@@ -1,0 +1,299 @@
+# Niwaki vocabulary — the single curated naming source for the SDK.
+#
+# Replaces domain/jargon.yaml + design/design_core.yaml (ADR-001, phase 1).
+# `tests/design/test_core_yaml.py` validates every entry against CHILD_MAP /
+# BIND_MAP / _contains so the curation cannot drift from the generated schema.
+#
+# Sections:
+#   jargon: ACI class → short name.  Feeds CHILD_MAP (read navigation);
+#           classes not listed fall back to snake_case(label) automatically.
+#   makers: parent ACI class → {maker name → child ACI class}.  The curated
+#           design surface; the "polUni" table defines the design roots.
+#           Structure is literal: one maker per real APIC child class.
+#   binds:  cursor ACI class → {bind alias → target ACI class} (the Rs class
+#           is resolved at push time via BIND_MAP, direct then inverse).
+#   verbs:  cursor ACI class → contract verbs (provide/consume).
+#   sugar:  extra typed maker/set parameters handled by design._sugar.
+#   atomic: classes whose subtree must ship in one POST in staged mode
+#           (consumed in phase 3).
+
+jargon:
+  # ── Root (polUni / uni) ─────────────────────────────────────────────────────
+  fvTenant: tenant
+  physDomP: phys_dom
+  l2extDomP: l2_dom
+  l3extDomP: l3_dom
+  vmmDomP: vmm_dom
+  infraInfra: infra
+  fabricInst: fabric
+
+  # ── infra children ──────────────────────────────────────────────────────────
+  fvnsVlanInstP: vlan_pool
+  fvnsVxlanInstP: vxlan_pool
+  infraAttEntityP: aaep
+  infraNodeP: leaf_profile
+  infraSpineP: spine_profile
+  infraAccPortP: access_port_profile
+  infraSpineAccPortP: spine_access_port_profile
+  infraAccBndlGrp: port_channel
+  infraAccBndlPolGrp: port_channel_override
+  infraFuncP: func_profile
+  infraPortP: port_profile
+  cdpIfPol: cdp_policy
+  lacpLagPol: lacp_policy
+  lldpIfPol: lldp_policy
+  mcpIfPol: mcp_policy
+  stpIfPol: stp_policy
+  monInfraPol: monitoring_policy
+
+  # ── Tenant ──────────────────────────────────────────────────────────────────
+  fvCtx: vrf
+  fvBD: bd
+  fvAp: app
+  vzBrCP: contract
+  vzOOBBrCP: oob_contract
+  vzFilter: filter
+  l3extOut: l3out
+  l2extOut: l2out
+  l2extInstP: external_epg
+  fvEpRetPol: ep_retention_policy
+  fvEpIpAgingP: ep_aging_policy
+  fvEndpointSecGrp: esg_policy
+  netflowMonitorPol: netflow_monitor
+  qosDppPol: dpp_policy
+  igmpSnoopPol: igmp_snoop_policy
+  monEPGPol: monitoring_policy
+
+  # ── VRF ─────────────────────────────────────────────────────────────────────
+  vzAny: vzany
+  pimCtxP: pim_ctx
+  fvRsBgpCtxPol: bgp_ctx_policy
+  fvRsOspfCtxPol: ospf_ctx_policy
+
+  # ── BD ──────────────────────────────────────────────────────────────────────
+  fvSubnet: subnet
+  fvRsCtx: vrf_binding
+  fvRsBDToOut: l3out_binding
+  igmpSnoopP: igmp_snoop
+  pimBDP: pim
+
+  # ── App profile ─────────────────────────────────────────────────────────────
+  fvAEPg: epg
+  fvESg: esg
+
+  # ── EPG / ESG ───────────────────────────────────────────────────────────────
+  fvRsBd: bd_binding
+  fvRsDomAtt: domain
+  fvEPSelector: ep_selector
+  fvRsProv: contract_provider
+  fvRsCons: contract_consumer
+  fvRsConsIf: contract_if_consumer
+  fvRsProtBy: taboo
+  fvRsIntraEpg: intra_epg_contract
+  fvRsPathAtt: static_path
+  fvRsNodeAtt: static_node
+  tagAnnotation: annotation
+  tagTag: tag
+  fvCEp: endpoint
+
+  # ── Contract ────────────────────────────────────────────────────────────────
+  vzSubj: subject
+  vzRsSubjGraphAtt: service_graph
+
+  # ── Subject ─────────────────────────────────────────────────────────────────
+  vzRsSubjFiltAtt: filter_binding
+  vzInTerm: in_term
+  vzOutTerm: out_term
+
+  # ── Filter ──────────────────────────────────────────────────────────────────
+  vzEntry: entry
+
+  # ── L2Out ───────────────────────────────────────────────────────────────────
+  l2extLNodeP: node_profile
+  l2extLIfP: interface_profile
+
+  # ── L3Out ───────────────────────────────────────────────────────────────────
+  l3extLNodeP: node_profile
+  l3extInstP: external_epg
+  l3extRsEctx: vrf_binding
+  ospfExtP: ospf
+  bgpExtP: bgp
+  eigrpExtP: eigrp
+
+  # ── L3Out Node profile ──────────────────────────────────────────────────────
+  l3extLIfP: interface_profile
+  l3extRsNodeL3OutAtt: node_attachment
+
+  # ── L3Out Interface profile ─────────────────────────────────────────────────
+  l3extRsPathL3OutAtt: path_attachment
+  bgpPeerP: bgp_peer
+  ospfIfP: ospf_interface
+
+  # ── Leaf profile ────────────────────────────────────────────────────────────
+  infraLeafS: leaf_selector
+  infraNodeBlk: node_block
+
+  # ── Access port profile ─────────────────────────────────────────────────────
+  infraHPortS: port_selector
+  infraSHPortS: sub_port_selector
+  infraPortBlk: port_block
+  infraSubPortBlk: sub_port_block
+
+  # ── AAEP ────────────────────────────────────────────────────────────────────
+  infraRsDomP: domain_binding
+
+makers:
+  # ── Design roots (children of polUni) ───────────────────────────────────────
+  polUni:
+    tenant: fvTenant
+    infra: infraInfra
+    fabric: fabricInst
+    controller: ctrlrInst
+    phys_dom: physDomP
+    l3_dom: l3extDomP
+
+  # ── Tenant world ────────────────────────────────────────────────────────────
+  fvTenant:
+    app: fvAp
+    bd: fvBD
+    vrf: fvCtx
+    l3out: l3extOut
+    filter: vzFilter
+    contract: vzBrCP
+  fvAp:
+    epg: fvAEPg
+  fvAEPg:
+    static_path: fvRsPathAtt
+  fvBD:
+    subnet: fvSubnet
+  fvCtx:
+    pim: pimCtxP
+  vzFilter:
+    entry: vzEntry
+  vzBrCP:
+    subject: vzSubj
+
+  # ── Access policies (uni/infra) ─────────────────────────────────────────────
+  infraInfra:
+    cdp_policy: cdpIfPol
+    lldp_policy: lldpIfPol
+    lacp_policy: lacpLagPol
+    link_level_policy: fabricHIfPol
+    mcp_policy: mcpIfPol
+    stp_policy: stpIfPol
+    storm_control_policy: stormctrlIfPol
+    vlan_pool: fvnsVlanInstP
+    aaep: infraAttEntityP
+    func_profile: infraFuncP
+    access_port_profile: infraAccPortP
+    leaf_profile: infraNodeP
+    spine_profile: infraSpineP
+  fvnsVlanInstP:
+    range: fvnsEncapBlk
+  infraFuncP:
+    access_group: infraAccPortGrp
+    port_channel: infraAccBndlGrp
+  infraAccPortP:
+    port_selector: infraHPortS
+  infraHPortS:
+    port_block: infraPortBlk
+    sub_port_block: infraSubPortBlk
+  infraNodeP:
+    leaf_selector: infraLeafS
+  infraSpineP:
+    spine_selector: infraSpineS
+  infraLeafS:
+    node_block: infraNodeBlk
+  infraSpineS:
+    node_block: infraNodeBlk
+
+  # ── Fabric policies (uni/fabric) ────────────────────────────────────────────
+  fabricInst:
+    datetime_policy: datetimePol
+    dns_profile: dnsProfile
+    bgp_instance: bgpInstPol
+    syslog_group: syslogGroup
+    vpc_protection: fabricProtPol
+  datetimePol:
+    ntp_provider: datetimeNtpProv
+  dnsProfile:
+    provider: dnsProv
+    domain: dnsDomain
+  syslogGroup:
+    remote_destination: syslogRemoteDest
+  bgpInstPol:
+    autonomous_system: bgpAsP
+    route_reflector: bgpRRP
+  bgpRRP:
+    node: bgpRRNodePEp
+  fabricProtPol:
+    vpc_pair: fabricExplicitGEp
+  fabricExplicitGEp:
+    node: fabricNodePEp
+
+  # ── Controller (uni/controller) ─────────────────────────────────────────────
+  ctrlrInst:
+    fabric_membership: fabricNodeIdentPol
+  fabricNodeIdentPol:
+    fabric_node_member: fabricNodeIdentP
+
+binds:
+  # ── Tenant world ────────────────────────────────────────────────────────────
+  fvAEPg:
+    bd: fvBD
+    domain: infraDomP        # abstract — phys_dom / vmm_dom / l3_dom / ...
+  fvBD:
+    vrf: fvCtx
+    l3out: l3extOut
+  fvCtx:
+    l3out: l3extOut
+  l3extOut:
+    vrf: fvCtx
+  vzSubj:
+    filter: vzFilter
+
+  # ── Access policies ─────────────────────────────────────────────────────────
+  infraAttEntityP:
+    domain: infraADomP       # abstract — phys_dom / vmm_dom / l3_dom / ...
+  physDomP:
+    vlan_pool: fvnsVlanInstP
+  l3extDomP:
+    vlan_pool: fvnsVlanInstP
+  infraAccPortGrp:
+    aaep: infraAttEntityP
+    cdp: cdpIfPol
+    lldp: lldpIfPol
+    link_level: fabricHIfPol
+    stp: stpIfPol
+    mcp: mcpIfPol
+    storm_control: stormctrlIfPol
+  infraAccBndlGrp:
+    aaep: infraAttEntityP
+    cdp: cdpIfPol
+    lldp: lldpIfPol
+    lacp: lacpLagPol
+    link_level: fabricHIfPol
+    stp: stpIfPol
+    mcp: mcpIfPol
+    storm_control: stormctrlIfPol
+  infraHPortS:
+    policy_group: infraAccBaseGrp  # abstract — access_group / port_channel
+  infraNodeP:
+    interface_profile: infraAccPortP
+
+verbs:
+  fvAEPg:
+    provide:
+      rs: fvRsProv
+      target: vzBrCP
+    consume:
+      rs: fvRsCons
+      target: vzBrCP
+
+sugar:
+  vzEntry:
+    tcp: "int | str | tuple[int, int] | None"
+    udp: "int | str | tuple[int, int] | None"
+
+atomic:
+  - fabricExplicitGEp

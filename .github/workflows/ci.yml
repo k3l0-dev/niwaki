@@ -1,0 +1,61 @@
+# niwaki — public CI (GitHub Actions)
+#
+# The full test suite runs in the maintainers' private infrastructure; this
+# pipeline validates what the public deliverable itself guarantees: clean
+# lint/types, documentation that builds strictly, a vocabulary book that
+# matches the curation, and a wheel that installs and works in a pristine
+# environment.
+
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  lint-types:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          python-version: "3.12"
+      - run: uv sync --extra dev
+      - run: uv run ruff format --check src docs scripts
+      - run: uv run ruff check src docs scripts
+      - run: uv run mypy src
+
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          python-version: "3.12"
+      - run: uv sync --extra dev --extra docs
+      # The vocabulary book is generated from the same tables the runtime
+      # uses — regeneration must be a no-op.
+      - run: uv run python -m niwaki._codegen.generate_docs
+      - run: git diff --exit-code -- docs/reference/vocabulary
+      - run: uv run sphinx-build -b html -W docs docs/_build/html
+      - uses: actions/upload-artifact@v4
+        with:
+          name: docs
+          path: docs/_build/html
+
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          python-version: "3.12"
+      - run: uv build
+      - run: uv venv /tmp/smoke
+      - run: uv pip install --python /tmp/smoke/bin/python dist/niwaki-*.whl
+      - run: /tmp/smoke/bin/python scripts/wheel_smoke.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
