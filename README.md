@@ -11,7 +11,7 @@ The modern, typed, design-first Python SDK for Cisco ACI.
 [![ci](https://github.com/k3l0-dev/niwaki/actions/workflows/ci.yml/badge.svg)](https://github.com/k3l0-dev/niwaki/actions/workflows/ci.yml)
 [![python](https://img.shields.io/badge/python-3.12%2B-3776AB?logo=python&logoColor=white)](https://github.com/k3l0-dev/niwaki/blob/main/pyproject.toml)
 [![license](https://img.shields.io/badge/license-Apache--2.0-blue)](https://github.com/k3l0-dev/niwaki/blob/main/LICENSE)
-[![release](https://img.shields.io/github/v/tag/k3l0-dev/niwaki?label=release&color=2e6f45)](https://github.com/k3l0-dev/niwaki/tags)
+[![pypi](https://img.shields.io/pypi/v/niwaki?color=2e6f45)](https://pypi.org/project/niwaki/)
 [![ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 [![mypy](https://img.shields.io/badge/mypy-strict-blue)](https://github.com/k3l0-dev/niwaki/blob/main/pyproject.toml)
 [![typed](https://img.shields.io/badge/types-Pydantic%20v2-e92063?logo=pydantic&logoColor=white)](https://docs.pydantic.dev)
@@ -57,11 +57,11 @@ be the SDK you *want* to write.  The deep comparison lives in
 
 ## Installation
 
-From this repository (PyPI publication comes with the public release):
-
 ```bash
-uv sync --extra dev
+uv add niwaki          # or: pip install niwaki
 ```
+
+Requires Python 3.12+.  To work on the SDK itself, clone and `uv sync --extra dev`.
 
 ## Quickstart — declarative provisioning (design DSL)
 

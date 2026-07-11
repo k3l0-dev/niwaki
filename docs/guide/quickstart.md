@@ -2,11 +2,10 @@
 
 ## Install
 
-niwaki targets Python 3.12+ and is managed with [uv](https://docs.astral.sh/uv/).
-Until the public PyPI release, install from the repository:
+niwaki targets Python 3.12+:
 
 ```bash
-uv sync --extra dev
+uv add niwaki          # or: pip install niwaki
 ```
 
 ## Connect

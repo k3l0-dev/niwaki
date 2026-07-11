@@ -12,7 +12,7 @@ from __future__ import annotations
 project = "niwaki"
 author = "Khalid El-Ouiali"
 copyright = "2026, Monark AIOP SRL"
-release = "0.3.0rc1"
+release = "0.3.0"
 
 # ── Extensions ────────────────────────────────────────────────────────────────
 

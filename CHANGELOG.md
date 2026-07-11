@@ -4,7 +4,7 @@ All notable changes to this project are documented here.  The format follows
 [Keep a Changelog](https://keepachangelog.com/); versions follow semver
 (0.x — the API may still change between minor versions).
 
-## [0.3.0] — 2026-07-12
+## [0.3.0] — 2026-07-11
 
 First PyPI release.
 
