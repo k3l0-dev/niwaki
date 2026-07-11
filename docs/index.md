@@ -45,6 +45,7 @@ with Niwaki("https://apic.example.com", "admin", "secret") as aci:
 :caption: Guide
 :maxdepth: 2
 
+guide/installation
 guide/quickstart
 guide/design-dsl
 guide/push-modes

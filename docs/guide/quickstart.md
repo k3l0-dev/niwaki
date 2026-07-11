@@ -8,6 +8,9 @@ niwaki targets Python 3.12+:
 uv add niwaki          # or: pip install niwaki
 ```
 
+No PyPI access on your network?  Every GitHub Release ships an offline
+wheelhouse — see {doc}`installation`.
+
 ## Connect
 
 {class}`~niwaki.facade.Niwaki` (sync) and {class}`~niwaki.facade.AsyncNiwaki` (async) are

@@ -1,0 +1,20 @@
+# Keeps the SHA-pinned actions in .github/workflows fresh.
+#
+# This repository mirrors a private development tree (see CONTRIBUTING.md,
+# "reference-patch model"): pull requests opened here are never merged
+# directly.  The maintainer re-lands the pin bumps in the private tree and
+# they arrive with the next sync commit — at which point Dependabot closes
+# its own pull request automatically.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: "Europe/Brussels"
+    groups:
+      actions:
+        patterns: ["*"]
+    labels: ["dependencies"]

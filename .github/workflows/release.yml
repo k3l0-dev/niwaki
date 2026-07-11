@@ -2,9 +2,11 @@
 #
 # Triggered by version tags.  Release-candidate tags (v*rc*) rehearse on
 # TestPyPI; final tags publish to PyPI through the protected `pypi`
-# environment (manual approval).  No tokens anywhere: both indexes trust
-# this exact repository/workflow/environment via OIDC, and the pypa action
-# generates PEP 740 attestations automatically.
+# environment (manual approval), then materialise as a GitHub Release
+# carrying the CHANGELOG section and the built distributions.  No tokens
+# anywhere: both indexes trust this exact repository/workflow/environment
+# via OIDC, the pypa action generates PEP 740 attestations, and GitHub
+# build-provenance attestations cover the attached artifacts.
 
 name: release
 
@@ -12,14 +14,27 @@ on:
   push:
     tags: ["v*"]
 
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}
+
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+      attestations: write
     steps:
-      - uses: actions/checkout@v4
-      - uses: astral-sh/setup-uv@v5
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990 # v8.3.2
         with:
           python-version: "3.12"
+          enable-cache: false # no cache on the publishing path
       # The tag must match the packaged version — a mismatch would publish
       # an immutable artifact under the wrong name.
       - name: Check tag matches version
@@ -29,18 +44,60 @@ jobs:
             echo "tag $GITHUB_REF_NAME does not match pyproject version $VERSION"
             exit 1
           fi
+      # Fail before anything reaches an index if the release notes are
+      # missing — the github-release job extracts this same section.
+      - name: Check the changelog has a section for this version
+        if: ${{ !contains(github.ref_name, 'rc') }}
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          awk -v ver="$VERSION" '
+            $0 ~ "^## \\[" ver "\\]" {flag=1; next}
+            /^## \[/ {flag=0}
+            flag' CHANGELOG.md > /tmp/notes.md
+          test -s /tmp/notes.md
       - run: uv build
       - name: Validate metadata and README rendering
         run: uvx twine check dist/*
-      - name: Smoke the wheel in a pristine venv
+      - name: Smoke the wheel on every supported Python
         run: |
-          uv venv /tmp/smoke
-          uv pip install --python /tmp/smoke/bin/python dist/niwaki-*.whl
-          /tmp/smoke/bin/python scripts/wheel_smoke.py
-      - uses: actions/upload-artifact@v4
+          for py in 3.12 3.13; do
+            uv venv --python "$py" "/tmp/smoke$py"
+            uv pip install --python "/tmp/smoke$py/bin/python" dist/niwaki-*.whl
+            "/tmp/smoke$py/bin/python" scripts/wheel_smoke.py
+          done
+      # Offline wheelhouse for restricted networks (no index access): the
+      # niwaki wheel plus every dependency, as wheels, for the mainstream
+      # platform/Python combinations.  Installable with
+      #   pip install --no-index --find-links=wheelhouse niwaki
+      # Kept OUT of dist/ — dist/ is uploaded verbatim to PyPI.
+      - name: Build the offline wheelhouse
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          mkdir -p wheelhouse assets
+          cp dist/niwaki-*.whl wheelhouse/
+          for py in 3.12 3.13; do
+            for plat in manylinux2014_x86_64 win_amd64 macosx_11_0_arm64; do
+              uv run --with pip python -m pip download "dist/niwaki-${VERSION}-py3-none-any.whl" \
+                --dest wheelhouse --only-binary=:all: \
+                --platform "$plat" --python-version "$py" --implementation cp
+            done
+          done
+          (cd wheelhouse && zip -q "../assets/niwaki-${VERSION}-offline-wheelhouse.zip" ./*.whl)
+      - name: Write the checksums
+        run: sha256sum dist/* assets/*.zip | sed 's|  .*/|  |' > assets/SHA256SUMS.txt
+      - uses: actions/attest-build-provenance@0f67c3f4856b2e3261c31976d6725780e5e4c373 # v4.1.1
+        with:
+          subject-path: |
+            dist/*
+            assets/*.zip
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: dist
           path: dist/
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: release-assets
+          path: assets/
 
   publish-testpypi:
     if: contains(github.ref_name, 'rc')
@@ -52,11 +109,11 @@ jobs:
     permissions:
       id-token: write
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
         with:
           name: dist
           path: dist/
-      - uses: pypa/gh-action-pypi-publish@release/v1
+      - uses: pypa/gh-action-pypi-publish@cef221092ed1bacb1cc03d23a2d87d1d172e277b # v1.14.0
         with:
           repository-url: https://test.pypi.org/legacy/
 
@@ -70,8 +127,44 @@ jobs:
     permissions:
       id-token: write
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
         with:
           name: dist
           path: dist/
-      - uses: pypa/gh-action-pypi-publish@release/v1
+      - uses: pypa/gh-action-pypi-publish@cef221092ed1bacb1cc03d23a2d87d1d172e277b # v1.14.0
+
+  github-release:
+    if: ${{ !contains(github.ref_name, 'rc') }}
+    needs: [build, publish-pypi]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: dist
+          path: dist/
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: release-assets
+          path: assets/
+      - name: Extract the changelog section
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          awk -v ver="$VERSION" '
+            $0 ~ "^## \\[" ver "\\]" {flag=1; next}
+            /^## \[/ {flag=0}
+            flag' CHANGELOG.md > /tmp/notes.md
+          test -s /tmp/notes.md
+      - name: Create the GitHub Release
+        run: |
+          gh release create "$GITHUB_REF_NAME" dist/* assets/* \
+            --repo "$GITHUB_REPOSITORY" \
+            --verify-tag \
+            --title "niwaki $GITHUB_REF_NAME" \
+            --notes-file /tmp/notes.md
+        env:
+          GH_TOKEN: ${{ github.token }}

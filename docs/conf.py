@@ -7,12 +7,14 @@ Build locally (static HTML, no server needed):
 
 from __future__ import annotations
 
+from importlib.metadata import version as _pkg_version
+
 # ── Project ───────────────────────────────────────────────────────────────────
 
 project = "niwaki"
 author = "Khalid El-Ouiali"
 copyright = "2026, Monark AIOPS SRL"
-release = "0.3.0"
+release = _pkg_version("niwaki")  # single source of truth: pyproject.toml
 html_baseurl = "https://k3l0-dev.github.io/niwaki/"
 
 # ── Extensions ────────────────────────────────────────────────────────────────
@@ -87,7 +89,9 @@ nitpick_ignore_regex = [
 
 html_theme = "furo"
 html_title = "niwaki — Cisco ACI SDK"
-html_static_path: list[str] = []
+# _static carries the coverage badge endpoint (docs/_static/coverage-badge.json,
+# refreshed by scripts/checks.sh) served from the Pages site.
+html_static_path = ["_static"]
 html_theme_options = {
     "source_repository": "https://github.com/k3l0-dev/niwaki",
     "source_branch": "main",

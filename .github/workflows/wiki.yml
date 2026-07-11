@@ -1,0 +1,45 @@
+# niwaki — wiki sync
+#
+# Mirrors docs/wiki/ (the signpost pages) to this repository's wiki
+# whenever a sync touches them.  Hand-rolled on purpose: the job is a
+# clone-replace-push, and no third-party action gets a write token.
+
+name: wiki
+
+on:
+  push:
+    branches: [main]
+    paths: ["docs/wiki/**"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: wiki
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+      - name: Mirror docs/wiki to the wiki
+        run: |
+          git clone --depth 1 \
+            "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.wiki.git" /tmp/wiki
+          find /tmp/wiki -mindepth 1 -maxdepth 1 -not -name .git -exec rm -rf {} +
+          cp -R docs/wiki/. /tmp/wiki/
+          cd /tmp/wiki
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "wiki already in sync"
+            exit 0
+          fi
+          git commit -m "sync from docs/wiki @ ${GITHUB_SHA}"
+          git push origin HEAD
+        env:
+          GH_TOKEN: ${{ github.token }}

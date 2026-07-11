@@ -2,20 +2,17 @@
 
 <img src="https://raw.githubusercontent.com/k3l0-dev/niwaki/main/assets/niwaki-banner.svg" width="360" alt="niwaki — a cloud-pruned garden tree">
 
-# niwaki 庭木
+# NIWAKI 庭木
 
 **Cisco ACI for humans — describe, push, observe.**
 
 The modern, typed, design-first Python SDK for Cisco ACI.
 
-[![ci](https://github.com/k3l0-dev/niwaki/actions/workflows/ci.yml/badge.svg)](https://github.com/k3l0-dev/niwaki/actions/workflows/ci.yml)
-[![docs](https://img.shields.io/badge/docs-k3l0--dev.github.io%2Fniwaki-2e6f45)](https://k3l0-dev.github.io/niwaki/)
-[![python](https://img.shields.io/badge/python-3.12%2B-3776AB?logo=python&logoColor=white)](https://github.com/k3l0-dev/niwaki/blob/main/pyproject.toml)
-[![license](https://img.shields.io/badge/license-Apache--2.0-blue)](https://github.com/k3l0-dev/niwaki/blob/main/LICENSE)
-[![pypi](https://img.shields.io/pypi/v/niwaki?color=2e6f45)](https://pypi.org/project/niwaki/)
-[![ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
-[![mypy](https://img.shields.io/badge/mypy-strict-blue)](https://github.com/k3l0-dev/niwaki/blob/main/pyproject.toml)
-[![typed](https://img.shields.io/badge/types-Pydantic%20v2-e92063?logo=pydantic&logoColor=white)](https://docs.pydantic.dev)
+[![cisco aci](https://img.shields.io/badge/Cisco%20ACI-049fd9)](https://k3l0-dev.github.io/niwaki/)
+[![network automation](https://img.shields.io/badge/Network%20Automation-2e6f45)](https://k3l0-dev.github.io/niwaki/cookbook/index.html)
+[![pydantic](https://img.shields.io/badge/Pydantic-e92063?logo=pydantic&logoColor=white)](https://docs.pydantic.dev)
+[![python](https://img.shields.io/badge/Python-3.12%2B-3776AB?logo=python&logoColor=white)](https://pypi.org/project/niwaki/)
+[![license](https://img.shields.io/badge/License-Apache--2.0-blue)](https://github.com/k3l0-dev/niwaki/blob/main/LICENSE)
 
 </div>
 
@@ -63,6 +60,12 @@ uv add niwaki          # or: pip install niwaki
 ```
 
 Requires Python 3.12+.  To work on the SDK itself, clone and `uv sync --extra dev`.
+
+**Restricted network?**  Every [GitHub Release](https://github.com/k3l0-dev/niwaki/releases)
+ships an *offline wheelhouse* (niwaki + all dependencies as wheels, with
+checksums and provenance attestations) for environments that cannot reach
+PyPI — the step-by-step is in
+[the installation guide](https://k3l0-dev.github.io/niwaki/guide/installation.html).
 
 Full documentation — guides, cookbook, vocabulary book, API reference —
 lives at **<https://k3l0-dev.github.io/niwaki/>**.
