@@ -4,6 +4,29 @@ All notable changes to this project are documented here.  The format follows
 [Keep a Changelog](https://keepachangelog.com/); versions follow semver
 (0.x — the API may still change between minor versions).
 
+## [0.3.0] — 2026-07-12
+
+First PyPI release.
+
+### Added
+
+- Published on PyPI: `pip install niwaki` / `uv add niwaki` (trusted
+  publishing with provenance attestations, from the public repository).
+- Fabric ASN as a curated position (`bgp_instance().autonomous_system()`),
+  per-port interface-profile convention support proven in the live
+  walkthrough (one selector per port, reserved ports never profiled).
+
+### Fixed
+
+- `plan` reads are scoped with `rsp-subtree-class` to the classes the design
+  declares — an unscoped full read of `uni/fabric` exceeds the APIC query
+  limit ("result dataset is too big").
+- Field comparison in `plan` is numeric-aware: the APIC canonicalises
+  numeric strings ("80.0" reads back as "80.000000"); designs carrying
+  float-like values stay idempotent.
+- `fvSubnet.scope` carries its operator name (was
+  `visibility_of_the_subnet`).
+
 ## [0.2.0] — 2026-07-11
 
 ### Changed

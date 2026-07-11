@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "niwaki"
-version = "0.2.0"
+version = "0.3.0rc1"
 description = "Modern, typed, design-first Python SDK for Cisco ACI (APIC)"
 readme = "README.md"
 license = "Apache-2.0"

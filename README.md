@@ -53,7 +53,7 @@ cobra remains the reference when you need guaranteed write parity with your
 exact firmware and Cisco support behind it.  For everything else — reading
 fabrics, building and converging configuration as code — niwaki is built to
 be the SDK you *want* to write.  The deep comparison lives in
-[the documentation](docs/why.md).
+[the documentation](https://github.com/k3l0-dev/niwaki/blob/main/docs/why.md).
 
 ## Installation
 
@@ -231,11 +231,11 @@ the SDK: source, documentation, releases and issues.
 Active development. 13,700+ tests, mypy strict, ruff. The design DSL covers a
 curated vocabulary across tenant, access (`infra`), fabric, and controller
 policies (~50 positions); everything else is reachable via `.mo()` and
-`bind_dn()`. Why this SDK exists: [docs/why.md](docs/why.md).
+`bind_dn()`. Why this SDK exists: [docs/why.md](https://github.com/k3l0-dev/niwaki/blob/main/docs/why.md).
 
 ## License
 
-Apache License 2.0 — see [LICENSE](LICENSE) and [NOTICE](NOTICE).
+Apache License 2.0 — see [LICENSE](https://github.com/k3l0-dev/niwaki/blob/main/LICENSE) and [NOTICE](https://github.com/k3l0-dev/niwaki/blob/main/NOTICE).
 Copyright 2026 Monark AIOP SRL.  Developed by Khalid El-Ouiali.
 
 Cisco, Cisco ACI and APIC are trademarks of Cisco Systems, Inc.  niwaki is an

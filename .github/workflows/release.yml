@@ -1,0 +1,77 @@
+# niwaki — release pipeline (PyPI trusted publishing)
+#
+# Triggered by version tags.  Release-candidate tags (v*rc*) rehearse on
+# TestPyPI; final tags publish to PyPI through the protected `pypi`
+# environment (manual approval).  No tokens anywhere: both indexes trust
+# this exact repository/workflow/environment via OIDC, and the pypa action
+# generates PEP 740 attestations automatically.
+
+name: release
+
+on:
+  push:
+    tags: ["v*"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          python-version: "3.12"
+      # The tag must match the packaged version — a mismatch would publish
+      # an immutable artifact under the wrong name.
+      - name: Check tag matches version
+        run: |
+          VERSION=$(grep -m1 '^version' pyproject.toml | cut -d'"' -f2)
+          if [ "v$VERSION" != "$GITHUB_REF_NAME" ]; then
+            echo "tag $GITHUB_REF_NAME does not match pyproject version $VERSION"
+            exit 1
+          fi
+      - run: uv build
+      - name: Validate metadata and README rendering
+        run: uvx twine check dist/*
+      - name: Smoke the wheel in a pristine venv
+        run: |
+          uv venv /tmp/smoke
+          uv pip install --python /tmp/smoke/bin/python dist/niwaki-*.whl
+          /tmp/smoke/bin/python scripts/wheel_smoke.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+  publish-testpypi:
+    if: contains(github.ref_name, 'rc')
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: testpypi
+      url: https://test.pypi.org/p/niwaki
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+      - uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
+
+  publish-pypi:
+    if: ${{ !contains(github.ref_name, 'rc') }}
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/niwaki
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+      - uses: pypa/gh-action-pypi-publish@release/v1
