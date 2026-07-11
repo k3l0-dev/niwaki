@@ -32,7 +32,7 @@ cursor — sibling domains stay one maker call away::
     cfg.infra().vlan_pool("prod", "static").range("vlan-100", "vlan-199")
     cfg.tenant("prod").vrf("main")
 
-Core rules (ADR-001, ``docs/adr-001-design-first-architecture.md``):
+Core rules (see the *Design-first architecture* page in the documentation):
 
 - **Structure is literal**: every maker maps 1:1 to a real APIC child class;
   nothing is silently created or hidden.

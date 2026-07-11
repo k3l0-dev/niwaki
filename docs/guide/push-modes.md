@@ -6,6 +6,16 @@ here, and only here.  The same call works with a sync
 {class}`~niwaki.facade.Niwaki` (returns the result) or an async
 {class}`~niwaki.facade.AsyncNiwaki` (returns an awaitable).
 
+The examples on this page share one design and one connected client:
+
+```python
+from niwaki import Niwaki
+from niwaki.design import tenant
+
+config = tenant("prod").vrf("main")
+aci = Niwaki.connect("https://apic.example.com", "admin", "secret")
+```
+
 ```python
 report = config.push(aci)                  # strict (default)
 report = config.push(aci, mode="staged")

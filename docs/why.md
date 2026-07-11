@@ -34,6 +34,7 @@ cobra is imperative.  From its
 [examples](https://cobra.readthedocs.io/en/latest/api-examples/index.html),
 verbatim:
 
+<!--- skip: next --->
 ```python
 from cobra.model.fv import Tenant, Ctx, BD, RsCtx, Ap, AEPg, RsBd
 from cobra.mit.request import ConfigRequest
@@ -61,6 +62,7 @@ POST, or worse, a dangling reference.
 The same configuration in niwaki:
 
 ```python
+from niwaki import Niwaki
 from niwaki.design import tenant
 
 config = (
@@ -71,7 +73,8 @@ config = (
         .epg("WebEPG").bind(bd="bridge-domain1")
 )  # fmt: skip
 
-config.push(aci)
+with Niwaki("https://apic.example.com", "admin", "secret") as aci:
+    config.push(aci)
 ```
 
 No relation class, no `tn*Name`, no parent plumbing: `bind(vrf=...)` is
@@ -93,6 +96,7 @@ cobra exposes the model as the APIC stores it: wire attribute names
 filters written as raw strings — from the
 [getting-started guide](https://cobra.readthedocs.io/en/latest/getting-started.html):
 
+<!--- skip: next --->
 ```python
 moDir.lookupByClass("fvTenant", propFilter='and(eq(fvTenant.name, "Tenant1"))')
 ```

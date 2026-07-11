@@ -12,6 +12,14 @@ Two rules govern the whole surface:
   use (`entry("api", tcp=8080)`, `scope="vrf"`); the SDK translates them to
   ACI classes, enum values and wire attribute names.
 
+The examples on this page share one connected client:
+
+```python
+from niwaki import Niwaki
+
+aci = Niwaki.connect("https://apic.example.com", "admin", "secret")
+```
+
 ## Roots
 
 Every design is rooted at `polUni`.  {func}`~niwaki.design.design` opens an
@@ -63,7 +71,19 @@ References are **lazy and closed-world**: `bind(alias=name)` records an
 intent, resolved at push time against the objects declared in the design.
 Forward references are fine.  The relation class, its direction, and how it
 targets (by name or by DN) all come from the schemas — you never write an
-`fvRsCtx` or a `tDn` by hand:
+`fvRsCtx` or a `tDn` by hand.  Given a design holding the usual cursors:
+
+```python
+cfg = design()
+tn = cfg.tenant("prod")
+epg = tn.app("shop").epg("web")
+vrf = tn.vrf("main")
+inf = cfg.infra()
+aaep = inf.aaep("prod-aaep")
+port_selector = inf.access_port_profile("leaf101").port_selector("esxi", "range")
+```
+
+every reference is one alias away:
 
 ```python
 epg.bind(bd="web")                  # name-flavor Rs (tnFvBDName)
@@ -95,7 +115,7 @@ Three escapes when the closed world is not enough:
 
 There is no `update()` — a day-2 change is a smaller design.  Only the fields
 you `set()` travel in the payload; parents declared without attributes are
-upserts that touch nothing (ADR-001, D-1):
+upserts that touch nothing:
 
 ```python
 patch = tenant("prod").bd("backend").set(description="patched")

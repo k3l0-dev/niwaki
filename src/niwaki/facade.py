@@ -12,7 +12,7 @@ navigation and observation API through :class:`NiwakiNode` (sync) and
 The facade **observes**: navigation, reads, queries, and deletion.  All
 configuration goes through the design DSL (:mod:`niwaki.design`) — describe
 the desired subtree with ``design()``/``tenant()``/``infra()``/``fabric()``
-and ``push()`` it through a connected client (ADR-001).
+and ``push()`` it through a connected client.
 
 Sync workflow::
 

@@ -1,9 +1,9 @@
 niwaki — modern Python SDK for Cisco ACI (APIC)
-Copyright 2026 Monark AIOP SRL
+Copyright 2026 Monark AIOPS SRL
 
 Developed by Khalid El-Ouiali (monark.aiops@pm.me).
 
-This product includes software developed at Monark AIOP SRL.
+This product includes software developed at Monark AIOPS SRL.
 Licensed under the Apache License, Version 2.0 (see LICENSE).
 
 Cisco, Cisco ACI and APIC are trademarks of Cisco Systems, Inc.

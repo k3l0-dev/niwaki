@@ -9,6 +9,7 @@
 The modern, typed, design-first Python SDK for Cisco ACI.
 
 [![ci](https://github.com/k3l0-dev/niwaki/actions/workflows/ci.yml/badge.svg)](https://github.com/k3l0-dev/niwaki/actions/workflows/ci.yml)
+[![docs](https://img.shields.io/badge/docs-k3l0--dev.github.io%2Fniwaki-2e6f45)](https://k3l0-dev.github.io/niwaki/)
 [![python](https://img.shields.io/badge/python-3.12%2B-3776AB?logo=python&logoColor=white)](https://github.com/k3l0-dev/niwaki/blob/main/pyproject.toml)
 [![license](https://img.shields.io/badge/license-Apache--2.0-blue)](https://github.com/k3l0-dev/niwaki/blob/main/LICENSE)
 [![pypi](https://img.shields.io/pypi/v/niwaki?color=2e6f45)](https://pypi.org/project/niwaki/)
@@ -53,7 +54,7 @@ cobra remains the reference when you need guaranteed write parity with your
 exact firmware and Cisco support behind it.  For everything else — reading
 fabrics, building and converging configuration as code — niwaki is built to
 be the SDK you *want* to write.  The deep comparison lives in
-[the documentation](https://github.com/k3l0-dev/niwaki/blob/main/docs/why.md).
+[the documentation](https://k3l0-dev.github.io/niwaki/why.html).
 
 ## Installation
 
@@ -63,9 +64,12 @@ uv add niwaki          # or: pip install niwaki
 
 Requires Python 3.12+.  To work on the SDK itself, clone and `uv sync --extra dev`.
 
+Full documentation — guides, cookbook, vocabulary book, API reference —
+lives at **<https://k3l0-dev.github.io/niwaki/>**.
+
 ## Quickstart — declarative provisioning (design DSL)
 
-**One mental model** (ADR-001): describe the desired configuration with the
+**One mental model**: describe the desired configuration with the
 design DSL, apply it with `push()`, observe with the facade.  The DSL covers
 the whole `uni` subtree — tenants, access policies (`infra`), fabric policies
 (`fabric`), controller policies — with the same vocabulary everywhere.
@@ -214,7 +218,8 @@ async with AsyncNiwaki("https://apic.example.com", "admin", "secret") as aci:
 uv sync --extra dev
 ```
 
-Documentation (static HTML, no server needed):
+Documentation (the hosted site is <https://k3l0-dev.github.io/niwaki/>;
+to build it locally — static HTML, no server needed):
 
 ```bash
 uv sync --extra docs
@@ -231,12 +236,12 @@ the SDK: source, documentation, releases and issues.
 Active development. 13,700+ tests, mypy strict, ruff. The design DSL covers a
 curated vocabulary across tenant, access (`infra`), fabric, and controller
 policies (~50 positions); everything else is reachable via `.mo()` and
-`bind_dn()`. Why this SDK exists: [docs/why.md](https://github.com/k3l0-dev/niwaki/blob/main/docs/why.md).
+`bind_dn()`. Why this SDK exists: [the comparison with cobra](https://k3l0-dev.github.io/niwaki/why.html).
 
 ## License
 
 Apache License 2.0 — see [LICENSE](https://github.com/k3l0-dev/niwaki/blob/main/LICENSE) and [NOTICE](https://github.com/k3l0-dev/niwaki/blob/main/NOTICE).
-Copyright 2026 Monark AIOP SRL.  Developed by Khalid El-Ouiali.
+Copyright 2026 Monark AIOPS SRL.  Developed by Khalid El-Ouiali.
 
 Cisco, Cisco ACI and APIC are trademarks of Cisco Systems, Inc.  niwaki is an
 independent project, not affiliated with or endorsed by Cisco Systems, Inc.

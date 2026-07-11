@@ -5,10 +5,10 @@ take reports seriously and appreciate coordinated disclosure.
 
 ## Supported versions
 
-| Version | Supported |
-| --- | --- |
-| latest 0.x release | ✅ |
-| anything older | ❌ — upgrade first |
+| Version            | Supported         |
+| ------------------ | ----------------- |
+| latest 0.x release | ✅                 |
+| anything older     | ❌ — upgrade first |
 
 ## Reporting a vulnerability
 

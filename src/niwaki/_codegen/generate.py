@@ -319,8 +319,8 @@ def _render_class(
     Prop names are converted to human-readable snake_case using
     :func:`best_field_name`.  The ``_rn_format`` placeholder is updated to
     match whenever a naming prop is renamed.  Models carry data and
-    validation only — the write path is the design DSL (ADR-001), so no
-    builder methods are emitted.
+    validation only — the write path is the design DSL, so no builder
+    methods are emitted.
 
     Args:
         class_name: ACI class name, e.g. ``"fvBD"``.

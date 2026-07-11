@@ -1,0 +1,127 @@
+# Errors & recovery
+
+Every error the SDK raises is a subclass of
+{class}`~niwaki.exceptions.NiwakiError`, so one broad handler is always
+possible — and each branch of the hierarchy answers one operational
+question:
+
+```text
+NiwakiError
+├── AuthError                      "can I log in?"
+│   ├── LoginError                     wrong credentials
+│   ├── TokenRefreshError              /aaaRefresh.json failed
+│   └── SessionExpiredError            token dead, re-login also failed
+├── TransportError                 "can I reach the APIC?"
+│   ├── ConnectionError                host unreachable
+│   ├── TimeoutError                   request too slow
+│   └── TLSError                       certificate problem
+├── APIError                       "what did the APIC answer?"
+│   ├── UnauthorizedError              401 — token rejected
+│   ├── ForbiddenError                 403 — insufficient privileges
+│   ├── NotFoundError                  404 — MO does not exist
+│   └── ServerError                    5xx — APIC internal error
+├── DeserializationError           "can I type this response?"
+└── DesignError                    "is my design coherent?"
+    ├── UnknownMakerError              no such maker at this position
+    ├── DuplicateDeclarationError      same object declared twice
+    ├── UnresolvedReferenceError       bind() target not in the design
+    ├── AmbiguousBindError             bind() matches several declarations
+    └── StagedPushError                staged push partially applied
+```
+
+## What to catch when
+
+| You are writing… | Catch | Typical reaction |
+| --- | --- | --- |
+| a CLI / one-shot script | `NiwakiError` | print and exit non-zero |
+| a retry-around-auth loop | `AuthError` | rotate credentials, alert |
+| network-sensitive automation | `TransportError` | back off, try the standby APIC |
+| a read that may miss | `NotFoundError` | treat as absence, not failure |
+| permission-scoped tooling | `ForbiddenError` | report the missing privilege |
+| any push pipeline | `DesignError` | fix the design — do not retry |
+| a staged rollout | `StagedPushError` | see the playbook below |
+
+## Design errors are eager
+
+Everything that can be checked before the wire **is** checked before the
+wire.  A reference typo fails at resolution time, with the declared world
+and a did-you-mean in the message:
+
+```python
+from niwaki import Niwaki
+from niwaki.design import tenant
+from niwaki.exceptions import UnresolvedReferenceError
+
+config = tenant("prod")
+config.vrf("main")
+config.bd("web").bind(vrf="mian")          # typo — no such VRF declared
+
+aci = Niwaki.connect("https://apic.example.com", "admin", "secret")
+try:
+    config.push(aci)
+except UnresolvedReferenceError as exc:
+    print(exc)      # …no fvCtx named 'mian' is declared… Did you mean 'main'?
+```
+
+No request was sent: the design never left the process.  The same eagerness
+applies to unknown makers (`UnknownMakerError` lists the available makers),
+duplicate declarations, and attribute values (the Pydantic models validate
+at the call site — see {doc}`models`).
+
+## APIC answers as typed exceptions
+
+HTTP status codes arrive as exception types, with the status and the APIC's
+own message attached:
+
+```python
+from niwaki.exceptions import NotFoundError
+
+try:
+    aci.tenant("ghost").read()
+except NotFoundError as exc:
+    print(exc.status_code)      # 404
+    print(exc)                  # HTTP 404: MO not found at DN: 'uni/tn-ghost'
+```
+
+`APIError` exposes `status_code` and `apic_message` on every branch — log
+both; the APIC message usually names the offending attribute.
+
+## The `StagedPushError` playbook
+
+A `strict` push cannot half-apply — the APIC rolls the whole envelope back.
+A **staged** push can: it executes one operation per object, in DN-depth
+waves, and a mid-flight failure leaves earlier waves applied.  The exception
+carries the full picture in plain DNs:
+
+```python
+from niwaki.exceptions import StagedPushError
+
+rollout = tenant("prod")
+rollout.vrf("main")
+rollout.bd("web").bind(vrf="main")
+
+try:
+    rollout.push(aci, mode="staged")
+except StagedPushError as exc:
+    print("applied :", exc.report.dns)             # what landed
+    print("failed  :", [dn for dn, _ in exc.failures])
+    print("skipped :", exc.not_run)                # never attempted
+```
+
+Recovery is declarative, like everything else:
+
+1. **Read the first failure** — its APIC message names the real problem;
+   later failures are usually collateral.
+2. **Fix the design**, not the fabric: the applied objects are exactly what
+   the design describes, so there is nothing to undo.
+3. **Push again.**  Pushes are upserts — re-running the same design
+   converges; already-applied objects are simply confirmed.
+4. When in doubt, `mode="plan"` first: it shows precisely what a new push
+   would still change (see {doc}`push-modes`).
+
+## Transport errors and retries
+
+`ConnectionError`, `TimeoutError` and `TLSError` surface **after** the retry
+policy is exhausted (see {doc}`connection`).  If you catch them, you are
+seeing a genuine outage, not a blip — prefer alerting over looping another
+retry around the SDK's own.

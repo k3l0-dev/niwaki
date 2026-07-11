@@ -234,7 +234,76 @@ def _render_index() -> str:
         ":maxdepth: 2",
         "",
         *(root_key for root_key, _, _ in _DOMAINS),
+        "coverage",
         "```",
+    ]
+    return "\n".join(lines).rstrip() + "\n"
+
+
+# Frequently requested areas that are not curated yet — shown on the
+# coverage page next to the escape hatches, so the boundary is explicit.
+_NOT_CURATED = [
+    ("ESGs and vzAny", "`fvESg`, `vzAny` and their contract wiring"),
+    ("L3Out internals", "node/interface profiles, external EPGs, BGP peers"),
+    ("VMM domains", "`vmmDomP` and VMM controller integration"),
+    ("Port-channel overrides and FEX", "per-node overrides, FEX profiles"),
+]
+
+
+def _coverage_row(pos: _Position) -> str:
+    """One coverage-matrix row for a curated position."""
+    tables = _tables()
+    makers = tables.makers.get(pos.aci_class, {})
+    binds = tables.binds.get(pos.aci_class, {})
+    verbs = tables.verbs.get(pos.aci_class, {})
+    sugar = tables.sugar.get(pos.aci_class, {})
+    return (
+        f"| `{pos.key}` | `{pos.aci_class}` | {len(makers) or '—'} "
+        f"| {', '.join(f'`{a}=`' for a in binds) or '—'} "
+        f"| {', '.join(f'`.{v}()`' for v in verbs) or '—'} "
+        f"| {', '.join(f'`{s}=`' for s in sugar) or '—'} "
+        f"| {'✓' if pos.aci_class in tables.atomic else '—'} |"
+    )
+
+
+def _render_coverage() -> str:
+    """The coverage matrix: every curated position, one row each."""
+    positions = _positions()
+    domain_rows = {
+        root_key: [_coverage_row(pos) for pos in _subtree(root_key, positions)]
+        for root_key, _, _ in _DOMAINS
+    }
+    uni_rows = [_coverage_row(positions[key]) for key in ("phys_dom", "l3_dom")]
+    total = sum(len(rows) for rows in domain_rows.values()) + len(uni_rows)
+
+    table_header = [
+        "| position | ACI class | makers | bind aliases | verbs | sugar | atomic |",
+        "| --- | --- | --- | --- | --- | --- | --- |",
+    ]
+    lines = [
+        _HEADER,
+        "# Coverage matrix",
+        "",
+        f"**{total} curated positions** across the four design domains plus "
+        "the `uni`-level domains.  Everything else in the 2,222 generated "
+        "classes stays reachable through `.mo(Class, ...)` and "
+        "`bind_dn(alias=dn)` — see the design guide.",
+        "",
+    ]
+    for root_key, title, _ in _DOMAINS:
+        lines += [f"## {title.split(' — ')[0]}", "", *table_header, *domain_rows[root_key], ""]
+    lines += ["## domains under `uni`", "", *table_header, *uni_rows, ""]
+
+    lines += [
+        "## Not curated yet",
+        "",
+        "Commonly requested areas that still speak raw ACI (`.mo()` / `bind_dn()`) today:",
+        "",
+        *(f"- **{title}** — {detail}" for title, detail in _NOT_CURATED),
+        "",
+        "Curation grows by demand: if one of these (or anything else) is your "
+        "daily work, open a "
+        "[vocabulary request](https://github.com/k3l0-dev/niwaki/issues/new/choose).",
     ]
     return "\n".join(lines).rstrip() + "\n"
 
@@ -244,6 +313,7 @@ def render_all() -> dict[str, str]:
     pages = {"index.md": _render_index()}
     for root_key, title, blurb in _DOMAINS:
         pages[f"{root_key}.md"] = _render_domain(root_key, title, blurb)
+    pages["coverage.md"] = _render_coverage()
     return pages
 
 

@@ -1,6 +1,5 @@
 # Niwaki vocabulary — the single curated naming source for the SDK.
 #
-# Replaces domain/jargon.yaml + design/design_core.yaml (ADR-001, phase 1).
 # `tests/design/test_core_yaml.py` validates every entry against CHILD_MAP /
 # BIND_MAP / _contains so the curation cannot drift from the generated schema.
 #

@@ -11,8 +11,9 @@ from __future__ import annotations
 
 project = "niwaki"
 author = "Khalid El-Ouiali"
-copyright = "2026, Monark AIOP SRL"
+copyright = "2026, Monark AIOPS SRL"
 release = "0.3.0"
+html_baseurl = "https://k3l0-dev.github.io/niwaki/"
 
 # ── Extensions ────────────────────────────────────────────────────────────────
 
@@ -42,7 +43,9 @@ autodoc_default_options = {
     "show-inheritance": True,
 }
 
-exclude_patterns = ["_build", "internal"]
+# "wiki" holds the GitHub-wiki signpost pages (published by
+# scripts/publish_wiki.sh, not part of the Sphinx site).
+exclude_patterns = ["_build", "wiki"]
 
 myst_enable_extensions = ["colon_fence", "deflist", "fieldlist"]
 myst_heading_anchors = 3
@@ -93,3 +96,15 @@ html_theme_options = {
 
 # Strip the ">>> " prompts when copying doctest-style blocks.
 copybutton_prompt_text = ">>> "
+
+# ── linkcheck (advisory: scripts/docs.sh linkcheck, non-blocking in CI) ───────
+
+linkcheck_ignore = [
+    r"https://apic\.example\.com.*",  # documentation placeholder host
+    r"https://github\.com/k3l0-dev/niwaki/issues/new.*",  # requires auth
+    r"https://github\.com/k3l0-dev/niwaki/security/.*",  # requires auth
+]
+linkcheck_allowed_redirects = {
+    r"https://cobra\.readthedocs\.io.*": r".*",
+    r"https://docs\.pydantic\.dev.*": r".*",
+}

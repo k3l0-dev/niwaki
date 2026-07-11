@@ -45,7 +45,7 @@ First PyPI release.
 
 Initial private milestone, under the project's former working name.
 
-- Design-first architecture (ADR-001): the design DSL describes the whole
+- Design-first architecture: the design DSL describes the whole
   `uni` subtree (tenant, access, fabric, controller), `push()` applies
   (`strict` / `staged` / `plan`), the facade observes (navigation, typed
   reads, queries, delete).

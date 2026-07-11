@@ -51,7 +51,7 @@ dependencies = [
 [project.urls]
 Homepage = "https://github.com/k3l0-dev/niwaki"
 Repository = "https://github.com/k3l0-dev/niwaki"
-Documentation = "https://github.com/k3l0-dev/niwaki/tree/main/docs"
+Documentation = "https://k3l0-dev.github.io/niwaki/"
 Changelog = "https://github.com/k3l0-dev/niwaki/blob/main/CHANGELOG.md"
 Issues = "https://github.com/k3l0-dev/niwaki/issues"
 
@@ -64,6 +64,7 @@ dev = [
     "ruff>=0.4",
     "mypy>=1.10",
     "python-dotenv>=1.0",
+    "sybil>=9",
 ]
 docs = [
     "furo>=2024.8",
@@ -128,7 +129,7 @@ pythonpath = ["src"]
 asyncio_mode = "auto"
 asyncio_default_fixture_loop_scope = "function"
 markers = [
-    "integration: tests nécessitant un accès réseau à un APIC réel",
+    "integration: tests requiring network access to a live APIC",
 ]
 
 [dependency-groups]

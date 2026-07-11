@@ -39,6 +39,9 @@ jobs:
       - run: uv run python -m niwaki._codegen.generate_docs
       - run: git diff --exit-code -- docs/reference/vocabulary
       - run: uv run sphinx-build -b html -W docs docs/_build/html
+      # External links break for reasons outside this repo — advisory only.
+      - run: uv run sphinx-build -b linkcheck docs docs/_build/linkcheck
+        continue-on-error: true
       - uses: actions/upload-artifact@v4
         with:
           name: docs

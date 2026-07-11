@@ -4,16 +4,30 @@ The facade is the SDK's read side: navigation in operator jargon, typed
 reads, the query builder, and deletion.  It never configures — writing is the
 design DSL's job.
 
+The examples below observe a small tenant pushed by its design:
+
+```python
+from niwaki import Niwaki
+from niwaki.design import tenant
+
+config = tenant("prod")
+config.bd("web", unicast_routing=True).bind(vrf="main")
+config.vrf("main")
+
+aci = Niwaki.connect("https://apic.example.com", "admin", "secret")
+config.push(aci)
+```
+
 ## Jargon navigation
 
 Every node is a DN-scoped handle.  Navigate with the same vocabulary the GUI
 tree uses; the DN is computed for you:
 
 ```python
-bd = aci.tenant("prod").bd("web")          # NiwakiNode at uni/tn-prod/BD-web
-bd.dn                                       # "uni/tn-prod/BD-web"
+bd = aci.tenant("prod").bd("web")           # NiwakiNode at uni/tn-prod/BD-web
+assert bd.dn == "uni/tn-prod/BD-web"
 mo = bd.read()                              # typed fvBD instance
-mo.unicast_routing                          # True — human-readable field names
+assert mo.unicast_routing is True           # human-readable field names
 ```
 
 `aci.node(dn, cls)` reaches any explicit DN; `.mo(Class, **naming)` descends
@@ -65,13 +79,20 @@ synchronous, executors are awaitable, and `gather()` runs reads concurrently
 under a TaskGroup:
 
 ```python
+import asyncio
+
 from niwaki import AsyncNiwaki
 from niwaki.models.fv.fvTenant import fvTenant
 
-async with AsyncNiwaki("https://apic.example.com", "admin", "secret") as aci:
-    tenants, bd = await aci.gather(
-        aci.query(fvTenant).fetch(),
-        aci.tenant("prod").bd("web").read(),
-    )
-    await config.push(aci)        # the quickstart design — async-ready too
+
+async def snapshot() -> None:
+    async with AsyncNiwaki("https://apic.example.com", "admin", "secret") as aci:
+        tenants, bd = await aci.gather(
+            aci.query(fvTenant).fetch(),
+            aci.tenant("prod").bd("web").read(),
+        )
+        await config.push(aci)    # the same design — async-ready too
+
+
+asyncio.run(snapshot())
 ```

@@ -8,7 +8,7 @@ Navigation, object names, and attributes use operator vocabulary with full IDE
 autocompletion; the SDK translates to ACI classes, `tn*Name` relation props,
 and wire attribute names for you.
 
-One mental model, everywhere (ADR-001): the **design DSL describes** the
+One mental model, everywhere: the **design DSL describes** the
 desired configuration — the whole `uni` subtree, from fabric policies to
 tenants — **`push()` applies** it, and the **facade observes** (navigation,
 reads, queries, deletion).
@@ -49,6 +49,17 @@ guide/quickstart
 guide/design-dsl
 guide/push-modes
 guide/observing
+guide/connection
+guide/errors
+guide/async
+guide/models
+```
+
+```{toctree}
+:caption: Cookbook
+:maxdepth: 2
+
+cookbook/index
 ```
 
 ```{toctree}
@@ -63,5 +74,17 @@ reference/api/index
 :caption: Explanation
 :maxdepth: 1
 
+design-first
 why
+comparison
+```
+
+```{toctree}
+:caption: Project
+:maxdepth: 1
+
+Changelog <project/CHANGELOG>
+Contributing <project/CONTRIBUTING>
+Security <project/SECURITY>
+Code of conduct <project/CODE_OF_CONDUCT>
 ```

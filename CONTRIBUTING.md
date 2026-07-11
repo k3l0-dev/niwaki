@@ -42,7 +42,17 @@ travel fastest.
 
 ### 4. Improve the documentation
 
-Typos, unclear guides, missing examples: open an issue or a small PR.
+The documentation lives at <https://k3l0-dev.github.io/niwaki/> and is built
+from the `docs/` sources in this repository.  Typos, unclear guides, missing
+examples: open an issue or a small PR.
+
+The documentation is **executable**: every ` ```python ` fence is run as a
+test in the maintainers' suite, with blocks on the same page sharing one
+namespace (a page reads as one continuous program).  When contributing
+snippets: write blocks that really run against the SDK; mark the rare
+non-runnable block (another SDK, live-fabric-only steps) with an HTML
+comment `<!--- skip: next --->` on the line above the fence; and use
+`text` / `console` fences for output that is shown, not executed.
 
 ## Pull requests: the reference-patch model
 

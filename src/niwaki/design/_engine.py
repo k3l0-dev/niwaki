@@ -1,6 +1,6 @@
 """Design push engine — internal wave executor for ``staged`` mode.
 
-Everything here is private to the design package (ADR-001 phase 4c): the
+Everything here is private to the design package: the
 ``_Op`` unit, the DN-depth toposort, and one wave engine shared by the sync
 and async push paths.  Nothing in this module appears in public signatures or
 results — ``push()`` reports plain DNs, and failures surface as

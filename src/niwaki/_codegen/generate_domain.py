@@ -369,7 +369,7 @@ def _build_rs_target_prop(classes: dict[str, dict[str, Any]]) -> dict[str, str]:
 def _build_reference_map(
     classes: dict[str, dict[str, Any]],
 ) -> tuple[dict[str, dict[str, tuple[str, str]]], dict[str, list[str]], dict[str, int]]:
-    """Build REFERENCE_MAP and TARGET_SUBCLASSES from schema data (ADR-001).
+    """Build REFERENCE_MAP and TARGET_SUBCLASSES from schema data.
 
     REFERENCE_MAP is the design resolver's relation table: every resolvable
     relation carries its flavor (``"name"`` for ``tn*`` props, ``"dn"``

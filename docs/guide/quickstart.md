@@ -63,8 +63,10 @@ upserts and nothing else is touched:
 from niwaki.design import infra
 
 flip = infra().cdp_policy("cdp-on", admin_state="disabled")
-flip.push(aci, mode="plan")   # shows exactly one field changing
-flip.push(aci)
+
+with Niwaki("https://apic.example.com", "admin", "secret") as aci:
+    flip.push(aci, mode="plan")   # shows exactly one field changing
+    flip.push(aci)
 ```
 
 ## Where to go next
