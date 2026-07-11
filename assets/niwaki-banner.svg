@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="440" height="200" viewBox="0 0 440 200" role="img" aria-label="niwaki — a cloud-pruned garden tree">
+  <!-- niwaki mark — original artwork, Apache-2.0 like the rest of the repo.
+       A cloud-pruned garden pine: full-size, living, sculpted with intent. -->
+  <defs>
+    <linearGradient id="pad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#4c9a62"/>
+      <stop offset="1" stop-color="#2e6f45"/>
+    </linearGradient>
+    <linearGradient id="padlight" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#66b37d"/>
+      <stop offset="1" stop-color="#3d8a55"/>
+    </linearGradient>
+  </defs>
+
+  <!-- ground mound: in the ground, not in a pot -->
+  <path d="M 95 178 Q 220 158 345 178 L 345 182 Q 220 166 95 182 Z" fill="#8a7a63" opacity="0.85"/>
+
+  <!-- trunk: the S-curve of a trained pine -->
+  <path d="M 212 176
+           C 206 150 226 138 218 116
+           C 212 100 190 96 178 84
+           M 218 116
+           C 230 98 258 96 268 78
+           M 214 132
+           C 196 126 172 130 156 120"
+        fill="none" stroke="#6b5942" stroke-width="9" stroke-linecap="round"/>
+
+  <!-- cloud pads (kumozukuri), sculpted planes -->
+  <g>
+    <ellipse cx="150" cy="112" rx="46" ry="20" fill="url(#pad)"/>
+    <ellipse cx="130" cy="104" rx="26" ry="12" fill="url(#padlight)"/>
+
+    <ellipse cx="172" cy="70" rx="52" ry="22" fill="url(#pad)"/>
+    <ellipse cx="152" cy="61" rx="30" ry="13" fill="url(#padlight)"/>
+
+    <ellipse cx="282" cy="62" rx="56" ry="23" fill="url(#pad)"/>
+    <ellipse cx="262" cy="52" rx="32" ry="13" fill="url(#padlight)"/>
+
+    <ellipse cx="236" cy="30" rx="40" ry="17" fill="url(#pad)"/>
+    <ellipse cx="222" cy="23" rx="22" ry="10" fill="url(#padlight)"/>
+  </g>
+</svg>

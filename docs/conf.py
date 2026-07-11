@@ -11,7 +11,7 @@ from __future__ import annotations
 
 project = "niwaki"
 author = "Khalid El-Ouiali"
-copyright = "2026, Monark AIOP SRL"  # noqa: A001
+copyright = "2026, Monark AIOP SRL"
 release = "0.2.0"
 
 # ── Extensions ────────────────────────────────────────────────────────────────
