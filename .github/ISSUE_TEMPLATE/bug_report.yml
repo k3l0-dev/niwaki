@@ -1,0 +1,56 @@
+name: Bug report
+description: Something behaves incorrectly
+labels: [bug]
+body:
+  - type: input
+    id: niwaki-version
+    attributes:
+      label: niwaki version
+      placeholder: "0.3.0"
+    validations:
+      required: true
+  - type: input
+    id: python-version
+    attributes:
+      label: Python version
+      placeholder: "3.12.4"
+    validations:
+      required: true
+  - type: input
+    id: apic-version
+    attributes:
+      label: APIC version
+      placeholder: "6.0(9c)"
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Minimal reproduction
+      description: The smallest design / query that shows the problem.
+      render: python
+      placeholder: |
+        from niwaki.design import tenant
+        cfg = tenant("prod")
+        ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected-actual
+    attributes:
+      label: Expected vs actual
+    validations:
+      required: true
+  - type: textarea
+    id: output
+    attributes:
+      label: Relevant output
+      description: "`to_payload()`, `push(aci, mode=\"plan\")` result, full traceback…"
+      render: text
+  - type: checkboxes
+    id: redaction
+    attributes:
+      label: Redaction
+      options:
+        - label: I have redacted all credentials, IP addresses, hostnames and sensitive DNs from this report.
+          required: true

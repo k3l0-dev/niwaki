@@ -1,0 +1,43 @@
+name: Vocabulary request
+description: Ask for an ACI class/position to join the curated design vocabulary
+labels: [vocabulary]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        The design DSL grows by curating positions — this form is the
+        project's roadmap funnel.  Until curation lands, `.mo(Class, ...)`
+        and `bind_dn()` remain available as escape hatches.
+  - type: input
+    id: aci-class
+    attributes:
+      label: ACI class
+      placeholder: "fvESg"
+    validations:
+      required: true
+  - type: input
+    id: parent
+    attributes:
+      label: Where it lives (parent class or position)
+      placeholder: "fvAp — uni/tn-*/ap-*"
+    validations:
+      required: true
+  - type: input
+    id: operator-name
+    attributes:
+      label: The word you would expect to type
+      placeholder: ".esg(\"payments\")"
+  - type: textarea
+    id: use-case
+    attributes:
+      label: Use case
+      description: What are you configuring, and what references (binds) does it need?
+    validations:
+      required: true
+  - type: checkboxes
+    id: redaction
+    attributes:
+      label: Redaction
+      options:
+        - label: This request contains no credentials, real IPs/hostnames or sensitive DNs.
+          required: true

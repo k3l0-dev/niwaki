@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Questions & ideas (Discussions)
+    url: https://github.com/k3l0-dev/niwaki/discussions
+    about: Ask questions and discuss before opening an issue.
+  - name: Documentation
+    url: https://github.com/k3l0-dev/niwaki/tree/main/docs
+    about: Guides, the vocabulary book and the API reference.
+  - name: Security reports (private)
+    url: https://github.com/k3l0-dev/niwaki/security/advisories/new
+    about: Never report vulnerabilities in a public issue.

@@ -1,0 +1,31 @@
+name: Feature request
+description: Propose an improvement
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: The operational problem
+      description: What are you trying to do on the fabric, and what gets in the way?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behaviour
+      description: |
+        Ideally as the code you wish you could write.  The DSL's rules —
+        structure is literal, verbatim is translated, closed-world
+        references — are the frame proposals are judged in.
+      render: python
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+  - type: checkboxes
+    id: redaction
+    attributes:
+      label: Redaction
+      options:
+        - label: This request contains no credentials, real IPs/hostnames or sensitive DNs.
+          required: true
