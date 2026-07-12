@@ -230,6 +230,10 @@ class TestCreateOnlyFields:
 # ── Pipeline integrity — metadata comes from sdk_subset.json ─────────────────
 
 
+@pytest.mark.skipif(
+    not _SUBSET.exists(),
+    reason="requires the extracted APIC schema data (data/extracted/, not in the repository)",
+)
 class TestPipelineIntegrity:
     """Generated metadata must match what's in the extraction output."""
 
