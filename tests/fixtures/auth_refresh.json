@@ -1,0 +1,29 @@
+{
+  "imdata": [
+    {
+      "aaaRefresh": {
+        "attributes": {
+          "token": "FIXTURE_TOKEN_REFRESH",
+          "refreshTimeoutSeconds": "600",
+          "maximumLifetimeSeconds": "86400",
+          "guiIdleTimeoutSeconds": "1200",
+          "restTimeoutSeconds": "90",
+          "creationTime": "1719400000",
+          "firstLoginTime": "1719400000",
+          "lastLoginTime": "1719400600",
+          "userName": "admin",
+          "remoteUser": "false",
+          "unixUserId": "15374",
+          "sessionId": "A1B2C3D4E5F6G7H8I9J0==",
+          "siteFingerprint": "XyZ123abcDEF==",
+          "urlToken": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+          "changePassword": "no",
+          "healthScore": "100",
+          "version": "6.0(9c)",
+          "buildTime": "Wed Apr 26 22:34:04 UTC 2023",
+          "node": "topology/pod-1/node-1"
+        }
+      }
+    }
+  ]
+}

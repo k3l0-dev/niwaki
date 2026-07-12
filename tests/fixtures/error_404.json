@@ -1,0 +1,12 @@
+{
+  "imdata": [
+    {
+      "error": {
+        "attributes": {
+          "code": "404",
+          "text": "Request failed, the DN uni/tn-does-not-exist-xyz is invalid"
+        }
+      }
+    }
+  ]
+}

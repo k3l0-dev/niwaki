@@ -4,13 +4,15 @@ Thank you for helping tend the tree. 🌳
 
 ## How this repository works
 
-niwaki is developed in a private workshop where the full test suite (13,000+
-unit tests plus a live three-act walkthrough against a lab APIC) and the
-release engineering live.  **This public repository is the product's home**:
-source releases, documentation, issues and discussions.  Every release lands
-here as a single commit, which is why pull requests are never merged
-directly — see [the reference-patch model](#pull-requests-the-reference-patch-model)
-below.
+niwaki is developed in a private workshop; the release engineering lives
+there.  **This public repository is the product's home**: source, the full
+test suite (13,900+ unit tests plus the executable documentation — run it
+with `uv run pytest --ignore=tests/integration tests/ docs/`), documentation,
+releases, issues and discussions.  Every release lands here as a single
+commit, which is why pull requests are never merged directly — see
+[the reference-patch model](#pull-requests-the-reference-patch-model) below.
+The live integration walkthrough needs a lab APIC and skips itself without
+one.
 
 ## The best ways to contribute
 
@@ -46,8 +48,8 @@ The documentation lives at <https://k3l0-dev.github.io/niwaki/> and is built
 from the `docs/` sources in this repository.  Typos, unclear guides, missing
 examples: open an issue or a small PR.
 
-The documentation is **executable**: every ` ```python ` fence is run as a
-test in the maintainers' suite, with blocks on the same page sharing one
+The documentation is **executable**: every ` ```python ` fence runs as a
+test (`uv run pytest docs/`), with blocks on the same page sharing one
 namespace (a page reads as one continuous program).  When contributing
 snippets: write blocks that really run against the SDK; mark the rare
 non-runnable block (another SDK, live-fabric-only steps) with an HTML
@@ -58,7 +60,7 @@ comment `<!--- skip: next --->` on the line above the fence; and use
 
 Pull requests are welcome as **reference patches**:
 
-1. Open the PR as usual — the public CI (lint, types, docs, packaging) runs
+1. Open the PR as usual — the public CI (lint, types, tests, docs, packaging) runs
    on it.
 2. A maintainer re-lands accepted changes in the private workshop, where the
    full test suite and the live APIC walkthrough validate them.

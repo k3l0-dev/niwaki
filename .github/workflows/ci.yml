@@ -1,10 +1,12 @@
 # niwaki — public CI (GitHub Actions)
 #
-# The full test suite runs in the maintainers' private infrastructure; this
-# pipeline validates what the public deliverable itself guarantees: clean
-# lint/types, documentation that builds strictly, a vocabulary book that
-# matches the curation, a wheel that installs and works on every supported
-# Python, and workflows that pass their own security lint.
+# Everything the deliverable guarantees, verified on every push and PR:
+# clean lint/types, the full unit-test suite (including the executable
+# documentation — every python fence in docs/ runs), documentation that
+# builds strictly, a vocabulary book that matches the curation, a wheel
+# that installs and works on every supported Python, and workflows that
+# pass their own security lint.  The live integration suite needs a lab
+# APIC and skips itself without one.
 #
 # Also callable as a reusable workflow (workflow_call) — the weekly canary
 # re-runs the exact same gates against a fresh dependency resolution.
@@ -40,6 +42,25 @@ jobs:
       - run: uv run ruff format --check src docs scripts
       - run: uv run ruff check src docs scripts
       - run: uv run mypy src
+
+  tests:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990 # v8.3.2
+        with:
+          python-version: ${{ matrix.python }}
+          enable-cache: true
+          cache-dependency-glob: "pyproject.toml"
+      - run: uv sync --extra dev
+      # tests/ plus docs/ — the documentation snippets run as tests too.
+      - run: uv run pytest -q --tb=short --ignore=tests/integration tests/ docs/
 
   docs:
     runs-on: ubuntu-latest

@@ -1,0 +1,154 @@
+{
+  "timestamp": "2026-06-27T13:20:03.745083+02:00",
+  "python_version": "3.12.11",
+  "platform": "darwin",
+  "benchmarks": {
+    "baseline_python_pass": {
+      "type": "cold_import_ms",
+      "first_ms": 13.5,
+      "min_ms": 11.5,
+      "mean_ms": 12.2,
+      "std_ms": 0.8,
+      "runs": 5
+    },
+    "import_niwaki": {
+      "type": "cold_import_ms",
+      "first_ms": 90.3,
+      "min_ms": 89.0,
+      "mean_ms": 90.2,
+      "std_ms": 0.8,
+      "runs": 5
+    },
+    "import_child_map": {
+      "type": "cold_import_ms",
+      "first_ms": 91.7,
+      "min_ms": 90.0,
+      "mean_ms": 91.5,
+      "std_ms": 1.4,
+      "runs": 5
+    },
+    "import_1_model_fvBD": {
+      "type": "cold_import_ms",
+      "first_ms": 93.7,
+      "min_ms": 92.0,
+      "mean_ms": 93.2,
+      "std_ms": 1.0,
+      "runs": 5
+    },
+    "import_3_models": {
+      "type": "cold_import_ms",
+      "first_ms": 96.8,
+      "min_ms": 94.7,
+      "mean_ms": 95.8,
+      "std_ms": 0.8,
+      "runs": 5
+    },
+    "import_10_models": {
+      "type": "cold_import_ms",
+      "first_ms": 101.8,
+      "min_ms": 101.4,
+      "mean_ms": 102.0,
+      "std_ms": 0.7,
+      "runs": 5
+    },
+    "import_niwaki_nav_only": {
+      "type": "cold_import_ms",
+      "first_ms": 99.7,
+      "min_ms": 99.7,
+      "mean_ms": 100.9,
+      "std_ms": 0.8,
+      "runs": 5
+    },
+    "child_map_dict_lookup": {
+      "type": "nav_us",
+      "min_us": 0.0,
+      "mean_us": 0.051,
+      "std_us": 0.019,
+      "runs": 2000
+    },
+    "nav_1hop_tenant": {
+      "type": "nav_us",
+      "min_us": 2.667,
+      "mean_us": 2.824,
+      "std_us": 0.229,
+      "runs": 2000
+    },
+    "nav_2hop_tenant_bd": {
+      "type": "nav_us",
+      "min_us": 5.875,
+      "mean_us": 6.165,
+      "std_us": 0.491,
+      "runs": 2000
+    },
+    "nav_3hop_tenant_bd_vrf": {
+      "type": "nav_us",
+      "min_us": 8.125,
+      "mean_us": 8.433,
+      "std_us": 0.592,
+      "runs": 2000
+    },
+    "nav_3hop_rs_positional": {
+      "type": "nav_us",
+      "min_us": 8.292,
+      "mean_us": 8.569,
+      "std_us": 0.277,
+      "runs": 2000
+    },
+    "nav_4hop_epg_bd_binding": {
+      "type": "nav_us",
+      "min_us": 10.542,
+      "mean_us": 10.865,
+      "std_us": 0.38,
+      "runs": 2000
+    },
+    "nav_bind_method": {
+      "type": "nav_us",
+      "min_us": 8.042,
+      "mean_us": 8.352,
+      "std_us": 0.366,
+      "runs": 2000
+    },
+    "dn_tenant": {
+      "type": "dn_us",
+      "min_us": 0.041,
+      "mean_us": 0.07,
+      "std_us": 0.022,
+      "runs": 2000
+    },
+    "dn_bd": {
+      "type": "dn_us",
+      "min_us": 0.0,
+      "mean_us": 0.07,
+      "std_us": 0.022,
+      "runs": 2000
+    },
+    "dn_epg": {
+      "type": "dn_us",
+      "min_us": 0.041,
+      "mean_us": 0.066,
+      "std_us": 0.023,
+      "runs": 2000
+    },
+    "dn_rs_singleton": {
+      "type": "dn_us",
+      "min_us": 0.041,
+      "mean_us": 0.071,
+      "std_us": 0.023,
+      "runs": 2000
+    },
+    "dn_chain_tenant_bd": {
+      "type": "dn_us",
+      "min_us": 5.75,
+      "mean_us": 5.963,
+      "std_us": 0.233,
+      "runs": 2000
+    },
+    "dn_chain_4hop": {
+      "type": "dn_us",
+      "min_us": 7.792,
+      "mean_us": 8.092,
+      "std_us": 0.288,
+      "runs": 2000
+    }
+  }
+}

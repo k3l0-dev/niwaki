@@ -1,0 +1,12 @@
+{
+  "imdata": [
+    {
+      "error": {
+        "attributes": {
+          "code": "403",
+          "text": "Access restricted to L3Out interface only"
+        }
+      }
+    }
+  ]
+}

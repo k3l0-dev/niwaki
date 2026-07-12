@@ -1,0 +1,68 @@
+{
+  "totalCount": "3",
+  "imdata": [
+    {
+      "fvTenant": {
+        "attributes": {
+          "dn": "uni/tn-common",
+          "rn": "tn-common",
+          "name": "common",
+          "nameAlias": "",
+          "descr": "Common tenant - shared resources",
+          "annotation": "",
+          "ownerKey": "",
+          "ownerTag": "",
+          "uid": "0",
+          "lcOwn": "local",
+          "modTs": "2024-06-25T10:00:00.000+00:00",
+          "monPolDn": "uni/tn-common/monepg-default",
+          "extMngdBy": "undefined",
+          "userdom": "all",
+          "status": ""
+        }
+      }
+    },
+    {
+      "fvTenant": {
+        "attributes": {
+          "dn": "uni/tn-mgmt",
+          "rn": "tn-mgmt",
+          "name": "mgmt",
+          "nameAlias": "",
+          "descr": "Management tenant",
+          "annotation": "",
+          "ownerKey": "",
+          "ownerTag": "",
+          "uid": "0",
+          "lcOwn": "local",
+          "modTs": "2024-06-25T10:00:00.000+00:00",
+          "monPolDn": "uni/tn-common/monepg-default",
+          "extMngdBy": "undefined",
+          "userdom": "all",
+          "status": ""
+        }
+      }
+    },
+    {
+      "fvTenant": {
+        "attributes": {
+          "dn": "uni/tn-Prod",
+          "rn": "tn-Prod",
+          "name": "Prod",
+          "nameAlias": "Production",
+          "descr": "Production tenant",
+          "annotation": "",
+          "ownerKey": "",
+          "ownerTag": "",
+          "uid": "15374",
+          "lcOwn": "local",
+          "modTs": "2024-06-25T12:00:00.000+00:00",
+          "monPolDn": "uni/tn-common/monepg-default",
+          "extMngdBy": "undefined",
+          "userdom": "all",
+          "status": ""
+        }
+      }
+    }
+  ]
+}

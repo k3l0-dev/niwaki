@@ -229,10 +229,17 @@ uv sync --extra docs
 bash scripts/docs.sh open     # build + open docs/_build/html/index.html
 ```
 
-Development, the full test suite (13,700+ unit tests plus a three-act live
-walkthrough against a lab APIC) and release engineering run in the
-maintainers' private infrastructure.  This repository is the public home of
-the SDK: source, documentation, releases and issues.
+The full test suite ships with the repository — 13,900+ unit tests plus the
+executable documentation (every `python` fence in `docs/` runs as a test):
+
+```bash
+uv run pytest --ignore=tests/integration tests/ docs/
+```
+
+The integration suite (a three-act live walkthrough) needs a lab APIC and
+skips itself without one.  Release engineering runs in the maintainers'
+private infrastructure; this repository is the public home of the SDK:
+source, tests, documentation, releases and issues.
 
 ## Status
 
