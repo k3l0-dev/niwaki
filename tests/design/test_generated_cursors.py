@@ -56,9 +56,25 @@ class TestSignatures:
     """The typed surface is the autocompletion contract — pin it."""
 
     def test_ancestor_makers_are_real_methods(self) -> None:
-        """Implicit pop is statically visible: EpgCursor exposes tenant makers."""
+        """Implicit pop is statically visible: EpgCursor exposes tenant makers.
+
+        Ancestor makers come from the inherited maker mixins (one per ancestor
+        level) — the method must resolve through the MRO with its typed
+        signature, wherever it is defined.
+        """
         for maker in ("epg", "app", "bd", "vrf", "l3out", "filter", "contract"):
-            assert maker in EpgCursor.__dict__, f"EpgCursor lacks typed {maker}()"
+            method = getattr(EpgCursor, maker, None)
+            assert callable(method), f"EpgCursor lacks typed {maker}()"
+            assert "params" in method.__code__.co_varnames, f"{maker}() is not a generated maker"
+
+    def test_mixin_mro_is_nearest_wins(self) -> None:
+        """The mixin inheritance order reproduces the runtime resolution:
+        a maker defined at a nearer level shadows the same label further up."""
+        mro_names = [c.__name__ for c in EpgCursor.__mro__]
+        app_idx = mro_names.index("_AppMakers")
+        tenant_idx = mro_names.index("_TenantMakers")
+        uni_idx = mro_names.index("_UniMakers")
+        assert app_idx < tenant_idx < uni_idx
 
     def test_set_exposes_model_fields(self) -> None:
         params = inspect.signature(BdCursor.set).parameters
@@ -118,10 +134,31 @@ class TestConsistency:
         assert spine.__name__ == "SpineSelectorNodeBlockCursor"
 
     def test_regeneration_matches_curation(self) -> None:
-        """render() stays parseable and emits one class per curated position."""
-        from niwaki._codegen.generate_design import render
+        """render_all() stays parseable and emits one cursor per curated position."""
+        from niwaki._codegen.generate_design import render_all
 
-        tree = ast.parse(render())
-        classes = {n.name for n in ast.walk(tree) if isinstance(n, ast.ClassDef)}
+        classes: set[str] = set()
+        for content in render_all().values():
+            tree = ast.parse(content)
+            classes |= {n.name for n in ast.walk(tree) if isinstance(n, ast.ClassDef)}
+        cursors = {name for name in classes if not name.startswith("_")}
         expected = {type_.__name__ for type_ in CURSOR_FOR.values()}
-        assert classes == expected
+        assert cursors == expected
+
+    def test_committed_package_matches_regeneration(self) -> None:
+        """A stale committed module means vocabulary.yaml changed without
+        running ``uv run python -m niwaki._codegen.generate_design``.
+
+        The committed files are ruff-formatted after generation, so the guard
+        normalises whitespace-only differences by comparing the AST dumps.
+        """
+        from niwaki._codegen.generate_design import OUTPUT_DIR, render_all
+
+        rendered = render_all()
+        on_disk = {p.name for p in OUTPUT_DIR.glob("*.py")}
+        assert on_disk == set(rendered), "module set drifted — re-run generate_design"
+        for filename, content in rendered.items():
+            disk = (OUTPUT_DIR / filename).read_text(encoding="utf-8")
+            assert ast.dump(ast.parse(disk)) == ast.dump(ast.parse(content)), (
+                f"{filename} is stale — re-run generate_design"
+            )

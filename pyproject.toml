@@ -106,7 +106,7 @@ exclude = ["src/niwaki/models/_generated/"]
 # (set/bind take the curated typed kwargs instead of **Any) — that Liskov
 # violation is the feature, so the override check is disabled there.
 [[tool.mypy.overrides]]
-module = "niwaki.design._generated_cursors"
+module = ["niwaki.design._generated_cursors", "niwaki.design._generated_cursors.*"]
 disable_error_code = ["override"]
 
 # ── Coverage ──────────────────────────────────────────────────────────────────
@@ -117,7 +117,7 @@ disable_error_code = ["override"]
 [tool.coverage.run]
 omit = [
     "*/models/_generated/*",
-    "*/design/_generated_cursors.py",
+    "*/design/_generated_cursors/*",
     "*/domain/_child_map.py",
 ]
 
