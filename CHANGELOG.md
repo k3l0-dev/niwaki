@@ -4,6 +4,51 @@ All notable changes to this project are documented here.  The format follows
 [Keep a Changelog](https://keepachangelog.com/); versions follow semver
 (0.x — the API may still change between minor versions).
 
+## [0.4.0] — 2026-07-12
+
+The vocabulary triples and the whole delivery pipeline matures.
+
+### Added
+
+- **L3Out, complete** (wave 1): node and interface profiles, node/path
+  attachments as literal-DN makers, BGP peers with ASN and prefix
+  policies, OSPF/EIGRP/HSRP/PIM/IGMP/BFD/MPLS interface profiles,
+  floating SVIs, external EPGs with subnets and contract verbs,
+  route-control profiles and contexts.
+- **Tenant > Policies > Protocol, 28/28 GUI folders** (wave 1bis): BGP and
+  EIGRP address-family contexts, OSPF timers, data-plane policing, DHCP
+  relay (provider carries the server address) and options, endpoint
+  retention, external bridge group profiles, First Hop Security with RA
+  guard, IGMP/MLD snooping, IP SLA with ICMP/TCP probes, track
+  lists/members, PIM route maps with entries, route tags, tenant-level
+  route maps, keychains with key tables — plus the standalone L4-L7
+  policies (PBR with destinations, backup, health groups, service EPG).
+  The vocabulary grows from 57 to 176 curated positions.
+- `propose_vocabulary` codegen tool: assisted-curation candidates
+  (makers from the navigation jargon, binds from the reference map,
+  contract-verb detection, review flags) — the vocabulary now grows in
+  reviewed waves, and contributions need no fabric.
+- Write-only schema properties (passwords, pre-shared keys) are tracked
+  as `_secure_props` on the models and excluded from `plan`/diff
+  comparison — a pushed secret no longer reports phantom drift.
+  Consequence: rotating a secret requires a push; `plan` cannot see it.
+- Documentation: hosted site (GitHub Pages) with an executable-docs
+  suite, a cookbook of operator recipes, the generated coverage matrix,
+  the cobra comparison gallery, and the *Inside the DSL* page; offline
+  wheelhouse (niwaki + all dependencies) attached to every GitHub
+  Release for restricted networks.
+- The full unit-test suite (14,200+) ships with the repository and runs
+  in the public CI on Python 3.12 and 3.13.
+
+### Changed
+
+- The generated cursor layout scales: one module per design domain,
+  loaded lazily; ancestor makers are inherited through per-position
+  mixins (nearest level wins, like the runtime) — 25k generated lines
+  became 4.3k at 57 positions, ~75 lines per position since.
+- Cursor class names disambiguate with as many ancestor labels as
+  needed (`bgpPeerP` under two positions yields distinct cursors).
+
 ## [0.3.0] — 2026-07-11
 
 First PyPI release.
