@@ -17,6 +17,7 @@ class pkiFabricSelfCAEp(ManagedObject):
     _aci_class: ClassVar[str] = "pkiFabricSelfCAEp"
     _rn_format: ClassVar[str] = "fabselfca"
     _naming_props: ClassVar[list[str]] = []
+    _secure_props: ClassVar[frozenset[str]] = frozenset(["ca_key"])
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

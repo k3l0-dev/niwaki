@@ -19,6 +19,7 @@ class datetimeNtpAuthKey(ManagedObject):
     _aci_class: ClassVar[str] = "datetimeNtpAuthKey"
     _rn_format: ClassVar[str] = "ntpauth-{auth_key_id}"
     _naming_props: ClassVar[list[str]] = ["auth_key_id"]
+    _secure_props: ClassVar[frozenset[str]] = frozenset(["key"])
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

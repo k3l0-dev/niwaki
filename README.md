@@ -229,7 +229,7 @@ uv sync --extra docs
 bash scripts/docs.sh open     # build + open docs/_build/html/index.html
 ```
 
-The full test suite ships with the repository — 13,900+ unit tests plus the
+The full test suite ships with the repository — 14,200+ unit tests plus the
 executable documentation (every `python` fence in `docs/` runs as a test):
 
 ```bash
@@ -243,9 +243,9 @@ source, tests, documentation, releases and issues.
 
 ## Status
 
-Active development. 13,700+ tests, mypy strict, ruff. The design DSL covers a
+Active development. 14,200+ tests, mypy strict, ruff. The design DSL covers a
 curated vocabulary across tenant, access (`infra`), fabric, and controller
-policies (~50 positions); everything else is reachable via `.mo()` and
+policies — 175+ curated positions, growing wave by wave; everything else is reachable via `.mo()` and
 `bind_dn()`. Why this SDK exists: [the comparison with cobra](https://k3l0-dev.github.io/niwaki/why.html).
 
 ## License

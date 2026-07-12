@@ -17,6 +17,7 @@ class macsecKeyPol(ManagedObject):
     _aci_class: ClassVar[str] = "macsecKeyPol"
     _rn_format: ClassVar[str] = "keyp-{key_name}"
     _naming_props: ClassVar[list[str]] = ["key_name"]
+    _secure_props: ClassVar[frozenset[str]] = frozenset(["pre_shared_key"])
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

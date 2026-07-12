@@ -235,3 +235,29 @@ class TestMoDiffChildren:
 
         delta = mo_diff(desired, current, recurse_children=False)
         assert delta is None  # scalar unchanged, children ignored
+
+
+class TestSecureProps:
+    """Write-only props never count as drift — the APIC never echoes them."""
+
+    def test_secure_prop_is_skipped(self) -> None:
+        from niwaki.models._generated.fv.fvKeyPol import fvKeyPol
+
+        desired = fvKeyPol(key_id="1", name="rollover", pre_shared_key="s3cr3t")
+        current = fvKeyPol.model_validate({"id": "1", "name": "rollover"})
+        assert mo_diff(desired, current) is None
+
+    def test_secure_prop_is_skipped_in_fields_set_mode(self) -> None:
+        from niwaki.models._generated.fv.fvKeyPol import fvKeyPol
+
+        desired = fvKeyPol(key_id="1", pre_shared_key="s3cr3t")
+        current = fvKeyPol.model_validate({"id": "1"})
+        assert mo_diff(desired, current, respect_fields_set=True) is None
+
+    def test_non_secure_changes_still_diff(self) -> None:
+        from niwaki.models._generated.fv.fvKeyPol import fvKeyPol
+
+        desired = fvKeyPol(key_id="1", name="rotated", pre_shared_key="s3cr3t")
+        current = fvKeyPol.model_validate({"id": "1", "name": "rollover"})
+        delta = mo_diff(desired, current)
+        assert delta is not None and delta.name == "rotated"

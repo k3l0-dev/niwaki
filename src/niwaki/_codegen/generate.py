@@ -358,10 +358,13 @@ def _render_class(
     create_only_fields: list[str] = []
     optional_fields: list[str] = []
     enum_imports: set[str] = set()
+    secure_props: list[str] = []
 
     has_aliased_props = False
 
     for prop_name, prop_data in sorted(props.items()):
+        if prop_data.get("secure"):
+            secure_props.append(py_names.get(prop_name) or _prop_py_name(prop_name))
         if _prop_py_name(prop_name) != prop_name:
             has_aliased_props = True
         line = _field_line(
@@ -413,6 +416,7 @@ def _render_class(
         class_name=aci_class,
         rn_format=rn_format,
         naming_props=naming_props_py,
+        secure_props=sorted(secure_props),
         contains=contains,
         naming_fields=naming_fields,
         create_only_fields=create_only_fields,

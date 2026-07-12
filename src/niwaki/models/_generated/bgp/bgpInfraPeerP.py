@@ -21,6 +21,7 @@ class bgpInfraPeerP(ManagedObject):
     _aci_class: ClassVar[str] = "bgpInfraPeerP"
     _rn_format: ClassVar[str] = "infraPeerP-[{peer_address}]"
     _naming_props: ClassVar[list[str]] = ["peer_address"]
+    _secure_props: ClassVar[frozenset[str]] = frozenset(["password"])
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

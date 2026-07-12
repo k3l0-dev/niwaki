@@ -19,6 +19,9 @@ class aaaServiceNodeCluster(ManagedObject):
     _aci_class: ClassVar[str] = "aaaServiceNodeCluster"
     _rn_format: ClassVar[str] = "snclstr-{name}"
     _naming_props: ClassVar[list[str]] = ["name"]
+    _secure_props: ClassVar[frozenset[str]] = frozenset(
+        ["service_node_admin_password", "service_node_api_key", "service_node_kms_private_key"]
+    )
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

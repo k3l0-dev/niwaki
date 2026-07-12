@@ -17,6 +17,9 @@ class datetimeNtpIFFClientKey(ManagedObject):
     _aci_class: ClassVar[str] = "datetimeNtpIFFClientKey"
     _rn_format: ClassVar[str] = "ntpiff-{iff_key_id}"
     _naming_props: ClassVar[list[str]] = ["iff_key_id"]
+    _secure_props: ClassVar[frozenset[str]] = frozenset(
+        ["client_group_key_password", "ntp_iff_key_file_contents"]
+    )
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

@@ -71,7 +71,8 @@ in the same design.  Two explicit escape hatches cross that boundary:
 ## Why a curated vocabulary
 
 niwaki generates 2,222 model classes, but the DSL vocabulary is **curated by
-hand** (~50 positions across tenant, access, fabric and controller policies).
+hand** — 175+ positions across tenant, access, fabric and controller policies,
+growing wave by wave (see the coverage matrix).
 Generating makers for every class would bury the useful names under thousands
 of unreadable ones and offer no ergonomic gain over the raw models.  Curation
 keeps the operator verbatim honest — and everything outside it stays reachable
@@ -89,6 +90,7 @@ model layer stays small, predictable, and safe to hold anywhere.
 ## Reading further
 
 - {doc}`guide/design-dsl` — the DSL in practice
+- {doc}`inside-the-dsl` — how the DSL is built, and how to grow it
 - {doc}`guide/push-modes` — strict, staged, plan
 - {doc}`guide/observing` — the read side
 - {doc}`why` — how this compares with the official `cobra` SDK

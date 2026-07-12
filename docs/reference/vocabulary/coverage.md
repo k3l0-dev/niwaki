@@ -5,13 +5,15 @@ Re-generate: uv run python -m niwaki._codegen.generate_docs
 
 # Coverage matrix
 
-**57 curated positions** across the four design domains plus the `uni`-level domains.  Everything else in the 2,222 generated classes stays reachable through `.mo(Class, ...)` and `bind_dn(alias=dn)` — see the design guide.
+**176 curated positions** across the four design domains plus the `uni`-level domains.  Everything else in the 2,222 generated classes stays reachable through `.mo(Class, ...)` and `bind_dn(alias=dn)` — see the design guide.
 
 ## fabric
 
 | position | ACI class | makers | bind aliases | verbs | sugar | atomic |
 | --- | --- | --- | --- | --- | --- | --- |
-| `fabric` | `fabricInst` | 5 | — | — | — | — |
+| `fabric` | `fabricInst` | 7 | — | — | — | — |
+| `fabric.igmp_snoop_policy` | `igmpSnoopPol` | — | — | — | — | — |
+| `fabric.mld_snoop_policy` | `mldSnoopPol` | — | — | — | — | — |
 | `fabric.datetime_policy` | `datetimePol` | 1 | — | — | — | — |
 | `fabric.datetime_policy.ntp_provider` | `datetimeNtpProv` | — | — | — | — | — |
 | `fabric.dns_profile` | `dnsProfile` | 2 | — | — | — | — |
@@ -31,7 +33,10 @@ Re-generate: uv run python -m niwaki._codegen.generate_docs
 
 | position | ACI class | makers | bind aliases | verbs | sugar | atomic |
 | --- | --- | --- | --- | --- | --- | --- |
-| `infra` | `infraInfra` | 13 | — | — | — | — |
+| `infra` | `infraInfra` | 15 | — | — | — | — |
+| `infra.dhcp_relay_policy` | `dhcpRelayP` | 1 | — | — | — | — |
+| `infra.dhcp_relay_policy.provider` | `dhcpRsProv` | — | — | — | — | — |
+| `infra.dpp_policy` | `qosDppPol` | — | — | — | — | — |
 | `infra.cdp_policy` | `cdpIfPol` | — | — | — | — | — |
 | `infra.lldp_policy` | `lldpIfPol` | — | — | — | — | — |
 | `infra.lacp_policy` | `lacpLagPol` | — | — | — | — | — |
@@ -60,7 +65,7 @@ Re-generate: uv run python -m niwaki._codegen.generate_docs
 
 | position | ACI class | makers | bind aliases | verbs | sugar | atomic |
 | --- | --- | --- | --- | --- | --- | --- |
-| `tenant` | `fvTenant` | 6 | — | — | — | — |
+| `tenant` | `fvTenant` | 49 | — | — | — | — |
 | `tenant.app` | `fvAp` | 1 | — | — | — | — |
 | `tenant.app.epg` | `fvAEPg` | 1 | `bd=`, `domain=` | `.provide()`, `.consume()` | — | — |
 | `tenant.app.epg.static_path` | `fvRsPathAtt` | — | — | — | — | — |
@@ -68,11 +73,125 @@ Re-generate: uv run python -m niwaki._codegen.generate_docs
 | `tenant.bd.subnet` | `fvSubnet` | — | — | — | — | — |
 | `tenant.vrf` | `fvCtx` | 1 | `l3out=` | — | — | — |
 | `tenant.vrf.pim` | `pimCtxP` | — | — | — | — | — |
-| `tenant.l3out` | `l3extOut` | — | `vrf=` | — | — | — |
+| `tenant.l3out` | `l3extOut` | 10 | `vrf=`, `domain=`, `fallback_route_group=` | — | — | — |
+| `tenant.l3out.node_profile` | `l3extLNodeP` | 6 | `fabric_node=`, `mpls_custom_qos_policy=` | — | — | — |
+| `tenant.l3out.node_profile.interface_profile` | `l3extLIfP` | 12 | `arp_interface_policy=`, `nd_interface_policy=`, `custom_qos_policy=`, `netflow_monitor=` | — | — | — |
+| `tenant.l3out.node_profile.interface_profile.path_attachment` | `l3extRsPathL3OutAtt` | — | — | — | — | — |
+| `tenant.l3out.node_profile.interface_profile.floating_svi` | `l3extVirtualLIfP` | 6 | `domain=` | — | — | — |
+| `tenant.l3out.node_profile.interface_profile.floating_svi.bgp_peer` | `bgpPeerP` | 3 | `bgp_peer_prefix_policy=`, `route_control_profile=` | — | — | — |
+| `tenant.l3out.node_profile.interface_profile.floating_svi.bgp_peer.autonomous_system_profile` | `bgpAsP` | — | — | — | — | — |
+| `tenant.l3out.node_profile.interface_profile.floating_svi.bgp_peer.local_autonomous_system_profile` | `bgpLocalAsnP` | — | — | — | — | — |
+| `tenant.l3out.node_profile.interface_profile.floating_svi.bgp_peer.site_of_origin_profile` | `bgpSiteOfOriginP` | — | — | — | — | — |
+| `tenant.l3out.node_profile.interface_profile.floating_svi.infra_peer_connectivity_profile` | `bgpInfraPeerP` | 2 | `bgp_peer_prefix_policy=` | — | — | — |
+| `tenant.l3out.node_profile.interface_profile.floating_svi.infra_peer_connectivity_profile.autonomous_system_profile` | `bgpAsP` | — | — | — | — | — |
+| `tenant.l3out.node_profile.interface_profile.floating_svi.infra_peer_connectivity_profile.local_autonomous_system_profile` | `bgpLocalAsnP` | — | — | — | — | — |
+| `tenant.l3out.node_profile.interface_profile.floating_svi.member_node_configuration` | `l3extMember` | — | — | — | — | — |
+| `tenant.l3out.node_profile.interface_profile.floating_svi.nd_prefix_profile` | `ndPfxP` | — | `nd_ra_prefix_policy=` | — | — | — |
+| `tenant.l3out.node_profile.interface_profile.floating_svi.secondary_ip_address` | `l3extIp` | — | — | — | — | — |
+| `tenant.l3out.node_profile.interface_profile.floating_svi.bd_profile_container` | `l3extBdProfileCont` | — | `bd_profile=` | — | — | — |
+| `tenant.l3out.node_profile.interface_profile.ospf_interface` | `ospfIfP` | — | `ospf_interface_policy=` | — | — | — |
+| `tenant.l3out.node_profile.interface_profile.eigrp_interface` | `eigrpIfP` | 1 | `eigrp_interface_policy=` | — | — | — |
+| `tenant.l3out.node_profile.interface_profile.eigrp_interface.eigrp_authentication` | `eigrpAuthIfP` | — | `keychain_policy=` | — | — | — |
+| `tenant.l3out.node_profile.interface_profile.hsrp_interface` | `hsrpIfP` | 1 | `hsrp_interface_policy=` | — | — | — |
+| `tenant.l3out.node_profile.interface_profile.hsrp_interface.hsrp_group_profile` | `hsrpGroupP` | — | `hsrp_group_policy=` | — | — | — |
+| `tenant.l3out.node_profile.interface_profile.igmp_interface` | `igmpIfP` | — | `igmp_interface_policy=` | — | — | — |
+| `tenant.l3out.node_profile.interface_profile.pim_interface` | `pimIfP` | — | `pim_interface_policy=` | — | — | — |
+| `tenant.l3out.node_profile.interface_profile.pim_ipv6_interface` | `pimIPV6IfP` | — | `pim_interface_policy=` | — | — | — |
+| `tenant.l3out.node_profile.interface_profile.bfd_interface` | `bfdIfP` | — | `bfd_interface_policy=` | — | — | — |
+| `tenant.l3out.node_profile.interface_profile.bfd_mh_interface` | `bfdMhIfP` | — | `bfd_interface_policy=` | — | — | — |
+| `tenant.l3out.node_profile.interface_profile.dhcp_relay_label` | `dhcpLbl` | — | `dhcp_option_policy=` | — | — | — |
+| `tenant.l3out.node_profile.interface_profile.mpls_interface` | `mplsIfP` | — | `mpls_interface_policy=` | — | — | — |
+| `tenant.l3out.node_profile.node_attachment` | `l3extRsNodeL3OutAtt` | — | — | — | — | — |
+| `tenant.l3out.node_profile.bgp_peer` | `bgpPeerP` | 3 | `bgp_peer_prefix_policy=`, `route_control_profile=` | — | — | — |
+| `tenant.l3out.node_profile.bgp_peer.autonomous_system_profile` | `bgpAsP` | — | — | — | — | — |
+| `tenant.l3out.node_profile.bgp_peer.local_autonomous_system_profile` | `bgpLocalAsnP` | — | — | — | — | — |
+| `tenant.l3out.node_profile.bgp_peer.site_of_origin_profile` | `bgpSiteOfOriginP` | — | — | — | — | — |
+| `tenant.l3out.node_profile.protocol_profile` | `bgpProtP` | — | `bgp_best_path_control_policy=`, `bgp_timers_policy=` | — | — | — |
+| `tenant.l3out.node_profile.infra_peer_connectivity_profile` | `bgpInfraPeerP` | 2 | `bgp_peer_prefix_policy=` | — | — | — |
+| `tenant.l3out.node_profile.infra_peer_connectivity_profile.autonomous_system_profile` | `bgpAsP` | — | — | — | — | — |
+| `tenant.l3out.node_profile.infra_peer_connectivity_profile.local_autonomous_system_profile` | `bgpLocalAsnP` | — | — | — | — | — |
+| `tenant.l3out.node_profile.bfd_multihop_node_profile` | `bfdMhNodeP` | — | `bfd_multihop_node_policy=` | — | — | — |
+| `tenant.l3out.external_epg` | `l3extInstP` | 7 | `contract_master=`, `endpoint_security_group=`, `external_epg=`, `custom_qos_policy=`, `route_control_profile=`, `taboo_contract=`, `in_band_management_epg=`, `dot1q_tunnel=`, `access_client_epg=`, `access_function_provider=` | `.provide()`, `.consume()` | — | — |
+| `tenant.l3out.external_epg.subnet` | `l3extSubnet` | — | `bgp_route_summarization_policy=`, `eigrp_route_summarization_policy=`, `ospf_route_summarization_policy=`, `route_control_profile=` | — | — | — |
+| `tenant.l3out.external_epg.consumer_contract_label` | `vzConsCtrctLbl` | — | — | — | — | — |
+| `tenant.l3out.external_epg.provider_contract_label` | `vzProvCtrctLbl` | — | — | — | — | — |
+| `tenant.l3out.external_epg.consumer_label` | `vzConsLbl` | — | — | — | — | — |
+| `tenant.l3out.external_epg.provider_label` | `vzProvLbl` | — | — | — | — | — |
+| `tenant.l3out.external_epg.vz_cons_subject_label` | `vzConsSubjLbl` | — | — | — | — | — |
+| `tenant.l3out.external_epg.vz_prov_subject_label` | `vzProvSubjLbl` | — | — | — | — | — |
+| `tenant.l3out.bgp` | `bgpExtP` | — | — | — | — | — |
+| `tenant.l3out.ospf` | `ospfExtP` | — | — | — | — | — |
+| `tenant.l3out.eigrp` | `eigrpExtP` | — | — | — | — | — |
+| `tenant.l3out.pim_external` | `pimExtP` | — | — | — | — | — |
+| `tenant.l3out.mpls_external` | `mplsExtP` | — | `mpls_global_configuration=` | — | — | — |
+| `tenant.l3out.default_route_leak_policy` | `l3extDefaultRouteLeakP` | — | — | — | — | — |
+| `tenant.l3out.route_control_profile` | `rtctrlProfile` | 1 | — | — | — | — |
+| `tenant.l3out.route_control_profile.route_control_context` | `rtctrlCtxP` | 1 | `match_rule=` | — | — | — |
+| `tenant.l3out.route_control_profile.route_control_context.route_context_scope` | `rtctrlScope` | — | `action_rule_profile=` | — | — | — |
+| `tenant.l3out.route_target_instrumentation_profile` | `bgpRtTargetInstrP` | — | — | — | — | — |
 | `tenant.filter` | `vzFilter` | 1 | — | — | — | — |
 | `tenant.filter.entry` | `vzEntry` | — | — | — | `tcp=`, `udp=` | — |
 | `tenant.contract` | `vzBrCP` | 1 | — | — | — | — |
 | `tenant.contract.subject` | `vzSubj` | — | `filter=` | — | — | — |
+| `tenant.ospf_interface_policy` | `ospfIfPol` | — | — | — | — | — |
+| `tenant.eigrp_interface_policy` | `eigrpIfPol` | — | — | — | — | — |
+| `tenant.hsrp_interface_policy` | `hsrpIfPol` | — | — | — | — | — |
+| `tenant.hsrp_group_policy` | `hsrpGroupPol` | — | — | — | — | — |
+| `tenant.igmp_interface_policy` | `igmpIfPol` | — | — | — | — | — |
+| `tenant.pim_interface_policy` | `pimIfPol` | — | — | — | — | — |
+| `tenant.bfd_interface_policy` | `bfdIfPol` | — | — | — | — | — |
+| `tenant.bfd_mh_interface_policy` | `bfdMhIfPol` | — | — | — | — | — |
+| `tenant.bfd_multihop_node_policy` | `bfdMhNodePol` | — | — | — | — | — |
+| `tenant.bgp_peer_prefix_policy` | `bgpPeerPfxPol` | — | — | — | — | — |
+| `tenant.bgp_best_path_control_policy` | `bgpBestPathCtrlPol` | — | — | — | — | — |
+| `tenant.bgp_timers_policy` | `bgpCtxPol` | — | — | — | — | — |
+| `tenant.bgp_route_summarization_policy` | `bgpRtSummPol` | — | — | — | — | — |
+| `tenant.eigrp_route_summarization_policy` | `eigrpRtSummPol` | — | — | — | — | — |
+| `tenant.ospf_route_summarization_policy` | `ospfRtSummPol` | — | — | — | — | — |
+| `tenant.dhcp_option_policy` | `dhcpOptionPol` | 1 | — | — | — | — |
+| `tenant.dhcp_option_policy.dhcp_option` | `dhcpOption` | — | — | — | — | — |
+| `tenant.nd_interface_policy` | `ndIfPol` | — | — | — | — | — |
+| `tenant.nd_ra_prefix_policy` | `ndPfxPol` | — | — | — | — | — |
+| `tenant.arp_interface_policy` | `arpIfPol` | — | — | — | — | — |
+| `tenant.custom_qos_policy` | `qosCustomPol` | — | — | — | — | — |
+| `tenant.tenant_keychain_policy` | `fvKeyChainPol` | 1 | — | — | — | — |
+| `tenant.tenant_keychain_policy.key_policy` | `fvKeyPol` | — | — | — | — | — |
+| `tenant.mpls_interface_policy` | `mplsIfPol` | — | — | — | — | — |
+| `tenant.mpls_global_configuration` | `mplsLabelPol` | — | — | — | — | — |
+| `tenant.match_rule` | `rtctrlSubjP` | — | — | — | — | — |
+| `tenant.action_rule_profile` | `rtctrlAttrP` | — | — | — | — | — |
+| `tenant.bgp_address_family_context_policy` | `bgpCtxAfPol` | 1 | — | — | — | — |
+| `tenant.bgp_address_family_context_policy.bgp_additional_path_context_policy` | `bgpCtxAddlPathPol` | — | — | — | — | — |
+| `tenant.eigrp_address_family_context_policy` | `eigrpCtxAfPol` | — | — | — | — | — |
+| `tenant.ospf_timers_policy` | `ospfCtxPol` | — | — | — | — | — |
+| `tenant.dpp_policy` | `qosDppPol` | — | — | — | — | — |
+| `tenant.dhcp_relay_policy` | `dhcpRelayP` | 1 | — | — | — | — |
+| `tenant.dhcp_relay_policy.provider` | `dhcpRsProv` | — | — | — | — | — |
+| `tenant.ep_retention_policy` | `fvEpRetPol` | — | — | — | — | — |
+| `tenant.external_bridge_group_profile` | `l3extBdProfile` | — | — | — | — | — |
+| `tenant.fhs_bd_policy` | `fhsBDPol` | 1 | — | — | — | — |
+| `tenant.fhs_bd_policy.ra_guard_policy` | `fhsRaGuardPol` | — | — | — | — | — |
+| `tenant.trust_control_policy` | `fhsTrustCtrlPol` | — | — | — | — | — |
+| `tenant.igmp_snoop_policy` | `igmpSnoopPol` | — | — | — | — | — |
+| `tenant.mld_snoop_policy` | `mldSnoopPol` | — | — | — | — | — |
+| `tenant.ip_sla_monitoring_policy` | `fvIPSLAMonitoringPol` | 2 | — | — | — | — |
+| `tenant.ip_sla_monitoring_policy.icmp_echo_probe` | `fvICMPProbe` | — | — | — | — | — |
+| `tenant.ip_sla_monitoring_policy.tcp_probe` | `fvTCPProbe` | — | — | — | — | — |
+| `tenant.track_list` | `fvTrackList` | — | `track_member=` | — | — | — |
+| `tenant.track_member` | `fvTrackMember` | — | `ip_sla_monitoring_policy=` | — | — | — |
+| `tenant.pim_route_map_policy` | `pimRouteMapPol` | 1 | — | — | — | — |
+| `tenant.pim_route_map_policy.pim_route_map_entry` | `pimRouteMapEntry` | — | — | — | — | — |
+| `tenant.route_tag_policy` | `l3extRouteTagPol` | — | — | — | — | — |
+| `tenant.route_control_profile` | `rtctrlProfile` | 1 | — | — | — | — |
+| `tenant.route_control_profile.route_control_context` | `rtctrlCtxP` | 1 | `match_rule=` | — | — | — |
+| `tenant.route_control_profile.route_control_context.route_context_scope` | `rtctrlScope` | — | `action_rule_profile=` | — | — | — |
+| `tenant.service_container` | `vnsSvcCont` | 4 | — | — | — | — |
+| `tenant.service_container.service_redirect_policy` | `vnsSvcRedirectPol` | 1 | `ip_sla_monitoring_policy=`, `pbr_backup_policy=` | — | — | — |
+| `tenant.service_container.service_redirect_policy.destination_of_redirected_traffic` | `vnsRedirectDest` | — | `l4_l7_redirect_health_group=` | — | — | — |
+| `tenant.service_container.pbr_backup_policy` | `vnsBackupPol` | 1 | — | — | — | — |
+| `tenant.service_container.pbr_backup_policy.destination_of_redirected_traffic` | `vnsRedirectDest` | — | `l4_l7_redirect_health_group=` | — | — | — |
+| `tenant.service_container.l4_l7_redirect_health_group` | `vnsRedirectHealthGroup` | — | — | — | — | — |
+| `tenant.service_container.service_epg_policy` | `vnsSvcEPgPol` | — | — | — | — | — |
 
 ## controller
 

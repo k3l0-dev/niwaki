@@ -19,6 +19,7 @@ class bfdMhNodeP(ManagedObject):
     _aci_class: ClassVar[str] = "bfdMhNodeP"
     _rn_format: ClassVar[str] = "bfdMhNodeP"
     _naming_props: ClassVar[list[str]] = []
+    _secure_props: ClassVar[frozenset[str]] = frozenset(["authentication_key"])
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

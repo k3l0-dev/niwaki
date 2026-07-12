@@ -76,6 +76,7 @@ reference/api/index
 :maxdepth: 1
 
 design-first
+inside-the-dsl
 why
 comparison
 ```

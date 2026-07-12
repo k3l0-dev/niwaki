@@ -122,11 +122,16 @@ jargon:
   # ── L3Out Node profile ──────────────────────────────────────────────────────
   l3extLIfP: interface_profile
   l3extRsNodeL3OutAtt: node_attachment
+  bfdMhNodeP: bfd_multihop_node_profile  # schema label "Node Profile" would shadow l3extLNodeP
 
   # ── L3Out Interface profile ─────────────────────────────────────────────────
   l3extRsPathL3OutAtt: path_attachment
   bgpPeerP: bgp_peer
   ospfIfP: ospf_interface
+  l3extVirtualLIfP: floating_svi         # schema label "Logical Interface Profile" is l3extLIfP's
+  mplsIfP: mpls_interface                # schema label says "Interface Config"
+  eigrpAuthIfP: eigrp_authentication     # schema label says "Keychainpol Holder Mo"
+  l3extBdProfileCont: bd_profile_container  # schema label typo: "Conntainer Of Rspath …"
 
   # ── Leaf profile ────────────────────────────────────────────────────────────
   infraLeafS: leaf_selector
@@ -159,6 +164,51 @@ makers:
     l3out: l3extOut
     filter: vzFilter
     contract: vzBrCP
+    # Tenant-level protocol/QoS policies referenced by the L3Out binds (wave 1)
+    ospf_interface_policy: ospfIfPol
+    eigrp_interface_policy: eigrpIfPol
+    hsrp_interface_policy: hsrpIfPol
+    hsrp_group_policy: hsrpGroupPol
+    igmp_interface_policy: igmpIfPol
+    pim_interface_policy: pimIfPol
+    bfd_interface_policy: bfdIfPol
+    bfd_mh_interface_policy: bfdMhIfPol
+    bfd_multihop_node_policy: bfdMhNodePol
+    bgp_peer_prefix_policy: bgpPeerPfxPol
+    bgp_best_path_control_policy: bgpBestPathCtrlPol
+    bgp_timers_policy: bgpCtxPol
+    bgp_route_summarization_policy: bgpRtSummPol
+    eigrp_route_summarization_policy: eigrpRtSummPol
+    ospf_route_summarization_policy: ospfRtSummPol
+    dhcp_option_policy: dhcpOptionPol
+    nd_interface_policy: ndIfPol
+    nd_ra_prefix_policy: ndPfxPol
+    arp_interface_policy: arpIfPol
+    custom_qos_policy: qosCustomPol
+    tenant_keychain_policy: fvKeyChainPol
+    mpls_interface_policy: mplsIfPol
+    mpls_global_configuration: mplsLabelPol
+    match_rule: rtctrlSubjP
+    action_rule_profile: rtctrlAttrP
+    # Tenant > Policies > Protocol completion (wave 1bis, 2026-07-12)
+    bgp_address_family_context_policy: bgpCtxAfPol
+    eigrp_address_family_context_policy: eigrpCtxAfPol
+    ospf_timers_policy: ospfCtxPol
+    dpp_policy: qosDppPol
+    dhcp_relay_policy: dhcpRelayP
+    ep_retention_policy: fvEpRetPol
+    external_bridge_group_profile: l3extBdProfile
+    fhs_bd_policy: fhsBDPol
+    trust_control_policy: fhsTrustCtrlPol
+    igmp_snoop_policy: igmpSnoopPol
+    mld_snoop_policy: mldSnoopPol
+    ip_sla_monitoring_policy: fvIPSLAMonitoringPol
+    track_list: fvTrackList
+    track_member: fvTrackMember
+    pim_route_map_policy: pimRouteMapPol
+    route_tag_policy: l3extRouteTagPol
+    route_control_profile: rtctrlProfile
+    service_container: vnsSvcCont
   fvAp:
     epg: fvAEPg
   fvAEPg:
@@ -172,8 +222,99 @@ makers:
   vzBrCP:
     subject: vzSubj
 
+  # ── L3Out (wave 1, 2026-07-12) ──────────────────────────────────────────────
+  l3extOut:
+    node_profile: l3extLNodeP
+    external_epg: l3extInstP
+    bgp: bgpExtP
+    ospf: ospfExtP
+    eigrp: eigrpExtP
+    pim_external: pimExtP
+    mpls_external: mplsExtP
+    default_route_leak_policy: l3extDefaultRouteLeakP
+    route_control_profile: rtctrlProfile
+    route_target_instrumentation_profile: bgpRtTargetInstrP
+  l3extLNodeP:
+    interface_profile: l3extLIfP
+    node_attachment: l3extRsNodeL3OutAtt   # literal-DN maker (topology node), like static_path
+    bgp_peer: bgpPeerP
+    protocol_profile: bgpProtP
+    infra_peer_connectivity_profile: bgpInfraPeerP
+    bfd_multihop_node_profile: bfdMhNodeP
+  l3extLIfP:
+    path_attachment: l3extRsPathL3OutAtt   # literal-DN maker (interface path), like static_path
+    floating_svi: l3extVirtualLIfP
+    ospf_interface: ospfIfP
+    eigrp_interface: eigrpIfP
+    hsrp_interface: hsrpIfP
+    igmp_interface: igmpIfP
+    pim_interface: pimIfP
+    pim_ipv6_interface: pimIPV6IfP
+    bfd_interface: bfdIfP
+    bfd_mh_interface: bfdMhIfP
+    dhcp_relay_label: dhcpLbl
+    mpls_interface: mplsIfP
+  l3extInstP:
+    subnet: l3extSubnet
+    consumer_contract_label: vzConsCtrctLbl
+    provider_contract_label: vzProvCtrctLbl
+    consumer_label: vzConsLbl
+    provider_label: vzProvLbl
+    vz_cons_subject_label: vzConsSubjLbl
+    vz_prov_subject_label: vzProvSubjLbl
+  l3extVirtualLIfP:
+    bgp_peer: bgpPeerP
+    infra_peer_connectivity_profile: bgpInfraPeerP
+    member_node_configuration: l3extMember
+    nd_prefix_profile: ndPfxP
+    secondary_ip_address: l3extIp
+    bd_profile_container: l3extBdProfileCont
+  bgpPeerP:
+    autonomous_system_profile: bgpAsP
+    local_autonomous_system_profile: bgpLocalAsnP
+    site_of_origin_profile: bgpSiteOfOriginP
+  bgpInfraPeerP:
+    autonomous_system_profile: bgpAsP
+    local_autonomous_system_profile: bgpLocalAsnP
+  hsrpIfP:
+    hsrp_group_profile: hsrpGroupP
+  eigrpIfP:
+    eigrp_authentication: eigrpAuthIfP
+  rtctrlProfile:
+    route_control_context: rtctrlCtxP
+  rtctrlCtxP:
+    route_context_scope: rtctrlScope
+
+  # ── Tenant protocol policies (wave 1bis, 2026-07-12) ────────────────────────
+  bgpCtxAfPol:
+    bgp_additional_path_context_policy: bgpCtxAddlPathPol
+  dhcpRelayP:
+    provider: dhcpRsProv       # literal-DN maker (EPG dn + dhcp_server_address)
+  dhcpOptionPol:
+    dhcp_option: dhcpOption
+  fvKeyChainPol:
+    key_policy: fvKeyPol       # pre_shared_key is write-only (plan skips it)
+  fhsBDPol:
+    ra_guard_policy: fhsRaGuardPol
+  fvIPSLAMonitoringPol:
+    icmp_echo_probe: fvICMPProbe
+    tcp_probe: fvTCPProbe
+  pimRouteMapPol:
+    pim_route_map_entry: pimRouteMapEntry
+  vnsSvcCont:
+    service_redirect_policy: vnsSvcRedirectPol
+    pbr_backup_policy: vnsBackupPol
+    l4_l7_redirect_health_group: vnsRedirectHealthGroup
+    service_epg_policy: vnsSvcEPgPol
+  vnsSvcRedirectPol:
+    destination_of_redirected_traffic: vnsRedirectDest
+  vnsBackupPol:
+    destination_of_redirected_traffic: vnsRedirectDest
+
   # ── Access policies (uni/infra) ─────────────────────────────────────────────
   infraInfra:
+    dhcp_relay_policy: dhcpRelayP
+    dpp_policy: qosDppPol
     cdp_policy: cdpIfPol
     lldp_policy: lldpIfPol
     lacp_policy: lacpLagPol
@@ -208,6 +349,8 @@ makers:
 
   # ── Fabric policies (uni/fabric) ────────────────────────────────────────────
   fabricInst:
+    igmp_snoop_policy: igmpSnoopPol
+    mld_snoop_policy: mldSnoopPol
     datetime_policy: datetimePol
     dns_profile: dnsProfile
     bgp_instance: bgpInstPol
@@ -248,8 +391,93 @@ binds:
     l3out: l3extOut
   l3extOut:
     vrf: fvCtx
+    domain: extnwDomP        # abstract — l3_dom / l2_dom
+    fallback_route_group: fvFBRGroup
   vzSubj:
     filter: vzFilter
+
+  # ── L3Out (wave 1, 2026-07-12) ──────────────────────────────────────────────
+  l3extLNodeP:
+    fabric_node: fabricNode
+    mpls_custom_qos_policy: qosMplsCustomPol
+  l3extLIfP:
+    arp_interface_policy: arpIfPol
+    nd_interface_policy: ndIfPol
+    custom_qos_policy: qosCustomPol
+    netflow_monitor: netflowMonitorPol
+  l3extInstP:
+    contract_master: fvEPg   # abstract — inherit contracts from another EPG
+    endpoint_security_group: fvESg
+    external_epg: l3extInstP
+    custom_qos_policy: qosCustomPol
+    route_control_profile: rtctrlProfile
+    taboo_contract: vzTaboo
+    in_band_management_epg: mgmtInB
+    dot1q_tunnel: fvTnlEPg
+    access_client_epg: infraCEPg
+    access_function_provider: infraPEPg
+  l3extSubnet:
+    bgp_route_summarization_policy: bgpRtSummPol
+    eigrp_route_summarization_policy: eigrpRtSummPol
+    ospf_route_summarization_policy: ospfRtSummPol
+    route_control_profile: rtctrlProfile
+  l3extVirtualLIfP:
+    domain: infraDomP        # abstract — phys_dom / vmm_dom / l3_dom / ...
+  bgpPeerP:
+    bgp_peer_prefix_policy: bgpPeerPfxPol
+    route_control_profile: rtctrlProfile
+  bgpInfraPeerP:
+    bgp_peer_prefix_policy: bgpPeerPfxPol
+  bgpProtP:
+    bgp_best_path_control_policy: bgpBestPathCtrlPol
+    bgp_timers_policy: bgpCtxPol
+  bfdIfP:
+    bfd_interface_policy: bfdIfPol
+  bfdMhIfP:
+    bfd_interface_policy: bfdMhIfPol
+  bfdMhNodeP:
+    bfd_multihop_node_policy: bfdMhNodePol
+  dhcpLbl:
+    dhcp_option_policy: dhcpOptionPol
+  eigrpAuthIfP:
+    keychain_policy: fvKeyChainPol
+  eigrpIfP:
+    eigrp_interface_policy: eigrpIfPol
+  hsrpGroupP:
+    hsrp_group_policy: hsrpGroupPol
+  hsrpIfP:
+    hsrp_interface_policy: hsrpIfPol
+  igmpIfP:
+    igmp_interface_policy: igmpIfPol
+  l3extBdProfileCont:
+    bd_profile: l3extBdProfile
+  mplsExtP:
+    mpls_global_configuration: mplsLabelPol
+  mplsIfP:
+    mpls_interface_policy: mplsIfPol
+  ndPfxP:
+    nd_ra_prefix_policy: ndPfxPol
+  ospfIfP:
+    ospf_interface_policy: ospfIfPol
+  pimIfP:
+    pim_interface_policy: pimIfPol
+  pimIPV6IfP:
+    pim_interface_policy: pimIfPol
+  rtctrlCtxP:
+    match_rule: rtctrlSubjP
+  rtctrlScope:
+    action_rule_profile: rtctrlAttrP
+
+  # ── Tenant protocol policies (wave 1bis) ────────────────────────────────────
+  fvTrackList:
+    track_member: fvTrackMember
+  fvTrackMember:
+    ip_sla_monitoring_policy: fvIPSLAMonitoringPol
+  vnsRedirectDest:
+    l4_l7_redirect_health_group: vnsRedirectHealthGroup
+  vnsSvcRedirectPol:
+    ip_sla_monitoring_policy: fvIPSLAMonitoringPol
+    pbr_backup_policy: vnsBackupPol
 
   # ── Access policies ─────────────────────────────────────────────────────────
   infraAttEntityP:
@@ -282,6 +510,13 @@ binds:
 
 verbs:
   fvAEPg:
+    provide:
+      rs: fvRsProv
+      target: vzBrCP
+    consume:
+      rs: fvRsCons
+      target: vzBrCP
+  l3extInstP:
     provide:
       rs: fvRsProv
       target: vzBrCP

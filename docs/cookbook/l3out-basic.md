@@ -1,11 +1,12 @@
-# A basic L3Out shell
+# A complete L3Out
 
-**Problem** — the `prod` VRF needs a way out of the fabric.  This recipe
-builds the L3Out shell — the L3Out itself, its VRF and domain wiring — with
-the curated vocabulary, then goes below the waterline (node and interface
-profiles) with the escape hatches, honestly flagged.
+**Problem** — the `prod` VRF needs a routed way out of the fabric: a border
+leaf with a router ID, a routed sub-interface toward the WAN router, OSPF on
+the link, and an external EPG that governs what the outside may reach.
+The whole chain is curated vocabulary — every level below is typed, checked
+closed-world, and IDE-completed.
 
-## The curated part
+## The design
 
 ```python
 from niwaki import Niwaki
@@ -15,31 +16,42 @@ config = tenant("shop")
 config.vrf("prod")
 config.l3_dom("wan-dom")
 
-l3out = config.l3out("wan").bind(vrf="prod")
+# Tenant-level protocol policy, referenced by name further down
+config.ospf_interface_policy("ospf-p2p", network_type="p2p")
+
+l3out = config.l3out("wan").bind(vrf="prod", domain="wan-dom")
+l3out.ospf()                                    # enable OSPF on the L3Out
+
+# Border leaf: node 101 with its router ID
+nodes = l3out.node_profile("border-leaves")
+nodes.node_attachment("topology/pod-1/node-101", rtr_id="10.0.0.101")
+
+# Routed sub-interface toward the WAN router, OSPF on the link
+interfaces = nodes.interface_profile("uplinks")
+interfaces.path_attachment(
+    "topology/pod-1/paths-101/pathep-[eth1/33]",
+    if_inst_t="sub-interface",
+    addr="192.0.2.2/30",
+    encap="vlan-3900",
+)
+interfaces.ospf_interface().bind(ospf_interface_policy="ospf-p2p")
+
+# The security half: what the outside is, and what it may consume
+config.filter("any-ip").entry("ip", ethernet_type="ip")
+config.contract("outbound").set(scope="vrf").subject("all").bind(filter="any-ip")
+
+external = l3out.external_epg("internet")
+external.subnet("0.0.0.0/0")
+external.consume("outbound")
 ```
 
-`l3out.bind(vrf=...)` places the relation where ACI expects it
-(`l3extRsEctx` on the L3Out side); the same edge is reachable from the VRF
-cursor as `vrf.bind(l3out="wan")` — one declaration either way.
-
-## Below the waterline: `.mo()`
-
-Node profiles, interface profiles and BGP peers are **not curated yet** —
-they remain reachable through `.mo()`, with containment still validated
-against the schema:
-
-```python
-from niwaki.models.l3ext.l3extLNodeP import l3extLNodeP
-from niwaki.models.l3ext.l3extLIfP import l3extLIfP
-
-nodes = l3out.mo(l3extLNodeP, name="border-leaves")
-nodes.mo(l3extLIfP, name="uplinks")
-```
-
-The `.mo()` blocks read as what they are: raw ACI classes, no operator
-verbatim.  If you build L3Outs routinely, that is a vocabulary gap worth a
-[vocabulary request](https://github.com/k3l0-dev/niwaki/issues/new/choose)
-— curation grows by demand.
+Everything resolves inside the design: `bind(domain="wan-dom")` finds the
+declared L3 domain (the alias accepts L2/L3 domains — the target is
+abstract), `bind(ospf_interface_policy=...)` finds the tenant-level policy,
+and a typo in any of them fails **before any request** with a did-you-mean.
+The two `topology/...` arguments are the only literal DNs — node and path
+attachments name physical topology, which lives outside `uni`
+({doc}`static-paths` explains the DN shapes).
 
 ## Plan, push, verify
 
@@ -52,16 +64,44 @@ config.push(aci)
 
 outs = aci.query("l3extOut").fetch()
 assert [o.name for o in outs] == ["wan"]
+
+peers = aci.query("l3extRsNodeL3OutAtt").fetch()
+assert [p.rtr_id for p in peers] == ["10.0.0.101"]
+
+assert config.push(aci, mode="plan").has_changes is False
 ```
+
+## BGP instead of OSPF
+
+The BGP flavor swaps the protocol block — peers hang off the node profile
+(loopback peering) or the interface profile (interface peering):
+
+```python
+bgp_out = tenant("shop").l3out("wan-bgp")
+bgp_out.bgp()
+peer = bgp_out.node_profile("border-leaves").bgp_peer("192.0.2.1")
+peer.autonomous_system_profile(autonomous_system_number="65002")
+```
+
+`bgp_peer(...)` takes the peer address; the remote AS is its
+`autonomous_system_profile` child, and prefix limits bind to a tenant-level
+`bgp_peer_prefix_policy` — all curated.
 
 ## Variations & pitfalls
 
-- **The domain still needs encap** — `wan-dom` wants a
-  `bind(vlan_pool=...)` to a pool covering the uplink VLANs, exactly as in
+- **SVI / floating SVI** — `path_attachment(..., if_inst_t="ext-svi")` for a
+  classic SVI; `interfaces.floating_svi(anchor_node_dn, encap, ...)` for
+  anchor-based floating SVIs (VMM-mobile routers).
+- **The encap must be in the domain's pool** — `wan-dom` needs a
+  `bind(vlan_pool=...)` covering `vlan-3900`, exactly as in
   {doc}`access-policies-vpc`.
-- **External EPGs govern reachability** — an L3Out without an
-  `l3extInstP` (external EPG) and its subnets forwards nothing; that class
-  is also `.mo()` territory today.
+- **`0.0.0.0/0` scope** — an external subnet classifies traffic
+  (import-security) by default; advertising and aggregation are flags on the
+  subnet, and route summarization binds to per-protocol tenant policies
+  (`bgp_route_summarization_policy`, …).
 - **Advertising BD subnets** — a BD whose subnet must be advertised needs
   `bd.bind(l3out="wan")` *and* the subnet scoped `public`; keep both in the
   same design so the intent reviews as one change.
+- **Static routes** — hang off the node attachment; declare them with
+  `nodes.node_attachment(...)` children via `.mo()` for now (they join the
+  vocabulary with the route-control wave).

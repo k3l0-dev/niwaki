@@ -22,6 +22,7 @@ class pkiKeyRing(ManagedObject):
     _aci_class: ClassVar[str] = "pkiKeyRing"
     _rn_format: ClassVar[str] = "keyring-{name}"
     _naming_props: ClassVar[list[str]] = ["name"]
+    _secure_props: ClassVar[frozenset[str]] = frozenset(["key"])
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

@@ -17,6 +17,7 @@ class pkiWebTokenData(ManagedObject):
     _aci_class: ClassVar[str] = "pkiWebTokenData"
     _rn_format: ClassVar[str] = "webtokendata"
     _naming_props: ClassVar[list[str]] = []
+    _secure_props: ClassVar[frozenset[str]] = frozenset(["jwt_private_key"])
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

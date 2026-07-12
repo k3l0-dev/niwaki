@@ -97,9 +97,12 @@ def _reverse_child_map(parent: str) -> dict[str, str]:
 class _Wave:
     """One proposal run: the walked subtree and its derived tables."""
 
-    def __init__(self, roots: list[str], max_depth: int) -> None:
+    def __init__(
+        self, roots: list[str], max_depth: int, allow: frozenset[str] = frozenset()
+    ) -> None:
         self.roots = roots
         self.max_depth = max_depth
+        self.allow = allow
         self.classes = _schemas()
         self.labels = _load_labels()
         self.makers: dict[str, dict[str, tuple[str, list[str]]]] = {}
@@ -119,17 +122,40 @@ class _Wave:
         for root in self.roots:
             if root not in self.classes:
                 sys.exit(f"propose_vocabulary: unknown or non-configurable class {root!r}")
+            self._anchor_root(root)
             self._propose_binds(root, depth=0)
             self._propose_verbs(root)
             self._walk(root, depth=0, lineage=(root,))
 
+    def _anchor_root(self, root: str) -> None:
+        """Propose the parent→root maker line under already-curated parents.
+
+        A wave root is only reachable in the DSL if some curated position can
+        make it — when its schema parent is itself a curated class (fvTenant
+        for the tenant protocol policies), the anchoring line is exactly what
+        the wave needs to add.
+        """
+        from niwaki.design._cursor import _tables
+
+        curated_classes = {"polUni"} | {
+            child for table in _tables().makers.values() for child in table.values()
+        }
+        for parent in self.classes[root]["containedBy"]:
+            if parent not in curated_classes:
+                continue
+            if root in set(_tables().makers.get(parent, {}).values()):
+                continue  # already anchored
+            name = _reverse_child_map(parent).get(root, "")
+            if name:
+                self.makers.setdefault(parent, {})[name] = (root, self._maker_flags(name, 0))
+
     def _eligible(self, child: str) -> bool:
         info = self.classes[child]
-        return (
-            child not in NOISY_CLASSES
-            and info["classPkg"] not in EXCLUDED_PKGS
-            and info["flavor"] == ""  # Rs classes become binds, not makers
-        )
+        if info["flavor"] != "":
+            return False  # Rs classes become binds, not makers
+        if child in self.allow:
+            return True  # explicit override of the family/noise denylists
+        return child not in NOISY_CLASSES and info["classPkg"] not in EXCLUDED_PKGS
 
     def _walk(self, parent: str, depth: int, lineage: tuple[str, ...]) -> None:
         from niwaki.design._cursor import _tables
@@ -270,17 +296,20 @@ def _alias_name(label: str, aci_class: str) -> str:
     return _normalise_method(_derive_name(aci_class, label, ""))
 
 
-def propose(roots: list[str], max_depth: int = 6) -> _Wave:
+def propose(roots: list[str], max_depth: int = 6, allow: frozenset[str] = frozenset()) -> _Wave:
     """Build the proposal for *roots* (public entry point, used by tests).
 
     Args:
         roots: Subtree root ACI classes (e.g. ``["l3extOut"]``).
         max_depth: Maker levels to walk below each root.
+        allow: Classes explicitly exempted from the family/noise denylists
+            (e.g. the standalone L4-L7 policy classes inside the excluded
+            ``vns`` package).
 
     Returns:
         The populated :class:`_Wave` (call ``render()`` for the YAML).
     """
-    wave = _Wave(roots, max_depth)
+    wave = _Wave(roots, max_depth, allow)
     wave.build()
     return wave
 
@@ -291,9 +320,15 @@ def main() -> None:
     parser.add_argument("roots", nargs="+", help="subtree root ACI classes (e.g. l3extOut)")
     parser.add_argument("--max-depth", type=int, default=6)
     parser.add_argument("--wave", default=None, help="candidate file name (data/candidates/)")
+    parser.add_argument(
+        "--allow",
+        nargs="*",
+        default=[],
+        help="classes exempted from the family/noise denylists",
+    )
     args = parser.parse_args()
 
-    wave = propose(args.roots, args.max_depth)
+    wave = propose(args.roots, args.max_depth, frozenset(args.allow))
     output = wave.render()
     if args.wave:
         CANDIDATES_DIR.mkdir(parents=True, exist_ok=True)

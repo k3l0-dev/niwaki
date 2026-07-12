@@ -19,6 +19,7 @@ class callhomeProf(ManagedObject):
     _aci_class: ClassVar[str] = "callhomeProf"
     _rn_format: ClassVar[str] = "prof"
     _naming_props: ClassVar[list[str]] = []
+    _secure_props: ClassVar[frozenset[str]] = frozenset(["password"])
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

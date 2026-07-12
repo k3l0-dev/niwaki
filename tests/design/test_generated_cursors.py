@@ -15,9 +15,9 @@ from niwaki.design._cursor import _tables
 from niwaki.design._generated_cursors import (
     CURSOR_FOR,
     BdCursor,
+    BdSubnetCursor,
     EpgCursor,
     FilterCursor,
-    SubnetCursor,
     TenantCursor,
     UniCursor,
     VrfCursor,
@@ -33,7 +33,7 @@ class TestRuntimeDispatch:
         assert type(cfg.bd("web")) is BdCursor
         assert type(cfg.vrf("v")) is VrfCursor
         assert type(cfg.app("a").epg("e")) is EpgCursor
-        assert type(cfg.bd("web2").subnet("10.0.0.1/24")) is SubnetCursor
+        assert type(cfg.bd("web2").subnet("10.0.0.1/24")) is BdSubnetCursor
 
     def test_typed_maker_prunes_none_params(self) -> None:
         bd = tenant("prod").bd("web")
@@ -89,7 +89,7 @@ class TestSignatures:
         assert set(params) == {"self", "vrf", "l3out"}
 
     def test_subnet_bind_inherits_bd_aliases(self) -> None:
-        params = inspect.signature(SubnetCursor.bind).parameters
+        params = inspect.signature(BdSubnetCursor.bind).parameters
         assert "vrf" in params
 
     def test_entry_maker_exposes_sugar_params(self) -> None:

@@ -17,6 +17,7 @@ class fvKeyPol(ManagedObject):
     _aci_class: ClassVar[str] = "fvKeyPol"
     _rn_format: ClassVar[str] = "keyp-{key_id}"
     _naming_props: ClassVar[list[str]] = ["key_id"]
+    _secure_props: ClassVar[frozenset[str]] = frozenset(["pre_shared_key"])
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

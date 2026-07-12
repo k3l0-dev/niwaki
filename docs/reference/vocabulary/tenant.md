@@ -19,6 +19,49 @@ ACI class `fvTenant` — RN `tn-{name}` — cursor `TenantCursor`.
 - `.l3out(name, **attrs)` → `l3extOut`
 - `.filter(name, **attrs)` → `vzFilter`
 - `.contract(name, **attrs)` → `vzBrCP`
+- `.ospf_interface_policy(name, **attrs)` → `ospfIfPol`
+- `.eigrp_interface_policy(name, **attrs)` → `eigrpIfPol`
+- `.hsrp_interface_policy(name, **attrs)` → `hsrpIfPol`
+- `.hsrp_group_policy(name, **attrs)` → `hsrpGroupPol`
+- `.igmp_interface_policy(name, **attrs)` → `igmpIfPol`
+- `.pim_interface_policy(name, **attrs)` → `pimIfPol`
+- `.bfd_interface_policy(name, **attrs)` → `bfdIfPol`
+- `.bfd_mh_interface_policy(name, **attrs)` → `bfdMhIfPol`
+- `.bfd_multihop_node_policy(name, **attrs)` → `bfdMhNodePol`
+- `.bgp_peer_prefix_policy(name, **attrs)` → `bgpPeerPfxPol`
+- `.bgp_best_path_control_policy(name, **attrs)` → `bgpBestPathCtrlPol`
+- `.bgp_timers_policy(name, **attrs)` → `bgpCtxPol`
+- `.bgp_route_summarization_policy(name, **attrs)` → `bgpRtSummPol`
+- `.eigrp_route_summarization_policy(name, **attrs)` → `eigrpRtSummPol`
+- `.ospf_route_summarization_policy(name, **attrs)` → `ospfRtSummPol`
+- `.dhcp_option_policy(name, **attrs)` → `dhcpOptionPol`
+- `.nd_interface_policy(name, **attrs)` → `ndIfPol`
+- `.nd_ra_prefix_policy(name, **attrs)` → `ndPfxPol`
+- `.arp_interface_policy(name, **attrs)` → `arpIfPol`
+- `.custom_qos_policy(name, **attrs)` → `qosCustomPol`
+- `.tenant_keychain_policy(name, **attrs)` → `fvKeyChainPol`
+- `.mpls_interface_policy(name, **attrs)` → `mplsIfPol`
+- `.mpls_global_configuration(name, **attrs)` → `mplsLabelPol`
+- `.match_rule(name, **attrs)` → `rtctrlSubjP`
+- `.action_rule_profile(name, **attrs)` → `rtctrlAttrP`
+- `.bgp_address_family_context_policy(name, **attrs)` → `bgpCtxAfPol`
+- `.eigrp_address_family_context_policy(name, **attrs)` → `eigrpCtxAfPol`
+- `.ospf_timers_policy(name, **attrs)` → `ospfCtxPol`
+- `.dpp_policy(name, **attrs)` → `qosDppPol`
+- `.dhcp_relay_policy(name, **attrs)` → `dhcpRelayP`
+- `.ep_retention_policy(name, **attrs)` → `fvEpRetPol`
+- `.external_bridge_group_profile(name, **attrs)` → `l3extBdProfile`
+- `.fhs_bd_policy(name, **attrs)` → `fhsBDPol`
+- `.trust_control_policy(name, **attrs)` → `fhsTrustCtrlPol`
+- `.igmp_snoop_policy(name, **attrs)` → `igmpSnoopPol`
+- `.mld_snoop_policy(name, **attrs)` → `mldSnoopPol`
+- `.ip_sla_monitoring_policy(name, **attrs)` → `fvIPSLAMonitoringPol`
+- `.track_list(name, **attrs)` → `fvTrackList`
+- `.track_member(name, **attrs)` → `fvTrackMember`
+- `.pim_route_map_policy(name, **attrs)` → `pimRouteMapPol`
+- `.route_tag_policy(name, **attrs)` → `l3extRouteTagPol`
+- `.route_control_profile(name, **attrs)` → `rtctrlProfile`
+- `.service_container(**attrs)` → `vnsSvcCont`
 
 ## `tenant.app`
 
@@ -69,7 +112,7 @@ ACI class `fvBD` — RN `BD-{name}` — cursor `BdCursor`.
 
 ## `tenant.bd.subnet`
 
-ACI class `fvSubnet` — RN `subnet-[{subnet}]` — cursor `SubnetCursor`.
+ACI class `fvSubnet` — RN `subnet-[{subnet}]` — cursor `BdSubnetCursor`.
 
 ## `tenant.vrf`
 
@@ -93,11 +136,519 @@ ACI class `pimCtxP` — RN `pimctxp` — cursor `PimCursor`.
 
 ACI class `l3extOut` — RN `out-{name}` — cursor `L3outCursor`.
 
+**Makers**
+
+- `.node_profile(name, **attrs)` → `l3extLNodeP`
+- `.external_epg(name, **attrs)` → `l3extInstP`
+- `.bgp(**attrs)` → `bgpExtP`
+- `.ospf(**attrs)` → `ospfExtP`
+- `.eigrp(**attrs)` → `eigrpExtP`
+- `.pim_external(**attrs)` → `pimExtP`
+- `.mpls_external(**attrs)` → `mplsExtP`
+- `.default_route_leak_policy(**attrs)` → `l3extDefaultRouteLeakP`
+- `.route_control_profile(name, **attrs)` → `rtctrlProfile`
+- `.route_target_instrumentation_profile(**attrs)` → `bgpRtTargetInstrP`
+
 **Bind aliases** (lazy references, resolved closed-world at push time)
 
 | alias | target | flavor | relation |
 | --- | --- | --- | --- |
 | `vrf=` | `fvCtx` | name | `l3extRsEctx` |
+| `domain=` | `extnwDomP` *(abstract: `l2extDomP`, `l3extDomP`…)* | DN — `bind_dn()` allowed | `l3extRsL3DomAtt` |
+| `fallback_route_group=` | `fvFBRGroup` | DN — `bind_dn()` allowed | `l3extRsOutToFBRGroup` |
+
+## `tenant.l3out.node_profile`
+
+ACI class `l3extLNodeP` — RN `lnodep-{name}` — cursor `NodeProfileCursor`.
+
+**Makers**
+
+- `.interface_profile(name, **attrs)` → `l3extLIfP`
+- `.node_attachment(target_dn, **attrs)` → `l3extRsNodeL3OutAtt`
+- `.bgp_peer(peer_address, **attrs)` → `bgpPeerP`
+- `.protocol_profile(**attrs)` → `bgpProtP`
+- `.infra_peer_connectivity_profile(peer_address, **attrs)` → `bgpInfraPeerP`
+- `.bfd_multihop_node_profile(**attrs)` → `bfdMhNodeP`
+
+**Bind aliases** (lazy references, resolved closed-world at push time)
+
+| alias | target | flavor | relation |
+| --- | --- | --- | --- |
+| `fabric_node=` | `fabricNode` | DN — `bind_dn()` allowed | `l3extRsNodeL3OutAtt` |
+| `mpls_custom_qos_policy=` | `qosMplsCustomPol` | DN — `bind_dn()` allowed | `l3extRsLNodePMplsCustQosPol` |
+
+## `tenant.l3out.node_profile.interface_profile`
+
+ACI class `l3extLIfP` — RN `lifp-{name}` — cursor `InterfaceProfileCursor`.
+
+**Makers**
+
+- `.path_attachment(target_dn, **attrs)` → `l3extRsPathL3OutAtt`
+- `.floating_svi(path_of_the_anchor_node, external_interface_encap, **attrs)` → `l3extVirtualLIfP`
+- `.ospf_interface(**attrs)` → `ospfIfP`
+- `.eigrp_interface(**attrs)` → `eigrpIfP`
+- `.hsrp_interface(**attrs)` → `hsrpIfP`
+- `.igmp_interface(**attrs)` → `igmpIfP`
+- `.pim_interface(**attrs)` → `pimIfP`
+- `.pim_ipv6_interface(**attrs)` → `pimIPV6IfP`
+- `.bfd_interface(**attrs)` → `bfdIfP`
+- `.bfd_mh_interface(**attrs)` → `bfdMhIfP`
+- `.dhcp_relay_label(name, **attrs)` → `dhcpLbl`
+- `.mpls_interface(**attrs)` → `mplsIfP`
+
+**Bind aliases** (lazy references, resolved closed-world at push time)
+
+| alias | target | flavor | relation |
+| --- | --- | --- | --- |
+| `arp_interface_policy=` | `arpIfPol` | name | `l3extRsArpIfPol` |
+| `nd_interface_policy=` | `ndIfPol` | name | `l3extRsNdIfPol` |
+| `custom_qos_policy=` | `qosCustomPol` | name | `l3extRsLIfPCustQosPol` |
+| `netflow_monitor=` | `netflowMonitorPol` | name | `l3extRsLIfPToNetflowMonitorPol` |
+
+## `tenant.l3out.node_profile.interface_profile.path_attachment`
+
+ACI class `l3extRsPathL3OutAtt` — RN `rspathL3OutAtt-[{target_dn}]` — cursor `PathAttachmentCursor`.
+
+## `tenant.l3out.node_profile.interface_profile.floating_svi`
+
+ACI class `l3extVirtualLIfP` — RN `vlifp-[{path_of_the_anchor_node}]-[{external_interface_encap}]` — cursor `FloatingSviCursor`.
+
+**Makers**
+
+- `.bgp_peer(peer_address, **attrs)` → `bgpPeerP`
+- `.infra_peer_connectivity_profile(peer_address, **attrs)` → `bgpInfraPeerP`
+- `.member_node_configuration(side, **attrs)` → `l3extMember`
+- `.nd_prefix_profile(**attrs)` → `ndPfxP`
+- `.secondary_ip_address(ip_address, **attrs)` → `l3extIp`
+- `.bd_profile_container(**attrs)` → `l3extBdProfileCont`
+
+**Bind aliases** (lazy references, resolved closed-world at push time)
+
+| alias | target | flavor | relation |
+| --- | --- | --- | --- |
+| `domain=` | `infraDomP` *(abstract: `extdevGroupP`, `fcDomP`, `l2extDomP`, `l3extDomP`…)* | DN — `bind_dn()` allowed | `l3extRsDynPathAtt` |
+
+## `tenant.l3out.node_profile.interface_profile.floating_svi.bgp_peer`
+
+ACI class `bgpPeerP` — RN `peerP-[{peer_address}]` — cursor `FloatingSviBgpPeerCursor`.
+
+**Makers**
+
+- `.autonomous_system_profile(**attrs)` → `bgpAsP`
+- `.local_autonomous_system_profile(**attrs)` → `bgpLocalAsnP`
+- `.site_of_origin_profile(**attrs)` → `bgpSiteOfOriginP`
+
+**Bind aliases** (lazy references, resolved closed-world at push time)
+
+| alias | target | flavor | relation |
+| --- | --- | --- | --- |
+| `bgp_peer_prefix_policy=` | `bgpPeerPfxPol` | name | `bgpRsPeerPfxPol` |
+| `route_control_profile=` | `rtctrlProfile` | DN — `bind_dn()` allowed | `bgpRsPeerToProfile` |
+
+## `tenant.l3out.node_profile.interface_profile.floating_svi.bgp_peer.autonomous_system_profile`
+
+ACI class `bgpAsP` — RN `as` — cursor `FloatingSviBgpPeerAutonomousSystemProfileCursor`.
+
+## `tenant.l3out.node_profile.interface_profile.floating_svi.bgp_peer.local_autonomous_system_profile`
+
+ACI class `bgpLocalAsnP` — RN `localasn` — cursor `FloatingSviBgpPeerLocalAutonomousSystemProfileCursor`.
+
+## `tenant.l3out.node_profile.interface_profile.floating_svi.bgp_peer.site_of_origin_profile`
+
+ACI class `bgpSiteOfOriginP` — RN `soo` — cursor `FloatingSviBgpPeerSiteOfOriginProfileCursor`.
+
+## `tenant.l3out.node_profile.interface_profile.floating_svi.infra_peer_connectivity_profile`
+
+ACI class `bgpInfraPeerP` — RN `infraPeerP-[{peer_address}]` — cursor `FloatingSviInfraPeerConnectivityProfileCursor`.
+
+**Makers**
+
+- `.autonomous_system_profile(**attrs)` → `bgpAsP`
+- `.local_autonomous_system_profile(**attrs)` → `bgpLocalAsnP`
+
+**Bind aliases** (lazy references, resolved closed-world at push time)
+
+| alias | target | flavor | relation |
+| --- | --- | --- | --- |
+| `bgp_peer_prefix_policy=` | `bgpPeerPfxPol` | name | `bgpRsPeerPfxPol` |
+
+## `tenant.l3out.node_profile.interface_profile.floating_svi.infra_peer_connectivity_profile.autonomous_system_profile`
+
+ACI class `bgpAsP` — RN `as` — cursor `FloatingSviInfraPeerConnectivityProfileAutonomousSystemProfileCursor`.
+
+## `tenant.l3out.node_profile.interface_profile.floating_svi.infra_peer_connectivity_profile.local_autonomous_system_profile`
+
+ACI class `bgpLocalAsnP` — RN `localasn` — cursor `FloatingSviInfraPeerConnectivityProfileLocalAutonomousSystemProfileCursor`.
+
+## `tenant.l3out.node_profile.interface_profile.floating_svi.member_node_configuration`
+
+ACI class `l3extMember` — RN `mem-{side}` — cursor `MemberNodeConfigurationCursor`.
+
+## `tenant.l3out.node_profile.interface_profile.floating_svi.nd_prefix_profile`
+
+ACI class `ndPfxP` — RN `ndpfxP` — cursor `NdPrefixProfileCursor`.
+
+**Bind aliases** (lazy references, resolved closed-world at push time)
+
+| alias | target | flavor | relation |
+| --- | --- | --- | --- |
+| `nd_ra_prefix_policy=` | `ndPfxPol` | name | `ndRsPfxPToNdPfxPol` |
+
+## `tenant.l3out.node_profile.interface_profile.floating_svi.secondary_ip_address`
+
+ACI class `l3extIp` — RN `addr-[{ip_address}]` — cursor `SecondaryIpAddressCursor`.
+
+## `tenant.l3out.node_profile.interface_profile.floating_svi.bd_profile_container`
+
+ACI class `l3extBdProfileCont` — RN `bdprofilecont` — cursor `BdProfileContainerCursor`.
+
+**Bind aliases** (lazy references, resolved closed-world at push time)
+
+| alias | target | flavor | relation |
+| --- | --- | --- | --- |
+| `bd_profile=` | `l3extBdProfile` | DN — `bind_dn()` allowed | `l3extRsBdProfile` |
+
+## `tenant.l3out.node_profile.interface_profile.ospf_interface`
+
+ACI class `ospfIfP` — RN `ospfIfP` — cursor `OspfInterfaceCursor`.
+
+**Bind aliases** (lazy references, resolved closed-world at push time)
+
+| alias | target | flavor | relation |
+| --- | --- | --- | --- |
+| `ospf_interface_policy=` | `ospfIfPol` | name | `ospfRsIfPol` |
+
+## `tenant.l3out.node_profile.interface_profile.eigrp_interface`
+
+ACI class `eigrpIfP` — RN `eigrpIfP` — cursor `EigrpInterfaceCursor`.
+
+**Makers**
+
+- `.eigrp_authentication(**attrs)` → `eigrpAuthIfP`
+
+**Bind aliases** (lazy references, resolved closed-world at push time)
+
+| alias | target | flavor | relation |
+| --- | --- | --- | --- |
+| `eigrp_interface_policy=` | `eigrpIfPol` | name | `eigrpRsIfPol` |
+
+## `tenant.l3out.node_profile.interface_profile.eigrp_interface.eigrp_authentication`
+
+ACI class `eigrpAuthIfP` — RN `eigrpAuthIfP` — cursor `EigrpAuthenticationCursor`.
+
+**Bind aliases** (lazy references, resolved closed-world at push time)
+
+| alias | target | flavor | relation |
+| --- | --- | --- | --- |
+| `keychain_policy=` | `fvKeyChainPol` | name | `eigrpRsKeyChainPol` |
+
+## `tenant.l3out.node_profile.interface_profile.hsrp_interface`
+
+ACI class `hsrpIfP` — RN `hsrpIfP` — cursor `HsrpInterfaceCursor`.
+
+**Makers**
+
+- `.hsrp_group_profile(name, **attrs)` → `hsrpGroupP`
+
+**Bind aliases** (lazy references, resolved closed-world at push time)
+
+| alias | target | flavor | relation |
+| --- | --- | --- | --- |
+| `hsrp_interface_policy=` | `hsrpIfPol` | name | `hsrpRsIfPol` |
+
+## `tenant.l3out.node_profile.interface_profile.hsrp_interface.hsrp_group_profile`
+
+ACI class `hsrpGroupP` — RN `hsrpGroupP-{name}` — cursor `HsrpGroupProfileCursor`.
+
+**Bind aliases** (lazy references, resolved closed-world at push time)
+
+| alias | target | flavor | relation |
+| --- | --- | --- | --- |
+| `hsrp_group_policy=` | `hsrpGroupPol` | name | `hsrpRsGroupPol` |
+
+## `tenant.l3out.node_profile.interface_profile.igmp_interface`
+
+ACI class `igmpIfP` — RN `igmpIfP` — cursor `IgmpInterfaceCursor`.
+
+**Bind aliases** (lazy references, resolved closed-world at push time)
+
+| alias | target | flavor | relation |
+| --- | --- | --- | --- |
+| `igmp_interface_policy=` | `igmpIfPol` | DN — `bind_dn()` allowed | `igmpRsIfPol` |
+
+## `tenant.l3out.node_profile.interface_profile.pim_interface`
+
+ACI class `pimIfP` — RN `pimifp` — cursor `PimInterfaceCursor`.
+
+**Bind aliases** (lazy references, resolved closed-world at push time)
+
+| alias | target | flavor | relation |
+| --- | --- | --- | --- |
+| `pim_interface_policy=` | `pimIfPol` | DN — `bind_dn()` allowed | `pimRsIfPol` |
+
+## `tenant.l3out.node_profile.interface_profile.pim_ipv6_interface`
+
+ACI class `pimIPV6IfP` — RN `pimipv6ifp` — cursor `PimIpv6InterfaceCursor`.
+
+**Bind aliases** (lazy references, resolved closed-world at push time)
+
+| alias | target | flavor | relation |
+| --- | --- | --- | --- |
+| `pim_interface_policy=` | `pimIfPol` | DN — `bind_dn()` allowed | `pimRsV6IfPol` |
+
+## `tenant.l3out.node_profile.interface_profile.bfd_interface`
+
+ACI class `bfdIfP` — RN `bfdIfP` — cursor `BfdInterfaceCursor`.
+
+**Bind aliases** (lazy references, resolved closed-world at push time)
+
+| alias | target | flavor | relation |
+| --- | --- | --- | --- |
+| `bfd_interface_policy=` | `bfdIfPol` | name | `bfdRsIfPol` |
+
+## `tenant.l3out.node_profile.interface_profile.bfd_mh_interface`
+
+ACI class `bfdMhIfP` — RN `bfdMhIfP` — cursor `BfdMhInterfaceCursor`.
+
+**Bind aliases** (lazy references, resolved closed-world at push time)
+
+| alias | target | flavor | relation |
+| --- | --- | --- | --- |
+| `bfd_interface_policy=` | `bfdMhIfPol` | name | `bfdRsMhIfPol` |
+
+## `tenant.l3out.node_profile.interface_profile.dhcp_relay_label`
+
+ACI class `dhcpLbl` — RN `dhcplbl-{name}` — cursor `DhcpRelayLabelCursor`.
+
+**Bind aliases** (lazy references, resolved closed-world at push time)
+
+| alias | target | flavor | relation |
+| --- | --- | --- | --- |
+| `dhcp_option_policy=` | `dhcpOptionPol` | name | `dhcpRsDhcpOptionPol` |
+
+## `tenant.l3out.node_profile.interface_profile.mpls_interface`
+
+ACI class `mplsIfP` — RN `mplsIfP` — cursor `MplsInterfaceCursor`.
+
+**Bind aliases** (lazy references, resolved closed-world at push time)
+
+| alias | target | flavor | relation |
+| --- | --- | --- | --- |
+| `mpls_interface_policy=` | `mplsIfPol` | name | `mplsRsIfPol` |
+
+## `tenant.l3out.node_profile.node_attachment`
+
+ACI class `l3extRsNodeL3OutAtt` — RN `rsnodeL3OutAtt-[{target_dn}]` — cursor `NodeAttachmentCursor`.
+
+## `tenant.l3out.node_profile.bgp_peer`
+
+ACI class `bgpPeerP` — RN `peerP-[{peer_address}]` — cursor `NodeProfileBgpPeerCursor`.
+
+**Makers**
+
+- `.autonomous_system_profile(**attrs)` → `bgpAsP`
+- `.local_autonomous_system_profile(**attrs)` → `bgpLocalAsnP`
+- `.site_of_origin_profile(**attrs)` → `bgpSiteOfOriginP`
+
+**Bind aliases** (lazy references, resolved closed-world at push time)
+
+| alias | target | flavor | relation |
+| --- | --- | --- | --- |
+| `bgp_peer_prefix_policy=` | `bgpPeerPfxPol` | name | `bgpRsPeerPfxPol` |
+| `route_control_profile=` | `rtctrlProfile` | DN — `bind_dn()` allowed | `bgpRsPeerToProfile` |
+
+## `tenant.l3out.node_profile.bgp_peer.autonomous_system_profile`
+
+ACI class `bgpAsP` — RN `as` — cursor `NodeProfileBgpPeerAutonomousSystemProfileCursor`.
+
+## `tenant.l3out.node_profile.bgp_peer.local_autonomous_system_profile`
+
+ACI class `bgpLocalAsnP` — RN `localasn` — cursor `NodeProfileBgpPeerLocalAutonomousSystemProfileCursor`.
+
+## `tenant.l3out.node_profile.bgp_peer.site_of_origin_profile`
+
+ACI class `bgpSiteOfOriginP` — RN `soo` — cursor `NodeProfileBgpPeerSiteOfOriginProfileCursor`.
+
+## `tenant.l3out.node_profile.protocol_profile`
+
+ACI class `bgpProtP` — RN `protp` — cursor `ProtocolProfileCursor`.
+
+**Bind aliases** (lazy references, resolved closed-world at push time)
+
+| alias | target | flavor | relation |
+| --- | --- | --- | --- |
+| `bgp_best_path_control_policy=` | `bgpBestPathCtrlPol` | name | `bgpRsBestPathCtrlPol` |
+| `bgp_timers_policy=` | `bgpCtxPol` | name | `bgpRsBgpNodeCtxPol` |
+
+## `tenant.l3out.node_profile.infra_peer_connectivity_profile`
+
+ACI class `bgpInfraPeerP` — RN `infraPeerP-[{peer_address}]` — cursor `NodeProfileInfraPeerConnectivityProfileCursor`.
+
+**Makers**
+
+- `.autonomous_system_profile(**attrs)` → `bgpAsP`
+- `.local_autonomous_system_profile(**attrs)` → `bgpLocalAsnP`
+
+**Bind aliases** (lazy references, resolved closed-world at push time)
+
+| alias | target | flavor | relation |
+| --- | --- | --- | --- |
+| `bgp_peer_prefix_policy=` | `bgpPeerPfxPol` | name | `bgpRsPeerPfxPol` |
+
+## `tenant.l3out.node_profile.infra_peer_connectivity_profile.autonomous_system_profile`
+
+ACI class `bgpAsP` — RN `as` — cursor `NodeProfileInfraPeerConnectivityProfileAutonomousSystemProfileCursor`.
+
+## `tenant.l3out.node_profile.infra_peer_connectivity_profile.local_autonomous_system_profile`
+
+ACI class `bgpLocalAsnP` — RN `localasn` — cursor `NodeProfileInfraPeerConnectivityProfileLocalAutonomousSystemProfileCursor`.
+
+## `tenant.l3out.node_profile.bfd_multihop_node_profile`
+
+ACI class `bfdMhNodeP` — RN `bfdMhNodeP` — cursor `BfdMultihopNodeProfileCursor`.
+
+**Bind aliases** (lazy references, resolved closed-world at push time)
+
+| alias | target | flavor | relation |
+| --- | --- | --- | --- |
+| `bfd_multihop_node_policy=` | `bfdMhNodePol` | name | `bfdRsMhNodePol` |
+
+## `tenant.l3out.external_epg`
+
+ACI class `l3extInstP` — RN `instP-{name}` — cursor `ExternalEpgCursor`.
+
+**Makers**
+
+- `.subnet(subnet, **attrs)` → `l3extSubnet`
+- `.consumer_contract_label(name, **attrs)` → `vzConsCtrctLbl`
+- `.provider_contract_label(name, **attrs)` → `vzProvCtrctLbl`
+- `.consumer_label(name, **attrs)` → `vzConsLbl`
+- `.provider_label(name, **attrs)` → `vzProvLbl`
+- `.vz_cons_subject_label(name, **attrs)` → `vzConsSubjLbl`
+- `.vz_prov_subject_label(name, **attrs)` → `vzProvSubjLbl`
+
+**Bind aliases** (lazy references, resolved closed-world at push time)
+
+| alias | target | flavor | relation |
+| --- | --- | --- | --- |
+| `contract_master=` | `fvEPg` *(abstract: `fvAEPg`, `fvESg`, `fvTnlEPg`, `infraCEPg`…)* | DN — `bind_dn()` allowed | `fvRsSecInherited` |
+| `endpoint_security_group=` | `fvESg` | DN — `bind_dn()` allowed | `fvRsSecInherited` |
+| `external_epg=` | `l3extInstP` | DN — `bind_dn()` allowed | `fvRsSecInherited` |
+| `custom_qos_policy=` | `qosCustomPol` | name | `fvRsCustQosPol` |
+| `route_control_profile=` | `rtctrlProfile` | name | `l3extRsInstPToProfile` |
+| `taboo_contract=` | `vzTaboo` | name | `fvRsProtBy` |
+| `in_band_management_epg=` | `mgmtInB` | DN — `bind_dn()` allowed | `fvRsSecInherited` |
+| `dot1q_tunnel=` | `fvTnlEPg` | DN — `bind_dn()` allowed | `fvRsSecInherited` |
+| `access_client_epg=` | `infraCEPg` | DN — `bind_dn()` allowed | `fvRsSecInherited` |
+| `access_function_provider=` | `infraPEPg` | DN — `bind_dn()` allowed | `fvRsSecInherited` |
+
+**Verbs**
+
+- `.provide(name)` → `fvRsProv` targeting `vzBrCP`
+- `.consume(name)` → `fvRsCons` targeting `vzBrCP`
+
+## `tenant.l3out.external_epg.subnet`
+
+ACI class `l3extSubnet` — RN `extsubnet-[{subnet}]` — cursor `ExternalEpgSubnetCursor`.
+
+**Bind aliases** (lazy references, resolved closed-world at push time)
+
+| alias | target | flavor | relation |
+| --- | --- | --- | --- |
+| `bgp_route_summarization_policy=` | `bgpRtSummPol` | DN — `bind_dn()` allowed | `l3extRsSubnetToRtSumm` |
+| `eigrp_route_summarization_policy=` | `eigrpRtSummPol` | DN — `bind_dn()` allowed | `l3extRsSubnetToRtSumm` |
+| `ospf_route_summarization_policy=` | `ospfRtSummPol` | DN — `bind_dn()` allowed | `l3extRsSubnetToRtSumm` |
+| `route_control_profile=` | `rtctrlProfile` | name | `l3extRsSubnetToProfile` |
+
+## `tenant.l3out.external_epg.consumer_contract_label`
+
+ACI class `vzConsCtrctLbl` — RN `cCtrctLbl-{name}` — cursor `ConsumerContractLabelCursor`.
+
+## `tenant.l3out.external_epg.provider_contract_label`
+
+ACI class `vzProvCtrctLbl` — RN `pCtrctLbl-{name}` — cursor `ProviderContractLabelCursor`.
+
+## `tenant.l3out.external_epg.consumer_label`
+
+ACI class `vzConsLbl` — RN `conslbl-{name}` — cursor `ConsumerLabelCursor`.
+
+## `tenant.l3out.external_epg.provider_label`
+
+ACI class `vzProvLbl` — RN `provlbl-{name}` — cursor `ProviderLabelCursor`.
+
+## `tenant.l3out.external_epg.vz_cons_subject_label`
+
+ACI class `vzConsSubjLbl` — RN `conssubjlbl-{name}` — cursor `VzConsSubjectLabelCursor`.
+
+## `tenant.l3out.external_epg.vz_prov_subject_label`
+
+ACI class `vzProvSubjLbl` — RN `provsubjlbl-{name}` — cursor `VzProvSubjectLabelCursor`.
+
+## `tenant.l3out.bgp`
+
+ACI class `bgpExtP` — RN `bgpExtP` — cursor `BgpCursor`.
+
+## `tenant.l3out.ospf`
+
+ACI class `ospfExtP` — RN `ospfExtP` — cursor `OspfCursor`.
+
+## `tenant.l3out.eigrp`
+
+ACI class `eigrpExtP` — RN `eigrpExtP` — cursor `EigrpCursor`.
+
+## `tenant.l3out.pim_external`
+
+ACI class `pimExtP` — RN `pimextp` — cursor `PimExternalCursor`.
+
+## `tenant.l3out.mpls_external`
+
+ACI class `mplsExtP` — RN `mplsextp` — cursor `MplsExternalCursor`.
+
+**Bind aliases** (lazy references, resolved closed-world at push time)
+
+| alias | target | flavor | relation |
+| --- | --- | --- | --- |
+| `mpls_global_configuration=` | `mplsLabelPol` | DN — `bind_dn()` allowed | `mplsRsLabelPol` |
+
+## `tenant.l3out.default_route_leak_policy`
+
+ACI class `l3extDefaultRouteLeakP` — RN `defrtleak` — cursor `DefaultRouteLeakPolicyCursor`.
+
+## `tenant.l3out.route_control_profile`
+
+ACI class `rtctrlProfile` — RN `prof-{name}` — cursor `L3outRouteControlProfileCursor`.
+
+**Makers**
+
+- `.route_control_context(name, **attrs)` → `rtctrlCtxP`
+
+## `tenant.l3out.route_control_profile.route_control_context`
+
+ACI class `rtctrlCtxP` — RN `ctx-{name}` — cursor `L3outRouteControlProfileRouteControlContextCursor`.
+
+**Makers**
+
+- `.route_context_scope(**attrs)` → `rtctrlScope`
+
+**Bind aliases** (lazy references, resolved closed-world at push time)
+
+| alias | target | flavor | relation |
+| --- | --- | --- | --- |
+| `match_rule=` | `rtctrlSubjP` | name | `rtctrlRsCtxPToSubjP` |
+
+## `tenant.l3out.route_control_profile.route_control_context.route_context_scope`
+
+ACI class `rtctrlScope` — RN `scp` — cursor `L3outRouteControlProfileRouteControlContextRouteContextScopeCursor`.
+
+**Bind aliases** (lazy references, resolved closed-world at push time)
+
+| alias | target | flavor | relation |
+| --- | --- | --- | --- |
+| `action_rule_profile=` | `rtctrlAttrP` | name | `rtctrlRsScopeToAttrP` |
+
+## `tenant.l3out.route_target_instrumentation_profile`
+
+ACI class `bgpRtTargetInstrP` — RN `rttargetinstrp` — cursor `RouteTargetInstrumentationProfileCursor`.
 
 ## `tenant.filter`
 
@@ -133,3 +684,334 @@ ACI class `vzSubj` — RN `subj-{name}` — cursor `SubjectCursor`.
 | alias | target | flavor | relation |
 | --- | --- | --- | --- |
 | `filter=` | `vzFilter` | name | `vzRsSubjFiltAtt` |
+
+## `tenant.ospf_interface_policy`
+
+ACI class `ospfIfPol` — RN `ospfIfPol-{name}` — cursor `OspfInterfacePolicyCursor`.
+
+## `tenant.eigrp_interface_policy`
+
+ACI class `eigrpIfPol` — RN `eigrpIfPol-{name}` — cursor `EigrpInterfacePolicyCursor`.
+
+## `tenant.hsrp_interface_policy`
+
+ACI class `hsrpIfPol` — RN `hsrpIfPol-{name}` — cursor `HsrpInterfacePolicyCursor`.
+
+## `tenant.hsrp_group_policy`
+
+ACI class `hsrpGroupPol` — RN `hsrpGroupPol-{name}` — cursor `HsrpGroupPolicyCursor`.
+
+## `tenant.igmp_interface_policy`
+
+ACI class `igmpIfPol` — RN `igmpIfPol-{name}` — cursor `IgmpInterfacePolicyCursor`.
+
+## `tenant.pim_interface_policy`
+
+ACI class `pimIfPol` — RN `pimifpol-{name}` — cursor `PimInterfacePolicyCursor`.
+
+## `tenant.bfd_interface_policy`
+
+ACI class `bfdIfPol` — RN `bfdIfPol-{name}` — cursor `BfdInterfacePolicyCursor`.
+
+## `tenant.bfd_mh_interface_policy`
+
+ACI class `bfdMhIfPol` — RN `bfdMhIfPol-{name}` — cursor `BfdMhInterfacePolicyCursor`.
+
+## `tenant.bfd_multihop_node_policy`
+
+ACI class `bfdMhNodePol` — RN `bfdMhNodePol-{name}` — cursor `BfdMultihopNodePolicyCursor`.
+
+## `tenant.bgp_peer_prefix_policy`
+
+ACI class `bgpPeerPfxPol` — RN `bgpPfxP-{name}` — cursor `BgpPeerPrefixPolicyCursor`.
+
+## `tenant.bgp_best_path_control_policy`
+
+ACI class `bgpBestPathCtrlPol` — RN `bestpath-{name}` — cursor `BgpBestPathControlPolicyCursor`.
+
+## `tenant.bgp_timers_policy`
+
+ACI class `bgpCtxPol` — RN `bgpCtxP-{name}` — cursor `BgpTimersPolicyCursor`.
+
+## `tenant.bgp_route_summarization_policy`
+
+ACI class `bgpRtSummPol` — RN `bgprtsum-{name}` — cursor `BgpRouteSummarizationPolicyCursor`.
+
+## `tenant.eigrp_route_summarization_policy`
+
+ACI class `eigrpRtSummPol` — RN `eigrprtsumm-{name}` — cursor `EigrpRouteSummarizationPolicyCursor`.
+
+## `tenant.ospf_route_summarization_policy`
+
+ACI class `ospfRtSummPol` — RN `ospfrtsumm-{name}` — cursor `OspfRouteSummarizationPolicyCursor`.
+
+## `tenant.dhcp_option_policy`
+
+ACI class `dhcpOptionPol` — RN `dhcpoptpol-{name}` — cursor `DhcpOptionPolicyCursor`.
+
+**Makers**
+
+- `.dhcp_option(name, **attrs)` → `dhcpOption`
+
+## `tenant.dhcp_option_policy.dhcp_option`
+
+ACI class `dhcpOption` — RN `opt-{name}` — cursor `DhcpOptionCursor`.
+
+## `tenant.nd_interface_policy`
+
+ACI class `ndIfPol` — RN `ndifpol-{name}` — cursor `NdInterfacePolicyCursor`.
+
+## `tenant.nd_ra_prefix_policy`
+
+ACI class `ndPfxPol` — RN `ndpfxpol-{name}` — cursor `NdRaPrefixPolicyCursor`.
+
+## `tenant.arp_interface_policy`
+
+ACI class `arpIfPol` — RN `arpifpol-{name}` — cursor `ArpInterfacePolicyCursor`.
+
+## `tenant.custom_qos_policy`
+
+ACI class `qosCustomPol` — RN `qoscustom-{name}` — cursor `CustomQosPolicyCursor`.
+
+## `tenant.tenant_keychain_policy`
+
+ACI class `fvKeyChainPol` — RN `keychainp-{name}` — cursor `TenantKeychainPolicyCursor`.
+
+**Makers**
+
+- `.key_policy(key_id, **attrs)` → `fvKeyPol`
+
+## `tenant.tenant_keychain_policy.key_policy`
+
+ACI class `fvKeyPol` — RN `keyp-{key_id}` — cursor `KeyPolicyCursor`.
+
+## `tenant.mpls_interface_policy`
+
+ACI class `mplsIfPol` — RN `mplsifpol-{name}` — cursor `MplsInterfacePolicyCursor`.
+
+## `tenant.mpls_global_configuration`
+
+ACI class `mplsLabelPol` — RN `mplslabelpol-{name}` — cursor `MplsGlobalConfigurationCursor`.
+
+## `tenant.match_rule`
+
+ACI class `rtctrlSubjP` — RN `subj-{name}` — cursor `MatchRuleCursor`.
+
+## `tenant.action_rule_profile`
+
+ACI class `rtctrlAttrP` — RN `attr-{name}` — cursor `ActionRuleProfileCursor`.
+
+## `tenant.bgp_address_family_context_policy`
+
+ACI class `bgpCtxAfPol` — RN `bgpCtxAfP-{name}` — cursor `BgpAddressFamilyContextPolicyCursor`.
+
+**Makers**
+
+- `.bgp_additional_path_context_policy(**attrs)` → `bgpCtxAddlPathPol`
+
+## `tenant.bgp_address_family_context_policy.bgp_additional_path_context_policy`
+
+ACI class `bgpCtxAddlPathPol` — RN `bgpCtxAddlPathP` — cursor `BgpAdditionalPathContextPolicyCursor`.
+
+## `tenant.eigrp_address_family_context_policy`
+
+ACI class `eigrpCtxAfPol` — RN `eigrpCtxAfP-{name}` — cursor `EigrpAddressFamilyContextPolicyCursor`.
+
+## `tenant.ospf_timers_policy`
+
+ACI class `ospfCtxPol` — RN `ospfCtxP-{name}` — cursor `OspfTimersPolicyCursor`.
+
+## `tenant.dpp_policy`
+
+ACI class `qosDppPol` — RN `qosdpppol-{name}` — cursor `TenantDppPolicyCursor`.
+
+## `tenant.dhcp_relay_policy`
+
+ACI class `dhcpRelayP` — RN `relayp-{name}` — cursor `TenantDhcpRelayPolicyCursor`.
+
+**Makers**
+
+- `.provider(target_dn, **attrs)` → `dhcpRsProv`
+
+## `tenant.dhcp_relay_policy.provider`
+
+ACI class `dhcpRsProv` — RN `rsprov-[{target_dn}]` — cursor `TenantDhcpRelayPolicyProviderCursor`.
+
+## `tenant.ep_retention_policy`
+
+ACI class `fvEpRetPol` — RN `epRPol-{name}` — cursor `EpRetentionPolicyCursor`.
+
+## `tenant.external_bridge_group_profile`
+
+ACI class `l3extBdProfile` — RN `bdprofile-{name}` — cursor `ExternalBridgeGroupProfileCursor`.
+
+## `tenant.fhs_bd_policy`
+
+ACI class `fhsBDPol` — RN `bdpol-{name}` — cursor `FhsBdPolicyCursor`.
+
+**Makers**
+
+- `.ra_guard_policy(**attrs)` → `fhsRaGuardPol`
+
+## `tenant.fhs_bd_policy.ra_guard_policy`
+
+ACI class `fhsRaGuardPol` — RN `raguardpol` — cursor `RaGuardPolicyCursor`.
+
+## `tenant.trust_control_policy`
+
+ACI class `fhsTrustCtrlPol` — RN `trustctrlpol-{name}` — cursor `TrustControlPolicyCursor`.
+
+## `tenant.igmp_snoop_policy`
+
+ACI class `igmpSnoopPol` — RN `snPol-{name}` — cursor `TenantIgmpSnoopPolicyCursor`.
+
+## `tenant.mld_snoop_policy`
+
+ACI class `mldSnoopPol` — RN `mldsnoopPol-{name}` — cursor `TenantMldSnoopPolicyCursor`.
+
+## `tenant.ip_sla_monitoring_policy`
+
+ACI class `fvIPSLAMonitoringPol` — RN `ipslaMonitoringPol-{name}` — cursor `IpSlaMonitoringPolicyCursor`.
+
+**Makers**
+
+- `.icmp_echo_probe(**attrs)` → `fvICMPProbe`
+- `.tcp_probe(**attrs)` → `fvTCPProbe`
+
+## `tenant.ip_sla_monitoring_policy.icmp_echo_probe`
+
+ACI class `fvICMPProbe` — RN `icmpProbe` — cursor `IcmpEchoProbeCursor`.
+
+## `tenant.ip_sla_monitoring_policy.tcp_probe`
+
+ACI class `fvTCPProbe` — RN `tcpProbe` — cursor `TcpProbeCursor`.
+
+## `tenant.track_list`
+
+ACI class `fvTrackList` — RN `tracklist-{name}` — cursor `TrackListCursor`.
+
+**Bind aliases** (lazy references, resolved closed-world at push time)
+
+| alias | target | flavor | relation |
+| --- | --- | --- | --- |
+| `track_member=` | `fvTrackMember` | DN — `bind_dn()` allowed | `fvRsOtmListMember` |
+
+## `tenant.track_member`
+
+ACI class `fvTrackMember` — RN `trackmember-{name}` — cursor `TrackMemberCursor`.
+
+**Bind aliases** (lazy references, resolved closed-world at push time)
+
+| alias | target | flavor | relation |
+| --- | --- | --- | --- |
+| `ip_sla_monitoring_policy=` | `fvIPSLAMonitoringPol` | DN — `bind_dn()` allowed | `fvRsIpslaMonPol` |
+
+## `tenant.pim_route_map_policy`
+
+ACI class `pimRouteMapPol` — RN `rtmap-{name}` — cursor `PimRouteMapPolicyCursor`.
+
+**Makers**
+
+- `.pim_route_map_entry(order, **attrs)` → `pimRouteMapEntry`
+
+## `tenant.pim_route_map_policy.pim_route_map_entry`
+
+ACI class `pimRouteMapEntry` — RN `rtmapentry-{order}` — cursor `PimRouteMapEntryCursor`.
+
+## `tenant.route_tag_policy`
+
+ACI class `l3extRouteTagPol` — RN `rttag-{name}` — cursor `RouteTagPolicyCursor`.
+
+## `tenant.route_control_profile`
+
+ACI class `rtctrlProfile` — RN `prof-{name}` — cursor `TenantRouteControlProfileCursor`.
+
+**Makers**
+
+- `.route_control_context(name, **attrs)` → `rtctrlCtxP`
+
+## `tenant.route_control_profile.route_control_context`
+
+ACI class `rtctrlCtxP` — RN `ctx-{name}` — cursor `TenantRouteControlProfileRouteControlContextCursor`.
+
+**Makers**
+
+- `.route_context_scope(**attrs)` → `rtctrlScope`
+
+**Bind aliases** (lazy references, resolved closed-world at push time)
+
+| alias | target | flavor | relation |
+| --- | --- | --- | --- |
+| `match_rule=` | `rtctrlSubjP` | name | `rtctrlRsCtxPToSubjP` |
+
+## `tenant.route_control_profile.route_control_context.route_context_scope`
+
+ACI class `rtctrlScope` — RN `scp` — cursor `TenantRouteControlProfileRouteControlContextRouteContextScopeCursor`.
+
+**Bind aliases** (lazy references, resolved closed-world at push time)
+
+| alias | target | flavor | relation |
+| --- | --- | --- | --- |
+| `action_rule_profile=` | `rtctrlAttrP` | name | `rtctrlRsScopeToAttrP` |
+
+## `tenant.service_container`
+
+ACI class `vnsSvcCont` — RN `svcCont` — cursor `ServiceContainerCursor`.
+
+**Makers**
+
+- `.service_redirect_policy(name, **attrs)` → `vnsSvcRedirectPol`
+- `.pbr_backup_policy(name, **attrs)` → `vnsBackupPol`
+- `.l4_l7_redirect_health_group(name, **attrs)` → `vnsRedirectHealthGroup`
+- `.service_epg_policy(name, **attrs)` → `vnsSvcEPgPol`
+
+## `tenant.service_container.service_redirect_policy`
+
+ACI class `vnsSvcRedirectPol` — RN `svcRedirectPol-{name}` — cursor `ServiceRedirectPolicyCursor`.
+
+**Makers**
+
+- `.destination_of_redirected_traffic(ip_address, **attrs)` → `vnsRedirectDest`
+
+**Bind aliases** (lazy references, resolved closed-world at push time)
+
+| alias | target | flavor | relation |
+| --- | --- | --- | --- |
+| `ip_sla_monitoring_policy=` | `fvIPSLAMonitoringPol` | DN — `bind_dn()` allowed | `vnsRsIPSLAMonitoringPol` |
+| `pbr_backup_policy=` | `vnsBackupPol` | DN — `bind_dn()` allowed | `vnsRsBackupPol` |
+
+## `tenant.service_container.service_redirect_policy.destination_of_redirected_traffic`
+
+ACI class `vnsRedirectDest` — RN `RedirectDest_ip-[{ip_address}]` — cursor `ServiceRedirectPolicyDestinationOfRedirectedTrafficCursor`.
+
+**Bind aliases** (lazy references, resolved closed-world at push time)
+
+| alias | target | flavor | relation |
+| --- | --- | --- | --- |
+| `l4_l7_redirect_health_group=` | `vnsRedirectHealthGroup` | DN — `bind_dn()` allowed | `vnsRsRedirectHealthGroup` |
+
+## `tenant.service_container.pbr_backup_policy`
+
+ACI class `vnsBackupPol` — RN `backupPol-{name}` — cursor `PbrBackupPolicyCursor`.
+
+**Makers**
+
+- `.destination_of_redirected_traffic(ip_address, **attrs)` → `vnsRedirectDest`
+
+## `tenant.service_container.pbr_backup_policy.destination_of_redirected_traffic`
+
+ACI class `vnsRedirectDest` — RN `RedirectDest_ip-[{ip_address}]` — cursor `PbrBackupPolicyDestinationOfRedirectedTrafficCursor`.
+
+**Bind aliases** (lazy references, resolved closed-world at push time)
+
+| alias | target | flavor | relation |
+| --- | --- | --- | --- |
+| `l4_l7_redirect_health_group=` | `vnsRedirectHealthGroup` | DN — `bind_dn()` allowed | `vnsRsRedirectHealthGroup` |
+
+## `tenant.service_container.l4_l7_redirect_health_group`
+
+ACI class `vnsRedirectHealthGroup` — RN `redirectHealthGroup-{name}` — cursor `L4L7RedirectHealthGroupCursor`.
+
+## `tenant.service_container.service_epg_policy`
+
+ACI class `vnsSvcEPgPol` — RN `svcEPgPol-{name}` — cursor `ServiceEpgPolicyCursor`.

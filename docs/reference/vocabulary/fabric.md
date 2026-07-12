@@ -13,11 +13,21 @@ ACI class `fabricInst` — RN `fabric` — cursor `FabricCursor`.
 
 **Makers**
 
+- `.igmp_snoop_policy(name, **attrs)` → `igmpSnoopPol`
+- `.mld_snoop_policy(name, **attrs)` → `mldSnoopPol`
 - `.datetime_policy(name, **attrs)` → `datetimePol`
 - `.dns_profile(name, **attrs)` → `dnsProfile`
 - `.bgp_instance(name, **attrs)` → `bgpInstPol`
 - `.syslog_group(name, **attrs)` → `syslogGroup`
 - `.vpc_protection(**attrs)` → `fabricProtPol`
+
+## `fabric.igmp_snoop_policy`
+
+ACI class `igmpSnoopPol` — RN `snPol-{name}` — cursor `FabricIgmpSnoopPolicyCursor`.
+
+## `fabric.mld_snoop_policy`
+
+ACI class `mldSnoopPol` — RN `mldsnoopPol-{name}` — cursor `FabricMldSnoopPolicyCursor`.
 
 ## `fabric.datetime_policy`
 
@@ -42,7 +52,7 @@ ACI class `dnsProfile` — RN `dnsp-{name}` — cursor `DnsProfileCursor`.
 
 ## `fabric.dns_profile.provider`
 
-ACI class `dnsProv` — RN `prov-[{ip_address}]` — cursor `ProviderCursor`.
+ACI class `dnsProv` — RN `prov-[{ip_address}]` — cursor `DnsProfileProviderCursor`.
 
 ## `fabric.dns_profile.domain`
 

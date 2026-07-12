@@ -36,6 +36,9 @@ _MAKER_RENAMES = {
     ("fabricProtPol", "vpc_pair"): "vpc_explicit_protection_group",
     ("fabricExplicitGEp", "node"): "node_policy_end_point",
     ("ctrlrInst", "fabric_membership"): "fabric_membership_policy",
+    # On a dhcp_relay_policy cursor, .provider() reads naturally — the dhcp_
+    # prefix is redundant at that position (same call as dnsProfile.provider).
+    ("dhcpRelayP", "provider"): "dhcp_provider",
 }
 
 

@@ -19,6 +19,7 @@ class fvIntersitePeeringP(ManagedObject):
     _aci_class: ClassVar[str] = "fvIntersitePeeringP"
     _rn_format: ClassVar[str] = "ispeeringP"
     _naming_props: ClassVar[list[str]] = []
+    _secure_props: ClassVar[frozenset[str]] = frozenset(["bgp_evpn_peering_password"])
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

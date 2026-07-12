@@ -19,6 +19,7 @@ class mcpInstPol(ManagedObject):
     _aci_class: ClassVar[str] = "mcpInstPol"
     _rn_format: ClassVar[str] = "mcpInstP-{name}"
     _naming_props: ClassVar[list[str]] = ["name"]
+    _secure_props: ClassVar[frozenset[str]] = frozenset(["secret_key"])
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

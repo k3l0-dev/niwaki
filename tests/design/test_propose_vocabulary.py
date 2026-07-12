@@ -25,13 +25,23 @@ def l3out_wave():  # type: ignore[no-untyped-def]
     return propose(["l3extOut"], max_depth=4)
 
 
+@pytest.fixture(scope="module")
+def tenant_wave():  # type: ignore[no-untyped-def]
+    from niwaki._codegen.propose_vocabulary import propose
+
+    return propose(["fvTenant"], max_depth=4)
+
+
 class TestMakers:
-    def test_known_positions_are_proposed_with_childmap_names(self, l3out_wave) -> None:  # type: ignore[no-untyped-def]
+    def test_maker_names_agree_with_childmap(self, tenant_wave) -> None:  # type: ignore[no-untyped-def]
         """Maker names come verbatim from CHILD_MAP — the jargon agreement is
-        by construction, not by whitelist."""
-        root = l3out_wave.makers["l3extOut"]
-        assert root["external_epg"][0] == "l3extInstP"
-        assert root["node_profile"][0] == "l3extLNodeP"
+        by construction, not by whitelist.  Invariant across waves."""
+        from niwaki.domain._child_map import CHILD_MAP
+
+        assert tenant_wave.makers, "the tenant subtree should still have uncurated classes"
+        for parent, table in tenant_wave.makers.items():
+            for name, (child, _flags) in table.items():
+                assert CHILD_MAP[parent][name] == child
 
     def test_rs_classes_are_never_makers(self, l3out_wave) -> None:  # type: ignore[no-untyped-def]
         proposed = {
@@ -67,6 +77,45 @@ class TestMakers:
         assert "fvCtx" not in proposed  # curated maker (tenant.vrf)
         assert wave.skipped_curated >= 6  # app/bd/vrf/l3out/filter/contract
 
+    def test_roots_are_anchored_under_curated_parents(self, tenant_wave) -> None:  # type: ignore[no-untyped-def]
+        """A wave root contained by an already-curated class gets its
+        anchoring maker line proposed.  Wave-agnostic: the test picks any
+        class the tenant subtree still leaves uncurated."""
+        from niwaki._codegen.propose_vocabulary import propose
+
+        candidates = [child for child, _flags in tenant_wave.makers.get("fvTenant", {}).values()]
+        if not candidates:
+            pytest.skip("every direct fvTenant child is curated — nothing to anchor")
+        root = candidates[0]
+        wave = propose([root], max_depth=1)
+        anchored = {child for child, _flags in wave.makers.get("fvTenant", {}).values()}
+        assert root in anchored
+
+    def test_already_anchored_roots_are_not_reproposed(self, l3out_wave) -> None:  # type: ignore[no-untyped-def]
+        assert "l3extOut" not in {
+            child for child, _flags in l3out_wave.makers.get("fvTenant", {}).values()
+        }
+
+    def test_allow_pierces_the_family_denylist(self) -> None:
+        """--allow exempts specific classes from the excluded families.
+
+        vnsAbsGraph (service-graph machinery) is excluded for good by user
+        decision — a permanently stable probe.
+        """
+        from niwaki._codegen.propose_vocabulary import propose
+
+        closed = propose(["fvTenant"], max_depth=1)
+        proposed_closed = {
+            child for table in closed.makers.values() for child, _flags in table.values()
+        }
+        assert "vnsAbsGraph" not in proposed_closed
+
+        opened = propose(["fvTenant"], max_depth=1, allow=frozenset({"vnsAbsGraph"}))
+        proposed_open = {
+            child for table in opened.makers.values() for child, _flags in table.values()
+        }
+        assert "vnsAbsGraph" in proposed_open
+
     def test_long_names_carry_the_review_flag(self, l3out_wave) -> None:  # type: ignore[no-untyped-def]
         flagged = [
             name
@@ -78,31 +127,42 @@ class TestMakers:
 
 
 class TestBindsAndVerbs:
-    def test_bind_aliases_come_from_reference_map(self, l3out_wave) -> None:  # type: ignore[no-untyped-def]
-        assert l3out_wave.binds["bfdIfP"]["bfd_interface_policy"][0] == "bfdIfPol"
+    def test_bind_aliases_come_from_reference_map(self, tenant_wave) -> None:  # type: ignore[no-untyped-def]
+        """Every proposed (owner, target) pair resolves in REFERENCE_MAP and
+        is not already curated.  Invariant across waves."""
+        from niwaki.design._cursor import _tables
+        from niwaki.domain._child_map import REFERENCE_MAP
+
+        assert tenant_wave.binds
+        for owner, table in tenant_wave.binds.items():
+            curated = set(_tables().binds.get(owner, {}).values())
+            for _alias, (target, _flags) in table.items():
+                assert target in REFERENCE_MAP[owner]
+                assert target not in curated
 
     def test_already_curated_binds_are_skipped(self, l3out_wave) -> None:  # type: ignore[no-untyped-def]
         targets = {t for t, _flags in l3out_wave.binds.get("l3extOut", {}).values()}
         assert "fvCtx" not in targets  # curated as l3out.bind(vrf=...)
 
-    def test_contract_verbs_are_proposed_as_a_pair(self, l3out_wave) -> None:  # type: ignore[no-untyped-def]
-        verbs = l3out_wave.verbs["l3extInstP"]
-        assert verbs["provide"] == {"rs": "fvRsProv", "target": "vzBrCP"}
-        assert verbs["consume"] == {"rs": "fvRsCons", "target": "vzBrCP"}
+    def test_proposed_verbs_are_complete_pairs(self, tenant_wave) -> None:  # type: ignore[no-untyped-def]
+        """The pair-or-nothing rule: a verbs proposal always carries both
+        provide and consume, each with an rs class and a target."""
+        for owner, verbs in tenant_wave.verbs.items():
+            assert set(verbs) == {"provide", "consume"}, owner
+            for spec in verbs.values():
+                assert set(spec) == {"rs", "target"}
 
-    def test_curated_verb_owners_are_not_reproposed(self) -> None:
-        from niwaki._codegen.propose_vocabulary import propose
-
-        wave = propose(["fvTenant"], max_depth=3)
-        assert "fvAEPg" not in wave.verbs  # epg verbs are curated already
+    def test_curated_verb_owners_are_not_reproposed(self, tenant_wave) -> None:  # type: ignore[no-untyped-def]
+        assert "fvAEPg" not in tenant_wave.verbs  # epg verbs are curated
+        assert "l3extInstP" not in tenant_wave.verbs  # curated in wave 1
 
 
 class TestRender:
-    def test_output_is_valid_yaml_with_the_vocabulary_shape(self, l3out_wave) -> None:  # type: ignore[no-untyped-def]
-        data = yaml.safe_load(l3out_wave.render())
+    def test_output_is_valid_yaml_with_the_vocabulary_shape(self, tenant_wave) -> None:  # type: ignore[no-untyped-def]
+        data = yaml.safe_load(tenant_wave.render())
         assert set(data) == {"makers", "binds", "verbs"}
-        assert data["makers"]["l3extOut"]["external_epg"] == "l3extInstP"
-        assert data["verbs"]["l3extInstP"]["provide"] == {"rs": "fvRsProv", "target": "vzBrCP"}
+        for parent, table in data["makers"].items():
+            assert tenant_wave.makers[parent].keys() == table.keys()
 
     def test_review_flags_survive_as_comments(self, l3out_wave) -> None:  # type: ignore[no-untyped-def]
         text = l3out_wave.render()

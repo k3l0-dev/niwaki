@@ -17,6 +17,7 @@ class dcMessage(ManagedObject):
     _aci_class: ClassVar[str] = "dcMessage"
     _rn_format: ClassVar[str] = "dm-{category}"
     _naming_props: ClassVar[list[str]] = ["category"]
+    _secure_props: ClassVar[frozenset[str]] = frozenset(["secure_payload"])
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

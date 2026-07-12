@@ -82,6 +82,9 @@ class ManagedObject(BaseModel):
         _aci_class: ACI class name (e.g. ``"fvBD"``).
         _rn_format: Relative Name format string (e.g. ``"BD-{name}"``).
         _naming_props: List of property names used in the RN (e.g. ``["name"]``).
+        _secure_props: Frozenset of write-only property names (passwords,
+            pre-shared keys) — the APIC never echoes them on reads, so diff
+            and plan comparisons must skip them.
         _contains: Frozenset of ACI class names valid as direct children.
         _mo_category: APIC object category from the schema (e.g. ``"Regular"``,
             ``"RelationshipToLocal"``).  Populated by codegen; defaults to
@@ -112,6 +115,7 @@ class ManagedObject(BaseModel):
     _aci_class: ClassVar[str] = ""
     _rn_format: ClassVar[str] = ""
     _naming_props: ClassVar[list[str]] = []
+    _secure_props: ClassVar[frozenset[str]] = frozenset()
     _contains: ClassVar[frozenset[str]] = frozenset()
     _mo_category: ClassVar[str] = "Regular"
     _write_access: ClassVar[frozenset[str]] = frozenset()

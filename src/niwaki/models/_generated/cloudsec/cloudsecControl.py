@@ -20,6 +20,7 @@ class cloudsecControl(ManagedObject):
     _aci_class: ClassVar[str] = "cloudsecControl"
     _rn_format: ClassVar[str] = "cloudseccontrol"
     _naming_props: ClassVar[list[str]] = []
+    _secure_props: ClassVar[frozenset[str]] = frozenset(["key_encryption_key"])
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

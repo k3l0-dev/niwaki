@@ -20,6 +20,9 @@ class aaaRadiusProvider(ManagedObject):
     _aci_class: ClassVar[str] = "aaaRadiusProvider"
     _rn_format: ClassVar[str] = "radiusprovider-{name}"
     _naming_props: ClassVar[list[str]] = ["name"]
+    _secure_props: ClassVar[frozenset[str]] = frozenset(
+        ["key", "periodic_server_monitoring_password"]
+    )
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

@@ -17,6 +17,7 @@ class vmmEpValidatorPol(ManagedObject):
     _aci_class: ClassVar[str] = "vmmEpValidatorPol"
     _rn_format: ClassVar[str] = "epv"
     _naming_props: ClassVar[list[str]] = []
+    _secure_props: ClassVar[frozenset[str]] = frozenset(["current_key", "previous_key"])
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

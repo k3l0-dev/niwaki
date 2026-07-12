@@ -19,6 +19,7 @@ class tacacsTacacsDest(ManagedObject):
     _aci_class: ClassVar[str] = "tacacsTacacsDest"
     _rn_format: ClassVar[str] = "tacacsdest-{host}-port-{port}"
     _naming_props: ClassVar[list[str]] = ["host", "port"]
+    _secure_props: ClassVar[frozenset[str]] = frozenset(["key"])
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

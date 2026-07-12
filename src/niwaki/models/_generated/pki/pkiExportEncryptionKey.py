@@ -21,6 +21,7 @@ class pkiExportEncryptionKey(ManagedObject):
     _aci_class: ClassVar[str] = "pkiExportEncryptionKey"
     _rn_format: ClassVar[str] = "exportcryptkey"
     _naming_props: ClassVar[list[str]] = []
+    _secure_props: ClassVar[frozenset[str]] = frozenset(["passphrase"])
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

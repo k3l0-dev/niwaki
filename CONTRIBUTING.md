@@ -6,7 +6,7 @@ Thank you for helping tend the tree. 🌳
 
 niwaki is developed in a private workshop; the release engineering lives
 there.  **This public repository is the product's home**: source, the full
-test suite (13,900+ unit tests plus the executable documentation — run it
+test suite (14,200+ unit tests plus the executable documentation — run it
 with `uv run pytest --ignore=tests/integration tests/ docs/`), documentation,
 releases, issues and discussions.  Every release lands here as a single
 commit, which is why pull requests are never merged directly — see

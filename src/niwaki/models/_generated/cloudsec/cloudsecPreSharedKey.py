@@ -17,6 +17,7 @@ class cloudsecPreSharedKey(ManagedObject):
     _aci_class: ClassVar[str] = "cloudsecPreSharedKey"
     _rn_format: ClassVar[str] = "psk-{index}"
     _naming_props: ClassVar[list[str]] = ["index"]
+    _secure_props: ClassVar[frozenset[str]] = frozenset(["pre_shared_key_string"])
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

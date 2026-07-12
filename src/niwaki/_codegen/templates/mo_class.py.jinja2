@@ -26,6 +26,9 @@ class {{ class_name }}(ManagedObject):
     _aci_class:    ClassVar[str]            = "{{ class_name }}"
     _rn_format:    ClassVar[str]            = "{{ rn_format }}"
     _naming_props: ClassVar[list[str]]      = {{ naming_props | tojson }}
+{% if secure_props %}
+    _secure_props: ClassVar[frozenset[str]] = frozenset({{ secure_props | tojson }})
+{% endif %}
     _contains:     ClassVar[frozenset[str]] = frozenset({
 {% for child in contains %}
         "{{ child }}",

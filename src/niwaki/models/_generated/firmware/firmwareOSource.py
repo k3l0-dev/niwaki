@@ -21,6 +21,14 @@ class firmwareOSource(ManagedObject):
     _aci_class: ClassVar[str] = "firmwareOSource"
     _rn_format: ClassVar[str] = "osrc-{name}"
     _naming_props: ClassVar[list[str]] = ["name"]
+    _secure_props: ClassVar[frozenset[str]] = frozenset(
+        [
+            "password",
+            "ssh_private_key_content",
+            "ssh_private_key_passphrase",
+            "ssh_public_key_content",
+        ]
+    )
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

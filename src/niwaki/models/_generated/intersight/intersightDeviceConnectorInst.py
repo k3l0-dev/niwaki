@@ -17,6 +17,7 @@ class intersightDeviceConnectorInst(ManagedObject):
     _aci_class: ClassVar[str] = "intersightDeviceConnectorInst"
     _rn_format: ClassVar[str] = "dcinst"
     _naming_props: ClassVar[list[str]] = []
+    _secure_props: ClassVar[frozenset[str]] = frozenset(["base64_encoded_parent_signature_block"])
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

@@ -17,6 +17,7 @@ class vnsCCredSecret(ManagedObject):
     _aci_class: ClassVar[str] = "vnsCCredSecret"
     _rn_format: ClassVar[str] = "cCredSecret"
     _naming_props: ClassVar[list[str]] = []
+    _secure_props: ClassVar[frozenset[str]] = frozenset(["value"])
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

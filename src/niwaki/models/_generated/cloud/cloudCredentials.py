@@ -17,6 +17,7 @@ class cloudCredentials(ManagedObject):
     _aci_class: ClassVar[str] = "cloudCredentials"
     _rn_format: ClassVar[str] = "credentials-{name}"
     _naming_props: ClassVar[list[str]] = ["name"]
+    _secure_props: ClassVar[frozenset[str]] = frozenset(["rsa_private_key", "secret_key"])
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

@@ -20,6 +20,7 @@ class bfdAuthP(ManagedObject):
     _aci_class: ClassVar[str] = "bfdAuthP"
     _rn_format: ClassVar[str] = "auth"
     _naming_props: ClassVar[list[str]] = []
+    _secure_props: ClassVar[frozenset[str]] = frozenset(["hex_key", "hex_key_size", "key"])
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

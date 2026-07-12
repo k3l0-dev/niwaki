@@ -13,6 +13,8 @@ ACI class `infraInfra` — RN `infra` — cursor `InfraCursor`.
 
 **Makers**
 
+- `.dhcp_relay_policy(name, **attrs)` → `dhcpRelayP`
+- `.dpp_policy(name, **attrs)` → `qosDppPol`
 - `.cdp_policy(name, **attrs)` → `cdpIfPol`
 - `.lldp_policy(name, **attrs)` → `lldpIfPol`
 - `.lacp_policy(name, **attrs)` → `lacpLagPol`
@@ -26,6 +28,22 @@ ACI class `infraInfra` — RN `infra` — cursor `InfraCursor`.
 - `.access_port_profile(name, **attrs)` → `infraAccPortP`
 - `.leaf_profile(name, **attrs)` → `infraNodeP`
 - `.spine_profile(name, **attrs)` → `infraSpineP`
+
+## `infra.dhcp_relay_policy`
+
+ACI class `dhcpRelayP` — RN `relayp-{name}` — cursor `InfraDhcpRelayPolicyCursor`.
+
+**Makers**
+
+- `.provider(target_dn, **attrs)` → `dhcpRsProv`
+
+## `infra.dhcp_relay_policy.provider`
+
+ACI class `dhcpRsProv` — RN `rsprov-[{target_dn}]` — cursor `InfraDhcpRelayPolicyProviderCursor`.
+
+## `infra.dpp_policy`
+
+ACI class `qosDppPol` — RN `qosdpppol-{name}` — cursor `InfraDppPolicyCursor`.
 
 ## `infra.cdp_policy`
 

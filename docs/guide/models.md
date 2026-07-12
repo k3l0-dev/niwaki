@@ -77,7 +77,7 @@ the generated schema version), so a round-trip never loses data.
 
 ## The `.mo()` escape hatch
 
-The design DSL's curated vocabulary covers ~50 positions; the other 2,000+
+The design DSL's curated vocabulary covers 175+ positions; the other 2,000+
 classes remain one call away.  `.mo(Class, **attrs)` declares a child of any
 generated class at the current position — containment is still validated
 against the schema:

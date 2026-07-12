@@ -17,6 +17,7 @@ class fvPasswordConfig(ManagedObject):
     _aci_class: ClassVar[str] = "fvPasswordConfig"
     _rn_format: ClassVar[str] = "passwordConfig"
     _naming_props: ClassVar[list[str]] = []
+    _secure_props: ClassVar[frozenset[str]] = frozenset(["password"])
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

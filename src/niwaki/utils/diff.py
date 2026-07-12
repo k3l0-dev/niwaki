@@ -188,8 +188,14 @@ def mo_diff[T: ManagedObject](
             raise ValueError(f"Cannot diff: naming prop {prop!r} differs ({d_val!r} vs {c_val!r})")
 
     # Compare all non-naming declared fields — or only the explicitly set
-    # ones when respect_fields_set is requested.
-    model_fields = set(cls.model_fields.keys()) - {"children"} - naming_props
+    # ones when respect_fields_set is requested.  Write-only props (passwords,
+    # pre-shared keys) are excluded: the APIC never echoes them on reads, so
+    # comparing them would report phantom drift forever.  Consequence: a
+    # changed secret is invisible to ``plan`` — pushing the design is the only
+    # way to rotate it.
+    model_fields = (
+        set(cls.model_fields.keys()) - {"children"} - naming_props - cls._secure_props  # pyright: ignore[reportPrivateUsage]
+    )
     if respect_fields_set:
         model_fields &= desired.model_fields_set
     changed: dict[str, Any] = {}

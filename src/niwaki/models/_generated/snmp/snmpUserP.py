@@ -20,6 +20,7 @@ class snmpUserP(ManagedObject):
     _aci_class: ClassVar[str] = "snmpUserP"
     _rn_format: ClassVar[str] = "user-{name}"
     _naming_props: ClassVar[list[str]] = ["name"]
+    _secure_props: ClassVar[frozenset[str]] = frozenset(["authentication_key", "privacy_key"])
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

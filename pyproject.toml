@@ -103,11 +103,13 @@ files = ["src/niwaki"]
 exclude = ["src/niwaki/models/_generated/"]
 
 # Generated typed cursors deliberately narrow the base Cursor signatures
-# (set/bind take the curated typed kwargs instead of **Any) — that Liskov
-# violation is the feature, so the override check is disabled there.
+# (set/bind take the curated typed kwargs instead of **Any), and a cursor
+# inheriting two ancestor maker mixins resolves same-label makers by MRO
+# (nearest level wins — the runtime semantics).  Those Liskov violations are
+# the feature, so the override and multiple-inheritance checks are disabled.
 [[tool.mypy.overrides]]
 module = ["niwaki.design._generated_cursors", "niwaki.design._generated_cursors.*"]
-disable_error_code = ["override"]
+disable_error_code = ["override", "misc"]
 
 # ── Coverage ──────────────────────────────────────────────────────────────────
 # Generated code (~30k lines) would drown the signal; measure hand-written
