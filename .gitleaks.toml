@@ -1,0 +1,17 @@
+# gitleaks configuration (used by the weekly canary's history audit).
+#
+# Default rules, plus an allowlist for the generated code: those files are
+# produced from the public APIC class schemas, where identifiers such as
+# "ipv4aclIntfACE" (ACE = Access Control Entry) trip the generic api-key
+# rule.  Generated files carry no hand-written strings by construction.
+
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "generated code — ACI class tables from the public schemas"
+paths = [
+  '''src/niwaki/models/_generated/.*''',
+  '''src/niwaki/domain/_child_map\.py''',
+  '''src/niwaki/design/_generated_cursors\.py''',
+]
