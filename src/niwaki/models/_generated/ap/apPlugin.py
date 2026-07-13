@@ -24,41 +24,41 @@ class apPlugin(ManagedObject):
     The APIC can flag these accepted-but-inconsistent states on this class
     (read-only ``configIssues``):
 
-    - ``app-downgrade-not-allowed``
-    - ``app-inconsistent-state``
-    - ``app-installation-failed``
-    - ``app-removal-deferred``
-    - ``app-validation-deferred``
-    - ``certificate-generation-failed``
-    - ``cluster-has-vapic``
-    - ``high-privilege-app-not-signed``
-    - ``invalid-meta-data``
-    - ``plugin-health-not-ok``
-    - ``runtime-required-platform-not-available``
-    - ``signature-verification-failed``
-    - ``start-plugin-failed``
-    - ``stop-plugin-failed``
+    - ``app-downgrade-not-allowed`` — app downgrade not allowed
+    - ``app-inconsistent-state`` — app in inconsistent state
+    - ``app-installation-failed`` — app installation failed
+    - ``app-removal-deferred`` — app removal deferred
+    - ``app-validation-deferred`` — app validation deferred
+    - ``certificate-generation-failed`` — certificate generation failed
+    - ``cluster-has-vapic`` — cluster has vAPIC
+    - ``high-privilege-app-not-signed`` — High privilege app is not signed
+    - ``invalid-meta-data`` — invalid meta data
+    - ``plugin-health-not-ok`` — plugin health is not ok
+    - ``runtime-required-platform-not-available`` — runtime required platform not available
+    - ``signature-verification-failed`` — signature verification failed
+    - ``start-plugin-failed`` — start plugin failed
+    - ``stop-plugin-failed`` — stop plugin failed
     """
 
     _aci_class: ClassVar[str] = "apPlugin"
     _rn_format: ClassVar[str] = "plugin-{app_ctx_root}"
     _naming_props: ClassVar[list[str]] = ["app_ctx_root"]
     _config_issues: ClassVar[dict[str, str]] = {
-        "app-downgrade-not-allowed": "",
-        "app-inconsistent-state": "",
-        "app-installation-failed": "",
-        "app-removal-deferred": "",
-        "app-validation-deferred": "",
-        "certificate-generation-failed": "",
-        "cluster-has-vapic": "",
-        "high-privilege-app-not-signed": "",
-        "invalid-meta-data": "",
-        "ok": "",
-        "plugin-health-not-ok": "",
-        "runtime-required-platform-not-available": "",
-        "signature-verification-failed": "",
-        "start-plugin-failed": "",
-        "stop-plugin-failed": "",
+        "app-downgrade-not-allowed": "app downgrade not allowed",
+        "app-inconsistent-state": "app in inconsistent state",
+        "app-installation-failed": "app installation failed",
+        "app-removal-deferred": "app removal deferred",
+        "app-validation-deferred": "app validation deferred",
+        "certificate-generation-failed": "certificate generation failed",
+        "cluster-has-vapic": "cluster has vAPIC",
+        "high-privilege-app-not-signed": "High privilege app is not signed",
+        "invalid-meta-data": "invalid meta data",
+        "ok": "ok",
+        "plugin-health-not-ok": "plugin health is not ok",
+        "runtime-required-platform-not-available": "runtime required platform not available",
+        "signature-verification-failed": "signature verification failed",
+        "start-plugin-failed": "start plugin failed",
+        "stop-plugin-failed": "stop plugin failed",
     }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {

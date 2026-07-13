@@ -16,21 +16,21 @@ class fvEpIpTag(ManagedObject):
     The APIC can flag these accepted-but-inconsistent states on this class
     (read-only ``configIssues``):
 
-    - ``bd-does-not-exist``
-    - ``multiple-tag-selector-match``
-    - ``multiple-tag-selector-match-after-single-match``
-    - ``vrf-does-not-exist``
+    - ``bd-does-not-exist`` — Endpoint is associated to a Bridge Domain, but the Bridge Domain does not exist.
+    - ``multiple-tag-selector-match`` — Tag(s) matching more than one ESG TagSelector. Endpoints can only be associated to a single ESG TagSelector via Tags.
+    - ``multiple-tag-selector-match-after-single-match`` — Tag(s) are now matching more than one ESG TagSelector. The original match is still active. Endpoints can only be associated to a single ESG TagSelector via Tags.
+    - ``vrf-does-not-exist`` — Endpoint is associated to a VRF, but the VRF does not exist.
     """
 
     _aci_class: ClassVar[str] = "fvEpIpTag"
     _rn_format: ClassVar[str] = "epiptag-[{endpoint_ip_address}]-{vrf_name}"
     _naming_props: ClassVar[list[str]] = ["endpoint_ip_address", "vrf_name"]
     _config_issues: ClassVar[dict[str, str]] = {
-        "bd-does-not-exist": "",
-        "multiple-tag-selector-match": "",
-        "multiple-tag-selector-match-after-single-match": "",
+        "bd-does-not-exist": "Endpoint is associated to a Bridge Domain, but the Bridge Domain does not exist.",
+        "multiple-tag-selector-match": "Tag(s) matching more than one ESG TagSelector. Endpoints can only be associated to a single ESG TagSelector via Tags.",
+        "multiple-tag-selector-match-after-single-match": "Tag(s) are now matching more than one ESG TagSelector. The original match is still active. Endpoints can only be associated to a single ESG TagSelector via Tags.",
         "none": "",
-        "vrf-does-not-exist": "",
+        "vrf-does-not-exist": "Endpoint is associated to a VRF, but the VRF does not exist.",
     }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {

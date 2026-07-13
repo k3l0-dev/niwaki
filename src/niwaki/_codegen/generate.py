@@ -437,7 +437,7 @@ def _render_class(
     config_issues: dict[str, str] = meta.get("config_issues", {})
     healthy = {"ok", "none", "N/A", "not-applicable"}
     config_issue_display = [
-        f"- ``{code}``" + (f" — {desc}" if desc else "")
+        f"- ``{code}``" + (f" — {desc}" if desc and desc != code else "")
         for code, desc in sorted(config_issues.items())
         if code not in healthy
     ]

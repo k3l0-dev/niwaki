@@ -18,10 +18,10 @@ class fabricSetupP(ManagedObject):
     The APIC can flag these accepted-but-inconsistent states on this class
     (read-only ``configIssues``):
 
-    - ``primary-dhcp-server-not-configured``
-    - ``routable-subnet-not-configured``
-    - ``secondary-dhcp-server-not-configured``
-    - ``secondary-subnet-not-configured``
+    - ``primary-dhcp-server-not-configured`` — Either primary DHCP server Leaf node is not configured or the node is not active
+    - ``routable-subnet-not-configured`` — fabricExtRoutablePodSubnet is not configured
+    - ``secondary-dhcp-server-not-configured`` — Either secondary DHCP server Leaf node is not configured or the node is not active
+    - ``secondary-subnet-not-configured`` — fabricAssociatedSetupP is not configured
     """
 
     _aci_class: ClassVar[str] = "fabricSetupP"
@@ -29,10 +29,10 @@ class fabricSetupP(ManagedObject):
     _naming_props: ClassVar[list[str]] = ["pod_identifier"]
     _config_issues: ClassVar[dict[str, str]] = {
         "none": "",
-        "primary-dhcp-server-not-configured": "",
-        "routable-subnet-not-configured": "",
-        "secondary-dhcp-server-not-configured": "",
-        "secondary-subnet-not-configured": "",
+        "primary-dhcp-server-not-configured": "Either primary DHCP server Leaf node is not configured or the node is not active",
+        "routable-subnet-not-configured": "fabricExtRoutablePodSubnet is not configured",
+        "secondary-dhcp-server-not-configured": "Either secondary DHCP server Leaf node is not configured or the node is not active",
+        "secondary-subnet-not-configured": "fabricAssociatedSetupP is not configured",
     }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {

@@ -18,55 +18,55 @@ class physDomP(ManagedObject):
     The APIC can flag these accepted-but-inconsistent states on this class
     (read-only ``configIssues``):
 
-    - ``cdp-lldp-collision``
-    - ``enhanced-lacp-lag-creation-skipped``
-    - ``invalid-mcast-addr``
-    - ``invalid-port``
-    - ``invalid-vxlan-ns-range``
-    - ``missing-assoc-attEntP``
-    - ``missing-encap``
-    - ``missing-encapblk``
-    - ``missing-epg``
-    - ``missing-infra-pg-vlan``
-    - ``missing-internal-vlan-blk``
-    - ``missing-ns-assoc``
-    - ``multiple-cdp``
-    - ``multiple-cdp-policy``
-    - ``multiple-lacp-policy``
-    - ``multiple-lldp``
-    - ``multiple-lldp-policy``
-    - ``multiple-mtu-policy``
-    - ``multiple-nwsfw-policy``
-    - ``multiple-stp-policy``
-    - ``unsupported-dom-avs``
+    - ``cdp-lldp-collision`` — Both Cdp policy and Lldp policy are configured for Attach Entity Profile
+    - ``enhanced-lacp-lag-creation-skipped`` — Enhanced Lacp Lag Policy creation skipped, DVS has Lacp v1 enabled
+    - ``invalid-mcast-addr`` — Missing multicast address for vxlan mode
+    - ``invalid-port`` — Invalid port for fabric interface
+    - ``invalid-vxlan-ns-range`` — VXlan range below 0x800000 is not valid for N1kv NS mode
+    - ``missing-assoc-attEntP`` — Domain is missing association from Attach Entity Profile
+    - ``missing-encap`` — Invalid or missing encapsulation
+    - ``missing-encapblk`` — Invalid or missing Encapsulation Blocks
+    - ``missing-epg`` — Association to End-point Group not specified
+    - ``missing-infra-pg-vlan`` — Infrastructure VLAN needs to be configured for Infra-PG. Please enable under AEP.
+    - ``missing-internal-vlan-blk`` — Missing Internal VLAN Encapsulation Blocks
+    - ``missing-ns-assoc`` — Invalid or missing association to VLAN or VxLAN namespace
+    - ``multiple-cdp`` — More than one Cdp policy found for Attach Entity Profile
+    - ``multiple-cdp-policy`` — Domain has multiple CDP policies in interface policy groups and no override CDP policy
+    - ``multiple-lacp-policy`` — Domain has multiple LACP policies in interface policy groups and no override LACP policy
+    - ``multiple-lldp`` — More than one Lldp policy found for Attach Entity Profile
+    - ``multiple-lldp-policy`` — Domain has multiple LLDP policies in interface policy groups and no override LLDP policy
+    - ``multiple-mtu-policy`` — Domain has multiple MTU policies in interface policy groups and no override MTU policy
+    - ``multiple-nwsfw-policy`` — Domain has multiple Firewall policies in interface policy groups and no override Firewall policy
+    - ``multiple-stp-policy`` — Domain has multiple STP policies in interface policy groups and no override STP policy
+    - ``unsupported-dom-avs`` — AVS domain is no longer supported from 5.0 onwards. Please migrate to AVE.
     """
 
     _aci_class: ClassVar[str] = "physDomP"
     _rn_format: ClassVar[str] = "phys-{name}"
     _naming_props: ClassVar[list[str]] = ["name"]
     _config_issues: ClassVar[dict[str, str]] = {
-        "cdp-lldp-collision": "",
-        "enhanced-lacp-lag-creation-skipped": "",
-        "invalid-mcast-addr": "",
-        "invalid-port": "",
-        "invalid-vxlan-ns-range": "",
-        "missing-assoc-attEntP": "",
-        "missing-encap": "",
-        "missing-encapblk": "",
-        "missing-epg": "",
-        "missing-infra-pg-vlan": "",
-        "missing-internal-vlan-blk": "",
-        "missing-ns-assoc": "",
-        "multiple-cdp": "",
-        "multiple-cdp-policy": "",
-        "multiple-lacp-policy": "",
-        "multiple-lldp": "",
-        "multiple-lldp-policy": "",
-        "multiple-mtu-policy": "",
-        "multiple-nwsfw-policy": "",
-        "multiple-stp-policy": "",
+        "cdp-lldp-collision": "Both Cdp policy and Lldp policy are configured for Attach Entity Profile",
+        "enhanced-lacp-lag-creation-skipped": "Enhanced Lacp Lag Policy creation skipped, DVS has Lacp v1 enabled",
+        "invalid-mcast-addr": "Missing multicast address for vxlan mode",
+        "invalid-port": "Invalid port for fabric interface",
+        "invalid-vxlan-ns-range": "VXlan range below 0x800000 is not valid for N1kv NS mode",
+        "missing-assoc-attEntP": "Domain is missing association from Attach Entity Profile",
+        "missing-encap": "Invalid or missing encapsulation",
+        "missing-encapblk": "Invalid or missing Encapsulation Blocks",
+        "missing-epg": "Association to End-point Group not specified",
+        "missing-infra-pg-vlan": "Infrastructure VLAN needs to be configured for Infra-PG. Please enable under AEP.",
+        "missing-internal-vlan-blk": "Missing Internal VLAN Encapsulation Blocks",
+        "missing-ns-assoc": "Invalid or missing association to VLAN or VxLAN namespace",
+        "multiple-cdp": "More than one Cdp policy found for Attach Entity Profile",
+        "multiple-cdp-policy": "Domain has multiple CDP policies in interface policy groups and no override CDP policy",
+        "multiple-lacp-policy": "Domain has multiple LACP policies in interface policy groups and no override LACP policy",
+        "multiple-lldp": "More than one Lldp policy found for Attach Entity Profile",
+        "multiple-lldp-policy": "Domain has multiple LLDP policies in interface policy groups and no override LLDP policy",
+        "multiple-mtu-policy": "Domain has multiple MTU policies in interface policy groups and no override MTU policy",
+        "multiple-nwsfw-policy": "Domain has multiple Firewall policies in interface policy groups and no override Firewall policy",
+        "multiple-stp-policy": "Domain has multiple STP policies in interface policy groups and no override STP policy",
         "none": "",
-        "unsupported-dom-avs": "",
+        "unsupported-dom-avs": "AVS domain is no longer supported from 5.0 onwards. Please migrate to AVE.",
     }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {

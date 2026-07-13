@@ -18,31 +18,31 @@ class vnsCopyConnector(ManagedObject):
     The APIC can flag these accepted-but-inconsistent states on this class
     (read-only ``configIssues``):
 
-    - ``conn-nonrenderable``
-    - ``invalid-ctx``
-    - ``missing-bd``
-    - ``missing-connection``
-    - ``missing-l3instp``
-    - ``missing-lif``
-    - ``missing-nodeinst``
-    - ``missing-peer-conn``
-    - ``missing-subnet``
+    - ``conn-nonrenderable`` — Graph connector could not be rendered.
+    - ``invalid-ctx`` — Ctx associated with a connector is not valid.
+    - ``missing-bd`` — Unable to find BD associated with a connector.
+    - ``missing-connection`` — connection associated with a connector not found.
+    - ``missing-l3instp`` — Unable to find L3InstP associated with a connector.
+    - ``missing-lif`` — no cluster interface found
+    - ``missing-nodeinst`` — NodeInst associated with a connector not found.
+    - ``missing-peer-conn`` — Peer connector associated with a connector not found.
+    - ``missing-subnet`` — Unable to find subnet for this connector.
     """
 
     _aci_class: ClassVar[str] = "vnsCopyConnector"
     _rn_format: ClassVar[str] = "copyconnector"
     _naming_props: ClassVar[list[str]] = []
     _config_issues: ClassVar[dict[str, str]] = {
-        "conn-nonrenderable": "",
-        "invalid-ctx": "",
-        "missing-bd": "",
-        "missing-connection": "",
-        "missing-l3instp": "",
-        "missing-lif": "",
-        "missing-nodeinst": "",
-        "missing-peer-conn": "",
-        "missing-subnet": "",
-        "ok": "",
+        "conn-nonrenderable": "Graph connector could not be rendered.",
+        "invalid-ctx": "Ctx associated with a connector is not valid.",
+        "missing-bd": "Unable to find BD associated with a connector.",
+        "missing-connection": "connection associated with a connector not found.",
+        "missing-l3instp": "Unable to find L3InstP associated with a connector.",
+        "missing-lif": "no cluster interface found",
+        "missing-nodeinst": "NodeInst associated with a connector not found.",
+        "missing-peer-conn": "Peer connector associated with a connector not found.",
+        "missing-subnet": "Unable to find subnet for this connector.",
+        "ok": "ok",
     }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {

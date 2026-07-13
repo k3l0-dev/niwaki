@@ -18,27 +18,27 @@ class pimInterVRFEntryPol(ManagedObject):
     The APIC can flag these accepted-but-inconsistent states on this class
     (read-only ``configIssues``):
 
-    - ``csw-invalid-pod-id``
-    - ``intervrf-route-map-empty``
-    - ``missing-rp-group-range``
-    - ``pim-not-supported-in-vpc-mode``
-    - ``pim-not-supported-on-ext-svi``
-    - ``pim-not-supported-on-floating-svi``
-    - ``src-only-route-map-allowed``
+    - ``csw-invalid-pod-id`` — Pod ID associated with this CSW Entry does not exist
+    - ``intervrf-route-map-empty`` — No routemap associated with InterVRF policy / associated routemap is empty
+    - ``missing-rp-group-range`` — missing RP Group range configuration.
+    - ``pim-not-supported-in-vpc-mode`` — PIM is not supported in VPC mode
+    - ``pim-not-supported-on-ext-svi`` — PIMv6 is not supported on external SVI interfaces
+    - ``pim-not-supported-on-floating-svi`` — PIM is not supported on floating SVIs
+    - ``src-only-route-map-allowed`` — Only source-based route-maps are allowed for BSR/Auto RP.
     """
 
     _aci_class: ClassVar[str] = "pimInterVRFEntryPol"
     _rn_format: ClassVar[str] = "intervrfent-[{dn_of_the_src_vrf}]"
     _naming_props: ClassVar[list[str]] = ["dn_of_the_src_vrf"]
     _config_issues: ClassVar[dict[str, str]] = {
-        "csw-invalid-pod-id": "",
-        "intervrf-route-map-empty": "",
-        "missing-rp-group-range": "",
-        "ok": "",
-        "pim-not-supported-in-vpc-mode": "",
-        "pim-not-supported-on-ext-svi": "",
-        "pim-not-supported-on-floating-svi": "",
-        "src-only-route-map-allowed": "",
+        "csw-invalid-pod-id": "Pod ID associated with this CSW Entry does not exist",
+        "intervrf-route-map-empty": "No routemap associated with InterVRF policy / associated routemap is empty",
+        "missing-rp-group-range": "missing RP Group range configuration.",
+        "ok": "ok",
+        "pim-not-supported-in-vpc-mode": "PIM is not supported in VPC mode",
+        "pim-not-supported-on-ext-svi": "PIMv6 is not supported on external SVI interfaces",
+        "pim-not-supported-on-floating-svi": "PIM is not supported on floating SVIs",
+        "src-only-route-map-allowed": "Only source-based route-maps are allowed for BSR/Auto RP.",
     }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {

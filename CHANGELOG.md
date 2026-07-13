@@ -14,7 +14,9 @@ All notable changes to this project are documented here.  The format follows
   `FHS-enabled-on-l2-only-bd`), previously invisible to users.  Each such
   class exposes `_config_issues` (`{code: description}`) and lists the
   codes in its docstring — the states your IDE can warn you about before
-  the APIC flags them.
+  the APIC flags them.  Descriptions come from the value's `comment`
+  (rich prose) with the schema `label` as fallback — every code is
+  described.
 
 ## [0.6.0] — 2026-07-13
 

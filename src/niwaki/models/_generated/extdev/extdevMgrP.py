@@ -20,7 +20,7 @@ class extdevMgrP(ManagedObject):
     The APIC can flag these accepted-but-inconsistent states on this class
     (read-only ``configIssues``):
 
-    - ``invalid-usraccp``
+    - ``invalid-usraccp`` — Manager is not associated to a valid Access Profile
     """
 
     _aci_class: ClassVar[str] = "extdevMgrP"
@@ -28,7 +28,7 @@ class extdevMgrP(ManagedObject):
     _naming_props: ClassVar[list[str]] = ["name"]
     _secure_props: ClassVar[frozenset[str]] = frozenset(["password"])
     _config_issues: ClassVar[dict[str, str]] = {
-        "invalid-usraccp": "",
+        "invalid-usraccp": "Manager is not associated to a valid Access Profile",
         "not-applicable": "",
     }
     _contains: ClassVar[frozenset[str]] = frozenset(

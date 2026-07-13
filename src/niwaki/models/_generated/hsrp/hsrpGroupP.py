@@ -21,29 +21,29 @@ class hsrpGroupP(ManagedObject):
     The APIC can flag these accepted-but-inconsistent states on this class
     (read-only ``configIssues``):
 
-    - ``GroupMac-Conflicts-Other-Group``
-    - ``GroupName-Conflicts-Other-Group``
-    - ``GroupVIP-Conflicts-Other-Group``
-    - ``Multiple-Version-On-Interface``
-    - ``Secondary-vip-conflicts-if-ip``
-    - ``Secondary-vip-subnet-mismatch``
-    - ``group-vip-conflicts-if-ip``
-    - ``group-vip-subnet-mismatch``
+    - ``GroupMac-Conflicts-Other-Group`` — GroupMac Conflicts Other Group
+    - ``GroupName-Conflicts-Other-Group`` — GroupName Conflicts Other Group
+    - ``GroupVIP-Conflicts-Other-Group`` — GroupVIP Conflicts Other Group
+    - ``Multiple-Version-On-Interface`` — Multiple hsrp version configured on Interface
+    - ``Secondary-vip-conflicts-if-ip`` — SecVip Conflicts Interface Ip
+    - ``Secondary-vip-subnet-mismatch`` — SecVip RsPathL3OutAtt Subnet Misconfiguration
+    - ``group-vip-conflicts-if-ip`` — hsrpGroupP Ip Conflict
+    - ``group-vip-subnet-mismatch`` — hsrpGroupP RsPathL3OutAtt Subnet Misconfiguration
     """
 
     _aci_class: ClassVar[str] = "hsrpGroupP"
     _rn_format: ClassVar[str] = "hsrpGroupP-{name}"
     _naming_props: ClassVar[list[str]] = ["name"]
     _config_issues: ClassVar[dict[str, str]] = {
-        "group-vip-conflicts-if-ip": "",
-        "group-vip-subnet-mismatch": "",
-        "GroupMac-Conflicts-Other-Group": "",
-        "GroupName-Conflicts-Other-Group": "",
-        "GroupVIP-Conflicts-Other-Group": "",
-        "Multiple-Version-On-Interface": "",
+        "group-vip-conflicts-if-ip": "hsrpGroupP Ip Conflict",
+        "group-vip-subnet-mismatch": "hsrpGroupP RsPathL3OutAtt Subnet Misconfiguration",
+        "GroupMac-Conflicts-Other-Group": "GroupMac Conflicts Other Group",
+        "GroupName-Conflicts-Other-Group": "GroupName Conflicts Other Group",
+        "GroupVIP-Conflicts-Other-Group": "GroupVIP Conflicts Other Group",
+        "Multiple-Version-On-Interface": "Multiple hsrp version configured on Interface",
         "none": "",
-        "Secondary-vip-conflicts-if-ip": "",
-        "Secondary-vip-subnet-mismatch": "",
+        "Secondary-vip-conflicts-if-ip": "SecVip Conflicts Interface Ip",
+        "Secondary-vip-subnet-mismatch": "SecVip RsPathL3OutAtt Subnet Misconfiguration",
     }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {

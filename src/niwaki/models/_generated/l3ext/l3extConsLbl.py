@@ -21,11 +21,11 @@ class l3extConsLbl(ManagedObject):
     The APIC can flag these accepted-but-inconsistent states on this class
     (read-only ``configIssues``):
 
-    - ``access-encap-bd-map-conflict``
-    - ``access-encap-node-overlap``
-    - ``anchor-encap-mismatch``
-    - ``anchor-node-mismatch``
-    - ``bd-profile-mismatch``
+    - ``access-encap-bd-map-conflict`` — Conflicting access-encap to BD mapping
+    - ``access-encap-node-overlap`` — Access encap node overlap
+    - ``anchor-encap-mismatch`` — Anchor node encap mismatch
+    - ``anchor-node-mismatch`` — v4 and v4 anchor node sets are not matching
+    - ``bd-profile-mismatch`` — External bridge profile mismatch
     - ``loopback-ip-missing`` — CP-TEP configuration validations
     - ``missing-mpls-infra-l3out`` — MPLS infra l3out validation for the consumer Lbl
     - ``missing-rs-export-route-profile`` — MPLS ConsLbl configuration validations
@@ -33,19 +33,19 @@ class l3extConsLbl(ManagedObject):
     - ``node-path-misconfig`` — LNodeP node/path configuration validations
     - ``node-vlif-misconfig`` — LNodeP node/vlif configuration validations
     - ``routerid-not-changable-with-mcast`` — LNodeP router id multicast configuration validations
-    - ``rtsumsubnet-l3extsubnet-conflict``
-    - ``subnet-mismatch``
+    - ``rtsumsubnet-l3extsubnet-conflict`` — fvRtSummSubnet and l3extSubnet has same prefix
+    - ``subnet-mismatch`` — Primary IP and floating ip are not in same subnet
     """
 
     _aci_class: ClassVar[str] = "l3extConsLbl"
     _rn_format: ClassVar[str] = "conslbl-{name}"
     _naming_props: ClassVar[list[str]] = ["name"]
     _config_issues: ClassVar[dict[str, str]] = {
-        "access-encap-bd-map-conflict": "",
-        "access-encap-node-overlap": "",
-        "anchor-encap-mismatch": "",
-        "anchor-node-mismatch": "",
-        "bd-profile-mismatch": "",
+        "access-encap-bd-map-conflict": "Conflicting access-encap to BD mapping",
+        "access-encap-node-overlap": "Access encap node overlap",
+        "anchor-encap-mismatch": "Anchor node encap mismatch",
+        "anchor-node-mismatch": "v4 and v4 anchor node sets are not matching",
+        "bd-profile-mismatch": "External bridge profile mismatch",
         "loopback-ip-missing": "CP-TEP configuration validations",
         "missing-mpls-infra-l3out": "MPLS infra l3out validation for the consumer Lbl",
         "missing-rs-export-route-profile": "MPLS ConsLbl configuration validations",
@@ -54,8 +54,8 @@ class l3extConsLbl(ManagedObject):
         "node-vlif-misconfig": "LNodeP node/vlif configuration validations",
         "none": "",
         "routerid-not-changable-with-mcast": "LNodeP router id multicast configuration validations",
-        "rtsumsubnet-l3extsubnet-conflict": "",
-        "subnet-mismatch": "",
+        "rtsumsubnet-l3extsubnet-conflict": "fvRtSummSubnet and l3extSubnet has same prefix",
+        "subnet-mismatch": "Primary IP and floating ip are not in same subnet",
     }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {

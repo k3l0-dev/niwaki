@@ -16,33 +16,33 @@ class fvFabricExpRtctrlP(ManagedObject):
     The APIC can flag these accepted-but-inconsistent states on this class
     (read-only ``configIssues``):
 
-    - ``exp-rtctrl-on-non-bl``
-    - ``rtprofile-export-policy-missing``
-    - ``rtprofile-export-policy-node-missing``
-    - ``rtprofile-import-policy-missing``
-    - ``rtprofile-import-policy-node-missing``
+    - ``exp-rtctrl-on-non-bl`` — Export Route-map policy is configured on node for the VRF without any L3Out. Please configure L3Out on node or remove export route-map policy from this
+    - ``rtprofile-export-policy-missing`` — Route Profile from vrf export policy is missing
+    - ``rtprofile-export-policy-node-missing`` — Node is missing in VRF export route control policy
+    - ``rtprofile-import-policy-missing`` — Route Profile from vrf import policy is missing
+    - ``rtprofile-import-policy-node-missing`` — Node is missing in VRF import route control policy
     - ``rtsum-on-non-bl`` — Rt Summarization configured on Non BL Node
-    - ``rtsum-policy-node-missing``
-    - ``rtsum-subnet-missing``
-    - ``rtsum-subnet-policy-missing``
-    - ``rtsumsubnet-l3extsubnet-conflict``
+    - ``rtsum-policy-node-missing`` — Node is missing in route summarization policy
+    - ``rtsum-subnet-missing`` — Rtsum subnet is missing
+    - ``rtsum-subnet-policy-missing`` — Route Summarization policy is missing from rtsumSubnet
+    - ``rtsumsubnet-l3extsubnet-conflict`` — fvRtSummSubnet and l3extSubnet has same prefix
     """
 
     _aci_class: ClassVar[str] = "fvFabricExpRtctrlP"
     _rn_format: ClassVar[str] = "exprtctrl-{name}"
     _naming_props: ClassVar[list[str]] = ["name"]
     _config_issues: ClassVar[dict[str, str]] = {
-        "exp-rtctrl-on-non-bl": "",
+        "exp-rtctrl-on-non-bl": "Export Route-map policy is configured on node for the VRF without any L3Out. Please configure L3Out on node or remove export route-map policy from this",
         "none": "",
-        "rtprofile-export-policy-missing": "",
-        "rtprofile-export-policy-node-missing": "",
-        "rtprofile-import-policy-missing": "",
-        "rtprofile-import-policy-node-missing": "",
+        "rtprofile-export-policy-missing": "Route Profile from vrf export policy is missing",
+        "rtprofile-export-policy-node-missing": "Node is missing in VRF export route control policy",
+        "rtprofile-import-policy-missing": "Route Profile from vrf import policy is missing",
+        "rtprofile-import-policy-node-missing": "Node is missing in VRF import route control policy",
         "rtsum-on-non-bl": "Rt Summarization configured on Non BL Node",
-        "rtsum-policy-node-missing": "",
-        "rtsum-subnet-missing": "",
-        "rtsum-subnet-policy-missing": "",
-        "rtsumsubnet-l3extsubnet-conflict": "",
+        "rtsum-policy-node-missing": "Node is missing in route summarization policy",
+        "rtsum-subnet-missing": "Rtsum subnet is missing",
+        "rtsum-subnet-policy-missing": "Route Summarization policy is missing from rtsumSubnet",
+        "rtsumsubnet-l3extsubnet-conflict": "fvRtSummSubnet and l3extSubnet has same prefix",
     }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {

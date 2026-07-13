@@ -21,21 +21,21 @@ class vzSubj(ManagedObject):
     The APIC can flag these accepted-but-inconsistent states on this class
     (read-only ``configIssues``):
 
-    - ``any-to-prov-shared-service``
-    - ``filter-not-present``
-    - ``subject-not-in-use-due-to-label``
-    - ``taboo-has-no-filter``
+    - ``any-to-prov-shared-service`` — Private Network Cannot be a Provider in Shared Service Scenario
+    - ``filter-not-present`` — Filter Not Present
+    - ``subject-not-in-use-due-to-label`` — No EPG Has Label For This Subject
+    - ``taboo-has-no-filter`` — Taboo Not associated to Any Filter
     """
 
     _aci_class: ClassVar[str] = "vzSubj"
     _rn_format: ClassVar[str] = "subj-{name}"
     _naming_props: ClassVar[list[str]] = ["name"]
     _config_issues: ClassVar[dict[str, str]] = {
-        "any-to-prov-shared-service": "",
-        "filter-not-present": "",
+        "any-to-prov-shared-service": "Private Network Cannot be a Provider in Shared Service Scenario",
+        "filter-not-present": "Filter Not Present",
         "none": "",
-        "subject-not-in-use-due-to-label": "",
-        "taboo-has-no-filter": "",
+        "subject-not-in-use-due-to-label": "No EPG Has Label For This Subject",
+        "taboo-has-no-filter": "Taboo Not associated to Any Filter",
     }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {

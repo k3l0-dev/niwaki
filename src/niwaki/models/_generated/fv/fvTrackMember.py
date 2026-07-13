@@ -16,15 +16,15 @@ class fvTrackMember(ManagedObject):
     The APIC can flag these accepted-but-inconsistent states on this class
     (read-only ``configIssues``):
 
-    - ``scope-dn-cannot-be-resolved``
+    - ``scope-dn-cannot-be-resolved`` — scopeDn cannot be resolved to an existing Bridge Domain or L3Out
     """
 
     _aci_class: ClassVar[str] = "fvTrackMember"
     _rn_format: ClassVar[str] = "trackmember-{name}"
     _naming_props: ClassVar[list[str]] = ["name"]
     _config_issues: ClassVar[dict[str, str]] = {
-        "ok": "",
-        "scope-dn-cannot-be-resolved": "",
+        "ok": "ok",
+        "scope-dn-cannot-be-resolved": "scopeDn cannot be resolved to an existing Bridge Domain or L3Out",
     }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {

@@ -25,22 +25,22 @@ class fvTnlEPg(ManagedObject):
     (read-only ``configIssues``):
 
     - ``allow-useg-inconsistent`` — allow useg Validations
-    - ``bd-id-not-allocated``
+    - ``bd-id-not-allocated`` — BD IDs Not Allocated
     - ``bd-not-present`` — BD Validations
-    - ``context-id-not-allocated``
+    - ``context-id-not-allocated`` — Context IDs Not Allocated
     - ``context-not-present`` — Context Validations
-    - ``encap-assignment``
+    - ``encap-assignment`` — Encapsulation Not Valid
     - ``esg-association-contract-inheritance-present`` — EPgSelector Contract Inheritance Validations
     - ``esg-association-contract-present`` — EPgSelector Contract Validations
     - ``esg-association-contract-taboo-present`` — EPgSelector Taboo Contract Validations
     - ``esg-tag-selector-match-obj-not-associated`` — ESG TagSelector Duplicate Detected
-    - ``id-not-allocated``
+    - ``id-not-allocated`` — IDs Not Allocated
     - ``incorrect-active-standby-uplink-order`` — Active/Standby Uplink Config Validations
     - ``instrimedcy-unsupported`` — Deployment Immediacy Validation
-    - ``invalid-rel-to-rtctrlProfile``
-    - ``l3port-and-sub-interface-on-path``
+    - ``invalid-rel-to-rtctrlProfile`` — Invalid Association to Route Control Policy
+    - ``l3port-and-sub-interface-on-path`` — L3 Port and Sub-Interface Not Allowed on Same Path
     - ``no-conslbl-association`` — MPLS InstP Validations
-    - ``not-associated-with-mgmt-zone``
+    - ``not-associated-with-mgmt-zone`` — Not Associated With Management Zone
     """
 
     _aci_class: ClassVar[str] = "fvTnlEPg"
@@ -48,23 +48,23 @@ class fvTnlEPg(ManagedObject):
     _naming_props: ClassVar[list[str]] = ["name"]
     _config_issues: ClassVar[dict[str, str]] = {
         "allow-useg-inconsistent": "allow useg Validations",
-        "bd-id-not-allocated": "",
+        "bd-id-not-allocated": "BD IDs Not Allocated",
         "bd-not-present": "BD Validations",
-        "context-id-not-allocated": "",
+        "context-id-not-allocated": "Context IDs Not Allocated",
         "context-not-present": "Context Validations",
-        "encap-assignment": "",
+        "encap-assignment": "Encapsulation Not Valid",
         "esg-association-contract-inheritance-present": "EPgSelector Contract Inheritance Validations",
         "esg-association-contract-present": "EPgSelector Contract Validations",
         "esg-association-contract-taboo-present": "EPgSelector Taboo Contract Validations",
         "esg-tag-selector-match-obj-not-associated": "ESG TagSelector Duplicate Detected",
-        "id-not-allocated": "",
+        "id-not-allocated": "IDs Not Allocated",
         "incorrect-active-standby-uplink-order": "Active/Standby Uplink Config Validations",
         "instrimedcy-unsupported": "Deployment Immediacy Validation",
-        "invalid-rel-to-rtctrlProfile": "",
-        "l3port-and-sub-interface-on-path": "",
+        "invalid-rel-to-rtctrlProfile": "Invalid Association to Route Control Policy",
+        "l3port-and-sub-interface-on-path": "L3 Port and Sub-Interface Not Allowed on Same Path",
         "no-conslbl-association": "MPLS InstP Validations",
         "none": "",
-        "not-associated-with-mgmt-zone": "",
+        "not-associated-with-mgmt-zone": "Not Associated With Management Zone",
     }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {

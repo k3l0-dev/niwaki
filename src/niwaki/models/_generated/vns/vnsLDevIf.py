@@ -18,141 +18,141 @@ class vnsLDevIf(ManagedObject):
     The APIC can flag these accepted-but-inconsistent states on this class
     (read-only ``configIssues``):
 
-    - ``arp-flood-enabled``
-    - ``cdev-missing-cif``
-    - ``cdev-missing-mgmt-ip``
-    - ``cdev-missing-path-for-interface``
-    - ``cdev-missing-virtual-info``
-    - ``cif-missing-virtual-info``
-    - ``context-cardinality-violation-failure``
-    - ``devfolder-validation-failed``
-    - ``devparam-validation-failed``
-    - ``epp-download-failure``
-    - ``folderinst-validation-failed``
-    - ``function-type-mismatch-failure``
-    - ``gothrough-routing-enabled-both``
-    - ``gothru-same-bd``
-    - ``graph-loop-detected``
-    - ``id-allocation-failure``
-    - ``inappropriate-devfolder``
-    - ``insufficient-devctx``
-    - ``internal-error``
-    - ``invalid-absfunc-profile``
-    - ``invalid-abstract-graph-config``
-    - ``invalid-abstract-graph-config-param``
-    - ``invalid-config``
-    - ``invalid-conn-for-configparam``
-    - ``invalid-connection``
-    - ``invalid-devcfg-folder``
-    - ``invalid-devctx``
-    - ``invalid-filter-referred-by-rsconntoflt``
-    - ``invalid-graphinst``
-    - ``invalid-ldev``
-    - ``invalid-mfolder``
-    - ``invalid-namespace-allocation-mode``
-    - ``invalid-param-config``
-    - ``invalid-param-scope``
-    - ``invalid-relation-target``
-    - ``invalid-rsmconnatt``
-    - ``invalid-terminal-nodes``
-    - ``ldevvip-missing-mgmt-ip``
-    - ``lif-has-invalid-interface-label``
-    - ``lif-invalid-CIf``
-    - ``missing-abs-function``
-    - ``missing-abs-graph``
-    - ``missing-bd``
-    - ``missing-cdev``
-    - ``missing-cif``
-    - ``missing-config-params``
-    - ``missing-function-in-device-package``
-    - ``missing-function-node``
-    - ``missing-interface``
-    - ``missing-l3ctx``
-    - ``missing-l3instp``
-    - ``missing-ldev``
-    - ``missing-ldev-ctx``
-    - ``missing-lif``
-    - ``missing-mandatory-param``
-    - ``missing-mdev``
-    - ``missing-mparam``
-    - ``missing-namespace``
-    - ``missing-terminal``
-    - ``param-cardinality-error``
-    - ``param-validation-failed``
-    - ``paraminst-validation-failed``
-    - ``relinst-validation-failed``
-    - ``resource-allocation-failure``
+    - ``arp-flood-enabled`` — ARP flood is enabled on the management end point group
+    - ``cdev-missing-cif`` — No interface defined. It must have at least one interface defined
+    - ``cdev-missing-mgmt-ip`` — no mgmt ip found for cdev
+    - ``cdev-missing-path-for-interface`` — Missing path for interface.
+    - ``cdev-missing-virtual-info`` — Virtual Object Info like Vcenter name and VM name is missing in CDev
+    - ``cif-missing-virtual-info`` — Virtual Object like vnic name is missing in CIf
+    - ``context-cardinality-violation-failure`` — invalid cluster context cardinality
+    - ``devfolder-validation-failed`` — DevFolder has key, that is not found in MFolder
+    - ``devparam-validation-failed`` — DevParam has key and/or value, that are not found in MParam
+    - ``epp-download-failure`` — epp download failure
+    - ``folderinst-validation-failed`` — FolderInst has key, that is not found in MFolder
+    - ``function-type-mismatch-failure`` — invalid function type
+    - ``gothrough-routing-enabled-both`` — Both the legs of go through node has routing enabled
+    - ``gothru-same-bd`` — Both the legs of go through node are attached to same BD
+    - ``graph-loop-detected`` — Service graph template configuration is invalid. It has a loop
+    - ``id-allocation-failure`` — id allocation failure
+    - ``inappropriate-devfolder`` — Illegal folder in configuration.
+    - ``insufficient-devctx`` — Folder must have one value for each associated CDev.
+    - ``internal-error`` — internal error occured during graph processing.`
+    - ``invalid-absfunc-profile`` — Service graph template function profile config is invalid.
+    - ``invalid-abstract-graph-config`` — invalid abstract graph config
+    - ``invalid-abstract-graph-config-param`` — invalid abstract graph config param
+    - ``invalid-config`` — Configuration of this device contains errors
+    - ``invalid-conn-for-configparam`` — Config param is using an invalid graph connector.
+    - ``invalid-connection`` — AbsGraph Connection is invalid.
+    - ``invalid-devcfg-folder`` — DevCfg folder has invalid configuration parameters.
+    - ``invalid-devctx`` — Device context is not valid for this folder.
+    - ``invalid-filter-referred-by-rsconntoflt`` — AbsGraph connector is pointing to an invalid filter.
+    - ``invalid-graphinst`` — Graphinst config is invalid
+    - ``invalid-ldev`` — Invalid cluster
+    - ``invalid-mfolder`` — FolderInst points to an invalid MFolder
+    - ``invalid-namespace-allocation-mode`` — VlanInstP has invalid allocation mode: static. Allocation mode should be dynamic.
+    - ``invalid-param-config`` — invalid param config
+    - ``invalid-param-scope`` — invalid parameter scope
+    - ``invalid-relation-target`` — Relation target parameter could not be resolved.
+    - ``invalid-rsmconnatt`` — Invalid RsMConnAtt MO which points to connector
+    - ``invalid-terminal-nodes`` — Service graph template must have two or more terminal nodes
+    - ``ldevvip-missing-mgmt-ip`` — No Mgmt ip found for LDevVip
+    - ``lif-has-invalid-interface-label`` — LIf has an invalid MifLbl
+    - ``lif-invalid-CIf`` — LIf has an invalid CIf
+    - ``missing-abs-function`` — no abstract function definition found
+    - ``missing-abs-graph`` — no abs graph found
+    - ``missing-bd`` — no bd found
+    - ``missing-cdev`` — No device found in cluster.
+    - ``missing-cif`` — Device interfaces does not match cluster.
+    - ``missing-config-params`` — GraphInst does not have any configuration parameters. It should have at least one valid configuration parameter.
+    - ``missing-function-in-device-package`` — No function found in device package
+    - ``missing-function-node`` — Service graph template missing function node.
+    - ``missing-interface`` — no interface found
+    - ``missing-l3ctx`` — No L3 Context found for the graph connection
+    - ``missing-l3instp`` — no L3InstP found
+    - ``missing-ldev`` — No cluster found
+    - ``missing-ldev-ctx`` — No device context found for LDev
+    - ``missing-lif`` — no cluster interface found
+    - ``missing-mandatory-param`` — mandatory param not found
+    - ``missing-mdev`` — No device type found. LDevVip must be associated with an MDev.
+    - ``missing-mparam`` — No parameter definition found
+    - ``missing-namespace`` — no vlan/vxlan namespace found
+    - ``missing-terminal`` — Terminal node is missing a terminal
+    - ``param-cardinality-error`` — invalid param cardinality
+    - ``param-validation-failed`` — param value is invalid
+    - ``paraminst-validation-failed`` — ParamInst has key and/or value, that are not found in MParam
+    - ``relinst-validation-failed`` — CfgRelInst has key and/or value, that are not found in MParam
+    - ``resource-allocation-failure`` — resource could not be allocated during graph processing
     """
 
     _aci_class: ClassVar[str] = "vnsLDevIf"
     _rn_format: ClassVar[str] = "lDevIf-[{ldev}]"
     _naming_props: ClassVar[list[str]] = ["ldev"]
     _config_issues: ClassVar[dict[str, str]] = {
-        "arp-flood-enabled": "",
-        "cdev-missing-cif": "",
-        "cdev-missing-mgmt-ip": "",
-        "cdev-missing-path-for-interface": "",
-        "cdev-missing-virtual-info": "",
-        "cif-missing-virtual-info": "",
-        "context-cardinality-violation-failure": "",
-        "devfolder-validation-failed": "",
-        "devparam-validation-failed": "",
-        "epp-download-failure": "",
-        "folderinst-validation-failed": "",
-        "function-type-mismatch-failure": "",
-        "gothrough-routing-enabled-both": "",
-        "gothru-same-bd": "",
-        "graph-loop-detected": "",
-        "id-allocation-failure": "",
-        "inappropriate-devfolder": "",
-        "insufficient-devctx": "",
-        "internal-error": "",
-        "invalid-absfunc-profile": "",
-        "invalid-abstract-graph-config": "",
-        "invalid-abstract-graph-config-param": "",
-        "invalid-config": "",
-        "invalid-conn-for-configparam": "",
-        "invalid-connection": "",
-        "invalid-devcfg-folder": "",
-        "invalid-devctx": "",
-        "invalid-filter-referred-by-rsconntoflt": "",
-        "invalid-graphinst": "",
-        "invalid-ldev": "",
-        "invalid-mfolder": "",
-        "invalid-namespace-allocation-mode": "",
-        "invalid-param-config": "",
-        "invalid-param-scope": "",
-        "invalid-relation-target": "",
-        "invalid-rsmconnatt": "",
-        "invalid-terminal-nodes": "",
-        "ldevvip-missing-mgmt-ip": "",
-        "lif-has-invalid-interface-label": "",
-        "lif-invalid-CIf": "",
-        "missing-abs-function": "",
-        "missing-abs-graph": "",
-        "missing-bd": "",
-        "missing-cdev": "",
-        "missing-cif": "",
-        "missing-config-params": "",
-        "missing-function-in-device-package": "",
-        "missing-function-node": "",
-        "missing-interface": "",
-        "missing-l3ctx": "",
-        "missing-l3instp": "",
-        "missing-ldev": "",
-        "missing-ldev-ctx": "",
-        "missing-lif": "",
-        "missing-mandatory-param": "",
-        "missing-mdev": "",
-        "missing-mparam": "",
-        "missing-namespace": "",
-        "missing-terminal": "",
-        "ok": "",
-        "param-cardinality-error": "",
-        "param-validation-failed": "",
-        "paraminst-validation-failed": "",
-        "relinst-validation-failed": "",
-        "resource-allocation-failure": "",
+        "arp-flood-enabled": "ARP flood is enabled on the management end point group",
+        "cdev-missing-cif": "No interface defined. It must have at least one interface defined",
+        "cdev-missing-mgmt-ip": "no mgmt ip found for cdev",
+        "cdev-missing-path-for-interface": "Missing path for interface.",
+        "cdev-missing-virtual-info": "Virtual Object Info like Vcenter name and VM name is missing in CDev",
+        "cif-missing-virtual-info": "Virtual Object like vnic name is missing in CIf",
+        "context-cardinality-violation-failure": "invalid cluster context cardinality",
+        "devfolder-validation-failed": "DevFolder has key, that is not found in MFolder",
+        "devparam-validation-failed": "DevParam has key and/or value, that are not found in MParam",
+        "epp-download-failure": "epp download failure",
+        "folderinst-validation-failed": "FolderInst has key, that is not found in MFolder",
+        "function-type-mismatch-failure": "invalid function type",
+        "gothrough-routing-enabled-both": "Both the legs of go through node has routing enabled",
+        "gothru-same-bd": "Both the legs of go through node are attached to same BD",
+        "graph-loop-detected": "Service graph template configuration is invalid. It has a loop",
+        "id-allocation-failure": "id allocation failure",
+        "inappropriate-devfolder": "Illegal folder in configuration.",
+        "insufficient-devctx": "Folder must have one value for each associated CDev.",
+        "internal-error": "internal error occured during graph processing.`",
+        "invalid-absfunc-profile": "Service graph template function profile config is invalid.",
+        "invalid-abstract-graph-config": "invalid abstract graph config",
+        "invalid-abstract-graph-config-param": "invalid abstract graph config param",
+        "invalid-config": "Configuration of this device contains errors",
+        "invalid-conn-for-configparam": "Config param is using an invalid graph connector.",
+        "invalid-connection": "AbsGraph Connection is invalid.",
+        "invalid-devcfg-folder": "DevCfg folder has invalid configuration parameters.",
+        "invalid-devctx": "Device context is not valid for this folder.",
+        "invalid-filter-referred-by-rsconntoflt": "AbsGraph connector is pointing to an invalid filter.",
+        "invalid-graphinst": "Graphinst config is invalid",
+        "invalid-ldev": "Invalid cluster",
+        "invalid-mfolder": "FolderInst points to an invalid MFolder",
+        "invalid-namespace-allocation-mode": "VlanInstP has invalid allocation mode: static. Allocation mode should be dynamic.",
+        "invalid-param-config": "invalid param config",
+        "invalid-param-scope": "invalid parameter scope",
+        "invalid-relation-target": "Relation target parameter could not be resolved.",
+        "invalid-rsmconnatt": "Invalid RsMConnAtt MO which points to connector",
+        "invalid-terminal-nodes": "Service graph template must have two or more terminal nodes",
+        "ldevvip-missing-mgmt-ip": "No Mgmt ip found for LDevVip",
+        "lif-has-invalid-interface-label": "LIf has an invalid MifLbl",
+        "lif-invalid-CIf": "LIf has an invalid CIf",
+        "missing-abs-function": "no abstract function definition found",
+        "missing-abs-graph": "no abs graph found",
+        "missing-bd": "no bd found",
+        "missing-cdev": "No device found in cluster.",
+        "missing-cif": "Device interfaces does not match cluster.",
+        "missing-config-params": "GraphInst does not have any configuration parameters. It should have at least one valid configuration parameter.",
+        "missing-function-in-device-package": "No function found in device package",
+        "missing-function-node": "Service graph template missing function node.",
+        "missing-interface": "no interface found",
+        "missing-l3ctx": "No L3 Context found for the graph connection",
+        "missing-l3instp": "no L3InstP found",
+        "missing-ldev": "No cluster found",
+        "missing-ldev-ctx": "No device context found for LDev",
+        "missing-lif": "no cluster interface found",
+        "missing-mandatory-param": "mandatory param not found",
+        "missing-mdev": "No device type found. LDevVip must be associated with an MDev.",
+        "missing-mparam": "No parameter definition found",
+        "missing-namespace": "no vlan/vxlan namespace found",
+        "missing-terminal": "Terminal node is missing a terminal",
+        "ok": "ok",
+        "param-cardinality-error": "invalid param cardinality",
+        "param-validation-failed": "param value is invalid",
+        "paraminst-validation-failed": "ParamInst has key and/or value, that are not found in MParam",
+        "relinst-validation-failed": "CfgRelInst has key and/or value, that are not found in MParam",
+        "resource-allocation-failure": "resource could not be allocated during graph processing",
     }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {

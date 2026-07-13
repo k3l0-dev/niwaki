@@ -24,9 +24,9 @@ class fvBD(ManagedObject):
     The APIC can flag these accepted-but-inconsistent states on this class
     (read-only ``configIssues``):
 
-    - ``FHS-enabled-on-l2-only-bd``
+    - ``FHS-enabled-on-l2-only-bd`` — first hop security enabled on layer 2 only bridge domain
     - ``bd-cannot-combine-hardware-proxy-and-flood-in-encapsulation``
-    - ``igmp-snoop-disabled-on-multicast-if``
+    - ``igmp-snoop-disabled-on-multicast-if`` — igmpsnoop disabled on multicast enabled BD
     - ``l3-mcast-is-enabled-on-vrf-where-bd-has-ip-learn-disable``
     """
 
@@ -34,11 +34,11 @@ class fvBD(ManagedObject):
     _rn_format: ClassVar[str] = "BD-{name}"
     _naming_props: ClassVar[list[str]] = ["name"]
     _config_issues: ClassVar[dict[str, str]] = {
-        "bd-cannot-combine-hardware-proxy-and-flood-in-encapsulation": "",
-        "FHS-enabled-on-l2-only-bd": "",
-        "igmp-snoop-disabled-on-multicast-if": "",
-        "l3-mcast-is-enabled-on-vrf-where-bd-has-ip-learn-disable": "",
-        "ok": "",
+        "bd-cannot-combine-hardware-proxy-and-flood-in-encapsulation": "bd-cannot-combine-hardware-proxy-and-flood-in-encapsulation",
+        "FHS-enabled-on-l2-only-bd": "first hop security enabled on layer 2 only bridge domain",
+        "igmp-snoop-disabled-on-multicast-if": "igmpsnoop disabled on multicast enabled BD",
+        "l3-mcast-is-enabled-on-vrf-where-bd-has-ip-learn-disable": "l3-mcast-is-enabled-on-vrf-where-bd-has-ip-learn-disable",
+        "ok": "ok",
     }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {

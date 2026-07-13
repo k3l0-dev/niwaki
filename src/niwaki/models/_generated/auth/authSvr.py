@@ -21,14 +21,14 @@ class authSvr(ManagedObject):
     The APIC can flag these accepted-but-inconsistent states on this class
     (read-only ``configIssues``):
 
-    - ``mode-not-set``
+    - ``mode-not-set`` — Mode not set yet.
     """
 
     _aci_class: ClassVar[str] = "authSvr"
     _rn_format: ClassVar[str] = "authsvr-{name}"
     _naming_props: ClassVar[list[str]] = ["name"]
     _config_issues: ClassVar[dict[str, str]] = {
-        "mode-not-set": "",
+        "mode-not-set": "Mode not set yet.",
         "not-applicable": "",
     }
     _contains: ClassVar[frozenset[str]] = frozenset(

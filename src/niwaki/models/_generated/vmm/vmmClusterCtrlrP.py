@@ -18,57 +18,57 @@ class vmmClusterCtrlrP(ManagedObject):
     The APIC can flag these accepted-but-inconsistent states on this class
     (read-only ``configIssues``):
 
-    - ``aaacert-invalid``
-    - ``domain-not-deployable``
-    - ``duplicate-mac-in-inventory``
-    - ``duplicate-rootContName``
-    - ``enfpref-not-set``
-    - ``invalid-CtrlrAssoc``
-    - ``invalid-cluster-ctrlr``
-    - ``invalid-mcastAddr``
-    - ``invalid-object-in-inventory``
-    - ``invalid-policy``
-    - ``invalid-rootContName``
-    - ``invalid-statsP``
-    - ``invalid-usraccp``
-    - ``invalid-vxlanNs``
-    - ``inventory-failed``
-    - ``missing-cluster-ctrlr``
-    - ``missing-hostGroup-in-cloud``
-    - ``missing-infra-vlan``
-    - ``missing-ns-ctrlr-assoc``
-    - ``missing-rootContName``
-    - ``mode-not-set``
-    - ``zero-mac-in-inventory``
+    - ``aaacert-invalid`` — SCVMM comp inventory is missing due to invalid Certificate on SCVMM server or aaaVMMCertificateRule is missing on APIC controller.
+    - ``domain-not-deployable`` — Parent Domain is not deployable due to configuration issues.
+    - ``duplicate-mac-in-inventory`` — SCVMM Agent found duplicate mac address in SCVMM comp Inventory.
+    - ``duplicate-rootContName`` — Controller is not deployable. the same rootContName controller also exist in another vmm Domain.
+    - ``enfpref-not-set`` — Switching Preference not set yet.
+    - ``invalid-CtrlrAssoc`` — Controller is not associated to a valid VM Controller. Please provide the association.
+    - ``invalid-cluster-ctrlr`` — There are config issues on cluster ctrlr.
+    - ``invalid-mcastAddr`` — No valid Multicast Address Block specified for the Controller.
+    - ``invalid-object-in-inventory`` — SCVMM Agent has ignored duplicate object(s) in SCVMM comp Inventory .
+    - ``invalid-policy`` — MAC-PINNING POLICY basing on physical-NIC load is not supported for this mode.
+    - ``invalid-rootContName`` — SCVMM controller does not have cloudName that matches with rootContName. Controller is not deployable.
+    - ``invalid-statsP`` — Controller is not associated to a valid Statistics Collection Policy
+    - ``invalid-usraccp`` — Controller is not associated to a valid Access Profile
+    - ``invalid-vxlanNs`` — No valid VXLAN Pool specified for the Controller.
+    - ``inventory-failed`` — SCVMM Agent failed to post comp inventory to APIC Controller.
+    - ``missing-cluster-ctrlr`` — Nutanix domain should have a valid cluster controller association.
+    - ``missing-hostGroup-in-cloud`` — No valid hostGroup exist under the cloud resource in SCVMM Controller. Controller is not deployable
+    - ``missing-infra-vlan`` — Missing infra VLAN for the controller.
+    - ``missing-ns-ctrlr-assoc`` — vCenter should be associated to a vShield or the parent domain should be associated with a VLAN pool.
+    - ``missing-rootContName`` — SCVMM controller has missing cloudName that matches with rootContName but Its SCVMM HostGroup is still exists along with APIC VMMdomain Logical switch.
+    - ``mode-not-set`` — Mode not set yet.
+    - ``zero-mac-in-inventory`` — SCVMM Agent found zero mac address in SCVMM comp Inventory.
     """
 
     _aci_class: ClassVar[str] = "vmmClusterCtrlrP"
     _rn_format: ClassVar[str] = "clusterctrlr-{name}"
     _naming_props: ClassVar[list[str]] = ["name"]
     _config_issues: ClassVar[dict[str, str]] = {
-        "aaacert-invalid": "",
-        "domain-not-deployable": "",
-        "duplicate-mac-in-inventory": "",
-        "duplicate-rootContName": "",
-        "enfpref-not-set": "",
-        "invalid-cluster-ctrlr": "",
-        "invalid-CtrlrAssoc": "",
-        "invalid-mcastAddr": "",
-        "invalid-object-in-inventory": "",
-        "invalid-policy": "",
-        "invalid-rootContName": "",
-        "invalid-statsP": "",
-        "invalid-usraccp": "",
-        "invalid-vxlanNs": "",
-        "inventory-failed": "",
-        "missing-cluster-ctrlr": "",
-        "missing-hostGroup-in-cloud": "",
-        "missing-infra-vlan": "",
-        "missing-ns-ctrlr-assoc": "",
-        "missing-rootContName": "",
-        "mode-not-set": "",
+        "aaacert-invalid": "SCVMM comp inventory is missing due to invalid Certificate on SCVMM server or aaaVMMCertificateRule is missing on APIC controller.",
+        "domain-not-deployable": "Parent Domain is not deployable due to configuration issues.",
+        "duplicate-mac-in-inventory": "SCVMM Agent found duplicate mac address in SCVMM comp Inventory.",
+        "duplicate-rootContName": "Controller is not deployable. the same rootContName controller also exist in another vmm Domain.",
+        "enfpref-not-set": "Switching Preference not set yet.",
+        "invalid-cluster-ctrlr": "There are config issues on cluster ctrlr.",
+        "invalid-CtrlrAssoc": "Controller is not associated to a valid VM Controller. Please provide the association.",
+        "invalid-mcastAddr": "No valid Multicast Address Block specified for the Controller.",
+        "invalid-object-in-inventory": "SCVMM Agent has ignored duplicate object(s) in SCVMM comp Inventory .",
+        "invalid-policy": "MAC-PINNING POLICY basing on physical-NIC load is not supported for this mode.",
+        "invalid-rootContName": "SCVMM controller does not have cloudName that matches with rootContName. Controller is not deployable.",
+        "invalid-statsP": "Controller is not associated to a valid Statistics Collection Policy",
+        "invalid-usraccp": "Controller is not associated to a valid Access Profile",
+        "invalid-vxlanNs": "No valid VXLAN Pool specified for the Controller.",
+        "inventory-failed": "SCVMM Agent failed to post comp inventory to APIC Controller.",
+        "missing-cluster-ctrlr": "Nutanix domain should have a valid cluster controller association.",
+        "missing-hostGroup-in-cloud": "No valid hostGroup exist under the cloud resource in SCVMM Controller. Controller is not deployable",
+        "missing-infra-vlan": "Missing infra VLAN for the controller.",
+        "missing-ns-ctrlr-assoc": "vCenter should be associated to a vShield or the parent domain should be associated with a VLAN pool.",
+        "missing-rootContName": "SCVMM controller has missing cloudName that matches with rootContName but Its SCVMM HostGroup is still exists along with APIC VMMdomain Logical switch.",
+        "mode-not-set": "Mode not set yet.",
         "not-applicable": "",
-        "zero-mac-in-inventory": "",
+        "zero-mac-in-inventory": "SCVMM Agent found zero mac address in SCVMM comp Inventory.",
     }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {

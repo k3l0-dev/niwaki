@@ -18,16 +18,16 @@ class bgpSiteOfOriginP(ManagedObject):
     The APIC can flag these accepted-but-inconsistent states on this class
     (read-only ``configIssues``):
 
-    - ``conflicting-soo-value``
-    - ``no-loopback-configured``
+    - ``conflicting-soo-value`` — Peer SoO value conflicts with Pod/Msite/Fabric SoO
+    - ``no-loopback-configured`` — No loopback configured under node profile
     """
 
     _aci_class: ClassVar[str] = "bgpSiteOfOriginP"
     _rn_format: ClassVar[str] = "soo"
     _naming_props: ClassVar[list[str]] = []
     _config_issues: ClassVar[dict[str, str]] = {
-        "conflicting-soo-value": "",
-        "no-loopback-configured": "",
+        "conflicting-soo-value": "Peer SoO value conflicts with Pod/Msite/Fabric SoO",
+        "no-loopback-configured": "No loopback configured under node profile",
         "none": "",
     }
     _contains: ClassVar[frozenset[str]] = frozenset(

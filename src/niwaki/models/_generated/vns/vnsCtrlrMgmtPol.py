@@ -18,19 +18,19 @@ class vnsCtrlrMgmtPol(ManagedObject):
     The APIC can flag these accepted-but-inconsistent states on this class
     (read-only ``configIssues``):
 
-    - ``arp-flood-enabled``
-    - ``invalid-ctx``
-    - ``missing-ctx``
+    - ``arp-flood-enabled`` — ARP flood is enabled on the management end point group
+    - ``invalid-ctx`` — ctx dn mismatch
+    - ``missing-ctx`` — Ctx does not exist
     """
 
     _aci_class: ClassVar[str] = "vnsCtrlrMgmtPol"
     _rn_format: ClassVar[str] = "mgmtPolicy-[{ctx_dn}]"
     _naming_props: ClassVar[list[str]] = ["ctx_dn"]
     _config_issues: ClassVar[dict[str, str]] = {
-        "arp-flood-enabled": "",
-        "invalid-ctx": "",
-        "missing-ctx": "",
-        "ok": "",
+        "arp-flood-enabled": "ARP flood is enabled on the management end point group",
+        "invalid-ctx": "ctx dn mismatch",
+        "missing-ctx": "Ctx does not exist",
+        "ok": "ok",
     }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {

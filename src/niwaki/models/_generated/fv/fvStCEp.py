@@ -20,8 +20,8 @@ class fvStCEp(ManagedObject):
     The APIC can flag these accepted-but-inconsistent states on this class
     (read-only ``configIssues``):
 
-    - ``multiple-tag-selector-match``
-    - ``multiple-tag-selector-match-after-single-match``
+    - ``multiple-tag-selector-match`` — Tag(s) matching more than one ESG TagSelector. Endpoints can only be associated to a single ESG TagSelector via Tags.
+    - ``multiple-tag-selector-match-after-single-match`` — Tag(s) are now matching more than one ESG TagSelector. The original match is still active. Endpoints can only be associated to a single ESG TagSelector via Tags.
     - ``path-not-present`` — Path Validations
     """
 
@@ -29,8 +29,8 @@ class fvStCEp(ManagedObject):
     _rn_format: ClassVar[str] = "stcep-{macaddress}-type-{type}"
     _naming_props: ClassVar[list[str]] = ["macaddress", "type"]
     _config_issues: ClassVar[dict[str, str]] = {
-        "multiple-tag-selector-match": "",
-        "multiple-tag-selector-match-after-single-match": "",
+        "multiple-tag-selector-match": "Tag(s) matching more than one ESG TagSelector. Endpoints can only be associated to a single ESG TagSelector via Tags.",
+        "multiple-tag-selector-match-after-single-match": "Tag(s) are now matching more than one ESG TagSelector. The original match is still active. Endpoints can only be associated to a single ESG TagSelector via Tags.",
         "none": "",
         "path-not-present": "Path Validations",
     }

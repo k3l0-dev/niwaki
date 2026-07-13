@@ -21,16 +21,16 @@ class bgpRsPeerToProfile(ManagedObject):
     The APIC can flag these accepted-but-inconsistent states on this class
     (read-only ``configIssues``):
 
-    - ``conflicting-soo-value``
-    - ``no-loopback-configured``
+    - ``conflicting-soo-value`` — Peer SoO value conflicts with Pod/Msite/Fabric SoO
+    - ``no-loopback-configured`` — No loopback configured under node profile
     """
 
     _aci_class: ClassVar[str] = "bgpRsPeerToProfile"
     _rn_format: ClassVar[str] = "rspeerToProfile-[{target_dn}]-{direction}"
     _naming_props: ClassVar[list[str]] = ["target_dn", "direction"]
     _config_issues: ClassVar[dict[str, str]] = {
-        "conflicting-soo-value": "",
-        "no-loopback-configured": "",
+        "conflicting-soo-value": "Peer SoO value conflicts with Pod/Msite/Fabric SoO",
+        "no-loopback-configured": "No loopback configured under node profile",
         "none": "",
     }
     _contains: ClassVar[frozenset[str]] = frozenset(

@@ -22,18 +22,18 @@ class apphostingAppConf(ManagedObject):
     The APIC can flag these accepted-but-inconsistent states on this class
     (read-only ``configIssues``):
 
-    - ``non-border-leaf``
-    - ``non-ipn-spine``
-    - ``non-remote-leaf``
+    - ``non-border-leaf`` — non-border leaf
+    - ``non-ipn-spine`` — non-ipn spine
+    - ``non-remote-leaf`` — non-remote leaf
     """
 
     _aci_class: ClassVar[str] = "apphostingAppConf"
     _rn_format: ClassVar[str] = "appconf-{unique_id_to_identify_the_application}"
     _naming_props: ClassVar[list[str]] = ["unique_id_to_identify_the_application"]
     _config_issues: ClassVar[dict[str, str]] = {
-        "non-border-leaf": "",
-        "non-ipn-spine": "",
-        "non-remote-leaf": "",
+        "non-border-leaf": "non-border leaf",
+        "non-ipn-spine": "non-ipn spine",
+        "non-remote-leaf": "non-remote leaf",
         "none": "",
     }
     _contains: ClassVar[frozenset[str]] = frozenset(

@@ -17,20 +17,20 @@ class monitorTelemetryPol(ManagedObject):
     (read-only ``configIssues``):
 
     - ``label usage limit reached``
-    - ``no``
+    - ``no`` — No
     - ``tcam limit reached``
-    - ``yes``
+    - ``yes`` — Yes
     """
 
     _aci_class: ClassVar[str] = "monitorTelemetryPol"
     _rn_format: ClassVar[str] = "telemetrypol-{name}"
     _naming_props: ClassVar[list[str]] = ["name"]
     _config_issues: ClassVar[dict[str, str]] = {
-        "label usage limit reached": "",
-        "no": "",
+        "label usage limit reached": "label usage limit reached",
+        "no": "No",
         "none": "",
-        "tcam limit reached": "",
-        "yes": "",
+        "tcam limit reached": "tcam limit reached",
+        "yes": "Yes",
     }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {

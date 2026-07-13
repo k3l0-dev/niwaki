@@ -18,26 +18,26 @@ class leakInternalSubnet(ManagedObject):
     The APIC can flag these accepted-but-inconsistent states on this class
     (read-only ``configIssues``):
 
-    - ``internal-subnet-anycast-epg-not-assigned-to-esg``
-    - ``internal-subnet-bd-hbr-mismatch``
-    - ``internal-subnet-ep-reachability-epg-not-assigned-to-esg``
-    - ``internal-subnet-is-superset-of-bd-fvsubnet``
-    - ``internal-subnet-nlb-epg-not-assigned-to-esg``
+    - ``internal-subnet-anycast-epg-not-assigned-to-esg`` — Subnet is an Anycast Host, but the parent EPG is not assigned to an ESG. Inter-VRF Leaked Anycast Subnet is only supported if the parent EPG is assigned to an ESG via an EPG Selector.
+    - ``internal-subnet-bd-hbr-mismatch`` — Subnet is matching multiple BD Subnets but the hostBasedRouting property of the BDs do not match. Each matching BD should have the same HBR configuration.
+    - ``internal-subnet-ep-reachability-epg-not-assigned-to-esg`` — Subnet is an EP Reachability Host, but the parent EPG is not assigned to an ESG. Inter-VRF Leaked EP Reachability Subnet is only supported if the parent EPG is assigned to an ESG via an EPG Selector.
+    - ``internal-subnet-is-superset-of-bd-fvsubnet`` — Subnet is a superset of a EPG/BD Subnet in the VRF. An Inter-VRF Leaked Subnet must be equal to an EPG/BD Subnet or be a subset of an EPG/BD Subnet in the VRF.
+    - ``internal-subnet-nlb-epg-not-assigned-to-esg`` — Subnet is an NLB Host, but the parent EPG is not assigned to an ESG. Inter-VRF Leaked NLB Subnet is only supported if the parent EPG is assigned to an ESG via an EPG Selector.
     - ``internal-subnet-not-present`` — Internal Subnet Validation
-    - ``internal-subnet-not-present-in-cloud-network``
+    - ``internal-subnet-not-present-in-cloud-network`` — An Inter-VRF Leaked Subnet must be equal to a cloudCidr, or contain cloudSubnet, or be a part of a cloudSubnet.
     """
 
     _aci_class: ClassVar[str] = "leakInternalSubnet"
     _rn_format: ClassVar[str] = "leakintsubnet-[{subnet}]"
     _naming_props: ClassVar[list[str]] = ["subnet"]
     _config_issues: ClassVar[dict[str, str]] = {
-        "internal-subnet-anycast-epg-not-assigned-to-esg": "",
-        "internal-subnet-bd-hbr-mismatch": "",
-        "internal-subnet-ep-reachability-epg-not-assigned-to-esg": "",
-        "internal-subnet-is-superset-of-bd-fvsubnet": "",
-        "internal-subnet-nlb-epg-not-assigned-to-esg": "",
+        "internal-subnet-anycast-epg-not-assigned-to-esg": "Subnet is an Anycast Host, but the parent EPG is not assigned to an ESG. Inter-VRF Leaked Anycast Subnet is only supported if the parent EPG is assigned to an ESG via an EPG Selector.",
+        "internal-subnet-bd-hbr-mismatch": "Subnet is matching multiple BD Subnets but the hostBasedRouting property of the BDs do not match. Each matching BD should have the same HBR configuration.",
+        "internal-subnet-ep-reachability-epg-not-assigned-to-esg": "Subnet is an EP Reachability Host, but the parent EPG is not assigned to an ESG. Inter-VRF Leaked EP Reachability Subnet is only supported if the parent EPG is assigned to an ESG via an EPG Selector.",
+        "internal-subnet-is-superset-of-bd-fvsubnet": "Subnet is a superset of a EPG/BD Subnet in the VRF. An Inter-VRF Leaked Subnet must be equal to an EPG/BD Subnet or be a subset of an EPG/BD Subnet in the VRF.",
+        "internal-subnet-nlb-epg-not-assigned-to-esg": "Subnet is an NLB Host, but the parent EPG is not assigned to an ESG. Inter-VRF Leaked NLB Subnet is only supported if the parent EPG is assigned to an ESG via an EPG Selector.",
         "internal-subnet-not-present": "Internal Subnet Validation",
-        "internal-subnet-not-present-in-cloud-network": "",
+        "internal-subnet-not-present-in-cloud-network": "An Inter-VRF Leaked Subnet must be equal to a cloudCidr, or contain cloudSubnet, or be a part of a cloudSubnet.",
         "none": "",
     }
     _contains: ClassVar[frozenset[str]] = frozenset(

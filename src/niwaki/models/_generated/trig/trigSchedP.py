@@ -18,16 +18,16 @@ class trigSchedP(ManagedObject):
     The APIC can flag these accepted-but-inconsistent states on this class
     (read-only ``configIssues``):
 
-    - ``no``
-    - ``yes``
+    - ``no`` — No
+    - ``yes`` — Yes
     """
 
     _aci_class: ClassVar[str] = "trigSchedP"
     _rn_format: ClassVar[str] = "schedp-{name}"
     _naming_props: ClassVar[list[str]] = ["name"]
     _config_issues: ClassVar[dict[str, str]] = {
-        "no": "",
-        "yes": "",
+        "no": "No",
+        "yes": "Yes",
     }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {

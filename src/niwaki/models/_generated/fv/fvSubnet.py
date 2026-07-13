@@ -20,16 +20,16 @@ class fvSubnet(ManagedObject):
     The APIC can flag these accepted-but-inconsistent states on this class
     (read-only ``configIssues``):
 
-    - ``multiple-tag-selector-match``
-    - ``multiple-tag-selector-match-after-single-match``
+    - ``multiple-tag-selector-match`` — Tag(s) matching more than one ESG TagSelector. Subnets can only be associated to a single ESG TagSelector via Tags.
+    - ``multiple-tag-selector-match-after-single-match`` — Tag(s) are now matching more than one ESG TagSelector. The original match is still active. Subnets can only be associated to a single ESG TagSelector via Tags.
     """
 
     _aci_class: ClassVar[str] = "fvSubnet"
     _rn_format: ClassVar[str] = "subnet-[{subnet}]"
     _naming_props: ClassVar[list[str]] = ["subnet"]
     _config_issues: ClassVar[dict[str, str]] = {
-        "multiple-tag-selector-match": "",
-        "multiple-tag-selector-match-after-single-match": "",
+        "multiple-tag-selector-match": "Tag(s) matching more than one ESG TagSelector. Subnets can only be associated to a single ESG TagSelector via Tags.",
+        "multiple-tag-selector-match-after-single-match": "Tag(s) are now matching more than one ESG TagSelector. The original match is still active. Subnets can only be associated to a single ESG TagSelector via Tags.",
         "none": "",
     }
     _contains: ClassVar[frozenset[str]] = frozenset(

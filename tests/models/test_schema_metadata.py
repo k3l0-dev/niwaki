@@ -369,7 +369,9 @@ class TestConfigIssuesIntegrity:
             for entry in prop.get("validValues", []) or []:
                 code = entry.get("localName", "")
                 if code and code != "defaultValue":
-                    catalog.setdefault(code, entry.get("comment") or [])
+                    comment = entry.get("comment") or []
+                    label = (entry.get("label") or "").strip()
+                    catalog.setdefault(code, comment if comment else [label])
         return catalog
 
     def test_every_class_matches_the_raw_schema(self) -> None:
@@ -384,11 +386,14 @@ class TestConfigIssuesIntegrity:
             model = getattr(import_module(f"niwaki.models._generated.{pkg}.{aci_class}"), aci_class)
             got: dict[str, str] = model._config_issues
             assert set(got) == set(expected), f"{aci_class}: code sets differ"
-            for code, comment_list in expected.items():
-                raw_comment = " ".join(" ".join(comment_list).split())
-                if raw_comment:
-                    assert got[code], f"{aci_class}.{code}: schema comment dropped"
-                    assert got[code][:80] == raw_comment[:80], f"{aci_class}.{code}: drift"
+            placeholders = {"null", "none", "na", "n/a", "tbd", "todo"}
+            for code, text_list in expected.items():
+                raw_text = " ".join(" ".join(text_list).split())
+                if raw_text.lower().rstrip(".") in placeholders:
+                    raw_text = ""  # the cleaning contract drops placeholder texts
+                if raw_text:
+                    assert got[code], f"{aci_class}.{code}: schema description dropped"
+                    assert got[code][:80] == raw_text[:80], f"{aci_class}.{code}: drift"
                 else:
                     assert got[code] == "", f"{aci_class}.{code}: invented description"
             if expected:
