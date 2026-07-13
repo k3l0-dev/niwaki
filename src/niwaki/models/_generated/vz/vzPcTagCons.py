@@ -34,15 +34,35 @@ class vzPcTagCons(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    pc_tag: Annotated[int, Field(alias="pcTag")] = 0
+    pc_tag: Annotated[
+        int,
+        Field(
+            alias="pcTag",
+            description="The default class ID for unknown unicast traffic terminating on this bridge domain.",
+        ),
+    ] = 0
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
+        ""
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

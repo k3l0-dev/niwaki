@@ -17,6 +17,8 @@ from niwaki.models.base import ManagedObject
 class l3extInstP(ManagedObject):
     """ACI Managed Object: ``l3extInstP`` — External Network Instance Profile.
 
+    The external network instance profile represents a group of external subnets that have the same security behavior. These subnets inherit contract profiles applied to the parent instance profile.
+
     RN format: ``instP-{name}``
     """
 
@@ -70,24 +72,66 @@ class l3extInstP(ManagedObject):
     _has_stats: ClassVar[bool] = True
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the layer 3 external network instance profile. This name can be up to 64 alphanumeric characters. Note that you cannot change this name after the object has been saved.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
     contract_exception_tag: Annotated[str, Field(max_length=512, alias="exceptionTag")] = ""
-    flood_on_encap: FvFloodOnEncap = Field(default=FvFloodOnEncap.DISABLED, alias="floodOnEncap")
-    provider_label_match_criteria: VzMatchT = Field(default=VzMatchT.ATLEASTONE, alias="matchT")
+    flood_on_encap: FvFloodOnEncap = Field(
+        default=FvFloodOnEncap.DISABLED,
+        alias="floodOnEncap",
+        description="Control at EPG level if the traffic L2 Multicast/Broadcast and Link Local Layer should be flooded only on ENCAP or based on bridg-domain settings",
+    )
+    provider_label_match_criteria: VzMatchT = Field(
+        default=VzMatchT.ATLEASTONE,
+        alias="matchT",
+        description="The provider label match criteria.",
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
     policy_control_enforcement: FvPcEnfPref = Field(
-        default=FvPcEnfPref.UNENFORCED, alias="pcEnfPref"
+        default=FvPcEnfPref.UNENFORCED,
+        alias="pcEnfPref",
+        description="Represents parameter used by the node (i.e. Leaf) to enforce filter rules in this EPG",
     )
-    preferred_group_member: FvPrefGrMemb = Field(default=FvPrefGrMemb.EXCLUDE, alias="prefGrMemb")
-    qos_class: QosTenantPrio = Field(default=QosTenantPrio.UNSPECIFIED, alias="prio")
-    epg_level_dscp: str = Field(default="", alias="targetDscp")
+    preferred_group_member: FvPrefGrMemb = Field(
+        default=FvPrefGrMemb.EXCLUDE,
+        alias="prefGrMemb",
+        description="Represents parameter used to determine if EPg is part of a group that does not a contract for communication",
+    )
+    qos_class: QosTenantPrio = Field(
+        default=QosTenantPrio.UNSPECIFIED,
+        alias="prio",
+        description="The QoS priority class identifier.",
+    )
+    epg_level_dscp: str = Field(
+        default="",
+        alias="targetDscp",
+        description="The target differentiated services code point (DSCP) of the path attached to the layer 3 outside profile.",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

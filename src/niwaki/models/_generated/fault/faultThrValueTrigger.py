@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class faultThrValueTrigger(ManagedObject):
     """ACI Managed Object: ``faultThrValueTrigger``.
 
+    The threshold value trigger.
+
     RN format: ``thrValTrigger-{property}``
     """
 
@@ -36,10 +38,21 @@ class faultThrValueTrigger(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    property: Annotated[str, Field(alias="propId")]
+    property: Annotated[str, Field(alias="propId", description="null")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    threshold_value_from_policy: StatsTrigger = Field(default=StatsTrigger.OFF, alias="thrValue")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    threshold_value_from_policy: StatsTrigger = Field(
+        default=StatsTrigger.OFF, alias="thrValue", description="Threshold value from policy."
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    value_of_the_property: StatsTrigger = Field(default=StatsTrigger.OFF, alias="value")
+    value_of_the_property: StatsTrigger = Field(
+        default=StatsTrigger.OFF, alias="value", description="Value of the property."
+    )

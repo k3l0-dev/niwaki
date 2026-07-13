@@ -35,32 +35,72 @@ class bgpCtxAfPol(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the policy.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    controls: str = Field(default="", alias="ctrl")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    controls: str = Field(default="", alias="ctrl", description="The control state.")
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies a description of the policy definition.",
+        ),
     ] = ""
-    ebgp_distance: str = Field(default="", alias="eDist")
-    ibgp_distance: str = Field(default="", alias="iDist")
-    local_distance: str = Field(default="", alias="localDist")
-    max_ecmp_for_ebgp_routes: str = Field(default="", alias="maxEcmp")
-    max_ecmp_for_ibgp_routes: str = Field(default="", alias="maxEcmpIbgp")
-    max_local_ecmp_for_redistribute_rotes: str = Field(default="", alias="maxLocalEcmp")
+    ebgp_distance: str = Field(
+        default="", alias="eDist", description="The administrative distance of eBGP routes."
+    )
+    ibgp_distance: str = Field(
+        default="", alias="iDist", description="The administrative distance of iBGP routes."
+    )
+    local_distance: str = Field(
+        default="", alias="localDist", description="The administrative distance of local routes."
+    )
+    max_ecmp_for_ebgp_routes: str = Field(default="", alias="maxEcmp", description="eBGP max-path")
+    max_ecmp_for_ibgp_routes: str = Field(
+        default="", alias="maxEcmpIbgp", description="iBGP max-path"
+    )
+    max_local_ecmp_for_redistribute_rotes: str = Field(
+        default="",
+        alias="maxLocalEcmp",
+        description="Maximum number of equal-cost local paths for redist",
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
     owner_key: Annotated[
         str,
         Field(
-            max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerKey"
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerKey",
+            description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
     owner_tag: Annotated[
         str,
-        Field(max_length=64, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerTag"),
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerTag",
+            description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

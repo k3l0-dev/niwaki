@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class infraRsFcAttEntP(ManagedObject):
     """ACI Managed Object: ``infraRsFcAttEntP`` — Relation to Access Attach Entity Policy.
 
+    Relationship to policy for entities attached to the interfaces @@@ This relation is used to get meta to subscribe node for @@@ connectivity policy selector.
+
     RN format: ``rsfcAttEntP``
     """
 
@@ -37,6 +39,15 @@ class infraRsFcAttEntP(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    target_dn: str = Field(default="", alias="tDn")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    target_dn: str = Field(
+        default="", alias="tDn", description="The distinguished name of the target."
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

@@ -14,6 +14,8 @@ from niwaki.models.base import ManagedObject
 class faultSevAsnP(ManagedObject):
     """ACI Managed Object: ``faultSevAsnP`` — Fault Severity Assignment Policy.
 
+    The initial and target severities for a specific fault can be specified in a custom or default monitoring policy directly under an observable target object.
+
     RN format: ``fsevp-{condition_code}``
     """
 
@@ -42,21 +44,51 @@ class faultSevAsnP(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    condition_code: Annotated[int, Field(alias="code")] = 0
+    condition_code: Annotated[
+        int,
+        Field(
+            alias="code",
+            description="Contains a category code that helps to categorize and identify different types of fault severity assignment policy objects.",
+        ),
+    ] = 0
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
     initial_severity: ConditionInitSevDir = Field(
-        default=ConditionInitSevDir.INHERIT, alias="initial"
+        default=ConditionInitSevDir.INHERIT,
+        alias="initial",
+        description="The policy for assignment of initial severity is assigned at condition detection or when a fault object is created. If inherit is selected, a less precise (or default) definition is applied. If squelched is selected, a fault object is never raised, and the corresponding condition is ignored.",
     )
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
+        ""
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    target_severity: ConditionSevDir = Field(default=ConditionSevDir.INHERIT, alias="target")
+    target_severity: ConditionSevDir = Field(
+        default=ConditionSevDir.INHERIT,
+        alias="target",
+        description="The policy for assignment of target severity is the severity level that a fault object reaches after a maturity soaking interval. If inherit is selected, a less precise (or default) definition will be applied.",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    health_score_weight: str = Field(default="", alias="weight")
+    health_score_weight: str = Field(
+        default="",
+        alias="weight",
+        description="The weight of the fault in calculating the health score of an object. A higher weight causes a higher degradation of the health score of the affected object.",
+    )

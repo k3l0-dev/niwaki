@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class aaaUserEp(ManagedObject):
     """ACI Managed Object: ``aaaUserEp`` — User Management.
 
+    A user endpoint is a local user. A user is assigned a role determines the user's privileges, and belongs to a security domain, which determines the user's scope of control
+
     RN format: ``userext``
     """
 
@@ -63,13 +65,32 @@ class aaaUserEp(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Create-only (ignored by APIC on modification) ─────────────────────────
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    name: Annotated[
+        str,
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the AAA definition object.",
+        ),
+    ] = ""
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies a description of the policy definition.",
+        ),
     ] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
@@ -77,12 +98,24 @@ class aaaUserEp(ManagedObject):
     owner_key: Annotated[
         str,
         Field(
-            max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerKey"
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerKey",
+            description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
     owner_tag: Annotated[
         str,
-        Field(max_length=64, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerTag"),
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerTag",
+            description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+        ),
     ] = ""
-    password_strength_check: AaaBoolean = Field(default=AaaBoolean.YES, alias="pwdStrengthCheck")
+    password_strength_check: AaaBoolean = Field(
+        default=AaaBoolean.YES,
+        alias="pwdStrengthCheck",
+        description="The password strength check specifies if the system enforces the strength of the user password.",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

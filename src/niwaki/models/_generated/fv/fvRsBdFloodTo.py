@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class fvRsBdFloodTo(ManagedObject):
     """ACI Managed Object: ``fvRsBdFloodTo`` — Filter.
 
+    A source relation to a filter. A filter is a group of resolvable filter entries. Each filter entry is a combination of network traffic classification properties. This is an internal object.
+
     RN format: ``rsbdFloodTo-[{target_dn}]``
     """
 
@@ -37,9 +39,18 @@ class fvRsBdFloodTo(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    target_dn: Annotated[str, Field(alias="tDn")]
+    target_dn: Annotated[str, Field(alias="tDn", description="null")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    action: VzBinaryAction = VzBinaryAction.PERMIT
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    action: VzBinaryAction = Field(
+        default=VzBinaryAction.PERMIT, description="The action required when the condition is met."
+    )
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

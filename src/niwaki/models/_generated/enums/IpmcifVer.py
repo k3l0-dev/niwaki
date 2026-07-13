@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class IpmcifVer(StrEnum):
     V2 = "v2"
+    """Version 2"""
     V3 = "v3"
+    """Version 3"""
 
     @classmethod
     def _missing_(cls, value: object) -> IpmcifVer | None:

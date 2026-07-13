@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class igmpSSMXlateP(ManagedObject):
     """ACI Managed Object: ``igmpSSMXlateP`` — Context level SSM Translate Policy.
 
+    Context-level SSM Translate Policy
+
     RN format: ``ssmxlate-[{address}]-[{src_addr}]``
     """
 
@@ -36,16 +38,40 @@ class igmpSSMXlateP(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    address: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="grpPfx")]
-    src_addr: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="srcAddr")]
+    address: Annotated[
+        str,
+        Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="grpPfx", description="Group IP Prefix address"),
+    ]
+    src_addr: Annotated[
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            alias="srcAddr",
+            description="Source IP address, to xlate v1/v2 grp report to create (S,G) state",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
+        ""
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

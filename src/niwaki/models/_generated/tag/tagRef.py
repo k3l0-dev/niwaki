@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class tagRef(ManagedObject):
     """ACI Managed Object: ``tagRef`` — Tag Reference.
 
+    The label reference, contained by the label definition, contains the domain name of a taggable object that uses this label.
+
     RN format: ``ref-[{subject_dn}]``
     """
 
@@ -38,5 +40,12 @@ class tagRef(ManagedObject):
     subject_dn: Annotated[str, Field(alias="oDn")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

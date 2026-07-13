@@ -39,10 +39,22 @@ class fcFabricPol(ManagedObject):
     name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies a description of the policy definition.",
+        ),
     ] = ""
     fc_protocol_error_detect_timeout: Annotated[int, Field(ge=1000, le=4000, alias="edTov")] = 2000
     fcoe_mac_address_prefix: str = Field(default="", alias="fcMap")
@@ -52,12 +64,20 @@ class fcFabricPol(ManagedObject):
     owner_key: Annotated[
         str,
         Field(
-            max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerKey"
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerKey",
+            description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
     owner_tag: Annotated[
         str,
-        Field(max_length=64, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerTag"),
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerTag",
+            description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+        ),
     ] = ""
     fc_protocol_resource_allocation_timeout: Annotated[
         int, Field(ge=5000, le=10000, alias="raTov")

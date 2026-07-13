@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class mgmtRsOoBProv(ManagedObject):
     """ACI Managed Object: ``mgmtRsOoBProv`` — Out-Of-Band Contract.
 
+    A source relation to an out-of-band contract profile.
+
     RN format: ``rsooBProv-{name}``
     """
 
@@ -41,10 +43,27 @@ class mgmtRsOoBProv(ManagedObject):
     # ── Naming (required) ──────────────────────────────────────────────────────
     name: Annotated[
         str,
-        Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="tnVzOOBBrCPName"),
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            alias="tnVzOOBBrCPName",
+            description="The Out-of-Band contract name.",
+        ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    qos_priority: QosTenantPrio = Field(default=QosTenantPrio.UNSPECIFIED, alias="prio")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    qos_priority: QosTenantPrio = Field(
+        default=QosTenantPrio.UNSPECIFIED,
+        alias="prio",
+        description="The Quality of service (QoS) priority class ID. QoS refers to the capability of a network to provide better service to selected network traffic over various technologies.",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

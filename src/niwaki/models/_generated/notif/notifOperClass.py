@@ -35,11 +35,24 @@ class notifOperClass(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     classname_that_is_being_subscribed: Annotated[
-        str, Field(min_length=1, max_length=512, alias="className")
+        str,
+        Field(
+            min_length=1,
+            max_length=512,
+            alias="className",
+            description="The class name of the object used for a comparison filter. This property is used internally to validate compatibility between two firmware images.",
+        ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     is_chatty: bool = Field(default=False, alias="isChatty")
     refresh_type: str = Field(default="", alias="refreshType")
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

@@ -34,10 +34,33 @@ class smarteventRule(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=512)]
+    name: Annotated[
+        str,
+        Field(min_length=1, max_length=512, description="name represents the name of the event"),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    generic_rule_name: Annotated[str, Field(max_length=512, alias="genericRuleName")] = ""
-    message: Annotated[str, Field(max_length=512)] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    generic_rule_name: Annotated[
+        str,
+        Field(
+            max_length=512,
+            alias="genericRuleName",
+            description="Generic Rule Name represents the name of the generic rule that triggers this event",
+        ),
+    ] = ""
+    message: Annotated[
+        str,
+        Field(
+            max_length=512,
+            description="message represents the message to get displayed when the event gets raised. Message can also be an expression that referes to the properties of the objects that satisfied the generic rule",
+        ),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

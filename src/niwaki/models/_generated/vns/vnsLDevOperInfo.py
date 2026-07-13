@@ -14,6 +14,8 @@ from niwaki.models.base import ManagedObject
 class vnsLDevOperInfo(ManagedObject):
     """ACI Managed Object: ``vnsLDevOperInfo`` — Logical Device Operational Information.
 
+    The operational status information from the device gathered during service graph deployment.
+
     RN format: ``LDevOpInf-{name}``
     """
 
@@ -38,10 +40,25 @@ class vnsLDevOperInfo(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=16, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=16,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the device operational status information.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     dev_state: VnsDevStateType = Field(default=VnsDevStateType.INIT, alias="devState")
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")

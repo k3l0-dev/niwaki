@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class snmpCommSecP(ManagedObject):
     """ACI Managed Object: ``snmpCommSecP`` — Community Security Policy.
 
+    A security profile using a community string match for authentication.
+
     RN format: ``community-{name}``
     """
 
@@ -39,19 +41,41 @@ class snmpCommSecP(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: str
+    name: Annotated[str, Field(description="The name of the community security profile")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     snmp_community_group: SnmpCommAcessT = Field(
-        default=SnmpCommAcessT.UNSPECIFIED, alias="commAcess"
+        default=SnmpCommAcessT.UNSPECIFIED, alias="commAcess", description="Community Access"
     )
-    name_of_the_snmp_context: Annotated[str, Field(max_length=512, alias="contextName")] = ""
+    name_of_the_snmp_context: Annotated[
+        str,
+        Field(
+            max_length=512,
+            alias="contextName",
+            description="Context to which community is associated",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
-    grp_name: Annotated[str, Field(max_length=512, alias="grpName")] = ""
+    grp_name: Annotated[
+        str,
+        Field(max_length=512, alias="grpName", description="Group to which community belongs to"),
+    ] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

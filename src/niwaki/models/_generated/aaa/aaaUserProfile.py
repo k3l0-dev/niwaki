@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class aaaUserProfile(ManagedObject):
     """ACI Managed Object: ``aaaUserProfile``.
 
+    User profile
+
     RN format: ``prof``
     """
 
@@ -34,29 +36,62 @@ class aaaUserProfile(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Create-only (ignored by APIC on modification) ─────────────────────────
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    name: Annotated[
+        str,
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the AAA definition object.",
+        ),
+    ] = ""
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies a description of the policy definition.",
+        ),
     ] = ""
-    email_address: str = Field(default="", alias="email")
-    first_name: Annotated[str, Field(max_length=32, alias="firstName")] = ""
-    last_name: Annotated[str, Field(max_length=32, alias="lastName")] = ""
+    email_address: str = Field(default="", alias="email", description="The user's e-mail address")
+    first_name: Annotated[
+        str, Field(max_length=32, alias="firstName", description="The user's first name")
+    ] = ""
+    last_name: Annotated[
+        str, Field(max_length=32, alias="lastName", description="The user's last name")
+    ] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
     owner_key: Annotated[
         str,
         Field(
-            max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerKey"
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerKey",
+            description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
     owner_tag: Annotated[
         str,
-        Field(max_length=64, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerTag"),
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerTag",
+            description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+        ),
     ] = ""
-    phone_number: Annotated[str, Field(max_length=16, alias="phone")] = ""
+    phone_number: Annotated[
+        str, Field(max_length=16, alias="phone", description="The user's phone number")
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

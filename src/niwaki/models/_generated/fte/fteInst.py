@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class fteInst(ManagedObject):
     """ACI Managed Object: ``fteInst`` — Configure FTE Instance.
 
+    Holds FTE instance information
+
     RN format: ``inst-{configure_the_type_of_fte_instance}``
     """
 
@@ -43,8 +45,17 @@ class fteInst(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    configure_the_type_of_fte_instance: FteModeT = Field(default=FteModeT.FLOW_EVENTS, alias="mode")
+    configure_the_type_of_fte_instance: FteModeT = Field(
+        default=FteModeT.FLOW_EVENTS, alias="mode", description="FTE mode"
+    )
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

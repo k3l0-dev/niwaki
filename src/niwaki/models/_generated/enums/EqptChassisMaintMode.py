@@ -7,8 +7,11 @@ from enum import StrEnum
 
 class EqptChassisMaintMode(StrEnum):
     DEBUG = "debug"
+    """Debug Mode"""
     FACTORYRESET = "factoryreset"
+    """Factory Reset"""
     RELOAD = "reload"
+    """Reload"""
 
     @classmethod
     def _missing_(cls, value: object) -> EqptChassisMaintMode | None:

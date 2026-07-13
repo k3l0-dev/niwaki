@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class isisRsNhAtt(ManagedObject):
     """ACI Managed Object: ``isisRsNhAtt`` — IS-IS Nexthop Attachment.
 
+    A source relation to the list of next hopss
+
     RN format: ``rsnhAtt-[{target_dn}]``
     """
 
@@ -37,7 +39,14 @@ class isisRsNhAtt(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    target_dn: Annotated[str, Field(alias="tDn")]
+    target_dn: Annotated[str, Field(alias="tDn", description="null")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""

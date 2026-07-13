@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class TopNodeRoleP(StrEnum):
     LEAF = "leaf"
+    """Leaf"""
     SPINE = "spine"
+    """Spine"""
     UNSPECIFIED = "unspecified"
 
     @classmethod

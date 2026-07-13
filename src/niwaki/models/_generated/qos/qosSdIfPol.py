@@ -14,6 +14,8 @@ from niwaki.models.base import ManagedObject
 class qosSdIfPol(ManagedObject):
     """ACI Managed Object: ``qosSdIfPol`` — Slow Drain Policy.
 
+    Slow drain policy
+
     RN format: ``qossdpol-{name}``
     """
 
@@ -39,17 +41,37 @@ class qosSdIfPol(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the object.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     congestion_clear_action: L1CongClearAction = Field(
         default=L1CongClearAction.OFF, alias="congClearAction"
     )
     congestion_detect_multiplier: str = Field(default="", alias="congDetectMult")
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies a description of the policy definition.",
+        ),
     ] = ""
     slowdrain_flush_mode_admin_state: L1PortFlushAdminSt = Field(
         default=L1PortFlushAdminSt.DISABLED, alias="flushAdminSt"
@@ -61,11 +83,19 @@ class qosSdIfPol(ManagedObject):
     owner_key: Annotated[
         str,
         Field(
-            max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerKey"
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerKey",
+            description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
     owner_tag: Annotated[
         str,
-        Field(max_length=64, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerTag"),
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerTag",
+            description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

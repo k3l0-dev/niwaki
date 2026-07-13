@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class dhcpClientAddr(ManagedObject):
     """ACI Managed Object: ``dhcpClientAddr`` — Client Address.
 
+    The DHCP address received for the client.
+
     RN format: ``addr-[{address}]``
     """
 
@@ -36,7 +38,14 @@ class dhcpClientAddr(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    address: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$")]
+    address: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", description="null")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""

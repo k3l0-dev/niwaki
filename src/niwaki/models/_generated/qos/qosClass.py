@@ -14,6 +14,8 @@ from niwaki.models.base import ManagedObject
 class qosClass(ManagedObject):
     """ACI Managed Object: ``qosClass`` — QOS Class Policy.
 
+    The QoS classification traffic descriptor and specifications are used to categorize a packet within a specific group and making the packet accessible for QoS handling in the network.
+
     RN format: ``class-{prio}``
     """
 
@@ -45,28 +47,54 @@ class qosClass(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    prio: QosTenantPrio = QosTenantPrio.UNSPECIFIED
+    prio: QosTenantPrio = Field(
+        default=QosTenantPrio.UNSPECIFIED, description="The priority class identifier."
+    )
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    admin_state: NwAdminSt = Field(default=NwAdminSt.ENABLED, alias="admin")
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    admin_state: NwAdminSt = Field(
+        default=NwAdminSt.ENABLED, alias="admin", description="The policy administrative state."
+    )
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies a description of the policy definition.",
+        ),
     ] = ""
-    mtu: str = ""
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    mtu: Annotated[str, Field(description="The maximum transmit unit (MTU)for the port.")] = ""
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
+        ""
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
     owner_key: Annotated[
         str,
         Field(
-            max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerKey"
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerKey",
+            description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
     owner_tag: Annotated[
         str,
-        Field(max_length=64, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerTag"),
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerTag",
+            description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

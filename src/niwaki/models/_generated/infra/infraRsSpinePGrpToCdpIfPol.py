@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class infraRsSpinePGrpToCdpIfPol(ManagedObject):
     """ACI Managed Object: ``infraRsSpinePGrpToCdpIfPol`` — Relation to cdp interface policy for mgmt port.
 
+    Relationship to cdp interface policy for mgmt port
+
     RN format: ``rsspinePGrpToCdpIfPol``
     """
 
@@ -37,8 +39,21 @@ class infraRsSpinePGrpToCdpIfPol(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     name: Annotated[
-        str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="tnCdpIfPolName")
+        str,
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            alias="tnCdpIfPolName",
+            description="The CDP policy name.",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

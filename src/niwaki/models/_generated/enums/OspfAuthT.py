@@ -7,8 +7,11 @@ from enum import StrEnum
 
 class OspfAuthT(StrEnum):
     MD5 = "md5"
+    """MD5"""
     NONE = "none"
+    """None"""
     SIMPLE = "simple"
+    """Simple"""
 
     @classmethod
     def _missing_(cls, value: object) -> OspfAuthT | None:

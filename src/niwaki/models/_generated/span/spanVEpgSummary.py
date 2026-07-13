@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class spanVEpgSummary(ManagedObject):
     """ACI Managed Object: ``spanVEpgSummary`` — VSPAN Destination EPG Summary.
 
+    The VEpg summary.
+
     RN format: ``vepgsummary``
     """
 
@@ -39,26 +41,41 @@ class spanVEpgSummary(ManagedObject):
     annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies a description of the policy definition.",
+        ),
     ] = ""
     dscp: str = ""
     destination_ip: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="dstIp")] = ""
     flow_id: str = Field(default="", alias="flowId")
     mode: SpanErspanDestMode = SpanErspanDestMode.NOT_VISIBLE
     mtu: str = ""
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
+        ""
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
     owner_key: Annotated[
         str,
         Field(
-            max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerKey"
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerKey",
+            description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
     owner_tag: Annotated[
         str,
-        Field(max_length=64, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerTag"),
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerTag",
+            description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+        ),
     ] = ""
     source_ip_of_erspan_packet: Annotated[
         str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="srcIpPrefix")

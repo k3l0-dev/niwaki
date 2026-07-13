@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class conditionRsNodeEventRecRetP(ManagedObject):
     """ACI Managed Object: ``conditionRsNodeEventRecRetP`` — Node Event Record Retention Policy.
 
+    A source relation to the switch event retention policy.
+
     RN format: ``rsnodeEventRecRetP``
     """
 
@@ -35,8 +37,21 @@ class conditionRsNodeEventRecRetP(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     name: Annotated[
-        str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="tnEventSwRetPName")
+        str,
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            alias="tnEventSwRetPName",
+            description="A name for the event record retention policy used by the node policy group. The event record retention policy is referred by the node policy group. The node policy group also includes references to the Health, Audit, and Fault record retention policies.",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

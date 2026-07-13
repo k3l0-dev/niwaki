@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class bgpRRNodePEp(ManagedObject):
     """ACI Managed Object: ``bgpRRNodePEp`` — Route Reflector Node Policy Ep.
 
+    The MP-BGP Route Reflector End Point Policy is used to specify Route Reflector Nodes/Spines for the MP-BGP running inside the fabric.
+
     RN format: ``node-{node_id}``
     """
 
@@ -36,16 +38,28 @@ class bgpRRNodePEp(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    node_id: Annotated[str, Field(alias="id")]
+    node_id: Annotated[str, Field(alias="id", description="The spine node ID.")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    pod_id: str = Field(default="", alias="podId")
+    pod_id: str = Field(default="", alias="podId", description="Pod id")
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

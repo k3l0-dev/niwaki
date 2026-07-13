@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class bfdMicroBfdP(ManagedObject):
     """ACI Managed Object: ``bfdMicroBfdP`` — Micro BFD Configuration.
 
+    Micro BFD Configuration
+
     RN format: ``microBfdP``
     """
 
@@ -38,16 +40,34 @@ class bfdMicroBfdP(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    microbfd: bool = Field(default=False, alias="adminState")
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    microbfd: bool = Field(
+        default=False,
+        alias="adminState",
+        description="The destination policy administrative state. If enabled, the system uses the destination policy when an error matching the associated cause is encountered. Otherwise, the system ignores the policy even if a matching error occurs. By default, all policies are enabled.",
+    )
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
     micro_bfd_destination_address: Annotated[
-        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="dst")
+        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="dst", description="Destination address")
     ] = ""
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
+        ""
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

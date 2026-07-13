@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class lldpInstPol(ManagedObject):
     """ACI Managed Object: ``lldpInstPol`` — LLDP Policy.
 
+    The node level LLDP policy.
+
     RN format: ``lldpInstP-{name}``
     """
 
@@ -34,29 +36,67 @@ class lldpInstPol(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the node level LLDP policy.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies a description of the policy definition.",
+        ),
     ] = ""
-    hold_time: str = Field(default="", alias="holdTime")
-    initial_delay: str = Field(default="", alias="initDelayTime")
+    hold_time: str = Field(
+        default="",
+        alias="holdTime",
+        description="The amount of time (in seconds) that a policy holds information before discarding it.",
+    )
+    initial_delay: str = Field(
+        default="", alias="initDelayTime", description="The delay time (in seconds) for a policy."
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    optional_tlv_selector: str = Field(default="", alias="optTlvSel")
+    optional_tlv_selector: str = Field(
+        default="", alias="optTlvSel", description="Holds selectors for optional TLVS."
+    )
     owner_key: Annotated[
         str,
         Field(
-            max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerKey"
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerKey",
+            description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
     owner_tag: Annotated[
         str,
-        Field(max_length=64, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerTag"),
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerTag",
+            description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+        ),
     ] = ""
-    transmit_frequency: str = Field(default="", alias="txFreq")
+    transmit_frequency: str = Field(
+        default="", alias="txFreq", description="The transmission frequency."
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

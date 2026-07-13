@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class infraRsOverrideCdpIfPol(ManagedObject):
     """ACI Managed Object: ``infraRsOverrideCdpIfPol`` — Relation to CDP Interface Policy.
 
+    A source relation to the CDP interface policy parameters.
+
     RN format: ``rsoverrideCdpIfPol``
     """
 
@@ -35,8 +37,21 @@ class infraRsOverrideCdpIfPol(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     name: Annotated[
-        str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="tnCdpIfPolName")
+        str,
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            alias="tnCdpIfPolName",
+            description="The CDP policy name.",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

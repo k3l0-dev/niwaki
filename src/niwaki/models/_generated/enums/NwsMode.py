@@ -7,8 +7,11 @@ from enum import StrEnum
 
 class NwsMode(StrEnum):
     DISABLED = "disabled"
+    """Learn"""
     ENABLED = "enabled"
+    """Enable"""
     LEARNING = "learning"
+    """Learn"""
 
     @classmethod
     def _missing_(cls, value: object) -> NwsMode | None:

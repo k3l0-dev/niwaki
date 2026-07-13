@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class proxyIgnoreHost(ManagedObject):
     """ACI Managed Object: ``proxyIgnoreHost``.
 
+    Policy to configure ProxyIgnoreHost
+
     RN format: ``ignorehost-{hosts}``
     """
 
@@ -37,8 +39,18 @@ class proxyIgnoreHost(ManagedObject):
     hosts: Annotated[str, Field(min_length=1, max_length=512)]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    name: Annotated[str, Field(max_length=16, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    name: Annotated[
+        str,
+        Field(max_length=16, pattern="^[a-zA-Z0-9_.:-]+$", description="The name of the object."),
+    ] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class mdpLocalEp(ManagedObject):
     """ACI Managed Object: ``mdpLocalEp`` — Mdp Local Endpoint.
 
+    Represents an fvIp at the AEPg level
+
     RN format: ``mdpLocalEp-[{ip_address}]``
     """
 
@@ -36,8 +38,17 @@ class mdpLocalEp(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    ip_address: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="addr")]
+    ip_address: Annotated[
+        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="addr", description="The peer IP address.")
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

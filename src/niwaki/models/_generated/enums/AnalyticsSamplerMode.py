@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class AnalyticsSamplerMode(StrEnum):
     FLOW = "flow"
+    """M out of N flows"""
     PKTS = "pkts"
+    """M out of N packets"""
 
     @classmethod
     def _missing_(cls, value: object) -> AnalyticsSamplerMode | None:

@@ -39,9 +39,20 @@ class spanRsDestApic(ManagedObject):
     # ── Configurable ───────────────────────────────────────────────────────────
     analyser_ip: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="analyserIp")] = ""
     annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    flow_id: str = Field(default="", alias="flowId")
-    mtu: str = ""
-    src_ip_prefix: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="srcIpPrefix")] = ""
-    target_dn: str = Field(default="", alias="tDn")
+    flow_id: str = Field(
+        default="", alias="flowId", description="The flow ID of the ERSPAN packet."
+    )
+    mtu: Annotated[str, Field(description="mtu")] = ""
+    src_ip_prefix: Annotated[
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            alias="srcIpPrefix",
+            description="The source IP prefix of the ERSPAN packet.",
+        ),
+    ] = ""
+    target_dn: str = Field(
+        default="", alias="tDn", description="The distinguished name of the target."
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    ver: SpanErSpanVer = SpanErSpanVer.VER2
+    ver: SpanErSpanVer = Field(default=SpanErSpanVer.VER2, description="Erspan version")

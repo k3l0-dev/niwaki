@@ -7,6 +7,7 @@ from enum import StrEnum
 
 class MdpDomainType(StrEnum):
     ACI = "ACI"
+    """MDP is ACI"""
 
     @classmethod
     def _missing_(cls, value: object) -> MdpDomainType | None:

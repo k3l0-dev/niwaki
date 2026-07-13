@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class eqptdiagpRsSupCOdDiag(ManagedObject):
     """ACI Managed Object: ``eqptdiagpRsSupCOdDiag`` — Relation to Supervisor Module.
 
+    A source relation to the supervisor card that contains the CPU running control plate. Note that this relation is an internal object.
+
     RN format: ``rssupCOdDiag-[{target_dn}]``
     """
 
@@ -34,8 +36,15 @@ class eqptdiagpRsSupCOdDiag(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    target_dn: Annotated[str, Field(alias="tDn")]
+    target_dn: Annotated[str, Field(alias="tDn", description="The target supervisor module.")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

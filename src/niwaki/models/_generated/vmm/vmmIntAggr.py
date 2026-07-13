@@ -17,6 +17,8 @@ from niwaki.models.base import ManagedObject
 class vmmIntAggr(ManagedObject):
     """ACI Managed Object: ``vmmIntAggr`` — Internal End Point Group Aggregator Definition.
 
+    Internal EPG Aggregator Object @@@ This is managed by PolicyMgr
+
     RN format: ``intaggr-{name}``
     """
 
@@ -42,30 +44,52 @@ class vmmIntAggr(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=128)]
+    name: Annotated[str, Field(min_length=1, max_length=128, description="The name of the object.")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     aggr_imedcy: FvImmediacy = Field(default=FvImmediacy.LAZY, alias="aggrImedcy")
     alloc_mode: CompAllocMode = Field(default=CompAllocMode.DYNAMIC, alias="allocMode")
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    classification_preference: FvClassPref = Field(default=FvClassPref.ENCAP, alias="classPref")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    classification_preference: FvClassPref = Field(
+        default=FvClassPref.ENCAP, alias="classPref", description="Classification Preference"
+    )
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Additional descriptive information about the object.",
+        ),
     ] = ""
     feature_flags: VmmAggrFlags = Field(default=VmmAggrFlags.NONE, alias="featureFlags")
     forged_transmit_setting: CompConfigMode = Field(
-        default=CompConfigMode.ENABLED, alias="forgedTransmit"
+        default=CompConfigMode.ENABLED,
+        alias="forgedTransmit",
+        description="Forged Transmits setting",
     )
-    ident_consumer_dn: str = Field(default="", alias="idConsumerDn")
+    ident_consumer_dn: str = Field(
+        default="",
+        alias="idConsumerDn",
+        description="Id Consumer DN used for encap allocation @@@ set to vmmEpPDDn by default @@@ set to vmmEncapAllctr Dn when allocator is used for enacp allocation",
+    )
     mac_address_changes_setting: CompConfigMode = Field(
-        default=CompConfigMode.ENABLED, alias="macChange"
+        default=CompConfigMode.ENABLED, alias="macChange", description="MAC address changes setting"
     )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
     promiscous_mode_setting: CompConfigMode = Field(
-        default=CompConfigMode.DISABLED, alias="promMode"
+        default=CompConfigMode.DISABLED, alias="promMode", description="Promiscous mode setting"
     )
-    untagged_access_port: bool = Field(default=False, alias="untagged")
+    untagged_access_port: bool = Field(
+        default=False, alias="untagged", description="Untagged Access port"
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

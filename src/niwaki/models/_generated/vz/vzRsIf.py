@@ -14,6 +14,8 @@ from niwaki.models.base import ManagedObject
 class vzRsIf(ManagedObject):
     """ACI Managed Object: ``vzRsIf`` — Contract.
 
+    A source relation to an abstract resolvable contract. Note that this relation is an internal object.
+
     RN format: ``rsif``
     """
 
@@ -40,8 +42,19 @@ class vzRsIf(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     intent: VzIntent = VzIntent.INSTALL
-    prio: QosTenantPrio = QosTenantPrio.UNSPECIFIED
-    target_dn: str = Field(default="", alias="tDn")
+    prio: QosTenantPrio = Field(default=QosTenantPrio.UNSPECIFIED, description="null")
+    target_dn: str = Field(
+        default="",
+        alias="tDn",
+        description="The distinguished name of a contract consumption interface. The maximum supported string length is 255 ASCII characters.",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

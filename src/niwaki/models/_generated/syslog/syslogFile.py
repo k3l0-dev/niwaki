@@ -15,6 +15,8 @@ from niwaki.models.base import ManagedObject
 class syslogFile(ManagedObject):
     """ACI Managed Object: ``syslogFile`` — File.
 
+    A local file.
+
     RN format: ``file``
     """
 
@@ -38,16 +40,41 @@ class syslogFile(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    admin_state: MonAdminState = Field(default=MonAdminState.ENABLED, alias="adminState")
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    admin_state: MonAdminState = Field(
+        default=MonAdminState.ENABLED,
+        alias="adminState",
+        description="The administrative state of the local file.",
+    )
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
-    format_setting: SyslogFormatSetting = Field(default=SyslogFormatSetting.ACI, alias="format")
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    format_setting: SyslogFormatSetting = Field(
+        default=SyslogFormatSetting.ACI,
+        alias="format",
+        description="The Call Home destination message format.",
+    )
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
+        ""
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    severity: SyslogSeverity = SyslogSeverity.INFORMATION
+    severity: SyslogSeverity = Field(
+        default=SyslogSeverity.INFORMATION,
+        description="The severity of the event, alert, or issue that caused the syslog entry to be generated.",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

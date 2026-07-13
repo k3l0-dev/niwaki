@@ -15,6 +15,8 @@ from niwaki.models.base import ManagedObject
 class vzEntry(ManagedObject):
     """ACI Managed Object: ``vzEntry`` — Filter Entry.
 
+    A filter entry is a combination of network traffic classification properties.
+
     RN format: ``e-{name}``
     """
 
@@ -40,28 +42,56 @@ class vzEntry(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of a filter entry. This name can be up to 64 alphanumeric characters. Note that you cannot change this name after the object has been saved.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     apply_rule_for_all_fragments: bool = Field(default=False, alias="applyToFrag")
-    arp_opcodes: ArpOpcode = Field(default=ArpOpcode.UNSPECIFIED, alias="arpOpc")
-    destination_from_port: str = Field(default="", alias="dFromPort")
-    destination_to_port: str = Field(default="", alias="dToPort")
+    arp_opcodes: ArpOpcode = Field(
+        default=ArpOpcode.UNSPECIFIED, alias="arpOpc", description="ARP opcodes"
+    )
+    destination_from_port: str = Field(
+        default="", alias="dFromPort", description="Destination From Port"
+    )
+    destination_to_port: str = Field(default="", alias="dToPort", description="Destination To Port")
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
-    ethernet_type: L2EtherType = Field(default=L2EtherType.UNSPECIFIED, alias="etherT")
+    ethernet_type: L2EtherType = Field(
+        default=L2EtherType.UNSPECIFIED, alias="etherT", description="Ether type"
+    )
     icmpv4_type: str = Field(default="", alias="icmpv4T")
     icmpv6_type: str = Field(default="", alias="icmpv6T")
     dscp_match_for_filter_entry: str = Field(default="", alias="matchDscp")
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    protocol: str = Field(default="", alias="prot")
-    source_from_port: str = Field(default="", alias="sFromPort")
-    source_to_port: str = Field(default="", alias="sToPort")
+    protocol: str = Field(default="", alias="prot", description="L3 Ip Protocol")
+    source_from_port: str = Field(default="", alias="sFromPort", description="Source From Port")
+    source_to_port: str = Field(default="", alias="sToPort", description="Source To Port")
     stateful: bool = False
-    tcp_rules: L4TcpFlags = Field(default=L4TcpFlags.UNSPECIFIED, alias="tcpRules")
+    tcp_rules: L4TcpFlags = Field(
+        default=L4TcpFlags.UNSPECIFIED, alias="tcpRules", description="TCP Session Rules"
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

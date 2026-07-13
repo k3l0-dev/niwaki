@@ -37,19 +37,31 @@ class syntheticEpGroup(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    id: str
+    id: Annotated[str, Field(description="An identifier .")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     acommunity: str = ""
     admin_state: SyntheticAdminState = Field(
-        default=SyntheticAdminState.ENABLED, alias="adminState"
+        default=SyntheticAdminState.ENABLED,
+        alias="adminState",
+        description="The destination policy administrative state. If enabled, the system uses the destination policy when an error matching the associated cause is encountered. Otherwise, the system ignores the policy even if a matching error occurs. By default, all policies are enabled.",
     )
     aencap: str = ""
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     descr: Annotated[
         str, Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$")
     ] = ""
-    name: Annotated[str, Field(max_length=16, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    name: Annotated[
+        str,
+        Field(max_length=16, pattern="^[a-zA-Z0-9_.:-]+$", description="The name of the object."),
+    ] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

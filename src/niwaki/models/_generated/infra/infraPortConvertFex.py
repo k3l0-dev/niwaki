@@ -35,8 +35,15 @@ class infraPortConvertFex(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     fex_id: Annotated[str, Field(alias="fex")]
-    node: str
+    node: Annotated[str, Field(description="explicit properties")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

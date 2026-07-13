@@ -34,38 +34,94 @@ class vnsFWReq(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    acl: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
-    ctrct: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
-    graph: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
-    node: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    acl: Annotated[
+        str,
+        Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="acl name"),
+    ]
+    ctrct: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="contract name, graphInst selector",
+        ),
+    ]
+    graph: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="graph name, graphInst selector",
+        ),
+    ]
+    node: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="node name, graphInst selector",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    ace: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    consumer: str = Field(default="", alias="cons")
-    destination_from_port: str = Field(default="", alias="dFromPort")
-    destination_to_port: str = Field(default="", alias="dToPort")
-    acl_destination_type: str = Field(default="", alias="dType")
+    ace: Annotated[
+        str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="ace name")
+    ] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    consumer: str = Field(default="", alias="cons", description="consumer dn")
+    destination_from_port: str = Field(
+        default="",
+        alias="dFromPort",
+        description="The end of the destination port range. The end of the port range is determined by the server type.",
+    )
+    destination_to_port: str = Field(default="", alias="dToPort", description="Destination To Port")
+    acl_destination_type: str = Field(
+        default="", alias="dType", description="type of acl destination"
+    )
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
-    host_network_ip_address: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="destIp")] = (
-        ""
-    )
+    host_network_ip_address: Annotated[
+        str,
+        Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="destIp", description="The destination address."),
+    ] = ""
     external_interface_name: Annotated[
-        str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="extIntf")
+        str,
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            alias="extIntf",
+            description="where to apply acl",
+        ),
     ] = ""
     internal_interface_name: Annotated[
         str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="intIntf")
     ] = ""
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
+        ""
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
     nw_obj_name: Annotated[
         str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="nwObjName")
     ] = ""
-    protocol: str = Field(default="", alias="prot")
-    provider: str = Field(default="", alias="prov")
+    protocol: str = Field(default="", alias="prot", description="The IP protocol.")
+    provider: str = Field(default="", alias="prov", description="provider Dn")
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

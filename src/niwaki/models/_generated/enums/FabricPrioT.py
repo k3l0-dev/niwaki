@@ -7,9 +7,13 @@ from enum import StrEnum
 
 class FabricPrioT(StrEnum):
     ANALYTICS = "analytics"
+    """Analytics Priority"""
     MIXED = "mixed"
+    """Mixed Priority"""
     NETFLOW = "netflow"
+    """Netflow Priority"""
     TELEMETRY = "telemetry"
+    """Telemetry Priority"""
 
     @classmethod
     def _missing_(cls, value: object) -> FabricPrioT | None:

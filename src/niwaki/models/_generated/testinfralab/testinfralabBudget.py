@@ -34,7 +34,14 @@ class testinfralabBudget(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     sk_high: Annotated[int, Field(alias="skHigh")] = 0
     sk_low: Annotated[int, Field(alias="skLow")] = 0
     tot_amt: Annotated[int, Field(alias="totAmt")] = 0

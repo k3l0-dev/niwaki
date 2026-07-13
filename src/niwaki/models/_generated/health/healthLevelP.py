@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class healthLevelP(ManagedObject):
     """ACI Managed Object: ``healthLevelP`` — Health Score Level Policy.
 
+    Represents the health score level policy.
+
     RN format: ``lvl-{high}``
     """
 
@@ -36,18 +38,41 @@ class healthLevelP(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    high: str
+    high: Annotated[str, Field(description="Specifies high value for this level.")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    color: HealthColorT = HealthColorT.ALICE_BLUE
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    color: HealthColorT = Field(
+        default=HealthColorT.ALICE_BLUE,
+        description="Specifies recommended color for displaying the health score value.",
+    )
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
+        ""
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    txtlabel: Annotated[str, Field(max_length=512)] = ""
+    txtlabel: Annotated[
+        str,
+        Field(
+            max_length=512,
+            description="Specifies textual label that the user assigns to the level.",
+        ),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

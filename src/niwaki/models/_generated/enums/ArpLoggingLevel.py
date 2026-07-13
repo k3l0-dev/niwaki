@@ -7,13 +7,21 @@ from enum import StrEnum
 
 class ArpLoggingLevel(StrEnum):
     ALERT = "alert"
+    """Alert"""
     CRITICAL = "critical"
+    """Critical"""
     DEBUG = "debug"
+    """Debug mesages"""
     EMERGENCY = "emergency"
+    """Catastrophic"""
     ERROR = "error"
+    """Error"""
     INFORMATIONAL = "informational"
+    """Informational"""
     NOTIFICATION = "notification"
+    """Notifications"""
     WARNING = "warning"
+    """Warning"""
 
     @classmethod
     def _missing_(cls, value: object) -> ArpLoggingLevel | None:

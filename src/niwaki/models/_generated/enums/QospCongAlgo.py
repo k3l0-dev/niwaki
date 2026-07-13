@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class QospCongAlgo(StrEnum):
     TAIL_DROP = "tail-drop"
+    """Tail drop"""
     WRED = "wred"
+    """WRED"""
 
     @classmethod
     def _missing_(cls, value: object) -> QospCongAlgo | None:

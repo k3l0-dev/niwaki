@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class infraRsAttEntP(ManagedObject):
     """ACI Managed Object: ``infraRsAttEntP`` — Relation to Access Attach Entity Policy.
 
+    A source relation to the attached entity profile.
+
     RN format: ``rsattEntP``
     """
 
@@ -40,6 +42,15 @@ class infraRsAttEntP(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    target_dn: str = Field(default="", alias="tDn")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    target_dn: str = Field(
+        default="", alias="tDn", description="A host or cluster of hosts attached to a profile."
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

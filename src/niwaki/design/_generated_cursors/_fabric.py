@@ -60,7 +60,30 @@ class _FabricMakers(Cursor):
         userdom: str | None = None,
         version: McastVer | str | None = None,
     ) -> FabricIgmpSnoopPolicyCursor:
-        """Declare a ``igmpSnoopPol`` child under the fabric level."""
+        """Declare a ``igmpSnoopPol`` child under the fabric level.
+
+        The IGMP snooping policy streamlines multicast traffic handling for VLANs. By examining
+        (snooping) IGMP membership report messages from interested hosts, multicast traffic is
+        limited to the subset of VLAN interfaces on which the hosts reside.
+
+        Args:
+            name: The name of the IGMP Snoop policy
+            admin_state: Administrative State Values: ``disabled``, ``enabled``. Default:
+                ``enabled``.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            last_member_query_interval: When the last member query interval parameter is
+                configured, the software removes the group state if no host responds before the
+                timeout.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            response_interval: The IGMP snooping query response interval.
+            startup_query_count: The interval before the IGMP query begins.
+            startup_query_interval: The startup query interval. This configures the IGMP
+                snooping query interval at startup.
+            version: Version Values: ``unspecified``, ``v1``, ``v2``, ``v3``. Default: ``v3``.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -94,7 +117,30 @@ class _FabricMakers(Cursor):
         userdom: str | None = None,
         version: McastVer2 | str | None = None,
     ) -> FabricMldSnoopPolicyCursor:
-        """Declare a ``mldSnoopPol`` child under the fabric level."""
+        """Declare a ``mldSnoopPol`` child under the fabric level.
+
+        The MLD snooping policy streamlines multicast traffic handling for VLANs. By examining
+        (snooping) MLD membership report messages from interested hosts, multicast traffic is
+        limited to the subset of VLAN interfaces on which the hosts reside.
+
+        Args:
+            name: The name of the MLD Snoop policy
+            admin_state: Values: ``disabled``, ``enabled``. Default: ``disabled``.
+            controls: Controls for MLD Snoop Policy
+            description: Specifies a description of the policy definition.
+            last_member_query_interval: When the last member query interval parameter is
+                configured, the software removes the group state if no host responds before the
+                timeout.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            query_interval: Query interval
+            response_interval: The snooping query response interval.
+            startup_query_count: The interval before the query begins.
+            startup_query_interval: The startup query interval. This configures the snooping
+                query interval at startup.
+            version: Version Values: ``unspecified``, ``v1``, ``v2``. Default: ``v2``.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -125,7 +171,32 @@ class _FabricMakers(Cursor):
         server_mode: DatetimeAdminState | str | None = None,
         userdom: str | None = None,
     ) -> DatetimePolicyCursor:
-        """Declare a ``datetimePol`` child under the fabric level."""
+        """Declare a ``datetimePol`` child under the fabric level.
+
+        The date time policy is based on international time zones and a defined NTP server. Before
+        configuring a date and time policy under a domain group, this policy must first be created.
+        Policies under the Domain Groups root were already created by the system and ready to
+        configure.
+
+        Args:
+            name: The user-configured date/time policy name. This value can be between 1 and 64
+                alphanumeric characters. Note that you cannot change this name after the object
+                has been saved.
+            ntp_stratum_value_see_ntp_rfc_5905: NTP Stratum value, see RFC 5905
+            admin_state: A property that indicates if the NTP protocol is enabled or disabled.
+                Values: ``disabled``, ``enabled``. Default: ``enabled``.
+            annotation: User annotation. Suggested format orchestrator:value
+            authentication_state: A property that indicates if the Datetime policy
+                authentication is enabled or disabled. Values: ``disabled``, ``enabled``.
+                Default: ``disabled``.
+            description: Specifies a description of the policy definition.
+            master_clock_mode_toggle: Toggle between master clock mode Values: ``disabled``,
+                ``enabled``. Default: ``disabled``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            server_mode: Values: ``disabled``, ``enabled``. Default: ``disabled``.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -152,7 +223,21 @@ class _FabricMakers(Cursor):
         owner_tag: str | None = None,
         userdom: str | None = None,
     ) -> DnsProfileCursor:
-        """Declare a ``dnsProfile`` child under the fabric level."""
+        """Declare a ``dnsProfile`` child under the fabric level.
+
+        The DNS profile defines a set of DNS providers and can be deployed to a switch for tenant
+        contexts. To deploy a DNS profile on a switch, the appropriate label has to be defined for
+        the context deployed on switch.
+
+        Args:
+            name: The name of the DNS profile.
+            ip_protocol_version: Values: ``IPv4``, ``IPv6``. Default: ``IPv4``.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -178,7 +263,20 @@ class _FabricMakers(Cursor):
         owner_tag: str | None = None,
         userdom: str | None = None,
     ) -> BgpInstanceCursor:
-        """Declare a ``bgpInstPol`` child under the fabric level."""
+        """Declare a ``bgpInstPol`` child under the fabric level.
+
+        The BGP Instance level policy is used to configure MP-BGP policies inside the fabric.
+
+        Args:
+            name: The BGP instance policy name. This name can be up to 64 alphanumeric
+                characters. Note that you cannot change this name after the object has been
+                saved.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -205,7 +303,20 @@ class _FabricMakers(Cursor):
         display_name: str | None = None,
         userdom: str | None = None,
     ) -> SyslogGroupCursor:
-        """Declare a ``syslogGroup`` child under the fabric level."""
+        """Declare a ``syslogGroup`` child under the fabric level.
+
+        The syslog destination group contains all information required to send syslog messages to a
+        group of destinations.
+
+        Args:
+            name: The name of the destination group.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            format_setting: The Call Home destination message format. Values: ``aci``, ``nxos``,
+                ``rfc5424-ts``. Default: ``aci``.
+            show_milli_seconds_in_timestamp: Default: ``False``.
+            show_timezone_in_timestamp: Default: ``False``.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -232,7 +343,21 @@ class _FabricMakers(Cursor):
         pair_type: FabricPairT | str | None = None,
         userdom: str | None = None,
     ) -> VpcProtectionCursor:
-        """Declare a ``fabricProtPol`` child under the fabric level."""
+        """Declare a ``fabricProtPol`` child under the fabric level.
+
+        The VPC protection policy is a container of VPC protection groups; it enables you to select
+        a pairing type for creating the protection groups
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            name: null
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            pair_type: The pair type of the Virtual Port Channel protection policy. Values:
+                ``consecutive``, ``explicit``, ``reciprocal``. Default: ``explicit``.
+        """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
             "VpcProtectionCursor",
@@ -282,7 +407,17 @@ class _BgpInstanceMakers(Cursor):
         display_name: str | None = None,
         userdom: str | None = None,
     ) -> AutonomousSystemCursor:
-        """Declare a ``bgpAsP`` child under the bgp_instance level."""
+        """Declare a ``bgpAsP`` child under the bgp_instance level.
+
+        The BGP autonomous system profile information.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            autonomous_system_number: A number that uniquely identifies an autonomous system.
+                Default: ``0``.
+            description: Specifies the description of a policy component.
+            name: null
+        """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
             "AutonomousSystemCursor",
@@ -298,7 +433,15 @@ class _BgpInstanceMakers(Cursor):
         display_name: str | None = None,
         userdom: str | None = None,
     ) -> RouteReflectorCursor:
-        """Declare a ``bgpRRP`` child under the bgp_instance level."""
+        """Declare a ``bgpRRP`` child under the bgp_instance level.
+
+        The BGP route reflector profile information.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            name: null
+        """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
             "RouteReflectorCursor",
@@ -352,7 +495,23 @@ class _DatetimePolicyMakers(Cursor):
         truechimer_status: DatetimeTrueChimerStatus | str | None = None,
         userdom: str | None = None,
     ) -> NtpProviderCursor:
-        """Declare a ``datetimeNtpProv`` child under the datetime_policy level."""
+        """Declare a ``datetimeNtpProv`` child under the datetime_policy level.
+
+        The date/time NTP provider is an NTP server.
+
+        Args:
+            name: The user-configured NTP provider name. This name can be between 1 and 64
+                alphanumeric characters. Note that you cannot change this name after the object
+                has been saved.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            key_id: The NTP provider key ID. The range is from 1 to 65535.
+            max_poll: The NTP maximum interval default in seconds.
+            min_poll: The NTP minimum interval default in seconds.
+            preferred_state: A property that indicates if the NTP server is preferred. Only one
+                preferred server is allowed. Default: ``False``.
+            truechimer_status: Values: ``disabled``, ``enabled``. Default: ``disabled``.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -415,7 +574,19 @@ class _DnsProfileMakers(Cursor):
         prefered_dns_provider: bool | None = None,
         userdom: str | None = None,
     ) -> DnsProfileProviderCursor:
-        """Declare a ``dnsProv`` child under the dns_profile level."""
+        """Declare a ``dnsProv`` child under the dns_profile level.
+
+        The DNS provider is a DNS server that uses a hierarchical scheme for establishing host names
+        for network nodes, which local control of the segments of the network through a client-
+        server scheme.
+
+        Args:
+            ip_address: The address of the DNS provider.
+            annotation: User annotation. Suggested format orchestrator:value
+            name: null
+            prefered_dns_provider: Specifies if this the preferred provider. Only one provider
+                in the group should be preferred Default: ``False``.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -440,7 +611,20 @@ class _DnsProfileMakers(Cursor):
         display_name: str | None = None,
         userdom: str | None = None,
     ) -> DomainCursor:
-        """Declare a ``dnsDomain`` child under the dns_profile level."""
+        """Declare a ``dnsDomain`` child under the dns_profile level.
+
+        The DNS domain uses a hierarchical scheme for establishing host names for network nodes and
+        allows local control of the segments of the network through a client-server scheme. The DNS
+        system can locate a network device by translating the hostname of the device into its
+        associated IP address.
+
+        Args:
+            name: The domain name.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            default: Indicate whether this domain is the default domain. Only one domain in the
+                group can be the default. Default: ``False``.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -575,7 +759,31 @@ class _SyslogGroupMakers(Cursor):
         severity: SyslogSeverity | str | None = None,
         userdom: str | None = None,
     ) -> RemoteDestinationCursor:
-        """Declare a ``syslogRemoteDest`` child under the syslog_group level."""
+        """Declare a ``syslogRemoteDest`` child under the syslog_group level.
+
+        The syslog remote destination host enables you to specify syslog servers to which messages
+        from the APIC and fabric nodes should be forwarded.
+
+        Args:
+            host: The host name or IP for export destination.
+            admin_state: The administrative state of the remote destination host. Values:
+                ``disabled``, ``enabled``. Default: ``enabled``.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            format_setting: The Call Home destination message format. Values: ``aci``, ``nxos``,
+                ``rfc5424-ts``. Default: ``aci``.
+            forward_facility: The facility to be used to send messages to this destination.
+                Values: ``local0``, ``local1``, ``local2``, ``local3``, ``local4``, ``local5``,
+                ``local6``, ``local7``. Default: ``local7``.
+            name: null
+            port: The syslog service port of the remote destination. Default: ``514``.
+            protocol: The transfer protocol to be used for data export. Values: ``ssl``,
+                ``tcp``, ``udp``. Default: ``udp``.
+            severity: The severity of the event, alert, or issue that caused the syslog entry to
+                be generated. Values: ``alerts``, ``critical``, ``debugging``, ``emergencies``,
+                ``errors``, ``information``, ``notifications``, ``warnings``. Default:
+                ``warnings``.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -632,7 +840,18 @@ class _VpcProtectionMakers(Cursor):
         logical_pair_id: str | None = None,
         userdom: str | None = None,
     ) -> VpcPairCursor:
-        """Declare a ``fabricExplicitGEp`` child under the vpc_protection level."""
+        """Declare a ``fabricExplicitGEp`` child under the vpc_protection level.
+
+        A VPC explicit protection group represents a VPC domain (a protection group). You can
+        explicitly configure member nodes of the group using a Fabric policy node endpoint.
+
+        Args:
+            name: The name of the VPC explicit protection group. This name can be up to 64
+                characters. Note that you cannot change this name after the object has been
+                saved.
+            annotation: User annotation. Suggested format orchestrator:value
+            logical_pair_id: Logical Pair Id
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -719,7 +938,17 @@ class _RouteReflectorMakers(Cursor):
         pod_id: str | None = None,
         userdom: str | None = None,
     ) -> RouteReflectorNodeCursor:
-        """Declare a ``bgpRRNodePEp`` child under the route_reflector level."""
+        """Declare a ``bgpRRNodePEp`` child under the route_reflector level.
+
+        The MP-BGP Route Reflector End Point Policy is used to specify Route Reflector Nodes/Spines
+        for the MP-BGP running inside the fabric.
+
+        Args:
+            node_id: The spine node ID.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            pod_id: Pod id
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -891,7 +1120,18 @@ class _VpcPairMakers(Cursor):
         pod_id: str | None = None,
         userdom: str | None = None,
     ) -> VpcPairNodeCursor:
-        """Declare a ``fabricNodePEp`` child under the vpc_pair level."""
+        """Declare a ``fabricNodePEp`` child under the vpc_pair level.
+
+        The node policy endpoint. This is specified by a unique node ID.
+
+        Args:
+            node_id: Select the node identifier to be added to the vPC pair in the protection
+                group.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            name: null
+            pod_id: Pod id
+        """
         params = {
             k: v
             for k, v in locals().items()

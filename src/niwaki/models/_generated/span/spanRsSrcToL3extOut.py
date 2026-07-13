@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class spanRsSrcToL3extOut(ManagedObject):
     """ACI Managed Object: ``spanRsSrcToL3extOut`` — Relation to SPAN Source to l3extOut.
 
+    Relation to l3extOut
+
     RN format: ``rssrcToL3extOut``
     """
 
@@ -37,5 +39,7 @@ class spanRsSrcToL3extOut(ManagedObject):
     addr: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$")] = ""
     annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     encap: str = ""
-    target_dn: str = Field(default="", alias="tDn")
+    target_dn: str = Field(
+        default="", alias="tDn", description="The distinguished name of the target."
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class TopoctrlPrioritization(StrEnum):
     OFF = "off"
+    """off"""
     ON = "on"
+    """on"""
 
     @classmethod
     def _missing_(cls, value: object) -> TopoctrlPrioritization | None:

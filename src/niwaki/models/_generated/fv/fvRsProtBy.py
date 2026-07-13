@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class fvRsProtBy(ManagedObject):
     """ACI Managed Object: ``fvRsProtBy`` — Taboo Contract Association.
 
+    The taboo contract for which the EPG will be a provider and consumer.
+
     RN format: ``rsprotBy-{name}``
     """
 
@@ -38,9 +40,23 @@ class fvRsProtBy(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     name: Annotated[
-        str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="tnVzTabooName")
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            alias="tnVzTabooName",
+            description="A contract for denying specific classes of traffic. Taboo rules are applied in the hardware before applying the rules of regular contracts. Without a contract, the default forwarding policy is to not allow any communication between EPGs.",
+        ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

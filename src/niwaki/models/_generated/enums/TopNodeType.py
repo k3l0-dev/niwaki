@@ -7,9 +7,12 @@ from enum import StrEnum
 
 class TopNodeType(StrEnum):
     REMOTE_LEAF_WAN = "remote-leaf-wan"
+    """remotel-eaf-wan"""
     TIER_2_LEAF = "tier-2-leaf"
+    """tier-2-leaf"""
     UNSPECIFIED = "unspecified"
     VIRTUAL = "virtual"
+    """virtual-controler"""
 
     @classmethod
     def _missing_(cls, value: object) -> TopNodeType | None:

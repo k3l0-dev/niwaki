@@ -14,6 +14,8 @@ from niwaki.models.base import ManagedObject
 class statsDestP(ManagedObject):
     """ACI Managed Object: ``statsDestP`` — Stats Destination.
 
+    The export policy. The export policy enables you to output statistics collection policy reports in an XML or JSON format. The reports are exported at a specified frequency and to a chosen export destination.
+
     RN format: ``dest-{name}``
     """
 
@@ -47,33 +49,91 @@ class statsDestP(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the destination policy. The destination policy is the location where data is exported. The name can be between 0 and 64 alphanumeric characters.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     authentication_type_choice: FileAuthenticationType = Field(
-        default=FileAuthenticationType.USEPASSWORD, alias="authType"
+        default=FileAuthenticationType.USEPASSWORD,
+        alias="authType",
+        description="The OSPF authentication type specifier. The type options are; default, md5, none, and simple.",
     )
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
-    host_ip: str = Field(default="", alias="host")
+    host_ip: str = Field(
+        default="", alias="host", description="Hostname or IP for export destination"
+    )
     identity_private_key_contents: Annotated[
         str, Field(alias="identityPrivateKeyContents", repr=False)
     ] = ""
     ssh_private_key_passphrase: Annotated[
-        str, Field(max_length=512, alias="identityPrivateKeyPassphrase", repr=False)
+        str,
+        Field(
+            max_length=512,
+            alias="identityPrivateKeyPassphrase",
+            repr=False,
+            description="Passphrase given at the identity key creation.",
+        ),
     ] = ""
     identity_public_key_contents: Annotated[
-        str, Field(alias="identityPublicKeyContents", repr=False)
+        str,
+        Field(
+            alias="identityPublicKeyContents",
+            repr=False,
+            description="Certificate contents for data transfer. Used for credentials.",
+        ),
     ] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    protocol: FileTransferProtocol2 = FileTransferProtocol2.SFTP
-    remote_path: Annotated[str, Field(max_length=512, alias="remotePath")] = ""
-    remote_port: str = Field(default="", alias="remotePort")
-    user_name: str = Field(default="", alias="userName")
-    password: Annotated[str, Field(alias="userPasswd", repr=False)] = ""
+    protocol: FileTransferProtocol2 = Field(
+        default=FileTransferProtocol2.SFTP,
+        description="The protocol to use when communicating with the remote server.",
+    )
+    remote_path: Annotated[
+        str,
+        Field(
+            max_length=512,
+            alias="remotePath",
+            description="Path where data will reside in the destination",
+        ),
+    ] = ""
+    remote_port: str = Field(
+        default="", alias="remotePort", description="Remote port for data export destination"
+    )
+    user_name: str = Field(
+        default="",
+        alias="userName",
+        description="Username to be used to transfer data to destination",
+    )
+    password: Annotated[
+        str,
+        Field(
+            alias="userPasswd",
+            repr=False,
+            description="Password to be used to transfer data to destination",
+        ),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

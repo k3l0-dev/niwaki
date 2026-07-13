@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class plannerL3OutTmpl(ManagedObject):
     """ACI Managed Object: ``plannerL3OutTmpl`` — L3Out Template.
 
+    L3Out template
+
     RN format: ``l3out-{name}``
     """
 
@@ -45,20 +47,45 @@ class plannerL3OutTmpl(ManagedObject):
     name: str
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     count: Annotated[int, Field(ge=1, le=4000000000)] = 1
-    epg_deployment_preference: bool = Field(default=False, alias="deployOnExisting")
+    epg_deployment_preference: bool = Field(
+        default=False, alias="deployOnExisting", description="Deploy EPG on existing topology"
+    )
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
     number_of_prefix_based_epgs: Annotated[
-        int, Field(ge=1, le=4000000000, alias="prefixBasedEpgs")
+        int,
+        Field(
+            ge=1, le=4000000000, alias="prefixBasedEpgs", description="Number of Prefix based EPGs"
+        ),
     ] = 1
-    epg_span: Annotated[int, Field(ge=1, le=4000000000, alias="span")] = 1
-    number_of_l3_interfaces: Annotated[int, Field(alias="subifs")] = 0
-    number_of_svi_interfaces: Annotated[int, Field(alias="svis")] = 0
+    epg_span: Annotated[
+        int,
+        Field(ge=1, le=4000000000, alias="span", description="No of leafs this EPG deployed on"),
+    ] = 1
+    number_of_l3_interfaces: Annotated[
+        int,
+        Field(alias="subifs", description="Number of L3 Sub Interfaces (per leaf) in this l2out"),
+    ] = 0
+    number_of_svi_interfaces: Annotated[
+        int, Field(alias="svis", description="Number of SVI Interfaces (per leaf) in this l3out")
+    ] = 0
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

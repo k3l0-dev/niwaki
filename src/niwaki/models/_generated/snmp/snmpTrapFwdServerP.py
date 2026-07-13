@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class snmpTrapFwdServerP(ManagedObject):
     """ACI Managed Object: ``snmpTrapFwdServerP`` — Client Entry.
 
+    Client entry
+
     RN format: ``trapfwdserver-[{external_trap_server_address}]``
     """
 
@@ -34,13 +36,32 @@ class snmpTrapFwdServerP(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    external_trap_server_address: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="addr")]
+    external_trap_server_address: Annotated[
+        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="addr", description="IP address entry")
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
+        ""
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    external_trap_server_port: Annotated[int, Field(ge=0, le=65535, alias="port")] = 162
+    external_trap_server_port: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=65535,
+            alias="port",
+            description="The service port number for the LDAP service.",
+        ),
+    ] = 162
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

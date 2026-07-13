@@ -15,6 +15,8 @@ from niwaki.models.base import ManagedObject
 class fvRsProv(ManagedObject):
     """ACI Managed Object: ``fvRsProv`` — Contract Provider.
 
+    A contract for which the EPG will be a provider.
+
     RN format: ``rsprov-{name}``
     """
 
@@ -46,12 +48,32 @@ class fvRsProv(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     name: Annotated[
-        str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="tnVzBrCPName")
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            alias="tnVzBrCPName",
+            description="The provider contract name.",
+        ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     intent: VzIntent = VzIntent.INSTALL
-    match_t: VzMatchT = Field(default=VzMatchT.ATLEASTONE, alias="matchT")
-    priority: QosTenantPrio = Field(default=QosTenantPrio.UNSPECIFIED, alias="prio")
+    match_t: VzMatchT = Field(
+        default=VzMatchT.ATLEASTONE, alias="matchT", description="The matched EPG type."
+    )
+    priority: QosTenantPrio = Field(
+        default=QosTenantPrio.UNSPECIFIED,
+        alias="prio",
+        description="The system class determines the quality of service and priority for the consumer traffic.",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

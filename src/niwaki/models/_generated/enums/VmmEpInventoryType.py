@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class VmmEpInventoryType(StrEnum):
     NONE = "none"
+    """No endpoints hsould be included in the inventory"""
     ON_LINK = "on-link"
+    """Inventory contains all endpoints that share a fabric uplink"""
 
     @classmethod
     def _missing_(cls, value: object) -> VmmEpInventoryType | None:

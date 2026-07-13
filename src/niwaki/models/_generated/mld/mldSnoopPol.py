@@ -14,6 +14,8 @@ from niwaki.models.base import ManagedObject
 class mldSnoopPol(ManagedObject):
     """ACI Managed Object: ``mldSnoopPol`` — MLD Snoop Policy.
 
+    The MLD snooping policy streamlines multicast traffic handling for VLANs. By examining (snooping) MLD membership report messages from interested hosts, multicast traffic is limited to the subset of VLAN interfaces on which the hosts reside.
+
     RN format: ``mldsnoopPol-{name}``
     """
 
@@ -37,33 +39,66 @@ class mldSnoopPol(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the MLD Snoop policy",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     admin_state: NwAdminSt = Field(default=NwAdminSt.DISABLED, alias="adminSt")
     annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    controls: str = Field(default="", alias="ctrl")
+    controls: str = Field(default="", alias="ctrl", description="Controls for MLD Snoop Policy")
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies a description of the policy definition.",
+        ),
     ] = ""
-    last_member_query_interval: str = Field(default="", alias="lastMbrIntvl")
+    last_member_query_interval: str = Field(
+        default="",
+        alias="lastMbrIntvl",
+        description="When the last member query interval parameter is configured, the software removes the group state if no host responds before the timeout.",
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
     owner_key: Annotated[
         str,
         Field(
-            max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerKey"
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerKey",
+            description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
     owner_tag: Annotated[
         str,
-        Field(max_length=64, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerTag"),
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerTag",
+            description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+        ),
     ] = ""
-    query_interval: str = Field(default="", alias="queryIntvl")
-    response_interval: str = Field(default="", alias="rspIntvl")
-    startup_query_count: str = Field(default="", alias="startQueryCnt")
-    startup_query_interval: str = Field(default="", alias="startQueryIntvl")
+    query_interval: str = Field(default="", alias="queryIntvl", description="Query interval")
+    response_interval: str = Field(
+        default="", alias="rspIntvl", description="The snooping query response interval."
+    )
+    startup_query_count: str = Field(
+        default="", alias="startQueryCnt", description="The interval before the query begins."
+    )
+    startup_query_interval: str = Field(
+        default="",
+        alias="startQueryIntvl",
+        description="The startup query interval. This configures the snooping query interval at startup.",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    version: McastVer2 = Field(default=McastVer2.V2, alias="ver")
+    version: McastVer2 = Field(default=McastVer2.V2, alias="ver", description="Version")

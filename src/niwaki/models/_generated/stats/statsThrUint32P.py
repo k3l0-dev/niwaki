@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class statsThrUint32P(ManagedObject):
     """ACI Managed Object: ``statsThrUint32P`` — Base Threshold Policy Definition.
 
+    The concrete statistical threshold policy for a 32-bit unsigned Int data type.
+
     RN format: ``thrUint32-{property}``
     """
 
@@ -39,14 +41,26 @@ class statsThrUint32P(ManagedObject):
     property: Annotated[str, Field(alias="propId")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     crit_high_reset: Annotated[int, Field(alias="critHighReset")] = 0
     crit_high_set: Annotated[int, Field(alias="critHighSet")] = 0
     crit_low_reset: Annotated[int, Field(alias="critLowReset")] = 0
     crit_low_set: Annotated[int, Field(alias="critLowSet")] = 0
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
     threshold_direction: StatsThrDir = Field(default=StatsThrDir.BOTH, alias="direction")
     high_range_end: Annotated[int, Field(alias="highRangeEnd")] = 0
@@ -63,7 +77,9 @@ class statsThrUint32P(ManagedObject):
     minor_high_set: Annotated[int, Field(alias="minorHighSet")] = 0
     minor_low_reset: Annotated[int, Field(alias="minorLowReset")] = 0
     minor_low_set: Annotated[int, Field(alias="minorLowSet")] = 0
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
+        ""
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class licenseFeatureEntitlement(ManagedObject):
     """ACI Managed Object: ``licenseFeatureEntitlement`` — Entitlement Definition.
 
+    Feature Entitlement is to model the definition of an entitlement.
+
     RN format: ``fentitle-{entitlement_tag_name}``
     """
 
@@ -35,13 +37,38 @@ class licenseFeatureEntitlement(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     entitlement_tag_name: Annotated[
-        str, Field(min_length=1, max_length=512, alias="entitlementTagName")
+        str,
+        Field(
+            min_length=1,
+            max_length=512,
+            alias="entitlementTagName",
+            description="entitlementTagName denotes a name of entitlement tag. entitlementTagName is provided by marketing team.",
+        ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    entitlement_tag: Annotated[str, Field(max_length=512, alias="entitlementTag")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    entitlement_tag: Annotated[
+        str,
+        Field(
+            max_length=512,
+            alias="entitlementTag",
+            description="entitlementTag denotes a license entitlement tag to uniquely identify a license entitlement. entitlementTag is provided by marketing team.",
+        ),
+    ] = ""
     entitlement_tag_description: Annotated[
-        str, Field(max_length=512, alias="entitlementTagDescr")
+        str,
+        Field(
+            max_length=512,
+            alias="entitlementTagDescr",
+            description="entitlementTagDescr denotes the description of entitlement tag. entitlementTagDescr is provided by marketing team.",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

@@ -15,6 +15,8 @@ from niwaki.models.base import ManagedObject
 class dbgacEpToEpg(ManagedObject):
     """ACI Managed Object: ``dbgacEpToEpg`` — From an EP to an EPG Atomic Counter Policy.
 
+    The endpoint-to-endpoint group atomic counter policy detects drops and misrouting in the fabric to enable quick debugging and isolation of application connectivity issues.
+
     RN format: ``epToEpg-{name}``
     """
 
@@ -45,17 +47,39 @@ class dbgacEpToEpg(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the endpoint-to-endpoint group atomic counter policy definition. This name can be between 1 and 64 alphanumeric characters. Note that you cannot change this name after the object has been saved.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    administrative_state: NwAdminSt = Field(default=NwAdminSt.ENABLED, alias="adminSt")
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    administrative_state: NwAdminSt = Field(
+        default=NwAdminSt.ENABLED, alias="adminSt", description="Administrative state of the policy"
+    )
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies a description of the policy definition.",
+        ),
     ] = ""
     latency_collection: AcLatencyCollect = Field(
-        default=AcLatencyCollect.AVG, alias="latencyCollect"
+        default=AcLatencyCollect.AVG, alias="latencyCollect", description="Latency Feature Action"
     )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
@@ -63,12 +87,22 @@ class dbgacEpToEpg(ManagedObject):
     owner_key: Annotated[
         str,
         Field(
-            max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerKey"
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerKey",
+            description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
     owner_tag: Annotated[
         str,
-        Field(max_length=64, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerTag"),
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerTag",
+            description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+        ),
     ] = ""
-    usage: AcIpRuleUsage = AcIpRuleUsage.ATOMIC_COUNTER
+    usage: AcIpRuleUsage = Field(
+        default=AcIpRuleUsage.ATOMIC_COUNTER, description="IP Rule feature"
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

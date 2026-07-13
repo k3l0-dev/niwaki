@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class CoopAuthT(StrEnum):
     COMPATIBLE = "compatible"
+    """Compatible Type"""
     STRICT = "strict"
+    """Strict Type"""
 
     @classmethod
     def _missing_(cls, value: object) -> CoopAuthT | None:

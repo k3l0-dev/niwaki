@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class BfdAfT(StrEnum):
     IPV4 = "ipv4"
+    """ipv4"""
     IPV6 = "ipv6"
+    """ipv6"""
 
     @classmethod
     def _missing_(cls, value: object) -> BfdAfT | None:

@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class polRsFirmwareRepoP(ManagedObject):
     """ACI Managed Object: ``polRsFirmwareRepoP`` — Firmware Repository.
 
+    A source relation to the firmware repository population and maintenance information. Note that this relation is an internal object.
+
     RN format: ``rsfirmwareRepoP``
     """
 
@@ -35,6 +37,13 @@ class polRsFirmwareRepoP(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     target_dn: str = Field(default="", alias="tDn")
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

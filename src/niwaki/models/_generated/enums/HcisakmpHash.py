@@ -7,10 +7,15 @@ from enum import StrEnum
 
 class HcisakmpHash(StrEnum):
     MD5 = "md5"
+    """Message Digest 5"""
     SHA = "sha"
+    """Secure Hash Standard"""
     SHA256 = "sha256"
+    """Secure Hash Standard 2 (256 bit)"""
     SHA384 = "sha384"
+    """Secure Hash Standard 2 (384 bit)"""
     SHA512 = "sha512"
+    """Secure Hash Standard 2 (512 bit)"""
 
     @classmethod
     def _missing_(cls, value: object) -> HcisakmpHash | None:

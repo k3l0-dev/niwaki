@@ -15,6 +15,8 @@ from niwaki.models.base import ManagedObject
 class dbgacIpToIp(ManagedObject):
     """ACI Managed Object: ``dbgacIpToIp`` — Ext IP Address to Ext IP Address Atomic Counter Policy.
 
+    IP Addr to IP policy Defn. Used for an external host identified by its IP address to another IP address
+
     RN format: ``acIpToIp-{name}``
     """
 
@@ -42,21 +44,47 @@ class dbgacIpToIp(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the object.",
+        ),
+    ]
 
     # ── Create-only (ignored by APIC on modification) ─────────────────────────
-    dst_ip: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="dstIp")] = ""
-    src_ip: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="srcIp")] = ""
+    dst_ip: Annotated[
+        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="dstIp", description=".Dst IP Address")
+    ] = ""
+    src_ip: Annotated[
+        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="srcIp", description="Src. IP Address")
+    ] = ""
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    administrative_state: NwAdminSt = Field(default=NwAdminSt.ENABLED, alias="adminSt")
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    administrative_state: NwAdminSt = Field(
+        default=NwAdminSt.ENABLED, alias="adminSt", description="Administrative state of the policy"
+    )
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies a description of the policy definition.",
+        ),
     ] = ""
     latency_collection: AcLatencyCollect = Field(
-        default=AcLatencyCollect.AVG, alias="latencyCollect"
+        default=AcLatencyCollect.AVG, alias="latencyCollect", description="Latency Feature Action"
     )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
@@ -64,12 +92,22 @@ class dbgacIpToIp(ManagedObject):
     owner_key: Annotated[
         str,
         Field(
-            max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerKey"
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerKey",
+            description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
     owner_tag: Annotated[
         str,
-        Field(max_length=64, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerTag"),
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerTag",
+            description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+        ),
     ] = ""
-    usage: AcIpRuleUsage = AcIpRuleUsage.ATOMIC_COUNTER
+    usage: AcIpRuleUsage = Field(
+        default=AcIpRuleUsage.ATOMIC_COUNTER, description="IP Rule feature"
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

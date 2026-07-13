@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class vzRsInTermGraphAtt(ManagedObject):
     """ACI Managed Object: ``vzRsInTermGraphAtt`` — L4-L7 Service Graph Template.
 
+    A source relation to an output terminal node. For abstract graphs, this is the terminal node at the output end. Note that this relation is an internal object.
+
     RN format: ``rsInTermGraphAtt``
     """
 
@@ -37,7 +39,14 @@ class vzRsInTermGraphAtt(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     name: Annotated[
         str,
         Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="tnVnsAbsGraphName"),

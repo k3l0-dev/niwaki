@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class analyticsProfile(ManagedObject):
     """ACI Managed Object: ``analyticsProfile`` — Profile.
 
+    Analytics profile
+
     RN format: ``prof-{name}``
     """
 
@@ -40,31 +42,56 @@ class analyticsProfile(ManagedObject):
     name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    timestamp_shift_value_for_burst_interval: str = Field(default="", alias="burstIntvlShift")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    timestamp_shift_value_for_burst_interval: str = Field(
+        default="", alias="burstIntvlShift", description="Burst interval shift"
+    )
     collect_interval_in_milliseconds: Annotated[
-        int, Field(ge=100, le=64000, alias="collectIntvl")
+        int, Field(ge=100, le=64000, alias="collectIntvl", description="Collect interval")
     ] = 100
     description: Annotated[
         str,
         Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
     ] = ""
-    ip_packet_id_shift: str = Field(default="", alias="ipPktIdShift")
-    mtu: str = ""
+    ip_packet_id_shift: str = Field(
+        default="", alias="ipPktIdShift", description="IP packet id shift"
+    )
+    mtu: Annotated[str, Field(description="Collector export packet MTU")] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
     collection_interval_in_seconds: Annotated[
-        int, Field(ge=60, le=36000, alias="netflowCollectorIntvl")
+        int, Field(ge=60, le=36000, alias="netflowCollectorIntvl", description="Collector interval")
     ] = 60
     sequence_number_guess_threshold_high: Annotated[
-        int, Field(ge=0, le=4294967295, alias="seqNumGuessThreshHi")
+        int,
+        Field(
+            ge=0,
+            le=4294967295,
+            alias="seqNumGuessThreshHi",
+            description="Sequence number guess threshold high",
+        ),
     ] = 0
     sequence_number_guess_threshold_low: Annotated[
-        int, Field(ge=0, le=4294967295, alias="seqNumGuessThreshLo")
+        int,
+        Field(
+            ge=0,
+            le=4294967295,
+            alias="seqNumGuessThreshLo",
+            description="Sequence number guess threshold low",
+        ),
     ] = 0
-    source_l4_port: Annotated[int, Field(ge=1, le=65535, alias="srcPort")] = 0
-    template_interval_in_seconds: Annotated[int, Field(ge=60, le=64000, alias="templateIntvl")] = (
-        300
-    )
+    source_l4_port: Annotated[
+        int, Field(ge=1, le=65535, alias="srcPort", description="Source port")
+    ] = 0
+    template_interval_in_seconds: Annotated[
+        int, Field(ge=60, le=64000, alias="templateIntvl", description="Template interval")
+    ] = 300
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

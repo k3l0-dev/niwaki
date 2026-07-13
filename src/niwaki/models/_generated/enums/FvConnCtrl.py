@@ -7,8 +7,11 @@ from enum import StrEnum
 
 class FvConnCtrl(StrEnum):
     DO_NOT_INSTRUMENT = "do-not-instrument"
+    """Do not intrument the policy in the hardware"""
     INSTRUMENT_AND_NO_ROUTE = "instrument-and-no-route"
+    """If Instrumenting the policy then do-not-enable routing"""
     INSTRUMENT_AND_ROUTE = "instrument-and-route"
+    """If Instrumenting the policy then enable routing too"""
 
     @classmethod
     def _missing_(cls, value: object) -> FvConnCtrl | None:

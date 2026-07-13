@@ -36,17 +36,29 @@ class opflexONic(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    mac: Annotated[str, Field(pattern="^([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}$")]
+    mac: Annotated[
+        str,
+        Field(pattern="^([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}$", description="The MAC address."),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     device_name: Annotated[str, Field(max_length=512, alias="deviceName")] = ""
     driver_info: Annotated[str, Field(max_length=512, alias="driverInfo")] = ""
-    id: str = ""
+    id: Annotated[str, Field(description="An identifier .")] = ""
     link_speed: Annotated[str, Field(max_length=512, alias="linkSpeed")] = ""
-    name: Annotated[str, Field(max_length=128)] = ""
+    name: Annotated[str, Field(max_length=128, description="The name of the object.")] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    state: CompNicState = CompNicState.DOWN
+    state: CompNicState = Field(
+        default=CompNicState.DOWN, description="The state of the relationship."
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

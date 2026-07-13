@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class plannerEpgPrefixes(ManagedObject):
     """ACI Managed Object: ``plannerEpgPrefixes`` — Count of EPG Prefixes.
 
+    Counts of EPG prefixes
+
     RN format: ``epgpfxs``
     """
 
@@ -34,7 +36,18 @@ class plannerEpgPrefixes(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    count_of_ipv4_addresses: Annotated[int, Field(alias="ipv4")] = 0
-    count_of_ipv6_addresses: Annotated[int, Field(alias="ipv6")] = 0
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    count_of_ipv4_addresses: Annotated[
+        int, Field(alias="ipv4", description="Count of IPv4 addresses")
+    ] = 0
+    count_of_ipv6_addresses: Annotated[
+        int, Field(alias="ipv6", description="Count of IPv6 addresses")
+    ] = 0
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

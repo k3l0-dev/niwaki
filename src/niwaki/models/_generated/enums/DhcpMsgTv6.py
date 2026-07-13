@@ -7,19 +7,33 @@ from enum import StrEnum
 
 class DhcpMsgTv6(StrEnum):
     ADVERTISE = "advertise"
+    """Advertise"""
     CONFIRM = "confirm"
+    """Confirm"""
     DECLINE = "decline"
+    """Decline"""
     INFORMATION_REQUEST = "information_request"
+    """Information_Request"""
     INVALID = "invalid"
+    """Invalid"""
     REBIND = "rebind"
+    """Rebind"""
     RECONFIGURE = "reconfigure"
+    """Reconfigure"""
     RELAY_FORW = "relay_forw"
+    """Relay_Forw"""
     RELAY_REPL = "relay_repl"
+    """Relay_Repl"""
     RELEASE = "release"
+    """Release"""
     RENEW = "renew"
+    """Renew"""
     REPLY = "reply"
+    """Reply"""
     REQUEST = "request"
+    """Request"""
     SOLICIT = "solicit"
+    """Solicit"""
 
     @classmethod
     def _missing_(cls, value: object) -> DhcpMsgTv6 | None:

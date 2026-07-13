@@ -43,7 +43,20 @@ class _UniMakers(Cursor):
         owner_tag: str | None = None,
         userdom: str | None = None,
     ) -> TenantCursor:
-        """Declare a ``fvTenant`` child under the uni level."""
+        """Declare a ``fvTenant`` child under the uni level.
+
+        A policy owner in the virtual fabric. A tenant can be either a private or a shared entity.
+        For example, you can create a tenant with contexts and bridge domains shared by other
+        tenants. A shared type of tenant is typically named common, default, or infra.
+
+        Args:
+            name: The name of the tenant.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: The description of the tenant.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -67,7 +80,16 @@ class _UniMakers(Cursor):
         owner_tag: str | None = None,
         userdom: str | None = None,
     ) -> InfraCursor:
-        """Declare a ``infraInfra`` child under the uni level."""
+        """Declare a ``infraInfra`` child under the uni level.
+
+        A container for all tenant infra configurations.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
             "InfraCursor",
@@ -84,7 +106,17 @@ class _UniMakers(Cursor):
         owner_tag: str | None = None,
         userdom: str | None = None,
     ) -> FabricCursor:
-        """Declare a ``fabricInst`` child under the uni level."""
+        """Declare a ``fabricInst`` child under the uni level.
+
+        A container object for fabric policies.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            name: null
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
             "FabricCursor",
@@ -101,7 +133,17 @@ class _UniMakers(Cursor):
         owner_tag: str | None = None,
         userdom: str | None = None,
     ) -> ControllerCursor:
-        """Declare a ``ctrlrInst`` child under the uni level."""
+        """Declare a ``ctrlrInst`` child under the uni level.
+
+        An instance of the controller.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            name: null
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
             "ControllerCursor",
@@ -118,7 +160,19 @@ class _UniMakers(Cursor):
         owner_tag: str | None = None,
         userdom: str | None = None,
     ) -> PhysDomCursor:
-        """Declare a ``physDomP`` child under the uni level."""
+        """Declare a ``physDomP`` child under the uni level.
+
+        The physical domain profile stores the physical resources (ports and port-channels) and
+        encap resources (VLAN/VXLAN) that should be used for endpoint groups associated with this
+        domain.
+
+        Args:
+            name: The name of the physical domain.
+            annotation: User annotation. Suggested format orchestrator:value
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -143,7 +197,18 @@ class _UniMakers(Cursor):
         owner_tag: str | None = None,
         userdom: str | None = None,
     ) -> L3DomCursor:
-        """Declare a ``l3extDomP`` child under the uni level."""
+        """Declare a ``l3extDomP`` child under the uni level.
+
+        The external routed domain profile is a policy for managing the physical infrastructure,
+        such as ports/VLANS, that can be used by an L3 routed outside network.
+
+        Args:
+            name: The name of the policy.
+            annotation: User annotation. Suggested format orchestrator:value
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
         params = {
             k: v
             for k, v in locals().items()

@@ -7,6 +7,7 @@ from enum import StrEnum
 
 class PtpNodeProfTemplate(StrEnum):
     TELECOM_FULL_PATH = "telecom_full_path"
+    """try to keep unique values for profiles"""
 
     @classmethod
     def _missing_(cls, value: object) -> PtpNodeProfTemplate | None:

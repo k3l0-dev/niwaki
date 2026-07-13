@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class infraRsLacpIfPol(ManagedObject):
     """ACI Managed Object: ``infraRsLacpIfPol`` — Relation to LACP Interface Policy.
 
+    The PortChannel member policy configured parameters.
+
     RN format: ``rslacpIfPol``
     """
 
@@ -37,8 +39,21 @@ class infraRsLacpIfPol(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     name: Annotated[
-        str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="tnLacpIfPolName")
+        str,
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            alias="tnLacpIfPolName",
+            description="The PortChannel Member policy name.",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

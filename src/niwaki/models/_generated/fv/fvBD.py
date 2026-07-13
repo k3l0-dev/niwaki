@@ -17,6 +17,8 @@ from niwaki.models.base import ManagedObject
 class fvBD(ManagedObject):
     """ACI Managed Object: ``fvBD`` — Bridge Domain.
 
+    A bridge domain is a unique layer 2 forwarding domain that contains one or more subnets. Each bridge domain must be linked to a context.
+
     RN format: ``BD-{name}``
     """
 
@@ -70,37 +72,113 @@ class fvBD(ManagedObject):
     _has_stats: ClassVar[bool] = True
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            description="The bridge domain name.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    optimize_wan_bandwidth_between_sites: bool = Field(default=False, alias="OptimizeWanBandwidth")
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    arp_flooding: bool = Field(default=False, alias="arpFlood")
+    optimize_wan_bandwidth_between_sites: bool = Field(
+        default=False,
+        alias="OptimizeWanBandwidth",
+        description="OptimizeWanBandwidth flag is enabled between sites",
+    )
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    arp_flooding: bool = Field(
+        default=False,
+        alias="arpFlood",
+        description="A property to specify whether ARP flooding is enabled. If flooding is disabled, unicast routing will be performed on the target IP address.",
+    )
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies a description of the policy definition root.",
+        ),
     ] = ""
-    enable_rogue_except_mac: bool = Field(default=False, alias="enableRogueExceptMac")
-    clear_endpoints: bool = Field(default=False, alias="epClear")
+    enable_rogue_except_mac: bool = Field(
+        default=False,
+        alias="enableRogueExceptMac",
+        description="rogue exception mac wildcard support at bd level",
+    )
+    clear_endpoints: bool = Field(
+        default=False,
+        alias="epClear",
+        description="Represents the parameter used by the node (i.e. Leaf) to clear all EPs in all leaves for this BD.",
+    )
     ep_move_detection_mode: L2EpMoveDetectMode = Field(
-        default=L2EpMoveDetectMode.GARP, alias="epMoveDetectMode"
+        default=L2EpMoveDetectMode.GARP,
+        alias="epMoveDetectMode",
+        description="The End Point move detection option uses the Gratuitous Address Resolution Protocol (GARP). A gratuitous ARP is an ARP broadcast-type of packet that is used to verify that no other device on the network has the same IP address as the sending device.",
     )
-    bd_host_based_routing: bool = Field(default=False, alias="hostBasedRouting")
-    allow_bum_traffic_between_sites: bool = Field(default=False, alias="intersiteBumTrafficAllow")
-    allow_l2stretch_between_sites: bool = Field(default=False, alias="intersiteL2Stretch")
+    bd_host_based_routing: bool = Field(
+        default=False,
+        alias="hostBasedRouting",
+        description="Enables advertising host routes (/32 prefixes) out of the L3OUT(s) that are associated to this BD.",
+    )
+    allow_bum_traffic_between_sites: bool = Field(
+        default=False,
+        alias="intersiteBumTrafficAllow",
+        description="Control whether BUM traffic is allowed between sites",
+    )
+    allow_l2stretch_between_sites: bool = Field(
+        default=False,
+        alias="intersiteL2Stretch",
+        description="l2Stretch flag is enabled between sites",
+    )
     ip_learning: bool = Field(default=True, alias="ipLearning")
-    ipv6_multicast_allow: bool = Field(default=False, alias="ipv6McastAllow")
-    limit_ip_learning_to_bd_subnets_only: bool = Field(default=True, alias="limitIpLearnToSubnets")
-    ipv6_link_local_address: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="llAddr")] = (
-        ""
+    ipv6_multicast_allow: bool = Field(
+        default=False,
+        alias="ipv6McastAllow",
+        description="Multicast. Flag to indicate if ipv6 multicast is enabled",
     )
-    mac_address: Annotated[
-        str, Field(pattern="^([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}$", alias="mac")
+    limit_ip_learning_to_bd_subnets_only: bool = Field(
+        default=True,
+        alias="limitIpLearnToSubnets",
+        description="Limits IP address learning to the bridge domain subnets only. Every BD can have multiple subnets associated with it. By default, all IPs are learned.",
+    )
+    ipv6_link_local_address: Annotated[
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            alias="llAddr",
+            description="The override of the system generated IPv6 link-local address.",
+        ),
     ] = ""
-    bd_rogue_mcast_arp_packet_drop: bool = Field(default=True, alias="mcastARPDrop")
-    multicast_allow: bool = Field(default=False, alias="mcastAllow")
+    mac_address: Annotated[
+        str,
+        Field(
+            pattern="^([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}$",
+            alias="mac",
+            description="The MAC address of the bridge domain (BD) or switched virtual interface (SVI). Every BD by default takes the fabric-wide default MAC address. You can override that address with a different one. By default the BD will take a 00:22:BD:F8:19:FF mac address.",
+        ),
+    ] = ""
+    bd_rogue_mcast_arp_packet_drop: bool = Field(
+        default=True, alias="mcastARPDrop", description="rogue mcast ARP packet drop"
+    )
+    multicast_allow: bool = Field(
+        default=False,
+        alias="mcastAllow",
+        description="Multicast. Flag to indicate if multicast is enabled",
+    )
     multi_destination_packet_action: L2MultiDstPktAct = Field(
-        default=L2MultiDstPktAct.BD_FLOOD, alias="multiDstPktAct"
+        default=L2MultiDstPktAct.BD_FLOOD,
+        alias="multiDstPktAct",
+        description="The multiple destination forwarding method for L2 Multicast, Broadcast, and Link Layer traffic types.",
     )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
@@ -108,26 +186,49 @@ class fvBD(ManagedObject):
     owner_key: Annotated[
         str,
         Field(
-            max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerKey"
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerKey",
+            description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
     owner_tag: Annotated[
         str,
-        Field(max_length=64, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerTag"),
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerTag",
+            description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+        ),
     ] = ""
-    disable_routing_on_service_bd: bool = Field(default=False, alias="serviceBdRoutingDisable")
-    type: FvBDType = FvBDType.REGULAR
-    unicast_routing: bool = Field(default=True, alias="unicastRoute")
+    disable_routing_on_service_bd: bool = Field(
+        default=False, alias="serviceBdRoutingDisable", description="Disable Routing on service BD"
+    )
+    type: FvBDType = Field(default=FvBDType.REGULAR, description="domain type")
+    unicast_routing: bool = Field(
+        default=True,
+        alias="unicastRoute",
+        description="The forwarding method based on predefined forwarding criteria (IP or MAC address).",
+    )
     unknown_mac_unicast_action: L2UnkMacUcastAct = Field(
-        default=L2UnkMacUcastAct.PROXY, alias="unkMacUcastAct"
+        default=L2UnkMacUcastAct.PROXY,
+        alias="unkMacUcastAct",
+        description="The forwarding method for unknown layer 2 destinations.",
     )
     unknown_multicast_destination_action: L2UnkMcastAct = Field(
-        default=L2UnkMcastAct.FLOOD, alias="unkMcastAct"
+        default=L2UnkMcastAct.FLOOD,
+        alias="unkMcastAct",
+        description="The parameter used by the node (i.e. a leaf) for forwarding data for an unknown multicast destination.",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     unknown_v6_multicast_destination_action: L2UnkMcastAct = Field(
         default=L2UnkMcastAct.FLOOD, alias="v6unkMcastAct"
     )
     virtual_mac_address: Annotated[
-        str, Field(pattern="^([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}$", alias="vmac")
+        str,
+        Field(
+            pattern="^([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}$",
+            alias="vmac",
+            description="Virtual MAC address of the BD/SVI. This is used when the BD is extended to multiple sites using l2 Outside.",
+        ),
     ] = ""

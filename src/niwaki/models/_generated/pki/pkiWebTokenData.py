@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class pkiWebTokenData(ManagedObject):
     """ACI Managed Object: ``pkiWebTokenData`` — Web Token Data.
 
+    The cryptographic data used for generating and verifying web tokens.
+
     RN format: ``webtokendata``
     """
 
@@ -38,29 +40,63 @@ class pkiWebTokenData(ManagedObject):
     name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies a description of the policy definition.",
+        ),
     ] = ""
     jwt_api_key: Annotated[str, Field(max_length=512, alias="jwtApiKey")] = ""
     jwt_private_key: Annotated[str, Field(alias="jwtPrivateKey", repr=False)] = ""
     jwt_public_key: str = Field(default="", alias="jwtPublicKey")
-    maximum_validity_period_in_hours: str = Field(default="", alias="maximumValidityPeriod")
+    maximum_validity_period_in_hours: str = Field(
+        default="",
+        alias="maximumValidityPeriod",
+        description="The maximum validity period for a webt oken.",
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
     owner_key: Annotated[
         str,
         Field(
-            max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerKey"
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerKey",
+            description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
     owner_tag: Annotated[
         str,
-        Field(max_length=64, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerTag"),
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerTag",
+            description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+        ),
     ] = ""
-    session_recording_options: str = Field(default="", alias="sessionRecordFlags")
-    gui_idle_timeout_in_seconds: str = Field(default="", alias="uiIdleTimeoutSeconds")
+    session_recording_options: str = Field(
+        default="",
+        alias="sessionRecordFlags",
+        description="Enables or disables a refresh in the session records.",
+    )
+    gui_idle_timeout_in_seconds: str = Field(
+        default="",
+        alias="uiIdleTimeoutSeconds",
+        description="The maximum interval time the GUI remains idle before login needs to be refreshed.",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    timeout_in_seconds: str = Field(default="", alias="webtokenTimeoutSeconds")
+    timeout_in_seconds: str = Field(
+        default="", alias="webtokenTimeoutSeconds", description="The web token timeout interval."
+    )

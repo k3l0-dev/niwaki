@@ -9,6 +9,8 @@ from niwaki.models.base import ManagedObject
 class topRoot(ManagedObject):
     """ACI Managed Object: ``topRoot``.
 
+    This class represents the root element in the object hierarchy. All managed objects in the system are descendants of the Root element.
+
     RN format: ````
     """
 

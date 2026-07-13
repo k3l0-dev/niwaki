@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class MaintSchedulerStatus(StrEnum):
     PAUSED = "paused"
+    """Scheduler is paused, waiting for admin intervention. Admin can resume the scheduler."""
     RUNNING = "running"
+    """Scheduler is running, scheduling maintenance operations in suitable windows."""
 
     @classmethod
     def _missing_(cls, value: object) -> MaintSchedulerStatus | None:

@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class vnsRsMConnAtt(ManagedObject):
     """ACI Managed Object: ``vnsRsMConnAtt`` — Relation from a Function Connector to a Meta Connector from Package.
 
+    A source relation to a connector between logical functions. Note that this relation is an internal object.
+
     RN format: ``rsMConnAtt``
     """
 
@@ -35,6 +37,13 @@ class vnsRsMConnAtt(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    target_dn: str = Field(default="", alias="tDn")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    target_dn: str = Field(default="", alias="tDn", description="null")
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

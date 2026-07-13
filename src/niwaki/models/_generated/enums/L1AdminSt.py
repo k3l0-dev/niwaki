@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class L1AdminSt(StrEnum):
     DOWN = "down"
+    """Admin state shut"""
     UP = "up"
+    """Admin state up"""
 
     @classmethod
     def _missing_(cls, value: object) -> L1AdminSt | None:

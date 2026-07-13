@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class tagAliasDef(ManagedObject):
     """ACI Managed Object: ``tagAliasDef`` — Alias.
 
+    The alias definition.
+
     RN format: ``alias-{name}``
     """
 
@@ -40,7 +42,14 @@ class tagAliasDef(ManagedObject):
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

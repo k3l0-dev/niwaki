@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class coppRule(ManagedObject):
     """ACI Managed Object: ``coppRule`` — Class.
 
+    Holder for copp class policy, each class describes a set of rules describing the policer rates
+
     RN format: ``rulep-[{rule_name}]-{rule_type}``
     """
 
@@ -35,9 +37,18 @@ class coppRule(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    rule_name: Annotated[str, Field(min_length=1, max_length=512, alias="name")]
-    rule_type: Annotated[str, Field(alias="type")]
+    rule_name: Annotated[
+        str, Field(min_length=1, max_length=512, alias="name", description="Rule name")
+    ]
+    rule_type: Annotated[str, Field(alias="type", description="Rule Type - v4 vs v6")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

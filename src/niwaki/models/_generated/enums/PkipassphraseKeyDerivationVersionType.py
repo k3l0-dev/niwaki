@@ -7,6 +7,7 @@ from enum import StrEnum
 
 class PkipassphraseKeyDerivationVersionType(StrEnum):
     V1 = "v1"
+    """Only one value possible today, but will allow new enum definitions in the future"""
 
     @classmethod
     def _missing_(cls, value: object) -> PkipassphraseKeyDerivationVersionType | None:

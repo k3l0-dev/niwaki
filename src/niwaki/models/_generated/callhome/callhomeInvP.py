@@ -14,6 +14,8 @@ from niwaki.models.base import ManagedObject
 class callhomeInvP(ManagedObject):
     """ACI Managed Object: ``callhomeInvP`` — Callhome Inventory Policy.
 
+    The call home inventory policy is used to send Call Home messages with system inventory information.
+
     RN format: ``chinvp-{name}``
     """
 
@@ -41,17 +43,53 @@ class callhomeInvP(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the inventory policy. The inventory policy is for periodically sending Call Home messages with system inventory information.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    administrative_state: TrigExecState = Field(default=TrigExecState.UNTRIGGERED, alias="adminSt")
-    admin_state: MonAdminState = Field(default=MonAdminState.ENABLED, alias="adminState")
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    administrative_state: TrigExecState = Field(
+        default=TrigExecState.UNTRIGGERED,
+        alias="adminSt",
+        description="The administrative state of the executable policies.",
+    )
+    admin_state: MonAdminState = Field(
+        default=MonAdminState.ENABLED,
+        alias="adminState",
+        description="The enabled or disabled state of the inventory policy. If the policy is disabled then no inventory messages are sent.",
+    )
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
-    maximum_retry: Annotated[int, Field(ge=0, le=5, alias="maximumRetryCount")] = 1
+    maximum_retry: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=5,
+            alias="maximumRetryCount",
+            description="The maximum number of attempts to send an inventory message.",
+        ),
+    ] = 1
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

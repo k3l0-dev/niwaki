@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class dcUserKeyCert(ManagedObject):
     """ACI Managed Object: ``dcUserKeyCert`` — device connector configuration.
 
+    Needs to replicate cert/key to all other APIC.
+
     RN format: ``userkey``
     """
 
@@ -35,10 +37,23 @@ class dcUserKeyCert(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     cert: Annotated[str, Field(repr=False)] = ""
     cert_file_name: Annotated[str, Field(max_length=512, alias="certFileName")] = ""
-    key: Annotated[str, Field(repr=False)] = ""
+    key: Annotated[
+        str,
+        Field(
+            repr=False,
+            description="The key or password used to uniquely identify this configuration object.",
+        ),
+    ] = ""
     key_file_name: Annotated[str, Field(max_length=512, alias="keyFileName")] = ""
-    path: Annotated[str, Field(max_length=512)] = ""
+    path: Annotated[str, Field(max_length=512, description="Ignore, removed")] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

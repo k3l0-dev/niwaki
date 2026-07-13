@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class igmpSnoopStaticGroup(ManagedObject):
     """ACI Managed Object: ``igmpSnoopStaticGroup`` — IGMP Snooping Static Membership configuration.
 
+    Representation of an IGMP snooping static (*,G) or (S,G) membership
+
     RN format: ``group-[{multicast_group_ip}]-source-[{multicast_source_ip}]``
     """
 
@@ -36,16 +38,44 @@ class igmpSnoopStaticGroup(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    multicast_group_ip: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="group")]
-    multicast_source_ip: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="source")]
+    multicast_group_ip: Annotated[
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            alias="group",
+            description="Group Address of IGMP snooping Static Entry",
+        ),
+    ]
+    multicast_source_ip: Annotated[
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            alias="source",
+            description="Source Address of IGMP snooping Static Entry, 0 in case of (*,G) entry",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
+        ""
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

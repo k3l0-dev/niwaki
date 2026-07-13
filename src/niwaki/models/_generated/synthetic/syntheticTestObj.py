@@ -40,20 +40,32 @@ class syntheticTestObj(ManagedObject):
     # ── Naming (required) ──────────────────────────────────────────────────────
     dn_bin: Annotated[str, Field(alias="dnBin")]
     dn_str: Annotated[str, Field(alias="dnStr")]
-    id: str
+    id: Annotated[str, Field(description="An identifier .")]
 
     # ── Create-only (ignored by APIC on modification) ─────────────────────────
     num_eps: Annotated[int, Field(alias="numEps")] = 0
     sec_key: Annotated[int, Field(alias="secKey")] = 0
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     descr: Annotated[
         str, Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$")
     ] = ""
-    name: Annotated[str, Field(max_length=16, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    name: Annotated[
+        str,
+        Field(max_length=16, pattern="^[a-zA-Z0-9_.:-]+$", description="The name of the object."),
+    ] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    state: ScalarEnum82 = ScalarEnum82.ENABLED
+    state: ScalarEnum82 = Field(
+        default=ScalarEnum82.ENABLED, description="Represents the state of the relationship."
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

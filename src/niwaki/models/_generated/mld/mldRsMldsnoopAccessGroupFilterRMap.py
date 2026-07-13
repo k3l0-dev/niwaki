@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class mldRsMldsnoopAccessGroupFilterRMap(ManagedObject):
     """ACI Managed Object: ``mldRsMldsnoopAccessGroupFilterRMap`` — Profile that specify what to accept using a pimRouteMapPol.
 
+    Matching rule for the access group using rtctrlProfileFor future releasesMatching rule for the access group using pimRouteMapPol
+
     RN format: ``rsmldsnoopAccessGroupFilterRMap``
     """
 
@@ -37,7 +39,14 @@ class mldRsMldsnoopAccessGroupFilterRMap(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     name: Annotated[
         str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="tnPimRouteMapPolName")
     ] = ""

@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class orchsRsToFuncProfile(ManagedObject):
     """ACI Managed Object: ``orchsRsToFuncProfile`` — Association to function profile.
 
+    Association from Local Resource to Function Profile
+
     RN format: ``rstoFuncProfile-[{target_dn}]``
     """
 
@@ -35,10 +37,25 @@ class orchsRsToFuncProfile(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    target_dn: Annotated[str, Field(alias="tDn")]
+    target_dn: Annotated[
+        str, Field(alias="tDn", description="The distinguished name of the target.")
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    description: Annotated[str, Field(max_length=512)] = ""
-    is_default: bool = Field(default=False, alias="isDefault")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    description: Annotated[
+        str, Field(max_length=512, description="The description of this configuration item.")
+    ] = ""
+    is_default: bool = Field(
+        default=False,
+        alias="isDefault",
+        description="Specifies if this is the default domain. Only one domain in the group should be default.",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

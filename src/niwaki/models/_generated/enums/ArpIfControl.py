@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class ArpIfControl(StrEnum):
     GARP_ADJ_ENABLE = "garp-adj-enable"
+    """Enable learning adjacency from GARP"""
     UNSPECIFIED = "unspecified"
+    """Unspecified"""
 
     @classmethod
     def _missing_(cls, value: object) -> ArpIfControl | None:

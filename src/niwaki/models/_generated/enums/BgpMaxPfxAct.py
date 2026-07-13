@@ -7,9 +7,13 @@ from enum import StrEnum
 
 class BgpMaxPfxAct(StrEnum):
     LOG = "log"
+    """Log a warning"""
     REJECT = "reject"
+    """Reject prefixes beyond the configured limit"""
     RESTART = "restart"
+    """Restart the peer"""
     SHUT = "shut"
+    """Shut the peer"""
 
     @classmethod
     def _missing_(cls, value: object) -> BgpMaxPfxAct | None:

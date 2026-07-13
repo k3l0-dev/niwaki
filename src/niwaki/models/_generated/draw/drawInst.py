@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class drawInst(ManagedObject):
     """ACI Managed Object: ``drawInst`` — Graph Node.
 
+    The visual coordinates for an object displayed in the GUI. This is optional and is only used to make graphs displayed by the GUI retain the position in which the user placed the objects.
+
     RN format: ``item-[{o_dn}]``
     """
 
@@ -34,9 +36,16 @@ class drawInst(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    o_dn: Annotated[str, Field(alias="oDn")]
+    o_dn: Annotated[str, Field(alias="oDn", description="Distinguished name of the target object")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     info: str = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

@@ -7,19 +7,33 @@ from enum import StrEnum
 
 class RtctrlSetType(StrEnum):
     AS_PATH = "as-path"
+    """AS Path"""
     COMMUNITY = "community"
+    """Community"""
     DAMPENING_POL = "dampening-pol"
+    """Dampening Type"""
     IP_NH = "ip-nh"
+    """IP Nexthop"""
     LOCAL_PREF = "local-pref"
+    """Local preference (implicitly used in BGP only)"""
     METRIC = "metric"
+    """Metric"""
     METRIC_TYPE = "metric-type"
+    """Metric Type"""
     NH_UNCHANGED = "nh-unchanged"
+    """Nexthop Unchanged"""
     OSPF_FWD_ADDR = "ospf-fwd-addr"
+    """OSPF forwarding address"""
     OSPF_NSSA = "ospf-nssa"
+    """OSPF NSSA"""
     POLICY_TAG = "policy-tag"
+    """Policy tag"""
     REDIST_MULTIPATH = "redist-multipath"
+    """Pick multiple path for redistribution into MP-BGP"""
     RT_TAG = "rt-tag"
+    """Route tag"""
     RT_WEIGHT = "rt-weight"
+    """Route weight (implicitly used in BGP only)"""
 
     @classmethod
     def _missing_(cls, value: object) -> RtctrlSetType | None:

@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class mdpRemoteService(ManagedObject):
     """ACI Managed Object: ``mdpRemoteService`` — Multi-Domain Imported Service.
 
+    define exported service
+
     RN format: ``mdprsrv``
     """
 
@@ -36,17 +38,38 @@ class mdpRemoteService(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     consumer_scope: str = Field(default="", alias="consumerScope")
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
     remote_domain_id: str = Field(default="", alias="domainId")
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
+        ""
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
     remote_service_name: Annotated[str, Field(max_length=512, alias="service")] = ""
-    remote_tenant_name: Annotated[str, Field(max_length=512, alias="tenant")] = ""
+    remote_tenant_name: Annotated[
+        str,
+        Field(
+            max_length=512,
+            alias="tenant",
+            description="The tenant under which this traceroute policy is configured.",
+        ),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

@@ -7,8 +7,11 @@ from enum import StrEnum
 
 class PoePoliceAct(StrEnum):
     ERR_DIS = "err-dis"
+    """Error Disable"""
     LOG = "log"
+    """Log"""
     NONE = "none"
+    """None"""
 
     @classmethod
     def _missing_(cls, value: object) -> PoePoliceAct | None:

@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class ndIfPol(ManagedObject):
     """ACI Managed Object: ``ndIfPol`` — ND Interface Policy.
 
+    The neighbor discovery interface policy defines a common configuration that will apply to one or more neighbor discovery interfaces.
+
     RN format: ``ndifpol-{name}``
     """
 
@@ -34,37 +36,125 @@ class ndIfPol(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the object.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    controls: str = Field(default="", alias="ctrl")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    controls: str = Field(default="", alias="ctrl", description="The control state.")
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies a description of the policy definition.",
+        ),
     ] = ""
-    hop_limit: str = Field(default="", alias="hopLimit")
-    mtu: str = ""
+    hop_limit: str = Field(
+        default="",
+        alias="hopLimit",
+        description="The hop limit is used by hosts in outgoing packets and link parameters such as the link MTU. This facilitates centralized administration of critical parameters that can be set on routers and automatically propagated to all attached hosts.",
+    )
+    mtu: Annotated[
+        str,
+        Field(
+            description="In the RA message, the maximum transmission unit (MTU) value that a host should use in packets that it originates."
+        ),
+    ] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    neighbor_solicit_interval: Annotated[int, Field(ge=1000, le=3600000, alias="nsIntvl")] = 1000
-    neighbor_solicit_retry_count: str = Field(default="", alias="nsRetries")
-    nud_retry_base: str = Field(default="", alias="nudRetryBase")
-    nud_retry_interval: Annotated[int, Field(ge=1000, le=10000, alias="nudRetryInterval")] = 1000
-    nud_retry_max_attempts: str = Field(default="", alias="nudRetryMaxAttempts")
+    neighbor_solicit_interval: Annotated[
+        int,
+        Field(
+            ge=1000,
+            le=3600000,
+            alias="nsIntvl",
+            description="The neighbor solicitation interval is sent by a node to determine the link-layer address of a neighbor, or to verify that a neighbor is still reachable through a cached link-layer address. Neighbor solicitations are also used for duplicate address detection.",
+        ),
+    ] = 1000
+    neighbor_solicit_retry_count: str = Field(
+        default="",
+        alias="nsRetries",
+        description="The retransmission retry count for for sending neighbor solicitation messages.",
+    )
+    nud_retry_base: str = Field(
+        default="",
+        alias="nudRetryBase",
+        description="Retransmission base for NUD neighbor solication messages",
+    )
+    nud_retry_interval: Annotated[
+        int,
+        Field(
+            ge=1000,
+            le=10000,
+            alias="nudRetryInterval",
+            description="Retransmission interval between NUD neighbor solication messages",
+        ),
+    ] = 1000
+    nud_retry_max_attempts: str = Field(
+        default="",
+        alias="nudRetryMaxAttempts",
+        description="Retransmission maximum number of attempts for NUD neighbor solication messages",
+    )
     owner_key: Annotated[
         str,
         Field(
-            max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerKey"
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerKey",
+            description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
     owner_tag: Annotated[
         str,
-        Field(max_length=64, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerTag"),
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerTag",
+            description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+        ),
     ] = ""
-    router_advertisement_interval: str = Field(default="", alias="raIntvl")
-    router_advertisement_lifetime: str = Field(default="", alias="raLifetime")
-    reachable_time: Annotated[int, Field(ge=0, le=3600000, alias="reachableTime")] = 0
-    retransmit_timer: Annotated[int, Field(ge=0, alias="retransTimer")] = 0
+    router_advertisement_interval: str = Field(
+        default="",
+        alias="raIntvl",
+        description="The interval for sending router advertisement messages.",
+    )
+    router_advertisement_lifetime: str = Field(
+        default="",
+        alias="raLifetime",
+        description="The lifetime associated with the default router.",
+    )
+    reachable_time: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=3600000,
+            alias="reachableTime",
+            description="The reachable time, which is the time in milliseconds that a node assumes a neighbor is reachable after receiving a reachability confirmation.",
+        ),
+    ] = 0
+    retransmit_timer: Annotated[
+        int,
+        Field(
+            ge=0,
+            alias="retransTimer",
+            description="The retransmit timer has the time in milliseconds between retransmitted neighbor solicitation messages.",
+        ),
+    ] = 0
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

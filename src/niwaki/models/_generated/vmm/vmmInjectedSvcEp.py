@@ -39,8 +39,15 @@ class vmmInjectedSvcEp(ManagedObject):
     cont_grp_name: Annotated[str, Field(min_length=1, max_length=512, alias="contGrpName")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     ep_ip: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="epIp")] = ""
-    name: Annotated[str, Field(max_length=128)] = ""
+    name: Annotated[str, Field(max_length=128, description="The name of the object.")] = ""
     display_name: Annotated[str, Field(max_length=128, alias="nameAlias")] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

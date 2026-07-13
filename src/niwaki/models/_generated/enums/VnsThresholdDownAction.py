@@ -7,8 +7,11 @@ from enum import StrEnum
 
 class VnsThresholdDownAction(StrEnum):
     BYPASS = "bypass"
+    """Action: ByPass"""
     DENY = "deny"
+    """Action: Deny"""
     PERMIT = "permit"
+    """Action: Permit"""
 
     @classmethod
     def _missing_(cls, value: object) -> VnsThresholdDownAction | None:

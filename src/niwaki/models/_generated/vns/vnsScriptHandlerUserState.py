@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class vnsScriptHandlerUserState(ManagedObject):
     """ACI Managed Object: ``vnsScriptHandlerUserState`` — Container for User Modifiable State of Scripthandler.
 
+    The user created state for L4 to L7.
+
     RN format: ``scriptHandlerUserState``
     """
 
@@ -35,5 +37,12 @@ class vnsScriptHandlerUserState(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

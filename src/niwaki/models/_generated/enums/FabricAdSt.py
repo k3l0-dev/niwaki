@@ -7,11 +7,17 @@ from enum import StrEnum
 
 class FabricAdSt(StrEnum):
     LOCATE = "locate"
+    """Locate"""
     LOCATE_OFF = "locate-off"
+    """Locate"""
     OFF = "off"
+    """Off"""
     ON = "on"
+    """On"""
     REBOOT = "reboot"
+    """Reboot"""
     SHUTDOWN = "shutdown"
+    """Shutdown"""
 
     @classmethod
     def _missing_(cls, value: object) -> FabricAdSt | None:

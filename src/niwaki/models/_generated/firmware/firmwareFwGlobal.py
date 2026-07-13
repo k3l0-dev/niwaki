@@ -36,9 +36,20 @@ class firmwareFwGlobal(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=512)]
+    name: Annotated[str, Field(min_length=1, max_length=512, description="Firmware name.")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    sync_status: FirmwareSyncStatus = Field(default=FirmwareSyncStatus.QUEUED, alias="syncSt")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    sync_status: FirmwareSyncStatus = Field(
+        default=FirmwareSyncStatus.QUEUED,
+        alias="syncSt",
+        description="Synchronization status of the firmware",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

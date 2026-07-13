@@ -14,6 +14,8 @@ from niwaki.models.base import ManagedObject
 class extdevSwMgrFlags(ManagedObject):
     """ACI Managed Object: ``extdevSwMgrFlags`` — Container for domain relations.
 
+    Container for Switch Manager Policies
+
     RN format: ``fl``
     """
 
@@ -40,12 +42,27 @@ class extdevSwMgrFlags(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    dyn_loose_node_discovery: bool = Field(default=True, alias="dynLooseNodeDiscovery")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    dyn_loose_node_discovery: bool = Field(
+        default=True,
+        alias="dynLooseNodeDiscovery",
+        description="Used to determine how Encaps are deployed to the target EDMGR",
+    )
     encap_deploy_mode: EdmEncapDeployMode = Field(
-        default=EdmEncapDeployMode.PREPROVISION, alias="encapDeployMode"
+        default=EdmEncapDeployMode.PREPROVISION,
+        alias="encapDeployMode",
+        description="Encap Deploy Mode",
     )
     nic_prof_cfg_preserve_mode: EdmCfgPreserveMode = Field(
-        default=EdmCfgPreserveMode.PRESERVE, alias="nicProfCfgPreserveMode"
+        default=EdmCfgPreserveMode.PRESERVE,
+        alias="nicProfCfgPreserveMode",
+        description="NIC Profile Config Preservation Mode",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

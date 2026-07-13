@@ -14,6 +14,8 @@ from niwaki.models.base import ManagedObject
 class nwsSyslogSrc(ManagedObject):
     """ACI Managed Object: ``nwsSyslogSrc`` — Syslog Source for Firewall.
 
+    Policy providing a concrete implementation of a syslog source for a firewall.
+
     RN format: ``slsrc-{name}``
     """
 
@@ -44,10 +46,22 @@ class nwsSyslogSrc(ManagedObject):
 
     # ── Configurable ───────────────────────────────────────────────────────────
     admin_state: MonAdminState = Field(default=MonAdminState.ENABLED, alias="adminState")
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
     log_action: str = Field(default="", alias="inclAction")
     min_severity: SyslogSeverity = Field(default=SyslogSeverity.INFORMATION, alias="logLevel")

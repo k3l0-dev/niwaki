@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class snmpCommunityP(ManagedObject):
     """ACI Managed Object: ``snmpCommunityP`` — SNMP Community.
 
+    The SNMP community profile enables access to the router or switch statistics for monitoring. SNMP is an application-layer protocol that provides a message format for communication between SNMP managers and agents.
+
     RN format: ``community-{name}``
     """
 
@@ -34,13 +36,33 @@ class snmpCommunityP(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=32, pattern="^[a-zA-Z0-9_.-]{0,32}$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=32,
+            pattern="^[a-zA-Z0-9_.-]{0,32}$",
+            description="The name of the community profile. This name can be between 1 and 64 alphanumeric characters.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")

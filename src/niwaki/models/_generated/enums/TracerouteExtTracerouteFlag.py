@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class TracerouteExtTracerouteFlag(StrEnum):
     FALSE = "false"
+    """No External Traceroute"""
     TRUE = "true"
+    """Do External Traceroute"""
 
     @classmethod
     def _missing_(cls, value: object) -> TracerouteExtTracerouteFlag | None:

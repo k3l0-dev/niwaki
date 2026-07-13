@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class pim6If(ManagedObject):
     """ACI Managed Object: ``pim6If`` — PIM6 Interface.
 
+    This object holds pim6 information that is operated at a interface level
+
     RN format: ``if-[{interface_id}]``
     """
 
@@ -36,13 +38,22 @@ class pim6If(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    interface_id: Annotated[str, Field(alias="id")]
+    interface_id: Annotated[str, Field(alias="id", description="Interface ID of this endpoint")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
         Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
     ] = ""
-    name: Annotated[str, Field(min_length=1, max_length=128)] = ""
+    name: Annotated[
+        str, Field(min_length=1, max_length=128, description="The name of the object.")
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

@@ -37,12 +37,27 @@ class vmmClusterFaultInfo(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    fault_code: Annotated[int, Field(alias="faultCode")] = 0
+    fault_code: Annotated[
+        int,
+        Field(
+            alias="faultCode",
+            description="The code corresponding to a service fault. The code characterizes information about the fault. The fault may be reported while updating a configuration or polling for health or counter values.",
+        ),
+    ] = 0
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     fault_desc: Annotated[str, Field(max_length=512, alias="faultDesc")] = ""
     fault_severity: VmmFaultSeverity = Field(
-        default=VmmFaultSeverity.CLEARED, alias="faultSeverity"
+        default=VmmFaultSeverity.CLEARED,
+        alias="faultSeverity",
+        description="The severity of a service fault. The fault may be reported while updating a configuration or polling for health or counter values.",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

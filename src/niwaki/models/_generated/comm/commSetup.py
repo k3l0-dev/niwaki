@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class commSetup(ManagedObject):
     """ACI Managed Object: ``commSetup`` — Communication Setup.
 
+    This is generated and used only by internal processes.
+
     RN format: ``setup``
     """
 
@@ -34,6 +36,13 @@ class commSetup(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     maximum_mos_in_query: Annotated[int, Field(ge=100, le=500000, alias="maxMos")] = 100000
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

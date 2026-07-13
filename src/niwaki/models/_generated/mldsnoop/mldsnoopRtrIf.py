@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class mldsnoopRtrIf(ManagedObject):
     """ACI Managed Object: ``mldsnoopRtrIf`` — Router Interface.
 
+    Multicast router if
+
     RN format: ``rtrif-[{id}]``
     """
 

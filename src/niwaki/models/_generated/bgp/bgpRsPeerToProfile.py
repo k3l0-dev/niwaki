@@ -14,6 +14,8 @@ from niwaki.models.base import ManagedObject
 class bgpRsPeerToProfile(ManagedObject):
     """ACI Managed Object: ``bgpRsPeerToProfile`` — Route Control Profile.
 
+    Bgp Peer Relation to Routing Policy
+
     RN format: ``rspeerToProfile-[{target_dn}]-{direction}``
     """
 
@@ -40,10 +42,25 @@ class bgpRsPeerToProfile(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    direction: RtctrlDirection = RtctrlDirection.IMPORT
-    target_dn: Annotated[str, Field(alias="tDn")]
+    direction: RtctrlDirection = Field(
+        default=RtctrlDirection.IMPORT, description="The connector direction."
+    )
+    target_dn: Annotated[
+        str, Field(alias="tDn", description="The distinguished name of the target.")
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    config_issues: BgpConfigIssues = Field(default=BgpConfigIssues.NONE, alias="configIssues")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    config_issues: BgpConfigIssues = Field(
+        default=BgpConfigIssues.NONE,
+        alias="configIssues",
+        description="Bitmask representation of the configuration issues found during the endpoint group deployment.",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class vzRsAnyToConsIf(ManagedObject):
     """ACI Managed Object: ``vzRsAnyToConsIf`` — Imported Contract.
 
+    A source relation to a contract interface. A contract interface can be used as a contract consumption interface when a consumer consumes the contract by associating it to a consumption interface provided by the provider in the consumer's domain.
+
     RN format: ``rsanyToConsIf-{name}``
     """
 
@@ -44,6 +46,15 @@ class vzRsAnyToConsIf(ManagedObject):
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    priority: QosTenantPrio = Field(default=QosTenantPrio.UNSPECIFIED, alias="prio")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    priority: QosTenantPrio = Field(
+        default=QosTenantPrio.UNSPECIFIED, alias="prio", description="null"
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

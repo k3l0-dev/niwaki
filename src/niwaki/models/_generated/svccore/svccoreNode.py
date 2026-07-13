@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class svccoreNode(ManagedObject):
     """ACI Managed Object: ``svccoreNode`` — History of metadata for a core generated at a Fabric Node.
 
+    A core node.
+
     RN format: ``node-{node_id_where_the_core_file_was_created}-card-{card_id}-svc-{name_of_service_that_cored}-ts-{create_time}``
     """
 
@@ -42,11 +44,22 @@ class svccoreNode(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    card_id: Annotated[str, Field(alias="cardId")]
-    create_time: Annotated[str, Field(alias="createTime")]
-    node_id_where_the_core_file_was_created: Annotated[str, Field(alias="nodeId")]
-    name_of_service_that_cored: Annotated[str, Field(min_length=1, max_length=512, alias="svcName")]
+    card_id: Annotated[str, Field(alias="cardId", description="Card ID where the core was created")]
+    create_time: Annotated[str, Field(alias="createTime", description="null")]
+    node_id_where_the_core_file_was_created: Annotated[
+        str, Field(alias="nodeId", description="Node ID where the core was created")
+    ]
+    name_of_service_that_cored: Annotated[
+        str, Field(min_length=1, max_length=512, alias="svcName", description="null")
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     ack: bool = False
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""

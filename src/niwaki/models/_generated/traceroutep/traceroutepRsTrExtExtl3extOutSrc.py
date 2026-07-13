@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class traceroutepRsTrExtExtl3extOutSrc(ManagedObject):
     """ACI Managed Object: ``traceroutepRsTrExtExtl3extOutSrc`` — Relation to Traceroute Source to l3extOut.
 
+    Relation to l3extOut
+
     RN format: ``rstrExtExtl3extOutSrc``
     """
 
@@ -36,8 +38,19 @@ class traceroutepRsTrExtExtl3extOutSrc(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    addr: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$")] = ""
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    encap: str = ""
-    target_dn: str = Field(default="", alias="tDn")
+    addr: Annotated[
+        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", description="The peer IP address.")
+    ] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    encap: Annotated[str, Field(description="The port encapsulation.")] = ""
+    target_dn: str = Field(
+        default="", alias="tDn", description="The distinguished name of the target."
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

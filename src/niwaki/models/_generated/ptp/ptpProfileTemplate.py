@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class ptpProfileTemplate(ManagedObject):
     """ACI Managed Object: ``ptpProfileTemplate`` — PTP profile template abstract.
 
+    PTP profile template
+
     RN format: ``ptpprofiletemplate-{ptp_profile_template_name}``
     """
 
@@ -37,21 +39,58 @@ class ptpProfileTemplate(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     ptp_profile_template_name: PtpProfileTemplate = Field(
-        default=PtpProfileTemplate.AES67, alias="profile"
+        default=PtpProfileTemplate.AES67,
+        alias="profile",
+        description="TemplateName (Defaut/AES/SMPTE/Telecom)",
     )
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    announce_interval_default_value: str = Field(default="", alias="announceIntvlDefault")
-    announce_interval_range_end: str = Field(default="", alias="announceIntvlEnd")
-    announce_interval_range_start: str = Field(default="", alias="announceIntvlStart")
-    announce_timeout_default_value: str = Field(default="", alias="announceTimeoutDefault")
-    announce_timeout_range_end: str = Field(default="", alias="announceTimeoutEnd")
-    announce_timeout_range_start: str = Field(default="", alias="announceTimeoutStart")
-    delay_req_intvl_default: str = Field(default="", alias="delayReqIntvlDefault")
-    minimum_delay_request_interval_range_end: str = Field(default="", alias="delayReqIntvlEnd")
-    delay_req_intvl_start: str = Field(default="", alias="delayReqIntvlStart")
-    sync_intvl_default: str = Field(default="", alias="syncIntvlDefault")
-    sync_intvl_end: str = Field(default="", alias="syncIntvlEnd")
-    sync_intvl_start: str = Field(default="", alias="syncIntvlStart")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    announce_interval_default_value: str = Field(
+        default="", alias="announceIntvlDefault", description="Announce interval default value"
+    )
+    announce_interval_range_end: str = Field(
+        default="", alias="announceIntvlEnd", description="Announce interval range end"
+    )
+    announce_interval_range_start: str = Field(
+        default="", alias="announceIntvlStart", description="Announce interval range start"
+    )
+    announce_timeout_default_value: str = Field(
+        default="", alias="announceTimeoutDefault", description="Announce timeout default value"
+    )
+    announce_timeout_range_end: str = Field(
+        default="", alias="announceTimeoutEnd", description="Announce timeout range end"
+    )
+    announce_timeout_range_start: str = Field(
+        default="", alias="announceTimeoutStart", description="Announce timeout range start"
+    )
+    delay_req_intvl_default: str = Field(
+        default="",
+        alias="delayReqIntvlDefault",
+        description="Minimum Delay Request Interval default value",
+    )
+    minimum_delay_request_interval_range_end: str = Field(
+        default="", alias="delayReqIntvlEnd", description="Minimum Delay Request Interval range end"
+    )
+    delay_req_intvl_start: str = Field(
+        default="",
+        alias="delayReqIntvlStart",
+        description="Minimum Delay Request Interval range start",
+    )
+    sync_intvl_default: str = Field(
+        default="", alias="syncIntvlDefault", description="Sync Interval default value"
+    )
+    sync_intvl_end: str = Field(
+        default="", alias="syncIntvlEnd", description="Sync Interval range end"
+    )
+    sync_intvl_start: str = Field(
+        default="", alias="syncIntvlStart", description="Sync Interval range start"
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class analyticsController(ManagedObject):
     """ACI Managed Object: ``analyticsController`` — Controller Reachability.
 
+    Controller information for bootstrapping the analytics agent
+
     RN format: ``controller-{name}``
     """
 
@@ -38,14 +40,27 @@ class analyticsController(ManagedObject):
     name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
         Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
     ] = ""
-    image_uri: Annotated[str, Field(max_length=512, alias="imageUri")] = ""
-    image_uri2: Annotated[str, Field(max_length=512, alias="imageUri2")] = ""
-    image_version: Annotated[str, Field(max_length=512, alias="imageVer")] = ""
+    image_uri: Annotated[
+        str, Field(max_length=512, alias="imageUri", description="RPM image uri")
+    ] = ""
+    image_uri2: Annotated[
+        str, Field(max_length=512, alias="imageUri2", description="RPM image uri2")
+    ] = ""
+    image_version: Annotated[
+        str, Field(max_length=512, alias="imageVer", description="RPM image version")
+    ] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

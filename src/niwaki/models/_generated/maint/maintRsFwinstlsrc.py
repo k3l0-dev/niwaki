@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class maintRsFwinstlsrc(ManagedObject):
     """ACI Managed Object: ``maintRsFwinstlsrc`` — Relation to Source Node.
 
+    A source relation to the system health.
+
     RN format: ``rsfwinstlsrc-[{target_dn}]``
     """
 
@@ -37,5 +39,12 @@ class maintRsFwinstlsrc(ManagedObject):
     target_dn: Annotated[str, Field(alias="tDn")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

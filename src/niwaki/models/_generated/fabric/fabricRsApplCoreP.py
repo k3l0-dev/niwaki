@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class fabricRsApplCoreP(ManagedObject):
     """ACI Managed Object: ``fabricRsApplCoreP`` — Tech Support Policy.
 
+    A source relation to the core file report containing data about the system and the component at the time of the failure.
+
     RN format: ``rsapplCoreP``
     """
 
@@ -37,8 +39,21 @@ class fabricRsApplCoreP(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     name: Annotated[
-        str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="tnDbgexpCorePName")
+        str,
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            alias="tnDbgexpCorePName",
+            description="The name of the core export policy. This name can be up to 64 characters. Note that you cannot change this name after the object has been saved.",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

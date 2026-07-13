@@ -14,6 +14,8 @@ from niwaki.models.base import ManagedObject
 class snmpUserP(ManagedObject):
     """ACI Managed Object: ``snmpUserP`` — User Profile.
 
+    The SNMP user profile is used to associate users with SNMP policies for monitoring devices in a network. SNMP is an application-layer protocol that provides a message format for communication between SNMP managers and agents.
+
     RN format: ``user-{name}``
     """
 
@@ -38,19 +40,53 @@ class snmpUserP(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: str
+    name: Annotated[
+        str,
+        Field(
+            description="The name of the user profile. This name can be between 1 and 64 alphanumeric characters provided the name starts with an alphabet."
+        ),
+    ]
 
     # ── Create-only (ignored by APIC on modification) ─────────────────────────
-    authentication_key: Annotated[str, Field(alias="authKey", repr=False)] = ""
-    authentication_type: SnmpAuthType = Field(default=SnmpAuthType.HMAC_SHA1_96, alias="authType")
-    privacy_key: Annotated[str, Field(alias="privKey", repr=False)] = ""
-    privacy: SnmpPrivType = Field(default=SnmpPrivType.NONE, alias="privType")
+    authentication_key: Annotated[
+        str,
+        Field(
+            alias="authKey",
+            repr=False,
+            description="The authentication key for the user profile. The key can be any case-sensitive alphanumeric string up to 64 chars.",
+        ),
+    ] = ""
+    authentication_type: SnmpAuthType = Field(
+        default=SnmpAuthType.HMAC_SHA1_96,
+        alias="authType",
+        description="The authentication type for the user profile. The authentication type is a message authentication code (MAC) that is used between two parties sharing a secret key to validate information transmitted between them. HMAC (Hash MAC) is based on cryptographic hash functions.",
+    )
+    privacy_key: Annotated[
+        str, Field(alias="privKey", repr=False, description="The privacy key for the user profile.")
+    ] = ""
+    privacy: SnmpPrivType = Field(
+        default=SnmpPrivType.NONE,
+        alias="privType",
+        description="The encryption type for the user profile.",
+    )
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")

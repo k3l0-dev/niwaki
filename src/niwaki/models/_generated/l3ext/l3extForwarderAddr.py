@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class l3extForwarderAddr(ManagedObject):
     """ACI Managed Object: ``l3extForwarderAddr`` — Forwarding IP address.
 
+    Forwarding IP Address Policy
+
     RN format: ``forwarderaddr-[{ip_address}]``
     """
 
@@ -38,16 +40,36 @@ class l3extForwarderAddr(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    ip_address: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="addr")]
+    ip_address: Annotated[
+        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="addr", description="The peer IP address.")
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
-    ipv6_dad: L3extIpv6Dad = Field(default=L3extIpv6Dad.ENABLED, alias="ipv6Dad")
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    ipv6_dad: L3extIpv6Dad = Field(
+        default=L3extIpv6Dad.ENABLED,
+        alias="ipv6Dad",
+        description="IPv6 DAD feature When disabled it will IPv6 DAD will be diasabled",
+    )
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
+        ""
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

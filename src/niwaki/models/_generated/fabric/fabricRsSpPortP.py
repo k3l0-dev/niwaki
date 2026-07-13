@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class fabricRsSpPortP(ManagedObject):
     """ACI Managed Object: ``fabricRsSpPortP`` — Spine Interface Profile.
 
+    A source relation to the spine port profile.
+
     RN format: ``rsspPortP-[{target_dn}]``
     """
 
@@ -35,8 +37,21 @@ class fabricRsSpPortP(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    target_dn: Annotated[str, Field(alias="tDn")]
+    target_dn: Annotated[
+        str,
+        Field(
+            alias="tDn",
+            description="A distinguished name for a spine port profile. This is the full path to the organization. The maximum supported string length is 255 ASCII characters.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

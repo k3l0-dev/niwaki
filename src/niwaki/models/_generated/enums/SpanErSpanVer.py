@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class SpanErSpanVer(StrEnum):
     VER1 = "ver1"
+    """Version 1"""
     VER2 = "ver2"
+    """Version 2"""
 
     @classmethod
     def _missing_(cls, value: object) -> SpanErSpanVer | None:

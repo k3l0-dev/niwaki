@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class mgmtRsAddrInst(ManagedObject):
     """ACI Managed Object: ``mgmtRsAddrInst`` — Relation to IP Address Pool.
 
+    A source relation to the IP address namespace/IP address range.
+
     RN format: ``rsaddrInst``
     """
 
@@ -35,6 +37,13 @@ class mgmtRsAddrInst(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    target_dn: str = Field(default="", alias="tDn")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    target_dn: str = Field(default="", alias="tDn", description="Specifies a namespace target RN")
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

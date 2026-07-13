@@ -7,8 +7,11 @@ from enum import StrEnum
 
 class MacsecConfOffset(StrEnum):
     OFFSET_0 = "offset-0"
+    """0"""
     OFFSET_30 = "offset-30"
+    """30"""
     OFFSET_50 = "offset-50"
+    """50"""
 
     @classmethod
     def _missing_(cls, value: object) -> MacsecConfOffset | None:

@@ -7,13 +7,20 @@ from enum import StrEnum
 
 class OpflexDeviceType(StrEnum):
     AVE = "ave"
+    """AVE Guest VM vswitch"""
     AVE_NG = "ave-ng"
+    """Next-gen AVE Guest VM vswitch"""
     CF = "cf"
+    """Cloud Foundry"""
     HYPERV = "hyperv"
+    """Hyperv vswitch"""
     K8S = "k8s"
     N1KV = "n1kv"
+    """N1kv vswitch"""
     OPENSHIFT = "openshift"
+    """OpenShift"""
     OVS = "ovs"
+    """Ovs vswitch"""
     UNKNOWN = "unknown"
 
     @classmethod

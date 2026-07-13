@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class MacsecSecPolicy(StrEnum):
     MUST_SECURE = "must-secure"
+    """must-secure"""
     SHOULD_SECURE = "should-secure"
+    """should-secure"""
 
     @classmethod
     def _missing_(cls, value: object) -> MacsecSecPolicy | None:

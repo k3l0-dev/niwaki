@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class fabricRsMonInstFabricPol(ManagedObject):
     """ACI Managed Object: ``fabricRsMonInstFabricPol`` — Monitoring Policy.
 
+    A source relation to the monitoring policy model for the fabric semantic scope.
+
     RN format: ``rsmonInstFabricPol``
     """
 
@@ -35,8 +37,21 @@ class fabricRsMonInstFabricPol(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     name: Annotated[
-        str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="tnMonFabricPolName")
+        str,
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            alias="tnMonFabricPolName",
+            description="The name of the monitoring fabric policy session. This name can be up to 64 alphanumeric characters. Note that you cannot change this name after the object has been saved.",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

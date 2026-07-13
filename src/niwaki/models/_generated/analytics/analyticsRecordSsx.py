@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class analyticsRecordSsx(ManagedObject):
     """ACI Managed Object: ``analyticsRecordSsx`` — SSX Record.
 
+    SSX Record
+
     RN format: ``recordssx-{name}``
     """
 
@@ -34,18 +36,46 @@ class analyticsRecordSsx(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the object.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    collect_params_set0: str = Field(default="", alias="collectssx")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    collect_params_set0: str = Field(
+        default="", alias="collectssx", description="Export parameters for the ssx record"
+    )
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="The description of this configuration item.",
+        ),
     ] = ""
-    collect_interval_in_milliseconds: Annotated[int, Field(ge=100, le=64000, alias="interval")] = (
-        100
-    )
+    collect_interval_in_milliseconds: Annotated[
+        int,
+        Field(
+            ge=100,
+            le=64000,
+            alias="interval",
+            description="Interval in uS of collection for this record",
+        ),
+    ] = 100
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

@@ -7,6 +7,7 @@ from enum import StrEnum
 
 class ApphostingPkgRunOptState(StrEnum):
     APPEND = "append"
+    """Package run option config state values"""
     OVER_WRITE = "over-write"
 
     @classmethod

@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class vzInTerm(ManagedObject):
     """ACI Managed Object: ``vzInTerm`` — InTerm Subject.
 
+    An input terminal node. For abstract graphs, this is the terminal node at the input end.
+
     RN format: ``intmnl``
     """
 
@@ -40,15 +42,33 @@ class vzInTerm(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
+        ""
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    qos_class_id: QosTenantPrio = Field(default=QosTenantPrio.UNSPECIFIED, alias="prio")
-    terminal_level_dscp: str = Field(default="", alias="targetDscp")
+    qos_class_id: QosTenantPrio = Field(
+        default=QosTenantPrio.UNSPECIFIED, alias="prio", description="null"
+    )
+    terminal_level_dscp: str = Field(
+        default="", alias="targetDscp", description="Terminal level dscp value"
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

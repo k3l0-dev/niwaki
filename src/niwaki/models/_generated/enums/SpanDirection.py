@@ -7,8 +7,11 @@ from enum import StrEnum
 
 class SpanDirection(StrEnum):
     BOTH = "both"
+    """Both"""
     IN = "in"
+    """Incoming"""
     OUT = "out"
+    """Outgoing"""
 
     @classmethod
     def _missing_(cls, value: object) -> SpanDirection | None:

@@ -7,9 +7,13 @@ from enum import StrEnum
 
 class EigrpIfAfControl(StrEnum):
     BFD = "bfd"
+    """Enable BFD"""
     NH_SELF = "nh-self"
+    """Nexthop self"""
     PASSIVE = "passive"
+    """Passive"""
     SPLIT_HORIZON = "split-horizon"
+    """Split horizon"""
 
     @classmethod
     def _missing_(cls, value: object) -> EigrpIfAfControl | None:

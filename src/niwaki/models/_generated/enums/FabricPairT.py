@@ -8,6 +8,7 @@ from enum import StrEnum
 class FabricPairT(StrEnum):
     CONSECUTIVE = "consecutive"
     EXPLICIT = "explicit"
+    """use explicitly pairs nodes"""
     RECIPROCAL = "reciprocal"
 
     @classmethod

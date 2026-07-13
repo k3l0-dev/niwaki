@@ -42,7 +42,18 @@ class _ControllerMakers(Cursor):
         owner_tag: str | None = None,
         userdom: str | None = None,
     ) -> FabricMembershipCursor:
-        """Declare a ``fabricNodeIdentPol`` child under the controller level."""
+        """Declare a ``fabricNodeIdentPol`` child under the controller level.
+
+        A container for the node identity profile.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            name: null
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
             "FabricMembershipCursor",
@@ -98,7 +109,23 @@ class _FabricMembershipMakers(Cursor):
         display_name: str | None = None,
         userdom: str | None = None,
     ) -> FabricNodeMemberCursor:
-        """Declare a ``fabricNodeIdentP`` child under the fabric_membership level."""
+        """Declare a ``fabricNodeIdentP`` child under the fabric_membership level.
+
+        The node identity profile assigns IDs to the fabric nodes.
+
+        Args:
+            serial: The node manufacturer serial number.
+            fabric_id: null
+            id: null
+            node_type: Values: ``remote-leaf-wan``, ``tier-2-leaf``, ``unspecified``,
+                ``virtual``. Default: ``unspecified``.
+            pod_id: null
+            role: The system role type. Values: ``leaf``, ``spine``, ``unspecified``. Default:
+                ``unspecified``.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            name: null
+        """
         params = {
             k: v
             for k, v in locals().items()

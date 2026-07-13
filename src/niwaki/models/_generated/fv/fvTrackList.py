@@ -40,16 +40,40 @@ class fvTrackList(ManagedObject):
     _has_stats: ClassVar[bool] = True
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the object.",
+        ),
+    ]
 
     # ── Create-only (ignored by APIC on modification) ─────────────────────────
-    type_of_tracklist: TrackListObj = Field(default=TrackListObj.PERCENTAGE, alias="type")
+    type_of_tracklist: TrackListObj = Field(
+        default=TrackListObj.PERCENTAGE,
+        alias="type",
+        description="The specific type of the object or component.",
+    )
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies a description of the policy definition.",
+        ),
     ] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
@@ -57,15 +81,39 @@ class fvTrackList(ManagedObject):
     owner_key: Annotated[
         str,
         Field(
-            max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerKey"
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerKey",
+            description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
     owner_tag: Annotated[
         str,
-        Field(max_length=64, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerTag"),
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerTag",
+            description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+        ),
     ] = ""
-    percentage_down: str = Field(default="", alias="percentageDown")
-    percentage_up: str = Field(default="", alias="percentageUp")
+    percentage_down: str = Field(
+        default="",
+        alias="percentageDown",
+        description="Down Threshold percentage. This specifies the threshold percentage down. This applies when track:List.type is 'percentageDown'.",
+    )
+    percentage_up: str = Field(
+        default="",
+        alias="percentageUp",
+        description="Up Threshold percentage. This specifies the threshold percentage up. This applies when track:List.type is 'percentage'.",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    weight_down_value: str = Field(default="", alias="weightDown")
-    weight_up_value: str = Field(default="", alias="weightUp")
+    weight_down_value: str = Field(
+        default="",
+        alias="weightDown",
+        description="Down Threshold weight. This specifies the threshold weight down. This applies when track:List.type is 'weight'.",
+    )
+    weight_up_value: str = Field(
+        default="",
+        alias="weightUp",
+        description="Up Threshold weight. This specifies the threshold weight up. This applies when track:List.type is 'weight'.",
+    )

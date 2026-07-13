@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class segrtMplsPrefixSid(ManagedObject):
     """ACI Managed Object: ``segrtMplsPrefixSid`` — MPLS Prefix Segment Identifier.
 
+    MPLS Prefix SID
+
     RN format: ``sid-[{prefix}]``
     """
 
@@ -38,12 +40,25 @@ class segrtMplsPrefixSid(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    prefix: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="pfx")]
+    prefix: Annotated[
+        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="pfx", description="Address of the prefix")
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    value_of_sid: Annotated[int, Field(ge=0, le=471804, alias="sidValue")] = 0
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    value_of_sid: Annotated[
+        int, Field(ge=0, le=471804, alias="sidValue", description="Value of Segment Identifier")
+    ] = 0
     type_of_segment_identifier_value: SegrtSidValueType = Field(
-        default=SegrtSidValueType.INDEX, alias="sidValueType"
+        default=SegrtSidValueType.INDEX,
+        alias="sidValueType",
+        description="Type of segment identifier",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

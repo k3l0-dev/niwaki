@@ -14,6 +14,8 @@ from niwaki.models.base import ManagedObject
 class vzRsFiltAtt(ManagedObject):
     """ACI Managed Object: ``vzRsFiltAtt`` — Filter.
 
+    A source relation to a filter. A filter is a group of resolvable filter entries. Each filter entry is a combination of network traffic classification properties. Note that this relation is an internal object.
+
     RN format: ``rsfiltAtt-{name}``
     """
 
@@ -46,9 +48,18 @@ class vzRsFiltAtt(ManagedObject):
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    action: VzBinaryAction = VzBinaryAction.PERMIT
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    directives: str = ""
+    action: VzBinaryAction = Field(
+        default=VzBinaryAction.PERMIT, description="The action required when the condition is met."
+    )
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    directives: Annotated[str, Field(description="Adding log config to inTerm and OutTerm")] = ""
     priority_override: VzPriorityLevel = Field(
         default=VzPriorityLevel.DEFAULT, alias="priorityOverride"
     )

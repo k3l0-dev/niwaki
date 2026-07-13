@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class vnsDevPing(ManagedObject):
     """ACI Managed Object: ``vnsDevPing`` — CDev Ping Policy.
 
+    An object created to test the reachability information of a device node.
+
     RN format: ``devPing-{name}``
     """
 
@@ -38,7 +40,14 @@ class vnsDevPing(ManagedObject):
     name: Annotated[str, Field(min_length=1, max_length=16, pattern="^[a-zA-Z0-9_.:-]+$")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

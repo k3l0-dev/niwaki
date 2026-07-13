@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class L3extEncapScope(StrEnum):
     CTX = "ctx"
+    """Represents that the scope of the encap is Ctx"""
     LOCAL = "local"
+    """Represents that the scope of the encap is local"""
 
     @classmethod
     def _missing_(cls, value: object) -> L3extEncapScope | None:

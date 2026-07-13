@@ -37,16 +37,39 @@ class vmmInjectedVnic(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     mac_address: Annotated[
-        str, Field(pattern="^([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}$", alias="mac")
+        str,
+        Field(
+            pattern="^([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}$",
+            alias="mac",
+            description="The MAC address.",
+        ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="The description of this configuration item.",
+        ),
     ] = ""
-    guid: Annotated[str, Field(max_length=512)] = ""
-    name: Annotated[str, Field(max_length=128)] = ""
+    guid: Annotated[
+        str,
+        Field(
+            max_length=512,
+            description="The globally unique identifier of an object in the external VM management system. For example, the GUID of the virtual machine in the VMware vCenter.",
+        ),
+    ] = ""
+    name: Annotated[str, Field(max_length=128, description="The name of the object.")] = ""
     display_name: Annotated[str, Field(max_length=128, alias="nameAlias")] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

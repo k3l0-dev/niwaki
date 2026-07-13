@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class segrtSrgb(ManagedObject):
     """ACI Managed Object: ``segrtSrgb`` — Segment Routing Global Block.
 
+    Segment Routing Global Block
+
     RN format: ``srgb-{srgb_identifier}``
     """
 
@@ -37,10 +39,23 @@ class segrtSrgb(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    srgb_identifier: Annotated[int, Field(ge=1, le=64, alias="localId")] = 0
+    srgb_identifier: Annotated[
+        int, Field(ge=1, le=64, alias="localId", description="SRGB identifier")
+    ] = 0
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    srgb_minimum_label: Annotated[int, Field(ge=16000, le=471804, alias="srLblMax")] = 23999
-    sr_lbl_min: Annotated[int, Field(ge=16000, le=471804, alias="srLblMin")] = 16000
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    srgb_minimum_label: Annotated[
+        int, Field(ge=16000, le=471804, alias="srLblMax", description="SRGB maximum label")
+    ] = 23999
+    sr_lbl_min: Annotated[
+        int, Field(ge=16000, le=471804, alias="srLblMin", description="SRGB minimum label")
+    ] = 16000
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

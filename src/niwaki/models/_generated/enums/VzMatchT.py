@@ -7,9 +7,13 @@ from enum import StrEnum
 
 class VzMatchT(StrEnum):
     ALL = "All"
+    """Logical AND i.e. &&"""
     ATLEASTONE = "AtleastOne"
+    """Logical OR i.e. ||"""
     ATMOSTONE = "AtmostOne"
+    """Logical XOR"""
     NONE = "None"
+    """Logical NOT i.e. !"""
 
     @classmethod
     def _missing_(cls, value: object) -> VzMatchT | None:

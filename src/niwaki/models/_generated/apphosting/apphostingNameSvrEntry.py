@@ -14,6 +14,8 @@ from niwaki.models.base import ManagedObject
 class apphostingNameSvrEntry(ManagedObject):
     """ACI Managed Object: ``apphostingNameSvrEntry`` — app name server entries.
 
+    1.1.2 NameSrvEntry [dn] /sys/apphosting/appconf-[appId]/namesvr-[tagName]1.1.2 Name Server Configuration MO
+
     RN format: ``namesvr-{name_server_entry_tag_eg_v4addr0_1}``
     """
 
@@ -38,16 +40,39 @@ class apphostingNameSvrEntry(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     name_server_entry_tag_eg_v4addr0_1: ApphostingNameSrvEntryTag = Field(
-        default=ApphostingNameSrvEntryTag.V4ADDR0, alias="tagName"
+        default=ApphostingNameSrvEntryTag.V4ADDR0,
+        alias="tagName",
+        description="Name server entry tag. eg: 'v4addr<0-1> or v6addr<0-1>'",
     )
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    admin_st: ApphostingAdminState = Field(default=ApphostingAdminState.ENABLED, alias="adminSt")
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    admin_st: ApphostingAdminState = Field(
+        default=ApphostingAdminState.ENABLED,
+        alias="adminSt",
+        description='Admin state to configure mo "',
+    )
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     v4_ip_address_of_the_name_server_entry: Annotated[
-        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="ipV4Addr")
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            alias="ipV4Addr",
+            description="v4 ip address in name server entry",
+        ),
     ] = ""
     v6_ip_address_of_the_name_server_entry: Annotated[
-        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="ipV6Addr")
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            alias="ipV6Addr",
+            description="v6 ip address in name server entry",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

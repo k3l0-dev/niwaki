@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class datetimeRsNtpProvToNtpAuthKey(ManagedObject):
     """ACI Managed Object: ``datetimeRsNtpProvToNtpAuthKey`` — Relation to Datetime Authentication Key.
 
+    The authentication key to apply to a specific provider. Keys can be shared with different providers.
+
     RN format: ``rsntpProvToNtpAuthKey-{auth_key_id}``
     """
 
@@ -38,5 +40,12 @@ class datetimeRsNtpProvToNtpAuthKey(ManagedObject):
     auth_key_id: Annotated[str, Field(alias="tnDatetimeNtpAuthKeyId")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

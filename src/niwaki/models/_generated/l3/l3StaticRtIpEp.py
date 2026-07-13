@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class l3StaticRtIpEp(ManagedObject):
     """ACI Managed Object: ``l3StaticRtIpEp`` — Static Route IP Endpoint.
 
+    Static Route IP end point
+
     RN format: ``strtipep-[{route_address}]``
     """
 
@@ -34,8 +36,22 @@ class l3StaticRtIpEp(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    route_address: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="routeIpAddr")]
+    route_address: Annotated[
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            alias="routeIpAddr",
+            description="IP address for the static route",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

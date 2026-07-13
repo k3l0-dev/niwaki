@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class mgmtIp(ManagedObject):
     """ACI Managed Object: ``mgmtIp`` — Secondary IP address.
 
+    Secondary interface connection parameters
+
     RN format: ``mip-[{ip_address}]``
     """
 
@@ -38,19 +40,42 @@ class mgmtIp(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    ip_address: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="addr")]
+    ip_address: Annotated[
+        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="addr", description="IP address of the node")
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     configuration_mode: MgmtConfigurationMode = Field(
-        default=MgmtConfigurationMode.STATIC, alias="configurationMode"
+        default=MgmtConfigurationMode.STATIC,
+        alias="configurationMode",
+        description="Address allocated either static or auto",
     )
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
-    gateway_ip_address: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="gw")] = ""
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    gateway_ip_address: Annotated[
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$", alias="gw", description="Gateway IP address of the node"
+        ),
+    ] = ""
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
+        ""
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

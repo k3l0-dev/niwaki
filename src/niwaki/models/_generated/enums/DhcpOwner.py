@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class DhcpOwner(StrEnum):
     INFRA = "infra"
+    """The dhcp server to relay to should be chosen from the ones configured under the infrastructure"""
     TENANT = "tenant"
+    """The dhcp server to relay to should be chosen from the ones configured under the tenant"""
 
     @classmethod
     def _missing_(cls, value: object) -> DhcpOwner | None:

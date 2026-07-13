@@ -7,9 +7,13 @@ from enum import StrEnum
 
 class InfraLagT(StrEnum):
     FC_LINK = "fc-link"
+    """Fc Port Channel"""
     LINK = "link"
+    """Direct Port Channel"""
     NODE = "node"
+    """Virtaul Port Channel"""
     NOT_AGGREGATED = "not-aggregated"
+    """Not an aggregated link"""
 
     @classmethod
     def _missing_(cls, value: object) -> InfraLagT | None:

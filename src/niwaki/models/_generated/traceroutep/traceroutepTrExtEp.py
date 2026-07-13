@@ -14,6 +14,8 @@ from niwaki.models.base import ManagedObject
 class traceroutepTrExtEp(ManagedObject):
     """ACI Managed Object: ``traceroutepTrExtEp`` — External-IP-to-Endpoint Traceroute Policy.
 
+    Traceroute an External IP address from an End Point learned as being connected to ToR
+
     RN format: ``trExtEp-{name}``
     """
 
@@ -42,19 +44,52 @@ class traceroutepTrExtEp(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the object.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    administrative_state: ActionAdminSt = Field(default=ActionAdminSt.STOP, alias="adminSt")
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    administrative_state: ActionAdminSt = Field(
+        default=ActionAdminSt.STOP,
+        alias="adminSt",
+        description="Administrative state of the monitoring policy",
+    )
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies a description of the policy definition.",
+        ),
     ] = ""
-    destination_port_end: str = Field(default="", alias="dstPortEnd")
-    destination_port_start: str = Field(default="", alias="dstPortStart")
+    destination_port_end: str = Field(
+        default="", alias="dstPortEnd", description="Destination Port range end value"
+    )
+    destination_port_start: str = Field(
+        default="", alias="dstPortStart", description="Destination Port range start value"
+    )
     macaddress: Annotated[
-        str, Field(pattern="^([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}$", alias="gwMac")
+        str,
+        Field(
+            pattern="^([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}$",
+            alias="gwMac",
+            description="Gateway MAC If specified, this value will be used as the destination MAC for all the traceroute policies (for all sources/destinations).",
+        ),
     ] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
@@ -62,15 +97,31 @@ class traceroutepTrExtEp(ManagedObject):
     owner_key: Annotated[
         str,
         Field(
-            max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerKey"
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerKey",
+            description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
     owner_tag: Annotated[
         str,
-        Field(max_length=64, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerTag"),
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerTag",
+            description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+        ),
     ] = ""
-    payload_size_in_bytes: str = Field(default="", alias="payloadSz")
-    protocol: TracerouteProtT = Field(default=TracerouteProtT.UDP, alias="prot")
-    source_port_end: str = Field(default="", alias="srcPortEnd")
-    source_port_start: str = Field(default="", alias="srcPortStart")
+    payload_size_in_bytes: str = Field(
+        default="", alias="payloadSz", description="Probe packet size"
+    )
+    protocol: TracerouteProtT = Field(
+        default=TracerouteProtT.UDP, alias="prot", description="L3 Ip Protocol"
+    )
+    source_port_end: str = Field(
+        default="", alias="srcPortEnd", description="Source Port range end value"
+    )
+    source_port_start: str = Field(
+        default="", alias="srcPortStart", description="Source Port range start value"
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

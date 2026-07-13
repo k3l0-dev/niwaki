@@ -44,10 +44,19 @@ class fcVsanAttrPEntry(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    vsan_encap: Annotated[str, Field(alias="vsanEncap")]
+    vsan_encap: Annotated[str, Field(alias="vsanEncap", description="mapped fcoe vsan")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    loadbalancing_type: VsanLbType = Field(default=VsanLbType.SRC_DST_OX_ID, alias="lbType")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    loadbalancing_type: VsanLbType = Field(
+        default=VsanLbType.SRC_DST_OX_ID, alias="lbType", description="Loadbalancing type"
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    vlan_encap: str = Field(default="", alias="vlanEncap")
+    vlan_encap: str = Field(default="", alias="vlanEncap", description="vlan encap value")

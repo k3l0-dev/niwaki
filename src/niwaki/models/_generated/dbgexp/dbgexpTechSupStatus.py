@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class dbgexpTechSupStatus(ManagedObject):
     """ACI Managed Object: ``dbgexpTechSupStatus`` — TechSupport Export Status.
 
+    Status of techsupport data export
+
     RN format: ``tsnode-{node_id}``
     """
 
@@ -35,9 +37,29 @@ class dbgexpTechSupStatus(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    node_id: Annotated[int, Field(alias="nodeId")] = 0
+    node_id: Annotated[
+        int,
+        Field(
+            alias="nodeId",
+            description="The ID of the IFC, leaf, or spine from which the technical support data was uploaded.",
+        ),
+    ] = 0
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    fqdn_of_the_host: Annotated[str, Field(max_length=512, alias="hostName")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    fqdn_of_the_host: Annotated[
+        str,
+        Field(
+            max_length=512,
+            alias="hostName",
+            description="The hostname of the router advertising the link-state packet.",
+        ),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class infraPortBlk(ManagedObject):
     """ACI Managed Object: ``infraPortBlk`` — Access Port Block.
 
+    The port block enables you to specify a range of interfaces.
+
     RN format: ``portblk-{name}``
     """
 
@@ -37,19 +39,39 @@ class infraPortBlk(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The port block name",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="The description of this configuration item.",
+        ),
     ] = ""
-    from_module_id: str = Field(default="", alias="fromCard")
-    from_port_id: str = Field(default="", alias="fromPort")
+    from_module_id: str = Field(default="", alias="fromCard", description="null")
+    from_port_id: str = Field(default="", alias="fromPort", description="null")
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    to_module_id: str = Field(default="", alias="toCard")
-    to_port_id: str = Field(default="", alias="toPort")
+    to_module_id: str = Field(default="", alias="toCard", description="null")
+    to_port_id: str = Field(default="", alias="toPort", description="null")
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class monEPGTarget(ManagedObject):
     """ACI Managed Object: ``monEPGTarget`` — Monitoring Target.
 
+    Creating a monitoring target will allow you to associate certain monitoring policies to the target object for this tenant. These associated policies can be related to stats collection, stats export, Callhome/SNMP/Syslog, event severities, fault severities, and fault lifecycle policies.
+
     RN format: ``tarepg-{target_scope}``
     """
 
@@ -48,16 +50,32 @@ class monEPGTarget(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    target_scope: MonTargetScope = Field(default=MonTargetScope.UNSPECIFIED, alias="scope")
+    target_scope: MonTargetScope = Field(
+        default=MonTargetScope.UNSPECIFIED,
+        alias="scope",
+        description="The target object to which you will apply monitoring policies.",
+    )
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
     mon_epgtarget_name: Annotated[
-        str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="name")
+        str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="name", description="null")
     ] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")

@@ -14,6 +14,8 @@ from niwaki.models.base import ManagedObject
 class spanExtendedFltEntry(ManagedObject):
     """ACI Managed Object: ``spanExtendedFltEntry`` — Extended Filter Entry.
 
+    Extended Filter Entry
+
     RN format: ``extFltEntry-{name}``
     """
 
@@ -39,23 +41,45 @@ class spanExtendedFltEntry(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the object.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
-    dot1p_from: str = Field(default="", alias="dot1pFrom")
-    dot1p_to: str = Field(default="", alias="dot1pTo")
-    dscp_from: str = Field(default="", alias="dscpFrom")
-    dscp_to: str = Field(default="", alias="dscpTo")
+    dot1p_from: str = Field(default="", alias="dot1pFrom", description="Dot1p From")
+    dot1p_to: str = Field(default="", alias="dot1pTo", description="Dot1p To")
+    dscp_from: str = Field(default="", alias="dscpFrom", description="DSCP From")
+    dscp_to: str = Field(default="", alias="dscpTo", description="DSCP To")
     packet_is_routeable_or_switched: SpanForwardingType = Field(
-        default=SpanForwardingType.BOTH, alias="forwardingVal"
+        default=SpanForwardingType.BOTH, alias="forwardingVal", description="Routed/Switched"
     )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    tcp_flags: SpanTcpCtrl = Field(default=SpanTcpCtrl.TCP_FLAGS_DEFAULT, alias="tcpFlags")
+    tcp_flags: SpanTcpCtrl = Field(
+        default=SpanTcpCtrl.TCP_FLAGS_DEFAULT, alias="tcpFlags", description="TCP Flags"
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

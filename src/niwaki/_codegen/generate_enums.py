@@ -132,6 +132,9 @@ def _collect(subset: dict[str, Any]) -> dict[str, Any]:
     # model_type → list of (sig_key, values, aliases)  — in insertion order
     by_model: dict[str, list[tuple[str, list[str], dict[str, str]]]] = defaultdict(list)
     seen_sigs: set[str] = set()
+    # sig_key → {value: Cisco comment} — merged across every class sharing the
+    # signature (a value may be documented in one class's schema and not another)
+    comments_by_sig: dict[str, dict[str, str]] = defaultdict(dict)
 
     for cls_data in subset.values():
         for prop in cls_data.get("properties", {}).values():
@@ -141,6 +144,8 @@ def _collect(subset: dict[str, Any]) -> dict[str, Any]:
             values: list[str] = prop["values"]
             aliases: dict[str, str] = prop.get("aliases", {})
             key = _sig_key(mt, values)
+            for val, comment in (prop.get("value_comments") or {}).items():
+                comments_by_sig[key].setdefault(val, comment)
             if key not in seen_sigs:
                 seen_sigs.add(key)
                 by_model[mt].append((key, values, aliases))
@@ -151,7 +156,12 @@ def _collect(subset: dict[str, Any]) -> dict[str, Any]:
         base = _class_name(mt)
         for i, (key, values, aliases) in enumerate(entries):
             cls = base if i == 0 else f"{base}{i + 1}"
-            result[key] = {"class_name": cls, "values": values, "aliases": aliases}
+            result[key] = {
+                "class_name": cls,
+                "values": values,
+                "aliases": aliases,
+                "value_comments": comments_by_sig.get(key, {}),
+            }
 
     return result
 
@@ -159,13 +169,20 @@ def _collect(subset: dict[str, Any]) -> dict[str, Any]:
 # ── Code generation ────────────────────────────────────────────────────────────
 
 
-def _render_enum(class_name: str, values: list[str], aliases: dict[str, str]) -> str:
+def _render_enum(
+    class_name: str,
+    values: list[str],
+    aliases: dict[str, str],
+    value_comments: dict[str, str] | None = None,
+) -> str:
     """Render a single StrEnum class definition.
 
     Args:
         class_name: Python class name (PascalCase).
         values:     Sorted list of canonical ``localName`` strings.
         aliases:    Dict mapping numeric aliases to canonical values.
+        value_comments: Optional Cisco descriptions per value, emitted as
+            member docstrings (picked up by IDE hovers and Sphinx).
 
     Returns:
         Python source for one StrEnum class.
@@ -175,6 +192,9 @@ def _render_enum(class_name: str, values: list[str], aliases: dict[str, str]) ->
     for val in values:
         member = _member_name(val)
         lines.append(f'    {member} = "{val}"\n')
+        if comment := (value_comments or {}).get(val):
+            safe = comment.replace('"""', "'''")
+            lines.append(f'    """{safe}"""\n')
 
     if aliases:
         lines.append("\n    @classmethod\n")
@@ -194,18 +214,24 @@ def _render_enum(class_name: str, values: list[str], aliases: dict[str, str]) ->
     return "".join(lines)
 
 
-def _render_single_file(class_name: str, values: list[str], aliases: dict[str, str]) -> str:
+def _render_single_file(
+    class_name: str,
+    values: list[str],
+    aliases: dict[str, str],
+    value_comments: dict[str, str] | None = None,
+) -> str:
     """Render a standalone .py file for one StrEnum class.
 
     Args:
         class_name: Python class name (PascalCase).
         values:     Sorted list of canonical ``localName`` strings.
         aliases:    Dict mapping numeric aliases to canonical values.
+        value_comments: Optional Cisco descriptions per value.
 
     Returns:
         Full Python source for ``{class_name}.py``.
     """
-    return _HEADER_SINGLE + _render_enum(class_name, values, aliases)
+    return _HEADER_SINGLE + _render_enum(class_name, values, aliases, value_comments)
 
 
 def _render_barrel(enum_defs: dict[str, Any]) -> str:
@@ -258,7 +284,9 @@ def main() -> None:
     # Emit one file per StrEnum class.
     for info in enum_defs.values():
         cls = info["class_name"]
-        content = _render_single_file(cls, info["values"], info["aliases"])
+        content = _render_single_file(
+            cls, info["values"], info["aliases"], info.get("value_comments")
+        )
         (ENUMS_DIR / f"{cls}.py").write_text(content)
 
     # Emit _all.py as a backward-compat barrel.

@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class analyticsRcvWindowSzBin(ManagedObject):
     """ACI Managed Object: ``analyticsRcvWindowSzBin`` — Receive window size bin entry.
 
+    Receive window size bin
+
     RN format: ``rcvwindowszbin-{receive_window_size_bin_id}``
     """
 
@@ -34,14 +36,21 @@ class analyticsRcvWindowSzBin(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    receive_window_size_bin_id: Annotated[str, Field(alias="id")]
+    receive_window_size_bin_id: Annotated[str, Field(alias="id", description="Identifier")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
         Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
     ] = ""
-    bin_high_value: Annotated[int, Field(ge=0, le=65535, alias="hi")] = 0
-    bin_low_value: Annotated[int, Field(ge=0, le=65535, alias="lo")] = 0
+    bin_high_value: Annotated[int, Field(ge=0, le=65535, alias="hi", description="High value")] = 0
+    bin_low_value: Annotated[int, Field(ge=0, le=65535, alias="lo", description="Low value")] = 0
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

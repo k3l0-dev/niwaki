@@ -14,6 +14,8 @@ from niwaki.models.base import ManagedObject
 class infraRsFuncToEpg(ManagedObject):
     """ACI Managed Object: ``infraRsFuncToEpg`` — EPGs Using Function.
 
+    A source relation to a set of endpoints.
+
     RN format: ``rsfuncToEpg-[{target_dn}]``
     """
 
@@ -38,12 +40,31 @@ class infraRsFuncToEpg(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    target_dn: Annotated[str, Field(alias="tDn")]
+    target_dn: Annotated[
+        str, Field(alias="tDn", description="The description of the application endpoint group.")
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    encap: str = ""
-    instr_imedcy: FvInstrImedcy = Field(default=FvInstrImedcy.LAZY, alias="instrImedcy")
-    mode: FvMode = FvMode.REGULAR
-    primary_encap: str = Field(default="", alias="primaryEncap")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    encap: Annotated[str, Field(description="The VLAN number encapsulation.")] = ""
+    instr_imedcy: FvInstrImedcy = Field(
+        default=FvInstrImedcy.LAZY,
+        alias="instrImedcy",
+        description="Represents the deployment immediacy preference of the EpG",
+    )
+    mode: FvMode = Field(
+        default=FvMode.REGULAR, description="Represents the mode (native etc.) of the encap"
+    )
+    primary_encap: str = Field(
+        default="",
+        alias="primaryEncap",
+        description="Represents the primary encap when the EPG is isolated",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

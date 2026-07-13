@@ -15,6 +15,8 @@ from niwaki.models.base import ManagedObject
 class statsExportP(ManagedObject):
     """ACI Managed Object: ``statsExportP`` — Export Policy of an User.
 
+    The export policy, which enables you to output statistics collection policy reports in an XML or JSON format. The reports are exported at a specified frequency with an option for gzip file compression.
+
     RN format: ``exp-{export_frequency}``
     """
 
@@ -40,18 +42,42 @@ class statsExportP(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     export_frequency: StatsExportFrequency = Field(
-        default=StatsExportFrequency.STREAM, alias="frequency"
+        default=StatsExportFrequency.STREAM,
+        alias="frequency",
+        description="The frequency with which the system backs up policy information. The option currently available is streaming.",
     )
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    compression_algorithm: MonCompression = Field(default=MonCompression.GZIP, alias="compression")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    compression_algorithm: MonCompression = Field(
+        default=MonCompression.GZIP,
+        alias="compression",
+        description="Compression format for data export",
+    )
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
-    data_format: StatsExportFormat = Field(default=StatsExportFormat.JSON, alias="format")
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    data_format: StatsExportFormat = Field(
+        default=StatsExportFormat.JSON,
+        alias="format",
+        description="The format of the export policy.",
+    )
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
+        ""
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

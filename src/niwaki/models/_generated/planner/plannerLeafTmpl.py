@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class plannerLeafTmpl(ManagedObject):
     """ACI Managed Object: ``plannerLeafTmpl`` — Leaf.
 
+    Leaf Template
+
     RN format: ``leaf-{name}``
     """
 
@@ -38,16 +40,32 @@ class plannerLeafTmpl(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: str
+    name: Annotated[str, Field(description="Don't allow numbers")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    count_of_leafs: Annotated[int, Field(ge=1, le=4000000000, alias="count")] = 1
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    count_of_leafs: Annotated[
+        int, Field(ge=1, le=4000000000, alias="count", description="Count of leafs")
+    ] = 1
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
-    model: PlannerSwitchModel = PlannerSwitchModel.N9K_C9372PX
+    model: PlannerSwitchModel = Field(
+        default=PlannerSwitchModel.N9K_C9372PX, description="Hardware model of the leaf"
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

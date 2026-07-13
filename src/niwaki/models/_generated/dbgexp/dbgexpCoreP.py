@@ -16,6 +16,8 @@ from niwaki.models.base import ManagedObject
 class dbgexpCoreP(ManagedObject):
     """ACI Managed Object: ``dbgexpCoreP`` — Core Export Policy.
 
+    The core policy provides a core file report containing data about the system and the component at the time of the failure.
+
     RN format: ``coreexp-{name}``
     """
 
@@ -44,22 +46,51 @@ class dbgexpCoreP(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the core file export policy.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    administrative_state: TrigExecState = Field(default=TrigExecState.UNTRIGGERED, alias="adminSt")
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    administrative_state: TrigExecState = Field(
+        default=TrigExecState.UNTRIGGERED,
+        alias="adminSt",
+        description="The administrative state of the executable policies.",
+    )
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     apic_path: Annotated[str, Field(max_length=512, alias="apicPath")] = ""
     app_name: Annotated[str, Field(max_length=512, alias="appName")] = ""
     files_to_collect_and_export: DbgexpCollectType = Field(
-        default=DbgexpCollectType.COREONLY, alias="collectType"
+        default=DbgexpCollectType.COREONLY,
+        alias="collectType",
+        description="The collection type for the core file.",
     )
-    compression: MonCompression = MonCompression.NONE
+    compression: MonCompression = Field(
+        default=MonCompression.NONE,
+        description="The compression format for core files. The format can either be gzip or no compression.",
+    )
     export_location: ScalarEnum8 = Field(default=ScalarEnum8.APIC, alias="controllerLocation")
     include_db_metadata_file: bool = Field(default=True, alias="dbMetadata")
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
     export_to_controller: bool = Field(default=False, alias="exportToController")
     export_to_intersight: bool = Field(default=False, alias="exportToIntersight")
@@ -69,4 +100,11 @@ class dbgexpCoreP(ManagedObject):
     ] = ""
     include_pre_upgrade_logs: bool = Field(default=False, alias="upgradeLogs")
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    vendor_name: Annotated[str, Field(max_length=512, alias="vendorName")] = ""
+    vendor_name: Annotated[
+        str,
+        Field(
+            max_length=512,
+            alias="vendorName",
+            description="The SFP transceiver vendor name (ASCII).",
+        ),
+    ] = ""

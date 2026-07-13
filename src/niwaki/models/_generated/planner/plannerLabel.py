@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class plannerLabel(ManagedObject):
     """ACI Managed Object: ``plannerLabel`` — Label.
 
+    Label used to tag EPGs and Nodes
+
     RN format: ``label-{name}``
     """
 
@@ -34,10 +36,17 @@ class plannerLabel(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: str
+    name: Annotated[str, Field(description="Don't allow numbers")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

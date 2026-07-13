@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class apBasePackage(ManagedObject):
     """ACI Managed Object: ``apBasePackage`` — Information about APIC Base Package.
 
+    BasePackage Info
+
     RN format: ``basepkg-{app_ctx_root}``
     """
 
@@ -34,11 +36,20 @@ class apBasePackage(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    app_ctx_root: Annotated[str, Field(min_length=1, max_length=512, alias="appCtxRoot")]
+    app_ctx_root: Annotated[
+        str, Field(min_length=1, max_length=512, alias="appCtxRoot", description="app Context Root")
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    apps: Annotated[str, Field(max_length=512)] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    apps: Annotated[str, Field(max_length=512, description="Apps in Package")] = ""
     name: Annotated[str, Field(min_length=1, max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")

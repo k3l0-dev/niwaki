@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class fvRsBdToEpRet(ManagedObject):
     """ACI Managed Object: ``fvRsBdToEpRet`` — End Point Retention Policy.
 
+    A source relation to the endpoint retention policy providing the parameters for the lifecycle of the endpoint group. This is an internal object.
+
     RN format: ``rsbdToEpRet``
     """
 
@@ -37,11 +39,24 @@ class fvRsBdToEpRet(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     resolve_act: FabricPolResolveAct = Field(
-        default=FabricPolResolveAct.RESOLVE, alias="resolveAct"
+        default=FabricPolResolveAct.RESOLVE, alias="resolveAct", description="null"
     )
     name: Annotated[
-        str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="tnFvEpRetPolName")
+        str,
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            alias="tnFvEpRetPolName",
+            description="The End Point Retention policy name associated with the bridge domain.",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

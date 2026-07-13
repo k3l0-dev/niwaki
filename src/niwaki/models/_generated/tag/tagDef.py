@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class tagDef(ManagedObject):
     """ACI Managed Object: ``tagDef`` — Tag Definition.
 
+    Tags define the label parameters and enables the classifying of the objects that can and cannot communicate with one another.
+
     RN format: ``tag-{name}``
     """
 
@@ -35,10 +37,17 @@ class tagDef(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: str
+    name: Annotated[str, Field(description="The tag name.")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

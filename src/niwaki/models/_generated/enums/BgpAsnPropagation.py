@@ -7,9 +7,13 @@ from enum import StrEnum
 
 class BgpAsnPropagation(StrEnum):
     DUAL_AS = "dual-as"
+    """Dual AS: Accept either real AS or local AS from the ebgp peer"""
     NO_PREPEND = "no-prepend"
+    """No Prepend: Do not prepend local-as to updates from ebgp peers"""
     NONE = "none"
+    """Specify local-as number"""
     REPLACE_AS = "replace-as"
+    """Replace AS: Replace real AS with local AS in the EBGP updates"""
 
     @classmethod
     def _missing_(cls, value: object) -> BgpAsnPropagation | None:

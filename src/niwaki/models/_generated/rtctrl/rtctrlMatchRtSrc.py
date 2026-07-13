@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class rtctrlMatchRtSrc(ManagedObject):
     """ACI Managed Object: ``rtctrlMatchRtSrc`` — Match Route Source Rule.
 
+    The match rule based on a route source.
+
     RN format: ``src-[{match_ip_address}]``
     """
 
@@ -34,17 +36,35 @@ class rtctrlMatchRtSrc(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    match_ip_address: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="ip")]
+    match_ip_address: Annotated[
+        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="ip", description="null")
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    aggregated_route: bool = Field(default=False, alias="aggregate")
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    aggregated_route: bool = Field(default=False, alias="aggregate", description="Aggregated Route")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
-    start_of_prefix_length: str = Field(default="", alias="fromPfxLen")
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    start_of_prefix_length: str = Field(
+        default="", alias="fromPfxLen", description="Prefix list range"
+    )
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
+        ""
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

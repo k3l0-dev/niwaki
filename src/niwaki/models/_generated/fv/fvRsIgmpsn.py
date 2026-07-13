@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class fvRsIgmpsn(ManagedObject):
     """ACI Managed Object: ``fvRsIgmpsn`` — IGMP Snoop Policy.
 
+    A source relation to the Internet Group Management Protocol (IGMP) snooping policy. This is an internal object.
+
     RN format: ``rsigmpsn``
     """
 
@@ -35,8 +37,21 @@ class fvRsIgmpsn(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     name: Annotated[
-        str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="tnIgmpSnoopPolName")
+        str,
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            alias="tnIgmpSnoopPolName",
+            description="The IGMP Snooping policy name. By examining (snooping) IGMP membership report messages from interested hosts, multicast traffic is limited to the subset of VLAN interfaces on which the hosts reside.",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

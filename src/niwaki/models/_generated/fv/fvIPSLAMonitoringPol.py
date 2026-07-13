@@ -42,13 +42,33 @@ class fvIPSLAMonitoringPol(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the object.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies a description of the policy definition.",
+        ),
     ] = ""
     http_method_used_for_probing: FvhttpMethod = Field(default=FvhttpMethod.GET, alias="httpMethod")
     uri_for_http_probing: Annotated[str, Field(max_length=512, alias="httpUri")] = ""
@@ -63,12 +83,20 @@ class fvIPSLAMonitoringPol(ManagedObject):
     owner_key: Annotated[
         str,
         Field(
-            max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerKey"
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerKey",
+            description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
     owner_tag: Annotated[
         str,
-        Field(max_length=64, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerTag"),
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerTag",
+            description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+        ),
     ] = ""
     request_data_size: Annotated[int, Field(ge=0, le=17512, alias="reqDataSize")] = 28
     detect_multiplier: str = Field(default="", alias="slaDetectMultiplier")
@@ -76,5 +104,13 @@ class fvIPSLAMonitoringPol(ManagedObject):
     port: str = Field(default="", alias="slaPort")
     sla_type: FvslaType = Field(default=FvslaType.ICMP, alias="slaType")
     threshold: Annotated[int, Field(ge=0, le=604800000)] = 900
-    operation_timeout: Annotated[int, Field(ge=0, le=604800000, alias="timeout")] = 900
+    operation_timeout: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=604800000,
+            alias="timeout",
+            description="The amount of time between authentication attempts.",
+        ),
+    ] = 900
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

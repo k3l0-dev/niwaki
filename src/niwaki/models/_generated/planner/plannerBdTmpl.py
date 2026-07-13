@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class plannerBdTmpl(ManagedObject):
     """ACI Managed Object: ``plannerBdTmpl`` — BD Template.
 
+    BD template
+
     RN format: ``bd-{name}``
     """
 
@@ -39,17 +41,39 @@ class plannerBdTmpl(ManagedObject):
     name: str
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
-    enable_routing: bool = Field(default=False, alias="enableRouting")
-    legacy_mode_one_vlan_per_bridge_domain: bool = Field(default=False, alias="legacyMode")
-    multicast_groups: Annotated[int, Field(alias="multicastGroups")] = 0
+    enable_routing: bool = Field(default=False, alias="enableRouting", description="Enable Routing")
+    legacy_mode_one_vlan_per_bridge_domain: bool = Field(
+        default=False, alias="legacyMode", description="Legacy Mode (One VLAN per bridge domain)"
+    )
+    multicast_groups: Annotated[
+        int, Field(alias="multicastGroups", description="Count of Multicast Groups")
+    ] = 0
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    omf_disabled: bool = Field(default=False, alias="omfDisabled")
-    shared_bd: bool = Field(default=True, alias="shared")
+    omf_disabled: bool = Field(
+        default=False, alias="omfDisabled", description="Disable Optimized multicast flooding"
+    )
+    shared_bd: bool = Field(
+        default=True,
+        alias="shared",
+        description="Shared BD (EPGs refer this BdTmpl share a single BD)",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

@@ -7,8 +7,11 @@ from enum import StrEnum
 
 class AnalyticsDirectionT(StrEnum):
     BOTH = "both"
+    """Both"""
     IN = "in"
+    """Ingress"""
     OUT = "out"
+    """Egress"""
 
     @classmethod
     def _missing_(cls, value: object) -> AnalyticsDirectionT | None:

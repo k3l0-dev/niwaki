@@ -7,6 +7,7 @@ from enum import StrEnum
 
 class L2EpMoveDetectMode(StrEnum):
     GARP = "garp"
+    """Detection through GARP"""
 
     @classmethod
     def _missing_(cls, value: object) -> L2EpMoveDetectMode | None:

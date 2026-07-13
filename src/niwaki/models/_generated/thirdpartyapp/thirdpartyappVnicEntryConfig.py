@@ -34,11 +34,43 @@ class thirdpartyappVnicEntryConfig(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    interface_index: Annotated[int, Field(ge=0, le=3, alias="guestIntfId")] = 0
+    interface_index: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=3,
+            alias="guestIntfId",
+            description="guest interface identifier in the range of 0 to 3 value '0' will appear as eth0 inside the container",
+        ),
+    ] = 0
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    ipv4_address: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="appIpV4")] = ""
-    ipv6_address: str = Field(default="", alias="appIpV6")
-    connectivity_vrf: Annotated[str, Field(min_length=1, max_length=32, alias="p2pBridgeVrf")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    ipv4_address: Annotated[
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            alias="appIpV4",
+            description="v4 ip address for vnic entry",
+        ),
+    ] = ""
+    ipv6_address: str = Field(
+        default="", alias="appIpV6", description="v6 ip address for vnic entry"
+    )
+    connectivity_vrf: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=32,
+            alias="p2pBridgeVrf",
+            description="point to point bridge vrf name",
+        ),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

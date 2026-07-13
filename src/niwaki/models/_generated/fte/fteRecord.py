@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class fteRecord(ManagedObject):
     """ACI Managed Object: ``fteRecord`` — Configure FTE Record Information.
 
+    FTE Record
+
     RN format: ``record-{name}``
     """
 
@@ -34,31 +36,69 @@ class fteRecord(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the object.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="The description of this configuration item.",
+        ),
     ] = ""
-    dst_ipv4: bool = Field(default=False, alias="dstIpv4")
-    dst_ipv6: bool = Field(default=False, alias="dstIpv6")
-    dst_mac: bool = Field(default=False, alias="dstMac")
-    dst_port_ipv4: bool = Field(default=False, alias="dstPortIpv4")
-    dst_port_ipv6: bool = Field(default=False, alias="dstPortIpv6")
-    ether_type: bool = Field(default=False, alias="etherType")
-    flow_label: bool = Field(default=False, alias="flowLabel")
+    dst_ipv4: bool = Field(
+        default=False, alias="dstIpv4", description="Match ipv4 destination address"
+    )
+    dst_ipv6: bool = Field(
+        default=False, alias="dstIpv6", description="Match ipv6 destination address"
+    )
+    dst_mac: bool = Field(
+        default=False, alias="dstMac", description="Match datalink mac destination address"
+    )
+    dst_port_ipv4: bool = Field(
+        default=False, alias="dstPortIpv4", description="Match ipv4 transport destination-port"
+    )
+    dst_port_ipv6: bool = Field(
+        default=False, alias="dstPortIpv6", description="Match ipv6 transport destination-port"
+    )
+    ether_type: bool = Field(
+        default=False, alias="etherType", description="Match datalink ethertype"
+    )
+    flow_label: bool = Field(default=False, alias="flowLabel", description="Match ipv6 flow-label")
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    proto_ipv4: bool = Field(default=False, alias="protoIpv4")
-    proto_ipv6: bool = Field(default=False, alias="protoIpv6")
-    src_ipv4: bool = Field(default=False, alias="srcIpv4")
-    src_ipv6: bool = Field(default=False, alias="srcIpv6")
-    src_mac: bool = Field(default=False, alias="srcMac")
-    src_port_ipv4: bool = Field(default=False, alias="srcPortIpv4")
-    src_port_ipv6: bool = Field(default=False, alias="srcPortIpv6")
-    tos_ipv4: bool = Field(default=False, alias="tosIpv4")
-    tos_ipv6: bool = Field(default=False, alias="tosIpv6")
+    proto_ipv4: bool = Field(default=False, alias="protoIpv4", description="Match ipv4protocol")
+    proto_ipv6: bool = Field(default=False, alias="protoIpv6", description="Match ipv6protocol")
+    src_ipv4: bool = Field(default=False, alias="srcIpv4", description="Match ipv4 source address")
+    src_ipv6: bool = Field(default=False, alias="srcIpv6", description="Match ipv6 source address")
+    src_mac: bool = Field(
+        default=False, alias="srcMac", description="Match datalink mac source address"
+    )
+    src_port_ipv4: bool = Field(
+        default=False, alias="srcPortIpv4", description="Match ipv4 transport source-port"
+    )
+    src_port_ipv6: bool = Field(
+        default=False, alias="srcPortIpv6", description="Match ipv6 transport source-port"
+    )
+    tos_ipv4: bool = Field(default=False, alias="tosIpv4", description="Match ipv4 tos")
+    tos_ipv6: bool = Field(default=False, alias="tosIpv6", description="Match ipv6 tos")
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

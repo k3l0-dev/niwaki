@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class infraProvAcc(ManagedObject):
     """ACI Managed Object: ``infraProvAcc`` — Vlan Encapsulation for Vxlan Traffic.
 
+    The provider access function is defined when the hypervisor is using an encapsulation protocol, such as VxLAN/NVGRE, and provides the policies to impacting VxLAN/NvGRE packets from NVGRE. You do not need to provide the encapsulation VLAN and endpoint for the provider access function.
+
     RN format: ``provacc``
     """
 
@@ -37,12 +39,31 @@ class infraProvAcc(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    name: Annotated[
+        str,
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The provider access encapsulation name. This name can be up to 64 alphanumeric characters. Note that you cannot change this name after the object has been saved.",
+        ),
+    ] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

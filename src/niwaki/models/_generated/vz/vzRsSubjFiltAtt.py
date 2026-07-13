@@ -14,6 +14,8 @@ from niwaki.models.base import ManagedObject
 class vzRsSubjFiltAtt(ManagedObject):
     """ACI Managed Object: ``vzRsSubjFiltAtt`` — Subject Filter.
 
+    The filter for the subject of a service contract. A subject represents a sub-application running behind an endpoint group, such as an exchange server. A subject is parented by the contract.
+
     RN format: ``rssubjFiltAtt-{name}``
     """
 
@@ -46,8 +48,17 @@ class vzRsSubjFiltAtt(ManagedObject):
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    action: VzBinaryAction = VzBinaryAction.PERMIT
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    action: VzBinaryAction = Field(
+        default=VzBinaryAction.PERMIT, description="The action required when the condition is met."
+    )
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     directives: str = ""
     priority_override: VzPriorityLevel = Field(
         default=VzPriorityLevel.DEFAULT, alias="priorityOverride"

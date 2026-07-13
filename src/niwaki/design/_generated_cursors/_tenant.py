@@ -120,7 +120,22 @@ class _TenantMakers(Cursor):
         priority: QosTenantPrio | str | None = None,
         userdom: str | None = None,
     ) -> AppCursor:
-        """Declare a ``fvAp`` child under the tenant level."""
+        """Declare a ``fvAp`` child under the tenant level.
+
+        The application profile is a set of requirements that an application instance has on the
+        virtualizable fabric. The policy regulates connectivity and visibility among endpoints
+        within the scope of the policy.
+
+        Args:
+            name: The name of the application profile.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition root.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            priority: The priority class identifier. Values: ``level1``, ``level2``, ``level3``,
+                ``level4``, ``level5``, ``level6``, ``unspecified``. Default: ``unspecified``.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -169,7 +184,69 @@ class _TenantMakers(Cursor):
         unknown_v6_multicast_destination_action: L2UnkMcastAct | str | None = None,
         virtual_mac_address: str | None = None,
     ) -> BdCursor:
-        """Declare a ``fvBD`` child under the tenant level."""
+        """Declare a ``fvBD`` child under the tenant level.
+
+        A bridge domain is a unique layer 2 forwarding domain that contains one or more subnets.
+        Each bridge domain must be linked to a context.
+
+        Args:
+            name: The bridge domain name.
+            optimize_wan_bandwidth_between_sites: OptimizeWanBandwidth flag is enabled between
+                sites Default: ``False``.
+            annotation: User annotation. Suggested format orchestrator:value
+            arp_flooding: A property to specify whether ARP flooding is enabled. If flooding is
+                disabled, unicast routing will be performed on the target IP address. Default:
+                ``False``.
+            description: Specifies a description of the policy definition root.
+            enable_rogue_except_mac: rogue exception mac wildcard support at bd level Default:
+                ``False``.
+            clear_endpoints: Represents the parameter used by the node (i.e. Leaf) to clear all
+                EPs in all leaves for this BD. Default: ``False``.
+            ep_move_detection_mode: The End Point move detection option uses the Gratuitous
+                Address Resolution Protocol (GARP). A gratuitous ARP is an ARP broadcast-type of
+                packet that is used to verify that no other device on the network has the same
+                IP address as the sending device. Values: ``garp``. Default: ``garp``.
+            bd_host_based_routing: Enables advertising host routes (/32 prefixes) out of the
+                L3OUT(s) that are associated to this BD. Default: ``False``.
+            allow_bum_traffic_between_sites: Control whether BUM traffic is allowed between
+                sites Default: ``False``.
+            allow_l2stretch_between_sites: l2Stretch flag is enabled between sites Default:
+                ``False``.
+            ip_learning: Default: ``True``.
+            ipv6_multicast_allow: Multicast. Flag to indicate if ipv6 multicast is enabled
+                Default: ``False``.
+            limit_ip_learning_to_bd_subnets_only: Limits IP address learning to the bridge
+                domain subnets only. Every BD can have multiple subnets associated with it. By
+                default, all IPs are learned. Default: ``True``.
+            ipv6_link_local_address: The override of the system generated IPv6 link-local
+                address.
+            mac_address: The MAC address of the bridge domain (BD) or switched virtual interface
+                (SVI). Every BD by default takes the fabric-wide default MAC address. You can
+                override that address with a different one. By default the BD will take a
+                00:22:BD:F8:19:FF mac address.
+            bd_rogue_mcast_arp_packet_drop: rogue mcast ARP packet drop Default: ``True``.
+            multicast_allow: Multicast. Flag to indicate if multicast is enabled Default:
+                ``False``.
+            multi_destination_packet_action: The multiple destination forwarding method for L2
+                Multicast, Broadcast, and Link Layer traffic types. Values: ``bd-flood``,
+                ``drop``, ``encap-flood``. Default: ``bd-flood``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            disable_routing_on_service_bd: Disable Routing on service BD Default: ``False``.
+            type: domain type Values: ``fc``, ``regular``. Default: ``regular``.
+            unicast_routing: The forwarding method based on predefined forwarding criteria (IP
+                or MAC address). Default: ``True``.
+            unknown_mac_unicast_action: The forwarding method for unknown layer 2 destinations.
+                Values: ``flood``, ``proxy``. Default: ``proxy``.
+            unknown_multicast_destination_action: The parameter used by the node (i.e. a leaf)
+                for forwarding data for an unknown multicast destination. Values: ``flood``,
+                ``opt-flood``. Default: ``flood``.
+            unknown_v6_multicast_destination_action: Values: ``flood``, ``opt-flood``. Default:
+                ``flood``.
+            virtual_mac_address: Virtual MAC address of the BD/SVI. This is used when the BD is
+                extended to multiple sites using l2 Outside.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -201,7 +278,28 @@ class _TenantMakers(Cursor):
         userdom: str | None = None,
         vrf_index: int | None = None,
     ) -> VrfCursor:
-        """Declare a ``fvCtx`` child under the tenant level."""
+        """Declare a ``fvCtx`` child under the tenant level.
+
+        The private layer 3 network context that belongs to a specific tenant or is shared.
+
+        Args:
+            name: A name for the network context.
+            annotation: User annotation. Suggested format orchestrator:value
+            bd_enforcement_status: BD Enforced Flag Default: ``False``.
+            description: Specifies a description of the policy definition root.
+            data_plane_learning: Values: ``disabled``, ``enabled``. Default: ``enabled``.
+            known_multicast_action: Values: ``deny``, ``permit``. Default: ``permit``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            policy_enforcement_direction: Policy Control Enforcement Direction. It is used for
+                defining policy enforcemnt direction for the traffic coming to or from an L3Out.
+                Egress and Ingress directions are wrt L3Out. Default will be Ingress. Values:
+                ``egress``, ``ingress``, ``mixed``. Default: ``ingress``.
+            policy_control_enforcement: Values: ``enforced``, ``unenforced``. Default:
+                ``enforced``.
+            vrf_index: Default: ``0``.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -230,7 +328,25 @@ class _TenantMakers(Cursor):
         out_level_dscp: str | None = None,
         userdom: str | None = None,
     ) -> L3outCursor:
-        """Declare a ``l3extOut`` child under the tenant level."""
+        """Declare a ``l3extOut`` child under the tenant level.
+
+        The L3 outside policy controls connectivity to the outside.
+
+        Args:
+            name: The name for the policy controlling connectivity to the outside. This name can
+                be up to 64 alphanumeric characters. Note that you cannot change this name after
+                the object has been saved.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition root.
+            enforce_rtctrl: The enforce route control type.
+            indicate_whether_mpls_is_enabled_or_not: Indiscate whether MPLS is enabled or not
+                Default: ``False``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            out_level_dscp: The target differentiated services code point (DSCP) of the path
+                attached to the layer 3 outside profile.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -256,7 +372,21 @@ class _TenantMakers(Cursor):
         owner_tag: str | None = None,
         userdom: str | None = None,
     ) -> FilterCursor:
-        """Declare a ``vzFilter`` child under the tenant level."""
+        """Declare a ``vzFilter`` child under the tenant level.
+
+        A filter policy is a group of resolvable filter entries. Each filter entry is a combination
+        of network traffic classification properties.
+
+        Args:
+            name: The name of a filter policy. This name can be up to 64 alphanumeric
+                characters. Note that you cannot change this name after the object has been
+                saved.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -287,7 +417,35 @@ class _TenantMakers(Cursor):
         contract_level_dscp: str | None = None,
         userdom: str | None = None,
     ) -> ContractCursor:
-        """Declare a ``vzBrCP`` child under the tenant level."""
+        """Declare a ``vzBrCP`` child under the tenant level.
+
+        A contract is a logical container for the subjects which relate to the filters that govern
+        the rules for communication between endpoint groups (EPGs). Without a contract, the default
+        forwarding policy is to not allow any communication between EPGs but all communication
+        within an EPG is allowed.
+
+        Args:
+            name: Name of a contract to apply between two or more EPGs under the Application
+                Profile.
+            annotation: User annotation. Suggested format orchestrator:value
+            az_network_security_group_rule: A Contract can depend on a subject exposed by
+                another contract. Example: An application contract can depened on a Web/DB
+                subject exposed by another contract. A contract consuming entity, consumes all
+                the dependencies as well. TODO: How to detect dependency loops?
+            description: Specifies a description of the policy definition.
+            intent: Values: ``estimate_add``, ``estimate_delete``, ``install``. Default:
+                ``install``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            qos_class_id: null Values: ``level1``, ``level2``, ``level3``, ``level4``,
+                ``level5``, ``level6``, ``unspecified``. Default: ``unspecified``.
+            scope: Represents the scope of this contract. If the scope is set as application-
+                profile, the epg can only communicate with epgs in the same application-profile
+                Values: ``application-profile``, ``context``, ``global``, ``tenant``. Default:
+                ``context``.
+            contract_level_dscp: contract level dscp value
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -322,7 +480,49 @@ class _TenantMakers(Cursor):
         userdom: str | None = None,
         transmit_delay: str | None = None,
     ) -> OspfInterfacePolicyCursor:
-        """Declare a ``ospfIfPol`` child under the tenant level."""
+        """Declare a ``ospfIfPol`` child under the tenant level.
+
+        The OSPF interface-level policy information.
+
+        Args:
+            name: The OSPF interface policy name. This name can be between 1 and 64 alphanumeric
+                characters. Note that you cannot change this name after the object has been
+                saved.
+            annotation: User annotation. Suggested format orchestrator:value
+            cost_of_interface: The OSPF cost for the interface. The cost (also called metric) of
+                an interface in OSPF is an indication of the overhead required to send packets
+                across a certain interface. The cost of an interface is inversely proportional
+                to the bandwidth of that interface.
+            interface_controls: The interface policy controls.
+            dead_interval: The interval between hello packets from a neighbor before the router
+                declares the neighbor as down. This value must be the same for all networking
+                devices on a specific network.
+            description: Specifies a description of the policy definition.
+            hello_interval: The interval between hello packets that OSPF sends on the interface.
+                Note that the smaller the hello interval, the faster topological changes will be
+                detected, but more routing traffic will ensue. This value must be the same for
+                all routers and access servers on a specific network.
+            network_type: The OSPF interface policy network type. OSPF supports point-to-point
+                and broadcast. Values: ``bcast``, ``p2p``, ``unspecified``. Default:
+                ``unspecified``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            prefix_suppression: prefix suppression Values: ``disable``, ``enable``, ``inherit``.
+                Default: ``inherit``.
+            prioriity: The OSPF interface priority used to determine the designated router (DR)
+                on a specific network. The router with the highest OSPF priority on a segment
+                will become the DR for that segment. The same process is repeated for the backup
+                designated router (BDR).
+            retransmit_interval: The interval between LSA retransmissions. The retransmit
+                interval occurs while the router is waiting for an acknowledgement from the
+                neighbor router that it received the LSA. If no acknowlegment is received at the
+                end of the interval, then the LSA is resent.
+            transmit_delay: The delay time needed to send an LSA update packet. OSPF increments
+                the LSA age time by the transmit delay amount before transmitting the LSA
+                update. You should take into account the transmission and propagation delays for
+                the interface when you set this value.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -354,7 +554,30 @@ class _TenantMakers(Cursor):
         owner_tag: str | None = None,
         userdom: str | None = None,
     ) -> EigrpInterfacePolicyCursor:
-        """Declare a ``eigrpIfPol`` child under the tenant level."""
+        """Declare a ``eigrpIfPol`` child under the tenant level.
+
+        The EIGRP interface policy, which defines a common configuration that will apply to one or
+        more EIGRP interfaces.
+
+        Args:
+            name: The name of the object.
+            annotation: User annotation. Suggested format orchestrator:value
+            eigrp_interface_bandwidth: EIGRP bandwidth in kbps, overrides the bandwidth
+                configured on an interface. Used to influence path selection Default: ``0``.
+            interface_controls: The control state. Values: ``bfd``, ``nh-self``, ``passive``,
+                ``split-horizon``. Default: ``bfd``.
+            eigrp_interface_delay: EIGRP throughput delay, overrides the delay configured on an
+                interface. Used to influence path selection Default: ``0``.
+            units_for_eigrp_interface_delay: EIGRP delay units, Wide metrics can use picosecond
+                accuracy for delay Values: ``pico``, ``tens-of-micro``. Default: ``tens-of-
+                micro``.
+            description: Specifies a description of the policy definition.
+            hello_interval: The hello interval.
+            hold_interval: The period of time before declaring that the neighbor is down.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -383,7 +606,21 @@ class _TenantMakers(Cursor):
         hsrp_reload_delay: str | None = None,
         userdom: str | None = None,
     ) -> HsrpInterfacePolicyCursor:
-        """Declare a ``hsrpIfPol`` child under the tenant level."""
+        """Declare a ``hsrpIfPol`` child under the tenant level.
+
+        Interface-level hsrp policy
+
+        Args:
+            name: The name of the object.
+            annotation: User annotation. Suggested format orchestrator:value
+            controls: Interface controls
+            hsrp_interface_delay: Interface delay
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            hsrp_reload_delay: Reload delay
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -420,7 +657,31 @@ class _TenantMakers(Cursor):
         authentication_type: HsrpAuthT | str | None = None,
         userdom: str | None = None,
     ) -> HsrpGroupPolicyCursor:
-        """Declare a ``hsrpGroupPol`` child under the tenant level."""
+        """Declare a ``hsrpGroupPol`` child under the tenant level.
+
+        Hsrp Group Policy
+
+        Args:
+            name: The name of the object.
+            annotation: User annotation. Suggested format orchestrator:value
+            group_control_bits: HSRP Group Control Bits
+            description: Specifies a description of the policy definition.
+            hello_interval: HSRP Hello packet interval Default: ``3000``.
+            hold_interval: HSRP Hold interval Default: ``10000``.
+            authentication_key: Authentication key
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            miminum_delay_before_preempt: HSRP Group's Minimum Preemption delay
+            preempt_delay_after_a_switch_reload: Preemption delay after switch reboot
+            wait_for_ip_redundancy_clients: Maximum number of seconds to allow IPredundancy
+                clients to prevent preemption
+            group_priority: Grouph Priority
+            secure_authentication_key: Secure Authentication key
+            authentication_key_timeout: Authentication timeout
+            authentication_type: Authentication type Values: ``md5``, ``simple``. Default:
+                ``simple``.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -457,7 +718,29 @@ class _TenantMakers(Cursor):
         userdom: str | None = None,
         version: IpmcifVer | str | None = None,
     ) -> IgmpInterfacePolicyCursor:
-        """Declare a ``igmpIfPol`` child under the tenant level."""
+        """Declare a ``igmpIfPol`` child under the tenant level.
+
+        Interface-level IGMP policy
+
+        Args:
+            name: The name of the object.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            group_timeout: Group Timeout
+            controls: Interface Control
+            last_member_query_count: Last member query count
+            last_member_response_time: Last member response time
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            querier_timeout: Querier timeout
+            query_interval: Query interval
+            robustness_factor: Robustness factor
+            response_interval: Query response interval
+            startup_query_count: Startup Query Count
+            startup_query_interval: Startup query interval
+            version: Interface version Values: ``v2``, ``v3``. Default: ``v2``.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -490,7 +773,26 @@ class _TenantMakers(Cursor):
         secure_authentication_key: str | None = None,
         userdom: str | None = None,
     ) -> PimInterfacePolicyCursor:
-        """Declare a ``pimIfPol`` child under the tenant level."""
+        """Declare a ``pimIfPol`` child under the tenant level.
+
+        Interface-level PIM-SM (sparse mode) policy.
+
+        Args:
+            name: Interface-level PIM-SM (sparse mode) policy name.
+            annotation: User annotation. Suggested format orchestrator:value
+            authentication_type: Authentication Type Values: ``ah-md5``, ``none``. Default:
+                ``none``.
+            interface_controls: Interface controls
+            description: Specifies a description of the policy definition.
+            designated_router_delay: Designated Router Delay
+            designated_router_priority: Designated Router Priority Default: ``1``.
+            hello_interval: Hello Traffic Policy Default: ``30000``.
+            join_prune_interval_seconds: JP Traffic Policy
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            secure_authentication_key: Secure Authentication key
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -523,7 +825,27 @@ class _TenantMakers(Cursor):
         owner_tag: str | None = None,
         userdom: str | None = None,
     ) -> BfdInterfacePolicyCursor:
-        """Declare a ``bfdIfPol`` child under the tenant level."""
+        """Declare a ``bfdIfPol`` child under the tenant level.
+
+        Interface-level bfd policy
+
+        Args:
+            name: Naming property — forms the object's RN.
+            enable_disable_sessions: Enable/Disable sessions Values: ``disabled``, ``enabled``.
+                Default: ``enabled``.
+            annotation: User annotation. Suggested format orchestrator:value
+            interface_controls: Interface controls
+            description: Specifies a description of the policy definition.
+            detection_multiplier: Detection multiplier.
+            enable_disable_echo_mode: Enable/Disable Echo mode. Values: ``disabled``,
+                ``enabled``. Default: ``enabled``.
+            echo_rx_interval: Echo rx interval.
+            required_minimum_rx_interval: Required minimum rx interval.
+            desired_minimum_tx_interval: Desired minimum tx interval.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -553,7 +875,23 @@ class _TenantMakers(Cursor):
         owner_tag: str | None = None,
         userdom: str | None = None,
     ) -> BfdMhInterfacePolicyCursor:
-        """Declare a ``bfdMhIfPol`` child under the tenant level."""
+        """Declare a ``bfdMhIfPol`` child under the tenant level.
+
+        Interface-level Mh bfd policy
+
+        Args:
+            name: The name of the object.
+            enable_disable_sessions: Enable/Disable sessions Values: ``disabled``, ``enabled``.
+                Default: ``enabled``.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            detection_multiplier: Detection multiplier.
+            required_minimum_rx_interval: Required minimum rx interval.
+            desired_minimum_tx_interval: Desired minimum tx interval.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -583,7 +921,23 @@ class _TenantMakers(Cursor):
         owner_tag: str | None = None,
         userdom: str | None = None,
     ) -> BfdMultihopNodePolicyCursor:
-        """Declare a ``bfdMhNodePol`` child under the tenant level."""
+        """Declare a ``bfdMhNodePol`` child under the tenant level.
+
+        Node-level Mh bfd policy
+
+        Args:
+            name: The name of the object.
+            enable_disable_sessions: Enable/Disable sessions Values: ``disabled``, ``enabled``.
+                Default: ``enabled``.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            detection_multiplier: Detection multiplier.
+            required_minimum_rx_interval: Required minimum rx interval.
+            desired_minimum_tx_interval: Desired minimum tx interval.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -613,7 +967,31 @@ class _TenantMakers(Cursor):
         warning_threshold: str | None = None,
         userdom: str | None = None,
     ) -> BgpPeerPrefixPolicyCursor:
-        """Declare a ``bgpPeerPfxPol`` child under the tenant level."""
+        """Declare a ``bgpPeerPfxPol`` child under the tenant level.
+
+        The peer prefix policy defines how many prefixes can be received from a neighbor and the
+        action to take when the number of allowed prefixes is exceeded. This feature is commonly
+        used for external BGP peers, but can also be applied to internal BGP peers.
+
+        Args:
+            name: The peer prefix policy name. This name can be up to 64 alphanumeric
+                characters.
+            max_prefix_action: Action to be performed when the maximum prefix limit is reached.
+                Values: ``log``, ``reject``, ``restart``, ``shut``. Default: ``reject``.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            max_number_of_prefixes: Maximum number of prefixes allowed from the peer. Default:
+                ``20000``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            prefix_limit_restart_time: The period of time in minutes before restarting the peer
+                when the prefix limit is reached.
+            warning_threshold: The threshold percentage of the maximum number of prefixes before
+                a warning is issued. For example, if the maximum number of prefixes is 10 and
+                the threshold is 70%, a warning is issued when the number of prefixes exceeds 7
+                (70%).
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -638,7 +1016,15 @@ class _TenantMakers(Cursor):
         display_name: str | None = None,
         userdom: str | None = None,
     ) -> BgpBestPathControlPolicyCursor:
-        """Declare a ``bgpBestPathCtrlPol`` child under the tenant level."""
+        """Declare a ``bgpBestPathCtrlPol`` child under the tenant level.
+
+        Args:
+            name: The name of the object.
+            annotation: User annotation. Suggested format orchestrator:value
+            best_path_control: Best Path control Values: ``asPathMultipathRelax``. Default:
+                ``asPathMultipathRelax``.
+            description: Specifies the description of a policy component.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -669,7 +1055,30 @@ class _TenantMakers(Cursor):
         stale_interval: str | None = None,
         userdom: str | None = None,
     ) -> BgpTimersPolicyCursor:
-        """Declare a ``bgpCtxPol`` child under the tenant level."""
+        """Declare a ``bgpCtxPol`` child under the tenant level.
+
+        The BGP timers policy uses timers to control periodic activities such as the frequency
+        keepalive messages that are sent to its peer, the amount of time the system waits to declare
+        a peer dead after keepalive messages stop being received, and the amount of time before
+        restarting a dead peer.
+
+        Args:
+            name: The context level policy name. This name can be up to 64 alphanumeric
+                characters.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            graceful_restart_controls: A property to determine whether the entity functions only
+                as a graceful restart helper, forwarding prefixes pointing to a restarting peer,
+                or whether graceful restart is enabled completely.
+            hold_interval: The time period to wait before declaring the neighbor device down.
+            keepalive_interval: The interval time between sending keepalive messages.
+            max_as_limit: Maximum AS limit, to discard routes that have excessive AS numbers
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            stale_interval: Maximum time that BGP keeps stale routes from the restarting BGP
+                peer.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -698,7 +1107,19 @@ class _TenantMakers(Cursor):
         owner_tag: str | None = None,
         userdom: str | None = None,
     ) -> BgpRouteSummarizationPolicyCursor:
-        """Declare a ``bgpRtSummPol`` child under the tenant level."""
+        """Declare a ``bgpRtSummPol`` child under the tenant level.
+
+        Args:
+            name: The name of the object.
+            address_type_af_controls: Ucast/Mcast Addr Type AF Control
+            annotation: User annotation. Suggested format orchestrator:value
+            route_summarization_attribute_route_map: Summary attribute map
+            summary_control: Summary controlTODO: CHECK if this is user configurable
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -724,7 +1145,16 @@ class _TenantMakers(Cursor):
         owner_tag: str | None = None,
         userdom: str | None = None,
     ) -> EigrpRouteSummarizationPolicyCursor:
-        """Declare a ``eigrpRtSummPol`` child under the tenant level."""
+        """Declare a ``eigrpRtSummPol`` child under the tenant level.
+
+        Args:
+            name: The name of the object.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -753,7 +1183,21 @@ class _TenantMakers(Cursor):
         summary_route_tag: int | None = None,
         userdom: str | None = None,
     ) -> OspfRouteSummarizationPolicyCursor:
-        """Declare a ``ospfRtSummPol`` child under the tenant level."""
+        """Declare a ``ospfRtSummPol`` child under the tenant level.
+
+        External Route summarization abstract policy
+
+        Args:
+            name: The name of the object.
+            annotation: User annotation. Suggested format orchestrator:value
+            area_range_cost: Route summary cost Default: ``0``.
+            description: Specifies a description of the policy definition.
+            inter_area_summarization_enabled: Default: ``False``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            summary_route_tag: Route summary tag Default: ``0``.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -779,7 +1223,21 @@ class _TenantMakers(Cursor):
         owner_tag: str | None = None,
         userdom: str | None = None,
     ) -> DhcpOptionPolicyCursor:
-        """Declare a ``dhcpOptionPol`` child under the tenant level."""
+        """Declare a ``dhcpOptionPol`` child under the tenant level.
+
+        The DHCP option policy, which defines lease duration, gateway routers, and other
+        configuration parameters in what are called DHCP options. Every DHCP server must have one or
+        more policies defined for it.
+
+        Args:
+            name: The DHCP option policy name. This name can be up to 64 alphanumeric
+                characters.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -817,7 +1275,45 @@ class _TenantMakers(Cursor):
         retransmit_timer: int | None = None,
         userdom: str | None = None,
     ) -> NdInterfacePolicyCursor:
-        """Declare a ``ndIfPol`` child under the tenant level."""
+        """Declare a ``ndIfPol`` child under the tenant level.
+
+        The neighbor discovery interface policy defines a common configuration that will apply to
+        one or more neighbor discovery interfaces.
+
+        Args:
+            name: The name of the object.
+            annotation: User annotation. Suggested format orchestrator:value
+            controls: The control state.
+            description: Specifies a description of the policy definition.
+            hop_limit: The hop limit is used by hosts in outgoing packets and link parameters
+                such as the link MTU. This facilitates centralized administration of critical
+                parameters that can be set on routers and automatically propagated to all
+                attached hosts.
+            mtu: In the RA message, the maximum transmission unit (MTU) value that a host should
+                use in packets that it originates.
+            neighbor_solicit_interval: The neighbor solicitation interval is sent by a node to
+                determine the link-layer address of a neighbor, or to verify that a neighbor is
+                still reachable through a cached link-layer address. Neighbor solicitations are
+                also used for duplicate address detection. Default: ``1000``.
+            neighbor_solicit_retry_count: The retransmission retry count for for sending
+                neighbor solicitation messages.
+            nud_retry_base: Retransmission base for NUD neighbor solication messages
+            nud_retry_interval: Retransmission interval between NUD neighbor solication messages
+                Default: ``1000``.
+            nud_retry_max_attempts: Retransmission maximum number of attempts for NUD neighbor
+                solication messages
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            router_advertisement_interval: The interval for sending router advertisement
+                messages.
+            router_advertisement_lifetime: The lifetime associated with the default router.
+            reachable_time: The reachable time, which is the time in milliseconds that a node
+                assumes a neighbor is reachable after receiving a reachability confirmation.
+                Default: ``0``.
+            retransmit_timer: The retransmit timer has the time in milliseconds between
+                retransmitted neighbor solicitation messages. Default: ``0``.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -846,7 +1342,22 @@ class _TenantMakers(Cursor):
         preferred_lifetime: int | None = None,
         userdom: str | None = None,
     ) -> NdRaPrefixPolicyCursor:
-        """Declare a ``ndPfxPol`` child under the tenant level."""
+        """Declare a ``ndPfxPol`` child under the tenant level.
+
+        The neighbor discovery prefix policy.
+
+        Args:
+            name: The name of the object.
+            annotation: User annotation. Suggested format orchestrator:value
+            prefix_controls: The RA prefix controls.
+            description: Specifies a description of the policy definition.
+            valid_lifetime: The length of time for the prefix to remain valid. Default:
+                ``2592000``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            preferred_lifetime: The preferred lifetime of the prefix. Default: ``604800``.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -873,7 +1384,18 @@ class _TenantMakers(Cursor):
         owner_tag: str | None = None,
         userdom: str | None = None,
     ) -> ArpInterfacePolicyCursor:
-        """Declare a ``arpIfPol`` child under the tenant level."""
+        """Declare a ``arpIfPol`` child under the tenant level.
+
+        Args:
+            name: The name of the object.
+            annotation: User annotation. Suggested format orchestrator:value
+            interface_controls_for_arp: Interface controls Values: ``garp-adj-enable``,
+                ``unspecified``. Default: ``unspecified``.
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -899,7 +1421,20 @@ class _TenantMakers(Cursor):
         owner_tag: str | None = None,
         userdom: str | None = None,
     ) -> CustomQosPolicyCursor:
-        """Declare a ``qosCustomPol`` child under the tenant level."""
+        """Declare a ``qosCustomPol`` child under the tenant level.
+
+        The custom QoS policy enables different levels of service to be assigned to network traffic,
+        including specifications for the Differentiated Services Code Point (DSCP) value(s), and the
+        802.1p Dot1p priority.
+
+        Args:
+            name: The policy name.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -925,7 +1460,18 @@ class _TenantMakers(Cursor):
         owner_tag: str | None = None,
         userdom: str | None = None,
     ) -> TenantKeychainPolicyCursor:
-        """Declare a ``fvKeyChainPol`` child under the tenant level."""
+        """Declare a ``fvKeyChainPol`` child under the tenant level.
+
+        KeyChain Policy
+
+        Args:
+            name: The name of the object.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -951,7 +1497,16 @@ class _TenantMakers(Cursor):
         owner_tag: str | None = None,
         userdom: str | None = None,
     ) -> MplsInterfacePolicyCursor:
-        """Declare a ``mplsIfPol`` child under the tenant level."""
+        """Declare a ``mplsIfPol`` child under the tenant level.
+
+        Args:
+            name: The name of the object.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -981,7 +1536,20 @@ class _TenantMakers(Cursor):
         owner_tag: str | None = None,
         userdom: str | None = None,
     ) -> MplsGlobalConfigurationCursor:
-        """Declare a ``mplsLabelPol`` child under the tenant level."""
+        """Declare a ``mplsLabelPol`` child under the tenant level.
+
+        Args:
+            name: The name of the object.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            mpls_maximum_dynamic_label: Default: ``525286``.
+            mpls_maximum_static_label: Default: ``0``.
+            mpls_minimum_dynamic_label: MPLS Label Dynamic Range Default: ``16``.
+            mpls_minimum_static_label: MPLS Label Static Range Default: ``0``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -1005,7 +1573,15 @@ class _TenantMakers(Cursor):
         display_name: str | None = None,
         userdom: str | None = None,
     ) -> MatchRuleCursor:
-        """Declare a ``rtctrlSubjP`` child under the tenant level."""
+        """Declare a ``rtctrlSubjP`` child under the tenant level.
+
+        The subject profile.
+
+        Args:
+            name: null
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -1029,7 +1605,16 @@ class _TenantMakers(Cursor):
         display_name: str | None = None,
         userdom: str | None = None,
     ) -> ActionRuleProfileCursor:
-        """Declare a ``rtctrlAttrP`` child under the tenant level."""
+        """Declare a ``rtctrlAttrP`` child under the tenant level.
+
+        The action rule profile, which specifies actions for events that meet a configured action
+        rule.
+
+        Args:
+            name: The action rule name.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -1062,7 +1647,24 @@ class _TenantMakers(Cursor):
         owner_tag: str | None = None,
         userdom: str | None = None,
     ) -> BgpAddressFamilyContextPolicyCursor:
-        """Declare a ``bgpCtxAfPol`` child under the tenant level."""
+        """Declare a ``bgpCtxAfPol`` child under the tenant level.
+
+        Args:
+            name: The name of the policy.
+            annotation: User annotation. Suggested format orchestrator:value
+            controls: The control state.
+            description: Specifies a description of the policy definition.
+            ebgp_distance: The administrative distance of eBGP routes.
+            ibgp_distance: The administrative distance of iBGP routes.
+            local_distance: The administrative distance of local routes.
+            max_ecmp_for_ebgp_routes: eBGP max-path
+            max_ecmp_for_ibgp_routes: iBGP max-path
+            max_local_ecmp_for_redistribute_rotes: Maximum number of equal-cost local paths for
+                redist
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -1093,7 +1695,28 @@ class _TenantMakers(Cursor):
         owner_tag: str | None = None,
         userdom: str | None = None,
     ) -> EigrpAddressFamilyContextPolicyCursor:
-        """Declare a ``eigrpCtxAfPol`` child under the tenant level."""
+        """Declare a ``eigrpCtxAfPol`` child under the tenant level.
+
+        An EIGRP context policy can be applied on one or more contexts under the tenant. EIGRP
+        context policies can be enabled on a context through a relation in the context per address
+        family.
+
+        Args:
+            name: The EIGRP Address Family Context policy name.
+            active_timer: The active timer interval, which specifies the length of time an EIGRP
+                route can stay in the Active state without a best path. When the time ends, the
+                route is moved to the Stuck-In-Active state.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            external_distance: The administrative distance preference for external routes.
+            internal_distance: The administrative distance preference for internal routes.
+            maximum_ecmp_paths: The maximum number of equal cost different paths.
+            metric_style: The metric version used for metric calculations. EIRGP supports 32 and
+                64 bit metrics. Values: ``narrow``, ``wide``. Default: ``narrow``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -1138,7 +1761,58 @@ class _TenantMakers(Cursor):
         min_wait_time: int | None = None,
         userdom: str | None = None,
     ) -> OspfTimersPolicyCursor:
-        """Declare a ``ospfCtxPol`` child under the tenant level."""
+        """Declare a ``ospfCtxPol`` child under the tenant level.
+
+        The context-level OSPF timer policy provides the Hello timer and Dead timer intervals
+        configuration.
+
+        Args:
+            name: The context-level OSPF policy name. This name can be between 1 and 64
+                alphanumeric characters. Note that you cannot change this name after the object
+                has been saved.
+            annotation: User annotation. Suggested format orchestrator:value
+            bandwidth_preference: The OSPF policy bandwidth reference. This is used to calculate
+                the default metrics for an interface. Default: ``40000``.
+            control_knobs: DOM controls
+            description: Specifies a description of the policy definition.
+            distance_preference: The preferred administrative distance.
+            graceful_restart_controls: The graceful restart controls.
+            min_arrival_interval: The minimum interval between the arrival of each link-state
+                advertisement (LSA). Default: ``1000``.
+            pacing_interval: The interval in which LSAs are grouped and refreshed, checksummed,
+                or aged. The duration of the LSA group pacing is inversely proportional to the
+                number of LSAs that the router is handling. For example, if you have about
+                10,000 LSAs, you should decrease the pacing interval.
+            throttle_hold_interval: The incremental time (in milliseconds) used to calculate the
+                subsequent rate limiting times for LSA generation. Default: ``5000``.
+            throttle_max_interval: The generation throttle maximum interval between LSAs.
+                Default: ``5000``.
+            throttle_start_wait_interval: The generation throttle start-wait interval between
+                LSAs. Default: ``0``.
+            max_ecmp: The maximum ECMP for the OSPF protocol.
+            action: The action to take when the maximum LSA limit is reached. Values: ``log``,
+                ``reject``, ``restart``. Default: ``reject``.
+            maximum_of_non_self_generated_lsas: The maximum number of LSAs that are not self-
+                generated. Default: ``20000``.
+            reset_interval: The time (in minutes) before the sleep count is reset to zero.
+                Default: ``10``.
+            sleep_count: The number of times the OSPF process can consecutively be placed into
+                the sleep state. Default: ``5``.
+            sleep_interval: The time (in minutes) to ignore all neighbors after the maximum
+                limit of LSAs has been exceeded.
+            threshold: The maximum link-state advertisement (LSA) threshold value (%) at which
+                to generate a warning message.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            max_hold_interval: The minimum hold time between SPF calculations. Default:
+                ``1000``.
+            initial_delay_interval: The initial delay interval for the SPF schedule. Default:
+                ``200``.
+            min_wait_time: The maximum interval between SPF calculations. Each interval after
+                the initial calculation is twice as long as the previous one until the wait
+                interval reaches the maximum wait time specified. Default: ``5000``.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -1185,7 +1859,51 @@ class _TenantMakers(Cursor):
         violate_mark_cos: str | None = None,
         violate_mark_dscp: str | None = None,
     ) -> TenantDppPolicyCursor:
-        """Declare a ``qosDppPol`` child under the tenant level."""
+        """Declare a ``qosDppPol`` child under the tenant level.
+
+        Define a Data Plane Policing policy. User is supposed to use this in scenarios where the
+        incoming traffic need to be policed to certain levels
+
+        Args:
+            name: The name of the object.
+            admin_st: The Administrative state of the policy Values: ``disabled``, ``enabled``.
+                Default: ``disabled``.
+            annotation: User annotation. Suggested format orchestrator:value
+            excessive_burst: Excessive burst size (2R3C policer only)
+            excessive_burst_unit: Excessive Burst unit - none, Kilo, Mega, Giga, ms, us Values:
+                ``giga``, ``kilo``, ``mega``, ``msec``, ``unspecified``, ``usec``. Default:
+                ``unspecified``.
+            burst: Committed burst size, number of packets to absorb during a burst
+            burst_unit: Burst unit - byte, kbyte, mbyte etc. Values: ``giga``, ``kilo``,
+                ``mega``, ``msec``, ``unspecified``, ``usec``. Default: ``unspecified``.
+            confirm_action: Confirm action Values: ``drop``, ``mark``, ``transmit``. Default:
+                ``transmit``.
+            conform_mark_cos: Conform Mark cos
+            conform_mark_dscp: Conform Mark Dscp
+            description: Specifies a description of the policy definition.
+            exceed_action: Exceed action Values: ``drop``, ``mark``, ``transmit``. Default:
+                ``drop``.
+            exceed_mark_cos: Exceed Mark cos
+            exceed_mark_dscp: Exceed Mark Dscp
+            bit_or_packet: Policer mode - bytes or packet policer Values: ``bit``, ``packet``.
+                Default: ``bit``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            peak_rate: Peak rate (pir) (2R3C policer only)
+            peak_rate_unit: Peak Rate unit - none, Kilo, Mega, Giga Values: ``giga``, ``kilo``,
+                ``mega``, ``unspecified``. Default: ``unspecified``.
+            rate: Allowed rate, committed rate at which the packets are allowed into the system
+            rate_unit: Rate unit - bps, kbps, mbps, packets etc. Values: ``giga``, ``kilo``,
+                ``mega``, ``unspecified``. Default: ``unspecified``.
+            policer_sharing_mode: Policer sharing mode Values: ``dedicated``, ``shared``.
+                Default: ``dedicated``.
+            type: Policer type Values: ``1R2C``, ``2R3C``. Default: ``1R2C``.
+            violate_action: Violate action Values: ``drop``, ``mark``, ``transmit``. Default:
+                ``drop``.
+            violate_mark_cos: Violate Mark cos
+            violate_mark_dscp: Violate Mark Dscp
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -1213,7 +1931,23 @@ class _TenantMakers(Cursor):
         owner_tag: str | None = None,
         userdom: str | None = None,
     ) -> TenantDhcpRelayPolicyCursor:
-        """Declare a ``dhcpRelayP`` child under the tenant level."""
+        """Declare a ``dhcpRelayP`` child under the tenant level.
+
+        The DHCP relay profile, with one or more helper addresses in it, configures a DHCP relay
+        agent for forwarding DHCP packets to a remote server.
+
+        Args:
+            name: The DHCP relay policy name. This name can be up to 64 alphanumeric characters.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            relay_mode: Represents the mode to be used for doing DHCP relay Values: ``not-
+                visible``, ``visible``. Default: ``visible``.
+            owner: Represents the target relay servers ownership Values: ``infra``, ``tenant``.
+                Default: ``infra``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -1245,7 +1979,35 @@ class _TenantMakers(Cursor):
         remote_ep_age_interval: str | None = None,
         userdom: str | None = None,
     ) -> EpRetentionPolicyCursor:
-        """Declare a ``fvEpRetPol`` child under the tenant level."""
+        """Declare a ``fvEpRetPol`` child under the tenant level.
+
+        The endpoint retention policy provides the parameters for the lifecycle of the endpoints.
+
+        Args:
+            name: The name for the endpoint retention policy.
+            annotation: User annotation. Suggested format orchestrator:value
+            ep_bounce_age_interval: The aging interval for a bounce entry. When an endpoint (VM)
+                migrates to another switch, the endpoint is marked as bouncing for the specified
+                aging interval and is deleted afterwards.
+            ep_bounce_trigger: Specifies whether to install the bounce entry by RARP flood or by
+                COOP protocol.
+            description: Specifies a description of the policy definition.
+            ep_hold_interval: A time period during which new endpoint learn events will not be
+                honored. This interval is triggered when the maximum endpoint move frequency is
+                exceeded.
+            local_ep_age_interval: The aging interval for all local endpoints learned in this
+                bridge domain. When 75% of the interval is reached, 3 ARP requests are sent to
+                verify the existence of the endpoint. If no response is received, the endpoint
+                is deleted.
+            ep_move_frequency: A maximum allowed number of endpoint moves per second. If the
+                move frequency is exceeded, the hold interval is triggered, and new endpoint
+                learn events will not be honored until after the hold interval expires.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            remote_ep_age_interval: The aging interval for all remote endpoints learned in this
+                bridge domain.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -1267,7 +2029,12 @@ class _TenantMakers(Cursor):
         annotation: str | None = None,
         userdom: str | None = None,
     ) -> ExternalBridgeGroupProfileCursor:
-        """Declare a ``l3extBdProfile`` child under the tenant level."""
+        """Declare a ``l3extBdProfile`` child under the tenant level.
+
+        Args:
+            name: The name of the object.
+            annotation: User annotation. Suggested format orchestrator:value
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -1296,7 +2063,22 @@ class _TenantMakers(Cursor):
         source_guard_admin_status: FhsAdminSt | str | None = None,
         userdom: str | None = None,
     ) -> FhsBdPolicyCursor:
-        """Declare a ``fhsBDPol`` child under the tenant level."""
+        """Declare a ``fhsBDPol`` child under the tenant level.
+
+        Args:
+            name: The name of the object.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            ip_inspection_admin_status: Values: ``disabled``, ``enabled-both``, ``enabled-
+                ipv4``, ``enabled-ipv6``. Default: ``enabled-both``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            router_advertisement_guard_admin_status: Values: ``disabled``, ``enabled``. Default:
+                ``enabled``.
+            source_guard_admin_status: Values: ``disabled``, ``enabled-both``, ``enabled-ipv4``,
+                ``enabled-ipv6``. Default: ``enabled-both``.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -1328,7 +2110,22 @@ class _TenantMakers(Cursor):
         trust_router_advertisement: bool | None = None,
         userdom: str | None = None,
     ) -> TrustControlPolicyCursor:
-        """Declare a ``fhsTrustCtrlPol`` child under the tenant level."""
+        """Declare a ``fhsTrustCtrlPol`` child under the tenant level.
+
+        Args:
+            name: The name of the object.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            contains_dhcpv4_servers: Default: ``False``.
+            contains_dhcpv6_servers: Default: ``False``.
+            contains_ipv6_routers: Default: ``False``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            trust_arp: Default: ``False``.
+            trust_nd: Default: ``False``.
+            trust_router_advertisement: Default: ``False``.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -1362,7 +2159,30 @@ class _TenantMakers(Cursor):
         userdom: str | None = None,
         version: McastVer | str | None = None,
     ) -> TenantIgmpSnoopPolicyCursor:
-        """Declare a ``igmpSnoopPol`` child under the tenant level."""
+        """Declare a ``igmpSnoopPol`` child under the tenant level.
+
+        The IGMP snooping policy streamlines multicast traffic handling for VLANs. By examining
+        (snooping) IGMP membership report messages from interested hosts, multicast traffic is
+        limited to the subset of VLAN interfaces on which the hosts reside.
+
+        Args:
+            name: The name of the IGMP Snoop policy
+            admin_state: Administrative State Values: ``disabled``, ``enabled``. Default:
+                ``enabled``.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            last_member_query_interval: When the last member query interval parameter is
+                configured, the software removes the group state if no host responds before the
+                timeout.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            response_interval: The IGMP snooping query response interval.
+            startup_query_count: The interval before the IGMP query begins.
+            startup_query_interval: The startup query interval. This configures the IGMP
+                snooping query interval at startup.
+            version: Version Values: ``unspecified``, ``v1``, ``v2``, ``v3``. Default: ``v3``.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -1396,7 +2216,30 @@ class _TenantMakers(Cursor):
         userdom: str | None = None,
         version: McastVer2 | str | None = None,
     ) -> TenantMldSnoopPolicyCursor:
-        """Declare a ``mldSnoopPol`` child under the tenant level."""
+        """Declare a ``mldSnoopPol`` child under the tenant level.
+
+        The MLD snooping policy streamlines multicast traffic handling for VLANs. By examining
+        (snooping) MLD membership report messages from interested hosts, multicast traffic is
+        limited to the subset of VLAN interfaces on which the hosts reside.
+
+        Args:
+            name: The name of the MLD Snoop policy
+            admin_state: Values: ``disabled``, ``enabled``. Default: ``disabled``.
+            controls: Controls for MLD Snoop Policy
+            description: Specifies a description of the policy definition.
+            last_member_query_interval: When the last member query interval parameter is
+                configured, the software removes the group state if no host responds before the
+                timeout.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            query_interval: Query interval
+            response_interval: The snooping query response interval.
+            startup_query_count: The interval before the query begins.
+            startup_query_interval: The startup query interval. This configures the snooping
+                query interval at startup.
+            version: Version Values: ``unspecified``, ``v1``, ``v2``. Default: ``v2``.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -1434,7 +2277,23 @@ class _TenantMakers(Cursor):
         operation_timeout: int | None = None,
         userdom: str | None = None,
     ) -> IpSlaMonitoringPolicyCursor:
-        """Declare a ``fvIPSLAMonitoringPol`` child under the tenant level."""
+        """Declare a ``fvIPSLAMonitoringPol`` child under the tenant level.
+
+        Args:
+            name: The name of the object.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            http_method_used_for_probing: Values: ``get``. Default: ``get``.
+            http_version_used_for_probing: Values: ``HTTP10``, ``HTTP11``. Default: ``HTTP10``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            request_data_size: Default: ``28``.
+            sla_type: Values: ``http``, ``icmp``, ``l2ping``, ``tcp``. Default: ``icmp``.
+            threshold: Default: ``900``.
+            operation_timeout: The amount of time between authentication attempts. Default:
+                ``900``.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -1465,7 +2324,26 @@ class _TenantMakers(Cursor):
         weight_down_value: str | None = None,
         weight_up_value: str | None = None,
     ) -> TrackListCursor:
-        """Declare a ``fvTrackList`` child under the tenant level."""
+        """Declare a ``fvTrackList`` child under the tenant level.
+
+        Args:
+            name: The name of the object.
+            type_of_tracklist: The specific type of the object or component. Values:
+                ``percentage``, ``weight``. Default: ``percentage``.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            percentage_down: Down Threshold percentage. This specifies the threshold percentage
+                down. This applies when track:List.type is 'percentageDown'.
+            percentage_up: Up Threshold percentage. This specifies the threshold percentage up.
+                This applies when track:List.type is 'percentage'.
+            weight_down_value: Down Threshold weight. This specifies the threshold weight down.
+                This applies when track:List.type is 'weight'.
+            weight_up_value: Up Threshold weight. This specifies the threshold weight up. This
+                applies when track:List.type is 'weight'.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -1493,7 +2371,17 @@ class _TenantMakers(Cursor):
         scope_of_track_member: str | None = None,
         userdom: str | None = None,
     ) -> TrackMemberCursor:
-        """Declare a ``fvTrackMember`` child under the tenant level."""
+        """Declare a ``fvTrackMember`` child under the tenant level.
+
+        Args:
+            name: The name of the object.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            scope_of_track_member: The parameters of the service graph instance.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -1519,7 +2407,18 @@ class _TenantMakers(Cursor):
         owner_tag: str | None = None,
         userdom: str | None = None,
     ) -> PimRouteMapPolicyCursor:
-        """Declare a ``pimRouteMapPol`` child under the tenant level."""
+        """Declare a ``pimRouteMapPol`` child under the tenant level.
+
+        PIM route map policy
+
+        Args:
+            name: The name of the route map policy.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -1546,7 +2445,19 @@ class _TenantMakers(Cursor):
         route_tag: int | None = None,
         userdom: str | None = None,
     ) -> RouteTagPolicyCursor:
-        """Declare a ``l3extRouteTagPol`` child under the tenant level."""
+        """Declare a ``l3extRouteTagPol`` child under the tenant level.
+
+        A route tag is used to assign a number to identify the policy.
+
+        Args:
+            name: The route tag policy name.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            route_tag: The color of a policy label. Default: ``4294967295``.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -1574,7 +2485,21 @@ class _TenantMakers(Cursor):
         type: RtctrlPolicyType | str | None = None,
         userdom: str | None = None,
     ) -> TenantRouteControlProfileCursor:
-        """Declare a ``rtctrlProfile`` child under the tenant level."""
+        """Declare a ``rtctrlProfile`` child under the tenant level.
+
+        The route control profile specifies policies for external networks. The layer 3 networks
+        outside the fabric, and reachable by a Tenant's applications, route to external networks.
+
+        Args:
+            name: The name of the policy profile
+            annotation: User annotation. Suggested format orchestrator:value
+            auto_continue: Default: ``False``.
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            type: null Values: ``combinable``, ``global``. Default: ``combinable``.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -1595,7 +2520,11 @@ class _TenantMakers(Cursor):
         annotation: str | None = None,
         userdom: str | None = None,
     ) -> ServiceContainerCursor:
-        """Declare a ``vnsSvcCont`` child under the tenant level."""
+        """Declare a ``vnsSvcCont`` child under the tenant level.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+        """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
             "ServiceContainerCursor",
@@ -1679,7 +2608,34 @@ class _AppMakers(Cursor):
         shutdown: bool | None = None,
         userdom: str | None = None,
     ) -> EpgCursor:
-        """Declare a ``fvAEPg`` child under the app level."""
+        """Declare a ``fvAEPg`` child under the app level.
+
+        A set of requirements for the application-level EPG instance. The policy regulates
+        connectivity and visibility among the end points within the scope of the policy.
+
+        Args:
+            name: The name for the endpoint group.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            flood_on_encap: Control at EPG level if the traffic L2 Multicast/Broadcast and Link
+                Local Layer should be flooded only on ENCAP or based on bridg-domain settings
+                Values: ``disabled``, ``enabled``. Default: ``disabled``.
+            forwarding_control_bits: Forwarding Control
+            epg_with_multisite_mcast_source: Default: ``False``.
+            attribute_based_epg: Default: ``False``.
+            provider_label_match_criteria: The provider label match criteria. Values: ``All``,
+                ``AtleastOne``, ``AtmostOne``, ``None``. Default: ``AtleastOne``.
+            policy_control_enforcement: Represents parameter used by the node (i.e. Leaf) to
+                enforce filter rules in this EPG Values: ``enforced``, ``unenforced``. Default:
+                ``unenforced``.
+            preferred_group_member: Represents parameter used to determine if EPg is part of a
+                group that does not a contract for communication Values: ``exclude``,
+                ``include``. Default: ``exclude``.
+            qos_class: The QoS priority class identifier. Values: ``level1``, ``level2``,
+                ``level3``, ``level4``, ``level5``, ``level6``, ``unspecified``. Default:
+                ``unspecified``.
+            shutdown: Default: ``False``.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -1771,7 +2727,28 @@ class _BdMakers(Cursor):
         userdom: str | None = None,
         treated_as_virtual_ip_address: bool | None = None,
     ) -> BdSubnetCursor:
-        """Declare a ``fvSubnet`` child under the bd level."""
+        """Declare a ``fvSubnet`` child under the bd level.
+
+        A subnet defines the IP address range that can be used within the bridge domain. While a
+        context defines a unique layer 3 space, that space can consist of multiple subnets. These
+        subnets are defined per bridge domain.
+
+        Args:
+            subnet: The IP address and mask of the default gateway.
+            annotation: User annotation. Suggested format orchestrator:value
+            subnet_control: The subnet control state. The control can be specific protocols
+                applied to the subnet such as IGMP Snooping.
+            description: Specifies the description of a policy component.
+            ip_dp_learning: Knob to disable IP Dataplane Learning for Host(/32, /128) and for BD
+                Subnet Values: ``disabled``, ``enabled``. Default: ``enabled``.
+            name: null
+            preferred_as_primary_subnet: Indicates if the subnet is preferred (primary) over the
+                available alternatives. Only one preferred subnet is allowed. Default:
+                ``False``.
+            scope: The network visibility of the subnet.
+            treated_as_virtual_ip_address: Treated as virtual IP address. Used in case of BD
+                extended to multiple sites. Default: ``False``.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -1961,7 +2938,19 @@ class _BgpAddressFamilyContextPolicyMakers(Cursor):
         owner_tag: str | None = None,
         userdom: str | None = None,
     ) -> BgpAdditionalPathContextPolicyCursor:
-        """Declare a ``bgpCtxAddlPathPol`` child under the bgp_address_family_context_policy level."""
+        """Declare a ``bgpCtxAddlPathPol`` child under the bgp_address_family_context_policy level.
+
+        BGP Additional Path Context Policy
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            capability: The neighbor system capability.
+            description: Specifies a description of the policy definition.
+            name: null
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
             "BgpAdditionalPathContextPolicyCursor",
@@ -2143,7 +3132,29 @@ class _ContractMakers(Cursor):
         subject_level_dscp: str | None = None,
         userdom: str | None = None,
     ) -> SubjectCursor:
-        """Declare a ``vzSubj`` child under the contract level."""
+        """Declare a ``vzSubj`` child under the contract level.
+
+        A subject is a sub-application running behind an endpoint group (for example, an Exchange
+        server). A subject is parented by the contract, which can encapsulate multiple subjects.
+
+        Args:
+            name: The name of a sub application running behind an endpoint group, such as an
+                Exchange server. This name can be up to 64 alphanumeric characters. Note that
+                you cannot change this name after the object has been saved.
+            annotation: User annotation. Suggested format orchestrator:value
+            consumer_label_match_type: The subject match criteria across consumers. Values:
+                ``All``, ``AtleastOne``, ``AtmostOne``, ``None``. Default: ``AtleastOne``.
+            description: Specifies the description of a policy component.
+            qos_class_id: The priority level of a sub application running behind an endpoint
+                group, such as an Exchange server. Values: ``level1``, ``level2``, ``level3``,
+                ``level4``, ``level5``, ``level6``, ``unspecified``. Default: ``unspecified``.
+            provider_label_match_type: The subject match criteria across consumers. Values:
+                ``All``, ``AtleastOne``, ``AtmostOne``, ``None``. Default: ``AtleastOne``.
+            reverse_filter_ports: Enables the filter to apply on both ingress and egress
+                traffic. Default: ``True``.
+            subject_level_dscp: The target differentiated services code point (DSCP) of the path
+                attached to the layer 3 outside profile.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -2233,7 +3244,18 @@ class _DhcpOptionPolicyMakers(Cursor):
         display_name: str | None = None,
         userdom: str | None = None,
     ) -> DhcpOptionCursor:
-        """Declare a ``dhcpOption`` child under the dhcp_option_policy level."""
+        """Declare a ``dhcpOption`` child under the dhcp_option_policy level.
+
+        The DHCP option is used to supply DHCP clients with configuration parameters such as a
+        domain, name server, subnet, and network address. DHCP provides a framework for passing
+        configuration information to clients on a TCP/IP network.
+
+        Args:
+            name: The DHCP option name. This name can be up to 64 alphanumeric characters.
+            annotation: User annotation. Suggested format orchestrator:value
+            model_regex: The ID of the DHCP option.
+            id: DHCP OPTION ID
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -2290,7 +3312,18 @@ class _TenantDhcpRelayPolicyMakers(Cursor):
         pref: str | None = None,
         userdom: str | None = None,
     ) -> TenantDhcpRelayPolicyProviderCursor:
-        """Declare a ``dhcpRsProv`` child under the dhcp_relay_policy level."""
+        """Declare a ``dhcpRsProv`` child under the dhcp_relay_policy level.
+
+        An endpoint group associated with the DHCP relay profile. Hosts/clients in the endpoint
+        group can obtain IP addresses acquired via the DHCP relay profile.
+
+        Args:
+            target_dn: The distinguished name of the target endpoint group.
+            dhcp_server_address: The DHCP server address. This address is configured onto the
+                relationship between a relay profile and an endpoint group.
+            annotation: User annotation. Suggested format orchestrator:value
+            pref: DHCP server preferences
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -2554,7 +3587,22 @@ class _FhsBdPolicyMakers(Cursor):
         owner_tag: str | None = None,
         userdom: str | None = None,
     ) -> RaGuardPolicyCursor:
-        """Declare a ``fhsRaGuardPol`` child under the fhs_bd_policy level."""
+        """Declare a ``fhsRaGuardPol`` child under the fhs_bd_policy level.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            perform_managed_config_flag_check: Default: ``False``.
+            managed_config_flag_settting: Default: ``False``.
+            allowed_max_router_preference: Values: ``disabled``, ``high``, ``low``, ``medium``.
+                Default: ``disabled``.
+            name: null
+            perform_other_config_flag_check: Default: ``False``.
+            other_config_flag_settting: Default: ``False``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
             "RaGuardPolicyCursor",
@@ -2621,7 +3669,31 @@ class _FilterMakers(Cursor):
         tcp_rules: L4TcpFlags | str | None = None,
         userdom: str | None = None,
     ) -> EntryCursor:
-        """Declare a ``vzEntry`` child under the filter level."""
+        """Declare a ``vzEntry`` child under the filter level.
+
+        A filter entry is a combination of network traffic classification properties.
+
+        Args:
+            name: The name of a filter entry. This name can be up to 64 alphanumeric characters.
+                Note that you cannot change this name after the object has been saved.
+            tcp: Curated shorthand, compiled to the underlying wire fields.
+            udp: Curated shorthand, compiled to the underlying wire fields.
+            annotation: User annotation. Suggested format orchestrator:value
+            apply_rule_for_all_fragments: Default: ``False``.
+            arp_opcodes: ARP opcodes Values: ``reply``, ``req``, ``unspecified``. Default:
+                ``unspecified``.
+            destination_from_port: Destination From Port
+            destination_to_port: Destination To Port
+            description: Specifies the description of a policy component.
+            ethernet_type: Ether type Values: ``arp``, ``fcoe``, ``ip``, ``ipv4``, ``ipv6``,
+                ``mac_security``, ``mpls_ucast``, ``trill``, …. Default: ``unspecified``.
+            protocol: L3 Ip Protocol
+            source_from_port: Source From Port
+            source_to_port: Source To Port
+            stateful: Default: ``False``.
+            tcp_rules: TCP Session Rules Values: ``ack``, ``est``, ``fin``, ``rst``, ``syn``,
+                ``unspecified``. Default: ``unspecified``.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -2821,7 +3893,16 @@ class _IpSlaMonitoringPolicyMakers(Cursor):
         owner_tag: str | None = None,
         userdom: str | None = None,
     ) -> IcmpEchoProbeCursor:
-        """Declare a ``fvICMPProbe`` child under the ip_sla_monitoring_policy level."""
+        """Declare a ``fvICMPProbe`` child under the ip_sla_monitoring_policy level.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            name: null
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
             "IcmpEchoProbeCursor",
@@ -2839,7 +3920,16 @@ class _IpSlaMonitoringPolicyMakers(Cursor):
         owner_tag: str | None = None,
         userdom: str | None = None,
     ) -> TcpProbeCursor:
-        """Declare a ``fvTCPProbe`` child under the ip_sla_monitoring_policy level."""
+        """Declare a ``fvTCPProbe`` child under the ip_sla_monitoring_policy level.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            name: null
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
             "TcpProbeCursor",
@@ -2905,7 +3995,27 @@ class _L3outMakers(Cursor):
         dscp_value: str | None = None,
         userdom: str | None = None,
     ) -> NodeProfileCursor:
-        """Declare a ``l3extLNodeP`` child under the l3out level."""
+        """Declare a ``l3extLNodeP`` child under the l3out level.
+
+        The logical node profile defines a common configuration that can be applied to one or more
+        leaf nodes.
+
+        Args:
+            name: The name of the logical node profile. This name can be up to 64 alphanumeric
+                characters. Note that you cannot change this name after the object has been
+                saved.
+            annotation: User annotation. Suggested format orchestrator:value
+            node_path_misconfiguration: Bitmask representation of the configuration issues found
+                during the endpoint group deployment.
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            tag: Specifies the color of a policy label. Values: ``alice-blue``, ``antique-
+                white``, ``aqua``, ``aquamarine``, ``azure``, ``beige``, ``bisque``, ``black``,
+                …. Default: ``alice-blue``.
+            dscp_value: Node level Dscp value.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -2936,7 +4046,35 @@ class _L3outMakers(Cursor):
         epg_level_dscp: str | None = None,
         userdom: str | None = None,
     ) -> ExternalEpgCursor:
-        """Declare a ``l3extInstP`` child under the l3out level."""
+        """Declare a ``l3extInstP`` child under the l3out level.
+
+        The external network instance profile represents a group of external subnets that have the
+        same security behavior. These subnets inherit contract profiles applied to the parent
+        instance profile.
+
+        Args:
+            name: The name of the layer 3 external network instance profile. This name can be up
+                to 64 alphanumeric characters. Note that you cannot change this name after the
+                object has been saved.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            flood_on_encap: Control at EPG level if the traffic L2 Multicast/Broadcast and Link
+                Local Layer should be flooded only on ENCAP or based on bridg-domain settings
+                Values: ``disabled``, ``enabled``. Default: ``disabled``.
+            provider_label_match_criteria: The provider label match criteria. Values: ``All``,
+                ``AtleastOne``, ``AtmostOne``, ``None``. Default: ``AtleastOne``.
+            policy_control_enforcement: Represents parameter used by the node (i.e. Leaf) to
+                enforce filter rules in this EPG Values: ``enforced``, ``unenforced``. Default:
+                ``unenforced``.
+            preferred_group_member: Represents parameter used to determine if EPg is part of a
+                group that does not a contract for communication Values: ``exclude``,
+                ``include``. Default: ``exclude``.
+            qos_class: The QoS priority class identifier. Values: ``level1``, ``level2``,
+                ``level3``, ``level4``, ``level5``, ``level6``, ``unspecified``. Default:
+                ``unspecified``.
+            epg_level_dscp: The target differentiated services code point (DSCP) of the path
+                attached to the layer 3 outside profile.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -2959,7 +4097,15 @@ class _L3outMakers(Cursor):
         display_name: str | None = None,
         userdom: str | None = None,
     ) -> BgpCursor:
-        """Declare a ``bgpExtP`` child under the l3out level."""
+        """Declare a ``bgpExtP`` child under the l3out level.
+
+        When created, this profile indicates that IBGP will be configured for the endpoint groups in
+        this external network.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
             "BgpCursor",
@@ -2978,7 +4124,22 @@ class _L3outMakers(Cursor):
         display_name: str | None = None,
         userdom: str | None = None,
     ) -> OspfCursor:
-        """Declare a ``ospfExtP`` child under the l3out level."""
+        """Declare a ``ospfExtP`` child under the l3out level.
+
+        The OSPF external profile information.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            area_cost: Default: ``1``.
+            area_type: The area type. Values: ``nssa``, ``regular``, ``stub``. Default:
+                ``nssa``.
+            area_id: The OSPF Area ID. An area is a logical collection of OSPF networks,
+                routers, and links that have the same area identification. A router within an
+                area must maintain a topological database for the area to which it belongs.
+            description: Specifies the description of a policy component.
+            create_multipod_internal_ospf_instance: Start OSPF in WAN instance instead of
+                default Default: ``False``.
+        """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
             "OspfCursor",
@@ -2994,7 +4155,16 @@ class _L3outMakers(Cursor):
         display_name: str | None = None,
         userdom: str | None = None,
     ) -> EigrpCursor:
-        """Declare a ``eigrpExtP`` child under the l3out level."""
+        """Declare a ``eigrpExtP`` child under the l3out level.
+
+        The EIGRP external profile information.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            autonomous_system_number: A number that uniquely identifies an autonomous system.
+                Default: ``0``.
+            description: Specifies the description of a policy component.
+        """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
             "EigrpCursor",
@@ -3011,7 +4181,15 @@ class _L3outMakers(Cursor):
         display_name: str | None = None,
         userdom: str | None = None,
     ) -> PimExternalCursor:
-        """Declare a ``pimExtP`` child under the l3out level."""
+        """Declare a ``pimExtP`` child under the l3out level.
+
+        OSPF external profile.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            enabled_pim_address_families: Enabled Multicast Address Families
+        """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
             "PimExternalCursor",
@@ -3026,7 +4204,12 @@ class _L3outMakers(Cursor):
         display_name: str | None = None,
         userdom: str | None = None,
     ) -> MplsExternalCursor:
-        """Declare a ``mplsExtP`` child under the l3out level."""
+        """Declare a ``mplsExtP`` child under the l3out level.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
             "MplsExternalCursor",
@@ -3042,7 +4225,20 @@ class _L3outMakers(Cursor):
         scope_of_default_route_leak_policy: str | None = None,
         userdom: str | None = None,
     ) -> DefaultRouteLeakPolicyCursor:
-        """Declare a ``l3extDefaultRouteLeakP`` child under the l3out level."""
+        """Declare a ``l3extDefaultRouteLeakP`` child under the l3out level.
+
+        The default route leak policy.
+
+        Args:
+            always_advertise_default_leak: A property to indicate whether or not to always
+                advertise the default route leak (OSPF specific). Values: ``no``, ``yes``.
+                Default: ``no``.
+            annotation: User annotation. Suggested format orchestrator:value
+            default_leak_advertise_criteria: A property that specifies an exact or subset
+                matching of communities. Values: ``in-addition``, ``none``, ``only``. Default:
+                ``only``.
+            scope_of_default_route_leak_policy: The domain applicable to the capability.
+        """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
             "DefaultRouteLeakPolicyCursor",
@@ -3062,7 +4258,21 @@ class _L3outMakers(Cursor):
         type: RtctrlPolicyType | str | None = None,
         userdom: str | None = None,
     ) -> L3outRouteControlProfileCursor:
-        """Declare a ``rtctrlProfile`` child under the l3out level."""
+        """Declare a ``rtctrlProfile`` child under the l3out level.
+
+        The route control profile specifies policies for external networks. The layer 3 networks
+        outside the fabric, and reachable by a Tenant's applications, route to external networks.
+
+        Args:
+            name: The name of the policy profile
+            annotation: User annotation. Suggested format orchestrator:value
+            auto_continue: Default: ``False``.
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            type: null Values: ``combinable``, ``global``. Default: ``combinable``.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -3089,7 +4299,20 @@ class _L3outMakers(Cursor):
         route_target_instrumentation_type: BgpRtTargetT | str | None = None,
         userdom: str | None = None,
     ) -> RouteTargetInstrumentationProfileCursor:
-        """Declare a ``bgpRtTargetInstrP`` child under the l3out level."""
+        """Declare a ``bgpRtTargetInstrP`` child under the l3out level.
+
+        BGP Route Target Instrumentation Profile
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            name: null
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            route_target_instrumentation_type: Route Target Instrumentation Type Values:
+                ``automatic``, ``explicit``. Default: ``explicit``.
+        """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
             "RouteTargetInstrumentationProfileCursor",
@@ -3502,7 +4725,20 @@ class _PimRouteMapPolicyMakers(Cursor):
         source_filter: str | None = None,
         userdom: str | None = None,
     ) -> PimRouteMapEntryCursor:
-        """Declare a ``pimRouteMapEntry`` child under the pim_route_map_policy level."""
+        """Declare a ``pimRouteMapEntry`` child under the pim_route_map_policy level.
+
+        PIM route map entry
+
+        Args:
+            order: PIM route map entry order
+            action: route action Values: ``deny``, ``permit``. Default: ``permit``.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            destination_filter: Multicast group ip/prefix
+            name: null
+            rp_ip_address: Multicast RP Ip
+            source_filter: Multicast Source Ip
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -3561,7 +4797,19 @@ class _TenantRouteControlProfileMakers(Cursor):
         local_order: str | None = None,
         userdom: str | None = None,
     ) -> TenantRouteControlProfileRouteControlContextCursor:
-        """Declare a ``rtctrlCtxP`` child under the route_control_profile level."""
+        """Declare a ``rtctrlCtxP`` child under the route_control_profile level.
+
+        The context policy, which is a unique layer 3 forwarding and application policy domain. The
+        context defines a layer 3 address domain.
+
+        Args:
+            name: The name of the policy context.
+            action: The action required when the condition is met. Values: ``deny``, ``permit``.
+                Default: ``permit``.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            local_order: The order of the policy context.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -3660,7 +4908,26 @@ class _ServiceContainerMakers(Cursor):
         threshold_enable: bool | None = None,
         userdom: str | None = None,
     ) -> ServiceRedirectPolicyCursor:
-        """Declare a ``vnsSvcRedirectPol`` child under the service_container level."""
+        """Declare a ``vnsSvcRedirectPol`` child under the service_container level.
+
+        Args:
+            name: The name of the object.
+            anycast_enabled_or_not: Default: ``False``.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            dest_type: Values: ``L1``, ``L2``, ``L3``. Default: ``L3``.
+            hashing_algorithm: Values: ``dip``, ``sip``, ``sip-dip-prototype``. Default: ``sip-
+                dip-prototype``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            program_local_pod_only: Default: ``False``.
+            resilient_hashing_enabled_or_not: Default: ``False``.
+            source_mac_rewrite_enabled_or_not: Default: ``False``.
+            threshold_down_action: Down action Values: ``bypass``, ``deny``, ``permit``.
+                Default: ``permit``.
+            threshold_enable: Default: ``False``.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -3686,7 +4953,16 @@ class _ServiceContainerMakers(Cursor):
         owner_tag: str | None = None,
         userdom: str | None = None,
     ) -> PbrBackupPolicyCursor:
-        """Declare a ``vnsBackupPol`` child under the service_container level."""
+        """Declare a ``vnsBackupPol`` child under the service_container level.
+
+        Args:
+            name: The name of the object.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -3712,7 +4988,16 @@ class _ServiceContainerMakers(Cursor):
         owner_tag: str | None = None,
         userdom: str | None = None,
     ) -> L4L7RedirectHealthGroupCursor:
-        """Declare a ``vnsRedirectHealthGroup`` child under the service_container level."""
+        """Declare a ``vnsRedirectHealthGroup`` child under the service_container level.
+
+        Args:
+            name: The name of the object.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -3739,7 +5024,17 @@ class _ServiceContainerMakers(Cursor):
         preferred_group_member: VnsPrefGrMemb | str | None = None,
         userdom: str | None = None,
     ) -> ServiceEpgPolicyCursor:
-        """Declare a ``vnsSvcEPgPol`` child under the service_container level."""
+        """Declare a ``vnsSvcEPgPol`` child under the service_container level.
+
+        Args:
+            name: The name of the object.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            preferred_group_member: Values: ``exclude``, ``include``. Default: ``exclude``.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -3798,7 +5093,22 @@ class _TenantKeychainPolicyMakers(Cursor):
         start_time: str | None = None,
         userdom: str | None = None,
     ) -> KeyPolicyCursor:
-        """Declare a ``fvKeyPol`` child under the tenant_keychain_policy level."""
+        """Declare a ``fvKeyPol`` child under the tenant_keychain_policy level.
+
+        Key Policy
+
+        Args:
+            key_id: An object identifier.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            end_time: end time
+            name: null
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            pre_shared_key: pre-shared key
+            start_time: start-time
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -3993,7 +5303,20 @@ class _VrfMakers(Cursor):
         owner_tag: str | None = None,
         userdom: str | None = None,
     ) -> PimCursor:
-        """Declare a ``pimCtxP`` child under the vrf level."""
+        """Declare a ``pimCtxP`` child under the vrf level.
+
+        Context-level PIM policy.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            control_knobs: DOM controls
+            description: Specifies a description of the policy definition.
+            mtu: MTU Default: ``1500``.
+            name: null
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
             "PimCursor",
@@ -4061,7 +5384,21 @@ class _EpgMakers(Cursor):
         primary_encap: str | None = None,
         userdom: str | None = None,
     ) -> StaticPathCursor:
-        """Declare a ``fvRsPathAtt`` child under the epg level."""
+        """Declare a ``fvRsPathAtt`` child under the epg level.
+
+        A source relation to an abstraction of a path endpoint.
+
+        Args:
+            target_dn: null
+            annotation: User annotation. Suggested format orchestrator:value
+            descr: The description of this configuration item.
+            encap: The encapsulation method (VLAN) of the path.
+            deployment_immediacy: The deployment immediacy preference of this path association.
+                Values: ``immediate``, ``lazy``. Default: ``lazy``.
+            mode: The mode of the static association with the path. Values: ``native``,
+                ``regular``, ``untagged``. Default: ``regular``.
+            primary_encap: Represents the primary encap when the EPG is isolated
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -4601,7 +5938,18 @@ class _ExternalEpgMakers(Cursor):
         scope_of_the_external_subnet: str | None = None,
         userdom: str | None = None,
     ) -> ExternalEpgSubnetCursor:
-        """Declare a ``l3extSubnet`` child under the external_epg level."""
+        """Declare a ``l3extSubnet`` child under the external_epg level.
+
+        The network visibility of the domain.
+
+        Args:
+            subnet: null
+            aggregate_routes_for_subnet: Aggregate Routes for Subnet
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            name: null
+            scope_of_the_external_subnet: The domain applicable to the capability.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -4628,7 +5976,24 @@ class _ExternalEpgMakers(Cursor):
         tag: PolColor | str | None = None,
         userdom: str | None = None,
     ) -> ConsumerContractLabelCursor:
-        """Declare a ``vzConsCtrctLbl`` child under the external_epg level."""
+        """Declare a ``vzConsCtrctLbl`` child under the external_epg level.
+
+        A consumer contract label. A contract label can be parented by the relation between an
+        endpoint group (EPG) and security group. The EPG is associated with a group and lists all
+        contracts it provides out of the group, as well as, optionally, contracts that it chooses to
+        consume.
+
+        Args:
+            name: null
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            tag: Specifies the color of a policy label. Values: ``alice-blue``, ``antique-
+                white``, ``aqua``, ``aquamarine``, ``azure``, ``beige``, ``bisque``, ``black``,
+                …. Default: ``alice-blue``.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -4655,7 +6020,24 @@ class _ExternalEpgMakers(Cursor):
         tag: PolColor | str | None = None,
         userdom: str | None = None,
     ) -> ProviderContractLabelCursor:
-        """Declare a ``vzProvCtrctLbl`` child under the external_epg level."""
+        """Declare a ``vzProvCtrctLbl`` child under the external_epg level.
+
+        A label identifying a contract. A contract label can be parented by the relation between an
+        endpoint group (EPG) and security group. The EPG is associated with a group and lists all
+        contracts it provides out of the group, as well as, optionally, contracts that it chooses to
+        consume.
+
+        Args:
+            name: null
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            tag: Specifies the color of a policy label. Values: ``alice-blue``, ``antique-
+                white``, ``aqua``, ``aquamarine``, ``azure``, ``beige``, ``bisque``, ``black``,
+                …. Default: ``alice-blue``.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -4682,7 +6064,23 @@ class _ExternalEpgMakers(Cursor):
         tag: PolColor | str | None = None,
         userdom: str | None = None,
     ) -> ConsumerLabelCursor:
-        """Declare a ``vzConsLbl`` child under the external_epg level."""
+        """Declare a ``vzConsLbl`` child under the external_epg level.
+
+        A label used by consumers to filter the providers. The label can be parented as follows: *
+        By the consumer endpoint group. * By the relation between the consumer endpoint group and
+        contract. * By the relation between the contract interface and contract.
+
+        Args:
+            name: null
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            tag: Specifies the color of a policy label. Values: ``alice-blue``, ``antique-
+                white``, ``aqua``, ``aquamarine``, ``azure``, ``beige``, ``bisque``, ``black``,
+                …. Default: ``alice-blue``.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -4710,7 +6108,28 @@ class _ExternalEpgMakers(Cursor):
         tag: PolColor | str | None = None,
         userdom: str | None = None,
     ) -> ProviderLabelCursor:
-        """Declare a ``vzProvLbl`` child under the external_epg level."""
+        """Declare a ``vzProvLbl`` child under the external_epg level.
+
+        A label used by a provider for specifying its identity. The parent can be either the
+        provider endpoint group or the relation between the provider endpoint group and a contract.
+        A consumer with no label will consume from all the providers of the contract regardless of
+        the provider label.
+
+        Args:
+            name: null
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            complement: Specify the behavior of the label. @@@ 1. true
+                &amp;amp;amp;amp;amp;amp;amp;amp;&amp;amp;amp;amp;amp;amp;amp;amp;
+                parent::MatchT==AND: Then this label should not match for @@@ the compound
+                subject label statement across consumers to be true @@@ 2. Default: ``False``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            tag: Specifies the color of a policy label. Values: ``alice-blue``, ``antique-
+                white``, ``aqua``, ``aquamarine``, ``azure``, ``beige``, ``bisque``, ``black``,
+                …. Default: ``alice-blue``.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -4738,7 +6157,28 @@ class _ExternalEpgMakers(Cursor):
         tag: PolColor | str | None = None,
         userdom: str | None = None,
     ) -> VzConsSubjectLabelCursor:
-        """Declare a ``vzConsSubjLbl`` child under the external_epg level."""
+        """Declare a ``vzConsSubjLbl`` child under the external_epg level.
+
+        A consumer subject label. In general, a subject label is used as a classification criteria
+        for subjects being consumed/provided by the endpoint groups (EPGs) participating in the
+        contract. The label identifies a subject being consumed by a consumer. It can be parented by
+        2 different methods.
+
+        Args:
+            name: The subject label name.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            complement: Specify the behavior of the label. @@@ 1. true
+                &amp;amp;amp;amp;amp;amp;amp;amp;&amp;amp;amp;amp;amp;amp;amp;amp;
+                parent::MatchT==AND: Then this label should not match for @@@ the compound
+                subject label statement across consumers to be true @@@ 2. Default: ``False``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            tag: Specifies the color of a policy label. Values: ``alice-blue``, ``antique-
+                white``, ``aqua``, ``aquamarine``, ``azure``, ``beige``, ``bisque``, ``black``,
+                …. Default: ``alice-blue``.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -4766,7 +6206,27 @@ class _ExternalEpgMakers(Cursor):
         tag: PolColor | str | None = None,
         userdom: str | None = None,
     ) -> VzProvSubjectLabelCursor:
-        """Declare a ``vzProvSubjLbl`` child under the external_epg level."""
+        """Declare a ``vzProvSubjLbl`` child under the external_epg level.
+
+        A subject label is used as classification criteria for subjects being consumed/provided by
+        the endpoint groups (EPGs) participating in the contract. The label identifies a subject
+        being provided by a provider. It can be parented by 2 different methods.
+
+        Args:
+            name: The provider label name.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            complement: Specify the behavior of the label. @@@ 1. true
+                &amp;amp;amp;amp;amp;amp;amp;amp;&amp;amp;amp;amp;amp;amp;amp;amp;
+                parent::MatchT==AND: Then this label should not match for @@@ the compound
+                subject label statement across consumers to be true @@@ 2. Default: ``False``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            tag: Specifies the color of a policy label. Values: ``alice-blue``, ``antique-
+                white``, ``aqua``, ``aquamarine``, ``azure``, ``beige``, ``bisque``, ``black``,
+                …. Default: ``alice-blue``.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -4932,7 +6392,26 @@ class _NodeProfileMakers(Cursor):
         tag: PolColor | str | None = None,
         userdom: str | None = None,
     ) -> InterfaceProfileCursor:
-        """Declare a ``l3extLIfP`` child under the node_profile level."""
+        """Declare a ``l3extLIfP`` child under the node_profile level.
+
+        The logical interface profile, which defines a common configuration that can be applied to
+        one or more interfaces.
+
+        Args:
+            name: The name of the logical interface profile. This name can be up to 64
+                alphanumeric characters. Note that you cannot change this name after the object
+                has been saved.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            prio: The QoS priority class ID. Values: ``level1``, ``level2``, ``level3``,
+                ``level4``, ``level5``, ``level6``, ``unspecified``. Default: ``unspecified``.
+            tag: Specifies the color of a policy label. Values: ``alice-blue``, ``antique-
+                white``, ``aqua``, ``aquamarine``, ``azure``, ``beige``, ``bisque``, ``black``,
+                …. Default: ``alice-blue``.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -4957,7 +6436,21 @@ class _NodeProfileMakers(Cursor):
         rtr_id_loop_back: bool | None = None,
         userdom: str | None = None,
     ) -> NodeAttachmentCursor:
-        """Declare a ``l3extRsNodeL3OutAtt`` child under the node_profile level."""
+        """Declare a ``l3extRsNodeL3OutAtt`` child under the node_profile level.
+
+        A static association with each leaf node that is part of the node profile. The corresponding
+        set of policies will be resolved into the specified node. This object must contain a router
+        ID that will be used as the OSPF/BGP router ID.
+
+        Args:
+            target_dn: The distinguished name for the node attached to the layer 3 outside
+                profile. The maximum supported string length is 255 ASCII characters.
+            annotation: User annotation. Suggested format orchestrator:value
+            config_issues: Bitmask representation of the configuration issues found during the
+                endpoint group deployment.
+            rtr_id: The router identifier used as the OSPF/BGP router ID.
+            rtr_id_loop_back: Default: ``True``.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -4994,7 +6487,33 @@ class _NodeProfileMakers(Cursor):
         userdom: str | None = None,
         weight_for_routes_from_this_neighbor: str | None = None,
     ) -> NodeProfileBgpPeerCursor:
-        """Declare a ``bgpPeerP`` child under the node_profile level."""
+        """Declare a ``bgpPeerP`` child under the node_profile level.
+
+        The BGP peer connectivity profile contains the peer IP address and defines the peer
+        connectivity control settings. These values are for BGP routers, which can only exchange
+        routing information when they establish a peer connection between them.
+
+        Args:
+            peer_address: The peer IP address.
+            address_type_af_controls: Ucast/Mcast Addr Type AF Control
+            administrative_state: Administrative State Values: ``disabled``, ``enabled``.
+                Default: ``enabled``.
+            allowed_self_as_count: The number of occurrences of a local Autonomous System Number
+                (ASN).
+            annotation: User annotation. Suggested format orchestrator:value
+            capability: Peer AF Capability
+            type_of_network_reachable_via_this_peer: Network reachability via this Peer
+            peer_af_controls: The peer controls specify which Border Gateway Protocol (BGP)
+                attributes are sent to a peer.
+            peer_af_controls_ext: Peer AF controls Ext
+            description: Specifies the description of a policy component.
+            asn_name: null
+            password: Administrative state
+            peer_controls: The peer controls.
+            private_as_control: Remove private AS
+            ebgp_multihop_ttl_value: Specifies time to live (TTL).
+            weight_for_routes_from_this_neighbor: Default weight for routes from this neighbor
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -5017,7 +6536,14 @@ class _NodeProfileMakers(Cursor):
         display_name: str | None = None,
         userdom: str | None = None,
     ) -> ProtocolProfileCursor:
-        """Declare a ``bgpProtP`` child under the node_profile level."""
+        """Declare a ``bgpProtP`` child under the node_profile level.
+
+        Protocol profile
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            name: The name of the object.
+        """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
             "ProtocolProfileCursor",
@@ -5050,7 +6576,36 @@ class _NodeProfileMakers(Cursor):
         userdom: str | None = None,
         weight_for_routes_from_this_neighbor: str | None = None,
     ) -> NodeProfileInfraPeerConnectivityProfileCursor:
-        """Declare a ``bgpInfraPeerP`` child under the node_profile level."""
+        """Declare a ``bgpInfraPeerP`` child under the node_profile level.
+
+        Peer connectivity profile
+
+        Args:
+            peer_address: Peer address
+            address_type_af_controls: Ucast/Mcast Addr Type AF Control
+            administrative_state: Administrative State Values: ``disabled``, ``enabled``.
+                Default: ``enabled``.
+            allowed_self_as_count: The number of occurrences of a local Autonomous System Number
+                (ASN).
+            annotation: User annotation. Suggested format orchestrator:value
+            capability: Peer AF Capability
+            peer_af_controls: Peer Controls
+            peer_af_controls_ext: Peer AF controls Ext
+            data_plane_address: Data plane address
+            description: Specifies the description of a policy component.
+            name: null
+            password: Administrative state
+            peer_controls: The peer controls.
+            peer_type: Peer Type
+            private_as_control: Remove private AS
+            intersite_route_reflector: Is the peer an intersite route reflector Default:
+                ``False``.
+            source_interface_type: Source Interface Type Values: ``l3out-loopback``, ``routable-
+                loopback``. Default: ``l3out-loopback``.
+            control_type: Values: ``trusted``, ``untrusted``. Default: ``untrusted``.
+            ebgp_multihop_ttl_value: Specifies time to live (TTL).
+            weight_for_routes_from_this_neighbor: Default weight for routes from this neighbor
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -5077,7 +6632,17 @@ class _NodeProfileMakers(Cursor):
         authentication_type: BfdAuthT | str | None = None,
         userdom: str | None = None,
     ) -> BfdMultihopNodeProfileCursor:
-        """Declare a ``bfdMhNodeP`` child under the node_profile level."""
+        """Declare a ``bfdMhNodeP`` child under the node_profile level.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            authentication_key: Authentication key
+            authentication_key_id: Authentication key id
+            name: null
+            authentication_type: Authentication type Values: ``none``, ``sha1``. Default:
+                ``none``.
+        """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
             "BfdMultihopNodeProfileCursor",
@@ -5260,7 +6825,19 @@ class _L3outRouteControlProfileMakers(Cursor):
         local_order: str | None = None,
         userdom: str | None = None,
     ) -> L3outRouteControlProfileRouteControlContextCursor:
-        """Declare a ``rtctrlCtxP`` child under the route_control_profile level."""
+        """Declare a ``rtctrlCtxP`` child under the route_control_profile level.
+
+        The context policy, which is a unique layer 3 forwarding and application policy domain. The
+        context defines a layer 3 address domain.
+
+        Args:
+            name: The name of the policy context.
+            action: The action required when the condition is met. Values: ``deny``, ``permit``.
+                Default: ``permit``.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            local_order: The order of the policy context.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -5426,7 +7003,15 @@ class _TenantRouteControlProfileRouteControlContextMakers(Cursor):
         display_name: str | None = None,
         userdom: str | None = None,
     ) -> TenantRouteControlProfileRouteControlContextRouteContextScopeCursor:
-        """Declare a ``rtctrlScope`` child under the route_control_context level."""
+        """Declare a ``rtctrlScope`` child under the route_control_context level.
+
+        The route context Scope. The scope defines the node on which the policy is deployed.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            name: null
+        """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
             "TenantRouteControlProfileRouteControlContextRouteContextScopeCursor",
@@ -5523,7 +7108,22 @@ class _PbrBackupPolicyMakers(Cursor):
         userdom: str | None = None,
         weight: int | None = None,
     ) -> PbrBackupPolicyDestinationOfRedirectedTrafficCursor:
-        """Declare a ``vnsRedirectDest`` child under the pbr_backup_policy level."""
+        """Declare a ``vnsRedirectDest`` child under the pbr_backup_policy level.
+
+        Args:
+            ip_address: The IP address.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            dest_name: The destination name to which data was exported. This utility creates a
+                summary report containing configuration information, logs and diagnostic data
+                that will help TAC in troubleshooting and resolving a technical issue.
+            mac_address: The MAC address.
+            name: null
+            pod_id: The POD identifier.
+            weight: The weight of the fault in calculating the health score of an object. A
+                higher weight causes a higher degradation of the health score of the affected
+                object. Default: ``1``.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -5616,7 +7216,22 @@ class _ServiceRedirectPolicyMakers(Cursor):
         userdom: str | None = None,
         weight: int | None = None,
     ) -> ServiceRedirectPolicyDestinationOfRedirectedTrafficCursor:
-        """Declare a ``vnsRedirectDest`` child under the service_redirect_policy level."""
+        """Declare a ``vnsRedirectDest`` child under the service_redirect_policy level.
+
+        Args:
+            ip_address: The IP address.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            dest_name: The destination name to which data was exported. This utility creates a
+                summary report containing configuration information, logs and diagnostic data
+                that will help TAC in troubleshooting and resolving a technical issue.
+            mac_address: The MAC address.
+            name: null
+            pod_id: The POD identifier.
+            weight: The weight of the fault in calculating the health score of an object. A
+                higher weight causes a higher degradation of the health score of the affected
+                object. Default: ``1``.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -6370,7 +7985,17 @@ class _NodeProfileBgpPeerMakers(Cursor):
         display_name: str | None = None,
         userdom: str | None = None,
     ) -> NodeProfileBgpPeerAutonomousSystemProfileCursor:
-        """Declare a ``bgpAsP`` child under the bgp_peer level."""
+        """Declare a ``bgpAsP`` child under the bgp_peer level.
+
+        The BGP autonomous system profile information.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            autonomous_system_number: A number that uniquely identifies an autonomous system.
+                Default: ``0``.
+            description: Specifies the description of a policy component.
+            name: null
+        """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
             "NodeProfileBgpPeerAutonomousSystemProfileCursor",
@@ -6388,7 +8013,18 @@ class _NodeProfileBgpPeerMakers(Cursor):
         display_name: str | None = None,
         userdom: str | None = None,
     ) -> NodeProfileBgpPeerLocalAutonomousSystemProfileCursor:
-        """Declare a ``bgpLocalAsnP`` child under the bgp_peer level."""
+        """Declare a ``bgpLocalAsnP`` child under the bgp_peer level.
+
+        The local autonomous system information pertaining to a peer.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            asn_propagation: The local Autonomous System Number (ASN) configuration. Values:
+                ``dual-as``, ``no-prepend``, ``none``, ``replace-as``. Default: ``none``.
+            description: Specifies the description of a policy component.
+            local_asn: The local autonomous system number (ASN). Default: ``0``.
+            name: null
+        """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
             "NodeProfileBgpPeerLocalAutonomousSystemProfileCursor",
@@ -6405,7 +8041,16 @@ class _NodeProfileBgpPeerMakers(Cursor):
         site_of_origin: str | None = None,
         userdom: str | None = None,
     ) -> NodeProfileBgpPeerSiteOfOriginProfileCursor:
-        """Declare a ``bgpSiteOfOriginP`` child under the bgp_peer level."""
+        """Declare a ``bgpSiteOfOriginP`` child under the bgp_peer level.
+
+        Site of Origin Profile
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            name: null
+            site_of_origin: Site of origin
+        """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
             "NodeProfileBgpPeerSiteOfOriginProfileCursor",
@@ -6498,7 +8143,17 @@ class _NodeProfileInfraPeerConnectivityProfileMakers(Cursor):
         display_name: str | None = None,
         userdom: str | None = None,
     ) -> NodeProfileInfraPeerConnectivityProfileAutonomousSystemProfileCursor:
-        """Declare a ``bgpAsP`` child under the infra_peer_connectivity_profile level."""
+        """Declare a ``bgpAsP`` child under the infra_peer_connectivity_profile level.
+
+        The BGP autonomous system profile information.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            autonomous_system_number: A number that uniquely identifies an autonomous system.
+                Default: ``0``.
+            description: Specifies the description of a policy component.
+            name: null
+        """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
             "NodeProfileInfraPeerConnectivityProfileAutonomousSystemProfileCursor",
@@ -6516,7 +8171,18 @@ class _NodeProfileInfraPeerConnectivityProfileMakers(Cursor):
         display_name: str | None = None,
         userdom: str | None = None,
     ) -> NodeProfileInfraPeerConnectivityProfileLocalAutonomousSystemProfileCursor:
-        """Declare a ``bgpLocalAsnP`` child under the infra_peer_connectivity_profile level."""
+        """Declare a ``bgpLocalAsnP`` child under the infra_peer_connectivity_profile level.
+
+        The local autonomous system information pertaining to a peer.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            asn_propagation: The local Autonomous System Number (ASN) configuration. Values:
+                ``dual-as``, ``no-prepend``, ``none``, ``replace-as``. Default: ``none``.
+            description: Specifies the description of a policy component.
+            local_asn: The local autonomous system number (ASN). Default: ``0``.
+            name: null
+        """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
             "NodeProfileInfraPeerConnectivityProfileLocalAutonomousSystemProfileCursor",
@@ -6625,7 +8291,38 @@ class _InterfaceProfileMakers(Cursor):
         target_dscp: str | None = None,
         userdom: str | None = None,
     ) -> PathAttachmentCursor:
-        """Declare a ``l3extRsPathL3OutAtt`` child under the interface_profile level."""
+        """Declare a ``l3extRsPathL3OutAtt`` child under the interface_profile level.
+
+        The path endpoints (ports and port channels) used to reach the external layer 3 network. The
+        corresponding set of policies will be resolved into the specified leaf path endpoints.
+
+        Args:
+            target_dn: The logical interface identifier.
+            is_multi_pod_direct: MultiPod Direct (back-to-back) Link feature When link is
+                MultiPod Direct Link Default: ``False``.
+            addr: The IP address of the path attached to the layer 3 outside profile.
+            annotation: User annotation. Suggested format orchestrator:value
+            autostate: Autostate feature When enabled an SVI automatically goes down when
+                forwarding states of all ports attached to it is down Values: ``disabled``,
+                ``enabled``. Default: ``disabled``.
+            descr: The description of this configuration item.
+            encap: The encapsulation of the path attached to the layer 3 outside profile.
+            encap_scope: Represents the scope of the encap Values: ``ctx``, ``local``. Default:
+                ``local``.
+            if_inst_t: null Values: ``ext-svi``, ``l3-port``, ``sub-interface``,
+                ``unspecified``. Default: ``ext-svi``.
+            ipv6_dad: IPv6 DAD feature When disabled it will IPv6 DAD will be diasabled Values:
+                ``disabled``, ``enabled``. Default: ``enabled``.
+            ll_addr: The override of the system generated IPv6 link-local address.
+            mac: The MAC address of the path attached to the layer 3 outside profile.
+            mode: Represents the mode (native etc.) of the encap. This property only takes
+                affect ifInstT (Interface Instantiation Type) is external-svi and is ignored for
+                sub-interface and l3-port Values: ``native``, ``regular``, ``untagged``.
+                Default: ``regular``.
+            mtu: The maximum transmit unit of the external network. Default: ``0``.
+            target_dscp: The target differentiated service code point (DSCP) of the path
+                attached to the layer 3 outside profile.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -6660,7 +8357,33 @@ class _InterfaceProfileMakers(Cursor):
         dscp_value: str | None = None,
         userdom: str | None = None,
     ) -> FloatingSviCursor:
-        """Declare a ``l3extVirtualLIfP`` child under the interface_profile level."""
+        """Declare a ``l3extVirtualLIfP`` child under the interface_profile level.
+
+        Args:
+            path_of_the_anchor_node: Dn of the Anchor Node
+            external_interface_encap: Encap of the external l2/l3 interface @@@ Note: In switch,
+                two External BDs on the same node cannot have @@@ the external encap. In order
+                to support this for external encap @@@ on a node (it can come from any port
+                relation), same BD vxlan @@@ id should be allocated
+            external_l3_interface_ip_address: Address of the external l3 interface
+            annotation: User annotation. Suggested format orchestrator:value
+            svi_autostate: Values: ``disabled``, ``enabled``. Default: ``disabled``.
+            description: Description
+            encap_scope: Values: ``ctx``, ``local``. Default: ``local``.
+            external_interface_type: Type of the external l2/l3 interface Values: ``ext-svi``,
+                ``l3-port``, ``sub-interface``, ``unspecified``. Default: ``ext-svi``.
+            ipv6_dad: IPv6 DAD feature When disabled it will IPv6 DAD will be diasabled Values:
+                ``disabled``, ``enabled``. Default: ``enabled``.
+            ipv6_link_local_address: Override of system generated Ipv6 Link Local Addr
+            external_l3_interface_mac_address: Mac of the external l3 interface. The mac address
+                is by default hard coded to "00:22:BD:F8:19:FF". This is a reserved MAC address
+                and all the l3 interfaces by default use this mac as the router mac.
+            encap_mode: The BGP Domain mode. Values: ``native``, ``regular``, ``untagged``.
+                Default: ``regular``.
+            mtu_size: The administrative MTU port on the aggregated interface. Default: ``0``.
+            name_of_virtuallifp: The name of the object.
+            dscp_value: Interface level Dscp value.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -6695,7 +8418,20 @@ class _InterfaceProfileMakers(Cursor):
         display_name: str | None = None,
         userdom: str | None = None,
     ) -> OspfInterfaceCursor:
-        """Declare a ``ospfIfP`` child under the interface_profile level."""
+        """Declare a ``ospfIfP`` child under the interface_profile level.
+
+        The OSPF interface profile enables OSPF on the interface. Optionally, the OSPF interface
+        profile can have a relation to an OSPF interface policy for more granular control over
+        interface proprieties.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            authentication_key: The OSPF authentication key
+            authentication_type: The OSPF authentication type. The type options are; default,
+                md5, none, and simple. Values: ``md5``, ``none``, ``simple``. Default: ``none``.
+            description: Specifies the description of a policy component.
+            name: null
+        """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
             "OspfInterfaceCursor",
@@ -6711,7 +8447,17 @@ class _InterfaceProfileMakers(Cursor):
         display_name: str | None = None,
         userdom: str | None = None,
     ) -> EigrpInterfaceCursor:
-        """Declare a ``eigrpIfP`` child under the interface_profile level."""
+        """Declare a ``eigrpIfP`` child under the interface_profile level.
+
+        The EIGRP interface profile, which enables EIGRP on the interface. Optionally, the EIGRP
+        interface profile can have a relation to an EIGRP interface policy for more granular control
+        over interface proprieties.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            name: null
+        """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
             "EigrpInterfaceCursor",
@@ -6728,7 +8474,15 @@ class _InterfaceProfileMakers(Cursor):
         userdom: str | None = None,
         hsrp_version: Hsrpversion | str | None = None,
     ) -> HsrpInterfaceCursor:
-        """Declare a ``hsrpIfP`` child under the interface_profile level."""
+        """Declare a ``hsrpIfP`` child under the interface_profile level.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            name: null
+            hsrp_version: HSRP Version on this Interface Values: ``v1``, ``v2``. Default:
+                ``v1``.
+        """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
             "HsrpInterfaceCursor",
@@ -6744,7 +8498,13 @@ class _InterfaceProfileMakers(Cursor):
         display_name: str | None = None,
         userdom: str | None = None,
     ) -> IgmpInterfaceCursor:
-        """Declare a ``igmpIfP`` child under the interface_profile level."""
+        """Declare a ``igmpIfP`` child under the interface_profile level.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            name: null
+        """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
             "IgmpInterfaceCursor",
@@ -6760,7 +8520,15 @@ class _InterfaceProfileMakers(Cursor):
         display_name: str | None = None,
         userdom: str | None = None,
     ) -> PimInterfaceCursor:
-        """Declare a ``pimIfP`` child under the interface_profile level."""
+        """Declare a ``pimIfP`` child under the interface_profile level.
+
+        PIM interface policy.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            name: null
+        """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
             "PimInterfaceCursor",
@@ -6776,7 +8544,13 @@ class _InterfaceProfileMakers(Cursor):
         display_name: str | None = None,
         userdom: str | None = None,
     ) -> PimIpv6InterfaceCursor:
-        """Declare a ``pimIPV6IfP`` child under the interface_profile level."""
+        """Declare a ``pimIPV6IfP`` child under the interface_profile level.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            name: null
+        """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
             "PimIpv6InterfaceCursor",
@@ -6795,7 +8569,17 @@ class _InterfaceProfileMakers(Cursor):
         authentication_type: BfdAuthT | str | None = None,
         userdom: str | None = None,
     ) -> BfdInterfaceCursor:
-        """Declare a ``bfdIfP`` child under the interface_profile level."""
+        """Declare a ``bfdIfP`` child under the interface_profile level.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            authentication_key: Authentication key
+            authentication_key_id: Authentication key id
+            name: null
+            authentication_type: Authentication type Values: ``none``, ``sha1``. Default:
+                ``none``.
+        """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
             "BfdInterfaceCursor",
@@ -6814,7 +8598,17 @@ class _InterfaceProfileMakers(Cursor):
         authentication_type: BfdAuthT | str | None = None,
         userdom: str | None = None,
     ) -> BfdMhInterfaceCursor:
-        """Declare a ``bfdMhIfP`` child under the interface_profile level."""
+        """Declare a ``bfdMhIfP`` child under the interface_profile level.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            authentication_key: Authentication key
+            authentication_key_id: Authentication key id
+            name: null
+            authentication_type: Authentication type Values: ``none``, ``sha1``. Default:
+                ``none``.
+        """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
             "BfdMhInterfaceCursor",
@@ -6834,7 +8628,25 @@ class _InterfaceProfileMakers(Cursor):
         tag: PolColor | str | None = None,
         userdom: str | None = None,
     ) -> DhcpRelayLabelCursor:
-        """Declare a ``dhcpLbl`` child under the interface_profile level."""
+        """Declare a ``dhcpLbl`` child under the interface_profile level.
+
+        A DHCP relay label contains a name for the label, the scope, and a DHCP option policy. The
+        scope is the owner of the relay server and the DHCP option policy supplies DHCP clients with
+        configuration parameters such as domain, nameserver, and subnet router addresses.
+
+        Args:
+            name: The DHCP relay label name. This name can be up to 64 alphanumeric characters.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            scope: Represents the target relay servers ownership Values: ``infra``, ``tenant``.
+                Default: ``infra``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            tag: Specifies the color of a policy label. Values: ``alice-blue``, ``antique-
+                white``, ``aqua``, ``aquamarine``, ``azure``, ``beige``, ``bisque``, ``black``,
+                …. Default: ``alice-blue``.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -6858,7 +8670,13 @@ class _InterfaceProfileMakers(Cursor):
         display_name: str | None = None,
         userdom: str | None = None,
     ) -> MplsInterfaceCursor:
-        """Declare a ``mplsIfP`` child under the interface_profile level."""
+        """Declare a ``mplsIfP`` child under the interface_profile level.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            name: null
+        """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
             "MplsInterfaceCursor",
@@ -7049,7 +8867,15 @@ class _L3outRouteControlProfileRouteControlContextMakers(Cursor):
         display_name: str | None = None,
         userdom: str | None = None,
     ) -> L3outRouteControlProfileRouteControlContextRouteContextScopeCursor:
-        """Declare a ``rtctrlScope`` child under the route_control_context level."""
+        """Declare a ``rtctrlScope`` child under the route_control_context level.
+
+        The route context Scope. The scope defines the node on which the policy is deployed.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            name: null
+        """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
             "L3outRouteControlProfileRouteControlContextRouteContextScopeCursor",
@@ -7767,7 +9593,13 @@ class _EigrpInterfaceMakers(Cursor):
         annotation: str | None = None,
         userdom: str | None = None,
     ) -> EigrpAuthenticationCursor:
-        """Declare a ``eigrpAuthIfP`` child under the eigrp_interface level."""
+        """Declare a ``eigrpAuthIfP`` child under the eigrp_interface level.
+
+        AuthIfP
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+        """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
             "EigrpAuthenticationCursor",
@@ -7867,7 +9699,33 @@ class _FloatingSviMakers(Cursor):
         userdom: str | None = None,
         weight_for_routes_from_this_neighbor: str | None = None,
     ) -> FloatingSviBgpPeerCursor:
-        """Declare a ``bgpPeerP`` child under the floating_svi level."""
+        """Declare a ``bgpPeerP`` child under the floating_svi level.
+
+        The BGP peer connectivity profile contains the peer IP address and defines the peer
+        connectivity control settings. These values are for BGP routers, which can only exchange
+        routing information when they establish a peer connection between them.
+
+        Args:
+            peer_address: The peer IP address.
+            address_type_af_controls: Ucast/Mcast Addr Type AF Control
+            administrative_state: Administrative State Values: ``disabled``, ``enabled``.
+                Default: ``enabled``.
+            allowed_self_as_count: The number of occurrences of a local Autonomous System Number
+                (ASN).
+            annotation: User annotation. Suggested format orchestrator:value
+            capability: Peer AF Capability
+            type_of_network_reachable_via_this_peer: Network reachability via this Peer
+            peer_af_controls: The peer controls specify which Border Gateway Protocol (BGP)
+                attributes are sent to a peer.
+            peer_af_controls_ext: Peer AF controls Ext
+            description: Specifies the description of a policy component.
+            asn_name: null
+            password: Administrative state
+            peer_controls: The peer controls.
+            private_as_control: Remove private AS
+            ebgp_multihop_ttl_value: Specifies time to live (TTL).
+            weight_for_routes_from_this_neighbor: Default weight for routes from this neighbor
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -7908,7 +9766,36 @@ class _FloatingSviMakers(Cursor):
         userdom: str | None = None,
         weight_for_routes_from_this_neighbor: str | None = None,
     ) -> FloatingSviInfraPeerConnectivityProfileCursor:
-        """Declare a ``bgpInfraPeerP`` child under the floating_svi level."""
+        """Declare a ``bgpInfraPeerP`` child under the floating_svi level.
+
+        Peer connectivity profile
+
+        Args:
+            peer_address: Peer address
+            address_type_af_controls: Ucast/Mcast Addr Type AF Control
+            administrative_state: Administrative State Values: ``disabled``, ``enabled``.
+                Default: ``enabled``.
+            allowed_self_as_count: The number of occurrences of a local Autonomous System Number
+                (ASN).
+            annotation: User annotation. Suggested format orchestrator:value
+            capability: Peer AF Capability
+            peer_af_controls: Peer Controls
+            peer_af_controls_ext: Peer AF controls Ext
+            data_plane_address: Data plane address
+            description: Specifies the description of a policy component.
+            name: null
+            password: Administrative state
+            peer_controls: The peer controls.
+            peer_type: Peer Type
+            private_as_control: Remove private AS
+            intersite_route_reflector: Is the peer an intersite route reflector Default:
+                ``False``.
+            source_interface_type: Source Interface Type Values: ``l3out-loopback``, ``routable-
+                loopback``. Default: ``l3out-loopback``.
+            control_type: Values: ``trusted``, ``untrusted``. Default: ``untrusted``.
+            ebgp_multihop_ttl_value: Specifies time to live (TTL).
+            weight_for_routes_from_this_neighbor: Default weight for routes from this neighbor
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -7936,7 +9823,21 @@ class _FloatingSviMakers(Cursor):
         display_name: str | None = None,
         userdom: str | None = None,
     ) -> MemberNodeConfigurationCursor:
-        """Declare a ``l3extMember`` child under the floating_svi level."""
+        """Declare a ``l3extMember`` child under the floating_svi level.
+
+        The member. The member is used for providing per node IP address configuration.
+
+        Args:
+            side: null
+            addr: null
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            ipv6_dad: IPv6 DAD feature When disabled it will IPv6 DAD will be diasabled Values:
+                ``disabled``, ``enabled``. Default: ``enabled``.
+            ipv6_link_local_address: The override of the system generated Ipv6 link local
+                address.
+            name: null
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -7957,7 +9858,13 @@ class _FloatingSviMakers(Cursor):
         annotation: str | None = None,
         userdom: str | None = None,
     ) -> NdPrefixProfileCursor:
-        """Declare a ``ndPfxP`` child under the floating_svi level."""
+        """Declare a ``ndPfxP`` child under the floating_svi level.
+
+        Nd Prefix Policy
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+        """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
             "NdPrefixProfileCursor",
@@ -7975,7 +9882,18 @@ class _FloatingSviMakers(Cursor):
         display_name: str | None = None,
         userdom: str | None = None,
     ) -> SecondaryIpAddressCursor:
-        """Declare a ``l3extIp`` child under the floating_svi level."""
+        """Declare a ``l3extIp`` child under the floating_svi level.
+
+        A secondary IP address policy.
+
+        Args:
+            ip_address: The peer IP address.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            ipv6_dad: IPv6 DAD feature When disabled it will IPv6 DAD will be diasabled Values:
+                ``disabled``, ``enabled``. Default: ``enabled``.
+            name: null
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -7996,7 +9914,11 @@ class _FloatingSviMakers(Cursor):
         annotation: str | None = None,
         userdom: str | None = None,
     ) -> BdProfileContainerCursor:
-        """Declare a ``l3extBdProfileCont`` child under the floating_svi level."""
+        """Declare a ``l3extBdProfileCont`` child under the floating_svi level.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+        """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
             "BdProfileContainerCursor",
@@ -8098,7 +10020,24 @@ class _HsrpInterfaceMakers(Cursor):
         display_name: str | None = None,
         userdom: str | None = None,
     ) -> HsrpGroupProfileCursor:
-        """Declare a ``hsrpGroupP`` child under the hsrp_interface level."""
+        """Declare a ``hsrpGroupP`` child under the hsrp_interface level.
+
+        Hsrp Group Profile
+
+        Args:
+            name: The name of the object.
+            annotation: User annotation. Suggested format orchestrator:value
+            group_vip_misconfiguration: Bitmask representation of the configuration issues found
+                during the endpoint group deployment.
+            description: Specifies the description of a policy component.
+            group_af: HSRP Group Type Values: ``ipv4``, ``ipv6``. Default: ``ipv4``.
+            group_id: HSRP Group ID
+            group_name: Redundancy name string
+            primary_ip_address: HSRP primary Virtual IP address (VIP)
+            vip_obtain_mode: HSRP primary Virtual IP Obtain Mode Values: ``admin``, ``auto``,
+                ``learn``. Default: ``admin``.
+            configured_mac_address_for_the_group: HSRP VMAC for the group
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -8753,7 +10692,17 @@ class _FloatingSviBgpPeerMakers(Cursor):
         display_name: str | None = None,
         userdom: str | None = None,
     ) -> FloatingSviBgpPeerAutonomousSystemProfileCursor:
-        """Declare a ``bgpAsP`` child under the bgp_peer level."""
+        """Declare a ``bgpAsP`` child under the bgp_peer level.
+
+        The BGP autonomous system profile information.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            autonomous_system_number: A number that uniquely identifies an autonomous system.
+                Default: ``0``.
+            description: Specifies the description of a policy component.
+            name: null
+        """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
             "FloatingSviBgpPeerAutonomousSystemProfileCursor",
@@ -8771,7 +10720,18 @@ class _FloatingSviBgpPeerMakers(Cursor):
         display_name: str | None = None,
         userdom: str | None = None,
     ) -> FloatingSviBgpPeerLocalAutonomousSystemProfileCursor:
-        """Declare a ``bgpLocalAsnP`` child under the bgp_peer level."""
+        """Declare a ``bgpLocalAsnP`` child under the bgp_peer level.
+
+        The local autonomous system information pertaining to a peer.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            asn_propagation: The local Autonomous System Number (ASN) configuration. Values:
+                ``dual-as``, ``no-prepend``, ``none``, ``replace-as``. Default: ``none``.
+            description: Specifies the description of a policy component.
+            local_asn: The local autonomous system number (ASN). Default: ``0``.
+            name: null
+        """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
             "FloatingSviBgpPeerLocalAutonomousSystemProfileCursor",
@@ -8788,7 +10748,16 @@ class _FloatingSviBgpPeerMakers(Cursor):
         site_of_origin: str | None = None,
         userdom: str | None = None,
     ) -> FloatingSviBgpPeerSiteOfOriginProfileCursor:
-        """Declare a ``bgpSiteOfOriginP`` child under the bgp_peer level."""
+        """Declare a ``bgpSiteOfOriginP`` child under the bgp_peer level.
+
+        Site of Origin Profile
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            name: null
+            site_of_origin: Site of origin
+        """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
             "FloatingSviBgpPeerSiteOfOriginProfileCursor",
@@ -8891,7 +10860,17 @@ class _FloatingSviInfraPeerConnectivityProfileMakers(Cursor):
         display_name: str | None = None,
         userdom: str | None = None,
     ) -> FloatingSviInfraPeerConnectivityProfileAutonomousSystemProfileCursor:
-        """Declare a ``bgpAsP`` child under the infra_peer_connectivity_profile level."""
+        """Declare a ``bgpAsP`` child under the infra_peer_connectivity_profile level.
+
+        The BGP autonomous system profile information.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            autonomous_system_number: A number that uniquely identifies an autonomous system.
+                Default: ``0``.
+            description: Specifies the description of a policy component.
+            name: null
+        """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
             "FloatingSviInfraPeerConnectivityProfileAutonomousSystemProfileCursor",
@@ -8909,7 +10888,18 @@ class _FloatingSviInfraPeerConnectivityProfileMakers(Cursor):
         display_name: str | None = None,
         userdom: str | None = None,
     ) -> FloatingSviInfraPeerConnectivityProfileLocalAutonomousSystemProfileCursor:
-        """Declare a ``bgpLocalAsnP`` child under the infra_peer_connectivity_profile level."""
+        """Declare a ``bgpLocalAsnP`` child under the infra_peer_connectivity_profile level.
+
+        The local autonomous system information pertaining to a peer.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            asn_propagation: The local Autonomous System Number (ASN) configuration. Values:
+                ``dual-as``, ``no-prepend``, ``none``, ``replace-as``. Default: ``none``.
+            description: Specifies the description of a policy component.
+            local_asn: The local autonomous system number (ASN). Default: ``0``.
+            name: null
+        """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
             "FloatingSviInfraPeerConnectivityProfileLocalAutonomousSystemProfileCursor",

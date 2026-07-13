@@ -7,6 +7,7 @@ from enum import StrEnum
 
 class LldpDCBXPVerType(StrEnum):
     CEE = "CEE"
+    """const name="CIN" value="1" label="CIN"/"""
     IEEE = "IEEE"
 
     @classmethod

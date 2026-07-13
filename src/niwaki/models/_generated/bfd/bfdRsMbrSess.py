@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class bfdRsMbrSess(ManagedObject):
     """ACI Managed Object: ``bfdRsMbrSess`` — Port-Channel Member Sessions.
 
+    Relation to port-channel member sessions
+
     RN format: ``rsmbrSess-[{target_dn}]``
     """
 
@@ -40,4 +42,11 @@ class bfdRsMbrSess(ManagedObject):
     target_dn: Annotated[str, Field(alias="tDn")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""

@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class fvRsCtxToEigrpCtxAfPol(ManagedObject):
     """ACI Managed Object: ``fvRsCtxToEigrpCtxAfPol`` — EIGRP  Address Family Context Policy.
 
+    A source relation to the per-address family EIGRP context policy.
+
     RN format: ``rsctxToEigrpCtxAfPol-[{name}]-{af}``
     """
 
@@ -37,14 +39,25 @@ class fvRsCtxToEigrpCtxAfPol(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    af: EigrpAfT = EigrpAfT.IPV4_UCAST
+    af: EigrpAfT = Field(default=EigrpAfT.IPV4_UCAST, description="The address family.")
     name: Annotated[
         str,
         Field(
-            min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="tnEigrpCtxAfPolName"
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            alias="tnEigrpCtxAfPolName",
+            description="null",
         ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class analyticsRecordP(ManagedObject):
     """ACI Managed Object: ``analyticsRecordP`` — Flow Record.
 
+    Flow Record
+
     RN format: ``recordp-{name}``
     """
 
@@ -38,13 +40,24 @@ class analyticsRecordP(ManagedObject):
     name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    collect_params: str = Field(default="", alias="collect")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    collect_params: str = Field(
+        default="", alias="collect", description="Collect parameters for the flow record"
+    )
     description: Annotated[
         str,
         Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
     ] = ""
-    match_params: str = Field(default="", alias="match")
+    match_params: str = Field(
+        default="", alias="match", description="Match parameters for the flow record"
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

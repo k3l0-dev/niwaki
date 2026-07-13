@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class fvRsConsIf(ManagedObject):
     """ACI Managed Object: ``fvRsConsIf`` — Contract Interface.
 
+    A contract for which the EPG will be a consumer.
+
     RN format: ``rsconsIf-{name}``
     """
 
@@ -44,10 +46,28 @@ class fvRsConsIf(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     name: Annotated[
-        str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="tnVzCPIfName")
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            alias="tnVzCPIfName",
+            description="The contract interface name.",
+        ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    priority: QosTenantPrio = Field(default=QosTenantPrio.UNSPECIFIED, alias="prio")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    priority: QosTenantPrio = Field(
+        default=QosTenantPrio.UNSPECIFIED,
+        alias="prio",
+        description="The contract interface priority.",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

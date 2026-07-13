@@ -38,21 +38,54 @@ class thirdpartyappNodeConfig(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    node_id: Annotated[str, Field(alias="nodeId")]
+    node_id: Annotated[str, Field(alias="nodeId", description="Node ID")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     app_state: ThirdpartyappAppActionType = Field(
         default=ThirdpartyappAppActionType.INIT, alias="appCfgState"
     )
-    cpu_units: Annotated[int, Field(alias="appMaxCpu")] = 0
-    disk_units_mb: str = Field(default="", alias="appMaxDisk")
-    memory_units_mb: str = Field(default="", alias="appMaxMem")
-    runtime_options: str = Field(default="", alias="appParamList")
-    ipv4_gw_address: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="gwIpV4Addr")] = ""
-    interface_index: Annotated[int, Field(ge=0, le=3, alias="gwIpV4IntfIdx")] = 0
-    ipv6_gw_address: str = Field(default="", alias="gwIpV6Addr")
-    gw_ip_v6_intf_idx: Annotated[int, Field(ge=0, le=3, alias="gwIpV6IntfIdx")] = 0
+    cpu_units: Annotated[int, Field(alias="appMaxCpu", description="App Maximum CPU")] = 0
+    disk_units_mb: str = Field(default="", alias="appMaxDisk", description="App Maximum Disk")
+    memory_units_mb: str = Field(default="", alias="appMaxMem", description="App Maximum memory")
+    runtime_options: str = Field(
+        default="",
+        alias="appParamList",
+        description="When param list is more than 2048 chars in length, then use appParamListExt",
+    )
+    ipv4_gw_address: Annotated[
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            alias="gwIpV4Addr",
+            description="default gateway ip address",
+        ),
+    ] = ""
+    interface_index: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=3,
+            alias="gwIpV4IntfIdx",
+            description="default gateway interface index - v4guest interface index. e.g: specify '0' for interface eth0 inside the container",
+        ),
+    ] = 0
+    ipv6_gw_address: str = Field(
+        default="", alias="gwIpV6Addr", description="default gateway ip address"
+    )
+    gw_ip_v6_intf_idx: Annotated[
+        int,
+        Field(
+            ge=0, le=3, alias="gwIpV6IntfIdx", description="default gateway interface index - v6"
+        ),
+    ] = 0
     append_or_replace_runtime_options: ApphostingPkgRunOptState = Field(
         default=ApphostingPkgRunOptState.APPEND, alias="pkgOpts"
     )

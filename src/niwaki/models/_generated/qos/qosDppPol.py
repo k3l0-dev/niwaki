@@ -21,6 +21,8 @@ from niwaki.models.base import ManagedObject
 class qosDppPol(ManagedObject):
     """ACI Managed Object: ``qosDppPol`` — Data Plane Policing Policy.
 
+    Define a Data Plane Policing policy. User is supposed to use this in scenarios where the incoming traffic need to be policed to certain levels
+
     RN format: ``qosdpppol-{name}``
     """
 
@@ -48,54 +50,125 @@ class qosDppPol(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the object.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    admin_st: QosDppPolAdminState = Field(default=QosDppPolAdminState.DISABLED, alias="adminSt")
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    excessive_burst: str = Field(default="", alias="be")
-    excessive_burst_unit: DppBurstUnit = Field(default=DppBurstUnit.UNSPECIFIED, alias="beUnit")
-    burst: str = ""
-    burst_unit: DppBurstUnit = Field(default=DppBurstUnit.UNSPECIFIED, alias="burstUnit")
-    confirm_action: DppConformRateAction = Field(
-        default=DppConformRateAction.TRANSMIT, alias="conformAction"
+    admin_st: QosDppPolAdminState = Field(
+        default=QosDppPolAdminState.DISABLED,
+        alias="adminSt",
+        description="The Administrative state of the policy",
     )
-    conform_mark_cos: str = Field(default="", alias="conformMarkCos")
-    conform_mark_dscp: str = Field(default="", alias="conformMarkDscp")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    excessive_burst: str = Field(
+        default="", alias="be", description="Excessive burst size (2R3C policer only)"
+    )
+    excessive_burst_unit: DppBurstUnit = Field(
+        default=DppBurstUnit.UNSPECIFIED,
+        alias="beUnit",
+        description="Excessive Burst unit - none, Kilo, Mega, Giga, ms, us",
+    )
+    burst: Annotated[
+        str, Field(description="Committed burst size, number of packets to absorb during a burst")
+    ] = ""
+    burst_unit: DppBurstUnit = Field(
+        default=DppBurstUnit.UNSPECIFIED,
+        alias="burstUnit",
+        description="Burst unit - byte, kbyte, mbyte etc.",
+    )
+    confirm_action: DppConformRateAction = Field(
+        default=DppConformRateAction.TRANSMIT, alias="conformAction", description="Confirm action"
+    )
+    conform_mark_cos: str = Field(
+        default="", alias="conformMarkCos", description="Conform Mark cos"
+    )
+    conform_mark_dscp: str = Field(
+        default="", alias="conformMarkDscp", description="Conform Mark Dscp"
+    )
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies a description of the policy definition.",
+        ),
     ] = ""
     exceed_action: DppExceedRateAction = Field(
-        default=DppExceedRateAction.DROP, alias="exceedAction"
+        default=DppExceedRateAction.DROP, alias="exceedAction", description="Exceed action"
     )
-    exceed_mark_cos: str = Field(default="", alias="exceedMarkCos")
-    exceed_mark_dscp: str = Field(default="", alias="exceedMarkDscp")
-    bit_or_packet: DppMode = Field(default=DppMode.BIT, alias="mode")
+    exceed_mark_cos: str = Field(default="", alias="exceedMarkCos", description="Exceed Mark cos")
+    exceed_mark_dscp: str = Field(
+        default="", alias="exceedMarkDscp", description="Exceed Mark Dscp"
+    )
+    bit_or_packet: DppMode = Field(
+        default=DppMode.BIT, alias="mode", description="Policer mode - bytes or packet policer"
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
     owner_key: Annotated[
         str,
         Field(
-            max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerKey"
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerKey",
+            description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
     owner_tag: Annotated[
         str,
-        Field(max_length=64, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerTag"),
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerTag",
+            description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+        ),
     ] = ""
-    peak_rate: str = Field(default="", alias="pir")
-    peak_rate_unit: DppRateUnit = Field(default=DppRateUnit.UNSPECIFIED, alias="pirUnit")
-    rate: str = ""
-    rate_unit: DppRateUnit = Field(default=DppRateUnit.UNSPECIFIED, alias="rateUnit")
-    policer_sharing_mode: DppSharingMode = Field(
-        default=DppSharingMode.DEDICATED, alias="sharingMode"
+    peak_rate: str = Field(
+        default="", alias="pir", description="Peak rate (pir) (2R3C policer only)"
     )
-    type: DppType = DppType._1R2C
+    peak_rate_unit: DppRateUnit = Field(
+        default=DppRateUnit.UNSPECIFIED,
+        alias="pirUnit",
+        description="Peak Rate unit - none, Kilo, Mega, Giga",
+    )
+    rate: Annotated[
+        str,
+        Field(
+            description="Allowed rate, committed rate at which the packets are allowed into the system"
+        ),
+    ] = ""
+    rate_unit: DppRateUnit = Field(
+        default=DppRateUnit.UNSPECIFIED,
+        alias="rateUnit",
+        description="Rate unit - bps, kbps, mbps, packets etc.",
+    )
+    policer_sharing_mode: DppSharingMode = Field(
+        default=DppSharingMode.DEDICATED, alias="sharingMode", description="Policer sharing mode"
+    )
+    type: DppType = Field(default=DppType._1R2C, description="Policer type")
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     violate_action: DppViolateRateAction = Field(
-        default=DppViolateRateAction.DROP, alias="violateAction"
+        default=DppViolateRateAction.DROP, alias="violateAction", description="Violate action"
     )
-    violate_mark_cos: str = Field(default="", alias="violateMarkCos")
-    violate_mark_dscp: str = Field(default="", alias="violateMarkDscp")
+    violate_mark_cos: str = Field(
+        default="", alias="violateMarkCos", description="Violate Mark cos"
+    )
+    violate_mark_dscp: str = Field(
+        default="", alias="violateMarkDscp", description="Violate Mark Dscp"
+    )

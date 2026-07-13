@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class EigrpDelayUnit(StrEnum):
     PICO = "pico"
+    """Picoseconds"""
     TENS_OF_MICRO = "tens-of-micro"
+    """Tens of microseconds"""
 
     @classmethod
     def _missing_(cls, value: object) -> EigrpDelayUnit | None:

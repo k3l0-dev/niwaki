@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class MaintSMUOperation(StrEnum):
     SMUINSTALL = "smuInstall"
+    """SMU patch install operation."""
     SMUUNINSTALL = "smuUninstall"
+    """SMU patch uninstall operation."""
 
     @classmethod
     def _missing_(cls, value: object) -> MaintSMUOperation | None:

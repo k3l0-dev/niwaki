@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class ospfExtP(ManagedObject):
     """ACI Managed Object: ``ospfExtP`` — External Profile.
 
+    The OSPF external profile information.
+
     RN format: ``ospfExtP``
     """
 
@@ -40,16 +42,42 @@ class ospfExtP(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     area_cost: Annotated[int, Field(ge=0, le=16777215, alias="areaCost")] = 1
-    area_type: str = Field(default="", alias="areaCtrl")
-    area_id: str = Field(default="", alias="areaId")
-    area_type: OspfAreaT = Field(default=OspfAreaT.NSSA, alias="areaType")
+    area_type: str = Field(
+        default="",
+        alias="areaCtrl",
+        description="The controls of redistribution and summary LSA generation into NSSA and Stub areas.",
+    )
+    area_id: str = Field(
+        default="",
+        alias="areaId",
+        description="The OSPF Area ID. An area is a logical collection of OSPF networks, routers, and links that have the same area identification. A router within an area must maintain a topological database for the area to which it belongs.",
+    )
+    area_type: OspfAreaT = Field(
+        default=OspfAreaT.NSSA, alias="areaType", description="The area type."
+    )
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
-    create_multipod_internal_ospf_instance: bool = Field(default=False, alias="multipodInternal")
+    create_multipod_internal_ospf_instance: bool = Field(
+        default=False,
+        alias="multipodInternal",
+        description="Start OSPF in WAN instance instead of default",
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

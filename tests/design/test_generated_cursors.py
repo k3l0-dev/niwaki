@@ -162,3 +162,29 @@ class TestConsistency:
             assert ast.dump(ast.parse(disk)) == ast.dump(ast.parse(content)), (
                 f"{filename} is stale — re-run generate_design"
             )
+
+
+class TestMakerDocumentation:
+    """Generated makers carry Cisco-documented Args sections."""
+
+    def test_maker_docstring_has_args_section(self) -> None:
+        from niwaki.design._generated_cursors._tenant import TenantCursor
+
+        doc = " ".join((TenantCursor.ospf_interface_policy.__doc__ or "").split())
+        assert "Args:" in doc
+        assert "point-to-point and broadcast" in doc  # Cisco's field comment
+        assert "Values: ``bcast``, ``p2p``, ``unspecified``" in doc
+        assert "Default: ``unspecified``" in doc
+
+    def test_maker_docstring_carries_class_definition(self) -> None:
+        from niwaki.design._generated_cursors._tenant import TenantCursor
+
+        doc = " ".join((TenantCursor.bd.__doc__ or "").split())
+        assert doc.startswith("Declare a ``fvBD`` child")
+        assert "unique layer 2 forwarding domain" in doc
+
+    def test_sugar_params_are_documented(self) -> None:
+        from niwaki.design._generated_cursors._tenant import FilterCursor
+
+        doc = FilterCursor.entry.__doc__ or ""
+        assert "tcp: Curated shorthand" in doc

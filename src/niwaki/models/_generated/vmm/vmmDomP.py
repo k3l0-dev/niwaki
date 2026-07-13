@@ -19,6 +19,8 @@ from niwaki.models.base import ManagedObject
 class vmmDomP(ManagedObject):
     """ACI Managed Object: ``vmmDomP`` — VMM Domain.
 
+    The VMM domain profile is a policy for grouping VM controllers with similar networking policy requirements. For example, the VM controllers can share VLAN or VXLAN space and application endpoint groups.
+
     RN format: ``dom-{name}``
     """
 
@@ -64,7 +66,7 @@ class vmmDomP(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: str
+    name: Annotated[str, Field(description="The domain profile name.")]
 
     # ── Create-only (ignored by APIC on modification) ─────────────────────────
     delimiter: Annotated[
@@ -73,8 +75,19 @@ class vmmDomP(ManagedObject):
 
     # ── Configurable ───────────────────────────────────────────────────────────
     access_mode: VmmAccessMode = Field(default=VmmAccessMode.READ_WRITE, alias="accessMode")
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    arp_learning: VmmARPLearning = Field(default=VmmARPLearning.DISABLED, alias="arpLearning")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    arp_learning: VmmARPLearning = Field(
+        default=VmmARPLearning.DISABLED,
+        alias="arpLearning",
+        description="Enable/Disable arp learning for AVS Domain",
+    )
     ave_time_out_time_seconds: Annotated[int, Field(ge=10, le=300, alias="aveTimeOut")] = 30
     configure_infra_port_group: bool = Field(default=False, alias="configInfraPg")
     ctrl_knob: str = Field(default="", alias="ctrlKnob")
@@ -83,26 +96,49 @@ class vmmDomP(ManagedObject):
     enable_tag_data_retrieval: bool = Field(default=False, alias="enableTag")
     enable_vm_folder_data_retrieval: bool = Field(default=False, alias="enableVmFolder")
     encap_mode: VmmEncapMode = Field(default=VmmEncapMode.UNKNOWN, alias="encapMode")
-    switching_preference: L2EnfPref = Field(default=L2EnfPref.HW, alias="enfPref")
+    switching_preference: L2EnfPref = Field(
+        default=L2EnfPref.HW,
+        alias="enfPref",
+        description="The switching enforcement preference. This determines whether switches can be done within the virtual switch (Local Switching) or whether all switched traffic must go through the fabric (No Local Switching).",
+    )
     ep_inventory_type: VmmEpInventoryType = Field(
         default=VmmEpInventoryType.ON_LINK, alias="epInventoryType"
     )
     end_point_retention_time_seconds: Annotated[int, Field(ge=0, le=600, alias="epRetTime")] = 0
     enable_host_availibility_monitoring: bool = Field(default=False, alias="hvAvailMonitor")
-    multicast_address: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="mcastAddr")] = ""
-    virtual_switch: VmmMode = Field(default=VmmMode.DEFAULT, alias="mode")
+    multicast_address: Annotated[
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            alias="mcastAddr",
+            description="The multicast address of the VMM domain profile.",
+        ),
+    ] = ""
+    virtual_switch: VmmMode = Field(
+        default=VmmMode.DEFAULT,
+        alias="mode",
+        description="The switch to be used for the domain profile.",
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
     owner_key: Annotated[
         str,
         Field(
-            max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerKey"
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerKey",
+            description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
     owner_tag: Annotated[
         str,
-        Field(max_length=64, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerTag"),
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerTag",
+            description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+        ),
     ] = ""
     default_encap_mode: VmmEncapModePref = Field(
         default=VmmEncapModePref.UNSPECIFIED, alias="prefEncapMode"

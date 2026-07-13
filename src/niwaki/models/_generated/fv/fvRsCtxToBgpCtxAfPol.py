@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class fvRsCtxToBgpCtxAfPol(ManagedObject):
     """ACI Managed Object: ``fvRsCtxToBgpCtxAfPol`` — BGP  Address Family Context Policy.
 
+    A source relation to the BGP address family context policy.
+
     RN format: ``rsctxToBgpCtxAfPol-[{name}]-{af}``
     """
 
@@ -37,12 +39,25 @@ class fvRsCtxToBgpCtxAfPol(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    af: BgpExtAfType = BgpExtAfType.IPV4_UCAST
+    af: BgpExtAfType = Field(default=BgpExtAfType.IPV4_UCAST, description="The address family.")
     name: Annotated[
         str,
-        Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="tnBgpCtxAfPolName"),
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            alias="tnBgpCtxAfPolName",
+            description="The name of the per-address family BGP context policy.",
+        ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

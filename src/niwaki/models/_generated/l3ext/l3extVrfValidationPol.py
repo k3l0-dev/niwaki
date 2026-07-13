@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class l3extVrfValidationPol(ManagedObject):
     """ACI Managed Object: ``l3extVrfValidationPol`` — VRF Validation Policy.
 
+    VRF Validation knobs
+
     RN format: ``vrfvalidationpol-{name}``
     """
 
@@ -36,50 +38,96 @@ class l3extVrfValidationPol(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the object.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     enable_bgpinfrapeer_policy_validation: bool = Field(
-        default=True, alias="EnableVrfValidationBgpInfraPeerP"
+        default=True,
+        alias="EnableVrfValidationBgpInfraPeerP",
+        description="Implementation note: Corresponds to kVrfValidationBgpInfraPeerP",
     )
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies a description of the policy definition.",
+        ),
     ] = ""
     enable_vrf_validation_infra_underlay: bool = Field(
         default=True, alias="enableVrfValidationInfraUnderlay"
     )
     enable_vrf_validation_interface_inco: bool = Field(
-        default=True, alias="enableVrfValidationInterfaceInco"
+        default=True,
+        alias="enableVrfValidationInterfaceInco",
+        description="Implementation note: Corresponds to kVrfValidationInterfaceInfo",
     )
     enable_vrf_validation_ip_address: bool = Field(
-        default=True, alias="enableVrfValidationIpAddress"
+        default=True,
+        alias="enableVrfValidationIpAddress",
+        description="Implementation note: Corresponds to kVrfValidationRsPathAddress",
     )
     enable_loopback_interface_validation: bool = Field(
-        default=True, alias="enableVrfValidationLoopbackIf"
+        default=True,
+        alias="enableVrfValidationLoopbackIf",
+        description="Implementation note: Corresponds to kVrfValidationNodeRouterLoopback",
     )
     enable_vrf_validation_node_router_id_bgp_peer: bool = Field(
-        default=True, alias="enableVrfValidationNodeRouterIdBgpPeer"
+        default=True,
+        alias="enableVrfValidationNodeRouterIdBgpPeer",
+        description="Implementation note: Corresponds to kVrfValidationNodeRouterIdBgpPeer",
     )
     enable_ospf_interface_and_area_validaton: bool = Field(
-        default=True, alias="enableVrfValidationOspfArea"
+        default=True,
+        alias="enableVrfValidationOspfArea",
+        description="Implementation note: Corresponds to kVrfValidationRsPathOspfArea",
     )
     enable_ospf_area_id_validation: bool = Field(
-        default=True, alias="enableVrfValidationOspfAreaId"
+        default=True,
+        alias="enableVrfValidationOspfAreaId",
+        description="Implementation note: Corresponds to kVrfValidationOspfAreaId",
     )
     enable_vrf_validation_ospf_if_pol: bool = Field(
-        default=True, alias="enableVrfValidationOspfIfPol"
+        default=True,
+        alias="enableVrfValidationOspfIfPol",
+        description="Implementation note: Corresponds to kVrfValidationRsPathOspfIfPol",
     )
     enable_redistribute_policy_validation: bool = Field(
-        default=True, alias="enableVrfValidationRedistributePol"
+        default=True,
+        alias="enableVrfValidationRedistributePol",
+        description="Implementation note: Corresponds to kVrfValidationRedistributePol",
     )
-    enable_node_routerid_validation: bool = Field(default=True, alias="enableVrfValidationRouterId")
+    enable_node_routerid_validation: bool = Field(
+        default=True,
+        alias="enableVrfValidationRouterId",
+        description="Implementation note: Corresponds to kVrfValidationNodeRouterId",
+    )
     enable_subnet_non_duplication_validation: bool = Field(
-        default=True, alias="enableVrfValidationSubnet"
+        default=True,
+        alias="enableVrfValidationSubnet",
+        description="Implementation note: Corresponds to kVrfValidationSubnet",
     )
     enable_svi_link_local_address_validation: bool = Field(
-        default=True, alias="enableVrfValidationSviLinkLocalAddr"
+        default=True,
+        alias="enableVrfValidationSviLinkLocalAddr",
+        description="Implementation note: Corresponds to kVrfValidationRsPathSviLinkLocalAddr",
     )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
@@ -87,11 +135,19 @@ class l3extVrfValidationPol(ManagedObject):
     owner_key: Annotated[
         str,
         Field(
-            max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerKey"
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerKey",
+            description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
     owner_tag: Annotated[
         str,
-        Field(max_length=64, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerTag"),
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerTag",
+            description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

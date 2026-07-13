@@ -15,6 +15,8 @@ from niwaki.models.base import ManagedObject
 class synceEthIfPol(ManagedObject):
     """ACI Managed Object: ``synceEthIfPol`` — synce Interface Policy.
 
+    synce Eth Interface Policy
+
     RN format: ``synceEthIfP-{name}``
     """
 
@@ -42,14 +44,36 @@ class synceEthIfPol(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the object.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    admin_state: NwAdminSt = Field(default=NwAdminSt.DISABLED, alias="adminSt")
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    admin_state: NwAdminSt = Field(
+        default=NwAdminSt.DISABLED, alias="adminSt", description="Admin State"
+    )
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies a description of the policy definition.",
+        ),
     ] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
@@ -57,34 +81,64 @@ class synceEthIfPol(ManagedObject):
     owner_key: Annotated[
         str,
         Field(
-            max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerKey"
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerKey",
+            description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
     owner_tag: Annotated[
         str,
-        Field(max_length=64, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerTag"),
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerTag",
+            description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+        ),
     ] = ""
     quality_transmit_exact_ql_option_type: SynceQloptype = Field(
-        default=SynceQloptype.NONE, alias="qloptype"
+        default=SynceQloptype.NONE,
+        alias="qloptype",
+        description="quality transmit exact option type",
     )
     quality_receive_exact_ql_value: SynceQlvalue = Field(
-        default=SynceQlvalue.FSYNC_QL_COMMON_NONE, alias="qlrcvexactval"
+        default=SynceQlvalue.FSYNC_QL_COMMON_NONE,
+        alias="qlrcvexactval",
+        description="quality receive exact value",
     )
     quality_receive_highest_ql_value: SynceQlvalue = Field(
-        default=SynceQlvalue.FSYNC_QL_COMMON_NONE, alias="qlrcvhval"
+        default=SynceQlvalue.FSYNC_QL_COMMON_NONE,
+        alias="qlrcvhval",
+        description="quality receive highest value",
     )
     quality_receive_lowest_ql_value: SynceQlvalue = Field(
-        default=SynceQlvalue.FSYNC_QL_COMMON_NONE, alias="qlrcvlval"
+        default=SynceQlvalue.FSYNC_QL_COMMON_NONE,
+        alias="qlrcvlval",
+        description="quality receive lowest value",
     )
     quality_transmit_exact_ql_value: SynceQlvalue = Field(
-        default=SynceQlvalue.FSYNC_QL_COMMON_NONE, alias="qltxexactval"
+        default=SynceQlvalue.FSYNC_QL_COMMON_NONE,
+        alias="qltxexactval",
+        description="quality receive exact option typequality transmit exact value",
     )
-    qltxhval: SynceQlvalue = SynceQlvalue.FSYNC_QL_COMMON_NONE
+    qltxhval: SynceQlvalue = Field(
+        default=SynceQlvalue.FSYNC_QL_COMMON_NONE, description="quality transmit highest value"
+    )
     quality_transmit_lowest_ql_value: SynceQlvalue = Field(
-        default=SynceQlvalue.FSYNC_QL_COMMON_NONE, alias="qltxlval"
+        default=SynceQlvalue.FSYNC_QL_COMMON_NONE,
+        alias="qltxlval",
+        description="quality transmit lowest value",
     )
-    selection_configuration: bool = Field(default=False, alias="selinput")
+    selection_configuration: bool = Field(
+        default=False, alias="selinput", description="selection input"
+    )
     source_priority_1_254_default100: str = Field(default="", alias="srcpriority")
-    ssm_configuration_enable_disable: bool = Field(default=True, alias="ssm")
+    ssm_configuration_enable_disable: bool = Field(
+        default=True, alias="ssm", description="ssm enabled/disabled"
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    wait_to_restore_time: str = Field(default="", alias="wtr")
+    wait_to_restore_time: str = Field(
+        default="",
+        alias="wtr",
+        description="Time-of-the-day prioritywait-to-restore time value in minutes",
+    )

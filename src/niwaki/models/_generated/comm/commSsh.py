@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class commSsh(ManagedObject):
     """ACI Managed Object: ``commSsh`` — Ssh Service.
 
+    Object that encompasses properties related to Secure Shell access to the APIC, namely admin-state (default=enabled) and port(default=22).
+
     RN format: ``ssh``
     """
 
@@ -36,21 +38,39 @@ class commSsh(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    admin_state: CommAdminState = Field(default=CommAdminState.ENABLED, alias="adminSt")
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    admin_state: CommAdminState = Field(
+        default=CommAdminState.ENABLED,
+        alias="adminSt",
+        description="The state of SSH communication service. This can be enabled or disabled.",
+    )
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
     kex_algorithms: str = Field(default="", alias="kexAlgos")
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
+        ""
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
     password_auth_state: CommAdminState = Field(
         default=CommAdminState.ENABLED, alias="passwordAuth"
     )
-    port: Annotated[int, Field(ge=0, le=65535)] = 22
+    port: Annotated[int, Field(ge=0, le=65535, description="The SSH port.")] = 22
     ssh_ciphers: str = Field(default="", alias="sshCiphers")
     ssh_macs: str = Field(default="", alias="sshMacs")
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

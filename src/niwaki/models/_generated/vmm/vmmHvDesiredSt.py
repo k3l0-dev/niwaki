@@ -36,15 +36,34 @@ class vmmHvDesiredSt(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    host_name: Annotated[str, Field(min_length=1, max_length=512, alias="host")]
+    host_name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=512,
+            alias="host",
+            description="The hostname or IP for export destination. Call Home sends email messages to either the IP address or hostname, and the associated port number.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
+        ""
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
     desired_state_for_the_host: HvsManagedEntityStatus = Field(
-        default=HvsManagedEntityStatus.GRAY, alias="state"
+        default=HvsManagedEntityStatus.GRAY,
+        alias="state",
+        description="The state of the relationship.",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

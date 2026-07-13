@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class fvEpTags(ManagedObject):
     """ACI Managed Object: ``fvEpTags`` — Endpoint Tags Container.
 
+    EP TAGs section
+
     RN format: ``eptags``
     """
 
@@ -36,5 +38,12 @@ class fvEpTags(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

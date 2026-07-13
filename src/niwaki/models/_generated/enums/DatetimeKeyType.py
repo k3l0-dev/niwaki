@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class DatetimeKeyType(StrEnum):
     MD5 = "md5"
+    """Use HMAC MD5 algorithm for authentication"""
     SHA1 = "sha1"
+    """Use HMAC SHA1 algorithm for authentication"""
 
     @classmethod
     def _missing_(cls, value: object) -> DatetimeKeyType | None:

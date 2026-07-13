@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class fteEvents(ManagedObject):
     """ACI Managed Object: ``fteEvents`` — Configure FTE Events Information.
 
+    FTE Events
+
     RN format: ``events-{name}``
     """
 
@@ -36,99 +38,263 @@ class fteEvents(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the object.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    acl_drops: bool = Field(default=False, alias="aclDrops")
-    sub_event_configuration_for_acl_span: bool = Field(default=False, alias="aclSpan")
-    analytics_changed_bit: bool = Field(default=False, alias="analyticsChangedBit")
+    acl_drops: bool = Field(
+        default=False,
+        alias="aclDrops",
+        description="11. Capture the acl drops for the FTE events under FTE",
+    )
+    sub_event_configuration_for_acl_span: bool = Field(
+        default=False, alias="aclSpan", description="46. ACL span configuration"
+    )
+    analytics_changed_bit: bool = Field(
+        default=False,
+        alias="analyticsChangedBit",
+        description="04. Analytics Changed bit configuration",
+    )
     analytics_changed_count: Annotated[
-        int, Field(ge=0, le=32000, alias="analyticsChangedCount")
+        int,
+        Field(
+            ge=0,
+            le=32000,
+            alias="analyticsChangedCount",
+            description="26. FTE analytics_changed Bucket count",
+        ),
     ] = 3
-    analytics_changed_limit: bool = Field(default=False, alias="analyticsChangedLimit")
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    black_hole: bool = Field(default=False, alias="blackHole")
-    buffer_drops: bool = Field(default=False, alias="bufferDrops")
+    analytics_changed_limit: bool = Field(
+        default=False,
+        alias="analyticsChangedLimit",
+        description="25. FTE Bucket analytics_changed limit",
+    )
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    black_hole: bool = Field(
+        default=False,
+        alias="blackHole",
+        description="14. Capture the blackhole for the FTE events under FTE",
+    )
+    buffer_drops: bool = Field(
+        default=False,
+        alias="bufferDrops",
+        description="12. Capture the buffer drops for the FTE events under FTE",
+    )
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="The description of this configuration item.",
+        ),
     ] = ""
     configure_fte_drop_events_flow_count: Annotated[
-        int, Field(ge=1, le=32767, alias="dropFlowCount")
+        int,
+        Field(
+            ge=1,
+            le=32767,
+            alias="dropFlowCount",
+            description="18. Drop events flow count under FTE",
+        ),
     ] = 500
     configure_fte_event_export_max_value: Annotated[
-        int, Field(ge=0, le=32000, alias="eventExportMax")
+        int, Field(ge=0, le=32000, alias="eventExportMax", description="35. Event Export max")
     ] = 5
-    export_flow_bit: bool = Field(default=False, alias="exportFlowBit")
+    export_flow_bit: bool = Field(
+        default=False, alias="exportFlowBit", description="01. Export Flow bit configuration"
+    )
     configure_fte_export_flow_bucket_count: Annotated[
-        int, Field(ge=0, le=32000, alias="exportFlowCount")
+        int,
+        Field(
+            ge=0, le=32000, alias="exportFlowCount", description="20. FTE export_flow Bucket count"
+        ),
     ] = 3
-    configure_fte_export_flow_bucket_limit: bool = Field(default=False, alias="exportFlowLimit")
-    first_packet_bit: bool = Field(default=False, alias="firstPacketBit")
+    configure_fte_export_flow_bucket_limit: bool = Field(
+        default=False, alias="exportFlowLimit", description="19. FTE export_flow Bucket limit"
+    )
+    first_packet_bit: bool = Field(
+        default=False, alias="firstPacketBit", description="02. First Pkt bit configuration"
+    )
     configure_fte_first_packet_bucket_count: Annotated[
-        int, Field(ge=0, le=32000, alias="firstPacketCount")
+        int,
+        Field(
+            ge=0, le=32000, alias="firstPacketCount", description="22. FTE first_pkt Bucket count"
+        ),
     ] = 3
-    configure_fte_first_packet_bucket_limit: bool = Field(default=False, alias="firstPacketLimit")
-    flow_type: str = Field(default="", alias="flowType")
-    fwd_drops: bool = Field(default=False, alias="fwdDrops")
-    group_drop_events: bool = Field(default=False, alias="groupDropEvents")
-    group_latency_events: bool = Field(default=False, alias="groupLatencyEvents")
+    configure_fte_first_packet_bucket_limit: bool = Field(
+        default=False, alias="firstPacketLimit", description="21. FTE first_pkt Bucket limit"
+    )
+    flow_type: str = Field(default="", alias="flowType", description="49. Flow Type")
+    fwd_drops: bool = Field(
+        default=False,
+        alias="fwdDrops",
+        description="13. Capture the forward drops for the FTE events under FTE",
+    )
+    group_drop_events: bool = Field(
+        default=False,
+        alias="groupDropEvents",
+        description="09. Dropped Event Groups for the FTE events under FTE",
+    )
+    group_latency_events: bool = Field(
+        default=False,
+        alias="groupLatencyEvents",
+        description="10. Dropped Event Groups for the FTE events under FTE",
+    )
     configure_fte_latency_bucket_count: Annotated[
-        int, Field(ge=0, le=32000, alias="latencyCount")
+        int,
+        Field(
+            ge=0, le=32000, alias="latencyCount", description="32. FTE rtt_sample_seq Bucket count"
+        ),
     ] = 3
     configure_fte_latency_events_flow_count: Annotated[
-        int, Field(ge=1, le=32767, alias="latencyFlowCount")
+        int,
+        Field(
+            ge=1,
+            le=32767,
+            alias="latencyFlowCount",
+            description="17. Latency events flow count under FTE",
+        ),
     ] = 500
-    configure_fte_latency_bucket_limit: bool = Field(default=False, alias="latencyLimit")
+    configure_fte_latency_bucket_limit: bool = Field(
+        default=False, alias="latencyLimit", description="31. FTE rtt_sample_seq Bucket limit"
+    )
     configure_fte_latency_threshold_limit: Annotated[
-        int, Field(ge=0, le=65535, alias="latencyThreshold")
+        int, Field(ge=0, le=65535, alias="latencyThreshold", description="15. Latency under FTE")
     ] = 0
     configure_fte_latency_threshold_unit: FteLatencyUnit = Field(
-        default=FteLatencyUnit.MICRO_SEC, alias="latencyThresholdUnit"
+        default=FteLatencyUnit.MICRO_SEC,
+        alias="latencyThresholdUnit",
+        description="16. Latency Unit under FTE",
     )
-    mouse_packet_bit: bool = Field(default=False, alias="mousePacketBit")
+    mouse_packet_bit: bool = Field(
+        default=False, alias="mousePacketBit", description="03. Mouse Pkt bit configuration"
+    )
     configure_fte_mouse_packet_bucket_count: Annotated[
-        int, Field(ge=0, le=32000, alias="mousePacketCount")
+        int,
+        Field(
+            ge=0, le=32000, alias="mousePacketCount", description="24. FTE Bucket mouse_pkt count"
+        ),
     ] = 3
-    configure_fte_mouse_packet_bucket_limit: bool = Field(default=False, alias="mousePacketLimit")
+    configure_fte_mouse_packet_bucket_limit: bool = Field(
+        default=False, alias="mousePacketLimit", description="23. FTE Bucket mouse_pkt limit"
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    packet_disposition: bool = Field(default=False, alias="packetDisposition")
-    packet_disposition_ids_drop: bool = Field(default=False, alias="packetDispositionIdsDrop")
+    packet_disposition: bool = Field(
+        default=False,
+        alias="packetDisposition",
+        description="36. Packet value disposition configuration",
+    )
+    packet_disposition_ids_drop: bool = Field(
+        default=False,
+        alias="packetDispositionIdsDrop",
+        description="39. Packet disposition ids_drop configuration",
+    )
     packet_disposition_policing_drop: bool = Field(
-        default=False, alias="packetDispositionPolicingDrop"
+        default=False,
+        alias="packetDispositionPolicingDrop",
+        description="38. Packet disposition policing_drop configuration",
     )
     packet_disposition_policy_applied: bool = Field(
-        default=False, alias="packetDispositionPolicyApplied"
+        default=False,
+        alias="packetDispositionPolicyApplied",
+        description="43. Packet disposition policy_applied configuration",
     )
-    packet_disposition_policy_copy: bool = Field(default=False, alias="packetDispositionPolicyCopy")
-    packet_disposition_policy_drop: bool = Field(default=False, alias="packetDispositionPolicyDrop")
+    packet_disposition_policy_copy: bool = Field(
+        default=False,
+        alias="packetDispositionPolicyCopy",
+        description="42. Packet disposition policy_copy configuration",
+    )
+    packet_disposition_policy_drop: bool = Field(
+        default=False,
+        alias="packetDispositionPolicyDrop",
+        description="40. Packet disposition policy_drop configuration",
+    )
     packet_disposition_policy_redirect: bool = Field(
-        default=False, alias="packetDispositionPolicyRedirect"
+        default=False,
+        alias="packetDispositionPolicyRedirect",
+        description="41. Packet disposition policy_redirect configuration",
     )
     packet_disposition_rpf_port_sec_fail: bool = Field(
-        default=False, alias="packetDispositionRpfPortSecFail"
+        default=False,
+        alias="packetDispositionRpfPortSecFail",
+        description="37. Packet disposition rpf_port_sec_fail configuration",
     )
-    packet_length: str = Field(default="", alias="packetLength")
-    packet_value_match_bit: bool = Field(default=False, alias="packetValueMatchBit")
+    packet_length: str = Field(default="", alias="packetLength", description="50. Packet Length")
+    packet_value_match_bit: bool = Field(
+        default=False,
+        alias="packetValueMatchBit",
+        description="06. Pkt Value Match bit configuration",
+    )
     packet_value_match_count: Annotated[
-        int, Field(ge=0, le=32000, alias="packetValueMatchCount")
+        int,
+        Field(
+            ge=0,
+            le=32000,
+            alias="packetValueMatchCount",
+            description="30. FTE pkt_value_match Bucket count",
+        ),
     ] = 3
-    packet_value_match_limit: bool = Field(default=False, alias="packetValueMatchLimit")
-    ping_of_death: bool = Field(default=False, alias="pingOfDeath")
-    receive_window_zero: bool = Field(default=False, alias="receiveWindowZero")
+    packet_value_match_limit: bool = Field(
+        default=False,
+        alias="packetValueMatchLimit",
+        description="29. FTE pkt_value_match Bucket limit",
+    )
+    ping_of_death: bool = Field(
+        default=False, alias="pingOfDeath", description="45. Ping of death configuration"
+    )
+    receive_window_zero: bool = Field(
+        default=False,
+        alias="receiveWindowZero",
+        description="44. Receive window zero configuration",
+    )
     configure_fte_rtt_ack_bucket_count: Annotated[
-        int, Field(ge=0, le=32000, alias="rttAckCount")
+        int,
+        Field(
+            ge=0, le=32000, alias="rttAckCount", description="34. FTE rtt_sample_ack Bucket count"
+        ),
     ] = 3
-    configure_fte_rtt_ack_bucket_limit: bool = Field(default=False, alias="rttAckLimit")
-    rtt_sample_ack_bit: bool = Field(default=False, alias="rttSampleAckBit")
-    rtt_sample_seq_bit: bool = Field(default=False, alias="rttSampleSeqBit")
-    table_full_bit: bool = Field(default=False, alias="tableFullBit")
+    configure_fte_rtt_ack_bucket_limit: bool = Field(
+        default=False, alias="rttAckLimit", description="33. FTE rtt_sample_ack Bucket limit"
+    )
+    rtt_sample_ack_bit: bool = Field(
+        default=False, alias="rttSampleAckBit", description="08. RTT Sample Ack bit configuration"
+    )
+    rtt_sample_seq_bit: bool = Field(
+        default=False, alias="rttSampleSeqBit", description="07. RTT Sample Seq bit configuration"
+    )
+    table_full_bit: bool = Field(
+        default=False, alias="tableFullBit", description="05. Table Full bit configuration"
+    )
     configure_fte_table_full_bucket_count: Annotated[
-        int, Field(ge=0, le=32000, alias="tableFullCount")
+        int,
+        Field(
+            ge=0, le=32000, alias="tableFullCount", description="28. FTE table_full Bucket count"
+        ),
     ] = 3
-    configure_fte_table_full_bucket_limit: bool = Field(default=False, alias="tableFullLimit")
-    ttl_match_enable: bool = Field(default=False, alias="ttlMatchEnable")
-    ttl_match_value: str = Field(default="", alias="ttlMatchValue")
+    configure_fte_table_full_bucket_limit: bool = Field(
+        default=False, alias="tableFullLimit", description="27. FTE table_full Bucket limit"
+    )
+    ttl_match_enable: bool = Field(
+        default=False, alias="ttlMatchEnable", description="47. TTL match enable configuration"
+    )
+    ttl_match_value: str = Field(
+        default="", alias="ttlMatchValue", description="48. TTL match value configuration"
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

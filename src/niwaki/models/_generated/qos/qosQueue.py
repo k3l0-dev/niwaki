@@ -14,6 +14,8 @@ from niwaki.models.base import ManagedObject
 class qosQueue(ManagedObject):
     """ACI Managed Object: ``qosQueue`` — QOS Queue Management Policy.
 
+    The queuing information, such as the limit and queuing method. This is applied at system level.
+
     RN format: ``queue``
     """
 
@@ -39,18 +41,44 @@ class qosQueue(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    admin_st: QosUburstAdminState = Field(default=QosUburstAdminState.DISABLED, alias="adminSt")
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    admin_st: QosUburstAdminState = Field(
+        default=QosUburstAdminState.DISABLED,
+        alias="adminSt",
+        description="The Administrative state of micro burst",
+    )
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
-    limit: str = ""
-    meth: QospCtrlMeth = QospCtrlMeth.DYNAMIC
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    limit: Annotated[
+        str, Field(description="queue limit, only applicable with static control method")
+    ] = ""
+    meth: QospCtrlMeth = Field(
+        default=QospCtrlMeth.DYNAMIC, description="Queue control method (static/dynamic)"
+    )
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
+        ""
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    uburst_down_threshold: str = Field(default="", alias="uburstDownThreshold")
-    uburst_up_threshold: str = Field(default="", alias="uburstUpThreshold")
+    uburst_down_threshold: str = Field(
+        default="", alias="uburstDownThreshold", description="micro burst down Threshold"
+    )
+    uburst_up_threshold: str = Field(
+        default="", alias="uburstUpThreshold", description="micro burst up Threshold"
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

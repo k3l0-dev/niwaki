@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class AcIpRuleUsage(StrEnum):
     ATOMIC_COUNTER = "atomic-counter"
+    """Enable Atomic Counters"""
     LATENCY_STATS = "latency-stats"
+    """Enable Latency Statistics"""
 
     @classmethod
     def _missing_(cls, value: object) -> AcIpRuleUsage | None:

@@ -42,19 +42,41 @@ class aaaRsaProvider(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the object.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     port: Annotated[int, Field(ge=1, le=65535, alias="authPort")] = 1812
     authentication_protocol: AaaauthenticationProtocol = Field(
         default=AaaauthenticationProtocol.PAP, alias="authProtocol"
     )
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies a description of the policy definition.",
+        ),
     ] = ""
-    key: Annotated[str, Field(repr=False)] = ""
+    key: Annotated[
+        str, Field(repr=False, description="A password for the AAA provider database.")
+    ] = ""
     periodic_server_monitoring: AaaMonitorServerType = Field(
         default=AaaMonitorServerType.DISABLED, alias="monitorServer"
     )
@@ -68,13 +90,29 @@ class aaaRsaProvider(ManagedObject):
     owner_key: Annotated[
         str,
         Field(
-            max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerKey"
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerKey",
+            description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
     owner_tag: Annotated[
         str,
-        Field(max_length=64, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerTag"),
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerTag",
+            description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+        ),
     ] = ""
-    retries: Annotated[int, Field(ge=0, le=5)] = 1
-    timeout_in_seconds: Annotated[int, Field(ge=0, le=60, alias="timeout")] = 5
+    retries: Annotated[int, Field(ge=0, le=5, description="null")] = 1
+    timeout_in_seconds: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=60,
+            alias="timeout",
+            description="Per provider configuration, if set to 0, it uses global settings value",
+        ),
+    ] = 5
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

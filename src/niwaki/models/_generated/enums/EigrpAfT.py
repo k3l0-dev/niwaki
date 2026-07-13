@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class EigrpAfT(StrEnum):
     IPV4_UCAST = "ipv4-ucast"
+    """ipv4 unicast"""
     IPV6_UCAST = "ipv6-ucast"
+    """ipv6 unicast"""
 
     @classmethod
     def _missing_(cls, value: object) -> EigrpAfT | None:

@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class rtctrlSetNh(ManagedObject):
     """ACI Managed Object: ``rtctrlSetNh``.
 
+    Sets action rule based on the next hop address.
+
     RN format: ``nh``
     """
 
@@ -36,15 +38,31 @@ class rtctrlSetNh(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    addr: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$")] = ""
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    addr: Annotated[
+        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", description="The peer IP address.")
+    ] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
+        ""
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    type: RtctrlSetType = RtctrlSetType.IP_NH
+    type: RtctrlSetType = Field(default=RtctrlSetType.IP_NH, description="null")
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

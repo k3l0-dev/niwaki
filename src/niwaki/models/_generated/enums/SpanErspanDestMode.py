@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class SpanErspanDestMode(StrEnum):
     NOT_VISIBLE = "not-visible"
+    """The ERSPAN dest. may or may not be in a diffenet private network but the ip address of the ERSPAN destination will not get leaked into the consumers private network"""
     VISIBLE = "visible"
+    """The ERSPAN dest. is in a diffenet private network. The ip address of the ERSPAN dest. will get leaked into the consumers private network. Hence the ERSPAN destination IP address must not overlap with esiting IP addresses in the Source EPGs whose traffic is being remote spanned."""
 
     @classmethod
     def _missing_(cls, value: object) -> SpanErspanDestMode | None:

@@ -7,11 +7,17 @@ from enum import StrEnum
 
 class SnmpAuthType(StrEnum):
     HMAC_MD5_96 = "hmac-md5-96"
+    """md5"""
     HMAC_SHA1_96 = "hmac-sha1-96"
+    """sha1"""
     HMAC_SHA2_224 = "hmac-sha2-224"
+    """sha2"""
     HMAC_SHA2_256 = "hmac-sha2-256"
+    """sha2"""
     HMAC_SHA2_384 = "hmac-sha2-384"
+    """sha2"""
     HMAC_SHA2_512 = "hmac-sha2-512"
+    """sha2"""
 
     @classmethod
     def _missing_(cls, value: object) -> SnmpAuthType | None:

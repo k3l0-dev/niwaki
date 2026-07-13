@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class dppIf(ManagedObject):
     """ACI Managed Object: ``dppIf`` — DPP Interface.
 
+    Interface info
+
     RN format: ``if-[{id}]-{ingress_or_egress_direction}``
     """
 
@@ -38,10 +40,19 @@ class dppIf(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     ingress_or_egress_direction: DppDirection = Field(
-        default=DppDirection.INGRESS, alias="direction"
+        default=DppDirection.INGRESS,
+        alias="direction",
+        description="direction in which policer is applied",
     )
-    id: str
+    id: Annotated[str, Field(description="Interface ID")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

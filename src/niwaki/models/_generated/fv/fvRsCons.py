@@ -14,6 +14,8 @@ from niwaki.models.base import ManagedObject
 class fvRsCons(ManagedObject):
     """ACI Managed Object: ``fvRsCons`` — Contract Consumer.
 
+    The Consumer contract profile information.
+
     RN format: ``rscons-{name}``
     """
 
@@ -45,11 +47,29 @@ class fvRsCons(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     name: Annotated[
-        str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="tnVzBrCPName")
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            alias="tnVzBrCPName",
+            description="The consumer contract name.",
+        ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     intent: VzIntent = VzIntent.INSTALL
-    priority: QosTenantPrio = Field(default=QosTenantPrio.UNSPECIFIED, alias="prio")
+    priority: QosTenantPrio = Field(
+        default=QosTenantPrio.UNSPECIFIED,
+        alias="prio",
+        description="The system class determines the quality of service and priority for the consumer traffic.",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

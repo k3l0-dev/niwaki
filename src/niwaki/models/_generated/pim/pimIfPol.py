@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class pimIfPol(ManagedObject):
     """ACI Managed Object: ``pimIfPol`` — PIM Interface Policy.
 
+    Interface-level PIM-SM (sparse mode) policy.
+
     RN format: ``pimifpol-{name}``
     """
 
@@ -40,32 +42,72 @@ class pimIfPol(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="Interface-level PIM-SM (sparse mode) policy name.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    authentication_type: RtdmcAuthT = Field(default=RtdmcAuthT.NONE, alias="authT")
-    interface_controls: str = Field(default="", alias="ctrl")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    authentication_type: RtdmcAuthT = Field(
+        default=RtdmcAuthT.NONE, alias="authT", description="Authentication Type"
+    )
+    interface_controls: str = Field(default="", alias="ctrl", description="Interface controls")
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies a description of the policy definition.",
+        ),
     ] = ""
-    designated_router_delay: str = Field(default="", alias="drDelay")
-    designated_router_priority: Annotated[int, Field(ge=1, le=4294967295, alias="drPrio")] = 1
-    hello_interval: Annotated[int, Field(ge=1, le=18724286, alias="helloItvl")] = 30000
-    join_prune_interval_seconds: str = Field(default="", alias="jpInterval")
+    designated_router_delay: str = Field(
+        default="", alias="drDelay", description="Designated Router Delay"
+    )
+    designated_router_priority: Annotated[
+        int, Field(ge=1, le=4294967295, alias="drPrio", description="Designated Router Priority")
+    ] = 1
+    hello_interval: Annotated[
+        int, Field(ge=1, le=18724286, alias="helloItvl", description="Hello Traffic Policy")
+    ] = 30000
+    join_prune_interval_seconds: str = Field(
+        default="", alias="jpInterval", description="JP Traffic Policy"
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
     owner_key: Annotated[
         str,
         Field(
-            max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerKey"
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerKey",
+            description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
     owner_tag: Annotated[
         str,
-        Field(max_length=64, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerTag"),
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerTag",
+            description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+        ),
     ] = ""
-    secure_authentication_key: Annotated[str, Field(alias="secureAuthKey", repr=False)] = ""
+    secure_authentication_key: Annotated[
+        str, Field(alias="secureAuthKey", repr=False, description="Secure Authentication key")
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

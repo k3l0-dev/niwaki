@@ -7,6 +7,7 @@ from enum import StrEnum
 
 class FteModeT(StrEnum):
     FLOW_EVENTS = "flow-events"
+    """FTE mode"""
 
     @classmethod
     def _missing_(cls, value: object) -> FteModeT | None:

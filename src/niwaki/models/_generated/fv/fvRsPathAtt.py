@@ -14,6 +14,8 @@ from niwaki.models.base import ManagedObject
 class fvRsPathAtt(ManagedObject):
     """ACI Managed Object: ``fvRsPathAtt`` — Static Path.
 
+    A source relation to an abstraction of a path endpoint.
+
     RN format: ``rspathAtt-[{target_dn}]``
     """
 
@@ -48,15 +50,37 @@ class fvRsPathAtt(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    target_dn: Annotated[str, Field(alias="tDn")]
+    target_dn: Annotated[str, Field(alias="tDn", description="null")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    descr: Annotated[
-        str, Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
     ] = ""
-    encap: str = ""
-    deployment_immediacy: FvInstrImedcy = Field(default=FvInstrImedcy.LAZY, alias="instrImedcy")
-    mode: FvMode = FvMode.REGULAR
-    primary_encap: str = Field(default="", alias="primaryEncap")
+    descr: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            description="The description of this configuration item.",
+        ),
+    ] = ""
+    encap: Annotated[str, Field(description="The encapsulation method (VLAN) of the path.")] = ""
+    deployment_immediacy: FvInstrImedcy = Field(
+        default=FvInstrImedcy.LAZY,
+        alias="instrImedcy",
+        description="The deployment immediacy preference of this path association.",
+    )
+    mode: FvMode = Field(
+        default=FvMode.REGULAR, description="The mode of the static association with the path."
+    )
+    primary_encap: str = Field(
+        default="",
+        alias="primaryEncap",
+        description="Represents the primary encap when the EPG is isolated",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

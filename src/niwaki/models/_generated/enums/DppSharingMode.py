@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class DppSharingMode(StrEnum):
     DEDICATED = "dedicated"
+    """Policer is Dedicated on the members of the place where is attached"""
     SHARED = "shared"
+    """Policer is Shared on a given leaf among the attachment points using it"""
 
     @classmethod
     def _missing_(cls, value: object) -> DppSharingMode | None:

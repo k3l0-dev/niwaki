@@ -7,13 +7,21 @@ from enum import StrEnum
 
 class TopoctrlFwdScaleProfType(StrEnum):
     DUAL_STACK = "dual-stack"
+    """Dual Stack (IPv4/IPv6) Profile"""
     HIGH_DUAL_STACK = "high-dual-stack"
+    """High Dual Stack (IPv4/IPv6) Profile"""
     HIGH_IPV4_EP = "high-ipv4-ep"
+    """High IPV4 Profile"""
     HIGH_LPM = "high-lpm"
+    """High LPM Profile"""
     HIGH_POLICY = "high-policy"
+    """High Policy Profile"""
     IPV4 = "ipv4"
+    """IPv4 Only Profile"""
     MAX_LPM = "max-lpm"
+    """Max LPM Profile"""
     MCAST_HEAVY = "mcast-heavy"
+    """Mcast Heavy Profile"""
 
     @classmethod
     def _missing_(cls, value: object) -> TopoctrlFwdScaleProfType | None:

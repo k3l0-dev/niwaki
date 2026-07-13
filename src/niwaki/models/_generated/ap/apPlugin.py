@@ -17,6 +17,8 @@ from niwaki.models.base import ManagedObject
 class apPlugin(ManagedObject):
     """ACI Managed Object: ``apPlugin`` — Information about APIC app.
 
+    Plugin Info
+
     RN format: ``plugin-{app_ctx_root}``
     """
 
@@ -42,22 +44,35 @@ class apPlugin(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    app_ctx_root: Annotated[str, Field(min_length=1, max_length=512, alias="appCtxRoot")]
+    app_ctx_root: Annotated[
+        str, Field(min_length=1, max_length=512, alias="appCtxRoot", description="app Context Root")
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    app_type: ApAppType = Field(default=ApAppType.REGULAR, alias="appType")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    app_type: ApAppType = Field(default=ApAppType.REGULAR, alias="appType", description="App Type")
     cluster_manager_type: ApClusterManagerType = Field(
-        default=ApClusterManagerType.NONE, alias="clusterManagerType"
+        default=ApClusterManagerType.NONE,
+        alias="clusterManagerType",
+        description="Cluster Manager Type",
     )
-    config_st: ApConfSt = Field(default=ApConfSt.NONE, alias="configSt")
+    config_st: ApConfSt = Field(
+        default=ApConfSt.NONE, alias="configSt", description="Configuration State"
+    )
     name: Annotated[str, Field(min_length=1, max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
     plugin_st: ApPluginState = Field(default=ApPluginState.INACTIVE, alias="pluginSt")
     plugin_type: ApPluginType = Field(default=ApPluginType.STATELESS, alias="pluginType")
-    role: Annotated[str, Field(max_length=512)] = ""
+    role: Annotated[str, Field(max_length=512, description="Name of plugin role")] = ""
     security_domains: Annotated[str, Field(max_length=512, alias="securityDomains")] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    username: Annotated[str, Field(max_length=512)] = ""
+    username: Annotated[str, Field(max_length=512, description="Name of plugin user")] = ""

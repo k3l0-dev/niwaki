@@ -15,6 +15,8 @@ from niwaki.models.base import ManagedObject
 class callhomeDest(ManagedObject):
     """ACI Managed Object: ``callhomeDest`` — Callhome Destination.
 
+    The Call Home destination profile contains the delivery information for receiving email-based alert notifications of critical system policies. A range of message formats are available for compatibility with pager services or XML-based automated parsing applications.
+
     RN format: ``dest-{name}``
     """
 
@@ -38,21 +40,65 @@ class callhomeDest(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The user-defined name for the Call Home destination.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    admin_state: MonAdminState = Field(default=MonAdminState.ENABLED, alias="adminState")
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    admin_state: MonAdminState = Field(
+        default=MonAdminState.ENABLED,
+        alias="adminState",
+        description="The destination policy administrative state. If enabled, the system uses the destination policy when an error matching the associated cause is encountered. Otherwise, the system ignores the policy even if a matching error occurs. By default, all policies are enabled.",
+    )
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
-    destination_email_address: str = Field(default="", alias="email")
-    message_format: CallhomeMsgFormat = Field(default=CallhomeMsgFormat.XML, alias="format")
-    maximum_size: Annotated[int, Field(ge=0, le=5000000, alias="maxSize")] = 1000000
+    destination_email_address: str = Field(
+        default="",
+        alias="email",
+        description="This is the actual email address to which the message is sent.",
+    )
+    message_format: CallhomeMsgFormat = Field(
+        default=CallhomeMsgFormat.XML,
+        alias="format",
+        description="The Call Home destination message format.",
+    )
+    maximum_size: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=5000000,
+            alias="maxSize",
+            description="The maximum size (in bytes) for a Call Home message to a specific destination.",
+        ),
+    ] = 1000000
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
     message_format_rfc_compliant: bool = Field(default=False, alias="rfcCompliant")
-    severity_level: CallhomeUrgency = Field(default=CallhomeUrgency.ALERT, alias="urgency")
+    severity_level: CallhomeUrgency = Field(
+        default=CallhomeUrgency.ALERT,
+        alias="urgency",
+        description="The severity level for Call Home destinations. The Call Home destination is an object that also contains the recipient's email address and a format selection (.xml, .aml, or short-test).",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

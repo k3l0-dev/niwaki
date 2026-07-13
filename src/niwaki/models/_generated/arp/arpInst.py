@@ -14,6 +14,8 @@ from niwaki.models.base import ManagedObject
 class arpInst(ManagedObject):
     """ACI Managed Object: ``arpInst`` — ARP Instance.
 
+    Represents per-ARP instance information. In the current implementation, only one instance of ARP is running in the system.
+
     RN format: ``inst``
     """
 
@@ -47,30 +49,66 @@ class arpInst(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Create-only (ignored by APIC on modification) ─────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=128)] = ""
+    name: Annotated[
+        str, Field(min_length=1, max_length=128, description="The name of the object.")
+    ] = ""
 
     # ── Configurable ───────────────────────────────────────────────────────────
     adjacency_events_logging_level: ArpLoggingLevel = Field(
-        default=ArpLoggingLevel.ERROR, alias="adjLoggingLevel"
+        default=ArpLoggingLevel.ERROR,
+        alias="adjLoggingLevel",
+        description="Adjacency Manager Logging Level",
     )
     allow_static_arp_outside_subnet: NwAdminSt = Field(
-        default=NwAdminSt.DISABLED, alias="allowStaticArpOutsideSubnet"
+        default=NwAdminSt.DISABLED,
+        alias="allowStaticArpOutsideSubnet",
+        description="Enable / Disable allow-static-arp-outside-subnet",
     )
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     arp_unnum_svi_sw_replication: NwAdminSt = Field(
-        default=NwAdminSt.DISABLED, alias="arpUnnumSviSwReplication"
+        default=NwAdminSt.DISABLED,
+        alias="arpUnnumSviSwReplication",
+        description="Enable / Disable arp sw-replication",
     )
-    cache_limit: Annotated[int, Field(ge=1, le=614400, alias="cacheLimit")] = 196608
-    cache_syslog_rate: Annotated[int, Field(ge=1, le=1000, alias="cacheSyslogRate")] = 1
-    refresh_in_evpn_on_host_moves: str = Field(default="", alias="evpn_timeout")
+    cache_limit: Annotated[
+        int, Field(ge=1, le=614400, alias="cacheLimit", description="ARP Cache Limit")
+    ] = 196608
+    cache_syslog_rate: Annotated[
+        int, Field(ge=1, le=1000, alias="cacheSyslogRate", description="ARP Cache SysLog Rate")
+    ] = 1
+    refresh_in_evpn_on_host_moves: str = Field(
+        default="", alias="evpn_timeout", description="Evpn-Timeout"
+    )
     ip_adjacency_route_distance: Annotated[int, Field(ge=2, le=250, alias="ipAdjRouteDistance")] = (
         250
     )
-    cos_for_arp_packet: Annotated[int, Field(ge=0, le=7, alias="ipArpCos")] = 6
-    logging_level: ArpLoggingLevel = Field(default=ArpLoggingLevel.ERROR, alias="loggingLevel")
-    off_list_timeout: str = Field(default="", alias="offListTimeout")
-    rarp_fabric_forwarding: NwAdminSt = Field(default=NwAdminSt.DISABLED, alias="rarpFabricFwding")
-    rarp_fabric_forwarding_rate: str = Field(default="", alias="rarpFabricFwdingRate")
-    suppression_timeout: str = ""
-    arp_global_timeout: str = Field(default="", alias="timeout")
+    cos_for_arp_packet: Annotated[
+        int, Field(ge=0, le=7, alias="ipArpCos", description="COS for ARP packet")
+    ] = 6
+    logging_level: ArpLoggingLevel = Field(
+        default=ArpLoggingLevel.ERROR, alias="loggingLevel", description="ARP Logging Level"
+    )
+    off_list_timeout: str = Field(
+        default="", alias="offListTimeout", description="Off list Timeout"
+    )
+    rarp_fabric_forwarding: NwAdminSt = Field(
+        default=NwAdminSt.DISABLED, alias="rarpFabricFwding", description="RARP fabric forwarding"
+    )
+    rarp_fabric_forwarding_rate: str = Field(
+        default="", alias="rarpFabricFwdingRate", description="RARP Fabric Fwding Rate"
+    )
+    suppression_timeout: Annotated[
+        str,
+        Field(
+            description="Suppression Timeout - After enbaling the timer, If host doesn't speak in ARP/GARP within specified timeout L2 mode entries will be expired/deleted"
+        ),
+    ] = ""
+    arp_global_timeout: str = Field(default="", alias="timeout", description="Timeout")
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

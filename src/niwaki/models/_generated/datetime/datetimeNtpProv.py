@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class datetimeNtpProv(ManagedObject):
     """ACI Managed Object: ``datetimeNtpProv`` — Providers.
 
+    The date/time NTP provider is an NTP server.
+
     RN format: ``ntpprov-{name}``
     """
 
@@ -40,21 +42,50 @@ class datetimeNtpProv(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: str
+    name: Annotated[
+        str,
+        Field(
+            description="The user-configured NTP provider name. This name can be between 1 and 64 alphanumeric characters. Note that you cannot change this name after the object has been saved."
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
-    key_id: str = Field(default="", alias="keyId")
-    max_poll: str = Field(default="", alias="maxPoll")
-    min_poll: str = Field(default="", alias="minPoll")
+    key_id: str = Field(
+        default="",
+        alias="keyId",
+        description="The NTP provider key ID. The range is from 1 to 65535.",
+    )
+    max_poll: str = Field(
+        default="", alias="maxPoll", description="The NTP maximum interval default in seconds."
+    )
+    min_poll: str = Field(
+        default="", alias="minPoll", description="The NTP minimum interval default in seconds."
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    preferred_state: bool = Field(default=False, alias="preferred")
+    preferred_state: bool = Field(
+        default=False,
+        alias="preferred",
+        description="A property that indicates if the NTP server is preferred. Only one preferred server is allowed.",
+    )
     truechimer_status: DatetimeTrueChimerStatus = Field(
         default=DatetimeTrueChimerStatus.DISABLED, alias="trueChimer"
     )

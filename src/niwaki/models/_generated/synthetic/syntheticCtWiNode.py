@@ -36,14 +36,23 @@ class syntheticCtWiNode(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    cluster_unique_controller_id: Annotated[str, Field(alias="id")]
+    cluster_unique_controller_id: Annotated[str, Field(alias="id", description="An identifier .")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     what_to_do_with_appliance: SyntheticActionType = Field(
-        default=SyntheticActionType.OUT_OF_SERVICE, alias="action"
+        default=SyntheticActionType.OUT_OF_SERVICE,
+        alias="action",
+        description="The action required when the condition is met.",
     )
     all_shards_on_this_appliance_are_leaders: bool = Field(default=False, alias="allShardLeaders")
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     id_agent: str = Field(default="", alias="idAgent")
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")

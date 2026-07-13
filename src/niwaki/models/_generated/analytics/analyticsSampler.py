@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class analyticsSampler(ManagedObject):
     """ACI Managed Object: ``analyticsSampler`` — Sampler.
 
+    Sampler
+
     RN format: ``sampler-{name}``
     """
 
@@ -39,15 +41,40 @@ class analyticsSampler(ManagedObject):
     name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
         Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
     ] = ""
-    sampler_mode: AnalyticsSamplerMode = Field(default=AnalyticsSamplerMode.FLOW, alias="mode")
+    sampler_mode: AnalyticsSamplerMode = Field(
+        default=AnalyticsSamplerMode.FLOW, alias="mode", description="Sampler mode"
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    sample_size: Annotated[int, Field(ge=1, le=65535, alias="sampleSz")] = 1
+    sample_size: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=65535,
+            alias="sampleSz",
+            description="Numerator of the sampling size expressed as a fraction",
+        ),
+    ] = 1
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    sample_window_size: Annotated[int, Field(ge=1, le=65535, alias="windowSz")] = 1
+    sample_window_size: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=65535,
+            alias="windowSz",
+            description="Denominator of the sampling size expressed as a fraction",
+        ),
+    ] = 1

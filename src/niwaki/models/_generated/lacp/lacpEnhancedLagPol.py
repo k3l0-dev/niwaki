@@ -39,15 +39,36 @@ class lacpEnhancedLagPol(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=16, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=16,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the object.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    id: str = ""
-    loadbalancing_mode: LacpLBMode = Field(default=LacpLBMode.SRC_DST_IP, alias="lbmode")
-    lacp_mode: LacpEnLacpMode = Field(default=LacpEnLacpMode.ACTIVE, alias="mode")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    id: Annotated[str, Field(description="An identifier .")] = ""
+    loadbalancing_mode: LacpLBMode = Field(
+        default=LacpLBMode.SRC_DST_IP, alias="lbmode", description="Load Balancing mode"
+    )
+    lacp_mode: LacpEnLacpMode = Field(
+        default=LacpEnLacpMode.ACTIVE, alias="mode", description="Enhanced LACP mode"
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    number_of_links: Annotated[int, Field(ge=2, le=8, alias="numLinks")] = 2
+    number_of_links: Annotated[
+        int, Field(ge=2, le=8, alias="numLinks", description="Number of Links")
+    ] = 2
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

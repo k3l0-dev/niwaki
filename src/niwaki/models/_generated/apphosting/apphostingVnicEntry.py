@@ -14,6 +14,8 @@ from niwaki.models.base import ManagedObject
 class apphostingVnicEntry(ManagedObject):
     """ACI Managed Object: ``apphostingVnicEntry`` — app vnic entry table.
 
+    1.1.1 VnicEntry [dn] /sys/apphosting/appconf-[appId]/vnic-[guestIntfId]Model to define each vnic instance of the app
+
     RN format: ``vnic-{guest_intf_id}``
     """
 
@@ -37,21 +39,58 @@ class apphostingVnicEntry(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    guest_intf_id: Annotated[int, Field(ge=0, le=3, alias="guestIntfId")] = 0
+    guest_intf_id: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=3,
+            alias="guestIntfId",
+            description="guest interface identifier in the range of 0 to 3",
+        ),
+    ] = 0
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    admin_st: ApphostingAdminState = Field(default=ApphostingAdminState.ENABLED, alias="adminSt")
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    admin_st: ApphostingAdminState = Field(
+        default=ApphostingAdminState.ENABLED,
+        alias="adminSt",
+        description='vnic Admin state to configure mo "',
+    )
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     host_intf: ApphostingHostIntfType = Field(
-        default=ApphostingHostIntfType.MANAGEMENT, alias="hostIntf"
+        default=ApphostingHostIntfType.MANAGEMENT,
+        alias="hostIntf",
+        description='host interface type. e.g: "management or bridge<1-8>"',
     )
     v4_ip_address_of_the_interface: Annotated[
-        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="ipV4Addr")
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            alias="ipV4Addr",
+            description="v4 ip address for vnic entry",
+        ),
     ] = ""
     v6_ip_address_for_interface: Annotated[
-        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="ipV6Addr")
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            alias="ipV6Addr",
+            description="v6 ip address for vnic entry",
+        ),
     ] = ""
     point_to_point_bridge_vrf_name: Annotated[
-        str, Field(min_length=1, max_length=32, alias="p2pBridgeVrf")
+        str,
+        Field(
+            min_length=1,
+            max_length=32,
+            alias="p2pBridgeVrf",
+            description="point to point bridge vrf name",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

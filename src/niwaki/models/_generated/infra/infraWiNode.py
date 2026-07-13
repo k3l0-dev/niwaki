@@ -14,6 +14,8 @@ from niwaki.models.base import ManagedObject
 class infraWiNode(ManagedObject):
     """ACI Managed Object: ``infraWiNode`` — Cluster Element.
 
+    The appliances as physical devices that are wired into the cluster.
+
     RN format: ``node-{cluster_unique_controller_id}``
     """
 
@@ -39,20 +41,44 @@ class infraWiNode(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    cluster_unique_controller_id: Annotated[str, Field(alias="id")]
+    cluster_unique_controller_id: Annotated[
+        str, Field(alias="id", description="The ID of a wired node.")
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     administrative_state: InfraAdminState = Field(
-        default=InfraAdminState.OUT_OF_SERVICE, alias="adminSt"
+        default=InfraAdminState.OUT_OF_SERVICE,
+        alias="adminSt",
+        description="A value that indicates the administrative state of the cluster. No appliance with the given ID will be admitted into the cluster while it is in an Out of Service state.",
     )
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     appliance_failover_status: InfraApplianceFailoverStatus = Field(
-        default=InfraApplianceFailoverStatus.IDLE, alias="failoverStatus"
+        default=InfraApplianceFailoverStatus.IDLE,
+        alias="failoverStatus",
+        description="Appliance failover status",
     )
     force_administrative_state_change: bool = Field(default=False, alias="force")
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    routable_ip_address: str = Field(default="", alias="routableIpAddr")
-    target_motherboard_serial_number: Annotated[str, Field(max_length=512, alias="targetMbSn")] = ""
+    routable_ip_address: str = Field(
+        default="",
+        alias="routableIpAddr",
+        description='No controller with given ID will be admitted into the cluster while it is in "out-of-service" state',
+    )
+    target_motherboard_serial_number: Annotated[
+        str,
+        Field(
+            max_length=512,
+            alias="targetMbSn",
+            description="Cluster HA target controller's motherboard serial number",
+        ),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

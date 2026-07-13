@@ -8,6 +8,7 @@ from enum import StrEnum
 class OrchsresourcePoolVersion(StrEnum):
     CLASSIC = "classic"
     NORMALIZED = "normalized"
+    """Normalized: Function Profile Cont for Normalized services"""
 
     @classmethod
     def _missing_(cls, value: object) -> OrchsresourcePoolVersion | None:

@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class eqptdiagpRsFcOdDiag(ManagedObject):
     """ACI Managed Object: ``eqptdiagpRsFcOdDiag`` — Relation to Fabric Module.
 
+    A source relation to the fabric card connecting different IO cards. Note that this relation is an internal object.
+
     RN format: ``rsfcOdDiag-[{target_dn}]``
     """
 
@@ -36,8 +38,15 @@ class eqptdiagpRsFcOdDiag(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    target_dn: Annotated[str, Field(alias="tDn")]
+    target_dn: Annotated[str, Field(alias="tDn", description="The target fabric module.")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

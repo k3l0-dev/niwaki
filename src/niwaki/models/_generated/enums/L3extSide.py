@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class L3extSide(StrEnum):
     A = "A"
+    """Left represents the node with small Id in the group"""
     B = "B"
+    """Right represents the node with big Id in the group"""
 
     @classmethod
     def _missing_(cls, value: object) -> L3extSide | None:

@@ -34,14 +34,28 @@ class syntheticMaintPValidate(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     criticality: Annotated[str, Field(max_length=512)] = ""
-    description_for_validation_check: Annotated[str, Field(max_length=512, alias="description")] = (
-        ""
-    )
-    name_of_validation_check: Annotated[str, Field(max_length=512, alias="name")] = ""
+    description_for_validation_check: Annotated[
+        str,
+        Field(
+            max_length=512,
+            alias="description",
+            description="The description of this configuration item.",
+        ),
+    ] = ""
+    name_of_validation_check: Annotated[
+        str, Field(max_length=512, alias="name", description="The name of the object.")
+    ] = ""
     message_for_rejecting_upgrade_downgrade: Annotated[
-        str, Field(max_length=512, alias="reason")
+        str, Field(max_length=512, alias="reason", description="The reset reason.")
     ] = ""
     maintenance_policy_validition_result: bool = Field(default=False, alias="result")
     whether_to_show_this_validation_in_ui: bool = Field(default=True, alias="showValidation")

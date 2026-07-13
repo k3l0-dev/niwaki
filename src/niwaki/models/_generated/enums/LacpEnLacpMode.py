@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class LacpEnLacpMode(StrEnum):
     ACTIVE = "active"
+    """LACP active port channel"""
     PASSIVE = "passive"
+    """LACP passive port channel"""
 
     @classmethod
     def _missing_(cls, value: object) -> LacpEnLacpMode | None:

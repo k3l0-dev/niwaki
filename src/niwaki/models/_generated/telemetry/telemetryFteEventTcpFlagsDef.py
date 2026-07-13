@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class telemetryFteEventTcpFlagsDef(ManagedObject):
     """ACI Managed Object: ``telemetryFteEventTcpFlagsDef`` — Configure FTE Events Information.
 
+    FTE Events
+
     RN format: ``fteeventtcpflagsdef-{name}``
     """
 
@@ -34,13 +36,33 @@ class telemetryFteEventTcpFlagsDef(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the object.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="The description of this configuration item.",
+        ),
     ] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
@@ -48,21 +70,51 @@ class telemetryFteEventTcpFlagsDef(ManagedObject):
     owner_key: Annotated[
         str,
         Field(
-            max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerKey"
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerKey",
+            description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
     owner_tag: Annotated[
         str,
-        Field(max_length=64, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerTag"),
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerTag",
+            description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+        ),
     ] = ""
-    sub_event_configuration_for_tcp_ack_flag: bool = Field(default=False, alias="tcpAckFlag")
-    sub_event_configuration_for_tcp_cwr_flag: bool = Field(default=False, alias="tcpCwrFlag")
-    sub_event_configuration_for_tcp_ece_flag: bool = Field(default=False, alias="tcpEceFlag")
-    sub_event_configuration_for_tcp_fin_flag: bool = Field(default=False, alias="tcpFinFlag")
-    sub_event_configuration_for_tcp_flag_set: bool = Field(default=False, alias="tcpFlagSet")
-    sub_event_configuration_for_tcp_ns_flag: bool = Field(default=False, alias="tcpNsFlag")
-    sub_event_configuration_for_tcp_psh_flag: bool = Field(default=False, alias="tcpPshFlag")
-    sub_event_configuration_for_tcp_rst_flag: bool = Field(default=False, alias="tcpRstFlag")
-    sub_event_configuration_for_tcp_syn_flag: bool = Field(default=False, alias="tcpSynFlag")
-    sub_event_configuration_for_tcp_urg_flag: bool = Field(default=False, alias="tcpUrgFlag")
+    sub_event_configuration_for_tcp_ack_flag: bool = Field(
+        default=False, alias="tcpAckFlag", description="06. TCP ACK flag set"
+    )
+    sub_event_configuration_for_tcp_cwr_flag: bool = Field(
+        default=False, alias="tcpCwrFlag", description="09. TCP CWR flag set"
+    )
+    sub_event_configuration_for_tcp_ece_flag: bool = Field(
+        default=False, alias="tcpEceFlag", description="08. TCP ECE flag set"
+    )
+    sub_event_configuration_for_tcp_fin_flag: bool = Field(
+        default=False, alias="tcpFinFlag", description="02. TCP FIN flag configuration"
+    )
+    sub_event_configuration_for_tcp_flag_set: bool = Field(
+        default=False,
+        alias="tcpFlagSet",
+        description="01. TCP flag set configuration. Enables all TCP flags",
+    )
+    sub_event_configuration_for_tcp_ns_flag: bool = Field(
+        default=False, alias="tcpNsFlag", description="10. TCP NS flag set"
+    )
+    sub_event_configuration_for_tcp_psh_flag: bool = Field(
+        default=False, alias="tcpPshFlag", description="05. TCP PSH flag set"
+    )
+    sub_event_configuration_for_tcp_rst_flag: bool = Field(
+        default=False, alias="tcpRstFlag", description="04. TCP RST flag set"
+    )
+    sub_event_configuration_for_tcp_syn_flag: bool = Field(
+        default=False, alias="tcpSynFlag", description="03. TCP SYN flag set"
+    )
+    sub_event_configuration_for_tcp_urg_flag: bool = Field(
+        default=False, alias="tcpUrgFlag", description="07. TCP URG flag set"
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

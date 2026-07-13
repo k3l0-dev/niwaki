@@ -14,6 +14,8 @@ from niwaki.models.base import ManagedObject
 class orchsRsIpPoolRefv2(ManagedObject):
     """ACI Managed Object: ``orchsRsIpPoolRefv2`` — External/Public IP Address Pool.
 
+    Association from Local Resource to Real Resource
+
     RN format: ``rsipPoolRefv2-[{target_dn}]``
     """
 
@@ -38,16 +40,27 @@ class orchsRsIpPoolRefv2(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    target_dn: Annotated[str, Field(alias="tDn")]
+    target_dn: Annotated[
+        str, Field(alias="tDn", description="The distinguished name of the target.")
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     alloc_dvc_ips: bool = Field(default=True, alias="allocDvcIps")
     alloc_gw_ips: bool = Field(default=True, alias="allocGwIps")
     alloc_nat_ips: bool = Field(default=True, alias="allocNatIps")
     alloc_vips: bool = Field(default=True, alias="allocVips")
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     graph_conn_type: OrchsgraphConn = Field(
         default=OrchsgraphConn.L3_EXTERNAL, alias="graphConnType"
     )
-    type: FvIpLoc = FvIpLoc.EXTERNAL
+    type: FvIpLoc = Field(
+        default=FvIpLoc.EXTERNAL, description="The specific type of the object or component."
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

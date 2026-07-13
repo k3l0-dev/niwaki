@@ -37,13 +37,30 @@ class infraNonCompliantNode(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    node_serial_number: Annotated[str, Field(min_length=1, max_length=512, alias="serialNum")]
+    node_serial_number: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=512,
+            alias="serialNum",
+            description="Controller's motherboard serial number",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     administrative_state: InfraAdminState = Field(
-        default=InfraAdminState.OUT_OF_SERVICE, alias="adminSt"
+        default=InfraAdminState.OUT_OF_SERVICE,
+        alias="adminSt",
+        description="The administrative state of the object or policy.",
     )
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

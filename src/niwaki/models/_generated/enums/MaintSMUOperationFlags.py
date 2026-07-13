@@ -7,8 +7,11 @@ from enum import StrEnum
 
 class MaintSMUOperationFlags(StrEnum):
     PATCHHOTSMU = "patchHotSmu"
+    """SMU operation flags to indicate hot SMU. Node does not need a reload on hot SMU Install/Uninstall. Operator does not need to perform reload to make hot SMU to take affect."""
     SMURELOADIMMEDIATE = "smuReloadImmediate"
+    """SMU operation flags to indicate if node should be reloaded immediately on SMU Install/Uninstall."""
     SMURELOADSKIP = "smuReloadSkip"
+    """SMU operation flags to indicate if node should skip auto reload on SMU Install/Uninstall. Operator would perform the usual reload (or mode reload) later to make SMU to take affect."""
 
     @classmethod
     def _missing_(cls, value: object) -> MaintSMUOperationFlags | None:

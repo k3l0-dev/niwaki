@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class L3extOwner(StrEnum):
     INFRA = "infra"
+    """The Logical Outside Profile should be chosen from the ones configured under the infrastructure"""
     TENANT = "tenant"
+    """The Logical Outside Profile should be chosen from the ones configured under the tenant"""
 
     @classmethod
     def _missing_(cls, value: object) -> L3extOwner | None:

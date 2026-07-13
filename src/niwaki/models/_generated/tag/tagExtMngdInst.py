@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class tagExtMngdInst(ManagedObject):
     """ACI Managed Object: ``tagExtMngdInst`` — External tag instance.
 
+    tag inst for external orchestrators to tag objects that are managed by them
+
     RN format: ``extmngd``
     """
 
@@ -34,7 +36,14 @@ class tagExtMngdInst(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     is_msc: bool = Field(default=False, alias="isMsc")
     is_shadow: bool = Field(default=False, alias="isShadow")
     name: Annotated[

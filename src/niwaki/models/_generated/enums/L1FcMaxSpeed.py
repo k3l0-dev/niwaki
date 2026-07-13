@@ -7,10 +7,15 @@ from enum import StrEnum
 
 class L1FcMaxSpeed(StrEnum):
     _16G = "16G"
+    """Speed is 16 Gbps"""
     _2G = "2G"
+    """Speed is 2 Gbps"""
     _32G = "32G"
+    """Speed is 32 Gbps"""
     _4G = "4G"
+    """Speed is 4 Gbps"""
     _8G = "8G"
+    """Speed is 8 Gbps"""
 
     @classmethod
     def _missing_(cls, value: object) -> L1FcMaxSpeed | None:

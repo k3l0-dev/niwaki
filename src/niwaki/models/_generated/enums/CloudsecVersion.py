@@ -7,6 +7,7 @@ from enum import StrEnum
 
 class CloudsecVersion(StrEnum):
     V1 = "v1"
+    """Version 1"""
 
     @classmethod
     def _missing_(cls, value: object) -> CloudsecVersion | None:

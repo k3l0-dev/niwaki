@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class opflexpClientCert(ManagedObject):
     """ACI Managed Object: ``opflexpClientCert`` — Opflex Client Certificate.
 
+    Certificate Signing Request or Signed Certificate
+
     RN format: ``cert-{client_name}``
     """
 
@@ -36,15 +38,35 @@ class opflexpClientCert(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    client_name: Annotated[str, Field(min_length=1, max_length=512, alias="clientName")]
+    client_name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=512,
+            alias="clientName",
+            description="The hostname used by the client when it acquired the lease.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     certificate_signing_request_state: OpflexpCsrState = Field(
         default=OpflexpCsrState.SIGNINGREQUEST, alias="csrState"
     )
-    data: str = ""
-    name: Annotated[str, Field(max_length=16, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    data: Annotated[
+        str, Field(description="Information returned by or provided to the application or task.")
+    ] = ""
+    name: Annotated[
+        str,
+        Field(max_length=16, pattern="^[a-zA-Z0-9_.:-]+$", description="The name of the object."),
+    ] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

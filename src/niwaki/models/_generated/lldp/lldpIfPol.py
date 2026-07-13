@@ -14,6 +14,8 @@ from niwaki.models.base import ManagedObject
 class lldpIfPol(ManagedObject):
     """ACI Managed Object: ``lldpIfPol`` — LLDP Interface Policy.
 
+    The LLDP interface policy, which defines a common configuration that will apply to one or more LLDP interfaces. LLDP uses the logical link control (LLC) services to transmit and receive information to and from other LLDP agents.
+
     RN format: ``lldpIfP-{name}``
     """
 
@@ -41,15 +43,39 @@ class lldpIfPol(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="LLDP interface policy name.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    receive_state: LldpAdminSt = Field(default=LldpAdminSt.ENABLED, alias="adminRxSt")
-    transmit_state: LldpAdminSt = Field(default=LldpAdminSt.ENABLED, alias="adminTxSt")
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    receive_state: LldpAdminSt = Field(
+        default=LldpAdminSt.ENABLED, alias="adminRxSt", description="Receive admin state"
+    )
+    transmit_state: LldpAdminSt = Field(
+        default=LldpAdminSt.ENABLED, alias="adminTxSt", description="Transmit admin state"
+    )
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies a description of the policy definition.",
+        ),
     ] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
@@ -57,12 +83,22 @@ class lldpIfPol(ManagedObject):
     owner_key: Annotated[
         str,
         Field(
-            max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerKey"
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerKey",
+            description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
     owner_tag: Annotated[
         str,
-        Field(max_length=64, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerTag"),
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerTag",
+            description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+        ),
     ] = ""
-    dcbxp_version: LldpDCBXPVerType = Field(default=LldpDCBXPVerType.CEE, alias="portDCBXPVer")
+    dcbxp_version: LldpDCBXPVerType = Field(
+        default=LldpDCBXPVerType.CEE, alias="portDCBXPVer", description="Port DCBXP Version"
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

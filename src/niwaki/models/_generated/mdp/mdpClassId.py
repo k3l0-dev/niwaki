@@ -36,7 +36,18 @@ class mdpClassId(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    control_ep_stream_for_this_epg_to_mdc: bool = Field(default=False, alias="epStream")
-    domain_level_pctag_allocated_by_mdc: Annotated[int, Field(alias="pcTag")] = 0
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    control_ep_stream_for_this_epg_to_mdc: bool = Field(
+        default=False, alias="epStream", description="Control EP stream for this EPg to MDC"
+    )
+    domain_level_pctag_allocated_by_mdc: Annotated[
+        int, Field(alias="pcTag", description="Domain level pcTag allocated by MDC")
+    ] = 0
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

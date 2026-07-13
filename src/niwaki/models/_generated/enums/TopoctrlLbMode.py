@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class TopoctrlLbMode(StrEnum):
     LFR = "lfr"
+    """Link Failure Resiliency"""
     TRADITIONAL = "traditional"
+    """traditional"""
 
     @classmethod
     def _missing_(cls, value: object) -> TopoctrlLbMode | None:

@@ -14,6 +14,8 @@ from niwaki.models.base import ManagedObject
 class lacpLagPol(ManagedObject):
     """ACI Managed Object: ``lacpLagPol`` — LACP Policy.
 
+    The PortChannel policy enables you to bundle several physical ports together to form a single port channel. LACP enables a node to negotiate an automatic bundling of links by sending LACP packets to the peer node.
+
     RN format: ``lacplagp-{name}``
     """
 
@@ -43,29 +45,69 @@ class lacpLagPol(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="Specifies the policy name.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    control: PcIfControl = Field(default=PcIfControl.FAST_SEL_HOT_STDBY, alias="ctrl")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    control: PcIfControl = Field(
+        default=PcIfControl.FAST_SEL_HOT_STDBY, alias="ctrl", description="LAG control properties"
+    )
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies a description of the policy definition.",
+        ),
     ] = ""
-    maximum_number_of_links: Annotated[int, Field(ge=1, le=64, alias="maxLinks")] = 16
-    minimum_number_of_links: Annotated[int, Field(ge=1, le=16, alias="minLinks")] = 1
-    mode: LacpMode = LacpMode.OFF
+    maximum_number_of_links: Annotated[
+        int, Field(ge=1, le=64, alias="maxLinks", description="maximum links")
+    ] = 16
+    minimum_number_of_links: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=16,
+            alias="minLinks",
+            description="minimum links @@@ MinLinks in the port channel",
+        ),
+    ] = 1
+    mode: LacpMode = Field(default=LacpMode.OFF, description="mode")
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
     owner_key: Annotated[
         str,
         Field(
-            max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerKey"
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerKey",
+            description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
     owner_tag: Annotated[
         str,
-        Field(max_length=64, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerTag"),
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerTag",
+            description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

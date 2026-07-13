@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class TrackListObj(StrEnum):
     PERCENTAGE = "percentage"
+    """const name="none" value="0"/Each object defined within the track list must be in an UP state so that the track list object can become UP.const name="and" value="1" label="Boolean 'and' function"/At least one object defined within the track list must be in an UP state so that the tracked object can b…"""
     WEIGHT = "weight"
+    """Assign a weight value to each object in the tracked list, and a weight threshold for the track list. If the combined weights of all UP objects exceeds the track list weight UP threshold, the track list is in an UP state."""
 
     @classmethod
     def _missing_(cls, value: object) -> TrackListObj | None:

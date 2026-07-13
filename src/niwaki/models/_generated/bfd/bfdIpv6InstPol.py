@@ -39,31 +39,68 @@ class bfdIpv6InstPol(ManagedObject):
     name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies a description of the policy definition.",
+        ),
     ] = ""
-    detection_multiplier: str = Field(default="", alias="detectMult")
-    echo_rx_interval: str = Field(default="", alias="echoRxIntvl")
+    detection_multiplier: str = Field(
+        default="", alias="detectMult", description="Detection multiplier."
+    )
+    echo_rx_interval: str = Field(default="", alias="echoRxIntvl", description="Echo rx interval.")
     bfd_ipv4_source_address_for_echo_frames: Annotated[
-        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="echoSrcAddr")
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            alias="echoSrcAddr",
+            description="BFD Source Address for Echo frames.",
+        ),
     ] = ""
-    required_minimum_rx_interval: str = Field(default="", alias="minRxIntvl")
-    desired_minimum_tx_interval: str = Field(default="", alias="minTxIntvl")
+    required_minimum_rx_interval: str = Field(
+        default="", alias="minRxIntvl", description="Required minimum rx interval."
+    )
+    desired_minimum_tx_interval: str = Field(
+        default="", alias="minTxIntvl", description="Desired minimum tx interval."
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
     owner_key: Annotated[
         str,
         Field(
-            max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerKey"
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerKey",
+            description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
     owner_tag: Annotated[
         str,
-        Field(max_length=64, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerTag"),
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerTag",
+            description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+        ),
     ] = ""
-    slow_timer_interval: str = Field(default="", alias="slowIntvl")
-    startup_timer_interval: str = Field(default="", alias="startupIntvl")
+    slow_timer_interval: str = Field(
+        default="", alias="slowIntvl", description="Slow timer interval."
+    )
+    startup_timer_interval: str = Field(
+        default="",
+        alias="startupIntvl",
+        description="Startup timer interval. This is the delay after which BFD sessions will be installed to LC.",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

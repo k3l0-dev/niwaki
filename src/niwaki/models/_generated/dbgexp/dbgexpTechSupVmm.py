@@ -15,6 +15,8 @@ from niwaki.models.base import ManagedObject
 class dbgexpTechSupVmm(ManagedObject):
     """ACI Managed Object: ``dbgexpTechSupVmm`` — TechSupport Export Policy for VMM.
 
+    Techsupport export for Vmm hypervisor
+
     RN format: ``tsvmm-{name}``
     """
 
@@ -46,20 +48,51 @@ class dbgexpTechSupVmm(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the object.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    administrative_state: TrigExecState = Field(default=TrigExecState.UNTRIGGERED, alias="adminSt")
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    administrative_state: TrigExecState = Field(
+        default=TrigExecState.UNTRIGGERED,
+        alias="adminSt",
+        description="The administrative state of the executable policies.",
+    )
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     apic_path: Annotated[str, Field(max_length=512, alias="apicPath")] = ""
     app_name: Annotated[str, Field(max_length=512, alias="appName")] = ""
-    category_of_feature_to_be_collected: str = Field(default="", alias="category")
-    compression: MonCompression = MonCompression.GZIP
+    category_of_feature_to_be_collected: str = Field(
+        default="",
+        alias="category",
+        description="The category name. This is the name of the grouping used when calculating the healthscore. If unspecified, the child's class name is used.",
+    )
+    compression: MonCompression = Field(
+        default=MonCompression.GZIP,
+        description="Compression format for techsupport, default is gzip",
+    )
     export_location: ScalarEnum8 = Field(default=ScalarEnum8.APIC, alias="controllerLocation")
     include_db_metadata_file: bool = Field(default=True, alias="dbMetadata")
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
     end_time_for_techsupport_collection: str = Field(default="", alias="endTime")
     export_to_controller: bool = Field(default=False, alias="exportToController")
@@ -71,4 +104,11 @@ class dbgexpTechSupVmm(ManagedObject):
     start_time_for_techsupport_collection: str = Field(default="", alias="startTime")
     include_pre_upgrade_logs: bool = Field(default=False, alias="upgradeLogs")
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    vendor_name: Annotated[str, Field(max_length=512, alias="vendorName")] = ""
+    vendor_name: Annotated[
+        str,
+        Field(
+            max_length=512,
+            alias="vendorName",
+            description="The SFP transceiver vendor name (ASCII).",
+        ),
+    ] = ""

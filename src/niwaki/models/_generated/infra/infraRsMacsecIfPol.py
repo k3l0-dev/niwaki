@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class infraRsMacsecIfPol(ManagedObject):
     """ACI Managed Object: ``infraRsMacsecIfPol`` — Relation to MACsec Interface Policy.
 
+    Relationship to policy providing physical configuration of the interfaces
+
     RN format: ``rsmacsecIfPol``
     """
 
@@ -37,7 +39,14 @@ class infraRsMacsecIfPol(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     name: Annotated[
         str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="tnMacsecIfPolName")
     ] = ""

@@ -17,6 +17,8 @@ from niwaki.models.base import ManagedObject
 class syslogRemoteDest(ManagedObject):
     """ACI Managed Object: ``syslogRemoteDest`` — Syslog Remote Destination.
 
+    The syslog remote destination host enables you to specify syslog servers to which messages from the APIC and fabric nodes should be forwarded.
+
     RN format: ``rdst-{host}``
     """
 
@@ -42,24 +44,56 @@ class syslogRemoteDest(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    host: str
+    host: Annotated[str, Field(description="The host name or IP for export destination.")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    admin_state: MonAdminState = Field(default=MonAdminState.ENABLED, alias="adminState")
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    admin_state: MonAdminState = Field(
+        default=MonAdminState.ENABLED,
+        alias="adminState",
+        description="The administrative state of the remote destination host.",
+    )
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
-    format_setting: SyslogFormatSetting = Field(default=SyslogFormatSetting.ACI, alias="format")
-    forward_facility: SyslogForwardingFacility = Field(
-        default=SyslogForwardingFacility.LOCAL7, alias="forwardingFacility"
+    format_setting: SyslogFormatSetting = Field(
+        default=SyslogFormatSetting.ACI,
+        alias="format",
+        description="The Call Home destination message format.",
     )
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    forward_facility: SyslogForwardingFacility = Field(
+        default=SyslogForwardingFacility.LOCAL7,
+        alias="forwardingFacility",
+        description="The facility to be used to send messages to this destination.",
+    )
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
+        ""
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    port: Annotated[int, Field(ge=1, le=65535)] = 514
-    protocol: SyslogProtocolType = SyslogProtocolType.UDP
-    severity: SyslogSeverity = SyslogSeverity.WARNINGS
+    port: Annotated[
+        int, Field(ge=1, le=65535, description="The syslog service port of the remote destination.")
+    ] = 514
+    protocol: SyslogProtocolType = Field(
+        default=SyslogProtocolType.UDP,
+        description="The transfer protocol to be used for data export.",
+    )
+    severity: SyslogSeverity = Field(
+        default=SyslogSeverity.WARNINGS,
+        description="The severity of the event, alert, or issue that caused the syslog entry to be generated.",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

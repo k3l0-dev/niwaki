@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class eqptdiagpRsFpOdDiag(ManagedObject):
     """ACI Managed Object: ``eqptdiagpRsFpOdDiag`` — Relation to Fabric Port for On-Demand Diag Policy.
 
+    A source relation to the fabric facing external IO port. Note that this relation is an internal object.
+
     RN format: ``rsfpOdDiag-[{target_dn}]``
     """
 
@@ -36,8 +38,15 @@ class eqptdiagpRsFpOdDiag(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    target_dn: Annotated[str, Field(alias="tDn")]
+    target_dn: Annotated[str, Field(alias="tDn", description="The target fabric port.")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

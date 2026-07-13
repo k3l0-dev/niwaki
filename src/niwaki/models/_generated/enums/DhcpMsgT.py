@@ -7,14 +7,23 @@ from enum import StrEnum
 
 class DhcpMsgT(StrEnum):
     ACK = "ack"
+    """Ack"""
     DECLINE = "decline"
+    """Decline"""
     DISCOVER = "discover"
+    """Discover"""
     INFORM = "inform"
+    """Inform"""
     INVALID = "invalid"
+    """Invalid"""
     NAK = "nak"
+    """Nak"""
     OFFER = "offer"
+    """Offer"""
     RELEASE = "release"
+    """Release"""
     REQUEST = "request"
+    """Request"""
 
     @classmethod
     def _missing_(cls, value: object) -> DhcpMsgT | None:

@@ -15,6 +15,8 @@ from niwaki.models.base import ManagedObject
 class snmpTrapDest(ManagedObject):
     """ACI Managed Object: ``snmpTrapDest`` — SNMP Trap Destination.
 
+    A destination to which traps and informs are sent.
+
     RN format: ``trapdest-{host}-port-{port}``
     """
 
@@ -41,21 +43,55 @@ class snmpTrapDest(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    host: str
-    port: Annotated[int, Field(ge=1, le=65535)] = 162
+    host: Annotated[
+        str,
+        Field(
+            description="The host for the SNMP trap destination. SNMP traps enable an agent to notify the management station of significant events by way of an unsolicited SNMP message."
+        ),
+    ]
+    port: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=65535,
+            description="The service port of the SNMP trap destination. SNMP traps enable an agent to notify the management station of significant events by way of an unsolicited SNMP message.",
+        ),
+    ] = 162
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
+        ""
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
     notif_t: SnmpNotificationType = Field(default=SnmpNotificationType.TRAPS, alias="notifT")
-    security_name: str = Field(default="", alias="secName")
+    security_name: str = Field(
+        default="", alias="secName", description="The SNMP destination security name."
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    v3_security_level: SnmpV3SecLvl = Field(default=SnmpV3SecLvl.NOAUTH, alias="v3SecLvl")
-    version: SnmpVersion = Field(default=SnmpVersion.V2C, alias="ver")
+    v3_security_level: SnmpV3SecLvl = Field(
+        default=SnmpV3SecLvl.NOAUTH,
+        alias="v3SecLvl",
+        description="The SNMP V3 security level for the destination path.",
+    )
+    version: SnmpVersion = Field(
+        default=SnmpVersion.V2C, alias="ver", description="The CDP version supported by the device."
+    )

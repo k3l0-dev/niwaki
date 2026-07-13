@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class fvRsMldsn(ManagedObject):
     """ACI Managed Object: ``fvRsMldsn`` — MLD Snoop Policy.
 
+    Relation to an MLD Snoop policy
+
     RN format: ``rsmldsn``
     """
 
@@ -35,7 +37,14 @@ class fvRsMldsn(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     name: Annotated[
         str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="tnMldSnoopPolName")
     ] = ""

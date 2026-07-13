@@ -17,6 +17,8 @@ from niwaki.models.base import ManagedObject
 class vnsLDevVip(ManagedObject):
     """ACI Managed Object: ``vnsLDevVip`` — L4-L7 Devices.
 
+    An L4-L7 device cluster is represented by a single virtual IP (VIP). The configuration is pushed down to the VIP address.
+
     RN format: ``lDevVip-{name}``
     """
 
@@ -58,24 +60,56 @@ class vnsLDevVip(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the L4-L7 device cluster VIP. This property uniquely identifies the device cluster VIP.",
+        ),
+    ]
 
     # ── Create-only (ignored by APIC on modification) ─────────────────────────
     active_active_mode: bool = Field(default=False, alias="activeActive")
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    tenancy: VnsContextAware = Field(default=VnsContextAware.SINGLE_CONTEXT, alias="contextAware")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    tenancy: VnsContextAware = Field(
+        default=VnsContextAware.SINGLE_CONTEXT,
+        alias="contextAware",
+        description="A value to determine if the L4-L7 device cluster supports multiple contexts (VRFs).",
+    )
     device_type: VnsLDevType = Field(default=VnsLDevType.PHYSICAL, alias="devtype")
-    function_type: VnsNodeFuncType = Field(default=VnsNodeFuncType.GOTO, alias="funcType")
-    is_copy: bool = Field(default=False, alias="isCopy")
-    managed: bool = True
-    mode: VnsMode = VnsMode.LEGACY_MODE
+    function_type: VnsNodeFuncType = Field(
+        default=VnsNodeFuncType.GOTO,
+        alias="funcType",
+        description="The function type of the L4-L7 device cluster.",
+    )
+    is_copy: bool = Field(
+        default=False, alias="isCopy", description="if the device is a copy device"
+    )
+    managed: bool = Field(default=True, description="Specified if the device is a managed device")
+    mode: VnsMode = Field(
+        default=VnsMode.LEGACY_MODE,
+        description="The value for specifying if the device is legacy (classical VLAN/VXLAN) or supports service tag switching (STS).",
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
     package_model: Annotated[str, Field(max_length=512, alias="packageModel")] = ""
-    promiscuous_mode: bool = Field(default=False, alias="promMode")
-    svc_type: VnsL4L7SvcType = Field(default=VnsL4L7SvcType.OTHERS, alias="svcType")
-    trunking: bool = False
+    promiscuous_mode: bool = Field(default=False, alias="promMode", description="Promiscuous Mode")
+    svc_type: VnsL4L7SvcType = Field(
+        default=VnsL4L7SvcType.OTHERS, alias="svcType", description="UI Template type"
+    )
+    trunking: bool = Field(
+        default=False, description="For virtual devices, if a trunking port group is to be used"
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

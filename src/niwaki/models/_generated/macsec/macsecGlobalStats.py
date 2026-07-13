@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class macsecGlobalStats(ManagedObject):
     """ACI Managed Object: ``macsecGlobalStats`` — Global statistics.
 
+    MACSEC MKA Global Statistics
+
     RN format: ``globalstats``
     """
 
@@ -36,4 +38,11 @@ class macsecGlobalStats(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""

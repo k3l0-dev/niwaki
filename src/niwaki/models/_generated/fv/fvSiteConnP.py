@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class fvSiteConnP(ManagedObject):
     """ACI Managed Object: ``fvSiteConnP`` — Intersite Anycast DTEP IP for a POD.
 
+    Container for Local Multisite Connectivity Information for MultiSite deployments
+
     RN format: ``siteConnP-{site_id}``
     """
 
@@ -42,16 +44,30 @@ class fvSiteConnP(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    site_id: Annotated[int, Field(alias="id")] = 0
+    site_id: Annotated[int, Field(alias="id", description="Site Id")] = 0
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     remote_site_asn: Annotated[int, Field(ge=1, alias="bgpAsn")] = 0
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
+        ""
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

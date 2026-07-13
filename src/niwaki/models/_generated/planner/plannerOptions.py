@@ -36,9 +36,20 @@ class plannerOptions(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    use_ingress_acls_feature: bool = Field(default=False, alias="ignoreTopology")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    use_ingress_acls_feature: bool = Field(
+        default=False, alias="ignoreTopology", description="Enable ingress ACLs feature"
+    )
     switch_hardware_model: PlannerSwitchModel = Field(
-        default=PlannerSwitchModel.N9K_C9372PX, alias="switchModel"
+        default=PlannerSwitchModel.N9K_C9372PX,
+        alias="switchModel",
+        description="Default switch model when adding new switches",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

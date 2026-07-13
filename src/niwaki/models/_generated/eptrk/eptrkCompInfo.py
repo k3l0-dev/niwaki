@@ -42,9 +42,18 @@ class eptrkCompInfo(ManagedObject):
     name: Annotated[str, Field(min_length=1, max_length=512, alias="compName")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     debug_internal_data: str = Field(default="", alias="dbgInternalData")
     operational_state_qualifier: EptrkOperStQual = Field(
-        default=EptrkOperStQual.OK, alias="operStQual"
+        default=EptrkOperStQual.OK,
+        alias="operStQual",
+        description="The chassis operational status qualifier.",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

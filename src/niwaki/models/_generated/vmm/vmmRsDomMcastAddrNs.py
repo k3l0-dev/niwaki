@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class vmmRsDomMcastAddrNs(ManagedObject):
     """ACI Managed Object: ``vmmRsDomMcastAddrNs`` — Multicast Addr Pool.
 
+    A source relation to the policy definition of the multicast IP address ranges.
+
     RN format: ``rsdomMcastAddrNs``
     """
 
@@ -37,6 +39,17 @@ class vmmRsDomMcastAddrNs(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    target_dn: str = Field(default="", alias="tDn")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    target_dn: str = Field(
+        default="",
+        alias="tDn",
+        description="The Multicast Address Pool that the domain will pull from.",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

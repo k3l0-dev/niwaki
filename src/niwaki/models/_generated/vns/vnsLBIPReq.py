@@ -47,37 +47,108 @@ class vnsLBIPReq(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    ctrct: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
-    graph: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    ctrct: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="contract name, graphInst selector",
+        ),
+    ]
+    graph: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="graph name, graphInst selector",
+        ),
+    ]
     lb_name: Annotated[
-        str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="lbName")
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            alias="lbName",
+            description="LB name",
+        ),
     ]
     lbip_name: Annotated[
-        str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="lbipName")
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            alias="lbipName",
+            description="LBIP name",
+        ),
     ]
-    node: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    node: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="node name, graphInst selector",
+        ),
+    ]
     route_name: Annotated[
-        str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="routeName")
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            alias="routeName",
+            description="route name",
+        ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    add_route: bool = Field(default=False, alias="addRoute")
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    add_route: bool = Field(default=False, alias="addRoute", description="whether to add route")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
-    internal_snip_flag: bool = Field(default=True, alias="internalSnip")
-    lbip_ip: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="lbipIp")] = ""
-    lbip_subnet: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="lbipSubnet")] = ""
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    internal_snip_flag: bool = Field(
+        default=True, alias="internalSnip", description="internal SNIP"
+    )
+    lbip_ip: Annotated[
+        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="lbipIp", description="lbip IP")
+    ] = ""
+    lbip_subnet: Annotated[
+        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="lbipSubnet", description="lbip subnet")
+    ] = ""
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
+        ""
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    nsip_type: str = Field(default="", alias="nsipType")
-    provider: str = Field(default="", alias="prov")
-    route_gateway: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="routeGateway")] = ""
-    route_netmask: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="routeNetmask")] = ""
-    route_network: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="routeNetwork")] = ""
+    nsip_type: str = Field(default="", alias="nsipType", description="NSIP type")
+    provider: str = Field(default="", alias="prov", description="provider Dn")
+    route_gateway: Annotated[
+        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="routeGateway", description="route gateway")
+    ] = ""
+    route_netmask: Annotated[
+        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="routeNetmask", description="route netmask")
+    ] = ""
+    route_network: Annotated[
+        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="routeNetwork", description="route network")
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    version: VnsrequestVersion = VnsrequestVersion.CLASSIC
+    version: VnsrequestVersion = Field(default=VnsrequestVersion.CLASSIC, description="Version")

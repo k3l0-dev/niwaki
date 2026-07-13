@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class coppLeafGen1CustomValues(ManagedObject):
     """ACI Managed Object: ``coppLeafGen1CustomValues`` — Settings of burst and rate (for all protocols), on LEAFs of first generation.
 
+    Configuration of all the protocols burst and rates for LEAF of first generation
+
     RN format: ``leafgen1customvalues``
     """
 
@@ -38,7 +40,14 @@ class coppLeafGen1CustomValues(ManagedObject):
     # ── Configurable ───────────────────────────────────────────────────────────
     acllog_burst: str = Field(default="", alias="acllogBurst")
     acllog_rate: str = Field(default="", alias="acllogRate")
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     arp_burst: str = Field(default="", alias="arpBurst")
     arp_rate: str = Field(default="", alias="arpRate")
     bgp_burst: str = Field(default="", alias="bgpBurst")
@@ -73,7 +82,9 @@ class coppLeafGen1CustomValues(ManagedObject):
     lldp_rate: str = Field(default="", alias="lldpRate")
     mcp_burst: str = Field(default="", alias="mcpBurst")
     mcp_rate: str = Field(default="", alias="mcpRate")
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
+        ""
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

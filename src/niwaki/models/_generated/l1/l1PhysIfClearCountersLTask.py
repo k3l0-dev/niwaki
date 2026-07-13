@@ -14,6 +14,8 @@ from niwaki.models.base import ManagedObject
 class l1PhysIfClearCountersLTask(ManagedObject):
     """ACI Managed Object: ``l1PhysIfClearCountersLTask``.
 
+    A task object to clear counters of a port.
+
     RN format: ``l1PhysIfClearCountersLTask``
     """
 
@@ -37,12 +39,27 @@ class l1PhysIfClearCountersLTask(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    admin_state: ActionAdminSt = Field(default=ActionAdminSt.UNKNOWN, alias="adminSt")
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    admin_state: ActionAdminSt = Field(
+        default=ActionAdminSt.UNKNOWN,
+        alias="adminSt",
+        description="The administrative state of the object or policy.",
+    )
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
         Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
     ] = ""
-    task_frequency: str = Field(default="", alias="freq")
-    type: ActionType = ActionType.CLEAR
+    task_frequency: str = Field(
+        default="", alias="freq", description="Frequency at which tasks are executed"
+    )
+    type: ActionType = Field(
+        default=ActionType.CLEAR, description="The specific type of the object or component."
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class l2extRsPathL2OutAtt(ManagedObject):
     """ACI Managed Object: ``l2extRsPathL2OutAtt`` — Leaf Port.
 
+    The path endpoint.
+
     RN format: ``rspathL2OutAtt-[{target_dn}]``
     """
 
@@ -34,12 +36,34 @@ class l2extRsPathL2OutAtt(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    target_dn: Annotated[str, Field(alias="tDn")]
+    target_dn: Annotated[
+        str,
+        Field(
+            alias="tDn",
+            description="The name of the path attached to the layer 2 outside profile. The maximum supported string length is 255 ASCII characters.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    descr: Annotated[
-        str, Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
     ] = ""
-    target_dscp: str = Field(default="", alias="targetDscp")
+    descr: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            description="The description of this configuration item.",
+        ),
+    ] = ""
+    target_dscp: str = Field(
+        default="",
+        alias="targetDscp",
+        description="This property is for future use and is not supported in the current release.",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

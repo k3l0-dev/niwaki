@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class bfdInstAf(ManagedObject):
     """ACI Managed Object: ``bfdInstAf`` — Instance Address Family.
 
+    This objects hold per address family bfd instance information
+
     RN format: ``af-{type_of_the_address_family}``
     """
 
@@ -43,11 +45,33 @@ class bfdInstAf(ManagedObject):
     type_of_the_address_family: BfdAfT = Field(default=BfdAfT.IPV4, alias="type")
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    bfd_source_address_for_echo_frames: Annotated[
-        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="echoSrcAddr")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
     ] = ""
-    name: Annotated[str, Field(min_length=1, max_length=128)] = ""
-    slow_timer_interval: str = Field(default="", alias="slowIntvl")
-    startup_timer_interval: str = Field(default="", alias="startupIntvl")
+    bfd_source_address_for_echo_frames: Annotated[
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            alias="echoSrcAddr",
+            description="BFD Source Address for Echo frames",
+        ),
+    ] = ""
+    name: Annotated[
+        str, Field(min_length=1, max_length=128, description="The name of the object.")
+    ] = ""
+    slow_timer_interval: str = Field(
+        default="",
+        alias="slowIntvl",
+        description="Slow mode timer interval. This is the interval at which BFD control packets are sent.",
+    )
+    startup_timer_interval: str = Field(
+        default="",
+        alias="startupIntvl",
+        description="Startup timer interval. This is the delay after which BFD sessions will be installed to LC.",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

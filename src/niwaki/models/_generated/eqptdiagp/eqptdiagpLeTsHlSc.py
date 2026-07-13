@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class eqptdiagpLeTsHlSc(ManagedObject):
     """ACI Managed Object: ``eqptdiagpLeTsHlSc`` — Leaf Health Diag Policy Set for the IO Line Card Type.
 
+    The ongoing diagnostic health test set for leaf fabric nodes to run on supervisor cards.
+
     RN format: ``leHlSupDiags-{name}``
     """
 
@@ -38,29 +40,73 @@ class eqptdiagpLeTsHlSc(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the diagnostic test set.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    administrative_state: EqptdiagpAdminSt = Field(default=EqptdiagpAdminSt.START, alias="adminSt")
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    administrative_state: EqptdiagpAdminSt = Field(
+        default=EqptdiagpAdminSt.START,
+        alias="adminSt",
+        description="Administrative state of the diag policy",
+    )
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies a description of the policy definition.",
+        ),
     ] = ""
-    bitmask_of_diagnostics_tests_to_be_run: str = Field(default="", alias="diagsBm")
-    health_diag_test_frequency: str = Field(default="", alias="freq")
-    full_bm: str = Field(default="", alias="fullBm")
+    bitmask_of_diagnostics_tests_to_be_run: str = Field(
+        default="",
+        alias="diagsBm",
+        description="The bitmask of diagnostic test groups that are enabled.",
+    )
+    health_diag_test_frequency: str = Field(
+        default="",
+        alias="freq",
+        description="The frequency of the abstract health diagnostic policy for fabric nodes.",
+    )
+    full_bm: str = Field(
+        default="",
+        alias="fullBm",
+        description="A bitmask of test groups for which a full set of tests are enabled.",
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
     owner_key: Annotated[
         str,
         Field(
-            max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerKey"
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerKey",
+            description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
     owner_tag: Annotated[
         str,
-        Field(max_length=64, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerTag"),
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerTag",
+            description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

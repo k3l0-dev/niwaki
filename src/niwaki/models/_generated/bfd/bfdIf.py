@@ -14,6 +14,8 @@ from niwaki.models.base import ManagedObject
 class bfdIf(ManagedObject):
     """ACI Managed Object: ``bfdIf`` — BFD Interface.
 
+    This object holds bfd interface information
+
     RN format: ``if-[{interface_id}]``
     """
 
@@ -46,18 +48,33 @@ class bfdIf(ManagedObject):
     interface_id: Annotated[str, Field(alias="id")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    interface_controls: str = Field(default="", alias="ctrl")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    interface_controls: str = Field(default="", alias="ctrl", description="Interface controls")
     description: Annotated[
         str,
         Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
     ] = ""
-    destination_ip_address: str = Field(default="", alias="dst")
+    destination_ip_address: str = Field(default="", alias="dst", description="BFD Dest IP")
     echo_mode_admin_state_of_bfd_interface: NwAdminSt = Field(
-        default=NwAdminSt.ENABLED, alias="echoAdminSt"
+        default=NwAdminSt.ENABLED,
+        alias="echoAdminSt",
+        description="Enable/disable echo mode for interface",
     )
-    name: Annotated[str, Field(min_length=1, max_length=128)] = ""
-    src_ip: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="srcIp")] = ""
-    bfd_start_timeout: Annotated[int, Field(alias="stTm")] = 0
-    trk_mbr_lnk: BfdTrkMbrLnk = Field(default=BfdTrkMbrLnk.DISABLE, alias="trkMbrLnk")
+    name: Annotated[
+        str, Field(min_length=1, max_length=128, description="The name of the object.")
+    ] = ""
+    src_ip: Annotated[
+        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="srcIp", description="BFD Src IP")
+    ] = ""
+    bfd_start_timeout: Annotated[int, Field(alias="stTm", description="BFD Start Time")] = 0
+    trk_mbr_lnk: BfdTrkMbrLnk = Field(
+        default=BfdTrkMbrLnk.DISABLE, alias="trkMbrLnk", description="BFD track-member-link"
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

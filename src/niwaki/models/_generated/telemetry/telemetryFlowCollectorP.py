@@ -41,33 +41,64 @@ class telemetryFlowCollectorP(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    admin_state: TelemetryAdminState = Field(default=TelemetryAdminState.DISABLED, alias="adminSt")
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    admin_state: TelemetryAdminState = Field(
+        default=TelemetryAdminState.DISABLED,
+        alias="adminSt",
+        description="The administrative state of the object or policy.",
+    )
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     collector_placement: str = Field(default="", alias="collectorPlacement")
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies a description of the policy definition.",
+        ),
     ] = ""
     external_ip_where_collector_is_listening: Annotated[
-        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="externalServerIp")
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            alias="externalServerIp",
+            description="External Server Ip and Port would be used to export the streams to an external server",
+        ),
     ] = ""
     external_server_port: Annotated[int, Field(alias="externalServerPort")] = 0
     enable_fte_instance: TelemetryAdminState = Field(
-        default=TelemetryAdminState.DISABLED, alias="fteEn"
+        default=TelemetryAdminState.DISABLED, alias="fteEn", description="Enable FTE"
     )
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
+        ""
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
     owner_key: Annotated[
         str,
         Field(
-            max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerKey"
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerKey",
+            description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
     owner_tag: Annotated[
         str,
-        Field(max_length=64, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerTag"),
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerTag",
+            description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+        ),
     ] = ""
     software_hardware_based_record_export: bool = Field(default=False, alias="swExport")
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class quotaConf(ManagedObject):
     """ACI Managed Object: ``quotaConf`` — Quota Configuration.
 
+    Quota Configuration
+
     RN format: ``quotaconf-{class_}-scope-[{container_dn}]``
     """
 
@@ -37,16 +39,38 @@ class quotaConf(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    class_: Annotated[str, Field(alias="class")]
-    container_dn: Annotated[str, Field(alias="containerDn")]
+    class_: Annotated[str, Field(alias="class", description="Class subject to quota management")]
+    container_dn: Annotated[
+        str,
+        Field(alias="containerDn", description="Subtree where to limit the quota count evaluation"),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     action_when_quota_exceed: QuotaExceedActionType = Field(
-        default=QuotaExceedActionType.FAULT, alias="exceedAction"
+        default=QuotaExceedActionType.FAULT,
+        alias="exceedAction",
+        description="Action when quota exceed",
     )
-    max_num: Annotated[int, Field(ge=0, le=4294967295, alias="maxNum")] = 0
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    max_num: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=4294967295,
+            alias="maxNum",
+            description="Quota above which the exceedAction take place",
+        ),
+    ] = 0
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
+        ""
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

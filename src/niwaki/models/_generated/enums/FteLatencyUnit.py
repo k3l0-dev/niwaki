@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class FteLatencyUnit(StrEnum):
     MICRO_SEC = "micro-sec"
+    """micro sec"""
     MILLI_SEC = "milli-sec"
+    """milli sec"""
 
     @classmethod
     def _missing_(cls, value: object) -> FteLatencyUnit | None:

@@ -16,6 +16,8 @@ from niwaki.models.base import ManagedObject
 class tracerouteExecTn(ManagedObject):
     """ACI Managed Object: ``tracerouteExecTn`` — Tenant Traceroute Exec.
 
+    An execution for an endpoint to endpoint (tenant) traceroute.
+
     RN format: ``trexectn-[{tenant_name}]-[{name}]-ip-[{source_ip}]-to-[{destination_ip}]``
     """
 
@@ -45,16 +47,47 @@ class tracerouteExecTn(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    destination_ip: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="dstIp")]
-    name: Annotated[str, Field(min_length=1, max_length=16, pattern="^[a-zA-Z0-9_.:-]+$")]
-    source_ip: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="srcIp")]
+    destination_ip: Annotated[
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$", alias="dstIp", description="The destination IP address."
+        ),
+    ]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=16,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the object.",
+        ),
+    ]
+    source_ip: Annotated[
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            alias="srcIp",
+            description="The source IP address. Traffic from this IP address to the EP is counted",
+        ),
+    ]
     tenant_name: Annotated[
         str, Field(min_length=1, max_length=16, pattern="^[a-zA-Z0-9_.:-]+$", alias="tenant")
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    admin_state: ActionAdminSt = Field(default=ActionAdminSt.UNKNOWN, alias="adminSt")
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    admin_state: ActionAdminSt = Field(
+        default=ActionAdminSt.UNKNOWN,
+        alias="adminSt",
+        description="The administrative state of the object or policy.",
+    )
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
         Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
@@ -65,29 +98,53 @@ class tracerouteExecTn(ManagedObject):
         default=TracerouteExtTracerouteFlag.TRUE, alias="doExtTraceroute"
     )
     destination_mac: Annotated[
-        str, Field(pattern="^([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}$", alias="dstMac")
+        str,
+        Field(
+            pattern="^([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}$",
+            alias="dstMac",
+            description="Specifies the destination MAC address for the rule.",
+        ),
     ] = ""
     external_interval: str = Field(default="", alias="extInterval")
     max_hops: str = Field(default="", alias="extMaxHops")
     ext_max_probes_per_path: str = Field(default="", alias="extMaxProbesPerPath")
     external_timeout: str = Field(default="", alias="extTimeout")
-    task_frequency: str = Field(default="", alias="freq")
+    task_frequency: str = Field(
+        default="", alias="freq", description="Frequency at which tasks are executed"
+    )
     gateway_mac: Annotated[
         str, Field(pattern="^([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}$", alias="gwMac")
     ] = ""
-    max_hops: str = Field(default="", alias="maxHops")
+    max_hops: str = Field(
+        default="",
+        alias="maxHops",
+        description="Indicates the maximum number of hops that the traceroute took to reach the destination.",
+    )
     max_paths: str = Field(default="", alias="maxPaths")
-    payload_size: str = Field(default="", alias="payloadSz")
-    protocol_type: TracerouteProtT = Field(default=TracerouteProtT.UDP, alias="prot")
+    payload_size: str = Field(
+        default="", alias="payloadSz", description="Indicates the payload size."
+    )
+    protocol_type: TracerouteProtT = Field(
+        default=TracerouteProtT.UDP, alias="prot", description="The IP protocol."
+    )
     source_mac: Annotated[
-        str, Field(pattern="^([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}$", alias="srcMac")
+        str,
+        Field(
+            pattern="^([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}$",
+            alias="srcMac",
+            description="Specifies the source MAC address for the rule.",
+        ),
     ] = ""
     source_node_id: str = Field(default="", alias="srcNodeId")
     source_port_end: str = Field(default="", alias="srcPortEnd")
     source_port_start: str = Field(default="", alias="srcPortStart")
-    type: ActionType = ActionType.CLEAR
+    type: ActionType = Field(
+        default=ActionType.CLEAR, description="The specific type of the object or component."
+    )
     use_gw_mac: bool = Field(default=True, alias="useGwMac")
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    vrf: Annotated[str, Field(max_length=512)] = ""
+    vrf: Annotated[
+        str, Field(max_length=512, description="Identifies the VRF for the NTP providers")
+    ] = ""
     vtep_ip: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="vtep")] = ""
     vtep_encapsulation: str = Field(default="", alias="vtepEncap")

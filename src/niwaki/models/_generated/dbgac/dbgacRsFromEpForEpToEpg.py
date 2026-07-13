@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class dbgacRsFromEpForEpToEpg(ManagedObject):
     """ACI Managed Object: ``dbgacRsFromEpForEpToEpg`` — Source Ep Relation for Ep to Epg Atomic Counter Policy.
 
+    A source relation to the client endpoint attaching to the network.
+
     RN format: ``rsfromEpForEpToEpg-[{target_dn}]``
     """
 
@@ -35,8 +37,15 @@ class dbgacRsFromEpForEpToEpg(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    target_dn: Annotated[str, Field(alias="tDn")]
+    target_dn: Annotated[str, Field(alias="tDn", description="The source endpoint IP address.")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

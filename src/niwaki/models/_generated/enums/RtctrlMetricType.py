@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class RtctrlMetricType(StrEnum):
     OSPF_TYPE1 = "ospf-type1"
+    """OSPF external type1 metric"""
     OSPF_TYPE2 = "ospf-type2"
+    """OSPF external type2 metric"""
 
     @classmethod
     def _missing_(cls, value: object) -> RtctrlMetricType | None:

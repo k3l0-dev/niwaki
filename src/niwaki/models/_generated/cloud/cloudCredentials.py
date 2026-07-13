@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class cloudCredentials(ManagedObject):
     """ACI Managed Object: ``cloudCredentials`` — Access Credential to manage the cloud resources.
 
+    Credentials to access the cloud APIs
+
     RN format: ``credentials-{name}``
     """
 
@@ -36,19 +38,43 @@ class cloudCredentials(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=16, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=16,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the object.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    client_id: Annotated[str, Field(max_length=512, alias="clientId")] = ""
-    credentials_email_address: Annotated[str, Field(max_length=512, alias="email")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    client_id: Annotated[str, Field(max_length=512, alias="clientId", description="Client ID")] = ""
+    credentials_email_address: Annotated[
+        str,
+        Field(max_length=512, alias="email", description="Email associated to these Credentials"),
+    ] = ""
     http_proxy_to_connect_to_cloud_provider: Annotated[
         str, Field(max_length=512, alias="httpProxy")
     ] = ""
-    secret_key: Annotated[str, Field(min_length=1, max_length=512, alias="key", repr=False)] = ""
-    acces_key_id: Annotated[str, Field(min_length=1, max_length=512, alias="keyId")] = ""
+    secret_key: Annotated[
+        str, Field(min_length=1, max_length=512, alias="key", repr=False, description="Secret Key")
+    ] = ""
+    acces_key_id: Annotated[
+        str, Field(min_length=1, max_length=512, alias="keyId", description="Acces Key ID")
+    ] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    rsa_private_key: Annotated[str, Field(alias="rsaPrivateKey", repr=False)] = ""
+    rsa_private_key: Annotated[
+        str, Field(alias="rsaPrivateKey", repr=False, description="RSA Secret Key")
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

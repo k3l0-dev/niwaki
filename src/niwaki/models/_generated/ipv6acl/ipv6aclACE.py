@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class ipv6aclACE(ManagedObject):
     """ACI Managed Object: ``ipv6aclACE`` — IPv6 access-list entry.
 
+    IPv6 ACE
+
     RN format: ``seq-{sequence_number}``
     """
 
@@ -36,20 +38,39 @@ class ipv6aclACE(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    sequence_number: Annotated[int, Field(ge=0, le=4294967295, alias="seqNum")] = 0
+    sequence_number: Annotated[
+        int, Field(ge=0, le=4294967295, alias="seqNum", description="ACE sequence number")
+    ] = 0
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    ace_action: AclActionType = Field(default=AclActionType.INVALID, alias="action")
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    dest_port: str = Field(default="", alias="dstPort1")
-    dest_port_mask: str = Field(default="", alias="dstPortMask")
-    destination_ipv6_prefix: str = Field(default="", alias="dstPrefix")
-    destination_ipv6_prefix_mask: str = Field(default="", alias="dstPrefixMask")
-    protocol: str = ""
-    protocol_mask: str = Field(default="", alias="protocolMask")
-    source_port: str = Field(default="", alias="srcPort1")
-    source_port_mask: str = Field(default="", alias="srcPortMask")
-    source_ipv6_prefix: str = Field(default="", alias="srcPrefix")
-    source_ipv6_prefix_mask: str = Field(default="", alias="srcPrefixMask")
+    ace_action: AclActionType = Field(
+        default=AclActionType.INVALID, alias="action", description="ACE filtering action"
+    )
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    dest_port: str = Field(default="", alias="dstPort1", description="Destination Port")
+    dest_port_mask: str = Field(
+        default="", alias="dstPortMask", description="Destination Port Mask"
+    )
+    destination_ipv6_prefix: str = Field(
+        default="", alias="dstPrefix", description="Destination Prefix"
+    )
+    destination_ipv6_prefix_mask: str = Field(
+        default="", alias="dstPrefixMask", description="Destination Prefix Mask"
+    )
+    protocol: Annotated[str, Field(description="Protocol")] = ""
+    protocol_mask: str = Field(default="", alias="protocolMask", description="Protocol Mask")
+    source_port: str = Field(default="", alias="srcPort1", description="Source Port")
+    source_port_mask: str = Field(default="", alias="srcPortMask", description="Source Port Mask")
+    source_ipv6_prefix: str = Field(default="", alias="srcPrefix", description="Source Prefix")
+    source_ipv6_prefix_mask: str = Field(
+        default="", alias="srcPrefixMask", description="Source Prefix Mask"
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    vrf_name: Annotated[str, Field(max_length=512, alias="vrfName")] = ""
+    vrf_name: Annotated[str, Field(max_length=512, alias="vrfName", description="VRF Name")] = ""

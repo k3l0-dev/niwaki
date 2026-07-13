@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class dbgexpPolicyStatus(ManagedObject):
     """ACI Managed Object: ``dbgexpPolicyStatus`` — Per Policy Container for Export Status.
 
+    Per export policy container for status
+
     RN format: ``expstatus-{policy_name}``
     """
 
@@ -38,9 +40,23 @@ class dbgexpPolicyStatus(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     policy_name: Annotated[
-        str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="polName")
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            alias="polName",
+            description="Policy name associated with this status container",
+        ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

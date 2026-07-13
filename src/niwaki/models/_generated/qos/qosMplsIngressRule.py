@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class qosMplsIngressRule(ManagedObject):
     """ACI Managed Object: ``qosMplsIngressRule`` — Mpls to Priority Mapping Policy.
 
+    class for Exp to priority map
+
     RN format: ``exp-{from_}-{to}``
     """
 
@@ -36,20 +38,43 @@ class qosMplsIngressRule(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    from_: Annotated[str, Field(alias="from")]
-    to: str
+    from_: Annotated[str, Field(alias="from", description="Range from")]
+    to: Annotated[str, Field(description="Range to")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
+        ""
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    prio: QosTenantPrio = QosTenantPrio.UNSPECIFIED
-    target: str = ""
-    target_cos: str = Field(default="", alias="targetCos")
+    prio: QosTenantPrio = Field(default=QosTenantPrio.UNSPECIFIED, description="Class id")
+    target: Annotated[
+        str,
+        Field(
+            description="Our Fabric only supports DSCP mutation. Dot1P mutation is not supported"
+        ),
+    ] = ""
+    target_cos: str = Field(
+        default="",
+        alias="targetCos",
+        description="Target COS to be driven based on the range of input values of DSCP coming into the fabric",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class svccoreCtrlr(ManagedObject):
     """ACI Managed Object: ``svccoreCtrlr`` — History of metadata for a core generated at Ctrlr.
 
+    A core controller.
+
     RN format: ``ctrlr-{ctrlr_id_where_the_core_file_was_created}-svc-{name_of_service_that_cored}-ts-{create_time}``
     """
 
@@ -42,10 +44,20 @@ class svccoreCtrlr(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     create_time: Annotated[str, Field(alias="createTime")]
-    ctrlr_id_where_the_core_file_was_created: Annotated[int, Field(ge=1, le=7, alias="ctrlrId")] = 0
+    ctrlr_id_where_the_core_file_was_created: Annotated[
+        int,
+        Field(ge=1, le=7, alias="ctrlrId", description="The created core's controller identifier."),
+    ] = 0
     name_of_service_that_cored: Annotated[str, Field(min_length=1, max_length=512, alias="svcName")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     ack: bool = False
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

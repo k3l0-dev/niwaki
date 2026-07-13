@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class vnsCMgmt(ManagedObject):
     """ACI Managed Object: ``vnsCMgmt`` — Management Interface.
 
+    The management interface is used to manage a concrete device in the L4-L7 device cluster. The management interface is identified by a host address and port number.
+
     RN format: ``cMgmt``
     """
 
@@ -37,25 +39,68 @@ class vnsCMgmt(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    dns_domain: Annotated[str, Field(max_length=512, alias="dnsDomain")] = ""
-    gateway_ip_address: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="gateway")] = ""
-    ip_address: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="host")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    dns_domain: Annotated[
+        str, Field(max_length=512, alias="dnsDomain", description="dns Domain information")
+    ] = ""
+    gateway_ip_address: Annotated[
+        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="gateway", description="Gateway information")
+    ] = ""
+    ip_address: Annotated[
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            alias="host",
+            description="The management interface host address for the concrete device in the L4-L7 device cluster.",
+        ),
+    ] = ""
     ip_allocation_type: VnsIpAllocationType = Field(
         default=VnsIpAllocationType.FIXED, alias="ipAllocationType"
     )
-    is_in_band: bool = Field(default=False, alias="isInBand")
-    name: Annotated[str, Field(max_length=16, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    is_in_band: bool = Field(
+        default=False, alias="isInBand", description="dynamic only: Tell type of the network"
+    )
+    name: Annotated[
+        str,
+        Field(max_length=16, pattern="^[a-zA-Z0-9_.:-]+$", description="The name of the object."),
+    ] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    port: str = ""
-    port_group_name: Annotated[str, Field(max_length=512, alias="portGroupName")] = ""
-    subnet_mask: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="subnetmask")] = ""
+    port: Annotated[
+        str,
+        Field(
+            description="The management interface port number for the concrete device in the L4-L7 device cluster."
+        ),
+    ] = ""
+    port_group_name: Annotated[
+        str,
+        Field(
+            max_length=512,
+            alias="portGroupName",
+            description="dynamic only: management nic port group for out-of-band network",
+        ),
+    ] = ""
+    subnet_mask: Annotated[
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$", alias="subnetmask", description="subnet mask information"
+        ),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     vnic_name: Annotated[
         str,
         Field(
-            max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="vnicName"
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="vnicName",
+            description="The Vnic adapter name.",
         ),
     ] = ""

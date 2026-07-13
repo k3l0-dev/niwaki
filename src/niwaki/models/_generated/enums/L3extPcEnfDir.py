@@ -7,8 +7,11 @@ from enum import StrEnum
 
 class L3extPcEnfDir(StrEnum):
     EGRESS = "egress"
+    """Policy will be applied at the Egress Node"""
     INGRESS = "ingress"
+    """Policy Will be applied at the Ingress Node"""
     MIXED = "mixed"
+    """Mixed policy"""
 
     @classmethod
     def _missing_(cls, value: object) -> L3extPcEnfDir | None:

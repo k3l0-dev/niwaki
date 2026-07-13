@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class trigRecurrWindowP(ManagedObject):
     """ACI Managed Object: ``trigRecurrWindowP`` — Recurring Window.
 
+    A schedule window that triggers a task every 24 hours.
+
     RN format: ``recurrwinp-{name}``
     """
 
@@ -36,19 +38,62 @@ class trigRecurrWindowP(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=16, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=16,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the recurring schedule window.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    maximum_concurrent_tasks: str = Field(default="", alias="concurCap")
-    recurring_window_schedule_day: TrigDay = Field(default=TrigDay.EVERY_DAY, alias="day")
-    schedule_hour: str = Field(default="", alias="hour")
-    schedule_minute: str = Field(default="", alias="minute")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    maximum_concurrent_tasks: str = Field(
+        default="",
+        alias="concurCap",
+        description="The concurrency capacity limit. This is the maximum number of tasks that can be processed concurrently.",
+    )
+    recurring_window_schedule_day: TrigDay = Field(
+        default=TrigDay.EVERY_DAY,
+        alias="day",
+        description="The day of the week that the recurring window begins.",
+    )
+    schedule_hour: str = Field(
+        default="", alias="hour", description="The hour that the recurring window begins."
+    )
+    schedule_minute: str = Field(
+        default="", alias="minute", description="The minute that the recurring window begins."
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    delay_between_node_upgrades: str = Field(default="", alias="nodeUpgInterval")
-    proc_break: str = Field(default="", alias="procBreak")
-    proc_cap: str = Field(default="", alias="procCap")
-    maximum_running_time: str = Field(default="", alias="timeCap")
+    delay_between_node_upgrades: str = Field(
+        default="",
+        alias="nodeUpgInterval",
+        description="Delay between node upgrades in seconds. This is applicable only for concurCap 1.",
+    )
+    proc_break: str = Field(
+        default="",
+        alias="procBreak",
+        description="A period of time taken between processing of items within the concurrency cap.",
+    )
+    proc_cap: str = Field(
+        default="",
+        alias="procCap",
+        description="Processing size capacity limitation specification. Indicates the limit of items to be processed within this window.",
+    )
+    maximum_running_time: str = Field(
+        default="",
+        alias="timeCap",
+        description="The processing time capacity limit. This is the maximum duration of the window.",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

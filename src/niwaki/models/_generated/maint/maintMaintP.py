@@ -18,6 +18,8 @@ from niwaki.models.base import ManagedObject
 class maintMaintP(ManagedObject):
     """ACI Managed Object: ``maintMaintP`` — Maintenance Policy.
 
+    The maintenance policy determines the pre-defined action to take when there is a disruptive change made to the service profile associated with the node or set of nodes.
+
     RN format: ``maintpol-{name}``
     """
 
@@ -44,38 +46,85 @@ class maintMaintP(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name for the maintenance policy. The maintenance policy determines the pre-defined action to take when there is a disruptive change made to the service profile associated with the node or node group.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    administrative_state: TrigExecState = Field(default=TrigExecState.UNTRIGGERED, alias="adminSt")
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    administrative_state: TrigExecState = Field(
+        default=TrigExecState.UNTRIGGERED,
+        alias="adminSt",
+        description="The administrative state of the executable policies.",
+    )
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
     download_state: TrigExecState = Field(default=TrigExecState.UNTRIGGERED, alias="downloadSt")
-    graceful_maintenance: bool = Field(default=False, alias="graceful")
-    ignore_compatibility: bool = Field(default=False, alias="ignoreCompat")
-    internal_label: Annotated[str, Field(max_length=512, alias="internalLabel")] = ""
+    graceful_maintenance: bool = Field(
+        default=False,
+        alias="graceful",
+        description="Graceful maintenance. Describe graceful maintenance",
+    )
+    ignore_compatibility: bool = Field(
+        default=False,
+        alias="ignoreCompat",
+        description="Whether compatibility checks should be ignored when applying this firmware policy.",
+    )
+    internal_label: Annotated[
+        str,
+        Field(
+            max_length=512, alias="internalLabel", description="Firmware label - internal use only!"
+        ),
+    ] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
     notification_condition: MaintNotifCond = Field(
-        default=MaintNotifCond.NOTIFYONLYONFAILURES, alias="notifCond"
+        default=MaintNotifCond.NOTIFYONLYONFAILURES,
+        alias="notifCond",
+        description="Specifies under what pause condition will admin be notified via email/text as configured. This notification mechanism is independent of events/faults.",
     )
     scheduler_run_mode: MaintRunMode = Field(
-        default=MaintRunMode.PAUSEONLYONFAILURES, alias="runMode"
+        default=MaintRunMode.PAUSEONLYONFAILURES,
+        alias="runMode",
+        description="Specifies whether to proceed automatically to next set of nodes once a set of nodes have gone through maintenance successfully.",
     )
     smu_operation_type: MaintSMUOperation = Field(
-        default=MaintSMUOperation.SMUINSTALL, alias="smuOperation"
+        default=MaintSMUOperation.SMUINSTALL,
+        alias="smuOperation",
+        description="Specifies SMU Operation",
     )
     smu_operation_flags: MaintSMUOperationFlags = Field(
         default=MaintSMUOperationFlags.SMURELOADIMMEDIATE, alias="smuOperationFlags"
     )
     sr_upgrade: bool = Field(default=False, alias="srUpgrade")
-    sr_version: Annotated[str, Field(max_length=512, alias="srVersion")] = ""
+    sr_version: Annotated[
+        str, Field(max_length=512, alias="srVersion", description="srFirmware version desired.")
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    version: Annotated[str, Field(max_length=512)] = ""
+    version: Annotated[str, Field(max_length=512, description="Firmware version desired.")] = ""
     version_check_override: TrigAdminState = Field(
-        default=TrigAdminState.UNTRIGGERED, alias="versionCheckOverride"
+        default=TrigAdminState.UNTRIGGERED,
+        alias="versionCheckOverride",
+        description="Version check override - directive to ignore version check for next install. What is version check? During maintenance window, check whether desired version matches running. If it does not match, perform maintenance(install). If it does, do not perform any maintenance(install).",
     )

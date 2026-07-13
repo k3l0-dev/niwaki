@@ -40,29 +40,87 @@ class vnsLBRNatReq(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    ctrct: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
-    graph: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
-    lb_name: Annotated[
-        str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="lbName")
+    ctrct: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="contract name, graphInst selector",
+        ),
     ]
-    node: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    graph: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="graph name, graphInst selector",
+        ),
+    ]
+    lb_name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            alias="lbName",
+            description="LB name",
+        ),
+    ]
+    node: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="node name, graphInst selector",
+        ),
+    ]
     rnat_name: Annotated[
-        str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="rnatName")
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            alias="rnatName",
+            description="RNAT name",
+        ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
+        ""
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    nat_ip: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="natIp")] = ""
-    nat_netmask: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="netmask")] = ""
-    nat_network: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="network")] = ""
-    provider: str = Field(default="", alias="prov")
+    nat_ip: Annotated[
+        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="natIp", description="NAT IP")
+    ] = ""
+    nat_netmask: Annotated[
+        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="netmask", description="route netmask")
+    ] = ""
+    nat_network: Annotated[
+        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="network", description="route network")
+    ] = ""
+    provider: str = Field(default="", alias="prov", description="provider Dn")
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    version: VnsrequestVersion = VnsrequestVersion.CLASSIC
+    version: VnsrequestVersion = Field(default=VnsrequestVersion.CLASSIC, description="Version")

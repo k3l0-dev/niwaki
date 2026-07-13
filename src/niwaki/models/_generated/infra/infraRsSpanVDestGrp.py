@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class infraRsSpanVDestGrp(ManagedObject):
     """ACI Managed Object: ``infraRsSpanVDestGrp`` — Relation to Access VSPAN Destination Group.
 
+    A source relation to all end points (or IP in the case of ERSPAN) to which the SPAN packets will be spanned.
+
     RN format: ``rsspanVDestGrp-{name}``
     """
 
@@ -38,10 +40,21 @@ class infraRsSpanVDestGrp(ManagedObject):
     name: Annotated[
         str,
         Field(
-            min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="tnSpanVDestGrpName"
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            alias="tnSpanVDestGrpName",
+            description="The virtual destination end point group policy name.",
         ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

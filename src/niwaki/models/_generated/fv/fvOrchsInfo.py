@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class fvOrchsInfo(ManagedObject):
     """ACI Managed Object: ``fvOrchsInfo`` — Orchestrator configuration for this EPG.
 
+    The orchestration information is used to store orchestration specific properties such as Microsoft Azure Pack.
+
     RN format: ``Orchs-{name}``
     """
 
@@ -37,18 +39,38 @@ class fvOrchsInfo(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=16, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=16,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the object.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    addr_ns_name: Annotated[str, Field(max_length=512, alias="addrNsName")] = ""
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    cloud: Annotated[str, Field(max_length=512)] = ""
+    addr_ns_name: Annotated[str, Field(max_length=512, alias="addrNsName", description="null")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    cloud: Annotated[str, Field(max_length=512, description="null")] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    need_vip: bool = Field(default=False, alias="needVip")
-    plan: Annotated[str, Field(max_length=512)] = ""
+    need_vip: bool = Field(default=False, alias="needVip", description="null")
+    plan: Annotated[str, Field(max_length=512, description="null")] = ""
     svcs_mode: Annotated[str, Field(max_length=512, alias="svcsMode")] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    usr_acc: Annotated[str, Field(max_length=512, alias="usrAcc")] = ""
-    vip: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$")] = ""
+    usr_acc: Annotated[str, Field(max_length=512, alias="usrAcc", description="null")] = ""
+    vip: Annotated[
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$", description="The Infra Virtual IP of a VPC switch pair."
+        ),
+    ] = ""

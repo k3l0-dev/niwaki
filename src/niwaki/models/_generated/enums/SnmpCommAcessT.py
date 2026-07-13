@@ -7,8 +7,11 @@ from enum import StrEnum
 
 class SnmpCommAcessT(StrEnum):
     RO = "ro"
+    """Read only access"""
     RW = "rw"
+    """Read and write access"""
     UNSPECIFIED = "unspecified"
+    """Unspecified when grpname is specified"""
 
     @classmethod
     def _missing_(cls, value: object) -> SnmpCommAcessT | None:

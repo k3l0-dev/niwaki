@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class RtfltAction(StrEnum):
     DENY = "deny"
+    """deny"""
     PERMIT = "permit"
+    """permit"""
 
     @classmethod
     def _missing_(cls, value: object) -> RtfltAction | None:

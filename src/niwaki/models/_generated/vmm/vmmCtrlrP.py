@@ -20,6 +20,8 @@ from niwaki.models.base import ManagedObject
 class vmmCtrlrP(ManagedObject):
     """ACI Managed Object: ``vmmCtrlrP`` — VMM Controller.
 
+    The VMM controller profile specifies how to connect to a single VM management controller that is part of a policy enforcement domain. For example, the VMM controller profile could be a policy to connect a VMware vCenter that is part of a VMM domain.
+
     RN format: ``ctrlr-{name}``
     """
 
@@ -58,32 +60,66 @@ class vmmCtrlrP(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the controller profile.",
+        ),
+    ]
 
     # ── Create-only (ignored by APIC on modification) ─────────────────────────
-    hostname_or_ip_address: str = Field(default="", alias="hostOrIp")
+    hostname_or_ip_address: str = Field(default="", alias="hostOrIp", description="Host or IP")
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    aos_version: VmmAosVersion = Field(default=VmmAosVersion.UNKNOWN, alias="aosVersion")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    aos_version: VmmAosVersion = Field(
+        default=VmmAosVersion.UNKNOWN, alias="aosVersion", description="version of aos"
+    )
     dvs_version: VmmDvsVersion = Field(default=VmmDvsVersion.UNMANAGED, alias="dvsVersion")
     triggered_inventory_sync_status: VmmTrigSt = Field(
         default=VmmTrigSt.UNTRIGGERED, alias="inventoryTrigSt"
     )
-    mode: VmmMode = VmmMode.DEFAULT
-    msft_config_err_msg: Annotated[str, Field(max_length=256, alias="msftConfigErrMsg")] = ""
+    mode: VmmMode = Field(default=VmmMode.DEFAULT, description="The mode of operation.")
+    msft_config_err_msg: Annotated[
+        str,
+        Field(
+            max_length=256,
+            alias="msftConfigErrMsg",
+            description="Deployment Error Message of Mirosoft Plugin SCVM Controller. It captures error message encountered in SCVMM Controller plugin.This error message represents specific details for bitmask based msftConfigIssues fault.",
+        ),
+    ] = ""
     configissues: str = Field(default="", alias="msftConfigIssues")
     n1kv_stats_mode: VmmN1KVStatsMode = Field(
-        default=VmmN1KVStatsMode.ENABLED, alias="n1kvStatsMode"
+        default=VmmN1KVStatsMode.ENABLED,
+        alias="n1kvStatsMode",
+        description="n1kv statistics enable",
     )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    port: str = ""
-    datacenter: Annotated[str, Field(max_length=512, alias="rootContName")] = ""
-    type: VmmScope = Field(default=VmmScope.VM, alias="scope")
-    seq_num: Annotated[int, Field(alias="seqNum")] = 0
-    stats_collection: VmmStatsMode = Field(default=VmmStatsMode.DISABLED, alias="statsMode")
+    port: Annotated[str, Field(description="Port")] = ""
+    datacenter: Annotated[
+        str, Field(max_length=512, alias="rootContName", description="Top level container name.")
+    ] = ""
+    type: VmmScope = Field(
+        default=VmmScope.VM, alias="scope", description="The VMM control policy scope."
+    )
+    seq_num: Annotated[
+        int, Field(alias="seqNum", description="An ISIS link-state packet sequence number.")
+    ] = 0
+    stats_collection: VmmStatsMode = Field(
+        default=VmmStatsMode.DISABLED, alias="statsMode", description="The statistics mode."
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     vxlan_deployment_preference: VmmVxlanDeplPref = Field(
         default=VmmVxlanDeplPref.VXLAN, alias="vxlanDeplPref"

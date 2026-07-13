@@ -14,6 +14,8 @@ from niwaki.models.base import ManagedObject
 class apphostingAppGlobalCfg(ManagedObject):
     """ACI Managed Object: ``apphostingAppGlobalCfg`` — App hosting global config.
 
+    1.3 app hosting global config MO1.3 AppGlobalCfg [dn] /sys/apphosting/globalcfg
+
     RN format: ``globalcfg``
     """
 
@@ -37,10 +39,31 @@ class apphostingAppGlobalCfg(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    admin_st: ApphostingAdminState = Field(default=ApphostingAdminState.ENABLED, alias="adminSt")
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    enable_or_disable_signed_verification: ApphostingSignOption = Field(
-        default=ApphostingSignOption.ENABLE, alias="signVerify"
+    admin_st: ApphostingAdminState = Field(
+        default=ApphostingAdminState.ENABLED,
+        alias="adminSt",
+        description='Admin state to configure mo "',
     )
-    storage_limit: Annotated[int, Field(ge=0, le=2147483647, alias="storageLimit")] = 0
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    enable_or_disable_signed_verification: ApphostingSignOption = Field(
+        default=ApphostingSignOption.ENABLE,
+        alias="signVerify",
+        description="properties to enable or disable signed verification",
+    )
+    storage_limit: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=2147483647,
+            alias="storageLimit",
+            description="properties to set bootflash backend storage limit.",
+        ),
+    ] = 0
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class FteDefPolicyT(StrEnum):
     DENY = "deny"
+    """Deny"""
     PERMIT = "permit"
+    """Permit"""
 
     @classmethod
     def _missing_(cls, value: object) -> FteDefPolicyT | None:

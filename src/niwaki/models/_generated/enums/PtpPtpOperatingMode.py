@@ -7,6 +7,7 @@ from enum import StrEnum
 
 class PtpPtpOperatingMode(StrEnum):
     HYBRID = "hybrid"
+    """try to keep unique values for operating Mode across Models"""
 
     @classmethod
     def _missing_(cls, value: object) -> PtpPtpOperatingMode | None:

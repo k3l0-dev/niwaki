@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class QospPfcEnableScope(StrEnum):
     FABRIC = "fabric"
+    """Fabric"""
     TOR = "tor"
+    """ToR"""
 
     @classmethod
     def _missing_(cls, value: object) -> QospPfcEnableScope | None:

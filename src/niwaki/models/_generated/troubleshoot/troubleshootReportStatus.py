@@ -14,6 +14,8 @@ from niwaki.models.base import ManagedObject
 class troubleshootReportStatus(ManagedObject):
     """ACI Managed Object: ``troubleshootReportStatus`` — Troubleshoot report status MO.
 
+    Report Status
+
     RN format: ``reportStatus-{report_identifier}``
     """
 
@@ -40,7 +42,14 @@ class troubleshootReportStatus(ManagedObject):
     report_identifier: Annotated[str, Field(min_length=1, max_length=512, alias="reportName")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     format_of_the_report_data: TroubleshootFormat = Field(
         default=TroubleshootFormat.PDF, alias="format"
     )

@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class infraLocation(ManagedObject):
     """ACI Managed Object: ``infraLocation``.
 
+    This object is generated and used only by internal processes
+
     RN format: ``loc``
     """
 
@@ -34,8 +36,15 @@ class infraLocation(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Create-only (ignored by APIC on modification) ─────────────────────────
-    affected: str = ""
+    affected: Annotated[str, Field(description="null")] = ""
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

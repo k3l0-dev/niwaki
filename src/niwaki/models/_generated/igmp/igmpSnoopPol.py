@@ -14,6 +14,8 @@ from niwaki.models.base import ManagedObject
 class igmpSnoopPol(ManagedObject):
     """ACI Managed Object: ``igmpSnoopPol`` — IGMP Snoop Policy.
 
+    The IGMP snooping policy streamlines multicast traffic handling for VLANs. By examining (snooping) IGMP membership report messages from interested hosts, multicast traffic is limited to the subset of VLAN interfaces on which the hosts reside.
+
     RN format: ``snPol-{name}``
     """
 
@@ -37,33 +39,75 @@ class igmpSnoopPol(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the IGMP Snoop policy",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    admin_state: NwAdminSt = Field(default=NwAdminSt.ENABLED, alias="adminSt")
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    admin_state: NwAdminSt = Field(
+        default=NwAdminSt.ENABLED, alias="adminSt", description="Administrative State"
+    )
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     controls: str = Field(default="", alias="ctrl")
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies a description of the policy definition.",
+        ),
     ] = ""
-    last_member_query_interval: str = Field(default="", alias="lastMbrIntvl")
+    last_member_query_interval: str = Field(
+        default="",
+        alias="lastMbrIntvl",
+        description="When the last member query interval parameter is configured, the software removes the group state if no host responds before the timeout.",
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
     owner_key: Annotated[
         str,
         Field(
-            max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerKey"
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerKey",
+            description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
     owner_tag: Annotated[
         str,
-        Field(max_length=64, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerTag"),
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerTag",
+            description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+        ),
     ] = ""
     query_interval: str = Field(default="", alias="queryIntvl")
-    response_interval: str = Field(default="", alias="rspIntvl")
-    startup_query_count: str = Field(default="", alias="startQueryCnt")
-    startup_query_interval: str = Field(default="", alias="startQueryIntvl")
+    response_interval: str = Field(
+        default="", alias="rspIntvl", description="The IGMP snooping query response interval."
+    )
+    startup_query_count: str = Field(
+        default="", alias="startQueryCnt", description="The interval before the IGMP query begins."
+    )
+    startup_query_interval: str = Field(
+        default="",
+        alias="startQueryIntvl",
+        description="The startup query interval. This configures the IGMP snooping query interval at startup.",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    version: McastVer = Field(default=McastVer.V3, alias="ver")
+    version: McastVer = Field(default=McastVer.V3, alias="ver", description="Version")

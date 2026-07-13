@@ -7,8 +7,11 @@ from enum import StrEnum
 
 class RtmapSetCriteria(StrEnum):
     APPEND = "append"
+    """Append"""
     NONE = "none"
+    """None"""
     REPLACE = "replace"
+    """Replace"""
 
     @classmethod
     def _missing_(cls, value: object) -> RtmapSetCriteria | None:

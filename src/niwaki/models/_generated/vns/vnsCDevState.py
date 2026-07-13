@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class vnsCDevState(ManagedObject):
     """ACI Managed Object: ``vnsCDevState`` — State of the Device.
 
+    The state of the concrete device.
+
     RN format: ``cDevState-[{pri_key}]``
     """
 
@@ -40,8 +42,18 @@ class vnsCDevState(ManagedObject):
     pri_key: Annotated[str, Field(alias="priKey")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    name: Annotated[str, Field(max_length=16, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    name: Annotated[
+        str,
+        Field(max_length=16, pattern="^[a-zA-Z0-9_.:-]+$", description="The name of the object."),
+    ] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

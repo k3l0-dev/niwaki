@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class l2extRsEBd(ManagedObject):
     """ACI Managed Object: ``l2extRsEBd`` — Bridge Domain.
 
+    A source relation to the private layer 2 bridge domain.
+
     RN format: ``rseBd``
     """
 
@@ -35,7 +37,24 @@ class l2extRsEBd(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    encap: str = ""
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.-]+$", alias="tnFvBDName")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    encap: Annotated[
+        str, Field(description="The Layer 2 management interface context encapsulation.")
+    ] = ""
+    name: Annotated[
+        str,
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            alias="tnFvBDName",
+            description="The name of the bridge domain getting extended outside through the L2 outside profile. This name can be up to 64 alphanumeric characters. Note that you cannot change this name after the object has been saved.",
+        ),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

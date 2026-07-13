@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class igmpsnoopMcSrc(ManagedObject):
     """ACI Managed Object: ``igmpsnoopMcSrc`` — Source Specific Multicast.
 
+    IPMC Source IP
+
     RN format: ``src-[{multicast_source_ip}]``
     """
 
@@ -37,8 +39,17 @@ class igmpsnoopMcSrc(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    multicast_source_ip: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="id")]
+    multicast_source_ip: Annotated[
+        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="id", description="Multicast traffic source")
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

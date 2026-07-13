@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class FvFloodOnEncap(StrEnum):
     DISABLED = "disabled"
+    """Flood on encapsulation for EPG is disabled, which essentially means it will take the behavior from bridge-domain"""
     ENABLED = "enabled"
+    """Flood on encapsulation for EPG is enabled, this will override bridge-domain settings"""
 
     @classmethod
     def _missing_(cls, value: object) -> FvFloodOnEncap | None:

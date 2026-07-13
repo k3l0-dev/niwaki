@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class ptpDomain(ManagedObject):
     """ACI Managed Object: ``ptpDomain`` — User configured PTP Domain. will be associated with interface.
 
+    PTP Domain
+
     RN format: ``ptpdomain-{ptp_domain_name}``
     """
 
@@ -35,10 +37,24 @@ class ptpDomain(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     ptp_domain_name: Annotated[
-        str, Field(min_length=1, max_length=16, pattern="^[a-zA-Z0-9_.:-]+$", alias="name")
+        str,
+        Field(
+            min_length=1,
+            max_length=16,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            alias="name",
+            description="PTP Domain name",
+        ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    ptp_domain_value: str = Field(default="", alias="value")
+    ptp_domain_value: str = Field(default="", alias="value", description="PTP Domain value")

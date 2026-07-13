@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class FabricPolResolveAct(StrEnum):
     INHERIT = "inherit"
+    """Inherit the policy resolved at the logical parent level. Do not resolve the policy here"""
     RESOLVE = "resolve"
+    """Resolve the policy"""
 
     @classmethod
     def _missing_(cls, value: object) -> FabricPolResolveAct | None:

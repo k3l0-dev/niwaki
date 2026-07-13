@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class extdevSDWanSlaPol(ManagedObject):
     """ACI Managed Object: ``extdevSDWanSlaPol`` — WAN SLA Policy.
 
+    WAN SLA policy
+
     RN format: ``sdwanslapol-{name}``
     """
 
@@ -34,16 +36,28 @@ class extdevSDWanSlaPol(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=128)]
+    name: Annotated[str, Field(min_length=1, max_length=128, description="The name of the object.")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="The description of this configuration item.",
+        ),
     ] = ""
-    sla_dscp: str = Field(default="", alias="dscp")
-    edm_sla_dn: str = Field(default="", alias="edmSlaDn")
+    sla_dscp: str = Field(default="", alias="dscp", description="Specifies DSCP.")
+    edm_sla_dn: str = Field(default="", alias="edmSlaDn", description="edm SLA dn")
     sla_acceptable_jitter: Annotated[int, Field(ge=1, le=1000, alias="jitter")] = 100
     sla_acceptable_delay: Annotated[int, Field(ge=1, le=1000, alias="latency")] = 100
     sla_acceptable_loss: Annotated[int, Field(ge=0, le=100, alias="loss")] = 10

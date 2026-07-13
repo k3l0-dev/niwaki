@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class rtctrlMatchCommRegexTerm(ManagedObject):
     """ACI Managed Object: ``rtctrlMatchCommRegexTerm`` — Match Rule Based on Community Regular Expression.
 
+    Match Rule Based Route Regular Expression Community
+
     RN format: ``commrxtrm-{community_type}``
     """
 
@@ -37,16 +39,30 @@ class rtctrlMatchCommRegexTerm(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     community_type: RtctrlCommunityType = Field(
-        default=RtctrlCommunityType.REGULAR, alias="commType"
+        default=RtctrlCommunityType.REGULAR, alias="commType", description="Community Type"
     )
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
+        ""
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
@@ -56,6 +72,7 @@ class rtctrlMatchCommRegexTerm(ManagedObject):
             max_length=64,
             pattern="^[0-9\\(\\)\\[\\]\\^\\$\\:\\|\\.\\-\\_\\*\\+\\?]*$",
             alias="regex",
+            description="Regular Expression",
         ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

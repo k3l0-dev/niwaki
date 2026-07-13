@@ -37,14 +37,29 @@ class fvcapScopeRule(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     subject: Annotated[str, Field(alias="scopeSubj")]
-    subj: str
+    subj: Annotated[str, Field(description="Subject consuming the capability")]
     type: CapRuleT = CapRuleT.LIMIT
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies a description of a capability provider rule.",
+        ),
     ] = ""
-    user_defined_constraint: Annotated[int, Field(alias="userConstraint")] = 0
+    user_defined_constraint: Annotated[
+        int,
+        Field(alias="userConstraint", description="User defined Constraints of the capability."),
+    ] = 0
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

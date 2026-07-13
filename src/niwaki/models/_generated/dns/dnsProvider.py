@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class dnsProvider(ManagedObject):
     """ACI Managed Object: ``dnsProvider`` — DNS Provider.
 
+    The DNS provider is a DNS server that uses a hierarchical scheme for establishing host names for network nodes, which local control of the segments of the network through a client-server scheme.
+
     RN format: ``prov-[{ip_address}]``
     """
 
@@ -36,13 +38,28 @@ class dnsProvider(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    ip_address: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="addr")]
+    ip_address: Annotated[
+        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="addr", description="null")
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
+        ""
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    prefered_dns_provider: bool = Field(default=False, alias="preferred")
+    prefered_dns_provider: bool = Field(
+        default=False,
+        alias="preferred",
+        description="Specifies if this the preferred provider. Only one provider in the group should be preferred",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

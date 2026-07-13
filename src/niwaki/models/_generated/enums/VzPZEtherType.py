@@ -7,6 +7,7 @@ from enum import StrEnum
 
 class VzPZEtherType(StrEnum):
     IP = "ip"
+    """IP proto covers both IPv4 and IPv6 value for IP (internal use only) is unused in standard. http://standards.ieee.org/develop/regauth/ethertype/eth.txt"""
     IPV4 = "ipv4"
     IPV6 = "ipv6"
 

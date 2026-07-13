@@ -15,6 +15,8 @@ from niwaki.models.base import ManagedObject
 class stormctrlIfPol(ManagedObject):
     """ACI Managed Object: ``stormctrlIfPol`` — Storm Control Interface Policy.
 
+    The storm control interface policy. A traffic storm occurs when packets flood the LAN, creating excessive traffic and degrading network performance.
+
     RN format: ``stormctrlifp-{name}``
     """
 
@@ -42,51 +44,127 @@ class stormctrlIfPol(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The storm control policy name.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    broadcast_max_burst_size: Annotated[int, Field(ge=0, le=390625000, alias="bcBurstPps")] = 0
-    bc_burst_rate: str = Field(default="", alias="bcBurstRate")
-    broadcast_traffic_rate: str = Field(default="", alias="bcRate")
-    bc_rate_pps: Annotated[int, Field(ge=0, le=390625000, alias="bcRatePps")] = 0
-    max_burst_size: Annotated[int, Field(ge=0, le=390625000, alias="burstPps")] = 0
-    burst_rate: str = Field(default="", alias="burstRate")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    broadcast_max_burst_size: Annotated[
+        int, Field(ge=0, le=390625000, alias="bcBurstPps", description="burst rate in pps")
+    ] = 0
+    bc_burst_rate: str = Field(
+        default="", alias="bcBurstRate", description="burst rate in % (upto 1 decimal)"
+    )
+    broadcast_traffic_rate: str = Field(
+        default="", alias="bcRate", description="rate in % (upto 1 decimal)"
+    )
+    bc_rate_pps: Annotated[
+        int, Field(ge=0, le=390625000, alias="bcRatePps", description="rate in pps")
+    ] = 0
+    max_burst_size: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=390625000,
+            alias="burstPps",
+            description="The packets per second (PPS) burst interval rate for the storm control policy. During this interval, the traffic level which is expressed as packets flowing per second through the port, is then compared with the traffic storm control level that you configured.",
+        ),
+    ] = 0
+    burst_rate: str = Field(
+        default="", alias="burstRate", description="The traffic burst rate percentage."
+    )
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies a description of the policy definition.",
+        ),
     ] = ""
     packet_type_uc_bc_mc_config_valid_yes_no: L1StormCtrlCfgValid = Field(
         default=L1StormCtrlCfgValid.INVALID, alias="isUcMcBcStormPktCfgValid"
     )
-    multicast_max_burst_size: Annotated[int, Field(ge=0, le=390625000, alias="mcBurstPps")] = 0
-    mc_burst_rate: str = Field(default="", alias="mcBurstRate")
-    multicast_traffic_rate: str = Field(default="", alias="mcRate")
-    mc_rate_pps: Annotated[int, Field(ge=0, le=390625000, alias="mcRatePps")] = 0
+    multicast_max_burst_size: Annotated[
+        int, Field(ge=0, le=390625000, alias="mcBurstPps", description="burst rate in pps")
+    ] = 0
+    mc_burst_rate: str = Field(
+        default="", alias="mcBurstRate", description="burst rate in % (upto 1 decimal)"
+    )
+    multicast_traffic_rate: str = Field(
+        default="", alias="mcRate", description="rate in % (upto 1 decimal)"
+    )
+    mc_rate_pps: Annotated[
+        int, Field(ge=0, le=390625000, alias="mcRatePps", description="rate in pps")
+    ] = 0
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
     owner_key: Annotated[
         str,
         Field(
-            max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerKey"
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerKey",
+            description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
     owner_tag: Annotated[
         str,
-        Field(max_length=64, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerTag"),
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerTag",
+            description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+        ),
     ] = ""
-    traffic_rate: str = Field(default="", alias="rate")
-    tarffic_rate: Annotated[int, Field(ge=0, le=390625000, alias="ratePps")] = 0
+    traffic_rate: str = Field(default="", alias="rate", description="The traffic rate percentage.")
+    tarffic_rate: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=390625000,
+            alias="ratePps",
+            description="The packets per second (PPS) interval rate for the storm control policy. During this interval, the traffic level which is expressed as packets flowing per second through the port, is then compared with the traffic storm control level that you configured.",
+        ),
+    ] = 0
     storm_ctrl_action: L1StormCtrlActionT = Field(
-        default=L1StormCtrlActionT.DROP, alias="stormCtrlAction"
+        default=L1StormCtrlActionT.DROP, alias="stormCtrlAction", description="action drop/shutdown"
     )
-    storm_ctrl_soak_inst_count: str = Field(default="", alias="stormCtrlSoakInstCount")
-    packet_type: L1PktT = Field(default=L1PktT.ALL, alias="type")
+    storm_ctrl_soak_inst_count: str = Field(
+        default="",
+        alias="stormCtrlSoakInstCount",
+        description="Instances required to declare port shutdown",
+    )
+    packet_type: L1PktT = Field(
+        default=L1PktT.ALL,
+        alias="type",
+        description="The storm control interface policy type. The policy type prevents disruptions on ports by a broadcast, multicast, or unknown unicast traffic storm on physical interfaces. The policy type is set to ALL types of traffic by default and can not be changed.",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     unknown_unicast_max_burst_size: Annotated[
-        int, Field(ge=0, le=390625000, alias="uucBurstPps")
+        int, Field(ge=0, le=390625000, alias="uucBurstPps", description="burst rate in pps")
     ] = 0
-    uuc_burst_rate: str = Field(default="", alias="uucBurstRate")
-    unknown_unicast_traffic_rate: str = Field(default="", alias="uucRate")
-    uuc_rate_pps: Annotated[int, Field(ge=0, le=390625000, alias="uucRatePps")] = 0
+    uuc_burst_rate: str = Field(
+        default="", alias="uucBurstRate", description="burst rate in % (upto 1 decimal)"
+    )
+    unknown_unicast_traffic_rate: str = Field(
+        default="", alias="uucRate", description="rate in % (upto 1 decimal)"
+    )
+    uuc_rate_pps: Annotated[
+        int, Field(ge=0, le=390625000, alias="uucRatePps", description="rate in pps")
+    ] = 0

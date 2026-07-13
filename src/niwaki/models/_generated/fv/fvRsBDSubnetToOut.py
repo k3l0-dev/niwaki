@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class fvRsBDSubnetToOut(ManagedObject):
     """ACI Managed Object: ``fvRsBDSubnetToOut`` — Outside.
 
+    A source relation to the L3 routed outside network.
+
     RN format: ``rsBDSubnetToOut-{name}``
     """
 
@@ -37,9 +39,22 @@ class fvRsBDSubnetToOut(ManagedObject):
     # ── Naming (required) ──────────────────────────────────────────────────────
     name: Annotated[
         str,
-        Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="tnL3extOutName"),
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            alias="tnL3extOutName",
+            description="null",
+        ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class relnTargetClass(ManagedObject):
     """ACI Managed Object: ``relnTargetClass``.
 
+    This is generated and used only by internal processes.
+
     RN format: ``tcl-{subject_class}``
     """
 
@@ -36,8 +38,17 @@ class relnTargetClass(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    subject_class: RelnClassId = Field(default=RelnClassId.UNSPECIFIED, alias="id")
+    subject_class: RelnClassId = Field(
+        default=RelnClassId.UNSPECIFIED, alias="id", description="An identifier ."
+    )
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

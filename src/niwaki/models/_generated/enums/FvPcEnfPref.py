@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class FvPcEnfPref(StrEnum):
     ENFORCED = "enforced"
+    """Enforce access control rules for this private network"""
     UNENFORCED = "unenforced"
+    """Do not enforce access control rules for this private network"""
 
     @classmethod
     def _missing_(cls, value: object) -> FvPcEnfPref | None:

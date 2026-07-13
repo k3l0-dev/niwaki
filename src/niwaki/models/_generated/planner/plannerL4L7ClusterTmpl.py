@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class plannerL4L7ClusterTmpl(ManagedObject):
     """ACI Managed Object: ``plannerL4L7ClusterTmpl`` — L4-L7 Service Device Template.
 
+    L4L7 Cluster template
+
     RN format: ``l4l7cluster-{name}``
     """
 
@@ -38,14 +40,33 @@ class plannerL4L7ClusterTmpl(ManagedObject):
     name: str
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    number_of_devices_in_cluster: Annotated[int, Field(ge=1, le=4000000000, alias="numDevices")] = 1
-    graph_span: Annotated[int, Field(ge=1, le=4000000000, alias="span")] = 1
+    number_of_devices_in_cluster: Annotated[
+        int, Field(ge=1, le=4000000000, alias="numDevices", description="Type of graph node")
+    ] = 1
+    graph_span: Annotated[
+        int,
+        Field(
+            ge=1, le=4000000000, alias="span", description="No of leafs this cluster is deployed on"
+        ),
+    ] = 1
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

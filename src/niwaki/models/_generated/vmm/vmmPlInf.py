@@ -35,16 +35,33 @@ class vmmPlInf(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    epg_p_key: Annotated[str, Field(alias="epgPKey")]
+    epg_p_key: Annotated[
+        str,
+        Field(
+            alias="epgPKey",
+            description="The domain name of the endpoint group to which the fault will be delegated.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    encap: str = ""
-    name: Annotated[str, Field(max_length=128)] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    encap: Annotated[str, Field(description="The port encapsulation.")] = ""
+    name: Annotated[str, Field(max_length=128, description="The name of the object.")] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
     remote_err_msg: Annotated[str, Field(max_length=256, alias="remoteErrMsg")] = ""
-    remote_oper_issues: str = Field(default="", alias="remoteOperIssues")
-    status: str = Field(default="", alias="state")
+    remote_oper_issues: str = Field(
+        default="",
+        alias="remoteOperIssues",
+        description="The remote operational issues on this object not initiated by APIC.",
+    )
+    status: str = Field(default="", alias="state", description="The state of the relationship.")
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

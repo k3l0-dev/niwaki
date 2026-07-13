@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class L3extAlways(StrEnum):
     NO = "no"
+    """The state is not alawys"""
     YES = "yes"
+    """The state is always"""
 
     @classmethod
     def _missing_(cls, value: object) -> L3extAlways | None:

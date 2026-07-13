@@ -34,12 +34,21 @@ class dmemotltestBaseConfig(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    vdc: int = 0
+    vdc: Annotated[int, Field(description="Naming primary admin properties")] = 0
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     cfg_prop0: Annotated[int, Field(alias="cfgProp0")] = 0
     db_size: Annotated[int, Field(alias="dbSize")] = 0
-    log_path: Annotated[str, Field(max_length=512, alias="logPath")] = ""
+    log_path: Annotated[
+        str, Field(max_length=512, alias="logPath", description="Config properties")
+    ] = ""
     notify_flag: str = Field(default="", alias="notifyFlag")
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

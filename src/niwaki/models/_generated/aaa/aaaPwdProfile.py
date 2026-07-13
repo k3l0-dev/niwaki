@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class aaaPwdProfile(ManagedObject):
     """ACI Managed Object: ``aaaPwdProfile`` — Password Change/Expiration Policy.
 
+    The password profile contains the information about password constraints that apply to all local users.
+
     RN format: ``pwdprofile``
     """
 
@@ -36,31 +38,82 @@ class aaaPwdProfile(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Create-only (ignored by APIC on modification) ─────────────────────────
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    name: Annotated[
+        str,
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the AAA definition object.",
+        ),
+    ] = ""
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    number_of_password_changes_in_interval: str = Field(default="", alias="changeCount")
-    password_policy: AaaPwdPolicy = Field(default=AaaPwdPolicy.ENABLE, alias="changeDuringInterval")
-    change_interval_in_hours: str = Field(default="", alias="changeInterval")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    number_of_password_changes_in_interval: str = Field(
+        default="",
+        alias="changeCount",
+        description="The number of password changes allowed within the change interval.",
+    )
+    password_policy: AaaPwdPolicy = Field(
+        default=AaaPwdPolicy.ENABLE,
+        alias="changeDuringInterval",
+        description="The change count/change interval policy selector. This property enables you to select an option for enforcing password change.",
+    )
+    change_interval_in_hours: str = Field(
+        default="",
+        alias="changeInterval",
+        description="A time interval for limiting the number of password changes.",
+    )
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies a description of the policy definition.",
+        ),
     ] = ""
-    password_expiration_warn_time_in_days: str = Field(default="", alias="expirationWarnTime")
-    password_history_count: str = Field(default="", alias="historyCount")
+    password_expiration_warn_time_in_days: str = Field(
+        default="",
+        alias="expirationWarnTime",
+        description="A warning period before password expiration. A warning will be displayed when a user logs in within this number of days of an impending password expiration.",
+    )
+    password_history_count: str = Field(
+        default="",
+        alias="historyCount",
+        description="How many retired passwords are stored in a user's password history.",
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    no_password_change_interval_in_hours: str = Field(default="", alias="noChangeInterval")
+    no_password_change_interval_in_hours: str = Field(
+        default="",
+        alias="noChangeInterval",
+        description="A minimum period after a password change before the user can change the password again.",
+    )
     owner_key: Annotated[
         str,
         Field(
-            max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerKey"
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerKey",
+            description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
     owner_tag: Annotated[
         str,
-        Field(max_length=64, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerTag"),
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerTag",
+            description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

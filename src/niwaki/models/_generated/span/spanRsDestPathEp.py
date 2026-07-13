@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class spanRsDestPathEp(ManagedObject):
     """ACI Managed Object: ``spanRsDestPathEp`` — Relation to SPAN Destination Path.
 
+    A source relation to an abstraction of a path endpoint.
+
     RN format: ``rsdestPathEp-[{target_dn}]``
     """
 
@@ -35,9 +37,11 @@ class spanRsDestPathEp(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    target_dn: Annotated[str, Field(alias="tDn")]
+    target_dn: Annotated[str, Field(alias="tDn", description="The span destination path.")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    mtu: str = ""
+    mtu: Annotated[
+        str, Field(description="The administrative MTU port on the aggregated interface.")
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class infraRsIaclSpineProfile(ManagedObject):
     """ACI Managed Object: ``infraRsIaclSpineProfile`` — CoPP Prefilter Profile for Spines.
 
+    Relationship the CoPP Prefilter Spine profile to be applied on spines
+
     RN format: ``rsiaclSpineProfile``
     """
 
@@ -37,7 +39,14 @@ class infraRsIaclSpineProfile(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     name: Annotated[
         str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="tnIaclSpineProfileName")
     ] = ""

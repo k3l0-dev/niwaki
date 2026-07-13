@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class vnsLDevCtx(ManagedObject):
     """ACI Managed Object: ``vnsLDevCtx`` — Logical Device Context.
 
+    A device cluster context points to the device cluster used to pick a specific device based on contract, subject, and function label or names. To specify a wild card, set the name to Any.
+
     RN format: ``ldevCtx-c-{ctrct_name_or_lbl}-g-{graph_name_or_lbl}-n-{node_name_or_lbl}``
     """
 
@@ -48,26 +50,59 @@ class vnsLDevCtx(ManagedObject):
     # ── Naming (required) ──────────────────────────────────────────────────────
     ctrct_name_or_lbl: Annotated[
         str,
-        Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="ctrctNameOrLbl"),
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            alias="ctrctNameOrLbl",
+            description="The contract name or label for the device cluster context.",
+        ),
     ]
     graph_name_or_lbl: Annotated[
         str,
-        Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="graphNameOrLbl"),
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            alias="graphNameOrLbl",
+            description="The Service graph template name or label.",
+        ),
     ]
     node_name_or_lbl: Annotated[
-        str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="nodeNameOrLbl")
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            alias="nodeNameOrLbl",
+            description="The node name or label for the device cluster context.",
+        ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     context_name: Annotated[
         str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="context")
     ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
+        ""
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

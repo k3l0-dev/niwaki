@@ -14,6 +14,8 @@ from niwaki.models.base import ManagedObject
 class l3extMember(ManagedObject):
     """ACI Managed Object: ``l3extMember`` — Member Node Configuration.
 
+    The member. The member is used for providing per node IP address configuration.
+
     RN format: ``mem-{side}``
     """
 
@@ -41,20 +43,43 @@ class l3extMember(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    side: L3extSide = L3extSide.A
+    side: L3extSide = Field(default=L3extSide.A, description="null")
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    addr: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$")] = ""
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    addr: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", description="null")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
-    ipv6_dad: L3extIpv6Dad = Field(default=L3extIpv6Dad.ENABLED, alias="ipv6Dad")
-    ipv6_link_local_address: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="llAddr")] = (
+    ipv6_dad: L3extIpv6Dad = Field(
+        default=L3extIpv6Dad.ENABLED,
+        alias="ipv6Dad",
+        description="IPv6 DAD feature When disabled it will IPv6 DAD will be diasabled",
+    )
+    ipv6_link_local_address: Annotated[
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            alias="llAddr",
+            description="The override of the system generated Ipv6 link local address.",
+        ),
+    ] = ""
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
         ""
     )
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

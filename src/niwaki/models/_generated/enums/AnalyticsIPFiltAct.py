@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class AnalyticsIPFiltAct(StrEnum):
     DENY = "deny"
+    """Filtering action state is Deny"""
     PERMIT = "permit"
+    """Filtering action state is Permit"""
 
     @classmethod
     def _missing_(cls, value: object) -> AnalyticsIPFiltAct | None:

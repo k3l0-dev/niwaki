@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class vmmRsVswitchExporterPol(ManagedObject):
     """ACI Managed Object: ``vmmRsVswitchExporterPol`` — Relation to VMM Netflow Exporter Policy.
 
+    Relationship to VMM Netflow Exporter Policy
+
     RN format: ``rsvswitchExporterPol-[{target_dn}]``
     """
 
@@ -35,11 +37,20 @@ class vmmRsVswitchExporterPol(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    target_dn: Annotated[str, Field(alias="tDn")]
+    target_dn: Annotated[
+        str, Field(alias="tDn", description="The distinguished name of the target.")
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     active_flow_time_out: Annotated[int, Field(ge=0, le=3600, alias="activeFlowTimeOut")] = 60
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     idle_flow_time_out: Annotated[int, Field(ge=0, le=600, alias="idleFlowTimeOut")] = 15
     sampling_rate: Annotated[int, Field(ge=0, le=1000, alias="samplingRate")] = 0
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

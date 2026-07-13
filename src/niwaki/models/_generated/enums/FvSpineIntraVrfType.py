@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class FvSpineIntraVrfType(StrEnum):
     AUTOMATIC = "automatic"
+    """automatic - deploy routes by default"""
     CONTRACT = "contract"
+    """contract - deploy routes based on contract"""
 
     @classmethod
     def _missing_(cls, value: object) -> FvSpineIntraVrfType | None:

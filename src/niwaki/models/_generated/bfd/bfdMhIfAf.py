@@ -14,6 +14,8 @@ from niwaki.models.base import ManagedObject
 class bfdMhIfAf(ManagedObject):
     """ACI Managed Object: ``bfdMhIfAf`` — Multi Hop Interface Address Family.
 
+    This object holds per address family bfd interface information
+
     RN format: ``mhaf-{type_of_the_address_family}``
     """
 
@@ -42,11 +44,28 @@ class bfdMhIfAf(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    type_of_the_address_family: BfdAfT = Field(default=BfdAfT.IPV4, alias="type")
+    type_of_the_address_family: BfdAfT = Field(
+        default=BfdAfT.IPV4, alias="type", description="Type"
+    )
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    admin_st: NwAdminSt = Field(default=NwAdminSt.ENABLED, alias="adminSt")
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    interface_controls_for_multi_hop: str = Field(default="", alias="ctrl")
-    name: Annotated[str, Field(min_length=1, max_length=128)] = ""
+    admin_st: NwAdminSt = Field(
+        default=NwAdminSt.ENABLED,
+        alias="adminSt",
+        description="Enable/disable sessions for interface address family",
+    )
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    interface_controls_for_multi_hop: str = Field(
+        default="", alias="ctrl", description="Interface controls"
+    )
+    name: Annotated[
+        str, Field(min_length=1, max_length=128, description="The name of the object.")
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

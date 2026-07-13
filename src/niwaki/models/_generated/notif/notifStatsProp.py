@@ -34,10 +34,31 @@ class notifStatsProp(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    prop_name: Annotated[str, Field(min_length=1, max_length=512, alias="propName")]
+    prop_name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=512,
+            alias="propName",
+            description="The name of the property used for a comparison filter. This property is used internally to validate compatibility between two firmware images.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     alias_prop_name: Annotated[str, Field(max_length=512, alias="aliasPropName")] = ""
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    time_interval_of_streaming: Annotated[int, Field(alias="interval")] = 30
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    time_interval_of_streaming: Annotated[
+        int,
+        Field(
+            alias="interval",
+            description="The time interval in milliseconds that the peer keepalives should be sent.",
+        ),
+    ] = 30
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

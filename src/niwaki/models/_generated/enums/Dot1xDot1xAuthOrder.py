@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class Dot1xDot1xAuthOrder(StrEnum):
     DEFAULT = "default"
+    """Default Authentication order"""
     MAB = "mab"
+    """MAB authentication order"""
 
     @classmethod
     def _missing_(cls, value: object) -> Dot1xDot1xAuthOrder | None:

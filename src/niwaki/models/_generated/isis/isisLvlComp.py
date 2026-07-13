@@ -14,6 +14,8 @@ from niwaki.models.base import ManagedObject
 class isisLvlComp(ManagedObject):
     """ACI Managed Object: ``isisLvlComp`` — ISIS Level.
 
+    Per-level IS-IS vrf information.
+
     RN format: ``lvl-{type}``
     """
 
@@ -37,31 +39,89 @@ class isisLvlComp(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    type: IsisLvlT = IsisLvlT.L1
+    type: IsisLvlT = Field(default=IsisLvlT.L1, description="null")
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
     lsp_fast_flood: IsisLspFastFloodMode = Field(
-        default=IsisLspFastFloodMode.ENABLED, alias="lspFastFlood"
+        default=IsisLspFastFloodMode.ENABLED,
+        alias="lspFastFlood",
+        description="The IS-IS Fast-Flooding of LSPs improves Intermediate System-to-Intermediate System (IS-IS) convergence time when new link-state packets (LSPs) are generated in the network and shortest path first (SPF) is triggered by the new LSPs.",
     )
     lsp_generation_initial_wait_inerval: Annotated[
-        int, Field(ge=50, le=120000, alias="lspGenInitIntvl")
+        int,
+        Field(
+            ge=50,
+            le=120000,
+            alias="lspGenInitIntvl",
+            description="The LSP generation initial wait interval. This is used in the LSP generation interval for the LSP MTU.",
+        ),
     ] = 50
     lsp_generation_maximal_wait_inerval: Annotated[
-        int, Field(ge=50, le=120000, alias="lspGenMaxIntvl")
+        int,
+        Field(
+            ge=50,
+            le=120000,
+            alias="lspGenMaxIntvl",
+            description="The LSP generation maximum wait interval. This is used in the LSP generation interval for the LSP MTU.",
+        ),
     ] = 8000
     lsp_generation_secondary_wait_inerval: Annotated[
-        int, Field(ge=50, le=120000, alias="lspGenSecIntvl")
+        int,
+        Field(
+            ge=50,
+            le=120000,
+            alias="lspGenSecIntvl",
+            description="The LSP generation second wait interval. This is used in the LSP generation interval for the LSP MTU.",
+        ),
     ] = 50
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
+        ""
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    spf_comp_init_intvl: Annotated[int, Field(ge=50, le=120000, alias="spfCompInitIntvl")] = 50
-    spf_comp_max_intvl: Annotated[int, Field(ge=50, le=120000, alias="spfCompMaxIntvl")] = 8000
-    spf_comp_sec_intvl: Annotated[int, Field(ge=50, le=120000, alias="spfCompSecIntvl")] = 50
+    spf_comp_init_intvl: Annotated[
+        int,
+        Field(
+            ge=50,
+            le=120000,
+            alias="spfCompInitIntvl",
+            description="The SPF computation frequency initial wait interval. This is used in the SPF computations for the LSP MTU.",
+        ),
+    ] = 50
+    spf_comp_max_intvl: Annotated[
+        int,
+        Field(
+            ge=50,
+            le=120000,
+            alias="spfCompMaxIntvl",
+            description="The SPF computation frequency maximum wait interval. This is used in the SPF computations for the LSP MTU.",
+        ),
+    ] = 8000
+    spf_comp_sec_intvl: Annotated[
+        int,
+        Field(
+            ge=50,
+            le=120000,
+            alias="spfCompSecIntvl",
+            description="The SPF computation frequency second wait interval. This is used in the SPF computations for the LSP MTU.",
+        ),
+    ] = 50
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

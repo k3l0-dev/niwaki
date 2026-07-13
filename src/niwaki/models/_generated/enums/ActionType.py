@@ -7,14 +7,23 @@ from enum import StrEnum
 
 class ActionType(StrEnum):
     CLEAR = "clear"
+    """Execute clear"""
     COLLECT = "collect"
+    """Execute collect"""
     INSTALL = "install"
+    """Execute install"""
     INTERFACE_IN_SERVICE = "interface-in-service"
+    """Set interface in-service"""
     LOCATE = "locate"
+    """Execute locate"""
     POWEROFF = "poweroff"
+    """Execute poweroff"""
     RELOAD = "reload"
+    """Execute reload"""
     RESET = "reset"
+    """Execute reset"""
     TEST = "test"
+    """Execute test"""
 
     @classmethod
     def _missing_(cls, value: object) -> ActionType | None:

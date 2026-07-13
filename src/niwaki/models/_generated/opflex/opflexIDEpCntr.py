@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class opflexIDEpCntr(ManagedObject):
     """ACI Managed Object: ``opflexIDEpCntr``.
 
+    This is generated and used only by internal processes.
+
     RN format: ``idepcntr-{mac}-idepcntr-[{encap}]``
     """
 
@@ -36,14 +38,29 @@ class opflexIDEpCntr(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    encap: str
-    mac: Annotated[str, Field(pattern="^([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}$")]
+    encap: Annotated[str, Field(description="The port encapsulation.")]
+    mac: Annotated[
+        str,
+        Field(pattern="^([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}$", description="The MAC address."),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    direction: OpflexDirection = OpflexDirection.IN
-    id: str = ""
-    name: Annotated[str, Field(max_length=16, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    direction: OpflexDirection = Field(
+        default=OpflexDirection.IN, description="Specifies the connector direction."
+    )
+    id: Annotated[str, Field(description="An identifier .")] = ""
+    name: Annotated[
+        str,
+        Field(max_length=16, pattern="^[a-zA-Z0-9_.:-]+$", description="The name of the object."),
+    ] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

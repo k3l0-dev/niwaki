@@ -17,6 +17,8 @@ from niwaki.models.base import ManagedObject
 class licenseLicPolicy(ManagedObject):
     """ACI Managed Object: ``licenseLicPolicy`` — License Policy.
 
+    LicPolicy class represents license policy encapsulates user's configuration data used in smart licensing management. Because user's configuration data shall support export/import, the owner of LicensePolicy is PM.
+
     RN format: ``licensepol``
     """
 
@@ -41,31 +43,88 @@ class licenseLicPolicy(ManagedObject):
 
     # ── Configurable ───────────────────────────────────────────────────────────
     action_result: LicenseActionResult = Field(
-        default=LicenseActionResult.NONE, alias="actionResult"
+        default=LicenseActionResult.NONE,
+        alias="actionResult",
+        description="actionResult is to indicate whether or not RUM report download or Acknowledgement import is succeeded or failed.",
     )
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    authorization_code: Annotated[str, Field(max_length=512, alias="authCode")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    authorization_code: Annotated[
+        str,
+        Field(
+            max_length=512,
+            alias="authCode",
+            description="Authorization code or permanent license installed by user.",
+        ),
+    ] = ""
     certificate: str = Field(default="", alias="cert")
-    force_re_register: bool = Field(default=False, alias="forceRegister")
+    force_re_register: bool = Field(
+        default=False,
+        alias="forceRegister",
+        description="To force re-register the product with CSSM, regardless whether or not the product is alread registered. Per ELO requirement, let user decide if he/she wants to force re-register. If forceRegister = false, SA returns an error if the product is already registered.",
+    )
     hostname_privacy: bool = Field(default=False, alias="hostnamePrivacy")
-    ip_addr: Annotated[str, Field(max_length=512, alias="ipAddr")] = ""
+    ip_addr: Annotated[
+        str, Field(max_length=512, alias="ipAddr", description="For Call Home HTTP proxy server")
+    ] = ""
     smart_licensing_action: LicenseLicActionType = Field(
-        default=LicenseLicActionType.NONE, alias="licenseAction"
+        default=LicenseLicActionType.NONE,
+        alias="licenseAction",
+        description="Action for manually renewing ID certificate, license authorization and so on. Based on action enum type, corresponding SA API is invoked and SA return a formatted long string encapsulating the data.",
     )
     license_sync_freq: Annotated[int, Field(alias="licenseSyncFreq")] = 60
     smart_license_mode: LicenseLicenseMode = Field(
-        default=LicenseLicenseMode.SMART_LICENSING, alias="mode"
+        default=LicenseLicenseMode.SMART_LICENSING,
+        alias="mode",
+        description="Smart licensing mode.",
     )
     plr_admin_state: LicensePlrAdminState = Field(
-        default=LicensePlrAdminState.NONE, alias="plrAdminState"
+        default=LicensePlrAdminState.NONE,
+        alias="plrAdminState",
+        description="Admin state for triggering request/cancel/install/return reservation action.",
     )
-    proxy_server_port: Annotated[int, Field(ge=0, le=65535, alias="port")] = 443
+    proxy_server_port: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=65535,
+            alias="port",
+            description="The port number of third-party HTTP/HTTPs proxy server. When the mode is not proxy, port is not required and can be ignored.",
+        ),
+    ] = 443
     smart_licensing_admin_state: LicenseRegAdminState = Field(
-        default=LicenseRegAdminState.NONE, alias="regAdminState"
+        default=LicenseRegAdminState.NONE,
+        alias="regAdminState",
+        description="Admin state for triggering registration and unregistration.",
     )
-    product_instance_id_token: Annotated[str, Field(max_length=512, alias="regTokenId")] = ""
+    product_instance_id_token: Annotated[
+        str,
+        Field(
+            max_length=512,
+            alias="regTokenId",
+            description="To register product with CSSM, a user need to input registration token ID. The registration token ID is created by customer from CSSM web site.",
+        ),
+    ] = ""
     license_usage_reporting_interval_in_day: Annotated[
-        int, Field(ge=1, le=90, alias="reportInterval")
+        int,
+        Field(
+            ge=1,
+            le=90,
+            alias="reportInterval",
+            description="SLE policy allows a user to change license reporting interval. Default value is 30 days, and min and max range is 1 - 90 days.",
+        ),
     ] = 30
-    url: Annotated[str, Field(max_length=512)] = ""
+    url: Annotated[
+        str,
+        Field(
+            max_length=512,
+            description="The url of remote manager (CSSM, Satellite manager or SCH gateway server). When the mode is plr, url is not required and can be ignored.",
+        ),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

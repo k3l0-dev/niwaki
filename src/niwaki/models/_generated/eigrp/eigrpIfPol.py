@@ -14,6 +14,8 @@ from niwaki.models.base import ManagedObject
 class eigrpIfPol(ManagedObject):
     """ACI Managed Object: ``eigrpIfPol`` — EIGRP Interface Policy.
 
+    The EIGRP interface policy, which defines a common configuration that will apply to one or more EIGRP interfaces.
+
     RN format: ``eigrpIfPol-{name}``
     """
 
@@ -37,33 +39,84 @@ class eigrpIfPol(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the object.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    eigrp_interface_bandwidth: Annotated[int, Field(ge=0, le=2560000000, alias="bw")] = 0
-    interface_controls: EigrpIfAfControl = Field(default=EigrpIfAfControl.BFD, alias="ctrl")
-    eigrp_interface_delay: Annotated[int, Field(ge=0, alias="delay")] = 0
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    eigrp_interface_bandwidth: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=2560000000,
+            alias="bw",
+            description="EIGRP bandwidth in kbps, overrides the bandwidth configured on an interface. Used to influence path selection",
+        ),
+    ] = 0
+    interface_controls: EigrpIfAfControl = Field(
+        default=EigrpIfAfControl.BFD, alias="ctrl", description="The control state."
+    )
+    eigrp_interface_delay: Annotated[
+        int,
+        Field(
+            ge=0,
+            alias="delay",
+            description="EIGRP throughput delay, overrides the delay configured on an interface. Used to influence path selection",
+        ),
+    ] = 0
     units_for_eigrp_interface_delay: EigrpDelayUnit = Field(
-        default=EigrpDelayUnit.TENS_OF_MICRO, alias="delayUnit"
+        default=EigrpDelayUnit.TENS_OF_MICRO,
+        alias="delayUnit",
+        description="EIGRP delay units, Wide metrics can use picosecond accuracy for delay",
     )
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies a description of the policy definition.",
+        ),
     ] = ""
-    hello_interval: str = Field(default="", alias="helloIntvl")
-    hold_interval: str = Field(default="", alias="holdIntvl")
+    hello_interval: str = Field(default="", alias="helloIntvl", description="The hello interval.")
+    hold_interval: str = Field(
+        default="",
+        alias="holdIntvl",
+        description="The period of time before declaring that the neighbor is down.",
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
     owner_key: Annotated[
         str,
         Field(
-            max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerKey"
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerKey",
+            description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
     owner_tag: Annotated[
         str,
-        Field(max_length=64, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerTag"),
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerTag",
+            description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

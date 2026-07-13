@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class adepgRsSvrKeyRing(ManagedObject):
     """ACI Managed Object: ``adepgRsSvrKeyRing`` — Key Ring.
 
+    ISE private key, certificate
+
     RN format: ``rssvrKeyRing``
     """
 
@@ -35,6 +37,15 @@ class adepgRsSvrKeyRing(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    target_dn: str = Field(default="", alias="tDn")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    target_dn: str = Field(
+        default="", alias="tDn", description="The distinguished name of the target."
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

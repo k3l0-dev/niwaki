@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class ctrlrCimcNode(ManagedObject):
     """ACI Managed Object: ``ctrlrCimcNode``.
 
+    Policy to configure CIMC server
+
     RN format: ``cimcnode-{apic_id}``
     """
 
@@ -39,16 +41,32 @@ class ctrlrCimcNode(ManagedObject):
     apic_id: Annotated[str, Field(alias="apicId")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     cimc_ipv4_address_address_mask: Annotated[
-        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="ipv4Address")
+        str,
+        Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="ipv4Address", description="IPv4 address prefix"),
     ] = ""
-    cimc_ipv4_gateway_address_address: str = Field(default="", alias="ipv4Gw")
+    cimc_ipv4_gateway_address_address: str = Field(
+        default="", alias="ipv4Gw", description="IPv4 Gateway address"
+    )
     cimc_ipv6_address_address_mask: Annotated[
-        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="ipv6Address")
+        str,
+        Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="ipv6Address", description="IPv6 address prefix"),
     ] = ""
-    cimc_ipv6_gateway_address_address: str = Field(default="", alias="ipv6Gw")
-    name: Annotated[str, Field(max_length=16, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    cimc_ipv6_gateway_address_address: str = Field(
+        default="", alias="ipv6Gw", description="IPv6 Gateway address"
+    )
+    name: Annotated[
+        str,
+        Field(max_length=16, pattern="^[a-zA-Z0-9_.:-]+$", description="The name of the object."),
+    ] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

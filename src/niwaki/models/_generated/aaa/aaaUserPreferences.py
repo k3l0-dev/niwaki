@@ -16,6 +16,8 @@ from niwaki.models.base import ManagedObject
 class aaaUserPreferences(ManagedObject):
     """ACI Managed Object: ``aaaUserPreferences``.
 
+    User preferences
+
     RN format: ``pref``
     """
 
@@ -39,21 +41,44 @@ class aaaUserPreferences(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Create-only (ignored by APIC on modification) ─────────────────────────
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    name: Annotated[
+        str,
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the AAA definition object.",
+        ),
+    ] = ""
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     dashboard: str = ""
     default_page_size: AaaPageSize = Field(default=AaaPageSize._15, alias="defaultPageSize")
     default_tabs: str = Field(default="", alias="defaultTabs")
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies a description of the policy definition.",
+        ),
     ] = ""
     disable_confirmation_on_success: bool = Field(
         default=True, alias="disableConfirmationOnSuccess"
     )
-    disable_creation_splash: str = Field(default="", alias="disableCreationSplash")
+    disable_creation_splash: str = Field(
+        default="",
+        alias="disableCreationSplash",
+        description="List of which object creation splash screens to disable",
+    )
     disable_deployment_notifications: AaaDeplNotifications = Field(
         default=AaaDeplNotifications.FALSE, alias="disableDeploymentNotifications"
     )
@@ -72,20 +97,34 @@ class aaaUserPreferences(ManagedObject):
     owner_key: Annotated[
         str,
         Field(
-            max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerKey"
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerKey",
+            description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
     owner_tag: Annotated[
         str,
-        Field(max_length=64, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerTag"),
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerTag",
+            description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+        ),
     ] = ""
     preserve_tree_divider_position: bool = Field(default=False, alias="preserveTreeDividerPosition")
     preserve_tree_position: bool = Field(default=False, alias="preserveTreePosition")
     remove_license_evaluation: AaaBoolean = Field(default=AaaBoolean.NO, alias="removeLicenseEval")
-    session_timeout: str = Field(default="", alias="sessionTimeout")
+    session_timeout: str = Field(
+        default="",
+        alias="sessionTimeout",
+        description="session timeout preferences (default 10mins ?)",
+    )
     show_hidden_policies: bool = Field(default=False, alias="showHiddenPolicies")
     time_format: DatetimeDisplayFormat = Field(
-        default=DatetimeDisplayFormat.LOCAL, alias="tzDisplayFormat"
+        default=DatetimeDisplayFormat.LOCAL,
+        alias="tzDisplayFormat",
+        description="UI Date/Time Display Format (Local vs UTC)",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     visore_favorites: str = Field(default="", alias="visoreFavorites")

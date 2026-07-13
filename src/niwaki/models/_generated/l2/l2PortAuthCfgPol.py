@@ -38,13 +38,28 @@ class l2PortAuthCfgPol(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    mac_auth: Dot1xMacAuth = Field(default=Dot1xMacAuth.EAP, alias="macAuth")
-    max_reauth_request: str = Field(default="", alias="maxReauthReq")
-    max_request: str = Field(default="", alias="maxReq")
-    re_authentication: bool = Field(default=False, alias="reAuth")
-    re_auth_period: Annotated[int, Field(ge=1, le=2147483, alias="reAuthPeriod")] = 3600
-    server_timeout: str = Field(default="", alias="serverTimeout")
-    supplicant_timeout: str = Field(default="", alias="suppTimeout")
-    tx_period: str = Field(default="", alias="txPeriod")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    mac_auth: Dot1xMacAuth = Field(
+        default=Dot1xMacAuth.EAP, alias="macAuth", description="MAC Auth"
+    )
+    max_reauth_request: str = Field(
+        default="", alias="maxReauthReq", description="Max Reauth Request"
+    )
+    max_request: str = Field(default="", alias="maxReq", description="Max Request")
+    re_authentication: bool = Field(default=False, alias="reAuth", description="Re-authentication")
+    re_auth_period: Annotated[
+        int, Field(ge=1, le=2147483, alias="reAuthPeriod", description="Re-auth Period")
+    ] = 3600
+    server_timeout: str = Field(default="", alias="serverTimeout", description="Server Timeout")
+    supplicant_timeout: str = Field(
+        default="", alias="suppTimeout", description="Supplicant Timeout"
+    )
+    tx_period: str = Field(default="", alias="txPeriod", description="Tx Period")
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

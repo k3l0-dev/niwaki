@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class fabricLFPortS(ManagedObject):
     """ACI Managed Object: ``fabricLFPortS`` — Leaf Fabric Port Selector.
 
+    The leaf fabric port selector. This object enables you to specify leaf fabric ports with your leaf fabric port profile.
+
     RN format: ``lefabports-{name}-typ-{selector_type}``
     """
 
@@ -39,14 +41,38 @@ class fabricLFPortS(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")]
-    selector_type: FabricSelector2 = Field(default=FabricSelector2.ALL, alias="type")
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the leaf fabric port selector. This name can be up to 64 characters. Note that you cannot change this name after the object has been saved.",
+        ),
+    ]
+    selector_type: FabricSelector2 = Field(
+        default=FabricSelector2.ALL,
+        alias="type",
+        description="The type of the leaf fabric port selector.",
+    )
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies a description of the policy definition.",
+        ),
     ] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
@@ -54,11 +80,19 @@ class fabricLFPortS(ManagedObject):
     owner_key: Annotated[
         str,
         Field(
-            max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerKey"
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerKey",
+            description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
     owner_tag: Annotated[
         str,
-        Field(max_length=64, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerTag"),
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerTag",
+            description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

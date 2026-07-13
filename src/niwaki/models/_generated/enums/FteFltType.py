@@ -7,8 +7,11 @@ from enum import StrEnum
 
 class FteFltType(StrEnum):
     CE = "ce"
+    """CE filter type"""
     IPV4 = "ipv4"
+    """Ipv4 filter type"""
     IPV6 = "ipv6"
+    """Ipv6 filter type"""
 
     @classmethod
     def _missing_(cls, value: object) -> FteFltType | None:

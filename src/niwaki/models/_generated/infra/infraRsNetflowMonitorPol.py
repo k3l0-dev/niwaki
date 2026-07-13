@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class infraRsNetflowMonitorPol(ManagedObject):
     """ACI Managed Object: ``infraRsNetflowMonitorPol`` — Relation to Netflow Monitor Policy.
 
+    Relation to netflow Monitor Policy
+
     RN format: ``rsnetflowMonitorPol-[{name}]-{flt_type}``
     """
 
@@ -37,7 +39,9 @@ class infraRsNetflowMonitorPol(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    flt_type: AnalyticsFltType = Field(default=AnalyticsFltType.IPV4, alias="fltType")
+    flt_type: AnalyticsFltType = Field(
+        default=AnalyticsFltType.IPV4, alias="fltType", description="Address Family filter type"
+    )
     name: Annotated[
         str,
         Field(
@@ -49,5 +53,12 @@ class infraRsNetflowMonitorPol(ManagedObject):
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

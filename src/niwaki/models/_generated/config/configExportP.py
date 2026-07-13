@@ -14,6 +14,8 @@ from niwaki.models.base import ManagedObject
 class configExportP(ManagedObject):
     """ACI Managed Object: ``configExportP`` — Configuration Export Policy.
 
+    A configuration export policy is used to backup the system configuration.
+
     RN format: ``configexp-{name}``
     """
 
@@ -40,21 +42,53 @@ class configExportP(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the configuration export policy. For ease of reference, include details such as: the format of the export, how often the policy will run, and where the configuration will be exported. The name cannot be changed after the policy has been created.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    administrative_state: TrigExecState = Field(default=TrigExecState.UNTRIGGERED, alias="adminSt")
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    administrative_state: TrigExecState = Field(
+        default=TrigExecState.UNTRIGGERED,
+        alias="adminSt",
+        description="The administrative state of the executable policies.",
+    )
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
-    export_format: ConfigFormat = Field(default=ConfigFormat.JSON, alias="format")
+    export_format: ConfigFormat = Field(
+        default=ConfigFormat.JSON,
+        alias="format",
+        description="The data format to be used when exporting.",
+    )
     include_secure_fields_in_export: bool = Field(default=True, alias="includeSecureFields")
     max_snapshot_count: Annotated[int, Field(ge=0, le=10, alias="maxSnapshotCount")] = 0
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
     snapshot: bool = False
-    dn_to_export: str = Field(default="", alias="targetDn")
+    dn_to_export: str = Field(
+        default="",
+        alias="targetDn",
+        description="The distinguished name of the object to be exported. The policy universe is exported by default.",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

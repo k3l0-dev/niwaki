@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class datetimePol(ManagedObject):
     """ACI Managed Object: ``datetimePol`` — Date and Time Policy.
 
+    The date time policy is based on international time zones and a defined NTP server. Before configuring a date and time policy under a domain group, this policy must first be created. Policies under the Domain Groups root were already created by the system and ready to configure.
+
     RN format: ``time-{name}``
     """
 
@@ -39,21 +41,51 @@ class datetimePol(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The user-configured date/time policy name. This value can be between 1 and 64 alphanumeric characters. Note that you cannot change this name after the object has been saved.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    ntp_stratum_value_see_ntp_rfc_5905: str = Field(default="", alias="StratumValue")
-    admin_state: DatetimeAdminState = Field(default=DatetimeAdminState.ENABLED, alias="adminSt")
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    ntp_stratum_value_see_ntp_rfc_5905: str = Field(
+        default="", alias="StratumValue", description="NTP Stratum value, see RFC 5905"
+    )
+    admin_state: DatetimeAdminState = Field(
+        default=DatetimeAdminState.ENABLED,
+        alias="adminSt",
+        description="A property that indicates if the NTP protocol is enabled or disabled.",
+    )
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     authentication_state: DatetimeAdminState = Field(
-        default=DatetimeAdminState.DISABLED, alias="authSt"
+        default=DatetimeAdminState.DISABLED,
+        alias="authSt",
+        description="A property that indicates if the Datetime policy authentication is enabled or disabled.",
     )
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies a description of the policy definition.",
+        ),
     ] = ""
     master_clock_mode_toggle: DatetimeAdminState = Field(
-        default=DatetimeAdminState.DISABLED, alias="masterMode"
+        default=DatetimeAdminState.DISABLED,
+        alias="masterMode",
+        description="Toggle between master clock mode",
     )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
@@ -61,12 +93,20 @@ class datetimePol(ManagedObject):
     owner_key: Annotated[
         str,
         Field(
-            max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerKey"
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerKey",
+            description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
     owner_tag: Annotated[
         str,
-        Field(max_length=64, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerTag"),
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerTag",
+            description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+        ),
     ] = ""
     server_mode: DatetimeAdminState = Field(
         default=DatetimeAdminState.DISABLED, alias="serverState"

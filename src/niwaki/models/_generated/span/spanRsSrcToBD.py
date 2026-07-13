@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class spanRsSrcToBD(ManagedObject):
     """ACI Managed Object: ``spanRsSrcToBD`` — Relation to SPAN Source to Bridge Domain.
 
+    The source relation to a private Layer 2 bridge domain.
+
     RN format: ``rssrcToBD``
     """
 
@@ -35,5 +37,7 @@ class spanRsSrcToBD(ManagedObject):
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    target_dn: str = Field(default="", alias="tDn")
+    target_dn: str = Field(
+        default="", alias="tDn", description="The associated bridge domain name."
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

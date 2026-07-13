@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class pkiCertReq(ManagedObject):
     """ACI Managed Object: ``pkiCertReq`` — Certificate Request.
 
+    A request sent to a certificate authority (CA or trustpoint) requesting that the CA affirm the identity of the requester and issue a digital certificate verifying that the requestor is the owner of the presented public key.
+
     RN format: ``certreq``
     """
 
@@ -40,20 +42,64 @@ class pkiCertReq(ManagedObject):
             max_length=1024, pattern="^[a-zA-Z0-9\\!#$%()*,-\\/.:;@ _{|}~?]+$", alias="altSubjName"
         ),
     ] = ""
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    country: str = ""
-    email_address: Annotated[
-        str, Field(max_length=40, pattern="^[a-zA-Z0-9()+,-./:@_^\\s]+$", alias="email")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
     ] = ""
-    locality: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9()+,-./:@_^\\s]+$")] = ""
+    country: Annotated[
+        str,
+        Field(
+            description="The two-letter ISO code for the country where the organization is located."
+        ),
+    ] = ""
+    email_address: Annotated[
+        str,
+        Field(
+            max_length=40,
+            pattern="^[a-zA-Z0-9()+,-./:@_^\\s]+$",
+            alias="email",
+            description="The email address of the organization's contact person.",
+        ),
+    ] = ""
+    locality: Annotated[
+        str,
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9()+,-./:@_^\\s]+$",
+            description="The city or town of the organization.",
+        ),
+    ] = ""
     organization_name: Annotated[
-        str, Field(max_length=64, pattern="^[a-zA-Z0-9()+,-./:@_^\\s]+$", alias="orgName")
+        str,
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9()+,-./:@_^\\s]+$",
+            alias="orgName",
+            description="The full legal name of the organization.",
+        ),
     ] = ""
     organization_unit_name: Annotated[
-        str, Field(max_length=64, pattern="^[a-zA-Z0-9()+,-./:@_^\\s]+$", alias="orgUnitName")
+        str,
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9()+,-./:@_^\\s]+$",
+            alias="orgUnitName",
+            description="A department or unit name within the organization.",
+        ),
     ] = ""
-    password: str = Field(default="", alias="pwd")
-    state: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9()+,-./:@_^\\s]+$")] = ""
+    password: str = Field(default="", alias="pwd", description="The new password.")
+    state: Annotated[
+        str,
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9()+,-./:@_^\\s]+$",
+            description="The state or province in which the organization is located.",
+        ),
+    ] = ""
     subject_name: Annotated[
         str,
         Field(
@@ -61,6 +107,7 @@ class pkiCertReq(ManagedObject):
             max_length=64,
             pattern="^[a-zA-Z0-9\\!#$%()*,-\\/.:;@ _{|}~?]+$",
             alias="subjName",
+            description="The fully qualified domain name or distinguished name of the requesting device.",
         ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

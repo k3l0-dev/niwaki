@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class eigrpExtP(ManagedObject):
     """ACI Managed Object: ``eigrpExtP`` — External Profile.
 
+    The EIGRP external profile information.
+
     RN format: ``eigrpExtP``
     """
 
@@ -36,11 +38,28 @@ class eigrpExtP(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    autonomous_system_number: Annotated[int, Field(ge=1, alias="asn")] = 0
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    autonomous_system_number: Annotated[
+        int,
+        Field(
+            ge=1, alias="asn", description="A number that uniquely identifies an autonomous system."
+        ),
+    ] = 0
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")

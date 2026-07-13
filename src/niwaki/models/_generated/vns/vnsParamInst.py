@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class vnsParamInst(ManagedObject):
     """ACI Managed Object: ``vnsParamInst`` — L4-L7 param instance.
 
+    A parameter instance configured by the administrator.
+
     RN format: ``ParamInst-{name}``
     """
 
@@ -38,17 +40,47 @@ class vnsParamInst(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the parameter instance.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    cardinality: VnsVnsCardinalityType = VnsVnsCardinalityType.UNSPECIFIED
-    meta_param_key: Annotated[str, Field(max_length=512, alias="key")] = ""
-    locked: bool = False
-    mandatory: bool = False
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    cardinality: VnsVnsCardinalityType = Field(
+        default=VnsVnsCardinalityType.UNSPECIFIED,
+        description="A value to determine how many instances of this type can be present.",
+    )
+    meta_param_key: Annotated[
+        str,
+        Field(
+            max_length=512,
+            alias="key",
+            description="The key uniquely identifying this configuration object.",
+        ),
+    ] = ""
+    locked: bool = Field(
+        default=False,
+        description="A property that specifies if a value entered at configuration time can be modified at run time.",
+    )
+    mandatory: bool = Field(
+        default=False, description="The value that indicates if this parameter is mandatory."
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    validation: Annotated[str, Field(max_length=512)] = ""
-    value: Annotated[str, Field(max_length=512)] = ""
+    validation: Annotated[str, Field(max_length=512, description="The validation expression.")] = ""
+    value: Annotated[str, Field(max_length=512, description="The value of the property.")] = ""

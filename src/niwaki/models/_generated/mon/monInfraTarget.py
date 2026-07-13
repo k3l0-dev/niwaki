@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class monInfraTarget(ManagedObject):
     """ACI Managed Object: ``monInfraTarget`` — Monitoring Target.
 
+    Creating a monitoring target will allow you to associate certain monitoring policies to the target object for the fabric infrastructure.
+
     RN format: ``tarinfra-{target_scope}``
     """
 
@@ -58,16 +60,32 @@ class monInfraTarget(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    target_scope: MonTargetScope3 = Field(default=MonTargetScope3.UNSPECIFIED, alias="scope")
+    target_scope: MonTargetScope3 = Field(
+        default=MonTargetScope3.UNSPECIFIED,
+        alias="scope",
+        description="The target object to which you will apply monitoring policies.",
+    )
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
     mon_infratarget_name: Annotated[
-        str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="name")
+        str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="name", description="null")
     ] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")

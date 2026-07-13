@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class fvRsCtxToOspfCtxPol(ManagedObject):
     """ACI Managed Object: ``fvRsCtxToOspfCtxPol`` — OSPF Context Policy.
 
+    A source relation to the per-address family OSPF context policy.
+
     RN format: ``rsctxToOspfCtxPol-[{name}]-{af}``
     """
 
@@ -37,12 +39,25 @@ class fvRsCtxToOspfCtxPol(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    af: OspfAfT = OspfAfT.IPV6_UCAST
+    af: OspfAfT = Field(default=OspfAfT.IPV6_UCAST, description="The address family.")
     name: Annotated[
         str,
-        Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="tnOspfCtxPolName"),
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            alias="tnOspfCtxPolName",
+            description="The name of the OSPF timers policy associated with this object.",
+        ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class macsecKeyPol(ManagedObject):
     """ACI Managed Object: ``macsecKeyPol`` — MACsec Key Policy.
 
+    MACSEC Key Policy
+
     RN format: ``keyp-{key_name}``
     """
 
@@ -40,30 +42,61 @@ class macsecKeyPol(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     key_name: Annotated[
-        str, Field(min_length=1, max_length=64, pattern="^[a-fA-F0-9]+$", alias="keyName")
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-fA-F0-9]+$",
+            alias="keyName",
+            description="key name",
+        ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies a description of the policy definition.",
+        ),
     ] = ""
-    end_time: str = Field(default="", alias="endTime")
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    end_time: str = Field(default="", alias="endTime", description="end time")
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
+        ""
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
     owner_key: Annotated[
         str,
         Field(
-            max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerKey"
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerKey",
+            description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
     owner_tag: Annotated[
         str,
-        Field(max_length=64, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerTag"),
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerTag",
+            description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+        ),
     ] = ""
-    pre_shared_key: Annotated[str, Field(alias="preSharedKey", repr=False)] = ""
-    start_time: str = Field(default="", alias="startTime")
+    pre_shared_key: Annotated[
+        str, Field(alias="preSharedKey", repr=False, description="pre-shared key")
+    ] = ""
+    start_time: str = Field(default="", alias="startTime", description="start-time")
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class FvcapSubj(StrEnum):
     GLOBAL_PCTAG_NAMESPACE = "global-pctag-namespace"
+    """Global pcTag"""
     UNKNOWN = "unknown"
+    """Unknown"""
 
     @classmethod
     def _missing_(cls, value: object) -> FvcapSubj | None:

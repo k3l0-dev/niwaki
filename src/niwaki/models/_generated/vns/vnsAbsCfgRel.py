@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class vnsAbsCfgRel(ManagedObject):
     """ACI Managed Object: ``vnsAbsCfgRel`` — L4-L7 Services Relation.
 
+    The folder/param relations added to an abstract graph.
+
     RN format: ``absRel-{name}``
     """
 
@@ -38,16 +40,52 @@ class vnsAbsCfgRel(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the folder/param relations.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    cardinality: VnsVnsCardinalityType = VnsVnsCardinalityType.UNSPECIFIED
-    key: Annotated[str, Field(max_length=512)] = ""
-    locked: bool = False
-    mandatory: bool = False
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    cardinality: VnsVnsCardinalityType = Field(
+        default=VnsVnsCardinalityType.UNSPECIFIED,
+        description="A value to determine how many instances of this type can be present.",
+    )
+    key: Annotated[
+        str,
+        Field(
+            max_length=512, description="The key uniquely identifying this configuration object."
+        ),
+    ] = ""
+    locked: bool = Field(
+        default=False,
+        description="A property that specifies if a value entered at configuration time can be modified at run time.",
+    )
+    mandatory: bool = Field(
+        default=False, description="The value that indicates if this parameter is mandatory."
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    target_name: Annotated[str, Field(min_length=1, max_length=128, alias="targetName")] = ""
+    target_name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=128,
+            alias="targetName",
+            description="The target to which this parameter applies.",
+        ),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class dcPolicy(ManagedObject):
     """ACI Managed Object: ``dcPolicy`` — Intersight Device Connector Policy.
 
+    device connector policy
+
     RN format: ``dcpolicy``
     """
 
@@ -36,11 +38,31 @@ class dcPolicy(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    admin_state: ScalarEnum82 = Field(default=ScalarEnum82.ENABLED, alias="adminState")
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    admin_state: ScalarEnum82 = Field(
+        default=ScalarEnum82.ENABLED,
+        alias="adminState",
+        description="adminState: enabled, start device connector for APIC/Switch, how about rack server device connector disabled: stop the device connector",
+    )
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
+        ""
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    upgrade_state: Annotated[str, Field(max_length=512, alias="upgradeAdminState")] = ""
+    upgrade_state: Annotated[
+        str,
+        Field(
+            max_length=512,
+            alias="upgradeAdminState",
+            description="upgradeAdminState: place holder to capture the upgrade status.",
+        ),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

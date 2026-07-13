@@ -7,6 +7,7 @@ from enum import StrEnum
 
 class ApphostingAdminState(StrEnum):
     DISABLED = "disabled"
+    """Admin State values"""
     ENABLED = "enabled"
 
     @classmethod

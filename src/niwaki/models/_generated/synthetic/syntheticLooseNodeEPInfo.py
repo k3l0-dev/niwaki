@@ -35,15 +35,45 @@ class syntheticLooseNodeEPInfo(ManagedObject):
 
     # ── Configurable ───────────────────────────────────────────────────────────
     adapter_name: Annotated[str, Field(max_length=512, alias="adapterName")] = ""
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    comtroller_dn: Annotated[str, Field(max_length=512, alias="ctrlrDn")] = ""
-    domain_name_of_the_controller: Annotated[
-        str, Field(max_length=512, alias="ctrlrDomainName")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
     ] = ""
-    controller_name: Annotated[str, Field(max_length=512, alias="ctrlrName")] = ""
-    encap_info: Annotated[str, Field(max_length=512, alias="encap")] = ""
-    the_vm_nic_mac_address: Annotated[str, Field(max_length=512, alias="ep")] = ""
-    the_name_for_the_policies: Annotated[str, Field(max_length=512, alias="epgDn")] = ""
-    hypervisor_ip_description: Annotated[str, Field(max_length=512, alias="hvName")] = ""
+    comtroller_dn: Annotated[
+        str,
+        Field(
+            max_length=512,
+            alias="ctrlrDn",
+            description="Identifies the dynamic naming string of the controller object.For internal use only.",
+        ),
+    ] = ""
+    domain_name_of_the_controller: Annotated[
+        str, Field(max_length=512, alias="ctrlrDomainName", description="Controler Info")
+    ] = ""
+    controller_name: Annotated[
+        str,
+        Field(
+            max_length=512,
+            alias="ctrlrName",
+            description="The name of the controller object. For internal use only.",
+        ),
+    ] = ""
+    encap_info: Annotated[
+        str, Field(max_length=512, alias="encap", description="The port encapsulation.")
+    ] = ""
+    the_vm_nic_mac_address: Annotated[
+        str,
+        Field(max_length=512, alias="ep", description="Endpoint and Adapter details from compVNic"),
+    ] = ""
+    the_name_for_the_policies: Annotated[
+        str, Field(max_length=512, alias="epgDn", description="Policy Info from hvsExtPol")
+    ] = ""
+    hypervisor_ip_description: Annotated[
+        str, Field(max_length=512, alias="hvName", description="Host Name discription")
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    vm_name: Annotated[str, Field(max_length=512, alias="vmName")] = ""
+    vm_name: Annotated[str, Field(max_length=512, alias="vmName", description="Comp VM Info")] = ""

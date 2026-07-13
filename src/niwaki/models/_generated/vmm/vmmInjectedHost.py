@@ -38,12 +38,26 @@ class vmmInjectedHost(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=128)]
+    name: Annotated[str, Field(min_length=1, max_length=128, description="The name of the object.")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    host_name: Annotated[str, Field(max_length=512, alias="hostName")] = ""
-    id: str = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    host_name: Annotated[
+        str,
+        Field(
+            max_length=512,
+            alias="hostName",
+            description="The hostname of the router advertising the link-state packet.",
+        ),
+    ] = ""
+    id: Annotated[str, Field(description="An object identifier.")] = ""
     kernel_version: Annotated[str, Field(max_length=512, alias="kernelVer")] = ""
     management_ip: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="mgmtIp")] = ""
     display_name: Annotated[str, Field(max_length=128, alias="nameAlias")] = ""

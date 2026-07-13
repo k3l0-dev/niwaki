@@ -48,12 +48,25 @@ class infraBundleConfig(ManagedObject):
     associated_group_dn: Annotated[str, Field(alias="assocGrp")]
     fex_a: Annotated[str, Field(alias="fexA")]
     fex_b: Annotated[str, Field(alias="fexB")]
-    node_a: Annotated[str, Field(alias="nodeA")]
+    node_a: Annotated[str, Field(alias="nodeA", description="explicit properties")]
     node_b: Annotated[str, Field(alias="nodeB")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    configuration_action: FabricPCAction = Field(default=FabricPCAction.CONFIGURE, alias="action")
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    description: Annotated[str, Field(max_length=512)] = ""
+    configuration_action: FabricPCAction = Field(
+        default=FabricPCAction.CONFIGURE,
+        alias="action",
+        description="The action required when the condition is met.",
+    )
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    description: Annotated[
+        str, Field(max_length=512, description="The description of this configuration item.")
+    ] = ""
     pc_shutdown: InfraPCShutdown = Field(default=InfraPCShutdown.FALSE, alias="pcShutdown")
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

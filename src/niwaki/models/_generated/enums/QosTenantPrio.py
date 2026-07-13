@@ -9,6 +9,7 @@ class QosTenantPrio(StrEnum):
     LEVEL1 = "level1"
     LEVEL2 = "level2"
     LEVEL3 = "level3"
+    """User configurable classes"""
     LEVEL4 = "level4"
     LEVEL5 = "level5"
     LEVEL6 = "level6"

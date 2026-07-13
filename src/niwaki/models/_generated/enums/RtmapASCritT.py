@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class RtmapASCritT(StrEnum):
     PREPEND = "prepend"
+    """Append the specified AS number to the system path of the route"""
     PREPEND_LAST_AS = "prepend-last-as"
+    """Prepend the last AS numbers to the AS Path"""
 
     @classmethod
     def _missing_(cls, value: object) -> RtmapASCritT | None:

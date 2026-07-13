@@ -43,31 +43,78 @@ class eptrkIpEpExec(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     ip_address: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="addr")]
-    name: Annotated[str, Field(min_length=1, max_length=16, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=16,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the object.",
+        ),
+    ]
     vrf: Annotated[str, Field(min_length=1, max_length=512)]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    admin_state: ActionAdminSt = Field(default=ActionAdminSt.UNKNOWN, alias="adminSt")
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    admin_state: ActionAdminSt = Field(
+        default=ActionAdminSt.UNKNOWN,
+        alias="adminSt",
+        description="The administrative state of the object or policy.",
+    )
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
         Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
     ] = ""
-    destination_ip: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="dstIp")] = ""
-    destination_mac: Annotated[
-        str, Field(pattern="^([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}$", alias="dstMac")
+    destination_ip: Annotated[
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$", alias="dstIp", description="The destination IP address."
+        ),
     ] = ""
-    task_frequency: str = Field(default="", alias="freq")
-    payload_size: str = Field(default="", alias="payloadSz")
-    source_ip: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="srcIp")] = ""
+    destination_mac: Annotated[
+        str,
+        Field(
+            pattern="^([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}$",
+            alias="dstMac",
+            description="Specifies the destination MAC address for the rule.",
+        ),
+    ] = ""
+    task_frequency: str = Field(
+        default="", alias="freq", description="Frequency at which tasks are executed"
+    )
+    payload_size: str = Field(
+        default="", alias="payloadSz", description="Indicates the payload size."
+    )
+    source_ip: Annotated[
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            alias="srcIp",
+            description="The source IP address. Traffic from this IP address to the EP is counted",
+        ),
+    ] = ""
     source_mac: Annotated[
-        str, Field(pattern="^([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}$", alias="srcMac")
+        str,
+        Field(
+            pattern="^([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}$",
+            alias="srcMac",
+            description="Specifies the source MAC address for the rule.",
+        ),
     ] = ""
     source_node_id: str = Field(default="", alias="srcNodeId")
     tenant_name: Annotated[
         str, Field(max_length=16, pattern="^[a-zA-Z0-9_.:-]+$", alias="tenant")
     ] = ""
-    type: ActionType = ActionType.CLEAR
+    type: ActionType = Field(
+        default=ActionType.CLEAR, description="The specific type of the object or component."
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     vtep_ip: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="vtep")] = ""
     vtep_encapsulation: str = Field(default="", alias="vtepEncap")

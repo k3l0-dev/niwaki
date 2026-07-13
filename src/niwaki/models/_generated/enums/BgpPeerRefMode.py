@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class BgpPeerRefMode(StrEnum):
     HARD = "hard"
+    """Hard"""
     SOFT = "soft"
+    """Soft"""
 
     @classmethod
     def _missing_(cls, value: object) -> BgpPeerRefMode | None:

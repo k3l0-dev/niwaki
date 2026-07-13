@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class HsrpAuthT(StrEnum):
     MD5 = "md5"
+    """MD5"""
     SIMPLE = "simple"
+    """Simple"""
 
     @classmethod
     def _missing_(cls, value: object) -> HsrpAuthT | None:

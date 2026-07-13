@@ -7,9 +7,13 @@ from enum import StrEnum
 
 class FhsRAGuardMaxRouterPref(StrEnum):
     DISABLED = "disabled"
+    """Check is not enabled"""
     HIGH = "high"
+    """Allowed Max Router Preference High"""
     LOW = "low"
+    """Allowed Max Router Preference Low"""
     MEDIUM = "medium"
+    """Allowed Max Router Preference Medium"""
 
     @classmethod
     def _missing_(cls, value: object) -> FhsRAGuardMaxRouterPref | None:

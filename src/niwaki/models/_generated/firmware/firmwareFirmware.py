@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class firmwareFirmware(ManagedObject):
     """ACI Managed Object: ``firmwareFirmware`` — Firmware.
 
+    The firmware specification.
+
     RN format: ``fw-{name}``
     """
 
@@ -35,10 +37,25 @@ class firmwareFirmware(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=512)]
+    name: Annotated[str, Field(min_length=1, max_length=512, description="The firmware name.")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    action_to_delete: bool = Field(default=False, alias="deleteIt")
-    whether_latest: bool = Field(default=False, alias="latest")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    action_to_delete: bool = Field(
+        default=False,
+        alias="deleteIt",
+        description="A property for deleting firmware (when set to true). For internal use only.",
+    )
+    whether_latest: bool = Field(
+        default=False,
+        alias="latest",
+        description="A property that indicates whether the latest minor version.",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

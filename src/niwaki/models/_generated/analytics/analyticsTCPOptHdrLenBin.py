@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class analyticsTCPOptHdrLenBin(ManagedObject):
     """ACI Managed Object: ``analyticsTCPOptHdrLenBin`` — TCP optional header length bin entry.
 
+    TCP options header length bin
+
     RN format: ``tcpopthdrlenbin-{tcp_option_header_length_bin_id}``
     """
 
@@ -34,14 +36,21 @@ class analyticsTCPOptHdrLenBin(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    tcp_option_header_length_bin_id: Annotated[str, Field(alias="id")]
+    tcp_option_header_length_bin_id: Annotated[str, Field(alias="id", description="Identifier")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
         Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
     ] = ""
-    bin_high_value: Annotated[int, Field(ge=0, le=15, alias="hi")] = 0
-    bin_low_value: Annotated[int, Field(ge=0, le=15, alias="lo")] = 0
+    bin_high_value: Annotated[int, Field(ge=0, le=15, alias="hi", description="High value")] = 0
+    bin_low_value: Annotated[int, Field(ge=0, le=15, alias="lo", description="Low value")] = 0
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

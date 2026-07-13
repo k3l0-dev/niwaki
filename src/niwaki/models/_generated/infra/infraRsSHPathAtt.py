@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class infraRsSHPathAtt(ManagedObject):
     """ACI Managed Object: ``infraRsSHPathAtt`` — Host Path.
 
+    This object is used for creation of static association with a Spine's Host Port's Path. Existence of this implies that the corresponding set of policies will be resolved into the node to which the relationship points.
+
     RN format: ``rsSHPathAtt-[{target_dn}]``
     """
 
@@ -36,8 +38,17 @@ class infraRsSHPathAtt(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    target_dn: Annotated[str, Field(alias="tDn")]
+    target_dn: Annotated[
+        str, Field(alias="tDn", description="The distinguished name of the target.")
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

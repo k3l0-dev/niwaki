@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class spanRsSrcToEpg(ManagedObject):
     """ACI Managed Object: ``spanRsSrcToEpg`` — Relation to SPAN Source to EPG.
 
+    Relation to EPG
+
     RN format: ``rssrcToEpg``
     """
 
@@ -36,5 +38,7 @@ class spanRsSrcToEpg(ManagedObject):
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    target_dn: str = Field(default="", alias="tDn")
+    target_dn: str = Field(
+        default="", alias="tDn", description="The distinguished name of the target."
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

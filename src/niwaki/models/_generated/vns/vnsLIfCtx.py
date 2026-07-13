@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class vnsLIfCtx(ManagedObject):
     """ACI Managed Object: ``vnsLIfCtx`` — Logical Interface Context.
 
+    The logical interface context points to the logical interface used to pick a specific logical interface based on the connector name. To specify a wild card, set the name to Any.
+
     RN format: ``lIfCtx-c-{conn_name_or_lbl}``
     """
 
@@ -47,22 +49,45 @@ class vnsLIfCtx(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     conn_name_or_lbl: Annotated[
-        str, Field(min_length=1, max_length=16, pattern="^[a-zA-Z0-9_.:-]+$", alias="connNameOrLbl")
+        str,
+        Field(
+            min_length=1,
+            max_length=16,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            alias="connNameOrLbl",
+            description="The connector name or label for the logical interface context.",
+        ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    acl: bool = False
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    acl: bool = Field(default=False, description="ACL")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
-    l3_dest: bool = Field(default=True, alias="l3Dest")
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    l3_dest: bool = Field(
+        default=True, alias="l3Dest", description="Is this LIF a L3 Destination (VIP)"
+    )
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
+        ""
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    permit_handoff: bool = Field(default=False, alias="permitHandoff")
-    permit_log: bool = Field(default=False, alias="permitLog")
-    rule_type: bool = Field(default=False, alias="ruleType")
+    permit_handoff: bool = Field(default=False, alias="permitHandoff", description="Permit Handoff")
+    permit_log: bool = Field(default=False, alias="permitLog", description="Permit Logging Action")
+    rule_type: bool = Field(default=False, alias="ruleType", description="Rule Type")
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

@@ -37,15 +37,30 @@ class vmmAgtStatus(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=256)]
+    name: Annotated[str, Field(min_length=1, max_length=256, description="The name of the object.")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     hb_count: Annotated[int, Field(alias="HbCount")] = 0
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    status: CompCtrlrOperState = Field(default=CompCtrlrOperState.UNKNOWN, alias="operSt")
+    status: CompCtrlrOperState = Field(
+        default=CompCtrlrOperState.UNKNOWN,
+        alias="operSt",
+        description="The runtime state of the object or policy.",
+    )
     remote_err_msg: Annotated[str, Field(max_length=512, alias="remoteErrMsg")] = ""
-    remote_oper_issues: str = Field(default="", alias="remoteOperIssues")
+    remote_oper_issues: str = Field(
+        default="",
+        alias="remoteOperIssues",
+        description="The remote operational issues on this object not initiated by APIC.",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

@@ -16,6 +16,8 @@ from niwaki.models.base import ManagedObject
 class aaaUser(ManagedObject):
     """ACI Managed Object: ``aaaUser`` — Local User.
 
+    A locally-authenticated user account.
+
     RN format: ``user-{name}``
     """
 
@@ -45,22 +47,68 @@ class aaaUser(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: str
+    name: Annotated[str, Field(description="The name of the locally-authenticated user.")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    account_status: AaaAccountStatus = Field(default=AaaAccountStatus.ACTIVE, alias="accountStatus")
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    account_status: AaaAccountStatus = Field(
+        default=AaaAccountStatus.ACTIVE,
+        alias="accountStatus",
+        description="The status of the locally-authenticated user account.",
+    )
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     user_cert_attribute: Annotated[str, Field(max_length=128, alias="certAttribute")] = ""
-    clear_password_history: AaaClear = Field(default=AaaClear.NO, alias="clearPwdHistory")
+    clear_password_history: AaaClear = Field(
+        default=AaaClear.NO,
+        alias="clearPwdHistory",
+        description="Allows the administrator to clear the password history of a locally-authenticated user.",
+    )
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies a description of the policy definition.",
+        ),
     ] = ""
-    email_address: str = Field(default="", alias="email")
-    account_expiration_date: str = Field(default="", alias="expiration")
-    expiration_set_status: AaaBoolean = Field(default=AaaBoolean.NO, alias="expires")
-    first_name: Annotated[str, Field(max_length=32, alias="firstName")] = ""
-    last_name: Annotated[str, Field(max_length=32, alias="lastName")] = ""
+    email_address: str = Field(
+        default="",
+        alias="email",
+        description="The email address of the locally-authenticated user.",
+    )
+    account_expiration_date: str = Field(
+        default="",
+        alias="expiration",
+        description="The expiration date of the locally-authenticated user account. The expires property must be enabled to activate an expiration date.",
+    )
+    expiration_set_status: AaaBoolean = Field(
+        default=AaaBoolean.NO,
+        alias="expires",
+        description="A property to enable an expiration date for the locally-authenticated user account.",
+    )
+    first_name: Annotated[
+        str,
+        Field(
+            max_length=32,
+            alias="firstName",
+            description="The first name of the locally-authenticated user.",
+        ),
+    ] = ""
+    last_name: Annotated[
+        str,
+        Field(
+            max_length=32,
+            alias="lastName",
+            description="The last name of the locally-authenticated user.",
+        ),
+    ] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
@@ -69,21 +117,57 @@ class aaaUser(ManagedObject):
     owner_key: Annotated[
         str,
         Field(
-            max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerKey"
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerKey",
+            description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
     owner_tag: Annotated[
         str,
-        Field(max_length=64, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerTag"),
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerTag",
+            description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+        ),
     ] = ""
-    phone_number: Annotated[str, Field(max_length=16, alias="phone")] = ""
-    password: Annotated[str, Field(alias="pwd", repr=False)] = ""
-    password_life_time: str = Field(default="", alias="pwdLifeTime")
-    password_update_required: AaaBoolean = Field(default=AaaBoolean.NO, alias="pwdUpdateRequired")
+    phone_number: Annotated[
+        str,
+        Field(
+            max_length=16,
+            alias="phone",
+            description="The phone number of the locally-authenticated user.",
+        ),
+    ] = ""
+    password: Annotated[
+        str, Field(alias="pwd", repr=False, description="The system user password.")
+    ] = ""
+    password_life_time: str = Field(
+        default="",
+        alias="pwdLifeTime",
+        description="The lifetime of the locally-authenticated user password.",
+    )
+    password_update_required: AaaBoolean = Field(
+        default=AaaBoolean.NO,
+        alias="pwdUpdateRequired",
+        description="A boolean value indicating whether this account needs password update",
+    )
     domain_read_write_rules_for_user: Annotated[
         str, Field(max_length=1024, pattern="^.*$", alias="rbacString")
     ] = ""
     restricted_rbac_user: AaaBoolean = Field(default=AaaBoolean.NO, alias="restrictedRbacUser")
-    role_summary: Annotated[str, Field(max_length=512, alias="roleSummary")] = ""
-    unix_user_id: str = Field(default="", alias="unixUserId")
+    role_summary: Annotated[
+        str,
+        Field(
+            max_length=512,
+            alias="roleSummary",
+            description="current set of roles (keep explicit for audit log by PD and PM)",
+        ),
+    ] = ""
+    unix_user_id: str = Field(
+        default="",
+        alias="unixUserId",
+        description="The UNIX identifier of the locally-authenticated user.",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

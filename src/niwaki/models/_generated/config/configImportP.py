@@ -15,6 +15,8 @@ from niwaki.models.base import ManagedObject
 class configImportP(ManagedObject):
     """ACI Managed Object: ``configImportP`` — Configuration Import Policy.
 
+    A configuration import policy specifies how to import a fabric configuration file.
+
     RN format: ``configimp-{name}``
     """
 
@@ -40,20 +42,54 @@ class configImportP(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the import policy. For ease of reference, include details such as: the full or partial name of the file to be imported, the type/mode of import, and the remote location where the file is stored. The name cannot be changed after the policy has been created.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    administrative_state: TrigExecState = Field(default=TrigExecState.UNTRIGGERED, alias="adminSt")
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    administrative_state: TrigExecState = Field(
+        default=TrigExecState.UNTRIGGERED,
+        alias="adminSt",
+        description="The administrative state of the executable policies.",
+    )
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
     fail_on_decrypt_errors: bool = Field(default=True, alias="failOnDecryptErrors")
-    file_to_import: str = Field(default="", alias="fileName")
-    import_mode: ConfigImportMode = Field(default=ConfigImportMode.ATOMIC, alias="importMode")
+    file_to_import: str = Field(
+        default="",
+        alias="fileName",
+        description="The name of the file to be imported from the remote location listed below.",
+    )
+    import_mode: ConfigImportMode = Field(
+        default=ConfigImportMode.ATOMIC,
+        alias="importMode",
+        description="The import mode. The configuration data is imported per shard with each shard holding certain part of the system configuration objects.",
+    )
     import_action_type: ConfigImportAction = Field(
-        default=ConfigImportAction.MERGE, alias="importType"
+        default=ConfigImportAction.MERGE,
+        alias="importType",
+        description="The import type specifies whether the existing fabric configuration will be merged or replaced with the backup configuration being imported.",
     )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")

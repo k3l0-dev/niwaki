@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class BgpTrustCtrlT(StrEnum):
     TRUSTED = "trusted"
+    """trusted"""
     UNTRUSTED = "untrusted"
+    """untrusted"""
 
     @classmethod
     def _missing_(cls, value: object) -> BgpTrustCtrlT | None:

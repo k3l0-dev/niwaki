@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class aaaLdapEp(ManagedObject):
     """ACI Managed Object: ``aaaLdapEp`` — Default LDAP Authentication Settings.
 
+    The global security management properties for LDAP endpoints and LDAP provider groups.
+
     RN format: ``ldapext``
     """
 
@@ -38,30 +40,93 @@ class aaaLdapEp(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Create-only (ignored by APIC on modification) ─────────────────────────
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    name: Annotated[
+        str,
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the AAA definition object.",
+        ),
+    ] = ""
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    ldap_attribute: Annotated[str, Field(max_length=63, alias="attribute")] = ""
-    ldap_base_dn: Annotated[str, Field(max_length=512, alias="basedn")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    ldap_attribute: Annotated[
+        str,
+        Field(
+            max_length=63,
+            alias="attribute",
+            description="An LDAP endpoint attribute to be used as the CiscoAVPair.",
+        ),
+    ] = ""
+    ldap_base_dn: Annotated[
+        str,
+        Field(
+            max_length=512,
+            alias="basedn",
+            description="The LDAP base DN for user lookup in the LDAP directory tree.",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies a description of the policy definition.",
+        ),
     ] = ""
-    ldap_filter: Annotated[str, Field(max_length=63, alias="filter")] = ""
+    ldap_filter: Annotated[
+        str,
+        Field(
+            max_length=63,
+            alias="filter",
+            description="An LDAP search filter for the LDAP endpoint.",
+        ),
+    ] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
     owner_key: Annotated[
         str,
         Field(
-            max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerKey"
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerKey",
+            description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
     owner_tag: Annotated[
         str,
-        Field(max_length=64, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerTag"),
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerTag",
+            description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+        ),
     ] = ""
-    retries: Annotated[int, Field(ge=0, le=5)] = 1
-    timeout_in_seconds: Annotated[int, Field(ge=1, le=60, alias="timeout")] = 30
+    retries: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=5,
+            description="The number of attempts that the authentication method is tried.",
+        ),
+    ] = 1
+    timeout_in_seconds: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=60,
+            alias="timeout",
+            description="The endpoint timeout when contacting an LDAP endpoint.",
+        ),
+    ] = 30
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

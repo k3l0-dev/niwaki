@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class extdevDevType(ManagedObject):
     """ACI Managed Object: ``extdevDevType`` — Container for External Device Types and Info.
 
+    Container for External Device Type/Info
+
     RN format: ``devt-{vendor}-{model}``
     """
 
@@ -38,9 +40,22 @@ class extdevDevType(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     model: Annotated[str, Field(min_length=1, max_length=512, alias="productName")]
-    vendor: Annotated[str, Field(min_length=1, max_length=512)]
+    vendor: Annotated[
+        str, Field(min_length=1, max_length=512, description="The vendor of the controller.")
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    device_type: EdmDeviceType = Field(default=EdmDeviceType.APP_BASED, alias="deviceType")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    device_type: EdmDeviceType = Field(
+        default=EdmDeviceType.APP_BASED,
+        alias="deviceType",
+        description="Used to fault a Dev Manager in case intended type doesn't match polled type",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

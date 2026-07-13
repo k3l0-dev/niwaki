@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class snmpSrc(ManagedObject):
     """ACI Managed Object: ``snmpSrc`` — SNMP Source.
 
+    The SNMP source profile determines the fault information, severity level, and destination for sending messages to the SNMP destination. SNMP is an application-layer protocol that provides a message format for communication between SNMP managers and agents.
+
     RN format: ``snmpsrc-{name}``
     """
 
@@ -38,16 +40,42 @@ class snmpSrc(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name for the SNMP source. This name can be between 1 and 64 alphanumeric characters.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
-    include_action: str = Field(default="", alias="incl")
-    min_severity: ConditionSeverity = Field(default=ConditionSeverity.INFO, alias="minSev")
+    include_action: str = Field(
+        default="", alias="incl", description="The options to include for the SNMP source."
+    )
+    min_severity: ConditionSeverity = Field(
+        default=ConditionSeverity.INFO,
+        alias="minSev",
+        description="The minimum severity level of SNMP traps. SNMP traps enable an agent to notify the management station of significant events by way of an unsolicited SNMP message.",
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

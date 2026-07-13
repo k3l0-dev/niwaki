@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class l3extRsDampeningPol(ManagedObject):
     """ACI Managed Object: ``l3extRsDampeningPol`` — L3 Out Dampening Policy.
 
+    Relationship to per L3 Out Dampening Policy
+
     RN format: ``rsdampeningPol-[{name}]-{af}``
     """
 
@@ -41,10 +43,21 @@ class l3extRsDampeningPol(ManagedObject):
     name: Annotated[
         str,
         Field(
-            min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="tnRtctrlProfileName"
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            alias="tnRtctrlProfileName",
+            description="The name of the route profile associated with this object.",
         ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

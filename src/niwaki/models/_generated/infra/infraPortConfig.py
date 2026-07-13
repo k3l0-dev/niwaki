@@ -39,18 +39,33 @@ class infraPortConfig(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     card: str
-    node: str
-    port: str
+    node: Annotated[str, Field(description="explicit properties")]
+    port: Annotated[str, Field(description="The service port number for the LDAP service.")]
     sub_port: Annotated[str, Field(alias="subPort")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    configuration_action: FabricPCAction = Field(default=FabricPCAction.CONFIGURE, alias="action")
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    configuration_action: FabricPCAction = Field(
+        default=FabricPCAction.CONFIGURE,
+        alias="action",
+        description="The action required when the condition is met.",
+    )
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     associated_group_dn: str = Field(default="", alias="assocGrp")
     breakout_map: EqptBrkoutMap = Field(default=EqptBrkoutMap.NONE, alias="brkoutMap")
     connected_fex_id: str = Field(default="", alias="connectedFex")
-    description: Annotated[str, Field(max_length=512)] = ""
+    description: Annotated[
+        str, Field(max_length=512, description="The description of this configuration item.")
+    ] = ""
     port_channel_member: Annotated[str, Field(max_length=512, alias="pcMember")] = ""
-    port_role: FabricportRole = Field(default=FabricportRole.LEAF, alias="role")
+    port_role: FabricportRole = Field(
+        default=FabricportRole.LEAF, alias="role", description="The system role type."
+    )
     port_shutdown: bool = Field(default=False, alias="shutdown")
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

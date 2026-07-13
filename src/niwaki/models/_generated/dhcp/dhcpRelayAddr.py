@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class dhcpRelayAddr(ManagedObject):
     """ACI Managed Object: ``dhcpRelayAddr`` — Relay Address.
 
+    The DHCP relay address.
+
     RN format: ``addr-[{vrf}]-[{address}]``
     """
 
@@ -38,9 +40,23 @@ class dhcpRelayAddr(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    address: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$")]
-    vrf: Annotated[str, Field(min_length=1, max_length=512)]
+    address: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", description="null")]
+    vrf: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=512,
+            description="vrf in which the dhcp server is present. Valid only when the client is in a different vrf from the server vrf",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

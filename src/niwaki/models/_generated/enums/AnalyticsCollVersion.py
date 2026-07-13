@@ -7,8 +7,11 @@ from enum import StrEnum
 
 class AnalyticsCollVersion(StrEnum):
     CISCO_V1 = "cisco-v1"
+    """Cisco proprietary version 1"""
     V5 = "v5"
+    """Version 5"""
     V9 = "v9"
+    """Version 9"""
 
     @classmethod
     def _missing_(cls, value: object) -> AnalyticsCollVersion | None:

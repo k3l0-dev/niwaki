@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class coppFilter(ManagedObject):
     """ACI Managed Object: ``coppFilter`` — Filter entry.
 
+    Filter
+
     RN format: ``filter-{filter_action}-prio-{filter_priority}-proto-{ip_protocol}-src-[{source_address}]-dst-[{destination_address}]-srcFromP-{source_port_from}-srcToP-{source_port_to}-dstFromP-{destination_port_from}-dstToP-{destination_port_to}``
     """
 
@@ -47,16 +49,35 @@ class coppFilter(ManagedObject):
     _has_stats: ClassVar[bool] = True
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    filter_action: Annotated[str, Field(alias="action")]
-    destination_address: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="dstAddr")]
-    destination_port_from: Annotated[str, Field(alias="dstPortFrom")]
-    destination_port_to: Annotated[str, Field(alias="dstPortTo")]
-    ip_protocol: Annotated[str, Field(alias="ipProto")]
-    filter_priority: Annotated[str, Field(alias="prio")]
-    source_address: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="srcAddr")]
-    source_port_from: Annotated[str, Field(alias="srcPortFrom")]
-    source_port_to: Annotated[str, Field(alias="srcPortTo")]
+    filter_action: Annotated[str, Field(alias="action", description="Action")]
+    destination_address: Annotated[
+        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="dstAddr", description="Destination IP")
+    ]
+    destination_port_from: Annotated[
+        str, Field(alias="dstPortFrom", description="Destination Port From")
+    ]
+    destination_port_to: Annotated[str, Field(alias="dstPortTo", description="Destination Port To")]
+    ip_protocol: Annotated[str, Field(alias="ipProto", description="IpProtocol")]
+    filter_priority: Annotated[
+        str,
+        Field(
+            alias="prio",
+            description="filter priority in TCAM. For a whitelist policy, this takes the highest priority implicitly",
+        ),
+    ]
+    source_address: Annotated[
+        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="srcAddr", description="Source IP")
+    ]
+    source_port_from: Annotated[str, Field(alias="srcPortFrom", description="Source Port From")]
+    source_port_to: Annotated[str, Field(alias="srcPortTo", description="Source Port To")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

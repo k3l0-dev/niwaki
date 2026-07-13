@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class eqptdiagpRsLpOdDiag(ManagedObject):
     """ACI Managed Object: ``eqptdiagpRsLpOdDiag`` — Relation to Leaf Port for On-Demand Diag Policy.
 
+    The host facing access ports.
+
     RN format: ``rslpOdDiag-[{target_dn}]``
     """
 
@@ -36,8 +38,15 @@ class eqptdiagpRsLpOdDiag(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    target_dn: Annotated[str, Field(alias="tDn")]
+    target_dn: Annotated[str, Field(alias="tDn", description="The target port.")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

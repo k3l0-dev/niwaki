@@ -16,6 +16,8 @@ from niwaki.models.base import ManagedObject
 class mgmtInB(ManagedObject):
     """ACI Managed Object: ``mgmtInB`` — In-Band Management EPg.
 
+    The in-band management endpoint group consists of switches (leaves/spines) and APICs. Each node in the group is assigned an IP address that is dynamically allocated from the address pool associated with the corresponding in-band management zone.
+
     RN format: ``inb-{name}``
     """
 
@@ -71,21 +73,57 @@ class mgmtInB(ManagedObject):
     _has_stats: ClassVar[bool] = True
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The in-band management endpoint group name. This name can be up to 64 alphanumeric characters.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
-    encap: str = ""
+    encap: Annotated[str, Field(description="The in-band access encapsulation.")] = ""
     contract_exception_tag: Annotated[str, Field(max_length=512, alias="exceptionTag")] = ""
-    flood_on_encap: FvFloodOnEncap = Field(default=FvFloodOnEncap.DISABLED, alias="floodOnEncap")
-    provider_label_match_criteria: VzMatchT = Field(default=VzMatchT.ATLEASTONE, alias="matchT")
+    flood_on_encap: FvFloodOnEncap = Field(
+        default=FvFloodOnEncap.DISABLED,
+        alias="floodOnEncap",
+        description="Control at EPG level if the traffic L2 Multicast/Broadcast and Link Local Layer should be flooded only on ENCAP or based on bridg-domain settings",
+    )
+    provider_label_match_criteria: VzMatchT = Field(
+        default=VzMatchT.ATLEASTONE,
+        alias="matchT",
+        description="The provider label match criteria.",
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    preferred_group_member: FvPrefGrMemb = Field(default=FvPrefGrMemb.EXCLUDE, alias="prefGrMemb")
-    qos_class: QosTenantPrio = Field(default=QosTenantPrio.UNSPECIFIED, alias="prio")
+    preferred_group_member: FvPrefGrMemb = Field(
+        default=FvPrefGrMemb.EXCLUDE,
+        alias="prefGrMemb",
+        description="Represents parameter used to determine if EPg is part of a group that does not a contract for communication",
+    )
+    qos_class: QosTenantPrio = Field(
+        default=QosTenantPrio.UNSPECIFIED,
+        alias="prio",
+        description="The QoS priority class identifier.",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

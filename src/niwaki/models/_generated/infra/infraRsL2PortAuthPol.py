@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class infraRsL2PortAuthPol(ManagedObject):
     """ACI Managed Object: ``infraRsL2PortAuthPol`` — Interface Authentication (802.1x) policy.
 
+    Relation to l2PortAuthPol
+
     RN format: ``rsl2PortAuthPol``
     """
 
@@ -37,7 +39,14 @@ class infraRsL2PortAuthPol(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     name: Annotated[
         str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="tnL2PortAuthPolName")
     ] = ""

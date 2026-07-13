@@ -39,34 +39,74 @@ class ptpInstPol(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the object.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies a description of the policy definition.",
+        ),
     ] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    ptp_node_level_domain: str = Field(default="", alias="nodeDomain")
-    ptp_node_level_priority1: str = Field(default="", alias="nodePrio1")
-    ptp_node_level_priority2: str = Field(default="", alias="nodePrio2")
+    ptp_node_level_domain: str = Field(
+        default="",
+        alias="nodeDomain",
+        description="PTP Node level domain number (configured in profile)",
+    )
+    ptp_node_level_priority1: str = Field(
+        default="", alias="nodePrio1", description="PTP Node level priority1 value"
+    )
+    ptp_node_level_priority2: str = Field(
+        default="", alias="nodePrio2", description="PTP Node level priority2 value"
+    )
     node_level_ptp_profile: PtpNodeProfTemplate = Field(
-        default=PtpNodeProfTemplate.TELECOM_FULL_PATH, alias="nodeProfile"
+        default=PtpNodeProfTemplate.TELECOM_FULL_PATH,
+        alias="nodeProfile",
+        description="Node-level PTP profile Template",
     )
     ptp_operating_mode: PtpPtpOperatingMode = Field(
-        default=PtpPtpOperatingMode.HYBRID, alias="operatingMode"
+        default=PtpPtpOperatingMode.HYBRID,
+        alias="operatingMode",
+        description="Operating Mode (Hybrid or non-hybrid)",
     )
     owner_key: Annotated[
         str,
         Field(
-            max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerKey"
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerKey",
+            description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
     owner_tag: Annotated[
         str,
-        Field(max_length=64, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerTag"),
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerTag",
+            description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

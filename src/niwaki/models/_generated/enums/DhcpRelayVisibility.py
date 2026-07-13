@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class DhcpRelayVisibility(StrEnum):
     NOT_VISIBLE = "not-visible"
+    """The dhcp provider may or may not be sitting in a diffenet private network but the ip address of the provider will not get leaked into the consumers private network"""
     VISIBLE = "visible"
+    """The dhcp provider is sitting in a diffenet private network. The ip address of the provider will get leaked into the consumers private network"""
 
     @classmethod
     def _missing_(cls, value: object) -> DhcpRelayVisibility | None:

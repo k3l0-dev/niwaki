@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class QospCtrlMeth(StrEnum):
     DYNAMIC = "dynamic"
+    """Dynamic"""
     STATIC = "static"
+    """Static"""
 
     @classmethod
     def _missing_(cls, value: object) -> QospCtrlMeth | None:

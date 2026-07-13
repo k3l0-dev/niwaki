@@ -7,6 +7,7 @@ from enum import StrEnum
 
 class VzBinaryAction(StrEnum):
     DENY = "deny"
+    """deny"""
     PERMIT = "permit"
 
     @classmethod

@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class apphostingAppResourceCfg(ManagedObject):
     """ACI Managed Object: ``apphostingAppResourceCfg`` — App resource profile table.
 
+    1.1.4 AppResourceCfg [dn] /sys/apphosting/appconf-[appId]/resource
+
     RN format: ``resource``
     """
 
@@ -36,9 +38,30 @@ class apphostingAppResourceCfg(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    admin_st: ApphostingAdminState = Field(default=ApphostingAdminState.ENABLED, alias="adminSt")
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    cpu_unit_allocation_for_this_profile: Annotated[int, Field(alias="cpu")] = 0
-    disk_usg: str = Field(default="", alias="diskUsg")
-    memory_allocation_for_this_profile: str = Field(default="", alias="memory")
+    admin_st: ApphostingAdminState = Field(
+        default=ApphostingAdminState.ENABLED,
+        alias="adminSt",
+        description="The administrative state of the object or policy.",
+    )
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    cpu_unit_allocation_for_this_profile: Annotated[
+        int,
+        Field(
+            alias="cpu",
+            description="unique index to identify the package run optionscustom cpu unit allocation in profile",
+        ),
+    ] = 0
+    disk_usg: str = Field(
+        default="", alias="diskUsg", description="custom persistent disk utilization in profile"
+    )
+    memory_allocation_for_this_profile: str = Field(
+        default="", alias="memory", description="custom memory in profile"
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

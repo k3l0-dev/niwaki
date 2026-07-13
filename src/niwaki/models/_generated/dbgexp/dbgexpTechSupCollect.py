@@ -14,6 +14,8 @@ from niwaki.models.base import ManagedObject
 class dbgexpTechSupCollect(ManagedObject):
     """ACI Managed Object: ``dbgexpTechSupCollect`` — Per Feature Container for Techsupport Data.
 
+    The tech support data collection policy creates an archive containing configuration information, logs and diagnostic data that will help TAC with troubleshooting and resolving a technical issue.
+
     RN format: ``tsc-[{naming_identifier}]``
     """
 
@@ -38,18 +40,38 @@ class dbgexpTechSupCollect(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     naming_identifier: Annotated[
-        str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="ident")
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            alias="ident",
+            description="The summary report name.",
+        ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     file_or_cli_based_collection: DbgexpCollectionType = Field(
-        default=DbgexpCollectionType.FILE, alias="collectionType"
+        default=DbgexpCollectionType.FILE,
+        alias="collectionType",
+        description="The collection type for the core file.",
     )
     device_on_which_to_collect_data: DbgexpLocaleType = Field(
-        default=DbgexpLocaleType.ALL, alias="localeType"
+        default=DbgexpLocaleType.ALL,
+        alias="localeType",
+        description="The location type where the backup file that you want to export is located.",
     )
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
+        ""
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

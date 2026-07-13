@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class dnsDomain(ManagedObject):
     """ACI Managed Object: ``dnsDomain`` — DNS Domain.
 
+    The DNS domain uses a hierarchical scheme for establishing host names for network nodes and allows local control of the segments of the network through a client-server scheme. The DNS system can locate a network device by translating the hostname of the device into its associated IP address.
+
     RN format: ``dom-{name}``
     """
 
@@ -34,15 +36,31 @@ class dnsDomain(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: str
+    name: Annotated[str, Field(description="The domain name.")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
-    default: bool = Field(default=False, alias="isDefault")
+    default: bool = Field(
+        default=False,
+        alias="isDefault",
+        description="Indicate whether this domain is the default domain. Only one domain in the group can be the default.",
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

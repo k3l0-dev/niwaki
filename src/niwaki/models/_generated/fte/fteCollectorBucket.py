@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class fteCollectorBucket(ManagedObject):
     """ACI Managed Object: ``fteCollectorBucket`` — Flow Collector Bucket Entry.
 
+    Collector bucket info
+
     RN format: ``collectorbucket-{flow_collector_bucket_id}``
     """
 
@@ -35,14 +37,44 @@ class fteCollectorBucket(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    flow_collector_bucket_id: Annotated[str, Field(alias="id")]
+    flow_collector_bucket_id: Annotated[
+        str, Field(alias="id", description="Collector bucket identifier")
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="The description of this configuration item.",
+        ),
     ] = ""
-    hash_high_value: Annotated[int, Field(ge=0, le=4294967295, alias="hashHi")] = 0
-    hash_low_value: Annotated[int, Field(ge=0, le=4294967295, alias="hashLo")] = 0
+    hash_high_value: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=4294967295,
+            alias="hashHi",
+            description="HashHi value for this collector bucket",
+        ),
+    ] = 0
+    hash_low_value: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=4294967295,
+            alias="hashLo",
+            description="HashLo value for this collector bucket",
+        ),
+    ] = 0
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class ospfIfP(ManagedObject):
     """ACI Managed Object: ``ospfIfP`` — Interface Profile.
 
+    The OSPF interface profile enables OSPF on the interface. Optionally, the OSPF interface profile can have a relation to an OSPF interface policy for more granular control over interface proprieties.
+
     RN format: ``ospfIfP``
     """
 
@@ -42,15 +44,35 @@ class ospfIfP(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    authentication_key: Annotated[str, Field(alias="authKey", repr=False)] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    authentication_key: Annotated[
+        str, Field(alias="authKey", repr=False, description="The OSPF authentication key")
+    ] = ""
     authentication_key_id: str = Field(default="", alias="authKeyId")
-    authentication_type: OspfAuthT = Field(default=OspfAuthT.NONE, alias="authType")
+    authentication_type: OspfAuthT = Field(
+        default=OspfAuthT.NONE,
+        alias="authType",
+        description="The OSPF authentication type. The type options are; default, md5, none, and simple.",
+    )
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
+        ""
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

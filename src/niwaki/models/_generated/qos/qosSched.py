@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class qosSched(ManagedObject):
     """ACI Managed Object: ``qosSched`` — Schedule Policy.
 
+    The information about the scheduling parameter of the class. This object has the scheduling method and bandwidth parameter and is applied at system level.
+
     RN format: ``sched``
     """
 
@@ -38,14 +40,28 @@ class qosSched(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    bw: str = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    bw: Annotated[str, Field(description="If wrr, what is the bandwidth allocated (in %)")] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
-    meth: QospSchedAlgo = QospSchedAlgo.WRR
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    meth: QospSchedAlgo = Field(default=QospSchedAlgo.WRR, description="Scheduling algorithm")
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
+        ""
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

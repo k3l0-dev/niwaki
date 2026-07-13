@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class aaaBlockLoginProfile(ManagedObject):
     """ACI Managed Object: ``aaaBlockLoginProfile`` — Block User Logins Policy.
 
+    This MO stores config for blocking users that fail login continuously
+
     RN format: ``blockloginp``
     """
 
@@ -36,29 +38,68 @@ class aaaBlockLoginProfile(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Create-only (ignored by APIC on modification) ─────────────────────────
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    name: Annotated[
+        str,
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the AAA definition object.",
+        ),
+    ] = ""
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    block_duration: str = Field(default="", alias="blockDuration")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    block_duration: str = Field(
+        default="",
+        alias="blockDuration",
+        description="Duration in minutes for which future logins should be blocked",
+    )
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies a description of the policy definition.",
+        ),
     ] = ""
     enable_login_block: AaaBoolState = Field(default=AaaBoolState.DISABLE, alias="enableLoginBlock")
-    max_failed_attempts: str = Field(default="", alias="maxFailedAttempts")
-    max_failed_attempts_window: str = Field(default="", alias="maxFailedAttemptsWindow")
+    max_failed_attempts: str = Field(
+        default="",
+        alias="maxFailedAttempts",
+        description="max failed login attempts before blocking user login",
+    )
+    max_failed_attempts_window: str = Field(
+        default="",
+        alias="maxFailedAttemptsWindow",
+        description="times in minutes for max login failures to occur before blocking the user",
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
     owner_key: Annotated[
         str,
         Field(
-            max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerKey"
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerKey",
+            description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
     owner_tag: Annotated[
         str,
-        Field(max_length=64, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerTag"),
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerTag",
+            description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class fabricRsCtrlrPGrp(ManagedObject):
     """ACI Managed Object: ``fabricRsCtrlrPGrp`` — Controller Policy Group.
 
+    A source relation to policy group providing policies for appliance nodes in the pod.
+
     RN format: ``rsctrlrPGrp``
     """
 
@@ -35,6 +37,17 @@ class fabricRsCtrlrPGrp(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    target_dn: str = Field(default="", alias="tDn")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    target_dn: str = Field(
+        default="",
+        alias="tDn",
+        description="The distinguished name of the endpoint acting as the controller profile group. The maximum supported string length is 255 ASCII characters.",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

@@ -7,17 +7,29 @@ from enum import StrEnum
 
 class L1Speed(StrEnum):
     _100G = "100G"
+    """Speed is 100 Gbps"""
     _100M = "100M"
+    """Speed is 100 Mbps"""
     _10G = "10G"
+    """Speed is 10 Gbps"""
     _1G = "1G"
+    """Speed is 1 Gbps"""
     _200G = "200G"
+    """Speed is 200 Gbps"""
     _25G = "25G"
+    """Speed is 25 Gbps"""
     _400G = "400G"
+    """Speed is 400 Gbps"""
     _40G = "40G"
+    """Speed is 40 Gbps"""
     _50G = "50G"
+    """Speed is 50 Gbps"""
     AUTO = "auto"
+    """Speed is auto"""
     INHERIT = "inherit"
+    """Speed is Inherited"""
     UNKNOWN = "unknown"
+    """Speed is unknown"""
 
     @classmethod
     def _missing_(cls, value: object) -> L1Speed | None:

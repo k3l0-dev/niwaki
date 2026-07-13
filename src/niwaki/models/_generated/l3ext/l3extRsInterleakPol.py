@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class l3extRsInterleakPol(ManagedObject):
     """ACI Managed Object: ``l3extRsInterleakPol`` — Context Interleak Policy.
 
+    Relationship to per L3 Out Context Interleak Policy
+
     RN format: ``rsinterleakPol``
     """
 
@@ -35,8 +37,21 @@ class l3extRsInterleakPol(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     name: Annotated[
-        str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="tnRtctrlProfileName")
+        str,
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            alias="tnRtctrlProfileName",
+            description="The name of the route profile associated with this object.",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

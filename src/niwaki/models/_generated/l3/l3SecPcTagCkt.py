@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class l3SecPcTagCkt(ManagedObject):
     """ACI Managed Object: ``l3SecPcTagCkt`` — Secure pcTag Circuit Endpoint.
 
+    Secure pcTag Circuit Endpoint
+
     RN format: ``secpctagckt-{policy_control_tag}``
     """
 
@@ -34,15 +36,32 @@ class l3SecPcTagCkt(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    policy_control_tag: Annotated[int, Field(alias="pcTag")] = 0
+    policy_control_tag: Annotated[
+        int,
+        Field(alias="pcTag", description="It represents the classId of the Secure sclass endpoint"),
+    ] = 0
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies a control instrumentation description.",
+        ),
     ] = ""
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
+        ""
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

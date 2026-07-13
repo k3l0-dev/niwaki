@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class dhcpEp(ManagedObject):
     """ACI Managed Object: ``dhcpEp``.
 
+    The DHCP Discovered Endpoint.
+
     RN format: ``dhcpopt-{name}``
     """
 
@@ -36,11 +38,21 @@ class dhcpEp(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64)]
+    name: Annotated[str, Field(min_length=1, max_length=64, description="OPTION NAME")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    ack: bool = False
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    ack: bool = Field(
+        default=False,
+        description="Indicates the acknowledgement status of this Ep. If an is acknowledged, it is immediately deleted. If a fault is not acknowledged and cleared, it is deleted after the retention interval.",
+    )
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

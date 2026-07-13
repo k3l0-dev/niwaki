@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class eqptdiagpRsExtChCardOdDiag(ManagedObject):
     """ACI Managed Object: ``eqptdiagpRsExtChCardOdDiag`` — Relation to Extended Chassis Module.
 
+    A source relation to the extended chassis. An extended chassis is an extension of the fabric. Note that this relation is an internal object.
+
     RN format: ``rsextChCardOdDiag-[{target_dn}]``
     """
 
@@ -36,8 +38,15 @@ class eqptdiagpRsExtChCardOdDiag(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    target_dn: Annotated[str, Field(alias="tDn")]
+    target_dn: Annotated[str, Field(alias="tDn", description="The target FEX module.")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

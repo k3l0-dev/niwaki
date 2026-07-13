@@ -39,22 +39,57 @@ class aaaOauthProvider(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the object.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     authorization_endpoint_url_of_the_idp: Annotated[
         str, Field(min_length=1, max_length=1000, alias="authzEndpoint")
     ] = ""
     issuer_url: Annotated[str, Field(max_length=512, alias="baseUrl")] = ""
-    client_id: Annotated[str, Field(min_length=1, max_length=500, alias="clientId")] = ""
+    client_id: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=500,
+            alias="clientId",
+            description="The client ID (option code 61).",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies a description of the policy definition.",
+        ),
     ] = ""
     gui_redirect_banner_message: str = Field(default="", alias="guiBannerMessage")
     jwks_endpoint_url_of_the_idp: Annotated[str, Field(max_length=512, alias="jwksEndpoint")] = ""
-    client_secret: Annotated[str, Field(alias="key", repr=False)] = ""
+    client_secret: Annotated[
+        str,
+        Field(
+            alias="key",
+            repr=False,
+            description="The key or password used to uniquely identify this configuration object.",
+        ),
+    ] = ""
     periodic_server_monitoring_password: Annotated[
         str, Field(alias="monitoringPassword", repr=False)
     ] = ""
@@ -66,15 +101,34 @@ class aaaOauthProvider(ManagedObject):
     owner_key: Annotated[
         str,
         Field(
-            max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerKey"
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerKey",
+            description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
     owner_tag: Annotated[
         str,
-        Field(max_length=64, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerTag"),
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerTag",
+            description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+        ),
     ] = ""
-    scope: Annotated[str, Field(min_length=1, max_length=500)] = ""
-    timeout_in_seconds: Annotated[int, Field(ge=5, le=30, alias="timeout")] = 5
+    scope: Annotated[
+        str,
+        Field(min_length=1, max_length=500, description="The domain applicable to the capability."),
+    ] = ""
+    timeout_in_seconds: Annotated[
+        int,
+        Field(
+            ge=5,
+            le=30,
+            alias="timeout",
+            description="The following two properties are also defined in Ep MO. Here they reperesent per server configuration which would take precedence over global configuration defined in Ep MO",
+        ),
+    ] = 5
     token_endpoint_url_of_the_idp: Annotated[
         str, Field(min_length=1, max_length=1000, alias="tokenEndpoint")
     ] = ""

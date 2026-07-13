@@ -41,24 +41,58 @@ class ptpProfile(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     ptp_user_profile_name: Annotated[
-        str, Field(min_length=1, max_length=16, pattern="^[a-zA-Z0-9_.:-]+$", alias="name")
+        str,
+        Field(
+            min_length=1,
+            max_length=16,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            alias="name",
+            description="PTP user profile name",
+        ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    announce_interval_for_ptp_profile: str = Field(default="", alias="announceIntvl")
-    announce_timeout_for_ptp_profile: str = Field(default="", alias="announceTimeout")
-    delay_request_interval_for_ptp_profile: str = Field(default="", alias="delayIntvl")
-    local_priority: str = Field(default="", alias="localPriority")
-    flag_to_over_ride_node_level_config: bool = Field(default=False, alias="nodeProfileOverride")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    announce_interval_for_ptp_profile: str = Field(
+        default="", alias="announceIntvl", description="Announce Interval"
+    )
+    announce_timeout_for_ptp_profile: str = Field(
+        default="", alias="announceTimeout", description="Announce timeout"
+    )
+    delay_request_interval_for_ptp_profile: str = Field(
+        default="", alias="delayIntvl", description="Minimum Delay Request Interval"
+    )
+    local_priority: str = Field(
+        default="",
+        alias="localPriority",
+        description="Telecom profile related propertiesLocal Priority or PTP Cost",
+    )
+    flag_to_over_ride_node_level_config: bool = Field(
+        default=False,
+        alias="nodeProfileOverride",
+        description="Override Node-level configurationProfile Applicable when Node Telecom Profile is configured",
+    )
     ptp_profile_template: PtpProfileTemplate = Field(
-        default=PtpProfileTemplate.AES67, alias="profileTemplate"
+        default=PtpProfileTemplate.AES67, alias="profileTemplate", description="PTP template"
     )
     ptpoe_dst_mac_rx_no_match: PtpPtpoeDstMacRxNoMatch = Field(
-        default=PtpPtpoeDstMacRxNoMatch.REPLYWITHCFGMAC, alias="ptpoeDstMacRxNoMatch"
+        default=PtpPtpoeDstMacRxNoMatch.REPLYWITHCFGMAC,
+        alias="ptpoeDstMacRxNoMatch",
+        description="PTPoE - Handling of RX packets with non-matching Mac type",
     )
     ptpoe_dst_mac_type: PtpPtpoeDstMacType = Field(
-        default=PtpPtpoeDstMacType.FORWARDABLE, alias="ptpoeDstMacType"
+        default=PtpPtpoeDstMacType.FORWARDABLE,
+        alias="ptpoeDstMacType",
+        description="PTPoE destination mac type",
     )
-    sync_interval_for_ptp_profile: str = Field(default="", alias="syncIntvl")
+    sync_interval_for_ptp_profile: str = Field(
+        default="", alias="syncIntvl", description="Sync Interval"
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

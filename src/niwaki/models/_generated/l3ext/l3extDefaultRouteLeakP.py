@@ -16,6 +16,8 @@ from niwaki.models.base import ManagedObject
 class l3extDefaultRouteLeakP(ManagedObject):
     """ACI Managed Object: ``l3extDefaultRouteLeakP`` — Default Route Leak Policy.
 
+    The default route leak policy.
+
     RN format: ``defrtleak``
     """
 
@@ -41,10 +43,25 @@ class l3extDefaultRouteLeakP(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    always_advertise_default_leak: L3extAlways = Field(default=L3extAlways.NO, alias="always")
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    default_leak_advertise_criteria: L3extDefaultRtLeakCriteriaType = Field(
-        default=L3extDefaultRtLeakCriteriaType.ONLY, alias="criteria"
+    always_advertise_default_leak: L3extAlways = Field(
+        default=L3extAlways.NO,
+        alias="always",
+        description="A property to indicate whether or not to always advertise the default route leak (OSPF specific).",
     )
-    scope_of_default_route_leak_policy: str = Field(default="", alias="scope")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    default_leak_advertise_criteria: L3extDefaultRtLeakCriteriaType = Field(
+        default=L3extDefaultRtLeakCriteriaType.ONLY,
+        alias="criteria",
+        description="A property that specifies an exact or subset matching of communities.",
+    )
+    scope_of_default_route_leak_policy: str = Field(
+        default="", alias="scope", description="The domain applicable to the capability."
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

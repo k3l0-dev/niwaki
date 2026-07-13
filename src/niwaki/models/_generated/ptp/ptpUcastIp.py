@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class ptpUcastIp(ManagedObject):
     """ACI Managed Object: ``ptpUcastIp`` — Unicast IP address.
 
+    This object holds unicast ip address information
+
     RN format: ``ip-[{ptp_unicast_dst_address}]``
     """
 
@@ -34,8 +36,17 @@ class ptpUcastIp(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    ptp_unicast_dst_address: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="dstIp")]
+    ptp_unicast_dst_address: Annotated[
+        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="dstIp", description="IP address")
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

@@ -15,6 +15,8 @@ from niwaki.models.base import ManagedObject
 class vzOOBBrCP(ManagedObject):
     """ACI Managed Object: ``vzOOBBrCP`` — Out-Of-Band Contract.
 
+    An out-of-band binary contract profile can only be provided by an out-of-band endpoint group and can only be consumed by the external prefix set. A regular endpoint group cannot provide or consume an out-of-band contract profile.
+
     RN format: ``oobbrc-{name}``
     """
 
@@ -41,13 +43,33 @@ class vzOOBBrCP(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of an out-of-band binary contract profile. This name can be up to 64 alphanumeric characters. Note that you cannot change this name after the object has been saved.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies a description of the policy definition.",
+        ),
     ] = ""
     intent: VzIntent = VzIntent.INSTALL
     display_name: Annotated[
@@ -56,14 +78,29 @@ class vzOOBBrCP(ManagedObject):
     owner_key: Annotated[
         str,
         Field(
-            max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerKey"
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerKey",
+            description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
     owner_tag: Annotated[
         str,
-        Field(max_length=64, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerTag"),
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerTag",
+            description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+        ),
     ] = ""
-    qos_class_id: QosTenantPrio = Field(default=QosTenantPrio.UNSPECIFIED, alias="prio")
-    scope: VzScope = VzScope.CONTEXT
-    contract_level_dscp: str = Field(default="", alias="targetDscp")
+    qos_class_id: QosTenantPrio = Field(
+        default=QosTenantPrio.UNSPECIFIED, alias="prio", description="null"
+    )
+    scope: VzScope = Field(
+        default=VzScope.CONTEXT,
+        description="Represents the scope of this contract. If the scope is set as application-profile, the epg can only communicate with epgs in the same application-profile",
+    )
+    contract_level_dscp: str = Field(
+        default="", alias="targetDscp", description="contract level dscp value"
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

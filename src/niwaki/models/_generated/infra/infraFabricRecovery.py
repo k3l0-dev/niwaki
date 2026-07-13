@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class infraFabricRecovery(ManagedObject):
     """ACI Managed Object: ``infraFabricRecovery`` — Fabric Recovery State/Status.
 
+    Trigger fabric recovery
+
     RN format: ``recovery``
     """
 
@@ -35,7 +37,18 @@ class infraFabricRecovery(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     infra_ip_of_apic1: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="apicIp")] = ""
-    fabric_recovery_enabled: bool = Field(default=False, alias="enable")
+    fabric_recovery_enabled: bool = Field(
+        default=False,
+        alias="enable",
+        description="A flag to enable/disable the stats policy for comp objects.",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

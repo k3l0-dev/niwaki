@@ -14,6 +14,8 @@ from niwaki.models.base import ManagedObject
 class vnsFolderInst(ManagedObject):
     """ACI Managed Object: ``vnsFolderInst`` — L4-L7 folder instance.
 
+    A folder instance configured by the administrator.
+
     RN format: ``FI_C-{ctrct_name_or_lbl}-G-{graph_name_or_lbl}-F-{node_name_or_lbl}-N-{name}``
     """
 
@@ -53,25 +55,70 @@ class vnsFolderInst(ManagedObject):
     # ── Naming (required) ──────────────────────────────────────────────────────
     ctrct_name_or_lbl: Annotated[
         str,
-        Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="ctrctNameOrLbl"),
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            alias="ctrctNameOrLbl",
+            description="The folder instance contract name or label.",
+        ),
     ]
     graph_name_or_lbl: Annotated[
         str,
-        Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="graphNameOrLbl"),
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            alias="graphNameOrLbl",
+            description="The folder instance graph name or label.",
+        ),
     ]
-    name: Annotated[str, Field(min_length=1, max_length=128)]
+    name: Annotated[
+        str, Field(min_length=1, max_length=128, description="The folder instance name.")
+    ]
     node_name_or_lbl: Annotated[
-        str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="nodeNameOrLbl")
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            alias="nodeNameOrLbl",
+            description="The folder instance node name or label.",
+        ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    cardinality: VnsVnsCardinalityType = VnsVnsCardinalityType.UNSPECIFIED
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    cardinality: VnsVnsCardinalityType = Field(
+        default=VnsVnsCardinalityType.UNSPECIFIED,
+        description="A value to determine how many instances of this type can be present.",
+    )
     dev_ctx_lbl: Annotated[str, Field(max_length=512, alias="devCtxLbl")] = ""
-    meta_folder_key: Annotated[str, Field(max_length=512, alias="key")] = ""
-    locked: bool = False
+    meta_folder_key: Annotated[
+        str,
+        Field(
+            max_length=512,
+            alias="key",
+            description="The key uniquely identifying this configuration object.",
+        ),
+    ] = ""
+    locked: bool = Field(
+        default=False,
+        description="A property that specifies if a value entered at configuration time can be modified at run time.",
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    scoped_by: VnsItemScope = Field(default=VnsItemScope.EPG, alias="scopedBy")
+    scoped_by: VnsItemScope = Field(
+        default=VnsItemScope.EPG,
+        alias="scopedBy",
+        description="The scope used for resolving this parameter.",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

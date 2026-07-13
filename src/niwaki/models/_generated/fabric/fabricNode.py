@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class fabricNode(ManagedObject):
     """ACI Managed Object: ``fabricNode`` — Fabric Node.
 
+    The root node for the APIC.
+
     RN format: ``node-{id}``
     """
 
@@ -41,11 +43,20 @@ class fabricNode(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    id: int = 0
+    id: Annotated[int, Field(description="The identifier of the node.")] = 0
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    admin_state: FabricAdSt = Field(default=FabricAdSt.ON, alias="adSt")
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    admin_state: FabricAdSt = Field(
+        default=FabricAdSt.ON, alias="adSt", description="The administrative state of the node."
+    )
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

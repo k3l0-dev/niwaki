@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class IpmcJoinType(StrEnum):
     JOIN_GROUP = "join-group"
+    """Join Group : will add route unconditionally to MRIB"""
     STATIC_GROUP = "static-group"
+    """Static Group"""
 
     @classmethod
     def _missing_(cls, value: object) -> IpmcJoinType | None:

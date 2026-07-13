@@ -28,8 +28,24 @@ class tagTag(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    key: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    key: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The key or password used to uniquely identify this configuration object.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    value: Annotated[str, Field(min_length=1, max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    value: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The value of the property.",
+        ),
+    ] = ""

@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class EqptFwUpdSt(StrEnum):
     NOUPDATE = "noupdate"
+    """No Firmware update needed"""
     UPDATE = "update"
+    """Firmware update needed"""
 
     @classmethod
     def _missing_(cls, value: object) -> EqptFwUpdSt | None:

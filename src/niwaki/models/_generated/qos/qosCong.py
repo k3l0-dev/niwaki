@@ -14,6 +14,8 @@ from niwaki.models.base import ManagedObject
 class qosCong(ManagedObject):
     """ACI Managed Object: ``qosCong`` — QOS Congestion Policy.
 
+    The congestion algorithm and ECN information of a class. This is applied at system level
+
     RN format: ``cong``
     """
 
@@ -39,21 +41,51 @@ class qosCong(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    afd_queue_length: str = Field(default="", alias="afdQueueLength")
-    algo: QospCongAlgo = QospCongAlgo.TAIL_DROP
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    afd_queue_length: str = Field(
+        default="", alias="afdQueueLength", description="AFD Desired Queue Length"
+    )
+    algo: QospCongAlgo = Field(
+        default=QospCongAlgo.TAIL_DROP, description="What algorithm to use when congestion happens"
+    )
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
-    ecn: QospECN = QospECN.DISABLED
-    forward_non_ecn: QospECN = Field(default=QospECN.DISABLED, alias="forwardNonEcn")
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    ecn: QospECN = Field(
+        default=QospECN.DISABLED, description="Explicit congestion notification (ecn)"
+    )
+    forward_non_ecn: QospECN = Field(
+        default=QospECN.DISABLED,
+        alias="forwardNonEcn",
+        description="Forward non ecn capable traffic",
+    )
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
+        ""
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    wred_max_threshold: str = Field(default="", alias="wredMaxThreshold")
-    wred_min_threshold: str = Field(default="", alias="wredMinThreshold")
-    wred_probability: str = Field(default="", alias="wredProbability")
-    wred_weight: str = Field(default="", alias="wredWeight")
+    wred_max_threshold: str = Field(
+        default="", alias="wredMaxThreshold", description="WRED Maximum Threshold"
+    )
+    wred_min_threshold: str = Field(
+        default="", alias="wredMinThreshold", description="WRED Minimum Threshold"
+    )
+    wred_probability: str = Field(
+        default="", alias="wredProbability", description="WRED Drop/Mark Probability"
+    )
+    wred_weight: str = Field(default="", alias="wredWeight", description="WRED Weight")

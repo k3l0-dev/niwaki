@@ -14,6 +14,8 @@ from niwaki.models.base import ManagedObject
 class vzSubj(ManagedObject):
     """ACI Managed Object: ``vzSubj`` — Contract Subject.
 
+    A subject is a sub-application running behind an endpoint group (for example, an Exchange server). A subject is parented by the contract, which can encapsulate multiple subjects.
+
     RN format: ``subj-{name}``
     """
 
@@ -48,20 +50,60 @@ class vzSubj(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of a sub application running behind an endpoint group, such as an Exchange server. This name can be up to 64 alphanumeric characters. Note that you cannot change this name after the object has been saved.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    consumer_label_match_type: VzMatchT = Field(default=VzMatchT.ATLEASTONE, alias="consMatchT")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    consumer_label_match_type: VzMatchT = Field(
+        default=VzMatchT.ATLEASTONE,
+        alias="consMatchT",
+        description="The subject match criteria across consumers.",
+    )
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    qos_class_id: QosTenantPrio = Field(default=QosTenantPrio.UNSPECIFIED, alias="prio")
-    provider_label_match_type: VzMatchT = Field(default=VzMatchT.ATLEASTONE, alias="provMatchT")
-    reverse_filter_ports: bool = Field(default=True, alias="revFltPorts")
-    subject_level_dscp: str = Field(default="", alias="targetDscp")
+    qos_class_id: QosTenantPrio = Field(
+        default=QosTenantPrio.UNSPECIFIED,
+        alias="prio",
+        description="The priority level of a sub application running behind an endpoint group, such as an Exchange server.",
+    )
+    provider_label_match_type: VzMatchT = Field(
+        default=VzMatchT.ATLEASTONE,
+        alias="provMatchT",
+        description="The subject match criteria across consumers.",
+    )
+    reverse_filter_ports: bool = Field(
+        default=True,
+        alias="revFltPorts",
+        description="Enables the filter to apply on both ingress and egress traffic.",
+    )
+    subject_level_dscp: str = Field(
+        default="",
+        alias="targetDscp",
+        description="The target differentiated services code point (DSCP) of the path attached to the layer 3 outside profile.",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

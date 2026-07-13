@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class tacacsTacacsDest(ManagedObject):
     """ACI Managed Object: ``tacacsTacacsDest`` — TACACS Destination.
 
+    A destination to send audit logs
+
     RN format: ``tacacsdest-{host}-port-{port}``
     """
 
@@ -39,20 +41,40 @@ class tacacsTacacsDest(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    host: str
-    port: Annotated[int, Field(ge=1, le=65535)] = 49
+    host: Annotated[str, Field(description="Hostname or IP for export destination")]
+    port: Annotated[int, Field(ge=1, le=65535, description="Port")] = 49
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     authentication_protocol: TacacsauthenticationProtocol = Field(
         default=TacacsauthenticationProtocol.PAP, alias="authProtocol"
     )
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
-    key: Annotated[str, Field(repr=False)] = ""
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    key: Annotated[
+        str,
+        Field(
+            repr=False,
+            description="The key or password used to uniquely identify this configuration object.",
+        ),
+    ] = ""
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
+        ""
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

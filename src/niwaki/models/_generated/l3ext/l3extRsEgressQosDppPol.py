@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class l3extRsEgressQosDppPol(ManagedObject):
     """ACI Managed Object: ``l3extRsEgressQosDppPol`` — Data Plane Policy Egress.
 
+    Relation to qosDppPol In Egress
+
     RN format: ``rsegressQosDppPol``
     """
 
@@ -35,7 +37,14 @@ class l3extRsEgressQosDppPol(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     name: Annotated[
         str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="tnQosDppPolName")
     ] = ""

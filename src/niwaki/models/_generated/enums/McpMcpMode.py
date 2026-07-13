@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class McpMcpMode(StrEnum):
     OFF = "off"
+    """Non-strict mode"""
     ON = "on"
+    """Strict mode"""
 
     @classmethod
     def _missing_(cls, value: object) -> McpMcpMode | None:

@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class iaclEntry(ManagedObject):
     """ACI Managed Object: ``iaclEntry`` — ACL entry of the CoPP Prefilter.
 
+    ACL entry of the CoPP Prefilter
+
     RN format: ``proto-{ip_protocol}-src-[{source_prefix_to_match}]-dst-[{destination_prefix_to_match}]-srcFromP-{source_port_from}-srcToP-{source_port_to}-dstFromP-{destination_port_from}-dstToP-{destination_port_to}``
     """
 
@@ -46,18 +48,63 @@ class iaclEntry(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     destination_prefix_to_match: Annotated[
-        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="dstAddr")
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            alias="dstAddr",
+            description="Destination Prefix to match, can be /32 or /128 for single host",
+        ),
     ]
-    destination_port_from: Annotated[str, Field(alias="dstPortFrom")]
-    destination_port_to: Annotated[str, Field(alias="dstPortTo")]
-    ip_protocol: Annotated[str, Field(alias="ipProto")]
-    source_prefix_to_match: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="srcAddr")]
-    source_port_from: Annotated[str, Field(alias="srcPortFrom")]
-    source_port_to: Annotated[str, Field(alias="srcPortTo")]
+    destination_port_from: Annotated[
+        str,
+        Field(
+            alias="dstPortFrom",
+            description="Destination Port Range, from field. Valid only for TCP/UDP cases",
+        ),
+    ]
+    destination_port_to: Annotated[
+        str,
+        Field(
+            alias="dstPortTo",
+            description="Destination Port Range, to field. Valid only for TCP/UDP cases",
+        ),
+    ]
+    ip_protocol: Annotated[str, Field(alias="ipProto", description="IP Protocol to match")]
+    source_prefix_to_match: Annotated[
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            alias="srcAddr",
+            description="Source Prefix to match, can be /32 or /128 for single host",
+        ),
+    ]
+    source_port_from: Annotated[
+        str,
+        Field(
+            alias="srcPortFrom",
+            description="Source Port Range, from field. Valid only for TCP/UDP cases",
+        ),
+    ]
+    source_port_to: Annotated[
+        str,
+        Field(
+            alias="srcPortTo",
+            description="Source Port Range, to field. Valid only for TCP/UDP cases",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
+        ""
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

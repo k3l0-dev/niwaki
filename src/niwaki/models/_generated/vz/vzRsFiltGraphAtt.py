@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class vzRsFiltGraphAtt(ManagedObject):
     """ACI Managed Object: ``vzRsFiltGraphAtt`` — Relation to Filter Graph Attachment.
 
+    A source relation to an input terminal node. For abstract graphs, this is the terminal node at the input end. Note that this relation is an internal object.
+
     RN format: ``rsFiltGraphAtt``
     """
 
@@ -37,8 +39,16 @@ class vzRsFiltGraphAtt(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     graph_name: Annotated[
-        str, Field(max_length=16, pattern="^[a-zA-Z0-9_.:-]+$", alias="graphName")
+        str,
+        Field(max_length=16, pattern="^[a-zA-Z0-9_.:-]+$", alias="graphName", description="null"),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

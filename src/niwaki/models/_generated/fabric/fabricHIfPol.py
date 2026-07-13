@@ -17,6 +17,8 @@ from niwaki.models.base import ManagedObject
 class fabricHIfPol(ManagedObject):
     """ACI Managed Object: ``fabricHIfPol`` — Link Level Policy.
 
+    The host interface policy specifies the layer 1 parameters of host facing ports.
+
     RN format: ``hintfpol-{name}``
     """
 
@@ -44,36 +46,79 @@ class fabricHIfPol(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the interface policy. This name can be up to 64 characters. Note that you cannot change this name after the object has been saved.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    auto_negotiation_on_off: L1AutoNeg = Field(default=L1AutoNeg.ON, alias="autoNeg")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    auto_negotiation_on_off: L1AutoNeg = Field(
+        default=L1AutoNeg.ON,
+        alias="autoNeg",
+        description="The policy auto-negotiation. Auto-negotiation is an optional function of the IEEE 802.3u Fast Ethernet standard that enables devices to automatically exchange information over a link about speed and duplex abilities.",
+    )
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies a description of the policy definition.",
+        ),
     ] = ""
     dfe_delay_ms: str = Field(default="", alias="dfeDelayMs")
     enable_disable_emi_retrain: L1EmiRetrain = Field(
         default=L1EmiRetrain.DISABLE, alias="emiRetrain"
     )
-    fec_mode: L1FECMode = Field(default=L1FECMode.INHERIT, alias="fecMode")
-    link_debounce_interval_msec: str = Field(default="", alias="linkDebounce")
+    fec_mode: L1FECMode = Field(
+        default=L1FECMode.INHERIT,
+        alias="fecMode",
+        description="Forwarding error correction (FEC) mode. By incorporating error correction information into data packets, FEC improves the reliability of data transmission over networks that lack guaranteed delivery mechanisms.",
+    )
+    link_debounce_interval_msec: str = Field(
+        default="",
+        alias="linkDebounce",
+        description="The interface policy administrative port link debounce interval. Enables the debounce timer for physical interface ports and sets it for a specified amount of time in milliseconds. The debounce timer is disabled if you specify the time to 0 ms.",
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
     owner_key: Annotated[
         str,
         Field(
-            max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerKey"
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerKey",
+            description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
     owner_tag: Annotated[
         str,
-        Field(max_length=64, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerTag"),
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerTag",
+            description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+        ),
     ] = ""
     physical_media_type: L1PortPhyMediaType = Field(
         default=L1PortPhyMediaType.AUTO, alias="portPhyMediaType"
     )
-    speed: L1Speed = L1Speed.INHERIT
+    speed: L1Speed = Field(
+        default=L1Speed.INHERIT,
+        description="The interface policy administrative port speed. The data transfer rate for the port should match the destination to which the port is linked. The administrative speed can be changed only for certain ports, and not all speeds are available on all systems.",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

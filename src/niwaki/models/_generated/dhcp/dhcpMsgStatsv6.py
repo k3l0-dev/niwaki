@@ -39,4 +39,11 @@ class dhcpMsgStatsv6(ManagedObject):
     ipv6_message_type: DhcpMsgTv6 = Field(default=DhcpMsgTv6.SOLICIT, alias="typev6")
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""

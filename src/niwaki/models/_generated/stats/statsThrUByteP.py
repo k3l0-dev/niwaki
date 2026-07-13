@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class statsThrUByteP(ManagedObject):
     """ACI Managed Object: ``statsThrUByteP`` — Base Threshold Policy Definition.
 
+    The concrete statistical threshold policy for an unsigned byte data type.
+
     RN format: ``thrUByte-{property}``
     """
 
@@ -39,14 +41,26 @@ class statsThrUByteP(ManagedObject):
     property: Annotated[str, Field(alias="propId")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     crit_high_reset: str = Field(default="", alias="critHighReset")
     crit_high_set: str = Field(default="", alias="critHighSet")
     crit_low_reset: str = Field(default="", alias="critLowReset")
     crit_low_set: str = Field(default="", alias="critLowSet")
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
     threshold_direction: StatsThrDir = Field(default=StatsThrDir.BOTH, alias="direction")
     high_range_end: str = Field(default="", alias="highRangeEnd")
@@ -63,7 +77,9 @@ class statsThrUByteP(ManagedObject):
     minor_high_set: str = Field(default="", alias="minorHighSet")
     minor_low_reset: str = Field(default="", alias="minorLowReset")
     minor_low_set: str = Field(default="", alias="minorLowSet")
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
+        ""
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

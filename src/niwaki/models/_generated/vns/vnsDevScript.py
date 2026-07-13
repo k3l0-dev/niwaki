@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class vnsDevScript(ManagedObject):
     """ACI Managed Object: ``vnsDevScript`` — Device Script.
 
+    A device script handler contains meta information about the script handler's related attributes, including its name, package name, and version.
+
     RN format: ``mDevScr``
     """
 
@@ -36,16 +38,67 @@ class vnsDevScript(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    audit_timeout: Annotated[int, Field(ge=900, le=10800, alias="auditTimeout")] = 900
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    audit_timeout: Annotated[
+        int,
+        Field(
+            ge=900,
+            le=10800,
+            alias="auditTimeout",
+            description="device script timeout for audit operations",
+        ),
+    ] = 900
     dbg_port: str = Field(default="", alias="dbgPort")
     dbg_srv: Annotated[str, Field(max_length=512, alias="dbgSrv")] = ""
-    log_level: VnsLogLevel = Field(default=VnsLogLevel.DEBUG, alias="logLevel")
-    modify_timeout: Annotated[int, Field(ge=300, le=10800, alias="modifyTimeout")] = 300
-    name: Annotated[str, Field(min_length=1, max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    log_level: VnsLogLevel = Field(
+        default=VnsLogLevel.DEBUG,
+        alias="logLevel",
+        description="The current severity logged level of the fault.",
+    )
+    modify_timeout: Annotated[
+        int,
+        Field(
+            ge=300,
+            le=10800,
+            alias="modifyTimeout",
+            description="device script timeout for modify operations",
+        ),
+    ] = 300
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of this meta configuration instance.",
+        ),
+    ] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    validate_timeout: Annotated[int, Field(ge=300, le=10800, alias="validateTimeout")] = 300
-    watchdog_timeout: Annotated[int, Field(ge=900, le=10800, alias="watchdogTimeout")] = 900
+    validate_timeout: Annotated[
+        int,
+        Field(
+            ge=300,
+            le=10800,
+            alias="validateTimeout",
+            description="device script timeout for validate operations",
+        ),
+    ] = 300
+    watchdog_timeout: Annotated[
+        int,
+        Field(
+            ge=900,
+            le=10800,
+            alias="watchdogTimeout",
+            description="watchdog timeout for device script",
+        ),
+    ] = 900

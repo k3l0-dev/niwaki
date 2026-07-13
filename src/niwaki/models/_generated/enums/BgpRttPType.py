@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class BgpRttPType(StrEnum):
     EXPORT = "export"
+    """export"""
     IMPORT = "import"
+    """import"""
 
     @classmethod
     def _missing_(cls, value: object) -> BgpRttPType | None:

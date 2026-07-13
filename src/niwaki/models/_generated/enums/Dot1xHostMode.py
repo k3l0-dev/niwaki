@@ -7,9 +7,13 @@ from enum import StrEnum
 
 class Dot1xHostMode(StrEnum):
     MULTI_AUTH = "multi-auth"
+    """Multi Auth"""
     MULTI_DOMAIN = "multi-domain"
+    """Multi Domain"""
     MULTI_HOST = "multi-host"
+    """Multi Host"""
     SINGLE_HOST = "single-host"
+    """Single Host"""
 
     @classmethod
     def _missing_(cls, value: object) -> Dot1xHostMode | None:

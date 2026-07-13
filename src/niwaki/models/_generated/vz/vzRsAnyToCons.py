@@ -14,6 +14,8 @@ from niwaki.models.base import ManagedObject
 class vzRsAnyToCons(ManagedObject):
     """ACI Managed Object: ``vzRsAnyToCons`` — Contract.
 
+    A source relation to the binary contract profile.
+
     RN format: ``rsanyToCons-{name}``
     """
 
@@ -45,7 +47,18 @@ class vzRsAnyToCons(ManagedObject):
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     intent: VzIntent = VzIntent.INSTALL
-    priority: QosTenantPrio = Field(default=QosTenantPrio.UNSPECIFIED, alias="prio")
+    priority: QosTenantPrio = Field(
+        default=QosTenantPrio.UNSPECIFIED,
+        alias="prio",
+        description="The Quality of service (QoS) priority class ID. QoS refers to the capability of a network to provide better service to selected network traffic over various technologies.",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

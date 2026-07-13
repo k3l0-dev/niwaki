@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class bfdInst(ManagedObject):
     """ACI Managed Object: ``bfdInst`` — BFD Instance.
 
+    This objects hold per bfd instance information.
+
     RN format: ``inst``
     """
 
@@ -42,12 +44,33 @@ class bfdInst(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Create-only (ignored by APIC on modification) ─────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=128)] = ""
+    name: Annotated[
+        str, Field(min_length=1, max_length=128, description="The name of the object.")
+    ] = ""
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    echo_if: str = Field(default="", alias="echoIf")
-    hw_offload: BfdHwOffload = Field(default=BfdHwOffload.ENABLE, alias="hwOffload")
-    slow_timer_interval: str = Field(default="", alias="slowIntvl")
-    startup_timer_interval: str = Field(default="", alias="startupIntvl")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    echo_if: str = Field(
+        default="", alias="echoIf", description="Loopback interface to be used for bfd echo frames"
+    )
+    hw_offload: BfdHwOffload = Field(
+        default=BfdHwOffload.ENABLE,
+        alias="hwOffload",
+        description="Hardware Offload Enable/Disable flag",
+    )
+    slow_timer_interval: str = Field(
+        default="",
+        alias="slowIntvl",
+        description="Slow mode timer interval. This is the interval at which BFD control packets are sent.",
+    )
+    startup_timer_interval: str = Field(
+        default="", alias="startupIntvl", description="Startup timer interval."
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

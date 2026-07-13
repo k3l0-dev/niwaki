@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class poeRsPoeEpg(ManagedObject):
     """ACI Managed Object: ``poeRsPoeEpg`` — PoE EPg.
 
+    Represents the EPg the interface policy uses
+
     RN format: ``rspoeEpg``
     """
 

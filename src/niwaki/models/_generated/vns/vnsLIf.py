@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class vnsLIf(ManagedObject):
     """ACI Managed Object: ``vnsLIf`` — Logical Interface.
 
+    The logical interface is associated with a set of concrete interfaces from the L4-L7 device cluster. This is used to define the connection between a service graph and device interfaces.
+
     RN format: ``lIf-{name}``
     """
 
@@ -40,12 +42,29 @@ class vnsLIf(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=16, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=16,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the logical interface in the L4-L7 device cluster.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    encap: str = ""
-    enhanced_lag_policy_name: Annotated[str, Field(max_length=512, alias="lagPolicyName")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    encap: Annotated[str, Field(description="Static Encap")] = ""
+    enhanced_lag_policy_name: Annotated[
+        str, Field(max_length=512, alias="lagPolicyName", description="LAG Policy Name")
+    ] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

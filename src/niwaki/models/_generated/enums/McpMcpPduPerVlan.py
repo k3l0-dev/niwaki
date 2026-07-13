@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class McpMcpPduPerVlan(StrEnum):
     OFF = "off"
+    """Disable MCP PDU Per VLAN"""
     ON = "on"
+    """Enable MCP PDU Per VLAN"""
 
     @classmethod
     def _missing_(cls, value: object) -> McpMcpPduPerVlan | None:

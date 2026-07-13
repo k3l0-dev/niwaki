@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class Dot1xMacAuth(StrEnum):
     BYPASS = "bypass"
+    """Bypass Enabled"""
     EAP = "eap"
+    """Enabled with EAP"""
 
     @classmethod
     def _missing_(cls, value: object) -> Dot1xMacAuth | None:

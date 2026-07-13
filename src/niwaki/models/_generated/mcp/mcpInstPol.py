@@ -39,18 +39,49 @@ class mcpInstPol(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the object.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    admin_state: NwAdminSt = Field(default=NwAdminSt.DISABLED, alias="adminSt")
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    controls: str = Field(default="", alias="ctrl")
+    admin_state: NwAdminSt = Field(
+        default=NwAdminSt.DISABLED,
+        alias="adminSt",
+        description="The administrative state of the object or policy.",
+    )
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    controls: str = Field(default="", alias="ctrl", description="Instance Controls")
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies a description of the policy definition.",
+        ),
     ] = ""
     init_delay_time: str = Field(default="", alias="initDelayTime")
-    secret_key: Annotated[str, Field(alias="key", repr=False)] = ""
+    secret_key: Annotated[
+        str,
+        Field(
+            alias="key",
+            repr=False,
+            description="The key or password used to uniquely identify this configuration object.",
+        ),
+    ] = ""
     loop_detection_multiplier: str = Field(default="", alias="loopDetectMult")
     loop_protection_action: str = Field(default="", alias="loopProtectAct")
     display_name: Annotated[
@@ -59,13 +90,29 @@ class mcpInstPol(ManagedObject):
     owner_key: Annotated[
         str,
         Field(
-            max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerKey"
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerKey",
+            description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
     owner_tag: Annotated[
         str,
-        Field(max_length=64, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerTag"),
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerTag",
+            description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+        ),
     ] = ""
-    transmission_frequency: str = Field(default="", alias="txFreq")
-    tx_freq_msec: str = Field(default="", alias="txFreqMsec")
+    transmission_frequency: str = Field(
+        default="",
+        alias="txFreq",
+        description="Sets the transmission frequency of the instance advertisements.",
+    )
+    tx_freq_msec: str = Field(
+        default="",
+        alias="txFreqMsec",
+        description="Sets the transmission frequency of mcp advertisements in milliseconds",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

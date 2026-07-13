@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class fvEpRetPol(ManagedObject):
     """ACI Managed Object: ``fvEpRetPol`` — End Point Retention Policy.
 
+    The endpoint retention policy provides the parameters for the lifecycle of the endpoints.
+
     RN format: ``epRPol-{name}``
     """
 
@@ -34,31 +36,83 @@ class fvEpRetPol(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name for the endpoint retention policy.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    ep_bounce_age_interval: str = Field(default="", alias="bounceAgeIntvl")
-    ep_bounce_trigger: str = Field(default="", alias="bounceTrig")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    ep_bounce_age_interval: str = Field(
+        default="",
+        alias="bounceAgeIntvl",
+        description="The aging interval for a bounce entry. When an endpoint (VM) migrates to another switch, the endpoint is marked as bouncing for the specified aging interval and is deleted afterwards.",
+    )
+    ep_bounce_trigger: str = Field(
+        default="",
+        alias="bounceTrig",
+        description="Specifies whether to install the bounce entry by RARP flood or by COOP protocol.",
+    )
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies a description of the policy definition.",
+        ),
     ] = ""
-    ep_hold_interval: str = Field(default="", alias="holdIntvl")
-    local_ep_age_interval: str = Field(default="", alias="localEpAgeIntvl")
-    ep_move_frequency: str = Field(default="", alias="moveFreq")
+    ep_hold_interval: str = Field(
+        default="",
+        alias="holdIntvl",
+        description="A time period during which new endpoint learn events will not be honored. This interval is triggered when the maximum endpoint move frequency is exceeded.",
+    )
+    local_ep_age_interval: str = Field(
+        default="",
+        alias="localEpAgeIntvl",
+        description="The aging interval for all local endpoints learned in this bridge domain. When 75% of the interval is reached, 3 ARP requests are sent to verify the existence of the endpoint. If no response is received, the endpoint is deleted.",
+    )
+    ep_move_frequency: str = Field(
+        default="",
+        alias="moveFreq",
+        description="A maximum allowed number of endpoint moves per second. If the move frequency is exceeded, the hold interval is triggered, and new endpoint learn events will not be honored until after the hold interval expires.",
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
     owner_key: Annotated[
         str,
         Field(
-            max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerKey"
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerKey",
+            description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
     owner_tag: Annotated[
         str,
-        Field(max_length=64, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerTag"),
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerTag",
+            description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+        ),
     ] = ""
-    remote_ep_age_interval: str = Field(default="", alias="remoteEpAgeIntvl")
+    remote_ep_age_interval: str = Field(
+        default="",
+        alias="remoteEpAgeIntvl",
+        description="The aging interval for all remote endpoints learned in this bridge domain.",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

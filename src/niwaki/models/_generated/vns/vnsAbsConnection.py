@@ -15,6 +15,8 @@ from niwaki.models.base import ManagedObject
 class vnsAbsConnection(ManagedObject):
     """ACI Managed Object: ``vnsAbsConnection`` — Connection.
 
+    An abstract connection connects two abstract connectors. These connections can either be between two abstract nodes or between an abstract node and an abstract terminal node.
+
     RN format: ``AbsConnection-{name}``
     """
 
@@ -42,16 +44,40 @@ class vnsAbsConnection(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the abstract connection.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     adj_type: VnsConnAdjType = Field(default=VnsConnAdjType.L2, alias="adjType")
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    conn_dir: VnsConnDir = Field(default=VnsConnDir.UNKNOWN, alias="connDir")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    conn_dir: VnsConnDir = Field(
+        default=VnsConnDir.UNKNOWN,
+        alias="connDir",
+        description="Connector direction interal or external (CLI)",
+    )
     conn_type: VnsConnType = Field(default=VnsConnType.EXTERNAL, alias="connType")
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies a description of the policy definition.",
+        ),
     ] = ""
     direct_connect: bool = Field(default=False, alias="directConnect")
     display_name: Annotated[
@@ -60,12 +86,24 @@ class vnsAbsConnection(ManagedObject):
     owner_key: Annotated[
         str,
         Field(
-            max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerKey"
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerKey",
+            description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
     owner_tag: Annotated[
         str,
-        Field(max_length=64, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerTag"),
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerTag",
+            description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+        ),
     ] = ""
-    unicast_routing: bool = Field(default=True, alias="unicastRoute")
+    unicast_routing: bool = Field(
+        default=True,
+        alias="unicastRoute",
+        description="The parameter used by the node (Leaf) for forwarding data based on predefined forwarding criteria (IP or Mac).",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

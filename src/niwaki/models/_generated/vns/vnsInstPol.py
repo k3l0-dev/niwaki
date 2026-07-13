@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class vnsInstPol(ManagedObject):
     """ACI Managed Object: ``vnsInstPol`` — L4-L7 device Policy.
 
+    L4-L7 device policy for the controller
+
     RN format: ``instPol-{name}``
     """
 
@@ -35,14 +37,47 @@ class vnsInstPol(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=16, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=16,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the object.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    data_store_name: Annotated[str, Field(max_length=512, alias="dataStoreName")] = ""
-    host_name: Annotated[str, Field(max_length=512, alias="hostName")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    data_store_name: Annotated[
+        str,
+        Field(
+            max_length=512,
+            alias="dataStoreName",
+            description="datastore name on which the L4-L7 device will be created",
+        ),
+    ] = ""
+    host_name: Annotated[
+        str,
+        Field(
+            max_length=512,
+            alias="hostName",
+            description="Host name on which the L4-L7 device will be created",
+        ),
+    ] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    vm_template: str = Field(default="", alias="vmTemplate")
+    vm_template: str = Field(
+        default="",
+        alias="vmTemplate",
+        description="vmtemplate which the L4-L7 device will be using",
+    )

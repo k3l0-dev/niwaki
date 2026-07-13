@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class RtextcomScope(StrEnum):
     NON_TRANSITIVE = "non-transitive"
+    """Non transitive, this community should be carried only within the local AS"""
     TRANSITIVE = "transitive"
+    """Transitive, this community may be passed between ASs"""
 
     @classmethod
     def _missing_(cls, value: object) -> RtextcomScope | None:

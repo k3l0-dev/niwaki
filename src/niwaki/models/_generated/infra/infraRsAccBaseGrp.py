@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class infraRsAccBaseGrp(ManagedObject):
     """ACI Managed Object: ``infraRsAccBaseGrp`` — Access Access Group.
 
+    A source relation to the access policy group providing port configuration.
+
     RN format: ``rsaccBaseGrp``
     """
 
@@ -37,7 +39,18 @@ class infraRsAccBaseGrp(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    fex_id: str = Field(default="", alias="fexId")
-    target_dn: str = Field(default="", alias="tDn")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    fex_id: str = Field(default="", alias="fexId", description="The interface policy group FEX ID.")
+    target_dn: str = Field(
+        default="",
+        alias="tDn",
+        description="Select or create an interface policy group to associate to the Access Port selector.",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

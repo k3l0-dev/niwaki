@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class conditionSubj(ManagedObject):
     """ACI Managed Object: ``conditionSubj``.
 
+    This is generated and used only by internal processes.
+
     RN format: ``subj-[{subject_dn}]``
     """
 
@@ -34,8 +36,15 @@ class conditionSubj(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    subject_dn: Annotated[str, Field(alias="oDn")]
+    subject_dn: Annotated[str, Field(alias="oDn", description="Target Object's DN")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

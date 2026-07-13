@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class fvStCEp(ManagedObject):
     """ACI Managed Object: ``fvStCEp`` — Static End Point.
 
+    The static endpoint represents a silent client attached to the fabric which will not produce traffic of its own. The configuration of a static endpoint will prevent the client from aging out of relevant addressing tables.
+
     RN format: ``stcep-{macaddress}-type-{type}``
     """
 
@@ -45,16 +47,37 @@ class fvStCEp(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     macaddress: Annotated[
-        str, Field(pattern="^([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}$", alias="mac")
+        str,
+        Field(
+            pattern="^([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}$",
+            alias="mac",
+            description="The MAC address of the endpoint.",
+        ),
     ]
-    type: FvStCEpType = FvStCEpType.SILENT_HOST
+    type: FvStCEpType = Field(
+        default=FvStCEpType.SILENT_HOST, description="The specific type of endpoint."
+    )
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    encap: str = ""
-    id: str = ""
-    ip_address: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="ip")] = ""
-    name: Annotated[str, Field(max_length=128)] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    encap: Annotated[
+        str, Field(description="The encapsulation (VXLAN or VLAN) to be used for this endpoint.")
+    ] = ""
+    id: Annotated[str, Field(description="An identifier .")] = ""
+    ip_address: Annotated[
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$", alias="ip", description="The IP address of the endpoint."
+        ),
+    ] = ""
+    name: Annotated[str, Field(max_length=128, description="The name of the object.")] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

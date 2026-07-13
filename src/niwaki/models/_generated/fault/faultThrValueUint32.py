@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class faultThrValueUint32(ManagedObject):
     """ACI Managed Object: ``faultThrValueUint32``.
 
+    The threshold value uint 32.
+
     RN format: ``thrValUint32-{property}``
     """
 
@@ -34,10 +36,21 @@ class faultThrValueUint32(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    property: Annotated[str, Field(alias="propId")]
+    property: Annotated[str, Field(alias="propId", description="null")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    threshold_value_from_policy: Annotated[int, Field(alias="thrValue")] = 0
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    threshold_value_from_policy: Annotated[
+        int, Field(alias="thrValue", description="Threshold value from policy.")
+    ] = 0
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    value_of_the_property: Annotated[int, Field(alias="value")] = 0
+    value_of_the_property: Annotated[
+        int, Field(alias="value", description="Value of the property.")
+    ] = 0

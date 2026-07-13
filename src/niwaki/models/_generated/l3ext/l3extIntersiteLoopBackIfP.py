@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class l3extIntersiteLoopBackIfP(ManagedObject):
     """ACI Managed Object: ``l3extIntersiteLoopBackIfP`` — Intersite Loop Back Interface Profile.
 
+    Intersite Loop Back Interface Profile
+
     RN format: ``sitelbp-[{intersite_loop_back_interface_address}]``
     """
 
@@ -37,16 +39,35 @@ class l3extIntersiteLoopBackIfP(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     intersite_loop_back_interface_address: Annotated[
-        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="addr")
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            alias="addr",
+            description="Intersite Loop Back Interface Address",
+        ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
+        ""
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

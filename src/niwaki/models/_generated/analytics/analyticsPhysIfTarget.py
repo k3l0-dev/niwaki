@@ -15,6 +15,8 @@ from niwaki.models.base import ManagedObject
 class analyticsPhysIfTarget(ManagedObject):
     """ACI Managed Object: ``analyticsPhysIfTarget`` — Interface Instance Target.
 
+    Physical interface target
+
     RN format: ``if-[{interface_id}]-flt-{netflow_target_type}-layer-{l2_l3_layer}``
     """
 
@@ -42,11 +44,24 @@ class analyticsPhysIfTarget(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    netflow_target_type: AnalyticsFltType = Field(default=AnalyticsFltType.IPV4, alias="fltType")
-    interface_id: Annotated[str, Field(alias="id")]
-    l2_l3_layer: L1Layer = Field(default=L1Layer.LAYER3, alias="layer")
+    netflow_target_type: AnalyticsFltType = Field(
+        default=AnalyticsFltType.IPV4, alias="fltType", description="IP filter type"
+    )
+    interface_id: Annotated[str, Field(alias="id", description="Identifier")]
+    l2_l3_layer: L1Layer = Field(
+        default=L1Layer.LAYER3, alias="layer", description="Layer2 or 3 - set internally by PE"
+    )
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    direction: AnalyticsDirectionT = Field(default=AnalyticsDirectionT.IN, alias="dir")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    direction: AnalyticsDirectionT = Field(
+        default=AnalyticsDirectionT.IN, alias="dir", description="Direction"
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

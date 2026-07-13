@@ -37,9 +37,18 @@ class telemetryStatsStreamP(ManagedObject):
 
     # ── Configurable ───────────────────────────────────────────────────────────
     administrative_state: TelemetryAdminState = Field(
-        default=TelemetryAdminState.DISABLED, alias="adminSt"
+        default=TelemetryAdminState.DISABLED,
+        alias="adminSt",
+        description="The administrative state of the object or policy.",
     )
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     collection_interval_in_milliseconds: Annotated[
         int, Field(ge=0, le=1000, alias="apicCollectIntvl")
     ] = 30

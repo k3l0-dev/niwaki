@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class infraRsInfraBD(ManagedObject):
     """ACI Managed Object: ``infraRsInfraBD`` — Bridge Domain.
 
+    A source relation to the private layer 2 broadcast domain consisting of a set of physical or virtual ports.
+
     RN format: ``rsinfraBD``
     """
 
@@ -37,6 +39,16 @@ class infraRsInfraBD(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.-]+$", alias="tnFvBDName")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    name: Annotated[
+        str,
+        Field(max_length=64, pattern="^[a-zA-Z0-9_.-]+$", alias="tnFvBDName", description="null"),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class BgpSrcIfT(StrEnum):
     L3OUT_LOOPBACK = "l3out-loopback"
+    """User configured CP-TEP in l3out as Source"""
     ROUTABLE_LOOPBACK = "routable-loopback"
+    """Automatically allocated Routable CP-TEP as Source"""
 
     @classmethod
     def _missing_(cls, value: object) -> BgpSrcIfT | None:

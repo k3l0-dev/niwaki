@@ -14,6 +14,8 @@ from niwaki.models.base import ManagedObject
 class fvRsNodeAtt(ManagedObject):
     """ACI Managed Object: ``fvRsNodeAtt`` — Fabric Node.
 
+    The static association with an access group is a bundled or unbundled group of ports. The existence of this object implies that the corresponding set of policies will be resolved into the node to which the relationship points.
+
     RN format: ``rsnodeAtt-[{target_dn}]``
     """
 
@@ -41,14 +43,37 @@ class fvRsNodeAtt(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    target_dn: Annotated[str, Field(alias="tDn")]
+    target_dn: Annotated[
+        str,
+        Field(
+            alias="tDn", description="The distinguished name of the target of this static binding."
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    descr: Annotated[
-        str, Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
     ] = ""
-    encap: str = ""
-    deployment_immediacy: FvInstrImedcy = Field(default=FvInstrImedcy.LAZY, alias="instrImedcy")
-    mode: FvMode = FvMode.REGULAR
+    descr: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            description="The description of this configuration item.",
+        ),
+    ] = ""
+    encap: Annotated[
+        str, Field(description="The encapsulation method (VLAN) for the static binding.")
+    ] = ""
+    deployment_immediacy: FvInstrImedcy = Field(
+        default=FvInstrImedcy.LAZY, alias="instrImedcy", description="null"
+    )
+    mode: FvMode = Field(
+        default=FvMode.REGULAR, description="The mode of the static association with the path."
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

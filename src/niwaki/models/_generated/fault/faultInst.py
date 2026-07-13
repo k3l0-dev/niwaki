@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class faultInst(ManagedObject):
     """ACI Managed Object: ``faultInst``.
 
+    Contains detailed information of a fault. This object is attached as a child of the object on which the fault condition occurred. One instance object is created for each fault condition of the parent object. A fault instance object is identified by a fault code.
+
     RN format: ``fault-{code}``
     """
 
@@ -36,15 +38,35 @@ class faultInst(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    code: int = 0
+    code: Annotated[
+        int,
+        Field(
+            description="Contains a category code that helps to categorize and identify different types of fault instance objects."
+        ),
+    ] = 0
 
     # ── Create-only (ignored by APIC on modification) ─────────────────────────
-    alert: bool = False
-    delegated: bool = False
-    title: Annotated[str, Field(max_length=512)] = ""
-    type: ConditionType = ConditionType.CONFIG
+    alert: bool = Field(
+        default=False,
+        description='Indicates if the fault is defined as alert="yes". Fault alert is used by UI',
+    )
+    delegated: bool = Field(
+        default=False, description="Indicates whether the fault instance has been delegated."
+    )
+    title: Annotated[str, Field(max_length=512, description="Title is used by UI alert only")] = ""
+    type: ConditionType = Field(default=ConditionType.CONFIG, description="null")
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    ack: bool = False
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    ack: bool = Field(
+        default=False,
+        description="The acknowledgement status of the fault. If a fault is acknowledged and cleared, it is immediately deleted. If a fault is not acknowledged and cleared, it is deleted after the retention interval.",
+    )
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

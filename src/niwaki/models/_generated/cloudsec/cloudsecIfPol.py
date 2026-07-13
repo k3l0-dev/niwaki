@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class cloudsecIfPol(ManagedObject):
     """ACI Managed Object: ``cloudsecIfPol`` — Cloudsec Interface Policy.
 
+    Internal Mo for Cloudsec Policy
+
     RN format: ``cloudsecifp-{name}``
     """
 
@@ -37,16 +39,36 @@ class cloudsecIfPol(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the object.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies a description of the policy definition.",
+        ),
     ] = ""
     force_clean: CloudsecForceCleanType = Field(
-        default=CloudsecForceCleanType.DISABLED, alias="forceClean"
+        default=CloudsecForceCleanType.DISABLED, alias="forceClean", description="Force Cleanup"
     )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
@@ -54,13 +76,25 @@ class cloudsecIfPol(ManagedObject):
     owner_key: Annotated[
         str,
         Field(
-            max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerKey"
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerKey",
+            description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
     owner_tag: Annotated[
         str,
-        Field(max_length=64, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerTag"),
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerTag",
+            description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+        ),
     ] = ""
-    sak_expiry_time: Annotated[int, Field(ge=5, le=1440, alias="sakExpiryTime")] = 15
-    rekey_control_to_turn_on_off_rekeying: bool = Field(default=False, alias="stopRekey")
+    sak_expiry_time: Annotated[
+        int, Field(ge=5, le=1440, alias="sakExpiryTime", description="SA Key expiry time")
+    ] = 15
+    rekey_control_to_turn_on_off_rekeying: bool = Field(
+        default=False, alias="stopRekey", description="Rekey control"
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

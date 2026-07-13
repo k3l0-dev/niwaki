@@ -40,19 +40,53 @@ class mcpIfPol(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the object.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    admin_state: NwIfAdminSt = Field(default=NwIfAdminSt.ENABLED, alias="adminSt")
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    admin_state: NwIfAdminSt = Field(
+        default=NwIfAdminSt.ENABLED,
+        alias="adminSt",
+        description="The administrative state of the object or policy.",
+    )
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies a description of the policy definition.",
+        ),
     ] = ""
-    grace_period: str = Field(default="", alias="gracePeriod")
-    grace_period_msec: str = Field(default="", alias="gracePeriodMsec")
+    grace_period: str = Field(
+        default="",
+        alias="gracePeriod",
+        description="For strict mode, grace period timeout in sec during which early loop detection takes place",
+    )
+    grace_period_msec: str = Field(
+        default="",
+        alias="gracePeriodMsec",
+        description="For strict mode, grace period timeout in millisec during which early loop detection takes place",
+    )
     maximum_number_of_vlans: str = Field(default="", alias="maxPduPerVlanLimit")
-    mode: McpMcpMode = Field(default=McpMcpMode.OFF, alias="mcpMode")
+    mode: McpMcpMode = Field(
+        default=McpMcpMode.OFF, alias="mcpMode", description="Instance MCP mode"
+    )
     mcp_pdu_per_vlan: McpMcpPduPerVlan = Field(default=McpMcpPduPerVlan.ON, alias="mcpPduPerVlan")
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
@@ -60,14 +94,34 @@ class mcpIfPol(ManagedObject):
     owner_key: Annotated[
         str,
         Field(
-            max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerKey"
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerKey",
+            description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
     owner_tag: Annotated[
         str,
-        Field(max_length=64, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerTag"),
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerTag",
+            description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+        ),
     ] = ""
-    init_delay_time: str = Field(default="", alias="strictInitDelayTime")
-    transmission_frequency: str = Field(default="", alias="strictTxFreq")
-    strict_tx_freq_msec: str = Field(default="", alias="strictTxFreqMsec")
+    init_delay_time: str = Field(
+        default="",
+        alias="strictInitDelayTime",
+        description="For strict mode, delay time in seconds for mcp to wait before sending BPDUs. This gives time for STP on the external network to converge",
+    )
+    transmission_frequency: str = Field(
+        default="",
+        alias="strictTxFreq",
+        description="For strict mode, transmission frequency of MCP packets until grace period on each L2 interface in seconds",
+    )
+    strict_tx_freq_msec: str = Field(
+        default="",
+        alias="strictTxFreqMsec",
+        description="For strict mode, transmission frequency of MCP packets until grace period on each L2 interface in milliseconds",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

@@ -18,6 +18,8 @@ from niwaki.models.base import ManagedObject
 class xcvrZRFabIfPol(ManagedObject):
     """ACI Managed Object: ``xcvrZRFabIfPol`` — ZR-S Policy.
 
+    QDD-400G-ZR-S transceiver interface level policy
+
     RN format: ``zrfab-{name}``
     """
 
@@ -43,44 +45,86 @@ class xcvrZRFabIfPol(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the object.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    admin_st: XcvrOpticsAdminSt = Field(default=XcvrOpticsAdminSt.DISABLED, alias="adminSt")
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    chromatic_dispersion_maximum: str = Field(default="", alias="cdMax")
-    chromatic_dispersion_minimum: str = Field(default="", alias="cdMin")
-    dac_rate: L1DACRateZR = Field(default=L1DACRateZR._1X1, alias="dacRate")
+    admin_st: XcvrOpticsAdminSt = Field(
+        default=XcvrOpticsAdminSt.DISABLED,
+        alias="adminSt",
+        description="The administrative state of the object or policy.",
+    )
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    chromatic_dispersion_maximum: str = Field(
+        default="", alias="cdMax", description="Chromatic Dispersion max"
+    )
+    chromatic_dispersion_minimum: str = Field(
+        default="", alias="cdMin", description="Chromatic Dispersion min"
+    )
+    dac_rate: L1DACRateZR = Field(default=L1DACRateZR._1X1, alias="dacRate", description="DAC rate")
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies a description of the policy definition.",
+        ),
     ] = ""
     dwdm_carrier_grid_selector: L1dwdmCarrierZR = Field(
-        default=L1dwdmCarrierZR._100MHZFREQUENCY, alias="dwdmCarrier"
+        default=L1dwdmCarrierZR._100MHZFREQUENCY, alias="dwdmCarrier", description="DWDM Carrier"
     )
-    fec_mode: L1FECModeZR = Field(default=L1FECModeZR.CFEC, alias="fecMode")
-    frequency100_m_hz: Annotated[int, Field(ge=1911500, le=1961000, alias="frequency100MHz")] = (
-        1931000
+    fec_mode: L1FECModeZR = Field(default=L1FECModeZR.CFEC, alias="fecMode", description="FEC mode")
+    frequency100_m_hz: Annotated[
+        int, Field(ge=1911500, le=1961000, alias="frequency100MHz", description="Frequency 100MHz")
+    ] = 1931000
+    frequency50_g_hz: Annotated[
+        int, Field(ge=19115, le=19610, alias="frequency50GHz", description="Frequency 50GHz")
+    ] = 19310
+    itu_channel50_g_hz: Annotated[
+        int, Field(ge=1, le=100, alias="ituChannel50GHz", description="ITU Channel")
+    ] = 61
+    modulation: L1ModulationZR = Field(default=L1ModulationZR._16QAM, description="Modulation")
+    muxponder_mode: L1MuxponderZR = Field(
+        default=L1MuxponderZR._1X400, alias="muxponder", description="Muxponder"
     )
-    frequency50_g_hz: Annotated[int, Field(ge=19115, le=19610, alias="frequency50GHz")] = 19310
-    itu_channel50_g_hz: Annotated[int, Field(ge=1, le=100, alias="ituChannel50GHz")] = 61
-    modulation: L1ModulationZR = L1ModulationZR._16QAM
-    muxponder_mode: L1MuxponderZR = Field(default=L1MuxponderZR._1X400, alias="muxponder")
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
     owner_key: Annotated[
         str,
         Field(
-            max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerKey"
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerKey",
+            description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
     owner_tag: Annotated[
         str,
-        Field(max_length=64, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerTag"),
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerTag",
+            description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+        ),
     ] = ""
-    transmitted_power: str = Field(default="", alias="transmitPower")
+    transmitted_power: str = Field(default="", alias="transmitPower", description="Transmit Power")
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    wavelength50_g_hz: Annotated[int, Field(ge=1528773, le=1568362, alias="wavelength50GHz")] = (
-        1552524
-    )
+    wavelength50_g_hz: Annotated[
+        int, Field(ge=1528773, le=1568362, alias="wavelength50GHz", description="Wavelength")
+    ] = 1552524

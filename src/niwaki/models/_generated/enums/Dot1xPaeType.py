@@ -7,6 +7,7 @@ from enum import StrEnum
 
 class Dot1xPaeType(StrEnum):
     AUTHENTICATOR = "authenticator"
+    """PAE Authenticator Role"""
 
     @classmethod
     def _missing_(cls, value: object) -> Dot1xPaeType | None:

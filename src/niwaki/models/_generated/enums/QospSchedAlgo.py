@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class QospSchedAlgo(StrEnum):
     SP = "sp"
+    """SP"""
     WRR = "wrr"
+    """WRR"""
 
     @classmethod
     def _missing_(cls, value: object) -> QospSchedAlgo | None:

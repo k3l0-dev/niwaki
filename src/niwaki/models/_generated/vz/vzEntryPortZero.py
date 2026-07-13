@@ -41,22 +41,58 @@ class vzEntryPortZero(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the object.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    apply_rule_for_all_fragments: bool = Field(default=False, alias="applyToFrag")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    apply_rule_for_all_fragments: bool = Field(
+        default=False,
+        alias="applyToFrag",
+        description="When flag is true, apply this entry rule for all fragments. When false apply for initial fragment only",
+    )
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
-    port_zero_direction: VzPZDirection = Field(default=VzPZDirection.BOTH, alias="direction")
-    ethernet_type: VzPZEtherType = Field(default=VzPZEtherType.IPV4, alias="etherT")
+    port_zero_direction: VzPZDirection = Field(
+        default=VzPZDirection.BOTH,
+        alias="direction",
+        description="L3 Ip Protocol peppemon should be new",
+    )
+    ethernet_type: VzPZEtherType = Field(
+        default=VzPZEtherType.IPV4, alias="etherT", description="Ether type peppemon should new"
+    )
     dscp_match_for_filter_entry: str = Field(default="", alias="matchDscp")
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    protocol: VzPZIpProt = Field(default=VzPZIpProt.TCP, alias="prot")
-    stateful: bool = False
-    tcp_rules: L4TcpFlags = Field(default=L4TcpFlags.UNSPECIFIED, alias="tcpRules")
+    protocol: VzPZIpProt = Field(
+        default=VzPZIpProt.TCP, alias="prot", description="The IP protocol."
+    )
+    stateful: bool = Field(
+        default=False, description="Is this Entry stateful? Applies to prot tcp only"
+    )
+    tcp_rules: L4TcpFlags = Field(
+        default=L4TcpFlags.UNSPECIFIED, alias="tcpRules", description="TCP Session Rules"
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

@@ -16,6 +16,8 @@ from niwaki.models.base import ManagedObject
 class pkiKeyRing(ManagedObject):
     """ACI Managed Object: ``pkiKeyRing`` — Key Ring.
 
+    A keyring to create and hold an SSL certificate. The SSL certificate contains the public RSA key and signed identity information of a PKI device. The PKI device holds a pair of RSA encryption keys, one kept private and one made public, stored in an internal key ring.
+
     RN format: ``keyring-{name}``
     """
 
@@ -42,35 +44,84 @@ class pkiKeyRing(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the key ring.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    admin_state: PkiKeyringState = Field(default=PkiKeyringState.STARTED, alias="adminState")
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    certificate: str = Field(default="", alias="cert")
+    admin_state: PkiKeyringState = Field(
+        default=PkiKeyringState.STARTED,
+        alias="adminState",
+        description="The current administrative state of the certificate request process.",
+    )
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    certificate: str = Field(
+        default="",
+        alias="cert",
+        description="A certificate is a file containing a device's public key along with signed information verifying the identity of the device.",
+    )
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies a description of the policy definition.",
+        ),
     ] = ""
     ecc_curve: PkiEccCurve = Field(default=PkiEccCurve.NONE, alias="eccCurve")
-    key: Annotated[str, Field(repr=False)] = ""
+    key: Annotated[str, Field(repr=False, description="The private key of the certificate.")] = ""
     key_type: PkiKeyType = Field(default=PkiKeyType.RSA, alias="keyType")
-    modulus: PkiModulus = PkiModulus.MOD2048
+    modulus: PkiModulus = Field(
+        default=PkiModulus.MOD2048,
+        description="The length of the encryption keys. A longer key length increases the difficulty of breaking the key.",
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
     owner_key: Annotated[
         str,
         Field(
-            max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerKey"
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerKey",
+            description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
     owner_tag: Annotated[
         str,
-        Field(max_length=64, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerTag"),
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerTag",
+            description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+        ),
     ] = ""
-    regenerate: bool = Field(default=False, alias="regen")
+    regenerate: bool = Field(
+        default=False,
+        alias="regen",
+        description="Forces regeneration of the keypair. Each PKI device holds a pair of asymmetric Rivest-Shamir-Adleman (RSA) or Elliptic Curve Cryptography (ECC) encryption keys, one kept private and one made public, stored in an internal key ring.",
+    )
     certificate_authority: Annotated[
-        str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="tp")
+        str,
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            alias="tp",
+            description="A third-party certificate from a trusted source, or trusted point, that affirms the identity of your device.",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

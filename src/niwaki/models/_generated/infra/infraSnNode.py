@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class infraSnNode(ManagedObject):
     """ACI Managed Object: ``infraSnNode`` — Serial Number of Cluster Element.
 
+    controllers as physical devices wired into fabric, but not cluster
+
     RN format: ``serial-{cluster_unique_controller_id}``
     """
 
@@ -37,13 +39,24 @@ class infraSnNode(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    cluster_unique_controller_id: Annotated[str, Field(alias="id")]
+    cluster_unique_controller_id: Annotated[
+        str, Field(alias="id", description="An object identifier.")
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     administrative_state: InfraAdminState = Field(
-        default=InfraAdminState.OUT_OF_SERVICE, alias="adminSt"
+        default=InfraAdminState.OUT_OF_SERVICE,
+        alias="adminSt",
+        description="The administrative state of the object or policy.",
     )
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

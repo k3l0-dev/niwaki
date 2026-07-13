@@ -19,6 +19,10 @@ from niwaki.models.base import ManagedObject
 
 class {{ class_name }}(ManagedObject):
     """ACI Managed Object: ``{{ class_name }}``{% if label %} — {{ label }}{% endif %}.
+{% if class_comment %}
+
+    {{ class_comment }}
+{% endif %}
 
     RN format: ``{{ rn_format }}``
     """

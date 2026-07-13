@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class vmmEpValidatorPol(ManagedObject):
     """ACI Managed Object: ``vmmEpValidatorPol`` — End Point Validator Policy.
 
+    Currently only used by OpenStack VMMs
+
     RN format: ``epv``
     """
 
@@ -37,9 +39,18 @@ class vmmEpValidatorPol(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     current_key: Annotated[str, Field(max_length=512, alias="currentKey", repr=False)] = ""
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
+        ""
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

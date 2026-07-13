@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class spanRsDestEpg(ManagedObject):
     """ACI Managed Object: ``spanRsDestEpg`` — Relation to SPAN Destination EPG.
 
+    A source relation to a set of endpoints.
+
     RN format: ``rsdestEpg``
     """
 
@@ -38,14 +40,30 @@ class spanRsDestEpg(ManagedObject):
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    dscp: str = ""
+    dscp: Annotated[
+        str, Field(description="The DSCP value for sending the monitored packets using ERSPAN.")
+    ] = ""
     final_ip: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="finalIp")] = ""
-    flow_id: str = Field(default="", alias="flowId")
-    ip: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$")] = ""
-    mtu: str = ""
-    src_ip_prefix: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="srcIpPrefix")] = ""
-    target_dn: str = Field(default="", alias="tDn")
-    ttl: str = ""
+    flow_id: str = Field(default="", alias="flowId", description="The flow ID of the SPAN packet.")
+    ip: Annotated[
+        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", description="The destination EPG IP address.")
+    ] = ""
+    mtu: Annotated[str, Field(description="The MTU truncation size for the packets.")] = ""
+    src_ip_prefix: Annotated[
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            alias="srcIpPrefix",
+            description="The source EPG IP address prefix.",
+        ),
+    ] = ""
+    target_dn: str = Field(default="", alias="tDn", description="The destination EPG.")
+    ttl: Annotated[
+        str,
+        Field(
+            description="The time to live session. TTL determines the length of time a packet remains in the network before it is discarded."
+        ),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    ver: SpanErSpanVer = SpanErSpanVer.VER2
+    ver: SpanErSpanVer = Field(default=SpanErSpanVer.VER2, description="The SPAN version.")
     ver_enforced: bool = Field(default=False, alias="verEnforced")

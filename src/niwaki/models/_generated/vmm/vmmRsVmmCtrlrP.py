@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class vmmRsVmmCtrlrP(ManagedObject):
     """ACI Managed Object: ``vmmRsVmmCtrlrP`` — Vmm Controller Profile.
 
+    A source relation to the VMM controller profile. The VMM controller profile is a policy pertaining to a single VM management domain that also corresponds to a single policy enforcement domain. A cluster of VMware VCs forms such a domain. Note that this relation is an internal object.
+
     RN format: ``rsvmmCtrlrP-[{target_dn}]``
     """
 
@@ -37,9 +39,16 @@ class vmmRsVmmCtrlrP(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    target_dn: Annotated[str, Field(alias="tDn")]
+    target_dn: Annotated[str, Field(alias="tDn", description="The associated VM controller.")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     epg_depl_pref: VmmEPgDeplPref = Field(default=VmmEPgDeplPref.LOCAL, alias="epgDeplPref")
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

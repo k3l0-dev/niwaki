@@ -39,13 +39,39 @@ class l3extRsDynPathAtt(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    target_dn: Annotated[str, Field(alias="tDn")]
+    target_dn: Annotated[
+        str, Field(alias="tDn", description="The distinguished name of the target.")
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    encap: str = ""
-    floating_addr: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="floatingAddr")] = ""
-    forged_transmit: CompConfigMode = Field(default=CompConfigMode.DISABLED, alias="forgedTransmit")
-    mac_change: CompConfigMode = Field(default=CompConfigMode.DISABLED, alias="macChange")
-    prom_mode: CompConfigMode = Field(default=CompConfigMode.DISABLED, alias="promMode")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    encap: Annotated[str, Field(description="The port encapsulation.")] = ""
+    floating_addr: Annotated[
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            alias="floatingAddr",
+            description="Address of the dynamic l3 interface",
+        ),
+    ] = ""
+    forged_transmit: CompConfigMode = Field(
+        default=CompConfigMode.DISABLED,
+        alias="forgedTransmit",
+        description="Forged Transmits setting",
+    )
+    mac_change: CompConfigMode = Field(
+        default=CompConfigMode.DISABLED,
+        alias="macChange",
+        description="MAC address changes setting",
+    )
+    prom_mode: CompConfigMode = Field(
+        default=CompConfigMode.DISABLED, alias="promMode", description="Promiscous mode setting"
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

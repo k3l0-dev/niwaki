@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class hsrpSecVip(ManagedObject):
     """ACI Managed Object: ``hsrpSecVip`` — Secondary Virtual IP Policy.
 
+    Secondary Address Policy
+
     RN format: ``hsrpSecVip-[{secondary_ip_address}]``
     """
 
@@ -37,16 +39,41 @@ class hsrpSecVip(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    secondary_ip_address: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="ip")]
+    secondary_ip_address: Annotated[
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            alias="ip",
+            description="HSRP primary Virtual IP address (VIP)",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    sec_vip_misconfiguration: str = Field(default="", alias="configIssues")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    sec_vip_misconfiguration: str = Field(
+        default="",
+        alias="configIssues",
+        description="Bitmask representation of the configuration issues found during the endpoint group deployment.",
+    )
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
+        ""
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

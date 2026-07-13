@@ -41,40 +41,78 @@ class hostprotRuleDef(ManagedObject):
     _has_stats: ClassVar[bool] = True
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the object.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     host_protection_domain_action: HostprotAction = Field(
-        default=HostprotAction.PERMIT, alias="action"
+        default=HostprotAction.PERMIT,
+        alias="action",
+        description="The action required when the condition is met.",
     )
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     connection_tracking: HostprotConnTrack = Field(
         default=HostprotConnTrack.REFLEXIVE, alias="connTrack"
     )
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies a description of the policy definition.",
+        ),
     ] = ""
-    direction: NetworkDirection = NetworkDirection.INGRESS
+    direction: NetworkDirection = Field(
+        default=NetworkDirection.INGRESS, description="The connector direction."
+    )
     ethertype: HostprotEtypeMatch = HostprotEtypeMatch.UNDEFINED
-    from_port: str = Field(default="", alias="fromPort")
-    icmp_code: str = Field(default="", alias="icmpCode")
-    icmp_type: str = Field(default="", alias="icmpType")
+    from_port: str = Field(default="", alias="fromPort", description="The port block from port.")
+    icmp_code: str = Field(default="", alias="icmpCode", description="ICMP code")
+    icmp_type: str = Field(default="", alias="icmpType", description="ICMP type")
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    host_protection_rule_order: str = Field(default="", alias="order")
+    host_protection_rule_order: str = Field(
+        default="",
+        alias="order",
+        description="The relative priority or sequence order of this object.",
+    )
     owner_key: Annotated[
         str,
         Field(
-            max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerKey"
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerKey",
+            description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
     owner_tag: Annotated[
         str,
-        Field(max_length=64, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerTag"),
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerTag",
+            description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+        ),
     ] = ""
-    protocol: str = ""
+    protocol: Annotated[
+        str, Field(description="The transfer protocol to be used for data export.")
+    ] = ""
     domain_name: Annotated[str, Field(max_length=512, alias="toDns")] = ""
-    to_port: str = Field(default="", alias="toPort")
+    to_port: str = Field(default="", alias="toPort", description="The fabric card's port.")
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

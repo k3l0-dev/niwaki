@@ -45,6 +45,7 @@ cannot drift from them.
 from __future__ import annotations
 
 import sys
+import textwrap
 from enum import StrEnum
 from pathlib import Path
 from typing import Annotated, Literal, NamedTuple, get_args, get_origin
@@ -311,6 +312,76 @@ def _maker_body(label: str, naming: list[str], return_type: str) -> list[str]:
     ]
 
 
+def _docstring_safe(text: str) -> str:
+    """Make schema text safe inside a generated docstring."""
+    return text.replace("\\", "\\\\").replace('"""', "'''")
+
+
+def _arg_doc_entries(
+    child_cls: type[ManagedObject],
+    naming: list[str],
+    sugar: list[tuple[str, str]],
+    params: list[tuple[str, str]],
+) -> list[tuple[str, str]]:
+    """Build ``(param, description)`` pairs for a maker's Args section.
+
+    Descriptions come from the generated models' ``Field(description=...)``
+    (Cisco's schema comments — single source of truth); enum params list
+    their values and non-empty defaults are shown.  Params with nothing to
+    say are omitted rather than padded.
+    """
+    fields = child_cls.model_fields
+    entries: list[tuple[str, str]] = []
+
+    for p in naming:
+        info = fields.get(p)
+        desc = (info.description or "") if info is not None else ""
+        entries.append((p, desc or "Naming property — forms the object's RN."))
+
+    for name, _type_str in sugar:
+        entries.append((name, "Curated shorthand, compiled to the underlying wire fields."))
+
+    for name, _type_str in params:
+        info = fields.get(name)
+        if info is None:
+            continue
+        parts: list[str] = []
+        if info.description:
+            parts.append(info.description)
+        ann = info.annotation
+        if get_origin(ann) is Annotated:
+            ann = get_args(ann)[0]
+        if isinstance(ann, type) and issubclass(ann, StrEnum):
+            members = [m.value for m in ann]
+            shown = ", ".join(f"``{v}``" for v in members[:8]) + (", …" if len(members) > 8 else "")
+            parts.append(f"Values: {shown}.")
+        default = info.default
+        if isinstance(default, StrEnum):
+            default = default.value
+        if default not in ("", None):
+            parts.append(f"Default: ``{default}``.")
+        if parts:
+            entries.append((name, " ".join(parts)))
+
+    return entries
+
+
+def _render_args_section(entries: list[tuple[str, str]]) -> list[str]:
+    """Render a Google-style Args block (wrapped, docstring-safe)."""
+    if not entries:
+        return []
+    lines = ["", "        Args:"]
+    for param, desc in entries:
+        wrapped = textwrap.wrap(
+            f"{param}: {_docstring_safe(desc)}",
+            width=96,
+            initial_indent="            ",
+            subsequent_indent="                ",
+        )
+        lines.extend(wrapped)
+    return lines
+
+
 def _render_maker(
     label: str,
     child_aci: str,
@@ -322,9 +393,27 @@ def _render_maker(
     naming = _naming_params(child_cls)
     params, imports = _field_params(child_cls)
     enum_imports |= imports
-    keyword_params = _sugar_params(child_aci) + params
+    sugar = _sugar_params(child_aci)
+    keyword_params = sugar + params
     lines = _render_signature(label, naming, keyword_params, return_type)
-    lines.append(f'        """Declare a ``{child_aci}`` child under the {owner_label} level."""')
+
+    summary = f"Declare a ``{child_aci}`` child under the {owner_label} level."
+    class_comment = _docstring_safe(getattr(child_cls, "__doc__", "") or "")
+    # Second docstring line: Cisco's class definition (from the model docstring)
+    doc_lines = [f'        """{summary}']
+    if "\n\n" in class_comment:
+        cisco = class_comment.split("\n\n")[1].strip()
+        if cisco and not cisco.startswith("RN format"):
+            doc_lines.append("")
+            doc_lines.extend(
+                textwrap.wrap(
+                    cisco, width=100, initial_indent="        ", subsequent_indent="        "
+                )
+            )
+    doc_lines.extend(_render_args_section(_arg_doc_entries(child_cls, naming, sugar, params)))
+    doc_lines.append('        """')
+
+    lines.extend(doc_lines)
     lines.extend(_maker_body(label, naming, return_type))
     lines.append("")
     return lines

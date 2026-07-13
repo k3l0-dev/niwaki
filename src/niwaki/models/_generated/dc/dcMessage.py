@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class dcMessage(ManagedObject):
     """ACI Managed Object: ``dcMessage``.
 
+    define a generic object for device connector to persist message communicated among each other in the MIT
+
     RN format: ``dm-{category}``
     """
 
@@ -36,14 +38,29 @@ class dcMessage(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    category: Annotated[str, Field(min_length=1, max_length=512)]
+    category: Annotated[
+        str, Field(min_length=1, max_length=512, description="message category, transparent to DME")
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     addi_prop1: Annotated[str, Field(max_length=512, alias="addiProp1")] = ""
     addi_prop2: Annotated[str, Field(max_length=512, alias="addiProp2")] = ""
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    has_secure_data: bool = Field(default=False, alias="hasSecureData")
-    node_id: Annotated[int, Field(alias="nodeId")] = 0
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    has_secure_data: bool = Field(
+        default=False,
+        alias="hasSecureData",
+        description="when the client queries the object, it will not get securePayload. the client needs to check hasSecureData, hasSecureData is true, the client needs to call upate mo with refresh set to true",
+    )
+    node_id: Annotated[
+        int, Field(alias="nodeId", description="The ID of the APIC, leaf, or spine.")
+    ] = 0
     payload: str = ""
     refresh_date: Annotated[str, Field(max_length=512, alias="refreshDate")] = ""
     refresh_node_id: Annotated[int, Field(alias="refreshNodeId")] = 0

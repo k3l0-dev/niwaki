@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class ptpNodeProfileTemplate(ManagedObject):
     """ACI Managed Object: ``ptpNodeProfileTemplate`` — PTP profile template abstract.
 
+    PTP Node profile template
+
     RN format: ``ptpnodeprofiletemplate-{ptp_profile_template_name}``
     """
 
@@ -37,18 +39,45 @@ class ptpNodeProfileTemplate(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     ptp_profile_template_name: PtpNodeProfTemplate = Field(
-        default=PtpNodeProfTemplate.TELECOM_FULL_PATH, alias="nodeProfile"
+        default=PtpNodeProfTemplate.TELECOM_FULL_PATH,
+        alias="nodeProfile",
+        description="TemplateName (Telecom)",
     )
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    node_domain_default_value: str = Field(default="", alias="nodeDomainDefault")
-    node_domain_range_end: str = Field(default="", alias="nodeDomainEnd")
-    node_domain_range_start: str = Field(default="", alias="nodeDomainStart")
-    node_priority_1_default_value: str = Field(default="", alias="nodePrio1Default")
-    node_priority_1_range_end: str = Field(default="", alias="nodePrio1End")
-    node_priority_1_range_start: str = Field(default="", alias="nodePrio1Start")
-    node_priority_2_default_value: str = Field(default="", alias="nodePrio2Default")
-    node_priority_2_range_end: str = Field(default="", alias="nodePrio2End")
-    node_priority_2_range_start: str = Field(default="", alias="nodePrio2Start")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    node_domain_default_value: str = Field(
+        default="", alias="nodeDomainDefault", description="Node Domain default value"
+    )
+    node_domain_range_end: str = Field(
+        default="", alias="nodeDomainEnd", description="Node Domain range end"
+    )
+    node_domain_range_start: str = Field(
+        default="", alias="nodeDomainStart", description="Node Domain range start"
+    )
+    node_priority_1_default_value: str = Field(
+        default="", alias="nodePrio1Default", description="Node priority 1 default value"
+    )
+    node_priority_1_range_end: str = Field(
+        default="", alias="nodePrio1End", description="Node priority 1 range end"
+    )
+    node_priority_1_range_start: str = Field(
+        default="", alias="nodePrio1Start", description="Node priority 1 range start"
+    )
+    node_priority_2_default_value: str = Field(
+        default="", alias="nodePrio2Default", description="Node priority 2 default value"
+    )
+    node_priority_2_range_end: str = Field(
+        default="", alias="nodePrio2End", description="Node priority 2 range end"
+    )
+    node_priority_2_range_start: str = Field(
+        default="", alias="nodePrio2Start", description="Node priority 2 range start"
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

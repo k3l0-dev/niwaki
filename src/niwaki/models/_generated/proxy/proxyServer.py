@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class proxyServer(ManagedObject):
     """ACI Managed Object: ``proxyServer`` — Proxy Server.
 
+    Policy to configure Proxy Server
+
     RN format: ``server``
     """
 
@@ -35,10 +37,20 @@ class proxyServer(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    http_url: Annotated[str, Field(max_length=512, alias="httpUrl")] = ""
-    https_url: Annotated[str, Field(max_length=512, alias="httpsUrl")] = ""
-    name: Annotated[str, Field(max_length=16, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    http_url: Annotated[str, Field(max_length=512, alias="httpUrl", description="Http URL")] = ""
+    https_url: Annotated[str, Field(max_length=512, alias="httpsUrl", description="Https URL")] = ""
+    name: Annotated[
+        str,
+        Field(max_length=16, pattern="^[a-zA-Z0-9_.:-]+$", description="The name of the object."),
+    ] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

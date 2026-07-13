@@ -7,13 +7,21 @@ from enum import StrEnum
 
 class InfraApplianceFailoverStatus(StrEnum):
     COMPLETED = "completed"
+    """Appliance Failover completed successfully."""
     IDLE = "idle"
+    """No APIC replace operation in progress."""
     REPROVISIONING_STANDBY_FAILED = "reprovisioning-standby-failed"
+    """Replace operation failed because reprovisioning standby APIC failed."""
     STANDBY_NOT_REACHABLE = "standby-not-reachable"
+    """Replace operation failed because standby APIC became unreachable while operation was in progress."""
     STARTING = "starting"
+    """Request to replace an APIC with a standby APIC is accepted."""
     TIMED_OUT_WAITING_FOR_NEW_APIC = "timed-out-waiting-for-new-apic"
+    """Replace operation failed because new APIC did not join for long time."""
     WAITING_FOR_NEW_APIC = "waiting-for-new-apic"
+    """Waiting for new active APIC to join."""
     WORKING_ON_REPROVISIONING_STANDBY = "working-on-reprovisioning-standby"
+    """Reprovisioning standby APIC."""
 
     @classmethod
     def _missing_(cls, value: object) -> InfraApplianceFailoverStatus | None:

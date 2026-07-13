@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class dbgexpRsTsSrc(ManagedObject):
     """ACI Managed Object: ``dbgexpRsTsSrc`` — Relation to Techsupport Source Node.
 
+    A source relation to the system health.
+
     RN format: ``rstsSrc-[{target_dn}]``
     """
 
@@ -34,8 +36,17 @@ class dbgexpRsTsSrc(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    target_dn: Annotated[str, Field(alias="tDn")]
+    target_dn: Annotated[
+        str, Field(alias="tDn", description="The source node of the on-demand TechSupport object.")
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class MdpConsumeMode(StrEnum):
     AUTO = "auto"
+    """Consume Mode: Auto"""
     MANUAL = "manual"
+    """Consume Mode: Manual"""
 
     @classmethod
     def _missing_(cls, value: object) -> MdpConsumeMode | None:

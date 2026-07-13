@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class rtctrlRsScopeToAttrP(ManagedObject):
     """ACI Managed Object: ``rtctrlRsScopeToAttrP`` — Attribute Profile.
 
+    The action profile name.
+
     RN format: ``rsScopeToAttrP``
     """
 
@@ -35,8 +37,21 @@ class rtctrlRsScopeToAttrP(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     name: Annotated[
-        str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="tnRtctrlAttrPName")
+        str,
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            alias="tnRtctrlAttrPName",
+            description="The name of the associated set action rule profile.",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

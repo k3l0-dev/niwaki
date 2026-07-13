@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class bgpPeerP(ManagedObject):
     """ACI Managed Object: ``bgpPeerP`` — Peer Connectivity Profile.
 
+    The BGP peer connectivity profile contains the peer IP address and defines the peer connectivity control settings. These values are for BGP routers, which can only exchange routing information when they establish a peer connection between them.
+
     RN format: ``peerP-[{peer_address}]``
     """
 
@@ -45,28 +47,66 @@ class bgpPeerP(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    peer_address: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="addr")]
+    peer_address: Annotated[
+        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="addr", description="The peer IP address.")
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    address_type_af_controls: str = Field(default="", alias="addrTCtrl")
-    administrative_state: NwAdminSt = Field(default=NwAdminSt.ENABLED, alias="adminSt")
-    allowed_self_as_count: str = Field(default="", alias="allowedSelfAsCnt")
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    capability: str = ""
-    type_of_network_reachable_via_this_peer: str = Field(default="", alias="connectivityType")
-    peer_af_controls: str = Field(default="", alias="ctrl")
-    peer_af_controls_ext: str = Field(default="", alias="ctrlExt")
+    address_type_af_controls: str = Field(
+        default="", alias="addrTCtrl", description="Ucast/Mcast Addr Type AF Control"
+    )
+    administrative_state: NwAdminSt = Field(
+        default=NwAdminSt.ENABLED, alias="adminSt", description="Administrative State"
+    )
+    allowed_self_as_count: str = Field(
+        default="",
+        alias="allowedSelfAsCnt",
+        description="The number of occurrences of a local Autonomous System Number (ASN).",
+    )
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    capability: Annotated[str, Field(description="Peer AF Capability")] = ""
+    type_of_network_reachable_via_this_peer: str = Field(
+        default="", alias="connectivityType", description="Network reachability via this Peer"
+    )
+    peer_af_controls: str = Field(
+        default="",
+        alias="ctrl",
+        description="The peer controls specify which Border Gateway Protocol (BGP) attributes are sent to a peer.",
+    )
+    peer_af_controls_ext: str = Field(
+        default="", alias="ctrlExt", description="Peer AF controls Ext"
+    )
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
-    asn_name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="name")] = ""
+    asn_name: Annotated[
+        str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="name", description="null")
+    ] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    password: Annotated[str, Field(repr=False)] = ""
-    peer_controls: str = Field(default="", alias="peerCtrl")
-    private_as_control: str = Field(default="", alias="privateASctrl")
-    ebgp_multihop_ttl_value: str = Field(default="", alias="ttl")
+    password: Annotated[str, Field(repr=False, description="Administrative state")] = ""
+    peer_controls: str = Field(default="", alias="peerCtrl", description="The peer controls.")
+    private_as_control: str = Field(
+        default="", alias="privateASctrl", description="Remove private AS"
+    )
+    ebgp_multihop_ttl_value: str = Field(
+        default="", alias="ttl", description="Specifies time to live (TTL)."
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    weight_for_routes_from_this_neighbor: str = Field(default="", alias="weight")
+    weight_for_routes_from_this_neighbor: str = Field(
+        default="", alias="weight", description="Default weight for routes from this neighbor"
+    )

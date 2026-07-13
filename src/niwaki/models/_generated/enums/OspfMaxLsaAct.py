@@ -7,8 +7,11 @@ from enum import StrEnum
 
 class OspfMaxLsaAct(StrEnum):
     LOG = "log"
+    """log a warning"""
     REJECT = "reject"
+    """Reject LSAs beyond the limit"""
     RESTART = "restart"
+    """Restart the neighbor"""
 
     @classmethod
     def _missing_(cls, value: object) -> OspfMaxLsaAct | None:

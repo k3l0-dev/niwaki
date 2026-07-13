@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class fvCEp(ManagedObject):
     """ACI Managed Object: ``fvCEp`` — Client End Point.
 
+    A client endpoint attaching to the network.
+
     RN format: ``cep-{name}``
     """
 
@@ -38,11 +40,20 @@ class fvCEp(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=128)]
+    name: Annotated[
+        str, Field(min_length=1, max_length=128, description="The client endpoint name.")
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    id: str = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    id: Annotated[str, Field(description="An identifier .")] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

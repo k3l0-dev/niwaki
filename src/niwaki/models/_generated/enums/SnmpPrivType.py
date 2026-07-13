@@ -7,8 +7,11 @@ from enum import StrEnum
 
 class SnmpPrivType(StrEnum):
     AES_128 = "aes-128"
+    """AES-128"""
     DES = "des"
+    """des"""
     NONE = "none"
+    """None"""
 
     @classmethod
     def _missing_(cls, value: object) -> SnmpPrivType | None:

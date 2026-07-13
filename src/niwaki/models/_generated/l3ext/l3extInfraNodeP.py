@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class l3extInfraNodeP(ManagedObject):
     """ACI Managed Object: ``l3extInfraNodeP`` — Infra Logical Node Profile.
 
+    Infra Logical Node Profile
+
     RN format: ``infranodep``
     """
 
@@ -36,18 +38,40 @@ class l3extInfraNodeP(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
-    fabric_external_control_peering: bool = Field(default=True, alias="fabricExtCtrlPeering")
-    fabric_ext_intersite_ctrl_peering: bool = Field(
-        default=False, alias="fabricExtIntersiteCtrlPeering"
+    fabric_external_control_peering: bool = Field(
+        default=True,
+        alias="fabricExtCtrlPeering",
+        description="Enable/Disable participation of this node in peering for fabric external control traffic",
     )
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    fabric_ext_intersite_ctrl_peering: bool = Field(
+        default=False,
+        alias="fabricExtIntersiteCtrlPeering",
+        description="Enable/Disable participation of this node in peering for intersite control traffic",
+    )
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
+        ""
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    spine_role: str = Field(default="", alias="spineRole")
+    spine_role: str = Field(
+        default="", alias="spineRole", description="Spine role played by this node"
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class fabricRsCallhomeInvPol(ManagedObject):
     """ACI Managed Object: ``fabricRsCallhomeInvPol`` — Callhome Inventory Policy.
 
+    A source relation to the policy for periodically sending Call Home messages with system inventory information.
+
     RN format: ``rscallhomeInvPol``
     """
 
@@ -35,8 +37,21 @@ class fabricRsCallhomeInvPol(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     name: Annotated[
-        str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="tnCallhomeInvPName")
+        str,
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            alias="tnCallhomeInvPName",
+            description="The call home inventory policy name. This name can be up to 64 characters. Note that you cannot change this name after the object has been saved.",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

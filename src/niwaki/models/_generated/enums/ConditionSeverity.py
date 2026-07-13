@@ -7,11 +7,16 @@ from enum import StrEnum
 
 class ConditionSeverity(StrEnum):
     CLEARED = "cleared"
+    """The Cleared severity level indicates the clearing of one or more previously reported alarms. This alarm clears all alarms for this managed object that have the same Alarm type, Probable cause and Specific problems (if given)."""
     CRITICAL = "critical"
+    """The Critical severity level indicates that a service affecting condition has occurred and an immediate corrective action is required. Such a severity can be reported, for example, when a managed object becomes totally out of service and its capability must be restored."""
     INFO = "info"
     MAJOR = "major"
+    """The Major severity level indicates that a service affecting condition has developed and an urgent corrective action is required. Such a severity can be reported, for example, when there is a severe degradation in the capability of the managed object and its full capability must be restored."""
     MINOR = "minor"
+    """The Minor severity level indicates the existence of a non-service affecting fault condition and that corrective action should be taken in order to prevent a more serious (for example, service affecting) fault."""
     WARNING = "warning"
+    """The Warning severity level indicates the detection of a potential or impending service affecting fault, before any significant effects have been felt."""
 
     @classmethod
     def _missing_(cls, value: object) -> ConditionSeverity | None:

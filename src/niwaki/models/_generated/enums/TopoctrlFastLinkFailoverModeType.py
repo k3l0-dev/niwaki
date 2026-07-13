@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class TopoctrlFastLinkFailoverModeType(StrEnum):
     OFF = "off"
+    """off"""
     ON = "on"
+    """on"""
 
     @classmethod
     def _missing_(cls, value: object) -> TopoctrlFastLinkFailoverModeType | None:

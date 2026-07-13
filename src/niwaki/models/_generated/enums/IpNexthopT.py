@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class IpNexthopT(StrEnum):
     NONE = "none"
+    """None - It acts like "null0" interface"""
     PREFIX = "prefix"
+    """Prefix"""
 
     @classmethod
     def _missing_(cls, value: object) -> IpNexthopT | None:

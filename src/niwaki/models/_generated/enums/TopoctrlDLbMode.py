@@ -7,8 +7,11 @@ from enum import StrEnum
 
 class TopoctrlDLbMode(StrEnum):
     AGGRESSIVE = "aggressive"
+    """Aggressive"""
     CONSERVATIVE = "conservative"
+    """conservative"""
     OFF = "off"
+    """off"""
 
     @classmethod
     def _missing_(cls, value: object) -> TopoctrlDLbMode | None:

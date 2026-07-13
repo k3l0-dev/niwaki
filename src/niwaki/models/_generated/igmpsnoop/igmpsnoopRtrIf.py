@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class igmpsnoopRtrIf(ManagedObject):
     """ACI Managed Object: ``igmpsnoopRtrIf`` — Router Interface.
 
+    The Multicast router interface.
+
     RN format: ``rtrif-[{id}]``
     """
 
@@ -36,7 +38,14 @@ class igmpsnoopRtrIf(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    id: str
+    id: Annotated[str, Field(description="The router interface port identifier.")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""

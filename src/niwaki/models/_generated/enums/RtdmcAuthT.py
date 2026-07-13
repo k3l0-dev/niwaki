@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class RtdmcAuthT(StrEnum):
     AH_MD5 = "ah-md5"
+    """MD5 HMAC"""
     NONE = "none"
+    """None"""
 
     @classmethod
     def _missing_(cls, value: object) -> RtdmcAuthT | None:

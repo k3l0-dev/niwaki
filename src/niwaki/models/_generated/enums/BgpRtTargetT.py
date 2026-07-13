@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class BgpRtTargetT(StrEnum):
     AUTOMATIC = "automatic"
+    """configure route targets automatically"""
     EXPLICIT = "explicit"
+    """user will configure route targets explicitly"""
 
     @classmethod
     def _missing_(cls, value: object) -> BgpRtTargetT | None:

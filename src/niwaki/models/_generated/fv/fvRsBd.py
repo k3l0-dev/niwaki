@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class fvRsBd(ManagedObject):
     """ACI Managed Object: ``fvRsBd`` — Bridge Domain for the EPG.
 
+    A source relation to the bridge domain associated to this endpoint group. This is an internal object.
+
     RN format: ``rsbd``
     """
 
@@ -39,6 +41,21 @@ class fvRsBd(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.-]+$", alias="tnFvBDName")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    name: Annotated[
+        str,
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            alias="tnFvBDName",
+            description="The name of the bridge domain associated with this EPG.",
+        ),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

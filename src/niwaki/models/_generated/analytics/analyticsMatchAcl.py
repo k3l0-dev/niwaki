@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class analyticsMatchAcl(ManagedObject):
     """ACI Managed Object: ``analyticsMatchAcl`` — Match ACL.
 
+    Match ACL
+
     RN format: ``acl-{name}``
     """
 
@@ -36,16 +38,40 @@ class analyticsMatchAcl(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the object.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    match_using_acl: Annotated[str, Field(max_length=512, alias="aclName")] = ""
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    match_using_acl: Annotated[
+        str, Field(max_length=512, alias="aclName", description="ACL to match")
+    ] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="The description of this configuration item.",
+        ),
     ] = ""
-    acl_filter_type: AnalyticsFltType = Field(default=AnalyticsFltType.IPV4, alias="fltType")
+    acl_filter_type: AnalyticsFltType = Field(
+        default=AnalyticsFltType.IPV4, alias="fltType", description="Filter type"
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

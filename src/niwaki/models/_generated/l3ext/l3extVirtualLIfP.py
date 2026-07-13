@@ -50,30 +50,87 @@ class l3extVirtualLIfP(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    external_interface_encap: Annotated[str, Field(alias="encap")]
-    path_of_the_anchor_node: Annotated[str, Field(alias="nodeDn")]
+    external_interface_encap: Annotated[
+        str,
+        Field(
+            alias="encap",
+            description="Encap of the external l2/l3 interface @@@ Note: In switch, two External BDs on the same node cannot have @@@ the external encap. In order to support this for external encap @@@ on a node (it can come from any port relation), same BD vxlan @@@ id should be allocated",
+        ),
+    ]
+    path_of_the_anchor_node: Annotated[
+        str, Field(alias="nodeDn", description="Dn of the Anchor Node")
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     external_l3_interface_ip_address: Annotated[
-        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="addr")
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            alias="addr",
+            description="Address of the external l3 interface",
+        ),
     ] = ""
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     svi_autostate: SviAutostate = Field(default=SviAutostate.DISABLED, alias="autostate")
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Description",
+        ),
     ] = ""
     encap_scope: L3extEncapScope = Field(default=L3extEncapScope.LOCAL, alias="encapScope")
-    external_interface_type: ExtnwIfInstT = Field(default=ExtnwIfInstT.EXT_SVI, alias="ifInstT")
-    ipv6_dad: L3extIpv6Dad = Field(default=L3extIpv6Dad.ENABLED, alias="ipv6Dad")
-    ipv6_link_local_address: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="llAddr")] = (
-        ""
+    external_interface_type: ExtnwIfInstT = Field(
+        default=ExtnwIfInstT.EXT_SVI,
+        alias="ifInstT",
+        description="Type of the external l2/l3 interface",
     )
-    external_l3_interface_mac_address: Annotated[
-        str, Field(pattern="^([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}$", alias="mac")
+    ipv6_dad: L3extIpv6Dad = Field(
+        default=L3extIpv6Dad.ENABLED,
+        alias="ipv6Dad",
+        description="IPv6 DAD feature When disabled it will IPv6 DAD will be diasabled",
+    )
+    ipv6_link_local_address: Annotated[
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            alias="llAddr",
+            description="Override of system generated Ipv6 Link Local Addr",
+        ),
     ] = ""
-    encap_mode: FvMode = Field(default=FvMode.REGULAR, alias="mode")
-    mtu_size: Annotated[int, Field(ge=576, le=9216, alias="mtu")] = 0
-    name_of_virtuallifp: Annotated[str, Field(max_length=512, alias="name")] = ""
-    dscp_value: str = Field(default="", alias="targetDscp")
+    external_l3_interface_mac_address: Annotated[
+        str,
+        Field(
+            pattern="^([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}$",
+            alias="mac",
+            description='Mac of the external l3 interface. The mac address is by default hard coded to "00:22:BD:F8:19:FF". This is a reserved MAC address and all the l3 interfaces by default use this mac as the router mac.',
+        ),
+    ] = ""
+    encap_mode: FvMode = Field(
+        default=FvMode.REGULAR, alias="mode", description="The BGP Domain mode."
+    )
+    mtu_size: Annotated[
+        int,
+        Field(
+            ge=576,
+            le=9216,
+            alias="mtu",
+            description="The administrative MTU port on the aggregated interface.",
+        ),
+    ] = 0
+    name_of_virtuallifp: Annotated[
+        str, Field(max_length=512, alias="name", description="The name of the object.")
+    ] = ""
+    dscp_value: str = Field(
+        default="", alias="targetDscp", description="Interface level Dscp value."
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

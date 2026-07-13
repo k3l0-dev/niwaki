@@ -14,6 +14,8 @@ from niwaki.models.base import ManagedObject
 class aaaTacacsPlusProvider(ManagedObject):
     """ACI Managed Object: ``aaaTacacsPlusProvider`` — TACACS+ Provider.
 
+    A TACACS+ provider is a remote server supporting the TACACS+ protocol that will be used for authentication.
+
     RN format: ``tacacsplusprovider-{name}``
     """
 
@@ -42,18 +44,42 @@ class aaaTacacsPlusProvider(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the TACACS+ provider.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     tacacs_authentication_protocol: AaaauthenticationProtocol = Field(
-        default=AaaauthenticationProtocol.PAP, alias="authProtocol"
+        default=AaaauthenticationProtocol.PAP,
+        alias="authProtocol",
+        description="The TACACS+ authentication protocol.",
     )
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies a description of the policy definition.",
+        ),
     ] = ""
-    key: Annotated[str, Field(repr=False)] = ""
+    key: Annotated[
+        str, Field(repr=False, description="A password for the AAA provider database.")
+    ] = ""
     periodic_server_monitoring: AaaMonitorServerType = Field(
         default=AaaMonitorServerType.DISABLED, alias="monitorServer"
     )
@@ -67,14 +93,32 @@ class aaaTacacsPlusProvider(ManagedObject):
     owner_key: Annotated[
         str,
         Field(
-            max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerKey"
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerKey",
+            description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
     owner_tag: Annotated[
         str,
-        Field(max_length=64, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerTag"),
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerTag",
+            description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+        ),
     ] = ""
-    port: Annotated[int, Field(ge=1, le=65535)] = 49
-    retries: Annotated[int, Field(ge=0, le=5)] = 1
-    timeout_in_seconds: Annotated[int, Field(ge=0, le=60, alias="timeout")] = 5
+    port: Annotated[
+        int, Field(ge=1, le=65535, description="The service port number for the TACACS+ service.")
+    ] = 49
+    retries: Annotated[int, Field(ge=0, le=5, description="null")] = 1
+    timeout_in_seconds: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=60,
+            alias="timeout",
+            description="The timeout for communication with the TACACS+ provider server.",
+        ),
+    ] = 5
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

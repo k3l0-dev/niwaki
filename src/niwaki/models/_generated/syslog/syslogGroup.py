@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class syslogGroup(ManagedObject):
     """ACI Managed Object: ``syslogGroup`` — Syslog Monitoring Destination Group.
 
+    The syslog destination group contains all information required to send syslog messages to a group of destinations.
+
     RN format: ``slgroup-{name}``
     """
 
@@ -40,15 +42,39 @@ class syslogGroup(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the destination group.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
-    format_setting: SyslogFormatSetting = Field(default=SyslogFormatSetting.ACI, alias="format")
+    format_setting: SyslogFormatSetting = Field(
+        default=SyslogFormatSetting.ACI,
+        alias="format",
+        description="The Call Home destination message format.",
+    )
     show_milli_seconds_in_timestamp: bool = Field(default=False, alias="includeMilliSeconds")
     show_timezone_in_timestamp: bool = Field(default=False, alias="includeTimeZone")
     display_name: Annotated[

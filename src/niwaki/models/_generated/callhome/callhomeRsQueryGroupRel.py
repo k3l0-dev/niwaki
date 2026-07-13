@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class callhomeRsQueryGroupRel(ManagedObject):
     """ACI Managed Object: ``callhomeRsQueryGroupRel`` — Relation to Callhome Querygroup.
 
+    A source relation to a call home query group.
+
     RN format: ``rsqueryGroupRel``
     """
 
@@ -35,6 +37,17 @@ class callhomeRsQueryGroupRel(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    target_dn: str = Field(default="", alias="tDn")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    target_dn: str = Field(
+        default="",
+        alias="tDn",
+        description="The distinguished name of the query group. This is the full path to the organization. The maximum supported string length is 255 ASCII characters.",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

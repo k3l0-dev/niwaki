@@ -38,29 +38,84 @@ class vnsLBVSvrReq(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    ctrct: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
-    graph: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
-    lb_name: Annotated[
-        str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="lbName")
+    ctrct: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="contract name, graphInst selector",
+        ),
     ]
-    node: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    graph: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="graph name, graphInst selector",
+        ),
+    ]
+    lb_name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            alias="lbName",
+            description="LB name",
+        ),
+    ]
+    node: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="node name, graphInst selector",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
-    lb_method: Annotated[str, Field(max_length=512, alias="lbMethod")] = ""
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    lb_method: Annotated[str, Field(max_length=512, alias="lbMethod", description="LB Method")] = ""
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
+        ""
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    provider: str = Field(default="", alias="prov")
-    service_group_port: str = Field(default="", alias="svcGrpPort")
-    service_group_service_type: Annotated[str, Field(max_length=512, alias="svcGrpSvcType")] = ""
+    provider: str = Field(default="", alias="prov", description="provider Dn")
+    service_group_port: str = Field(
+        default="", alias="svcGrpPort", description="port number for the service group"
+    )
+    service_group_service_type: Annotated[
+        str, Field(max_length=512, alias="svcGrpSvcType", description="service group service type")
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    version: VnsrequestVersion = VnsrequestVersion.CLASSIC
-    vip_ip: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="vipIp")] = ""
-    virtual_server_port_number: str = Field(default="", alias="vipPort")
-    lb_service_type: Annotated[str, Field(max_length=512, alias="vipSvcType")] = ""
+    version: VnsrequestVersion = Field(default=VnsrequestVersion.CLASSIC, description="Version")
+    vip_ip: Annotated[
+        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="vipIp", description="VIP IP")
+    ] = ""
+    virtual_server_port_number: str = Field(
+        default="", alias="vipPort", description="port number for the virtual server"
+    )
+    lb_service_type: Annotated[
+        str, Field(max_length=512, alias="vipSvcType", description="LB service type")
+    ] = ""

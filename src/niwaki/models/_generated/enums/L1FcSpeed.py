@@ -7,11 +7,17 @@ from enum import StrEnum
 
 class L1FcSpeed(StrEnum):
     _16G = "16G"
+    """Speed is 16 Gbps"""
     _32G = "32G"
+    """Speed is 32 Gbps"""
     _4G = "4G"
+    """Speed is 4 Gbps"""
     _8G = "8G"
+    """Speed is 8 Gbps"""
     AUTO = "auto"
+    """Speed is auto"""
     UNKNOWN = "unknown"
+    """Speed is unknown"""
 
     @classmethod
     def _missing_(cls, value: object) -> L1FcSpeed | None:

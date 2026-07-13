@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class bgpRsBgpNodeCtxPol(ManagedObject):
     """ACI Managed Object: ``bgpRsBgpNodeCtxPol`` — BGP Context Policy Per Profile.
 
+    Relationship to the BGP context policy
+
     RN format: ``rsbgpNodeCtxPol``
     """
 
@@ -37,7 +39,14 @@ class bgpRsBgpNodeCtxPol(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     name: Annotated[
         str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="tnBgpCtxPolName")
     ] = ""

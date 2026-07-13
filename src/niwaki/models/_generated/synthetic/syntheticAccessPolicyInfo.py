@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class syntheticAccessPolicyInfo(ManagedObject):
     """ACI Managed Object: ``syntheticAccessPolicyInfo``.
 
+    -This Mo will contain IPG,Switch Profile, IP, AAEP, PathEP,VLAN Pool,Domain Name for a given EPG
+
     RN format: ``accesspolicyinfo-dom-{domain_name}-vlan-{vlan_pool}-attEnP-{attachable_access_entity_profile}-accBGrp-{interface_policy_group}-accPrtP-{interface_profile}-ndP-{switch_profile}-pthEp-{path_end_point}``
     """
 
@@ -44,16 +46,39 @@ class syntheticAccessPolicyInfo(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    interface_policy_group: Annotated[str, Field(min_length=1, max_length=512, alias="accBndlGrp")]
+    interface_policy_group: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=512,
+            alias="accBndlGrp",
+            description="The name of the PC/VPC Interface Policy Group deployed on this protection group.",
+        ),
+    ]
     interface_profile: Annotated[str, Field(min_length=1, max_length=512, alias="accPortP")]
     attachable_access_entity_profile: Annotated[
         str, Field(min_length=1, max_length=512, alias="attEntityP")
     ]
-    domain_name: Annotated[str, Field(min_length=1, max_length=512, alias="domain")]
+    domain_name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=512,
+            alias="domain",
+            description="The domain of the counts object.",
+        ),
+    ]
     switch_profile: Annotated[str, Field(min_length=1, max_length=512, alias="nodeP")]
     path_end_point: Annotated[str, Field(min_length=1, max_length=512, alias="pathEp")]
     vlan_pool: Annotated[str, Field(min_length=1, max_length=512, alias="vLanPool")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

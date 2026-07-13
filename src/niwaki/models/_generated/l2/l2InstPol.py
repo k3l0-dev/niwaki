@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class l2InstPol(ManagedObject):
     """ACI Managed Object: ``l2InstPol`` — Fabric L2 MTU Policy.
 
+    The Layer 2 instance policy is used for configuring fabric-wide layer 2 settings. Currently, this policy contains only fabric MTU and management MTU configuration.
+
     RN format: ``l2pol-{name}``
     """
 
@@ -34,29 +36,60 @@ class l2InstPol(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The Layer 2 instance policy name.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies a description of the policy definition.",
+        ),
     ] = ""
-    mtu_size_for_fabric_ports: Annotated[int, Field(ge=576, le=9216, alias="fabricMtu")] = 9000
-    mtu_size_for_management_ports: Annotated[int, Field(ge=576, le=9216, alias="managementMtu")] = (
-        9000
-    )
+    mtu_size_for_fabric_ports: Annotated[
+        int, Field(ge=576, le=9216, alias="fabricMtu", description="MTU Size for Fabric Ports")
+    ] = 9000
+    mtu_size_for_management_ports: Annotated[
+        int,
+        Field(ge=576, le=9216, alias="managementMtu", description="MTU Size for Management Ports"),
+    ] = 9000
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
     owner_key: Annotated[
         str,
         Field(
-            max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerKey"
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerKey",
+            description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
     owner_tag: Annotated[
         str,
-        Field(max_length=64, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerTag"),
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerTag",
+            description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

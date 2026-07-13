@@ -34,7 +34,14 @@ class syntheticSwitchFirmwareCheck(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     size_of_copied_tmp_file: Annotated[str, Field(max_length=512, alias="copiedSize")] = ""
     node_id: Annotated[str, Field(max_length=512, alias="nodeid")] = ""
     firmware_copy_check_result: bool = Field(default=False, alias="result")

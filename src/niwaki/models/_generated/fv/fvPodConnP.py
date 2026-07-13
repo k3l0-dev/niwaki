@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class fvPodConnP(ManagedObject):
     """ACI Managed Object: ``fvPodConnP`` — POD Anycast DTEP IP.
 
+    POD Connectivity Profile
+
     RN format: ``podConnP-{pod_id}``
     """
 
@@ -39,16 +41,34 @@ class fvPodConnP(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    pod_id: Annotated[str, Field(alias="id")]
+    pod_id: Annotated[str, Field(alias="id", description="Pod id")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    assoc_intersite_pod_id: str = Field(default="", alias="assocIntersitePodId")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    assoc_intersite_pod_id: str = Field(
+        default="",
+        alias="assocIntersitePodId",
+        description="ID of the pod in the main fabric to which this pod is assocated. This property is valid only if this pod is a virtual pod",
+    )
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
+        ""
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

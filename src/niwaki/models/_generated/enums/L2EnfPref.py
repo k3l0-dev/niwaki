@@ -7,8 +7,11 @@ from enum import StrEnum
 
 class L2EnfPref(StrEnum):
     HW = "hw"
+    """In hardware, which means the epg is in hair-pin mode, all packets come to iLeaf and there is no local switching in the hypervior (NS mode)"""
     SW = "sw"
+    """In software, which means that local switching can happen in the hypervisor (LS mode)"""
     UNKNOWN = "unknown"
+    """Unknwown mode to support CLI operations Domain is put in unknown mode until set to sw/hw"""
 
     @classmethod
     def _missing_(cls, value: object) -> L2EnfPref | None:

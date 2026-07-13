@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class qosInstPol(ManagedObject):
     """ACI Managed Object: ``qosInstPol`` — QOS Instance Policy.
 
+    A QOS instance policy, which is a container for QOS class objects.
+
     RN format: ``qosinst-{name}``
     """
 
@@ -39,20 +41,40 @@ class qosInstPol(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     e_trap_flow_age_out_timer: str = Field(default="", alias="EtrapAgeTimer")
     track_activeness_of_elephant_flow: str = Field(default="", alias="EtrapBwThresh")
     e_trap_elephant_flow_identifier: str = Field(default="", alias="EtrapByteCt")
-    e_trap_enable_knob: bool = Field(default=False, alias="EtrapSt")
+    e_trap_enable_knob: bool = Field(
+        default=False, alias="EtrapSt", description="E-trap parameters"
+    )
     fabric_flush_interval_in_ms: str = Field(default="", alias="FabricFlushInterval")
-    fabric_pfc_flush_enable_knob: bool = Field(default=False, alias="FabricFlushSt")
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    global_control_settings: Qosmctrl = Field(default=Qosmctrl.NONE, alias="ctrl")
+    fabric_pfc_flush_enable_knob: bool = Field(
+        default=False, alias="FabricFlushSt", description="Fabric Flush parameters"
+    )
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    global_control_settings: Qosmctrl = Field(
+        default=Qosmctrl.NONE, alias="ctrl", description="Global control knob within QoS"
+    )
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies a description of the policy definition.",
+        ),
     ] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
@@ -60,13 +82,25 @@ class qosInstPol(ManagedObject):
     owner_key: Annotated[
         str,
         Field(
-            max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerKey"
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerKey",
+            description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
     owner_tag: Annotated[
         str,
-        Field(max_length=64, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerTag"),
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerTag",
+            description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+        ),
     ] = ""
-    micro_burst_spine_queues_percent: str = Field(default="", alias="uburstSpineQueues")
-    micro_burst_tor_queues_percent: str = Field(default="", alias="uburstTorQueues")
+    micro_burst_spine_queues_percent: str = Field(
+        default="", alias="uburstSpineQueues", description="Global microburst spine % queues"
+    )
+    micro_burst_tor_queues_percent: str = Field(
+        default="", alias="uburstTorQueues", description="Global microburst tor % queues"
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

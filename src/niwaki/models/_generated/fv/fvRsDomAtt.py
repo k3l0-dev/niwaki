@@ -24,6 +24,8 @@ from niwaki.models.base import ManagedObject
 class fvRsDomAtt(ManagedObject):
     """ACI Managed Object: ``fvRsDomAtt`` — Domain.
 
+    An EPG can be linked to a domain profile via the Associated Domain Profiles. The domain profiles attached can be VMM, Physical, L2 External, or L3 External Domains.
+
     RN format: ``rsdomAtt-[{target_dn}]``
     """
 
@@ -56,7 +58,9 @@ class fvRsDomAtt(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    target_dn: Annotated[str, Field(alias="tDn")]
+    target_dn: Annotated[
+        str, Field(alias="tDn", description="The name of the Physical Domain Profile.")
+    ]
 
     # ── Create-only (ignored by APIC on modification) ─────────────────────────
     delimiter: Annotated[
@@ -64,29 +68,79 @@ class fvRsDomAtt(ManagedObject):
     ] = ""
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     api_mode: FvapiModes = Field(default=FvapiModes.MGMT, alias="apiMode")
-    binding_type: FvBindingType = Field(default=FvBindingType.NONE, alias="bindingType")
+    binding_type: FvBindingType = Field(
+        default=FvBindingType.NONE, alias="bindingType", description="Binding type for ports"
+    )
     class_pref: FvClassPref = Field(default=FvClassPref.ENCAP, alias="classPref")
-    custom_epg_name: Annotated[str, Field(max_length=80, alias="customEpgName")] = ""
-    encap: str = ""
+    custom_epg_name: Annotated[
+        str,
+        Field(
+            max_length=80,
+            alias="customEpgName",
+            description="User-configured port-group display name",
+        ),
+    ] = ""
+    encap: Annotated[str, Field(description="The port encapsulation.")] = ""
     encap_mode: FvEncapMode = Field(default=FvEncapMode.AUTO, alias="encapMode")
-    epg_cos: FvEpgCos = Field(default=FvEpgCos.COS0, alias="epgCos")
-    epg_cos_pref: FvEpgCosPref = Field(default=FvEpgCosPref.DISABLED, alias="epgCosPref")
-    deployment_immediacy: FvInstrImedcy = Field(default=FvInstrImedcy.LAZY, alias="instrImedcy")
+    epg_cos: FvEpgCos = Field(
+        default=FvEpgCos.COS0, alias="epgCos", description="Represents Epg Cos for AVS"
+    )
+    epg_cos_pref: FvEpgCosPref = Field(
+        default=FvEpgCosPref.DISABLED,
+        alias="epgCosPref",
+        description="Represents parameter used to enable/disable Epg Cos Policy",
+    )
+    deployment_immediacy: FvInstrImedcy = Field(
+        default=FvInstrImedcy.LAZY,
+        alias="instrImedcy",
+        description="Once policies are downloaded to the leaf software, deployment immediacy can specify when the policy is pushed into the hardware policy CAM.",
+    )
     ipam_dhcp_override: Annotated[
         str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="ipamDhcpOverride")
     ] = ""
     ipam_enabled: bool = Field(default=False, alias="ipamEnabled")
     ipam_gateway: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="ipamGateway")] = ""
-    lag_policy_name: Annotated[str, Field(max_length=512, alias="lagPolicyName")] = ""
-    netflow_dir: FvNetflowDir = Field(default=FvNetflowDir.BOTH, alias="netflowDir")
-    netflow_pref: FvNetflowPref = Field(default=FvNetflowPref.DISABLED, alias="netflowPref")
-    num_ports: str = Field(default="", alias="numPorts")
-    port_allocation: FvPortAllocation = Field(default=FvPortAllocation.NONE, alias="portAllocation")
-    primary_encap: str = Field(default="", alias="primaryEncap")
+    lag_policy_name: Annotated[
+        str, Field(max_length=512, alias="lagPolicyName", description="LAG Policy Name")
+    ] = ""
+    netflow_dir: FvNetflowDir = Field(
+        default=FvNetflowDir.BOTH,
+        alias="netflowDir",
+        description="Represents NetFlow monitoring direction",
+    )
+    netflow_pref: FvNetflowPref = Field(
+        default=FvNetflowPref.DISABLED,
+        alias="netflowPref",
+        description="Represents parameter used to enable/disable Netflow Policy",
+    )
+    num_ports: str = Field(
+        default="", alias="numPorts", description="Number of ports for binding type"
+    )
+    port_allocation: FvPortAllocation = Field(
+        default=FvPortAllocation.NONE,
+        alias="portAllocation",
+        description="Port allocation for ports",
+    )
+    primary_encap: str = Field(
+        default="",
+        alias="primaryEncap",
+        description="Represents the primary encap when the EPG is isolated",
+    )
     primary_encap_inner: str = Field(default="", alias="primaryEncapInner")
-    resolution_immediacy: FvResImedcy = Field(default=FvResImedcy.LAZY, alias="resImedcy")
+    resolution_immediacy: FvResImedcy = Field(
+        default=FvResImedcy.LAZY,
+        alias="resImedcy",
+        description="Specifies if policies are to be resolved immmediately or when needed.",
+    )
     secondary_encap_inner: str = Field(default="", alias="secondaryEncapInner")
     switching_mode: FvSwitchingModeT = Field(default=FvSwitchingModeT.NATIVE, alias="switchingMode")
     untagged: bool = False

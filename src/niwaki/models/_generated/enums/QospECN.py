@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class QospECN(StrEnum):
     DISABLED = "disabled"
+    """disabled"""
     ENABLED = "enabled"
+    """enabled"""
 
     @classmethod
     def _missing_(cls, value: object) -> QospECN | None:

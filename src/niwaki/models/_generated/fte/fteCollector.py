@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class fteCollector(ManagedObject):
     """ACI Managed Object: ``fteCollector`` — Configure the FTE Collector Information.
 
+    FTE Collector info
+
     RN format: ``collector-{name}``
     """
 
@@ -34,23 +36,56 @@ class fteCollector(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the object.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="The description of this configuration item.",
+        ),
     ] = ""
-    configure_collector_entity_dscp_value: str = Field(default="", alias="dscp")
+    configure_collector_entity_dscp_value: str = Field(
+        default="", alias="dscp", description="IP dscp value"
+    )
     configure_collector_entity_ip: Annotated[
-        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="dstAddr")
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            alias="dstAddr",
+            description="Collector node destination IP address",
+        ),
     ] = ""
-    configure_collector_entity_l4_port: str = Field(default="", alias="dstPort")
+    configure_collector_entity_l4_port: str = Field(
+        default="", alias="dstPort", description="Collector node destination port"
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    src_addr: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="srcAddr")] = ""
+    src_addr: Annotated[
+        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="srcAddr", description="Source IP address")
+    ] = ""
     sw_export: bool = Field(default=False, alias="swExport")
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    configure_collector_entity_vrf: Annotated[str, Field(max_length=512, alias="vrfName")] = ""
+    configure_collector_entity_vrf: Annotated[
+        str, Field(max_length=512, alias="vrfName", description="Collector node VRF")
+    ] = ""

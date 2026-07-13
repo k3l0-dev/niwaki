@@ -15,6 +15,8 @@ from niwaki.models.base import ManagedObject
 class analyticsFwdInstTarget(ManagedObject):
     """ACI Managed Object: ``analyticsFwdInstTarget`` — Forward Instance Target.
 
+    Forwarding instance based target
+
     RN format: ``fwdinst-{identifier}``
     """
 
@@ -44,14 +46,35 @@ class analyticsFwdInstTarget(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    identifier: Annotated[int, Field(ge=0, le=16777215, alias="id")] = 0
+    identifier: Annotated[int, Field(ge=0, le=16777215, alias="id", description="Identifier")] = 0
 
     # ── Configurable ───────────────────────────────────────────────────────────
     default_filtering_policy: AnalyticsDefPolicyT = Field(
-        default=AnalyticsDefPolicyT.PERMIT, alias="DefPolicy"
+        default=AnalyticsDefPolicyT.PERMIT,
+        alias="DefPolicy",
+        description="Default filtering policy",
     )
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    collector_id: Annotated[int, Field(ge=0, le=16777215, alias="collectorId")] = 0
-    direction: AnalyticsDirectionT = Field(default=AnalyticsDirectionT.IN, alias="dir")
-    netflow_target_type: AnalyticsFltType = Field(default=AnalyticsFltType.IPV4, alias="fltType")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    collector_id: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=16777215,
+            alias="collectorId",
+            description="Collector identifier provided by the analytics controller",
+        ),
+    ] = 0
+    direction: AnalyticsDirectionT = Field(
+        default=AnalyticsDirectionT.IN, alias="dir", description="Direction"
+    )
+    netflow_target_type: AnalyticsFltType = Field(
+        default=AnalyticsFltType.IPV4, alias="fltType", description="IP filter type"
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

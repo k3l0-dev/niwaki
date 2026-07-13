@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class maintRsPolScheduler(ManagedObject):
     """ACI Managed Object: ``maintRsPolScheduler`` — Relation to Maintenence Scheduler Policy.
 
+    A source relation to the scheduler policy.
+
     RN format: ``rspolScheduler``
     """
 
@@ -35,8 +37,21 @@ class maintRsPolScheduler(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     name: Annotated[
-        str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="tnTrigSchedPName")
+        str,
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            alias="tnTrigSchedPName",
+            description="The maintenance policy scheduler allows you to define one-time or reoccurring time periods where one or more of the affected nodes may be rebooted without administrator intervention.",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

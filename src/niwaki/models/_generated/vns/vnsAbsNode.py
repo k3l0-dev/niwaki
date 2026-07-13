@@ -15,6 +15,8 @@ from niwaki.models.base import ManagedObject
 class vnsAbsNode(ManagedObject):
     """ACI Managed Object: ``vnsAbsNode`` — Function Node.
 
+    An abstract node represents a service node such as a server load balancer (SLB) or firewall (FW). An abstract node is contained in an abstract graph.
+
     RN format: ``AbsNode-{name}``
     """
 
@@ -50,34 +52,74 @@ class vnsAbsNode(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the abstract node.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies a description of the policy definition.",
+        ),
     ] = ""
     func_template_type: VnsFuncTemplateType = Field(
-        default=VnsFuncTemplateType.OTHER, alias="funcTemplateType"
+        default=VnsFuncTemplateType.OTHER,
+        alias="funcTemplateType",
+        description="Func Template type",
     )
-    function_type: VnsNodeFuncType = Field(default=VnsNodeFuncType.GOTO, alias="funcType")
-    is_copy: bool = Field(default=False, alias="isCopy")
-    managed: bool = True
+    function_type: VnsNodeFuncType = Field(
+        default=VnsNodeFuncType.GOTO,
+        alias="funcType",
+        description="A function type. A GoThrough node is a transparent device, where a packet goes through without being addressed to the device, and the endpoints are not aware of that device. A GoTo device has a specific destination.",
+    )
+    is_copy: bool = Field(
+        default=False, alias="isCopy", description="if the device is a copy device"
+    )
+    managed: bool = Field(
+        default=True, description="Specified if the function is using a managed device"
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
     owner_key: Annotated[
         str,
         Field(
-            max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerKey"
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerKey",
+            description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
     owner_tag: Annotated[
         str,
-        Field(max_length=64, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerTag"),
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerTag",
+            description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+        ),
     ] = ""
     routing_mode: VnsRoutingMode = Field(default=VnsRoutingMode.UNSPECIFIED, alias="routingMode")
-    sequence_number: Annotated[int, Field(alias="sequenceNumber")] = 0
+    sequence_number: Annotated[
+        int, Field(alias="sequenceNumber", description="Sequence number. For CLI purposes")
+    ] = 0
     share_encap: bool = Field(default=False, alias="shareEncap")
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

@@ -43,18 +43,40 @@ class aaaSamlProvider(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the object.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies a description of the policy definition.",
+        ),
     ] = ""
     idp_entity_id: Annotated[str, Field(max_length=512, alias="entityId")] = ""
     gui_redirect_banner_message: str = Field(default="", alias="guiBannerMessage")
     identity_provider: AaaIdP = Field(default=AaaIdP.ADFS, alias="idP")
-    key: Annotated[str, Field(repr=False)] = ""
+    key: Annotated[
+        str, Field(repr=False, description="A password for the AAA provider database.")
+    ] = ""
     metadata_url_provided_by_idp: Annotated[
         str, Field(min_length=1, max_length=2000, alias="metadataUrl")
     ] = ""
@@ -71,17 +93,33 @@ class aaaSamlProvider(ManagedObject):
     owner_key: Annotated[
         str,
         Field(
-            max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerKey"
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerKey",
+            description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
     owner_tag: Annotated[
         str,
-        Field(max_length=64, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerTag"),
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerTag",
+            description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+        ),
     ] = ""
-    retries: Annotated[int, Field(ge=0, le=5)] = 1
+    retries: Annotated[int, Field(ge=0, le=5, description="null")] = 1
     signature_algorithm: AaaSigAlg = Field(default=AaaSigAlg.SIG_RSA_SHA256, alias="sigAlg")
     apicsp_entity_id: Annotated[str, Field(min_length=1, max_length=500, alias="spEntityId")] = ""
-    timeout_in_seconds: Annotated[int, Field(ge=5, le=60, alias="timeout")] = 5
+    timeout_in_seconds: Annotated[
+        int,
+        Field(
+            ge=5,
+            le=60,
+            alias="timeout",
+            description="The following two properties are also defined in Ep MO. Here they reperesent per server configuration which would take precedence over global configuration defined in Ep MO",
+        ),
+    ] = 5
     certificate_authority: Annotated[
         str, Field(max_length=16, pattern="^[a-zA-Z0-9_.:-]+$", alias="tp")
     ] = ""

@@ -45,24 +45,54 @@ class authSvr(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the object.",
+        ),
+    ]
 
     # ── Create-only (ignored by APIC on modification) ─────────────────────────
-    hostname_or_ip_address: str = Field(default="", alias="hostOrIp")
+    hostname_or_ip_address: str = Field(
+        default="", alias="hostOrIp", description="The host or IP address."
+    )
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    event_sync_interval_seconds: str = Field(default="", alias="evtSyncIntvl")
-    triggered_inventory_sync_status: AuthTrigSt = Field(
-        default=AuthTrigSt.UNTRIGGERED, alias="inventoryTrigSt"
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    event_sync_interval_seconds: str = Field(
+        default="", alias="evtSyncIntvl", description="Event Timers"
     )
-    mode: AuthMode = AuthMode.AD
+    triggered_inventory_sync_status: AuthTrigSt = Field(
+        default=AuthTrigSt.UNTRIGGERED,
+        alias="inventoryTrigSt",
+        description="Manual trigger state of inventory sync",
+    )
+    mode: AuthMode = Field(default=AuthMode.AD, description="The BGP Domain mode.")
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    port: str = ""
-    datacenter: Annotated[str, Field(max_length=512, alias="rootContName")] = ""
-    scope: AuthScope = AuthScope.ISE
-    sequence_number: Annotated[int, Field(alias="seqNum")] = 0
+    port: Annotated[str, Field(description="The service port number for the LDAP service.")] = ""
+    datacenter: Annotated[
+        str,
+        Field(
+            max_length=512,
+            alias="rootContName",
+            description="The name of the root level objects in the external VM management system that contains the compute and networking entities. For example, the name of the Datacenter in VMware vCenter.",
+        ),
+    ] = ""
+    scope: AuthScope = Field(default=AuthScope.ISE, description="mode of operation")
+    sequence_number: Annotated[
+        int, Field(alias="seqNum", description="An ISIS link-state packet sequence number.")
+    ] = 0
     stats_option: VmmStatsMode = Field(default=VmmStatsMode.DISABLED, alias="statsMode")
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

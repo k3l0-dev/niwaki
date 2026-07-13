@@ -14,6 +14,8 @@ from niwaki.models.base import ManagedObject
 class rtctrlSetASPath(ManagedObject):
     """ACI Managed Object: ``rtctrlSetASPath`` — Set AS Path.
 
+    Set rule based on AS Path
+
     RN format: ``saspath-{as_path_criteria}``
     """
 
@@ -38,18 +40,34 @@ class rtctrlSetASPath(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    as_path_criteria: RtmapASCritT = Field(default=RtmapASCritT.PREPEND, alias="criteria")
+    as_path_criteria: RtmapASCritT = Field(
+        default=RtmapASCritT.PREPEND, alias="criteria", description="Criteria value"
+    )
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
-    last_as_number: str = Field(default="", alias="lastnum")
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    last_as_number: str = Field(default="", alias="lastnum", description="Last AS Number")
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
+        ""
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    type: RtctrlSetType = RtctrlSetType.AS_PATH
+    type: RtctrlSetType = Field(default=RtctrlSetType.AS_PATH, description="Set type")
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

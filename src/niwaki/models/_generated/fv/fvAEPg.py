@@ -17,6 +17,8 @@ from niwaki.models.base import ManagedObject
 class fvAEPg(ManagedObject):
     """ACI Managed Object: ``fvAEPg`` — Application EPG.
 
+    A set of requirements for the application-level EPG instance. The policy regulates connectivity and visibility among the end points within the scope of the policy.
+
     RN format: ``epg-{name}``
     """
 
@@ -91,27 +93,67 @@ class fvAEPg(ManagedObject):
     _has_stats: ClassVar[bool] = True
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name for the endpoint group.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
     contract_exception_tag: Annotated[str, Field(max_length=512, alias="exceptionTag")] = ""
-    flood_on_encap: FvFloodOnEncap = Field(default=FvFloodOnEncap.DISABLED, alias="floodOnEncap")
-    forwarding_control_bits: str = Field(default="", alias="fwdCtrl")
+    flood_on_encap: FvFloodOnEncap = Field(
+        default=FvFloodOnEncap.DISABLED,
+        alias="floodOnEncap",
+        description="Control at EPG level if the traffic L2 Multicast/Broadcast and Link Local Layer should be flooded only on ENCAP or based on bridg-domain settings",
+    )
+    forwarding_control_bits: str = Field(
+        default="", alias="fwdCtrl", description="Forwarding Control"
+    )
     epg_with_multisite_mcast_source: bool = Field(default=False, alias="hasMcastSource")
     attribute_based_epg: bool = Field(default=False, alias="isAttrBasedEPg")
-    provider_label_match_criteria: VzMatchT = Field(default=VzMatchT.ATLEASTONE, alias="matchT")
+    provider_label_match_criteria: VzMatchT = Field(
+        default=VzMatchT.ATLEASTONE,
+        alias="matchT",
+        description="The provider label match criteria.",
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
     policy_control_enforcement: FvPcEnfPref = Field(
-        default=FvPcEnfPref.UNENFORCED, alias="pcEnfPref"
+        default=FvPcEnfPref.UNENFORCED,
+        alias="pcEnfPref",
+        description="Represents parameter used by the node (i.e. Leaf) to enforce filter rules in this EPG",
     )
-    preferred_group_member: FvPrefGrMemb = Field(default=FvPrefGrMemb.EXCLUDE, alias="prefGrMemb")
-    qos_class: QosTenantPrio = Field(default=QosTenantPrio.UNSPECIFIED, alias="prio")
+    preferred_group_member: FvPrefGrMemb = Field(
+        default=FvPrefGrMemb.EXCLUDE,
+        alias="prefGrMemb",
+        description="Represents parameter used to determine if EPg is part of a group that does not a contract for communication",
+    )
+    qos_class: QosTenantPrio = Field(
+        default=QosTenantPrio.UNSPECIFIED,
+        alias="prio",
+        description="The QoS priority class identifier.",
+    )
     shutdown: bool = False
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

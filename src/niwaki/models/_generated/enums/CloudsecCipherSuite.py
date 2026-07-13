@@ -7,6 +7,7 @@ from enum import StrEnum
 
 class CloudsecCipherSuite(StrEnum):
     GCM_AES_XPN_256 = "gcm-aes-xpn-256"
+    """gcm-aes-xpn-256, only supported suite for cloudsec"""
 
     @classmethod
     def _missing_(cls, value: object) -> CloudsecCipherSuite | None:

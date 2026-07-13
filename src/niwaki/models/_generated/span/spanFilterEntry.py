@@ -47,21 +47,35 @@ class spanFilterEntry(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    destination_ip_prefix: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="dstAddr")]
+    destination_ip_prefix: Annotated[
+        str,
+        Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="dstAddr", description="Destination IP Prefix"),
+    ]
     first_destination_port: Annotated[str, Field(alias="dstPortFrom")]
     dst_port_to: Annotated[str, Field(alias="dstPortTo")]
-    ip_protocol: Annotated[str, Field(alias="ipProto")]
-    source_ip_prefix: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="srcAddr")]
-    first_source_port: Annotated[str, Field(alias="srcPortFrom")]
-    last_source_port: Annotated[str, Field(alias="srcPortTo")]
+    ip_protocol: Annotated[str, Field(alias="ipProto", description="The IP protocol.")]
+    source_ip_prefix: Annotated[
+        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="srcAddr", description="Source IP Prefix")
+    ]
+    first_source_port: Annotated[
+        str, Field(alias="srcPortFrom", description="The First (Starting) Source Port")
+    ]
+    last_source_port: Annotated[str, Field(alias="srcPortTo", description="The Last Source Port")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
+        ""
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

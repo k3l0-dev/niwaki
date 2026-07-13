@@ -39,19 +39,56 @@ class qosUburst(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    admin_st: QosUburstAdminState = Field(default=QosUburstAdminState.DISABLED, alias="adminSt")
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    admin_st: QosUburstAdminState = Field(
+        default=QosUburstAdminState.DISABLED,
+        alias="adminSt",
+        description="The Administrative state of micro burst",
+    )
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
-    down_thres_bytes: Annotated[int, Field(ge=208, le=27262560, alias="downThresBytes")] = 27262560
-    down_thres_per: str = Field(default="", alias="downThresPer")
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    down_thres_bytes: Annotated[
+        int,
+        Field(
+            ge=208,
+            le=27262560,
+            alias="downThresBytes",
+            description="micro burst down Threshold bytes",
+        ),
+    ] = 27262560
+    down_thres_per: str = Field(
+        default="", alias="downThresPer", description="micro burst down Threshold percentage"
+    )
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
+        ""
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    type: QospUburstUnit = QospUburstUnit.PERCENTAGE
-    up_thres_bytes: Annotated[int, Field(ge=208, le=27262560, alias="upThresBytes")] = 27262560
-    up_thres_per: str = Field(default="", alias="upThresPer")
+    type: QospUburstUnit = Field(
+        default=QospUburstUnit.PERCENTAGE, description="What is the unit type of thresholds"
+    )
+    up_thres_bytes: Annotated[
+        int,
+        Field(
+            ge=208, le=27262560, alias="upThresBytes", description="micro burst up Threshold bytes"
+        ),
+    ] = 27262560
+    up_thres_per: str = Field(
+        default="", alias="upThresPer", description="micro burst up Threshold percentage"
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

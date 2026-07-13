@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class vnsCDev(ManagedObject):
     """ACI Managed Object: ``vnsCDev`` — Concrete Device.
 
+    The individual service device is used to define a concrete l4-l7 service device.
+
     RN format: ``cDev-{name}``
     """
 
@@ -47,18 +49,58 @@ class vnsCDev(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the service device in the L4-L7 device cluster. The service device is uniquely identified by its name.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     clone_count: Annotated[int, Field(alias="cloneCount")] = 0
     context_label: Annotated[str, Field(max_length=512, alias="devCtxLbl")] = ""
-    management_address: Annotated[str, Field(max_length=512, alias="host")] = ""
-    is_clone_operation: bool = Field(default=False, alias="isCloneOperation")
-    is_template: bool = Field(default=False, alias="isTemplate")
+    management_address: Annotated[
+        str,
+        Field(
+            max_length=512,
+            alias="host",
+            description="The hostname or IP for export destination. Call Home sends email messages to either the IP address or hostname, and the associated port number.",
+        ),
+    ] = ""
+    is_clone_operation: bool = Field(
+        default=False, alias="isCloneOperation", description="Tell whether Template or not"
+    )
+    is_template: bool = Field(
+        default=False, alias="isTemplate", description="Tell whether Template or not"
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    vcenter_name: Annotated[str, Field(max_length=512, alias="vcenterName")] = ""
-    vm_name: Annotated[str, Field(max_length=512, alias="vmName")] = ""
+    vcenter_name: Annotated[
+        str,
+        Field(
+            max_length=512,
+            alias="vcenterName",
+            description="The virtual center name on which the device is hosted in the L4-L7 device cluster. The virtual center name uniquely identifies the center.",
+        ),
+    ] = ""
+    vm_name: Annotated[
+        str,
+        Field(
+            max_length=512,
+            alias="vmName",
+            description="The virtual center VM name on which the device is hosted in the L4-L7 device cluster. The virtual center VM name uniquely identifies the VM.",
+        ),
+    ] = ""

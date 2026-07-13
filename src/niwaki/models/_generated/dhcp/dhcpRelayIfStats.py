@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class dhcpRelayIfStats(ManagedObject):
     """ACI Managed Object: ``dhcpRelayIfStats`` — Relay Interface Statistics.
 
+    The relay interface statistics.
+
     RN format: ``stat``
     """
 
@@ -36,4 +38,11 @@ class dhcpRelayIfStats(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""

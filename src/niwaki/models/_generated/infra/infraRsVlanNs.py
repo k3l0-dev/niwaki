@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class infraRsVlanNs(ManagedObject):
     """ACI Managed Object: ``infraRsVlanNs`` — Relation to VLAN Pool.
 
+    A source relation to the policy definition for ID ranges used for VLAN encapsulation.
+
     RN format: ``rsvlanNs``
     """
 
@@ -46,6 +48,17 @@ class infraRsVlanNs(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    target_dn: str = Field(default="", alias="tDn")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    target_dn: str = Field(
+        default="",
+        alias="tDn",
+        description="The name of the VLAN pool associated with the physical domain used for encapsulation.",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

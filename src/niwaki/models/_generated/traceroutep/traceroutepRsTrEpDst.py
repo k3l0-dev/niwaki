@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class traceroutepRsTrEpDst(ManagedObject):
     """ACI Managed Object: ``traceroutepRsTrEpDst`` — Relation to Destination End Point.
 
+    The destination end point information for the traceroute.
+
     RN format: ``rstrEpDst-[{target_dn}]``
     """
 
@@ -37,8 +39,15 @@ class traceroutepRsTrEpDst(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    target_dn: Annotated[str, Field(alias="tDn")]
+    target_dn: Annotated[str, Field(alias="tDn", description="null")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

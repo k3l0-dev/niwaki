@@ -7,9 +7,13 @@ from enum import StrEnum
 
 class FhsAdminSt(StrEnum):
     DISABLED = "disabled"
+    """disable"""
     ENABLED_BOTH = "enabled-both"
+    """enable both"""
     ENABLED_IPV4 = "enabled-ipv4"
+    """enable IPv4 only"""
     ENABLED_IPV6 = "enabled-ipv6"
+    """enable IPv6 only"""
 
     @classmethod
     def _missing_(cls, value: object) -> FhsAdminSt | None:

@@ -8,6 +8,7 @@ from enum import StrEnum
 class PtpPtpTransportMode(StrEnum):
     MULTICAST = "multicast"
     MULTICAST_MASTER = "multicast-master"
+    """Applicable for telecom profile"""
     UNICAST_MASTER = "unicast-master"
     UNICAST_SLAVE = "unicast-slave"
 

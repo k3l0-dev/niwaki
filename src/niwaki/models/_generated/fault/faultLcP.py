@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class faultLcP(ManagedObject):
     """ACI Managed Object: ``faultLcP`` — Lifecycle Policy.
 
+    The fault lifecycle policy specifies the timer intervals of faults in their lifecycle. This policy can be specified in a common, default, or custom monitoring policy. Custom and default monitoring policies can be applied globally, per monitoring object or to a group of monitoring objects.
+
     RN format: ``flcp-{condition_code}``
     """
 
@@ -34,19 +36,52 @@ class faultLcP(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    condition_code: Annotated[int, Field(alias="code")] = 0
+    condition_code: Annotated[
+        int,
+        Field(
+            alias="code",
+            description="Contains a category code that helps to categorize and identify different types of fault lifecycle policy objects.",
+        ),
+    ] = 0
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    clear_interval: str = Field(default="", alias="clear")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    clear_interval: str = Field(
+        default="",
+        alias="clear",
+        description="The time period between when the system detects the resolution a fault and when the fault severity is set to 'cleared'. This interval refers to the time between the Soaking-Clearing and Retaining fault states.",
+    )
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
+        ""
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    retain: str = ""
-    soaking_interval: str = Field(default="", alias="soak")
+    retain: Annotated[
+        str,
+        Field(
+            description="The time period between when the system sets the fault severity to 'cleared' and when the fault object is deleted. This interval refers to the time between the Retaining fault state and when it is deleted."
+        ),
+    ] = ""
+    soaking_interval: str = Field(
+        default="",
+        alias="soak",
+        description="The time period between when the system creates the fault with the initial severity and when it sets the fault to the target severity. This interval refers to the time between the Soaking and Raised fault states.",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

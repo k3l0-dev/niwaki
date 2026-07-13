@@ -38,21 +38,45 @@ class vmmClusterCtrlrP(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the object.",
+        ),
+    ]
 
     # ── Create-only (ignored by APIC on modification) ─────────────────────────
-    hostname_or_ip_address: str = Field(default="", alias="hostOrIp")
+    hostname_or_ip_address: str = Field(default="", alias="hostOrIp", description="Host or IP")
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     triggered_inventory_sync_status: VmmTrigSt = Field(
         default=VmmTrigSt.UNTRIGGERED, alias="inventoryTrigSt"
     )
-    msft_config_err_msg: Annotated[str, Field(max_length=256, alias="msftConfigErrMsg")] = ""
+    msft_config_err_msg: Annotated[
+        str,
+        Field(
+            max_length=256,
+            alias="msftConfigErrMsg",
+            description="Deployment Error Message of Mirosoft Plugin SCVM Controller. It captures error message encountered in SCVMM Controller plugin.This error message represents specific details for bitmask based msftConfigIssues fault.",
+        ),
+    ] = ""
     msft_config_issues: str = Field(default="", alias="msftConfigIssues")
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    port: str = ""
-    datacenter: Annotated[str, Field(max_length=512, alias="rootContName")] = ""
+    port: Annotated[str, Field(description="Port")] = ""
+    datacenter: Annotated[
+        str, Field(max_length=512, alias="rootContName", description="Top level container name.")
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

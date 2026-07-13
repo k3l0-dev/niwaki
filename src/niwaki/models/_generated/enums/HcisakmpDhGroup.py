@@ -7,16 +7,27 @@ from enum import StrEnum
 
 class HcisakmpDhGroup(StrEnum):
     _0 = "0"
+    """Diffie-Hellman group None"""
     _1 = "1"
+    """Diffie-Hellman group 1"""
     _14 = "14"
+    """Diffie-Hellman group 14"""
     _15 = "15"
+    """Diffie-Hellman group 15"""
     _16 = "16"
+    """Diffie-Hellman group 16"""
     _19 = "19"
+    """Diffie-Hellman group 19"""
     _2 = "2"
+    """Diffie-Hellman group 2"""
     _20 = "20"
+    """Diffie-Hellman group 20"""
     _21 = "21"
+    """Diffie-Hellman group 21"""
     _24 = "24"
+    """Diffie-Hellman group 24"""
     _5 = "5"
+    """Diffie-Hellman group 5"""
 
     @classmethod
     def _missing_(cls, value: object) -> HcisakmpDhGroup | None:

@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class acLatencyPtpModeDef(ManagedObject):
     """ACI Managed Object: ``acLatencyPtpModeDef`` — Latency Instance.
 
+    latency ptp mode knob
+
     RN format: ``latencyptpmodedef``
     """
 
@@ -36,7 +38,18 @@ class acLatencyPtpModeDef(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    state: NetflowAdminSt = NetflowAdminSt.DISABLED
-    ttag_ether_type0x8905_status: bool = Field(default=False, alias="ttagEtherType0x8905Status")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    state: NetflowAdminSt = Field(
+        default=NetflowAdminSt.DISABLED, description="State of the PTP protocol"
+    )
+    ttag_ether_type0x8905_status: bool = Field(
+        default=False, alias="ttagEtherType0x8905Status", description="State of the ttag ether type"
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class LacpTxRate(StrEnum):
     FAST = "fast"
+    """Fast"""
     NORMAL = "normal"
+    """Normal"""
 
     @classmethod
     def _missing_(cls, value: object) -> LacpTxRate | None:

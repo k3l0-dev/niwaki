@@ -7,9 +7,13 @@ from enum import StrEnum
 
 class PcLbL3L4(StrEnum):
     DST_IP = "dst-ip"
+    """destination ip"""
     L4_DST_PORT = "l4-dst-port"
+    """L4 dst port"""
     L4_SRC_PORT = "l4-src-port"
+    """L4 src port"""
     SRC_IP = "src-ip"
+    """source ip"""
 
     @classmethod
     def _missing_(cls, value: object) -> PcLbL3L4 | None:

@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class statstoreObsClassHolder(ManagedObject):
     """ACI Managed Object: ``statstoreObsClassHolder`` — Observable Class Holder.
 
+    Container for node objects to calculate fabric health.
+
     RN format: ``obsclass-{observable_class}``
     """
 
@@ -35,8 +37,18 @@ class statstoreObsClassHolder(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    observable_class: Annotated[str, Field(alias="obsClass")]
+    observable_class: Annotated[
+        str,
+        Field(alias="obsClass", description="Class of observables contained under this holder."),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

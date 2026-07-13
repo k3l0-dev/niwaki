@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class fvRsCtx(ManagedObject):
     """ACI Managed Object: ``fvRsCtx`` — Private Network.
 
+    A source relation to a private layer 3 network context that either belongs to a specific tenant or is shared. This is an internal object.
+
     RN format: ``rsctx``
     """
 
@@ -37,8 +39,21 @@ class fvRsCtx(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.-]+$", alias="tnFvCtxName")] = (
-        ""
-    )
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    name: Annotated[
+        str,
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            alias="tnFvCtxName",
+            description="The associated layer 3 context.",
+        ),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

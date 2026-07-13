@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class telemetryFteEventsExt(ManagedObject):
     """ACI Managed Object: ``telemetryFteEventsExt`` — Configure FTE Events Information.
 
+    FTE Events
+
     RN format: ``fteeventext-{name}``
     """
 
@@ -34,81 +36,125 @@ class telemetryFteEventsExt(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the object.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    ack_no: Annotated[int, Field(alias="ackNo")] = 0
-    acl_redirect: bool = Field(default=False, alias="aclRedirect")
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    bax_err: bool = Field(default=False, alias="baxErr")
-    ce_etype: str = Field(default="", alias="ceEtype")
-    cos: str = ""
-    d_class: str = Field(default="", alias="dClass")
-    d_ip_v4: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="dIpV4")] = ""
-    d_ip_v6: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="dIpV6")] = ""
-    d_tep: str = Field(default="", alias="dTep")
+    ack_no: Annotated[int, Field(alias="ackNo", description="30")] = 0
+    acl_redirect: bool = Field(default=False, alias="aclRedirect", description="13")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    bax_err: bool = Field(default=False, alias="baxErr", description="31")
+    ce_etype: str = Field(default="", alias="ceEtype", description="36")
+    cos: Annotated[str, Field(description="11")] = ""
+    d_class: str = Field(default="", alias="dClass", description="21")
+    d_ip_v4: Annotated[
+        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="dIpV4", description="15")
+    ] = ""
+    d_ip_v6: Annotated[
+        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="dIpV6", description="19")
+    ] = ""
+    d_tep: str = Field(default="", alias="dTep", description="27")
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="The description of this configuration item.",
+        ),
     ] = ""
-    ip_df: bool = Field(default=False, alias="ipDf")
-    ip_frag_offset_non_zero: bool = Field(default=False, alias="ipFragOffsetNonZero")
-    ip_ihl: str = Field(default="", alias="ipIhl")
-    ip_length_error: bool = Field(default=False, alias="ipLengthError")
-    ip_mf: bool = Field(default=False, alias="ipMf")
-    ip_opt_present: bool = Field(default=False, alias="ipOptPresent")
-    ip_packet_id: Annotated[int, Field(alias="ipPacketId")] = 0
-    ip_rsvd: bool = Field(default=False, alias="ipRsvd")
-    ipv4_arp_nd_packet: bool = Field(default=False, alias="ipv4ArpNdPacket")
-    ipv4_d_port: str = Field(default="", alias="ipv4DPort")
-    ipv4_protocol: str = Field(default="", alias="ipv4Protocol")
-    ipv4_s_port: str = Field(default="", alias="ipv4SPort")
-    ipv6_d_port: str = Field(default="", alias="ipv6DPort")
-    ipv6_flowlabel: Annotated[int, Field(alias="ipv6Flowlabel")] = 0
-    ipv6_opt_hdr: str = Field(default="", alias="ipv6OptHdr")
-    ipv6_protocol: str = Field(default="", alias="ipv6Protocol")
-    ipv6_s_port: str = Field(default="", alias="ipv6SPort")
-    l4_payload_length: str = Field(default="", alias="l4PayloadLength")
+    ip_df: bool = Field(default=False, alias="ipDf", description="43")
+    ip_frag_offset_non_zero: bool = Field(
+        default=False, alias="ipFragOffsetNonZero", description="46"
+    )
+    ip_ihl: str = Field(default="", alias="ipIhl", description="06")
+    ip_length_error: bool = Field(
+        default=False, alias="ipLengthError", description="41. IP length error configuration"
+    )
+    ip_mf: bool = Field(default=False, alias="ipMf", description="44")
+    ip_opt_present: bool = Field(default=False, alias="ipOptPresent", description="33")
+    ip_packet_id: Annotated[int, Field(alias="ipPacketId", description="04")] = 0
+    ip_rsvd: bool = Field(default=False, alias="ipRsvd", description="42")
+    ipv4_arp_nd_packet: bool = Field(default=False, alias="ipv4ArpNdPacket", description="01")
+    ipv4_d_port: str = Field(default="", alias="ipv4DPort", description="23")
+    ipv4_protocol: str = Field(default="", alias="ipv4Protocol", description="12")
+    ipv4_s_port: str = Field(default="", alias="ipv4SPort", description="22")
+    ipv6_d_port: str = Field(default="", alias="ipv6DPort", description="50")
+    ipv6_flowlabel: Annotated[int, Field(alias="ipv6Flowlabel", description="47")] = 0
+    ipv6_opt_hdr: str = Field(default="", alias="ipv6OptHdr", description="48")
+    ipv6_protocol: str = Field(default="", alias="ipv6Protocol", description="51")
+    ipv6_s_port: str = Field(default="", alias="ipv6SPort", description="49")
+    l4_payload_length: str = Field(default="", alias="l4PayloadLength", description="02")
     mac_da: Annotated[
-        str, Field(pattern="^([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}$", alias="macDa")
+        str,
+        Field(pattern="^([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}$", alias="macDa", description="35"),
     ] = ""
     mac_sa: Annotated[
-        str, Field(pattern="^([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}$", alias="macSa")
+        str,
+        Field(pattern="^([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}$", alias="macSa", description="34"),
     ] = ""
-    mask_dip_v4: Annotated[int, Field(alias="maskDipV4")] = 0
-    mask_sip_v4: Annotated[int, Field(alias="maskSipV4")] = 0
+    mask_dip_v4: Annotated[int, Field(alias="maskDipV4", description="17")] = 0
+    mask_sip_v4: Annotated[int, Field(alias="maskSipV4", description="16")] = 0
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    o_class: str = Field(default="", alias="oClass")
-    o_port: str = Field(default="", alias="oPort")
-    overlay_encap_type: str = Field(default="", alias="overlayEncapType")
+    o_class: str = Field(default="", alias="oClass", description="24")
+    o_port: str = Field(default="", alias="oPort", description="25")
+    overlay_encap_type: str = Field(default="", alias="overlayEncapType", description="10")
     owner_key: Annotated[
         str,
         Field(
-            max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerKey"
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerKey",
+            description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
     owner_tag: Annotated[
         str,
-        Field(max_length=64, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerTag"),
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerTag",
+            description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+        ),
     ] = ""
-    packet_id: str = Field(default="", alias="packetId")
-    profile_id: str = Field(default="", alias="profileId")
-    sub_event_configuration_for_rest_sop_bit: str = Field(default="", alias="restSopBit")
-    rx_bd: str = Field(default="", alias="rxBd")
-    rx_is_epg: bool = Field(default=False, alias="rxIsEpg")
-    s_class: str = Field(default="", alias="sClass")
-    s_ip_v4: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="sIpV4")] = ""
-    s_ip_v6: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="sIpV6")] = ""
-    s_tep: str = Field(default="", alias="sTep")
-    seq_no: Annotated[int, Field(alias="seqNo")] = 0
-    src_id: str = Field(default="", alias="srcId")
-    tenant_id: Annotated[int, Field(alias="tenantId")] = 0
-    tiny_frag: bool = Field(default=False, alias="tinyFrag")
-    tos: str = ""
-    ttl_changed: bool = Field(default=False, alias="ttlChanged")
-    tx_bd: str = Field(default="", alias="txBd")
-    tx_is_epg: bool = Field(default=False, alias="txIsEpg")
-    urg_ptr_bad: bool = Field(default=False, alias="urgPtrBad")
+    packet_id: str = Field(default="", alias="packetId", description="03")
+    profile_id: str = Field(default="", alias="profileId", description="08")
+    sub_event_configuration_for_rest_sop_bit: str = Field(
+        default="", alias="restSopBit", description="Rest sop bit configuration52"
+    )
+    rx_bd: str = Field(default="", alias="rxBd", description="37")
+    rx_is_epg: bool = Field(default=False, alias="rxIsEpg", description="39")
+    s_class: str = Field(default="", alias="sClass", description="20")
+    s_ip_v4: Annotated[
+        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="sIpV4", description="14")
+    ] = ""
+    s_ip_v6: Annotated[
+        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="sIpV6", description="18")
+    ] = ""
+    s_tep: str = Field(default="", alias="sTep", description="26")
+    seq_no: Annotated[int, Field(alias="seqNo", description="29")] = 0
+    src_id: str = Field(default="", alias="srcId", description="05")
+    tenant_id: Annotated[int, Field(alias="tenantId", description="28")] = 0
+    tiny_frag: bool = Field(default=False, alias="tinyFrag", description="32")
+    tos: Annotated[str, Field(description="07")] = ""
+    ttl_changed: bool = Field(default=False, alias="ttlChanged", description="09")
+    tx_bd: str = Field(default="", alias="txBd", description="38")
+    tx_is_epg: bool = Field(default=False, alias="txIsEpg", description="40")
+    urg_ptr_bad: bool = Field(default=False, alias="urgPtrBad", description="45")
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

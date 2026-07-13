@@ -14,6 +14,8 @@ from niwaki.models.base import ManagedObject
 class healthPol(ManagedObject):
     """ACI Managed Object: ``healthPol``.
 
+    Defines how much influence a child's health score has on its parent's health score.
+
     RN format: ``health-{r_cl}``
     """
 
@@ -41,14 +43,28 @@ class healthPol(ManagedObject):
 
     # ── Configurable ───────────────────────────────────────────────────────────
     aggrule: HealthAggRuleT = HealthAggRuleT.GRADIENT
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     category: Annotated[str, Field(max_length=512)] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
     impact: HealthImpactT = HealthImpactT.MAX
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
+        ""
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

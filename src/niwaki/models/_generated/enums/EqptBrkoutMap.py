@@ -7,11 +7,17 @@ from enum import StrEnum
 
 class EqptBrkoutMap(StrEnum):
     _100G_2X = "100g-2x"
+    """2*100g"""
     _100G_4X = "100g-4x"
+    """4*100g"""
     _10G_4X = "10g-4x"
+    """4*10g"""
     _25G_4X = "25g-4x"
+    """4*25g"""
     _50G_8X = "50g-8x"
+    """8*50g"""
     NONE = "none"
+    """No breakout"""
 
     @classmethod
     def _missing_(cls, value: object) -> EqptBrkoutMap | None:

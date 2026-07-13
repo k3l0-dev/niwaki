@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class configJob(ManagedObject):
     """ACI Managed Object: ``configJob`` — Job Instance.
 
+    The configuration job.
+
     RN format: ``run-{name}``
     """
 
@@ -38,14 +40,32 @@ class configJob(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    triggers_job_deletion: bool = Field(default=False, alias="ack")
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    triggers_job_deletion: bool = Field(
+        default=False,
+        alias="ack",
+        description="The acknowledgement status of an event, fault, or task. If acknowledged and cleared, the object is immediately deleted. If not acknowledged and cleared, it is deleted after the retention interval.",
+    )
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")

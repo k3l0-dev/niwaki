@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class wwnOuiPol(ManagedObject):
     """ACI Managed Object: ``wwnOuiPol`` — OUI Policy.
 
+    WWN OUI ID
+
     RN format: ``ouiPol-{organizationally_unique_identifier}``
     """
 
@@ -34,8 +36,15 @@ class wwnOuiPol(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    organizationally_unique_identifier: Annotated[str, Field(alias="id")]
+    organizationally_unique_identifier: Annotated[str, Field(alias="id", description="ID")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

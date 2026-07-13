@@ -15,6 +15,8 @@ from niwaki.models.base import ManagedObject
 class macsecParamPol(ManagedObject):
     """ACI Managed Object: ``macsecParamPol`` — MACsec Access Parameters Policy.
 
+    MACSEC Access Parameters Policy
+
     RN format: ``paramp-{name}``
     """
 
@@ -48,37 +50,74 @@ class macsecParamPol(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the object.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     cipher_suite: MacsecCipherSuite = Field(
-        default=MacsecCipherSuite.GCM_AES_XPN_256, alias="cipherSuite"
+        default=MacsecCipherSuite.GCM_AES_XPN_256, alias="cipherSuite", description="Cipher Suite"
     )
     confidentiality_offset: MacsecConfOffset = Field(
-        default=MacsecConfOffset.OFFSET_0, alias="confOffset"
+        default=MacsecConfOffset.OFFSET_0, alias="confOffset", description="Confidentiality Offset"
     )
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies a description of the policy definition.",
+        ),
     ] = ""
-    key_server_priority: str = Field(default="", alias="keySvrPrio")
+    key_server_priority: str = Field(
+        default="", alias="keySvrPrio", description="Key Server Priority"
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
     owner_key: Annotated[
         str,
         Field(
-            max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerKey"
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerKey",
+            description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
     owner_tag: Annotated[
         str,
-        Field(max_length=64, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerTag"),
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerTag",
+            description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+        ),
     ] = ""
-    replay_window: Annotated[int, Field(ge=0, le=4294967295, alias="replayWindow")] = 64
-    sak_expiry_time: Annotated[int, Field(ge=0, alias="sakExpiryTime")] = 0
+    replay_window: Annotated[
+        int,
+        Field(
+            ge=0, le=4294967295, alias="replayWindow", description="Replay Protection Window Size"
+        ),
+    ] = 64
+    sak_expiry_time: Annotated[
+        int, Field(ge=0, alias="sakExpiryTime", description="SAK Expiry Time")
+    ] = 0
     security_policy: MacsecSecPolicy = Field(
-        default=MacsecSecPolicy.SHOULD_SECURE, alias="secPolicy"
+        default=MacsecSecPolicy.SHOULD_SECURE, alias="secPolicy", description="Security Policy"
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

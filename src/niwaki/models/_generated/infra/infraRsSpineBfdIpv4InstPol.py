@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class infraRsSpineBfdIpv4InstPol(ManagedObject):
     """ACI Managed Object: ``infraRsSpineBfdIpv4InstPol`` — BFD Ipv4 Instance Policy.
 
+    Relationship to BFD Ipv4 Instance Policy
+
     RN format: ``rsspineBfdIpv4InstPol``
     """
 
@@ -37,7 +39,14 @@ class infraRsSpineBfdIpv4InstPol(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     name: Annotated[
         str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="tnBfdIpv4InstPolName")
     ] = ""

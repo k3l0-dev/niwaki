@@ -7,13 +7,21 @@ from enum import StrEnum
 
 class EqptPsRdnM(StrEnum):
     COMB = "comb"
+    """The combined output of the power supplies are available to operate the system when there are more than one matched power supply in the system"""
     INSRC_RDN = "insrc-rdn"
+    """Only the input power redundancy is enabled in the systems which support multiple levels of redundancy"""
     N_RDN = "n-rdn"
+    """There is only one power supply or there are unmatched power supplies in the system"""
     NOT_SUPP = "not-supp"
+    """not supported by this system"""
     PS_RDN = "ps-rdn"
+    """Only the power output redundancy is enabled in the systems which support multiple levels of redundancy"""
     RDN = "rdn"
+    """A single power supply output can power the entire system, although there are more than one matched supply in the system"""
     SININ_RDN = "sinin-rdn"
+    """Only the power redundancy with single input is enabled in the systems which support multiple levels of redundancy"""
     UNKNOWN = "unknown"
+    """unknown"""
 
     @classmethod
     def _missing_(cls, value: object) -> EqptPsRdnM | None:

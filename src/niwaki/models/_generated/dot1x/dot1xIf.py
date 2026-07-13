@@ -15,6 +15,8 @@ from niwaki.models.base import ManagedObject
 class dot1xIf(ManagedObject):
     """ACI Managed Object: ``dot1xIf`` — Dot1x interface information.
 
+    This object holds dot1x information that is operated at a interface level
+
     RN format: ``if-[{interface_id}]``
     """
 
@@ -42,34 +44,61 @@ class dot1xIf(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    interface_id: Annotated[str, Field(alias="id")]
+    interface_id: Annotated[str, Field(alias="id", description="Interface ID of this endpoint")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
         Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
     ] = ""
     dot1x_authentication_order: Dot1xDot1xAuthOrder = Field(
-        default=Dot1xDot1xAuthOrder.DEFAULT, alias="dot1xAuthOrder"
+        default=Dot1xDot1xAuthOrder.DEFAULT,
+        alias="dot1xAuthOrder",
+        description="Dot1x Authentication order",
     )
-    apic_dot1x_guest_vlan: str = Field(default="", alias="guestVlan")
-    dot1x_host_mode_type: Dot1xHostMode = Field(default=Dot1xHostMode.SINGLE_HOST, alias="hostMode")
+    apic_dot1x_guest_vlan: str = Field(default="", alias="guestVlan", description="Guest VLAN")
+    dot1x_host_mode_type: Dot1xHostMode = Field(
+        default=Dot1xHostMode.SINGLE_HOST, alias="hostMode", description="Host Mode"
+    )
     dot1x_timeout_inactivity_period: Annotated[
-        int, Field(ge=0, le=2147483, alias="inactivityPeriod")
+        int,
+        Field(
+            ge=0,
+            le=2147483,
+            alias="inactivityPeriod",
+            description="Dot1x Timeout: Inactivity Period",
+        ),
     ] = 0
-    max_reauth_req: str = Field(default="", alias="maxReauthReq")
-    max_req: str = Field(default="", alias="maxReq")
-    name: Annotated[str, Field(min_length=1, max_length=128)] = ""
+    max_reauth_req: str = Field(default="", alias="maxReauthReq", description="Max Reauth Request")
+    max_req: str = Field(default="", alias="maxReq", description="Max Request")
+    name: Annotated[
+        str, Field(min_length=1, max_length=128, description="The name of the object.")
+    ] = ""
     role_of_dot1x_authenticating_entity: Dot1xPaeType = Field(
-        default=Dot1xPaeType.AUTHENTICATOR, alias="paeType"
+        default=Dot1xPaeType.AUTHENTICATOR, alias="paeType", description="Dot1x Pae Type"
     )
-    dot1x_timeout_quiet_period: str = Field(default="", alias="quietPeriod")
-    dot1x_timeout_rate_limit_period: str = Field(default="", alias="rateLimitPeriod")
-    dot1x_timeout_re_auth_period: Annotated[int, Field(ge=1, le=2147483, alias="reAuthPeriod")] = (
-        3600
+    dot1x_timeout_quiet_period: str = Field(
+        default="", alias="quietPeriod", description="Quiet Period"
     )
-    dot1x_timeout_server_timeout: str = Field(default="", alias="serverTimeout")
-    dot1x_timeout_supplicant_timeout: str = Field(default="", alias="suppTimeout")
-    dot1x_timeout_tx_period: str = Field(default="", alias="txPeriod")
+    dot1x_timeout_rate_limit_period: str = Field(
+        default="", alias="rateLimitPeriod", description="Rate limit period"
+    )
+    dot1x_timeout_re_auth_period: Annotated[
+        int, Field(ge=1, le=2147483, alias="reAuthPeriod", description="Re-auth Period")
+    ] = 3600
+    dot1x_timeout_server_timeout: str = Field(
+        default="", alias="serverTimeout", description="Server Timeout"
+    )
+    dot1x_timeout_supplicant_timeout: str = Field(
+        default="", alias="suppTimeout", description="Supplicant Timeout"
+    )
+    dot1x_timeout_tx_period: str = Field(default="", alias="txPeriod", description="Tx Period")
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

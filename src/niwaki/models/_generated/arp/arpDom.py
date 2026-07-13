@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class arpDom(ManagedObject):
     """ACI Managed Object: ``arpDom`` — This Object Holds Per ARP Domain (vrf) Information.
 
+    Represents ARP domain (VRF) information.
+
     RN format: ``dom-{name}``
     """
 
@@ -44,8 +46,17 @@ class arpDom(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=128)]
+    name: Annotated[
+        str, Field(min_length=1, max_length=128, description="Specifies the name of the domain.")
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

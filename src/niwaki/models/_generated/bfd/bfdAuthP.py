@@ -14,6 +14,8 @@ from niwaki.models.base import ManagedObject
 class bfdAuthP(ManagedObject):
     """ACI Managed Object: ``bfdAuthP`` — Authentication Policy.
 
+    This object holds authentication policy information
+
     RN format: ``auth``
     """
 
@@ -39,19 +41,41 @@ class bfdAuthP(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    auth_interop: BfdAuthInterop = Field(default=BfdAuthInterop.DISABLE, alias="authInterop")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    auth_interop: BfdAuthInterop = Field(
+        default=BfdAuthInterop.DISABLE, alias="authInterop", description="Interop Attribute"
+    )
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies a control instrumentation description.",
+        ),
     ] = ""
-    hex_key: Annotated[str, Field(alias="hexKey", repr=False)] = ""
-    hex_key_size: Annotated[str, Field(alias="hexKeySize", repr=False)] = ""
-    key: Annotated[str, Field(repr=False)] = ""
-    key_id: str = Field(default="", alias="keyId")
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    hex_key: Annotated[
+        str, Field(alias="hexKey", repr=False, description="Authentication hex key")
+    ] = ""
+    hex_key_size: Annotated[
+        str, Field(alias="hexKeySize", repr=False, description="Authentication Hex key Size")
+    ] = ""
+    key: Annotated[str, Field(repr=False, description="Authentication key")] = ""
+    key_id: str = Field(default="", alias="keyId", description="Authentication key id")
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
+        ""
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    authentication_type_of_the_bfd_session: BfdAuthT = Field(default=BfdAuthT.NONE, alias="type")
+    authentication_type_of_the_bfd_session: BfdAuthT = Field(
+        default=BfdAuthT.NONE, alias="type", description="Authentication type"
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

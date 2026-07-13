@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class infraRsPoeIfPol(ManagedObject):
     """ACI Managed Object: ``infraRsPoeIfPol`` — Relation to POE Interface Policy.
 
+    Relationship to poe policy providing physical configuration of the interfaces
+
     RN format: ``rspoeIfPol``
     """
 
@@ -37,7 +39,14 @@ class infraRsPoeIfPol(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     name: Annotated[
         str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="tnPoeIfPolName")
     ] = ""

@@ -14,6 +14,8 @@ from niwaki.models.base import ManagedObject
 class orchsLDevVipCfg(ManagedObject):
     """ACI Managed Object: ``orchsLDevVipCfg`` — Orchestrated Device Config.
 
+    This is used to store orchestration specific properties like Microsoft Azure Pack
+
     RN format: ``lls-{node_type}``
     """
 
@@ -41,13 +43,28 @@ class orchsLDevVipCfg(ManagedObject):
     node_type: OrchsnodeType = Field(default=OrchsnodeType.ADC, alias="nodeType")
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="The description of this configuration item.",
+        ),
     ] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    version: OrchsresourcePoolVersion = OrchsresourcePoolVersion.CLASSIC
+    version: OrchsresourcePoolVersion = Field(
+        default=OrchsresourcePoolVersion.CLASSIC,
+        description="The version of the compatibility catalog.",
+    )

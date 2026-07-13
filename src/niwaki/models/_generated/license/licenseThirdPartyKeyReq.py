@@ -34,13 +34,22 @@ class licenseThirdPartyKeyReq(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    action: Annotated[str, Field(max_length=512)] = ""
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    action: Annotated[
+        str, Field(max_length=512, description="The action required when the condition is met.")
+    ] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     compliance: bool = False
-    id: str = ""
+    id: Annotated[str, Field(description="An object identifier.")] = ""
     key_id: str = ""
     live: bool = False
-    name: Annotated[str, Field(max_length=512)] = ""
+    name: Annotated[str, Field(max_length=512, description="The name of the object.")] = ""
     routing: Annotated[str, Field(max_length=512)] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    value: Annotated[str, Field(max_length=512)] = ""
+    value: Annotated[str, Field(max_length=512, description="The value of the property.")] = ""

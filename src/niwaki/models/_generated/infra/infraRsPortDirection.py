@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class infraRsPortDirection(ManagedObject):
     """ACI Managed Object: ``infraRsPortDirection`` — Port Direction.
 
+    Relation to fabricPathEp
+
     RN format: ``rsportDirection-[{target_dn}]``
     """
 
@@ -37,9 +39,18 @@ class infraRsPortDirection(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    target_dn: Annotated[str, Field(alias="tDn")]
+    target_dn: Annotated[
+        str, Field(alias="tDn", description="The distinguished name of the target.")
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     direc: Infradirec = Infradirec.UPLINK
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

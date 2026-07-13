@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class dhcpOption(ManagedObject):
     """ACI Managed Object: ``dhcpOption`` — DHCP Option.
 
+    The DHCP option is used to supply DHCP clients with configuration parameters such as a domain, name server, subnet, and network address. DHCP provides a framework for passing configuration information to clients on a TCP/IP network.
+
     RN format: ``opt-{name}``
     """
 
@@ -36,14 +38,35 @@ class dhcpOption(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9|_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9|_.:-]+$",
+            description="The DHCP option name. This name can be up to 64 alphanumeric characters.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    model_regex: Annotated[
-        str, Field(max_length=256, pattern="^[a-zA-Z0-9!#$%()*,-.?/:;@ _{|}~+]+$", alias="data")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
     ] = ""
-    id: str = ""
+    model_regex: Annotated[
+        str,
+        Field(
+            max_length=256,
+            pattern="^[a-zA-Z0-9!#$%()*,-.?/:;@ _{|}~+]+$",
+            alias="data",
+            description="The ID of the DHCP option.",
+        ),
+    ] = ""
+    id: Annotated[str, Field(description="DHCP OPTION ID")] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

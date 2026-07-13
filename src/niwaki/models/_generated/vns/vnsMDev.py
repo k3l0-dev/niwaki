@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class vnsMDev(ManagedObject):
     """ACI Managed Object: ``vnsMDev`` — L4-L7 Service Device Type.
 
+    Import a device package into the Application Policy Infrastructure Controller (APIC). The device package contains meta device type definition and definitions of the metadata for a service device type.
+
     RN format: ``mDev-{vendor}-{model}-{version}``
     """
 
@@ -36,10 +38,38 @@ class vnsMDev(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    model: Annotated[str, Field(min_length=1, max_length=512)]
-    vendor: Annotated[str, Field(min_length=1, max_length=512)]
-    version: Annotated[str, Field(min_length=1, max_length=512)]
+    model: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=512,
+            description="The model of the device. A device can have several models. This property uniquely identifies the specified model that was chosen from the available models.",
+        ),
+    ]
+    vendor: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=512,
+            description="The vendor manufacturing this device. The vendor name uniquely identifies the device's manufacturer.",
+        ),
+    ]
+    version: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=512,
+            description="The version number of the device supported by this model. There may be multiple supported versions of the device. This property uniquely identifies the version for this particular device.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

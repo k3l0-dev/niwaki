@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class l3extRsLIfPCustQosPol(ManagedObject):
     """ACI Managed Object: ``l3extRsLIfPCustQosPol`` — Custom QOS Policy.
 
+    Relationship for Custom QOS policy for DSCP to prio mapping
+
     RN format: ``rslIfPCustQosPol``
     """
 
@@ -37,7 +39,14 @@ class l3extRsLIfPCustQosPol(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     name: Annotated[
         str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="tnQosCustomPolName")
     ] = ""

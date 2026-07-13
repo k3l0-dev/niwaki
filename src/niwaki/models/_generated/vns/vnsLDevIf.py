@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class vnsLDevIf(ManagedObject):
     """ACI Managed Object: ``vnsLDevIf`` — Logical Device Consumer.
 
+    The logical device interface is a proxy object in the tenant that points to the logical device. This is used when the device cluster is defined in a common tenant and other tenants want to use the service provided by this device cluster.
+
     RN format: ``lDevIf-[{ldev}]``
     """
 
@@ -40,11 +42,23 @@ class vnsLDevIf(ManagedObject):
     ldev: str
 
     # ── Create-only (ignored by APIC on modification) ─────────────────────────
-    description: Annotated[str, Field(max_length=512)] = ""
+    description: Annotated[
+        str, Field(max_length=512, description="A description of this configuration item.")
+    ] = ""
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    name: Annotated[str, Field(max_length=16, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    name: Annotated[
+        str,
+        Field(max_length=16, pattern="^[a-zA-Z0-9_.:-]+$", description="The name of the object."),
+    ] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

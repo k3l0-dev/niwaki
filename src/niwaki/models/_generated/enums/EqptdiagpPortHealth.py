@@ -9,6 +9,7 @@ class EqptdiagpPortHealth(StrEnum):
     CPU = "cpu"
     FORWARDING = "forwarding"
     MEMORY = "memory"
+    """TODO: add more"""
     PORT = "port"
 
     @classmethod

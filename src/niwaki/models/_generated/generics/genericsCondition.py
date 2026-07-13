@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class genericsCondition(ManagedObject):
     """ACI Managed Object: ``genericsCondition`` — Generic Condition.
 
+    Condition represents the logical expression to match for the rule to get satisfied
+
     RN format: ``condition``
     """
 
@@ -34,6 +36,13 @@ class genericsCondition(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     logical_expression: Annotated[str, Field(max_length=512, alias="expression")] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

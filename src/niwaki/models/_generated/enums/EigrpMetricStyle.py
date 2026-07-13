@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class EigrpMetricStyle(StrEnum):
     NARROW = "narrow"
+    """Metric version 32bit"""
     WIDE = "wide"
+    """Metric version 64bit"""
 
     @classmethod
     def _missing_(cls, value: object) -> EigrpMetricStyle | None:

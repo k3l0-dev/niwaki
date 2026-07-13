@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class rtctrlSetDamp(ManagedObject):
     """ACI Managed Object: ``rtctrlSetDamp``.
 
+    Set rule based on dampening
+
     RN format: ``sdamp``
     """
 
@@ -36,18 +38,34 @@ class rtctrlSetDamp(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
-    half_life: str = Field(default="", alias="halfLife")
-    max_suppress_time: str = Field(default="", alias="maxSuppressTime")
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    half_life: str = Field(default="", alias="halfLife", description="Half Life")
+    max_suppress_time: str = Field(
+        default="", alias="maxSuppressTime", description="Max Suppress Time"
+    )
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
+        ""
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    reuse_limit: str = Field(default="", alias="reuse")
-    suppress_limit: str = Field(default="", alias="suppress")
-    type: RtctrlSetType = RtctrlSetType.DAMPENING_POL
+    reuse_limit: str = Field(default="", alias="reuse", description="Reuse Limit")
+    suppress_limit: str = Field(default="", alias="suppress", description="Suppress Limit")
+    type: RtctrlSetType = Field(default=RtctrlSetType.DAMPENING_POL, description="Set Action Type")
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

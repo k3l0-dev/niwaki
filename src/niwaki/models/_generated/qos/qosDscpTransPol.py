@@ -36,36 +36,72 @@ class qosDscpTransPol(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the object.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    admin_state: NwAdminSt = Field(default=NwAdminSt.DISABLED, alias="adminSt")
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    control_plane_traffic: str = Field(default="", alias="control")
+    admin_state: NwAdminSt = Field(
+        default=NwAdminSt.DISABLED, alias="adminSt", description="TRACEROUTE traffic"
+    )
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    control_plane_traffic: str = Field(
+        default="", alias="control", description="Control Plane Traffic"
+    )
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies a description of the policy definition.",
+        ),
     ] = ""
-    user_level_1: str = Field(default="", alias="level1")
-    user_level_2: str = Field(default="", alias="level2")
-    user_level_3: str = Field(default="", alias="level3")
-    user_level_4: str = Field(default="", alias="level4")
-    user_level_5: str = Field(default="", alias="level5")
-    user_level_6: str = Field(default="", alias="level6")
+    user_level_1: str = Field(default="", alias="level1", description="User Level 1")
+    user_level_2: str = Field(default="", alias="level2", description="User Level 2")
+    user_level_3: str = Field(default="", alias="level3", description="User Level 3")
+    user_level_4: str = Field(default="", alias="level4", description="User Level 4")
+    user_level_5: str = Field(default="", alias="level5", description="User Level 5")
+    user_level_6: str = Field(default="", alias="level6", description="User Level 6")
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
     owner_key: Annotated[
         str,
         Field(
-            max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerKey"
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerKey",
+            description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
     owner_tag: Annotated[
         str,
-        Field(max_length=64, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerTag"),
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerTag",
+            description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+        ),
     ] = ""
-    policy_plane_traffic: str = Field(default="", alias="policy")
-    span_traffic: str = Field(default="", alias="span")
-    traceroute_traffic: str = Field(default="", alias="traceroute")
+    policy_plane_traffic: str = Field(
+        default="", alias="policy", description="Policy Plane Traffic"
+    )
+    span_traffic: str = Field(default="", alias="span", description="SPAN Traffic")
+    traceroute_traffic: str = Field(
+        default="", alias="traceroute", description="TRACEROUTE traffic"
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

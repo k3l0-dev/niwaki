@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class aaaRbacAnnotation(ManagedObject):
     """ACI Managed Object: ``aaaRbacAnnotation`` — Annotation to capture rbac info.
 
+    RbacAnnotation is used for capturing rbac properties of any apic object Objects can append rbacannotations as Object->RbacAnnotation which is then checked for domain eligibility
+
     RN format: ``rbacDom-{domain}``
     """
 
@@ -28,7 +30,7 @@ class aaaRbacAnnotation(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    domain: str
+    domain: Annotated[str, Field(description="The domain of the counts object.")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     childregx: Annotated[str, Field(max_length=256, pattern="^.*$", alias="childRegex")] = ""

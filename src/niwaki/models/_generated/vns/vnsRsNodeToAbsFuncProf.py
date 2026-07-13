@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class vnsRsNodeToAbsFuncProf(ManagedObject):
     """ACI Managed Object: ``vnsRsNodeToAbsFuncProf`` — Relation from an Function Node to an Service Graph Function Profile.
 
+    A source relation to an abstract function profile. Note that this relation is an internal object.
+
     RN format: ``rsNodeToAbsFuncProf``
     """
 
@@ -35,6 +37,15 @@ class vnsRsNodeToAbsFuncProf(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    target_dn: str = Field(default="", alias="tDn")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    target_dn: str = Field(
+        default="", alias="tDn", description="The profile name associated with the abrstract node."
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

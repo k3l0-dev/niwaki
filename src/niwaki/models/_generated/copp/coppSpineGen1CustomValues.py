@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class coppSpineGen1CustomValues(ManagedObject):
     """ACI Managed Object: ``coppSpineGen1CustomValues`` — Settings of burst and rate (for all protocols), on SPINEs of first generation.
 
+    Configuration of all the protocols burst and rates for SPINE of first generation
+
     RN format: ``spinegen1customvalues``
     """
 
@@ -34,7 +36,14 @@ class coppSpineGen1CustomValues(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     arp_burst: str = Field(default="", alias="arpBurst")
     arp_rate: str = Field(default="", alias="arpRate")
     bgp_burst: str = Field(default="", alias="bgpBurst")
@@ -61,7 +70,9 @@ class coppSpineGen1CustomValues(ManagedObject):
     isis_rate: str = Field(default="", alias="isisRate")
     lldp_burst: str = Field(default="", alias="lldpBurst")
     lldp_rate: str = Field(default="", alias="lldpRate")
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
+        ""
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

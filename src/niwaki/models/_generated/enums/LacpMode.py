@@ -7,11 +7,17 @@ from enum import StrEnum
 
 class LacpMode(StrEnum):
     ACTIVE = "active"
+    """LACP active port channel"""
     EXPLICIT_FAILOVER = "explicit-failover"
+    """explicit failover order"""
     MAC_PIN = "mac-pin"
+    """mac-pin"""
     MAC_PIN_NICLOAD = "mac-pin-nicload"
+    """mac-pin physical NIC load"""
     OFF = "off"
+    """Off"""
     PASSIVE = "passive"
+    """LACP passive port channel"""
 
     @classmethod
     def _missing_(cls, value: object) -> LacpMode | None:

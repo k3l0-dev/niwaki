@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class vzRsDenyRule(ManagedObject):
     """ACI Managed Object: ``vzRsDenyRule`` — Deny Rule.
 
+    A filter is a group of resolvable filter entries. Each filter entry is a combination of network traffic classification properties. Note that this relation is an internal object.
+
     RN format: ``rsdenyRule-{name}``
     """
 
@@ -37,10 +39,25 @@ class vzRsDenyRule(ManagedObject):
     # ── Naming (required) ──────────────────────────────────────────────────────
     name: Annotated[
         str,
-        Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="tnVzFilterName"),
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            alias="tnVzFilterName",
+            description="The filter name.",
+        ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    directives: str = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    directives: Annotated[
+        str, Field(description="The filter directives assigned to the taboo contract.")
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

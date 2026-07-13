@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class fvExtRoutableRemoteSitePodSubnet(ManagedObject):
     """ACI Managed Object: ``fvExtRoutableRemoteSitePodSubnet`` — External Routable POD subnet associated with remote site.
 
+    Remote site's External Routable TEP Pool Definition.
+
     RN format: ``extrtremotesitepodsubnet-[{secondary_subnet_pool}]``
     """
 
@@ -39,14 +41,30 @@ class fvExtRoutableRemoteSitePodSubnet(ManagedObject):
     secondary_subnet_pool: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="pool")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
+        ""
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    physical_pod_identifier: str = Field(default="", alias="podId")
+    physical_pod_identifier: str = Field(
+        default="", alias="podId", description="remote pod id this subnet belongs to"
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

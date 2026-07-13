@@ -37,17 +37,35 @@ class vmmInjectedVm(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=128)]
+    name: Annotated[str, Field(min_length=1, max_length=128, description="The name of the object.")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     compute_node_name: Annotated[
         str, Field(max_length=255, pattern="^[a-zA-Z0-9_.:-]+$", alias="computeNodeName")
     ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="The description of this configuration item.",
+        ),
     ] = ""
-    guid: Annotated[str, Field(max_length=512)] = ""
+    guid: Annotated[
+        str,
+        Field(
+            max_length=512,
+            description="The globally unique identifier of an object in the external VM management system. For example, the GUID of the virtual machine in the VMware vCenter.",
+        ),
+    ] = ""
     display_name: Annotated[str, Field(max_length=128, alias="nameAlias")] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

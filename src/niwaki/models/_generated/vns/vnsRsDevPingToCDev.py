@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class vnsRsDevPingToCDev(ManagedObject):
     """ACI Managed Object: ``vnsRsDevPingToCDev`` — Relation from a Device Ping Object to a Concrete Service Device.
 
+    This property is managed internally and should not be modified by the user.
+
     RN format: ``rsdevPingToCDev``
     """
 
@@ -35,6 +37,17 @@ class vnsRsDevPingToCDev(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    target_dn: str = Field(default="", alias="tDn")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    target_dn: str = Field(
+        default="",
+        alias="tDn",
+        description="This property is managed internally and should not be modified by the user.",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

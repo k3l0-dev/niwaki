@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class arpStAdjEp(ManagedObject):
     """ACI Managed Object: ``arpStAdjEp`` — ARP Static Adjacency.
 
+    The ARP static adjacency endpoint, which is the endpoint object that contains information regarding statically configured endpoints. This is a statically configured endpoint corresponding to an interface.
+
     RN format: ``sadj-[{address}]``
     """
 
@@ -44,10 +46,22 @@ class arpStAdjEp(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    address: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="ip")]
+    address: Annotated[
+        str,
+        Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="ip", description="Specifies the IP address."),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     mac: Annotated[str, Field(pattern="^([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}$")] = ""
-    name: Annotated[str, Field(min_length=1, max_length=128)] = ""
+    name: Annotated[
+        str, Field(min_length=1, max_length=128, description="The name of the object.")
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

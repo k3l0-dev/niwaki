@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class cloudAD(ManagedObject):
     """ACI Managed Object: ``cloudAD`` — Active Directory.
 
+    Azure Active Directory
+
     RN format: ``ad-{ad_id}``
     """
 
@@ -34,11 +36,21 @@ class cloudAD(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    ad_id: Annotated[str, Field(min_length=1, max_length=512, alias="id")]
+    ad_id: Annotated[str, Field(min_length=1, max_length=512, alias="id", description="AAD ID")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    name: Annotated[str, Field(max_length=16, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    name: Annotated[
+        str,
+        Field(max_length=16, pattern="^[a-zA-Z0-9_.:-]+$", description="The name of the object."),
+    ] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

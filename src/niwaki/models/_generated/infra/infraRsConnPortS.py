@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class infraRsConnPortS(ManagedObject):
     """ACI Managed Object: ``infraRsConnPortS`` — Access Interface Profile.
 
+    A source relation to the host connectivity port selector.
+
     RN format: ``rsconnPortS-[{target_dn}]``
     """
 
@@ -37,8 +39,17 @@ class infraRsConnPortS(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    target_dn: Annotated[str, Field(alias="tDn")]
+    target_dn: Annotated[
+        str, Field(alias="tDn", description="The distinguished name of the target.")
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

@@ -15,6 +15,8 @@ from niwaki.models.base import ManagedObject
 class aaaLdapProvider(ManagedObject):
     """ACI Managed Object: ``aaaLdapProvider`` — LDAP Provider.
 
+    An LDAP provider is a remote server supporting the LDAP protocol that will be used for authentication.
+
     RN format: ``ldapprovider-{name}``
     """
 
@@ -43,25 +45,76 @@ class aaaLdapProvider(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The hostname or IP address of the LDAP provider (read-only). If SSL is enabled, this field must match a Common Name (CN) in the security certificate of the LDAP database. Note that if you use a hostname instead of an IP address, you must configure a DNS server in the VNMC server.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     ssl_certificate_validation_level: AaaLdapSSLStrictnessLevel = Field(
-        default=AaaLdapSSLStrictnessLevel.STRICT, alias="SSLValidationLevel"
+        default=AaaLdapSSLStrictnessLevel.STRICT,
+        alias="SSLValidationLevel",
+        description="The LDAP Server SSL Certificate validation level.",
     )
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    ldap_attribute: Annotated[str, Field(max_length=63, alias="attribute")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    ldap_attribute: Annotated[
+        str,
+        Field(
+            max_length=63,
+            alias="attribute",
+            description="The attribute to be downloaded that contains user role and domain information. If specified, this property takes precedence over the value of the LDAP attribute specified in the default LDAP parameters pane (Admin -> AAA -> Ldap Management).",
+        ),
+    ] = ""
     authentication_method: AaaLdapAuthMethod = Field(
-        default=AaaLdapAuthMethod.LDAPBIND, alias="authMethod"
+        default=AaaLdapAuthMethod.LDAPBIND,
+        alias="authMethod",
+        description="Method used for authenticating the user - LDAP Bind or Password Compare",
     )
-    ldap_base_dn: Annotated[str, Field(max_length=127, alias="basedn")] = ""
+    ldap_base_dn: Annotated[
+        str,
+        Field(
+            max_length=127,
+            alias="basedn",
+            description="The LDAP base DN to be used in a user search. If specified, this property takes precedence over the value of the LDAP base DN specified in the Default LDAP Authentication Settings pane (Admin > AAA > LDAP Management).",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies a description of the policy definition.",
+        ),
     ] = ""
-    enable_ssl: bool = Field(default=False, alias="enableSSL")
-    ldap_filter: Annotated[str, Field(max_length=63, alias="filter")] = ""
-    password: Annotated[str, Field(alias="key", repr=False)] = ""
+    enable_ssl: bool = Field(
+        default=False,
+        alias="enableSSL",
+        description="A property for enabling an SSL connection with the LDAP provider.",
+    )
+    ldap_filter: Annotated[
+        str,
+        Field(
+            max_length=63,
+            alias="filter",
+            description="The LDAP filter to be used in a user search.",
+        ),
+    ] = ""
+    password: Annotated[
+        str, Field(alias="key", repr=False, description="A password for the AAA provider database.")
+    ] = ""
     periodic_server_monitoring: AaaMonitorServerType = Field(
         default=AaaMonitorServerType.DISABLED, alias="monitorServer"
     )
@@ -75,15 +128,40 @@ class aaaLdapProvider(ManagedObject):
     owner_key: Annotated[
         str,
         Field(
-            max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerKey"
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerKey",
+            description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
     owner_tag: Annotated[
         str,
-        Field(max_length=64, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerTag"),
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerTag",
+            description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+        ),
     ] = ""
-    port: Annotated[int, Field(ge=1, le=65535)] = 389
-    retries: Annotated[int, Field(ge=0, le=5)] = 1
-    root_dn: Annotated[str, Field(max_length=127, alias="rootdn")] = ""
-    timeout_in_seconds: Annotated[int, Field(ge=5, le=60, alias="timeout")] = 30
+    port: Annotated[
+        int, Field(ge=1, le=65535, description="The service port number for the LDAP service.")
+    ] = 389
+    retries: Annotated[int, Field(ge=0, le=5, description="null")] = 1
+    root_dn: Annotated[
+        str,
+        Field(
+            max_length=127,
+            alias="rootdn",
+            description="The root DN or bind DN of the LDAP provider.",
+        ),
+    ] = ""
+    timeout_in_seconds: Annotated[
+        int,
+        Field(
+            ge=5,
+            le=60,
+            alias="timeout",
+            description="The timeout for communication with an LDAP provider server.",
+        ),
+    ] = 30
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

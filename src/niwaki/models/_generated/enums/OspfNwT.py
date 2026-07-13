@@ -7,8 +7,11 @@ from enum import StrEnum
 
 class OspfNwT(StrEnum):
     BCAST = "bcast"
+    """Broadcast interface"""
     P2P = "p2p"
+    """p2p interface"""
     UNSPECIFIED = "unspecified"
+    """Unspecified"""
 
     @classmethod
     def _missing_(cls, value: object) -> OspfNwT | None:

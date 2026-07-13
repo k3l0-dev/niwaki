@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class vnsCIf(ManagedObject):
     """ACI Managed Object: ``vnsCIf`` — Concrete Interface.
 
+    A concrete interface in the L4-L7 device cluster. Several concrete interfaces can be associated with an interface label (MIfLbl).
+
     RN format: ``cIf-[{name}]``
     """
 
@@ -41,12 +43,24 @@ class vnsCIf(ManagedObject):
     # ── Naming (required) ──────────────────────────────────────────────────────
     name: Annotated[
         str,
-        Field(min_length=1, max_length=256, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$"),
+        Field(
+            min_length=1,
+            max_length=256,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            description="The name of the concrete interface in the L4-L7 device cluster.",
+        ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    encap: str = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    encap: Annotated[str, Field(description="encap value")] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
@@ -54,6 +68,9 @@ class vnsCIf(ManagedObject):
     vnic: Annotated[
         str,
         Field(
-            max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="vnicName"
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="vnicName",
+            description="The concrete interface vNIC name.",
         ),
     ] = ""

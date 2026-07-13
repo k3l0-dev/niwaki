@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class analyticsMonitor(ManagedObject):
     """ACI Managed Object: ``analyticsMonitor`` — Flow Monitor.
 
+    Flow Monitor
+
     RN format: ``monitor-{name}``
     """
 
@@ -40,7 +42,14 @@ class analyticsMonitor(ManagedObject):
     name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
         Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),

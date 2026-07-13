@@ -7,9 +7,13 @@ from enum import StrEnum
 
 class MacsecCipherSuite(StrEnum):
     GCM_AES_128 = "gcm-aes-128"
+    """gcm-aes-128"""
     GCM_AES_256 = "gcm-aes-256"
+    """gcm-aes-256"""
     GCM_AES_XPN_128 = "gcm-aes-xpn-128"
+    """gcm-aes-xpn-128"""
     GCM_AES_XPN_256 = "gcm-aes-xpn-256"
+    """gcm-aes-xpn-256"""
 
     @classmethod
     def _missing_(cls, value: object) -> MacsecCipherSuite | None:

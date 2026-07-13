@@ -7,10 +7,15 @@ from enum import StrEnum
 
 class EptrkOperStQual(StrEnum):
     CP_FAIL = "cp-fail"
+    """Control plane failure"""
     DP_FAIL = "dp-fail"
+    """Data plane failure"""
     LC_OUT_OF_SYNC = "lc-out-of-sync"
+    """LC out of sync"""
     OK = "ok"
+    """Endpoint succesfully installed at all layers"""
     POL_ABSENT = "pol-absent"
+    """Policy absent"""
 
     @classmethod
     def _missing_(cls, value: object) -> EptrkOperStQual | None:

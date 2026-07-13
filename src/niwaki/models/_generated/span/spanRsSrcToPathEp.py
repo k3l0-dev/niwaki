@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class spanRsSrcToPathEp(ManagedObject):
     """ACI Managed Object: ``spanRsSrcToPathEp`` — Relation to SPAN Source to Path Endpoint.
 
+    The source access path.
+
     RN format: ``rssrcToPathEp-[{target_dn}]``
     """
 
@@ -35,7 +37,7 @@ class spanRsSrcToPathEp(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    target_dn: Annotated[str, Field(alias="tDn")]
+    target_dn: Annotated[str, Field(alias="tDn", description="The source end point path.")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

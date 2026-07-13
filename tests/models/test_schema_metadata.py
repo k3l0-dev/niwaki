@@ -278,3 +278,40 @@ class TestPipelineIntegrity:
     def test_create_only_flag_present_in_subset(self, subset: dict) -> None:
         props = subset.get("aaaActiveUserSession", {}).get("properties", {})
         assert props.get("name", {}).get("create_only") is True
+
+
+# ── Cisco schema comments piped into the generated surface ───────────────────
+
+
+class TestCiscoDescriptions:
+    """The schema ``comment`` flows into docstrings and Field descriptions."""
+
+    def test_class_docstring_carries_cisco_definition(self) -> None:
+        doc = _load_fvBD().__doc__ or ""
+        assert "unique layer 2 forwarding domain" in doc
+
+    def test_field_description_carries_cisco_definition(self) -> None:
+        info = _load_fvBD().model_fields["arp_flooding"]
+        assert info.description is not None
+        assert "ARP flooding" in info.description
+
+    def test_enum_field_description(self) -> None:
+        from niwaki.models._generated.ospf.ospfIfPol import ospfIfPol
+
+        info = ospfIfPol.model_fields["network_type"]
+        assert info.description is not None
+        assert "point-to-point and broadcast" in info.description
+
+    def test_enum_value_docstrings_in_source(self) -> None:
+        # Attribute docstrings are a static convention (read by IDEs and
+        # Sphinx, not stored at runtime) — assert on the generated source.
+        import inspect
+
+        from niwaki.models._generated.enums.OspfNwT import OspfNwT
+
+        source = inspect.getsource(OspfNwT)
+        assert 'BCAST = "bcast"\n    """Broadcast interface"""' in source
+
+    def test_field_without_comment_has_no_description(self) -> None:
+        # fvBD.ipLearning carries no schema comment — stays undescribed.
+        assert _load_fvBD().model_fields["ip_learning"].description is None

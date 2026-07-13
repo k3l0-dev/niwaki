@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class vnsRsMetaIf(ManagedObject):
     """ACI Managed Object: ``vnsRsMetaIf`` — Relation from a Logical Interface to an Interface Label.
 
+    A source relation to an interface label.
+
     RN format: ``rsmetaIf``
     """
 
@@ -35,7 +37,18 @@ class vnsRsMetaIf(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     is_con_and_prov: bool = Field(default=False, alias="isConAndProv")
-    target_dn: str = Field(default="", alias="tDn")
+    target_dn: str = Field(
+        default="",
+        alias="tDn",
+        description="The DN of the interface to which this logical interface is associated.",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

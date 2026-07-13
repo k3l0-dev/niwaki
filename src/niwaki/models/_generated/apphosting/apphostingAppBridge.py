@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class apphostingAppBridge(ManagedObject):
     """ACI Managed Object: ``apphostingAppBridge`` — App Bridge entries.
 
+    1.2 AppBridge Configuration Mo1.2 AppBridge [dn] /sys/apphosting/bridge-[bridgeId]1.2 when app uses vnic type as bridge<1-8>, the app bridge needs to be configured first.
+
     RN format: ``bridge-{bridge_id}``
     """
 
@@ -36,12 +38,49 @@ class apphostingAppBridge(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    bridge_id: Annotated[int, Field(ge=1, le=8, alias="bridgeId")] = 1
+    bridge_id: Annotated[
+        int,
+        Field(
+            ge=1, le=8, alias="bridgeId", description="unique id of the bridge for app container"
+        ),
+    ] = 1
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    admin_st: ApphostingAdminState = Field(default=ApphostingAdminState.ENABLED, alias="adminSt")
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    ip_v4_addr: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="ipV4Addr")] = ""
-    ip_v6_addr: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="ipV6Addr")] = ""
+    admin_st: ApphostingAdminState = Field(
+        default=ApphostingAdminState.ENABLED,
+        alias="adminSt",
+        description='Admin state to configure mo "',
+    )
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    ip_v4_addr: Annotated[
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            alias="ipV4Addr",
+            description="ip v4 address of the bridge entry",
+        ),
+    ] = ""
+    ip_v6_addr: Annotated[
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            alias="ipV6Addr",
+            description="ip v6 address of the bridge entry",
+        ),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    vrf: Annotated[str, Field(min_length=1, max_length=32)] = ""
+    vrf: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=32,
+            description="vrf name. If no vrf is mentioned, default vrf will be used.",
+        ),
+    ] = ""

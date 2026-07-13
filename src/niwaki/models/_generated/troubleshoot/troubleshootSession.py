@@ -14,6 +14,8 @@ from niwaki.models.base import ManagedObject
 class troubleshootSession(ManagedObject):
     """ACI Managed Object: ``troubleshootSession`` — Troubleshoot session MO.
 
+    ****************** MOs *********************
+
     RN format: ``session-{name}``
     """
 
@@ -42,13 +44,29 @@ class troubleshootSession(ManagedObject):
     name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    administrative_state: TrigExecState = Field(default=TrigExecState.UNTRIGGERED, alias="adminSt")
+    administrative_state: TrigExecState = Field(
+        default=TrigExecState.UNTRIGGERED,
+        alias="adminSt",
+        description="The administrative state of the executable policies.",
+    )
     span_analyzer_ip: Annotated[str, Field(max_length=512, alias="analyzerIP")] = ""
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     session_create_time: str = Field(default="", alias="createTime")
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
     destination_end_point: Annotated[str, Field(max_length=512, alias="dstEP")] = ""
     destination_end_point_external_ip: Annotated[str, Field(max_length=512, alias="dstExtIP")] = ""
@@ -61,15 +79,25 @@ class troubleshootSession(ManagedObject):
     end_time_for_the_session_period: str = Field(default="", alias="endTime")
     format: TroubleshootFormat = TroubleshootFormat.PDF
     internal_type: Annotated[str, Field(max_length=512, alias="internalType")] = ""
-    is_dst_remote: bool = Field(default=False, alias="isDstRemote")
-    is_src_remote: bool = Field(default=False, alias="isSrcRemote")
+    is_dst_remote: bool = Field(
+        default=False,
+        alias="isDstRemote",
+        description="Flag to tell if destination end point is on remote site",
+    )
+    is_src_remote: bool = Field(
+        default=False,
+        alias="isSrcRemote",
+        description="Flag to tell if source end point is on remote site",
+    )
     time_window_in_minutes_from_now: Annotated[int, Field(ge=5, le=525600, alias="latestMin")] = 240
     mtu: str = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
     list_of_nodes: Annotated[str, Field(max_length=512, alias="node")] = ""
-    list_of_interfaces: Annotated[str, Field(max_length=512, alias="path")] = ""
+    list_of_interfaces: Annotated[
+        str, Field(max_length=512, alias="path", description="Ignore, removed")
+    ] = ""
     post_processing: Annotated[str, Field(max_length=512, alias="postProcessing")] = ""
     scheduler: Annotated[str, Field(max_length=512)] = ""
     span_source_prefix: Annotated[str, Field(max_length=512, alias="spanSrcPrefix")] = ""

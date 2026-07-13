@@ -37,22 +37,48 @@ class vmmOrchsProvPlan(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=16, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=16,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the object.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     cre_shrd_svc: bool = Field(default=False, alias="creShrdSvc")
     map_fv_tenant: bool = Field(default=False, alias="mapFvTenant")
     maximum_number_of_bd_allowed_per_tenant: Annotated[
-        int, Field(ge=1, le=4000, alias="maxBDAllowed")
+        int, Field(ge=1, le=4000, alias="maxBDAllowed", description="Max BD allowed per tenant")
     ] = 4000
     maximum_number_of_vrf_allowed_per_tenant: Annotated[
-        int, Field(ge=1, le=4000, alias="maxCtxAllowed")
+        int,
+        Field(
+            ge=1, le=4000, alias="maxCtxAllowed", description="Max CTX or VRF allowed per tenant"
+        ),
     ] = 4000
     maximum_number_of_epg_allowed_per_tenant: Annotated[
-        int, Field(ge=1, le=4000, alias="maxEPGAllowed")
+        int, Field(ge=1, le=4000, alias="maxEPGAllowed", description="Max EPG allowed per tenant")
     ] = 4000
-    max_public_ip_allowed: Annotated[int, Field(ge=1, le=4000, alias="maxPublicIPAllowed")] = 4000
+    max_public_ip_allowed: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=4000,
+            alias="maxPublicIPAllowed",
+            description="Max Public IP allowed per tenant",
+        ),
+    ] = 4000
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

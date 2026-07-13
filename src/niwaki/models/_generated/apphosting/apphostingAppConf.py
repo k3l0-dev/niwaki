@@ -15,6 +15,8 @@ from niwaki.models.base import ManagedObject
 class apphostingAppConf(ManagedObject):
     """ACI Managed Object: ``apphostingAppConf`` — configuration required for app hosting.
 
+    1.1 AppConf [dn] /sys/apphosting/appconf-[appId]1.1 AppConf model to define app hosting config information and it is properties
+
     RN format: ``appconf-{unique_id_to_identify_the_application}``
     """
 
@@ -44,33 +46,95 @@ class apphostingAppConf(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     unique_id_to_identify_the_application: Annotated[
-        str, Field(min_length=1, max_length=64, alias="appId")
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            alias="appId",
+            description='unique identifier of app e.g: "nginx_1"',
+        ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     admin_state_for_appconf_config: ApphostingAdminState = Field(
-        default=ApphostingAdminState.ENABLED, alias="adminSt"
+        default=ApphostingAdminState.ENABLED,
+        alias="adminSt",
+        description='Adminstate state to configure application host information., e.g: "enable or disable [no app-hosting appid app1]"',
     )
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    exec_command_of_application: ApphostingAppActionCont = Field(
-        default=ApphostingAppActionCont.INIT, alias="appCfgState"
-    )
-    maximum_cpu_limit_of_app: Annotated[int, Field(alias="appMaxCpu")] = 0
-    maximum_disk_allocation_of_app: str = Field(default="", alias="appMaxDisk")
-    maximum_memory_allocation_of_app: str = Field(default="", alias="appMaxMem")
-    app_param_list: str = Field(default="", alias="appParamList")
-    extended_application_parameter_list: str = Field(default="", alias="appParamListExt")
-    complete_url_path_of_application: Annotated[
-        str, Field(min_length=1, max_length=128, alias="appPkgName")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
     ] = ""
-    gw_ip_v4_addr: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="gwIpV4Addr")] = ""
-    gw_ip_v4_intf_idx: Annotated[int, Field(ge=0, le=3, alias="gwIpV4IntfIdx")] = 0
-    gw_ip_v6_addr: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="gwIpV6Addr")] = ""
-    guest_interface_index_ipv6: Annotated[int, Field(ge=0, le=3, alias="gwIpV6IntfIdx")] = 0
+    exec_command_of_application: ApphostingAppActionCont = Field(
+        default=ApphostingAppActionCont.INIT,
+        alias="appCfgState",
+        description="application life cycle command. applicable only for aci",
+    )
+    maximum_cpu_limit_of_app: Annotated[
+        int, Field(alias="appMaxCpu", description="custom cpu unit allocation in profile")
+    ] = 0
+    maximum_disk_allocation_of_app: str = Field(
+        default="", alias="appMaxDisk", description="custom persistent disk utilization in profile"
+    )
+    maximum_memory_allocation_of_app: str = Field(
+        default="", alias="appMaxMem", description="custom memory in profile"
+    )
+    app_param_list: str = Field(
+        default="", alias="appParamList", description="application parameter list"
+    )
+    extended_application_parameter_list: str = Field(
+        default="", alias="appParamListExt", description="application parameter list extended"
+    )
+    complete_url_path_of_application: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=128,
+            alias="appPkgName",
+            description="url of application package",
+        ),
+    ] = ""
+    gw_ip_v4_addr: Annotated[
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            alias="gwIpV4Addr",
+            description="default gateway ip address",
+        ),
+    ] = ""
+    gw_ip_v4_intf_idx: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=3,
+            alias="gwIpV4IntfIdx",
+            description="default gateway interface index - v4guest interface index. e.g: specify '0' for interface eth0 inside the container",
+        ),
+    ] = 0
+    gw_ip_v6_addr: Annotated[
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            alias="gwIpV6Addr",
+            description="default gateway ip v6 address",
+        ),
+    ] = ""
+    guest_interface_index_ipv6: Annotated[
+        int,
+        Field(
+            ge=0, le=3, alias="gwIpV6IntfIdx", description="default gateway interface index - v6"
+        ),
+    ] = 0
     pkg_opts: ApphostingPkgRunOptState = Field(
-        default=ApphostingPkgRunOptState.APPEND, alias="pkgOpts"
+        default=ApphostingPkgRunOptState.APPEND,
+        alias="pkgOpts",
+        description="Application Container package file may come with its own runOpts. This is to indicate whether to append the user configure runOpts List to run-opts from the package file or over-write the run-opts from package file with with the user configured runOpts list.",
     )
     vrf_id_to_bind_with_opt_socket: Annotated[
-        str, Field(min_length=1, max_length=64, alias="switchIntf")
+        str, Field(min_length=1, max_length=64, alias="switchIntf", description="switch interface")
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

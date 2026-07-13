@@ -36,14 +36,32 @@ class telemetryExternalServer(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    external_server_ip: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="serverIp")]
+    external_server_ip: Annotated[
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            alias="serverIp",
+            description="External Server Ip and Port would be used to export the streams to an external server",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    admin_state: TelemetryAdminState = Field(default=TelemetryAdminState.ENABLED, alias="adminSt")
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    admin_state: TelemetryAdminState = Field(
+        default=TelemetryAdminState.ENABLED,
+        alias="adminSt",
+        description="The administrative state of the object or policy.",
+    )
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     user_grpc_certificate: str = Field(default="", alias="cert")
     hostname_associated_with_the_certificate: Annotated[
-        str, Field(max_length=255, alias="hostname")
+        str, Field(max_length=255, alias="hostname", description="ignore, removed")
     ] = ""
     remote_port: str = Field(default="", alias="serverPort")
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

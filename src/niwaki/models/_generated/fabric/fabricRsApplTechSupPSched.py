@@ -40,10 +40,21 @@ class fabricRsApplTechSupPSched(ManagedObject):
     name: Annotated[
         str,
         Field(
-            min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="tnDbgexpTechSupPName"
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            alias="tnDbgexpTechSupPName",
+            description="The name of the tech support export policy. This name can be up to 64 characters. Note that you cannot change this name after the object has been saved.",
         ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class eigrpCtxAfPol(ManagedObject):
     """ACI Managed Object: ``eigrpCtxAfPol`` — EIGRP Address Family Context Policy.
 
+    An EIGRP context policy can be applied on one or more contexts under the tenant. EIGRP context policies can be enabled on a context through a relation in the context per address family.
+
     RN format: ``eigrpCtxAfP-{name}``
     """
 
@@ -36,30 +38,78 @@ class eigrpCtxAfPol(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The EIGRP Address Family Context policy name.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    active_timer: str = Field(default="", alias="actIntvl")
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    active_timer: str = Field(
+        default="",
+        alias="actIntvl",
+        description="The active timer interval, which specifies the length of time an EIGRP route can stay in the Active state without a best path. When the time ends, the route is moved to the Stuck-In-Active state.",
+    )
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies a description of the policy definition.",
+        ),
     ] = ""
-    external_distance: str = Field(default="", alias="extDist")
-    internal_distance: str = Field(default="", alias="intDist")
-    maximum_ecmp_paths: str = Field(default="", alias="maxPaths")
-    metric_style: EigrpMetricStyle = Field(default=EigrpMetricStyle.NARROW, alias="metricStyle")
+    external_distance: str = Field(
+        default="",
+        alias="extDist",
+        description="The administrative distance preference for external routes.",
+    )
+    internal_distance: str = Field(
+        default="",
+        alias="intDist",
+        description="The administrative distance preference for internal routes.",
+    )
+    maximum_ecmp_paths: str = Field(
+        default="",
+        alias="maxPaths",
+        description="The maximum number of equal cost different paths.",
+    )
+    metric_style: EigrpMetricStyle = Field(
+        default=EigrpMetricStyle.NARROW,
+        alias="metricStyle",
+        description="The metric version used for metric calculations. EIRGP supports 32 and 64 bit metrics.",
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
     owner_key: Annotated[
         str,
         Field(
-            max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerKey"
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerKey",
+            description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
     owner_tag: Annotated[
         str,
-        Field(max_length=64, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerTag"),
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerTag",
+            description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

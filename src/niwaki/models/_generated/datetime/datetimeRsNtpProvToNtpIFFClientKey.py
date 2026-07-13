@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class datetimeRsNtpProvToNtpIFFClientKey(ManagedObject):
     """ACI Managed Object: ``datetimeRsNtpProvToNtpIFFClientKey`` — Relation to Datetime Secure Session Key.
 
+    Relation From Ntp Provider to Secure Session Key1-n defined. 1-1 needs to enforced in code. As per UCSM guidelines.
+
     RN format: ``rsntpProvToNtpIFFClientKey-{iff_key_id}``
     """
 
@@ -38,5 +40,12 @@ class datetimeRsNtpProvToNtpIFFClientKey(ManagedObject):
     iff_key_id: Annotated[str, Field(alias="tnDatetimeNtpIFFClientKeyIffKeyId")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

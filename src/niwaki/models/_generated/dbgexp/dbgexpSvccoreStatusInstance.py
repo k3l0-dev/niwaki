@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class dbgexpSvccoreStatusInstance(ManagedObject):
     """ACI Managed Object: ``dbgexpSvccoreStatusInstance``.
 
+    Temporary Mo to update the core location of svccore Mo
+
     RN format: ``ts-{collection_time}``
     """
 
@@ -35,8 +37,21 @@ class dbgexpSvccoreStatusInstance(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    collection_time: Annotated[str, Field(alias="collectionTime")]
+    collection_time: Annotated[
+        str,
+        Field(
+            alias="collectionTime",
+            description="The time at which the core file was uploaded from APIC or the leaf to the specified destination.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class genericsNode(ManagedObject):
     """ACI Managed Object: ``genericsNode`` — Generic Node.
 
+    Node represents a generic node policy
+
     RN format: ``node-{class_}-{node_tag}``
     """
 
@@ -37,10 +39,22 @@ class genericsNode(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     class_: Annotated[str, Field(min_length=1, max_length=512, alias="class")]
-    node_tag: Annotated[str, Field(min_length=1, max_length=512, alias="tag")]
+    node_tag: Annotated[
+        str,
+        Field(
+            min_length=1, max_length=512, alias="tag", description="The color of a policy label."
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     fetch_from_node_tag: Annotated[str, Field(max_length=512, alias="fetchFrom")] = ""
     fetching_operation: GenericsFetchingOperation = Field(
         default=GenericsFetchingOperation.ANCESTOR, alias="fetchUsing"

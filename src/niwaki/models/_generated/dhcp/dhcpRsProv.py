@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class dhcpRsProv(ManagedObject):
     """ACI Managed Object: ``dhcpRsProv`` — DHCP Provider.
 
+    An endpoint group associated with the DHCP relay profile. Hosts/clients in the endpoint group can obtain IP addresses acquired via the DHCP relay profile.
+
     RN format: ``rsprov-[{target_dn}]``
     """
 
@@ -35,10 +37,26 @@ class dhcpRsProv(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    target_dn: Annotated[str, Field(alias="tDn")]
+    target_dn: Annotated[
+        str, Field(alias="tDn", description="The distinguished name of the target endpoint group.")
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    dhcp_server_address: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="addr")] = ""
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    pref: str = ""
+    dhcp_server_address: Annotated[
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            alias="addr",
+            description="The DHCP server address. This address is configured onto the relationship between a relay profile and an endpoint group.",
+        ),
+    ] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    pref: Annotated[str, Field(description="DHCP server preferences")] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

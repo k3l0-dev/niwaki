@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class vnsRsALDevToDomP(ManagedObject):
     """ACI Managed Object: ``vnsRsALDevToDomP`` — Relation from L4-L7 Devices to a Vmm Domain.
 
+    A source relation to the VMM domain profile.
+
     RN format: ``rsALDevToDomP``
     """
 
@@ -39,7 +41,18 @@ class vnsRsALDevToDomP(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     switching_mode: FvSwitchingModeT = Field(default=FvSwitchingModeT.NATIVE, alias="switchingMode")
-    target_dn: str = Field(default="", alias="tDn")
+    target_dn: str = Field(
+        default="",
+        alias="tDn",
+        description="The distinguished name for the relation from the virtual device to the VLAN namespace (VMM domain). The virtual device should point to the VLAN namespace (VMM domain) pointed to by this relation.",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

@@ -123,15 +123,19 @@ def _aci_to_dot_class(aci_class: str) -> str:
 # ── Field line builder ────────────────────────────────────────────────────────
 
 
-def _bool_field_line(py_name: str, alias_arg: str | None, secure: bool, default: Any) -> str:
+def _bool_field_line(
+    py_name: str, alias_arg: str | None, secure: bool, default: Any, desc_arg: str | None
+) -> str:
     """Render the field line for a ``bool`` property."""
     default_repr = str(bool(default))
-    if alias_arg or secure:
+    if alias_arg or secure or desc_arg:
         args: list[str] = [f"default={default_repr}"]
         if alias_arg:
             args.append(alias_arg)
         if secure:
             args.append("repr=False")
+        if desc_arg:
+            args.append(desc_arg)
         return f"{py_name}: bool = Field({', '.join(args)})"
     return f"{py_name}: bool = {default_repr}"
 
@@ -143,6 +147,7 @@ def _enum_field_line(
     alias_arg: str | None,
     secure: bool,
     default: Any,
+    desc_arg: str | None,
 ) -> str:
     """Render the field line for an enum property (StrEnum, Literal fallback)."""
     model_type: str = prop.get("model_type", "")
@@ -151,16 +156,18 @@ def _enum_field_line(
     enum_cls = enum_mapping.get(key, "")
     if enum_cls:
         default_member = _enum_member(default) if default is not None else _enum_member(values[0])
-        if alias_arg or secure:
+        if alias_arg or secure or desc_arg:
             args = [f"default={enum_cls}.{default_member}"]
             if alias_arg:
                 args.append(alias_arg)
             if secure:
                 args.append("repr=False")
+            if desc_arg:
+                args.append(desc_arg)
             return f"{py_name}: {enum_cls} = Field({', '.join(args)})"
         return f"{py_name}: {enum_cls} = {enum_cls}.{default_member}"
     # Fallback: shouldn't happen if generate_enums ran first
-    return _literal_field_line(py_name, prop, alias_arg, secure, default)
+    return _literal_field_line(py_name, prop, alias_arg, secure, default, desc_arg)
 
 
 def _literal_field_line(
@@ -169,17 +176,20 @@ def _literal_field_line(
     alias_arg: str | None,
     secure: bool,
     default: Any,
+    desc_arg: str | None,
 ) -> str:
     """Render the field line for a ``Literal`` property (legacy fallback)."""
     values = prop.get("values", [])
     literal_args = ", ".join(repr(v) for v in values)
     default_str = repr(default) if default is not None else repr(values[0])
-    if alias_arg or secure:
+    if alias_arg or secure or desc_arg:
         args = [f"default={default_str}"]
         if alias_arg:
             args.append(alias_arg)
         if secure:
             args.append("repr=False")
+        if desc_arg:
+            args.append(desc_arg)
         return f"{py_name}: Literal[{literal_args}] = Field({', '.join(args)})"
     return f"{py_name}: Literal[{literal_args}] = {default_str}"
 
@@ -190,6 +200,7 @@ def _int_field_line(
     alias_arg: str | None,
     secure: bool,
     default: Any,
+    desc_arg: str | None,
 ) -> str:
     """Render the field line for an ``int`` property (with ge/le constraints)."""
     field_args: list[str] = []
@@ -201,6 +212,8 @@ def _int_field_line(
         field_args.append(alias_arg)
     if secure:
         field_args.append("repr=False")
+    if desc_arg:
+        field_args.append(desc_arg)
     default_val = default if default is not None else 0
     if field_args:
         return f"{py_name}: Annotated[int, Field({', '.join(field_args)})] = {default_val}"
@@ -216,6 +229,7 @@ def _str_field_line(
     secure: bool,
     is_naming: bool,
     default: Any,
+    desc_arg: str | None,
 ) -> str:
     """Render the field line for a ``str`` property (constraints, patterns)."""
     str_args: list[str] = []
@@ -241,6 +255,8 @@ def _str_field_line(
         str_args.append(alias_arg)
     if secure:
         str_args.append("repr=False")
+    if desc_arg:
+        str_args.append(desc_arg)
 
     type_ann = f"Annotated[str, Field({', '.join(str_args)})]" if str_args else "str"
 
@@ -250,7 +266,10 @@ def _str_field_line(
     default_str = repr(default) if default is not None else '""'
     # Plain str with only an alias and no other constraints: use Field() form
     if is_aliased and not (min_length or max_length or pattern or validate_as or secure):
-        return f"{py_name}: str = Field(default={default_str}, alias={prop_name!r})"
+        args = [f"default={default_str}", f"alias={prop_name!r}"]
+        if desc_arg:
+            args.append(desc_arg)
+        return f"{py_name}: str = Field({', '.join(args)})"
     return f"{py_name}: {type_ann} = {default_str}"
 
 
@@ -294,17 +313,20 @@ def _field_line(
         py_name = best_field_name(prop_name, json_label, sm_label, is_naming=is_naming)
     is_aliased = py_name != prop_name
     alias_arg = f"alias={prop_name!r}" if is_aliased else None
+    # Cisco's schema comment, cleaned at extraction — surfaces in IDE hovers,
+    # Pydantic errors and Sphinx autodoc.
+    desc_arg = f"description={comment!r}" if (comment := prop.get("comment")) else None
 
     if python_type == "bool":
-        return _bool_field_line(py_name, alias_arg, secure, default)
+        return _bool_field_line(py_name, alias_arg, secure, default, desc_arg)
     if python_type == "enum":
-        return _enum_field_line(py_name, prop, enum_mapping, alias_arg, secure, default)
+        return _enum_field_line(py_name, prop, enum_mapping, alias_arg, secure, default, desc_arg)
     if python_type == "literal":
-        return _literal_field_line(py_name, prop, alias_arg, secure, default)
+        return _literal_field_line(py_name, prop, alias_arg, secure, default, desc_arg)
     if python_type == "int":
-        return _int_field_line(py_name, prop, alias_arg, secure, default)
+        return _int_field_line(py_name, prop, alias_arg, secure, default, desc_arg)
     return _str_field_line(
-        py_name, prop_name, prop, alias_arg, is_aliased, secure, is_naming, default
+        py_name, prop_name, prop, alias_arg, is_aliased, secure, is_naming, default, desc_arg
     )
 
 
@@ -395,16 +417,22 @@ def _render_class(
         )
         # secure str/int use Annotated[T, Field(repr=False)]
         or (p.get("secure") and p["python_type"] in ("str", "int"))
+        # described str/int use Annotated[T, Field(description=...)]
+        or (p.get("comment") and p["python_type"] in ("str", "int"))
         for p in props.values()
     )
-    # Field() is needed for aliased props, secure fields of any type, or Annotated props
+    # Field() is needed for aliased props, secure or described fields, or Annotated props
     needs_field = (
-        needs_annotated or has_aliased_props or any(p.get("secure") for p in props.values())
+        needs_annotated
+        or has_aliased_props
+        or any(p.get("secure") or p.get("comment") for p in props.values())
     )
 
     # ── Semantic metadata from 01_extract_classes ──────────────────────────────
     mo_category = meta.get("mo_category", "Regular")
     label = meta.get("label", "")
+    # Cisco's class-level schema comment; keep it docstring-safe.
+    class_comment = meta.get("comment", "").replace('"""', "'''")
     write_access = meta.get("write_access", [])
     is_observable = meta.get("is_observable", False)
     is_faultable = meta.get("is_faultable", False)
@@ -427,6 +455,7 @@ def _render_class(
         enum_imports=sorted(enum_imports),
         mo_category=mo_category,
         label=label,
+        class_comment=class_comment,
         write_access=write_access,
         is_observable=is_observable,
         is_faultable=is_faultable,

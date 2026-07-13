@@ -15,6 +15,8 @@ from niwaki.models.base import ManagedObject
 class firmwareOSource(ManagedObject):
     """ACI Managed Object: ``firmwareOSource`` — Firmware Download Task.
 
+    An outside source of images, such as an HTTP or SCP server.
+
     RN format: ``osrc-{name}``
     """
 
@@ -47,39 +49,86 @@ class firmwareOSource(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The identifying name for the outside source of images, such as an HTTP or SCP server.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     authentication_type: FirmwareAuthPass = Field(
-        default=FirmwareAuthPass.PASSWORD, alias="authPass"
+        default=FirmwareAuthPass.PASSWORD,
+        alias="authPass",
+        description="The authentication type for the source.",
     )
     authentication_type_choice: FirmwareAuthenticationType = Field(
-        default=FirmwareAuthenticationType.USEPASSWORD, alias="authType"
+        default=FirmwareAuthenticationType.USEPASSWORD,
+        alias="authType",
+        description="The OSPF authentication type specifier. The type options are; default, md5, none, and simple.",
     )
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
-    variable_to_reuse_download_task: bool = Field(default=True, alias="dnldTaskFlip")
+    variable_to_reuse_download_task: bool = Field(
+        default=True, alias="dnldTaskFlip", description="Download Task Flip."
+    )
     ssh_private_key_content: Annotated[
         str, Field(alias="identityPrivateKeyContents", repr=False)
     ] = ""
     ssh_private_key_passphrase: Annotated[
-        str, Field(max_length=512, alias="identityPrivateKeyPassphrase", repr=False)
+        str,
+        Field(
+            max_length=512,
+            alias="identityPrivateKeyPassphrase",
+            repr=False,
+            description="Passphrase given at the identity key creation.",
+        ),
     ] = ""
-    ssh_public_key_content: Annotated[str, Field(alias="identityPublicKeyContents", repr=False)] = (
-        ""
-    )
+    ssh_public_key_content: Annotated[
+        str,
+        Field(
+            alias="identityPublicKeyContents",
+            repr=False,
+            description="Certificate contents for data transfer. Used for credentials.",
+        ),
+    ] = ""
     load_catalog_if_exists_and_newer: bool = Field(
         default=True, alias="loadCatalogIfExistsAndNewer"
     )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    password: Annotated[str, Field(repr=False)] = ""
-    polling_interval: Annotated[int, Field(alias="pollingInterval")] = 0
-    protocol: FirmwareDownloadProtocol = Field(default=FirmwareDownloadProtocol.SCP, alias="proto")
-    url: Annotated[str, Field(max_length=512)] = ""
-    username: str = Field(default="", alias="user")
+    password: Annotated[
+        str, Field(repr=False, description="The Firmware password or key string.")
+    ] = ""
+    polling_interval: Annotated[
+        int, Field(alias="pollingInterval", description="Polling interval in minutes.")
+    ] = 0
+    protocol: FirmwareDownloadProtocol = Field(
+        default=FirmwareDownloadProtocol.SCP,
+        alias="proto",
+        description="The Firmware download protocol.",
+    )
+    url: Annotated[
+        str, Field(max_length=512, description="The firmware URL for the image(s) on the source.")
+    ] = ""
+    username: str = Field(default="", alias="user", description="The username for the source.")
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

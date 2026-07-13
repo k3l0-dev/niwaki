@@ -7,8 +7,11 @@ from enum import StrEnum
 
 class MaintRunMode(StrEnum):
     PAUSEALWAYSBETWEENSETS = "pauseAlwaysBetweenSets"
+    """Pause the scheduler after running a maintenance set irrespective of upgrade status of nodes in the set."""
     PAUSENEVER = "pauseNever"
+    """Do not pause the scheduler after a maintenance set, irrespective of upgrade status of nodes in the set."""
     PAUSEONLYONFAILURES = "pauseOnlyOnFailures"
+    """Pause the scheduler upon a failure of maintenance operation."""
 
     @classmethod
     def _missing_(cls, value: object) -> MaintRunMode | None:

@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class apphostingRunOpt(ManagedObject):
     """ACI Managed Object: ``apphostingRunOpt`` — app package run option entry table.
 
+    1.1.3 RunOpt [dn] /sys/apphosting/appconf-[appId]/runopt-[optIdx]e.g from 'run-opts 2 hostname N9K-GX4' '2' is key and 'hostname N9k-GX4' is a keyvalue
+
     RN format: ``runopt-{opt_idx}``
     """
 
@@ -36,14 +38,37 @@ class apphostingRunOpt(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    opt_idx: Annotated[int, Field(ge=1, le=30, alias="optIdx")] = 1
+    opt_idx: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=30,
+            alias="optIdx",
+            description="unique index to identify the package run options",
+        ),
+    ] = 1
 
     # ── Configurable ───────────────────────────────────────────────────────────
     admin_state_to_enable_or_disable_run_opt: ApphostingAdminState = Field(
-        default=ApphostingAdminState.ENABLED, alias="adminSt"
+        default=ApphostingAdminState.ENABLED,
+        alias="adminSt",
+        description='Admin state to configure mo "',
     )
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     run_option_value_eg_hostname_n9k_gx4: Annotated[
-        str, Field(min_length=1, max_length=235, alias="optVal")
+        str,
+        Field(
+            min_length=1,
+            max_length=235,
+            alias="optVal",
+            description="run options to be stored as value for the key of index",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

@@ -14,6 +14,8 @@ from niwaki.models.base import ManagedObject
 class arpIf(ManagedObject):
     """ACI Managed Object: ``arpIf`` — ARP Interface.
 
+    The ARP Interface. This is configured to contain ARP specific interface information and contains statically configured adjacency endpoint(s).
+
     RN format: ``if-[{interface_id}]``
     """
 
@@ -47,32 +49,65 @@ class arpIf(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    interface_id: Annotated[str, Field(alias="id")]
+    interface_id: Annotated[
+        str, Field(alias="id", description="Specifies an identifier for the interface.")
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    interface_controls_for_arp: ArpIfControl = Field(default=ArpIfControl.UNSPECIFIED, alias="ctrl")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    interface_controls_for_arp: ArpIfControl = Field(
+        default=ArpIfControl.UNSPECIFIED, alias="ctrl", description="Interface controls"
+    )
     delete_adj_on_mac_delete: NwAdminSt = Field(
-        default=NwAdminSt.DISABLED, alias="deleteAdjOnMacDelete"
+        default=NwAdminSt.DISABLED,
+        alias="deleteAdjOnMacDelete",
+        description="Delete adjacency on MAC delete without refresh",
     )
     description: Annotated[
         str,
         Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
     ] = ""
     duplicate_ip_detection_for_unnumbered_svi: NwAdminSt = Field(
-        default=NwAdminSt.DISABLED, alias="duplicateIpDetectionForUnnumberedSvi"
+        default=NwAdminSt.DISABLED,
+        alias="duplicateIpDetectionForUnnumberedSvi",
+        description="Enable duplicate IP detection across VLANs for IP unnumbered SVIs",
     )
     gratuitous_arp_hsrp_duplicate: NwAdminSt = Field(
-        default=NwAdminSt.ENABLED, alias="gratuitousHsrpDup"
+        default=NwAdminSt.ENABLED,
+        alias="gratuitousHsrpDup",
+        description="Gratuitous ARP HSRP Duplicate",
     )
-    gratuitous_arp_request: NwAdminSt = Field(default=NwAdminSt.ENABLED, alias="gratuitousRequest")
-    gratuitous_arp_update: NwAdminSt = Field(default=NwAdminSt.ENABLED, alias="gratuitousUpdate")
-    local_proxy_arp: NwAdminSt = Field(default=NwAdminSt.DISABLED, alias="localProxyArp")
+    gratuitous_arp_request: NwAdminSt = Field(
+        default=NwAdminSt.ENABLED, alias="gratuitousRequest", description="Gratuitous ARP request"
+    )
+    gratuitous_arp_update: NwAdminSt = Field(
+        default=NwAdminSt.ENABLED, alias="gratuitousUpdate", description="Gratuitous ARP Update"
+    )
+    local_proxy_arp: NwAdminSt = Field(
+        default=NwAdminSt.DISABLED, alias="localProxyArp", description="Local Proxy ARP"
+    )
     local_proxy_arp_w_o_hw_flooding: NwAdminSt = Field(
-        default=NwAdminSt.DISABLED, alias="localProxyArpNoHwFlood"
+        default=NwAdminSt.DISABLED,
+        alias="localProxyArpNoHwFlood",
+        description="Local Proxy ARP without HW Flooding",
     )
-    name: Annotated[str, Field(min_length=1, max_length=128)] = ""
-    proxy_arp: NwAdminSt = Field(default=NwAdminSt.DISABLED, alias="proxyArp")
-    refresh_timer_for_mac_delete: str = Field(default="", alias="refreshTimerForMacDelete")
-    arp_timeout: str = Field(default="", alias="timeout")
+    name: Annotated[
+        str, Field(min_length=1, max_length=128, description="The name of the object.")
+    ] = ""
+    proxy_arp: NwAdminSt = Field(
+        default=NwAdminSt.DISABLED, alias="proxyArp", description="Proxy ARP"
+    )
+    refresh_timer_for_mac_delete: str = Field(
+        default="",
+        alias="refreshTimerForMacDelete",
+        description="Set refresh timer for MAC delete adjacency request",
+    )
+    arp_timeout: str = Field(default="", alias="timeout", description="Timeout")
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

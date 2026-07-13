@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class l3extRsNodeL3OutAtt(ManagedObject):
     """ACI Managed Object: ``l3extRsNodeL3OutAtt`` — Fabric Node.
 
+    A static association with each leaf node that is part of the node profile. The corresponding set of policies will be resolved into the specified node. This object must contain a router ID that will be used as the OSPF/BGP router ID.
+
     RN format: ``rsnodeL3OutAtt-[{target_dn}]``
     """
 
@@ -41,11 +43,32 @@ class l3extRsNodeL3OutAtt(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    target_dn: Annotated[str, Field(alias="tDn")]
+    target_dn: Annotated[
+        str,
+        Field(
+            alias="tDn",
+            description="The distinguished name for the node attached to the layer 3 outside profile. The maximum supported string length is 255 ASCII characters.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    config_issues: str = Field(default="", alias="configIssues")
-    rtr_id: str = Field(default="", alias="rtrId")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    config_issues: str = Field(
+        default="",
+        alias="configIssues",
+        description="Bitmask representation of the configuration issues found during the endpoint group deployment.",
+    )
+    rtr_id: str = Field(
+        default="",
+        alias="rtrId",
+        description="The router identifier used as the OSPF/BGP router ID.",
+    )
     rtr_id_loop_back: bool = Field(default=True, alias="rtrIdLoopBack")
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

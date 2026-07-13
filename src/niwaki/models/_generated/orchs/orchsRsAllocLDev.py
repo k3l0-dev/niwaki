@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class orchsRsAllocLDev(ManagedObject):
     """ACI Managed Object: ``orchsRsAllocLDev`` — Real Logical L4-L7 Device.
 
+    Allocated LDevVip
+
     RN format: ``rsallocLDev-[{target_dn}]``
     """
 
@@ -35,8 +37,17 @@ class orchsRsAllocLDev(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    target_dn: Annotated[str, Field(alias="tDn")]
+    target_dn: Annotated[
+        str, Field(alias="tDn", description="The distinguished name of the target.")
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

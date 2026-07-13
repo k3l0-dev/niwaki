@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class infraRsQosIngressDppIfPol(ManagedObject):
     """ACI Managed Object: ``infraRsQosIngressDppIfPol`` — Ingress Data Plane Policy.
 
+    Relation to qosDppPol as Ingress policy
+
     RN format: ``rsQosIngressDppIfPol``
     """
 
@@ -37,7 +39,14 @@ class infraRsQosIngressDppIfPol(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     name: Annotated[
         str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="tnQosDppPolName")
     ] = ""

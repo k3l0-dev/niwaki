@@ -17,6 +17,8 @@ from niwaki.models.base import ManagedObject
 class l3extRsPathL3OutAtt(ManagedObject):
     """ACI Managed Object: ``l3extRsPathL3OutAtt`` — Leaf Port.
 
+    The path endpoints (ports and port channels) used to reach the external layer 3 network. The corresponding set of policies will be resolved into the specified leaf path endpoints.
+
     RN format: ``rspathL3OutAtt-[{target_dn}]``
     """
 
@@ -53,25 +55,86 @@ class l3extRsPathL3OutAtt(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    target_dn: Annotated[str, Field(alias="tDn")]
+    target_dn: Annotated[str, Field(alias="tDn", description="The logical interface identifier.")]
 
     # ── Create-only (ignored by APIC on modification) ─────────────────────────
-    is_multi_pod_direct: bool = Field(default=False, alias="isMultiPodDirect")
+    is_multi_pod_direct: bool = Field(
+        default=False,
+        alias="isMultiPodDirect",
+        description="MultiPod Direct (back-to-back) Link feature When link is MultiPod Direct Link",
+    )
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    addr: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$")] = ""
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    autostate: SviAutostate = SviAutostate.DISABLED
-    descr: Annotated[
-        str, Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$")
+    addr: Annotated[
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            description="The IP address of the path attached to the layer 3 outside profile.",
+        ),
     ] = ""
-    encap: str = ""
-    encap_scope: L3extEncapScope = Field(default=L3extEncapScope.LOCAL, alias="encapScope")
-    if_inst_t: ExtnwIfInstT = Field(default=ExtnwIfInstT.EXT_SVI, alias="ifInstT")
-    ipv6_dad: L3extIpv6Dad = Field(default=L3extIpv6Dad.ENABLED, alias="ipv6Dad")
-    ll_addr: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="llAddr")] = ""
-    mac: Annotated[str, Field(pattern="^([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}$")] = ""
-    mode: FvMode = FvMode.REGULAR
-    mtu: Annotated[int, Field(ge=576, le=9216)] = 0
-    target_dscp: str = Field(default="", alias="targetDscp")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    autostate: SviAutostate = Field(
+        default=SviAutostate.DISABLED,
+        description="Autostate feature When enabled an SVI automatically goes down when forwarding states of all ports attached to it is down",
+    )
+    descr: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            description="The description of this configuration item.",
+        ),
+    ] = ""
+    encap: Annotated[
+        str,
+        Field(description="The encapsulation of the path attached to the layer 3 outside profile."),
+    ] = ""
+    encap_scope: L3extEncapScope = Field(
+        default=L3extEncapScope.LOCAL,
+        alias="encapScope",
+        description="Represents the scope of the encap",
+    )
+    if_inst_t: ExtnwIfInstT = Field(
+        default=ExtnwIfInstT.EXT_SVI, alias="ifInstT", description="null"
+    )
+    ipv6_dad: L3extIpv6Dad = Field(
+        default=L3extIpv6Dad.ENABLED,
+        alias="ipv6Dad",
+        description="IPv6 DAD feature When disabled it will IPv6 DAD will be diasabled",
+    )
+    ll_addr: Annotated[
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            alias="llAddr",
+            description="The override of the system generated IPv6 link-local address.",
+        ),
+    ] = ""
+    mac: Annotated[
+        str,
+        Field(
+            pattern="^([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}$",
+            description="The MAC address of the path attached to the layer 3 outside profile.",
+        ),
+    ] = ""
+    mode: FvMode = Field(
+        default=FvMode.REGULAR,
+        description="Represents the mode (native etc.) of the encap. This property only takes affect ifInstT (Interface Instantiation Type) is external-svi and is ignored for sub-interface and l3-port",
+    )
+    mtu: Annotated[
+        int,
+        Field(ge=576, le=9216, description="The maximum transmit unit of the external network."),
+    ] = 0
+    target_dscp: str = Field(
+        default="",
+        alias="targetDscp",
+        description="The target differentiated service code point (DSCP) of the path attached to the layer 3 outside profile.",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

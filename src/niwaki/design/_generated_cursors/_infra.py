@@ -71,7 +71,23 @@ class _InfraMakers(Cursor):
         owner_tag: str | None = None,
         userdom: str | None = None,
     ) -> InfraDhcpRelayPolicyCursor:
-        """Declare a ``dhcpRelayP`` child under the infra level."""
+        """Declare a ``dhcpRelayP`` child under the infra level.
+
+        The DHCP relay profile, with one or more helper addresses in it, configures a DHCP relay
+        agent for forwarding DHCP packets to a remote server.
+
+        Args:
+            name: The DHCP relay policy name. This name can be up to 64 alphanumeric characters.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            relay_mode: Represents the mode to be used for doing DHCP relay Values: ``not-
+                visible``, ``visible``. Default: ``visible``.
+            owner: Represents the target relay servers ownership Values: ``infra``, ``tenant``.
+                Default: ``infra``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -118,7 +134,51 @@ class _InfraMakers(Cursor):
         violate_mark_cos: str | None = None,
         violate_mark_dscp: str | None = None,
     ) -> InfraDppPolicyCursor:
-        """Declare a ``qosDppPol`` child under the infra level."""
+        """Declare a ``qosDppPol`` child under the infra level.
+
+        Define a Data Plane Policing policy. User is supposed to use this in scenarios where the
+        incoming traffic need to be policed to certain levels
+
+        Args:
+            name: The name of the object.
+            admin_st: The Administrative state of the policy Values: ``disabled``, ``enabled``.
+                Default: ``disabled``.
+            annotation: User annotation. Suggested format orchestrator:value
+            excessive_burst: Excessive burst size (2R3C policer only)
+            excessive_burst_unit: Excessive Burst unit - none, Kilo, Mega, Giga, ms, us Values:
+                ``giga``, ``kilo``, ``mega``, ``msec``, ``unspecified``, ``usec``. Default:
+                ``unspecified``.
+            burst: Committed burst size, number of packets to absorb during a burst
+            burst_unit: Burst unit - byte, kbyte, mbyte etc. Values: ``giga``, ``kilo``,
+                ``mega``, ``msec``, ``unspecified``, ``usec``. Default: ``unspecified``.
+            confirm_action: Confirm action Values: ``drop``, ``mark``, ``transmit``. Default:
+                ``transmit``.
+            conform_mark_cos: Conform Mark cos
+            conform_mark_dscp: Conform Mark Dscp
+            description: Specifies a description of the policy definition.
+            exceed_action: Exceed action Values: ``drop``, ``mark``, ``transmit``. Default:
+                ``drop``.
+            exceed_mark_cos: Exceed Mark cos
+            exceed_mark_dscp: Exceed Mark Dscp
+            bit_or_packet: Policer mode - bytes or packet policer Values: ``bit``, ``packet``.
+                Default: ``bit``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            peak_rate: Peak rate (pir) (2R3C policer only)
+            peak_rate_unit: Peak Rate unit - none, Kilo, Mega, Giga Values: ``giga``, ``kilo``,
+                ``mega``, ``unspecified``. Default: ``unspecified``.
+            rate: Allowed rate, committed rate at which the packets are allowed into the system
+            rate_unit: Rate unit - bps, kbps, mbps, packets etc. Values: ``giga``, ``kilo``,
+                ``mega``, ``unspecified``. Default: ``unspecified``.
+            policer_sharing_mode: Policer sharing mode Values: ``dedicated``, ``shared``.
+                Default: ``dedicated``.
+            type: Policer type Values: ``1R2C``, ``2R3C``. Default: ``1R2C``.
+            violate_action: Violate action Values: ``drop``, ``mark``, ``transmit``. Default:
+                ``drop``.
+            violate_mark_cos: Violate Mark cos
+            violate_mark_dscp: Violate Mark Dscp
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -145,7 +205,21 @@ class _InfraMakers(Cursor):
         owner_tag: str | None = None,
         userdom: str | None = None,
     ) -> CdpPolicyCursor:
-        """Declare a ``cdpIfPol`` child under the infra level."""
+        """Declare a ``cdpIfPol`` child under the infra level.
+
+        The CDP interface policy, which is primarily used to obtain protocol addresses of
+        neighboring devices and discover the platform of those devices. CDP can also be used to
+        display information about the interfaces your router uses.
+
+        Args:
+            name: The interface policy name.
+            admin_state: Admin state Values: ``disabled``, ``enabled``. Default: ``enabled``.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -174,7 +248,25 @@ class _InfraMakers(Cursor):
         dcbxp_version: LldpDCBXPVerType | str | None = None,
         userdom: str | None = None,
     ) -> LldpPolicyCursor:
-        """Declare a ``lldpIfPol`` child under the infra level."""
+        """Declare a ``lldpIfPol`` child under the infra level.
+
+        The LLDP interface policy, which defines a common configuration that will apply to one or
+        more LLDP interfaces. LLDP uses the logical link control (LLC) services to transmit and
+        receive information to and from other LLDP agents.
+
+        Args:
+            name: LLDP interface policy name.
+            receive_state: Receive admin state Values: ``disabled``, ``enabled``. Default:
+                ``enabled``.
+            transmit_state: Transmit admin state Values: ``disabled``, ``enabled``. Default:
+                ``enabled``.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            dcbxp_version: Port DCBXP Version Values: ``CEE``, ``IEEE``. Default: ``CEE``.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -204,7 +296,28 @@ class _InfraMakers(Cursor):
         owner_tag: str | None = None,
         userdom: str | None = None,
     ) -> LacpPolicyCursor:
-        """Declare a ``lacpLagPol`` child under the infra level."""
+        """Declare a ``lacpLagPol`` child under the infra level.
+
+        The PortChannel policy enables you to bundle several physical ports together to form a
+        single port channel. LACP enables a node to negotiate an automatic bundling of links by
+        sending LACP packets to the peer node.
+
+        Args:
+            name: Specifies the policy name.
+            annotation: User annotation. Suggested format orchestrator:value
+            control: LAG control properties Values: ``fast-sel-hot-stdby``, ``graceful-conv``,
+                ``load-defer``, ``susp-individual``, ``symmetric-hash``. Default: ``fast-sel-
+                hot-stdby``.
+            description: Specifies a description of the policy definition.
+            maximum_number_of_links: maximum links Default: ``16``.
+            minimum_number_of_links: minimum links @@@ MinLinks in the port channel Default:
+                ``1``.
+            mode: mode Values: ``active``, ``explicit-failover``, ``mac-pin``, ``mac-pin-
+                nicload``, ``off``, ``passive``. Default: ``off``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -237,7 +350,39 @@ class _InfraMakers(Cursor):
         speed: L1Speed | str | None = None,
         userdom: str | None = None,
     ) -> LinkLevelPolicyCursor:
-        """Declare a ``fabricHIfPol`` child under the infra level."""
+        """Declare a ``fabricHIfPol`` child under the infra level.
+
+        The host interface policy specifies the layer 1 parameters of host facing ports.
+
+        Args:
+            name: The name of the interface policy. This name can be up to 64 characters. Note
+                that you cannot change this name after the object has been saved.
+            annotation: User annotation. Suggested format orchestrator:value
+            auto_negotiation_on_off: The policy auto-negotiation. Auto-negotiation is an
+                optional function of the IEEE 802.3u Fast Ethernet standard that enables devices
+                to automatically exchange information over a link about speed and duplex
+                abilities. Values: ``off``, ``on``, ``on-enforce``. Default: ``on``.
+            description: Specifies a description of the policy definition.
+            enable_disable_emi_retrain: Values: ``disable``, ``enable``. Default: ``disable``.
+            fec_mode: Forwarding error correction (FEC) mode. By incorporating error correction
+                information into data packets, FEC improves the reliability of data transmission
+                over networks that lack guaranteed delivery mechanisms. Values: ``auto-fec``,
+                ``cl74-fc-fec``, ``cl91-rs-fec``, ``cons16-rs-fec``, ``disable-fec``, ``ieee-rs-
+                fec``, ``inherit``, ``kp-fec``. Default: ``inherit``.
+            link_debounce_interval_msec: The interface policy administrative port link debounce
+                interval. Enables the debounce timer for physical interface ports and sets it
+                for a specified amount of time in milliseconds. The debounce timer is disabled
+                if you specify the time to 0 ms.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            physical_media_type: Values: ``auto``, ``sfp-10g-tx``. Default: ``auto``.
+            speed: The interface policy administrative port speed. The data transfer rate for
+                the port should match the destination to which the port is linked. The
+                administrative speed can be changed only for certain ports, and not all speeds
+                are available on all systems. Values: ``100G``, ``100M``, ``10G``, ``1G``,
+                ``200G``, ``25G``, ``400G``, ``40G``, …. Default: ``inherit``.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -272,7 +417,30 @@ class _InfraMakers(Cursor):
         strict_tx_freq_msec: str | None = None,
         userdom: str | None = None,
     ) -> McpPolicyCursor:
-        """Declare a ``mcpIfPol`` child under the infra level."""
+        """Declare a ``mcpIfPol`` child under the infra level.
+
+        Args:
+            name: The name of the object.
+            admin_state: The administrative state of the object or policy. Values: ``disabled``,
+                ``enabled``. Default: ``enabled``.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            grace_period: For strict mode, grace period timeout in sec during which early loop
+                detection takes place
+            grace_period_msec: For strict mode, grace period timeout in millisec during which
+                early loop detection takes place
+            mode: Instance MCP mode Values: ``off``, ``on``. Default: ``off``.
+            mcp_pdu_per_vlan: Values: ``off``, ``on``. Default: ``on``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            init_delay_time: For strict mode, delay time in seconds for mcp to wait before
+                sending BPDUs. This gives time for STP on the external network to converge
+            transmission_frequency: For strict mode, transmission frequency of MCP packets until
+                grace period on each L2 interface in seconds
+            strict_tx_freq_msec: For strict mode, transmission frequency of MCP packets until
+                grace period on each L2 interface in milliseconds
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -299,7 +467,21 @@ class _InfraMakers(Cursor):
         owner_tag: str | None = None,
         userdom: str | None = None,
     ) -> StpPolicyCursor:
-        """Declare a ``stpIfPol`` child under the infra level."""
+        """Declare a ``stpIfPol`` child under the infra level.
+
+        The Spanning-Tree Protocol (STP) interface policy defines a common configuration that will
+        apply to one or more interfaces. STP prevents loops from being formed when the interfaces
+        are interconnected via multiple paths.
+
+        Args:
+            name: The STP interface policy name.
+            annotation: User annotation. Suggested format orchestrator:value
+            controls: Interface controls
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -345,7 +527,51 @@ class _InfraMakers(Cursor):
         unknown_unicast_traffic_rate: str | None = None,
         uuc_rate_pps: int | None = None,
     ) -> StormControlPolicyCursor:
-        """Declare a ``stormctrlIfPol`` child under the infra level."""
+        """Declare a ``stormctrlIfPol`` child under the infra level.
+
+        The storm control interface policy. A traffic storm occurs when packets flood the LAN,
+        creating excessive traffic and degrading network performance.
+
+        Args:
+            name: The storm control policy name.
+            annotation: User annotation. Suggested format orchestrator:value
+            broadcast_max_burst_size: burst rate in pps Default: ``0``.
+            bc_burst_rate: burst rate in % (upto 1 decimal)
+            broadcast_traffic_rate: rate in % (upto 1 decimal)
+            bc_rate_pps: rate in pps Default: ``0``.
+            max_burst_size: The packets per second (PPS) burst interval rate for the storm
+                control policy. During this interval, the traffic level which is expressed as
+                packets flowing per second through the port, is then compared with the traffic
+                storm control level that you configured. Default: ``0``.
+            burst_rate: The traffic burst rate percentage.
+            description: Specifies a description of the policy definition.
+            packet_type_uc_bc_mc_config_valid_yes_no: Values: ``Invalid``, ``Valid``. Default:
+                ``Invalid``.
+            multicast_max_burst_size: burst rate in pps Default: ``0``.
+            mc_burst_rate: burst rate in % (upto 1 decimal)
+            multicast_traffic_rate: rate in % (upto 1 decimal)
+            mc_rate_pps: rate in pps Default: ``0``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            traffic_rate: The traffic rate percentage.
+            tarffic_rate: The packets per second (PPS) interval rate for the storm control
+                policy. During this interval, the traffic level which is expressed as packets
+                flowing per second through the port, is then compared with the traffic storm
+                control level that you configured. Default: ``0``.
+            storm_ctrl_action: action drop/shutdown Values: ``drop``, ``shutdown``. Default:
+                ``drop``.
+            storm_ctrl_soak_inst_count: Instances required to declare port shutdown
+            packet_type: The storm control interface policy type. The policy type prevents
+                disruptions on ports by a broadcast, multicast, or unknown unicast traffic storm
+                on physical interfaces. The policy type is set to ALL types of traffic by
+                default and can not be changed. Values: ``all``, ``bcast``, ``mcast``, ``unk-
+                ucast``. Default: ``all``.
+            unknown_unicast_max_burst_size: burst rate in pps Default: ``0``.
+            uuc_burst_rate: burst rate in % (upto 1 decimal)
+            unknown_unicast_traffic_rate: rate in % (upto 1 decimal)
+            uuc_rate_pps: rate in pps Default: ``0``.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -372,7 +598,19 @@ class _InfraMakers(Cursor):
         owner_tag: str | None = None,
         userdom: str | None = None,
     ) -> VlanPoolCursor:
-        """Declare a ``fvnsVlanInstP`` child under the infra level."""
+        """Declare a ``fvnsVlanInstP`` child under the infra level.
+
+        The VLAN range namespace policy defines for ID ranges used for VLAN encapsulation.
+
+        Args:
+            name: The VLAN range namespace policy name.
+            allocation_mode: The allocation mode of the VLAN pool.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -406,7 +644,22 @@ class _InfraMakers(Cursor):
         owner_tag: str | None = None,
         userdom: str | None = None,
     ) -> AaepCursor:
-        """Declare a ``infraAttEntityP`` child under the infra level."""
+        """Declare a ``infraAttEntityP`` child under the infra level.
+
+        The attached entity profile provides a template to deploy hypervisor policies on a large set
+        of leaf ports. This also provides the association of a Virtual Machine Management (VMM)
+        domain and the physical network infrastructure.
+
+        Args:
+            name: The attached entity profile name. This name can be up to 64 alphanumeric
+                characters. Note that you cannot change this name after the object has been
+                saved.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -432,7 +685,19 @@ class _InfraMakers(Cursor):
         owner_tag: str | None = None,
         userdom: str | None = None,
     ) -> FuncProfileCursor:
-        """Declare a ``infraFuncP`` child under the infra level."""
+        """Declare a ``infraFuncP`` child under the infra level.
+
+        The hypervisor management function provides the policies used for hypervisor management and
+        connectivity. For example, an endpoint group and encap VLAN.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            name: null
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
             "FuncProfileCursor",
@@ -450,7 +715,19 @@ class _InfraMakers(Cursor):
         owner_tag: str | None = None,
         userdom: str | None = None,
     ) -> AccessPortProfileCursor:
-        """Declare a ``infraAccPortP`` child under the infra level."""
+        """Declare a ``infraAccPortP`` child under the infra level.
+
+        The interface profile enables you to specify the interface you want to configure.
+
+        Args:
+            name: The interface profile name. This name can be up to 64 alphanumeric characters.
+                Note that you cannot change this name after the object has been saved.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -476,7 +753,19 @@ class _InfraMakers(Cursor):
         owner_tag: str | None = None,
         userdom: str | None = None,
     ) -> LeafProfileCursor:
-        """Declare a ``infraNodeP`` child under the infra level."""
+        """Declare a ``infraNodeP`` child under the infra level.
+
+        The node profile enables you to specify which nodes (Example: a leaf) to configure.
+
+        Args:
+            name: The node policy name. This name can be up to 64 alphanumeric characters. Note
+                that you cannot change this name after the object has been saved.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -502,7 +791,19 @@ class _InfraMakers(Cursor):
         owner_tag: str | None = None,
         userdom: str | None = None,
     ) -> SpineProfileCursor:
-        """Declare a ``infraSpineP`` child under the infra level."""
+        """Declare a ``infraSpineP`` child under the infra level.
+
+        Spine ProfileSpine Access Policy: It represents the template used for deploying node access
+        configuration (ex. Configuration for connecting hypervisor, Fex, External network )
+
+        Args:
+            name: The name of the object.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -608,7 +909,22 @@ class _AccessPortProfileMakers(Cursor):
         owner_tag: str | None = None,
         userdom: str | None = None,
     ) -> PortSelectorCursor:
-        """Declare a ``infraHPortS`` child under the access_port_profile level."""
+        """Declare a ``infraHPortS`` child under the access_port_profile level.
+
+        The Host Port Selector is used for grouping ports between the node and the host (such as
+        hypervisor).
+
+        Args:
+            name: The host port selector name. This name can be up to 64 alphanumeric
+                characters. Note that you cannot change this name after the object has been
+                saved.
+            selector_type: The host port selector type.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -701,7 +1017,18 @@ class _InfraDhcpRelayPolicyMakers(Cursor):
         pref: str | None = None,
         userdom: str | None = None,
     ) -> InfraDhcpRelayPolicyProviderCursor:
-        """Declare a ``dhcpRsProv`` child under the dhcp_relay_policy level."""
+        """Declare a ``dhcpRsProv`` child under the dhcp_relay_policy level.
+
+        An endpoint group associated with the DHCP relay profile. Hosts/clients in the endpoint
+        group can obtain IP addresses acquired via the DHCP relay profile.
+
+        Args:
+            target_dn: The distinguished name of the target endpoint group.
+            dhcp_server_address: The DHCP server address. This address is configured onto the
+                relationship between a relay profile and an endpoint group.
+            annotation: User annotation. Suggested format orchestrator:value
+            pref: DHCP server preferences
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -810,7 +1137,19 @@ class _FuncProfileMakers(Cursor):
         owner_tag: str | None = None,
         userdom: str | None = None,
     ) -> AccessGroupCursor:
-        """Declare a ``infraAccPortGrp`` child under the func_profile level."""
+        """Declare a ``infraAccPortGrp`` child under the func_profile level.
+
+        The interface policy group enables you to specify the interface policies you want to use.
+
+        Args:
+            name: The singular ports name. This name can be up to 64 alphanumeric characters.
+                Note that you cannot change this name after the object has been saved.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -837,7 +1176,23 @@ class _FuncProfileMakers(Cursor):
         owner_tag: str | None = None,
         userdom: str | None = None,
     ) -> PortChannelCursor:
-        """Declare a ``infraAccBndlGrp`` child under the func_profile level."""
+        """Declare a ``infraAccBndlGrp`` child under the func_profile level.
+
+        The bundle interface group enables you to specify the interface policy you want to use.
+
+        Args:
+            name: The bundled ports group name. This name can be up to 64 alphanumeric
+                characters. Note that you cannot change this name after the object has been
+                saved.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            link_aggregation_type: The bundled ports group link aggregation type: port channel
+                vs virtual port channel. Values: ``fc-link``, ``link``, ``node``, ``not-
+                aggregated``. Default: ``link``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -929,7 +1284,19 @@ class _LeafProfileMakers(Cursor):
         owner_tag: str | None = None,
         userdom: str | None = None,
     ) -> LeafSelectorCursor:
-        """Declare a ``infraLeafS`` child under the leaf_profile level."""
+        """Declare a ``infraLeafS`` child under the leaf_profile level.
+
+        The leaf selector enables you to select the interface to configure.
+
+        Args:
+            name: The leaf selector name
+            selector_type: The leaf selector type
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -1117,7 +1484,19 @@ class _SpineProfileMakers(Cursor):
         owner_tag: str | None = None,
         userdom: str | None = None,
     ) -> SpineSelectorCursor:
-        """Declare a ``infraSpineS`` child under the spine_profile level."""
+        """Declare a ``infraSpineS`` child under the spine_profile level.
+
+        Spine Selector
+
+        Args:
+            name: The name of the object.
+            selector_type: The specific type of the object or component.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -1261,7 +1640,21 @@ class _VlanPoolMakers(Cursor):
         role: FvnsBlkRole | str | None = None,
         userdom: str | None = None,
     ) -> RangeCursor:
-        """Declare a ``fvnsEncapBlk`` child under the vlan_pool level."""
+        """Declare a ``fvnsEncapBlk`` child under the vlan_pool level.
+
+        The VLAN encapsulation block.
+
+        Args:
+            from_: Start of the encapsulation block.
+            to: End of the encapsulation block.
+            allocation_mode: Values: ``dynamic``, ``inherit``, ``static``. Default: ``inherit``.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            name: null
+            role: Role of the block. @@@ used only for domain in AVE mode @@@ external: On-the-
+                wire encap. PVLAN/Access determined by the domain @@@ Internal: Encaps used
+                internally Values: ``external``, ``internal``. Default: ``external``.
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -1330,7 +1723,19 @@ class _PortSelectorMakers(Cursor):
         to_port_id: str | None = None,
         userdom: str | None = None,
     ) -> PortBlockCursor:
-        """Declare a ``infraPortBlk`` child under the port_selector level."""
+        """Declare a ``infraPortBlk`` child under the port_selector level.
+
+        The port block enables you to specify a range of interfaces.
+
+        Args:
+            name: The port block name
+            annotation: User annotation. Suggested format orchestrator:value
+            description: The description of this configuration item.
+            from_module_id: null
+            from_port_id: null
+            to_module_id: null
+            to_port_id: null
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -1360,7 +1765,19 @@ class _PortSelectorMakers(Cursor):
         to_sub_port_id: str | None = None,
         userdom: str | None = None,
     ) -> SubPortBlockCursor:
-        """Declare a ``infraSubPortBlk`` child under the port_selector level."""
+        """Declare a ``infraSubPortBlk`` child under the port_selector level.
+
+        Access sub port (breakout) block
+
+        Args:
+            name: The name of the object.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: The description of this configuration item.
+            from_module_id: null
+            from_port_id: null
+            to_module_id: null
+            to_port_id: null
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -1572,7 +1989,18 @@ class _LeafSelectorMakers(Cursor):
         to_node_id: str | None = None,
         userdom: str | None = None,
     ) -> LeafSelectorNodeBlockCursor:
-        """Declare a ``infraNodeBlk`` child under the leaf_selector level."""
+        """Declare a ``infraNodeBlk`` child under the leaf_selector level.
+
+        A node block is a range of nodes. Each node block begins with the first port and ends with
+        the last port.
+
+        Args:
+            name: null
+            annotation: User annotation. Suggested format orchestrator:value
+            description: The description of this configuration item.
+            from_node_id: null
+            to_node_id: null
+        """
         params = {
             k: v
             for k, v in locals().items()
@@ -1651,7 +2079,18 @@ class _SpineSelectorMakers(Cursor):
         to_node_id: str | None = None,
         userdom: str | None = None,
     ) -> SpineSelectorNodeBlockCursor:
-        """Declare a ``infraNodeBlk`` child under the spine_selector level."""
+        """Declare a ``infraNodeBlk`` child under the spine_selector level.
+
+        A node block is a range of nodes. Each node block begins with the first port and ends with
+        the last port.
+
+        Args:
+            name: null
+            annotation: User annotation. Suggested format orchestrator:value
+            description: The description of this configuration item.
+            from_node_id: null
+            to_node_id: null
+        """
         params = {
             k: v
             for k, v in locals().items()

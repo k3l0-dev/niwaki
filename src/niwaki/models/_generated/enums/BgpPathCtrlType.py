@@ -7,6 +7,7 @@ from enum import StrEnum
 
 class BgpPathCtrlType(StrEnum):
     ASPATHMULTIPATHRELAX = "asPathMultipathRelax"
+    """Allow load sharing across providers with different AS paths"""
 
     @classmethod
     def _missing_(cls, value: object) -> BgpPathCtrlType | None:

@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class DatetimeDisplayFormat(StrEnum):
     LOCAL = "local"
+    """Local time, of the form YYYY-MM-DDThh:mm:ss.mmm"""
     UTC = "utc"
+    """Coordinated Universal Time (UTC), of the form YYYY-MM-DDThh:mm:ss.mmm"""
 
     @classmethod
     def _missing_(cls, value: object) -> DatetimeDisplayFormat | None:

@@ -4,6 +4,27 @@ All notable changes to this project are documented here.  The format follows
 [Keep a Changelog](https://keepachangelog.com/); versions follow semver
 (0.x — the API may still change between minor versions).
 
+## [0.5.0] — 2026-07-13
+
+Cisco's own definitions, everywhere the IDE looks.
+
+### Added
+
+- The APIC schema comments — Cisco's human-written definitions, covering
+  79% of configurable properties and 84% of classes — now flow through
+  the entire generated surface:
+  - every described model field carries `Field(description=...)`: IDE
+    hover, Pydantic error context and Sphinx autodoc all show Cisco's
+    definition;
+  - model class docstrings carry the class definition;
+  - enum members carry per-value docstrings (`OspfNwT.BCAST` —
+    "Broadcast interface");
+  - every DSL maker exposes a generated Args section: field definition,
+    allowed enum values and non-empty defaults, straight from the
+    schemas.
+- Wire behaviour is untouched (golden payloads pass unchanged) and
+  cold-start stays at ~90 ms — models remain lazily loaded.
+
 ## [0.4.0] — 2026-07-12
 
 The vocabulary triples and the whole delivery pipeline matures.

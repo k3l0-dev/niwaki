@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class fabricRsDecommissionNode(ManagedObject):
     """ACI Managed Object: ``fabricRsDecommissionNode`` — Decommission Node.
 
+    The node for decommissioning a switch.
+
     RN format: ``rsdecommissionNode-[{target_dn}]``
     """
 
@@ -35,11 +37,26 @@ class fabricRsDecommissionNode(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    target_dn: Annotated[str, Field(alias="tDn")]
+    target_dn: Annotated[str, Field(alias="tDn", description="The node identifier.")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     debug: bool = False
-    remove_from_controller: bool = Field(default=False, alias="removeFromController")
-    secure_erase: bool = Field(default=False, alias="secureErase")
+    remove_from_controller: bool = Field(
+        default=False,
+        alias="removeFromController",
+        description="Removes the node-level configuration as part of the decommission.",
+    )
+    secure_erase: bool = Field(
+        default=False,
+        alias="secureErase",
+        description="L-Rel - US17196 Secure erase of Data on Controllers and Switches",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

@@ -7,8 +7,11 @@ from enum import StrEnum
 
 class MaintNotifCond(StrEnum):
     NOTIFYALWAYSBETWEENSETS = "notifyAlwaysBetweenSets"
+    """Always notify admin after a maintenance set."""
     NOTIFYNEVER = "notifyNever"
+    """Never notify admin after a maintenance set."""
     NOTIFYONLYONFAILURES = "notifyOnlyOnFailures"
+    """Notify admin after a maintenance set, only if there were failures in the set."""
 
     @classmethod
     def _missing_(cls, value: object) -> MaintNotifCond | None:

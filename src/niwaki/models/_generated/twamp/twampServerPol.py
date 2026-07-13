@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class twampServerPol(ManagedObject):
     """ACI Managed Object: ``twampServerPol`` — TWAMP Server Policy.
 
+    Node level TWAMP policy
+
     RN format: ``twampServP-{name}``
     """
 
@@ -38,28 +40,59 @@ class twampServerPol(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="Name of the TWAMP Server Policy.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    twamp_server_enable_disable: NwAdminSt = Field(default=NwAdminSt.DISABLED, alias="adminSt")
+    twamp_server_enable_disable: NwAdminSt = Field(
+        default=NwAdminSt.DISABLED,
+        alias="adminSt",
+        description="Admininstrative state of the TWAMP Server Policy.",
+    )
     annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies a description of the policy definition.",
+        ),
     ] = ""
-    twamp_server_inactivity_timer: str = Field(default="", alias="inactivityTimer")
+    twamp_server_inactivity_timer: str = Field(
+        default="",
+        alias="inactivityTimer",
+        description="Number of seconds before which TWAMP Server has to finish establishing control session.",
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
     owner_key: Annotated[
         str,
         Field(
-            max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerKey"
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerKey",
+            description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
     owner_tag: Annotated[
         str,
-        Field(max_length=64, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerTag"),
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerTag",
+            description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+        ),
     ] = ""
-    twamp_server_port_number: str = Field(default="", alias="port")
+    twamp_server_port_number: str = Field(
+        default="", alias="port", description="TWAMP server listening port number."
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

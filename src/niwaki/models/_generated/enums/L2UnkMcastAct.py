@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class L2UnkMcastAct(StrEnum):
     FLOOD = "flood"
+    """Flooding"""
     OPT_FLOOD = "opt-flood"
+    """Optimized flooding"""
 
     @classmethod
     def _missing_(cls, value: object) -> L2UnkMcastAct | None:

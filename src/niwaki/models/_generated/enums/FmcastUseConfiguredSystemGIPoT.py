@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class FmcastUseConfiguredSystemGIPoT(StrEnum):
     DISABLED = "disabled"
+    """Disabled"""
     ENABLED = "enabled"
+    """Enabled"""
 
     @classmethod
     def _missing_(cls, value: object) -> FmcastUseConfiguredSystemGIPoT | None:

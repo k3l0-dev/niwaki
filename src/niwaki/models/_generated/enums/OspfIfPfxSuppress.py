@@ -7,8 +7,11 @@ from enum import StrEnum
 
 class OspfIfPfxSuppress(StrEnum):
     DISABLE = "disable"
+    """Disable"""
     ENABLE = "enable"
+    """Enable"""
     INHERIT = "inherit"
+    """Inherit"""
 
     @classmethod
     def _missing_(cls, value: object) -> OspfIfPfxSuppress | None:

@@ -15,6 +15,8 @@ from niwaki.models.base import ManagedObject
 class bgpInfraPeerP(ManagedObject):
     """ACI Managed Object: ``bgpInfraPeerP`` — Infra Peer Connectivity Profile.
 
+    Peer connectivity profile
+
     RN format: ``infraPeerP-[{peer_address}]``
     """
 
@@ -46,34 +48,75 @@ class bgpInfraPeerP(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    peer_address: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="addr")]
+    peer_address: Annotated[
+        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="addr", description="Peer address")
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    address_type_af_controls: str = Field(default="", alias="addrTCtrl")
-    administrative_state: NwAdminSt = Field(default=NwAdminSt.ENABLED, alias="adminSt")
-    allowed_self_as_count: str = Field(default="", alias="allowedSelfAsCnt")
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    capability: str = ""
-    peer_af_controls: str = Field(default="", alias="ctrl")
-    peer_af_controls_ext: str = Field(default="", alias="ctrlExt")
+    address_type_af_controls: str = Field(
+        default="", alias="addrTCtrl", description="Ucast/Mcast Addr Type AF Control"
+    )
+    administrative_state: NwAdminSt = Field(
+        default=NwAdminSt.ENABLED, alias="adminSt", description="Administrative State"
+    )
+    allowed_self_as_count: str = Field(
+        default="",
+        alias="allowedSelfAsCnt",
+        description="The number of occurrences of a local Autonomous System Number (ASN).",
+    )
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    capability: Annotated[str, Field(description="Peer AF Capability")] = ""
+    peer_af_controls: str = Field(default="", alias="ctrl", description="Peer Controls")
+    peer_af_controls_ext: str = Field(
+        default="", alias="ctrlExt", description="Peer AF controls Ext"
+    )
     data_plane_address: Annotated[
-        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="dataPlaneAddr")
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$", alias="dataPlaneAddr", description="Data plane address"
+        ),
     ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
+        ""
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    password: Annotated[str, Field(repr=False)] = ""
-    peer_controls: str = Field(default="", alias="peerCtrl")
-    peer_type: str = Field(default="", alias="peerT")
-    private_as_control: str = Field(default="", alias="privateASctrl")
-    intersite_route_reflector: bool = Field(default=False, alias="remoteIntersiteRR")
-    source_interface_type: BgpSrcIfT = Field(default=BgpSrcIfT.L3OUT_LOOPBACK, alias="srcIfT")
+    password: Annotated[str, Field(repr=False, description="Administrative state")] = ""
+    peer_controls: str = Field(default="", alias="peerCtrl", description="The peer controls.")
+    peer_type: str = Field(default="", alias="peerT", description="Peer Type")
+    private_as_control: str = Field(
+        default="", alias="privateASctrl", description="Remove private AS"
+    )
+    intersite_route_reflector: bool = Field(
+        default=False,
+        alias="remoteIntersiteRR",
+        description="Is the peer an intersite route reflector",
+    )
+    source_interface_type: BgpSrcIfT = Field(
+        default=BgpSrcIfT.L3OUT_LOOPBACK, alias="srcIfT", description="Source Interface Type"
+    )
     control_type: BgpTrustCtrlT = Field(default=BgpTrustCtrlT.UNTRUSTED, alias="trustCtrl")
-    ebgp_multihop_ttl_value: str = Field(default="", alias="ttl")
+    ebgp_multihop_ttl_value: str = Field(
+        default="", alias="ttl", description="Specifies time to live (TTL)."
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    weight_for_routes_from_this_neighbor: str = Field(default="", alias="weight")
+    weight_for_routes_from_this_neighbor: str = Field(
+        default="", alias="weight", description="Default weight for routes from this neighbor"
+    )

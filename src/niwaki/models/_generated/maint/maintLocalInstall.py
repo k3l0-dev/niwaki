@@ -14,6 +14,8 @@ from niwaki.models.base import ManagedObject
 class maintLocalInstall(ManagedObject):
     """ACI Managed Object: ``maintLocalInstall`` — Install Firmware on a Local Node and Reboot.
 
+    The local installation.
+
     RN format: ``localinstall``
     """
 
@@ -37,7 +39,14 @@ class maintLocalInstall(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     firmware_type: MaintFirmwareType = Field(default=MaintFirmwareType.FULL, alias="fwType")
     state: MaintState = MaintState.UNSCHEDULED
     url_of_firmware: Annotated[str, Field(max_length=512, alias="url")] = ""

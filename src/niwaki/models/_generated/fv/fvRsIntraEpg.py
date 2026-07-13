@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class fvRsIntraEpg(ManagedObject):
     """ACI Managed Object: ``fvRsIntraEpg`` — Intra EPg Contract.
 
+    Intra EPg contract: Represents that the EPg is moving from "allow all within epg" mode to a "deny all within epg" mode. The only type of traffic allowed between EPs in this EPg is the one specified by contracts EPg associates to with this relation.
+
     RN format: ``rsintraEpg-{name}``
     """
 
@@ -42,10 +44,24 @@ class fvRsIntraEpg(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     name: Annotated[
-        str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="tnVzBrCPName")
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            alias="tnVzBrCPName",
+            description="The binary contract name.",
+        ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     intent: VzIntent = VzIntent.INSTALL
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

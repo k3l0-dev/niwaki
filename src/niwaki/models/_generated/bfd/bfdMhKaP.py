@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class bfdMhKaP(ManagedObject):
     """ACI Managed Object: ``bfdMhKaP`` — Keepalive Policy.
 
+    This object holds keepalive policy information
+
     RN format: ``mhka``
     """
 
@@ -35,8 +37,27 @@ class bfdMhKaP(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    detection_multiplier: str = Field(default="", alias="detectMult")
-    required_minimum_rx_interval: str = Field(default="", alias="minRxIntvl")
-    desired_minimum_tx_interval: str = Field(default="", alias="minTxIntvl")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    detection_multiplier: str = Field(
+        default="",
+        alias="detectMult",
+        description="Detection multiplier. This is the desired detection time multiplier for BFD packets on the local system.",
+    )
+    required_minimum_rx_interval: str = Field(
+        default="",
+        alias="minRxIntvl",
+        description="Required minimum rx interval. This is the minimum interval, in ms, between received BFD control packets that this system is capable of supporting.",
+    )
+    desired_minimum_tx_interval: str = Field(
+        default="",
+        alias="minTxIntvl",
+        description="Desired minimum tx interval. This is the minimum interval, in ms, that the system would like to use when transmitting BFD control packets.",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

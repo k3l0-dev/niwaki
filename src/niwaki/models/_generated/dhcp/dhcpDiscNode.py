@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class dhcpDiscNode(ManagedObject):
     """ACI Managed Object: ``dhcpDiscNode`` — DHCP Discovered Client Node.
 
+    The Discovered DHCP client node.
+
     RN format: ``bd-[{fd_encap}]-{client_hardware_address}-[{client_ip_address}]``
     """
 
@@ -39,11 +41,30 @@ class dhcpDiscNode(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    client_ip_address: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="ciAddr")]
-    fd_encap: Annotated[str, Field(alias="encap")]
+    client_ip_address: Annotated[
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            alias="ciAddr",
+            description="The IP address that is assigned to this client by the DHCP server",
+        ),
+    ]
+    fd_encap: Annotated[str, Field(alias="encap", description="EPG Encap")]
     client_hardware_address: Annotated[
-        str, Field(pattern="^([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}$", alias="mac")
+        str,
+        Field(
+            pattern="^([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}$",
+            alias="mac",
+            description="Client hardware address",
+        ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""

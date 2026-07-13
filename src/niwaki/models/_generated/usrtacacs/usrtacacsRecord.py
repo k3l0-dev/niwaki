@@ -36,7 +36,25 @@ class usrtacacsRecord(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    tacacs_message: Annotated[str, Field(max_length=512, alias="message")] = ""
-    severity_of_log: ConditionSeverity = Field(default=ConditionSeverity.INFO, alias="severity")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    tacacs_message: Annotated[
+        str,
+        Field(
+            max_length=512,
+            alias="message",
+            description="The contents of the informational banner to be displayed before user login authentication.",
+        ),
+    ] = ""
+    severity_of_log: ConditionSeverity = Field(
+        default=ConditionSeverity.INFO,
+        alias="severity",
+        description="The severity level of the reportable object.",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

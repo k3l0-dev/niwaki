@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class callhomeProf(ManagedObject):
     """ACI Managed Object: ``callhomeProf`` — Callhome protocol profile.
 
+    Contains all site information and the address of the SMTP server used to send emails.
+
     RN format: ``prof``
     """
 
@@ -38,27 +40,94 @@ class callhomeProf(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    contact_address: Annotated[str, Field(max_length=255, alias="addr")] = ""
-    admin_state: MonAdminState = Field(default=MonAdminState.ENABLED, alias="adminState")
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    contact_name: Annotated[str, Field(max_length=255, alias="contact")] = ""
-    contract_number: Annotated[str, Field(max_length=512, alias="contract")] = ""
-    customer_name: Annotated[str, Field(max_length=512, alias="customer")] = ""
+    contact_address: Annotated[
+        str, Field(max_length=255, alias="addr", description="The contact address of the customer.")
+    ] = ""
+    admin_state: MonAdminState = Field(
+        default=MonAdminState.ENABLED, alias="adminState", description="null"
+    )
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    contact_name: Annotated[
+        str,
+        Field(
+            max_length=255,
+            alias="contact",
+            description="The customer contact ID. Note that the customer ID associated with the Smart Call Home configuration in Cisco UCS must be the CCO (Cisco.com) account name associated with a support contract that includes Smart Call Home.",
+        ),
+    ] = ""
+    contract_number: Annotated[
+        str,
+        Field(
+            max_length=512,
+            alias="contract",
+            description="The contract information provided by the customer.",
+        ),
+    ] = ""
+    customer_name: Annotated[
+        str,
+        Field(
+            max_length=512, alias="customer", description="The customer for the Call Home profile."
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
-    contact_email: str = Field(default="", alias="email")
-    from_: str = Field(default="", alias="from")
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    contact_email: str = Field(
+        default="",
+        alias="email",
+        description="The email address of the contact for the system or site. This address is not necessarily the same as the reply-to addresses used in the outgoing emails.",
+    )
+    from_: str = Field(default="", alias="from", description="The email address of the sender.")
+    name: Annotated[
+        str,
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The user-configured profile name.",
+        ),
+    ] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    contact_phone: Annotated[str, Field(max_length=16, alias="phone")] = ""
-    port: Annotated[int, Field(ge=0, le=65535)] = 25
-    password: Annotated[str, Field(max_length=512, alias="pwd", repr=False)] = ""
-    replyto_address: str = Field(default="", alias="replyTo")
+    contact_phone: Annotated[
+        str, Field(max_length=16, alias="phone", description="The contact phone number.")
+    ] = ""
+    port: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=65535,
+            description="The SMTP server port number. The SMTP server address must be configured for the Callhome functionality to work.",
+        ),
+    ] = 25
+    password: Annotated[
+        str, Field(max_length=512, alias="pwd", repr=False, description="The system user password.")
+    ] = ""
+    replyto_address: str = Field(
+        default="",
+        alias="replyTo",
+        description="The Reply-To email address for emails sent using the destination group policy.",
+    )
     secure_smtp: bool = Field(default=False, alias="secureSmtp")
-    site: Annotated[str, Field(max_length=512)] = ""
+    site: Annotated[
+        str,
+        Field(
+            max_length=512,
+            description="The site ID provided by the customer. This is the ID of the network where the site is deployed.",
+        ),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     username: Annotated[str, Field(max_length=512)] = ""

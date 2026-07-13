@@ -39,18 +39,51 @@ class mgmtRsInBStNode(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    target_dn: Annotated[str, Field(alias="tDn")]
+    target_dn: Annotated[
+        str, Field(alias="tDn", description="The distinguished name of the target.")
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    address: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="addr")] = ""
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    address: Annotated[
+        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="addr", description="The peer IP address.")
+    ] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     configuration_mode: MgmtConfigurationMode = Field(
-        default=MgmtConfigurationMode.STATIC, alias="configurationMode"
+        default=MgmtConfigurationMode.STATIC,
+        alias="configurationMode",
+        description="Address allocated either static or auto",
     )
     descr: Annotated[
-        str, Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$")
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            description="The description of this configuration item.",
+        ),
     ] = ""
-    gateway: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="gw")] = ""
+    gateway: Annotated[
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            alias="gw",
+            description="The gateway IP address. This property is only valid when crossing VRFs and should always be present when the client is crossing a VRF to get its IP address.",
+        ),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    v6_addr: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="v6Addr")] = ""
-    v6_gw: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="v6Gw")] = ""
+    v6_addr: Annotated[
+        str,
+        Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="v6Addr", description="IP address of the node"),
+    ] = ""
+    v6_gw: Annotated[
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$", alias="v6Gw", description="Gateway IP address of the node"
+        ),
+    ] = ""

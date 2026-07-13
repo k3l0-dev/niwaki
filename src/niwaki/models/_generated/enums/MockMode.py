@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class MockMode(StrEnum):
     ONCE = "Once"
+    """One-shot mode"""
     REPEATED = "Repeated"
+    """Repeated mode"""
 
     @classmethod
     def _missing_(cls, value: object) -> MockMode | None:

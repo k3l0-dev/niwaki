@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class vnsAbsParam(ManagedObject):
     """ACI Managed Object: ``vnsAbsParam`` — L4-L7 Services Parameter.
 
+    The abstract node parameters. This is contained by the folder added to the abstract graph (AbsFolder).
+
     RN format: ``absParam-{name}``
     """
 
@@ -38,19 +40,47 @@ class vnsAbsParam(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the abstract node parameters.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     aux_info: Annotated[str, Field(max_length=512, alias="auxInfo")] = ""
-    cardinality: VnsVnsCardinalityType = VnsVnsCardinalityType.UNSPECIFIED
-    key: Annotated[str, Field(max_length=512)] = ""
-    locked: bool = False
-    mandatory: bool = False
+    cardinality: VnsVnsCardinalityType = Field(
+        default=VnsVnsCardinalityType.UNSPECIFIED,
+        description="A value to determine how many instances of this type can be present.",
+    )
+    key: Annotated[
+        str,
+        Field(
+            max_length=512, description="The key uniquely identifying this configuration object."
+        ),
+    ] = ""
+    locked: bool = Field(
+        default=False,
+        description="A property that specifies if a value entered at configuration time can be modified at run time.",
+    )
+    mandatory: bool = Field(
+        default=False, description="The value that indicates if this parameter is mandatory."
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
     src_ref: Annotated[str, Field(max_length=512, alias="srcRef")] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    validation: Annotated[str, Field(max_length=512)] = ""
-    value: Annotated[str, Field(max_length=512)] = ""
+    validation: Annotated[str, Field(max_length=512, description="The validation expression.")] = ""
+    value: Annotated[str, Field(max_length=512, description="The value of the property.")] = ""

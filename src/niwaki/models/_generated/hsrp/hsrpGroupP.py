@@ -14,6 +14,8 @@ from niwaki.models.base import ManagedObject
 class hsrpGroupP(ManagedObject):
     """ACI Managed Object: ``hsrpGroupP`` — HSRP Group Profile.
 
+    Hsrp Group Profile
+
     RN format: ``hsrpGroupP-{name}``
     """
 
@@ -42,24 +44,66 @@ class hsrpGroupP(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the object.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    group_vip_misconfiguration: str = Field(default="", alias="configIssues")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    group_vip_misconfiguration: str = Field(
+        default="",
+        alias="configIssues",
+        description="Bitmask representation of the configuration issues found during the endpoint group deployment.",
+    )
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
-    group_af: HsrpGroupAf = Field(default=HsrpGroupAf.IPV4, alias="groupAf")
-    group_id: str = Field(default="", alias="groupId")
-    group_name: Annotated[str, Field(max_length=512, alias="groupName")] = ""
-    primary_ip_address: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="ip")] = ""
+    group_af: HsrpGroupAf = Field(
+        default=HsrpGroupAf.IPV4, alias="groupAf", description="HSRP Group Type"
+    )
+    group_id: str = Field(default="", alias="groupId", description="HSRP Group ID")
+    group_name: Annotated[
+        str, Field(max_length=512, alias="groupName", description="Redundancy name string")
+    ] = ""
+    primary_ip_address: Annotated[
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            alias="ip",
+            description="HSRP primary Virtual IP address (VIP)",
+        ),
+    ] = ""
     vip_obtain_mode: HsrpGrpIpObtainMode = Field(
-        default=HsrpGrpIpObtainMode.ADMIN, alias="ipObtainMode"
+        default=HsrpGrpIpObtainMode.ADMIN,
+        alias="ipObtainMode",
+        description="HSRP primary Virtual IP Obtain Mode",
     )
     configured_mac_address_for_the_group: Annotated[
-        str, Field(pattern="^([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}$", alias="mac")
+        str,
+        Field(
+            pattern="^([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}$",
+            alias="mac",
+            description="HSRP VMAC for the group",
+        ),
     ] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")

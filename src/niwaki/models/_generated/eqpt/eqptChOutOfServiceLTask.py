@@ -15,6 +15,8 @@ from niwaki.models.base import ManagedObject
 class eqptChOutOfServiceLTask(ManagedObject):
     """ACI Managed Object: ``eqptChOutOfServiceLTask``.
 
+    A local task to decommission the switch.
+
     RN format: ``eqptChOutOfServiceLTask``
     """
 
@@ -38,13 +40,30 @@ class eqptChOutOfServiceLTask(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    admin_state: ActionAdminSt = Field(default=ActionAdminSt.UNKNOWN, alias="adminSt")
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    admin_state: ActionAdminSt = Field(
+        default=ActionAdminSt.UNKNOWN,
+        alias="adminSt",
+        description="The administrative state of the object or policy.",
+    )
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
         Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
     ] = ""
-    task_frequency: str = Field(default="", alias="freq")
-    mode: EqptChassisMaintMode = EqptChassisMaintMode.RELOAD
-    type: ActionType = ActionType.CLEAR
+    task_frequency: str = Field(
+        default="", alias="freq", description="Frequency at which tasks are executed"
+    )
+    mode: EqptChassisMaintMode = Field(
+        default=EqptChassisMaintMode.RELOAD, description="The BGP Domain mode."
+    )
+    type: ActionType = Field(
+        default=ActionType.CLEAR, description="The specific type of the object or component."
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

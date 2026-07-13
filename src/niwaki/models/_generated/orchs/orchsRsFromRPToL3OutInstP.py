@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class orchsRsFromRPToL3OutInstP(ManagedObject):
     """ACI Managed Object: ``orchsRsFromRPToL3OutInstP`` — Relation from L4-L7 Resource Pool to L3OutInstP.
 
+    Association from Local Resource to Real Resource
+
     RN format: ``rsfromRPToL3OutInstP-[{target_dn}]``
     """
 
@@ -35,9 +37,22 @@ class orchsRsFromRPToL3OutInstP(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    target_dn: Annotated[str, Field(alias="tDn")]
+    target_dn: Annotated[
+        str, Field(alias="tDn", description="The distinguished name of the target.")
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    is_default: bool = Field(default=False, alias="isDefault")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    is_default: bool = Field(
+        default=False,
+        alias="isDefault",
+        description="Specifies if this is the default domain. Only one domain in the group should be default.",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

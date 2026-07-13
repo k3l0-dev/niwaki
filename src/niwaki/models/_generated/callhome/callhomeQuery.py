@@ -16,6 +16,8 @@ from niwaki.models.base import ManagedObject
 class callhomeQuery(ManagedObject):
     """ACI Managed Object: ``callhomeQuery`` — Query.
 
+    A query. This is a query object representing all information on returned objects.
+
     RN format: ``chquery-{name}``
     """
 
@@ -39,22 +41,55 @@ class callhomeQuery(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=16, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=16,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The user-configured name for the query.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     value: Annotated[
-        str, Field(max_length=512, pattern="^[a-zA-Z0-9_./\\[\\]:-]+$", alias="entity")
+        str,
+        Field(
+            max_length=512,
+            pattern="^[a-zA-Z0-9_./\\[\\]:-]+$",
+            alias="entity",
+            description="The query entity as a distinguished name or class name.",
+        ),
     ] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
     response_depth: ConfigRspSubtreeDepth = Field(
-        default=ConfigRspSubtreeDepth.NO, alias="rspSubtree"
+        default=ConfigRspSubtreeDepth.NO,
+        alias="rspSubtree",
+        description="The subtree information that should be included in objects returned from the query.",
     )
     response_data: ConfigRspSubtreeInclude = Field(
-        default=ConfigRspSubtreeInclude.NONE, alias="rspSubtreeInclude"
+        default=ConfigRspSubtreeInclude.NONE,
+        alias="rspSubtreeInclude",
+        description="The types of subtrees for the objects returned from the query.",
     )
-    query_target: ConfigQueryTarget = Field(default=ConfigQueryTarget.SELF, alias="target")
-    query_type: ConfigQueryType = Field(default=ConfigQueryType.DN, alias="type")
+    query_target: ConfigQueryTarget = Field(
+        default=ConfigQueryTarget.SELF,
+        alias="target",
+        description="A property to specify if the subtree information should be included for the objects returned by this query.",
+    )
+    query_type: ConfigQueryType = Field(
+        default=ConfigQueryType.DN,
+        alias="type",
+        description="The type of query. The type can be a class-name or a distinguished-name.",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

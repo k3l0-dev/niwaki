@@ -7,9 +7,13 @@ from enum import StrEnum
 
 class SynceQloptype(StrEnum):
     NONE = "none"
+    """To represent QL is not configured"""
     OP1 = "op1"
+    """option 1"""
     OP2G1 = "op2g1"
+    """option 2 generation 1"""
     OP2G2 = "op2g2"
+    """option 2 generation 2"""
 
     @classmethod
     def _missing_(cls, value: object) -> SynceQloptype | None:

@@ -14,6 +14,8 @@ from niwaki.models.base import ManagedObject
 class analyticsBDTarget(ManagedObject):
     """ACI Managed Object: ``analyticsBDTarget`` — BD Instance Target.
 
+    Bridge Domain target
+
     RN format: ``bd-[{bd_id}]-bd-{netflow_target_type}``
     """
 
@@ -41,10 +43,21 @@ class analyticsBDTarget(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    netflow_target_type: AnalyticsFltType = Field(default=AnalyticsFltType.IPV4, alias="fltType")
-    bd_id: Annotated[str, Field(alias="id")]
+    netflow_target_type: AnalyticsFltType = Field(
+        default=AnalyticsFltType.IPV4, alias="fltType", description="IP filter type"
+    )
+    bd_id: Annotated[str, Field(alias="id", description="Identifier")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    direction: AnalyticsDirectionT = Field(default=AnalyticsDirectionT.IN, alias="dir")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    direction: AnalyticsDirectionT = Field(
+        default=AnalyticsDirectionT.IN, alias="dir", description="Direction"
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

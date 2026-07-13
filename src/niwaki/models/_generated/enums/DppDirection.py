@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class DppDirection(StrEnum):
     EGRESS = "egress"
+    """Egress direction"""
     INGRESS = "ingress"
+    """Ingress direction"""
 
     @classmethod
     def _missing_(cls, value: object) -> DppDirection | None:

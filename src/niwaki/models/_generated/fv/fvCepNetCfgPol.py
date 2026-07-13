@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class fvCepNetCfgPol(ManagedObject):
     """ACI Managed Object: ``fvCepNetCfgPol`` — Client End point Network Configuration Policy For Microsoft.
 
+    Represents Client End Point network configuration policy, Used this information for Microsoft SCVMM/Azure application to create SCVMM static IP pool
+
     RN format: ``cepNetCfgPol-{name}``
     """
 
@@ -34,27 +36,53 @@ class fvCepNetCfgPol(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the object.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
     dns_search_suffix_for_network_ip_pool: Annotated[
-        str, Field(max_length=512, alias="dnsSearchSuffix")
+        str, Field(max_length=512, alias="dnsSearchSuffix", description="DNS Search Suffix")
     ] = ""
-    dns_servers: Annotated[str, Field(max_length=512, alias="dnsServers")] = ""
-    dns_suffix_for_network_ip_pool: Annotated[str, Field(max_length=512, alias="dnsSuffix")] = ""
+    dns_servers: Annotated[
+        str, Field(max_length=512, alias="dnsServers", description="DNS Server name")
+    ] = ""
+    dns_suffix_for_network_ip_pool: Annotated[
+        str, Field(max_length=512, alias="dnsSuffix", description="DNS Suffix name")
+    ] = ""
     end_ip_address_for_network_ip_pool: Annotated[
-        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="endIp")
+        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="endIp", description="Ending ip address")
     ] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
     start_ip_address_for_network_ip_pool: Annotated[
-        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="startIp")
+        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="startIp", description="Starting ip address")
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    wins_servers: Annotated[str, Field(max_length=512, alias="winsServers")] = ""
+    wins_servers: Annotated[
+        str, Field(max_length=512, alias="winsServers", description="DNS Search Suffix")
+    ] = ""

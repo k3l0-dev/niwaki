@@ -15,6 +15,8 @@ from niwaki.models.base import ManagedObject
 class vzBrCP(ManagedObject):
     """ACI Managed Object: ``vzBrCP`` — Contract.
 
+    A contract is a logical container for the subjects which relate to the filters that govern the rules for communication between endpoint groups (EPGs). Without a contract, the default forwarding policy is to not allow any communication between EPGs but all communication within an EPG is allowed.
+
     RN format: ``brc-{name}``
     """
 
@@ -46,16 +48,42 @@ class vzBrCP(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="Name of a contract to apply between two or more EPGs under the Application Profile.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     az_network_security_group_rule: Annotated[
-        str, Field(min_length=1, max_length=128, alias="azNetworkSecurityGroupRule")
+        str,
+        Field(
+            min_length=1,
+            max_length=128,
+            alias="azNetworkSecurityGroupRule",
+            description="A Contract can depend on a subject exposed by another contract. Example: An application contract can depened on a Web/DB subject exposed by another contract. A contract consuming entity, consumes all the dependencies as well. TODO: How to detect dependency loops?",
+        ),
     ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies a description of the policy definition.",
+        ),
     ] = ""
     intent: VzIntent = VzIntent.INSTALL
     display_name: Annotated[
@@ -64,14 +92,29 @@ class vzBrCP(ManagedObject):
     owner_key: Annotated[
         str,
         Field(
-            max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerKey"
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerKey",
+            description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
     owner_tag: Annotated[
         str,
-        Field(max_length=64, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerTag"),
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerTag",
+            description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+        ),
     ] = ""
-    qos_class_id: QosTenantPrio = Field(default=QosTenantPrio.UNSPECIFIED, alias="prio")
-    scope: VzScope = VzScope.CONTEXT
-    contract_level_dscp: str = Field(default="", alias="targetDscp")
+    qos_class_id: QosTenantPrio = Field(
+        default=QosTenantPrio.UNSPECIFIED, alias="prio", description="null"
+    )
+    scope: VzScope = Field(
+        default=VzScope.CONTEXT,
+        description="Represents the scope of this contract. If the scope is set as application-profile, the epg can only communicate with epgs in the same application-profile",
+    )
+    contract_level_dscp: str = Field(
+        default="", alias="targetDscp", description="contract level dscp value"
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

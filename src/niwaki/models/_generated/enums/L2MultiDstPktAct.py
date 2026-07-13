@@ -7,8 +7,11 @@ from enum import StrEnum
 
 class L2MultiDstPktAct(StrEnum):
     BD_FLOOD = "bd-flood"
+    """BD Flood, flood with all L2 encapsulations in that BD"""
     DROP = "drop"
+    """Drop"""
     ENCAP_FLOOD = "encap-flood"
+    """Flood with the L2 Encapsulation"""
 
     @classmethod
     def _missing_(cls, value: object) -> L2MultiDstPktAct | None:

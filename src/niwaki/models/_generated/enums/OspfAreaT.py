@@ -7,8 +7,11 @@ from enum import StrEnum
 
 class OspfAreaT(StrEnum):
     NSSA = "nssa"
+    """NSSA area"""
     REGULAR = "regular"
+    """Regular area"""
     STUB = "stub"
+    """Stub area"""
 
     @classmethod
     def _missing_(cls, value: object) -> OspfAreaT | None:

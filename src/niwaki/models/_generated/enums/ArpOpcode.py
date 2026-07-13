@@ -7,8 +7,11 @@ from enum import StrEnum
 
 class ArpOpcode(StrEnum):
     REPLY = "reply"
+    """ARP reply"""
     REQ = "req"
+    """ARP request"""
     UNSPECIFIED = "unspecified"
+    """Unspecified"""
 
     @classmethod
     def _missing_(cls, value: object) -> ArpOpcode | None:

@@ -7,9 +7,13 @@ from enum import StrEnum
 
 class TracerouteProtT(StrEnum):
     ICMP = "icmp"
+    """ICMP Protocol"""
     ICMP6 = "icmp6"
+    """ICMP Protocol"""
     TCP = "tcp"
+    """TCP Protocol"""
     UDP = "udp"
+    """UDP Protocol"""
 
     @classmethod
     def _missing_(cls, value: object) -> TracerouteProtT | None:

@@ -15,6 +15,8 @@ from niwaki.models.base import ManagedObject
 class poeIfPol(ManagedObject):
     """ACI Managed Object: ``poeIfPol`` — POE Interface Policy.
 
+    POE Interface Policy
+
     RN format: ``poeIfP-{name}``
     """
 
@@ -47,29 +49,54 @@ class poeIfPol(ManagedObject):
     name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    admin_state: NwAdminSt = Field(default=NwAdminSt.DISABLED, alias="adminSt")
+    admin_state: NwAdminSt = Field(
+        default=NwAdminSt.DISABLED, alias="adminSt", description="Admin State"
+    )
     annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    consumption: str = ""
+    consumption: Annotated[str, Field(description="Consumption")] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies a description of the policy definition.",
+        ),
     ] = ""
-    maximum_power: str = Field(default="", alias="max")
-    power_mode: PoePowerMode = Field(default=PoePowerMode.AUTO, alias="mode")
+    maximum_power: str = Field(
+        default="",
+        alias="max",
+        description="The maximum power in milliwatts that is allowed on the interface.",
+    )
+    power_mode: PoePowerMode = Field(
+        default=PoePowerMode.AUTO, alias="mode", description="The PoE power mode of the interface."
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
     owner_key: Annotated[
         str,
         Field(
-            max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerKey"
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerKey",
+            description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
     owner_tag: Annotated[
         str,
-        Field(max_length=64, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerTag"),
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerTag",
+            description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+        ),
     ] = ""
-    poe_vlan: str = Field(default="", alias="poeVoiceVlan")
-    policing_action: PoePoliceAct = Field(default=PoePoliceAct.ERR_DIS, alias="policeAct")
-    port_priority_high: bool = Field(default=False, alias="prioHigh")
+    poe_vlan: str = Field(default="", alias="poeVoiceVlan", description="POE VLAN")
+    policing_action: PoePoliceAct = Field(
+        default=PoePoliceAct.ERR_DIS, alias="policeAct", description="Policing Action"
+    )
+    port_priority_high: bool = Field(
+        default=False, alias="prioHigh", description="Port Priority High"
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

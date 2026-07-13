@@ -7,9 +7,13 @@ from enum import StrEnum
 
 class FabricLc(StrEnum):
     BLACKLIST = "blacklist"
+    """blacklisted equipment"""
     IN_SERVICE = "in-service"
+    """in-service equipment"""
     OUT_OF_SERVICE = "out-of-service"
+    """out-of-service equipment"""
     SECURE_ERASE = "secure-erase"
+    """Secure Erase"""
 
     @classmethod
     def _missing_(cls, value: object) -> FabricLc | None:

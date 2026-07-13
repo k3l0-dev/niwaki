@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class vnsRsAbsConnectionConns(ManagedObject):
     """ACI Managed Object: ``vnsRsAbsConnectionConns`` — Relation from Service Graph Connection to Service Graph Connectors.
 
+    A source relation to a connector. Note that this relation is an internal object.
+
     RN format: ``rsabsConnectionConns-[{target_dn}]``
     """
 
@@ -37,8 +39,15 @@ class vnsRsAbsConnectionConns(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    target_dn: Annotated[str, Field(alias="tDn")]
+    target_dn: Annotated[str, Field(alias="tDn", description="null")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

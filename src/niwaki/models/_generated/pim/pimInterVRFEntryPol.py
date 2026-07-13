@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class pimInterVRFEntryPol(ManagedObject):
     """ACI Managed Object: ``pimInterVRFEntryPol`` — PIM Inter VRF Entry Policy.
 
+    Inter VRF Entry policy
+
     RN format: ``intervrfent-[{dn_of_the_src_vrf}]``
     """
 
@@ -36,15 +38,29 @@ class pimInterVRFEntryPol(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    dn_of_the_src_vrf: Annotated[str, Field(alias="srcVrfDn")]
+    dn_of_the_src_vrf: Annotated[str, Field(alias="srcVrfDn", description="Src Vrf Dn")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
+        ""
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

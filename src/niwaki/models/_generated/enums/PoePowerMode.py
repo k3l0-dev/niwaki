@@ -7,8 +7,11 @@ from enum import StrEnum
 
 class PoePowerMode(StrEnum):
     AUTO = "auto"
+    """Auto"""
     NEVER = "never"
+    """Never"""
     STATIC = "static"
+    """Static"""
 
     @classmethod
     def _missing_(cls, value: object) -> PoePowerMode | None:

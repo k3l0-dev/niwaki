@@ -14,6 +14,8 @@ from niwaki.models.base import ManagedObject
 class latencyPtpMode(ManagedObject):
     """ACI Managed Object: ``latencyPtpMode`` — Precision Time Protocol Enabled/Disabled.
 
+    Precision Time Protocol enable/disable flag
+
     RN format: ``ptpmode``
     """
 
@@ -38,20 +40,57 @@ class latencyPtpMode(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    announce_interval: str = Field(default="", alias="fabAnnounceIntvl")
-    announce_timeout: str = Field(default="", alias="fabAnnounceTimeout")
-    delay_request_interval: str = Field(default="", alias="fabDelayIntvl")
-    ptp_profile_template: PtpProfileTemplate = Field(
-        default=PtpProfileTemplate.AES67, alias="fabProfileTemplate"
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    announce_interval: str = Field(
+        default="", alias="fabAnnounceIntvl", description="Fabric Interface Announce Interval"
     )
-    sync_interval: str = Field(default="", alias="fabSyncIntvl")
+    announce_timeout: str = Field(
+        default="", alias="fabAnnounceTimeout", description="Fabric Interace Announce timeout"
+    )
+    delay_request_interval: str = Field(
+        default="",
+        alias="fabDelayIntvl",
+        description="Fabric Interace Minimum Delay Request Interval",
+    )
+    ptp_profile_template: PtpProfileTemplate = Field(
+        default=PtpProfileTemplate.AES67,
+        alias="fabProfileTemplate",
+        description="Fabric PTP profile Template",
+    )
+    sync_interval: str = Field(
+        default="", alias="fabSyncIntvl", description="Fabric Interace Sync Interval"
+    )
     ptp_global_domain: str = Field(default="", alias="globalDomain")
-    is_count_valid: bool = Field(default=False, alias="isCountValid")
-    latency_policy_count: Annotated[int, Field(alias="latencyPolCount")] = 0
-    ptp_global_priority_1_value: str = Field(default="", alias="prio1")
+    is_count_valid: bool = Field(
+        default=False,
+        alias="isCountValid",
+        description="Flag to tell if the policy count is valid or not",
+    )
+    latency_policy_count: Annotated[
+        int, Field(alias="latencyPolCount", description="Total number of active latency policies")
+    ] = 0
+    ptp_global_priority_1_value: str = Field(
+        default="", alias="prio1", description="PTP Global properties"
+    )
     ptp_global_priority_2_value: str = Field(default="", alias="prio2")
-    state: NetflowAdminSt = NetflowAdminSt.DISABLED
-    system_resolution_factor_for_max_latency: Annotated[int, Field(alias="systemResolution")] = 0
-    ttag_ether_type0x8905_status: bool = Field(default=False, alias="ttagEtherType0x8905Status")
+    state: NetflowAdminSt = Field(
+        default=NetflowAdminSt.DISABLED, description="State of the PTP protocol"
+    )
+    system_resolution_factor_for_max_latency: Annotated[
+        int,
+        Field(
+            alias="systemResolution",
+            description="System Resolution factor, Value could be (0 or 11 )",
+        ),
+    ] = 0
+    ttag_ether_type0x8905_status: bool = Field(
+        default=False, alias="ttagEtherType0x8905Status", description="State of the ttag ether type"
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

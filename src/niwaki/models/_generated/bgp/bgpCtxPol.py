@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class bgpCtxPol(ManagedObject):
     """ACI Managed Object: ``bgpCtxPol`` — BGP Timers Policy.
 
+    The BGP timers policy uses timers to control periodic activities such as the frequency keepalive messages that are sent to its peer, the amount of time the system waits to declare a peer dead after keepalive messages stop being received, and the amount of time before restarting a dead peer.
+
     RN format: ``bgpCtxP-{name}``
     """
 
@@ -36,30 +38,78 @@ class bgpCtxPol(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The context level policy name. This name can be up to 64 alphanumeric characters.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies a description of the policy definition.",
+        ),
     ] = ""
-    graceful_restart_controls: str = Field(default="", alias="grCtrl")
-    hold_interval: str = Field(default="", alias="holdIntvl")
-    keepalive_interval: str = Field(default="", alias="kaIntvl")
-    max_as_limit: str = Field(default="", alias="maxAsLimit")
+    graceful_restart_controls: str = Field(
+        default="",
+        alias="grCtrl",
+        description="A property to determine whether the entity functions only as a graceful restart helper, forwarding prefixes pointing to a restarting peer, or whether graceful restart is enabled completely.",
+    )
+    hold_interval: str = Field(
+        default="",
+        alias="holdIntvl",
+        description="The time period to wait before declaring the neighbor device down.",
+    )
+    keepalive_interval: str = Field(
+        default="",
+        alias="kaIntvl",
+        description="The interval time between sending keepalive messages.",
+    )
+    max_as_limit: str = Field(
+        default="",
+        alias="maxAsLimit",
+        description="Maximum AS limit, to discard routes that have excessive AS numbers",
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
     owner_key: Annotated[
         str,
         Field(
-            max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerKey"
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerKey",
+            description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
     owner_tag: Annotated[
         str,
-        Field(max_length=64, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerTag"),
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerTag",
+            description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+        ),
     ] = ""
-    stale_interval: str = Field(default="", alias="staleIntvl")
+    stale_interval: str = Field(
+        default="",
+        alias="staleIntvl",
+        description="Maximum time that BGP keeps stale routes from the restarting BGP peer.",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

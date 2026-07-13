@@ -19,6 +19,8 @@ from niwaki.models.base import ManagedObject
 class commHttp(ManagedObject):
     """ACI Managed Object: ``commHttp`` — HTTP Service.
 
+    HTTP
+
     RN format: ``http``
     """
 
@@ -52,12 +54,28 @@ class commHttp(ManagedObject):
             max_length=256, pattern="^[a-zA-Z0-9-_:/.,\\*\\s]+$", alias="accessControlAllowOrigins"
         ),
     ] = ""
-    admin_state: CommAdminState = Field(default=CommAdminState.DISABLED, alias="adminSt")
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    admin_state: CommAdminState = Field(
+        default=CommAdminState.DISABLED,
+        alias="adminSt",
+        description="The state of the HTTP communication service. This can be enabled or disabled.",
+    )
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     cli_only_mode: CommCliOnlyMode = Field(default=CommCliOnlyMode.DISABLED, alias="cliOnlyMode")
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
     global_throttle_rate: Annotated[int, Field(ge=1, le=10000, alias="globalThrottleRate")] = 10000
     global_throttle_st: CommAdminState = Field(
@@ -67,15 +85,23 @@ class commHttp(ManagedObject):
     max_request_status_count: Annotated[
         int, Field(ge=0, le=1024, alias="maxRequestStatusCount")
     ] = 0
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
+        ""
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
     node_exporter_service: CommNodeExporter = Field(
         default=CommNodeExporter.DISABLED, alias="nodeExporter"
     )
-    port: Annotated[int, Field(ge=1, le=65535)] = 80
-    redirect_state: CommRedirect = Field(default=CommRedirect.DISABLED, alias="redirectSt")
+    port: Annotated[
+        int, Field(ge=1, le=65535, description="The port used for HTTP communication service.")
+    ] = 80
+    redirect_state: CommRedirect = Field(
+        default=CommRedirect.DISABLED,
+        alias="redirectSt",
+        description="The state of HTTPS communication service. This can be enabled or disabled.",
+    )
     server_header_response: CommServerHeader = Field(
         default=CommServerHeader.ENABLED, alias="serverHeader"
     )

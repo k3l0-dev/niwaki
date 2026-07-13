@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class nlbNlbTgtIf(ManagedObject):
     """ACI Managed Object: ``nlbNlbTgtIf`` — Target Interface.
 
+    Target Interface (outgoing interface list)
+
     RN format: ``nlbif-[{multicast_source_ip}]``
     """
 
@@ -36,8 +38,15 @@ class nlbNlbTgtIf(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    multicast_source_ip: Annotated[str, Field(alias="id")]
+    multicast_source_ip: Annotated[str, Field(alias="id", description="Target interface Id")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

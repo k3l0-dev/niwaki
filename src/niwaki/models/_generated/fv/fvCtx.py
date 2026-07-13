@@ -16,6 +16,8 @@ from niwaki.models.base import ManagedObject
 class fvCtx(ManagedObject):
     """ACI Managed Object: ``fvCtx`` — VRF.
 
+    The private layer 3 network context that belongs to a specific tenant or is shared.
+
     RN format: ``ctx-{name}``
     """
 
@@ -77,14 +79,36 @@ class fvCtx(ManagedObject):
     _has_stats: ClassVar[bool] = True
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            description="A name for the network context.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    bd_enforcement_status: bool = Field(default=False, alias="bdEnforcedEnable")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    bd_enforcement_status: bool = Field(
+        default=False, alias="bdEnforcedEnable", description="BD Enforced Flag"
+    )
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies a description of the policy definition root.",
+        ),
     ] = ""
     data_plane_learning: FvipDataPlaneLearning = Field(
         default=FvipDataPlaneLearning.ENABLED, alias="ipDataPlaneLearning"
@@ -98,15 +122,25 @@ class fvCtx(ManagedObject):
     owner_key: Annotated[
         str,
         Field(
-            max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerKey"
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerKey",
+            description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
     owner_tag: Annotated[
         str,
-        Field(max_length=64, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerTag"),
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerTag",
+            description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+        ),
     ] = ""
     policy_enforcement_direction: L3extPcEnfDir = Field(
-        default=L3extPcEnfDir.INGRESS, alias="pcEnfDir"
+        default=L3extPcEnfDir.INGRESS,
+        alias="pcEnfDir",
+        description="Policy Control Enforcement Direction. It is used for defining policy enforcemnt direction for the traffic coming to or from an L3Out. Egress and Ingress directions are wrt L3Out. Default will be Ingress.",
     )
     policy_control_enforcement: FvPcEnfPref = Field(default=FvPcEnfPref.ENFORCED, alias="pcEnfPref")
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class snmpCtx(ManagedObject):
     """ACI Managed Object: ``snmpCtx`` — Context.
 
+    SNMP context information.
+
     RN format: ``ctx-{name}``
     """
 
@@ -39,12 +41,38 @@ class snmpCtx(ManagedObject):
     name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    ctx_instance: Annotated[str, Field(max_length=512, alias="ctxInstance")] = ""
-    ctx_topology: Annotated[str, Field(max_length=512, alias="ctxTopology")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    ctx_instance: Annotated[
+        str,
+        Field(
+            max_length=512,
+            alias="ctxInstance",
+            description="The instance that this context belongs to",
+        ),
+    ] = ""
+    ctx_topology: Annotated[
+        str,
+        Field(
+            max_length=512,
+            alias="ctxTopology",
+            description="The topology that this context belongs to",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies a control instrumentation description.",
+        ),
     ] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")

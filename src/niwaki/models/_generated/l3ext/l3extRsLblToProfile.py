@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class l3extRsLblToProfile(ManagedObject):
     """ACI Managed Object: ``l3extRsLblToProfile`` — Route Control Profile.
 
+    Consumer Lable Relation to Routing Policy
+
     RN format: ``rslblToProfile-[{target_dn}]-{direction}``
     """
 
@@ -37,9 +39,20 @@ class l3extRsLblToProfile(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    direction: RtctrlDirection = RtctrlDirection.IMPORT
-    target_dn: Annotated[str, Field(alias="tDn")]
+    direction: RtctrlDirection = Field(
+        default=RtctrlDirection.IMPORT, description="The connector direction."
+    )
+    target_dn: Annotated[
+        str, Field(alias="tDn", description="The distinguished name of the target.")
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

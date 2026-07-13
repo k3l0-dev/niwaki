@@ -16,6 +16,8 @@ from niwaki.models.base import ManagedObject
 class ptpCfgDef(ManagedObject):
     """ACI Managed Object: ``ptpCfgDef`` — PTP Epg configuration.
 
+    PTP internal representation for ptp Cfg
+
     RN format: ``ptpCfgDef``
     """
 
@@ -40,34 +42,70 @@ class ptpCfgDef(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    announce_interval_for_ptp_profile: str = Field(default="", alias="announceIntvl")
-    announce_timeout_for_ptp_profile: str = Field(default="", alias="announceTimeout")
-    delay_request_interval_for_ptp_profile: str = Field(default="", alias="delayIntvl")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    announce_interval_for_ptp_profile: str = Field(
+        default="", alias="announceIntvl", description="Announce Interval"
+    )
+    announce_timeout_for_ptp_profile: str = Field(
+        default="", alias="announceTimeout", description="Announce timeout"
+    )
+    delay_request_interval_for_ptp_profile: str = Field(
+        default="", alias="delayIntvl", description="Minimum Delay Request Interval"
+    )
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
-    local_priority: str = Field(default="", alias="localPriority")
-    ptp_mode_for_interface: PtpPtpTransportMode = Field(
-        default=PtpPtpTransportMode.MULTICAST, alias="mode"
+    local_priority: str = Field(
+        default="",
+        alias="localPriority",
+        description="Telecom profile related propertiesLocal Priority or PTP Cost",
     )
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    ptp_mode_for_interface: PtpPtpTransportMode = Field(
+        default=PtpPtpTransportMode.MULTICAST,
+        alias="mode",
+        description="PTP mode multicast, unicast master/slave",
+    )
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
+        ""
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    flag_to_over_ride_node_level_config: bool = Field(default=False, alias="nodeProfileOverride")
+    flag_to_over_ride_node_level_config: bool = Field(
+        default=False,
+        alias="nodeProfileOverride",
+        description="Override Node-level configurationProfile Applicable when Node Telecom Profile is configured",
+    )
     ptp_profile_template: PtpProfileTemplate = Field(
-        default=PtpProfileTemplate.AES67, alias="profile"
+        default=PtpProfileTemplate.AES67, alias="profile", description="PTP template"
     )
     ptpoe_dst_mac_rx_no_match: PtpPtpoeDstMacRxNoMatch = Field(
-        default=PtpPtpoeDstMacRxNoMatch.REPLYWITHCFGMAC, alias="ptpoeDstMacRxNoMatch"
+        default=PtpPtpoeDstMacRxNoMatch.REPLYWITHCFGMAC,
+        alias="ptpoeDstMacRxNoMatch",
+        description="PTPoE - Handling of RX packets with non-matching Mac type",
     )
     ptpoe_dst_mac_type: PtpPtpoeDstMacType = Field(
-        default=PtpPtpoeDstMacType.FORWARDABLE, alias="ptpoeDstMacType"
+        default=PtpPtpoeDstMacType.FORWARDABLE,
+        alias="ptpoeDstMacType",
+        description="PTPoE destination mac type",
     )
     ptp_unicast_source_address: Annotated[
-        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="srcIp")
+        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="srcIp", description="IP address")
     ] = ""
-    sync_interval_for_ptp_profile: str = Field(default="", alias="syncIntvl")
+    sync_interval_for_ptp_profile: str = Field(
+        default="", alias="syncIntvl", description="Sync Interval"
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

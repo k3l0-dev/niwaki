@@ -7,8 +7,11 @@ from enum import StrEnum
 
 class HcisakmpAuthMethod(StrEnum):
     PRE_SHARE = "pre-share"
+    """Pre-Shared Key"""
     RSA_ENCR = "rsa-encr"
+    """Rivest-Shamir-Adleman Encryption"""
     RSA_SIG = "rsa-sig"
+    """Rivest-Shamir-Adleman Signature"""
 
     @classmethod
     def _missing_(cls, value: object) -> HcisakmpAuthMethod | None:

@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class ipv4aclAF(ManagedObject):
     """ACI Managed Object: ``ipv4aclAF`` — IPv4 access control list configuration space.
 
+    IPv4
+
     RN format: ``ipv4``
     """
 
@@ -35,5 +37,12 @@ class ipv4aclAF(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

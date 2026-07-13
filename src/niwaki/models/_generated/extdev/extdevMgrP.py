@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class extdevMgrP(ManagedObject):
     """ACI Managed Object: ``extdevMgrP`` — Integration.
 
+    External Device Controller Profile specifies how to connect to a single External Device Management Controller that is part of containing policy enforcement domain. For example, policy to connect a Cisco UCSM that is part a EDM Group.
+
     RN format: ``mgr-{name}``
     """
 
@@ -47,21 +49,53 @@ class extdevMgrP(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the object.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     scope: Annotated[str, Field(max_length=512, alias="connURI")] = ""
-    device_ip_fqdn: Annotated[str, Field(max_length=512, alias="deviceAddress")] = ""
+    device_ip_fqdn: Annotated[
+        str,
+        Field(max_length=512, alias="deviceAddress", description="External Device IP/FQDN Address"),
+    ] = ""
     triggered_inventory_sync_status: ExtdevTrigSt = Field(
-        default=ExtdevTrigSt.UNTRIGGERED, alias="inventoryTrigSt"
+        default=ExtdevTrigSt.UNTRIGGERED,
+        alias="inventoryTrigSt",
+        description="Manual Trigger state of Inventory Sync",
     )
-    appcenter_managed_translation: bool = Field(default=True, alias="isAppManaged")
+    appcenter_managed_translation: bool = Field(
+        default=True, alias="isAppManaged", description="AppCenter Managed Translator"
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    password: Annotated[str, Field(alias="pwd", repr=False)] = ""
-    seq_num: Annotated[int, Field(alias="seqNum")] = 0
-    device_type_dn: str = Field(default="", alias="srcDevType")
+    password: Annotated[
+        str, Field(alias="pwd", repr=False, description="The system user password.")
+    ] = ""
+    seq_num: Annotated[
+        int, Field(alias="seqNum", description="An ISIS link-state packet sequence number.")
+    ] = 0
+    device_type_dn: str = Field(
+        default="",
+        alias="srcDevType",
+        description="DN of extdevDevType for PD to auto-populate rel-def",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    username: Annotated[str, Field(max_length=512, alias="usr")] = ""
+    username: Annotated[
+        str, Field(max_length=512, alias="usr", description="Controller User-Access Info")
+    ] = ""

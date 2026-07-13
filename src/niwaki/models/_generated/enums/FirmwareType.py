@@ -7,17 +7,29 @@ from enum import StrEnum
 
 class FirmwareType(StrEnum):
     CAPICPATCH = "cApicPatch"
+    """cAPIC Patch"""
     CATALOG = "catalog"
+    """Catalog"""
     CISCODOCKERAPP = "ciscoDockerApp"
+    """ciscoDockerApp"""
     CONFIG = "config"
+    """ConfigFile"""
     CONTROLLER = "controller"
+    """Controller software"""
     CONTROLLERPATCH = "controllerPatch"
+    """APIC Patch"""
     DOCKERAPP = "dockerApp"
+    """dockerApp"""
     PLUGIN = "plugin"
+    """Plugin"""
     PLUGINPACKAGE = "pluginPackage"
+    """PluginPackage"""
     SWITCH = "switch"
+    """Switch software"""
     SWITCHPATCH = "switchPatch"
+    """Switch Patch"""
     VPOD = "vpod"
+    """VPod (vspine/vleaf software )"""
 
     @classmethod
     def _missing_(cls, value: object) -> FirmwareType | None:

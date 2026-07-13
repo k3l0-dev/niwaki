@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class LldpAdminSt(StrEnum):
     DISABLED = "disabled"
+    """Administrative state is disabled"""
     ENABLED = "enabled"
+    """Administrative state is enabled"""
 
     @classmethod
     def _missing_(cls, value: object) -> LldpAdminSt | None:

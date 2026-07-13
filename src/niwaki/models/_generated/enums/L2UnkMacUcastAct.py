@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class L2UnkMacUcastAct(StrEnum):
     FLOOD = "flood"
+    """Flooding"""
     PROXY = "proxy"
+    """Proxy"""
 
     @classmethod
     def _missing_(cls, value: object) -> L2UnkMacUcastAct | None:

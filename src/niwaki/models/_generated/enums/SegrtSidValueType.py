@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class SegrtSidValueType(StrEnum):
     ABSOLUTE = "absolute"
+    """Segment identifier absolute values"""
     INDEX = "index"
+    """Segment identifier index value"""
 
     @classmethod
     def _missing_(cls, value: object) -> SegrtSidValueType | None:

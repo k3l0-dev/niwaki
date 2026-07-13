@@ -7,9 +7,13 @@ from enum import StrEnum
 
 class TopoctrlMssTypes(StrEnum):
     GLOBAL = "Global"
+    """Global"""
     MSITERL = "MsiteRl"
+    """Msite w RLs Only"""
     RLONLY = "RlOnly"
+    """RL Only"""
     DISABLE = "disable"
+    """Disable"""
 
     @classmethod
     def _missing_(cls, value: object) -> TopoctrlMssTypes | None:

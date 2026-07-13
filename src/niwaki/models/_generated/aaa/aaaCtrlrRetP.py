@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class aaaCtrlrRetP(ManagedObject):
     """ACI Managed Object: ``aaaCtrlrRetP`` — Controller Audit Log Retention Policy.
 
+    The controller audit log retention policy specifies the maximum number of controller audit log records to be retained and the maximum number of controller audit log records to be deleted in a 30-second period.
+
     RN format: ``ifcaaaretp``
     """
 
@@ -34,25 +36,63 @@ class aaaCtrlrRetP(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies a description of the policy definition.",
+        ),
     ] = ""
-    maximum_size: Annotated[int, Field(ge=1000, le=1000000, alias="maxSize")] = 500000
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    maximum_size: Annotated[
+        int,
+        Field(
+            ge=1000,
+            le=1000000,
+            alias="maxSize",
+            description="The maximum number of audit records to be maintained in the audit log.",
+        ),
+    ] = 500000
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
+        ""
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
     owner_key: Annotated[
         str,
         Field(
-            max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerKey"
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerKey",
+            description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
     owner_tag: Annotated[
         str,
-        Field(max_length=64, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerTag"),
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerTag",
+            description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+        ),
     ] = ""
-    purge_window_size: Annotated[int, Field(ge=100, le=1000, alias="purgeWin")] = 250
+    purge_window_size: Annotated[
+        int,
+        Field(
+            ge=100,
+            le=1000,
+            alias="purgeWin",
+            description="The maximum number of records to be deleted in a 30-second period. The number of records should be chosen to avoid spikes in I/O and CPU utilization.",
+        ),
+    ] = 250
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

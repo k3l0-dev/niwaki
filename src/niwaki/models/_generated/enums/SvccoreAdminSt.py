@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class SvccoreAdminSt(StrEnum):
     DISABLED = "disabled"
+    """Entity admin state enabled"""
     ENABLED = "enabled"
+    """Entity admin state enabled"""
 
     @classmethod
     def _missing_(cls, value: object) -> SvccoreAdminSt | None:

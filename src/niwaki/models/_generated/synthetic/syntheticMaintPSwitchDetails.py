@@ -34,7 +34,14 @@ class syntheticMaintPSwitchDetails(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     name_of_maintenance_policy: Annotated[str, Field(max_length=512, alias="maintPName")] = ""
     node_ids_of_the_nodes_in_maintp: Annotated[str, Field(max_length=512, alias="nodeIds")] = ""
     target_version: Annotated[str, Field(max_length=512, alias="targetVersion")] = ""

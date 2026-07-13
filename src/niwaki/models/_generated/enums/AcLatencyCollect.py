@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class AcLatencyCollect(StrEnum):
     AVG = "avg"
+    """Latency Average"""
     HISTOGRAM = "histogram"
+    """Latency Histogram"""
 
     @classmethod
     def _missing_(cls, value: object) -> AcLatencyCollect | None:

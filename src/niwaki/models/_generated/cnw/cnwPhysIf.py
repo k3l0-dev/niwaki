@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class cnwPhysIf(ManagedObject):
     """ACI Managed Object: ``cnwPhysIf`` — Controller Physical Interface.
 
+    The physical interface assigned to the node cluster.
+
     RN format: ``cphys-[{interface_id}]``
     """
 
@@ -37,14 +39,25 @@ class cnwPhysIf(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    interface_id: Annotated[str, Field(alias="id")]
+    interface_id: Annotated[
+        str, Field(alias="id", description="The physical interface identifier.")
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     administrative_state: L1AdminSt = Field(default=L1AdminSt.UP, alias="adminSt")
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
         Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
     ] = ""
-    name: Annotated[str, Field(min_length=1, max_length=128)] = ""
+    name: Annotated[
+        str, Field(min_length=1, max_length=128, description="The name of the object.")
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

@@ -14,6 +14,8 @@ from niwaki.models.base import ManagedObject
 class vnsAbsFolder(ManagedObject):
     """ACI Managed Object: ``vnsAbsFolder`` — L4-L7 Services Folder.
 
+    A folder added to an abstract graph. An abstract graph folder can contain an abstract graph folder (AbsFolder) and abstract node parameters (AbsParam), which are analogous to an MFolder and MParam.
+
     RN format: ``absFolder-{name}``
     """
 
@@ -43,19 +45,53 @@ class vnsAbsFolder(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the abstract graph folder.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     aux_info: Annotated[str, Field(max_length=512, alias="auxInfo")] = ""
-    cardinality: VnsVnsCardinalityType = VnsVnsCardinalityType.UNSPECIFIED
+    cardinality: VnsVnsCardinalityType = Field(
+        default=VnsVnsCardinalityType.UNSPECIFIED,
+        description="A value to determine how many instances of this type can be present.",
+    )
     dev_ctx_lbl: Annotated[str, Field(max_length=512, alias="devCtxLbl")] = ""
-    key: Annotated[str, Field(max_length=512)] = ""
-    locked: bool = False
+    key: Annotated[
+        str,
+        Field(
+            max_length=512, description="The key uniquely identifying this configuration object."
+        ),
+    ] = ""
+    locked: bool = Field(
+        default=False,
+        description="A property that specifies if a value entered at configuration time can be modified at run time.",
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    profile_behavior_shared: bool = Field(default=False, alias="profileBehaviorShared")
-    scoped_by: VnsItemScope = Field(default=VnsItemScope.EPG, alias="scopedBy")
+    profile_behavior_shared: bool = Field(
+        default=False,
+        alias="profileBehaviorShared",
+        description="Enabling sharing of AbsFolder. Used for the folders in AbsFuncProf.",
+    )
+    scoped_by: VnsItemScope = Field(
+        default=VnsItemScope.EPG,
+        alias="scopedBy",
+        description="The scope used for resolving this parameter.",
+    )
     src_ref: Annotated[str, Field(max_length=512, alias="srcRef")] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class fabricRsLeCardP(ManagedObject):
     """ACI Managed Object: ``fabricRsLeCardP`` — Leaf Module Profile.
 
+    A source relation to leaf card profiles.
+
     RN format: ``rsleCardP-[{target_dn}]``
     """
 
@@ -35,8 +37,21 @@ class fabricRsLeCardP(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    target_dn: Annotated[str, Field(alias="tDn")]
+    target_dn: Annotated[
+        str,
+        Field(
+            alias="tDn",
+            description="The distinguished name of the leaf card profile. This is the full path to the organization. The maximum supported string length is 1024 ASCII characters.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

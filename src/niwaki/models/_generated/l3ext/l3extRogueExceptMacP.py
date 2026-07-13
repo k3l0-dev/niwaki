@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class l3extRogueExceptMacP(ManagedObject):
     """ACI Managed Object: ``l3extRogueExceptMacP`` — Rogue Exception MAC Group Policy.
 
+    Rogue Exception MAC Group Policy
+
     RN format: ``rogueexceptmacp``
     """
 
@@ -35,6 +37,17 @@ class l3extRogueExceptMacP(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    indicate_whether_all_macs_are_excluded: bool = Field(default=False, alias="enableAllMacs")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    indicate_whether_all_macs_are_excluded: bool = Field(
+        default=False,
+        alias="enableAllMacs",
+        description="Indicate whether all MACs are excluded or not",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

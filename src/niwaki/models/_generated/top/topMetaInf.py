@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class topMetaInf(ManagedObject):
     """ACI Managed Object: ``topMetaInf``.
 
+    Meta Info Object. System maintained
+
     RN format: ``meta``
     """
 
@@ -34,9 +36,16 @@ class topMetaInf(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    ecode: Annotated[str, Field(max_length=8)] = ""
-    name: str = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    ecode: Annotated[str, Field(max_length=8, description="null")] = ""
+    name: Annotated[str, Field(description="null")] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

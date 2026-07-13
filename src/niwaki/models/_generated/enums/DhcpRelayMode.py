@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class DhcpRelayMode(StrEnum):
     CONTROLLER = "controller"
+    """All the relays should go to IFC"""
     NORMAL = "normal"
+    """Normal tenant relay configutaion should be done"""
 
     @classmethod
     def _missing_(cls, value: object) -> DhcpRelayMode | None:

@@ -42,12 +42,27 @@ class vmmInjectedClusterInfo(ManagedObject):
 
     # ── Configurable ───────────────────────────────────────────────────────────
     account_name: Annotated[str, Field(max_length=512, alias="accountName")] = ""
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    name: Annotated[str, Field(max_length=128)] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    name: Annotated[str, Field(max_length=128, description="The name of the object.")] = ""
     display_name: Annotated[str, Field(max_length=128, alias="nameAlias")] = ""
-    oper_state: CompCtrlrOperState = Field(default=CompCtrlrOperState.UNKNOWN, alias="operState")
+    oper_state: CompCtrlrOperState = Field(
+        default=CompCtrlrOperState.UNKNOWN,
+        alias="operState",
+        description="The operational state of a process.",
+    )
     overlay_dn: str = Field(default="", alias="overlayDn")
     provider: Annotated[str, Field(max_length=512)] = ""
-    type: Annotated[str, Field(max_length=512)] = ""
+    type: Annotated[
+        str, Field(max_length=512, description="The specific type of the object or component.")
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    version: Annotated[str, Field(max_length=512)] = ""
+    version: Annotated[
+        str, Field(max_length=512, description="The version of the compatibility catalog.")
+    ] = ""

@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class spanRsSrcToCtx(ManagedObject):
     """ACI Managed Object: ``spanRsSrcToCtx`` — Relation to SPAN Source to Ctx.
 
+    A source relation to the private Layer 3 network context that belongs to a specific tenant or is shared.
+
     RN format: ``rssrcToCtx``
     """
 
@@ -35,5 +37,7 @@ class spanRsSrcToCtx(ManagedObject):
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    target_dn: str = Field(default="", alias="tDn")
+    target_dn: str = Field(
+        default="", alias="tDn", description="The distinguished name of the target."
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

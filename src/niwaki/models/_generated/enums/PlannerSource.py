@@ -7,6 +7,7 @@ from enum import StrEnum
 
 class PlannerSource(StrEnum):
     CURRENTACIFABRIC = "currentACIFabric"
+    """more options to be added moving forward"""
 
     @classmethod
     def _missing_(cls, value: object) -> PlannerSource | None:

@@ -36,13 +36,40 @@ class cloudBfdPol(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=16, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=16,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the object.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    required_minimum_rx_interval: str = Field(default="", alias="minRxIntervalMs")
-    desired_minimum_tx_interval: str = Field(default="", alias="minTxIntervalMs")
-    detection_multiplier: str = Field(default="", alias="multiplier")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    required_minimum_rx_interval: str = Field(
+        default="",
+        alias="minRxIntervalMs",
+        description="Required minimum rx interval. This is the minimum interval, in ms, between received BFD control packets that this system is capable of supporting.",
+    )
+    desired_minimum_tx_interval: str = Field(
+        default="",
+        alias="minTxIntervalMs",
+        description="Desired minimum tx interval. This is the minimum interval, in ms, that the system would like to use when transmitting BFD control packets.",
+    )
+    detection_multiplier: str = Field(
+        default="",
+        alias="multiplier",
+        description="Detection multiplier. This is the desired detection time multiplier for BFD packets on the local system.",
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

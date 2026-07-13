@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class aaaPreLoginBanner(ManagedObject):
     """ACI Managed Object: ``aaaPreLoginBanner`` — Pre Login Banner.
 
+    A GUI banner is the informational banner to be displayed before user login authentication.
+
     RN format: ``preloginbanner``
     """
 
@@ -36,34 +38,69 @@ class aaaPreLoginBanner(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Create-only (ignored by APIC on modification) ─────────────────────────
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    name: Annotated[
+        str,
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the AAA definition object.",
+        ),
+    ] = ""
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     application_banner_message: str = Field(default="", alias="bannerMessage")
     application_banner_severity: ConditionSeverity = Field(
         default=ConditionSeverity.INFO, alias="bannerMessageSeverity"
     )
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies a description of the policy definition.",
+        ),
     ] = ""
-    login_gui_message: str = Field(default="", alias="guiMessage")
+    login_gui_message: str = Field(
+        default="",
+        alias="guiMessage",
+        description="The contents of the GUI informational banner to be displayed before user login authentication. The GUI banner is a URL. Note that the URL site owner must allow the site to be placed in an iFrame to display the informational banner.",
+    )
     login_gui_string_message: str = Field(default="", alias="guiTextMessage")
     use_text_base_pre_login_banner_message: bool = Field(default=False, alias="isGuiMessageText")
-    login_banner_message: str = Field(default="", alias="message")
+    login_banner_message: str = Field(
+        default="",
+        alias="message",
+        description="The contents of the CLI informational banner to be displayed before user login authentication. The CLI banner is a text based string printed as-is to the console.",
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
     owner_key: Annotated[
         str,
         Field(
-            max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerKey"
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerKey",
+            description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
     owner_tag: Annotated[
         str,
-        Field(max_length=64, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerTag"),
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerTag",
+            description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+        ),
     ] = ""
     show_application_banner: bool = Field(default=False, alias="showBannerMessage")
     switch_login_banner_message: str = Field(default="", alias="switchMessage")

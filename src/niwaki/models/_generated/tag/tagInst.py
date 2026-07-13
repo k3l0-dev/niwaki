@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class tagInst(ManagedObject):
     """ACI Managed Object: ``tagInst`` — Tag Instance.
 
+    A tag allows you to group multiple objects by a descriptive name. You can assign the same tag name to multiple objects and you can assign one or more tag names to an object.
+
     RN format: ``tag-{name}``
     """
 
@@ -36,11 +38,24 @@ class tagInst(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     name: Annotated[
-        str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9=!#$%()*,-.:;@ _{|}~?&+]+$")
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9=!#$%()*,-.:;@ _{|}~?&+]+$",
+            description="The name of the tag.",
+        ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

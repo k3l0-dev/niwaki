@@ -45,16 +45,30 @@ class eptrkMacEpRslt(ManagedObject):
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    ack: bool = False
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    ack: bool = Field(
+        default=False,
+        description="The acknowledgement status of the fault. If a fault is acknowledged and cleared, it is immediately deleted. If a fault is not acknowledged and cleared, it is deleted after the retention interval.",
+    )
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     debug_internal_data: str = Field(default="", alias="dbgInternalData")
     description: Annotated[
         str,
         Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
     ] = ""
-    trkendpoint_encap: str = Field(default="", alias="encap")
+    trkendpoint_encap: str = Field(default="", alias="encap", description="The port encapsulation.")
     operational_state_qualifier: EptrkOperStQual = Field(
-        default=EptrkOperStQual.OK, alias="operStQual"
+        default=EptrkOperStQual.OK,
+        alias="operStQual",
+        description="The chassis operational status qualifier.",
     )
-    type: ActionType = ActionType.CLEAR
+    type: ActionType = Field(
+        default=ActionType.CLEAR, description="The specific type of the object or component."
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

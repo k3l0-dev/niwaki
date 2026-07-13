@@ -38,67 +38,184 @@ class vnsNATPATReq(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    ctrct: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
-    graph: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
-    nat_rule: Annotated[
-        str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="natRule")
+    ctrct: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="contract name, graphInst selector",
+        ),
     ]
-    node: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    graph: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="graph name, graphInst selector",
+        ),
+    ]
+    nat_rule: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            alias="natRule",
+            description="NAT rule name",
+        ),
+    ]
+    node: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="node name, graphInst selector",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    consumer: str = Field(default="", alias="cons")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    consumer: str = Field(default="", alias="cons", description="consumer dn")
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
     external_interface_address: Annotated[
-        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="extIntfAddr")
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            alias="extIntfAddr",
+            description="external interface address",
+        ),
     ] = ""
     ext_intf_name: Annotated[
-        str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="extIntfName")
+        str,
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            alias="extIntfName",
+            description="external interface name",
+        ),
     ] = ""
     external_interface_netmask: Annotated[
-        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="extIntfNetmask")
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            alias="extIntfNetmask",
+            description="external interface netmask",
+        ),
     ] = ""
     ext_route_network_addr: Annotated[
-        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="extRouteNetworkAddr")
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            alias="extRouteNetworkAddr",
+            description="external route network address",
+        ),
     ] = ""
     ext_route_network_mask: Annotated[
-        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="extRouteNetworkMask")
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            alias="extRouteNetworkMask",
+            description="external route network netmask",
+        ),
     ] = ""
     gateway_of_the_route_for_external_intf: Annotated[
-        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="externalGateway")
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            alias="externalGateway",
+            description="external route gateway",
+        ),
     ] = ""
     internal_interface_address: Annotated[
-        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="intIntfAddr")
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            alias="intIntfAddr",
+            description="internal interface address",
+        ),
     ] = ""
     int_intf_name: Annotated[
-        str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="intIntfName")
+        str,
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            alias="intIntfName",
+            description="internal interface name",
+        ),
     ] = ""
     internal_interface_netmask: Annotated[
-        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="intIntfNetmask")
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            alias="intIntfNetmask",
+            description="internal interface netmask",
+        ),
     ] = ""
     int_route_network_addr: Annotated[
-        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="intRouteNetworkAddr")
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            alias="intRouteNetworkAddr",
+            description="internal route network address",
+        ),
     ] = ""
     int_route_network_mask: Annotated[
-        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="intRouteNetworkMask")
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            alias="intRouteNetworkMask",
+            description="internal route network netmask",
+        ),
     ] = ""
     gateway_of_the_route_for_internal_intf: Annotated[
-        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="internalGateway")
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            alias="internalGateway",
+            description="internal route gateway",
+        ),
     ] = ""
-    mapped_ip_address: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="mappedIp")] = ""
-    mapped_port: str = Field(default="", alias="mappedPort")
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    mapped_ip_address: Annotated[
+        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="mappedIp", description="mapped IP")
+    ] = ""
+    mapped_port: str = Field(default="", alias="mappedPort", description="mapped port")
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
+        ""
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    order: str = ""
-    provider: str = Field(default="", alias="prov")
-    real_ip_address: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="realIp")] = ""
-    real_port: str = Field(default="", alias="realPort")
-    route_added_choice: str = Field(default="", alias="routeAddedChoice")
-    nat_service_type: str = Field(default="", alias="service")
+    order: Annotated[str, Field(description="ASA ctx order")] = ""
+    provider: str = Field(default="", alias="prov", description="provider Dn")
+    real_ip_address: Annotated[
+        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="realIp", description="real IP")
+    ] = ""
+    real_port: str = Field(default="", alias="realPort", description="real port")
+    route_added_choice: str = Field(
+        default="", alias="routeAddedChoice", description="which side route added"
+    )
+    nat_service_type: str = Field(
+        default="",
+        alias="service",
+        description="Static PAT configurationsl4 service type: udp or tcp",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    version: VnsrequestVersion = VnsrequestVersion.CLASSIC
+    version: VnsrequestVersion = Field(default=VnsrequestVersion.CLASSIC, description="Version")

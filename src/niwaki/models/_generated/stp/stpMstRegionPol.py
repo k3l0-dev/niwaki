@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class stpMstRegionPol(ManagedObject):
     """ACI Managed Object: ``stpMstRegionPol`` — Spanning Tree Policy Region.
 
+    The MST region policy enables switches to participate in MST instances when you consistently configure the switches with the same MST configuration information. A collection of interconnected switches that have the same MST configuration is an MST region.
+
     RN format: ``mstpRegionPol-{name}``
     """
 
@@ -37,17 +39,41 @@ class stpMstRegionPol(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The MST region policy name.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    region_name: Annotated[str, Field(max_length=32, alias="regName")] = ""
-    region_revision: str = Field(default="", alias="rev")
+    region_name: Annotated[
+        str, Field(max_length=32, alias="regName", description="The MST region policy region name.")
+    ] = ""
+    region_revision: str = Field(
+        default="", alias="rev", description="The MST region policy revision number."
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

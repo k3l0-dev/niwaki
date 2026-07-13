@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class FvPrefGrMemb(StrEnum):
     EXCLUDE = "exclude"
+    """EPg is NOT part of preferred group member"""
     INCLUDE = "include"
+    """EPg is part of preferred group member"""
 
     @classmethod
     def _missing_(cls, value: object) -> FvPrefGrMemb | None:

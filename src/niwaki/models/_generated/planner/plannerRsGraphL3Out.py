@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class plannerRsGraphL3Out(ManagedObject):
     """ACI Managed Object: ``plannerRsGraphL3Out`` — L3Out.
 
+    Graph L3Out (for goto-one-arm)
+
     RN format: ``rsgraphL3Out``
     """
 
@@ -35,6 +37,13 @@ class plannerRsGraphL3Out(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     target_dn: str = Field(default="", alias="tDn")
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

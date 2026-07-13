@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class vnsDevFolder(ManagedObject):
     """ACI Managed Object: ``vnsDevFolder`` — Device Configuration.
 
+    A container to hold device specific configuration items.
+
     RN format: ``devFolder-{name}-key-{key}``
     """
 
@@ -42,7 +44,14 @@ class vnsDevFolder(ManagedObject):
     name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

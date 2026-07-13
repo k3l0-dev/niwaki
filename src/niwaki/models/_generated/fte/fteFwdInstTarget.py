@@ -15,6 +15,8 @@ from niwaki.models.base import ManagedObject
 class fteFwdInstTarget(ManagedObject):
     """ACI Managed Object: ``fteFwdInstTarget`` — Forward Instance Target.
 
+    Forwarding instance based target
+
     RN format: ``fwdinst-{identifier}``
     """
 
@@ -39,25 +41,62 @@ class fteFwdInstTarget(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    identifier: Annotated[int, Field(ge=0, le=16777215, alias="id")] = 0
+    identifier: Annotated[int, Field(ge=0, le=16777215, alias="id", description="Identifier")] = 0
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    default_filtering_policy: FteDefPolicyT = Field(default=FteDefPolicyT.PERMIT, alias="DefPolicy")
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    timestamp_shift_value_for_burst_interval: str = Field(default="", alias="burstIntvlShift")
+    default_filtering_policy: FteDefPolicyT = Field(
+        default=FteDefPolicyT.PERMIT, alias="DefPolicy", description="Default filtering policy"
+    )
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    timestamp_shift_value_for_burst_interval: str = Field(
+        default="", alias="burstIntvlShift", description="Burst interval shift"
+    )
     collect_interval_in_milliseconds: Annotated[
-        int, Field(ge=100, le=64000, alias="collectIntvl")
+        int, Field(ge=100, le=64000, alias="collectIntvl", description="Collect interval")
     ] = 100
-    collector_id: Annotated[int, Field(ge=0, le=65535, alias="collectorId")] = 0
-    direction: FteDirectionT = Field(default=FteDirectionT.IN, alias="dir")
-    netflow_fte_type: FteFltType = Field(default=FteFltType.IPV4, alias="fltType")
-    ip_packet_id_shift: str = Field(default="", alias="ipPktIdShift")
-    mtu: str = ""
+    collector_id: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=65535,
+            alias="collectorId",
+            description="Collector identifier provided by the analytics controller",
+        ),
+    ] = 0
+    direction: FteDirectionT = Field(default=FteDirectionT.IN, alias="dir", description="Direction")
+    netflow_fte_type: FteFltType = Field(
+        default=FteFltType.IPV4, alias="fltType", description="IP filter type"
+    )
+    ip_packet_id_shift: str = Field(
+        default="", alias="ipPktIdShift", description="IP packet id shift"
+    )
+    mtu: Annotated[str, Field(description="Collector export packet MTU")] = ""
     sequence_number_guess_threshold_high: Annotated[
-        int, Field(ge=0, le=4294967295, alias="seqNumGuessThreshHi")
+        int,
+        Field(
+            ge=0,
+            le=4294967295,
+            alias="seqNumGuessThreshHi",
+            description="Sequence number guess threshold high",
+        ),
     ] = 0
     sequence_number_guess_threshold_low: Annotated[
-        int, Field(ge=0, le=4294967295, alias="seqNumGuessThreshLo")
+        int,
+        Field(
+            ge=0,
+            le=4294967295,
+            alias="seqNumGuessThreshLo",
+            description="Sequence number guess threshold low",
+        ),
     ] = 0
-    source_l4_port: Annotated[int, Field(ge=1, le=65535, alias="srcPort")] = 0
+    source_l4_port: Annotated[
+        int, Field(ge=1, le=65535, alias="srcPort", description="Source port")
+    ] = 0
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

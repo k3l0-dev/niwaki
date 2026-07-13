@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class fvSubnet(ManagedObject):
     """ACI Managed Object: ``fvSubnet`` — Subnet.
 
+    A subnet defines the IP address range that can be used within the bridge domain. While a context defines a unique layer 3 space, that space can consist of multiple subnets. These subnets are defined per bridge domain.
+
     RN format: ``subnet-[{subnet}]``
     """
 
@@ -47,21 +49,58 @@ class fvSubnet(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    subnet: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="ip")]
+    subnet: Annotated[
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            alias="ip",
+            description="The IP address and mask of the default gateway.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    subnet_control: str = Field(default="", alias="ctrl")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    subnet_control: str = Field(
+        default="",
+        alias="ctrl",
+        description="The subnet control state. The control can be specific protocols applied to the subnet such as IGMP Snooping.",
+    )
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
-    ip_dp_learning: FvipDPLearning = Field(default=FvipDPLearning.ENABLED, alias="ipDPLearning")
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    ip_dp_learning: FvipDPLearning = Field(
+        default=FvipDPLearning.ENABLED,
+        alias="ipDPLearning",
+        description="Knob to disable IP Dataplane Learning for Host(/32, /128) and for BD Subnet",
+    )
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
+        ""
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    preferred_as_primary_subnet: bool = Field(default=False, alias="preferred")
-    scope: str = ""
+    preferred_as_primary_subnet: bool = Field(
+        default=False,
+        alias="preferred",
+        description="Indicates if the subnet is preferred (primary) over the available alternatives. Only one preferred subnet is allowed.",
+    )
+    scope: Annotated[str, Field(description="The network visibility of the subnet.")] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    treated_as_virtual_ip_address: bool = Field(default=False, alias="virtual")
+    treated_as_virtual_ip_address: bool = Field(
+        default=False,
+        alias="virtual",
+        description="Treated as virtual IP address. Used in case of BD extended to multiple sites.",
+    )

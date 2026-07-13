@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class maintUpgStatus(ManagedObject):
     """ACI Managed Object: ``maintUpgStatus`` — Status of a Maintenance Policy.
 
+    Scheduler - one per maintenance policy. The Administrator can change the status from paused to running. This object exists only on the controller.
+
     RN format: ``maintupgstatus-{maintenance_policy_name}``
     """
 
@@ -39,12 +41,28 @@ class maintUpgStatus(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     maintenance_policy_name: Annotated[
-        str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="polName")
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            alias="polName",
+            description="TBD: status is mostly implicit. Only time its set externally is to let a paused job continue.",
+        ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     run_status: MaintSchedulerStatus = Field(
-        default=MaintSchedulerStatus.RUNNING, alias="runStatus"
+        default=MaintSchedulerStatus.RUNNING,
+        alias="runStatus",
+        description="The run status of the maintenance policy scheduler.",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

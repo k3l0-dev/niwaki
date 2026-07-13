@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class rtctrlCtxP(ManagedObject):
     """ACI Managed Object: ``rtctrlCtxP`` — Route Control Context.
 
+    The context policy, which is a unique layer 3 forwarding and application policy domain. The context defines a layer 3 address domain.
+
     RN format: ``ctx-{name}``
     """
 
@@ -38,17 +40,41 @@ class rtctrlCtxP(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the policy context.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    action: RtfltAction = RtfltAction.PERMIT
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    action: RtfltAction = Field(
+        default=RtfltAction.PERMIT, description="The action required when the condition is met."
+    )
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    local_order: str = Field(default="", alias="order")
+    local_order: str = Field(
+        default="", alias="order", description="The order of the policy context."
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

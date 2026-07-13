@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class RtctrlDirection(StrEnum):
     EXPORT = "export"
+    """In To Out"""
     IMPORT = "import"
+    """Out to In"""
 
     @classmethod
     def _missing_(cls, value: object) -> RtctrlDirection | None:

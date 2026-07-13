@@ -15,6 +15,8 @@ from niwaki.models.base import ManagedObject
 class thirdpartyappNodeGlobalConfig(ManagedObject):
     """ACI Managed Object: ``thirdpartyappNodeGlobalConfig`` — Global Config.
 
+    App Global config for nodes
+
     RN format: ``node-{name}``
     """
 
@@ -38,15 +40,40 @@ class thirdpartyappNodeGlobalConfig(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the object.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     allow_unsigned_app: ThirdpartyappAllowUnsignedApp = Field(
-        default=ThirdpartyappAllowUnsignedApp.NO, alias="allowUnsignedApp"
+        default=ThirdpartyappAllowUnsignedApp.NO,
+        alias="allowUnsignedApp",
+        description="properties to enable or disable signed verification",
     )
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    storage_limit: Annotated[int, Field(ge=0, le=2147483647, alias="storageLimit")] = 0
+    storage_limit: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=2147483647,
+            alias="storageLimit",
+            description="properties to set bootflash backend storage limit.",
+        ),
+    ] = 0
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

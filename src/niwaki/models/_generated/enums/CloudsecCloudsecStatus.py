@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class CloudsecCloudsecStatus(StrEnum):
     DISABLED = "disabled"
+    """Cloudsec Status is Disabled"""
     ENABLED = "enabled"
+    """Cloudsec Status is Enabled"""
 
     @classmethod
     def _missing_(cls, value: object) -> CloudsecCloudsecStatus | None:

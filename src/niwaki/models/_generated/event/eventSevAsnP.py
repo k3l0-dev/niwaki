@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class eventSevAsnP(ManagedObject):
     """ACI Managed Object: ``eventSevAsnP`` — Event Severity Assignment Policy.
 
+    Represents a policy that specifies the initial and target severity for a specific event.
+
     RN format: ``esevp-{condition_code}``
     """
 
@@ -41,17 +43,41 @@ class eventSevAsnP(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    condition_code: Annotated[int, Field(alias="code")] = 0
+    condition_code: Annotated[
+        int,
+        Field(
+            alias="code",
+            description="Contains a category code that helps to categorize and identify different types of event severity assignment policy objects.",
+        ),
+    ] = 0
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
+        ""
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    initial_severity: ConditionInitSevDir = Field(default=ConditionInitSevDir.INHERIT, alias="sev")
+    initial_severity: ConditionInitSevDir = Field(
+        default=ConditionInitSevDir.INHERIT,
+        alias="sev",
+        description="The policy for assigning severity at condition detection or when an event object is created.",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

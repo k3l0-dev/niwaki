@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class dhcpMsgStats(ManagedObject):
     """ACI Managed Object: ``dhcpMsgStats`` — DHCP Message Statistics.
 
+    The DHCP message statistics.
+
     RN format: ``msgstats-{message_type}``
     """
 
@@ -39,4 +41,11 @@ class dhcpMsgStats(ManagedObject):
     message_type: DhcpMsgT = Field(default=DhcpMsgT.DISCOVER, alias="type")
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""

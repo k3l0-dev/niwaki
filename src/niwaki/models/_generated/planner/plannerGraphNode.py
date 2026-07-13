@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class plannerGraphNode(ManagedObject):
     """ACI Managed Object: ``plannerGraphNode`` — L4-L7 Service.
 
+    Graph Node
+
     RN format: ``node-{name}``
     """
 
@@ -43,13 +45,24 @@ class plannerGraphNode(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: str
+    name: Annotated[str, Field(description="Don't allow numbers")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    node_order: Annotated[int, Field(alias="order")] = 0
-    node_type: PlannerGraphNodeType = Field(default=PlannerGraphNodeType.GOTO_ONE_ARM, alias="type")
+    node_order: Annotated[
+        int, Field(alias="order", description="Order of this node in the service graph")
+    ] = 0
+    node_type: PlannerGraphNodeType = Field(
+        default=PlannerGraphNodeType.GOTO_ONE_ARM, alias="type", description="Type of graph node"
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

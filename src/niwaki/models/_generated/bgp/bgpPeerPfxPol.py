@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class bgpPeerPfxPol(ManagedObject):
     """ACI Managed Object: ``bgpPeerPfxPol`` — BGP Peer Prefix Policy.
 
+    The peer prefix policy defines how many prefixes can be received from a neighbor and the action to take when the number of allowed prefixes is exceeded. This feature is commonly used for external BGP peers, but can also be applied to internal BGP peers.
+
     RN format: ``bgpPfxP-{name}``
     """
 
@@ -36,29 +38,77 @@ class bgpPeerPfxPol(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The peer prefix policy name. This name can be up to 64 alphanumeric characters.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    max_prefix_action: BgpMaxPfxAct = Field(default=BgpMaxPfxAct.REJECT, alias="action")
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    max_prefix_action: BgpMaxPfxAct = Field(
+        default=BgpMaxPfxAct.REJECT,
+        alias="action",
+        description="Action to be performed when the maximum prefix limit is reached.",
+    )
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies a description of the policy definition.",
+        ),
     ] = ""
-    max_number_of_prefixes: Annotated[int, Field(ge=1, le=712000, alias="maxPfx")] = 20000
+    max_number_of_prefixes: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=712000,
+            alias="maxPfx",
+            description="Maximum number of prefixes allowed from the peer.",
+        ),
+    ] = 20000
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
     owner_key: Annotated[
         str,
         Field(
-            max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerKey"
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerKey",
+            description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
     owner_tag: Annotated[
         str,
-        Field(max_length=64, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerTag"),
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerTag",
+            description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+        ),
     ] = ""
-    prefix_limit_restart_time: str = Field(default="", alias="restartTime")
-    warning_threshold: str = Field(default="", alias="thresh")
+    prefix_limit_restart_time: str = Field(
+        default="",
+        alias="restartTime",
+        description="The period of time in minutes before restarting the peer when the prefix limit is reached.",
+    )
+    warning_threshold: str = Field(
+        default="",
+        alias="thresh",
+        description="The threshold percentage of the maximum number of prefixes before a warning is issued. For example, if the maximum number of prefixes is 10 and the threshold is 70%, a warning is issued when the number of prefixes exceeds 7 (70%).",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

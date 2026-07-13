@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class datetimeNtpAuthKey(ManagedObject):
     """ACI Managed Object: ``datetimeNtpAuthKey`` — Datetime Client Authentication Key.
 
+    The date/time NTP authentication key is used to define a client authentication key if your NTP server requires authentication.
+
     RN format: ``ntpauth-{auth_key_id}``
     """
 
@@ -37,21 +39,41 @@ class datetimeNtpAuthKey(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    auth_key_id: Annotated[str, Field(alias="id")]
+    auth_key_id: Annotated[str, Field(alias="id", description="Specifies the NTP key ID.")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
-    key: Annotated[str, Field(max_length=40, repr=False)] = ""
+    key: Annotated[
+        str, Field(max_length=40, repr=False, description="The NTP authentication key.")
+    ] = ""
     type_of_authentication_key: DatetimeKeyType = Field(
-        default=DatetimeKeyType.MD5, alias="keyType"
+        default=DatetimeKeyType.MD5, alias="keyType", description="NTP authentication key type"
     )
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
+        ""
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    trusted_state: bool = Field(default=False, alias="trusted")
+    trusted_state: bool = Field(
+        default=False,
+        alias="trusted",
+        description="A property that indicates if the NTP authentication is trusted.",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

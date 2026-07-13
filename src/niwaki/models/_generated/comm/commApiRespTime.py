@@ -36,11 +36,44 @@ class commApiRespTime(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    calc_window: Annotated[int, Field(ge=30, le=900, alias="calcWindow")] = 300
-    admin_state: CommAdminState = Field(default=CommAdminState.DISABLED, alias="enableCalculation")
-    resp_time_threshold: Annotated[int, Field(ge=40, le=85000, alias="respTimeThreshold")] = 85000
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    calc_window: Annotated[
+        int,
+        Field(
+            ge=30,
+            le=900,
+            alias="calcWindow",
+            description="Window in which averageTime, and number of requests that go beyond the threshold is calculated",
+        ),
+    ] = 300
+    admin_state: CommAdminState = Field(
+        default=CommAdminState.DISABLED,
+        alias="enableCalculation",
+        description="Property is set to enable or disable the calculation",
+    )
+    resp_time_threshold: Annotated[
+        int,
+        Field(
+            ge=40,
+            le=85000,
+            alias="respTimeThreshold",
+            description="An event will be created if the response time of any request in the window is beyond this threshold",
+        ),
+    ] = 85000
     set_the_value_for_n_in_top_n_requests: Annotated[
-        int, Field(ge=1, le=10, alias="topNRequests")
+        int,
+        Field(
+            ge=1,
+            le=10,
+            alias="topNRequests",
+            description="Property to set the number of slowest requests to be seen",
+        ),
     ] = 5
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

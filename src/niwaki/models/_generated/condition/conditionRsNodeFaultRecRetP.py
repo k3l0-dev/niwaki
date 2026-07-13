@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class conditionRsNodeFaultRecRetP(ManagedObject):
     """ACI Managed Object: ``conditionRsNodeFaultRecRetP`` — Node Fault Record Retention Policy.
 
+    A source relation to the fault retention policy for switches.
+
     RN format: ``rsnodeFaultRecRetP``
     """
 
@@ -35,8 +37,21 @@ class conditionRsNodeFaultRecRetP(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     name: Annotated[
-        str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="tnFaultSwRetPName")
+        str,
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            alias="tnFaultSwRetPName",
+            description="A name for the fault record retention policy used by the node policy group. The fault record retention policy is referred by the node policy group. The node policy group also includes references to Health, Event, and Audit record retention policies.",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class trigAbsWindow(ManagedObject):
     """ACI Managed Object: ``trigAbsWindow``.
 
+    A schedule event with absolute start and end times.
+
     RN format: ``abs-{name}``
     """
 
@@ -34,17 +36,46 @@ class trigAbsWindow(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=16, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str, Field(min_length=1, max_length=16, pattern="^[a-zA-Z0-9_.:-]+$", description="null")
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    maximum_concurrent_tasks: str = Field(default="", alias="concurCap")
-    date: str = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    maximum_concurrent_tasks: str = Field(
+        default="",
+        alias="concurCap",
+        description="The concurrency capacity limit. This is the maximum number of tasks that can be processed concurrently.",
+    )
+    date: Annotated[str, Field(description="The date on which the absolute window occurs.")] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    delay_between_node_upgrades: str = Field(default="", alias="nodeUpgInterval")
-    proc_break: str = Field(default="", alias="procBreak")
-    proc_cap: str = Field(default="", alias="procCap")
-    maximum_running_time: str = Field(default="", alias="timeCap")
+    delay_between_node_upgrades: str = Field(
+        default="",
+        alias="nodeUpgInterval",
+        description="Delay between node upgrades in seconds. This is applicable only for concurCap 1.",
+    )
+    proc_break: str = Field(
+        default="",
+        alias="procBreak",
+        description="A period of time taken between processing of items within the concurrency cap.",
+    )
+    proc_cap: str = Field(
+        default="",
+        alias="procCap",
+        description="Processing size capacity limitation specification. Indicates the limit of items to be processed within this window.",
+    )
+    maximum_running_time: str = Field(
+        default="",
+        alias="timeCap",
+        description="The processing time capacity limit. This is the maximum duration of the window.",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

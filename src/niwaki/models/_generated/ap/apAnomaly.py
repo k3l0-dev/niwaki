@@ -37,13 +37,36 @@ class apAnomaly(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    node_name: Annotated[str, Field(min_length=1, max_length=512, alias="nodeName")]
-    resource: Annotated[str, Field(min_length=1, max_length=512)]
-    severity: ApSeverity = ApSeverity.INFO
-    start_ts: Annotated[str, Field(min_length=1, max_length=512, alias="startTs")]
+    node_name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=512,
+            alias="nodeName",
+            description="Node on which anomaly was detected",
+        ),
+    ]
+    resource: Annotated[
+        str,
+        Field(min_length=1, max_length=512, description="Resource in which anomaly was detected"),
+    ]
+    severity: ApSeverity = Field(default=ApSeverity.INFO, description="Severity of the anomaly")
+    start_ts: Annotated[
+        str,
+        Field(min_length=1, max_length=512, alias="startTs", description="Start time of Anomaly"),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    end_ts: Annotated[str, Field(max_length=512, alias="endTs")] = ""
-    reason: Annotated[str, Field(max_length=512)] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    end_ts: Annotated[
+        str, Field(max_length=512, alias="endTs", description="End time of Anomaly")
+    ] = ""
+    reason: Annotated[str, Field(max_length=512, description="Anomaly description")] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

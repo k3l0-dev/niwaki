@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class analyticsCollector(ManagedObject):
     """ACI Managed Object: ``analyticsCollector`` — Collector entry.
 
+    Flow Collector
+
     RN format: ``collector-{name}``
     """
 
@@ -40,7 +42,14 @@ class analyticsCollector(ManagedObject):
     name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     description: Annotated[
         str,
         Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
@@ -51,5 +60,5 @@ class analyticsCollector(ManagedObject):
     sw_export: bool = Field(default=False, alias="swExport")
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     collector_version_format: AnalyticsCollVersion = Field(
-        default=AnalyticsCollVersion.CISCO_V1, alias="ver"
+        default=AnalyticsCollVersion.CISCO_V1, alias="ver", description="Collector version"
     )

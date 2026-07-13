@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class fvConnInstrPol(ManagedObject):
     """ACI Managed Object: ``fvConnInstrPol`` — Connectivity Instrumentation Policy.
 
+    Every endpoint group should have a relation set to its bridge domain. If not set by the user, then the relation is set to the default Bridge Domain and the Connectivity Instrumentation Policy determines whether or not traffic will be allowed to flow to/from that EPG.
+
     RN format: ``connInstrPol``
     """
 
@@ -36,25 +38,55 @@ class fvConnInstrPol(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    bridge_domain: FvConnCtrl = Field(default=FvConnCtrl.DO_NOT_INSTRUMENT, alias="bdCtrl")
-    private_network: FvConnCtrl = Field(default=FvConnCtrl.DO_NOT_INSTRUMENT, alias="ctxCtrl")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    bridge_domain: FvConnCtrl = Field(
+        default=FvConnCtrl.DO_NOT_INSTRUMENT,
+        alias="bdCtrl",
+        description="The connectivity control for a Bridge Domain (BD).",
+    )
+    private_network: FvConnCtrl = Field(
+        default=FvConnCtrl.DO_NOT_INSTRUMENT,
+        alias="ctxCtrl",
+        description="The connectivity control for the VRF.",
+    )
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies a description of the policy definition.",
+        ),
     ] = ""
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
+        ""
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
     owner_key: Annotated[
         str,
         Field(
-            max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerKey"
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerKey",
+            description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
     owner_tag: Annotated[
         str,
-        Field(max_length=64, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerTag"),
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerTag",
+            description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

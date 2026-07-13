@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class QospUburstUnit(StrEnum):
     BYTES = "bytes"
+    """Bytes"""
     PERCENTAGE = "percentage"
+    """Percentage"""
 
     @classmethod
     def _missing_(cls, value: object) -> QospUburstUnit | None:

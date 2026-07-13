@@ -14,6 +14,8 @@ from niwaki.models.base import ManagedObject
 class ospfIfPol(ManagedObject):
     """ACI Managed Object: ``ospfIfPol`` — OSPF Interface Policy.
 
+    The OSPF interface-level policy information.
+
     RN format: ``ospfIfPol-{name}``
     """
 
@@ -39,36 +41,94 @@ class ospfIfPol(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The OSPF interface policy name. This name can be between 1 and 64 alphanumeric characters. Note that you cannot change this name after the object has been saved.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    cost_of_interface: str = Field(default="", alias="cost")
-    interface_controls: str = Field(default="", alias="ctrl")
-    dead_interval: str = Field(default="", alias="deadIntvl")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    cost_of_interface: str = Field(
+        default="",
+        alias="cost",
+        description="The OSPF cost for the interface. The cost (also called metric) of an interface in OSPF is an indication of the overhead required to send packets across a certain interface. The cost of an interface is inversely proportional to the bandwidth of that interface.",
+    )
+    interface_controls: str = Field(
+        default="", alias="ctrl", description="The interface policy controls."
+    )
+    dead_interval: str = Field(
+        default="",
+        alias="deadIntvl",
+        description="The interval between hello packets from a neighbor before the router declares the neighbor as down. This value must be the same for all networking devices on a specific network.",
+    )
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies a description of the policy definition.",
+        ),
     ] = ""
-    hello_interval: str = Field(default="", alias="helloIntvl")
+    hello_interval: str = Field(
+        default="",
+        alias="helloIntvl",
+        description="The interval between hello packets that OSPF sends on the interface. Note that the smaller the hello interval, the faster topological changes will be detected, but more routing traffic will ensue. This value must be the same for all routers and access servers on a specific network.",
+    )
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    network_type: OspfNwT = Field(default=OspfNwT.UNSPECIFIED, alias="nwT")
+    network_type: OspfNwT = Field(
+        default=OspfNwT.UNSPECIFIED,
+        alias="nwT",
+        description="The OSPF interface policy network type. OSPF supports point-to-point and broadcast.",
+    )
     owner_key: Annotated[
         str,
         Field(
-            max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerKey"
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerKey",
+            description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
     owner_tag: Annotated[
         str,
-        Field(max_length=64, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="ownerTag"),
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="ownerTag",
+            description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+        ),
     ] = ""
     prefix_suppression: OspfIfPfxSuppress = Field(
-        default=OspfIfPfxSuppress.INHERIT, alias="pfxSuppress"
+        default=OspfIfPfxSuppress.INHERIT, alias="pfxSuppress", description="prefix suppression"
     )
-    prioriity: str = Field(default="", alias="prio")
-    retransmit_interval: str = Field(default="", alias="rexmitIntvl")
+    prioriity: str = Field(
+        default="",
+        alias="prio",
+        description="The OSPF interface priority used to determine the designated router (DR) on a specific network. The router with the highest OSPF priority on a segment will become the DR for that segment. The same process is repeated for the backup designated router (BDR).",
+    )
+    retransmit_interval: str = Field(
+        default="",
+        alias="rexmitIntvl",
+        description="The interval between LSA retransmissions. The retransmit interval occurs while the router is waiting for an acknowledgement from the neighbor router that it received the LSA. If no acknowlegment is received at the end of the interval, then the LSA is resent.",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    transmit_delay: str = Field(default="", alias="xmitDelay")
+    transmit_delay: str = Field(
+        default="",
+        alias="xmitDelay",
+        description="The delay time needed to send an LSA update packet. OSPF increments the LSA age time by the transmit delay amount before transmitting the LSA update. You should take into account the transmission and propagation delays for the interface when you set this value.",
+    )

@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class infraRsMonIfInfraPol(ManagedObject):
     """ACI Managed Object: ``infraRsMonIfInfraPol`` — Relation to Access Monitoring Interface Policy.
 
+    A source relation to the monitoring policy model.
+
     RN format: ``rsmonIfInfraPol``
     """
 
@@ -37,8 +39,21 @@ class infraRsMonIfInfraPol(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     name: Annotated[
-        str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="tnMonInfraPolName")
+        str,
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            alias="tnMonInfraPolName",
+            description="The monitoring policy name. This name can be up to 64 alphanumeric characters. Note that you cannot change this name after being saved.",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

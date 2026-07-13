@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class FirmwareAuthPass(StrEnum):
     KEY = "key"
+    """Key based authentication."""
     PASSWORD = "password"
+    """Password based authentication."""
 
     @classmethod
     def _missing_(cls, value: object) -> FirmwareAuthPass | None:

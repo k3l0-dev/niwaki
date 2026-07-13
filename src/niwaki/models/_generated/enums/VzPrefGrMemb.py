@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class VzPrefGrMemb(StrEnum):
     DISABLED = "disabled"
+    """Disable use of preferred group member"""
     ENABLED = "enabled"
+    """Enable use of preferred group member"""
 
     @classmethod
     def _missing_(cls, value: object) -> VzPrefGrMemb | None:

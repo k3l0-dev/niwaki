@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class infraRsL2NodeAuthPol(ManagedObject):
     """ACI Managed Object: ``infraRsL2NodeAuthPol`` — Node Authentication (802.1x) policy.
 
+    Relation to l2NodeAuthPol
+
     RN format: ``rsl2NodeAuthPol``
     """
 
@@ -37,7 +39,14 @@ class infraRsL2NodeAuthPol(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     name: Annotated[
         str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="tnL2NodeAuthPolName")
     ] = ""

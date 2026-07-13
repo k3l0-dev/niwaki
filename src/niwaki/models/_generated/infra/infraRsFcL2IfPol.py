@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class infraRsFcL2IfPol(ManagedObject):
     """ACI Managed Object: ``infraRsFcL2IfPol`` — Relation to L2 FC Interface Policy.
 
+    Relationship to FC policy providing physical L2 configuration of the interfaces
+
     RN format: ``rsfcL2IfPol``
     """
 
@@ -37,7 +39,14 @@ class infraRsFcL2IfPol(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     name: Annotated[
         str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="tnFcIfPolName")
     ] = ""

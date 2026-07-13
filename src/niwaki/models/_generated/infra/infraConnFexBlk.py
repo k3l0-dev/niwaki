@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class infraConnFexBlk(ManagedObject):
     """ACI Managed Object: ``infraConnFexBlk`` — Connectivity Fex Block.
 
+    A block used for grouping fex for connecting hosts (such as hypervisor).
+
     RN format: ``fexblk-{name}``
     """
 
@@ -36,13 +38,28 @@ class infraConnFexBlk(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="The name of the object.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    from_: str = Field(default="", alias="from")
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    from_: str = Field(default="", alias="from", description="From Fex ID")
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    to_fex_id: str = Field(default="", alias="to")
+    to_fex_id: str = Field(default="", alias="to", description="To Fex ID")
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

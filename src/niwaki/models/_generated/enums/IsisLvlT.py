@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class IsisLvlT(StrEnum):
     L1 = "l1"
+    """L1 type"""
     L2 = "l2"
+    """L2 type"""
 
     @classmethod
     def _missing_(cls, value: object) -> IsisLvlT | None:

@@ -13,6 +13,8 @@ from niwaki.models.base import ManagedObject
 class topoctrlPortTrackIf(ManagedObject):
     """ACI Managed Object: ``topoctrlPortTrackIf`` — Port Tracking Control Port.
 
+    Port Tracking interface block
+
     RN format: ``if-[{interface_id}]``
     """
 
@@ -36,9 +38,18 @@ class topoctrlPortTrackIf(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    interface_id: Annotated[str, Field(alias="id")]
+    interface_id: Annotated[str, Field(alias="id", description="Interface ID")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    administrative_state: L1AdminSt = Field(default=L1AdminSt.DOWN, alias="adminSt")
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
+    administrative_state: L1AdminSt = Field(
+        default=L1AdminSt.DOWN, alias="adminSt", description="Administrative port state"
+    )
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

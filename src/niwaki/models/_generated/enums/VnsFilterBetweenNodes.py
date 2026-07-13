@@ -7,7 +7,9 @@ from enum import StrEnum
 
 class VnsFilterBetweenNodes(StrEnum):
     ALLOW_ALL = "allow-all"
+    """Default filters will be installed in the trusted zone of a service chain"""
     FILTERS_FROM_CONTRACT = "filters-from-contract"
+    """Specific filters from contract will be installed through out the service chain"""
 
     @classmethod
     def _missing_(cls, value: object) -> VnsFilterBetweenNodes | None:

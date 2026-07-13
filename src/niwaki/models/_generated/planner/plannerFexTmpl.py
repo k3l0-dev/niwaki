@@ -11,6 +11,8 @@ from niwaki.models.base import ManagedObject
 class plannerFexTmpl(ManagedObject):
     """ACI Managed Object: ``plannerFexTmpl`` — Fex.
 
+    Fex Tmpl
+
     RN format: ``fex-{name}``
     """
 
@@ -36,14 +38,28 @@ class plannerFexTmpl(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: str
+    name: Annotated[str, Field(description="Don't allow numbers")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    count_of_fexs: Annotated[int, Field(ge=1, le=4000000000, alias="count")] = 1
+    annotation: Annotated[
+        str,
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            description="User annotation. Suggested format orchestrator:value",
+        ),
+    ] = ""
+    count_of_fexs: Annotated[
+        int, Field(ge=1, le=4000000000, alias="count", description="Count of fexes")
+    ] = 1
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            alias="descr",
+            description="Specifies the description of a policy component.",
+        ),
     ] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
