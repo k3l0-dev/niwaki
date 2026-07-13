@@ -8,6 +8,12 @@ the respect it deserves — every claim below comes from its
 designed in the Python 2 era, and its model of the world is the APIC's, not
 the operator's.  niwaki exists to close that gap.
 
+```{note}
+cobra in this documentation — three pages, three jobs: this page is the
+argument; {doc}`comparison` shows the same tasks side by side;
+{doc}`cookbook/migrate-from-cobra` is the migration how-to.
+```
+
 ## Distribution and lifecycle
 
 cobra is not on PyPI.  Per its

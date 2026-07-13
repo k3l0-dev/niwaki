@@ -39,14 +39,15 @@ Credentials come from the environment (the CI runner's secret store —
 never the repository); `--plan` gates, push applies:
 
 ```python
+import os
 import sys
 
 from niwaki import Niwaki
 
 
-def apply(design, plan_only: bool) -> int:
+def apply(config, plan_only: bool) -> int:
     with Niwaki() as aci:                     # APIC_* env vars
-        plan = design.push(aci, mode="plan")
+        plan = config.push(aci, mode="plan")
         for dn in plan.creates:
             print(f"+ {dn}")
         for dn, fields in plan.updates.items():
@@ -54,15 +55,15 @@ def apply(design, plan_only: bool) -> int:
                 print(f"~ {dn} {field}: {current!r} -> {desired!r}")
         if plan_only or not plan.has_changes:
             return 0
-        design.push(aci)
+        config.push(aci)
         return 0
 
 
-import os
-
+# In CI these come from the runner's secret store; they are set here only to
+# make the page self-contained and runnable.
 os.environ.setdefault("APIC_HOST", "https://apic.example.com")
 os.environ.setdefault("APIC_USERNAME", "admin")
-os.environ.setdefault("APIC_PASSWORD", "secret")
+os.environ.setdefault("APIC_PASSWORD", "from-the-secret-store")
 
 exit_code = apply(build(), plan_only="--plan" in sys.argv)
 assert exit_code == 0
@@ -102,9 +103,10 @@ apply:
 - **Never print secrets** — the plan output contains configuration, not
   credentials; keep it that way by never echoing the environment in CI
   logs ({doc}`../guide/connection`).
-- **Scope per design** — plan reads pull each declared domain's subtree;
-  many small designs (one per tenant, one per rack) keep plans fast and
-  reviews focused ({doc}`../guide/push-modes`).
+- **Scope per design** — plan reads are already scoped to the classes each
+  design declares; keep many small designs (one per tenant, one per rack)
+  anyway, because each plan then reads as one reviewable change
+  ({doc}`../guide/push-modes`).
 - **Deletions are explicit** — a design never prunes; removals are their
   own reviewed change (a script around `aci.node(...).delete()`), not a
   side effect of a merge.

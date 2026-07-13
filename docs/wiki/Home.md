@@ -18,6 +18,8 @@ The modern, typed, design-first Python SDK for Cisco ACI (APIC).
 - [Cookbook](https://k3l0-dev.github.io/niwaki/cookbook/index.html) — task-oriented recipes, every snippet tested
 - [Vocabulary book](https://k3l0-dev.github.io/niwaki/reference/vocabulary/index.html) — every curated position, generated from the code
 - [API reference](https://k3l0-dev.github.io/niwaki/reference/api/index.html)
+- [Testing your automation](https://k3l0-dev.github.io/niwaki/guide/testing.html) — four test layers, no fabric needed
+- [Compatibility & limits](https://k3l0-dev.github.io/niwaki/reference/compatibility.html)
 - [Why niwaki](https://k3l0-dev.github.io/niwaki/why.html) — the comparison with cobra
 
 ## Install

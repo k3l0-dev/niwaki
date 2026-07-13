@@ -62,9 +62,15 @@ print("updates  :", plan.updates)
 print("converged:", not plan.has_changes)
 ```
 
+The `with` form closes the session for you; `connect()` is used here so the
+rest of the page can share one client — see {doc}`../guide/connection`.
+
 A plan that proposes more than you expected usually means a default you
 set explicitly somewhere (every `set()` field is compared) or a name that
 does not match the existing object (so it *creates* instead of updating).
+The inverse surprise: secure, write-only attributes never appear in a plan —
+a rotated password planning as "unchanged" is expected
+({doc}`../guide/push-modes`).
 
 ## Rung 4 — the APIC said no
 

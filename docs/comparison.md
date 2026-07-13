@@ -4,9 +4,14 @@ The same eight everyday tasks, written in both SDKs.  The cobra snippets
 follow the [official cobra documentation](https://cobra.readthedocs.io/)
 (APIC-hosted wheels, checked 2026-07-11); since cobra is not installable
 from an index they are shown for reference, while **every niwaki block on
-this page executes** as a test in the SDK's suite.  For the narrative
-version of this comparison — including where cobra remains the right tool —
-see {doc}`why`.
+this page executes** as a test in the SDK's suite.
+
+```{note}
+cobra in this documentation — three pages, three jobs: {doc}`why` is the
+argument (including where cobra remains the right tool); this page shows the
+tasks side by side; {doc}`cookbook/migrate-from-cobra` is the migration
+how-to.
+```
 
 ## 1 — Open a session
 
@@ -163,6 +168,9 @@ except Exception as ex:        # error arrives from the APIC, after the POST
     print(ex)
 ```
 
+`probe` below is a fresh design carrying a deliberate typo; `config` is the
+design from task 2, already pushed to the fabric.
+
 ```python
 from niwaki.exceptions import DesignError
 
@@ -175,6 +183,7 @@ try:
 except DesignError as exc:
     print(exc)                              # …Did you mean 'prod'?
 
+# config: the task-2 design, already on the fabric
 plan = config.push(aci, mode="plan")        # and the dry run is first-class
 assert plan.has_changes is False
 ```

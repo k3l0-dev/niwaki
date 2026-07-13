@@ -45,6 +45,14 @@ vlan-migration
 :maxdepth: 1
 
 fabric-audit
+```
+
+## Diagnose
+
+```{toctree}
+:maxdepth: 1
+
+troubleshooting-connection
 troubleshooting
 ```
 

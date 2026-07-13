@@ -41,6 +41,9 @@ members = aci.query("fabricNodeIdentP").fetch()
 assert {m.name for m in members} == {"leaf-101", "leaf-102", "spine-201"}
 ```
 
+The `with` form closes the session for you; `connect()` is used here so the
+rest of the page can share one client — see {doc}`../guide/connection`.
+
 Once the fabric has absorbed the registration, the operational view catches
 up — `aci.query("topSystem").fetch()` lists the nodes with their roles and
 addresses ({doc}`fabric-audit`).

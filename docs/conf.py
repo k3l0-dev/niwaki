@@ -9,6 +9,8 @@ from __future__ import annotations
 
 from importlib.metadata import version as _pkg_version
 
+from niwaki._codegen.generate_docs import curated_position_count
+
 # ── Project ───────────────────────────────────────────────────────────────────
 
 project = "niwaki"
@@ -49,8 +51,12 @@ autodoc_default_options = {
 # scripts/publish_wiki.sh, not part of the Sphinx site).
 exclude_patterns = ["_build", "wiki"]
 
-myst_enable_extensions = ["colon_fence", "deflist", "fieldlist"]
+myst_enable_extensions = ["colon_fence", "deflist", "fieldlist", "substitution"]
 myst_heading_anchors = 3
+
+# Generated figures the narrative pages cite without going stale:
+# {{ positions }} always matches the generated coverage matrix.
+myst_substitutions = {"positions": str(curated_position_count())}
 
 intersphinx_mapping = {
     "python": ("https://docs.python.org/3", None),

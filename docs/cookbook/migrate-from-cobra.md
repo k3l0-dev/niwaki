@@ -3,7 +3,8 @@
 **Problem** — you have working `cobra` automation and want to port it.
 This recipe is the practical mapping: which cobra concept becomes which
 niwaki call, three worked ports, and the pitfalls that bite in practice.
-For the *why*, see {doc}`the comparison <../why>`.
+For the argument, see {doc}`../why`; for the same tasks written in both
+SDKs, {doc}`../comparison`.
 
 cobra snippets follow the [official documentation](https://cobra.readthedocs.io/)
 and are shown for reference — cobra is not installable from an index, so
@@ -17,7 +18,7 @@ they are not executed here.  The niwaki blocks run.
 | build MOs with parent plumbing (`Tenant(uniMo, 'x')`) | designs — detached trees, no parent objects needed ({doc}`../guide/design-dsl`) |
 | relation classes + `tnXxxName` strings (`RsCtx(bdMo, tnFvCtxName='v')`) | `bind(vrf="v")` — relation class, direction and target prop derived |
 | `ConfigRequest` + `addMo()` + `commit()` | `config.push(aci)` — `strict` / `staged` / `plan` ({doc}`../guide/push-modes`) |
-| `lookupByDn('uni/tn-x')` | `aci.node("uni/tn-x").read()` or jargon navigation |
+| `lookupByDn('uni/tn-x')` | `aci.node("uni/tn-x").read()` or vocabulary navigation |
 | `lookupByClass(...)` / `ClassQuery` + `propFilter` strings | `aci.query(cls).where(...)` — typed builder ({doc}`../guide/observing`) |
 | `DnQuery` + `queryTarget='children'/'subtree'` | `.under(dn)` / node-scoped `query()` |
 | manual `page` / `pageSize` loops | transparent pagination; `stream()` for iteration |
@@ -85,6 +86,9 @@ aci = Niwaki.connect("https://apic.example.com", "admin", "secret")
 tenants = aci.query("fvTenant").where(name="ExampleCorp").fetch()
 assert [t.name for t in tenants] == ["ExampleCorp"]
 ```
+
+The `with` form closes the session for you; `connect()` is used here so the
+rest of the page can share one client — see {doc}`../guide/connection`.
 
 Filter kwargs address the APIC attribute names, exactly like the
 `propFilter` string did — but composed and quoted for you, with `and_` /

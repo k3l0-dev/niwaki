@@ -65,7 +65,9 @@ class ApicSession:
             Falls back to ``APIC_HOST`` environment variable if omitted.
         username: APIC username. Falls back to ``APIC_USERNAME`` if omitted.
         password: APIC password. Falls back to ``APIC_PASSWORD`` if omitted.
-        verify_ssl: Verify the APIC TLS certificate. Set to ``False`` for APICs
+        verify_ssl: TLS verification — ``True`` verifies against the system CA
+            store, a path to a PEM CA bundle verifies against a private CA,
+            ``False`` disables verification. Keep ``False`` for APICs
             with self-signed certificates (not recommended in production).
             Default: ``True``.
         timeout: HTTP timeout in seconds (connect + read). Default: 30.
@@ -92,7 +94,7 @@ class ApicSession:
         username: str | None = None,
         password: str | None = None,
         *,
-        verify_ssl: bool = True,
+        verify_ssl: bool | str = True,
         timeout: float = 30.0,
         refresh_threshold: int = 60,
         retry: RetryConfig = _DEFAULT_RETRY,
@@ -106,7 +108,12 @@ class ApicSession:
         self._token_lock = threading.Lock()
         self._client = httpx.Client(
             base_url=self._host,
-            verify=verify_ssl,
+            # httpx 0.28 deprecates verify=<str>; build the SSL context here.
+            verify=(
+                ssl.create_default_context(cafile=verify_ssl)
+                if isinstance(verify_ssl, str)
+                else verify_ssl
+            ),
             timeout=timeout,
         )
 

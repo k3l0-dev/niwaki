@@ -95,7 +95,7 @@ Cisco's per-value description as an attribute docstring (`OspfNwT.BCAST` →
 
 ## The `.mo()` escape hatch
 
-The design DSL's curated vocabulary covers 175+ positions; the other 2,000+
+The design DSL's curated vocabulary covers {{ positions }} positions; the other 2,000+
 classes remain one call away.  `.mo(Class, **attrs)` declares a child of any
 generated class at the current position — containment is still validated
 against the schema:
@@ -115,3 +115,8 @@ assert children == [{"monEPGPol": {"attributes": {"name": "strict-monitoring"}}}
 If you reach for `.mo()` often for the same class, that is a vocabulary gap
 worth reporting — the *vocabulary request* issue template exists exactly for
 that ({doc}`coverage matrix <../reference/vocabulary/coverage>`).
+
+## Next steps
+
+- {doc}`../reference/vocabulary/index` — where each class is curated
+- {doc}`design-dsl` — the write path built on these models

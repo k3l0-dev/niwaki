@@ -102,3 +102,8 @@ so a struggling APIC gets *less* traffic, not more.
 
 Everything else on this page is the same as the sync client — including
 {doc}`errors` and {doc}`connection`, which apply unchanged.
+
+## Next steps
+
+- {doc}`../cookbook/fabric-audit` — concurrent reads at work
+- {doc}`errors` — unchanged for the async client

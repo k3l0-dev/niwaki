@@ -4,10 +4,35 @@ All notable changes to this project are documented here.  The format follows
 [Keep a Changelog](https://keepachangelog.com/); versions follow semver
 (0.x — the API may still change between minor versions).
 
-## [Unreleased]
+## [0.6.0] — 2026-07-13
+
+A professional documentation overhaul, and the enterprise-CA answer.
+
+### Added
+
+- `verify_ssl` accepts a **path to a CA bundle** (PEM) on `Niwaki`,
+  `AsyncNiwaki` and both sessions — TLS verification against a private
+  or enterprise CA no longer requires disabling verification (the
+  bundle loads eagerly into an `ssl.SSLContext`; a wrong path fails at
+  construction).
+- Three documentation pages the adopting coder was missing: **Testing
+  your automation** (payload asserts, plan as a convergence test, a
+  fake APIC at the httpx boundary, transport-protocol stubs — all
+  executable), **Compatibility & limits**, and **Troubleshooting
+  connection & auth** (the exception → question → knob ladder).
+- The documentation home is a real landing page (orientation, a
+  "Start here" path, the Diátaxis compass), every guide page ends with
+  next steps, and deletion semantics have a canonical section.
 
 ### Fixed
 
+- The `plan` documentation described pre-0.3.0 behaviour: plan reads
+  are scoped with `rsp-subtree-class` to the classes the design
+  declares — the stale "avoid planning large domains" advice is gone,
+  and the write-only-secrets caveat now lives where `plan` is taught.
+- One maxim ("structure is literal, vocabulary is translated"), one
+  term per concept, position counts generated straight from the
+  vocabulary — the terminology and numbers can no longer drift.
 - Cisco placeholder comments (the literal text "null", on 621 schema
   properties) no longer leak into maker Args sections and field
   descriptions — those fields simply stay undescribed.

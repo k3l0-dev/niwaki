@@ -66,6 +66,9 @@ print(f"infra: {len(plan.creates)} creates")
 report = config.push(aci, mode="staged")   # per-object waves, parents first
 ```
 
+The `with` form closes the session for you; `connect()` is used here so the
+rest of the page can share one client — see {doc}`../guide/connection`.
+
 `staged` suits access policies on brownfield fabrics: each object lands in
 its own request, so a conflict points at one precise DN.  The vPC pair is an
 **atomic class** — in staged mode `fabricExplicitGEp` ships with both node

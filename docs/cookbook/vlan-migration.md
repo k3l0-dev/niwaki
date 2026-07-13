@@ -23,6 +23,9 @@ web.static_path("topology/pod-1/paths-101/pathep-[eth1/13]", encap="vlan-120")
 base.push(aci)
 ```
 
+The `with` form closes the session for you; `connect()` is used here so the
+rest of the page can share one client — see {doc}`../guide/connection`.
+
 ## The migration design
 
 Only the delta is declared: a second range extends the pool, and the same
@@ -70,8 +73,8 @@ assert migration.push(aci, mode="plan").has_changes is False
   declare, so `vlan-100`–`vlan-199` survives until you retire it
   explicitly (`aci.node(...).delete()`), *after* the last consumer moved.
 - **Re-encap is disruptive per path** — the APIC reprograms the port; for
-  a fleet, migrate in waves (the inventory loop is plain Python) and let
-  `plan` gate each wave.
+  a fleet, migrate in batches (the inventory loop is plain Python) and let
+  `plan` gate each batch.
 - **Watch the change land** — `aci.query("fvRsPathAtt").where(encap="vlan-220")`
   confirms programming intent; the operational truth per port lives in the
   `fv` deployment classes ({doc}`fabric-audit`).

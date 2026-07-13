@@ -47,6 +47,9 @@ print(f"{len(plan.creates)} fabric objects to create")
 config.push(aci)
 ```
 
+The `with` form closes the session for you; `connect()` is used here so the
+rest of the page can share one client — see {doc}`../guide/connection`.
+
 ## Verify
 
 ```python

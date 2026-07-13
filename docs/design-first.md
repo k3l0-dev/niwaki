@@ -13,7 +13,7 @@ behind that shape.
 | --- | --- | --- |
 | **Describe** | {mod}`niwaki.design` | roots `design()` / `tenant()` / `infra()` / `fabric()` / `controller()`, typed cursors, one curated vocabulary, `set()`, lazy `bind()` / `provide()` / `consume()`, closed-world validation |
 | **Apply** | the push engine | `strict` (one atomic POST), `staged` (DN-depth waves), `plan` (dry-run diff) — see {doc}`guide/push-modes` |
-| **Observe** | the facade + query builder | jargon navigation **read-only**, `read()`, `query()`, `delete()` — see {doc}`guide/observing` |
+| **Observe** | the facade + query builder | vocabulary navigation **read-only**, `read()`, `query()`, `delete()` — see {doc}`guide/observing` |
 
 The facade deliberately has **no write surface**.  A single write path means a
 single set of semantics to learn, a single validation story, and payloads you
@@ -37,7 +37,7 @@ a design never removes what it does not declare, and there is **no
 desired-state reconciliation** by design.  Pruning would turn every partial
 design into a loaded weapon.
 
-## Structure is literal, verbatim is translated
+## Structure is literal, vocabulary is translated
 
 Every maker maps 1:1 to a real APIC child class — `.subject()` *is* a
 `vzSubj`, `.pim()` *is* a `pimCtxP`.  The DSL never invents intermediate
@@ -71,11 +71,11 @@ in the same design.  Two explicit escape hatches cross that boundary:
 ## Why a curated vocabulary
 
 niwaki generates 2,222 model classes, but the DSL vocabulary is **curated by
-hand** — 175+ positions across tenant, access, fabric and controller policies,
-growing wave by wave (see the coverage matrix).
+hand** — {{ positions }} positions across tenant, access, fabric and
+controller policies, growing by demand (see the coverage matrix).
 Generating makers for every class would bury the useful names under thousands
 of unreadable ones and offer no ergonomic gain over the raw models.  Curation
-keeps the operator verbatim honest — and everything outside it stays reachable
+keeps the operator vocabulary honest — and everything outside it stays reachable
 through `.mo(AnyClass, ...)`, which accepts any of the generated models at any
 position.  Coverage grows by demand: missing positions are exactly what the
 *vocabulary request* issue template is for.

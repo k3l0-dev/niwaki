@@ -71,6 +71,9 @@ assert [p.rtr_id for p in peers] == ["10.0.0.101"]
 assert config.push(aci, mode="plan").has_changes is False
 ```
 
+The `with` form closes the session for you; `connect()` is used here so the
+rest of the page can share one client — see {doc}`../guide/connection`.
+
 ## BGP instead of OSPF
 
 The BGP flavor swaps the protocol block — peers hang off the node profile
@@ -103,5 +106,4 @@ peer.autonomous_system_profile(autonomous_system_number="65002")
   `bd.bind(l3out="wan")` *and* the subnet scoped `public`; keep both in the
   same design so the intent reviews as one change.
 - **Static routes** — hang off the node attachment; declare them with
-  `nodes.node_attachment(...)` children via `.mo()` for now (they join the
-  vocabulary with the route-control wave).
+  `nodes.node_attachment(...)` children via `.mo()` ({doc}`../guide/models`).

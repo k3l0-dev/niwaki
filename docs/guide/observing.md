@@ -1,6 +1,6 @@
 # Observing the fabric
 
-The facade is the SDK's read side: navigation in operator jargon, typed
+The facade is the SDK's read side: navigation in operator vocabulary, typed
 reads, the query builder, and deletion.  It never configures — writing is the
 design DSL's job.
 
@@ -18,7 +18,10 @@ aci = Niwaki.connect("https://apic.example.com", "admin", "secret")
 config.push(aci)
 ```
 
-## Jargon navigation
+The `with` form closes the session for you; `connect()` is used here so the
+rest of the page can share one client — see {doc}`connection`.
+
+## Vocabulary navigation
 
 Every node is a DN-scoped handle.  Navigate with the same vocabulary the GUI
 tree uses; the DN is computed for you:
@@ -31,8 +34,7 @@ assert mo.unicast_routing is True           # human-readable field names
 ```
 
 `aci.node(dn, cls)` reaches any explicit DN; `.mo(Class, **naming)` descends
-one level for classes outside the curated jargon.  Deletion is the one
-imperative operation that stays here: `aci.tenant("old").delete()`.
+one level for classes outside the curated vocabulary.
 
 ## The query builder
 
@@ -72,27 +74,44 @@ nodes = aci.query("topSystem").naming_only().fetch()
 `build()` returns the URL and parameters without executing — the read-side
 mirror of `to_payload()`.
 
-## Async
+## Deleting
 
-{class}`~niwaki.facade.AsyncNiwaki` mirrors the sync API; accumulators stay
-synchronous, executors are awaitable, and `gather()` runs reads concurrently
-under a TaskGroup:
+Deletion is the **one imperative operation** on the facade — a design never
+removes what it does not declare, so removals are always an explicit act:
 
 ```python
-import asyncio
+retired = tenant("prod-old")
+retired.push(aci)                    # a tenant to retire
 
-from niwaki import AsyncNiwaki
-from niwaki.models.fv.fvTenant import fvTenant
-
-
-async def snapshot() -> None:
-    async with AsyncNiwaki("https://apic.example.com", "admin", "secret") as aci:
-        tenants, bd = await aci.gather(
-            aci.query(fvTenant).fetch(),
-            aci.tenant("prod").bd("web").read(),
-        )
-        await config.push(aci)    # the same design — async-ready too
-
-
-asyncio.run(snapshot())
+aci.tenant("prod-old").delete()      # removes the object AND its subtree
 ```
+
+Deleting a DN removes the whole subtree beneath it, exactly as in the GUI.
+A `delete()` on a DN that does not exist raises
+{class}`~niwaki.exceptions.NotFoundError` — deletion is never silently a
+no-op:
+
+```python
+import pytest
+
+from niwaki.exceptions import NotFoundError
+
+with pytest.raises(NotFoundError):
+    aci.tenant("prod-old").read()    # gone, subtree included
+```
+
+Day-2 removal of a single child (a subnet, a static path) is the same
+gesture one level deeper: navigate to it, `delete()` it, and keep the design
+in sync by no longer declaring it.
+
+## Async
+
+{class}`~niwaki.facade.AsyncNiwaki` mirrors everything on this page —
+accumulators stay synchronous, executors become awaitable, and `gather()`
+runs reads concurrently.  See {doc}`async` for the concurrency model.
+
+## Next steps
+
+- {doc}`models` — what the typed reads give you back
+- {doc}`async` — the same API, concurrent
+- {doc}`../cookbook/fabric-audit` — the read side at work

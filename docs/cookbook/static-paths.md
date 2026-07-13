@@ -50,6 +50,9 @@ paths = aci.query("fvRsPathAtt").fetch()
 assert sorted(p.encap for p in paths) == ["vlan-120", "vlan-121"]
 ```
 
+The `with` form closes the session for you; `connect()` is used here so the
+rest of the page can share one client — see {doc}`../guide/connection`.
+
 ## Reading the path DN
 
 | Segment | Meaning |

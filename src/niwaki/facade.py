@@ -62,10 +62,10 @@ if TYPE_CHECKING:
 
 
 class _JargonTarget(NamedTuple):
-    """Navigation metadata resolved from a jargon attribute.
+    """Navigation metadata resolved from a vocabulary attribute.
 
     Attributes:
-        child_cls: Generated class the jargon name maps to.
+        child_cls: Generated class the vocabulary name maps to.
         naming_props: Naming properties of that class.
         is_rs_target: ``True`` for Rs singletons carrying a target-name prop
             (exposed as the Python field ``name`` by the D2 renaming).
@@ -77,7 +77,7 @@ class _JargonTarget(NamedTuple):
 
 
 def _navigate_jargon(parent_cls: type[ManagedObject], attr: str) -> _JargonTarget:
-    """Resolve a jargon attribute to its child class and navigation metadata.
+    """Resolve a vocabulary attribute to its child class and navigation metadata.
 
     Looks up *attr* in ``CHILD_MAP`` for *parent_cls*, imports the generated
     class module, and returns everything needed to build a navigator function.
@@ -85,7 +85,7 @@ def _navigate_jargon(parent_cls: type[ManagedObject], attr: str) -> _JargonTarge
     Args:
         parent_cls: The ACI class of the parent node (or
             :class:`~niwaki.models.base.ManagedObject` for the root).
-        attr: Jargon method name to resolve (e.g. ``"tenant"``, ``"bd"``).
+        attr: Vocabulary method name to resolve (e.g. ``"tenant"``, ``"bd"``).
 
     Raises:
         AttributeError: *attr* is not a known child of *parent_cls*.
@@ -118,7 +118,7 @@ def _make_jargon_navigator(
     naming_props: list[str],
     is_rs_target: bool,
 ) -> Any:
-    """Build the callable that navigation sugar returns for a jargon attribute.
+    """Build the callable that navigation sugar returns for a vocabulary attribute.
 
     Dispatches to ``node.mo()`` regardless of whether *node* is a
     :class:`NiwakiNode` or :class:`AsyncNiwakiNode`, so both return the correct
@@ -175,7 +175,7 @@ class _JargonNavMixin[T: ManagedObject]:
     """Shared ``__getattr__`` logic for DN-scoped navigation nodes.
 
     Both :class:`NiwakiNode` and :class:`AsyncNiwakiNode` expose the same
-    jargon-based navigation (e.g. ``.tenant("prod").bd("web")``).  This mixin
+    vocabulary navigation (e.g. ``.tenant("prod").bd("web")``).  This mixin
     centralises the implementation so that any change to the resolution logic
     applies to both node types automatically.
 
@@ -187,7 +187,7 @@ class _JargonNavMixin[T: ManagedObject]:
     _cls: type[T]
 
     def __getattr__(self, attr: str) -> Any:
-        """Resolve jargon attribute names to typed child navigators.
+        """Resolve vocabulary attribute names to typed child navigators.
 
         Args:
             attr: Method name to resolve (e.g. ``"tenant"``, ``"bd"``).
@@ -212,7 +212,7 @@ class NiwakiNode[T: ManagedObject](_JargonNavMixin[T]):
     """A DN-scoped handle for observing a single ACI object (sync).
 
     Created via :attr:`Niwaki.root` or :meth:`Niwaki.node`.  Navigate the ACI
-    hierarchy with :meth:`mo` or the jargon accessors — each call descends one
+    hierarchy with :meth:`mo` or the vocabulary accessors — each call descends one
     level and computes the child DN automatically from the parent DN and the
     child's RN.  Terminal operations are read-side (:meth:`read`,
     :meth:`query`) plus :meth:`delete`; configuration goes through
@@ -477,7 +477,9 @@ class AsyncNiwaki:
             Falls back to ``APIC_HOST`` environment variable if omitted.
         username: APIC username. Falls back to ``APIC_USERNAME`` if omitted.
         password: APIC password. Falls back to ``APIC_PASSWORD`` if omitted.
-        verify_ssl: Verify the APIC TLS certificate.  Default: ``True``.
+        verify_ssl: TLS verification — ``True`` (system CA store), a path to
+            a PEM CA bundle (private/enterprise CA), or ``False`` (lab only).
+            Default: ``True``.
         timeout: HTTP request timeout in seconds.  Default: 30.
         refresh_threshold: Seconds before token expiry at which a proactive
             refresh is triggered.  Default: 60.
@@ -506,7 +508,7 @@ class AsyncNiwaki:
         username: str | None = None,
         password: str | None = None,
         *,
-        verify_ssl: bool = True,
+        verify_ssl: bool | str = True,
         timeout: float = 30.0,
         refresh_threshold: int = 60,
         max_concurrent: int = 10,
@@ -628,7 +630,7 @@ class AsyncNiwaki:
         return AsyncNiwakiNode(self, dn, cls)
 
     def __getattr__(self, attr: str) -> Any:
-        """Proxy jargon navigation to :attr:`root`.
+        """Proxy vocabulary navigation to :attr:`root`.
 
         Args:
             attr: Jargon method name (e.g. ``"tenant"``).
@@ -740,7 +742,9 @@ class Niwaki:
             Falls back to ``APIC_HOST`` environment variable if omitted.
         username: APIC username. Falls back to ``APIC_USERNAME`` if omitted.
         password: APIC password. Falls back to ``APIC_PASSWORD`` if omitted.
-        verify_ssl: Verify the APIC TLS certificate.  Default: ``True``.
+        verify_ssl: TLS verification — ``True`` (system CA store), a path to
+            a PEM CA bundle (private/enterprise CA), or ``False`` (lab only).
+            Default: ``True``.
         timeout: HTTP request timeout in seconds.  Default: 30.
         refresh_threshold: Seconds before token expiry at which a proactive
             refresh is triggered.  Default: 60.
@@ -754,7 +758,7 @@ class Niwaki:
         username: str | None = None,
         password: str | None = None,
         *,
-        verify_ssl: bool = True,
+        verify_ssl: bool | str = True,
         timeout: float = 30.0,
         refresh_threshold: int = 60,
         retry: RetryConfig | None = None,
@@ -777,7 +781,7 @@ class Niwaki:
         username: str,
         password: str,
         *,
-        verify_ssl: bool = True,
+        verify_ssl: bool | str = True,
         timeout: float = 30.0,
         refresh_threshold: int = 60,
         retry: RetryConfig | None = None,
@@ -793,7 +797,8 @@ class Niwaki:
             host: Base URL of the APIC.
             username: APIC username.
             password: APIC password.
-            verify_ssl: Verify TLS certificate.  Default: ``True``.
+            verify_ssl: TLS verification — ``True``, a PEM CA bundle path,
+                or ``False``.  Default: ``True``.
             timeout: HTTP timeout in seconds.  Default: 30.
             refresh_threshold: Proactive refresh threshold in seconds.
                 Default: 60.
@@ -945,7 +950,7 @@ class Niwaki:
         return NiwakiNode(self, dn, cls)
 
     def __getattr__(self, attr: str) -> Any:
-        """Proxy jargon navigation to :attr:`root`.
+        """Proxy vocabulary navigation to :attr:`root`.
 
         Allows top-level shortcuts without an explicit ``.root``::
 

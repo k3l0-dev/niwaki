@@ -81,3 +81,7 @@ uv sync --extra dev
 ```
 
 The documentation site is built locally with `bash scripts/docs.sh open`.
+
+## Next steps
+
+- {doc}`quickstart` — describe, apply, observe in ten minutes

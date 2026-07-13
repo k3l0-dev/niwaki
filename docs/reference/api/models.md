@@ -5,16 +5,14 @@ write logic.  Import them by package alias:
 
 ```python
 from niwaki.models.fv.fvBD import fvBD
-from niwaki.models.vz.vzBrCP import vzBrCP
 
 bd = fvBD(name="web", unicast_routing=True)   # validated at construction
 bd.rn                                          # "BD-web"
 bd.to_apic()                                   # wire payload, ACI attribute names
 ```
 
-Field names are human-readable (`arp_flooding`), with the ACI wire name as a
-Pydantic alias (`arpFlood`) — both parse on input, the wire name is always
-emitted.  558 field enums live under `niwaki.models._generated.enums`.
+Conventions and day-to-day usage — readable names vs wire aliases, enums,
+validation, the `.mo()` escape hatch: {doc}`../../guide/models`.
 
 ```{eval-rst}
 .. autoclass:: niwaki.models.base.ManagedObject

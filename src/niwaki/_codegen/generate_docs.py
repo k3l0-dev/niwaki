@@ -266,6 +266,23 @@ def _coverage_row(pos: _Position) -> str:
     )
 
 
+def curated_position_count() -> int:
+    """Total number of curated positions (the coverage-matrix figure).
+
+    The single source of truth for every "N curated positions" number: the
+    coverage matrix uses it, and ``docs/conf.py`` injects it as the MyST
+    substitution ``{{ positions }}`` so the narrative documentation can never
+    drift from the generated vocabulary.
+
+    Returns:
+        The count of curated positions across the four design domains plus
+        the ``uni``-level domains (the ``polUni`` root itself is not counted).
+    """
+    positions = _positions()
+    in_domains = sum(len(_subtree(root_key, positions)) for root_key, _, _ in _DOMAINS)
+    return in_domains + len(("phys_dom", "l3_dom"))
+
+
 def _render_coverage() -> str:
     """The coverage matrix: every curated position, one row each."""
     positions = _positions()
@@ -274,7 +291,7 @@ def _render_coverage() -> str:
         for root_key, _, _ in _DOMAINS
     }
     uni_rows = [_coverage_row(positions[key]) for key in ("phys_dom", "l3_dom")]
-    total = sum(len(rows) for rows in domain_rows.values()) + len(uni_rows)
+    total = curated_position_count()
 
     table_header = [
         "| position | ACI class | makers | bind aliases | verbs | sugar | atomic |",

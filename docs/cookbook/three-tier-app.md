@@ -44,6 +44,9 @@ plan = config.push(aci, mode="plan")
 print(f"{len(plan.creates)} objects to create")
 ```
 
+The `with` form closes the session for you; `connect()` is used here so the
+rest of the page can share one client — see {doc}`../guide/connection`.
+
 On an empty fabric the plan lists every DN the design would create:
 
 ```text

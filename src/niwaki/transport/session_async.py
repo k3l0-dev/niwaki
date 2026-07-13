@@ -69,7 +69,8 @@ class AsyncApicSession:
             Falls back to ``APIC_HOST`` if omitted.
         username: APIC username. Falls back to ``APIC_USERNAME`` if omitted.
         password: APIC password. Falls back to ``APIC_PASSWORD`` if omitted.
-        verify_ssl: Verify the APIC TLS certificate. Default: ``True``.
+        verify_ssl: TLS verification — ``True`` (system CA store), a path to
+            a PEM CA bundle (private CA), or ``False``. Default: ``True``.
         timeout: HTTP timeout in seconds. Default: 30.
         refresh_threshold: Seconds before token expiry at which a proactive
             refresh is triggered. Default: 60.
@@ -95,7 +96,7 @@ class AsyncApicSession:
         username: str | None = None,
         password: str | None = None,
         *,
-        verify_ssl: bool = True,
+        verify_ssl: bool | str = True,
         timeout: float = 30.0,
         refresh_threshold: int = 60,
         max_concurrent: int = 10,
@@ -111,7 +112,12 @@ class AsyncApicSession:
         self._semaphore = asyncio.Semaphore(max_concurrent)
         self._client = httpx.AsyncClient(
             base_url=self._host,
-            verify=verify_ssl,
+            # httpx 0.28 deprecates verify=<str>; build the SSL context here.
+            verify=(
+                ssl.create_default_context(cafile=verify_ssl)
+                if isinstance(verify_ssl, str)
+                else verify_ssl
+            ),
             timeout=timeout,
         )
 

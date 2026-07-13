@@ -63,6 +63,9 @@ except UnresolvedReferenceError as exc:
     print(exc)      # …no fvCtx named 'mian' is declared… Did you mean 'main'?
 ```
 
+The `with` form closes the session for you; `connect()` is used here so the
+rest of the page can share one client — see {doc}`connection`.
+
 No request was sent: the design never left the process.  The same eagerness
 applies to unknown makers (`UnknownMakerError` lists the available makers),
 duplicate declarations, and attribute values (the Pydantic models validate
@@ -125,3 +128,9 @@ Recovery is declarative, like everything else:
 policy is exhausted (see {doc}`connection`).  If you catch them, you are
 seeing a genuine outage, not a blip — prefer alerting over looping another
 retry around the SDK's own.
+
+## Next steps
+
+- {doc}`../cookbook/troubleshooting` — the push-failure ladder
+- {doc}`../cookbook/troubleshooting-connection` — the connection ladder
+- {doc}`testing` — asserting on failure behaviour

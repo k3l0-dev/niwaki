@@ -21,6 +21,9 @@ critical = aci.query("faultInst").where(severity="critical").fetch()
 print(f"{len(nodes)} nodes, {len(critical)} critical faults")
 ```
 
+The `with` form closes the session for you; `connect()` is used here so the
+rest of the page can share one client — see {doc}`../guide/connection`.
+
 `naming_only()` trims the payload to identity attributes — the right call
 for inventory sweeps on big fabrics.
 

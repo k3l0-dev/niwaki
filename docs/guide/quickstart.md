@@ -2,14 +2,8 @@
 
 ## Install
 
-niwaki targets Python 3.12+:
-
-```bash
-uv add niwaki          # or: pip install niwaki
-```
-
-No PyPI access on your network?  Every GitHub Release ships an offline
-wheelhouse — see {doc}`installation`.
+`uv add niwaki` (or `pip install niwaki`) — Python 3.12+.  Restricted
+network?  Every release ships an offline wheelhouse: {doc}`installation`.
 
 ## Connect
 
@@ -72,7 +66,7 @@ with Niwaki("https://apic.example.com", "admin", "secret") as aci:
     flip.push(aci)
 ```
 
-## Where to go next
+## Next steps
 
 - {doc}`design-dsl` — the full describe surface: makers, binds, escapes.
 - {doc}`push-modes` — `strict`, `staged`, `plan` in detail.

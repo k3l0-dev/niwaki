@@ -20,6 +20,9 @@ from niwaki import Niwaki
 aci = Niwaki.connect("https://apic.example.com", "admin", "secret")
 ```
 
+The `with` form closes the session for you; `connect()` is used here so the
+rest of the page can share one client — see {doc}`connection`.
+
 ## Roots
 
 Every design is rooted at `polUni`.  {func}`~niwaki.design.design` opens an
@@ -29,11 +32,11 @@ return its cursor:
 ```python
 from niwaki.design import design
 
-cfg = design()
-cfg.fabric().datetime_policy("prod-ntp").ntp_provider("10.0.0.1")
-cfg.infra().vlan_pool("prod", "static").range("vlan-100", "vlan-199")
-cfg.tenant("prod").vrf("main")
-cfg.push(aci)                    # the three domains in ONE atomic POST
+config = design()
+config.fabric().datetime_policy("prod-ntp").ntp_provider("10.0.0.1")
+config.infra().vlan_pool("prod", "static").range("vlan-100", "vlan-199")
+config.tenant("prod").vrf("main")
+config.push(aci)                    # the three domains in ONE atomic POST
 ```
 
 `tenant(...)` is exactly `design().tenant(...)` — sibling domains stay one
@@ -86,11 +89,11 @@ targets (by name or by DN) all come from the schemas — you never write an
 `fvRsCtx` or a `tDn` by hand.  Given a design holding the usual cursors:
 
 ```python
-cfg = design()
-tn = cfg.tenant("prod")
+config = design()
+tn = config.tenant("prod")
 epg = tn.app("shop").epg("web")
 vrf = tn.vrf("main")
-inf = cfg.infra()
+inf = config.infra()
 aaep = inf.aaep("prod-aaep")
 port_selector = inf.access_port_profile("leaf101").port_selector("esxi", "range")
 ```
@@ -148,3 +151,9 @@ only when the plan says something drifts.
 - Unresolvable or ambiguous reference at push time →
   `UnresolvedReferenceError` / `AmbiguousBindError`, listing what *is*
   declared.
+
+## Next steps
+
+- {doc}`push-modes` — `strict`, `staged`, `plan` in detail
+- {doc}`../reference/vocabulary/index` — every curated position
+- {doc}`models` — the typed layer underneath the makers

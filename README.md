@@ -42,7 +42,7 @@ the POST**.
 | Distribution | two `.whl` downloaded from a running APIC, firmware-matched | one wheel, standard packaging, installable from an index |
 | Python | "2.7 or 3.6", untyped | 3.12+, `Typing :: Typed`, full IDE autocompletion |
 | Writing model | imperative: build MOs, `ConfigRequest`, `commit()` | design-first: **describe → plan → push** (atomic or staged waves) |
-| Vocabulary | ACI classes and wire names (`fv.BD`, `arpFlood`, `tnFvCtxName`) | operator verbatim (`.bd("web").set(arp_flooding=True).bind(vrf="prod")`) |
+| Vocabulary | ACI classes and wire names (`fv.BD`, `arpFlood`, `tnFvCtxName`) | operator vocabulary (`.bd("web").set(arp_flooding=True).bind(vrf="prod")`) |
 | References | relation classes + target-name strings, unchecked | `bind()` resolved closed-world at push time — a typo fails **before any request**, with a did-you-mean |
 | Validation | server-side, after the POST | at the call site (Pydantic), plus a `plan` dry-run diff |
 | Async / retry / pagination | — | first-class async mirror, proactive token refresh, retries, transparent pagination |
@@ -115,15 +115,15 @@ one `design()` away:
 ```python
 from niwaki.design import design
 
-cfg = design()
-cfg.fabric().datetime_policy("prod-ntp").ntp_provider("10.0.0.1")
-inf = cfg.infra()
+config = design()
+config.fabric().datetime_policy("prod-ntp").ntp_provider("10.0.0.1")
+inf = config.infra()
 inf.vlan_pool("prod", "static").range("vlan-100", "vlan-199")
-cfg.phys_dom("prod-phys").bind(vlan_pool="prod")
+config.phys_dom("prod-phys").bind(vlan_pool="prod")
 inf.aaep("prod-aaep").bind(domain="prod-phys")
-cfg.tenant("prod").app("shop").epg("web").bind_dn(domain="uni/phys-prod-phys")
+config.tenant("prod").app("shop").epg("web").bind_dn(domain="uni/phys-prod-phys")
 
-cfg.push(aci)          # everything above in ONE atomic POST
+config.push(aci)          # everything above in ONE atomic POST
 ```
 
 Day-2 changes are just smaller designs — declare the field you want, the
@@ -212,7 +212,7 @@ async with AsyncNiwaki("https://apic.example.com", "admin", "secret") as aci:
 - **2,222 generated Pydantic models** (APIC v6.0 schemas) with human-readable
   field names, constraints, and 558 enums — models carry data and validation,
   never write logic.
-- **Facade** (observation): jargon navigation (`aci.tenant("x").bd("y")`),
+- **Facade** (observation): vocabulary navigation (`aci.tenant("x").bd("y")`),
   typed reads, queries, delete.
 - **Sync + async transport**: cookie/token auth, proactive refresh, retry
   with backoff, transparent pagination, typed exception hierarchy.
@@ -248,7 +248,7 @@ source, tests, documentation, releases and issues.
 
 Active development. 14,200+ tests, mypy strict, ruff. The design DSL covers a
 curated vocabulary across tenant, access (`infra`), fabric, and controller
-policies — 175+ curated positions, growing wave by wave; everything else is reachable via `.mo()` and
+policies — every curated position is listed in the generated coverage matrix; everything else is reachable via `.mo()` and
 `bind_dn()`. Why this SDK exists: [the comparison with cobra](https://k3l0-dev.github.io/niwaki/why.html).
 
 ## License

@@ -16,6 +16,9 @@ config = tenant("prod").vrf("main")
 aci = Niwaki.connect("https://apic.example.com", "admin", "secret")
 ```
 
+The `with` form closes the session for you; `connect()` is used here so the
+rest of the page can share one client — see {doc}`connection`.
+
 ```python
 report = config.push(aci)                  # strict (default)
 report = config.push(aci, mode="staged")
@@ -43,24 +46,18 @@ nested operation.
 
 Use it when you want progress granularity, or when a fabric rejects large
 atomic envelopes.  A partial failure raises
-{class}`~niwaki.exceptions.StagedPushError` carrying plain DNs:
-
-```python
-from niwaki.exceptions import StagedPushError
-
-try:
-    config.push(aci, mode="staged")
-except StagedPushError as exc:
-    print("written :", exc.report.dns)
-    print("failed  :", [dn for dn, _ in exc.failures])
-    print("skipped :", exc.not_run)
-```
+{class}`~niwaki.exceptions.StagedPushError` — what it carries and how to
+recover is the subject of the {doc}`errors` playbook.
 
 ## `plan` — dry run
 
-Reads the current APIC state (one `rsp-subtree=full` read per declared
-domain) and diffs it against the design.  **Nothing is pushed.**  Returns a
-{class}`~niwaki.design.PlanResult`:
+Reads the current APIC state and diffs it against the design.  **Nothing is
+pushed.**  There is one read per declared domain (each direct child of
+`polUni` the design touches), and each read is scoped twice:
+`rsp-subtree=full` fetches the hierarchy, and `rsp-subtree-class` restricts
+it to **the classes the design declares** — planning a three-line `infra`
+design against a loaded fabric reads back a handful of objects, not the
+whole access-policy tree.  Returns a {class}`~niwaki.design.PlanResult`:
 
 ```python
 plan = config.push(aci, mode="plan")
@@ -75,10 +72,13 @@ never set is never reported as drift.  Deletions are out of scope by design:
 a plan never proposes removing objects the design does not declare.
 
 ```{note}
-On a loaded fabric, planning `uni/infra` or `uni/fabric` pulls the whole
-policy subtree of that domain.  Scope day-2 plans to what you declare, and
-prefer several small designs over one giant one when only auditing.
+Write-only attributes (passwords, pre-shared keys) never read back from the
+APIC, so a plan cannot see them: after rotating a secret, the plan reports
+the object as unchanged — push to apply the new value.
 ```
+
+Several small designs still beat one giant one — not for the APIC's sake,
+but because each plan then reads as one reviewable change.
 
 ## `to_payload()` — inspect without executing
 
@@ -89,3 +89,9 @@ builder's `build()`): validation and reference resolution run, no transport.
 import json
 print(json.dumps(config.to_payload(), indent=2))
 ```
+
+## Next steps
+
+- {doc}`errors` — the exception hierarchy and the staged-failure playbook
+- {doc}`testing` — the plan as a convergence assertion
+- {doc}`../cookbook/gitops-pipeline` — plan as a CI gate
