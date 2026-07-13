@@ -1,6 +1,6 @@
 """Design push engine — _Op, bracket-aware depth, toposort, sync waves.
 
-The engine is internal (ADR-001 phase 4c): these tests pin its behaviour so
+The engine is internal: these tests pin its behaviour so
 the public ``push()`` semantics (ordering, failure accounting) cannot drift.
 No I/O — the sync engine takes a plain callable.
 """

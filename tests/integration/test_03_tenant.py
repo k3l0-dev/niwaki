@@ -1,16 +1,16 @@
 """Act 3 — tenant: the three-tier application, published on act-2's cabling.
 
-One mental model, end to end (ADR-001): **describe with the design DSL,
+One mental model, end to end: **describe with the design DSL,
 apply with push, observe with the facade**.
 
 1. **Plan → strict push → idempotence** — the app in operator vocabulary,
    dry-run first, one atomic POST, replan clean, drift pinpointed.
 2. **Staged push** — the same DSL compiled to per-object waves.
 3. **Day-2 declaratively** — a description patch and a drift check are just
-   smaller designs: set + push, audited by plan (D-1/D-7).
+   smaller designs: set + push, audited by plan.
 4. **The bridge to the physical world** — EPG domain attach through the
    abstract ``domain`` bind (declared phys-dom) and through ``bind_dn``
-   (raw DN, D-3b), then the static VPC path as a literal-DN maker.
+   (raw DN), then the static VPC path as a literal-DN maker.
 5. **Query audit** and an explicit ``delete()`` on a sacrificial tenant —
    the facade observes and deletes; it never configures.
 
@@ -133,7 +133,7 @@ class Test3TenantApplication:
     # ── 3 · Day-2 declaratively: smaller designs, same verbs ─────────────────
 
     def test_06_day2_patch_is_a_small_design(self, live_aci: Niwaki) -> None:
-        """Only the declared field travels — the rest is untouched (D-1)."""
+        """Only the declared field travels — the rest is untouched."""
         patch = tenant(TENANT).bd("backend").set(description="backend tier - patched declaratively")
         patch.push(live_aci)
 
@@ -154,7 +154,7 @@ class Test3TenantApplication:
 
     def test_08_new_subtree_is_a_design_too(self, live_aci: Niwaki) -> None:
         """A BD + subnet + VRF reference — closed world, so the existing VRF
-        is re-declared as an attribute-less upsert (D-1)."""
+        is re-declared as an attribute-less upsert."""
         cfg = tenant(TENANT)
         cfg.vrf("prod")  # upsert — already exists, nothing changes
         cfg.bd("typed-path", unicast_routing=True).subnet("10.10.9.1/24", scope="private").bind(
@@ -171,7 +171,7 @@ class Test3TenantApplication:
 
         Two equivalent spellings: declare the phys-dom in the design and
         ``bind(domain=...)`` (closed world, abstract target), or reference it
-        by raw DN with ``bind_dn`` (D-3b) — no lookup, the APIC arbitrates.
+        by raw DN with ``bind_dn`` — no lookup, the APIC arbitrates.
         """
         cfg = tenant(TENANT)
         cfg.phys_dom(PHYS_DOM)  # cross-domain upsert of act-2's domain

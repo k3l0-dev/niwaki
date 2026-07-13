@@ -1,4 +1,4 @@
-"""Live gate for ADR-001 risk R-1 — never-creatable carriers accept upserts.
+"""Live gate — never-creatable carriers accept attribute-less upserts.
 
 The design DSL compiles every domain into one ``polUni`` envelope whose
 intermediate nodes (``infraInfra``, ``fabricInst``, ``ctrlrInst``) are
@@ -47,8 +47,8 @@ def cleanup(live_aci: Niwaki) -> Iterator[None]:
 def test_carriers_accept_attributeless_upsert(live_aci: Niwaki, cleanup: None) -> None:
     """One strict push crossing fabric, infra and phys-dom carriers."""
     cfg = design()
-    cfg.fabric().datetime_policy(_SMOKE, description="ADR-001 R-1 smoke")
-    cfg.infra().aaep(_SMOKE, description="ADR-001 R-1 smoke")
+    cfg.fabric().datetime_policy(_SMOKE, description="carrier upsert smoke")
+    cfg.infra().aaep(_SMOKE, description="carrier upsert smoke")
     cfg.phys_dom(_SMOKE)
 
     report = cfg.push(live_aci, mode="strict")

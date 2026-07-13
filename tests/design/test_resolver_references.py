@@ -1,4 +1,4 @@
-"""Unified reference resolver (ADR-001 phase 2) — flavors, abstracts, bind_dn.
+"""The unified reference resolver — flavors, abstract targets, bind_dn.
 
 Complements ``test_resolver.py`` (name-flavor tenant world) with the phase-2
 surface: dn-flavor relations, abstract-target matching, the ``bind_dn`` raw-DN
@@ -151,7 +151,10 @@ class TestBindDn:
 
 class TestStaticPathMaker:
     def test_literal_dn_maker(self) -> None:
-        """fvRsPathAtt is a maker (C-11): the path DN is naming, not a bind."""
+        """fvRsPathAtt is a maker: the path DN is a naming prop, not a bind.
+
+        Its target lives outside the ``uni`` subtree (a topology path), so it
+        is modelled as a literal-DN maker rather than a reference."""
         epg = tenant("prod").app("a").epg("web")
         path = epg.static_path("topology/pod-1/paths-101/pathep-[eth1/1]", encap="vlan-100")
         assert path.design_node.aci_class == "fvRsPathAtt"

@@ -9,7 +9,7 @@ what an engineer does on day 0:
    is observation: the polling loop stays imperative by design.
 2. **Register** them — each registration is a mini design pushed through
    ``controller()``: the ``ctrlrInst``/``fabricNodeIdentPol`` carriers ride
-   along as attribute-less upserts (ADR-001 D-1).
+   along as attribute-less upserts.
 3. **Fabric policies** — NTP, DNS, BGP (fabric ASN first, then the route
    reflectors), syslog: one ``fabric()`` design pushed in ``staged`` mode —
    the wave engine orders the carriers before their children.

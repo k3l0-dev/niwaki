@@ -1,4 +1,4 @@
-"""Staged compilation hardening (ADR-001 phase 3) — brackets, atomic, plan.
+"""Staged compilation — brackets, atomic classes, plan.
 
 Wave ordering must survive DNs whose naming values contain slashes, atomic
 classes must ship their subtree in one op, and plan mode must read once per

@@ -1,4 +1,4 @@
-"""Golden payloads — fabric, controller and access-policy domains (ADR-001).
+"""Golden payloads — fabric, controller and access-policy domains.
 
 Offline counterparts of the live walkthrough acts 1 and 2: the exact APIC
 payloads the design DSL compiles for fabric/controller policies and access

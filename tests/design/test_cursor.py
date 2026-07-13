@@ -22,7 +22,7 @@ class TestTenantRoot:
     def test_returns_root_cursor(self) -> None:
         cfg = tenant("prod")
         assert isinstance(cfg, Cursor)
-        # Every design is rooted on a uniform polUni node (ADR-001, C-6).
+        # Every design is rooted on a uniform polUni node.
         assert cfg.design_node.parent is not None
         assert cfg.design_node.parent.aci_class == "polUni"
         assert cfg.design_node.parent.parent is None

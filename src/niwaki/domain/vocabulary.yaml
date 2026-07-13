@@ -14,7 +14,7 @@
 #   verbs:  cursor ACI class → contract verbs (provide/consume).
 #   sugar:  extra typed maker/set parameters handled by design._sugar.
 #   atomic: classes whose subtree must ship in one POST in staged mode
-#           (consumed in phase 3).
+#           (the APIC validates them as a unit).
 
 jargon:
   # ── Root (polUni / uni) ─────────────────────────────────────────────────────

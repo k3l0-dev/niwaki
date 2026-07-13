@@ -9,13 +9,13 @@ The complete cabling chain every ACI engineer recites, bottom-up:
         → switch profiles (leaf-01, leaf-02, spine-01)
         → VPC protection group (101 ⇄ 102)
 
-The whole chain is **one design** (ADR-001): makers declare the structure,
+The whole chain is **one design**: makers declare the structure,
 ``bind()`` declares every reference (name flavor for interface policies, dn
 flavor for AAEP/domains/profiles, abstract targets for ``policy_group`` and
 ``domain``), and the VPC pair rides in the same design — ``fabric()`` is one
 implicit-pop maker away.  One strict push ships everything atomically; the
 day-2 policy flip then lands as a declarative set+push with a ``plan``
-audit before and after (D-1/D-7).
+audit before and after.
 
 Requires act 1 (registered leaves).  Cleanup happens at the end of act 3.
 """
@@ -193,7 +193,7 @@ class Test2AccessPolicies:
         pair = protpol.vpc_explicit_protection_group(VPC_PAIR_NAME)
         assert pair.query("fabricNodePEp").count() == 2
 
-    # ── 3 · Day-2: flip a policy declaratively (D-1/D-7) ─────────────────────
+    # ── 3 · Day-2: flip a policy declaratively ───────────────────────────────
 
     def test_07_day2_flip_is_declarative(self, live_aci: Niwaki) -> None:
         """Declare the new desired state; carriers ride as bare upserts."""

@@ -1,6 +1,6 @@
 """Design roots — design()/tenant()/infra()/fabric()/controller() factories.
 
-ADR-001 phase 1: every design is rooted at ``polUni``; the root factories are
+Every design is rooted at ``polUni``; the root factories are
 sugar for ``design().<maker>()`` and multi-domain designs are structural —
 nominal path, edge cases, robustness.  No I/O anywhere.
 """
