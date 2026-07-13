@@ -4,6 +4,14 @@ All notable changes to this project are documented here.  The format follows
 [Keep a Changelog](https://keepachangelog.com/); versions follow semver
 (0.x — the API may still change between minor versions).
 
+## [Unreleased]
+
+### Fixed
+
+- Cisco placeholder comments (the literal text "null", on 621 schema
+  properties) no longer leak into maker Args sections and field
+  descriptions — those fields simply stay undescribed.
+
 ## [0.5.0] — 2026-07-13
 
 Cisco's own definitions, everywhere the IDE looks.

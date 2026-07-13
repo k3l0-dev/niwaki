@@ -153,6 +153,9 @@ What the DSL gives you:
   the entire curated vocabulary. `.mo(AnyClass, ...)` remains as the escape
   hatch, and `bind_dn(alias=dn)` references objects outside the design by
   raw DN.
+- **Cisco's definitions in every hover** — the APIC schema comments flow
+  into field descriptions, enum values, and maker signatures: your IDE
+  documents ACI while you type.
 - **Eager validation** — every name and attribute is checked by the Pydantic
   models at the call site, not on the wire.
 

@@ -89,6 +89,12 @@ generated code stays around 75 lines per position.  Signatures are
 introspected from the generated Pydantic models, so field names and enums
 can never disagree with validation.
 
+The documentation is generated from the same source: Cisco's schema
+comments flow into every model field's `description`, into per-value enum
+docstrings, and into each maker's Args section — hovering
+`ospf_interface_policy(` in an IDE shows Cisco's definition of every
+parameter, its allowed values, and its default.
+
 The generated classes add **types only**.  The runtime is a thin, stable
 core: `design/_cursor.py` dispatches makers dynamically, `design/_resolver.py`
 resolves references closed-world (name flavor for `tn*` properties, DN

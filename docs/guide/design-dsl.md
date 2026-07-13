@@ -65,6 +65,18 @@ Every maker, `set()` field and `bind()` alias is generated with a **typed
 signature per position**: autocompletion and mypy cover the entire curated
 vocabulary (see {doc}`../reference/vocabulary/index`).
 
+Makers are documented straight from the APIC schemas: hovering one in your
+IDE shows Cisco's definition of the class and an Args section with each
+parameter's meaning, allowed enum values, and default — the DSL documents
+ACI while you type:
+
+```python
+from niwaki.design import tenant
+
+doc = type(tenant("acme")).bd.__doc__
+assert "unique layer 2 forwarding domain" in doc  # Cisco's own definition
+```
+
 ## References: `bind()` and friends
 
 References are **lazy and closed-world**: `bind(alias=name)` records an

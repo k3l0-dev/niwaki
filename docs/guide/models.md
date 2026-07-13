@@ -75,6 +75,24 @@ except pydantic.ValidationError as exc:
 Instances returned by reads keep every APIC attribute (also the ones outside
 the generated schema version), so a round-trip never loses data.
 
+## Cisco's definitions, built in
+
+The APIC schemas carry a human-written definition for most configurable
+properties — and the generated models keep them.  Every described field
+carries it as its Pydantic `description`, so your IDE shows Cisco's own
+words when you hover an attribute, and the API reference renders them:
+
+```python
+from niwaki.models.fv.fvBD import fvBD
+
+info = fvBD.model_fields["arp_flooding"]
+assert "ARP flooding" in info.description
+```
+
+Enum values are documented too — each generated `StrEnum` member carries
+Cisco's per-value description as an attribute docstring (`OspfNwT.BCAST` →
+*"Broadcast interface"*), which IDEs surface in autocompletion.
+
 ## The `.mo()` escape hatch
 
 The design DSL's curated vocabulary covers 175+ positions; the other 2,000+
