@@ -16,11 +16,36 @@ class vnsAbsFuncConn(ManagedObject):
     An abstract function node connector is used to map a service graph interface with the device interface.
 
     RN format: ``AbsFConn-{name}``
+
+    The APIC can flag these accepted-but-inconsistent states on this class
+    (read-only ``configIssues``):
+
+    - ``conn-nonrenderable``
+    - ``invalid-ctx``
+    - ``missing-bd``
+    - ``missing-connection``
+    - ``missing-l3instp``
+    - ``missing-lif``
+    - ``missing-nodeinst``
+    - ``missing-peer-conn``
+    - ``missing-subnet``
     """
 
     _aci_class: ClassVar[str] = "vnsAbsFuncConn"
     _rn_format: ClassVar[str] = "AbsFConn-{name}"
     _naming_props: ClassVar[list[str]] = ["name"]
+    _config_issues: ClassVar[dict[str, str]] = {
+        "conn-nonrenderable": "",
+        "invalid-ctx": "",
+        "missing-bd": "",
+        "missing-connection": "",
+        "missing-l3instp": "",
+        "missing-lif": "",
+        "missing-nodeinst": "",
+        "missing-peer-conn": "",
+        "missing-subnet": "",
+        "ok": "",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

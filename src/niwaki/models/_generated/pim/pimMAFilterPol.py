@@ -14,11 +14,32 @@ class pimMAFilterPol(ManagedObject):
     Mapping agent (MA) filter policy.
 
     RN format: ``mafilter``
+
+    The APIC can flag these accepted-but-inconsistent states on this class
+    (read-only ``configIssues``):
+
+    - ``csw-invalid-pod-id``
+    - ``intervrf-route-map-empty``
+    - ``missing-rp-group-range``
+    - ``pim-not-supported-in-vpc-mode``
+    - ``pim-not-supported-on-ext-svi``
+    - ``pim-not-supported-on-floating-svi``
+    - ``src-only-route-map-allowed``
     """
 
     _aci_class: ClassVar[str] = "pimMAFilterPol"
     _rn_format: ClassVar[str] = "mafilter"
     _naming_props: ClassVar[list[str]] = []
+    _config_issues: ClassVar[dict[str, str]] = {
+        "csw-invalid-pod-id": "",
+        "intervrf-route-map-empty": "",
+        "missing-rp-group-range": "",
+        "ok": "",
+        "pim-not-supported-in-vpc-mode": "",
+        "pim-not-supported-on-ext-svi": "",
+        "pim-not-supported-on-floating-svi": "",
+        "src-only-route-map-allowed": "",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

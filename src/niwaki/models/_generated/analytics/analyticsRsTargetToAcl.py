@@ -14,11 +14,26 @@ class analyticsRsTargetToAcl(ManagedObject):
     Relationship to ACL MO
 
     RN format: ``rstargetToAcl-[{target_dn}]``
+
+    The APIC can flag these accepted-but-inconsistent states on this class
+    (read-only ``configIssues``):
+
+    - ``label usage limit reached``
+    - ``no``
+    - ``tcam limit reached``
+    - ``yes``
     """
 
     _aci_class: ClassVar[str] = "analyticsRsTargetToAcl"
     _rn_format: ClassVar[str] = "rstargetToAcl-[{target_dn}]"
     _naming_props: ClassVar[list[str]] = ["target_dn"]
+    _config_issues: ClassVar[dict[str, str]] = {
+        "label usage limit reached": "",
+        "no": "",
+        "none": "",
+        "tcam limit reached": "",
+        "yes": "",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

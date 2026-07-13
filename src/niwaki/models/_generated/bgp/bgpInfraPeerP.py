@@ -18,12 +18,23 @@ class bgpInfraPeerP(ManagedObject):
     Peer connectivity profile
 
     RN format: ``infraPeerP-[{peer_address}]``
+
+    The APIC can flag these accepted-but-inconsistent states on this class
+    (read-only ``configIssues``):
+
+    - ``conflicting-soo-value``
+    - ``no-loopback-configured``
     """
 
     _aci_class: ClassVar[str] = "bgpInfraPeerP"
     _rn_format: ClassVar[str] = "infraPeerP-[{peer_address}]"
     _naming_props: ClassVar[list[str]] = ["peer_address"]
     _secure_props: ClassVar[frozenset[str]] = frozenset(["password"])
+    _config_issues: ClassVar[dict[str, str]] = {
+        "conflicting-soo-value": "",
+        "no-loopback-configured": "",
+        "none": "",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

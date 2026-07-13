@@ -17,6 +17,74 @@ class vnsFolderInst(ManagedObject):
     A folder instance configured by the administrator.
 
     RN format: ``FI_C-{ctrct_name_or_lbl}-G-{graph_name_or_lbl}-F-{node_name_or_lbl}-N-{name}``
+
+    The APIC can flag these accepted-but-inconsistent states on this class
+    (read-only ``configIssues``):
+
+    - ``arp-flood-enabled``
+    - ``cdev-missing-cif``
+    - ``cdev-missing-mgmt-ip``
+    - ``cdev-missing-path-for-interface``
+    - ``cdev-missing-virtual-info``
+    - ``cif-missing-virtual-info``
+    - ``context-cardinality-violation-failure``
+    - ``devfolder-validation-failed``
+    - ``devparam-validation-failed``
+    - ``epp-download-failure``
+    - ``folderinst-validation-failed``
+    - ``function-type-mismatch-failure``
+    - ``gothrough-routing-enabled-both``
+    - ``gothru-same-bd``
+    - ``graph-loop-detected``
+    - ``id-allocation-failure``
+    - ``inappropriate-devfolder``
+    - ``insufficient-devctx``
+    - ``internal-error``
+    - ``invalid-absfunc-profile``
+    - ``invalid-abstract-graph-config``
+    - ``invalid-abstract-graph-config-param``
+    - ``invalid-config``
+    - ``invalid-conn-for-configparam``
+    - ``invalid-connection``
+    - ``invalid-devcfg-folder``
+    - ``invalid-devctx``
+    - ``invalid-filter-referred-by-rsconntoflt``
+    - ``invalid-graphinst``
+    - ``invalid-ldev``
+    - ``invalid-mfolder``
+    - ``invalid-namespace-allocation-mode``
+    - ``invalid-param-config``
+    - ``invalid-param-scope``
+    - ``invalid-relation-target``
+    - ``invalid-rsmconnatt``
+    - ``invalid-terminal-nodes``
+    - ``ldevvip-missing-mgmt-ip``
+    - ``lif-has-invalid-interface-label``
+    - ``lif-invalid-CIf``
+    - ``missing-abs-function``
+    - ``missing-abs-graph``
+    - ``missing-bd``
+    - ``missing-cdev``
+    - ``missing-cif``
+    - ``missing-config-params``
+    - ``missing-function-in-device-package``
+    - ``missing-function-node``
+    - ``missing-interface``
+    - ``missing-l3ctx``
+    - ``missing-l3instp``
+    - ``missing-ldev``
+    - ``missing-ldev-ctx``
+    - ``missing-lif``
+    - ``missing-mandatory-param``
+    - ``missing-mdev``
+    - ``missing-mparam``
+    - ``missing-namespace``
+    - ``missing-terminal``
+    - ``param-cardinality-error``
+    - ``param-validation-failed``
+    - ``paraminst-validation-failed``
+    - ``relinst-validation-failed``
+    - ``resource-allocation-failure``
     """
 
     _aci_class: ClassVar[str] = "vnsFolderInst"
@@ -29,6 +97,73 @@ class vnsFolderInst(ManagedObject):
         "node_name_or_lbl",
         "name",
     ]
+    _config_issues: ClassVar[dict[str, str]] = {
+        "arp-flood-enabled": "",
+        "cdev-missing-cif": "",
+        "cdev-missing-mgmt-ip": "",
+        "cdev-missing-path-for-interface": "",
+        "cdev-missing-virtual-info": "",
+        "cif-missing-virtual-info": "",
+        "context-cardinality-violation-failure": "",
+        "devfolder-validation-failed": "",
+        "devparam-validation-failed": "",
+        "epp-download-failure": "",
+        "folderinst-validation-failed": "",
+        "function-type-mismatch-failure": "",
+        "gothrough-routing-enabled-both": "",
+        "gothru-same-bd": "",
+        "graph-loop-detected": "",
+        "id-allocation-failure": "",
+        "inappropriate-devfolder": "",
+        "insufficient-devctx": "",
+        "internal-error": "",
+        "invalid-absfunc-profile": "",
+        "invalid-abstract-graph-config": "",
+        "invalid-abstract-graph-config-param": "",
+        "invalid-config": "",
+        "invalid-conn-for-configparam": "",
+        "invalid-connection": "",
+        "invalid-devcfg-folder": "",
+        "invalid-devctx": "",
+        "invalid-filter-referred-by-rsconntoflt": "",
+        "invalid-graphinst": "",
+        "invalid-ldev": "",
+        "invalid-mfolder": "",
+        "invalid-namespace-allocation-mode": "",
+        "invalid-param-config": "",
+        "invalid-param-scope": "",
+        "invalid-relation-target": "",
+        "invalid-rsmconnatt": "",
+        "invalid-terminal-nodes": "",
+        "ldevvip-missing-mgmt-ip": "",
+        "lif-has-invalid-interface-label": "",
+        "lif-invalid-CIf": "",
+        "missing-abs-function": "",
+        "missing-abs-graph": "",
+        "missing-bd": "",
+        "missing-cdev": "",
+        "missing-cif": "",
+        "missing-config-params": "",
+        "missing-function-in-device-package": "",
+        "missing-function-node": "",
+        "missing-interface": "",
+        "missing-l3ctx": "",
+        "missing-l3instp": "",
+        "missing-ldev": "",
+        "missing-ldev-ctx": "",
+        "missing-lif": "",
+        "missing-mandatory-param": "",
+        "missing-mdev": "",
+        "missing-mparam": "",
+        "missing-namespace": "",
+        "missing-terminal": "",
+        "ok": "",
+        "param-cardinality-error": "",
+        "param-validation-failed": "",
+        "paraminst-validation-failed": "",
+        "relinst-validation-failed": "",
+        "resource-allocation-failure": "",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

@@ -20,11 +20,46 @@ class apPlugin(ManagedObject):
     Plugin Info
 
     RN format: ``plugin-{app_ctx_root}``
+
+    The APIC can flag these accepted-but-inconsistent states on this class
+    (read-only ``configIssues``):
+
+    - ``app-downgrade-not-allowed``
+    - ``app-inconsistent-state``
+    - ``app-installation-failed``
+    - ``app-removal-deferred``
+    - ``app-validation-deferred``
+    - ``certificate-generation-failed``
+    - ``cluster-has-vapic``
+    - ``high-privilege-app-not-signed``
+    - ``invalid-meta-data``
+    - ``plugin-health-not-ok``
+    - ``runtime-required-platform-not-available``
+    - ``signature-verification-failed``
+    - ``start-plugin-failed``
+    - ``stop-plugin-failed``
     """
 
     _aci_class: ClassVar[str] = "apPlugin"
     _rn_format: ClassVar[str] = "plugin-{app_ctx_root}"
     _naming_props: ClassVar[list[str]] = ["app_ctx_root"]
+    _config_issues: ClassVar[dict[str, str]] = {
+        "app-downgrade-not-allowed": "",
+        "app-inconsistent-state": "",
+        "app-installation-failed": "",
+        "app-removal-deferred": "",
+        "app-validation-deferred": "",
+        "certificate-generation-failed": "",
+        "cluster-has-vapic": "",
+        "high-privilege-app-not-signed": "",
+        "invalid-meta-data": "",
+        "ok": "",
+        "plugin-health-not-ok": "",
+        "runtime-required-platform-not-available": "",
+        "signature-verification-failed": "",
+        "start-plugin-failed": "",
+        "stop-plugin-failed": "",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

@@ -4,6 +4,18 @@ All notable changes to this project are documented here.  The format follows
 [Keep a Changelog](https://keepachangelog.com/); versions follow semver
 (0.x — the API may still change between minor versions).
 
+## [Unreleased]
+
+### Added
+
+- The models now carry the APIC's own catalog of accepted-but-inconsistent
+  configuration states: 98 classes declare a read-only `configIssues` enum
+  in the schemas (~2,500 codes — `fvBD` alone lists
+  `FHS-enabled-on-l2-only-bd`), previously invisible to users.  Each such
+  class exposes `_config_issues` (`{code: description}`) and lists the
+  codes in its docstring — the states your IDE can warn you about before
+  the APIC flags them.
+
 ## [0.6.0] — 2026-07-13
 
 A professional documentation overhaul, and the enterprise-CA answer.

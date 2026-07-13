@@ -12,11 +12,26 @@ class monitorTelemetryPol(ManagedObject):
     """ACI Managed Object: ``monitorTelemetryPol`` — Access Node Configuration.
 
     RN format: ``telemetrypol-{name}``
+
+    The APIC can flag these accepted-but-inconsistent states on this class
+    (read-only ``configIssues``):
+
+    - ``label usage limit reached``
+    - ``no``
+    - ``tcam limit reached``
+    - ``yes``
     """
 
     _aci_class: ClassVar[str] = "monitorTelemetryPol"
     _rn_format: ClassVar[str] = "telemetrypol-{name}"
     _naming_props: ClassVar[list[str]] = ["name"]
+    _config_issues: ClassVar[dict[str, str]] = {
+        "label usage limit reached": "",
+        "no": "",
+        "none": "",
+        "tcam limit reached": "",
+        "yes": "",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

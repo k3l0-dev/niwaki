@@ -14,11 +14,34 @@ class hsrpSecVip(ManagedObject):
     Secondary Address Policy
 
     RN format: ``hsrpSecVip-[{secondary_ip_address}]``
+
+    The APIC can flag these accepted-but-inconsistent states on this class
+    (read-only ``configIssues``):
+
+    - ``GroupMac-Conflicts-Other-Group``
+    - ``GroupName-Conflicts-Other-Group``
+    - ``GroupVIP-Conflicts-Other-Group``
+    - ``Multiple-Version-On-Interface``
+    - ``Secondary-vip-conflicts-if-ip``
+    - ``Secondary-vip-subnet-mismatch``
+    - ``group-vip-conflicts-if-ip``
+    - ``group-vip-subnet-mismatch``
     """
 
     _aci_class: ClassVar[str] = "hsrpSecVip"
     _rn_format: ClassVar[str] = "hsrpSecVip-[{secondary_ip_address}]"
     _naming_props: ClassVar[list[str]] = ["secondary_ip_address"]
+    _config_issues: ClassVar[dict[str, str]] = {
+        "group-vip-conflicts-if-ip": "",
+        "group-vip-subnet-mismatch": "",
+        "GroupMac-Conflicts-Other-Group": "",
+        "GroupName-Conflicts-Other-Group": "",
+        "GroupVIP-Conflicts-Other-Group": "",
+        "Multiple-Version-On-Interface": "",
+        "none": "",
+        "Secondary-vip-conflicts-if-ip": "",
+        "Secondary-vip-subnet-mismatch": "",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

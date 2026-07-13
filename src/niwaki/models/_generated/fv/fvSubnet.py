@@ -16,11 +16,22 @@ class fvSubnet(ManagedObject):
     A subnet defines the IP address range that can be used within the bridge domain. While a context defines a unique layer 3 space, that space can consist of multiple subnets. These subnets are defined per bridge domain.
 
     RN format: ``subnet-[{subnet}]``
+
+    The APIC can flag these accepted-but-inconsistent states on this class
+    (read-only ``configIssues``):
+
+    - ``multiple-tag-selector-match``
+    - ``multiple-tag-selector-match-after-single-match``
     """
 
     _aci_class: ClassVar[str] = "fvSubnet"
     _rn_format: ClassVar[str] = "subnet-[{subnet}]"
     _naming_props: ClassVar[list[str]] = ["subnet"]
+    _config_issues: ClassVar[dict[str, str]] = {
+        "multiple-tag-selector-match": "",
+        "multiple-tag-selector-match-after-single-match": "",
+        "none": "",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

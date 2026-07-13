@@ -14,11 +14,60 @@ class fvnsVxlanInstP(ManagedObject):
     The VxLAN range namespace policy defines for ID ranges used for VLAN encapsulation
 
     RN format: ``vxlanns-{name}``
+
+    The APIC can flag these accepted-but-inconsistent states on this class
+    (read-only ``configIssues``):
+
+    - ``cdp-lldp-collision``
+    - ``enhanced-lacp-lag-creation-skipped``
+    - ``invalid-mcast-addr``
+    - ``invalid-port``
+    - ``invalid-vxlan-ns-range``
+    - ``missing-assoc-attEntP``
+    - ``missing-encap``
+    - ``missing-encapblk``
+    - ``missing-epg``
+    - ``missing-infra-pg-vlan``
+    - ``missing-internal-vlan-blk``
+    - ``missing-ns-assoc``
+    - ``multiple-cdp``
+    - ``multiple-cdp-policy``
+    - ``multiple-lacp-policy``
+    - ``multiple-lldp``
+    - ``multiple-lldp-policy``
+    - ``multiple-mtu-policy``
+    - ``multiple-nwsfw-policy``
+    - ``multiple-stp-policy``
+    - ``unsupported-dom-avs``
     """
 
     _aci_class: ClassVar[str] = "fvnsVxlanInstP"
     _rn_format: ClassVar[str] = "vxlanns-{name}"
     _naming_props: ClassVar[list[str]] = ["name"]
+    _config_issues: ClassVar[dict[str, str]] = {
+        "cdp-lldp-collision": "",
+        "enhanced-lacp-lag-creation-skipped": "",
+        "invalid-mcast-addr": "",
+        "invalid-port": "",
+        "invalid-vxlan-ns-range": "",
+        "missing-assoc-attEntP": "",
+        "missing-encap": "",
+        "missing-encapblk": "",
+        "missing-epg": "",
+        "missing-infra-pg-vlan": "",
+        "missing-internal-vlan-blk": "",
+        "missing-ns-assoc": "",
+        "multiple-cdp": "",
+        "multiple-cdp-policy": "",
+        "multiple-lacp-policy": "",
+        "multiple-lldp": "",
+        "multiple-lldp-policy": "",
+        "multiple-mtu-policy": "",
+        "multiple-nwsfw-policy": "",
+        "multiple-stp-policy": "",
+        "none": "",
+        "unsupported-dom-avs": "",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

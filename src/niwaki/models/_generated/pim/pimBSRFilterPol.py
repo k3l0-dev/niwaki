@@ -14,11 +14,32 @@ class pimBSRFilterPol(ManagedObject):
     The PIM Bootstrap Router (BSR) filter policy.
 
     RN format: ``bsfilter``
+
+    The APIC can flag these accepted-but-inconsistent states on this class
+    (read-only ``configIssues``):
+
+    - ``csw-invalid-pod-id``
+    - ``intervrf-route-map-empty``
+    - ``missing-rp-group-range``
+    - ``pim-not-supported-in-vpc-mode``
+    - ``pim-not-supported-on-ext-svi``
+    - ``pim-not-supported-on-floating-svi``
+    - ``src-only-route-map-allowed``
     """
 
     _aci_class: ClassVar[str] = "pimBSRFilterPol"
     _rn_format: ClassVar[str] = "bsfilter"
     _naming_props: ClassVar[list[str]] = []
+    _config_issues: ClassVar[dict[str, str]] = {
+        "csw-invalid-pod-id": "",
+        "intervrf-route-map-empty": "",
+        "missing-rp-group-range": "",
+        "ok": "",
+        "pim-not-supported-in-vpc-mode": "",
+        "pim-not-supported-on-ext-svi": "",
+        "pim-not-supported-on-floating-svi": "",
+        "src-only-route-map-allowed": "",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

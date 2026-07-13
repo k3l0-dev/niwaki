@@ -12,11 +12,26 @@ class fvEpIpTag(ManagedObject):
     """ACI Managed Object: ``fvEpIpTag`` — IP Endpoint.
 
     RN format: ``epiptag-[{endpoint_ip_address}]-{vrf_name}``
+
+    The APIC can flag these accepted-but-inconsistent states on this class
+    (read-only ``configIssues``):
+
+    - ``bd-does-not-exist``
+    - ``multiple-tag-selector-match``
+    - ``multiple-tag-selector-match-after-single-match``
+    - ``vrf-does-not-exist``
     """
 
     _aci_class: ClassVar[str] = "fvEpIpTag"
     _rn_format: ClassVar[str] = "epiptag-[{endpoint_ip_address}]-{vrf_name}"
     _naming_props: ClassVar[list[str]] = ["endpoint_ip_address", "vrf_name"]
+    _config_issues: ClassVar[dict[str, str]] = {
+        "bd-does-not-exist": "",
+        "multiple-tag-selector-match": "",
+        "multiple-tag-selector-match-after-single-match": "",
+        "none": "",
+        "vrf-does-not-exist": "",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

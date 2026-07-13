@@ -12,11 +12,38 @@ class fvIntraVrfFabricImpRtctrlP(ManagedObject):
     """ACI Managed Object: ``fvIntraVrfFabricImpRtctrlP`` — Vrf Level Fabric Import RtCtrl Policy for Intra Vrf.
 
     RN format: ``intravrfimprtctrl-{name}``
+
+    The APIC can flag these accepted-but-inconsistent states on this class
+    (read-only ``configIssues``):
+
+    - ``exp-rtctrl-on-non-bl``
+    - ``rtprofile-export-policy-missing``
+    - ``rtprofile-export-policy-node-missing``
+    - ``rtprofile-import-policy-missing``
+    - ``rtprofile-import-policy-node-missing``
+    - ``rtsum-on-non-bl`` — Rt Summarization configured on Non BL Node
+    - ``rtsum-policy-node-missing``
+    - ``rtsum-subnet-missing``
+    - ``rtsum-subnet-policy-missing``
+    - ``rtsumsubnet-l3extsubnet-conflict``
     """
 
     _aci_class: ClassVar[str] = "fvIntraVrfFabricImpRtctrlP"
     _rn_format: ClassVar[str] = "intravrfimprtctrl-{name}"
     _naming_props: ClassVar[list[str]] = ["name"]
+    _config_issues: ClassVar[dict[str, str]] = {
+        "exp-rtctrl-on-non-bl": "",
+        "none": "",
+        "rtprofile-export-policy-missing": "",
+        "rtprofile-export-policy-node-missing": "",
+        "rtprofile-import-policy-missing": "",
+        "rtprofile-import-policy-node-missing": "",
+        "rtsum-on-non-bl": "Rt Summarization configured on Non BL Node",
+        "rtsum-policy-node-missing": "",
+        "rtsum-subnet-missing": "",
+        "rtsum-subnet-policy-missing": "",
+        "rtsumsubnet-l3extsubnet-conflict": "",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

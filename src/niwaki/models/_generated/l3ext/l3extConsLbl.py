@@ -17,11 +17,46 @@ class l3extConsLbl(ManagedObject):
     Represents Logical Outside Profile Consumer Label. Defines the characteristics that will be applied to Layer3 Outside that matches with the label name
 
     RN format: ``conslbl-{name}``
+
+    The APIC can flag these accepted-but-inconsistent states on this class
+    (read-only ``configIssues``):
+
+    - ``access-encap-bd-map-conflict``
+    - ``access-encap-node-overlap``
+    - ``anchor-encap-mismatch``
+    - ``anchor-node-mismatch``
+    - ``bd-profile-mismatch``
+    - ``loopback-ip-missing`` — CP-TEP configuration validations
+    - ``missing-mpls-infra-l3out`` — MPLS infra l3out validation for the consumer Lbl
+    - ``missing-rs-export-route-profile`` — MPLS ConsLbl configuration validations
+    - ``mtu-mac-mismatch`` — Fault added via CSCvv00759 for identical l3extRsPathL3OutAtt
+    - ``node-path-misconfig`` — LNodeP node/path configuration validations
+    - ``node-vlif-misconfig`` — LNodeP node/vlif configuration validations
+    - ``routerid-not-changable-with-mcast`` — LNodeP router id multicast configuration validations
+    - ``rtsumsubnet-l3extsubnet-conflict``
+    - ``subnet-mismatch``
     """
 
     _aci_class: ClassVar[str] = "l3extConsLbl"
     _rn_format: ClassVar[str] = "conslbl-{name}"
     _naming_props: ClassVar[list[str]] = ["name"]
+    _config_issues: ClassVar[dict[str, str]] = {
+        "access-encap-bd-map-conflict": "",
+        "access-encap-node-overlap": "",
+        "anchor-encap-mismatch": "",
+        "anchor-node-mismatch": "",
+        "bd-profile-mismatch": "",
+        "loopback-ip-missing": "CP-TEP configuration validations",
+        "missing-mpls-infra-l3out": "MPLS infra l3out validation for the consumer Lbl",
+        "missing-rs-export-route-profile": "MPLS ConsLbl configuration validations",
+        "mtu-mac-mismatch": "Fault added via CSCvv00759 for identical l3extRsPathL3OutAtt",
+        "node-path-misconfig": "LNodeP node/path configuration validations",
+        "node-vlif-misconfig": "LNodeP node/vlif configuration validations",
+        "none": "",
+        "routerid-not-changable-with-mcast": "LNodeP router id multicast configuration validations",
+        "rtsumsubnet-l3extsubnet-conflict": "",
+        "subnet-mismatch": "",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

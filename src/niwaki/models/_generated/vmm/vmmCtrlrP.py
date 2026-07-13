@@ -23,11 +23,62 @@ class vmmCtrlrP(ManagedObject):
     The VMM controller profile specifies how to connect to a single VM management controller that is part of a policy enforcement domain. For example, the VMM controller profile could be a policy to connect a VMware vCenter that is part of a VMM domain.
 
     RN format: ``ctrlr-{name}``
+
+    The APIC can flag these accepted-but-inconsistent states on this class
+    (read-only ``configIssues``):
+
+    - ``aaacert-invalid``
+    - ``domain-not-deployable``
+    - ``duplicate-mac-in-inventory``
+    - ``duplicate-rootContName``
+    - ``enfpref-not-set``
+    - ``invalid-CtrlrAssoc``
+    - ``invalid-cluster-ctrlr``
+    - ``invalid-mcastAddr``
+    - ``invalid-object-in-inventory``
+    - ``invalid-policy``
+    - ``invalid-rootContName``
+    - ``invalid-statsP``
+    - ``invalid-usraccp``
+    - ``invalid-vxlanNs``
+    - ``inventory-failed``
+    - ``missing-cluster-ctrlr``
+    - ``missing-hostGroup-in-cloud``
+    - ``missing-infra-vlan``
+    - ``missing-ns-ctrlr-assoc``
+    - ``missing-rootContName``
+    - ``mode-not-set``
+    - ``zero-mac-in-inventory``
     """
 
     _aci_class: ClassVar[str] = "vmmCtrlrP"
     _rn_format: ClassVar[str] = "ctrlr-{name}"
     _naming_props: ClassVar[list[str]] = ["name"]
+    _config_issues: ClassVar[dict[str, str]] = {
+        "aaacert-invalid": "",
+        "domain-not-deployable": "",
+        "duplicate-mac-in-inventory": "",
+        "duplicate-rootContName": "",
+        "enfpref-not-set": "",
+        "invalid-cluster-ctrlr": "",
+        "invalid-CtrlrAssoc": "",
+        "invalid-mcastAddr": "",
+        "invalid-object-in-inventory": "",
+        "invalid-policy": "",
+        "invalid-rootContName": "",
+        "invalid-statsP": "",
+        "invalid-usraccp": "",
+        "invalid-vxlanNs": "",
+        "inventory-failed": "",
+        "missing-cluster-ctrlr": "",
+        "missing-hostGroup-in-cloud": "",
+        "missing-infra-vlan": "",
+        "missing-ns-ctrlr-assoc": "",
+        "missing-rootContName": "",
+        "mode-not-set": "",
+        "not-applicable": "",
+        "zero-mac-in-inventory": "",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

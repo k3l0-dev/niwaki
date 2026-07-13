@@ -85,6 +85,10 @@ class ManagedObject(BaseModel):
         _secure_props: Frozenset of write-only property names (passwords,
             pre-shared keys) — the APIC never echoes them on reads, so diff
             and plan comparisons must skip them.
+        _config_issues: The APIC's declared catalog of accepted-but-
+            inconsistent configuration states for this class
+            (``{code: description}``, from the read-only ``configIssues``
+            enum in the schema).  Empty for classes without the channel.
         _contains: Frozenset of ACI class names valid as direct children.
         _mo_category: APIC object category from the schema (e.g. ``"Regular"``,
             ``"RelationshipToLocal"``).  Populated by codegen; defaults to
@@ -116,6 +120,7 @@ class ManagedObject(BaseModel):
     _rn_format: ClassVar[str] = ""
     _naming_props: ClassVar[list[str]] = []
     _secure_props: ClassVar[frozenset[str]] = frozenset()
+    _config_issues: ClassVar[dict[str, str]] = {}
     _contains: ClassVar[frozenset[str]] = frozenset()
     _mo_category: ClassVar[str] = "Regular"
     _write_access: ClassVar[frozenset[str]] = frozenset()

@@ -14,11 +14,22 @@ class bgpSiteOfOriginP(ManagedObject):
     Site of Origin Profile
 
     RN format: ``soo``
+
+    The APIC can flag these accepted-but-inconsistent states on this class
+    (read-only ``configIssues``):
+
+    - ``conflicting-soo-value``
+    - ``no-loopback-configured``
     """
 
     _aci_class: ClassVar[str] = "bgpSiteOfOriginP"
     _rn_format: ClassVar[str] = "soo"
     _naming_props: ClassVar[list[str]] = []
+    _config_issues: ClassVar[dict[str, str]] = {
+        "conflicting-soo-value": "",
+        "no-loopback-configured": "",
+        "none": "",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

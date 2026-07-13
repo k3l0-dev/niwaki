@@ -12,11 +12,26 @@ class fvEpMacTag(ManagedObject):
     """ACI Managed Object: ``fvEpMacTag`` — Mac Endpoint.
 
     RN format: ``epmactag-{endpoint_mac_address}-[{bridge_domain_name}]``
+
+    The APIC can flag these accepted-but-inconsistent states on this class
+    (read-only ``configIssues``):
+
+    - ``bd-does-not-exist``
+    - ``multiple-tag-selector-match``
+    - ``multiple-tag-selector-match-after-single-match``
+    - ``vrf-does-not-exist``
     """
 
     _aci_class: ClassVar[str] = "fvEpMacTag"
     _rn_format: ClassVar[str] = "epmactag-{endpoint_mac_address}-[{bridge_domain_name}]"
     _naming_props: ClassVar[list[str]] = ["endpoint_mac_address", "bridge_domain_name"]
+    _config_issues: ClassVar[dict[str, str]] = {
+        "bd-does-not-exist": "",
+        "multiple-tag-selector-match": "",
+        "multiple-tag-selector-match-after-single-match": "",
+        "none": "",
+        "vrf-does-not-exist": "",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

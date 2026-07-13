@@ -25,6 +25,15 @@ class {{ class_name }}(ManagedObject):
 {% endif %}
 
     RN format: ``{{ rn_format }}``
+{% if config_issue_display %}
+
+    The APIC can flag these accepted-but-inconsistent states on this class
+    (read-only ``configIssues``):
+
+{% for line in config_issue_display %}
+    {{ line }}
+{% endfor %}
+{% endif %}
     """
 
     _aci_class:    ClassVar[str]            = "{{ class_name }}"
@@ -32,6 +41,13 @@ class {{ class_name }}(ManagedObject):
     _naming_props: ClassVar[list[str]]      = {{ naming_props | tojson }}
 {% if secure_props %}
     _secure_props: ClassVar[frozenset[str]] = frozenset({{ secure_props | tojson }})
+{% endif %}
+{% if config_issues %}
+    _config_issues: ClassVar[dict[str, str]] = {
+{% for code, desc in config_issues | dictsort %}
+        {{ code | tojson }}: {{ desc | tojson }},
+{% endfor %}
+    }
 {% endif %}
     _contains:     ClassVar[frozenset[str]] = frozenset({
 {% for child in contains %}

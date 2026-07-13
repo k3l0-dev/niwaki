@@ -433,6 +433,17 @@ def _render_class(
     label = meta.get("label", "")
     # Cisco's class-level schema comment; keep it docstring-safe.
     class_comment = meta.get("comment", "").replace('"""', "'''")
+    # The APIC's declared accepted-but-inconsistent states for this class.
+    config_issues: dict[str, str] = meta.get("config_issues", {})
+    healthy = {"ok", "none", "N/A", "not-applicable"}
+    config_issue_display = [
+        f"- ``{code}``" + (f" — {desc}" if desc else "")
+        for code, desc in sorted(config_issues.items())
+        if code not in healthy
+    ]
+    config_issue_display = [
+        line.replace("\\", "\\\\").replace('"""', "'''") for line in config_issue_display
+    ]
     write_access = meta.get("write_access", [])
     is_observable = meta.get("is_observable", False)
     is_faultable = meta.get("is_faultable", False)
@@ -456,6 +467,8 @@ def _render_class(
         mo_category=mo_category,
         label=label,
         class_comment=class_comment,
+        config_issues=config_issues,
+        config_issue_display=config_issue_display,
         write_access=write_access,
         is_observable=is_observable,
         is_faultable=is_faultable,

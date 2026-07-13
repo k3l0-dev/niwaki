@@ -18,11 +18,26 @@ class vzOOBBrCP(ManagedObject):
     An out-of-band binary contract profile can only be provided by an out-of-band endpoint group and can only be consumed by the external prefix set. A regular endpoint group cannot provide or consume an out-of-band contract profile.
 
     RN format: ``oobbrc-{name}``
+
+    The APIC can flag these accepted-but-inconsistent states on this class
+    (read-only ``configIssues``):
+
+    - ``any-to-prov-shared-service``
+    - ``filter-not-present``
+    - ``subject-not-in-use-due-to-label``
+    - ``taboo-has-no-filter``
     """
 
     _aci_class: ClassVar[str] = "vzOOBBrCP"
     _rn_format: ClassVar[str] = "oobbrc-{name}"
     _naming_props: ClassVar[list[str]] = ["name"]
+    _config_issues: ClassVar[dict[str, str]] = {
+        "any-to-prov-shared-service": "",
+        "filter-not-present": "",
+        "none": "",
+        "subject-not-in-use-due-to-label": "",
+        "taboo-has-no-filter": "",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

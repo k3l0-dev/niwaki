@@ -14,11 +14,60 @@ class l3extDomP(ManagedObject):
     The external routed domain profile is a policy for managing the physical infrastructure, such as ports/VLANS, that can be used by an L3 routed outside network.
 
     RN format: ``l3dom-{name}``
+
+    The APIC can flag these accepted-but-inconsistent states on this class
+    (read-only ``configIssues``):
+
+    - ``cdp-lldp-collision``
+    - ``enhanced-lacp-lag-creation-skipped``
+    - ``invalid-mcast-addr``
+    - ``invalid-port``
+    - ``invalid-vxlan-ns-range``
+    - ``missing-assoc-attEntP``
+    - ``missing-encap``
+    - ``missing-encapblk``
+    - ``missing-epg``
+    - ``missing-infra-pg-vlan``
+    - ``missing-internal-vlan-blk``
+    - ``missing-ns-assoc``
+    - ``multiple-cdp``
+    - ``multiple-cdp-policy``
+    - ``multiple-lacp-policy``
+    - ``multiple-lldp``
+    - ``multiple-lldp-policy``
+    - ``multiple-mtu-policy``
+    - ``multiple-nwsfw-policy``
+    - ``multiple-stp-policy``
+    - ``unsupported-dom-avs``
     """
 
     _aci_class: ClassVar[str] = "l3extDomP"
     _rn_format: ClassVar[str] = "l3dom-{name}"
     _naming_props: ClassVar[list[str]] = ["name"]
+    _config_issues: ClassVar[dict[str, str]] = {
+        "cdp-lldp-collision": "",
+        "enhanced-lacp-lag-creation-skipped": "",
+        "invalid-mcast-addr": "",
+        "invalid-port": "",
+        "invalid-vxlan-ns-range": "",
+        "missing-assoc-attEntP": "",
+        "missing-encap": "",
+        "missing-encapblk": "",
+        "missing-epg": "",
+        "missing-infra-pg-vlan": "",
+        "missing-internal-vlan-blk": "",
+        "missing-ns-assoc": "",
+        "multiple-cdp": "",
+        "multiple-cdp-policy": "",
+        "multiple-lacp-policy": "",
+        "multiple-lldp": "",
+        "multiple-lldp-policy": "",
+        "multiple-mtu-policy": "",
+        "multiple-nwsfw-policy": "",
+        "multiple-stp-policy": "",
+        "none": "",
+        "unsupported-dom-avs": "",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaDomainRef",

@@ -14,11 +14,60 @@ class physDomP(ManagedObject):
     The physical domain profile stores the physical resources (ports and port-channels) and encap resources (VLAN/VXLAN) that should be used for endpoint groups associated with this domain.
 
     RN format: ``phys-{name}``
+
+    The APIC can flag these accepted-but-inconsistent states on this class
+    (read-only ``configIssues``):
+
+    - ``cdp-lldp-collision``
+    - ``enhanced-lacp-lag-creation-skipped``
+    - ``invalid-mcast-addr``
+    - ``invalid-port``
+    - ``invalid-vxlan-ns-range``
+    - ``missing-assoc-attEntP``
+    - ``missing-encap``
+    - ``missing-encapblk``
+    - ``missing-epg``
+    - ``missing-infra-pg-vlan``
+    - ``missing-internal-vlan-blk``
+    - ``missing-ns-assoc``
+    - ``multiple-cdp``
+    - ``multiple-cdp-policy``
+    - ``multiple-lacp-policy``
+    - ``multiple-lldp``
+    - ``multiple-lldp-policy``
+    - ``multiple-mtu-policy``
+    - ``multiple-nwsfw-policy``
+    - ``multiple-stp-policy``
+    - ``unsupported-dom-avs``
     """
 
     _aci_class: ClassVar[str] = "physDomP"
     _rn_format: ClassVar[str] = "phys-{name}"
     _naming_props: ClassVar[list[str]] = ["name"]
+    _config_issues: ClassVar[dict[str, str]] = {
+        "cdp-lldp-collision": "",
+        "enhanced-lacp-lag-creation-skipped": "",
+        "invalid-mcast-addr": "",
+        "invalid-port": "",
+        "invalid-vxlan-ns-range": "",
+        "missing-assoc-attEntP": "",
+        "missing-encap": "",
+        "missing-encapblk": "",
+        "missing-epg": "",
+        "missing-infra-pg-vlan": "",
+        "missing-internal-vlan-blk": "",
+        "missing-ns-assoc": "",
+        "multiple-cdp": "",
+        "multiple-cdp-policy": "",
+        "multiple-lacp-policy": "",
+        "multiple-lldp": "",
+        "multiple-lldp-policy": "",
+        "multiple-mtu-policy": "",
+        "multiple-nwsfw-policy": "",
+        "multiple-stp-policy": "",
+        "none": "",
+        "unsupported-dom-avs": "",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaDomainRef",

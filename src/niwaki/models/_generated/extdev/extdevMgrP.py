@@ -16,12 +16,21 @@ class extdevMgrP(ManagedObject):
     External Device Controller Profile specifies how to connect to a single External Device Management Controller that is part of containing policy enforcement domain. For example, policy to connect a Cisco UCSM that is part a EDM Group.
 
     RN format: ``mgr-{name}``
+
+    The APIC can flag these accepted-but-inconsistent states on this class
+    (read-only ``configIssues``):
+
+    - ``invalid-usraccp``
     """
 
     _aci_class: ClassVar[str] = "extdevMgrP"
     _rn_format: ClassVar[str] = "mgr-{name}"
     _naming_props: ClassVar[list[str]] = ["name"]
     _secure_props: ClassVar[frozenset[str]] = frozenset(["password"])
+    _config_issues: ClassVar[dict[str, str]] = {
+        "invalid-usraccp": "",
+        "not-applicable": "",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

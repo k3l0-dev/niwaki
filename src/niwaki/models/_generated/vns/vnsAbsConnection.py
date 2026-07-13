@@ -18,11 +18,36 @@ class vnsAbsConnection(ManagedObject):
     An abstract connection connects two abstract connectors. These connections can either be between two abstract nodes or between an abstract node and an abstract terminal node.
 
     RN format: ``AbsConnection-{name}``
+
+    The APIC can flag these accepted-but-inconsistent states on this class
+    (read-only ``configIssues``):
+
+    - ``conn-nonrenderable``
+    - ``invalid-ctx``
+    - ``missing-bd``
+    - ``missing-connection``
+    - ``missing-l3instp``
+    - ``missing-lif``
+    - ``missing-nodeinst``
+    - ``missing-peer-conn``
+    - ``missing-subnet``
     """
 
     _aci_class: ClassVar[str] = "vnsAbsConnection"
     _rn_format: ClassVar[str] = "AbsConnection-{name}"
     _naming_props: ClassVar[list[str]] = ["name"]
+    _config_issues: ClassVar[dict[str, str]] = {
+        "conn-nonrenderable": "",
+        "invalid-ctx": "",
+        "missing-bd": "",
+        "missing-connection": "",
+        "missing-l3instp": "",
+        "missing-lif": "",
+        "missing-nodeinst": "",
+        "missing-peer-conn": "",
+        "missing-subnet": "",
+        "ok": "",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

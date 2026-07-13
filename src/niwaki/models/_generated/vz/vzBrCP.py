@@ -18,11 +18,26 @@ class vzBrCP(ManagedObject):
     A contract is a logical container for the subjects which relate to the filters that govern the rules for communication between endpoint groups (EPGs). Without a contract, the default forwarding policy is to not allow any communication between EPGs but all communication within an EPG is allowed.
 
     RN format: ``brc-{name}``
+
+    The APIC can flag these accepted-but-inconsistent states on this class
+    (read-only ``configIssues``):
+
+    - ``any-to-prov-shared-service``
+    - ``filter-not-present``
+    - ``subject-not-in-use-due-to-label``
+    - ``taboo-has-no-filter``
     """
 
     _aci_class: ClassVar[str] = "vzBrCP"
     _rn_format: ClassVar[str] = "brc-{name}"
     _naming_props: ClassVar[list[str]] = ["name"]
+    _config_issues: ClassVar[dict[str, str]] = {
+        "any-to-prov-shared-service": "",
+        "filter-not-present": "",
+        "none": "",
+        "subject-not-in-use-due-to-label": "",
+        "taboo-has-no-filter": "",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

@@ -14,11 +14,60 @@ class infraGeneric(ManagedObject):
     The hypervisor generic function provides policies used for any generic hypervisor functionality. This can be used when any other pre-defined functions are not sufficient. The VLAN and endpoint group policies associated with this function are deployed on the leaf ports.
 
     RN format: ``gen-{name}``
+
+    The APIC can flag these accepted-but-inconsistent states on this class
+    (read-only ``configIssues``):
+
+    - ``cdp-lldp-collision``
+    - ``enhanced-lacp-lag-creation-skipped``
+    - ``invalid-mcast-addr``
+    - ``invalid-port``
+    - ``invalid-vxlan-ns-range``
+    - ``missing-assoc-attEntP``
+    - ``missing-encap``
+    - ``missing-encapblk``
+    - ``missing-epg``
+    - ``missing-infra-pg-vlan``
+    - ``missing-internal-vlan-blk``
+    - ``missing-ns-assoc``
+    - ``multiple-cdp``
+    - ``multiple-cdp-policy``
+    - ``multiple-lacp-policy``
+    - ``multiple-lldp``
+    - ``multiple-lldp-policy``
+    - ``multiple-mtu-policy``
+    - ``multiple-nwsfw-policy``
+    - ``multiple-stp-policy``
+    - ``unsupported-dom-avs``
     """
 
     _aci_class: ClassVar[str] = "infraGeneric"
     _rn_format: ClassVar[str] = "gen-{name}"
     _naming_props: ClassVar[list[str]] = ["name"]
+    _config_issues: ClassVar[dict[str, str]] = {
+        "cdp-lldp-collision": "",
+        "enhanced-lacp-lag-creation-skipped": "",
+        "invalid-mcast-addr": "",
+        "invalid-port": "",
+        "invalid-vxlan-ns-range": "",
+        "missing-assoc-attEntP": "",
+        "missing-encap": "",
+        "missing-encapblk": "",
+        "missing-epg": "",
+        "missing-infra-pg-vlan": "",
+        "missing-internal-vlan-blk": "",
+        "missing-ns-assoc": "",
+        "multiple-cdp": "",
+        "multiple-cdp-policy": "",
+        "multiple-lacp-policy": "",
+        "multiple-lldp": "",
+        "multiple-lldp-policy": "",
+        "multiple-mtu-policy": "",
+        "multiple-nwsfw-policy": "",
+        "multiple-stp-policy": "",
+        "none": "",
+        "unsupported-dom-avs": "",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

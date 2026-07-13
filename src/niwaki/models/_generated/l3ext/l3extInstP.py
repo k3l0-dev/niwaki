@@ -20,11 +20,52 @@ class l3extInstP(ManagedObject):
     The external network instance profile represents a group of external subnets that have the same security behavior. These subnets inherit contract profiles applied to the parent instance profile.
 
     RN format: ``instP-{name}``
+
+    The APIC can flag these accepted-but-inconsistent states on this class
+    (read-only ``configIssues``):
+
+    - ``allow-useg-inconsistent`` — allow useg Validations
+    - ``bd-id-not-allocated``
+    - ``bd-not-present`` — BD Validations
+    - ``context-id-not-allocated``
+    - ``context-not-present`` — Context Validations
+    - ``encap-assignment``
+    - ``esg-association-contract-inheritance-present`` — EPgSelector Contract Inheritance Validations
+    - ``esg-association-contract-present`` — EPgSelector Contract Validations
+    - ``esg-association-contract-taboo-present`` — EPgSelector Taboo Contract Validations
+    - ``esg-tag-selector-match-obj-not-associated`` — ESG TagSelector Duplicate Detected
+    - ``id-not-allocated``
+    - ``incorrect-active-standby-uplink-order`` — Active/Standby Uplink Config Validations
+    - ``instrimedcy-unsupported`` — Deployment Immediacy Validation
+    - ``invalid-rel-to-rtctrlProfile``
+    - ``l3port-and-sub-interface-on-path``
+    - ``no-conslbl-association`` — MPLS InstP Validations
+    - ``not-associated-with-mgmt-zone``
     """
 
     _aci_class: ClassVar[str] = "l3extInstP"
     _rn_format: ClassVar[str] = "instP-{name}"
     _naming_props: ClassVar[list[str]] = ["name"]
+    _config_issues: ClassVar[dict[str, str]] = {
+        "allow-useg-inconsistent": "allow useg Validations",
+        "bd-id-not-allocated": "",
+        "bd-not-present": "BD Validations",
+        "context-id-not-allocated": "",
+        "context-not-present": "Context Validations",
+        "encap-assignment": "",
+        "esg-association-contract-inheritance-present": "EPgSelector Contract Inheritance Validations",
+        "esg-association-contract-present": "EPgSelector Contract Validations",
+        "esg-association-contract-taboo-present": "EPgSelector Taboo Contract Validations",
+        "esg-tag-selector-match-obj-not-associated": "ESG TagSelector Duplicate Detected",
+        "id-not-allocated": "",
+        "incorrect-active-standby-uplink-order": "Active/Standby Uplink Config Validations",
+        "instrimedcy-unsupported": "Deployment Immediacy Validation",
+        "invalid-rel-to-rtctrlProfile": "",
+        "l3port-and-sub-interface-on-path": "",
+        "no-conslbl-association": "MPLS InstP Validations",
+        "none": "",
+        "not-associated-with-mgmt-zone": "",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

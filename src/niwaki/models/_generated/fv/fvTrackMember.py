@@ -12,11 +12,20 @@ class fvTrackMember(ManagedObject):
     """ACI Managed Object: ``fvTrackMember`` — Track Member.
 
     RN format: ``trackmember-{name}``
+
+    The APIC can flag these accepted-but-inconsistent states on this class
+    (read-only ``configIssues``):
+
+    - ``scope-dn-cannot-be-resolved``
     """
 
     _aci_class: ClassVar[str] = "fvTrackMember"
     _rn_format: ClassVar[str] = "trackmember-{name}"
     _naming_props: ClassVar[list[str]] = ["name"]
+    _config_issues: ClassVar[dict[str, str]] = {
+        "ok": "",
+        "scope-dn-cannot-be-resolved": "",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

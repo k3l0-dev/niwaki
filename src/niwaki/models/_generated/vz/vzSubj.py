@@ -17,11 +17,26 @@ class vzSubj(ManagedObject):
     A subject is a sub-application running behind an endpoint group (for example, an Exchange server). A subject is parented by the contract, which can encapsulate multiple subjects.
 
     RN format: ``subj-{name}``
+
+    The APIC can flag these accepted-but-inconsistent states on this class
+    (read-only ``configIssues``):
+
+    - ``any-to-prov-shared-service``
+    - ``filter-not-present``
+    - ``subject-not-in-use-due-to-label``
+    - ``taboo-has-no-filter``
     """
 
     _aci_class: ClassVar[str] = "vzSubj"
     _rn_format: ClassVar[str] = "subj-{name}"
     _naming_props: ClassVar[list[str]] = ["name"]
+    _config_issues: ClassVar[dict[str, str]] = {
+        "any-to-prov-shared-service": "",
+        "filter-not-present": "",
+        "none": "",
+        "subject-not-in-use-due-to-label": "",
+        "taboo-has-no-filter": "",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

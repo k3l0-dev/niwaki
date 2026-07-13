@@ -14,11 +14,21 @@ class trigSchedP(ManagedObject):
     The scheduler policy enables you to schedule a recurring or one-time window for the execution of a task. Multiple scheduler policies can be created for the same time period.
 
     RN format: ``schedp-{name}``
+
+    The APIC can flag these accepted-but-inconsistent states on this class
+    (read-only ``configIssues``):
+
+    - ``no``
+    - ``yes``
     """
 
     _aci_class: ClassVar[str] = "trigSchedP"
     _rn_format: ClassVar[str] = "schedp-{name}"
     _naming_props: ClassVar[list[str]] = ["name"]
+    _config_issues: ClassVar[dict[str, str]] = {
+        "no": "",
+        "yes": "",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

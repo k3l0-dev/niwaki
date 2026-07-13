@@ -14,11 +14,26 @@ class vzTaboo(ManagedObject):
     A Taboo contract provides a way for an endpoint group to specify the subjects on which communication is not allowed.
 
     RN format: ``taboo-{name}``
+
+    The APIC can flag these accepted-but-inconsistent states on this class
+    (read-only ``configIssues``):
+
+    - ``any-to-prov-shared-service``
+    - ``filter-not-present``
+    - ``subject-not-in-use-due-to-label``
+    - ``taboo-has-no-filter``
     """
 
     _aci_class: ClassVar[str] = "vzTaboo"
     _rn_format: ClassVar[str] = "taboo-{name}"
     _naming_props: ClassVar[list[str]] = ["name"]
+    _config_issues: ClassVar[dict[str, str]] = {
+        "any-to-prov-shared-service": "",
+        "filter-not-present": "",
+        "none": "",
+        "subject-not-in-use-due-to-label": "",
+        "taboo-has-no-filter": "",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

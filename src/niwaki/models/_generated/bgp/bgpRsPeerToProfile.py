@@ -17,11 +17,22 @@ class bgpRsPeerToProfile(ManagedObject):
     Bgp Peer Relation to Routing Policy
 
     RN format: ``rspeerToProfile-[{target_dn}]-{direction}``
+
+    The APIC can flag these accepted-but-inconsistent states on this class
+    (read-only ``configIssues``):
+
+    - ``conflicting-soo-value``
+    - ``no-loopback-configured``
     """
 
     _aci_class: ClassVar[str] = "bgpRsPeerToProfile"
     _rn_format: ClassVar[str] = "rspeerToProfile-[{target_dn}]-{direction}"
     _naming_props: ClassVar[list[str]] = ["target_dn", "direction"]
+    _config_issues: ClassVar[dict[str, str]] = {
+        "conflicting-soo-value": "",
+        "no-loopback-configured": "",
+        "none": "",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

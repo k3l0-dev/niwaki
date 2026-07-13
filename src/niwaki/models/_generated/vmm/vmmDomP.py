@@ -22,11 +22,60 @@ class vmmDomP(ManagedObject):
     The VMM domain profile is a policy for grouping VM controllers with similar networking policy requirements. For example, the VM controllers can share VLAN or VXLAN space and application endpoint groups.
 
     RN format: ``dom-{name}``
+
+    The APIC can flag these accepted-but-inconsistent states on this class
+    (read-only ``configIssues``):
+
+    - ``cdp-lldp-collision``
+    - ``enhanced-lacp-lag-creation-skipped``
+    - ``invalid-mcast-addr``
+    - ``invalid-port``
+    - ``invalid-vxlan-ns-range``
+    - ``missing-assoc-attEntP``
+    - ``missing-encap``
+    - ``missing-encapblk``
+    - ``missing-epg``
+    - ``missing-infra-pg-vlan``
+    - ``missing-internal-vlan-blk``
+    - ``missing-ns-assoc``
+    - ``multiple-cdp``
+    - ``multiple-cdp-policy``
+    - ``multiple-lacp-policy``
+    - ``multiple-lldp``
+    - ``multiple-lldp-policy``
+    - ``multiple-mtu-policy``
+    - ``multiple-nwsfw-policy``
+    - ``multiple-stp-policy``
+    - ``unsupported-dom-avs``
     """
 
     _aci_class: ClassVar[str] = "vmmDomP"
     _rn_format: ClassVar[str] = "dom-{name}"
     _naming_props: ClassVar[list[str]] = ["name"]
+    _config_issues: ClassVar[dict[str, str]] = {
+        "cdp-lldp-collision": "",
+        "enhanced-lacp-lag-creation-skipped": "",
+        "invalid-mcast-addr": "",
+        "invalid-port": "",
+        "invalid-vxlan-ns-range": "",
+        "missing-assoc-attEntP": "",
+        "missing-encap": "",
+        "missing-encapblk": "",
+        "missing-epg": "",
+        "missing-infra-pg-vlan": "",
+        "missing-internal-vlan-blk": "",
+        "missing-ns-assoc": "",
+        "multiple-cdp": "",
+        "multiple-cdp-policy": "",
+        "multiple-lacp-policy": "",
+        "multiple-lldp": "",
+        "multiple-lldp-policy": "",
+        "multiple-mtu-policy": "",
+        "multiple-nwsfw-policy": "",
+        "multiple-stp-policy": "",
+        "none": "",
+        "unsupported-dom-avs": "",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaDomainRef",

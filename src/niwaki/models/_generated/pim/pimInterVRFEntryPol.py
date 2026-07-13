@@ -14,11 +14,32 @@ class pimInterVRFEntryPol(ManagedObject):
     Inter VRF Entry policy
 
     RN format: ``intervrfent-[{dn_of_the_src_vrf}]``
+
+    The APIC can flag these accepted-but-inconsistent states on this class
+    (read-only ``configIssues``):
+
+    - ``csw-invalid-pod-id``
+    - ``intervrf-route-map-empty``
+    - ``missing-rp-group-range``
+    - ``pim-not-supported-in-vpc-mode``
+    - ``pim-not-supported-on-ext-svi``
+    - ``pim-not-supported-on-floating-svi``
+    - ``src-only-route-map-allowed``
     """
 
     _aci_class: ClassVar[str] = "pimInterVRFEntryPol"
     _rn_format: ClassVar[str] = "intervrfent-[{dn_of_the_src_vrf}]"
     _naming_props: ClassVar[list[str]] = ["dn_of_the_src_vrf"]
+    _config_issues: ClassVar[dict[str, str]] = {
+        "csw-invalid-pod-id": "",
+        "intervrf-route-map-empty": "",
+        "missing-rp-group-range": "",
+        "ok": "",
+        "pim-not-supported-in-vpc-mode": "",
+        "pim-not-supported-on-ext-svi": "",
+        "pim-not-supported-on-floating-svi": "",
+        "src-only-route-map-allowed": "",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

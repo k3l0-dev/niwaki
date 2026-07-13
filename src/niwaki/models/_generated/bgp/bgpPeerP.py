@@ -16,12 +16,23 @@ class bgpPeerP(ManagedObject):
     The BGP peer connectivity profile contains the peer IP address and defines the peer connectivity control settings. These values are for BGP routers, which can only exchange routing information when they establish a peer connection between them.
 
     RN format: ``peerP-[{peer_address}]``
+
+    The APIC can flag these accepted-but-inconsistent states on this class
+    (read-only ``configIssues``):
+
+    - ``conflicting-soo-value``
+    - ``no-loopback-configured``
     """
 
     _aci_class: ClassVar[str] = "bgpPeerP"
     _rn_format: ClassVar[str] = "peerP-[{peer_address}]"
     _naming_props: ClassVar[list[str]] = ["peer_address"]
     _secure_props: ClassVar[frozenset[str]] = frozenset(["password"])
+    _config_issues: ClassVar[dict[str, str]] = {
+        "conflicting-soo-value": "",
+        "no-loopback-configured": "",
+        "none": "",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

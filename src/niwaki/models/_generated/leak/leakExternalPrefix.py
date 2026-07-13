@@ -12,11 +12,32 @@ class leakExternalPrefix(ManagedObject):
     """ACI Managed Object: ``leakExternalPrefix`` — Inter-VRF Leaked External Prefix.
 
     RN format: ``leakextsubnet-[{subnet}]``
+
+    The APIC can flag these accepted-but-inconsistent states on this class
+    (read-only ``configIssues``):
+
+    - ``internal-subnet-anycast-epg-not-assigned-to-esg``
+    - ``internal-subnet-bd-hbr-mismatch``
+    - ``internal-subnet-ep-reachability-epg-not-assigned-to-esg``
+    - ``internal-subnet-is-superset-of-bd-fvsubnet``
+    - ``internal-subnet-nlb-epg-not-assigned-to-esg``
+    - ``internal-subnet-not-present`` — Internal Subnet Validation
+    - ``internal-subnet-not-present-in-cloud-network``
     """
 
     _aci_class: ClassVar[str] = "leakExternalPrefix"
     _rn_format: ClassVar[str] = "leakextsubnet-[{subnet}]"
     _naming_props: ClassVar[list[str]] = ["subnet"]
+    _config_issues: ClassVar[dict[str, str]] = {
+        "internal-subnet-anycast-epg-not-assigned-to-esg": "",
+        "internal-subnet-bd-hbr-mismatch": "",
+        "internal-subnet-ep-reachability-epg-not-assigned-to-esg": "",
+        "internal-subnet-is-superset-of-bd-fvsubnet": "",
+        "internal-subnet-nlb-epg-not-assigned-to-esg": "",
+        "internal-subnet-not-present": "Internal Subnet Validation",
+        "internal-subnet-not-present-in-cloud-network": "",
+        "none": "",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

@@ -14,11 +14,24 @@ class vnsCtrlrMgmtPol(ManagedObject):
     The management policy for the controller appliance IP address.
 
     RN format: ``mgmtPolicy-[{ctx_dn}]``
+
+    The APIC can flag these accepted-but-inconsistent states on this class
+    (read-only ``configIssues``):
+
+    - ``arp-flood-enabled``
+    - ``invalid-ctx``
+    - ``missing-ctx``
     """
 
     _aci_class: ClassVar[str] = "vnsCtrlrMgmtPol"
     _rn_format: ClassVar[str] = "mgmtPolicy-[{ctx_dn}]"
     _naming_props: ClassVar[list[str]] = ["ctx_dn"]
+    _config_issues: ClassVar[dict[str, str]] = {
+        "arp-flood-enabled": "",
+        "invalid-ctx": "",
+        "missing-ctx": "",
+        "ok": "",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

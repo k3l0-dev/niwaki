@@ -14,11 +14,26 @@ class fabricSetupP(ManagedObject):
     """ACI Managed Object: ``fabricSetupP`` — Fabric Setup Policy for a POD.
 
     RN format: ``setupp-{pod_identifier}``
+
+    The APIC can flag these accepted-but-inconsistent states on this class
+    (read-only ``configIssues``):
+
+    - ``primary-dhcp-server-not-configured``
+    - ``routable-subnet-not-configured``
+    - ``secondary-dhcp-server-not-configured``
+    - ``secondary-subnet-not-configured``
     """
 
     _aci_class: ClassVar[str] = "fabricSetupP"
     _rn_format: ClassVar[str] = "setupp-{pod_identifier}"
     _naming_props: ClassVar[list[str]] = ["pod_identifier"]
+    _config_issues: ClassVar[dict[str, str]] = {
+        "none": "",
+        "primary-dhcp-server-not-configured": "",
+        "routable-subnet-not-configured": "",
+        "secondary-dhcp-server-not-configured": "",
+        "secondary-subnet-not-configured": "",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

@@ -16,11 +16,24 @@ class fvStCEp(ManagedObject):
     The static endpoint represents a silent client attached to the fabric which will not produce traffic of its own. The configuration of a static endpoint will prevent the client from aging out of relevant addressing tables.
 
     RN format: ``stcep-{macaddress}-type-{type}``
+
+    The APIC can flag these accepted-but-inconsistent states on this class
+    (read-only ``configIssues``):
+
+    - ``multiple-tag-selector-match``
+    - ``multiple-tag-selector-match-after-single-match``
+    - ``path-not-present`` — Path Validations
     """
 
     _aci_class: ClassVar[str] = "fvStCEp"
     _rn_format: ClassVar[str] = "stcep-{macaddress}-type-{type}"
     _naming_props: ClassVar[list[str]] = ["macaddress", "type"]
+    _config_issues: ClassVar[dict[str, str]] = {
+        "multiple-tag-selector-match": "",
+        "multiple-tag-selector-match-after-single-match": "",
+        "none": "",
+        "path-not-present": "Path Validations",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

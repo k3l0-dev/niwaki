@@ -14,11 +14,46 @@ class l3extRsNodeL3OutAtt(ManagedObject):
     A static association with each leaf node that is part of the node profile. The corresponding set of policies will be resolved into the specified node. This object must contain a router ID that will be used as the OSPF/BGP router ID.
 
     RN format: ``rsnodeL3OutAtt-[{target_dn}]``
+
+    The APIC can flag these accepted-but-inconsistent states on this class
+    (read-only ``configIssues``):
+
+    - ``access-encap-bd-map-conflict``
+    - ``access-encap-node-overlap``
+    - ``anchor-encap-mismatch``
+    - ``anchor-node-mismatch``
+    - ``bd-profile-mismatch``
+    - ``loopback-ip-missing`` — CP-TEP configuration validations
+    - ``missing-mpls-infra-l3out`` — MPLS infra l3out validation for the consumer Lbl
+    - ``missing-rs-export-route-profile`` — MPLS ConsLbl configuration validations
+    - ``mtu-mac-mismatch`` — Fault added via CSCvv00759 for identical l3extRsPathL3OutAtt
+    - ``node-path-misconfig`` — LNodeP node/path configuration validations
+    - ``node-vlif-misconfig`` — LNodeP node/vlif configuration validations
+    - ``routerid-not-changable-with-mcast`` — LNodeP router id multicast configuration validations
+    - ``rtsumsubnet-l3extsubnet-conflict``
+    - ``subnet-mismatch``
     """
 
     _aci_class: ClassVar[str] = "l3extRsNodeL3OutAtt"
     _rn_format: ClassVar[str] = "rsnodeL3OutAtt-[{target_dn}]"
     _naming_props: ClassVar[list[str]] = ["target_dn"]
+    _config_issues: ClassVar[dict[str, str]] = {
+        "access-encap-bd-map-conflict": "",
+        "access-encap-node-overlap": "",
+        "anchor-encap-mismatch": "",
+        "anchor-node-mismatch": "",
+        "bd-profile-mismatch": "",
+        "loopback-ip-missing": "CP-TEP configuration validations",
+        "missing-mpls-infra-l3out": "MPLS infra l3out validation for the consumer Lbl",
+        "missing-rs-export-route-profile": "MPLS ConsLbl configuration validations",
+        "mtu-mac-mismatch": "Fault added via CSCvv00759 for identical l3extRsPathL3OutAtt",
+        "node-path-misconfig": "LNodeP node/path configuration validations",
+        "node-vlif-misconfig": "LNodeP node/vlif configuration validations",
+        "none": "",
+        "routerid-not-changable-with-mcast": "LNodeP router id multicast configuration validations",
+        "rtsumsubnet-l3extsubnet-conflict": "",
+        "subnet-mismatch": "",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

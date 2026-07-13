@@ -20,11 +20,26 @@ class fvBD(ManagedObject):
     A bridge domain is a unique layer 2 forwarding domain that contains one or more subnets. Each bridge domain must be linked to a context.
 
     RN format: ``BD-{name}``
+
+    The APIC can flag these accepted-but-inconsistent states on this class
+    (read-only ``configIssues``):
+
+    - ``FHS-enabled-on-l2-only-bd``
+    - ``bd-cannot-combine-hardware-proxy-and-flood-in-encapsulation``
+    - ``igmp-snoop-disabled-on-multicast-if``
+    - ``l3-mcast-is-enabled-on-vrf-where-bd-has-ip-learn-disable``
     """
 
     _aci_class: ClassVar[str] = "fvBD"
     _rn_format: ClassVar[str] = "BD-{name}"
     _naming_props: ClassVar[list[str]] = ["name"]
+    _config_issues: ClassVar[dict[str, str]] = {
+        "bd-cannot-combine-hardware-proxy-and-flood-in-encapsulation": "",
+        "FHS-enabled-on-l2-only-bd": "",
+        "igmp-snoop-disabled-on-multicast-if": "",
+        "l3-mcast-is-enabled-on-vrf-where-bd-has-ip-learn-disable": "",
+        "ok": "",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

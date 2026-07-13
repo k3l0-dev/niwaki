@@ -17,11 +17,20 @@ class authSvr(ManagedObject):
     """ACI Managed Object: ``authSvr`` — Auth Server.
 
     RN format: ``authsvr-{name}``
+
+    The APIC can flag these accepted-but-inconsistent states on this class
+    (read-only ``configIssues``):
+
+    - ``mode-not-set``
     """
 
     _aci_class: ClassVar[str] = "authSvr"
     _rn_format: ClassVar[str] = "authsvr-{name}"
     _naming_props: ClassVar[list[str]] = ["name"]
+    _config_issues: ClassVar[dict[str, str]] = {
+        "mode-not-set": "",
+        "not-applicable": "",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

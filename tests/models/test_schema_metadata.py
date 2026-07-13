@@ -315,3 +315,86 @@ class TestCiscoDescriptions:
     def test_field_without_comment_has_no_description(self) -> None:
         # fvBD.ipLearning carries no schema comment — stays undescribed.
         assert _load_fvBD().model_fields["ip_learning"].description is None
+
+
+# ── configIssues catalog — the APIC's declared inconsistency channel ──────────
+
+_SCHEMAS_DIR = _SUBSET.parent.parent / "schemas" / "mo-apic-v6.0_9c"
+
+
+class TestConfigIssuesCatalog:
+    """The models carry the APIC's declared accepted-but-inconsistent states."""
+
+    def test_fvbd_carries_its_declared_issues(self) -> None:
+        issues = _load_fvBD()._config_issues
+        assert "FHS-enabled-on-l2-only-bd" in issues
+        assert "bd-cannot-combine-hardware-proxy-and-flood-in-encapsulation" in issues
+
+    def test_healthy_markers_are_data_not_filtered(self) -> None:
+        # Display filters "ok"; the machine catalog keeps the full enum.
+        assert "ok" in _load_fvBD()._config_issues
+
+    def test_class_without_channel_is_empty(self) -> None:
+        from niwaki.models._generated.fv.fvTenant import fvTenant
+
+        assert fvTenant._config_issues == {}
+
+
+@pytest.mark.skipif(
+    not _SCHEMAS_DIR.exists(),
+    reason="requires the raw APIC schemas (data/schemas/, not in the repository)",
+)
+class TestConfigIssuesIntegrity:
+    """Anti-drift: the catalogs match the RAW schemas, class by class.
+
+    The predicate and the extraction are re-stated here independently from
+    ``data/scripts/01_extract_classes.py`` — if either side changes alone,
+    this suite fails.
+    """
+
+    @staticmethod
+    def _is_config_issues_prop(name: str) -> bool:
+        lowered = name.lower()
+        return "configissues" in lowered or lowered == "confissues"
+
+    @classmethod
+    def _schema_catalog(cls, aci_class: str) -> dict[str, list[str]]:
+        """Raw ``{code: comment-list}`` straight from the schema file."""
+        raw = json.loads((_SCHEMAS_DIR / f"{aci_class}.json").read_text())
+        entity = next(iter(raw.values()))
+        catalog: dict[str, list[str]] = {}
+        for prop_name, prop in entity.get("properties", {}).items():
+            if not isinstance(prop, dict) or not cls._is_config_issues_prop(prop_name):
+                continue
+            for entry in prop.get("validValues", []) or []:
+                code = entry.get("localName", "")
+                if code and code != "defaultValue":
+                    catalog.setdefault(code, entry.get("comment") or [])
+        return catalog
+
+    def test_every_class_matches_the_raw_schema(self) -> None:
+        from importlib import import_module
+
+        from niwaki.models._generated import _PKG_MAP
+
+        classes_with_catalog = 0
+        total_codes = 0
+        for aci_class, pkg in _PKG_MAP.items():
+            expected = self._schema_catalog(aci_class)
+            model = getattr(import_module(f"niwaki.models._generated.{pkg}.{aci_class}"), aci_class)
+            got: dict[str, str] = model._config_issues
+            assert set(got) == set(expected), f"{aci_class}: code sets differ"
+            for code, comment_list in expected.items():
+                raw_comment = " ".join(" ".join(comment_list).split())
+                if raw_comment:
+                    assert got[code], f"{aci_class}.{code}: schema comment dropped"
+                    assert got[code][:80] == raw_comment[:80], f"{aci_class}.{code}: drift"
+                else:
+                    assert got[code] == "", f"{aci_class}.{code}: invented description"
+            if expected:
+                classes_with_catalog += 1
+                total_codes += len(expected)
+
+        # Coverage floors — a silent capture regression trips these.
+        assert classes_with_catalog >= 90, classes_with_catalog
+        assert total_codes >= 2000, total_codes
