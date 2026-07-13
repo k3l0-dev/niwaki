@@ -1,6 +1,6 @@
 # Async patterns
 
-{class}`~niwaki.facade.AsyncNiwaki` is a strict mirror of the sync client:
+{class}`~niwaki.AsyncNiwaki` is a strict mirror of the sync client:
 same navigation, same query builder, same `push()` — accumulators stay
 synchronous, executors become awaitable.  If you know the sync API, you
 already know this page; what it adds is the concurrency model.
@@ -33,7 +33,7 @@ The same design pushes through either client: transport is injected at
 
 ## Fan-out with `gather()`
 
-{meth}`~niwaki.facade.AsyncNiwaki.gather` runs several awaitables under one
+{meth}`~niwaki.AsyncNiwaki.gather` runs several awaitables under one
 `asyncio.TaskGroup` and returns their results in order — the idiomatic shape
 for read fan-out:
 

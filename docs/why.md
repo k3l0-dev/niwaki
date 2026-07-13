@@ -116,7 +116,7 @@ field names with the wire name as alias (`arp_flooding` ↔ `arpFlood`),
 558 real enums, typed cursors **per position** so autocompletion knows that
 `.node_block()` under a leaf selector differs from the one under a spine
 selector, and eager Pydantic validation at the call site.  The
-{doc}`vocabulary book <reference/vocabulary/index>` is generated from the
+{doc}`DSL reference <reference/vocabulary/index>` is generated from the
 same tables the runtime uses — documentation that cannot drift from the
 code.
 

@@ -80,7 +80,7 @@ does not match a fresh regeneration.
 | --- | --- | --- |
 | `generate_domain` | `domain/_child_map.py` | `CHILD_MAP` (12,500+ navigation names from schema labels, sibling collisions resolved), `REFERENCE_MAP` (1,700 relation edges with their name/DN flavor), abstract-target expansion |
 | `generate_design` | `design/_generated_cursors/` | one typed cursor class per **position** (a maker path, not a class — `infraNodeBlk` gets distinct cursors under leaf and spine selectors), one module per domain, loaded lazily |
-| `generate_docs` | `docs/reference/vocabulary/` | the vocabulary book and the coverage matrix — documentation that cannot drift from the code |
+| `generate_docs` | `docs/reference/vocabulary/` | the DSL reference — one page per position with every keyword argument, the enums, and the coverage matrix; documentation that cannot drift from the code |
 
 The cursor package is built to scale: each position's makers live in one
 mixin, and a cursor *inherits* its ancestor chain — the method resolution
@@ -152,5 +152,5 @@ every network team has corners of ACI it knows intimately:
 
 - {doc}`guide/design-dsl` — using the DSL
 - {doc}`design-first` — why one write path, why curation
-- {doc}`reference/vocabulary/index` — every position, maker and alias
+- {doc}`reference/vocabulary/index` — every position, maker, keyword and alias
 - {doc}`comparison` — the same tasks in cobra and niwaki

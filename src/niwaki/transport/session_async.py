@@ -173,7 +173,7 @@ class AsyncApicSession:
         """Active retry policy for this session.
 
         Returns:
-            The :class:`~niwaki.RetryConfig` in use.
+            The :class:`~niwaki.transport.RetryConfig` in use.
         """
         return self._retry
 
@@ -471,7 +471,7 @@ class AsyncApicSession:
         Args:
             dn: Full Distinguished Name of the target object.
             payload: APIC envelope dict as produced by
-                :meth:`~niwaki.models.base.ManagedObject.to_apic`.
+                :meth:`~niwaki.models.ManagedObject.to_apic`.
 
         Raises:
             AuthError: Not authenticated.

@@ -442,7 +442,7 @@ class AsyncNiwakiNode[T: ManagedObject](_JargonNavMixin[T]):
     def query[U: ManagedObject](self, cls: type[U] | str) -> AsyncQuery[U]:
         """Build a query scoped to this node's DN (async variant).
 
-        Mirrors :meth:`~niwaki.facade.NiwakiNode.query` for async contexts.
+        Mirrors :meth:`~niwaki.NiwakiNode.query` for async contexts.
         All accumulator methods are synchronous; only the execution methods
         (``fetch``, ``first``, ``count``, ``stream``) are coroutines.
 
@@ -486,7 +486,7 @@ class AsyncNiwaki:
         max_concurrent: Maximum simultaneous HTTP requests in flight.
             Default: 10.
         retry: Custom retry policy.  Defaults to 3 attempts with exponential
-            back-off.  Construct with :class:`~niwaki.RetryConfig`.
+            back-off.  Construct with :class:`~niwaki.transport.RetryConfig`.
 
     Example::
 
@@ -574,7 +574,7 @@ class AsyncNiwaki:
         """Custom retry policy passed at construction time, or ``None`` for the default.
 
         Returns:
-            The :class:`~niwaki.RetryConfig` override, or ``None``
+            The :class:`~niwaki.transport.RetryConfig` override, or ``None``
             when the session default (3 attempts) is in use.
         """
         return self._retry
@@ -650,7 +650,7 @@ class AsyncNiwaki:
     def query[T: ManagedObject](self, cls: type[T] | str) -> AsyncQuery[T]:
         """Build a global class query for the entire ACI fabric (async variant).
 
-        Mirrors :meth:`~niwaki.facade.Niwaki.query` for async contexts.  The
+        Mirrors :meth:`~niwaki.Niwaki.query` for async contexts.  The
         accumulator methods are synchronous; only the execution methods
         (``fetch``, ``first``, ``count``, ``stream``) are coroutines, which
         means they compose naturally with :meth:`gather`.
@@ -749,7 +749,7 @@ class Niwaki:
         refresh_threshold: Seconds before token expiry at which a proactive
             refresh is triggered.  Default: 60.
         retry: Custom retry policy.  Defaults to 3 attempts with exponential
-            back-off.  Construct with :class:`~niwaki.RetryConfig`.
+            back-off.  Construct with :class:`~niwaki.transport.RetryConfig`.
     """
 
     def __init__(
@@ -887,7 +887,7 @@ class Niwaki:
         """Custom retry policy passed at construction time, or ``None`` for the default.
 
         Returns:
-            The :class:`~niwaki.RetryConfig` override, or ``None``
+            The :class:`~niwaki.transport.RetryConfig` override, or ``None``
             when the session default (3 attempts) is in use.
         """
         return self._retry

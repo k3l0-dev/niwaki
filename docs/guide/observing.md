@@ -38,7 +38,7 @@ one level for classes outside the curated vocabulary.
 
 ## The query builder
 
-{meth}`~niwaki.facade.Niwaki.query` targets a class fabric-wide; `node.query(...)`
+{meth}`~niwaki.Niwaki.query` targets a class fabric-wide; `node.query(...)`
 scopes it to a subtree.  Accumulate, then execute:
 
 ```python
@@ -106,7 +106,7 @@ in sync by no longer declaring it.
 
 ## Async
 
-{class}`~niwaki.facade.AsyncNiwaki` mirrors everything on this page —
+{class}`~niwaki.AsyncNiwaki` mirrors everything on this page —
 accumulators stay synchronous, executors become awaitable, and `gather()`
 runs reads concurrently.  See {doc}`async` for the concurrency model.
 

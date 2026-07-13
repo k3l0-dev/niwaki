@@ -30,5 +30,8 @@ fabric
 infra
 tenant
 controller
+uni
+enums
+navigation
 coverage
 ```

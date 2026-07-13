@@ -7,7 +7,7 @@ network?  Every release ships an offline wheelhouse: {doc}`installation`.
 
 ## Connect
 
-{class}`~niwaki.facade.Niwaki` (sync) and {class}`~niwaki.facade.AsyncNiwaki` (async) are
+{class}`~niwaki.Niwaki` (sync) and {class}`~niwaki.AsyncNiwaki` (async) are
 context managers — authentication happens on entry, the session closes on
 exit.  Credentials fall back to the `APIC_HOST` / `APIC_USERNAME` /
 `APIC_PASSWORD` environment variables when omitted.
@@ -71,5 +71,5 @@ with Niwaki("https://apic.example.com", "admin", "secret") as aci:
 - {doc}`design-dsl` — the full describe surface: makers, binds, escapes.
 - {doc}`push-modes` — `strict`, `staged`, `plan` in detail.
 - {doc}`observing` — navigation, typed reads, and the query builder.
-- {doc}`../reference/vocabulary/index` — every curated position, maker and
-  bind alias, generated from the vocabulary itself.
+- {doc}`../reference/vocabulary/index` — every position, maker, keyword
+  argument and bind alias, generated from the vocabulary itself.

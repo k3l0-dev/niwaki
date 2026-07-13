@@ -1,13 +1,19 @@
 """Niwaki — a modern, typed Python SDK for Cisco ACI (APIC).
 
-Public entry points:
+One mental model: the **design DSL describes** the desired configuration,
+``push()`` **applies** it, and the **facade observes** (vocabulary
+navigation, typed reads, queries, deletion).
 
-- :class:`Niwaki` / :class:`AsyncNiwaki` — connected clients (facade:
-  jargon navigation, reads, queries, delete).
-- :func:`design` / :func:`tenant` / :func:`infra` / :func:`fabric` /
-  :func:`controller` — roots of the declarative design DSL (imported lazily;
-  canonical home is :mod:`niwaki.design`).
-- :class:`RetryConfig` — transport retry policy.
+Public entry points, importable straight from the package root:
+
+- :class:`~niwaki.Niwaki` / :class:`~niwaki.AsyncNiwaki` — connected clients
+  (and the :class:`~niwaki.NiwakiNode` / :class:`~niwaki.AsyncNiwakiNode`
+  handles they hand out).
+- :func:`~niwaki.design.design` / :func:`~niwaki.design.tenant` /
+  :func:`~niwaki.design.infra` / :func:`~niwaki.design.fabric` /
+  :func:`~niwaki.design.controller` — roots of the design DSL (imported
+  lazily; canonical home is :mod:`niwaki.design`).
+- :class:`~niwaki.transport.RetryConfig` — transport retry policy.
 """
 
 from __future__ import annotations
@@ -24,7 +30,7 @@ if TYPE_CHECKING:
     from niwaki.design import infra as infra
     from niwaki.design import tenant as tenant
 
-__version__ = "0.6.0"
+__version__ = "0.7.0"
 __all__ = [
     "AsyncNiwaki",
     "AsyncNiwakiNode",

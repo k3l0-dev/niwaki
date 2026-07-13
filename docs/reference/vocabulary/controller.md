@@ -7,22 +7,17 @@ Re-generate: uv run python -m niwaki._codegen.generate_docs
 
 Fabric membership (node registration) under `uni/controller`.  Root factory: `controller()`.
 
-## `controller`
+## Positions
 
-ACI class `ctrlrInst` — RN `controller` — cursor `ControllerCursor`.
+- {ref}`controller <vocab-controller>` — `ctrlrInst`, 3 attributes
+  - {ref}`controller.fabric_membership <vocab-controller-fabric_membership>` — `fabricNodeIdentPol`, 4 attributes
+    - {ref}`controller.fabric_membership.fabric_node_member <vocab-controller-fabric_membership-fabric_node_member>` — `fabricNodeIdentP`, 9 attributes
 
-**Makers**
+```{toctree}
+:maxdepth: 1
+:hidden:
 
-- `.fabric_membership(**attrs)` → `fabricNodeIdentPol`
-
-## `controller.fabric_membership`
-
-ACI class `fabricNodeIdentPol` — RN `nodeidentpol` — cursor `FabricMembershipCursor`.
-
-**Makers**
-
-- `.fabric_node_member(serial, **attrs)` → `fabricNodeIdentP`
-
-## `controller.fabric_membership.fabric_node_member`
-
-ACI class `fabricNodeIdentP` — RN `nodep-{serial}` — cursor `FabricNodeMemberCursor`.
+controller/controller
+controller/controller-fabric_membership
+controller/controller-fabric_membership-fabric_node_member
+```

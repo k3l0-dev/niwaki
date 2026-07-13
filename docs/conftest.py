@@ -210,7 +210,9 @@ def snippet_apic(request: pytest.FixtureRequest, httpx_mock: HTTPXMock) -> FakeA
 SYBIL = Sybil(
     parsers=[PythonCodeBlockParser(), SkipParser()],
     patterns=["*.md", "**/*.md"],
-    excludes=["_build/**", "wiki/**"],
+    # reference/vocabulary is generated (tables, not tutorials): its fences are
+    # for colouring, not execution — the generator is drift-guarded instead.
+    excludes=["_build/**", "wiki/**", "reference/vocabulary/**"],
     fixtures=["snippet_apic"],
 )
 

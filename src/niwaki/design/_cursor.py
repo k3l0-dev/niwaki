@@ -570,8 +570,8 @@ class Cursor:
               what would be created or changed, pushing nothing.
 
         Args:
-            client: A connected :class:`~niwaki.facade.Niwaki` (returns the
-                result directly) or :class:`~niwaki.facade.AsyncNiwaki`
+            client: A connected :class:`~niwaki.Niwaki` (returns the
+                result directly) or :class:`~niwaki.AsyncNiwaki`
                 (returns an awaitable).
             mode: ``"strict"`` | ``"staged"`` | ``"plan"``.
 

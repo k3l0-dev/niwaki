@@ -1,6 +1,6 @@
 # Connection & transport
 
-{class}`~niwaki.facade.Niwaki` (sync) and {class}`~niwaki.facade.AsyncNiwaki`
+{class}`~niwaki.Niwaki` (sync) and {class}`~niwaki.AsyncNiwaki`
 (async) own the whole session lifecycle: authentication, token refresh,
 retries, pagination.  This page covers everything between your code and the
 APIC socket.
@@ -100,7 +100,7 @@ slow_fabric = Niwaki("https://apic.example.com", "admin", "secret", timeout=120.
 
 Transient transport failures are retried with exponential backoff and
 jitter.  The policy is a frozen value object,
-{class}`~niwaki.RetryConfig`, passed at construction:
+{class}`~niwaki.transport.RetryConfig`, passed at construction:
 
 ```python
 from niwaki import RetryConfig

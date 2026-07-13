@@ -3,7 +3,7 @@
 :class:`RetryConfig` controls the stamina retry behaviour for all APIC HTTP
 requests.  Pass an instance to :class:`~niwaki.transport.session.ApicSession`
 or :class:`~niwaki.transport.session_async.AsyncApicSession` (or to
-:class:`~niwaki.facade.Niwaki` / :class:`~niwaki.facade.AsyncNiwaki`) to
+:class:`~niwaki.Niwaki` / :class:`~niwaki.AsyncNiwaki`) to
 override the defaults.
 
 Example::

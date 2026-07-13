@@ -7,114 +7,45 @@ Re-generate: uv run python -m niwaki._codegen.generate_docs
 
 NTP, DNS, syslog, BGP route reflectors, vPC protection — everything under `uni/fabric`.  Root factory: `fabric()`.
 
-## `fabric`
+## Positions
 
-ACI class `fabricInst` — RN `fabric` — cursor `FabricCursor`.
+- {ref}`fabric <vocab-fabric>` — `fabricInst`, 3 attributes
+  - {ref}`fabric.igmp_snoop_policy <vocab-fabric-igmp_snoop_policy>` — `igmpSnoopPol`, 12 attributes
+  - {ref}`fabric.mld_snoop_policy <vocab-fabric-mld_snoop_policy>` — `mldSnoopPol`, 12 attributes
+  - {ref}`fabric.datetime_policy <vocab-fabric-datetime_policy>` — `datetimePol`, 9 attributes
+    - {ref}`fabric.datetime_policy.ntp_provider <vocab-fabric-datetime_policy-ntp_provider>` — `datetimeNtpProv`, 7 attributes
+  - {ref}`fabric.dns_profile <vocab-fabric-dns_profile>` — `dnsProfile`, 5 attributes
+    - {ref}`fabric.dns_profile.provider <vocab-fabric-dns_profile-provider>` — `dnsProv`, 3 attributes
+    - {ref}`fabric.dns_profile.domain <vocab-fabric-dns_profile-domain>` — `dnsDomain`, 3 attributes
+  - {ref}`fabric.bgp_instance <vocab-fabric-bgp_instance>` — `bgpInstPol`, 4 attributes
+    - {ref}`fabric.bgp_instance.autonomous_system <vocab-fabric-bgp_instance-autonomous_system>` — `bgpAsP`, 3 attributes
+    - {ref}`fabric.bgp_instance.route_reflector <vocab-fabric-bgp_instance-route_reflector>` — `bgpRRP`, 2 attributes
+      - {ref}`fabric.bgp_instance.route_reflector.node <vocab-fabric-bgp_instance-route_reflector-node>` — `bgpRRNodePEp`, 3 attributes
+  - {ref}`fabric.syslog_group <vocab-fabric-syslog_group>` — `syslogGroup`, 5 attributes
+    - {ref}`fabric.syslog_group.remote_destination <vocab-fabric-syslog_group-remote_destination>` — `syslogRemoteDest`, 9 attributes
+  - {ref}`fabric.vpc_protection <vocab-fabric-vpc_protection>` — `fabricProtPol`, 5 attributes
+    - {ref}`fabric.vpc_protection.vpc_pair <vocab-fabric-vpc_protection-vpc_pair>` — `fabricExplicitGEp`, 2 attributes
+      - {ref}`fabric.vpc_protection.vpc_pair.node <vocab-fabric-vpc_protection-vpc_pair-node>` — `fabricNodePEp`, 4 attributes
 
-**Makers**
+```{toctree}
+:maxdepth: 1
+:hidden:
 
-- `.igmp_snoop_policy(name, **attrs)` → `igmpSnoopPol`
-- `.mld_snoop_policy(name, **attrs)` → `mldSnoopPol`
-- `.datetime_policy(name, **attrs)` → `datetimePol`
-- `.dns_profile(name, **attrs)` → `dnsProfile`
-- `.bgp_instance(name, **attrs)` → `bgpInstPol`
-- `.syslog_group(name, **attrs)` → `syslogGroup`
-- `.vpc_protection(**attrs)` → `fabricProtPol`
-
-## `fabric.igmp_snoop_policy`
-
-ACI class `igmpSnoopPol` — RN `snPol-{name}` — cursor `FabricIgmpSnoopPolicyCursor`.
-
-## `fabric.mld_snoop_policy`
-
-ACI class `mldSnoopPol` — RN `mldsnoopPol-{name}` — cursor `FabricMldSnoopPolicyCursor`.
-
-## `fabric.datetime_policy`
-
-ACI class `datetimePol` — RN `time-{name}` — cursor `DatetimePolicyCursor`.
-
-**Makers**
-
-- `.ntp_provider(name, **attrs)` → `datetimeNtpProv`
-
-## `fabric.datetime_policy.ntp_provider`
-
-ACI class `datetimeNtpProv` — RN `ntpprov-{name}` — cursor `NtpProviderCursor`.
-
-## `fabric.dns_profile`
-
-ACI class `dnsProfile` — RN `dnsp-{name}` — cursor `DnsProfileCursor`.
-
-**Makers**
-
-- `.provider(ip_address, **attrs)` → `dnsProv`
-- `.domain(name, **attrs)` → `dnsDomain`
-
-## `fabric.dns_profile.provider`
-
-ACI class `dnsProv` — RN `prov-[{ip_address}]` — cursor `DnsProfileProviderCursor`.
-
-## `fabric.dns_profile.domain`
-
-ACI class `dnsDomain` — RN `dom-{name}` — cursor `DomainCursor`.
-
-## `fabric.bgp_instance`
-
-ACI class `bgpInstPol` — RN `bgpInstP-{name}` — cursor `BgpInstanceCursor`.
-
-**Makers**
-
-- `.autonomous_system(**attrs)` → `bgpAsP`
-- `.route_reflector(**attrs)` → `bgpRRP`
-
-## `fabric.bgp_instance.autonomous_system`
-
-ACI class `bgpAsP` — RN `as` — cursor `AutonomousSystemCursor`.
-
-## `fabric.bgp_instance.route_reflector`
-
-ACI class `bgpRRP` — RN `rr` — cursor `RouteReflectorCursor`.
-
-**Makers**
-
-- `.node(node_id, **attrs)` → `bgpRRNodePEp`
-
-## `fabric.bgp_instance.route_reflector.node`
-
-ACI class `bgpRRNodePEp` — RN `node-{node_id}` — cursor `RouteReflectorNodeCursor`.
-
-## `fabric.syslog_group`
-
-ACI class `syslogGroup` — RN `slgroup-{name}` — cursor `SyslogGroupCursor`.
-
-**Makers**
-
-- `.remote_destination(host, **attrs)` → `syslogRemoteDest`
-
-## `fabric.syslog_group.remote_destination`
-
-ACI class `syslogRemoteDest` — RN `rdst-{host}` — cursor `RemoteDestinationCursor`.
-
-## `fabric.vpc_protection`
-
-ACI class `fabricProtPol` — RN `protpol` — cursor `VpcProtectionCursor`.
-
-**Makers**
-
-- `.vpc_pair(name, **attrs)` → `fabricExplicitGEp`
-
-## `fabric.vpc_protection.vpc_pair`
-
-ACI class `fabricExplicitGEp` — RN `expgep-{name}` — cursor `VpcPairCursor`.
-
-```{note}
-Atomic class: in `staged` mode the whole subtree ships in a single request (the APIC validates it as a unit).
+fabric/fabric
+fabric/fabric-igmp_snoop_policy
+fabric/fabric-mld_snoop_policy
+fabric/fabric-datetime_policy
+fabric/fabric-datetime_policy-ntp_provider
+fabric/fabric-dns_profile
+fabric/fabric-dns_profile-provider
+fabric/fabric-dns_profile-domain
+fabric/fabric-bgp_instance
+fabric/fabric-bgp_instance-autonomous_system
+fabric/fabric-bgp_instance-route_reflector
+fabric/fabric-bgp_instance-route_reflector-node
+fabric/fabric-syslog_group
+fabric/fabric-syslog_group-remote_destination
+fabric/fabric-vpc_protection
+fabric/fabric-vpc_protection-vpc_pair
+fabric/fabric-vpc_protection-vpc_pair-node
 ```
-
-**Makers**
-
-- `.node(node_id, **attrs)` → `fabricNodePEp`
-
-## `fabric.vpc_protection.vpc_pair.node`
-
-ACI class `fabricNodePEp` — RN `nodepep-{node_id}` — cursor `VpcPairNodeCursor`.

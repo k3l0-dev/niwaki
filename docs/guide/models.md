@@ -80,7 +80,8 @@ the generated schema version), so a round-trip never loses data.
 The APIC schemas carry a human-written definition for most configurable
 properties — and the generated models keep them.  Every described field
 carries it as its Pydantic `description`, so your IDE shows Cisco's own
-words when you hover an attribute, and the API reference renders them:
+words when you hover an attribute, and the DSL reference renders them for
+every curated position ({doc}`../reference/vocabulary/index`):
 
 ```python
 from niwaki.models.fv.fvBD import fvBD
@@ -118,5 +119,5 @@ that ({doc}`coverage matrix <../reference/vocabulary/coverage>`).
 
 ## Next steps
 
-- {doc}`../reference/vocabulary/index` — where each class is curated
+- {doc}`../reference/vocabulary/index` — every field of every curated class
 - {doc}`design-dsl` — the write path built on these models

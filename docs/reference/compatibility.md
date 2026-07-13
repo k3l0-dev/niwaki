@@ -17,8 +17,9 @@ model or curated position yet.
 
 ## Vocabulary coverage
 
-The design DSL curates {{ positions }} positions (the generated
-{doc}`coverage matrix <vocabulary/coverage>` lists every one).  Everything
+The design DSL curates {{ positions }} positions — the {doc}`DSL reference
+<vocabulary/index>` documents each one field by field, and the generated
+{doc}`coverage matrix <vocabulary/coverage>` lists them all.  Everything
 outside the curated vocabulary stays writable through `.mo(AnyClass, ...)`
 and referenceable through `bind_dn(alias=dn)` — coverage limits ergonomics,
 never reach.
@@ -41,7 +42,7 @@ never reach.
 ## Transport
 
 - The sync session is **not thread-safe** — one session per thread, or use
-  {class}`~niwaki.facade.AsyncNiwaki` (bounded concurrency, default
+  {class}`~niwaki.AsyncNiwaki` (bounded concurrency, default
   `max_concurrent=10`).
 - Very large designs may exceed what a fabric accepts as one atomic
   envelope — `mode="staged"` ships the same design as per-object waves

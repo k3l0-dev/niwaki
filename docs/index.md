@@ -77,9 +77,7 @@ cookbook/index
 :caption: Reference
 :maxdepth: 2
 
-reference/vocabulary/index
-reference/api/index
-reference/compatibility
+reference/index
 ```
 
 ```{toctree}

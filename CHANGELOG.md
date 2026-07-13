@@ -4,7 +4,7 @@ All notable changes to this project are documented here.  The format follows
 [Keep a Changelog](https://keepachangelog.com/); versions follow semver
 (0.x — the API may still change between minor versions).
 
-## [Unreleased]
+## [0.7.0] — 2026-07-13
 
 ### Added
 
@@ -23,6 +23,31 @@ All notable changes to this project are documented here.  The format follows
   classes (cardinality, enforceable, resolvable).  Both are guarded by
   an anti-drift integrity suite that re-derives them from the raw
   schemas for all 2,222 generated classes.
+
+- **The DSL reference**: the generated vocabulary book becomes a full
+  reference — one page per curated position with an attribute table
+  (parameter, wire alias, type, allowed values, default, Cisco's
+  description), the children/binds/verbs it reaches, and the APIC
+  diagnostics (config issues, fault codes) it can raise.  Plus a page of
+  the 106 enums the vocabulary uses (each value with Cisco's meaning) and
+  the read-side navigation vocabulary.  The typed keyword arguments of
+  every maker — the SDK's core surface — were previously visible only by
+  hovering in an IDE.
+
+### Changed
+
+- The transport boundary is public: `niwaki.transport` exports the four
+  structural protocols (`MoWriter`, `MoReader`, and their async mirrors)
+  and both sessions (`ApicSession`, `AsyncApicSession`) — the extension
+  point the testing guide relies on no longer lives in a private module.
+- The API reference renders objects under their real import path
+  (`niwaki.Niwaki`, not `niwaki.facade.Niwaki`), no longer exposes the
+  models' private ClassVars as public attributes, and gained the entries
+  it was missing: the root package, `mo_diff` / `parse_imdata`,
+  `REGISTRY`, the filter operators, and vocabulary navigation.
+- Deep anchors of the vocabulary pages moved: each position now has its
+  own page (`reference/vocabulary/tenant/tenant-bd.html`) instead of an
+  anchor on the domain page.
 
 ## [0.6.0] — 2026-07-13
 

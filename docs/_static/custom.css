@@ -1,0 +1,36 @@
+/* Wider content column on wide screens, for the generated DSL reference.
+ *
+ * Its attribute tables carry six columns (parameter, wire alias, type, allowed
+ * values, default, Cisco's description); furo's 46em content column squeezes
+ * the description to a few characters per line.
+ *
+ * furo centres the content by giving each drawer `calc(50% - 26em)` — half of
+ * (46em content + 6em padding) — with a 15em minimum.  A wider column moves
+ * that identity: half of (62em + 6em) = 34em, which needs a 98em viewport for
+ * the sidebar to still reach its 15em minimum.  Widening any earlier squeezes
+ * the sidebar below its minimum and breaks the layout, so the breakpoint sits
+ * at 100em; below it, furo's own responsive rules apply untouched.
+ */
+
+@media (min-width: 100em) {
+  .content {
+    width: 62em;
+  }
+
+  .sidebar-drawer {
+    width: calc(50% - 34em);
+  }
+}
+
+/* Tables: code tokens (values, defaults, wire names) must never be split
+   mid-token — only prose wraps.  Without this, a default like `bd-flood`
+   breaks across two lines and the column becomes unreadable. */
+.content table.docutils {
+  display: table;
+  width: 100%;
+  table-layout: auto;
+}
+
+.content table.docutils code {
+  white-space: nowrap;
+}

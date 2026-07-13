@@ -70,3 +70,31 @@ class TestVerifySslCaBundle:
     def test_missing_bundle_fails_at_construction(self) -> None:
         with pytest.raises(FileNotFoundError):
             ApicSession("https://apic", "admin", "pw", verify_ssl="/nonexistent/ca.pem")
+
+
+class TestPublicSurface:
+    """The transport boundary is importable from the package, not a private module."""
+
+    def test_exports(self) -> None:
+        import niwaki.transport as transport
+
+        assert set(transport.__all__) == {
+            "ApicSession",
+            "AsyncApicSession",
+            "AsyncMoReader",
+            "AsyncMoWriter",
+            "MoReader",
+            "MoWriter",
+            "RetryConfig",
+        }
+        for name in transport.__all__:
+            assert getattr(transport, name) is not None
+
+    def test_protocols_are_structural(self) -> None:
+        from niwaki.transport import MoWriter
+
+        class Recorder:
+            def post_mo(self, dn: str, payload: dict) -> None: ...
+            def delete_mo(self, dn: str) -> None: ...
+
+        assert isinstance(Recorder(), MoWriter)

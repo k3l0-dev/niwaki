@@ -3,8 +3,8 @@
 `push()` always operates on the **whole design tree**, whichever cursor you
 call it on.  Construction never touches the network — transport is injected
 here, and only here.  The same call works with a sync
-{class}`~niwaki.facade.Niwaki` (returns the result) or an async
-{class}`~niwaki.facade.AsyncNiwaki` (returns an awaitable).
+{class}`~niwaki.Niwaki` (returns the result) or an async
+{class}`~niwaki.AsyncNiwaki` (returns an awaitable).
 
 The examples on this page share one design and one connected client:
 

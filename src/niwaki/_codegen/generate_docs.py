@@ -25,6 +25,15 @@ from __future__ import annotations
 
 from pathlib import Path
 
+from niwaki._codegen._field_docs import (
+    FieldDoc,
+    class_definition,
+    enum_anchor,
+    enum_members,
+    field_docs,
+    position_anchor,
+    position_slug,
+)
 from niwaki._codegen.generate_design import _cursor_names, _Position, _positions
 from niwaki.design._cursor import _load_class, _tables
 
@@ -118,38 +127,103 @@ def _subtree(root_key: str, positions: dict[str, _Position]) -> list[_Position]:
     return _walk(root_key)
 
 
-def _render_position(pos: _Position, names: dict[str, str]) -> list[str]:
-    """Render one position: heading, identity, makers, binds, verbs, notes."""
+def _attribute_table(docs: list[FieldDoc], used_enums: set[str]) -> list[str]:
+    """Render the attribute table of a position (and collect the enums used)."""
+    lines = [
+        "| parameter | wire | type | values | default | description |",
+        "| --- | --- | --- | --- | --- | --- |",
+    ]
+    for doc in docs:
+        name = f"`{doc.name}`" + (" *(positional)*" if doc.kind == "naming" else "")
+        if doc.enum:
+            used_enums.add(doc.enum)
+            type_txt = f"{{ref}}`{doc.enum} <{enum_anchor(doc.enum)}>`"
+            values = ", ".join(f"`{v}`" for v in doc.values)
+        else:
+            type_txt = f"`{doc.type_str}`"
+            values = "—"
+        wire = f"`{doc.wire}`" if doc.wire != "—" else "—"
+        default = f"`{doc.default}`" if doc.default else "—"
+        description = doc.description.replace("|", "\\|") or "—"
+        lines.append(f"| {name} | {wire} | {type_txt} | {values} | {default} | {description} |")
+    lines.append("")
+    return lines
+
+
+def _render_position_page(
+    pos: _Position,
+    positions: dict[str, _Position],
+    names: dict[str, str],
+    used_enums: set[str],
+) -> str:
+    """Render the full reference page of one curated position."""
     tables = _tables()
     cls = _load_class(pos.aci_class)
     rn_format = cls._rn_format  # pyright: ignore[reportPrivateUsage]
+    label = pos.key.rsplit(".", 1)[-1]
 
     lines = [
-        f"## `{pos.key}`",
+        _HEADER,
+        f"({position_anchor(pos.key)})=",
         "",
-        f"ACI class `{pos.aci_class}` — RN `{rn_format}` — cursor `{names[pos.key]}`.",
+        f"# `{pos.key}`",
         "",
     ]
 
-    if pos.aci_class in tables.atomic:
-        lines += [
-            "```{note}",
-            "Atomic class: in `staged` mode the whole subtree ships in a single "
-            "request (the APIC validates it as a unit).",
-            "```",
-            "",
-        ]
+    if blurb := class_definition(cls):
+        lines += [blurb, ""]
+
+    atomic_txt = "yes — the subtree ships in one request" if pos.aci_class in tables.atomic else "—"
+    parent_txt = "—"
+    if pos.parent_key is not None:
+        parent = positions[pos.parent_key]
+        parent_txt = (
+            f"{{ref}}`{parent.key} <{position_anchor(parent.key)}>`"
+            if parent.key
+            else "`design()` root"
+        )
+    lines += [
+        "| | |",
+        "| --- | --- |",
+        f"| ACI class | `{pos.aci_class}` |",
+        f"| RN | `{rn_format}` |",
+        f"| Cursor | `{names[pos.key]}` |",
+        f"| Parent | {parent_txt} |",
+        f"| Atomic | {atomic_txt} |",
+        "",
+    ]
+
+    docs = field_docs(cls, tables.sugar.get(pos.aci_class, {}))
+    naming = [d.name for d in docs if d.kind == "naming"]
+    call = f".{label}({', '.join(naming)})" if pos.parent_key is not None else f"{label}()"
+
+    lines += [
+        "## Attributes",
+        "",
+        f"Accepted as keyword arguments of `{call}` and of `.set(**attrs)` on this "
+        "cursor.  Enum parameters also accept the plain string.",
+        "",
+    ]
+    lines += _attribute_table(docs, used_enums)
 
     if makers := tables.makers.get(pos.aci_class, {}):
-        lines += ["**Makers**", ""]
-        for label, child in makers.items():
-            sig = _maker_signature(label, child)
-            lines.append(f"- `.{sig}` → `{child}`")
+        lines += [
+            "## Children",
+            "",
+            "| maker | creates | position |",
+            "| --- | --- | --- |",
+        ]
+        for maker_label, child in makers.items():
+            child_key = f"{pos.key}.{maker_label}" if pos.key else maker_label
+            ref = f"{{ref}}`{child_key} <{position_anchor(child_key)}>`"
+            lines.append(f"| `.{_maker_signature(maker_label, child)}` | `{child}` | {ref} |")
         lines.append("")
 
     if binds := tables.binds.get(pos.aci_class, {}):
         lines += [
-            "**Bind aliases** (lazy references, resolved closed-world at push time)",
+            "## Bind aliases",
+            "",
+            "Lazy references, resolved closed-world at push time.",
             "",
             "| alias | target | flavor | relation |",
             "| --- | --- | --- | --- |",
@@ -170,26 +244,138 @@ def _render_position(pos: _Position, names: dict[str, str]) -> list[str]:
         lines.append("")
 
     if verbs := tables.verbs.get(pos.aci_class, {}):
-        lines += ["**Verbs**", ""]
+        lines += ["## Verbs", ""]
         for verb, spec in verbs.items():
             lines.append(f"- `.{verb}(name)` → `{spec['rs']}` targeting `{spec['target']}`")
         lines.append("")
 
-    if sugar := tables.sugar.get(pos.aci_class, {}):
-        lines += ["**Sugar parameters**", ""]
-        for param in sugar:
-            lines.append(f"- `{param}=` — expanded to the real schema fields at the call site")
-        lines.append("")
+    issues = cls._config_issues  # pyright: ignore[reportPrivateUsage]
+    faults = cls._fault_codes  # pyright: ignore[reportPrivateUsage]
+    healthy = {"ok", "none", "N/A", "not-applicable"}
+    issue_rows = [(c, d) for c, d in sorted(issues.items()) if c not in healthy]
+    if issue_rows or faults:
+        lines += [
+            "## APIC diagnostics",
+            "",
+            "States the APIC can flag on this class — it accepts the configuration "
+            "and reports the inconsistency afterwards.",
+            "",
+        ]
+        if issue_rows:
+            lines += ["**Config issues**", "", "| code | meaning |", "| --- | --- |"]
+            lines += [f"| `{code}` | {desc or '—'} |" for code, desc in issue_rows]
+            lines.append("")
+        if faults:
+            lines += ["**Faults**", "", "| code | condition |", "| --- | --- |"]
+            lines += [f"| `{code}` | `{name}` |" for code, name in sorted(faults.items())]
+            lines.append("")
 
-    return lines
+    return "\n".join(lines).rstrip() + "\n"
 
 
 def _render_domain(root_key: str, title: str, blurb: str) -> str:
+    """Render a domain index: the position tree plus a toctree of its pages."""
     positions = _positions()
-    names = _cursor_names(positions)
-    lines = [_HEADER, f"# {title}", "", blurb, ""]
-    for pos in _subtree(root_key, positions):
-        lines.extend(_render_position(pos, names))
+    subtree = _subtree(root_key, positions)
+    lines = [_HEADER, f"# {title}", "", blurb, "", "## Positions", ""]
+
+    for pos in subtree:
+        depth = pos.key.count(".") - root_key.count(".")
+        indent = "  " * depth
+        cls = _load_class(pos.aci_class)
+        n_fields = len(field_docs(cls, _tables().sugar.get(pos.aci_class, {})))
+        lines.append(
+            f"{indent}- {{ref}}`{pos.key} <{position_anchor(pos.key)}>` "
+            f"— `{pos.aci_class}`, {n_fields} attributes"
+        )
+    lines += [
+        "",
+        "```{toctree}",
+        ":maxdepth: 1",
+        ":hidden:",
+        "",
+        *(f"{root_key}/{position_slug(pos.key)}" for pos in subtree),
+        "```",
+    ]
+    return "\n".join(lines).rstrip() + "\n"
+
+
+def _render_enums(used_enums: set[str]) -> str:
+    """Render the enums reachable from the curated vocabulary."""
+    from niwaki.models._generated.enums import _all as enums_module
+
+    positions = _positions()
+    by_enum: dict[str, list[str]] = {}
+    for pos in positions.values():
+        if not pos.key:
+            continue
+        cls = _load_class(pos.aci_class)
+        for doc in field_docs(cls, _tables().sugar.get(pos.aci_class, {})):
+            if doc.enum:
+                by_enum.setdefault(doc.enum, []).append(pos.key)
+
+    lines = [
+        _HEADER,
+        "# Enums",
+        "",
+        f"The {len(by_enum)} enum types reachable from the curated vocabulary — "
+        "every constrained parameter of every maker.  A parameter typed as an "
+        "enum also accepts the plain string; the value is validated at the call "
+        "site either way.",
+        "",
+        "The remaining generated enums back the non-curated classes and live in "
+        "`niwaki.models._generated.enums`.",
+        "",
+    ]
+    for enum_name in sorted(by_enum):
+        enum_cls = getattr(enums_module, enum_name)
+        lines += [
+            f"({enum_anchor(enum_name)})=",
+            "",
+            f"## `{enum_name}`",
+            "",
+            "| value | meaning |",
+            "| --- | --- |",
+        ]
+        for value, meaning in enum_members(enum_cls):
+            lines.append(f"| `{value}` | {meaning or '—'} |")
+        used_by = sorted(set(by_enum[enum_name]))
+        shown = ", ".join(f"{{ref}}`{key} <{position_anchor(key)}>`" for key in used_by[:8])
+        more = f" *(+{len(used_by) - 8} more)*" if len(used_by) > 8 else ""
+        lines += ["", f"Used by: {shown}{more}", ""]
+    return "\n".join(lines).rstrip() + "\n"
+
+
+def _render_navigation() -> str:
+    """Render the read-side vocabulary: which name descends into which class."""
+    from niwaki.domain._child_map import CHILD_MAP
+
+    positions = _positions()
+    lines = [
+        _HEADER,
+        "# Navigation vocabulary",
+        "",
+        "The facade resolves operator names into typed child handles — "
+        '`aci.tenant("prod").bd("web")` walks the APIC containment model, one '
+        "name at a time.  The table below lists the navigation names of every "
+        "curated position (the read side accepts far more: any child name in the "
+        "APIC model resolves, curated or not).",
+        "",
+        "| from | name | descends into |",
+        "| --- | --- | --- |",
+    ]
+    for key in sorted(positions):
+        pos = positions[key]
+        parent_class = "_root" if not key else pos.aci_class
+        children = CHILD_MAP.get(parent_class, {})
+        if not key:
+            continue
+        for name, child in sorted(children.items()):
+            child_positions = [p.key for p in positions.values() if p.aci_class == child and p.key]
+            if not child_positions:
+                continue
+            ref = f"{{ref}}`{child_positions[0]} <{position_anchor(child_positions[0])}>`"
+            lines.append(f"| `{pos.key}` | `.{name}(…)` | `{child}` — {ref} |")
     return "\n".join(lines).rstrip() + "\n"
 
 
@@ -234,6 +420,9 @@ def _render_index() -> str:
         ":maxdepth: 2",
         "",
         *(root_key for root_key, _, _ in _DOMAINS),
+        "uni",
+        "enums",
+        "navigation",
         "coverage",
         "```",
     ]
@@ -257,8 +446,9 @@ def _coverage_row(pos: _Position) -> str:
     binds = tables.binds.get(pos.aci_class, {})
     verbs = tables.verbs.get(pos.aci_class, {})
     sugar = tables.sugar.get(pos.aci_class, {})
+    ref = f"{{ref}}`{pos.key} <{position_anchor(pos.key)}>`"
     return (
-        f"| `{pos.key}` | `{pos.aci_class}` | {len(makers) or '—'} "
+        f"| {ref} | `{pos.aci_class}` | {len(makers) or '—'} "
         f"| {', '.join(f'`{a}=`' for a in binds) or '—'} "
         f"| {', '.join(f'`.{v}()`' for v in verbs) or '—'} "
         f"| {', '.join(f'`{s}=`' for s in sugar) or '—'} "
@@ -325,21 +515,87 @@ def _render_coverage() -> str:
     return "\n".join(lines).rstrip() + "\n"
 
 
+_UNI_DOMAIN = (
+    "uni",
+    "uni — domains",
+    "Physical and routed domains, declared directly under `uni` — the bridge "
+    "between access policies and the tenant world.",
+)
+
+
 def render_all() -> dict[str, str]:
-    """Render every vocabulary page as ``{filename: content}``."""
-    pages = {"index.md": _render_index()}
-    for root_key, title, blurb in _DOMAINS:
-        pages[f"{root_key}.md"] = _render_domain(root_key, title, blurb)
+    """Render every reference page as ``{relative path: content}``.
+
+    One page per curated position (under its domain folder), one index per
+    domain, plus the enums, the navigation vocabulary and the coverage matrix.
+    """
+    positions = _positions()
+    names = _cursor_names(positions)
+    used_enums: set[str] = set()
+
+    pages: dict[str, str] = {}
+    for root_key, title, blurb in [*_DOMAINS, _UNI_DOMAIN]:
+        if root_key == "uni":
+            subtree = [positions[key] for key in ("phys_dom", "l3_dom")]
+            pages["uni.md"] = _render_uni_domain(subtree)
+        else:
+            subtree = _subtree(root_key, positions)
+            pages[f"{root_key}.md"] = _render_domain(root_key, title, blurb)
+        folder = root_key
+        for pos in subtree:
+            path = f"{folder}/{position_slug(pos.key)}.md"
+            pages[path] = _render_position_page(pos, positions, names, used_enums)
+
+    pages["index.md"] = _render_index()
+    pages["enums.md"] = _render_enums(used_enums)
+    pages["navigation.md"] = _render_navigation()
     pages["coverage.md"] = _render_coverage()
     return pages
 
 
+def _render_uni_domain(subtree: list[_Position]) -> str:
+    """Index of the ``uni``-level domains (physical / routed)."""
+    lines = [
+        _HEADER,
+        f"# {_UNI_DOMAIN[1]}",
+        "",
+        _UNI_DOMAIN[2],
+        "",
+        "## Positions",
+        "",
+    ]
+    for pos in subtree:
+        cls = _load_class(pos.aci_class)
+        n_fields = len(field_docs(cls, _tables().sugar.get(pos.aci_class, {})))
+        lines.append(
+            f"- {{ref}}`{pos.key} <{position_anchor(pos.key)}>` "
+            f"— `{pos.aci_class}`, {n_fields} attributes"
+        )
+    lines += [
+        "",
+        "```{toctree}",
+        ":maxdepth: 1",
+        ":hidden:",
+        "",
+        *(f"uni/{position_slug(pos.key)}" for pos in subtree),
+        "```",
+    ]
+    return "\n".join(lines).rstrip() + "\n"
+
+
 def main() -> None:
-    """Generate and write the vocabulary book."""
-    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-    for filename, content in render_all().items():
-        (OUTPUT_DIR / filename).write_text(content, encoding="utf-8")
-    print(f"generate_docs: wrote {len(render_all())} pages to {OUTPUT_DIR}")
+    """Generate and write the DSL reference (removing stale pages first)."""
+    import shutil
+
+    for folder in [*(root for root, _, _ in _DOMAINS), "uni"]:
+        shutil.rmtree(OUTPUT_DIR / folder, ignore_errors=True)
+
+    pages = render_all()
+    for path, content in pages.items():
+        target = OUTPUT_DIR / path
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_text(content, encoding="utf-8")
+    print(f"generate_docs: wrote {len(pages)} pages to {OUTPUT_DIR}")
 
 
 if __name__ == "__main__":

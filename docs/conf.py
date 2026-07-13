@@ -41,10 +41,16 @@ autodoc_typehints = "description"
 autodoc_typehints_description_target = "documented"
 maximum_signature_line_length = 90
 
-# The generated model modules re-export ManagedObject subclasses; autodoc only
-# touches the curated public surface, never the 2,222 generated classes.
+# One global policy instead of per-directive options (the source of silent
+# omissions).  autodoc only touches the curated public surface — never the
+# 2,222 generated model classes, whose fields are documented by the generated
+# DSL reference (docs/reference/vocabulary/).
 autodoc_default_options = {
+    "members": True,
     "show-inheritance": True,
+    "member-order": "bysource",
+    # Pydantic machinery — noise on every model page.
+    "exclude-members": "model_config,model_fields,model_computed_fields",
 }
 
 # "wiki" holds the GitHub-wiki signpost pages (published by
@@ -69,6 +75,34 @@ intersphinx_mapping = {
 # wrappers, not autodoc'd — ignore their targets explicitly.
 
 nitpicky = True
+
+# The generated cursors are documented by the DSL reference (one page per
+# position), not by autodoc — their names appear in the factories' return
+# annotations and in generated docstrings.  The ignore list below is DERIVED
+# from the code, so it stays exact: a typo in a cursor name is not in the list
+# and therefore fails the build.
+from niwaki.design._generated_cursors import CURSOR_FOR  # noqa: E402
+
+_CURSOR_CLASSES = {CURSOR_FOR[key] for key in CURSOR_FOR}
+_CURSOR_IGNORES = [
+    *(("py:class", cls.__name__) for cls in _CURSOR_CLASSES),
+    *(("py:class", f"{cls.__module__}.{cls.__name__}") for cls in _CURSOR_CLASSES),
+]
+
+nitpick_ignore = [
+    *_CURSOR_IGNORES,
+    # Typing spellings autodoc cannot resolve to a documented target.
+    ("py:class", "T"),
+    ("py:class", "_T"),
+    ("py:class", "_Coroutine"),
+    ("py:class", "PushMode"),
+    ("py:class", "niwaki.transport.session._T"),
+    ("py:class", "niwaki.transport.session_async._T"),
+    # pydantic's inventory does not expose its exceptions.
+    ("py:exc", "pydantic.ValidationError"),
+    ("py:exc", "ValidationError"),
+    ("py:class", "pydantic.ValidationError"),
+]
 nitpick_ignore_regex = [
     # Design/facade/query internals: documented through their public wrappers.
     ("py:class", r"niwaki\.design\._.*"),
@@ -76,19 +110,6 @@ nitpick_ignore_regex = [
     ("py:class", r"niwaki\.facade\._.*"),
     ("py:class", r"niwaki\.query\._.*"),
     ("py:class", r"niwaki\.models\._generated\..*"),
-    # Sessions are managed by the clients; only the protocols are documented.
-    ("py:class", r"(niwaki\.transport\.)?(session(_async)?\.)?(Async)?ApicSession"),
-    # TypeVars and typing spellings autodoc cannot resolve.
-    ("py:class", r"^[TUM]$"),
-    ("py:class", r"^_T$"),
-    ("py:class", r"^_Coroutine$"),
-    ("py:class", r"^PushMode$"),
-    # Generated cursor types surface in factory return annotations.
-    ("py:class", r"(niwaki\.design\.(_generated_cursors\.)?)?[A-Z][A-Za-z]*Cursor"),
-    # pydantic's inventory does not expose its exceptions.
-    ("py:exc", r"(pydantic\.)?ValidationError"),
-    ("py:class", r"(pydantic\.)?ValidationError"),
-    ("py:obj", r".*"),
 ]
 
 # ── HTML output ───────────────────────────────────────────────────────────────
@@ -98,6 +119,9 @@ html_title = "niwaki — Cisco ACI SDK"
 # _static carries the coverage badge endpoint (docs/_static/coverage-badge.json,
 # refreshed by scripts/checks.sh) served from the Pages site.
 html_static_path = ["_static"]
+# The generated attribute tables are six columns wide; furo's default content
+# column squeezes Cisco's descriptions into a few characters.
+html_css_files = ["custom.css"]
 html_theme_options = {
     "source_repository": "https://github.com/k3l0-dev/niwaki",
     "source_branch": "main",

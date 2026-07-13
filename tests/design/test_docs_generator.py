@@ -1,8 +1,9 @@
-"""Vocabulary book generator — drift guard and content contract.
+"""DSL reference generator — drift guard and content contract.
 
 The pages under ``docs/reference/vocabulary/`` are committed generated
-artifacts (same rule as ``_generated_cursors.py``): regeneration must match
-the working tree, and the content must reflect the live vocabulary tables.
+artifacts (same rule as ``_generated_cursors``): regeneration must match the
+working tree, and the content must cover the live vocabulary tables — every
+position, every maker, every **keyword argument**, every enum.
 """
 
 from __future__ import annotations
@@ -11,10 +12,21 @@ from pathlib import Path
 
 import pytest
 
+from niwaki._codegen._field_docs import enum_anchor, field_docs, position_anchor
+from niwaki._codegen.generate_design import _positions
 from niwaki._codegen.generate_docs import OUTPUT_DIR, _resolve_edge, render_all
-from niwaki.design._cursor import _tables
+from niwaki.design._cursor import _load_class, _tables
 
 _PAGES = sorted(render_all())
+
+# The uni-level domains (phys_dom, l3_dom) live under uni/, everything else
+# under its root domain — mirrors the generator's layout.
+_UNI_KEYS = frozenset({"phys_dom", "l3_dom"})
+
+
+def _page_path(key: str) -> str:
+    folder = "uni" if key in _UNI_KEYS else key.split(".")[0]
+    return f"{folder}/{key.replace('.', '-')}.md"
 
 
 class TestDrift:
@@ -29,52 +41,107 @@ class TestDrift:
         )
 
     def test_no_orphan_pages(self) -> None:
-        """Every committed page is produced by the generator."""
-        committed = {p.name for p in OUTPUT_DIR.glob("*.md")}
+        """Every committed page — including the per-position ones — is produced."""
+        committed = {str(path.relative_to(OUTPUT_DIR)) for path in OUTPUT_DIR.rglob("*.md")}
         assert committed == set(_PAGES)
 
 
-class TestContent:
+class TestCoverageOfTheDSL:
+    """The contract: nothing the DSL accepts is missing from the reference."""
+
+    def test_every_position_has_a_page(self) -> None:
+        pages = render_all()
+        for key in _positions():
+            if not key:  # the polUni root is the index, not a position page
+                continue
+            assert _page_path(key) in pages, f"position {key} has no page"
+
+    @pytest.mark.parametrize("key", [k for k in _positions() if k])
+    def test_every_keyword_argument_is_documented(self, key: str) -> None:
+        """Every kwarg a maker accepts appears in its position's table.
+
+        This is the central promise of the reference: the fields of `.bd()`
+        (and of every other maker) are findable without an IDE.
+        """
+        pos = _positions()[key]
+        cls = _load_class(pos.aci_class)
+        page = render_all()[_page_path(key)]
+        for doc in field_docs(cls, _tables().sugar.get(pos.aci_class, {})):
+            assert f"| `{doc.name}`" in page, f"{key}: {doc.name} missing from the table"
+
     def test_every_curated_maker_is_documented(self) -> None:
-        makers = _tables().makers
         book = "".join(render_all().values())
-        for table in makers.values():
+        for table in _tables().makers.values():
             for label, child in table.items():
-                assert f".{label}(" in book, f"maker {label} missing from the book"
-                assert f"`{child}`" in book, f"class {child} missing from the book"
+                assert f".{label}(" in book, f"maker {label} missing"
+                assert f"`{child}`" in book, f"class {child} missing"
 
     def test_every_bind_alias_is_documented_with_flavor(self) -> None:
-        binds = _tables().binds
         book = "".join(render_all().values())
-        for owner, table in binds.items():
+        for owner, table in _tables().binds.items():
             for alias, target in table.items():
                 edge = _resolve_edge(owner, target)
                 assert edge is not None, f"({owner}, {alias}) unresolvable"
                 assert f"`{alias}=`" in book or f"bind({alias}=...)" in book
 
-    def test_atomic_classes_carry_the_note(self) -> None:
+    def test_every_enum_used_is_documented(self) -> None:
+        """Every enum cited in an attribute table has its section on the page."""
         pages = render_all()
-        assert "Atomic class" in pages["fabric.md"]
+        enums_page = pages["enums.md"]
+        cited: set[str] = set()
+        for key, pos in _positions().items():
+            if not key:
+                continue
+            cls = _load_class(pos.aci_class)
+            for doc in field_docs(cls, _tables().sugar.get(pos.aci_class, {})):
+                if doc.enum:
+                    cited.add(doc.enum)
+        assert cited, "no enum found — the extractor is broken"
+        for enum_name in cited:
+            assert f"({enum_anchor(enum_name)})=" in enums_page, f"{enum_name} undocumented"
+            assert f"## `{enum_name}`" in enums_page
 
+
+class TestContent:
     def test_generated_banner_on_every_page(self) -> None:
         for content in render_all().values():
             assert content.startswith("<!--\nGenerated by niwaki generate_docs")
 
-    def test_coverage_matrix_lists_every_position(self) -> None:
-        """One row per curated position, and the escape-hatch section exists."""
-        from niwaki._codegen.generate_design import _positions
+    def test_position_page_carries_identity_and_cisco_definition(self) -> None:
+        page = render_all()["tenant/tenant-bd.md"]
+        assert f"({position_anchor('tenant.bd')})=" in page
+        assert "| ACI class | `fvBD` |" in page
+        assert "unique layer 2 forwarding domain" in page  # Cisco's own words
+        assert "| `arp_flooding` | `arpFlood` | `bool` |" in page
 
+    def test_enum_values_carry_their_meaning(self) -> None:
+        enums = render_all()["enums.md"]
+        assert "| `bcast` | Broadcast interface |" in enums
+
+    def test_apic_diagnostics_section(self) -> None:
+        page = render_all()["tenant/tenant-bd.md"]
+        assert "## APIC diagnostics" in page
+        assert "FHS-enabled-on-l2-only-bd" in page
+        assert "fltFvBDMulticastEnabledOnL2BD" in page
+
+    def test_atomic_classes_carry_the_note(self) -> None:
+        pages = render_all()
+        atomic_pages = [c for c in pages.values() if "the subtree ships in one request" in c]
+        assert atomic_pages, "no atomic position documented"
+
+    def test_coverage_matrix_lists_every_position(self) -> None:
         coverage = render_all()["coverage.md"]
         for key in _positions():
-            if not key:  # the polUni root is the page, not a row
+            if not key:
                 continue
-            assert f"| `{key}` |" in coverage, f"position {key} missing from the matrix"
+            assert f"<{position_anchor(key)}>" in coverage, f"{key} missing from the matrix"
         assert "Not curated yet" in coverage
-        assert "vocabulary request" in coverage
 
     def test_coverage_total_matches_the_positions(self) -> None:
-        from niwaki._codegen.generate_design import _positions
-
         coverage = render_all()["coverage.md"]
         rows = len(_positions()) - 1  # every position except the polUni root
         assert f"**{rows} curated positions**" in coverage
+
+    def test_navigation_page_lists_read_side_vocabulary(self) -> None:
+        navigation = render_all()["navigation.md"]
+        assert "| `tenant` | `.bd(…)` |" in navigation

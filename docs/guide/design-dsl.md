@@ -66,7 +66,9 @@ plain values too — capture them, use loops; the chain is never mandatory.
 
 Every maker, `set()` field and `bind()` alias is generated with a **typed
 signature per position**: autocompletion and mypy cover the entire curated
-vocabulary (see {doc}`../reference/vocabulary/index`).
+vocabulary.  Every maker's keyword arguments — type, allowed values,
+default, Cisco's definition — are listed position by position in the
+{doc}`DSL reference <../reference/vocabulary/index>`.
 
 Makers are documented straight from the APIC schemas: hovering one in your
 IDE shows Cisco's definition of the class and an Args section with each
@@ -155,5 +157,5 @@ only when the plan says something drifts.
 ## Next steps
 
 - {doc}`push-modes` — `strict`, `staged`, `plan` in detail
-- {doc}`../reference/vocabulary/index` — every curated position
+- {doc}`../reference/vocabulary/index` — every position, every keyword argument
 - {doc}`models` — the typed layer underneath the makers

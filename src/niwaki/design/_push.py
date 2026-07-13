@@ -192,7 +192,7 @@ def _staged_report(ops: list[_Op], outcome: _WaveOutcome) -> PushReport:
 
 
 def push_sync(root: DesignNode, client: Niwaki, mode: PushMode) -> PushReport | PlanResult:
-    """Execute a push through a sync :class:`~niwaki.facade.Niwaki` client.
+    """Execute a push through a sync :class:`~niwaki.Niwaki` client.
 
     See :meth:`niwaki.design.Cursor.push` for the full mode contract.
     """
@@ -234,7 +234,7 @@ async def push_async(
     client: AsyncNiwaki,
     mode: PushMode,
 ) -> PushReport | PlanResult:
-    """Execute a push through an :class:`~niwaki.facade.AsyncNiwaki` client.
+    """Execute a push through an :class:`~niwaki.AsyncNiwaki` client.
 
     Mirror of :func:`push_sync` — validation, resolution, and compilation are
     the same pure code; only the three I/O calls are awaited.

@@ -1,14 +1,15 @@
-# niwaki.design
+# The design DSL
 
 ```{eval-rst}
 .. automodule:: niwaki.design
+   :no-members:
 ```
 
 ## Root factories
 
-The typed signatures are generated from the models — every keyword is a
-real, validated field.  See {doc}`../vocabulary/index` for the curated
-surface each root opens.
+Each root opens a curated, fully typed surface: the makers, their keyword
+arguments, the `bind()` aliases and the verbs available at every position are
+generated and documented in the {doc}`DSL reference <../vocabulary/index>`.
 
 ```{eval-rst}
 .. autofunction:: niwaki.design.design
@@ -24,17 +25,19 @@ surface each root opens.
 
 ## Cursor
 
+Every position is a typed cursor subclass of `Cursor` — the makers and the
+`set()` / `bind()` signatures are generated per position (see the
+{doc}`DSL reference <../vocabulary/index>`).  The base class below is the
+behaviour they all share.
+
 ```{eval-rst}
 .. autoclass:: niwaki.design.Cursor
-   :members:
 ```
 
 ## Push results
 
 ```{eval-rst}
 .. autoclass:: niwaki.design.PushReport
-   :members:
 
 .. autoclass:: niwaki.design.PlanResult
-   :members:
 ```

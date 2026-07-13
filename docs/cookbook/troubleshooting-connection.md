@@ -65,7 +65,7 @@ clearing sessions) or a single request outlived the refresh margin.  Widen
 The retries are already spent when this reaches you.  Scope the request
 before reaching for knobs — a filtered, class-scoped query beats a raised
 timeout ({doc}`../guide/observing`).  Then: `timeout=` (per request,
-default 30 s) and {class}`~niwaki.RetryConfig` for flaky links.
+default 30 s) and {class}`~niwaki.transport.RetryConfig` for flaky links.
 
 ## The ladder at a glance
 

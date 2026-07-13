@@ -7,209 +7,65 @@ Re-generate: uv run python -m niwaki._codegen.generate_docs
 
 Interface policies, VLAN pools, AAEPs, policy groups, interface and switch profiles — everything under `uni/infra`.  Root factory: `infra()`.
 
-## `infra`
-
-ACI class `infraInfra` — RN `infra` — cursor `InfraCursor`.
-
-**Makers**
-
-- `.dhcp_relay_policy(name, **attrs)` → `dhcpRelayP`
-- `.dpp_policy(name, **attrs)` → `qosDppPol`
-- `.cdp_policy(name, **attrs)` → `cdpIfPol`
-- `.lldp_policy(name, **attrs)` → `lldpIfPol`
-- `.lacp_policy(name, **attrs)` → `lacpLagPol`
-- `.link_level_policy(name, **attrs)` → `fabricHIfPol`
-- `.mcp_policy(name, **attrs)` → `mcpIfPol`
-- `.stp_policy(name, **attrs)` → `stpIfPol`
-- `.storm_control_policy(name, **attrs)` → `stormctrlIfPol`
-- `.vlan_pool(name, allocation_mode, **attrs)` → `fvnsVlanInstP`
-- `.aaep(name, **attrs)` → `infraAttEntityP`
-- `.func_profile(**attrs)` → `infraFuncP`
-- `.access_port_profile(name, **attrs)` → `infraAccPortP`
-- `.leaf_profile(name, **attrs)` → `infraNodeP`
-- `.spine_profile(name, **attrs)` → `infraSpineP`
-
-## `infra.dhcp_relay_policy`
-
-ACI class `dhcpRelayP` — RN `relayp-{name}` — cursor `InfraDhcpRelayPolicyCursor`.
-
-**Makers**
-
-- `.provider(target_dn, **attrs)` → `dhcpRsProv`
-
-## `infra.dhcp_relay_policy.provider`
-
-ACI class `dhcpRsProv` — RN `rsprov-[{target_dn}]` — cursor `InfraDhcpRelayPolicyProviderCursor`.
-
-## `infra.dpp_policy`
-
-ACI class `qosDppPol` — RN `qosdpppol-{name}` — cursor `InfraDppPolicyCursor`.
-
-## `infra.cdp_policy`
-
-ACI class `cdpIfPol` — RN `cdpIfP-{name}` — cursor `CdpPolicyCursor`.
-
-## `infra.lldp_policy`
-
-ACI class `lldpIfPol` — RN `lldpIfP-{name}` — cursor `LldpPolicyCursor`.
-
-## `infra.lacp_policy`
-
-ACI class `lacpLagPol` — RN `lacplagp-{name}` — cursor `LacpPolicyCursor`.
-
-## `infra.link_level_policy`
-
-ACI class `fabricHIfPol` — RN `hintfpol-{name}` — cursor `LinkLevelPolicyCursor`.
-
-## `infra.mcp_policy`
-
-ACI class `mcpIfPol` — RN `mcpIfP-{name}` — cursor `McpPolicyCursor`.
-
-## `infra.stp_policy`
-
-ACI class `stpIfPol` — RN `ifPol-{name}` — cursor `StpPolicyCursor`.
-
-## `infra.storm_control_policy`
-
-ACI class `stormctrlIfPol` — RN `stormctrlifp-{name}` — cursor `StormControlPolicyCursor`.
-
-## `infra.vlan_pool`
-
-ACI class `fvnsVlanInstP` — RN `vlanns-[{name}]-{allocation_mode}` — cursor `VlanPoolCursor`.
-
-**Makers**
-
-- `.range(from_, to, **attrs)` → `fvnsEncapBlk`
-
-## `infra.vlan_pool.range`
-
-ACI class `fvnsEncapBlk` — RN `from-[{from_}]-to-[{to}]` — cursor `RangeCursor`.
-
-## `infra.aaep`
-
-ACI class `infraAttEntityP` — RN `attentp-{name}` — cursor `AaepCursor`.
-
-**Bind aliases** (lazy references, resolved closed-world at push time)
-
-| alias | target | flavor | relation |
-| --- | --- | --- | --- |
-| `domain=` | `infraADomP` *(abstract: `extdevGroupP`, `fcDomP`, `l2extDomP`, `l3extDomP`…)* | DN — `bind_dn()` allowed | `infraRsDomP` |
-
-## `infra.func_profile`
-
-ACI class `infraFuncP` — RN `funcprof` — cursor `FuncProfileCursor`.
-
-**Makers**
-
-- `.access_group(name, **attrs)` → `infraAccPortGrp`
-- `.port_channel(name, **attrs)` → `infraAccBndlGrp`
-
-## `infra.func_profile.access_group`
-
-ACI class `infraAccPortGrp` — RN `accportgrp-{name}` — cursor `AccessGroupCursor`.
-
-**Bind aliases** (lazy references, resolved closed-world at push time)
-
-| alias | target | flavor | relation |
-| --- | --- | --- | --- |
-| `aaep=` | `infraAttEntityP` | DN — `bind_dn()` allowed | `infraRsAttEntP` |
-| `cdp=` | `cdpIfPol` | name | `infraRsCdpIfPol` |
-| `lldp=` | `lldpIfPol` | name | `infraRsLldpIfPol` |
-| `link_level=` | `fabricHIfPol` | name | `infraRsHIfPol` |
-| `stp=` | `stpIfPol` | name | `infraRsStpIfPol` |
-| `mcp=` | `mcpIfPol` | name | `infraRsMcpIfPol` |
-| `storm_control=` | `stormctrlIfPol` | name | `infraRsStormctrlIfPol` |
-
-## `infra.func_profile.port_channel`
-
-ACI class `infraAccBndlGrp` — RN `accbundle-{name}` — cursor `PortChannelCursor`.
-
-**Bind aliases** (lazy references, resolved closed-world at push time)
-
-| alias | target | flavor | relation |
-| --- | --- | --- | --- |
-| `aaep=` | `infraAttEntityP` | DN — `bind_dn()` allowed | `infraRsAttEntP` |
-| `cdp=` | `cdpIfPol` | name | `infraRsCdpIfPol` |
-| `lldp=` | `lldpIfPol` | name | `infraRsLldpIfPol` |
-| `lacp=` | `lacpLagPol` | name | `infraRsLacpPol` |
-| `link_level=` | `fabricHIfPol` | name | `infraRsHIfPol` |
-| `stp=` | `stpIfPol` | name | `infraRsStpIfPol` |
-| `mcp=` | `mcpIfPol` | name | `infraRsMcpIfPol` |
-| `storm_control=` | `stormctrlIfPol` | name | `infraRsStormctrlIfPol` |
-
-## `infra.access_port_profile`
-
-ACI class `infraAccPortP` — RN `accportprof-{name}` — cursor `AccessPortProfileCursor`.
-
-**Makers**
-
-- `.port_selector(name, selector_type, **attrs)` → `infraHPortS`
-
-## `infra.access_port_profile.port_selector`
-
-ACI class `infraHPortS` — RN `hports-{name}-typ-{selector_type}` — cursor `PortSelectorCursor`.
-
-**Makers**
-
-- `.port_block(name, **attrs)` → `infraPortBlk`
-- `.sub_port_block(name, **attrs)` → `infraSubPortBlk`
-
-**Bind aliases** (lazy references, resolved closed-world at push time)
-
-| alias | target | flavor | relation |
-| --- | --- | --- | --- |
-| `policy_group=` | `infraAccBaseGrp` *(abstract: `infraAccBndlGrp`, `infraAccBndlPolGrp`, `infraAccBndlSubgrp`, `infraAccPortGrp`…)* | DN — `bind_dn()` allowed | `infraRsAccBaseGrp` |
-
-## `infra.access_port_profile.port_selector.port_block`
-
-ACI class `infraPortBlk` — RN `portblk-{name}` — cursor `PortBlockCursor`.
-
-## `infra.access_port_profile.port_selector.sub_port_block`
-
-ACI class `infraSubPortBlk` — RN `subportblk-{name}` — cursor `SubPortBlockCursor`.
-
-## `infra.leaf_profile`
-
-ACI class `infraNodeP` — RN `nprof-{name}` — cursor `LeafProfileCursor`.
-
-**Makers**
-
-- `.leaf_selector(name, selector_type, **attrs)` → `infraLeafS`
-
-**Bind aliases** (lazy references, resolved closed-world at push time)
-
-| alias | target | flavor | relation |
-| --- | --- | --- | --- |
-| `interface_profile=` | `infraAccPortP` | DN — `bind_dn()` allowed | `infraRsAccPortP` |
-
-## `infra.leaf_profile.leaf_selector`
-
-ACI class `infraLeafS` — RN `leaves-{name}-typ-{selector_type}` — cursor `LeafSelectorCursor`.
-
-**Makers**
-
-- `.node_block(name, **attrs)` → `infraNodeBlk`
-
-## `infra.leaf_profile.leaf_selector.node_block`
-
-ACI class `infraNodeBlk` — RN `nodeblk-{name}` — cursor `LeafSelectorNodeBlockCursor`.
-
-## `infra.spine_profile`
-
-ACI class `infraSpineP` — RN `spprof-{name}` — cursor `SpineProfileCursor`.
-
-**Makers**
-
-- `.spine_selector(name, selector_type, **attrs)` → `infraSpineS`
-
-## `infra.spine_profile.spine_selector`
-
-ACI class `infraSpineS` — RN `spines-{name}-typ-{selector_type}` — cursor `SpineSelectorCursor`.
-
-**Makers**
-
-- `.node_block(name, **attrs)` → `infraNodeBlk`
-
-## `infra.spine_profile.spine_selector.node_block`
-
-ACI class `infraNodeBlk` — RN `nodeblk-{name}` — cursor `SpineSelectorNodeBlockCursor`.
+## Positions
+
+- {ref}`infra <vocab-infra>` — `infraInfra`, 2 attributes
+  - {ref}`infra.dhcp_relay_policy <vocab-infra-dhcp_relay_policy>` — `dhcpRelayP`, 6 attributes
+    - {ref}`infra.dhcp_relay_policy.provider <vocab-infra-dhcp_relay_policy-provider>` — `dhcpRsProv`, 3 attributes
+  - {ref}`infra.dpp_policy <vocab-infra-dpp_policy>` — `qosDppPol`, 25 attributes
+  - {ref}`infra.cdp_policy <vocab-infra-cdp_policy>` — `cdpIfPol`, 5 attributes
+  - {ref}`infra.lldp_policy <vocab-infra-lldp_policy>` — `lldpIfPol`, 7 attributes
+  - {ref}`infra.lacp_policy <vocab-infra-lacp_policy>` — `lacpLagPol`, 8 attributes
+  - {ref}`infra.link_level_policy <vocab-infra-link_level_policy>` — `fabricHIfPol`, 11 attributes
+  - {ref}`infra.mcp_policy <vocab-infra-mcp_policy>` — `mcpIfPol`, 13 attributes
+  - {ref}`infra.stp_policy <vocab-infra-stp_policy>` — `stpIfPol`, 5 attributes
+  - {ref}`infra.storm_control_policy <vocab-infra-storm_control_policy>` — `stormctrlIfPol`, 24 attributes
+  - {ref}`infra.vlan_pool <vocab-infra-vlan_pool>` — `fvnsVlanInstP`, 5 attributes
+    - {ref}`infra.vlan_pool.range <vocab-infra-vlan_pool-range>` — `fvnsEncapBlk`, 6 attributes
+  - {ref}`infra.aaep <vocab-infra-aaep>` — `infraAttEntityP`, 4 attributes
+  - {ref}`infra.func_profile <vocab-infra-func_profile>` — `infraFuncP`, 4 attributes
+    - {ref}`infra.func_profile.access_group <vocab-infra-func_profile-access_group>` — `infraAccPortGrp`, 4 attributes
+    - {ref}`infra.func_profile.port_channel <vocab-infra-func_profile-port_channel>` — `infraAccBndlGrp`, 5 attributes
+  - {ref}`infra.access_port_profile <vocab-infra-access_port_profile>` — `infraAccPortP`, 4 attributes
+    - {ref}`infra.access_port_profile.port_selector <vocab-infra-access_port_profile-port_selector>` — `infraHPortS`, 5 attributes
+      - {ref}`infra.access_port_profile.port_selector.port_block <vocab-infra-access_port_profile-port_selector-port_block>` — `infraPortBlk`, 6 attributes
+      - {ref}`infra.access_port_profile.port_selector.sub_port_block <vocab-infra-access_port_profile-port_selector-sub_port_block>` — `infraSubPortBlk`, 8 attributes
+  - {ref}`infra.leaf_profile <vocab-infra-leaf_profile>` — `infraNodeP`, 4 attributes
+    - {ref}`infra.leaf_profile.leaf_selector <vocab-infra-leaf_profile-leaf_selector>` — `infraLeafS`, 5 attributes
+      - {ref}`infra.leaf_profile.leaf_selector.node_block <vocab-infra-leaf_profile-leaf_selector-node_block>` — `infraNodeBlk`, 4 attributes
+  - {ref}`infra.spine_profile <vocab-infra-spine_profile>` — `infraSpineP`, 4 attributes
+    - {ref}`infra.spine_profile.spine_selector <vocab-infra-spine_profile-spine_selector>` — `infraSpineS`, 5 attributes
+      - {ref}`infra.spine_profile.spine_selector.node_block <vocab-infra-spine_profile-spine_selector-node_block>` — `infraNodeBlk`, 4 attributes
+
+```{toctree}
+:maxdepth: 1
+:hidden:
+
+infra/infra
+infra/infra-dhcp_relay_policy
+infra/infra-dhcp_relay_policy-provider
+infra/infra-dpp_policy
+infra/infra-cdp_policy
+infra/infra-lldp_policy
+infra/infra-lacp_policy
+infra/infra-link_level_policy
+infra/infra-mcp_policy
+infra/infra-stp_policy
+infra/infra-storm_control_policy
+infra/infra-vlan_pool
+infra/infra-vlan_pool-range
+infra/infra-aaep
+infra/infra-func_profile
+infra/infra-func_profile-access_group
+infra/infra-func_profile-port_channel
+infra/infra-access_port_profile
+infra/infra-access_port_profile-port_selector
+infra/infra-access_port_profile-port_selector-port_block
+infra/infra-access_port_profile-port_selector-sub_port_block
+infra/infra-leaf_profile
+infra/infra-leaf_profile-leaf_selector
+infra/infra-leaf_profile-leaf_selector-node_block
+infra/infra-spine_profile
+infra/infra-spine_profile-spine_selector
+infra/infra-spine_profile-spine_selector-node_block
+```
