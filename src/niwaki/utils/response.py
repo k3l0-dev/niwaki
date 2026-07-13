@@ -11,7 +11,7 @@ APIC responses always have the envelope::
     }
 
 :func:`parse_imdata` consumes that envelope and returns typed ManagedObjects.
-HTTP-level error extraction lives in :mod:`niwaki.transport._errors`.
+HTTP-level error extraction lives in ``niwaki.transport._errors``.
 """
 
 from __future__ import annotations
@@ -25,7 +25,7 @@ from niwaki.models.base import ManagedObject
 def parse_imdata(data: dict[str, Any]) -> list[ManagedObject]:
     """Deserialise all objects in the ``imdata`` array into typed ManagedObjects.
 
-    Uses :meth:`ManagedObject.from_apic` for each item, which dispatches to the
+    Uses :meth:`~niwaki.models.ManagedObject.from_apic` for each item, which dispatches to the
     correct generated subclass via ``REGISTRY``.  Error entries (items keyed
     ``"error"``) are skipped — HTTP status handling raises typed exceptions
     before this parser runs.
@@ -34,7 +34,7 @@ def parse_imdata(data: dict[str, Any]) -> list[ManagedObject]:
         data: Raw APIC response dict (the top-level JSON object).
 
     Returns:
-        List of :class:`ManagedObject` instances (may be empty).
+        List of :class:`~niwaki.models.ManagedObject` instances (may be empty).
 
     Raises:
         :exc:`niwaki.exceptions.DeserializationError`: When any item in

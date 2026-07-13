@@ -41,8 +41,8 @@ class Query(_QueryBase[_T]):
     Every accumulator method returns a **new** :class:`Query` instance so
     partial queries can be safely stored and reused.
 
-    Created by :meth:`~niwaki.facade.Niwaki.query` and
-    :meth:`~niwaki.facade.NiwakiNode.query`, or by jargon navigation without
+    Created by :meth:`~niwaki.Niwaki.query` and
+    :meth:`~niwaki.NiwakiNode.query`, or by jargon navigation without
     a name argument (e.g. ``aci.root.tenant("prod").bd()``).
 
     Args:

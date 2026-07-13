@@ -1,7 +1,7 @@
 """ManagedObject diff utility for surgical APIC updates.
 
 :func:`mo_diff` compares a *desired* state object against a *current* state
-object (typically retrieved from the APIC via :func:`ManagedObject.from_apic`)
+object (typically retrieved from the APIC via :meth:`~niwaki.models.ManagedObject.from_apic`)
 and returns a new instance carrying only the changed fields.
 
 The returned object's ``model_fields_set`` contains exclusively the naming
@@ -123,7 +123,7 @@ def mo_diff[T: ManagedObject](
 
     Args:
         desired: Target state — the object as you want it to be.
-        current: Current state — typically from :meth:`ManagedObject.from_apic`.
+        current: Current state — typically from :meth:`~niwaki.models.ManagedObject.from_apic`.
         recurse_children: When ``True`` (default), children are diffed
             recursively and any changed or new children are included in the
             returned delta.  Set to ``False`` to restrict the diff to scalar

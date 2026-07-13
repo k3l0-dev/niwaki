@@ -46,9 +46,9 @@ class AsyncQuery(_QueryBase[_T]):
     Every accumulator method is synchronous and returns a new :class:`AsyncQuery`
     (same immutable-builder pattern as the sync variant).
 
-    Created by :meth:`~niwaki.facade.AsyncNiwaki.query` and
-    :meth:`~niwaki.facade.AsyncNiwakiNode.query`, or by jargon navigation without
-    a name argument on an :class:`~niwaki.facade.AsyncNiwakiNode`.
+    Created by :meth:`~niwaki.AsyncNiwaki.query` and
+    :meth:`~niwaki.AsyncNiwakiNode.query`, or by jargon navigation without
+    a name argument on an :class:`~niwaki.AsyncNiwakiNode`.
 
     Args:
         cls:      ACI class type or plain string class name.

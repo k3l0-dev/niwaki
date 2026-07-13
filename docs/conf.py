@@ -93,11 +93,15 @@ nitpick_ignore = [
     *_CURSOR_IGNORES,
     # Typing spellings autodoc cannot resolve to a documented target.
     ("py:class", "T"),
+    ("py:class", "U"),
+    ("py:class", "M"),
     ("py:class", "_T"),
     ("py:class", "_Coroutine"),
     ("py:class", "PushMode"),
     ("py:class", "niwaki.transport.session._T"),
     ("py:class", "niwaki.transport.session_async._T"),
+    ("py:obj", "niwaki.query._builder._T"),
+    ("py:obj", "niwaki.query._async_builder._T"),
     # pydantic's inventory does not expose its exceptions.
     ("py:exc", "pydantic.ValidationError"),
     ("py:exc", "ValidationError"),

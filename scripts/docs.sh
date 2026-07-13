@@ -21,6 +21,9 @@ if [[ "${1:-}" == "linkcheck" ]]; then
 fi
 
 echo "[docs] sphinx-build (nitpicky, warnings are errors)..."
+# Clean build, like the CI: an incremental build skips cached pages and their
+# warnings, so a broken cross-reference can pass locally and fail in CI.
+rm -rf docs/_build/html
 uv run sphinx-build -b html -W docs docs/_build/html
 
 echo "[docs] OK — docs/_build/html/index.html"
