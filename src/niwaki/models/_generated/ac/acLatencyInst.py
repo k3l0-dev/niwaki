@@ -19,6 +19,9 @@ class acLatencyInst(ManagedObject):
     _aci_class: ClassVar[str] = "acLatencyInst"
     _rn_format: ClassVar[str] = "latencyinst"
     _naming_props: ClassVar[list[str]] = []
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F2728": "fltAcLatencyInstOperStFailed",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

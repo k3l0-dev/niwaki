@@ -17,6 +17,14 @@ class l3extRsSubnetToRtSumm(ManagedObject):
     _aci_class: ClassVar[str] = "l3extRsSubnetToRtSumm"
     _rn_format: ClassVar[str] = "rsSubnetToRtSumm"
     _naming_props: ClassVar[list[str]] = []
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F2110": "fltL3extRsSubnetToRtSummResolveFail",
+    }
+    _relation_info: ClassVar[dict[str, str | bool]] = {
+        "cardinality": "n-to-1",
+        "enforceable": True,
+        "resolvable": True,
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

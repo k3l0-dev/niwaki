@@ -19,6 +19,9 @@ class pim6Dom(ManagedObject):
     _aci_class: ClassVar[str] = "pim6Dom"
     _rn_format: ClassVar[str] = "dom-{name}"
     _naming_props: ClassVar[list[str]] = ["name"]
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F3308": "fltPim6DomNwIssue",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

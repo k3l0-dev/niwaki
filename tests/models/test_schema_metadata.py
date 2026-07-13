@@ -403,3 +403,68 @@ class TestConfigIssuesIntegrity:
         # Coverage floors — a silent capture regression trips these.
         assert classes_with_catalog >= 90, classes_with_catalog
         assert total_codes >= 2000, total_codes
+
+
+# ── Fault codes & relation info — declared constraint channels ───────────────
+
+
+class TestStaticConstraintCatalogs:
+    """Spot checks on the committed catalogs (run everywhere)."""
+
+    def test_fvbd_fault_codes(self) -> None:
+        codes = _load_fvBD()._fault_codes
+        assert codes.get("F2305") == "fltFvBDMulticastEnabledOnL2BD"
+
+    def test_rs_relation_info(self) -> None:
+        from niwaki.models._generated.fv.fvRsCtx import fvRsCtx
+
+        info = fvRsCtx._relation_info
+        assert info["cardinality"] == "n-to-1"
+        assert info["enforceable"] is True
+        assert info["resolvable"] is True
+
+    def test_non_rs_class_has_no_relation_info(self) -> None:
+        assert _load_fvBD()._relation_info == {}
+
+
+@pytest.mark.skipif(
+    not _SCHEMAS_DIR.exists(),
+    reason="requires the raw APIC schemas (data/schemas/, not in the repository)",
+)
+class TestStaticCatalogsIntegrity:
+    """Anti-drift: fault codes and relation info match the RAW schemas."""
+
+    def test_every_class_matches_the_raw_schema(self) -> None:
+        from importlib import import_module
+
+        from niwaki.models._generated import _PKG_MAP
+
+        classes_with_faults = total_codes = classes_with_relation = 0
+        for aci_class, pkg in _PKG_MAP.items():
+            raw = json.loads((_SCHEMAS_DIR / f"{aci_class}.json").read_text())
+            entity = next(iter(raw.values()))
+            model = getattr(import_module(f"niwaki.models._generated.{pkg}.{aci_class}"), aci_class)
+
+            expected_faults = dict(sorted((entity.get("faults") or {}).items()))
+            assert model._fault_codes == expected_faults, f"{aci_class}: fault codes differ"
+
+            raw_relation = entity.get("relationInfo") or {}
+            expected_relation = (
+                {
+                    "cardinality": raw_relation.get("cardinality", ""),
+                    "enforceable": bool(raw_relation.get("enforceable")),
+                    "resolvable": bool(raw_relation.get("resolvable")),
+                }
+                if raw_relation
+                else {}
+            )
+            assert model._relation_info == expected_relation, f"{aci_class}: relation differs"
+
+            classes_with_faults += bool(expected_faults)
+            total_codes += len(expected_faults)
+            classes_with_relation += bool(expected_relation)
+
+        # Coverage floors — a silent capture regression trips these.
+        assert classes_with_faults >= 600, classes_with_faults
+        assert total_codes >= 700, total_codes
+        assert classes_with_relation >= 500, classes_with_relation

@@ -20,6 +20,10 @@ class aaaOauthProvider(ManagedObject):
     _secure_props: ClassVar[frozenset[str]] = frozenset(
         ["client_secret", "periodic_server_monitoring_password"]
     )
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F4236": "fltAaaOauthProviderOauthProvider_Inoperable",
+        "F4237": "fltAaaOauthProviderOauthProviderInoperable",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

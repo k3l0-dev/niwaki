@@ -19,6 +19,9 @@ class dbgexpPolicyStatus(ManagedObject):
     _aci_class: ClassVar[str] = "dbgexpPolicyStatus"
     _rn_format: ClassVar[str] = "expstatus-{policy_name}"
     _naming_props: ClassVar[list[str]] = ["policy_name"]
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F1651": "fltDbgexpPolicyStatusExportData",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

@@ -21,6 +21,9 @@ class dppIf(ManagedObject):
     _aci_class: ClassVar[str] = "dppIf"
     _rn_format: ClassVar[str] = "if-[{id}]-{ingress_or_egress_direction}"
     _naming_props: ClassVar[list[str]] = ["id", "ingress_or_egress_direction"]
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F2107": "fltDppIfOperStFailed",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

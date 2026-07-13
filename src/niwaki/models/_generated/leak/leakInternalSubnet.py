@@ -40,6 +40,9 @@ class leakInternalSubnet(ManagedObject):
         "internal-subnet-not-present-in-cloud-network": "An Inter-VRF Leaked Subnet must be equal to a cloudCidr, or contain cloudSubnet, or be a part of a cloudSubnet.",
         "none": "",
     }
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F3891": "fltLeakInternalSubnetConfigurationFailed",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

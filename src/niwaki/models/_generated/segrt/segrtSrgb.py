@@ -19,6 +19,10 @@ class segrtSrgb(ManagedObject):
     _aci_class: ClassVar[str] = "segrtSrgb"
     _rn_format: ClassVar[str] = "srgb-{srgb_identifier}"
     _naming_props: ClassVar[list[str]] = ["srgb_identifier"]
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F3725": "fltSegrtSrgbSrgbAllocationFailed",
+        "F3726": "fltSegrtSrgbSrgbCleanupFailed",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

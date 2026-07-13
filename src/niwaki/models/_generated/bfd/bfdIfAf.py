@@ -22,6 +22,9 @@ class bfdIfAf(ManagedObject):
     _aci_class: ClassVar[str] = "bfdIfAf"
     _rn_format: ClassVar[str] = "af-{type_of_the_address_family}"
     _naming_props: ClassVar[list[str]] = ["type_of_the_address_family"]
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F2169": "fltBfdIfAfBfdCfgCtrl",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

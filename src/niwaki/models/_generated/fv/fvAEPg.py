@@ -66,6 +66,9 @@ class fvAEPg(ManagedObject):
         "none": "",
         "not-associated-with-mgmt-zone": "Not Associated With Management Zone",
     }
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F3602": "fltFvAEPgConfig-warning",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

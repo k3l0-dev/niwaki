@@ -156,6 +156,9 @@ class vnsAbsParam(ManagedObject):
         "relinst-validation-failed": "CfgRelInst has key and/or value, that are not found in MParam",
         "resource-allocation-failure": "resource could not be allocated during graph processing",
     }
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F0763": "fltVnsAbsParamResolutionFailed",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

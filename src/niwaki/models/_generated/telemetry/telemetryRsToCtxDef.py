@@ -19,6 +19,14 @@ class telemetryRsToCtxDef(ManagedObject):
     _aci_class: ClassVar[str] = "telemetryRsToCtxDef"
     _rn_format: ClassVar[str] = "rstoCtxDef"
     _naming_props: ClassVar[list[str]] = []
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F3086": "fltTelemetryRsToCtxDefResolveFail",
+    }
+    _relation_info: ClassVar[dict[str, str | bool]] = {
+        "cardinality": "1-to-1",
+        "enforceable": True,
+        "resolvable": True,
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

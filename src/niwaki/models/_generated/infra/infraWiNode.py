@@ -22,6 +22,11 @@ class infraWiNode(ManagedObject):
     _aci_class: ClassVar[str] = "infraWiNode"
     _rn_format: ClassVar[str] = "node-{cluster_unique_controller_id}"
     _naming_props: ClassVar[list[str]] = ["cluster_unique_controller_id"]
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F0321": "fltInfraWiNodeHealth",
+        "F2595": "fltInfraWiNodeApplianceFailoverStatus",
+        "F3906": "fltInfraWiNodePeerNodeUnavailable",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

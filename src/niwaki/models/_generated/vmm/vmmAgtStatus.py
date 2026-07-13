@@ -19,6 +19,9 @@ class vmmAgtStatus(ManagedObject):
     _aci_class: ClassVar[str] = "vmmAgtStatus"
     _rn_format: ClassVar[str] = "AgtStatus-{name}"
     _naming_props: ClassVar[list[str]] = ["name"]
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F1676": "fltVmmAgtStatusConnectFailed",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

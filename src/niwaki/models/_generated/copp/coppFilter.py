@@ -31,6 +31,12 @@ class coppFilter(ManagedObject):
         "destination_port_from",
         "destination_port_to",
     ]
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F2923": "fltCoppFilterPrefilterTcamUnvailable",
+        "F2924": "fltCoppFilterPrefilterHardwareError",
+        "F2925": "fltCoppFilterPrefilterHwUnsupported",
+        "F2926": "fltCoppFilterPrefilterInvalidConfig",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

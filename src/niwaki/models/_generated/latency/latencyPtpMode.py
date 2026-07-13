@@ -22,6 +22,9 @@ class latencyPtpMode(ManagedObject):
     _aci_class: ClassVar[str] = "latencyPtpMode"
     _rn_format: ClassVar[str] = "ptpmode"
     _naming_props: ClassVar[list[str]] = []
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F2980": "fltLatencyPtpModePtpNotEnabled",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

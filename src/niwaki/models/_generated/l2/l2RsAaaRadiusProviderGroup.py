@@ -17,6 +17,14 @@ class l2RsAaaRadiusProviderGroup(ManagedObject):
     _aci_class: ClassVar[str] = "l2RsAaaRadiusProviderGroup"
     _rn_format: ClassVar[str] = "rsaaaRadiusProviderGroup"
     _naming_props: ClassVar[list[str]] = []
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F2744": "fltL2RsAaaRadiusProviderGroupResolveFail",
+    }
+    _relation_info: ClassVar[dict[str, str | bool]] = {
+        "cardinality": "n-to-1",
+        "enforceable": True,
+        "resolvable": False,
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

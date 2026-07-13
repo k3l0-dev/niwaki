@@ -19,6 +19,14 @@ class fabricRsMonInstFabricPol(ManagedObject):
     _aci_class: ClassVar[str] = "fabricRsMonInstFabricPol"
     _rn_format: ClassVar[str] = "rsmonInstFabricPol"
     _naming_props: ClassVar[list[str]] = []
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F0899": "fltFabricRsMonInstFabricPolResolveFail",
+    }
+    _relation_info: ClassVar[dict[str, str | bool]] = {
+        "cardinality": "n-to-1",
+        "enforceable": True,
+        "resolvable": True,
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

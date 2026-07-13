@@ -37,6 +37,9 @@ class vzSubj(ManagedObject):
         "subject-not-in-use-due-to-label": "No EPG Has Label For This Subject",
         "taboo-has-no-filter": "Taboo Not associated to Any Filter",
     }
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F1339": "fltVzSubjConfigurationMissing",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

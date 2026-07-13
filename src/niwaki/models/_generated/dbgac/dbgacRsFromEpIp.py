@@ -19,6 +19,14 @@ class dbgacRsFromEpIp(ManagedObject):
     _aci_class: ClassVar[str] = "dbgacRsFromEpIp"
     _rn_format: ClassVar[str] = "rsfromEpIp-[{target_dn}]"
     _naming_props: ClassVar[list[str]] = ["target_dn"]
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F1348": "fltDbgacRsFromEpIpResolveFail",
+    }
+    _relation_info: ClassVar[dict[str, str | bool]] = {
+        "cardinality": "n-to-m",
+        "enforceable": True,
+        "resolvable": True,
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

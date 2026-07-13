@@ -19,6 +19,14 @@ class datetimeRsNtpProvToNtpIFFClientKey(ManagedObject):
     _aci_class: ClassVar[str] = "datetimeRsNtpProvToNtpIFFClientKey"
     _rn_format: ClassVar[str] = "rsntpProvToNtpIFFClientKey-{iff_key_id}"
     _naming_props: ClassVar[list[str]] = ["iff_key_id"]
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F3543": "fltDatetimeRsNtpProvToNtpIFFClientKeyResolveFail",
+    }
+    _relation_info: ClassVar[dict[str, str | bool]] = {
+        "cardinality": "1-to-m",
+        "enforceable": True,
+        "resolvable": True,
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

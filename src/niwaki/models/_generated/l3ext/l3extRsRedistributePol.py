@@ -19,6 +19,14 @@ class l3extRsRedistributePol(ManagedObject):
     _aci_class: ClassVar[str] = "l3extRsRedistributePol"
     _rn_format: ClassVar[str] = "rsredistributePol-[{name}]-{src}"
     _naming_props: ClassVar[list[str]] = ["name", "src"]
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F3580": "fltL3extRsRedistributePolResolveFail",
+    }
+    _relation_info: ClassVar[dict[str, str | bool]] = {
+        "cardinality": "n-to-m",
+        "enforceable": True,
+        "resolvable": True,
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

@@ -19,6 +19,9 @@ class bfdMhKaP(ManagedObject):
     _aci_class: ClassVar[str] = "bfdMhKaP"
     _rn_format: ClassVar[str] = "mhka"
     _naming_props: ClassVar[list[str]] = []
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F3695": "fltBfdMhKaPBfdCfgCtrl",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

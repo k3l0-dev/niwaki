@@ -23,6 +23,10 @@ class dot1xIf(ManagedObject):
     _aci_class: ClassVar[str] = "dot1xIf"
     _rn_format: ClassVar[str] = "if-[{interface_id}]"
     _naming_props: ClassVar[list[str]] = ["interface_id"]
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F3103": "fltDot1xIfInvalidConfiguration",
+        "F3147": "fltDot1xIfHardwareNotSupported",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

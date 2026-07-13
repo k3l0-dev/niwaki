@@ -19,6 +19,14 @@ class infraRsLeafPGrpToLldpIfPol(ManagedObject):
     _aci_class: ClassVar[str] = "infraRsLeafPGrpToLldpIfPol"
     _rn_format: ClassVar[str] = "rsleafPGrpToLldpIfPol"
     _naming_props: ClassVar[list[str]] = []
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F3582": "fltInfraRsLeafPGrpToLldpIfPolResolveFail",
+    }
+    _relation_info: ClassVar[dict[str, str | bool]] = {
+        "cardinality": "n-to-1",
+        "enforceable": True,
+        "resolvable": True,
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

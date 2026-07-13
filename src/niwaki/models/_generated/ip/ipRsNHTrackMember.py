@@ -19,6 +19,14 @@ class ipRsNHTrackMember(ManagedObject):
     _aci_class: ClassVar[str] = "ipRsNHTrackMember"
     _rn_format: ClassVar[str] = "rsNHTrackMember"
     _naming_props: ClassVar[list[str]] = []
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F3311": "fltIpRsNHTrackMemberResolveFail",
+    }
+    _relation_info: ClassVar[dict[str, str | bool]] = {
+        "cardinality": "n-to-1",
+        "enforceable": True,
+        "resolvable": True,
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

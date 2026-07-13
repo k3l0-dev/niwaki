@@ -19,6 +19,14 @@ class netflowRsExporterToCtx(ManagedObject):
     _aci_class: ClassVar[str] = "netflowRsExporterToCtx"
     _rn_format: ClassVar[str] = "rsexporterToCtx"
     _naming_props: ClassVar[list[str]] = []
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F2551": "fltNetflowRsExporterToCtxResolveFail",
+    }
+    _relation_info: ClassVar[dict[str, str | bool]] = {
+        "cardinality": "n-to-1",
+        "enforceable": True,
+        "resolvable": False,
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

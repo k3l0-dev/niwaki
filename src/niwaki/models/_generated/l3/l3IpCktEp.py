@@ -19,6 +19,9 @@ class l3IpCktEp(ManagedObject):
     _aci_class: ClassVar[str] = "l3IpCktEp"
     _rn_format: ClassVar[str] = "ipcktep-[{identifier_of_the_ip_circuit_endpoint}]"
     _naming_props: ClassVar[list[str]] = ["identifier_of_the_ip_circuit_endpoint"]
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F1925": "fltL3IpCktEpIpCktEpConfigFailed",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

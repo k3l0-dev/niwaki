@@ -21,6 +21,9 @@ class traceroutepTrNode(ManagedObject):
     _aci_class: ClassVar[str] = "traceroutepTrNode"
     _rn_format: ClassVar[str] = "trNode-{name}"
     _naming_props: ClassVar[list[str]] = ["name"]
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F1286": "fltTraceroutepTrNodeInvalidSrcOrDst",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

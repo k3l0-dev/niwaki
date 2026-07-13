@@ -60,6 +60,21 @@ class apPlugin(ManagedObject):
         "start-plugin-failed": "start plugin failed",
         "stop-plugin-failed": "stop plugin failed",
     }
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F2548": "fltApPluginValidationFailed",
+        "F2650": "fltApPluginStartPluginFailed",
+        "F2656": "fltApPluginAppDowngradeNotAllowed",
+        "F2669": "fltApPluginSignatureVerificationFailed",
+        "F3254": "fltApPluginPluginHealthNotOk",
+        "F3293": "fltApPluginStopPluginFailed",
+        "F3335": "fltApPluginRequiredPlatformNotAvailable",
+        "F3471": "fltApPluginAppInconsistentState",
+        "F3588": "fltApPluginAppInstallationFailed",
+        "F3712": "fltApPluginAppRemovalDeferred",
+        "F4107": "fltApPluginHighPrivilegeAppNotSigned",
+        "F4156": "fltApPluginAppValidationDeferred",
+        "F4249": "fltApPluginClusterHasVApic",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

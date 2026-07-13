@@ -57,6 +57,10 @@ class l3extConsLbl(ManagedObject):
         "rtsumsubnet-l3extsubnet-conflict": "fvRtSummSubnet and l3extSubnet has same prefix",
         "subnet-mismatch": "Primary IP and floating ip are not in same subnet",
     }
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F3940": "fltL3extConsLblMissingExportRouteProfile",
+        "F3951": "fltL3extConsLblMissingInfraL3out",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

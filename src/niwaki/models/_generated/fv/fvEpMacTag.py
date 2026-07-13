@@ -32,6 +32,10 @@ class fvEpMacTag(ManagedObject):
         "none": "",
         "vrf-does-not-exist": "Endpoint is associated to a VRF, but the VRF does not exist.",
     }
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F4110": "fltFvEpMacTagConfigurationFailed",
+        "F4134": "fltFvEpMacTagConfigurationError",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

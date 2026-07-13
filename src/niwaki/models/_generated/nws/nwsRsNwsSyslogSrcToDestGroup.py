@@ -17,6 +17,15 @@ class nwsRsNwsSyslogSrcToDestGroup(ManagedObject):
     _aci_class: ClassVar[str] = "nwsRsNwsSyslogSrcToDestGroup"
     _rn_format: ClassVar[str] = "rsnwsSyslogSrcToDestGroup"
     _naming_props: ClassVar[list[str]] = []
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F1891": "fltNwsRsNwsSyslogSrcToDestGroupResolveFail",
+        "F1911": "fltNwsRsNwsSyslogSrcToDestGroupNwsFwSyslogTooManyRemoteDest",
+    }
+    _relation_info: ClassVar[dict[str, str | bool]] = {
+        "cardinality": "n-to-1",
+        "enforceable": True,
+        "resolvable": False,
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

@@ -24,6 +24,10 @@ class aaaSamlProvider(ManagedObject):
     _secure_props: ClassVar[frozenset[str]] = frozenset(
         ["key", "periodic_server_monitoring_password"]
     )
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F2869": "fltAaaSamlProviderSamlProvider_Inoperable",
+        "F2870": "fltAaaSamlProviderSamlProviderInoperable",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

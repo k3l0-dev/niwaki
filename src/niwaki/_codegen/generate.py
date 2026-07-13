@@ -435,6 +435,9 @@ def _render_class(
     class_comment = meta.get("comment", "").replace('"""', "'''")
     # The APIC's declared accepted-but-inconsistent states for this class.
     config_issues: dict[str, str] = meta.get("config_issues", {})
+    # Declared fault codes and (for Rs classes) relation constraints.
+    fault_codes: dict[str, str] = meta.get("fault_codes", {})
+    relation_info: dict[str, Any] = meta.get("relation_info", {})
     healthy = {"ok", "none", "N/A", "not-applicable"}
     config_issue_display = [
         f"- ``{code}``" + (f" — {desc}" if desc and desc != code else "")
@@ -469,6 +472,9 @@ def _render_class(
         class_comment=class_comment,
         config_issues=config_issues,
         config_issue_display=config_issue_display,
+        fault_codes=fault_codes,
+        relation_info=relation_info,
+        relation_info_repr=repr(relation_info),
         write_access=write_access,
         is_observable=is_observable,
         is_faultable=is_faultable,

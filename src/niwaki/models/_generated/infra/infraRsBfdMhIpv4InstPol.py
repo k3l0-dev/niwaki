@@ -19,6 +19,14 @@ class infraRsBfdMhIpv4InstPol(ManagedObject):
     _aci_class: ClassVar[str] = "infraRsBfdMhIpv4InstPol"
     _rn_format: ClassVar[str] = "rsbfdMhIpv4InstPol"
     _naming_props: ClassVar[list[str]] = []
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F3799": "fltInfraRsBfdMhIpv4InstPolResolveFail",
+    }
+    _relation_info: ClassVar[dict[str, str | bool]] = {
+        "cardinality": "n-to-1",
+        "enforceable": True,
+        "resolvable": True,
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

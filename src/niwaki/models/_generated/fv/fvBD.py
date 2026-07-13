@@ -40,6 +40,11 @@ class fvBD(ManagedObject):
         "l3-mcast-is-enabled-on-vrf-where-bd-has-ip-learn-disable": "l3-mcast-is-enabled-on-vrf-where-bd-has-ip-learn-disable",
         "ok": "ok",
     }
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F1386": "fltFvBDNoOptArpFwdWithUnkMacFlood",
+        "F2305": "fltFvBDMulticastEnabledOnL2BD",
+        "F2409": "fltFvBDInvalidConfigOnBD",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

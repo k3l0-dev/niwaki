@@ -17,6 +17,10 @@ class eqptPortP(ManagedObject):
     _aci_class: ClassVar[str] = "eqptPortP"
     _rn_format: ClassVar[str] = "portpol-{id}"
     _naming_props: ClassVar[list[str]] = ["id"]
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F2973": "fltEqptPortPOperStNotSupported",
+        "F2981": "fltEqptPortPOperStLimitExceeded",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

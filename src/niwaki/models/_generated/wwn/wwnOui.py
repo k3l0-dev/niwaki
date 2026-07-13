@@ -17,6 +17,11 @@ class wwnOui(ManagedObject):
     _aci_class: ClassVar[str] = "wwnOui"
     _rn_format: ClassVar[str] = "oui-{organizationally_unique_identifier}"
     _naming_props: ClassVar[list[str]] = ["organizationally_unique_identifier"]
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F3697": "fltWwnOuiConfigDuplicate",
+        "F3698": "fltWwnOuiConfigMaxCount",
+        "F3699": "fltWwnOuiWwnCfgCtrl",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

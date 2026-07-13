@@ -19,6 +19,11 @@ class aaaRsToSnInbEpg(ManagedObject):
     _aci_class: ClassVar[str] = "aaaRsToSnInbEpg"
     _rn_format: ClassVar[str] = "rstoSnInbEpg"
     _naming_props: ClassVar[list[str]] = []
+    _relation_info: ClassVar[dict[str, str | bool]] = {
+        "cardinality": "1-to-1",
+        "enforceable": False,
+        "resolvable": False,
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

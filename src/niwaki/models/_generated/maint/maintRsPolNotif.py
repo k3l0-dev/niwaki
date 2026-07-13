@@ -19,6 +19,14 @@ class maintRsPolNotif(ManagedObject):
     _aci_class: ClassVar[str] = "maintRsPolNotif"
     _rn_format: ClassVar[str] = "rspolNotif"
     _naming_props: ClassVar[list[str]] = []
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F1025": "fltMaintRsPolNotifResolveFail",
+    }
+    _relation_info: ClassVar[dict[str, str | bool]] = {
+        "cardinality": "n-to-1",
+        "enforceable": True,
+        "resolvable": True,
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

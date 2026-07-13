@@ -19,6 +19,9 @@ class snmpClient(ManagedObject):
     _aci_class: ClassVar[str] = "snmpClient"
     _rn_format: ClassVar[str] = "client-[{client_address}]"
     _naming_props: ClassVar[list[str]] = ["client_address"]
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F1368": "fltSnmpClientProgFailed",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

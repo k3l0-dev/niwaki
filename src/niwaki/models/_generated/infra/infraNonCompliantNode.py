@@ -19,6 +19,9 @@ class infraNonCompliantNode(ManagedObject):
     _aci_class: ClassVar[str] = "infraNonCompliantNode"
     _rn_format: ClassVar[str] = "noncompliantnode-{node_serial_number}"
     _naming_props: ClassVar[list[str]] = ["node_serial_number"]
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F4508": "fltInfraNonCompliantNodeNonCompliantNode",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

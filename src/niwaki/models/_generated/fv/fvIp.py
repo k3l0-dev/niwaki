@@ -19,6 +19,9 @@ class fvIp(ManagedObject):
     _aci_class: ClassVar[str] = "fvIp"
     _rn_format: ClassVar[str] = "ip-[{ip_address}]"
     _naming_props: ClassVar[list[str]] = ["ip_address"]
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F3083": "fltFvIpConfig-error",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

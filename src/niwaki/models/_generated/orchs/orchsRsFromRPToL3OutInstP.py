@@ -19,6 +19,14 @@ class orchsRsFromRPToL3OutInstP(ManagedObject):
     _aci_class: ClassVar[str] = "orchsRsFromRPToL3OutInstP"
     _rn_format: ClassVar[str] = "rsfromRPToL3OutInstP-[{target_dn}]"
     _naming_props: ClassVar[list[str]] = ["target_dn"]
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F2634": "fltOrchsRsFromRPToL3OutInstPResolveFail",
+    }
+    _relation_info: ClassVar[dict[str, str | bool]] = {
+        "cardinality": "n-to-m",
+        "enforceable": True,
+        "resolvable": False,
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

@@ -34,6 +34,9 @@ class fabricSetupP(ManagedObject):
         "secondary-dhcp-server-not-configured": "Either secondary DHCP server Leaf node is not configured or the node is not active",
         "secondary-subnet-not-configured": "fabricAssociatedSetupP is not configured",
     }
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F3264": "fltFabricSetupPInvalidConfiguration",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

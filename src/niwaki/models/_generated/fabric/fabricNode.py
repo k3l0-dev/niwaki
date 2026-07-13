@@ -21,6 +21,10 @@ class fabricNode(ManagedObject):
     _aci_class: ClassVar[str] = "fabricNode"
     _rn_format: ClassVar[str] = "node-{id}"
     _naming_props: ClassVar[list[str]] = ["id"]
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F1543": "fltFabricNodeInactive",
+        "F1544": "fltFabricNodeUnsupported",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

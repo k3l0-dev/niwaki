@@ -17,6 +17,14 @@ class infraRsVipAddrNs(ManagedObject):
     _aci_class: ClassVar[str] = "infraRsVipAddrNs"
     _rn_format: ClassVar[str] = "rsvipAddrNs"
     _naming_props: ClassVar[list[str]] = []
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F1427": "fltInfraRsVipAddrNsResolveFail",
+    }
+    _relation_info: ClassVar[dict[str, str | bool]] = {
+        "cardinality": "n-to-1",
+        "enforceable": True,
+        "resolvable": False,
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

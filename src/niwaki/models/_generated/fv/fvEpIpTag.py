@@ -32,6 +32,10 @@ class fvEpIpTag(ManagedObject):
         "none": "",
         "vrf-does-not-exist": "Endpoint is associated to a VRF, but the VRF does not exist.",
     }
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F4124": "fltFvEpIpTagConfigurationFailed",
+        "F4135": "fltFvEpIpTagConfigurationError",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

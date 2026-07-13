@@ -21,6 +21,14 @@ class vmmRsVmmCtrlrP(ManagedObject):
     _aci_class: ClassVar[str] = "vmmRsVmmCtrlrP"
     _rn_format: ClassVar[str] = "rsvmmCtrlrP-[{target_dn}]"
     _naming_props: ClassVar[list[str]] = ["target_dn"]
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F1066": "fltVmmRsVmmCtrlrPResolveFail",
+    }
+    _relation_info: ClassVar[dict[str, str | bool]] = {
+        "cardinality": "n-to-m",
+        "enforceable": True,
+        "resolvable": True,
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

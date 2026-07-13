@@ -64,6 +64,9 @@ class fvESg(ManagedObject):
         "none": "",
         "not-associated-with-mgmt-zone": "Not Associated With Management Zone",
     }
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F4195": "fltFvESgConfig-warning",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

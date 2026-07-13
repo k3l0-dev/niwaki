@@ -21,6 +21,15 @@ class spanRsDestEpg(ManagedObject):
     _aci_class: ClassVar[str] = "spanRsDestEpg"
     _rn_format: ClassVar[str] = "rsdestEpg"
     _naming_props: ClassVar[list[str]] = []
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F1041": "fltSpanRsDestEpgResolveFail",
+        "F1571": "fltSpanRsDestEpgConfigFailed",
+    }
+    _relation_info: ClassVar[dict[str, str | bool]] = {
+        "cardinality": "n-to-1",
+        "enforceable": True,
+        "resolvable": False,
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

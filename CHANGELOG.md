@@ -17,6 +17,12 @@ All notable changes to this project are documented here.  The format follows
   the APIC flags them.  Descriptions come from the value's `comment`
   (rich prose) with the schema `label` as fallback — every code is
   described.
+- Two more declared constraint channels reach the models: `_fault_codes`
+  (659 classes, 739 F-codes — `fvBD` carries
+  `fltFvBDMulticastEnabledOnL2BD`) and `_relation_info` on relation
+  classes (cardinality, enforceable, resolvable).  Both are guarded by
+  an anti-drift integrity suite that re-derives them from the raw
+  schemas for all 2,222 generated classes.
 
 ## [0.6.0] — 2026-07-13
 

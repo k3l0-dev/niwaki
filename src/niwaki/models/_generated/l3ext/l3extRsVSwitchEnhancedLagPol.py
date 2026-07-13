@@ -17,6 +17,14 @@ class l3extRsVSwitchEnhancedLagPol(ManagedObject):
     _aci_class: ClassVar[str] = "l3extRsVSwitchEnhancedLagPol"
     _rn_format: ClassVar[str] = "rsvSwitchEnhancedLagPol-[{target_dn}]"
     _naming_props: ClassVar[list[str]] = ["target_dn"]
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F3682": "fltL3extRsVSwitchEnhancedLagPolResolveFail",
+    }
+    _relation_info: ClassVar[dict[str, str | bool]] = {
+        "cardinality": "n-to-m",
+        "enforceable": True,
+        "resolvable": False,
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

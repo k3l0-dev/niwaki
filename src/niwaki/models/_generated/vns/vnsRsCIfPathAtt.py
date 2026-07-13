@@ -19,6 +19,11 @@ class vnsRsCIfPathAtt(ManagedObject):
     _aci_class: ClassVar[str] = "vnsRsCIfPathAtt"
     _rn_format: ClassVar[str] = "rsCIfPathAtt"
     _naming_props: ClassVar[list[str]] = []
+    _relation_info: ClassVar[dict[str, str | bool]] = {
+        "cardinality": "n-to-1",
+        "enforceable": False,
+        "resolvable": False,
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

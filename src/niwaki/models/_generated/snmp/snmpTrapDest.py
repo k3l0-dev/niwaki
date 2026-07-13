@@ -23,6 +23,10 @@ class snmpTrapDest(ManagedObject):
     _aci_class: ClassVar[str] = "snmpTrapDest"
     _rn_format: ClassVar[str] = "trapdest-{host}-port-{port}"
     _naming_props: ClassVar[list[str]] = ["host", "port"]
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F1449": "fltSnmpTrapDestSnmpTrapDestVrfName",
+        "F1450": "fltSnmpTrapDestSnmpTrapDestEpgDn",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

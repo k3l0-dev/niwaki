@@ -36,6 +36,9 @@ class apphostingAppConf(ManagedObject):
         "non-remote-leaf": "non-remote leaf",
         "none": "",
     }
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F4437": "fltApphostingAppConfConfig-failed",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

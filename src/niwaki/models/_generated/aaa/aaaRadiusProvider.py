@@ -25,6 +25,10 @@ class aaaRadiusProvider(ManagedObject):
     _secure_props: ClassVar[frozenset[str]] = frozenset(
         ["key", "periodic_server_monitoring_password"]
     )
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F0021": "fltAaaRadiusProviderRadiusProvider_Inoperable",
+        "F0397": "fltAaaRadiusProviderRadiusProviderInoperable",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

@@ -19,6 +19,11 @@ class traceroutepRsTrExtExtl3extOutSrc(ManagedObject):
     _aci_class: ClassVar[str] = "traceroutepRsTrExtExtl3extOutSrc"
     _rn_format: ClassVar[str] = "rstrExtExtl3extOutSrc"
     _naming_props: ClassVar[list[str]] = []
+    _relation_info: ClassVar[dict[str, str | bool]] = {
+        "cardinality": "1-to-1",
+        "enforceable": True,
+        "resolvable": True,
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

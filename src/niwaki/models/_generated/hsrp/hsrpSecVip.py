@@ -42,6 +42,9 @@ class hsrpSecVip(ManagedObject):
         "Secondary-vip-conflicts-if-ip": "SecVip Conflicts Interface Ip",
         "Secondary-vip-subnet-mismatch": "SecVip RsPathL3OutAtt Subnet Misconfiguration",
     }
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F2640": "fltHsrpSecVipSecondaryVipSubnetMismatch",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

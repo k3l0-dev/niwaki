@@ -21,6 +21,10 @@ class cnwPhysIf(ManagedObject):
     _aci_class: ClassVar[str] = "cnwPhysIf"
     _rn_format: ClassVar[str] = "cphys-[{interface_id}]"
     _naming_props: ClassVar[list[str]] = ["interface_id"]
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F0103": "fltCnwPhysIfDown",
+        "F0106": "fltCnwPhysIfPortOutofService",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

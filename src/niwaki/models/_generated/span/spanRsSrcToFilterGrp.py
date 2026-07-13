@@ -19,6 +19,11 @@ class spanRsSrcToFilterGrp(ManagedObject):
     _aci_class: ClassVar[str] = "spanRsSrcToFilterGrp"
     _rn_format: ClassVar[str] = "rssrcToFilterGrp"
     _naming_props: ClassVar[list[str]] = []
+    _relation_info: ClassVar[dict[str, str | bool]] = {
+        "cardinality": "n-to-1",
+        "enforceable": True,
+        "resolvable": True,
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

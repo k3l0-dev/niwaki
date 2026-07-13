@@ -21,6 +21,14 @@ class l3extRsLblToProfile(ManagedObject):
     _aci_class: ClassVar[str] = "l3extRsLblToProfile"
     _rn_format: ClassVar[str] = "rslblToProfile-[{target_dn}]-{direction}"
     _naming_props: ClassVar[list[str]] = ["target_dn", "direction"]
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F3784": "fltL3extRsLblToProfileResolveFail",
+    }
+    _relation_info: ClassVar[dict[str, str | bool]] = {
+        "cardinality": "n-to-m",
+        "enforceable": True,
+        "resolvable": True,
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

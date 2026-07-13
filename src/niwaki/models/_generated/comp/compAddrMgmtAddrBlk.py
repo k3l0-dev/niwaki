@@ -17,6 +17,9 @@ class compAddrMgmtAddrBlk(ManagedObject):
     _aci_class: ClassVar[str] = "compAddrMgmtAddrBlk"
     _rn_format: ClassVar[str] = "fromaddr-[{from_}]-toaddr-[{ending_ip_address}]"
     _naming_props: ClassVar[list[str]] = ["from_", "ending_ip_address"]
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F4483": "fltCompAddrMgmtAddrBlkInvalidconfiguration",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

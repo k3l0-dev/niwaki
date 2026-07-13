@@ -17,6 +17,9 @@ class l2NodeAuthPol(ManagedObject):
     _aci_class: ClassVar[str] = "l2NodeAuthPol"
     _rn_format: ClassVar[str] = "nodeauthpol-{name}"
     _naming_props: ClassVar[list[str]] = ["name"]
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F3206": "fltL2NodeAuthPolNodeAuthPolMisconfigured",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

@@ -19,6 +19,11 @@ class traceroutepRsTrExtExtSrcToPathEp(ManagedObject):
     _aci_class: ClassVar[str] = "traceroutepRsTrExtExtSrcToPathEp"
     _rn_format: ClassVar[str] = "rstrExtExtSrcToPathEp-[{target_dn}]"
     _naming_props: ClassVar[list[str]] = ["target_dn"]
+    _relation_info: ClassVar[dict[str, str | bool]] = {
+        "cardinality": "n-to-m",
+        "enforceable": False,
+        "resolvable": True,
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

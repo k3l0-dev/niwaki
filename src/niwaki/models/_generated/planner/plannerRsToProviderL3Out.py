@@ -19,6 +19,14 @@ class plannerRsToProviderL3Out(ManagedObject):
     _aci_class: ClassVar[str] = "plannerRsToProviderL3Out"
     _rn_format: ClassVar[str] = "rstoProviderL3Out"
     _naming_props: ClassVar[list[str]] = []
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F1835": "fltPlannerRsToProviderL3OutResolveFail",
+    }
+    _relation_info: ClassVar[dict[str, str | bool]] = {
+        "cardinality": "n-to-1",
+        "enforceable": True,
+        "resolvable": True,
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

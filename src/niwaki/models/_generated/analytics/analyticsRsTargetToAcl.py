@@ -34,6 +34,14 @@ class analyticsRsTargetToAcl(ManagedObject):
         "tcam limit reached": "tcam limit reached",
         "yes": "Yes",
     }
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F4398": "fltAnalyticsRsTargetToAclResolveFail",
+    }
+    _relation_info: ClassVar[dict[str, str | bool]] = {
+        "cardinality": "n-to-m",
+        "enforceable": True,
+        "resolvable": True,
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

@@ -19,6 +19,9 @@ class dhcpRelayAddr(ManagedObject):
     _aci_class: ClassVar[str] = "dhcpRelayAddr"
     _rn_format: ClassVar[str] = "addr-[{vrf}]-[{address}]"
     _naming_props: ClassVar[list[str]] = ["vrf", "address"]
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F2898": "fltDhcpRelayAddrDhcpCfgCtrl",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

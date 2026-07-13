@@ -32,6 +32,9 @@ class fvSubnet(ManagedObject):
         "multiple-tag-selector-match-after-single-match": "Tag(s) are now matching more than one ESG TagSelector. The original match is still active. Subnets can only be associated to a single ESG TagSelector via Tags.",
         "none": "",
     }
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F4125": "fltFvSubnetConfigurationFailed",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

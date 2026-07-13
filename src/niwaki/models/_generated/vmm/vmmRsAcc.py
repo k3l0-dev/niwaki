@@ -19,6 +19,14 @@ class vmmRsAcc(ManagedObject):
     _aci_class: ClassVar[str] = "vmmRsAcc"
     _rn_format: ClassVar[str] = "rsacc"
     _naming_props: ClassVar[list[str]] = []
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F1063": "fltVmmRsAccResolveFail",
+    }
+    _relation_info: ClassVar[dict[str, str | bool]] = {
+        "cardinality": "n-to-1",
+        "enforceable": True,
+        "resolvable": True,
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

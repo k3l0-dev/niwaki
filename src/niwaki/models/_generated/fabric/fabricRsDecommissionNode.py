@@ -19,6 +19,11 @@ class fabricRsDecommissionNode(ManagedObject):
     _aci_class: ClassVar[str] = "fabricRsDecommissionNode"
     _rn_format: ClassVar[str] = "rsdecommissionNode-[{target_dn}]"
     _naming_props: ClassVar[list[str]] = ["target_dn"]
+    _relation_info: ClassVar[dict[str, str | bool]] = {
+        "cardinality": "1-to-m",
+        "enforceable": False,
+        "resolvable": False,
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

@@ -19,6 +19,9 @@ class l2MacCktEp(ManagedObject):
     _aci_class: ClassVar[str] = "l2MacCktEp"
     _rn_format: ClassVar[str] = "maccktep-{identifier_of_the_mac_circuit_endpoint}"
     _naming_props: ClassVar[list[str]] = ["identifier_of_the_mac_circuit_endpoint"]
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F2407": "fltL2MacCktEpMacCktEpConfigFailed",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

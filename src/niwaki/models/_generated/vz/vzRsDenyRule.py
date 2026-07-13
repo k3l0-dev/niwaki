@@ -19,6 +19,14 @@ class vzRsDenyRule(ManagedObject):
     _aci_class: ClassVar[str] = "vzRsDenyRule"
     _rn_format: ClassVar[str] = "rsdenyRule-{name}"
     _naming_props: ClassVar[list[str]] = ["name"]
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F1129": "fltVzRsDenyRuleResolveFail",
+    }
+    _relation_info: ClassVar[dict[str, str | bool]] = {
+        "cardinality": "n-to-m",
+        "enforceable": True,
+        "resolvable": True,
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

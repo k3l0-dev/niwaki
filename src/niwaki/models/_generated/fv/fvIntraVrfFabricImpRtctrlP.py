@@ -44,6 +44,9 @@ class fvIntraVrfFabricImpRtctrlP(ManagedObject):
         "rtsum-subnet-policy-missing": "Route Summarization policy is missing from rtsumSubnet",
         "rtsumsubnet-l3extsubnet-conflict": "fvRtSummSubnet and l3extSubnet has same prefix",
     }
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F4305": "fltFvIntraVrfFabricImpRtctrlPConflictingConfig",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

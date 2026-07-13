@@ -21,6 +21,17 @@ class infraRsPortDirection(ManagedObject):
     _aci_class: ClassVar[str] = "infraRsPortDirection"
     _rn_format: ClassVar[str] = "rsportDirection-[{target_dn}]"
     _naming_props: ClassVar[list[str]] = ["target_dn"]
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F2873": "fltInfraRsPortDirectionDeploymentStatus",
+        "F2880": "fltInfraRsPortDirectionPortp-config-failed-not-exist",
+        "F2881": "fltInfraRsPortDirectionPortp-config-failed-pc",
+        "F4486": "fltInfraRsPortDirectionPortp-config-failed-breakout",
+    }
+    _relation_info: ClassVar[dict[str, str | bool]] = {
+        "cardinality": "1-to-m",
+        "enforceable": False,
+        "resolvable": True,
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

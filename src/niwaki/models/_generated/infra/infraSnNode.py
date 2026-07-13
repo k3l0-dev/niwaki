@@ -21,6 +21,9 @@ class infraSnNode(ManagedObject):
     _aci_class: ClassVar[str] = "infraSnNode"
     _rn_format: ClassVar[str] = "serial-{cluster_unique_controller_id}"
     _naming_props: ClassVar[list[str]] = ["cluster_unique_controller_id"]
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F4451": "fltInfraSnNodeStandbyNodeUnavailable",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

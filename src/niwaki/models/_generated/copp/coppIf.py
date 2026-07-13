@@ -19,6 +19,13 @@ class coppIf(ManagedObject):
     _aci_class: ClassVar[str] = "coppIf"
     _rn_format: ClassVar[str] = "if-[{id}]"
     _naming_props: ClassVar[list[str]] = ["id"]
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F2912": "fltCoppIfInstallationFailedTcamUnavailable",
+        "F2913": "fltCoppIfInstallationFailedIfAclLabelUnavailable",
+        "F2914": "fltCoppIfInstallationFailedHwErr",
+        "F2915": "fltCoppIfInstallationFailedInvalidRateBurst",
+        "F2916": "fltCoppIfInstallationFailedPolicerUnvailable",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

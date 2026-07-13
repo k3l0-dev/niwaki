@@ -19,6 +19,14 @@ class l3extRsIngressQosDppPol(ManagedObject):
     _aci_class: ClassVar[str] = "l3extRsIngressQosDppPol"
     _rn_format: ClassVar[str] = "rsingressQosDppPol"
     _naming_props: ClassVar[list[str]] = []
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F2044": "fltL3extRsIngressQosDppPolResolveFail",
+    }
+    _relation_info: ClassVar[dict[str, str | bool]] = {
+        "cardinality": "n-to-1",
+        "enforceable": True,
+        "resolvable": True,
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

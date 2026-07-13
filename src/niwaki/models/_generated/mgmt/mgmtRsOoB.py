@@ -19,6 +19,14 @@ class mgmtRsOoB(ManagedObject):
     _aci_class: ClassVar[str] = "mgmtRsOoB"
     _rn_format: ClassVar[str] = "rsooB"
     _naming_props: ClassVar[list[str]] = []
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F1975": "fltMgmtRsOoBResolveFail",
+    }
+    _relation_info: ClassVar[dict[str, str | bool]] = {
+        "cardinality": "n-to-1",
+        "enforceable": True,
+        "resolvable": False,
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

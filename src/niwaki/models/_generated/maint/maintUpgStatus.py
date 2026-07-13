@@ -21,6 +21,10 @@ class maintUpgStatus(ManagedObject):
     _aci_class: ClassVar[str] = "maintUpgStatus"
     _rn_format: ClassVar[str] = "maintupgstatus-{maintenance_policy_name}"
     _naming_props: ClassVar[list[str]] = ["maintenance_policy_name"]
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F1432": "fltMaintUpgStatusSchedulerPausedOnMemberUpgradeFailure",
+        "F1433": "fltMaintUpgStatusSchedulerPausedOnClusterHealth",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

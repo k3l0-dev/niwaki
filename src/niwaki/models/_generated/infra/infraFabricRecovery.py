@@ -19,6 +19,9 @@ class infraFabricRecovery(ManagedObject):
     _aci_class: ClassVar[str] = "infraFabricRecovery"
     _rn_format: ClassVar[str] = "recovery"
     _naming_props: ClassVar[list[str]] = []
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F1867": "fltInfraFabricRecoveryFabricRecoveryInProgress",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

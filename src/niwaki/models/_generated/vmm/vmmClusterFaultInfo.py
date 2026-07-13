@@ -19,6 +19,11 @@ class vmmClusterFaultInfo(ManagedObject):
     _aci_class: ClassVar[str] = "vmmClusterFaultInfo"
     _rn_format: ClassVar[str] = "clusterfaultinfo-{fault_code}"
     _naming_props: ClassVar[list[str]] = ["fault_code"]
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F4119": "fltVmmClusterFaultInfoMajorOperationalIssues",
+        "F4120": "fltVmmClusterFaultInfoMinorOperationalIssues",
+        "F4121": "fltVmmClusterFaultInfoCriticalOperationalIssues",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

@@ -19,6 +19,14 @@ class vnsRsDevFolderToMFolder(ManagedObject):
     _aci_class: ClassVar[str] = "vnsRsDevFolderToMFolder"
     _rn_format: ClassVar[str] = "rsdevFolderToMFolder-[{target_dn}]"
     _naming_props: ClassVar[list[str]] = ["target_dn"]
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F1095": "fltVnsRsDevFolderToMFolderResolveFail",
+    }
+    _relation_info: ClassVar[dict[str, str | bool]] = {
+        "cardinality": "1-to-m",
+        "enforceable": True,
+        "resolvable": True,
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

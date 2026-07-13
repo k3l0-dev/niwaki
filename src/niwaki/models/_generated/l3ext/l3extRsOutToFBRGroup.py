@@ -19,6 +19,14 @@ class l3extRsOutToFBRGroup(ManagedObject):
     _aci_class: ClassVar[str] = "l3extRsOutToFBRGroup"
     _rn_format: ClassVar[str] = "rsoutToFBRGroup-[{target_dn}]"
     _naming_props: ClassVar[list[str]] = ["target_dn"]
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F4260": "fltL3extRsOutToFBRGroupResolveFail",
+    }
+    _relation_info: ClassVar[dict[str, str | bool]] = {
+        "cardinality": "n-to-m",
+        "enforceable": True,
+        "resolvable": True,
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

@@ -17,6 +17,9 @@ class dhcpServerInfo(ManagedObject):
     _aci_class: ClassVar[str] = "dhcpServerInfo"
     _rn_format: ClassVar[str] = "dhcpserverinfo"
     _naming_props: ClassVar[list[str]] = []
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F3426": "fltDhcpServerInfoDhcpHAFailed",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

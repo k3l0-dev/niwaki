@@ -19,6 +19,14 @@ class adepgRsSvrKeyRing(ManagedObject):
     _aci_class: ClassVar[str] = "adepgRsSvrKeyRing"
     _rn_format: ClassVar[str] = "rssvrKeyRing"
     _naming_props: ClassVar[list[str]] = []
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F3181": "fltAdepgRsSvrKeyRingResolveFail",
+    }
+    _relation_info: ClassVar[dict[str, str | bool]] = {
+        "cardinality": "n-to-1",
+        "enforceable": True,
+        "resolvable": True,
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

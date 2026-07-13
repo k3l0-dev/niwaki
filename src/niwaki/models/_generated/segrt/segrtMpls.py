@@ -19,6 +19,9 @@ class segrtMpls(ManagedObject):
     _aci_class: ClassVar[str] = "segrtMpls"
     _rn_format: ClassVar[str] = "mpls"
     _naming_props: ClassVar[list[str]] = []
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F3727": "fltSegrtMplsSrUlibRegistrationState",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

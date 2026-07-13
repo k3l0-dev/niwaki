@@ -49,6 +49,16 @@ class {{ class_name }}(ManagedObject):
 {% endfor %}
     }
 {% endif %}
+{% if fault_codes %}
+    _fault_codes: ClassVar[dict[str, str]] = {
+{% for code, name in fault_codes | dictsort %}
+        {{ code | tojson }}: {{ name | tojson }},
+{% endfor %}
+    }
+{% endif %}
+{% if relation_info %}
+    _relation_info: ClassVar[dict[str, str | bool]] = {{ relation_info_repr }}
+{% endif %}
     _contains:     ClassVar[frozenset[str]] = frozenset({
 {% for child in contains %}
         "{{ child }}",

@@ -21,6 +21,9 @@ class quotaConf(ManagedObject):
     _aci_class: ClassVar[str] = "quotaConf"
     _rn_format: ClassVar[str] = "quotaconf-{class_}-scope-[{container_dn}]"
     _naming_props: ClassVar[list[str]] = ["class_", "container_dn"]
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F2593": "fltQuotaConfQuotaExceeded",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

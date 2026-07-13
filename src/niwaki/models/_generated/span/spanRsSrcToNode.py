@@ -19,6 +19,11 @@ class spanRsSrcToNode(ManagedObject):
     _aci_class: ClassVar[str] = "spanRsSrcToNode"
     _rn_format: ClassVar[str] = "rssrcToNode-[{target_dn}]"
     _naming_props: ClassVar[list[str]] = ["target_dn"]
+    _relation_info: ClassVar[dict[str, str | bool]] = {
+        "cardinality": "1-to-m",
+        "enforceable": False,
+        "resolvable": True,
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

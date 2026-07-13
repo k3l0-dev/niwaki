@@ -19,6 +19,14 @@ class vnsRsConnToCtxTerm(ManagedObject):
     _aci_class: ClassVar[str] = "vnsRsConnToCtxTerm"
     _rn_format: ClassVar[str] = "rsConnToCtxTerm"
     _naming_props: ClassVar[list[str]] = []
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F1076": "fltVnsRsConnToCtxTermResolveFail",
+    }
+    _relation_info: ClassVar[dict[str, str | bool]] = {
+        "cardinality": "n-to-1",
+        "enforceable": True,
+        "resolvable": True,
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

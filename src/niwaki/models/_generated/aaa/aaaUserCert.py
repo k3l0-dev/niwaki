@@ -19,6 +19,10 @@ class aaaUserCert(ManagedObject):
     _aci_class: ClassVar[str] = "aaaUserCert"
     _rn_format: ClassVar[str] = "usercert-{name}"
     _naming_props: ClassVar[list[str]] = ["name"]
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F2931": "fltAaaUserCertUserCertExpiring",
+        "F2932": "fltAaaUserCertUserCertExpired",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

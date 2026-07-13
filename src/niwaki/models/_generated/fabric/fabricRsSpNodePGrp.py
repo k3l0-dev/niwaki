@@ -19,6 +19,14 @@ class fabricRsSpNodePGrp(ManagedObject):
     _aci_class: ClassVar[str] = "fabricRsSpNodePGrp"
     _rn_format: ClassVar[str] = "rsspNodePGrp"
     _naming_props: ClassVar[list[str]] = []
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F0945": "fltFabricRsSpNodePGrpResolveFail",
+    }
+    _relation_info: ClassVar[dict[str, str | bool]] = {
+        "cardinality": "n-to-1",
+        "enforceable": True,
+        "resolvable": True,
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

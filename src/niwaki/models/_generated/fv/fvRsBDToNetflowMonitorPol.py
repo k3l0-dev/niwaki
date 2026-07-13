@@ -21,6 +21,14 @@ class fvRsBDToNetflowMonitorPol(ManagedObject):
     _aci_class: ClassVar[str] = "fvRsBDToNetflowMonitorPol"
     _rn_format: ClassVar[str] = "rsBDToNetflowMonitorPol-[{name}]-{flt_type}"
     _naming_props: ClassVar[list[str]] = ["name", "flt_type"]
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F2469": "fltFvRsBDToNetflowMonitorPolResolveFail",
+    }
+    _relation_info: ClassVar[dict[str, str | bool]] = {
+        "cardinality": "n-to-m",
+        "enforceable": True,
+        "resolvable": True,
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

@@ -32,6 +32,9 @@ class vnsCtrlrMgmtPol(ManagedObject):
         "missing-ctx": "Ctx does not exist",
         "ok": "ok",
     }
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F1613": "fltVnsCtrlrMgmtPolConfMismatch",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

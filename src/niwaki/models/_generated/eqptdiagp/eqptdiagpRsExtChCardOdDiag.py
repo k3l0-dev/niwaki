@@ -19,6 +19,11 @@ class eqptdiagpRsExtChCardOdDiag(ManagedObject):
     _aci_class: ClassVar[str] = "eqptdiagpRsExtChCardOdDiag"
     _rn_format: ClassVar[str] = "rsextChCardOdDiag-[{target_dn}]"
     _naming_props: ClassVar[list[str]] = ["target_dn"]
+    _relation_info: ClassVar[dict[str, str | bool]] = {
+        "cardinality": "1-to-m",
+        "enforceable": True,
+        "resolvable": True,
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

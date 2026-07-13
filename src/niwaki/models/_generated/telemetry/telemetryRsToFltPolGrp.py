@@ -17,6 +17,14 @@ class telemetryRsToFltPolGrp(ManagedObject):
     _aci_class: ClassVar[str] = "telemetryRsToFltPolGrp"
     _rn_format: ClassVar[str] = "rstoFltPolGrp-{name}"
     _naming_props: ClassVar[list[str]] = ["name"]
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F2998": "fltTelemetryRsToFltPolGrpResolveFail",
+    }
+    _relation_info: ClassVar[dict[str, str | bool]] = {
+        "cardinality": "1-to-m",
+        "enforceable": True,
+        "resolvable": True,
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

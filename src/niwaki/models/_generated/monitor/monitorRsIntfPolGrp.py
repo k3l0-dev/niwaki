@@ -17,6 +17,14 @@ class monitorRsIntfPolGrp(ManagedObject):
     _aci_class: ClassVar[str] = "monitorRsIntfPolGrp"
     _rn_format: ClassVar[str] = "rsintfPolGrp"
     _naming_props: ClassVar[list[str]] = []
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F4402": "fltMonitorRsIntfPolGrpResolveFail",
+    }
+    _relation_info: ClassVar[dict[str, str | bool]] = {
+        "cardinality": "n-to-1",
+        "enforceable": True,
+        "resolvable": True,
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

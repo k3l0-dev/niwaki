@@ -33,6 +33,9 @@ class bgpPeerP(ManagedObject):
         "no-loopback-configured": "No loopback configured under node profile",
         "none": "",
     }
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F3488": "fltBgpPeerPInvalidConfigBgpPeerP",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

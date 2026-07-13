@@ -19,6 +19,10 @@ class analyticsRecordP(ManagedObject):
     _aci_class: ClassVar[str] = "analyticsRecordP"
     _rn_format: ClassVar[str] = "recordp-{name}"
     _naming_props: ClassVar[list[str]] = ["name"]
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F2572": "fltAnalyticsRecordPRecordFailure",
+        "F4061": "fltAnalyticsRecordPRecordParamMismatch",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

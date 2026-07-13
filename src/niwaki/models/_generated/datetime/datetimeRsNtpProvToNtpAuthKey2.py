@@ -17,6 +17,14 @@ class datetimeRsNtpProvToNtpAuthKey2(ManagedObject):
     _aci_class: ClassVar[str] = "datetimeRsNtpProvToNtpAuthKey2"
     _rn_format: ClassVar[str] = "rsntpProvToNtpAuthKey2-{auth_key_id}"
     _naming_props: ClassVar[list[str]] = ["auth_key_id"]
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F4103": "fltDatetimeRsNtpProvToNtpAuthKey2ResolveFail",
+    }
+    _relation_info: ClassVar[dict[str, str | bool]] = {
+        "cardinality": "n-to-m",
+        "enforceable": True,
+        "resolvable": True,
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

@@ -19,6 +19,9 @@ class snmpUserSecP(ManagedObject):
     _aci_class: ClassVar[str] = "snmpUserSecP"
     _rn_format: ClassVar[str] = "user-{name}"
     _naming_props: ClassVar[list[str]] = ["name"]
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F1369": "fltSnmpUserSecPConfigFailed",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

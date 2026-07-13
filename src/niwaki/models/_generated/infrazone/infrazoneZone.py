@@ -21,6 +21,9 @@ class infrazoneZone(ManagedObject):
     _aci_class: ClassVar[str] = "infrazoneZone"
     _rn_format: ClassVar[str] = "zone-{name}"
     _naming_props: ClassVar[list[str]] = ["name"]
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F3872": "fltInfrazoneZoneConfigZoneDisabled",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

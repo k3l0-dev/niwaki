@@ -19,6 +19,15 @@ class analyticsRsRecordPAtt(ManagedObject):
     _aci_class: ClassVar[str] = "analyticsRsRecordPAtt"
     _rn_format: ClassVar[str] = "rsrecordPAtt"
     _naming_props: ClassVar[list[str]] = []
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F2302": "fltAnalyticsRsRecordPAttResolveFail",
+        "F2786": "fltAnalyticsRsRecordPAttRecordMonitorRelationFailure",
+    }
+    _relation_info: ClassVar[dict[str, str | bool]] = {
+        "cardinality": "n-to-1",
+        "enforceable": True,
+        "resolvable": True,
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

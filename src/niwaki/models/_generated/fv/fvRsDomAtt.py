@@ -73,6 +73,15 @@ class fvRsDomAtt(ManagedObject):
         "none": "",
         "not-associated-with-mgmt-zone": "Not Associated With Management Zone",
     }
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F0956": "fltFvRsDomAttResolveFail",
+        "F2531": "fltFvRsDomAttInvalidConfigOnRsDomAtt",
+    }
+    _relation_info: ClassVar[dict[str, str | bool]] = {
+        "cardinality": "n-to-m",
+        "enforceable": True,
+        "resolvable": True,
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

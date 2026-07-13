@@ -19,6 +19,9 @@ class polNdoProfile(ManagedObject):
     _aci_class: ClassVar[str] = "polNdoProfile"
     _rn_format: ClassVar[str] = "ndo-[{ndo_ip}]-{ndo_name}"
     _naming_props: ClassVar[list[str]] = ["ndo_ip", "ndo_name"]
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F4489": "fltPolNdoProfileUnsupportedConfigNDOLeaderProfileConfigured",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

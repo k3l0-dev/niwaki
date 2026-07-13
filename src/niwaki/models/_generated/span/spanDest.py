@@ -19,6 +19,9 @@ class spanDest(ManagedObject):
     _aci_class: ClassVar[str] = "spanDest"
     _rn_format: ClassVar[str] = "dest-{name}"
     _naming_props: ClassVar[list[str]] = ["name"]
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F1559": "fltSpanDestConfigFailed",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

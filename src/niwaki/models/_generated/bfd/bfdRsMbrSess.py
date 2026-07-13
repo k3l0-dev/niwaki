@@ -19,6 +19,14 @@ class bfdRsMbrSess(ManagedObject):
     _aci_class: ClassVar[str] = "bfdRsMbrSess"
     _rn_format: ClassVar[str] = "rsmbrSess-[{target_dn}]"
     _naming_props: ClassVar[list[str]] = ["target_dn"]
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F4457": "fltBfdRsMbrSessResolveFail",
+    }
+    _relation_info: ClassVar[dict[str, str | bool]] = {
+        "cardinality": "1-to-m",
+        "enforceable": True,
+        "resolvable": True,
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

@@ -19,6 +19,14 @@ class infraRsInfraBD(ManagedObject):
     _aci_class: ClassVar[str] = "infraRsInfraBD"
     _rn_format: ClassVar[str] = "rsinfraBD"
     _naming_props: ClassVar[list[str]] = []
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F1010": "fltInfraRsInfraBDResolveFail",
+    }
+    _relation_info: ClassVar[dict[str, str | bool]] = {
+        "cardinality": "n-to-1",
+        "enforceable": True,
+        "resolvable": True,
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

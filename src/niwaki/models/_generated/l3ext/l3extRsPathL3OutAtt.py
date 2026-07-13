@@ -60,6 +60,17 @@ class l3extRsPathL3OutAtt(ManagedObject):
         "rtsumsubnet-l3extsubnet-conflict": "fvRtSummSubnet and l3extSubnet has same prefix",
         "subnet-mismatch": "Primary IP and floating ip are not in same subnet",
     }
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F4104": "fltL3extRsPathL3OutAttMtuMacMismatch",
+        "F4211": "fltL3extRsPathL3OutAttBd-profile-mismatch",
+        "F4214": "fltL3extRsPathL3OutAttAccess-encap-node-overlap",
+        "F4255": "fltL3extRsPathL3OutAttAccess-encap-bd-map-conflict",
+    }
+    _relation_info: ClassVar[dict[str, str | bool]] = {
+        "cardinality": "n-to-m",
+        "enforceable": False,
+        "resolvable": False,
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

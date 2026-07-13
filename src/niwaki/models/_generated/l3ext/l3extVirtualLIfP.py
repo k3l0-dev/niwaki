@@ -58,6 +58,13 @@ class l3extVirtualLIfP(ManagedObject):
         "rtsumsubnet-l3extsubnet-conflict": "fvRtSummSubnet and l3extSubnet has same prefix",
         "subnet-mismatch": "Primary IP and floating ip are not in same subnet",
     }
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F3744": "fltL3extVirtualLIfPDifferentSubnets",
+        "F3935": "fltL3extVirtualLIfPAnchorNodeMismatch",
+        "F4210": "fltL3extVirtualLIfPBd-profile-mismatch",
+        "F4215": "fltL3extVirtualLIfPAccess-encap-node-overlap",
+        "F4256": "fltL3extVirtualLIfPAccess-encap-bd-map-conflict",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

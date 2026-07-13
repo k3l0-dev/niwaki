@@ -33,6 +33,14 @@ class bgpRsPeerToProfile(ManagedObject):
         "no-loopback-configured": "No loopback configured under node profile",
         "none": "",
     }
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F3571": "fltBgpRsPeerToProfileResolveFail",
+    }
+    _relation_info: ClassVar[dict[str, str | bool]] = {
+        "cardinality": "n-to-m",
+        "enforceable": True,
+        "resolvable": True,
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

@@ -21,6 +21,14 @@ class l3extRsLIfPToNetflowMonitorPol(ManagedObject):
     _aci_class: ClassVar[str] = "l3extRsLIfPToNetflowMonitorPol"
     _rn_format: ClassVar[str] = "rslIfPToNetflowMonitorPol-[{name}]-{flt_type}"
     _naming_props: ClassVar[list[str]] = ["name", "flt_type"]
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F2472": "fltL3extRsLIfPToNetflowMonitorPolResolveFail",
+    }
+    _relation_info: ClassVar[dict[str, str | bool]] = {
+        "cardinality": "n-to-m",
+        "enforceable": True,
+        "resolvable": True,
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

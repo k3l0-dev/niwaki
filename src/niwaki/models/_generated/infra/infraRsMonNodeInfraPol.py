@@ -19,6 +19,14 @@ class infraRsMonNodeInfraPol(ManagedObject):
     _aci_class: ClassVar[str] = "infraRsMonNodeInfraPol"
     _rn_format: ClassVar[str] = "rsmonNodeInfraPol"
     _naming_props: ClassVar[list[str]] = []
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F0998": "fltInfraRsMonNodeInfraPolResolveFail",
+    }
+    _relation_info: ClassVar[dict[str, str | bool]] = {
+        "cardinality": "n-to-1",
+        "enforceable": True,
+        "resolvable": True,
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

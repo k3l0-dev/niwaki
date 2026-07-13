@@ -54,6 +54,11 @@ class l3extRsNodeL3OutAtt(ManagedObject):
         "rtsumsubnet-l3extsubnet-conflict": "fvRtSummSubnet and l3extSubnet has same prefix",
         "subnet-mismatch": "Primary IP and floating ip are not in same subnet",
     }
+    _relation_info: ClassVar[dict[str, str | bool]] = {
+        "cardinality": "n-to-m",
+        "enforceable": False,
+        "resolvable": False,
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

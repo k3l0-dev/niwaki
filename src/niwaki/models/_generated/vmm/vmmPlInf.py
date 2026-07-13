@@ -17,6 +17,9 @@ class vmmPlInf(ManagedObject):
     _aci_class: ClassVar[str] = "vmmPlInf"
     _rn_format: ClassVar[str] = "plinf-[{epg_p_key}]"
     _naming_props: ClassVar[list[str]] = ["epg_p_key"]
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F1471": "fltVmmPlInfDeployFailed",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

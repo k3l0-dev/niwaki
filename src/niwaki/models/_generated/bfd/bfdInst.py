@@ -21,6 +21,10 @@ class bfdInst(ManagedObject):
     _aci_class: ClassVar[str] = "bfdInst"
     _rn_format: ClassVar[str] = "inst"
     _naming_props: ClassVar[list[str]] = []
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F4301": "fltBfdInstBfdMaxSessionLimit",
+        "F4302": "fltBfdInstBfdTimersUnsupported",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

@@ -19,6 +19,10 @@ class pkiTP(ManagedObject):
     _aci_class: ClassVar[str] = "pkiTP"
     _rn_format: ClassVar[str] = "tp-{name}"
     _naming_props: ClassVar[list[str]] = ["name"]
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F4503": "fltPkiTPTPExpired",
+        "F4617": "fltPkiTPTPExpiring",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

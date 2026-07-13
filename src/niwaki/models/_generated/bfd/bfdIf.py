@@ -22,6 +22,9 @@ class bfdIf(ManagedObject):
     _aci_class: ClassVar[str] = "bfdIf"
     _rn_format: ClassVar[str] = "if-[{interface_id}]"
     _naming_props: ClassVar[list[str]] = ["interface_id"]
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F4458": "fltBfdIfPcmCfgCtrl",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

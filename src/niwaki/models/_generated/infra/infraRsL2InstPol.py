@@ -19,6 +19,14 @@ class infraRsL2InstPol(ManagedObject):
     _aci_class: ClassVar[str] = "infraRsL2InstPol"
     _rn_format: ClassVar[str] = "rsl2InstPol"
     _naming_props: ClassVar[list[str]] = []
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F0992": "fltInfraRsL2InstPolResolveFail",
+    }
+    _relation_info: ClassVar[dict[str, str | bool]] = {
+        "cardinality": "n-to-1",
+        "enforceable": True,
+        "resolvable": True,
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

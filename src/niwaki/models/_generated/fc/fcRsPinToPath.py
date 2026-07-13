@@ -19,6 +19,11 @@ class fcRsPinToPath(ManagedObject):
     _aci_class: ClassVar[str] = "fcRsPinToPath"
     _rn_format: ClassVar[str] = "rspinToPath-[{target_dn}]"
     _naming_props: ClassVar[list[str]] = ["target_dn"]
+    _relation_info: ClassVar[dict[str, str | bool]] = {
+        "cardinality": "n-to-m",
+        "enforceable": False,
+        "resolvable": False,
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

@@ -19,6 +19,14 @@ class fteRsEventsAtt(ManagedObject):
     _aci_class: ClassVar[str] = "fteRsEventsAtt"
     _rn_format: ClassVar[str] = "rseventsAtt-[{target_dn}]"
     _naming_props: ClassVar[list[str]] = ["target_dn"]
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F3875": "fltFteRsEventsAttResolveFail",
+    }
+    _relation_info: ClassVar[dict[str, str | bool]] = {
+        "cardinality": "1-to-m",
+        "enforceable": True,
+        "resolvable": True,
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

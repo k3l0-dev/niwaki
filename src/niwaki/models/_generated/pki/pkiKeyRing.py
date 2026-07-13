@@ -25,6 +25,11 @@ class pkiKeyRing(ManagedObject):
     _rn_format: ClassVar[str] = "keyring-{name}"
     _naming_props: ClassVar[list[str]] = ["name"]
     _secure_props: ClassVar[frozenset[str]] = frozenset(["key"])
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F4501": "fltPkiKeyRingCustomKeyRingExpiring",
+        "F4502": "fltPkiKeyRingCustomKeyRingExpired",
+        "F4510": "fltPkiKeyRingKeyRingInsecure",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

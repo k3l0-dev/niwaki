@@ -17,6 +17,14 @@ class telemetryRsToRemoteLogServer(ManagedObject):
     _aci_class: ClassVar[str] = "telemetryRsToRemoteLogServer"
     _rn_format: ClassVar[str] = "rstoRemoteLogServer-{name}"
     _naming_props: ClassVar[list[str]] = ["name"]
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F2977": "fltTelemetryRsToRemoteLogServerResolveFail",
+    }
+    _relation_info: ClassVar[dict[str, str | bool]] = {
+        "cardinality": "1-to-m",
+        "enforceable": True,
+        "resolvable": True,
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

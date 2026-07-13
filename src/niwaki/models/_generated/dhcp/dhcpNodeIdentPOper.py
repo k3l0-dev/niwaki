@@ -17,6 +17,9 @@ class dhcpNodeIdentPOper(ManagedObject):
     _aci_class: ClassVar[str] = "dhcpNodeIdentPOper"
     _rn_format: ClassVar[str] = "nodeipoper-{serial}"
     _naming_props: ClassVar[list[str]] = ["serial"]
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F4245": "fltDhcpNodeIdentPOperPoapConversionFailed",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

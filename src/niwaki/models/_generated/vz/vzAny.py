@@ -22,6 +22,9 @@ class vzAny(ManagedObject):
     _aci_class: ClassVar[str] = "vzAny"
     _rn_format: ClassVar[str] = "any"
     _naming_props: ClassVar[list[str]] = []
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F0418": "fltVzAnyConfigurationFailed",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

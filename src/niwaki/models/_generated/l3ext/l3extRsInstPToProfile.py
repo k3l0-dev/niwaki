@@ -21,6 +21,14 @@ class l3extRsInstPToProfile(ManagedObject):
     _aci_class: ClassVar[str] = "l3extRsInstPToProfile"
     _rn_format: ClassVar[str] = "rsinstPToProfile-[{name}]-{direction}"
     _naming_props: ClassVar[list[str]] = ["name", "direction"]
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F1510": "fltL3extRsInstPToProfileResolveFail",
+    }
+    _relation_info: ClassVar[dict[str, str | bool]] = {
+        "cardinality": "n-to-m",
+        "enforceable": True,
+        "resolvable": True,
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

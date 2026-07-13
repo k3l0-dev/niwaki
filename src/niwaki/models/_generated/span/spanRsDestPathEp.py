@@ -19,6 +19,14 @@ class spanRsDestPathEp(ManagedObject):
     _aci_class: ClassVar[str] = "spanRsDestPathEp"
     _rn_format: ClassVar[str] = "rsdestPathEp-[{target_dn}]"
     _naming_props: ClassVar[list[str]] = ["target_dn"]
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F1556": "fltSpanRsDestPathEpConfigFailed",
+    }
+    _relation_info: ClassVar[dict[str, str | bool]] = {
+        "cardinality": "n-to-m",
+        "enforceable": False,
+        "resolvable": True,
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

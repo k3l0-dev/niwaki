@@ -17,6 +17,14 @@ class vnsRsL1L2RedirectHealthGroup(ManagedObject):
     _aci_class: ClassVar[str] = "vnsRsL1L2RedirectHealthGroup"
     _rn_format: ClassVar[str] = "rsL1L2RedirectHealthGroup"
     _naming_props: ClassVar[list[str]] = []
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F3117": "fltVnsRsL1L2RedirectHealthGroupResolveFail",
+    }
+    _relation_info: ClassVar[dict[str, str | bool]] = {
+        "cardinality": "n-to-1",
+        "enforceable": True,
+        "resolvable": True,
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

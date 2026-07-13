@@ -23,6 +23,9 @@ class bfdAuthP(ManagedObject):
     _rn_format: ClassVar[str] = "auth"
     _naming_props: ClassVar[list[str]] = []
     _secure_props: ClassVar[frozenset[str]] = frozenset(["hex_key", "hex_key_size", "key"])
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F2168": "fltBfdAuthPBfdCfgCtrl",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

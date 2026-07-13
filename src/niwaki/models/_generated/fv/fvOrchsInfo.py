@@ -19,6 +19,9 @@ class fvOrchsInfo(ManagedObject):
     _aci_class: ClassVar[str] = "fvOrchsInfo"
     _rn_format: ClassVar[str] = "Orchs-{name}"
     _naming_props: ClassVar[list[str]] = ["name"]
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F1712": "fltFvOrchsInfoVipNotAllocated",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

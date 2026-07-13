@@ -54,6 +54,16 @@ class l3extRsDynPathAtt(ManagedObject):
         "rtsumsubnet-l3extsubnet-conflict": "fvRtSummSubnet and l3extSubnet has same prefix",
         "subnet-mismatch": "Primary IP and floating ip are not in same subnet",
     }
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F3565": "fltL3extRsDynPathAttResolveFail",
+        "F4212": "fltL3extRsDynPathAttBd-profile-mismatch",
+        "F4213": "fltL3extRsDynPathAttAnchor-encap-mismatch",
+    }
+    _relation_info: ClassVar[dict[str, str | bool]] = {
+        "cardinality": "n-to-m",
+        "enforceable": True,
+        "resolvable": False,
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

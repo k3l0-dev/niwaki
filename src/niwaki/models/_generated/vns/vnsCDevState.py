@@ -21,6 +21,11 @@ class vnsCDevState(ManagedObject):
     _aci_class: ClassVar[str] = "vnsCDevState"
     _rn_format: ClassVar[str] = "cDevState-[{pri_key}]"
     _naming_props: ClassVar[list[str]] = ["pri_key"]
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F1565": "fltVnsCDevStateCDevValidateFailure",
+        "F1566": "fltVnsCDevStateCDevModifyFailure",
+        "F1567": "fltVnsCDevStateCDevAuditFailure",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

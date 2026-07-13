@@ -66,6 +66,9 @@ class l3extInstP(ManagedObject):
         "none": "",
         "not-associated-with-mgmt-zone": "Not Associated With Management Zone",
     }
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F3941": "fltL3extInstPNoConsLblAssociation",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

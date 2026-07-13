@@ -26,6 +26,9 @@ class fvTrackMember(ManagedObject):
         "ok": "ok",
         "scope-dn-cannot-be-resolved": "scopeDn cannot be resolved to an existing Bridge Domain or L3Out",
     }
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F4421": "fltFvTrackMemberConfigurationFailed",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

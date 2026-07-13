@@ -19,6 +19,14 @@ class infraRsQosSdIfPol(ManagedObject):
     _aci_class: ClassVar[str] = "infraRsQosSdIfPol"
     _rn_format: ClassVar[str] = "rsqosSdIfPol"
     _naming_props: ClassVar[list[str]] = []
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F2251": "fltInfraRsQosSdIfPolResolveFail",
+    }
+    _relation_info: ClassVar[dict[str, str | bool]] = {
+        "cardinality": "n-to-1",
+        "enforceable": True,
+        "resolvable": True,
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

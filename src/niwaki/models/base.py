@@ -89,6 +89,14 @@ class ManagedObject(BaseModel):
             inconsistent configuration states for this class
             (``{code: description}``, from the read-only ``configIssues``
             enum in the schema).  Empty for classes without the channel.
+        _fault_codes: The fault codes the APIC can raise on instances of
+            this class (``{F-code: fault-condition name}``, e.g.
+            ``{"F2305": "fltFvBDMulticastEnabledOnL2BD"}``).  Empty for
+            classes without declared faults.
+        _relation_info: Relation constraints for Rs classes —
+            ``cardinality`` (``"n-to-1"``, …), ``enforceable`` and
+            ``resolvable``, straight from the schema's ``relationInfo``.
+            Empty for non-relation classes.
         _contains: Frozenset of ACI class names valid as direct children.
         _mo_category: APIC object category from the schema (e.g. ``"Regular"``,
             ``"RelationshipToLocal"``).  Populated by codegen; defaults to
@@ -121,6 +129,8 @@ class ManagedObject(BaseModel):
     _naming_props: ClassVar[list[str]] = []
     _secure_props: ClassVar[frozenset[str]] = frozenset()
     _config_issues: ClassVar[dict[str, str]] = {}
+    _fault_codes: ClassVar[dict[str, str]] = {}
+    _relation_info: ClassVar[dict[str, str | bool]] = {}
     _contains: ClassVar[frozenset[str]] = frozenset()
     _mo_category: ClassVar[str] = "Regular"
     _write_access: ClassVar[frozenset[str]] = frozenset()

@@ -19,6 +19,14 @@ class spanRsDestToVPort(ManagedObject):
     _aci_class: ClassVar[str] = "spanRsDestToVPort"
     _rn_format: ClassVar[str] = "rsdestToVPort-[{target_dn}]"
     _naming_props: ClassVar[list[str]] = ["target_dn"]
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F1048": "fltSpanRsDestToVPortResolveFail",
+    }
+    _relation_info: ClassVar[dict[str, str | bool]] = {
+        "cardinality": "n-to-m",
+        "enforceable": True,
+        "resolvable": False,
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

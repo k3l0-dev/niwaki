@@ -19,6 +19,15 @@ class traceroutepRsTrEpDst(ManagedObject):
     _aci_class: ClassVar[str] = "traceroutepRsTrEpDst"
     _rn_format: ClassVar[str] = "rstrEpDst-[{target_dn}]"
     _naming_props: ClassVar[list[str]] = ["target_dn"]
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F0657": "fltTraceroutepRsTrEpDstMissingDestIp",
+        "F1059": "fltTraceroutepRsTrEpDstResolveFail",
+    }
+    _relation_info: ClassVar[dict[str, str | bool]] = {
+        "cardinality": "n-to-m",
+        "enforceable": True,
+        "resolvable": True,
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

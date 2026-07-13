@@ -40,6 +40,9 @@ class pimExtP(ManagedObject):
         "pim-not-supported-on-floating-svi": "PIM is not supported on floating SVIs",
         "src-only-route-map-allowed": "Only source-based route-maps are allowed for BSR/Auto RP.",
     }
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F2330": "fltPimExtPConfIssue",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

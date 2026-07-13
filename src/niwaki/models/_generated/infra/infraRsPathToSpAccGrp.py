@@ -17,6 +17,14 @@ class infraRsPathToSpAccGrp(ManagedObject):
     _aci_class: ClassVar[str] = "infraRsPathToSpAccGrp"
     _rn_format: ClassVar[str] = "rspathToSpAccGrp"
     _naming_props: ClassVar[list[str]] = []
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F2147": "fltInfraRsPathToSpAccGrpResolveFail",
+    }
+    _relation_info: ClassVar[dict[str, str | bool]] = {
+        "cardinality": "n-to-1",
+        "enforceable": True,
+        "resolvable": True,
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

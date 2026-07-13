@@ -21,6 +21,9 @@ class bfdMhAuthP(ManagedObject):
     _aci_class: ClassVar[str] = "bfdMhAuthP"
     _rn_format: ClassVar[str] = "mhauth"
     _naming_props: ClassVar[list[str]] = []
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F3745": "fltBfdMhAuthPBfdCfgCtrl",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

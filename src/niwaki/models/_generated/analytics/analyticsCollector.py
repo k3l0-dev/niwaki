@@ -21,6 +21,11 @@ class analyticsCollector(ManagedObject):
     _aci_class: ClassVar[str] = "analyticsCollector"
     _rn_format: ClassVar[str] = "collector-{name}"
     _naming_props: ClassVar[list[str]] = ["name"]
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F2570": "fltAnalyticsCollectorMaxExportersSupportedForVer9",
+        "F2589": "fltAnalyticsCollectorCollectorDestinationUnreachable",
+        "F2630": "fltAnalyticsCollectorCollectorConfigParamMismatch",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

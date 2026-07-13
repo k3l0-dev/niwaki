@@ -19,6 +19,9 @@ class apAnomaly(ManagedObject):
     _aci_class: ClassVar[str] = "apAnomaly"
     _rn_format: ClassVar[str] = "anomaly-{node_name}-{resource}-{severity}-{start_ts}"
     _naming_props: ClassVar[list[str]] = ["node_name", "resource", "severity", "start_ts"]
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F2990": "fltApAnomalyAnomalyDetected",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

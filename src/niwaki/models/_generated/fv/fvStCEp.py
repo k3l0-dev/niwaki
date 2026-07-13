@@ -34,6 +34,10 @@ class fvStCEp(ManagedObject):
         "none": "",
         "path-not-present": "Path Validations",
     }
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F0524": "fltFvStCEpConfigurationFailed",
+        "F4133": "fltFvStCEpConfigurationError",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

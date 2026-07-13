@@ -19,6 +19,14 @@ class dbgacRsToEpForEpToEp(ManagedObject):
     _aci_class: ClassVar[str] = "dbgacRsToEpForEpToEp"
     _rn_format: ClassVar[str] = "rstoEpForEpToEp-[{target_dn}]"
     _naming_props: ClassVar[list[str]] = ["target_dn"]
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F0867": "fltDbgacRsToEpForEpToEpResolveFail",
+    }
+    _relation_info: ClassVar[dict[str, str | bool]] = {
+        "cardinality": "n-to-m",
+        "enforceable": True,
+        "resolvable": False,
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

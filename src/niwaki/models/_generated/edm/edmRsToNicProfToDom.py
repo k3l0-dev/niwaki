@@ -19,6 +19,14 @@ class edmRsToNicProfToDom(ManagedObject):
     _aci_class: ClassVar[str] = "edmRsToNicProfToDom"
     _rn_format: ClassVar[str] = "rstoNicProfToDom-[{target_dn}]"
     _naming_props: ClassVar[list[str]] = ["target_dn"]
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F3327": "fltEdmRsToNicProfToDomResolveFail",
+    }
+    _relation_info: ClassVar[dict[str, str | bool]] = {
+        "cardinality": "n-to-m",
+        "enforceable": True,
+        "resolvable": False,
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

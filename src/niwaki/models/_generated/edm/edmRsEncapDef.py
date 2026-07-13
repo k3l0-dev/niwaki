@@ -19,6 +19,11 @@ class edmRsEncapDef(ManagedObject):
     _aci_class: ClassVar[str] = "edmRsEncapDef"
     _rn_format: ClassVar[str] = "rsencapDef-[{target_dn}]"
     _naming_props: ClassVar[list[str]] = ["target_dn"]
+    _relation_info: ClassVar[dict[str, str | bool]] = {
+        "cardinality": "n-to-m",
+        "enforceable": False,
+        "resolvable": False,
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

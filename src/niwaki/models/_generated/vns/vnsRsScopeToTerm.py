@@ -19,6 +19,14 @@ class vnsRsScopeToTerm(ManagedObject):
     _aci_class: ClassVar[str] = "vnsRsScopeToTerm"
     _rn_format: ClassVar[str] = "rsscopeToTerm"
     _naming_props: ClassVar[list[str]] = []
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F1075": "fltVnsRsScopeToTermResolveFail",
+    }
+    _relation_info: ClassVar[dict[str, str | bool]] = {
+        "cardinality": "1-to-1",
+        "enforceable": True,
+        "resolvable": True,
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

@@ -29,6 +29,9 @@ class trigSchedP(ManagedObject):
         "no": "No",
         "yes": "Yes",
     }
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F4127": "fltTrigSchedPConfigurationFailed",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

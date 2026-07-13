@@ -46,6 +46,9 @@ class vnsAbsFuncConn(ManagedObject):
         "missing-subnet": "Unable to find subnet for this connector.",
         "ok": "ok",
     }
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F1416": "fltVnsAbsFuncConnValidationFailed",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

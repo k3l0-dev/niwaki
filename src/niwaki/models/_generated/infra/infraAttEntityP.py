@@ -68,6 +68,9 @@ class infraAttEntityP(ManagedObject):
         "none": "",
         "unsupported-dom-avs": "AVS domain is no longer supported from 5.0 onwards. Please migrate to AVE.",
     }
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F1233": "fltInfraAttEntityPConfigFailed",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

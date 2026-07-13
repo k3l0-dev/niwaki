@@ -44,6 +44,9 @@ class fvCtxRtSummPol(ManagedObject):
         "rtsum-subnet-policy-missing": "Route Summarization policy is missing from rtsumSubnet",
         "rtsumsubnet-l3extsubnet-conflict": "fvRtSummSubnet and l3extSubnet has same prefix",
     }
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F4308": "fltFvCtxRtSummPolConflictingConfig",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

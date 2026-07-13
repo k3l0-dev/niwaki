@@ -79,6 +79,10 @@ class vmmCtrlrP(ManagedObject):
         "not-applicable": "",
         "zero-mac-in-inventory": "SCVMM Agent found zero mac address in SCVMM comp Inventory.",
     }
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F0564": "fltVmmCtrlrPConfigFailed",
+        "F1669": "fltVmmCtrlrPMsftConfigFailed",
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

@@ -19,6 +19,11 @@ class spanRsSrcToL3extOut(ManagedObject):
     _aci_class: ClassVar[str] = "spanRsSrcToL3extOut"
     _rn_format: ClassVar[str] = "rssrcToL3extOut"
     _naming_props: ClassVar[list[str]] = []
+    _relation_info: ClassVar[dict[str, str | bool]] = {
+        "cardinality": "n-to-1",
+        "enforceable": True,
+        "resolvable": True,
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",

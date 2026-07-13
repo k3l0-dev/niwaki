@@ -19,6 +19,14 @@ class fabricRsTwampServerPol(ManagedObject):
     _aci_class: ClassVar[str] = "fabricRsTwampServerPol"
     _rn_format: ClassVar[str] = "rstwampServerPol"
     _naming_props: ClassVar[list[str]] = []
+    _fault_codes: ClassVar[dict[str, str]] = {
+        "F3011": "fltFabricRsTwampServerPolResolveFail",
+    }
+    _relation_info: ClassVar[dict[str, str | bool]] = {
+        "cardinality": "n-to-1",
+        "enforceable": True,
+        "resolvable": True,
+    }
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",
