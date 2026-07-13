@@ -30,8 +30,8 @@ and wire attribute names for you.
 ## Why another SDK for Cisco ACI?
 
 Cisco ships an official Python SDK — [cobra](https://cobra.readthedocs.io/).
-It is authoritative and complete, but it was designed a decade ago and it
-shows: you install it as **two wheels downloaded from your own APIC**,
+It is authoritative and complete, but it was designed in the Python 2 era
+and it shows: you install it as **two wheels downloaded from your own APIC**,
 version-matched to the firmware, targeting "Python 2.7 or 3.6"; you write
 **wire names** and relation classes by hand (`RsCtx(bd,
 tnFvCtxName='prod')`); and every mistake is discovered **by the APIC, after
@@ -165,7 +165,7 @@ What the DSL gives you:
 | --- | --- |
 | `strict` (default) | Closed-world validation, then **one atomic POST** of the whole design to `/api/mo/uni.json` — all or nothing. |
 | `staged` | One operation per object, executed in DN-depth waves (parents before children); atomic classes (vPC pairs) ship whole; a partial failure raises `StagedPushError` with plain DNs. |
-| `plan` | Dry run: reads the current APIC state (one read per declared domain) and reports creates/updates — nothing is pushed. |
+| `plan` | Dry run: reads only what the design declares and reports creates/updates — nothing is pushed. |
 
 `config.to_payload()` returns the exact strict-mode payload without executing
 anything (same philosophy as `Query.build()`).
@@ -177,7 +177,7 @@ from niwaki import Niwaki
 from niwaki.models.fv.fvBD import fvBD
 
 with Niwaki("https://apic.example.com", "admin", "secret") as aci:
-    # Jargon navigation, no class imports needed
+    # Vocabulary navigation, no class imports needed
     bd = aci.tenant("prod").bd("frontend").read()
 
     # Query builder: filters, scoping, enrichment, pagination
@@ -216,7 +216,8 @@ async with AsyncNiwaki("https://apic.example.com", "admin", "secret") as aci:
   typed reads, queries, delete.
 - **Sync + async transport**: cookie/token auth, proactive refresh, retry
   with backoff, transparent pagination, typed exception hierarchy.
-- Cold-start import: ~90 ms; heavy tables load lazily on first use.
+- Imports stay lightweight — everything heavy (child maps, vocabulary
+  tables) loads lazily on first use.
 
 ## Development
 
@@ -232,24 +233,28 @@ uv sync --extra docs
 bash scripts/docs.sh open     # build + open docs/_build/html/index.html
 ```
 
-The full test suite ships with the repository — 14,200+ unit tests plus the
+The full test suite ships with the repository — the unit suite plus the
 executable documentation (every `python` fence in `docs/` runs as a test):
 
 ```bash
 uv run pytest --ignore=tests/integration tests/ docs/
 ```
 
-The integration suite (a three-act live walkthrough) needs a lab APIC and
-skips itself without one.  Release engineering runs in the maintainers'
+The integration suite (a live walkthrough against a lab APIC) skips itself
+when no fabric is reachable.  Release engineering runs in the maintainers'
 private infrastructure; this repository is the public home of the SDK:
 source, tests, documentation, releases and issues.
 
 ## Status
 
-Active development. 14,200+ tests, mypy strict, ruff. The design DSL covers a
-curated vocabulary across tenant, access (`infra`), fabric, and controller
-policies — every curated position is listed in the generated coverage matrix; everything else is reachable via `.mo()` and
-`bind_dn()`. Why this SDK exists: [the comparison with cobra](https://k3l0-dev.github.io/niwaki/why.html).
+Actively developed — the [changelog](https://k3l0-dev.github.io/niwaki/project/CHANGELOG.html)
+says what each release brings.  Typed end to end (mypy strict), linted and
+formatted (ruff).  The design DSL covers a curated vocabulary across tenant,
+access (`infra`), fabric, and controller policies — the generated
+[coverage matrix](https://k3l0-dev.github.io/niwaki/reference/vocabulary/coverage.html)
+lists every position; everything else stays reachable via `.mo()` and
+`bind_dn()`.  Why this SDK exists:
+[the comparison with cobra](https://k3l0-dev.github.io/niwaki/why.html).
 
 ## License
 
