@@ -46,9 +46,6 @@ class vmmRsDefaultStpIfPol(ManagedObject):
         ),
     ] = ""
     name: Annotated[
-        str,
-        Field(
-            max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="tnStpIfPolName", description="null"
-        ),
+        str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="tnStpIfPolName")
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

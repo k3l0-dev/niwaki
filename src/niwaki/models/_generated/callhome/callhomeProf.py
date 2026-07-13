@@ -43,9 +43,7 @@ class callhomeProf(ManagedObject):
     contact_address: Annotated[
         str, Field(max_length=255, alias="addr", description="The contact address of the customer.")
     ] = ""
-    admin_state: MonAdminState = Field(
-        default=MonAdminState.ENABLED, alias="adminState", description="null"
-    )
+    admin_state: MonAdminState = Field(default=MonAdminState.ENABLED, alias="adminState")
     annotation: Annotated[
         str,
         Field(

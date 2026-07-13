@@ -11,7 +11,6 @@ class PoePoliceAct(StrEnum):
     LOG = "log"
     """Log"""
     NONE = "none"
-    """None"""
 
     @classmethod
     def _missing_(cls, value: object) -> PoePoliceAct | None:

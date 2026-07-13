@@ -42,9 +42,7 @@ class dhcpNodeGrp(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[
-        str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")
-    ]
+    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[
@@ -85,7 +83,5 @@ class dhcpNodeGrp(ManagedObject):
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
-    selector_type: FabricSelector = Field(
-        default=FabricSelector.ALL, alias="type", description="null"
-    )
+    selector_type: FabricSelector = Field(default=FabricSelector.ALL, alias="type")
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

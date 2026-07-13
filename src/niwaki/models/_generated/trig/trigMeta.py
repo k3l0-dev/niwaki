@@ -39,14 +39,7 @@ class trigMeta(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     sched_name: Annotated[
-        str,
-        Field(
-            min_length=1,
-            max_length=64,
-            pattern="^[a-zA-Z0-9_.:-]+$",
-            alias="schedName",
-            description="null",
-        ),
+        str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="schedName")
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
@@ -72,9 +65,7 @@ class trigMeta(ManagedObject):
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
-        ""
-    )
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

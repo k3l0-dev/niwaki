@@ -48,7 +48,7 @@ class fvRsBdToEpRet(ManagedObject):
         ),
     ] = ""
     resolve_act: FabricPolResolveAct = Field(
-        default=FabricPolResolveAct.RESOLVE, alias="resolveAct", description="null"
+        default=FabricPolResolveAct.RESOLVE, alias="resolveAct"
     )
     name: Annotated[
         str,

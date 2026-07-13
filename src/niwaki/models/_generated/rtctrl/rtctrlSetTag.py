@@ -55,12 +55,10 @@ class rtctrlSetTag(ManagedObject):
             description="Specifies the description of a policy component.",
         ),
     ] = ""
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
-        ""
-    )
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
     route_tag: Annotated[int, Field(alias="tag", description="Tag value")] = 0
-    type: RtctrlSetType = Field(default=RtctrlSetType.RT_TAG, description="null")
+    type: RtctrlSetType = RtctrlSetType.RT_TAG
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

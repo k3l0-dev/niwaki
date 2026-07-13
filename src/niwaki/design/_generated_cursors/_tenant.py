@@ -438,8 +438,8 @@ class _TenantMakers(Cursor):
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
-            qos_class_id: null Values: ``level1``, ``level2``, ``level3``, ``level4``,
-                ``level5``, ``level6``, ``unspecified``. Default: ``unspecified``.
+            qos_class_id: Values: ``level1``, ``level2``, ``level3``, ``level4``, ``level5``,
+                ``level6``, ``unspecified``. Default: ``unspecified``.
             scope: Represents the scope of this contract. If the scope is set as application-
                 profile, the epg can only communicate with epgs in the same application-profile
                 Values: ``application-profile``, ``context``, ``global``, ``tenant``. Default:
@@ -1578,7 +1578,7 @@ class _TenantMakers(Cursor):
         The subject profile.
 
         Args:
-            name: null
+            name: Naming property — forms the object's RN.
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies the description of a policy component.
         """
@@ -2498,7 +2498,7 @@ class _TenantMakers(Cursor):
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
-            type: null Values: ``combinable``, ``global``. Default: ``combinable``.
+            type: Values: ``combinable``, ``global``. Default: ``combinable``.
         """
         params = {
             k: v
@@ -2741,7 +2741,6 @@ class _BdMakers(Cursor):
             description: Specifies the description of a policy component.
             ip_dp_learning: Knob to disable IP Dataplane Learning for Host(/32, /128) and for BD
                 Subnet Values: ``disabled``, ``enabled``. Default: ``enabled``.
-            name: null
             preferred_as_primary_subnet: Indicates if the subnet is preferred (primary) over the
                 available alternatives. Only one preferred subnet is allowed. Default:
                 ``False``.
@@ -2946,7 +2945,6 @@ class _BgpAddressFamilyContextPolicyMakers(Cursor):
             annotation: User annotation. Suggested format orchestrator:value
             capability: The neighbor system capability.
             description: Specifies a description of the policy definition.
-            name: null
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
@@ -3596,7 +3594,6 @@ class _FhsBdPolicyMakers(Cursor):
             managed_config_flag_settting: Default: ``False``.
             allowed_max_router_preference: Values: ``disabled``, ``high``, ``low``, ``medium``.
                 Default: ``disabled``.
-            name: null
             perform_other_config_flag_check: Default: ``False``.
             other_config_flag_settting: Default: ``False``.
             owner_key: The key for enabling clients to own their data for entity correlation.
@@ -3898,7 +3895,6 @@ class _IpSlaMonitoringPolicyMakers(Cursor):
         Args:
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies a description of the policy definition.
-            name: null
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
@@ -3925,7 +3921,6 @@ class _IpSlaMonitoringPolicyMakers(Cursor):
         Args:
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies a description of the policy definition.
-            name: null
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
@@ -4271,7 +4266,7 @@ class _L3outMakers(Cursor):
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
-            type: null Values: ``combinable``, ``global``. Default: ``combinable``.
+            type: Values: ``combinable``, ``global``. Default: ``combinable``.
         """
         params = {
             k: v
@@ -4306,7 +4301,6 @@ class _L3outMakers(Cursor):
         Args:
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies a description of the policy definition.
-            name: null
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
@@ -4735,7 +4729,6 @@ class _PimRouteMapPolicyMakers(Cursor):
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies the description of a policy component.
             destination_filter: Multicast group ip/prefix
-            name: null
             rp_ip_address: Multicast RP Ip
             source_filter: Multicast Source Ip
         """
@@ -5102,7 +5095,6 @@ class _TenantKeychainPolicyMakers(Cursor):
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies a description of the policy definition.
             end_time: end time
-            name: null
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
@@ -5312,7 +5304,6 @@ class _VrfMakers(Cursor):
             control_knobs: DOM controls
             description: Specifies a description of the policy definition.
             mtu: MTU Default: ``1500``.
-            name: null
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
@@ -5389,7 +5380,7 @@ class _EpgMakers(Cursor):
         A source relation to an abstraction of a path endpoint.
 
         Args:
-            target_dn: null
+            target_dn: Naming property — forms the object's RN.
             annotation: User annotation. Suggested format orchestrator:value
             descr: The description of this configuration item.
             encap: The encapsulation method (VLAN) of the path.
@@ -5943,11 +5934,10 @@ class _ExternalEpgMakers(Cursor):
         The network visibility of the domain.
 
         Args:
-            subnet: null
+            subnet: Naming property — forms the object's RN.
             aggregate_routes_for_subnet: Aggregate Routes for Subnet
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies the description of a policy component.
-            name: null
             scope_of_the_external_subnet: The domain applicable to the capability.
         """
         params = {
@@ -5984,7 +5974,7 @@ class _ExternalEpgMakers(Cursor):
         consume.
 
         Args:
-            name: null
+            name: Naming property — forms the object's RN.
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies a description of the policy definition.
             owner_key: The key for enabling clients to own their data for entity correlation.
@@ -6028,7 +6018,7 @@ class _ExternalEpgMakers(Cursor):
         consume.
 
         Args:
-            name: null
+            name: Naming property — forms the object's RN.
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies a description of the policy definition.
             owner_key: The key for enabling clients to own their data for entity correlation.
@@ -6071,7 +6061,7 @@ class _ExternalEpgMakers(Cursor):
         contract. * By the relation between the contract interface and contract.
 
         Args:
-            name: null
+            name: Naming property — forms the object's RN.
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies a description of the policy definition.
             owner_key: The key for enabling clients to own their data for entity correlation.
@@ -6116,7 +6106,7 @@ class _ExternalEpgMakers(Cursor):
         the provider label.
 
         Args:
-            name: null
+            name: Naming property — forms the object's RN.
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies a description of the policy definition.
             complement: Specify the behavior of the label. @@@ 1. true
@@ -6507,7 +6497,6 @@ class _NodeProfileMakers(Cursor):
                 attributes are sent to a peer.
             peer_af_controls_ext: Peer AF controls Ext
             description: Specifies the description of a policy component.
-            asn_name: null
             password: Administrative state
             peer_controls: The peer controls.
             private_as_control: Remove private AS
@@ -6593,7 +6582,6 @@ class _NodeProfileMakers(Cursor):
             peer_af_controls_ext: Peer AF controls Ext
             data_plane_address: Data plane address
             description: Specifies the description of a policy component.
-            name: null
             password: Administrative state
             peer_controls: The peer controls.
             peer_type: Peer Type
@@ -6639,7 +6627,6 @@ class _NodeProfileMakers(Cursor):
             description: Specifies the description of a policy component.
             authentication_key: Authentication key
             authentication_key_id: Authentication key id
-            name: null
             authentication_type: Authentication type Values: ``none``, ``sha1``. Default:
                 ``none``.
         """
@@ -7010,7 +6997,6 @@ class _TenantRouteControlProfileRouteControlContextMakers(Cursor):
         Args:
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies the description of a policy component.
-            name: null
         """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
@@ -7118,7 +7104,6 @@ class _PbrBackupPolicyMakers(Cursor):
                 summary report containing configuration information, logs and diagnostic data
                 that will help TAC in troubleshooting and resolving a technical issue.
             mac_address: The MAC address.
-            name: null
             pod_id: The POD identifier.
             weight: The weight of the fault in calculating the health score of an object. A
                 higher weight causes a higher degradation of the health score of the affected
@@ -7226,7 +7211,6 @@ class _ServiceRedirectPolicyMakers(Cursor):
                 summary report containing configuration information, logs and diagnostic data
                 that will help TAC in troubleshooting and resolving a technical issue.
             mac_address: The MAC address.
-            name: null
             pod_id: The POD identifier.
             weight: The weight of the fault in calculating the health score of an object. A
                 higher weight causes a higher degradation of the health score of the affected
@@ -7994,7 +7978,6 @@ class _NodeProfileBgpPeerMakers(Cursor):
             autonomous_system_number: A number that uniquely identifies an autonomous system.
                 Default: ``0``.
             description: Specifies the description of a policy component.
-            name: null
         """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
@@ -8023,7 +8006,6 @@ class _NodeProfileBgpPeerMakers(Cursor):
                 ``dual-as``, ``no-prepend``, ``none``, ``replace-as``. Default: ``none``.
             description: Specifies the description of a policy component.
             local_asn: The local autonomous system number (ASN). Default: ``0``.
-            name: null
         """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
@@ -8048,7 +8030,6 @@ class _NodeProfileBgpPeerMakers(Cursor):
         Args:
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies the description of a policy component.
-            name: null
             site_of_origin: Site of origin
         """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
@@ -8152,7 +8133,6 @@ class _NodeProfileInfraPeerConnectivityProfileMakers(Cursor):
             autonomous_system_number: A number that uniquely identifies an autonomous system.
                 Default: ``0``.
             description: Specifies the description of a policy component.
-            name: null
         """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
@@ -8181,7 +8161,6 @@ class _NodeProfileInfraPeerConnectivityProfileMakers(Cursor):
                 ``dual-as``, ``no-prepend``, ``none``, ``replace-as``. Default: ``none``.
             description: Specifies the description of a policy component.
             local_asn: The local autonomous system number (ASN). Default: ``0``.
-            name: null
         """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
@@ -8309,8 +8288,8 @@ class _InterfaceProfileMakers(Cursor):
             encap: The encapsulation of the path attached to the layer 3 outside profile.
             encap_scope: Represents the scope of the encap Values: ``ctx``, ``local``. Default:
                 ``local``.
-            if_inst_t: null Values: ``ext-svi``, ``l3-port``, ``sub-interface``,
-                ``unspecified``. Default: ``ext-svi``.
+            if_inst_t: Values: ``ext-svi``, ``l3-port``, ``sub-interface``, ``unspecified``.
+                Default: ``ext-svi``.
             ipv6_dad: IPv6 DAD feature When disabled it will IPv6 DAD will be diasabled Values:
                 ``disabled``, ``enabled``. Default: ``enabled``.
             ll_addr: The override of the system generated IPv6 link-local address.
@@ -8430,7 +8409,6 @@ class _InterfaceProfileMakers(Cursor):
             authentication_type: The OSPF authentication type. The type options are; default,
                 md5, none, and simple. Values: ``md5``, ``none``, ``simple``. Default: ``none``.
             description: Specifies the description of a policy component.
-            name: null
         """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
@@ -8456,7 +8434,6 @@ class _InterfaceProfileMakers(Cursor):
         Args:
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies the description of a policy component.
-            name: null
         """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
@@ -8479,7 +8456,6 @@ class _InterfaceProfileMakers(Cursor):
         Args:
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies the description of a policy component.
-            name: null
             hsrp_version: HSRP Version on this Interface Values: ``v1``, ``v2``. Default:
                 ``v1``.
         """
@@ -8503,7 +8479,6 @@ class _InterfaceProfileMakers(Cursor):
         Args:
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies the description of a policy component.
-            name: null
         """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
@@ -8527,7 +8502,6 @@ class _InterfaceProfileMakers(Cursor):
         Args:
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies the description of a policy component.
-            name: null
         """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
@@ -8549,7 +8523,6 @@ class _InterfaceProfileMakers(Cursor):
         Args:
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies the description of a policy component.
-            name: null
         """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
@@ -8576,7 +8549,6 @@ class _InterfaceProfileMakers(Cursor):
             description: Specifies the description of a policy component.
             authentication_key: Authentication key
             authentication_key_id: Authentication key id
-            name: null
             authentication_type: Authentication type Values: ``none``, ``sha1``. Default:
                 ``none``.
         """
@@ -8605,7 +8577,6 @@ class _InterfaceProfileMakers(Cursor):
             description: Specifies the description of a policy component.
             authentication_key: Authentication key
             authentication_key_id: Authentication key id
-            name: null
             authentication_type: Authentication type Values: ``none``, ``sha1``. Default:
                 ``none``.
         """
@@ -8675,7 +8646,6 @@ class _InterfaceProfileMakers(Cursor):
         Args:
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies the description of a policy component.
-            name: null
         """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
@@ -8874,7 +8844,6 @@ class _L3outRouteControlProfileRouteControlContextMakers(Cursor):
         Args:
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies the description of a policy component.
-            name: null
         """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
@@ -9719,7 +9688,6 @@ class _FloatingSviMakers(Cursor):
                 attributes are sent to a peer.
             peer_af_controls_ext: Peer AF controls Ext
             description: Specifies the description of a policy component.
-            asn_name: null
             password: Administrative state
             peer_controls: The peer controls.
             private_as_control: Remove private AS
@@ -9783,7 +9751,6 @@ class _FloatingSviMakers(Cursor):
             peer_af_controls_ext: Peer AF controls Ext
             data_plane_address: Data plane address
             description: Specifies the description of a policy component.
-            name: null
             password: Administrative state
             peer_controls: The peer controls.
             peer_type: Peer Type
@@ -9828,15 +9795,13 @@ class _FloatingSviMakers(Cursor):
         The member. The member is used for providing per node IP address configuration.
 
         Args:
-            side: null
-            addr: null
+            side: Naming property — forms the object's RN.
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies the description of a policy component.
             ipv6_dad: IPv6 DAD feature When disabled it will IPv6 DAD will be diasabled Values:
                 ``disabled``, ``enabled``. Default: ``enabled``.
             ipv6_link_local_address: The override of the system generated Ipv6 link local
                 address.
-            name: null
         """
         params = {
             k: v
@@ -9892,7 +9857,6 @@ class _FloatingSviMakers(Cursor):
             description: Specifies the description of a policy component.
             ipv6_dad: IPv6 DAD feature When disabled it will IPv6 DAD will be diasabled Values:
                 ``disabled``, ``enabled``. Default: ``enabled``.
-            name: null
         """
         params = {
             k: v
@@ -10701,7 +10665,6 @@ class _FloatingSviBgpPeerMakers(Cursor):
             autonomous_system_number: A number that uniquely identifies an autonomous system.
                 Default: ``0``.
             description: Specifies the description of a policy component.
-            name: null
         """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
@@ -10730,7 +10693,6 @@ class _FloatingSviBgpPeerMakers(Cursor):
                 ``dual-as``, ``no-prepend``, ``none``, ``replace-as``. Default: ``none``.
             description: Specifies the description of a policy component.
             local_asn: The local autonomous system number (ASN). Default: ``0``.
-            name: null
         """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
@@ -10755,7 +10717,6 @@ class _FloatingSviBgpPeerMakers(Cursor):
         Args:
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies the description of a policy component.
-            name: null
             site_of_origin: Site of origin
         """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
@@ -10869,7 +10830,6 @@ class _FloatingSviInfraPeerConnectivityProfileMakers(Cursor):
             autonomous_system_number: A number that uniquely identifies an autonomous system.
                 Default: ``0``.
             description: Specifies the description of a policy component.
-            name: null
         """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
@@ -10898,7 +10858,6 @@ class _FloatingSviInfraPeerConnectivityProfileMakers(Cursor):
                 ``dual-as``, ``no-prepend``, ``none``, ``replace-as``. Default: ``none``.
             description: Specifies the description of a policy component.
             local_asn: The local autonomous system number (ASN). Default: ``0``.
-            name: null
         """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(

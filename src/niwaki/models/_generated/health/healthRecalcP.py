@@ -56,9 +56,7 @@ class healthRecalcP(ManagedObject):
     faulted_dn: str = Field(
         default="", alias="faultedDn", description="Dn on which health needs to be recalculated"
     )
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
-        ""
-    )
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

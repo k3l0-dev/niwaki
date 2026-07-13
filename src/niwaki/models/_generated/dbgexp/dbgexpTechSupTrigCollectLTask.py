@@ -56,7 +56,7 @@ class dbgexpTechSupTrigCollectLTask(ManagedObject):
         str,
         Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
     ] = ""
-    file: Annotated[str, Field(max_length=512, description="null")] = ""
+    file: Annotated[str, Field(max_length=512)] = ""
     task_frequency: str = Field(
         default="", alias="freq", description="Frequency at which tasks are executed"
     )

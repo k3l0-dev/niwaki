@@ -36,7 +36,7 @@ class maintTextNotif(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    to: Annotated[str, Field(min_length=1, max_length=512, description="null")]
+    to: Annotated[str, Field(min_length=1, max_length=512)]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[

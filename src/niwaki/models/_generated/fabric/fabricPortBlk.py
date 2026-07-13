@@ -36,9 +36,7 @@ class fabricPortBlk(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[
-        str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")
-    ]
+    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[
@@ -58,11 +56,11 @@ class fabricPortBlk(ManagedObject):
             description="The description of this configuration item.",
         ),
     ] = ""
-    from_module_id: str = Field(default="", alias="fromCard", description="null")
-    from_port_id: str = Field(default="", alias="fromPort", description="null")
+    from_module_id: str = Field(default="", alias="fromCard")
+    from_port_id: str = Field(default="", alias="fromPort")
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    to_module_id: str = Field(default="", alias="toCard", description="null")
-    to_port_id: str = Field(default="", alias="toPort", description="null")
+    to_module_id: str = Field(default="", alias="toCard")
+    to_port_id: str = Field(default="", alias="toPort")
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

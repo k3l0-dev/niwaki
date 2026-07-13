@@ -39,7 +39,7 @@ class isisLvlComp(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    type: IsisLvlT = Field(default=IsisLvlT.L1, description="null")
+    type: IsisLvlT = IsisLvlT.L1
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[
@@ -91,9 +91,7 @@ class isisLvlComp(ManagedObject):
             description="The LSP generation second wait interval. This is used in the LSP generation interval for the LSP MTU.",
         ),
     ] = 50
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
-        ""
-    )
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

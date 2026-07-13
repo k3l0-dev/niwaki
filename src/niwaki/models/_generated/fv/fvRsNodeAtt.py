@@ -70,9 +70,7 @@ class fvRsNodeAtt(ManagedObject):
     encap: Annotated[
         str, Field(description="The encapsulation method (VLAN) for the static binding.")
     ] = ""
-    deployment_immediacy: FvInstrImedcy = Field(
-        default=FvInstrImedcy.LAZY, alias="instrImedcy", description="null"
-    )
+    deployment_immediacy: FvInstrImedcy = Field(default=FvInstrImedcy.LAZY, alias="instrImedcy")
     mode: FvMode = Field(
         default=FvMode.REGULAR, description="The mode of the static association with the path."
     )

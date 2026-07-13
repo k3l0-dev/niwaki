@@ -9,7 +9,6 @@ class L3extDefaultRtLeakCriteriaType(StrEnum):
     IN_ADDITION = "in-addition"
     """Leak Default Route in Addition"""
     NONE = "none"
-    """None"""
     ONLY = "only"
     """Leak Default Route Only"""
 

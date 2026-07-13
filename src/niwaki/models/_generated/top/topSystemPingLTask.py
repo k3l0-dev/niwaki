@@ -50,29 +50,25 @@ class topSystemPingLTask(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    ctrl: Annotated[str, Field(description="null")] = ""
+    ctrl: str = ""
     description: Annotated[
         str,
         Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
     ] = ""
-    dst_ip: Annotated[
-        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="dstIp", description="null")
-    ] = ""
+    dst_ip: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="dstIp")] = ""
     task_frequency: str = Field(
         default="", alias="freq", description="Frequency at which tasks are executed"
     )
-    num_pkt: str = Field(default="", alias="numPkt", description="null")
-    pkt_sz: str = Field(default="", alias="pktSz", description="null")
-    send_intvl: str = Field(default="", alias="sendIntvl", description="null")
-    src_if: str = Field(default="", alias="srcIf", description="null")
-    src_ip: Annotated[
-        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="srcIp", description="null")
-    ] = ""
-    timeout: Annotated[str, Field(description="null")] = ""
-    tos: Annotated[str, Field(description="null")] = ""
-    ttl: Annotated[str, Field(description="null")] = ""
+    num_pkt: str = Field(default="", alias="numPkt")
+    pkt_sz: str = Field(default="", alias="pktSz")
+    send_intvl: str = Field(default="", alias="sendIntvl")
+    src_if: str = Field(default="", alias="srcIf")
+    src_ip: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="srcIp")] = ""
+    timeout: str = ""
+    tos: str = ""
+    ttl: str = ""
     type: ActionType = Field(
         default=ActionType.CLEAR, description="The specific type of the object or component."
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    vrf: Annotated[str, Field(max_length=512, description="null")] = ""
+    vrf: Annotated[str, Field(max_length=512)] = ""

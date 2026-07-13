@@ -36,7 +36,7 @@ class faultThrValueFloat(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    property: Annotated[str, Field(alias="propId", description="null")]
+    property: Annotated[str, Field(alias="propId")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[

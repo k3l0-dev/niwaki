@@ -58,11 +58,9 @@ class rtctrlSetPref(ManagedObject):
     local_pref: Annotated[
         int, Field(alias="localPref", description="The local preference value.")
     ] = 0
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
-        ""
-    )
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    type: RtctrlSetType = Field(default=RtctrlSetType.LOCAL_PREF, description="null")
+    type: RtctrlSetType = RtctrlSetType.LOCAL_PREF
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

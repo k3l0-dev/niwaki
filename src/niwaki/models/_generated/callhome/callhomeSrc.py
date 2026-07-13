@@ -69,7 +69,7 @@ class callhomeSrc(ManagedObject):
             description="Specifies the description of a policy component.",
         ),
     ] = ""
-    include_action: str = Field(default="", alias="incl", description="null")
+    include_action: str = Field(default="", alias="incl")
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

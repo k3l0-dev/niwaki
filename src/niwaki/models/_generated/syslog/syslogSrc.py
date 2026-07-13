@@ -68,7 +68,7 @@ class syslogSrc(ManagedObject):
             description="Specifies the description of a policy component.",
         ),
     ] = ""
-    include_action: str = Field(default="", alias="incl", description="null")
+    include_action: str = Field(default="", alias="incl")
     min_severity: SyslogSeverity = Field(
         default=SyslogSeverity.WARNINGS,
         alias="minSev",

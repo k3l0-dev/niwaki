@@ -60,9 +60,7 @@ class mplsSrgbLabelPolDef(ManagedObject):
     srgb_minimum_label: Annotated[
         int, Field(ge=16000, le=471804, alias="minSrgbLabel", description="SRGB Label Range")
     ] = 16000
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
-        ""
-    )
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

@@ -105,7 +105,7 @@ class aaaRsaProvider(ManagedObject):
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
-    retries: Annotated[int, Field(ge=0, le=5, description="null")] = 1
+    retries: Annotated[int, Field(ge=0, le=5)] = 1
     timeout_in_seconds: Annotated[
         int,
         Field(

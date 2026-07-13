@@ -36,9 +36,7 @@ class rtctrlMatchRtNh(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    match_ip_address: Annotated[
-        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="ip", description="null")
-    ]
+    match_ip_address: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="ip")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     aggregated_route: bool = Field(default=False, alias="aggregate", description="Aggregated Route")
@@ -62,9 +60,7 @@ class rtctrlMatchRtNh(ManagedObject):
     start_of_prefix_length: str = Field(
         default="", alias="fromPfxLen", description="Prefix list range"
     )
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
-        ""
-    )
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

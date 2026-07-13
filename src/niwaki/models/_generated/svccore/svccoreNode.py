@@ -45,13 +45,11 @@ class svccoreNode(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     card_id: Annotated[str, Field(alias="cardId", description="Card ID where the core was created")]
-    create_time: Annotated[str, Field(alias="createTime", description="null")]
+    create_time: Annotated[str, Field(alias="createTime")]
     node_id_where_the_core_file_was_created: Annotated[
         str, Field(alias="nodeId", description="Node ID where the core was created")
     ]
-    name_of_service_that_cored: Annotated[
-        str, Field(min_length=1, max_length=512, alias="svcName", description="null")
-    ]
+    name_of_service_that_cored: Annotated[str, Field(min_length=1, max_length=512, alias="svcName")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     ack: bool = False

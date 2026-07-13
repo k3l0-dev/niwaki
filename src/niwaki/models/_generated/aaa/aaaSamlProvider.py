@@ -108,7 +108,7 @@ class aaaSamlProvider(ManagedObject):
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
-    retries: Annotated[int, Field(ge=0, le=5, description="null")] = 1
+    retries: Annotated[int, Field(ge=0, le=5)] = 1
     signature_algorithm: AaaSigAlg = Field(default=AaaSigAlg.SIG_RSA_SHA256, alias="sigAlg")
     apicsp_entity_id: Annotated[str, Field(min_length=1, max_length=500, alias="spEntityId")] = ""
     timeout_in_seconds: Annotated[

@@ -101,9 +101,7 @@ class l3extRsPathL3OutAtt(ManagedObject):
         alias="encapScope",
         description="Represents the scope of the encap",
     )
-    if_inst_t: ExtnwIfInstT = Field(
-        default=ExtnwIfInstT.EXT_SVI, alias="ifInstT", description="null"
-    )
+    if_inst_t: ExtnwIfInstT = Field(default=ExtnwIfInstT.EXT_SVI, alias="ifInstT")
     ipv6_dad: L3extIpv6Dad = Field(
         default=L3extIpv6Dad.ENABLED,
         alias="ipv6Dad",

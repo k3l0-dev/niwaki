@@ -44,8 +44,8 @@ class topMetaInf(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    ecode: Annotated[str, Field(max_length=8, description="null")] = ""
-    name: Annotated[str, Field(description="null")] = ""
+    ecode: Annotated[str, Field(max_length=8)] = ""
+    name: str = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

@@ -49,7 +49,6 @@ class _ControllerMakers(Cursor):
         Args:
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies a description of the policy definition.
-            name: null
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
@@ -115,16 +114,12 @@ class _FabricMembershipMakers(Cursor):
 
         Args:
             serial: The node manufacturer serial number.
-            fabric_id: null
-            id: null
             node_type: Values: ``remote-leaf-wan``, ``tier-2-leaf``, ``unspecified``,
                 ``virtual``. Default: ``unspecified``.
-            pod_id: null
             role: The system role type. Values: ``leaf``, ``spine``, ``unspecified``. Default:
                 ``unspecified``.
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies the description of a policy component.
-            name: null
         """
         params = {
             k: v

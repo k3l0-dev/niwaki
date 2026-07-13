@@ -36,7 +36,7 @@ class infraLocation(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Create-only (ignored by APIC on modification) ─────────────────────────
-    affected: Annotated[str, Field(description="null")] = ""
+    affected: str = ""
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[

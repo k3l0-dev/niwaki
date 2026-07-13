@@ -60,9 +60,7 @@ class fhsRaGuardPol(ManagedObject):
         default=FhsRAGuardMaxRouterPref.DISABLED, alias="maxRouterPref"
     )
     min_allowed_hop_limit: str = Field(default="", alias="minHopLimit")
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
-        ""
-    )
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

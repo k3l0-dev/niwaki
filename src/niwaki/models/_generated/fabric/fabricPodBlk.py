@@ -36,9 +36,7 @@ class fabricPodBlk(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[
-        str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")
-    ]
+    name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[
@@ -58,9 +56,9 @@ class fabricPodBlk(ManagedObject):
             description="The description of this configuration item.",
         ),
     ] = ""
-    from_pod_id: str = Field(default="", alias="from_", description="null")
+    from_pod_id: str = Field(default="", alias="from_")
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    to_pod_id: str = Field(default="", alias="to_", description="null")
+    to_pod_id: str = Field(default="", alias="to_")
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

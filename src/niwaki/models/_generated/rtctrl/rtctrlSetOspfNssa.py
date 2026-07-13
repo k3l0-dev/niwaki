@@ -55,11 +55,9 @@ class rtctrlSetOspfNssa(ManagedObject):
             description="Specifies the description of a policy component.",
         ),
     ] = ""
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
-        ""
-    )
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    type: RtctrlSetType = Field(default=RtctrlSetType.OSPF_NSSA, description="null")
+    type: RtctrlSetType = RtctrlSetType.OSPF_NSSA
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

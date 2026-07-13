@@ -48,7 +48,6 @@ class vzRsFiltGraphAtt(ManagedObject):
         ),
     ] = ""
     graph_name: Annotated[
-        str,
-        Field(max_length=16, pattern="^[a-zA-Z0-9_.:-]+$", alias="graphName", description="null"),
+        str, Field(max_length=16, pattern="^[a-zA-Z0-9_.:-]+$", alias="graphName")
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

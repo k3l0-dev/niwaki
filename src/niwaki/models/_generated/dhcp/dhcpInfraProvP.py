@@ -60,9 +60,7 @@ class dhcpInfraProvP(ManagedObject):
     mode: DhcpRelayMode = Field(
         default=DhcpRelayMode.NORMAL, description="Represents the target relay servers ownership"
     )
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
-        ""
-    )
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

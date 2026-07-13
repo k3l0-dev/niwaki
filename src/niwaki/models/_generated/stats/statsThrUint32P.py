@@ -77,9 +77,7 @@ class statsThrUint32P(ManagedObject):
     minor_high_set: Annotated[int, Field(alias="minorHighSet")] = 0
     minor_low_reset: Annotated[int, Field(alias="minorLowReset")] = 0
     minor_low_set: Annotated[int, Field(alias="minorLowSet")] = 0
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
-        ""
-    )
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

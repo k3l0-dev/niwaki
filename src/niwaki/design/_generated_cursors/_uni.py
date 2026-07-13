@@ -112,7 +112,6 @@ class _UniMakers(Cursor):
 
         Args:
             annotation: User annotation. Suggested format orchestrator:value
-            name: null
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
@@ -139,7 +138,6 @@ class _UniMakers(Cursor):
 
         Args:
             annotation: User annotation. Suggested format orchestrator:value
-            name: null
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.

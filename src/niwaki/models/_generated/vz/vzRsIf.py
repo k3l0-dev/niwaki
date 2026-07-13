@@ -51,7 +51,7 @@ class vzRsIf(ManagedObject):
         ),
     ] = ""
     intent: VzIntent = VzIntent.INSTALL
-    prio: QosTenantPrio = Field(default=QosTenantPrio.UNSPECIFIED, description="null")
+    prio: QosTenantPrio = QosTenantPrio.UNSPECIFIED
     target_dn: str = Field(
         default="",
         alias="tDn",

@@ -69,9 +69,7 @@ class firmwareRepoP(ManagedObject):
         alias="enforceBootscriptVersionValidation",
         description="Ensures that any switch discovered in the fabric is upgraded or downgraded automatically to match the specified version.",
     )
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
-        ""
-    )
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

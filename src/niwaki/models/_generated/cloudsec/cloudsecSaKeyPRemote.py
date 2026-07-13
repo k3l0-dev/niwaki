@@ -65,9 +65,7 @@ class cloudsecSaKeyPRemote(ManagedObject):
     encrypted_sa_key: Annotated[
         str, Field(max_length=512, alias="encryptedSaKey", description="Encrypted SaKey")
     ] = ""
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
-        ""
-    )
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

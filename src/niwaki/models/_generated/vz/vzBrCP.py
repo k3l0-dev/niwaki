@@ -107,9 +107,7 @@ class vzBrCP(ManagedObject):
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
-    qos_class_id: QosTenantPrio = Field(
-        default=QosTenantPrio.UNSPECIFIED, alias="prio", description="null"
-    )
+    qos_class_id: QosTenantPrio = Field(default=QosTenantPrio.UNSPECIFIED, alias="prio")
     scope: VzScope = Field(
         default=VzScope.CONTEXT,
         description="Represents the scope of this contract. If the scope is set as application-profile, the epg can only communicate with epgs in the same application-profile",

@@ -55,10 +55,10 @@ class fabricNodeIdentP(ManagedObject):
 
     # ── Create-only (ignored by APIC on modification) ─────────────────────────
     ext_pool_id: str = Field(default="", alias="extPoolId")
-    fabric_id: str = Field(default="", alias="fabricId", description="null")
-    id: str = Field(default="", alias="nodeId", description="null")
+    fabric_id: str = Field(default="", alias="fabricId")
+    id: str = Field(default="", alias="nodeId")
     node_type: TopNodeType = Field(default=TopNodeType.UNSPECIFIED, alias="nodeType")
-    pod_id: str = Field(default="", alias="podId", description="null")
+    pod_id: str = Field(default="", alias="podId")
     role: TopNodeRoleP = Field(
         default=TopNodeRoleP.UNSPECIFIED, description="The system role type."
     )
@@ -81,9 +81,7 @@ class fabricNodeIdentP(ManagedObject):
             description="Specifies the description of a policy component.",
         ),
     ] = ""
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
-        ""
-    )
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

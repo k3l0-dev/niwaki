@@ -53,7 +53,7 @@ class fvOrchsLBCfg(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    mntr: Annotated[str, Field(max_length=512, description="null")] = ""
+    mntr: Annotated[str, Field(max_length=512)] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

@@ -38,7 +38,7 @@ class fabricRsOosPath(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    target_dn: Annotated[str, Field(alias="tDn", description="null")]
+    target_dn: Annotated[str, Field(alias="tDn")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[
@@ -49,5 +49,5 @@ class fabricRsOosPath(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    lc: FabricLc = Field(default=FabricLc.IN_SERVICE, description="null")
+    lc: FabricLc = FabricLc.IN_SERVICE
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

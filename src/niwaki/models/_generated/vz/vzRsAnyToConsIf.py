@@ -54,7 +54,5 @@ class vzRsAnyToConsIf(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    priority: QosTenantPrio = Field(
-        default=QosTenantPrio.UNSPECIFIED, alias="prio", description="null"
-    )
+    priority: QosTenantPrio = Field(default=QosTenantPrio.UNSPECIFIED, alias="prio")
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

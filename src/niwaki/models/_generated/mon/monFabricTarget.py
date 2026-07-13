@@ -90,7 +90,7 @@ class monFabricTarget(ManagedObject):
         ),
     ] = ""
     mon_fabrictarget_name: Annotated[
-        str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="name", description="null")
+        str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="name")
     ] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")

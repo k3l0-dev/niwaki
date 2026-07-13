@@ -58,9 +58,7 @@ class mgmtConnectivityPrefs(ManagedObject):
     management_interface_that_has_to_be_used: MgmtMgmtIntfType = Field(
         default=MgmtMgmtIntfType.INBAND, alias="interfacePref"
     )
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
-        ""
-    )
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

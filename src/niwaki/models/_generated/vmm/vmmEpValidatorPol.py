@@ -48,9 +48,7 @@ class vmmEpValidatorPol(ManagedObject):
         ),
     ] = ""
     current_key: Annotated[str, Field(max_length=512, alias="currentKey", repr=False)] = ""
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
-        ""
-    )
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

@@ -65,9 +65,7 @@ class datetimeNtpAuthKey(ManagedObject):
     type_of_authentication_key: DatetimeKeyType = Field(
         default=DatetimeKeyType.MD5, alias="keyType", description="NTP authentication key type"
     )
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
-        ""
-    )
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

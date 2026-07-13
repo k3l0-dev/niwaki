@@ -693,7 +693,6 @@ class _InfraMakers(Cursor):
         Args:
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies a description of the policy definition.
-            name: null
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
@@ -1650,7 +1649,6 @@ class _VlanPoolMakers(Cursor):
             allocation_mode: Values: ``dynamic``, ``inherit``, ``static``. Default: ``inherit``.
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies the description of a policy component.
-            name: null
             role: Role of the block. @@@ used only for domain in AVE mode @@@ external: On-the-
                 wire encap. PVLAN/Access determined by the domain @@@ Internal: Encaps used
                 internally Values: ``external``, ``internal``. Default: ``external``.
@@ -1731,10 +1729,6 @@ class _PortSelectorMakers(Cursor):
             name: The port block name
             annotation: User annotation. Suggested format orchestrator:value
             description: The description of this configuration item.
-            from_module_id: null
-            from_port_id: null
-            to_module_id: null
-            to_port_id: null
         """
         params = {
             k: v
@@ -1773,10 +1767,6 @@ class _PortSelectorMakers(Cursor):
             name: The name of the object.
             annotation: User annotation. Suggested format orchestrator:value
             description: The description of this configuration item.
-            from_module_id: null
-            from_port_id: null
-            to_module_id: null
-            to_port_id: null
         """
         params = {
             k: v
@@ -1995,11 +1985,9 @@ class _LeafSelectorMakers(Cursor):
         the last port.
 
         Args:
-            name: null
+            name: Naming property — forms the object's RN.
             annotation: User annotation. Suggested format orchestrator:value
             description: The description of this configuration item.
-            from_node_id: null
-            to_node_id: null
         """
         params = {
             k: v
@@ -2085,11 +2073,9 @@ class _SpineSelectorMakers(Cursor):
         the last port.
 
         Args:
-            name: null
+            name: Naming property — forms the object's RN.
             annotation: User annotation. Suggested format orchestrator:value
             description: The description of this configuration item.
-            from_node_id: null
-            to_node_id: null
         """
         params = {
             k: v

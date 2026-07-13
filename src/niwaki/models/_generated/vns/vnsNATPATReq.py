@@ -197,9 +197,7 @@ class vnsNATPATReq(ManagedObject):
         str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="mappedIp", description="mapped IP")
     ] = ""
     mapped_port: str = Field(default="", alias="mappedPort", description="mapped port")
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
-        ""
-    )
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

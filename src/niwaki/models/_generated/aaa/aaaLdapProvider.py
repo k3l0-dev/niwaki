@@ -146,7 +146,7 @@ class aaaLdapProvider(ManagedObject):
     port: Annotated[
         int, Field(ge=1, le=65535, description="The service port number for the LDAP service.")
     ] = 389
-    retries: Annotated[int, Field(ge=0, le=5, description="null")] = 1
+    retries: Annotated[int, Field(ge=0, le=5)] = 1
     root_dn: Annotated[
         str,
         Field(

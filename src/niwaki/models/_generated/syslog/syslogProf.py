@@ -38,9 +38,7 @@ class syslogProf(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    admin_state: MonAdminState = Field(
-        default=MonAdminState.ENABLED, alias="adminState", description="null"
-    )
+    admin_state: MonAdminState = Field(default=MonAdminState.ENABLED, alias="adminState")
     annotation: Annotated[
         str,
         Field(

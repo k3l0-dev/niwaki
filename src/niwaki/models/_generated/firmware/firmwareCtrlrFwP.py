@@ -63,9 +63,7 @@ class firmwareCtrlrFwP(ManagedObject):
         description="A property for specifying whether compatibility checks should be ignored when applying the firmware policy.",
     )
     internal_label: Annotated[str, Field(max_length=512, alias="internalLabel")] = ""
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
-        ""
-    )
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

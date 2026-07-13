@@ -62,9 +62,9 @@ class infraPodBlk(ManagedObject):
             description="The description of this configuration item.",
         ),
     ] = ""
-    from_pod_id: str = Field(default="", alias="from_", description="null")
+    from_pod_id: str = Field(default="", alias="from_")
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    to_pod_id: str = Field(default="", alias="to_", description="null")
+    to_pod_id: str = Field(default="", alias="to_")
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

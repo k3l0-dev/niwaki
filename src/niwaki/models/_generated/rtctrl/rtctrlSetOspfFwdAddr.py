@@ -58,11 +58,9 @@ class rtctrlSetOspfFwdAddr(ManagedObject):
     fwd_addr: Annotated[
         str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="fwdAddr", description="Forwarding address")
     ] = ""
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
-        ""
-    )
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    type: RtctrlSetType = Field(default=RtctrlSetType.OSPF_FWD_ADDR, description="null")
+    type: RtctrlSetType = RtctrlSetType.OSPF_FWD_ADDR
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

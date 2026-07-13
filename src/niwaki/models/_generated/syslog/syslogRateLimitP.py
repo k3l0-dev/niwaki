@@ -57,9 +57,7 @@ class syslogRateLimitP(ManagedObject):
     syslog_legacy_messages_limit_per_sec: Annotated[
         int, Field(ge=0, le=300000, alias="limitPerSec")
     ] = 100000
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
-        ""
-    )
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

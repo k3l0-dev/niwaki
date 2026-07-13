@@ -56,9 +56,7 @@ class isakmpGlobalPol(ManagedObject):
     isakmp_keepalive_interval: Annotated[
         int, Field(ge=10, le=3600, alias="keepalive", description="IsaKmp Keepalive interval")
     ] = 10
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
-        ""
-    )
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

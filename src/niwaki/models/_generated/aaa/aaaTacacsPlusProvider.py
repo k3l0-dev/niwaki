@@ -111,7 +111,7 @@ class aaaTacacsPlusProvider(ManagedObject):
     port: Annotated[
         int, Field(ge=1, le=65535, description="The service port number for the TACACS+ service.")
     ] = 49
-    retries: Annotated[int, Field(ge=0, le=5, description="null")] = 1
+    retries: Annotated[int, Field(ge=0, le=5)] = 1
     timeout_in_seconds: Annotated[
         int,
         Field(

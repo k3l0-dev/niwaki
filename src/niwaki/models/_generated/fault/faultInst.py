@@ -54,7 +54,7 @@ class faultInst(ManagedObject):
         default=False, description="Indicates whether the fault instance has been delegated."
     )
     title: Annotated[str, Field(max_length=512, description="Title is used by UI alert only")] = ""
-    type: ConditionType = Field(default=ConditionType.CONFIG, description="null")
+    type: ConditionType = ConditionType.CONFIG
 
     # ── Configurable ───────────────────────────────────────────────────────────
     ack: bool = Field(

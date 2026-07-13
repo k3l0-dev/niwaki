@@ -50,7 +50,7 @@ class fvRsPathAtt(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    target_dn: Annotated[str, Field(alias="tDn", description="null")]
+    target_dn: Annotated[str, Field(alias="tDn")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[

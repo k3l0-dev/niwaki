@@ -7,7 +7,6 @@ from enum import StrEnum
 
 class BfdAuthT(StrEnum):
     NONE = "none"
-    """None"""
     SHA1 = "sha1"
     """Keyed SHA1"""
 

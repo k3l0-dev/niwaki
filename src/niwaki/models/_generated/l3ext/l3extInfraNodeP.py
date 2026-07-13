@@ -65,9 +65,7 @@ class l3extInfraNodeP(ManagedObject):
         alias="fabricExtIntersiteCtrlPeering",
         description="Enable/Disable participation of this node in peering for intersite control traffic",
     )
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
-        ""
-    )
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

@@ -46,9 +46,6 @@ class vmmRsDefaultL2InstPol(ManagedObject):
         ),
     ] = ""
     name: Annotated[
-        str,
-        Field(
-            max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="tnL2InstPolName", description="null"
-        ),
+        str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="tnL2InstPolName")
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

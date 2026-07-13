@@ -40,7 +40,7 @@ class l3extSubnet(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    subnet: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="ip", description="null")]
+    subnet: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="ip")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     aggregate_routes_for_subnet: str = Field(
@@ -63,9 +63,7 @@ class l3extSubnet(ManagedObject):
             description="Specifies the description of a policy component.",
         ),
     ] = ""
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
-        ""
-    )
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

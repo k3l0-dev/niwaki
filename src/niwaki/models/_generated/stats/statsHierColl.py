@@ -68,9 +68,7 @@ class statsHierColl(ManagedObject):
         ),
     ] = ""
     history_retention: StatsHistRet = Field(default=StatsHistRet.INHERITED, alias="histRet")
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
-        ""
-    )
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

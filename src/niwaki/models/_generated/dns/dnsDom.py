@@ -38,7 +38,7 @@ class dnsDom(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(description="null")]
+    name: str
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[

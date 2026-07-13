@@ -59,9 +59,7 @@ class rtctrlSetRtMetricType(ManagedObject):
     metric_type: RtctrlMetricType = Field(
         default=RtctrlMetricType.OSPF_TYPE1, alias="metricType", description="The Metric Type."
     )
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
-        ""
-    )
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

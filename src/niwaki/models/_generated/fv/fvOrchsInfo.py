@@ -50,7 +50,7 @@ class fvOrchsInfo(ManagedObject):
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    addr_ns_name: Annotated[str, Field(max_length=512, alias="addrNsName", description="null")] = ""
+    addr_ns_name: Annotated[str, Field(max_length=512, alias="addrNsName")] = ""
     annotation: Annotated[
         str,
         Field(
@@ -59,15 +59,15 @@ class fvOrchsInfo(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    cloud: Annotated[str, Field(max_length=512, description="null")] = ""
+    cloud: Annotated[str, Field(max_length=512)] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    need_vip: bool = Field(default=False, alias="needVip", description="null")
-    plan: Annotated[str, Field(max_length=512, description="null")] = ""
+    need_vip: bool = Field(default=False, alias="needVip")
+    plan: Annotated[str, Field(max_length=512)] = ""
     svcs_mode: Annotated[str, Field(max_length=512, alias="svcsMode")] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    usr_acc: Annotated[str, Field(max_length=512, alias="usrAcc", description="null")] = ""
+    usr_acc: Annotated[str, Field(max_length=512, alias="usrAcc")] = ""
     vip: Annotated[
         str,
         Field(

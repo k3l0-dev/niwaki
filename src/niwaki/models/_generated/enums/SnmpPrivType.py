@@ -11,7 +11,6 @@ class SnmpPrivType(StrEnum):
     DES = "des"
     """des"""
     NONE = "none"
-    """None"""
 
     @classmethod
     def _missing_(cls, value: object) -> SnmpPrivType | None:

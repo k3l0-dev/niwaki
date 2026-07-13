@@ -47,8 +47,5 @@ class infraRsInfraBD(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    name: Annotated[
-        str,
-        Field(max_length=64, pattern="^[a-zA-Z0-9_.-]+$", alias="tnFvBDName", description="null"),
-    ] = ""
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.-]+$", alias="tnFvBDName")] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

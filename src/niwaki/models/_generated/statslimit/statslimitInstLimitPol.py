@@ -52,11 +52,9 @@ class statslimitInstLimitPol(ManagedObject):
             description="Specifies the description of a policy component.",
         ),
     ] = ""
-    include_action: str = Field(default="", alias="incl", description="null")
+    include_action: str = Field(default="", alias="incl")
     instance_limit: Annotated[int, Field(ge=1, le=65535, alias="instLimit")] = 514
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
-        ""
-    )
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

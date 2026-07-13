@@ -56,9 +56,7 @@ class l2LoadBalancePol(ManagedObject):
     load_balance_criteria: PcLbL3L4 = Field(
         default=PcLbL3L4.DST_IP, alias="hashFields", description="Load balance parameters"
     )
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
-        ""
-    )
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

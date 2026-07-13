@@ -75,9 +75,7 @@ class faultSevAsnP(ManagedObject):
         alias="initial",
         description="The policy for assignment of initial severity is assigned at condition detection or when a fault object is created. If inherit is selected, a less precise (or default) definition is applied. If squelched is selected, a fault object is never raised, and the corresponding condition is ignored.",
     )
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
-        ""
-    )
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

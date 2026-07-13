@@ -65,13 +65,13 @@ class infraSubPortBlk(ManagedObject):
             description="The description of this configuration item.",
         ),
     ] = ""
-    from_module_id: str = Field(default="", alias="fromCard", description="null")
-    from_port_id: str = Field(default="", alias="fromPort", description="null")
+    from_module_id: str = Field(default="", alias="fromCard")
+    from_port_id: str = Field(default="", alias="fromPort")
     from_sub_port_id: str = Field(default="", alias="fromSubPort")
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    to_module_id: str = Field(default="", alias="toCard", description="null")
-    to_port_id: str = Field(default="", alias="toPort", description="null")
+    to_module_id: str = Field(default="", alias="toCard")
+    to_port_id: str = Field(default="", alias="toPort")
     to_sub_port_id: str = Field(default="", alias="toSubPort")
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

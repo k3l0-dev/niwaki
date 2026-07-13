@@ -40,7 +40,7 @@ class dhcpRelayAddr(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    address: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", description="null")]
+    address: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$")]
     vrf: Annotated[
         str,
         Field(

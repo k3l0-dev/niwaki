@@ -78,9 +78,7 @@ class statsThrTriggerP(ManagedObject):
     minor_high_set: StatsTrigger = Field(default=StatsTrigger.OFF, alias="minorHighSet")
     minor_low_reset: StatsTrigger = Field(default=StatsTrigger.OFF, alias="minorLowReset")
     minor_low_set: StatsTrigger = Field(default=StatsTrigger.OFF, alias="minorLowSet")
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
-        ""
-    )
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

@@ -61,9 +61,7 @@ class bgpDomainIdBase(ManagedObject):
     domain_id_base_ip: str = Field(
         default="", alias="domainIdBaseIp", description="Global BGP Domain Id Base Ip"
     )
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
-        ""
-    )
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

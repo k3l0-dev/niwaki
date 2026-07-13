@@ -89,5 +89,5 @@ class rtctrlProfile(ManagedObject):
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
-    type: RtctrlPolicyType = Field(default=RtctrlPolicyType.COMBINABLE, description="null")
+    type: RtctrlPolicyType = RtctrlPolicyType.COMBINABLE
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

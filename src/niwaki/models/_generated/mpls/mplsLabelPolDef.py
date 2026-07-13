@@ -62,9 +62,7 @@ class mplsLabelPolDef(ManagedObject):
     mpls_minimum_static_label: Annotated[
         int, Field(alias="minStaticLabel", description="MPLS Label Static Range")
     ] = 0
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
-        ""
-    )
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

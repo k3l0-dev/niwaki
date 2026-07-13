@@ -9,7 +9,6 @@ class RtmapSetCriteria(StrEnum):
     APPEND = "append"
     """Append"""
     NONE = "none"
-    """None"""
     REPLACE = "replace"
     """Replace"""
 

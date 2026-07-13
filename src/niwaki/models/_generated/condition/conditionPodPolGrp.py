@@ -89,7 +89,5 @@ class conditionPodPolGrp(ManagedObject):
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
-    selector_type: FabricSelector2 = Field(
-        default=FabricSelector2.ALL, alias="type", description="null"
-    )
+    selector_type: FabricSelector2 = Field(default=FabricSelector2.ALL, alias="type")
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

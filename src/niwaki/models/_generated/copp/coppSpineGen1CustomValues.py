@@ -70,9 +70,7 @@ class coppSpineGen1CustomValues(ManagedObject):
     isis_rate: str = Field(default="", alias="isisRate")
     lldp_burst: str = Field(default="", alias="lldpBurst")
     lldp_rate: str = Field(default="", alias="lldpRate")
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
-        ""
-    )
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

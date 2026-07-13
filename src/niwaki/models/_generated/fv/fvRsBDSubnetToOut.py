@@ -39,13 +39,7 @@ class fvRsBDSubnetToOut(ManagedObject):
     # ── Naming (required) ──────────────────────────────────────────────────────
     name: Annotated[
         str,
-        Field(
-            min_length=1,
-            max_length=64,
-            pattern="^[a-zA-Z0-9_.:-]+$",
-            alias="tnL3extOutName",
-            description="null",
-        ),
+        Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="tnL3extOutName"),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────

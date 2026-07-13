@@ -59,15 +59,11 @@ class vzOutTerm(ManagedObject):
             description="Specifies the description of a policy component.",
         ),
     ] = ""
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
-        ""
-    )
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    qos_class_id: QosTenantPrio = Field(
-        default=QosTenantPrio.UNSPECIFIED, alias="prio", description="null"
-    )
+    qos_class_id: QosTenantPrio = Field(default=QosTenantPrio.UNSPECIFIED, alias="prio")
     terminal_level_dscp: str = Field(
         default="", alias="targetDscp", description="Terminal level dscp value"
     )

@@ -92,7 +92,5 @@ class infraConnNodeS(ManagedObject):
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
-    selector_type: FabricSelector = Field(
-        default=FabricSelector.ALL, alias="type", description="null"
-    )
+    selector_type: FabricSelector = Field(default=FabricSelector.ALL, alias="type")
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

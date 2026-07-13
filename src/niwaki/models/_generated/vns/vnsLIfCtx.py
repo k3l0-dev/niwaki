@@ -81,9 +81,7 @@ class vnsLIfCtx(ManagedObject):
     l3_dest: bool = Field(
         default=True, alias="l3Dest", description="Is this LIF a L3 Destination (VIP)"
     )
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
-        ""
-    )
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

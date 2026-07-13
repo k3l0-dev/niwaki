@@ -351,7 +351,6 @@ class _FabricMakers(Cursor):
         Args:
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies a description of the policy definition.
-            name: null
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
@@ -416,7 +415,6 @@ class _BgpInstanceMakers(Cursor):
             autonomous_system_number: A number that uniquely identifies an autonomous system.
                 Default: ``0``.
             description: Specifies the description of a policy component.
-            name: null
         """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
@@ -440,7 +438,6 @@ class _BgpInstanceMakers(Cursor):
         Args:
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies the description of a policy component.
-            name: null
         """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
@@ -583,7 +580,6 @@ class _DnsProfileMakers(Cursor):
         Args:
             ip_address: The address of the DNS provider.
             annotation: User annotation. Suggested format orchestrator:value
-            name: null
             prefered_dns_provider: Specifies if this the preferred provider. Only one provider
                 in the group should be preferred Default: ``False``.
         """
@@ -775,7 +771,6 @@ class _SyslogGroupMakers(Cursor):
             forward_facility: The facility to be used to send messages to this destination.
                 Values: ``local0``, ``local1``, ``local2``, ``local3``, ``local4``, ``local5``,
                 ``local6``, ``local7``. Default: ``local7``.
-            name: null
             port: The syslog service port of the remote destination. Default: ``514``.
             protocol: The transfer protocol to be used for data export. Values: ``ssl``,
                 ``tcp``, ``udp``. Default: ``udp``.
@@ -1129,7 +1124,6 @@ class _VpcPairMakers(Cursor):
                 group.
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies the description of a policy component.
-            name: null
             pod_id: Pod id
         """
         params = {

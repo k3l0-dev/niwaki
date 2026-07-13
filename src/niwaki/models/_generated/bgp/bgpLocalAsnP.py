@@ -65,9 +65,7 @@ class bgpLocalAsnP(ManagedObject):
     local_asn: Annotated[
         int, Field(ge=1, alias="localAsn", description="The local autonomous system number (ASN).")
     ] = 0
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="null")] = (
-        ""
-    )
+    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""

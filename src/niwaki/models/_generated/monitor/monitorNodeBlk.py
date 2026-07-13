@@ -62,9 +62,9 @@ class monitorNodeBlk(ManagedObject):
             description="The description of this configuration item.",
         ),
     ] = ""
-    from_node_id: str = Field(default="", alias="from_", description="null")
+    from_node_id: str = Field(default="", alias="from_")
     display_name: Annotated[
         str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
     ] = ""
-    to_node_id: str = Field(default="", alias="to_", description="null")
+    to_node_id: str = Field(default="", alias="to_")
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
