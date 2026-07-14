@@ -34,3 +34,12 @@ Accepted as keyword arguments of `.app(name)` and of `.set(**attrs)` on this cur
 | maker | creates | position |
 | --- | --- | --- |
 | `.epg(name, **attrs)` | `fvAEPg` | {ref}`tenant.app.epg <vocab-tenant-app-epg>` |
+| `.esg(name, **attrs)` | `fvESg` | {ref}`tenant.app.esg <vocab-tenant-app-esg>` |
+
+## Bind aliases
+
+Lazy references, resolved closed-world at push time.
+
+| alias | target | flavor | relation |
+| --- | --- | --- | --- |
+| `monitoring_policy=` | `monEPGPol` | name | `fvRsApMonPol` |

@@ -13,7 +13,7 @@ A subject is a sub-application running behind an endpoint group (for example, an
 | --- | --- |
 | ACI class | `vzSubj` |
 | RN | `subj-{name}` |
-| Cursor | `SubjectCursor` |
+| Cursor | `ContractSubjectCursor` |
 | Parent | {ref}`tenant.contract <vocab-tenant-contract>` |
 | Atomic | — |
 
@@ -30,6 +30,16 @@ Accepted as keyword arguments of `.subject(name)` and of `.set(**attrs)` on this
 | `provider_label_match_type` | `provMatchT` | {ref}`VzMatchT <enum-vzmatcht>` | `All`, `AtleastOne`, `AtmostOne`, `None` | `AtleastOne` | The subject match criteria across consumers. |
 | `reverse_filter_ports` | `revFltPorts` | `bool` | — | `True` | Enables the filter to apply on both ingress and egress traffic. |
 | `subject_level_dscp` | `targetDscp` | `str` | — | — | The target differentiated services code point (DSCP) of the path attached to the layer 3 outside profile. |
+
+## Children
+
+| maker | creates | position |
+| --- | --- | --- |
+| `.in_term(**attrs)` | `vzInTerm` | {ref}`tenant.contract.subject.in_term <vocab-tenant-contract-subject-in_term>` |
+| `.out_term(**attrs)` | `vzOutTerm` | {ref}`tenant.contract.subject.out_term <vocab-tenant-contract-subject-out_term>` |
+| `.exception(name, **attrs)` | `vzException` | {ref}`tenant.contract.subject.exception <vocab-tenant-contract-subject-exception>` |
+| `.provider_subject_label(name, **attrs)` | `vzProvSubjLbl` | {ref}`tenant.contract.subject.provider_subject_label <vocab-tenant-contract-subject-provider_subject_label>` |
+| `.consumer_subject_label(name, **attrs)` | `vzConsSubjLbl` | {ref}`tenant.contract.subject.consumer_subject_label <vocab-tenant-contract-subject-consumer_subject_label>` |
 
 ## Bind aliases
 

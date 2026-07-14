@@ -5,13 +5,13 @@ Re-generate: uv run python -m niwaki._codegen.generate_docs
 
 # Coverage matrix
 
-**176 curated positions** across the four design domains plus the `uni`-level domains.  Everything else in the 2,222 generated classes stays reachable through `.mo(Class, ...)` and `bind_dn(alias=dn)` — see the design guide.
+**293 curated positions** across the four design domains plus the `uni`-level domains.  Everything else in the 2,222 generated classes stays reachable through `.mo(Class, ...)` and `bind_dn(alias=dn)` — see the design guide.
 
 ## fabric
 
 | position | ACI class | makers | bind aliases | verbs | sugar | atomic |
 | --- | --- | --- | --- | --- | --- | --- |
-| {ref}`fabric <vocab-fabric>` | `fabricInst` | 7 | — | — | — | — |
+| {ref}`fabric <vocab-fabric>` | `fabricInst` | 9 | — | — | — | — |
 | {ref}`fabric.igmp_snoop_policy <vocab-fabric-igmp_snoop_policy>` | `igmpSnoopPol` | — | — | — | — | — |
 | {ref}`fabric.mld_snoop_policy <vocab-fabric-mld_snoop_policy>` | `mldSnoopPol` | — | — | — | — | — |
 | {ref}`fabric.datetime_policy <vocab-fabric-datetime_policy>` | `datetimePol` | 1 | — | — | — | — |
@@ -28,12 +28,17 @@ Re-generate: uv run python -m niwaki._codegen.generate_docs
 | {ref}`fabric.vpc_protection <vocab-fabric-vpc_protection>` | `fabricProtPol` | 1 | — | — | — | — |
 | {ref}`fabric.vpc_protection.vpc_pair <vocab-fabric-vpc_protection-vpc_pair>` | `fabricExplicitGEp` | 1 | — | — | — | ✓ |
 | {ref}`fabric.vpc_protection.vpc_pair.node <vocab-fabric-vpc_protection-vpc_pair-node>` | `fabricNodePEp` | — | — | — | — | — |
+| {ref}`fabric.span_source_group <vocab-fabric-span_source_group>` | `spanSrcGrp` | 2 | `filter_group=` | — | — | — |
+| {ref}`fabric.span_source_group.span_source <vocab-fabric-span_source_group-span_source>` | `spanSrc` | — | `epg=`, `bd=`, `vrf=`, `l3out=`, `filter_group=`, `path=`, `fabric_node=` | — | — | — |
+| {ref}`fabric.span_source_group.span_label <vocab-fabric-span_source_group-span_label>` | `spanSpanLbl` | — | — | — | — | — |
+| {ref}`fabric.span_destination_group <vocab-fabric-span_destination_group>` | `spanDestGrp` | 1 | — | — | — | — |
+| {ref}`fabric.span_destination_group.span_destination <vocab-fabric-span_destination_group-span_destination>` | `spanDest` | — | `epg=`, `path=`, `apic_node=` | — | — | — |
 
 ## infra
 
 | position | ACI class | makers | bind aliases | verbs | sugar | atomic |
 | --- | --- | --- | --- | --- | --- | --- |
-| {ref}`infra <vocab-infra>` | `infraInfra` | 15 | — | — | — | — |
+| {ref}`infra <vocab-infra>` | `infraInfra` | 21 | — | — | — | — |
 | {ref}`infra.cdp_policy <vocab-infra-cdp_policy>` | `cdpIfPol` | — | — | — | — | — |
 | {ref}`infra.lldp_policy <vocab-infra-lldp_policy>` | `lldpIfPol` | — | — | — | — | — |
 | {ref}`infra.lacp_policy <vocab-infra-lacp_policy>` | `lacpLagPol` | — | — | — | — | — |
@@ -60,19 +65,67 @@ Re-generate: uv run python -m niwaki._codegen.generate_docs
 | {ref}`infra.spine_profile <vocab-infra-spine_profile>` | `infraSpineP` | 1 | — | — | — | — |
 | {ref}`infra.spine_profile.spine_selector <vocab-infra-spine_profile-spine_selector>` | `infraSpineS` | 1 | — | — | — | — |
 | {ref}`infra.spine_profile.spine_selector.node_block <vocab-infra-spine_profile-spine_selector-node_block>` | `infraNodeBlk` | — | — | — | — | — |
+| {ref}`infra.span_source_group <vocab-infra-span_source_group>` | `spanSrcGrp` | 2 | `filter_group=` | — | — | — |
+| {ref}`infra.span_source_group.span_source <vocab-infra-span_source_group-span_source>` | `spanSrc` | — | `epg=`, `bd=`, `vrf=`, `l3out=`, `filter_group=`, `path=`, `fabric_node=` | — | — | — |
+| {ref}`infra.span_source_group.span_label <vocab-infra-span_source_group-span_label>` | `spanSpanLbl` | — | — | — | — | — |
+| {ref}`infra.span_destination_group <vocab-infra-span_destination_group>` | `spanDestGrp` | 1 | — | — | — | — |
+| {ref}`infra.span_destination_group.span_destination <vocab-infra-span_destination_group-span_destination>` | `spanDest` | — | `epg=`, `path=`, `apic_node=` | — | — | — |
+| {ref}`infra.filter_group <vocab-infra-filter_group>` | `spanFilterGrp` | 1 | — | — | — | — |
+| {ref}`infra.filter_group.filter_entry <vocab-infra-filter_group-filter_entry>` | `spanFilterEntry` | — | — | — | — | — |
+| {ref}`infra.netflow_monitor <vocab-infra-netflow_monitor>` | `netflowMonitorPol` | — | `netflow_exporter=`, `netflow_record=` | — | — | — |
+| {ref}`infra.netflow_exporter <vocab-infra-netflow_exporter>` | `netflowExporterPol` | — | `vrf=`, `epg=` | — | — | — |
+| {ref}`infra.netflow_record <vocab-infra-netflow_record>` | `netflowRecordPol` | — | — | — | — | — |
 
 ## tenant
 
 | position | ACI class | makers | bind aliases | verbs | sugar | atomic |
 | --- | --- | --- | --- | --- | --- | --- |
-| {ref}`tenant <vocab-tenant>` | `fvTenant` | 49 | — | — | — | — |
-| {ref}`tenant.app <vocab-tenant-app>` | `fvAp` | 1 | — | — | — | — |
-| {ref}`tenant.app.epg <vocab-tenant-app-epg>` | `fvAEPg` | 1 | `bd=`, `domain=` | `.provide()`, `.consume()` | — | — |
+| {ref}`tenant <vocab-tenant>` | `fvTenant` | 69 | — | — | — | — |
+| {ref}`tenant.app <vocab-tenant-app>` | `fvAp` | 2 | `monitoring_policy=` | — | — | — |
+| {ref}`tenant.app.epg <vocab-tenant-app-epg>` | `fvAEPg` | 12 | `bd=`, `domain=`, `contract_master=`, `imported_contract=`, `taboo_contract=`, `custom_qos_policy=`, `dpp_policy=`, `monitoring_policy=`, `trust_control_policy=`, `qos_requirement=` | `.provide()`, `.consume()`, `.intra_epg()` | — | — |
 | {ref}`tenant.app.epg.static_path <vocab-tenant-app-epg-static_path>` | `fvRsPathAtt` | — | — | — | — | — |
+| {ref}`tenant.app.epg.fc_path <vocab-tenant-app-epg-fc_path>` | `fvRsFcPathAtt` | — | — | — | — | — |
+| {ref}`tenant.app.epg.subnet <vocab-tenant-app-epg-subnet>` | `fvSubnet` | — | `l3out=`, `nd_ra_prefix_policy=` | — | — | — |
+| {ref}`tenant.app.epg.static_endpoint <vocab-tenant-app-epg-static_endpoint>` | `fvStCEp` | 1 | `path=`, `fabric_node=` | — | — | — |
+| {ref}`tenant.app.epg.static_endpoint.static_ip <vocab-tenant-app-epg-static_endpoint-static_ip>` | `fvStIp` | — | — | — | — | — |
+| {ref}`tenant.app.epg.criterion <vocab-tenant-app-epg-criterion>` | `fvCrtrn` | 5 | — | — | — | — |
+| {ref}`tenant.app.epg.criterion.sub_criterion <vocab-tenant-app-epg-criterion-sub_criterion>` | `fvSCrtrn` | 1 | — | — | — | — |
+| {ref}`tenant.app.epg.criterion.sub_criterion.vm_attribute <vocab-tenant-app-epg-criterion-sub_criterion-vm_attribute>` | `fvVmAttr` | — | — | — | — | — |
+| {ref}`tenant.app.epg.criterion.ip_attribute <vocab-tenant-app-epg-criterion-ip_attribute>` | `fvIpAttr` | — | — | — | — | — |
+| {ref}`tenant.app.epg.criterion.mac_attribute <vocab-tenant-app-epg-criterion-mac_attribute>` | `fvMacAttr` | — | — | — | — | — |
+| {ref}`tenant.app.epg.criterion.vm_attribute <vocab-tenant-app-epg-criterion-vm_attribute>` | `fvVmAttr` | — | — | — | — | — |
+| {ref}`tenant.app.epg.criterion.dns_attribute <vocab-tenant-app-epg-criterion-dns_attribute>` | `fvDnsAttr` | — | — | — | — | — |
+| {ref}`tenant.app.epg.provider_label <vocab-tenant-app-epg-provider_label>` | `vzProvLbl` | — | — | — | — | — |
+| {ref}`tenant.app.epg.consumer_label <vocab-tenant-app-epg-consumer_label>` | `vzConsLbl` | — | — | — | — | — |
+| {ref}`tenant.app.epg.provider_subject_label <vocab-tenant-app-epg-provider_subject_label>` | `vzProvSubjLbl` | — | — | — | — | — |
+| {ref}`tenant.app.epg.consumer_subject_label <vocab-tenant-app-epg-consumer_subject_label>` | `vzConsSubjLbl` | — | — | — | — | — |
+| {ref}`tenant.app.epg.provider_contract_label <vocab-tenant-app-epg-provider_contract_label>` | `vzProvCtrctLbl` | — | — | — | — | — |
+| {ref}`tenant.app.epg.consumer_contract_label <vocab-tenant-app-epg-consumer_contract_label>` | `vzConsCtrctLbl` | — | — | — | — | — |
+| {ref}`tenant.app.epg.virtual_ip <vocab-tenant-app-epg-virtual_ip>` | `fvVip` | — | — | — | — | — |
+| {ref}`tenant.app.esg <vocab-tenant-app-esg>` | `fvESg` | 9 | `vrf=`, `contract_master=`, `imported_contract=`, `custom_qos_policy=` | `.provide()`, `.consume()`, `.intra_epg()` | — | — |
+| {ref}`tenant.app.esg.ep_selector <vocab-tenant-app-esg-ep_selector>` | `fvEPSelector` | — | — | — | — | — |
+| {ref}`tenant.app.esg.epg_selector <vocab-tenant-app-esg-epg_selector>` | `fvEPgSelector` | — | — | — | — | — |
+| {ref}`tenant.app.esg.tag_selector <vocab-tenant-app-esg-tag_selector>` | `fvTagSelector` | — | — | — | — | — |
+| {ref}`tenant.app.esg.provider_label <vocab-tenant-app-esg-provider_label>` | `vzProvLbl` | — | — | — | — | — |
+| {ref}`tenant.app.esg.consumer_label <vocab-tenant-app-esg-consumer_label>` | `vzConsLbl` | — | — | — | — | — |
+| {ref}`tenant.app.esg.provider_subject_label <vocab-tenant-app-esg-provider_subject_label>` | `vzProvSubjLbl` | — | — | — | — | — |
+| {ref}`tenant.app.esg.consumer_subject_label <vocab-tenant-app-esg-consumer_subject_label>` | `vzConsSubjLbl` | — | — | — | — | — |
+| {ref}`tenant.app.esg.provider_contract_label <vocab-tenant-app-esg-provider_contract_label>` | `vzProvCtrctLbl` | — | — | — | — | — |
+| {ref}`tenant.app.esg.consumer_contract_label <vocab-tenant-app-esg-consumer_contract_label>` | `vzConsCtrctLbl` | — | — | — | — | — |
 | {ref}`tenant.bd <vocab-tenant-bd>` | `fvBD` | 1 | `vrf=`, `l3out=` | — | — | — |
-| {ref}`tenant.bd.subnet <vocab-tenant-bd-subnet>` | `fvSubnet` | — | — | — | — | — |
-| {ref}`tenant.vrf <vocab-tenant-vrf>` | `fvCtx` | 1 | `l3out=` | — | — | — |
+| {ref}`tenant.bd.subnet <vocab-tenant-bd-subnet>` | `fvSubnet` | — | `l3out=`, `nd_ra_prefix_policy=` | — | — | — |
+| {ref}`tenant.vrf <vocab-tenant-vrf>` | `fvCtx` | 3 | `l3out=` | — | — | — |
 | {ref}`tenant.vrf.pim <vocab-tenant-vrf-pim>` | `pimCtxP` | — | — | — | — | — |
+| {ref}`tenant.vrf.vzany <vocab-tenant-vrf-vzany>` | `vzAny` | 6 | `imported_contract=` | `.provide()`, `.consume()` | — | — |
+| {ref}`tenant.vrf.vzany.provider_label <vocab-tenant-vrf-vzany-provider_label>` | `vzProvLbl` | — | — | — | — | — |
+| {ref}`tenant.vrf.vzany.consumer_label <vocab-tenant-vrf-vzany-consumer_label>` | `vzConsLbl` | — | — | — | — | — |
+| {ref}`tenant.vrf.vzany.provider_subject_label <vocab-tenant-vrf-vzany-provider_subject_label>` | `vzProvSubjLbl` | — | — | — | — | — |
+| {ref}`tenant.vrf.vzany.consumer_subject_label <vocab-tenant-vrf-vzany-consumer_subject_label>` | `vzConsSubjLbl` | — | — | — | — | — |
+| {ref}`tenant.vrf.vzany.provider_contract_label <vocab-tenant-vrf-vzany-provider_contract_label>` | `vzProvCtrctLbl` | — | — | — | — | — |
+| {ref}`tenant.vrf.vzany.consumer_contract_label <vocab-tenant-vrf-vzany-consumer_contract_label>` | `vzConsCtrctLbl` | — | — | — | — | — |
+| {ref}`tenant.vrf.fallback_route_group <vocab-tenant-vrf-fallback_route_group>` | `fvFBRGroup` | 2 | — | — | — | — |
+| {ref}`tenant.vrf.fallback_route_group.fallback_route <vocab-tenant-vrf-fallback_route_group-fallback_route>` | `fvFBRoute` | — | — | — | — | — |
+| {ref}`tenant.vrf.fallback_route_group.fallback_member <vocab-tenant-vrf-fallback_route_group-fallback_member>` | `fvFBRMember` | — | — | — | — | — |
 | {ref}`tenant.l3out <vocab-tenant-l3out>` | `l3extOut` | 10 | `vrf=`, `domain=`, `fallback_route_group=` | — | — | — |
 | {ref}`tenant.l3out.node_profile <vocab-tenant-l3out-node_profile>` | `l3extLNodeP` | 6 | `fabric_node=`, `mpls_custom_qos_policy=` | — | — | — |
 | {ref}`tenant.l3out.node_profile.interface_profile <vocab-tenant-l3out-node_profile-interface_profile>` | `l3extLIfP` | 12 | `arp_interface_policy=`, `nd_interface_policy=`, `custom_qos_policy=`, `netflow_monitor=` | — | — | — |
@@ -117,8 +170,8 @@ Re-generate: uv run python -m niwaki._codegen.generate_docs
 | {ref}`tenant.l3out.external_epg.provider_contract_label <vocab-tenant-l3out-external_epg-provider_contract_label>` | `vzProvCtrctLbl` | — | — | — | — | — |
 | {ref}`tenant.l3out.external_epg.consumer_label <vocab-tenant-l3out-external_epg-consumer_label>` | `vzConsLbl` | — | — | — | — | — |
 | {ref}`tenant.l3out.external_epg.provider_label <vocab-tenant-l3out-external_epg-provider_label>` | `vzProvLbl` | — | — | — | — | — |
-| {ref}`tenant.l3out.external_epg.vz_cons_subject_label <vocab-tenant-l3out-external_epg-vz_cons_subject_label>` | `vzConsSubjLbl` | — | — | — | — | — |
-| {ref}`tenant.l3out.external_epg.vz_prov_subject_label <vocab-tenant-l3out-external_epg-vz_prov_subject_label>` | `vzProvSubjLbl` | — | — | — | — | — |
+| {ref}`tenant.l3out.external_epg.consumer_subject_label <vocab-tenant-l3out-external_epg-consumer_subject_label>` | `vzConsSubjLbl` | — | — | — | — | — |
+| {ref}`tenant.l3out.external_epg.provider_subject_label <vocab-tenant-l3out-external_epg-provider_subject_label>` | `vzProvSubjLbl` | — | — | — | — | — |
 | {ref}`tenant.l3out.bgp <vocab-tenant-l3out-bgp>` | `bgpExtP` | — | — | — | — | — |
 | {ref}`tenant.l3out.ospf <vocab-tenant-l3out-ospf>` | `ospfExtP` | — | — | — | — | — |
 | {ref}`tenant.l3out.eigrp <vocab-tenant-l3out-eigrp>` | `eigrpExtP` | — | — | — | — | — |
@@ -129,10 +182,45 @@ Re-generate: uv run python -m niwaki._codegen.generate_docs
 | {ref}`tenant.l3out.route_control_profile.route_control_context <vocab-tenant-l3out-route_control_profile-route_control_context>` | `rtctrlCtxP` | 1 | `match_rule=` | — | — | — |
 | {ref}`tenant.l3out.route_control_profile.route_control_context.route_context_scope <vocab-tenant-l3out-route_control_profile-route_control_context-route_context_scope>` | `rtctrlScope` | — | `action_rule_profile=` | — | — | — |
 | {ref}`tenant.l3out.route_target_instrumentation_profile <vocab-tenant-l3out-route_target_instrumentation_profile>` | `bgpRtTargetInstrP` | — | — | — | — | — |
+| {ref}`tenant.l2out <vocab-tenant-l2out>` | `l2extOut` | 2 | `bd=`, `domain=` | — | — | — |
+| {ref}`tenant.l2out.node_profile <vocab-tenant-l2out-node_profile>` | `l2extLNodeP` | 1 | — | — | — | — |
+| {ref}`tenant.l2out.node_profile.interface_profile <vocab-tenant-l2out-node_profile-interface_profile>` | `l2extLIfP` | 1 | — | — | — | — |
+| {ref}`tenant.l2out.node_profile.interface_profile.static_path <vocab-tenant-l2out-node_profile-interface_profile-static_path>` | `l2extRsPathL2OutAtt` | — | — | — | — | — |
+| {ref}`tenant.l2out.external_epg <vocab-tenant-l2out-external_epg>` | `l2extInstP` | 7 | `contract_master=`, `imported_contract=`, `taboo_contract=`, `custom_qos_policy=` | `.provide()`, `.consume()`, `.intra_epg()` | — | — |
+| {ref}`tenant.l2out.external_epg.subnet <vocab-tenant-l2out-external_epg-subnet>` | `fvSubnet` | — | `l3out=`, `nd_ra_prefix_policy=` | — | — | — |
+| {ref}`tenant.l2out.external_epg.provider_label <vocab-tenant-l2out-external_epg-provider_label>` | `vzProvLbl` | — | — | — | — | — |
+| {ref}`tenant.l2out.external_epg.consumer_label <vocab-tenant-l2out-external_epg-consumer_label>` | `vzConsLbl` | — | — | — | — | — |
+| {ref}`tenant.l2out.external_epg.provider_subject_label <vocab-tenant-l2out-external_epg-provider_subject_label>` | `vzProvSubjLbl` | — | — | — | — | — |
+| {ref}`tenant.l2out.external_epg.consumer_subject_label <vocab-tenant-l2out-external_epg-consumer_subject_label>` | `vzConsSubjLbl` | — | — | — | — | — |
+| {ref}`tenant.l2out.external_epg.provider_contract_label <vocab-tenant-l2out-external_epg-provider_contract_label>` | `vzProvCtrctLbl` | — | — | — | — | — |
+| {ref}`tenant.l2out.external_epg.consumer_contract_label <vocab-tenant-l2out-external_epg-consumer_contract_label>` | `vzConsCtrctLbl` | — | — | — | — | — |
+| {ref}`tenant.dot1q_tunnel <vocab-tenant-dot1q_tunnel>` | `fvTnlEPg` | — | — | — | — | — |
+| {ref}`tenant.endpoint_tags <vocab-tenant-endpoint_tags>` | `fvEpTags` | 2 | — | — | — | — |
+| {ref}`tenant.endpoint_tags.mac_endpoint <vocab-tenant-endpoint_tags-mac_endpoint>` | `fvEpMacTag` | — | — | — | — | — |
+| {ref}`tenant.endpoint_tags.ip_endpoint <vocab-tenant-endpoint_tags-ip_endpoint>` | `fvEpIpTag` | — | — | — | — | — |
+| {ref}`tenant.ip_address_pool <vocab-tenant-ip_address_pool>` | `fvnsAddrInst` | 1 | — | — | — | — |
+| {ref}`tenant.ip_address_pool.ip_address_block <vocab-tenant-ip_address_pool-ip_address_block>` | `fvnsUcastAddrBlk` | — | — | — | — | — |
 | {ref}`tenant.filter <vocab-tenant-filter>` | `vzFilter` | 1 | — | — | — | — |
 | {ref}`tenant.filter.entry <vocab-tenant-filter-entry>` | `vzEntry` | — | — | — | `tcp=`, `udp=` | — |
-| {ref}`tenant.contract <vocab-tenant-contract>` | `vzBrCP` | 1 | — | — | — | — |
-| {ref}`tenant.contract.subject <vocab-tenant-contract-subject>` | `vzSubj` | — | `filter=` | — | — | — |
+| {ref}`tenant.contract <vocab-tenant-contract>` | `vzBrCP` | 2 | — | — | — | — |
+| {ref}`tenant.contract.subject <vocab-tenant-contract-subject>` | `vzSubj` | 5 | `filter=` | — | — | — |
+| {ref}`tenant.contract.subject.in_term <vocab-tenant-contract-subject-in_term>` | `vzInTerm` | — | `filter=` | — | — | — |
+| {ref}`tenant.contract.subject.out_term <vocab-tenant-contract-subject-out_term>` | `vzOutTerm` | — | `filter=` | — | — | — |
+| {ref}`tenant.contract.subject.exception <vocab-tenant-contract-subject-exception>` | `vzException` | — | — | — | — | — |
+| {ref}`tenant.contract.subject.provider_subject_label <vocab-tenant-contract-subject-provider_subject_label>` | `vzProvSubjLbl` | — | — | — | — | — |
+| {ref}`tenant.contract.subject.consumer_subject_label <vocab-tenant-contract-subject-consumer_subject_label>` | `vzConsSubjLbl` | — | — | — | — | — |
+| {ref}`tenant.contract.exception <vocab-tenant-contract-exception>` | `vzException` | — | — | — | — | — |
+| {ref}`tenant.taboo_contract <vocab-tenant-taboo_contract>` | `vzTaboo` | 1 | — | — | — | — |
+| {ref}`tenant.taboo_contract.subject <vocab-tenant-taboo_contract-subject>` | `vzTSubj` | — | `filter=` | — | — | — |
+| {ref}`tenant.imported_contract <vocab-tenant-imported_contract>` | `vzCPIf` | — | `contract=` | — | — | — |
+| {ref}`tenant.oob_contract <vocab-tenant-oob_contract>` | `vzOOBBrCP` | 2 | — | — | — | — |
+| {ref}`tenant.oob_contract.subject <vocab-tenant-oob_contract-subject>` | `vzSubj` | 5 | `filter=` | — | — | — |
+| {ref}`tenant.oob_contract.subject.in_term <vocab-tenant-oob_contract-subject-in_term>` | `vzInTerm` | — | `filter=` | — | — | — |
+| {ref}`tenant.oob_contract.subject.out_term <vocab-tenant-oob_contract-subject-out_term>` | `vzOutTerm` | — | `filter=` | — | — | — |
+| {ref}`tenant.oob_contract.subject.exception <vocab-tenant-oob_contract-subject-exception>` | `vzException` | — | — | — | — | — |
+| {ref}`tenant.oob_contract.subject.provider_subject_label <vocab-tenant-oob_contract-subject-provider_subject_label>` | `vzProvSubjLbl` | — | — | — | — | — |
+| {ref}`tenant.oob_contract.subject.consumer_subject_label <vocab-tenant-oob_contract-subject-consumer_subject_label>` | `vzConsSubjLbl` | — | — | — | — | — |
+| {ref}`tenant.oob_contract.exception <vocab-tenant-oob_contract-exception>` | `vzException` | — | — | — | — | — |
 | {ref}`tenant.bgp_timers_policy <vocab-tenant-bgp_timers_policy>` | `bgpCtxPol` | — | — | — | — | — |
 | {ref}`tenant.bgp_address_family_context_policy <vocab-tenant-bgp_address_family_context_policy>` | `bgpCtxAfPol` | 1 | — | — | — | — |
 | {ref}`tenant.bgp_address_family_context_policy.bgp_additional_path_context_policy <vocab-tenant-bgp_address_family_context_policy-bgp_additional_path_context_policy>` | `bgpCtxAddlPathPol` | — | — | — | — | — |
@@ -185,6 +273,34 @@ Re-generate: uv run python -m niwaki._codegen.generate_docs
 | {ref}`tenant.tenant_keychain_policy.key_policy <vocab-tenant-tenant_keychain_policy-key_policy>` | `fvKeyPol` | — | — | — | — | — |
 | {ref}`tenant.custom_qos_policy <vocab-tenant-custom_qos_policy>` | `qosCustomPol` | — | — | — | — | — |
 | {ref}`tenant.dpp_policy <vocab-tenant-dpp_policy>` | `qosDppPol` | — | — | — | — | — |
+| {ref}`tenant.qos_requirement <vocab-tenant-qos_requirement>` | `qosRequirement` | 1 | — | `.ingress_dpp()`, `.egress_dpp()` | — | — |
+| {ref}`tenant.qos_requirement.dscp_marking <vocab-tenant-qos_requirement-dscp_marking>` | `qosEpDscpMarking` | — | — | — | — | — |
+| {ref}`tenant.mpls_custom_qos_policy <vocab-tenant-mpls_custom_qos_policy>` | `qosMplsCustomPol` | 2 | — | — | — | — |
+| {ref}`tenant.mpls_custom_qos_policy.mpls_ingress_rule <vocab-tenant-mpls_custom_qos_policy-mpls_ingress_rule>` | `qosMplsIngressRule` | — | — | — | — | — |
+| {ref}`tenant.mpls_custom_qos_policy.mpls_egress_rule <vocab-tenant-mpls_custom_qos_policy-mpls_egress_rule>` | `qosMplsEgressRule` | — | — | — | — | — |
+| {ref}`tenant.dscp_translation_policy <vocab-tenant-dscp_translation_policy>` | `qosDscpTransPol` | — | — | — | — | — |
+| {ref}`tenant.netflow_monitor <vocab-tenant-netflow_monitor>` | `netflowMonitorPol` | — | `netflow_exporter=`, `netflow_record=` | — | — | — |
+| {ref}`tenant.netflow_exporter <vocab-tenant-netflow_exporter>` | `netflowExporterPol` | — | `vrf=`, `epg=` | — | — | — |
+| {ref}`tenant.netflow_record <vocab-tenant-netflow_record>` | `netflowRecordPol` | — | — | — | — | — |
+| {ref}`tenant.span_source_group <vocab-tenant-span_source_group>` | `spanSrcGrp` | 2 | `filter_group=` | — | — | — |
+| {ref}`tenant.span_source_group.span_source <vocab-tenant-span_source_group-span_source>` | `spanSrc` | — | `epg=`, `bd=`, `vrf=`, `l3out=`, `filter_group=`, `path=`, `fabric_node=` | — | — | — |
+| {ref}`tenant.span_source_group.span_label <vocab-tenant-span_source_group-span_label>` | `spanSpanLbl` | — | — | — | — | — |
+| {ref}`tenant.span_destination_group <vocab-tenant-span_destination_group>` | `spanDestGrp` | 1 | — | — | — | — |
+| {ref}`tenant.span_destination_group.span_destination <vocab-tenant-span_destination_group-span_destination>` | `spanDest` | — | `epg=`, `path=`, `apic_node=` | — | — | — |
+| {ref}`tenant.monitoring_policy <vocab-tenant-monitoring_policy>` | `monEPGPol` | — | — | — | — | — |
+| {ref}`tenant.management_profile <vocab-tenant-management_profile>` | `mgmtMgmtP` | 2 | — | — | — | — |
+| {ref}`tenant.management_profile.in_band_epg <vocab-tenant-management_profile-in_band_epg>` | `mgmtInB` | 2 | `bd=`, `contract_master=`, `imported_contract=`, `custom_qos_policy=`, `static_node=` | `.provide()`, `.consume()` | — | — |
+| {ref}`tenant.management_profile.in_band_epg.subnet <vocab-tenant-management_profile-in_band_epg-subnet>` | `fvSubnet` | — | `l3out=`, `nd_ra_prefix_policy=` | — | — | — |
+| {ref}`tenant.management_profile.in_band_epg.static_route <vocab-tenant-management_profile-in_band_epg-static_route>` | `mgmtStaticRoute` | — | — | — | — | — |
+| {ref}`tenant.management_profile.out_of_band_epg <vocab-tenant-management_profile-out_of_band_epg>` | `mgmtOoB` | 1 | `static_node=` | `.provide()` | — | — |
+| {ref}`tenant.management_profile.out_of_band_epg.static_route <vocab-tenant-management_profile-out_of_band_epg-static_route>` | `mgmtStaticRoute` | — | — | — | — | — |
+| {ref}`tenant.external_management_entity <vocab-tenant-external_management_entity>` | `mgmtExtMgmtEntity` | 1 | — | — | — | — |
+| {ref}`tenant.external_management_entity.external_management_epg <vocab-tenant-external_management_entity-external_management_epg>` | `mgmtInstP` | 1 | — | `.consume()` | — | — |
+| {ref}`tenant.external_management_entity.external_management_epg.external_subnet <vocab-tenant-external_management_entity-external_management_epg-external_subnet>` | `mgmtSubnet` | — | — | — | — | — |
+| {ref}`tenant.access_client_profile <vocab-tenant-access_client_profile>` | `infraClP` | 1 | — | — | — | — |
+| {ref}`tenant.access_client_profile.access_client_epg <vocab-tenant-access_client_profile-access_client_epg>` | `infraCEPg` | — | — | — | — | — |
+| {ref}`tenant.access_function_profile <vocab-tenant-access_function_profile>` | `infraProvP` | 1 | — | — | — | — |
+| {ref}`tenant.access_function_profile.access_function_provider <vocab-tenant-access_function_profile-access_function_provider>` | `infraPEPg` | — | — | — | — | — |
 | {ref}`tenant.service_container <vocab-tenant-service_container>` | `vnsSvcCont` | 4 | — | — | — | — |
 | {ref}`tenant.service_container.service_redirect_policy <vocab-tenant-service_container-service_redirect_policy>` | `vnsSvcRedirectPol` | 1 | `ip_sla_monitoring_policy=`, `pbr_backup_policy=` | — | — | — |
 | {ref}`tenant.service_container.service_redirect_policy.destination_of_redirected_traffic <vocab-tenant-service_container-service_redirect_policy-destination_of_redirected_traffic>` | `vnsRedirectDest` | — | `l4_l7_redirect_health_group=` | — | — | — |
@@ -207,6 +323,7 @@ Re-generate: uv run python -m niwaki._codegen.generate_docs
 | --- | --- | --- | --- | --- | --- | --- |
 | {ref}`phys_dom <vocab-phys_dom>` | `physDomP` | — | `vlan_pool=` | — | — | — |
 | {ref}`l3_dom <vocab-l3_dom>` | `l3extDomP` | — | `vlan_pool=` | — | — | — |
+| {ref}`l2_dom <vocab-l2_dom>` | `l2extDomP` | — | `vlan_pool=` | — | — | — |
 
 ## Not curated yet
 

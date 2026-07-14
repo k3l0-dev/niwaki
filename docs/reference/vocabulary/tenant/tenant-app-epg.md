@@ -41,6 +41,17 @@ Accepted as keyword arguments of `.epg(name)` and of `.set(**attrs)` on this cur
 | maker | creates | position |
 | --- | --- | --- |
 | `.static_path(target_dn, **attrs)` | `fvRsPathAtt` | {ref}`tenant.app.epg.static_path <vocab-tenant-app-epg-static_path>` |
+| `.fc_path(target_dn, **attrs)` | `fvRsFcPathAtt` | {ref}`tenant.app.epg.fc_path <vocab-tenant-app-epg-fc_path>` |
+| `.subnet(subnet, **attrs)` | `fvSubnet` | {ref}`tenant.app.epg.subnet <vocab-tenant-app-epg-subnet>` |
+| `.static_endpoint(macaddress, type, **attrs)` | `fvStCEp` | {ref}`tenant.app.epg.static_endpoint <vocab-tenant-app-epg-static_endpoint>` |
+| `.criterion(**attrs)` | `fvCrtrn` | {ref}`tenant.app.epg.criterion <vocab-tenant-app-epg-criterion>` |
+| `.provider_label(name, **attrs)` | `vzProvLbl` | {ref}`tenant.app.epg.provider_label <vocab-tenant-app-epg-provider_label>` |
+| `.consumer_label(name, **attrs)` | `vzConsLbl` | {ref}`tenant.app.epg.consumer_label <vocab-tenant-app-epg-consumer_label>` |
+| `.provider_subject_label(name, **attrs)` | `vzProvSubjLbl` | {ref}`tenant.app.epg.provider_subject_label <vocab-tenant-app-epg-provider_subject_label>` |
+| `.consumer_subject_label(name, **attrs)` | `vzConsSubjLbl` | {ref}`tenant.app.epg.consumer_subject_label <vocab-tenant-app-epg-consumer_subject_label>` |
+| `.provider_contract_label(name, **attrs)` | `vzProvCtrctLbl` | {ref}`tenant.app.epg.provider_contract_label <vocab-tenant-app-epg-provider_contract_label>` |
+| `.consumer_contract_label(name, **attrs)` | `vzConsCtrctLbl` | {ref}`tenant.app.epg.consumer_contract_label <vocab-tenant-app-epg-consumer_contract_label>` |
+| `.virtual_ip(virtual_ip_address, **attrs)` | `fvVip` | {ref}`tenant.app.epg.virtual_ip <vocab-tenant-app-epg-virtual_ip>` |
 
 ## Bind aliases
 
@@ -50,11 +61,20 @@ Lazy references, resolved closed-world at push time.
 | --- | --- | --- | --- |
 | `bd=` | `fvBD` | name | `fvRsBd` |
 | `domain=` | `infraDomP` *(abstract: `extdevGroupP`, `fcDomP`, `l2extDomP`, `l3extDomP`…)* | DN — `bind_dn()` allowed | `fvRsDomAtt` |
+| `contract_master=` | `fvEPg` *(abstract: `fvAEPg`, `fvESg`, `fvTnlEPg`, `infraCEPg`…)* | DN — `bind_dn()` allowed | `fvRsSecInherited` |
+| `imported_contract=` | `vzCPIf` | name | `fvRsConsIf` |
+| `taboo_contract=` | `vzTaboo` | name | `fvRsProtBy` |
+| `custom_qos_policy=` | `qosCustomPol` | name | `fvRsCustQosPol` |
+| `dpp_policy=` | `qosDppPol` | name | `fvRsDppPol` |
+| `monitoring_policy=` | `monEPGPol` | name | `fvRsAEPgMonPol` |
+| `trust_control_policy=` | `fhsTrustCtrlPol` | name | `fvRsTrustCtrl` |
+| `qos_requirement=` | `qosRequirement` | name | `fvRsQosRequirement` |
 
 ## Verbs
 
 - `.provide(name)` → `fvRsProv` targeting `vzBrCP`
 - `.consume(name)` → `fvRsCons` targeting `vzBrCP`
+- `.intra_epg(name)` → `fvRsIntraEpg` targeting `vzBrCP`
 
 ## APIC diagnostics
 

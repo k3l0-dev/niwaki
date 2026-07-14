@@ -29,7 +29,7 @@ from importlib import import_module
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, Literal, NamedTuple, overload
 
-from niwaki.design._node import DesignNode, PendingBind
+from niwaki.design._node import DesignNode, PendingBind, Ref
 from niwaki.design._sugar import apply_sugar
 from niwaki.exceptions._design import (
     DesignError,
@@ -156,6 +156,17 @@ def _validate_attr_names(cls: type[ManagedObject], attrs: dict[str, Any]) -> Non
         for key in unknown
     )
     raise DesignError(f"{cls.__name__} has no attribute(s) {details}.")
+
+
+def _unwrap_ref(target: Any) -> tuple[str, dict[str, Any]]:
+    """Split a bind target into ``(name_or_dn, relationship attributes)``.
+
+    A plain string is a pure edge; a :class:`~niwaki.design._node.Ref` also
+    carries fields for the relationship object itself.
+    """
+    if isinstance(target, Ref):
+        return str(target.target), dict(target.attrs)
+    return str(target), {}
 
 
 def _split_naming(
@@ -345,14 +356,16 @@ class Cursor:
             DesignError: An alias is not bindable at any level of the path.
         """
         binds = _tables().binds
-        for alias, target_name in targets.items():
+        for alias, target in targets.items():
             owner = self._find_bind_owner(alias, binds)
+            name, attrs = _unwrap_ref(target)
             owner.binds.append(
                 PendingBind(
                     kind="bind",
                     alias=alias,
                     target_aci_class=binds[owner.aci_class][alias],
-                    target_name=str(target_name),
+                    target_name=name,
+                    attrs=attrs,
                 )
             )
         return self
@@ -397,8 +410,9 @@ class Cursor:
         from niwaki.domain._child_map import REFERENCE_MAP, TARGET_SUBCLASSES
 
         binds = _tables().binds
-        for alias, target_dn in targets.items():
+        for alias, target in targets.items():
             owner = self._find_bind_owner(alias, binds)
+            target_dn, attrs = _unwrap_ref(target)
             target_aci_class = binds[owner.aci_class][alias]
 
             direct = REFERENCE_MAP.get(owner.aci_class, {})
@@ -437,9 +451,10 @@ class Cursor:
                     kind="bind_dn",
                     alias=alias,
                     target_aci_class=target_aci_class,
-                    target_name=str(target_dn),
+                    target_name=target_dn,
                     rs_aci_class=rs_aci_class,
                     flavor="dn",
+                    attrs=attrs,
                 )
             )
         return self
@@ -466,24 +481,52 @@ class Cursor:
         """
         return self._verb("consume", contract)
 
-    def _verb(self, kind: Literal["provide", "consume"], target_name: str) -> Cursor:
-        """Record a contract verb on the nearest level that supports it."""
+    def intra_epg(self, contract: str) -> Cursor:
+        """Declare *contract* between the endpoints of this EPG (``fvRsIntraEpg``).
+
+        The APIC applies it to traffic that stays inside the group — the EPG
+        must be intra-EPG isolated for it to bite.
+
+        Args:
+            contract: Name of a contract declared in this design.
+
+        Returns:
+            This cursor, for chaining.
+        """
+        return self._verb("intra_epg", contract)
+
+    def _verb(self, verb: str, target_name: str | Ref) -> Cursor:
+        """Record a contract verb on the nearest level that supports it.
+
+        Args:
+            verb: A verb curated in ``vocabulary.yaml`` (``provide``,
+                ``consume``, ``intra_epg``).
+            target_name: Name of the contract the verb points at.
+
+        Returns:
+            This cursor, for chaining.
+
+        Raises:
+            DesignError: No level of the current path declares that verb.
+        """
         verbs = _tables().verbs
+        name, attrs = _unwrap_ref(target_name)
         for level in self._node.ancestors_and_self():
-            spec = verbs.get(level.aci_class, {}).get(kind)
+            spec = verbs.get(level.aci_class, {}).get(verb)
             if spec is not None:
                 level.binds.append(
                     PendingBind(
-                        kind=kind,
-                        alias=kind,
+                        kind="verb",
+                        alias=verb,
                         target_aci_class=spec["target"],
-                        target_name=str(target_name),
+                        target_name=name,
                         rs_aci_class=spec["rs"],
+                        attrs=attrs,
                     )
                 )
                 return self
         raise DesignError(
-            f"{kind}() is not available at any level of {self._node.path()} "
+            f"{verb}() is not available at any level of {self._node.path()} "
             "(contract verbs apply to EPGs)."
         )
 

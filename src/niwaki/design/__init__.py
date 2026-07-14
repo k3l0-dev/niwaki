@@ -47,15 +47,18 @@ from __future__ import annotations
 
 from niwaki.design._cursor import Cursor
 from niwaki.design._generated_cursors import controller, design, fabric, infra, tenant
+from niwaki.design._node import Ref, ref
 from niwaki.design._push import PlanResult, PushReport
 
 __all__ = [
     "Cursor",
     "PlanResult",
     "PushReport",
+    "Ref",
     "controller",
     "design",
     "fabric",
     "infra",
+    "ref",
     "tenant",
 ]

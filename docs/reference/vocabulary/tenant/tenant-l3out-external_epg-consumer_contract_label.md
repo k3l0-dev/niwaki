@@ -13,7 +13,7 @@ A consumer contract label. A contract label can be parented by the relation betw
 | --- | --- |
 | ACI class | `vzConsCtrctLbl` |
 | RN | `cCtrctLbl-{name}` |
-| Cursor | `ConsumerContractLabelCursor` |
+| Cursor | `L3outExternalEpgConsumerContractLabelCursor` |
 | Parent | {ref}`tenant.l3out.external_epg <vocab-tenant-l3out-external_epg>` |
 | Atomic | — |
 

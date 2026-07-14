@@ -36,8 +36,15 @@ Accepted as keyword arguments of `.tenant(name)` and of `.set(**attrs)` on this 
 | `.bd(name, **attrs)` | `fvBD` | {ref}`tenant.bd <vocab-tenant-bd>` |
 | `.vrf(name, **attrs)` | `fvCtx` | {ref}`tenant.vrf <vocab-tenant-vrf>` |
 | `.l3out(name, **attrs)` | `l3extOut` | {ref}`tenant.l3out <vocab-tenant-l3out>` |
+| `.l2out(name, **attrs)` | `l2extOut` | {ref}`tenant.l2out <vocab-tenant-l2out>` |
+| `.dot1q_tunnel(name, **attrs)` | `fvTnlEPg` | {ref}`tenant.dot1q_tunnel <vocab-tenant-dot1q_tunnel>` |
+| `.endpoint_tags(**attrs)` | `fvEpTags` | {ref}`tenant.endpoint_tags <vocab-tenant-endpoint_tags>` |
+| `.ip_address_pool(name, **attrs)` | `fvnsAddrInst` | {ref}`tenant.ip_address_pool <vocab-tenant-ip_address_pool>` |
 | `.filter(name, **attrs)` | `vzFilter` | {ref}`tenant.filter <vocab-tenant-filter>` |
 | `.contract(name, **attrs)` | `vzBrCP` | {ref}`tenant.contract <vocab-tenant-contract>` |
+| `.taboo_contract(name, **attrs)` | `vzTaboo` | {ref}`tenant.taboo_contract <vocab-tenant-taboo_contract>` |
+| `.imported_contract(name, **attrs)` | `vzCPIf` | {ref}`tenant.imported_contract <vocab-tenant-imported_contract>` |
+| `.oob_contract(name, **attrs)` | `vzOOBBrCP` | {ref}`tenant.oob_contract <vocab-tenant-oob_contract>` |
 | `.bgp_timers_policy(name, **attrs)` | `bgpCtxPol` | {ref}`tenant.bgp_timers_policy <vocab-tenant-bgp_timers_policy>` |
 | `.bgp_address_family_context_policy(name, **attrs)` | `bgpCtxAfPol` | {ref}`tenant.bgp_address_family_context_policy <vocab-tenant-bgp_address_family_context_policy>` |
 | `.bgp_best_path_control_policy(name, **attrs)` | `bgpBestPathCtrlPol` | {ref}`tenant.bgp_best_path_control_policy <vocab-tenant-bgp_best_path_control_policy>` |
@@ -80,4 +87,17 @@ Accepted as keyword arguments of `.tenant(name)` and of `.set(**attrs)` on this 
 | `.tenant_keychain_policy(name, **attrs)` | `fvKeyChainPol` | {ref}`tenant.tenant_keychain_policy <vocab-tenant-tenant_keychain_policy>` |
 | `.custom_qos_policy(name, **attrs)` | `qosCustomPol` | {ref}`tenant.custom_qos_policy <vocab-tenant-custom_qos_policy>` |
 | `.dpp_policy(name, **attrs)` | `qosDppPol` | {ref}`tenant.dpp_policy <vocab-tenant-dpp_policy>` |
+| `.qos_requirement(name, **attrs)` | `qosRequirement` | {ref}`tenant.qos_requirement <vocab-tenant-qos_requirement>` |
+| `.mpls_custom_qos_policy(name, **attrs)` | `qosMplsCustomPol` | {ref}`tenant.mpls_custom_qos_policy <vocab-tenant-mpls_custom_qos_policy>` |
+| `.dscp_translation_policy(name, **attrs)` | `qosDscpTransPol` | {ref}`tenant.dscp_translation_policy <vocab-tenant-dscp_translation_policy>` |
+| `.netflow_monitor(name, **attrs)` | `netflowMonitorPol` | {ref}`tenant.netflow_monitor <vocab-tenant-netflow_monitor>` |
+| `.netflow_exporter(name, **attrs)` | `netflowExporterPol` | {ref}`tenant.netflow_exporter <vocab-tenant-netflow_exporter>` |
+| `.netflow_record(name, **attrs)` | `netflowRecordPol` | {ref}`tenant.netflow_record <vocab-tenant-netflow_record>` |
+| `.span_source_group(name, **attrs)` | `spanSrcGrp` | {ref}`tenant.span_source_group <vocab-tenant-span_source_group>` |
+| `.span_destination_group(name, **attrs)` | `spanDestGrp` | {ref}`tenant.span_destination_group <vocab-tenant-span_destination_group>` |
+| `.monitoring_policy(name, **attrs)` | `monEPGPol` | {ref}`tenant.monitoring_policy <vocab-tenant-monitoring_policy>` |
+| `.management_profile(name, **attrs)` | `mgmtMgmtP` | {ref}`tenant.management_profile <vocab-tenant-management_profile>` |
+| `.external_management_entity(name, **attrs)` | `mgmtExtMgmtEntity` | {ref}`tenant.external_management_entity <vocab-tenant-external_management_entity>` |
+| `.access_client_profile(name, **attrs)` | `infraClP` | {ref}`tenant.access_client_profile <vocab-tenant-access_client_profile>` |
+| `.access_function_profile(name, **attrs)` | `infraProvP` | {ref}`tenant.access_function_profile <vocab-tenant-access_function_profile>` |
 | `.service_container(**attrs)` | `vnsSvcCont` | {ref}`tenant.service_container <vocab-tenant-service_container>` |

@@ -13,7 +13,7 @@ A source relation to an abstraction of a path endpoint.
 | --- | --- |
 | ACI class | `fvRsPathAtt` |
 | RN | `rspathAtt-[{target_dn}]` |
-| Cursor | `StaticPathCursor` |
+| Cursor | `EpgStaticPathCursor` |
 | Parent | {ref}`tenant.app.epg <vocab-tenant-app-epg>` |
 | Atomic | — |
 

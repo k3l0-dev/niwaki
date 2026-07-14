@@ -45,3 +45,9 @@ Accepted as keyword arguments of `.infra()` and of `.set(**attrs)` on this curso
 | `.access_port_profile(name, **attrs)` | `infraAccPortP` | {ref}`infra.access_port_profile <vocab-infra-access_port_profile>` |
 | `.leaf_profile(name, **attrs)` | `infraNodeP` | {ref}`infra.leaf_profile <vocab-infra-leaf_profile>` |
 | `.spine_profile(name, **attrs)` | `infraSpineP` | {ref}`infra.spine_profile <vocab-infra-spine_profile>` |
+| `.span_source_group(name, **attrs)` | `spanSrcGrp` | {ref}`infra.span_source_group <vocab-infra-span_source_group>` |
+| `.span_destination_group(name, **attrs)` | `spanDestGrp` | {ref}`infra.span_destination_group <vocab-infra-span_destination_group>` |
+| `.filter_group(name, **attrs)` | `spanFilterGrp` | {ref}`infra.filter_group <vocab-infra-filter_group>` |
+| `.netflow_monitor(name, **attrs)` | `netflowMonitorPol` | {ref}`infra.netflow_monitor <vocab-infra-netflow_monitor>` |
+| `.netflow_exporter(name, **attrs)` | `netflowExporterPol` | {ref}`infra.netflow_exporter <vocab-infra-netflow_exporter>` |
+| `.netflow_record(name, **attrs)` | `netflowRecordPol` | {ref}`infra.netflow_record <vocab-infra-netflow_record>` |

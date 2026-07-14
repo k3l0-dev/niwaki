@@ -39,6 +39,8 @@ Accepted as keyword arguments of `.vrf(name)` and of `.set(**attrs)` on this cur
 | maker | creates | position |
 | --- | --- | --- |
 | `.pim(**attrs)` | `pimCtxP` | {ref}`tenant.vrf.pim <vocab-tenant-vrf-pim>` |
+| `.vzany(**attrs)` | `vzAny` | {ref}`tenant.vrf.vzany <vocab-tenant-vrf-vzany>` |
+| `.fallback_route_group(name, **attrs)` | `fvFBRGroup` | {ref}`tenant.vrf.fallback_route_group <vocab-tenant-vrf-fallback_route_group>` |
 
 ## Bind aliases
 

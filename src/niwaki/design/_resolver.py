@@ -29,7 +29,7 @@ from __future__ import annotations
 
 import difflib
 
-from niwaki.design._node import DesignNode, PendingBind
+from niwaki.design._node import BindFlavor, DesignNode, PendingBind
 from niwaki.exceptions._design import (
     AmbiguousBindError,
     DuplicateDeclarationError,
@@ -69,6 +69,52 @@ def _target_classes(target_aci_class: str) -> list[str]:
     from niwaki.domain._child_map import TARGET_SUBCLASSES
 
     return [target_aci_class, *TARGET_SUBCLASSES.get(target_aci_class, ())]
+
+
+def _flavor_of(rs_aci_class: str) -> BindFlavor:
+    """How a relationship class points at its target: by DN, or by name.
+
+    A curated verb fixes its Rs class upfront, so the flavor is read off that
+    class rather than looked up in ``REFERENCE_MAP``: a relation carrying
+    ``tDn`` (renamed ``target_dn``) is a DN relation, every other one names its
+    target through a ``tn*Name`` prop (renamed ``name``).
+
+    Args:
+        rs_aci_class: ACI class name of the relationship, e.g. ``"fvRsProv"``.
+
+    Returns:
+        ``"dn"`` when the class carries a ``target_dn`` field, ``"name"``
+        otherwise.
+    """
+    from niwaki.design._cursor import _load_class
+
+    return "dn" if "target_dn" in _load_class(rs_aci_class).model_fields else "name"
+
+
+def _build_rs(rs_aci_class: str, target_fields: dict[str, str], bind: PendingBind) -> ManagedObject:
+    """Construct the relationship object: its target, plus any ``ref()`` fields.
+
+    Args:
+        rs_aci_class: ACI class name of the relationship.
+        target_fields: How the relation points at its target — ``target_dn``
+            or ``name``, per the flavor.
+        bind: The pending reference; ``bind.attrs`` holds the fields the caller
+            set on the relationship itself through :func:`~niwaki.design.ref`.
+
+    Returns:
+        A validated relationship instance.
+
+    Raises:
+        DesignError: A ``ref()`` attribute is not a field of the relationship
+            class (a wire name, or a typo).
+        ValidationError: A ``ref()`` attribute fails the field's constraints.
+    """
+    from niwaki.design._cursor import _load_class, _validate_attr_names
+
+    cls = _load_class(rs_aci_class)
+    if bind.attrs:
+        _validate_attr_names(cls, bind.attrs)
+    return cls.model_validate({**target_fields, **bind.attrs})
 
 
 def _lookup_target(index: _Index, owner: DesignNode, bind: PendingBind) -> DesignNode:
@@ -122,7 +168,6 @@ def resolve(root: DesignNode) -> dict[DesignNode, list[ManagedObject]]:
         DuplicateDeclarationError: Two references (or a reference and an
             explicit child) collide on the same RN under the same parent.
     """
-    from niwaki.design._cursor import _load_class
     from niwaki.domain._child_map import REFERENCE_MAP
 
     index = build_index(root)
@@ -132,16 +177,15 @@ def resolve(root: DesignNode) -> dict[DesignNode, list[ManagedObject]]:
         for bind in node.binds:
             if bind.kind == "bind_dn":
                 # Rs class and raw DN fixed at the call site — no lookup.
-                rs_mo = _load_class(bind.rs_aci_class).model_validate(
-                    {"target_dn": bind.target_name}
-                )
+                rs_mo = _build_rs(bind.rs_aci_class, {"target_dn": bind.target_name}, bind)
                 extras.setdefault(node, []).append(rs_mo)
                 continue
 
             target = _lookup_target(index, node, bind)
 
-            if bind.rs_aci_class:  # provide / consume — Rs class fixed by the verb
-                attach, rs_aci_class, flavor = node, bind.rs_aci_class, "name"
+            if bind.rs_aci_class:  # curated verb — the Rs class is fixed upfront
+                attach, rs_aci_class = node, bind.rs_aci_class
+                flavor = _flavor_of(rs_aci_class)
             elif entry := REFERENCE_MAP.get(node.aci_class, {}).get(target.aci_class):
                 attach, (rs_aci_class, flavor) = node, entry
             elif entry := REFERENCE_MAP.get(target.aci_class, {}).get(node.aci_class):
@@ -163,7 +207,7 @@ def resolve(root: DesignNode) -> dict[DesignNode, list[ManagedObject]]:
                 # D2 renames every Rs target prop (tn*Name) to the Python
                 # field "name" — one constructor shape for all name relations.
                 fields = {"name": referenced.primary_name}
-            rs_mo = _load_class(rs_aci_class).model_validate(fields)
+            rs_mo = _build_rs(rs_aci_class, fields, bind)
             extras.setdefault(attach, []).append(rs_mo)
 
     _check_rn_collisions(extras)

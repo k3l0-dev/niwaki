@@ -19,6 +19,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Any, cast
 
 from niwaki.design._cursor import Cursor, _prune
+from niwaki.design._node import Ref
 from niwaki.design._generated_cursors._uni import _UniMakers
 
 if TYPE_CHECKING:
@@ -30,6 +31,8 @@ if TYPE_CHECKING:
     from niwaki.models._generated.enums.McastVer2 import McastVer2
     from niwaki.models._generated.enums.MonAdminState import MonAdminState
     from niwaki.models._generated.enums.NwAdminSt import NwAdminSt
+    from niwaki.models._generated.enums.PolColor import PolColor
+    from niwaki.models._generated.enums.SpanDirection import SpanDirection
     from niwaki.models._generated.enums.SyslogFormatSetting import SyslogFormatSetting
     from niwaki.models._generated.enums.SyslogForwardingFacility import SyslogForwardingFacility
     from niwaki.models._generated.enums.SyslogProtocolType import SyslogProtocolType
@@ -361,6 +364,85 @@ class _FabricMakers(Cursor):
         return cast(
             "VpcProtectionCursor",
             self._invoke_maker("vpc_protection", (), _prune(params)),
+        )
+
+    def span_source_group(
+        self,
+        name: str,
+        *,
+        administrative_state: NwAdminSt | str | None = None,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> FabricSpanSourceGroupCursor:
+        """Declare a ``spanSrcGrp`` child under the fabric level.
+
+        The SPAN source group can contain a group of SPAN sources. A SPAN source is where network
+        traffic is sampled. A SPAN source can be an endpoint group (EPG), one or more ports, or port
+        traffic filtered by an EPG (access SPAN), a Layer 2 bridge domain, or a Layer 3 context
+        (Fabric SPAN).
+
+        Args:
+            name: The name of the source SPAN group.
+            administrative_state: Values: ``disabled``, ``enabled``. Default: ``enabled``.
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "FabricSpanSourceGroupCursor",
+            self._invoke_maker("span_source_group", (name,), _prune(params)),
+        )
+
+    def span_destination_group(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> FabricSpanDestinationGroupCursor:
+        """Declare a ``spanDestGrp`` child under the fabric level.
+
+        The SPAN destination group contains a group of SPAN destinations. A SPAN destination is
+        where network traffic is sent for analysis by a network analyzer. A SPAN destination can be
+        local or remote (ERSPAN).
+
+        Args:
+            name: The name of the SPAN destinations object.
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "FabricSpanDestinationGroupCursor",
+            self._invoke_maker("span_destination_group", (name,), _prune(params)),
         )
 
 
@@ -734,6 +816,218 @@ class FabricMldSnoopPolicyCursor(_FabricMakers, _UniMakers):
         return self
 
 
+class _FabricSpanDestinationGroupMakers(Cursor):
+    """Makers declared at the span_destination_group level (``spanDestGrp``)."""
+
+    __slots__ = ()
+
+    def span_destination(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> FabricSpanDestinationGroupSpanDestinationCursor:
+        """Declare a ``spanDest`` child under the span_destination_group level.
+
+        The SPAN destination is where network traffic is sent for analysis by a network analyzer. A
+        SPAN destination can be local or remote (ERSPAN). When you create a traffic monitoring
+        session, you must select a SPAN source and a SPAN destination.
+
+        Args:
+            name: The destination name for the SPAN packets.
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "FabricSpanDestinationGroupSpanDestinationCursor",
+            self._invoke_maker("span_destination", (name,), _prune(params)),
+        )
+
+
+class FabricSpanDestinationGroupCursor(
+    _FabricSpanDestinationGroupMakers, _FabricMakers, _UniMakers
+):
+    """Typed cursor for ``spanDestGrp`` (span_destination_group level).
+
+    Position: ``uni.fabric.span_destination_group``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> FabricSpanDestinationGroupCursor:
+        """Set ``spanDestGrp`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class _FabricSpanSourceGroupMakers(Cursor):
+    """Makers declared at the span_source_group level (``spanSrcGrp``)."""
+
+    __slots__ = ()
+
+    def span_source(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        direction_ingress_egress_both: SpanDirection | str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        span_only_dropped_packets: bool | None = None,
+        userdom: str | None = None,
+    ) -> FabricSpanSourceGroupSpanSourceCursor:
+        """Declare a ``spanSrc`` child under the span_source_group level.
+
+        The SPAN or ERSPAN source is where traffic is sampled. A source can be an endpoint group
+        (EPG), one or more ports, or port traffic filtered by an EPG (access SPAN), a Layer 2 bridge
+        domain, or a Layer 3 context (fabric SPAN).
+
+        Args:
+            name: The name of the SPAN source.
+            description: Specifies a description of the policy definition.
+            direction_ingress_egress_both: The direction of the packets to monitor Values:
+                ``both``, ``in``, ``out``. Default: ``both``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            span_only_dropped_packets: Enables spanning of only dropped packets Default:
+                ``False``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "FabricSpanSourceGroupSpanSourceCursor",
+            self._invoke_maker("span_source", (name,), _prune(params)),
+        )
+
+    def span_label(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        tag: PolColor | str | None = None,
+        userdom: str | None = None,
+    ) -> FabricSpanSourceGroupSpanLabelCursor:
+        """Declare a ``spanSpanLbl`` child under the span_source_group level.
+
+        The SPAN label is used for SPAN label parameters.
+
+        Args:
+            name: The name of the label that is used to match SPAN sources with SPAN
+                destination(s).
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            tag: Specifies the color of a policy label. Values: ``alice-blue``, ``antique-
+                white``, ``aqua``, ``aquamarine``, ``azure``, ``beige``, ``bisque``, ``black``,
+                …. Default: ``alice-blue``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "FabricSpanSourceGroupSpanLabelCursor",
+            self._invoke_maker("span_label", (name,), _prune(params)),
+        )
+
+
+class FabricSpanSourceGroupCursor(_FabricSpanSourceGroupMakers, _FabricMakers, _UniMakers):
+    """Typed cursor for ``spanSrcGrp`` (span_source_group level).
+
+    Position: ``uni.fabric.span_source_group``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        administrative_state: NwAdminSt | str | None = None,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> FabricSpanSourceGroupCursor:
+        """Set ``spanSrcGrp`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        filter_group: str | Ref | None = None,
+    ) -> FabricSpanSourceGroupCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        filter_group: str | Ref | None = None,
+    ) -> FabricSpanSourceGroupCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
 class _SyslogGroupMakers(Cursor):
     """Makers declared at the syslog_group level (``syslogGroup``)."""
 
@@ -1064,6 +1358,170 @@ class DnsProfileProviderCursor(_DnsProfileMakers, _FabricMakers, _UniMakers):
         """Set ``dnsProv`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
+        return self
+
+
+class FabricSpanDestinationGroupSpanDestinationCursor(
+    _FabricSpanDestinationGroupMakers, _FabricMakers, _UniMakers
+):
+    """Typed cursor for ``spanDest`` (span_destination level).
+
+    Position: ``uni.fabric.span_destination_group.span_destination``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> FabricSpanDestinationGroupSpanDestinationCursor:
+        """Set ``spanDest`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        epg: str | Ref | None = None,
+        path: str | Ref | None = None,
+        apic_node: str | Ref | None = None,
+    ) -> FabricSpanDestinationGroupSpanDestinationCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        epg: str | Ref | None = None,
+        path: str | Ref | None = None,
+        apic_node: str | Ref | None = None,
+    ) -> FabricSpanDestinationGroupSpanDestinationCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class FabricSpanSourceGroupSpanLabelCursor(_FabricSpanSourceGroupMakers, _FabricMakers, _UniMakers):
+    """Typed cursor for ``spanSpanLbl`` (span_label level).
+
+    Position: ``uni.fabric.span_source_group.span_label``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        tag: PolColor | str | None = None,
+        userdom: str | None = None,
+    ) -> FabricSpanSourceGroupSpanLabelCursor:
+        """Set ``spanSpanLbl`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        filter_group: str | Ref | None = None,
+    ) -> FabricSpanSourceGroupSpanLabelCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        filter_group: str | Ref | None = None,
+    ) -> FabricSpanSourceGroupSpanLabelCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class FabricSpanSourceGroupSpanSourceCursor(
+    _FabricSpanSourceGroupMakers, _FabricMakers, _UniMakers
+):
+    """Typed cursor for ``spanSrc`` (span_source level).
+
+    Position: ``uni.fabric.span_source_group.span_source``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        direction_ingress_egress_both: SpanDirection | str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        span_only_dropped_packets: bool | None = None,
+        userdom: str | None = None,
+    ) -> FabricSpanSourceGroupSpanSourceCursor:
+        """Set ``spanSrc`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        epg: str | Ref | None = None,
+        bd: str | Ref | None = None,
+        vrf: str | Ref | None = None,
+        l3out: str | Ref | None = None,
+        filter_group: str | Ref | None = None,
+        path: str | Ref | None = None,
+        fabric_node: str | Ref | None = None,
+    ) -> FabricSpanSourceGroupSpanSourceCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        epg: str | Ref | None = None,
+        bd: str | Ref | None = None,
+        vrf: str | Ref | None = None,
+        l3out: str | Ref | None = None,
+        filter_group: str | Ref | None = None,
+        path: str | Ref | None = None,
+        fabric_node: str | Ref | None = None,
+    ) -> FabricSpanSourceGroupSpanSourceCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
         return self
 
 

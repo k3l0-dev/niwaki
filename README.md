@@ -148,6 +148,11 @@ What the DSL gives you:
   any request**, with a did-you-mean. Direction is handled for you:
   `.vrf("prod").bind(l3out="ext")` creates the `l3extRsEctx` on the L3Out
   side, where ACI expects it.
+- **References that configure the relationship** — some ACI relations carry
+  fields of their own (the immediacy of a domain attachment, the `directives`
+  of a filter under a subject — contract logging lives there). `ref()` sets
+  them without leaving the closed world:
+  `subject.bind(filter=ref("web", directives="log"))`.
 - **Typed cursors per position** — makers, `set()` fields, and `bind()`
   aliases are generated with full signatures: autocompletion and mypy cover
   the entire curated vocabulary. `.mo(AnyClass, ...)` remains as the escape

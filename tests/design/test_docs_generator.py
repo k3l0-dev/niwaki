@@ -14,14 +14,14 @@ import pytest
 
 from niwaki._codegen._field_docs import enum_anchor, field_docs, position_anchor
 from niwaki._codegen.generate_design import _positions
-from niwaki._codegen.generate_docs import OUTPUT_DIR, _resolve_edge, render_all
+from niwaki._codegen.generate_docs import OUTPUT_DIR, _resolve_edge, _uni_keys, render_all
 from niwaki.design._cursor import _load_class, _tables
 
 _PAGES = sorted(render_all())
 
-# The uni-level domains (phys_dom, l3_dom) live under uni/, everything else
-# under its root domain — mirrors the generator's layout.
-_UNI_KEYS = frozenset({"phys_dom", "l3_dom"})
+# The uni-level domains (phys_dom, l3_dom, l2_dom) live under uni/, everything
+# else under its root domain — mirrors the generator's layout.
+_UNI_KEYS = frozenset(_uni_keys())
 
 
 def _page_path(key: str) -> str:

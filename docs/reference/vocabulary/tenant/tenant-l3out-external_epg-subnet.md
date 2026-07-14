@@ -13,7 +13,7 @@ The network visibility of the domain.
 | --- | --- |
 | ACI class | `l3extSubnet` |
 | RN | `extsubnet-[{subnet}]` |
-| Cursor | `ExternalEpgSubnetCursor` |
+| Cursor | `L3outExternalEpgSubnetCursor` |
 | Parent | {ref}`tenant.l3out.external_epg <vocab-tenant-l3out-external_epg>` |
 | Atomic | — |
 

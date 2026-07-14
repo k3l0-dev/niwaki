@@ -11,6 +11,7 @@ Physical and routed domains, declared directly under `uni` — the bridge betwee
 
 - {ref}`phys_dom <vocab-phys_dom>` — `physDomP`, 3 attributes
 - {ref}`l3_dom <vocab-l3_dom>` — `l3extDomP`, 3 attributes
+- {ref}`l2_dom <vocab-l2_dom>` — `l2extDomP`, 3 attributes
 
 ```{toctree}
 :maxdepth: 1
@@ -18,4 +19,5 @@ Physical and routed domains, declared directly under `uni` — the bridge betwee
 
 uni/phys_dom
 uni/l3_dom
+uni/l2_dom
 ```

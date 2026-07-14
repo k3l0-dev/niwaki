@@ -11,7 +11,11 @@
 #           Structure is literal: one maker per real APIC child class.
 #   binds:  cursor ACI class → {bind alias → target ACI class} (the Rs class
 #           is resolved at push time via BIND_MAP, direct then inverse).
-#   verbs:  cursor ACI class → contract verbs (provide/consume).
+#   verbs:  cursor ACI class → {verb → {rs, target}}.  A verb names its Rs
+#           class upfront, which is what lets it reach a target automatic
+#           resolution cannot: two relations to the same class (provide vs
+#           consume, ingress vs egress policing).  The parameter is named
+#           after the target's jargon (provide(contract), ingress_dpp(dpp_policy)).
 #   sugar:  extra typed maker/set parameters handled by design._sugar.
 #   atomic: classes whose subtree must ship in one POST in staged mode
 #           (the APIC validates them as a unit).
@@ -84,6 +88,8 @@ jargon:
   fvRsBd: bd_binding
   fvRsDomAtt: domain
   fvEPSelector: ep_selector
+  fvEPgSelector: epg_selector
+  fvTagSelector: tag_selector
   fvRsProv: contract_provider
   fvRsCons: contract_consumer
   fvRsConsIf: contract_if_consumer
@@ -91,13 +97,38 @@ jargon:
   fvRsIntraEpg: intra_epg_contract
   fvRsPathAtt: static_path
   fvRsNodeAtt: static_node
+  fvRsFcPathAtt: fc_path       # schema label would give "Fv Static Path"
   tagAnnotation: annotation
   tagTag: tag
   fvCEp: endpoint
+  fvStCEp: static_endpoint
+  fvStIp: static_ip
+  fvVip: virtual_ip
+
+  # ── uSeg EPG (criterion) ────────────────────────────────────────────────────
+  fvCrtrn: criterion
+  fvSCrtrn: sub_criterion
+  fvIpAttr: ip_attribute
+  fvMacAttr: mac_attribute
+  fvVmAttr: vm_attribute
+  fvDnsAttr: dns_attribute
 
   # ── Contract ────────────────────────────────────────────────────────────────
   vzSubj: subject
   vzRsSubjGraphAtt: service_graph
+  vzTaboo: taboo_contract
+  vzCPIf: imported_contract
+  vzTSubj: subject             # taboo subject — sibling of nothing else named "subject"
+  vzRsDenyRule: deny_rule
+  vzException: exception
+
+  # ── Contract labels (EPG / ESG / vzAny / subject) ────────────────────────────
+  vzProvLbl: provider_label
+  vzConsLbl: consumer_label
+  vzProvSubjLbl: provider_subject_label
+  vzConsSubjLbl: consumer_subject_label
+  vzProvCtrctLbl: provider_contract_label
+  vzConsCtrctLbl: consumer_contract_label
 
   # ── Subject ─────────────────────────────────────────────────────────────────
   vzRsSubjFiltAtt: filter_binding
@@ -107,9 +138,42 @@ jargon:
   # ── Filter ──────────────────────────────────────────────────────────────────
   vzEntry: entry
 
+  # ── Troubleshooting (SPAN) ──────────────────────────────────────────────────
+  spanSpanLbl: span_label      # schema label: "Span Source Destination Group Match Label"
+
+  # ── NetFlow ─────────────────────────────────────────────────────────────────
+  netflowExporterPol: netflow_exporter
+  netflowRecordPol: netflow_record
+
+  # ── QoS ─────────────────────────────────────────────────────────────────────
+  qosRequirement: qos_requirement
+  qosDscpTransPol: dscp_translation_policy
+  qosEpDscpMarking: dscp_marking
+  qosMplsIngressRule: mpls_ingress_rule
+  qosMplsEgressRule: mpls_egress_rule
+
+  # ── Management (in-band / out-of-band) ──────────────────────────────────────
+  mgmtInB: in_band_epg
+  mgmtOoB: out_of_band_epg
+  mgmtExtMgmtEntity: external_management_entity
+  mgmtInstP: external_management_epg
+  mgmtStaticRoute: static_route
+
+  # ── Endpoint tags (what an ESG tag selector matches) ────────────────────────
+  fvEpTags: endpoint_tags
+
+  # ── Fallback route group (VRF) ──────────────────────────────────────────────
+  fvFBRGroup: fallback_route_group
+  fvFBRMember: fallback_member
+
+  # ── Access EPGs (infra) ─────────────────────────────────────────────────────
+  infraClP: access_client_profile
+  infraProvP: access_function_profile
+
   # ── L2Out ───────────────────────────────────────────────────────────────────
   l2extLNodeP: node_profile
   l2extLIfP: interface_profile
+  l2extRsPathL2OutAtt: static_path   # schema label says "Leaf Port"
 
   # ── L3Out ───────────────────────────────────────────────────────────────────
   l3extLNodeP: node_profile
@@ -155,6 +219,7 @@ makers:
     controller: ctrlrInst
     phys_dom: physDomP
     l3_dom: l3extDomP
+    l2_dom: l2extDomP     # the domain an L2Out attaches to
 
   # ══ Tenant world ═══════════════════════════════════════════════════════════
   # Ordered like the APIC GUI tree under Tenants > <tenant>, so a new maker
@@ -167,10 +232,17 @@ makers:
     bd: fvBD
     vrf: fvCtx
     l3out: l3extOut
+    l2out: l2extOut
+    dot1q_tunnel: fvTnlEPg
+    endpoint_tags: fvEpTags     # the tags an ESG tag_selector matches
+    ip_address_pool: fvnsAddrInst
 
     # ── Contracts ─────────────────────────────────────────────────────────────
     filter: vzFilter
     contract: vzBrCP
+    taboo_contract: vzTaboo
+    imported_contract: vzCPIf
+    oob_contract: vzOOBBrCP     # out-of-band (management tenant)
 
     # ── Policies › Protocol › BGP ─────────────────────────────────────────────
     bgp_timers_policy: bgpCtxPol
@@ -241,21 +313,217 @@ makers:
     # ── Policies › QoS ────────────────────────────────────────────────────────
     custom_qos_policy: qosCustomPol
     dpp_policy: qosDppPol
+    qos_requirement: qosRequirement
+    mpls_custom_qos_policy: qosMplsCustomPol
+    dscp_translation_policy: qosDscpTransPol
+
+    # ── Policies › NetFlow ────────────────────────────────────────────────────
+    netflow_monitor: netflowMonitorPol
+    netflow_exporter: netflowExporterPol
+    netflow_record: netflowRecordPol
+
+    # ── Policies › Troubleshooting (SPAN) ─────────────────────────────────────
+    span_source_group: spanSrcGrp
+    span_destination_group: spanDestGrp
+
+    # ── Policies › Monitoring ─────────────────────────────────────────────────
+    monitoring_policy: monEPGPol
+
+    # ── Managed Node Connectivity Groups (in-band / out-of-band) ──────────────
+    management_profile: mgmtMgmtP
+    external_management_entity: mgmtExtMgmtEntity
+
+    # ── Access EPGs (an L3Out external EPG may inherit contracts from them) ───
+    access_client_profile: infraClP
+    access_function_profile: infraProvP
 
     # ── Services (L4-L7 policies, no service graph) ────────────────────────────
     service_container: vnsSvcCont
+
+  # ══ Application profile ════════════════════════════════════════════════════
   fvAp:
     epg: fvAEPg
+    esg: fvESg
+
+  # ══ EPG (wave 2, 2026-07-14) ═══════════════════════════════════════════════
+  # Ordered like Tenants > <tenant> > Application Profiles > <ap> > Application
+  # EPGs > <epg> in the GUI.
   fvAEPg:
+    # ── Domains › Static ports / Static leafs / Fibre Channel ─────────────────
     static_path: fvRsPathAtt
+    fc_path: fvRsFcPathAtt
+
+    # ── Subnets ───────────────────────────────────────────────────────────────
+    subnet: fvSubnet
+
+    # ── Static endpoints ──────────────────────────────────────────────────────
+    static_endpoint: fvStCEp
+
+    # ── uSeg attributes (the EPG is a uSeg EPG when it carries a criterion) ───
+    criterion: fvCrtrn
+
+    # ── Contracts › labels (matched against the contract's own labels) ────────
+    provider_label: vzProvLbl
+    consumer_label: vzConsLbl
+    provider_subject_label: vzProvSubjLbl
+    consumer_subject_label: vzConsSubjLbl
+    provider_contract_label: vzProvCtrctLbl
+    consumer_contract_label: vzConsCtrctLbl
+
+    # ── L4-L7 virtual IPs ─────────────────────────────────────────────────────
+    virtual_ip: fvVip
+
+  fvStCEp:
+    static_ip: fvStIp
+
+  fvCrtrn:
+    sub_criterion: fvSCrtrn
+    ip_attribute: fvIpAttr
+    mac_attribute: fvMacAttr
+    vm_attribute: fvVmAttr
+    dns_attribute: fvDnsAttr
+
+  fvSCrtrn:
+    # The MIT hangs IP and MAC attributes here as well; the APIC rejects both
+    # ("cannot be configured under a Sub-Criteria") — VM attributes only.
+    vm_attribute: fvVmAttr
+
+  # ══ ESG (endpoint security group) ══════════════════════════════════════════
+  fvESg:
+    # ── Selectors ─────────────────────────────────────────────────────────────
+    ep_selector: fvEPSelector      # tag / IP match expression
+    epg_selector: fvEPgSelector    # whole EPG
+    tag_selector: fvTagSelector    # policy tag (key/value)
+
+    # ── Contracts › labels ────────────────────────────────────────────────────
+    provider_label: vzProvLbl
+    consumer_label: vzConsLbl
+    provider_subject_label: vzProvSubjLbl
+    consumer_subject_label: vzConsSubjLbl
+    provider_contract_label: vzProvCtrctLbl
+    consumer_contract_label: vzConsCtrctLbl
+
   fvBD:
     subnet: fvSubnet
+
+  # ══ VRF ════════════════════════════════════════════════════════════════════
   fvCtx:
     pim: pimCtxP
+    vzany: vzAny                   # the VRF-wide EPG collection
+    fallback_route_group: fvFBRGroup
+
+  fvFBRGroup:
+    fallback_route: fvFBRoute
+    fallback_member: fvFBRMember
+
+  # ══ Observability (wave 2, 2026-07-14) ═════════════════════════════════════
+  # SPAN, NetFlow and QoS requirements hang under the tenant, under infra
+  # (access) and under fabric alike — the same makers, three positions.
+  spanSrcGrp:
+    span_source: spanSrc
+    span_label: spanSpanLbl        # matches a destination group by name
+
+  spanDestGrp:
+    span_destination: spanDest
+
+  spanFilterGrp:
+    filter_entry: spanFilterEntry
+
+  # (netflowMonitorPol is a leaf: its exporter and record are binds)
+
+  qosRequirement:
+    dscp_marking: qosEpDscpMarking
+
+  qosMplsCustomPol:
+    mpls_ingress_rule: qosMplsIngressRule
+    mpls_egress_rule: qosMplsEgressRule
+
+  # ══ L2Out (bridged outside) ════════════════════════════════════════════════
+  l2extOut:
+    node_profile: l2extLNodeP
+    external_epg: l2extInstP
+
+  l2extLNodeP:
+    interface_profile: l2extLIfP
+
+  l2extLIfP:
+    static_path: l2extRsPathL2OutAtt   # literal-DN maker, like the EPG's
+
+  l2extInstP:
+    subnet: fvSubnet
+    provider_label: vzProvLbl
+    consumer_label: vzConsLbl
+    provider_subject_label: vzProvSubjLbl
+    consumer_subject_label: vzConsSubjLbl
+    provider_contract_label: vzProvCtrctLbl
+    consumer_contract_label: vzConsCtrctLbl
+
+  # ══ Management (the EPGs that carry in-band / out-of-band contracts) ═══════
+  mgmtMgmtP:
+    in_band_epg: mgmtInB
+    out_of_band_epg: mgmtOoB
+
+  mgmtInB:
+    subnet: fvSubnet
+    static_route: mgmtStaticRoute
+
+  mgmtOoB:
+    static_route: mgmtStaticRoute
+
+  mgmtExtMgmtEntity:
+    external_management_epg: mgmtInstP
+
+  mgmtInstP:
+    external_subnet: mgmtSubnet
+
+  infraClP:
+    access_client_epg: infraCEPg
+  infraProvP:
+    access_function_provider: infraPEPg
+
+  # ══ Endpoint tags / address pools ══════════════════════════════════════════
+  fvEpTags:
+    mac_endpoint: fvEpMacTag
+    ip_endpoint: fvEpIpTag
+
+  fvnsAddrInst:
+    ip_address_block: fvnsUcastAddrBlk
+
+  # ══ Contracts (wave 2, 2026-07-14) ═════════════════════════════════════════
+  # Ordered like Tenants > <tenant> > Contracts in the GUI.
   vzFilter:
     entry: vzEntry
+
   vzBrCP:
     subject: vzSubj
+    exception: vzException         # EPGs excluded from this contract
+
+  vzSubj:
+    # Directional filters — used when the subject stops applying both ways.
+    in_term: vzInTerm
+    out_term: vzOutTerm
+    exception: vzException
+    provider_subject_label: vzProvSubjLbl
+    consumer_subject_label: vzConsSubjLbl
+
+  # ── Taboo contract ──────────────────────────────────────────────────────────
+  # (the imported contract, vzCPIf, is a leaf: it only binds the exported contract)
+  vzTaboo:
+    subject: vzTSubj
+
+  # ── Out-of-band contract (management tenant) ────────────────────────────────
+  vzOOBBrCP:
+    subject: vzSubj
+    exception: vzException
+
+  # ── vzAny — one place to hang contracts for the whole VRF ───────────────────
+  vzAny:
+    provider_label: vzProvLbl
+    consumer_label: vzConsLbl
+    provider_subject_label: vzProvSubjLbl
+    consumer_subject_label: vzConsSubjLbl
+    provider_contract_label: vzProvCtrctLbl
+    consumer_contract_label: vzConsCtrctLbl
 
   # ── L3Out (wave 1, 2026-07-12) ──────────────────────────────────────────────
   # ══ L3Out ══════════════════════════════════════════════════════════════════
@@ -301,8 +569,8 @@ makers:
     provider_contract_label: vzProvCtrctLbl
     consumer_label: vzConsLbl
     provider_label: vzProvLbl
-    vz_cons_subject_label: vzConsSubjLbl
-    vz_prov_subject_label: vzProvSubjLbl
+    consumer_subject_label: vzConsSubjLbl
+    provider_subject_label: vzProvSubjLbl
   l3extVirtualLIfP:
     bgp_peer: bgpPeerP
     infra_peer_connectivity_profile: bgpInfraPeerP
@@ -382,6 +650,17 @@ makers:
     access_port_profile: infraAccPortP
     leaf_profile: infraNodeP
     spine_profile: infraSpineP
+
+    # ── Policies › Troubleshooting (access SPAN) ──────────────────────────────
+    span_source_group: spanSrcGrp
+    span_destination_group: spanDestGrp
+    filter_group: spanFilterGrp   # the only home of SPAN filter groups
+
+    # ── Policies › NetFlow ────────────────────────────────────────────────────
+    netflow_monitor: netflowMonitorPol
+    netflow_exporter: netflowExporterPol
+    netflow_record: netflowRecordPol
+
   fvnsVlanInstP:
     range: fvnsEncapBlk
   infraFuncP:
@@ -410,6 +689,10 @@ makers:
     bgp_instance: bgpInstPol
     syslog_group: syslogGroup
     vpc_protection: fabricProtPol
+
+    # ── Fabric SPAN (same makers as the tenant and access ones) ───────────────
+    span_source_group: spanSrcGrp
+    span_destination_group: spanDestGrp
   datetimePol:
     ntp_provider: datetimeNtpProv
   dnsProfile:
@@ -438,6 +721,80 @@ binds:
   fvAEPg:
     bd: fvBD
     domain: infraDomP        # abstract — phys_dom / vmm_dom / l3_dom / ...
+    contract_master: fvEPg   # abstract — inherit contracts from another EPG/ESG
+    imported_contract: vzCPIf
+    taboo_contract: vzTaboo
+    custom_qos_policy: qosCustomPol
+    dpp_policy: qosDppPol
+    monitoring_policy: monEPGPol
+    trust_control_policy: fhsTrustCtrlPol
+    qos_requirement: qosRequirement
+  fvESg:
+    vrf: fvCtx               # mandatory — an ESG lives in a VRF
+    contract_master: fvEPg   # abstract
+    imported_contract: vzCPIf
+    custom_qos_policy: qosCustomPol
+    # No taboo_contract: the MIT hangs fvRsProtBy here, the APIC answers
+    # "Taboo contracts are not supported by fvESg".
+  fvSubnet:
+    l3out: l3extOut
+    nd_ra_prefix_policy: ndPfxPol
+  fvStCEp:
+    path: fabricAPathEp      # fabric-discovered — reach it with bind_dn(path=...)
+    fabric_node: fabricNode
+  vzTSubj:
+    filter: vzFilter
+  vzCPIf:
+    contract: vzBrCP         # the exported contract this interface points at
+  vzInTerm:
+    filter: vzFilter         # consumer → provider direction
+  vzOutTerm:
+    filter: vzFilter         # provider → consumer direction
+  vzAny:
+    imported_contract: vzCPIf
+  fvAp:
+    monitoring_policy: monEPGPol
+
+  # ── Observability (wave 2) ──────────────────────────────────────────────────
+  spanSrcGrp:
+    filter_group: spanFilterGrp     # declared under infra — a cross-domain bind
+  spanSrc:
+    epg: fvEPg                      # abstract — EPG / ESG / external EPG / ...
+    bd: fvBD
+    vrf: fvCtx
+    l3out: l3extOut
+    filter_group: spanFilterGrp
+    path: fabricPathEp              # fabric-discovered — bind_dn(path=...)
+    fabric_node: fabricNode         # fabric-discovered — bind_dn(...)
+  spanDest:
+    epg: fvEPg                      # abstract
+    path: fabricPathEp              # fabric-discovered — bind_dn(path=...)
+    apic_node: fabricNode           # ERSPAN to an APIC — bind_dn(...)
+  netflowMonitorPol:
+    netflow_exporter: netflowExporterPol
+    netflow_record: netflowRecordPol
+  netflowExporterPol:
+    vrf: fvCtx                      # the VRF the collector sits behind
+    epg: fvEPg                      # abstract
+
+  # ── L2Out / management (wave 2) ─────────────────────────────────────────────
+  l2extOut:
+    bd: fvBD
+    domain: l2extDomP
+  l2extInstP:
+    contract_master: fvEPg          # abstract
+    imported_contract: vzCPIf
+    taboo_contract: vzTaboo
+    custom_qos_policy: qosCustomPol
+  mgmtInB:
+    bd: fvBD                        # the in-band management BD
+    contract_master: fvEPg          # abstract
+    imported_contract: vzCPIf
+    custom_qos_policy: qosCustomPol
+    static_node: fabricNode         # fabric-discovered — bind_dn(...)
+  mgmtOoB:
+    static_node: fabricNode         # fabric-discovered — bind_dn(...)
+
   fvBD:
     vrf: fvCtx
     l3out: l3extOut
@@ -540,6 +897,8 @@ binds:
     vlan_pool: fvnsVlanInstP
   l3extDomP:
     vlan_pool: fvnsVlanInstP
+  l2extDomP:
+    vlan_pool: fvnsVlanInstP
   infraAccPortGrp:
     aaep: infraAttEntityP
     cdp: cdpIfPol
@@ -570,6 +929,19 @@ verbs:
     consume:
       rs: fvRsCons
       target: vzBrCP
+    intra_epg:
+      rs: fvRsIntraEpg
+      target: vzBrCP
+  fvESg:
+    provide:
+      rs: fvRsProv
+      target: vzBrCP
+    consume:
+      rs: fvRsCons
+      target: vzBrCP
+    intra_epg:
+      rs: fvRsIntraEpg
+      target: vzBrCP
   l3extInstP:
     provide:
       rs: fvRsProv
@@ -577,6 +949,49 @@ verbs:
     consume:
       rs: fvRsCons
       target: vzBrCP
+  # vzAny reaches contracts through its own Rs classes, not the EPG ones.
+  vzAny:
+    provide:
+      rs: vzRsAnyToProv
+      target: vzBrCP
+    consume:
+      rs: vzRsAnyToCons
+      target: vzBrCP
+  l2extInstP:
+    provide:
+      rs: fvRsProv
+      target: vzBrCP
+    consume:
+      rs: fvRsCons
+      target: vzBrCP
+    intra_epg:
+      rs: fvRsIntraEpg
+      target: vzBrCP
+  mgmtInB:
+    provide:
+      rs: fvRsProv
+      target: vzBrCP
+    consume:
+      rs: fvRsCons
+      target: vzBrCP
+  # The out-of-band world speaks the same two words, over its own Rs classes.
+  mgmtOoB:
+    provide:
+      rs: mgmtRsOoBProv
+      target: vzOOBBrCP
+  mgmtInstP:
+    consume:
+      rs: mgmtRsOoBCons
+      target: vzOOBBrCP
+  # Two relations to the same class (ingress and egress policing): automatic
+  # resolution cannot choose, so the verb names the Rs class itself.
+  qosRequirement:
+    ingress_dpp:
+      rs: qosRsIngressDppPol
+      target: qosDppPol
+    egress_dpp:
+      rs: qosRsEgressDppPol
+      target: qosDppPol
 
 sugar:
   vzEntry:

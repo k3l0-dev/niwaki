@@ -5,9 +5,21 @@ Re-generate: uv run python -m niwaki._codegen.generate_docs
 
 # Enums
 
-The 106 enum types reachable from the curated vocabulary — every constrained parameter of every maker.  A parameter typed as an enum also accepts the plain string; the value is validated at the call site either way.
+The 119 enum types reachable from the curated vocabulary — every constrained parameter of every maker.  A parameter typed as an enum also accepts the plain string; the value is validated at the call site either way.
 
 The remaining generated enums back the non-curated classes and live in `niwaki.models._generated.enums`.
+
+(enum-analyticscollversion)=
+
+## `AnalyticsCollVersion`
+
+| value | meaning |
+| --- | --- |
+| `cisco-v1` | Cisco proprietary version 1 |
+| `v5` | Version 5 |
+| `v9` | Version 9 |
+
+Used by: {ref}`infra.netflow_exporter <vocab-infra-netflow_exporter>`, {ref}`tenant.netflow_exporter <vocab-tenant-netflow_exporter>`
 
 (enum-arpifcontrol)=
 
@@ -324,6 +336,17 @@ Used by: {ref}`tenant.l3out.node_profile.interface_profile.floating_svi <vocab-t
 
 Used by: {ref}`fabric.vpc_protection <vocab-fabric-vpc_protection>`
 
+(enum-fcvsanmode)=
+
+## `FcVsanMode`
+
+| value | meaning |
+| --- | --- |
+| `native` | — |
+| `regular` | — |
+
+Used by: {ref}`tenant.app.epg.fc_path <vocab-tenant-app-epg-fc_path>`
+
 (enum-fhsadminst)=
 
 ## `FhsAdminSt`
@@ -361,6 +384,17 @@ Used by: {ref}`tenant.fhs_bd_policy.ra_guard_policy <vocab-tenant-fhs_bd_policy-
 
 Used by: {ref}`tenant.bd <vocab-tenant-bd>`
 
+(enum-fvcrtrnscopet)=
+
+## `FvCrtrnScopeT`
+
+| value | meaning |
+| --- | --- |
+| `scope-bd` | — |
+| `scope-vrf` | — |
+
+Used by: {ref}`tenant.app.epg.criterion <vocab-tenant-app-epg-criterion>`
+
 (enum-fvfloodonencap)=
 
 ## `FvFloodOnEncap`
@@ -370,7 +404,7 @@ Used by: {ref}`tenant.bd <vocab-tenant-bd>`
 | `disabled` | Flood on encapsulation for EPG is disabled, which essentially means it will take the behavior from bridge-domain |
 | `enabled` | Flood on encapsulation for EPG is enabled, this will override bridge-domain settings |
 
-Used by: {ref}`tenant.app.epg <vocab-tenant-app-epg>`, {ref}`tenant.l3out.external_epg <vocab-tenant-l3out-external_epg>`
+Used by: {ref}`tenant.access_client_profile.access_client_epg <vocab-tenant-access_client_profile-access_client_epg>`, {ref}`tenant.access_function_profile.access_function_provider <vocab-tenant-access_function_profile-access_function_provider>`, {ref}`tenant.app.epg <vocab-tenant-app-epg>`, {ref}`tenant.app.esg <vocab-tenant-app-esg>`, {ref}`tenant.dot1q_tunnel <vocab-tenant-dot1q_tunnel>`, {ref}`tenant.l2out.external_epg <vocab-tenant-l2out-external_epg>`, {ref}`tenant.l3out.external_epg <vocab-tenant-l3out-external_epg>`, {ref}`tenant.management_profile.in_band_epg <vocab-tenant-management_profile-in_band_epg>`
 
 (enum-fvinstrimedcy)=
 
@@ -382,6 +416,17 @@ Used by: {ref}`tenant.app.epg <vocab-tenant-app-epg>`, {ref}`tenant.l3out.extern
 | `lazy` | — |
 
 Used by: {ref}`tenant.app.epg.static_path <vocab-tenant-app-epg-static_path>`
+
+(enum-fvmatcht)=
+
+## `FvMatchT`
+
+| value | meaning |
+| --- | --- |
+| `all` | — |
+| `any` | — |
+
+Used by: {ref}`tenant.app.epg.criterion <vocab-tenant-app-epg-criterion>`, {ref}`tenant.app.epg.criterion.sub_criterion <vocab-tenant-app-epg-criterion-sub_criterion>`
 
 (enum-fvmode)=
 
@@ -395,6 +440,20 @@ Used by: {ref}`tenant.app.epg.static_path <vocab-tenant-app-epg-static_path>`
 
 Used by: {ref}`tenant.app.epg.static_path <vocab-tenant-app-epg-static_path>`, {ref}`tenant.l3out.node_profile.interface_profile.floating_svi <vocab-tenant-l3out-node_profile-interface_profile-floating_svi>`, {ref}`tenant.l3out.node_profile.interface_profile.path_attachment <vocab-tenant-l3out-node_profile-interface_profile-path_attachment>`
 
+(enum-fvopert)=
+
+## `FvOperT`
+
+| value | meaning |
+| --- | --- |
+| `contains` | — |
+| `endsWith` | — |
+| `equals` | — |
+| `notEquals` | — |
+| `startsWith` | — |
+
+Used by: {ref}`tenant.app.epg.criterion.sub_criterion.vm_attribute <vocab-tenant-app-epg-criterion-sub_criterion-vm_attribute>`, {ref}`tenant.app.epg.criterion.vm_attribute <vocab-tenant-app-epg-criterion-vm_attribute>`
+
 (enum-fvpcenfpref)=
 
 ## `FvPcEnfPref`
@@ -404,7 +463,7 @@ Used by: {ref}`tenant.app.epg.static_path <vocab-tenant-app-epg-static_path>`, {
 | `enforced` | Enforce access control rules for this private network |
 | `unenforced` | Do not enforce access control rules for this private network |
 
-Used by: {ref}`tenant.app.epg <vocab-tenant-app-epg>`, {ref}`tenant.l3out.external_epg <vocab-tenant-l3out-external_epg>`, {ref}`tenant.vrf <vocab-tenant-vrf>`
+Used by: {ref}`tenant.app.epg <vocab-tenant-app-epg>`, {ref}`tenant.app.esg <vocab-tenant-app-esg>`, {ref}`tenant.l3out.external_epg <vocab-tenant-l3out-external_epg>`, {ref}`tenant.vrf <vocab-tenant-vrf>`
 
 (enum-fvprefgrmemb)=
 
@@ -415,7 +474,50 @@ Used by: {ref}`tenant.app.epg <vocab-tenant-app-epg>`, {ref}`tenant.l3out.extern
 | `exclude` | EPg is NOT part of preferred group member |
 | `include` | EPg is part of preferred group member |
 
-Used by: {ref}`tenant.app.epg <vocab-tenant-app-epg>`, {ref}`tenant.l3out.external_epg <vocab-tenant-l3out-external_epg>`
+Used by: {ref}`tenant.access_client_profile.access_client_epg <vocab-tenant-access_client_profile-access_client_epg>`, {ref}`tenant.access_function_profile.access_function_provider <vocab-tenant-access_function_profile-access_function_provider>`, {ref}`tenant.app.epg <vocab-tenant-app-epg>`, {ref}`tenant.app.esg <vocab-tenant-app-esg>`, {ref}`tenant.dot1q_tunnel <vocab-tenant-dot1q_tunnel>`, {ref}`tenant.l2out.external_epg <vocab-tenant-l2out-external_epg>`, {ref}`tenant.l3out.external_epg <vocab-tenant-l3out-external_epg>`, {ref}`tenant.management_profile.in_band_epg <vocab-tenant-management_profile-in_band_epg>`
+
+(enum-fvtnlfwdctrl)=
+
+## `FvTnlFwdCtrl`
+
+| value | meaning |
+| --- | --- |
+| `mac-learn-disable` | — |
+| `mac-learn-enable` | — |
+
+Used by: {ref}`tenant.dot1q_tunnel <vocab-tenant-dot1q_tunnel>`
+
+(enum-fvvalueoperator)=
+
+## `FvValueOperator`
+
+| value | meaning |
+| --- | --- |
+| `contains` | — |
+| `equals` | — |
+| `regex` | — |
+
+Used by: {ref}`tenant.app.esg.tag_selector <vocab-tenant-app-esg-tag_selector>`
+
+(enum-fvvmattrt)=
+
+## `FvVmAttrT`
+
+| value | meaning |
+| --- | --- |
+| `custom-label` | — |
+| `domain` | — |
+| `guest-os` | — |
+| `hv` | — |
+| `rootContName` | — |
+| `tag` | — |
+| `vm` | — |
+| `vm-folder` | — |
+| `vm-name` | — |
+| `vmfolder-path` | — |
+| `vnic` | — |
+
+Used by: {ref}`tenant.app.epg.criterion.sub_criterion.vm_attribute <vocab-tenant-app-epg-criterion-sub_criterion-vm_attribute>`, {ref}`tenant.app.epg.criterion.vm_attribute <vocab-tenant-app-epg-criterion-vm_attribute>`
 
 (enum-fvhttpmethod)=
 
@@ -447,7 +549,7 @@ Used by: {ref}`tenant.ip_sla_monitoring_policy <vocab-tenant-ip_sla_monitoring_p
 | `disabled` | — |
 | `enabled` | — |
 
-Used by: {ref}`tenant.bd.subnet <vocab-tenant-bd-subnet>`
+Used by: {ref}`tenant.app.epg.subnet <vocab-tenant-app-epg-subnet>`, {ref}`tenant.bd.subnet <vocab-tenant-bd-subnet>`, {ref}`tenant.l2out.external_epg.subnet <vocab-tenant-l2out-external_epg-subnet>`, {ref}`tenant.management_profile.in_band_epg.subnet <vocab-tenant-management_profile-in_band_epg-subnet>`
 
 (enum-fvipdataplanelearning)=
 
@@ -459,6 +561,17 @@ Used by: {ref}`tenant.bd.subnet <vocab-tenant-bd-subnet>`
 | `enabled` | — |
 
 Used by: {ref}`tenant.vrf <vocab-tenant-vrf>`
+
+(enum-fvnsaddrtype)=
+
+## `FvnsAddrType`
+
+| value | meaning |
+| --- | --- |
+| `regular` | — |
+| `vip_range` | — |
+
+Used by: {ref}`tenant.ip_address_pool <vocab-tenant-ip_address_pool>`
 
 (enum-fvnsblkallocmode)=
 
@@ -901,6 +1014,19 @@ Used by: {ref}`infra.mcp_policy <vocab-infra-mcp_policy>`
 
 Used by: {ref}`fabric.syslog_group.remote_destination <vocab-fabric-syslog_group-remote_destination>`
 
+(enum-netflowsrciptype)=
+
+## `NetflowSrcIpType`
+
+| value | meaning |
+| --- | --- |
+| `custom-src-ip` | — |
+| `inband-mgmt-ip` | — |
+| `oob-mgmt-ip` | — |
+| `ptep` | — |
+
+Used by: {ref}`infra.netflow_exporter <vocab-infra-netflow_exporter>`, {ref}`tenant.netflow_exporter <vocab-tenant-netflow_exporter>`
+
 (enum-nwadminst)=
 
 ## `NwAdminSt`
@@ -910,7 +1036,7 @@ Used by: {ref}`fabric.syslog_group.remote_destination <vocab-fabric-syslog_group
 | `disabled` | Disabled |
 | `enabled` | Enabled |
 
-Used by: {ref}`fabric.igmp_snoop_policy <vocab-fabric-igmp_snoop_policy>`, {ref}`fabric.mld_snoop_policy <vocab-fabric-mld_snoop_policy>`, {ref}`tenant.bfd_interface_policy <vocab-tenant-bfd_interface_policy>`, {ref}`tenant.bfd_mh_interface_policy <vocab-tenant-bfd_mh_interface_policy>`, {ref}`tenant.bfd_multihop_node_policy <vocab-tenant-bfd_multihop_node_policy>`, {ref}`tenant.fhs_bd_policy <vocab-tenant-fhs_bd_policy>`, {ref}`tenant.igmp_snoop_policy <vocab-tenant-igmp_snoop_policy>`, {ref}`tenant.l3out.node_profile.bgp_peer <vocab-tenant-l3out-node_profile-bgp_peer>` *(+4 more)*
+Used by: {ref}`fabric.igmp_snoop_policy <vocab-fabric-igmp_snoop_policy>`, {ref}`fabric.mld_snoop_policy <vocab-fabric-mld_snoop_policy>`, {ref}`fabric.span_source_group <vocab-fabric-span_source_group>`, {ref}`infra.span_source_group <vocab-infra-span_source_group>`, {ref}`tenant.bfd_interface_policy <vocab-tenant-bfd_interface_policy>`, {ref}`tenant.bfd_mh_interface_policy <vocab-tenant-bfd_mh_interface_policy>`, {ref}`tenant.bfd_multihop_node_policy <vocab-tenant-bfd_multihop_node_policy>`, {ref}`tenant.dscp_translation_policy <vocab-tenant-dscp_translation_policy>` *(+8 more)*
 
 (enum-nwifadminst)=
 
@@ -1144,7 +1270,7 @@ Used by: {ref}`infra.lacp_policy <vocab-infra-lacp_policy>`
 | `yellow` | — |
 | `yellow-green` | — |
 
-Used by: {ref}`tenant.l3out.external_epg.consumer_contract_label <vocab-tenant-l3out-external_epg-consumer_contract_label>`, {ref}`tenant.l3out.external_epg.consumer_label <vocab-tenant-l3out-external_epg-consumer_label>`, {ref}`tenant.l3out.external_epg.provider_contract_label <vocab-tenant-l3out-external_epg-provider_contract_label>`, {ref}`tenant.l3out.external_epg.provider_label <vocab-tenant-l3out-external_epg-provider_label>`, {ref}`tenant.l3out.external_epg.vz_cons_subject_label <vocab-tenant-l3out-external_epg-vz_cons_subject_label>`, {ref}`tenant.l3out.external_epg.vz_prov_subject_label <vocab-tenant-l3out-external_epg-vz_prov_subject_label>`, {ref}`tenant.l3out.node_profile <vocab-tenant-l3out-node_profile>`, {ref}`tenant.l3out.node_profile.interface_profile <vocab-tenant-l3out-node_profile-interface_profile>` *(+1 more)*
+Used by: {ref}`fabric.span_source_group.span_label <vocab-fabric-span_source_group-span_label>`, {ref}`infra.span_source_group.span_label <vocab-infra-span_source_group-span_label>`, {ref}`tenant.app.epg.consumer_contract_label <vocab-tenant-app-epg-consumer_contract_label>`, {ref}`tenant.app.epg.consumer_label <vocab-tenant-app-epg-consumer_label>`, {ref}`tenant.app.epg.consumer_subject_label <vocab-tenant-app-epg-consumer_subject_label>`, {ref}`tenant.app.epg.provider_contract_label <vocab-tenant-app-epg-provider_contract_label>`, {ref}`tenant.app.epg.provider_label <vocab-tenant-app-epg-provider_label>`, {ref}`tenant.app.epg.provider_subject_label <vocab-tenant-app-epg-provider_subject_label>` *(+34 more)*
 
 (enum-qosdpppoladminstate)=
 
@@ -1171,7 +1297,7 @@ Used by: {ref}`infra.dpp_policy <vocab-infra-dpp_policy>`, {ref}`tenant.dpp_poli
 | `level6` | — |
 | `unspecified` | — |
 
-Used by: {ref}`tenant.app <vocab-tenant-app>`, {ref}`tenant.app.epg <vocab-tenant-app-epg>`, {ref}`tenant.contract <vocab-tenant-contract>`, {ref}`tenant.contract.subject <vocab-tenant-contract-subject>`, {ref}`tenant.l3out.external_epg <vocab-tenant-l3out-external_epg>`, {ref}`tenant.l3out.node_profile.interface_profile <vocab-tenant-l3out-node_profile-interface_profile>`
+Used by: {ref}`tenant.access_client_profile.access_client_epg <vocab-tenant-access_client_profile-access_client_epg>`, {ref}`tenant.access_function_profile.access_function_provider <vocab-tenant-access_function_profile-access_function_provider>`, {ref}`tenant.app <vocab-tenant-app>`, {ref}`tenant.app.epg <vocab-tenant-app-epg>`, {ref}`tenant.app.esg <vocab-tenant-app-esg>`, {ref}`tenant.contract <vocab-tenant-contract>`, {ref}`tenant.contract.subject <vocab-tenant-contract-subject>`, {ref}`tenant.contract.subject.in_term <vocab-tenant-contract-subject-in_term>` *(+13 more)*
 
 (enum-rtctrlpolicytype)=
 
@@ -1216,6 +1342,18 @@ Used by: {ref}`tenant.pim_route_map_policy.pim_route_map_entry <vocab-tenant-pim
 | `permit` | permit |
 
 Used by: {ref}`tenant.l3out.route_control_profile.route_control_context <vocab-tenant-l3out-route_control_profile-route_control_context>`, {ref}`tenant.route_control_profile.route_control_context <vocab-tenant-route_control_profile-route_control_context>`
+
+(enum-spandirection)=
+
+## `SpanDirection`
+
+| value | meaning |
+| --- | --- |
+| `both` | Both |
+| `in` | Incoming |
+| `out` | Outgoing |
+
+Used by: {ref}`fabric.span_source_group.span_source <vocab-fabric-span_source_group-span_source>`, {ref}`infra.span_source_group.span_source <vocab-infra-span_source_group-span_source>`, {ref}`tenant.span_source_group.span_source <vocab-tenant-span_source_group-span_source>`
 
 (enum-sviautostate)=
 
@@ -1390,7 +1528,7 @@ Used by: {ref}`tenant.vrf <vocab-tenant-vrf>`
 | `estimate_delete` | — |
 | `install` | — |
 
-Used by: {ref}`tenant.contract <vocab-tenant-contract>`
+Used by: {ref}`tenant.contract <vocab-tenant-contract>`, {ref}`tenant.oob_contract <vocab-tenant-oob_contract>`
 
 (enum-vzmatcht)=
 
@@ -1403,7 +1541,18 @@ Used by: {ref}`tenant.contract <vocab-tenant-contract>`
 | `AtmostOne` | Logical XOR |
 | `None` | Logical NOT i.e. ! |
 
-Used by: {ref}`tenant.app.epg <vocab-tenant-app-epg>`, {ref}`tenant.contract.subject <vocab-tenant-contract-subject>`, {ref}`tenant.l3out.external_epg <vocab-tenant-l3out-external_epg>`
+Used by: {ref}`tenant.access_client_profile.access_client_epg <vocab-tenant-access_client_profile-access_client_epg>`, {ref}`tenant.access_function_profile.access_function_provider <vocab-tenant-access_function_profile-access_function_provider>`, {ref}`tenant.app.epg <vocab-tenant-app-epg>`, {ref}`tenant.app.esg <vocab-tenant-app-esg>`, {ref}`tenant.contract.subject <vocab-tenant-contract-subject>`, {ref}`tenant.dot1q_tunnel <vocab-tenant-dot1q_tunnel>`, {ref}`tenant.l2out.external_epg <vocab-tenant-l2out-external_epg>`, {ref}`tenant.l3out.external_epg <vocab-tenant-l3out-external_epg>` *(+3 more)*
+
+(enum-vzprefgrmemb)=
+
+## `VzPrefGrMemb`
+
+| value | meaning |
+| --- | --- |
+| `disabled` | Disable use of preferred group member |
+| `enabled` | Enable use of preferred group member |
+
+Used by: {ref}`tenant.vrf.vzany <vocab-tenant-vrf-vzany>`
 
 (enum-vzscope)=
 
@@ -1416,4 +1565,18 @@ Used by: {ref}`tenant.app.epg <vocab-tenant-app-epg>`, {ref}`tenant.contract.sub
 | `global` | — |
 | `tenant` | — |
 
-Used by: {ref}`tenant.contract <vocab-tenant-contract>`
+Used by: {ref}`tenant.contract <vocab-tenant-contract>`, {ref}`tenant.oob_contract <vocab-tenant-oob_contract>`
+
+(enum-vzregexfield)=
+
+## `VzregexField`
+
+| value | meaning |
+| --- | --- |
+| `Ctx` | — |
+| `Dn` | — |
+| `EPg` | — |
+| `Tag` | — |
+| `Tenant` | — |
+
+Used by: {ref}`tenant.contract.exception <vocab-tenant-contract-exception>`, {ref}`tenant.contract.subject.exception <vocab-tenant-contract-subject-exception>`, {ref}`tenant.oob_contract.exception <vocab-tenant-oob_contract-exception>`, {ref}`tenant.oob_contract.subject.exception <vocab-tenant-oob_contract-subject-exception>`

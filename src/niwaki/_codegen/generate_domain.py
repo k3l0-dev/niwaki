@@ -39,6 +39,8 @@ HEADER = """\
 # Re-generate: uv run python -m niwaki._codegen.generate_domain
 from __future__ import annotations
 
+from typing import Literal
+
 """
 
 
@@ -476,7 +478,7 @@ def _render(
         "# Abstract targets are expanded to their generated concrete subclasses\n"
         "# and also kept under their own name (for curated abstract aliases).\n"
         "# The design resolver (niwaki.design._resolver) resolves through this.\n"
-        "REFERENCE_MAP: dict[str, dict[str, tuple[str, str]]] = {\n"
+        'REFERENCE_MAP: dict[str, dict[str, tuple[str, Literal["name", "dn"]]]] = {\n'
     )
     for owner in sorted(reference_map):
         targets2 = reference_map[owner]

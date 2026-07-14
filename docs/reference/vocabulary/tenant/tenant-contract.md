@@ -38,6 +38,7 @@ Accepted as keyword arguments of `.contract(name)` and of `.set(**attrs)` on thi
 | maker | creates | position |
 | --- | --- | --- |
 | `.subject(name, **attrs)` | `vzSubj` | {ref}`tenant.contract.subject <vocab-tenant-contract-subject>` |
+| `.exception(name, **attrs)` | `vzException` | {ref}`tenant.contract.exception <vocab-tenant-contract-exception>` |
 
 ## APIC diagnostics
 

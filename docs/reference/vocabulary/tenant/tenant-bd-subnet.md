@@ -32,6 +32,15 @@ Accepted as keyword arguments of `.subnet(subnet)` and of `.set(**attrs)` on thi
 | `scope` | `scope` | `str` | — | — | The network visibility of the subnet. |
 | `treated_as_virtual_ip_address` | `virtual` | `bool` | — | `False` | Treated as virtual IP address. Used in case of BD extended to multiple sites. |
 
+## Bind aliases
+
+Lazy references, resolved closed-world at push time.
+
+| alias | target | flavor | relation |
+| --- | --- | --- | --- |
+| `l3out=` | `l3extOut` | name | `fvRsBDSubnetToOut` |
+| `nd_ra_prefix_policy=` | `ndPfxPol` | name | `fvRsNdPfxPol` |
+
 ## APIC diagnostics
 
 States the APIC can flag on this class — it accepts the configuration and reports the inconsistency afterwards.

@@ -38,3 +38,5 @@ Accepted as keyword arguments of `.fabric()` and of `.set(**attrs)` on this curs
 | `.bgp_instance(name, **attrs)` | `bgpInstPol` | {ref}`fabric.bgp_instance <vocab-fabric-bgp_instance>` |
 | `.syslog_group(name, **attrs)` | `syslogGroup` | {ref}`fabric.syslog_group <vocab-fabric-syslog_group>` |
 | `.vpc_protection(**attrs)` | `fabricProtPol` | {ref}`fabric.vpc_protection <vocab-fabric-vpc_protection>` |
+| `.span_source_group(name, **attrs)` | `spanSrcGrp` | {ref}`fabric.span_source_group <vocab-fabric-span_source_group>` |
+| `.span_destination_group(name, **attrs)` | `spanDestGrp` | {ref}`fabric.span_destination_group <vocab-fabric-span_destination_group>` |

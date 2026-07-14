@@ -36,6 +36,16 @@ Interface policies, VLAN pools, AAEPs, policy groups, interface and switch profi
   - {ref}`infra.spine_profile <vocab-infra-spine_profile>` — `infraSpineP`, 4 attributes
     - {ref}`infra.spine_profile.spine_selector <vocab-infra-spine_profile-spine_selector>` — `infraSpineS`, 5 attributes
       - {ref}`infra.spine_profile.spine_selector.node_block <vocab-infra-spine_profile-spine_selector-node_block>` — `infraNodeBlk`, 4 attributes
+  - {ref}`infra.span_source_group <vocab-infra-span_source_group>` — `spanSrcGrp`, 5 attributes
+    - {ref}`infra.span_source_group.span_source <vocab-infra-span_source_group-span_source>` — `spanSrc`, 6 attributes
+    - {ref}`infra.span_source_group.span_label <vocab-infra-span_source_group-span_label>` — `spanSpanLbl`, 5 attributes
+  - {ref}`infra.span_destination_group <vocab-infra-span_destination_group>` — `spanDestGrp`, 4 attributes
+    - {ref}`infra.span_destination_group.span_destination <vocab-infra-span_destination_group-span_destination>` — `spanDest`, 4 attributes
+  - {ref}`infra.filter_group <vocab-infra-filter_group>` — `spanFilterGrp`, 2 attributes
+    - {ref}`infra.filter_group.filter_entry <vocab-infra-filter_group-filter_entry>` — `spanFilterEntry`, 9 attributes
+  - {ref}`infra.netflow_monitor <vocab-infra-netflow_monitor>` — `netflowMonitorPol`, 4 attributes
+  - {ref}`infra.netflow_exporter <vocab-infra-netflow_exporter>` — `netflowExporterPol`, 10 attributes
+  - {ref}`infra.netflow_record <vocab-infra-netflow_record>` — `netflowRecordPol`, 6 attributes
 
 ```{toctree}
 :maxdepth: 1
@@ -68,4 +78,14 @@ infra/infra-leaf_profile-leaf_selector-node_block
 infra/infra-spine_profile
 infra/infra-spine_profile-spine_selector
 infra/infra-spine_profile-spine_selector-node_block
+infra/infra-span_source_group
+infra/infra-span_source_group-span_source
+infra/infra-span_source_group-span_label
+infra/infra-span_destination_group
+infra/infra-span_destination_group-span_destination
+infra/infra-filter_group
+infra/infra-filter_group-filter_entry
+infra/infra-netflow_monitor
+infra/infra-netflow_exporter
+infra/infra-netflow_record
 ```

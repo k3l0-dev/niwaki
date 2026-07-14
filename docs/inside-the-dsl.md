@@ -50,9 +50,11 @@ binds:                         # cursor class → {bind alias → target class}
   fvBD:
     vrf: fvCtx                 # the Rs class and direction come from the schemas
 
-verbs:                         # contract shorthand
+verbs:                         # references whose relation class is named upfront
   fvAEPg:
     provide: {rs: fvRsProv, target: vzBrCP}
+  qosRequirement:              # two relations to one class — ingress and egress
+    ingress_dpp: {rs: qosRsIngressDppPol, target: qosDppPol}
 
 sugar:                         # typed convenience parameters
   vzEntry:
@@ -68,6 +70,14 @@ class in the words an operator uses.  Curation is deliberate
 ({doc}`design-first` explains why {{ positions }} hand-reviewed positions beat 2,222
 auto-generated ones); the escape hatches `.mo(AnyClass, ...)` and
 `bind_dn(alias=dn)` keep the rest of the schema one call away.
+
+`binds` and `verbs` differ in one thing only: who names the relation class.
+A bind lets the schemas decide (`REFERENCE_MAP` resolves owner → target to a
+single Rs class and its flavor); a verb names it upfront, which is what lets
+it reach a target the automatic resolution cannot — two relations to the same
+class, like `provide` versus `consume`, or ingress versus egress policing.
+Either way, when the relation carries configuration of its own, `ref()` sets
+it: `bind(domain=ref("prod-phys", resolution_immediacy="immediate"))`.
 
 ## Generated, never hand-written
 

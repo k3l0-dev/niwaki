@@ -77,6 +77,23 @@ _DOMAINS = [
 ]
 
 
+_DOMAIN_ROOTS = tuple(root for root, _, _ in _DOMAINS)
+
+
+def _uni_keys() -> tuple[str, ...]:
+    """The ``uni``-level domains: every polUni maker that is not a design root.
+
+    Derived, not enumerated — curating a new domain under ``polUni``
+    (``l2_dom`` after ``phys_dom`` and ``l3_dom``) gives it a page without
+    touching the generator.
+    """
+    from niwaki.design._cursor import _tables
+
+    return tuple(
+        label for label in _tables().makers.get("polUni", {}) if label not in _DOMAIN_ROOTS
+    )
+
+
 def _resolve_edge(owner_aci: str, target_aci: str) -> tuple[str, str, str] | None:
     """Resolve a curated bind edge to ``(rs_class, flavor, direction)``.
 
@@ -403,7 +420,7 @@ def _render_index() -> str:
 
     # Standalone uni-level domains (physical/routed domains) with their binds.
     lines += ["", "**Domains under `uni`**", ""]
-    for key in ("phys_dom", "l3_dom"):
+    for key in _uni_keys():
         pos = positions[key]
         for alias, target in tables.binds.get(pos.aci_class, {}).items():
             edge = _resolve_edge(pos.aci_class, target)
@@ -470,7 +487,7 @@ def curated_position_count() -> int:
     """
     positions = _positions()
     in_domains = sum(len(_subtree(root_key, positions)) for root_key, _, _ in _DOMAINS)
-    return in_domains + len(("phys_dom", "l3_dom"))
+    return in_domains + len(_uni_keys())
 
 
 def _render_coverage() -> str:
@@ -480,7 +497,7 @@ def _render_coverage() -> str:
         root_key: [_coverage_row(pos) for pos in _subtree(root_key, positions)]
         for root_key, _, _ in _DOMAINS
     }
-    uni_rows = [_coverage_row(positions[key]) for key in ("phys_dom", "l3_dom")]
+    uni_rows = [_coverage_row(positions[key]) for key in _uni_keys()]
     total = curated_position_count()
 
     table_header = [
@@ -536,7 +553,7 @@ def render_all() -> dict[str, str]:
     pages: dict[str, str] = {}
     for root_key, title, blurb in [*_DOMAINS, _UNI_DOMAIN]:
         if root_key == "uni":
-            subtree = [positions[key] for key in ("phys_dom", "l3_dom")]
+            subtree = [positions[key] for key in _uni_keys()]
             pages["uni.md"] = _render_uni_domain(subtree)
         else:
             subtree = _subtree(root_key, positions)

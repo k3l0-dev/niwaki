@@ -13,7 +13,7 @@ A label used by consumers to filter the providers. The label can be parented as 
 | --- | --- |
 | ACI class | `vzConsLbl` |
 | RN | `conslbl-{name}` |
-| Cursor | `ConsumerLabelCursor` |
+| Cursor | `L3outExternalEpgConsumerLabelCursor` |
 | Parent | {ref}`tenant.l3out.external_epg <vocab-tenant-l3out-external_epg>` |
 | Atomic | — |
 

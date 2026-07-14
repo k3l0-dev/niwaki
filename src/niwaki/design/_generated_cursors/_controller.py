@@ -19,6 +19,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Any, cast
 
 from niwaki.design._cursor import Cursor, _prune
+from niwaki.design._node import Ref
 from niwaki.design._generated_cursors._uni import _UniMakers
 
 if TYPE_CHECKING:

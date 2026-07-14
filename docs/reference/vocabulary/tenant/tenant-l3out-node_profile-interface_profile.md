@@ -13,7 +13,7 @@ The logical interface profile, which defines a common configuration that can be 
 | --- | --- |
 | ACI class | `l3extLIfP` |
 | RN | `lifp-{name}` |
-| Cursor | `InterfaceProfileCursor` |
+| Cursor | `L3outNodeProfileInterfaceProfileCursor` |
 | Parent | {ref}`tenant.l3out.node_profile <vocab-tenant-l3out-node_profile>` |
 | Atomic | — |
 

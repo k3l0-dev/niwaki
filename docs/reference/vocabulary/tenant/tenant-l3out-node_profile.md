@@ -13,7 +13,7 @@ The logical node profile defines a common configuration that can be applied to o
 | --- | --- |
 | ACI class | `l3extLNodeP` |
 | RN | `lnodep-{name}` |
-| Cursor | `NodeProfileCursor` |
+| Cursor | `L3outNodeProfileCursor` |
 | Parent | {ref}`tenant.l3out <vocab-tenant-l3out>` |
 | Atomic | — |
 

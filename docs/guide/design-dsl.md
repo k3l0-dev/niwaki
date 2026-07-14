@@ -113,6 +113,25 @@ vrf.bind(l3out="ext")               # inverse edge: the Rs lands on the L3Out si
 Contract verbs are the EPG shorthand: `epg.provide("web-api")` /
 `epg.consume("web-api")`.
 
+### When the relationship itself is configuration
+
+Most relations are pure edges, but some carry fields of their own: an
+EPG-to-domain attachment holds the resolution immediacy, a filter attached to
+a subject holds its `directives` (this is where contract logging lives), a
+route-control profile attachment holds its direction.  Wrap the target in
+`ref()` and set them — anywhere a plain name goes, including `bind_dn()` and
+the verbs:
+
+```python
+from niwaki.design import ref
+
+epg.bind(domain=ref("prod-phys", resolution_immediacy="immediate"))
+tn.contract("web").subject("http").bind(filter=ref("web", directives="log"))
+```
+
+The fields are validated against the relation class as you declare them, so a
+typo or an out-of-range value fails on the spot — not on the wire.
+
 Three escapes when the closed world is not enough:
 
 `bind_dn(alias=dn)`

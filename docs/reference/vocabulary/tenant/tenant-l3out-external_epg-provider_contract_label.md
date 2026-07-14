@@ -13,7 +13,7 @@ A label identifying a contract. A contract label can be parented by the relation
 | --- | --- |
 | ACI class | `vzProvCtrctLbl` |
 | RN | `pCtrctLbl-{name}` |
-| Cursor | `ProviderContractLabelCursor` |
+| Cursor | `L3outExternalEpgProviderContractLabelCursor` |
 | Parent | {ref}`tenant.l3out.external_epg <vocab-tenant-l3out-external_epg>` |
 | Atomic | — |
 

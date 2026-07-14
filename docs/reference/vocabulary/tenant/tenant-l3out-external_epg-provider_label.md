@@ -13,7 +13,7 @@ A label used by a provider for specifying its identity. The parent can be either
 | --- | --- |
 | ACI class | `vzProvLbl` |
 | RN | `provlbl-{name}` |
-| Cursor | `ProviderLabelCursor` |
+| Cursor | `L3outExternalEpgProviderLabelCursor` |
 | Parent | {ref}`tenant.l3out.external_epg <vocab-tenant-l3out-external_epg>` |
 | Atomic | — |
 

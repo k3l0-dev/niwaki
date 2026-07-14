@@ -243,8 +243,24 @@ class TestBindDeclaration:
 
     def test_provide_consume_record_on_epg(self) -> None:
         epg = tenant("prod").app("a").epg("web").provide("http").consume("db")
-        kinds = [(b.kind, b.rs_aci_class, b.target_name) for b in epg.design_node.binds]
-        assert kinds == [("provide", "fvRsProv", "http"), ("consume", "fvRsCons", "db")]
+        kinds = [(b.kind, b.alias, b.rs_aci_class, b.target_name) for b in epg.design_node.binds]
+        assert kinds == [
+            ("verb", "provide", "fvRsProv", "http"),
+            ("verb", "consume", "fvRsCons", "db"),
+        ]
+
+    def test_intra_epg_records_on_epg_and_esg(self) -> None:
+        """The third curated verb rides the same data-driven dispatcher."""
+        epg = tenant("prod").app("a").epg("web").intra_epg("isolate")
+        esg = tenant("prod").app("a").esg("secure").intra_epg("isolate")
+        for cursor in (epg, esg):
+            (bind,) = cursor.design_node.binds
+            assert (bind.kind, bind.alias, bind.rs_aci_class) == (
+                "verb",
+                "intra_epg",
+                "fvRsIntraEpg",
+            )
+            assert bind.target_name == "isolate"
 
     def test_provide_outside_epg_raises(self) -> None:
         with pytest.raises(DesignError, match="contract verbs apply to EPGs"):

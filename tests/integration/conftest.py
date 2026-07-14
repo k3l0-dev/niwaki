@@ -144,6 +144,16 @@ AAEP_DN = f"uni/infra/attentp-{AAEP}"
 
 TENANT = "niwaki-showcase"
 TENANT_DEV = "niwaki-showcase-dev"
+
+# ── Acts 5-6: observability and the L2 edge ─────────────────────────────────
+SPAN_FILTER_GRP = "niwaki-span-filters"
+NETFLOW_RECORD = "niwaki-netflow-rec"
+NETFLOW_EXPORTER = "niwaki-netflow-exp"
+NETFLOW_MONITOR = "niwaki-netflow-mon"
+L2_DOM = "niwaki-l2"
+MGMT_TENANT = "mgmt"
+OOB_EPG = "niwaki-oob-epg"
+EXT_MGMT = "niwaki-ext-mgmt"
 VPC_PATH_DN = f"topology/pod-1/protpaths-{LEAF1_ID}-{LEAF2_ID}/pathep-[{VPC_PG}]"
 
 IF_POLICIES = {  # name → facade jargon maker on infra (used by the wipes)
@@ -195,6 +205,48 @@ def wipe_access(aci: Niwaki) -> None:
             getattr(infra, maker)(name).delete()
 
 
+def wipe_observability(aci: Niwaki) -> None:
+    """Remove the infra-side objects act 5 owns (its tenant side goes with the
+    tenant).  Each act wipes only what it owns — act 6 must not delete these."""
+    import contextlib
+
+    infra = aci.root.infra()
+    for node in (
+        infra.netflow_monitor(NETFLOW_MONITOR),  # children before their targets
+        infra.netflow_exporter(NETFLOW_EXPORTER),
+        infra.netflow_record(NETFLOW_RECORD),
+        infra.filter_group(SPAN_FILTER_GRP),
+    ):
+        with contextlib.suppress(Exception):
+            node.delete()
+
+
+def wipe_edge(aci: Niwaki) -> None:
+    """Remove the objects act 6 owns outside the tenant (the L2 domain)."""
+    import contextlib
+
+    with contextlib.suppress(Exception):
+        aci.root.l2_dom(L2_DOM).delete()
+
+
+def wipe_management(aci: Niwaki) -> None:
+    """Remove the two EPGs act 6 owns in the management tenant.
+
+    Only ours (``niwaki-*``): the APIC's own ``default`` out-of-band EPG is
+    never touched — deleting it, or binding nodes to ours, would rewrite the
+    fabric's management access.
+    """
+    import contextlib
+
+    mgmt = aci.tenant(MGMT_TENANT)
+    for node in (
+        mgmt.management_profile("default").out_of_band_epg(OOB_EPG),
+        mgmt.external_management_entity("default").external_management_epg(EXT_MGMT),
+    ):
+        with contextlib.suppress(Exception):
+            node.delete()
+
+
 def wipe_fabric(aci: Niwaki) -> None:
     """Remove act-1 objects (named fabric policies; node registration stays —
     unregistering simulator nodes mid-suite would break the following acts)."""
@@ -217,5 +269,8 @@ def wipe_fabric(aci: Niwaki) -> None:
 def wipe_all(aci: Niwaki) -> None:
     """Full walkthrough cleanup, in reverse dependency order."""
     wipe_tenant(aci)
+    wipe_observability(aci)
+    wipe_edge(aci)
+    wipe_management(aci)
     wipe_access(aci)
     wipe_fabric(aci)

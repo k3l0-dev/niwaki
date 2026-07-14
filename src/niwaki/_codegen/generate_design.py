@@ -47,9 +47,11 @@ from __future__ import annotations
 import sys
 import textwrap
 from enum import StrEnum
+from functools import cache
 from pathlib import Path
-from typing import Annotated, Literal, NamedTuple, get_args, get_origin
+from typing import Annotated, Any, Literal, NamedTuple, get_args, get_origin
 
+from niwaki._codegen._label_utils import label_to_snake
 from niwaki.design._cursor import _load_class, _tables
 from niwaki.models.base import ManagedObject
 
@@ -92,6 +94,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Any, cast
 
 from niwaki.design._cursor import Cursor, _prune
+from niwaki.design._node import Ref
 {runtime_imports}
 if TYPE_CHECKING:
 {type_imports}
@@ -117,7 +120,9 @@ class _Position(NamedTuple):
 
 # Base-cursor methods the generated classes narrow ON PURPOSE (typed
 # signatures delegating to the runtime) — everything else is off-limits.
-_TYPED_NARROWINGS = frozenset({"set", "bind", "bind_dn", "provide", "consume"})
+# A curated verb may narrow its base-cursor twin (``provide``, ``consume``,
+# ``intra_epg``); every other collision is a bug.
+_TYPED_NARROWINGS = frozenset({"set", "bind", "bind_dn"})
 
 
 def _reserved_cursor_api() -> frozenset[str]:
@@ -129,7 +134,12 @@ def _reserved_cursor_api() -> frozenset[str]:
     """
     from niwaki.design._cursor import Cursor
 
-    return frozenset(name for name in dir(Cursor) if not name.startswith("_")) - _TYPED_NARROWINGS
+    curated_verbs = {verb for table in _tables().verbs.values() for verb in table}
+    return (
+        frozenset(name for name in dir(Cursor) if not name.startswith("_"))
+        - _TYPED_NARROWINGS
+        - curated_verbs
+    )
 
 
 def _positions() -> dict[str, _Position]:
@@ -259,6 +269,29 @@ def _field_params(cls: type[ManagedObject]) -> tuple[list[tuple[str, str]], set[
 def _sugar_params(aci_class: str) -> list[tuple[str, str]]:
     """Curated sugar parameters of *aci_class* (from ``vocabulary.yaml``)."""
     return list(_tables().sugar.get(aci_class, {}).items())
+
+
+@cache
+def _jargon() -> dict[str, str]:
+    """ACI class → short name, from the ``jargon`` section of the vocabulary.
+
+    The runtime tables deliberately ignore that section (it feeds CHILD_MAP and
+    the facade); the generator reads it to name a verb's parameter after what
+    the verb points at — ``provide(contract)``, ``ingress_dpp(dpp_policy)``.
+    """
+    import yaml
+
+    with (Path(__file__).parent.parent / "domain" / "vocabulary.yaml").open(encoding="utf-8") as fh:
+        data: dict[str, Any] = yaml.safe_load(fh)
+    jargon: dict[str, str] = data.get("jargon", {})
+    return jargon
+
+
+def _verb_param(target_aci_class: str) -> str:
+    """Name a verb's parameter after its target's jargon (fallback: snake case)."""
+    if name := _jargon().get(target_aci_class):
+        return name
+    return label_to_snake(target_aci_class)
 
 
 def _alias_targets_by_dn(owner_aci_class: str, target_aci_class: str) -> bool:
@@ -501,7 +534,7 @@ def _render_cursor(
             if _alias_targets_by_dn(level.aci_class, target):
                 dn_aliases.append(alias)
     if aliases:
-        alias_params = [(a, "str | None") for a in aliases]
+        alias_params = [(a, "str | Ref | None") for a in aliases]
         lines.extend(_render_signature("bind", [], alias_params, cursor_name))
         lines.append('        """Declare lazy Rs references (resolved at push time)."""')
         lines.append('        params = {k: v for k, v in locals().items() if k != "self"}')
@@ -509,7 +542,7 @@ def _render_cursor(
         lines.append("        return self")
         lines.append("")
     if dn_aliases:
-        alias_params = [(a, "str | None") for a in dn_aliases]
+        alias_params = [(a, "str | Ref | None") for a in dn_aliases]
         lines.extend(_render_signature("bind_dn", [], alias_params, cursor_name))
         lines.append('        """Reference objects outside the design by raw DN."""')
         lines.append('        params = {k: v for k, v in locals().items() if k != "self"}')
@@ -517,12 +550,19 @@ def _render_cursor(
         lines.append("        return self")
         lines.append("")
 
-    # Contract verbs (typed narrowing of the runtime methods).
+    # Curated verbs (typed narrowing of the runtime dispatcher).  A verb names
+    # its Rs class upfront — that is what lets it reach a target the automatic
+    # resolution cannot (two relations to the same class: provide/consume,
+    # ingress/egress policing).
     if tables.verbs.get(pos.aci_class):
-        for verb in tables.verbs[pos.aci_class]:
-            lines.append(f"    def {verb}(self, contract: str) -> {cursor_name}:")
-            lines.append(f'        """Declare this EPG {verb}s *contract* (lazy)."""')
-            lines.append(f"        Cursor.{verb}(self, contract)")
+        for verb, spec in tables.verbs[pos.aci_class].items():
+            param = _verb_param(spec["target"])
+            lines.append(f"    def {verb}(self, {param}: str | Ref) -> {cursor_name}:")
+            lines.append(
+                f'        """Reference the {spec["target"]} *{param}* '
+                f'through ``{spec["rs"]}`` (lazy)."""'
+            )
+            lines.append(f'        Cursor._verb(self, "{verb}", {param})')
             lines.append("        return self")
             lines.append("")
 

@@ -13,10 +13,48 @@ VRFs, bridge domains, application profiles, EPGs, contracts and filters — one 
   - {ref}`tenant.app <vocab-tenant-app>` — `fvAp`, 5 attributes
     - {ref}`tenant.app.epg <vocab-tenant-app-epg>` — `fvAEPg`, 12 attributes
       - {ref}`tenant.app.epg.static_path <vocab-tenant-app-epg-static_path>` — `fvRsPathAtt`, 6 attributes
+      - {ref}`tenant.app.epg.fc_path <vocab-tenant-app-epg-fc_path>` — `fvRsFcPathAtt`, 4 attributes
+      - {ref}`tenant.app.epg.subnet <vocab-tenant-app-epg-subnet>` — `fvSubnet`, 8 attributes
+      - {ref}`tenant.app.epg.static_endpoint <vocab-tenant-app-epg-static_endpoint>` — `fvStCEp`, 6 attributes
+        - {ref}`tenant.app.epg.static_endpoint.static_ip <vocab-tenant-app-epg-static_endpoint-static_ip>` — `fvStIp`, 1 attributes
+      - {ref}`tenant.app.epg.criterion <vocab-tenant-app-epg-criterion>` — `fvCrtrn`, 7 attributes
+        - {ref}`tenant.app.epg.criterion.sub_criterion <vocab-tenant-app-epg-criterion-sub_criterion>` — `fvSCrtrn`, 5 attributes
+          - {ref}`tenant.app.epg.criterion.sub_criterion.vm_attribute <vocab-tenant-app-epg-criterion-sub_criterion-vm_attribute>` — `fvVmAttr`, 9 attributes
+        - {ref}`tenant.app.epg.criterion.ip_attribute <vocab-tenant-app-epg-criterion-ip_attribute>` — `fvIpAttr`, 6 attributes
+        - {ref}`tenant.app.epg.criterion.mac_attribute <vocab-tenant-app-epg-criterion-mac_attribute>` — `fvMacAttr`, 5 attributes
+        - {ref}`tenant.app.epg.criterion.vm_attribute <vocab-tenant-app-epg-criterion-vm_attribute>` — `fvVmAttr`, 9 attributes
+        - {ref}`tenant.app.epg.criterion.dns_attribute <vocab-tenant-app-epg-criterion-dns_attribute>` — `fvDnsAttr`, 5 attributes
+      - {ref}`tenant.app.epg.provider_label <vocab-tenant-app-epg-provider_label>` — `vzProvLbl`, 6 attributes
+      - {ref}`tenant.app.epg.consumer_label <vocab-tenant-app-epg-consumer_label>` — `vzConsLbl`, 5 attributes
+      - {ref}`tenant.app.epg.provider_subject_label <vocab-tenant-app-epg-provider_subject_label>` — `vzProvSubjLbl`, 6 attributes
+      - {ref}`tenant.app.epg.consumer_subject_label <vocab-tenant-app-epg-consumer_subject_label>` — `vzConsSubjLbl`, 6 attributes
+      - {ref}`tenant.app.epg.provider_contract_label <vocab-tenant-app-epg-provider_contract_label>` — `vzProvCtrctLbl`, 5 attributes
+      - {ref}`tenant.app.epg.consumer_contract_label <vocab-tenant-app-epg-consumer_contract_label>` — `vzConsCtrctLbl`, 5 attributes
+      - {ref}`tenant.app.epg.virtual_ip <vocab-tenant-app-epg-virtual_ip>` — `fvVip`, 5 attributes
+    - {ref}`tenant.app.esg <vocab-tenant-app-esg>` — `fvESg`, 9 attributes
+      - {ref}`tenant.app.esg.ep_selector <vocab-tenant-app-esg-ep_selector>` — `fvEPSelector`, 5 attributes
+      - {ref}`tenant.app.esg.epg_selector <vocab-tenant-app-esg-epg_selector>` — `fvEPgSelector`, 5 attributes
+      - {ref}`tenant.app.esg.tag_selector <vocab-tenant-app-esg-tag_selector>` — `fvTagSelector`, 7 attributes
+      - {ref}`tenant.app.esg.provider_label <vocab-tenant-app-esg-provider_label>` — `vzProvLbl`, 6 attributes
+      - {ref}`tenant.app.esg.consumer_label <vocab-tenant-app-esg-consumer_label>` — `vzConsLbl`, 5 attributes
+      - {ref}`tenant.app.esg.provider_subject_label <vocab-tenant-app-esg-provider_subject_label>` — `vzProvSubjLbl`, 6 attributes
+      - {ref}`tenant.app.esg.consumer_subject_label <vocab-tenant-app-esg-consumer_subject_label>` — `vzConsSubjLbl`, 6 attributes
+      - {ref}`tenant.app.esg.provider_contract_label <vocab-tenant-app-esg-provider_contract_label>` — `vzProvCtrctLbl`, 5 attributes
+      - {ref}`tenant.app.esg.consumer_contract_label <vocab-tenant-app-esg-consumer_contract_label>` — `vzConsCtrctLbl`, 5 attributes
   - {ref}`tenant.bd <vocab-tenant-bd>` — `fvBD`, 27 attributes
     - {ref}`tenant.bd.subnet <vocab-tenant-bd-subnet>` — `fvSubnet`, 8 attributes
   - {ref}`tenant.vrf <vocab-tenant-vrf>` — `fvCtx`, 10 attributes
     - {ref}`tenant.vrf.pim <vocab-tenant-vrf-pim>` — `pimCtxP`, 6 attributes
+    - {ref}`tenant.vrf.vzany <vocab-tenant-vrf-vzany>` — `vzAny`, 4 attributes
+      - {ref}`tenant.vrf.vzany.provider_label <vocab-tenant-vrf-vzany-provider_label>` — `vzProvLbl`, 6 attributes
+      - {ref}`tenant.vrf.vzany.consumer_label <vocab-tenant-vrf-vzany-consumer_label>` — `vzConsLbl`, 5 attributes
+      - {ref}`tenant.vrf.vzany.provider_subject_label <vocab-tenant-vrf-vzany-provider_subject_label>` — `vzProvSubjLbl`, 6 attributes
+      - {ref}`tenant.vrf.vzany.consumer_subject_label <vocab-tenant-vrf-vzany-consumer_subject_label>` — `vzConsSubjLbl`, 6 attributes
+      - {ref}`tenant.vrf.vzany.provider_contract_label <vocab-tenant-vrf-vzany-provider_contract_label>` — `vzProvCtrctLbl`, 5 attributes
+      - {ref}`tenant.vrf.vzany.consumer_contract_label <vocab-tenant-vrf-vzany-consumer_contract_label>` — `vzConsCtrctLbl`, 5 attributes
+    - {ref}`tenant.vrf.fallback_route_group <vocab-tenant-vrf-fallback_route_group>` — `fvFBRGroup`, 2 attributes
+      - {ref}`tenant.vrf.fallback_route_group.fallback_route <vocab-tenant-vrf-fallback_route_group-fallback_route>` — `fvFBRoute`, 3 attributes
+      - {ref}`tenant.vrf.fallback_route_group.fallback_member <vocab-tenant-vrf-fallback_route_group-fallback_member>` — `fvFBRMember`, 3 attributes
   - {ref}`tenant.l3out <vocab-tenant-l3out>` — `l3extOut`, 7 attributes
     - {ref}`tenant.l3out.node_profile <vocab-tenant-l3out-node_profile>` — `l3extLNodeP`, 7 attributes
       - {ref}`tenant.l3out.node_profile.interface_profile <vocab-tenant-l3out-node_profile-interface_profile>` — `l3extLIfP`, 6 attributes
@@ -61,8 +99,8 @@ VRFs, bridge domains, application profiles, EPGs, contracts and filters — one 
       - {ref}`tenant.l3out.external_epg.provider_contract_label <vocab-tenant-l3out-external_epg-provider_contract_label>` — `vzProvCtrctLbl`, 5 attributes
       - {ref}`tenant.l3out.external_epg.consumer_label <vocab-tenant-l3out-external_epg-consumer_label>` — `vzConsLbl`, 5 attributes
       - {ref}`tenant.l3out.external_epg.provider_label <vocab-tenant-l3out-external_epg-provider_label>` — `vzProvLbl`, 6 attributes
-      - {ref}`tenant.l3out.external_epg.vz_cons_subject_label <vocab-tenant-l3out-external_epg-vz_cons_subject_label>` — `vzConsSubjLbl`, 6 attributes
-      - {ref}`tenant.l3out.external_epg.vz_prov_subject_label <vocab-tenant-l3out-external_epg-vz_prov_subject_label>` — `vzProvSubjLbl`, 6 attributes
+      - {ref}`tenant.l3out.external_epg.consumer_subject_label <vocab-tenant-l3out-external_epg-consumer_subject_label>` — `vzConsSubjLbl`, 6 attributes
+      - {ref}`tenant.l3out.external_epg.provider_subject_label <vocab-tenant-l3out-external_epg-provider_subject_label>` — `vzProvSubjLbl`, 6 attributes
     - {ref}`tenant.l3out.bgp <vocab-tenant-l3out-bgp>` — `bgpExtP`, 1 attributes
     - {ref}`tenant.l3out.ospf <vocab-tenant-l3out-ospf>` — `ospfExtP`, 5 attributes
     - {ref}`tenant.l3out.eigrp <vocab-tenant-l3out-eigrp>` — `eigrpExtP`, 2 attributes
@@ -73,10 +111,45 @@ VRFs, bridge domains, application profiles, EPGs, contracts and filters — one 
       - {ref}`tenant.l3out.route_control_profile.route_control_context <vocab-tenant-l3out-route_control_profile-route_control_context>` — `rtctrlCtxP`, 4 attributes
         - {ref}`tenant.l3out.route_control_profile.route_control_context.route_context_scope <vocab-tenant-l3out-route_control_profile-route_control_context-route_context_scope>` — `rtctrlScope`, 2 attributes
     - {ref}`tenant.l3out.route_target_instrumentation_profile <vocab-tenant-l3out-route_target_instrumentation_profile>` — `bgpRtTargetInstrP`, 5 attributes
+  - {ref}`tenant.l2out <vocab-tenant-l2out>` — `l2extOut`, 5 attributes
+    - {ref}`tenant.l2out.node_profile <vocab-tenant-l2out-node_profile>` — `l2extLNodeP`, 5 attributes
+      - {ref}`tenant.l2out.node_profile.interface_profile <vocab-tenant-l2out-node_profile-interface_profile>` — `l2extLIfP`, 5 attributes
+        - {ref}`tenant.l2out.node_profile.interface_profile.static_path <vocab-tenant-l2out-node_profile-interface_profile-static_path>` — `l2extRsPathL2OutAtt`, 3 attributes
+    - {ref}`tenant.l2out.external_epg <vocab-tenant-l2out-external_epg>` — `l2extInstP`, 8 attributes
+      - {ref}`tenant.l2out.external_epg.subnet <vocab-tenant-l2out-external_epg-subnet>` — `fvSubnet`, 8 attributes
+      - {ref}`tenant.l2out.external_epg.provider_label <vocab-tenant-l2out-external_epg-provider_label>` — `vzProvLbl`, 6 attributes
+      - {ref}`tenant.l2out.external_epg.consumer_label <vocab-tenant-l2out-external_epg-consumer_label>` — `vzConsLbl`, 5 attributes
+      - {ref}`tenant.l2out.external_epg.provider_subject_label <vocab-tenant-l2out-external_epg-provider_subject_label>` — `vzProvSubjLbl`, 6 attributes
+      - {ref}`tenant.l2out.external_epg.consumer_subject_label <vocab-tenant-l2out-external_epg-consumer_subject_label>` — `vzConsSubjLbl`, 6 attributes
+      - {ref}`tenant.l2out.external_epg.provider_contract_label <vocab-tenant-l2out-external_epg-provider_contract_label>` — `vzProvCtrctLbl`, 5 attributes
+      - {ref}`tenant.l2out.external_epg.consumer_contract_label <vocab-tenant-l2out-external_epg-consumer_contract_label>` — `vzConsCtrctLbl`, 5 attributes
+  - {ref}`tenant.dot1q_tunnel <vocab-tenant-dot1q_tunnel>` — `fvTnlEPg`, 10 attributes
+  - {ref}`tenant.endpoint_tags <vocab-tenant-endpoint_tags>` — `fvEpTags`, 0 attributes
+    - {ref}`tenant.endpoint_tags.mac_endpoint <vocab-tenant-endpoint_tags-mac_endpoint>` — `fvEpMacTag`, 5 attributes
+    - {ref}`tenant.endpoint_tags.ip_endpoint <vocab-tenant-endpoint_tags-ip_endpoint>` — `fvEpIpTag`, 4 attributes
+  - {ref}`tenant.ip_address_pool <vocab-tenant-ip_address_pool>` — `fvnsAddrInst`, 7 attributes
+    - {ref}`tenant.ip_address_pool.ip_address_block <vocab-tenant-ip_address_pool-ip_address_block>` — `fvnsUcastAddrBlk`, 4 attributes
   - {ref}`tenant.filter <vocab-tenant-filter>` — `vzFilter`, 4 attributes
     - {ref}`tenant.filter.entry <vocab-tenant-filter-entry>` — `vzEntry`, 17 attributes
   - {ref}`tenant.contract <vocab-tenant-contract>` — `vzBrCP`, 9 attributes
     - {ref}`tenant.contract.subject <vocab-tenant-contract-subject>` — `vzSubj`, 7 attributes
+      - {ref}`tenant.contract.subject.in_term <vocab-tenant-contract-subject-in_term>` — `vzInTerm`, 4 attributes
+      - {ref}`tenant.contract.subject.out_term <vocab-tenant-contract-subject-out_term>` — `vzOutTerm`, 4 attributes
+      - {ref}`tenant.contract.subject.exception <vocab-tenant-contract-subject-exception>` — `vzException`, 4 attributes
+      - {ref}`tenant.contract.subject.provider_subject_label <vocab-tenant-contract-subject-provider_subject_label>` — `vzProvSubjLbl`, 6 attributes
+      - {ref}`tenant.contract.subject.consumer_subject_label <vocab-tenant-contract-subject-consumer_subject_label>` — `vzConsSubjLbl`, 6 attributes
+    - {ref}`tenant.contract.exception <vocab-tenant-contract-exception>` — `vzException`, 4 attributes
+  - {ref}`tenant.taboo_contract <vocab-tenant-taboo_contract>` — `vzTaboo`, 4 attributes
+    - {ref}`tenant.taboo_contract.subject <vocab-tenant-taboo_contract-subject>` — `vzTSubj`, 2 attributes
+  - {ref}`tenant.imported_contract <vocab-tenant-imported_contract>` — `vzCPIf`, 4 attributes
+  - {ref}`tenant.oob_contract <vocab-tenant-oob_contract>` — `vzOOBBrCP`, 8 attributes
+    - {ref}`tenant.oob_contract.subject <vocab-tenant-oob_contract-subject>` — `vzSubj`, 7 attributes
+      - {ref}`tenant.oob_contract.subject.in_term <vocab-tenant-oob_contract-subject-in_term>` — `vzInTerm`, 4 attributes
+      - {ref}`tenant.oob_contract.subject.out_term <vocab-tenant-oob_contract-subject-out_term>` — `vzOutTerm`, 4 attributes
+      - {ref}`tenant.oob_contract.subject.exception <vocab-tenant-oob_contract-subject-exception>` — `vzException`, 4 attributes
+      - {ref}`tenant.oob_contract.subject.provider_subject_label <vocab-tenant-oob_contract-subject-provider_subject_label>` — `vzProvSubjLbl`, 6 attributes
+      - {ref}`tenant.oob_contract.subject.consumer_subject_label <vocab-tenant-oob_contract-subject-consumer_subject_label>` — `vzConsSubjLbl`, 6 attributes
+    - {ref}`tenant.oob_contract.exception <vocab-tenant-oob_contract-exception>` — `vzException`, 4 attributes
   - {ref}`tenant.bgp_timers_policy <vocab-tenant-bgp_timers_policy>` — `bgpCtxPol`, 9 attributes
   - {ref}`tenant.bgp_address_family_context_policy <vocab-tenant-bgp_address_family_context_policy>` — `bgpCtxAfPol`, 11 attributes
     - {ref}`tenant.bgp_address_family_context_policy.bgp_additional_path_context_policy <vocab-tenant-bgp_address_family_context_policy-bgp_additional_path_context_policy>` — `bgpCtxAddlPathPol`, 5 attributes
@@ -129,6 +202,34 @@ VRFs, bridge domains, application profiles, EPGs, contracts and filters — one 
     - {ref}`tenant.tenant_keychain_policy.key_policy <vocab-tenant-tenant_keychain_policy-key_policy>` — `fvKeyPol`, 8 attributes
   - {ref}`tenant.custom_qos_policy <vocab-tenant-custom_qos_policy>` — `qosCustomPol`, 4 attributes
   - {ref}`tenant.dpp_policy <vocab-tenant-dpp_policy>` — `qosDppPol`, 25 attributes
+  - {ref}`tenant.qos_requirement <vocab-tenant-qos_requirement>` — `qosRequirement`, 4 attributes
+    - {ref}`tenant.qos_requirement.dscp_marking <vocab-tenant-qos_requirement-dscp_marking>` — `qosEpDscpMarking`, 5 attributes
+  - {ref}`tenant.mpls_custom_qos_policy <vocab-tenant-mpls_custom_qos_policy>` — `qosMplsCustomPol`, 4 attributes
+    - {ref}`tenant.mpls_custom_qos_policy.mpls_ingress_rule <vocab-tenant-mpls_custom_qos_policy-mpls_ingress_rule>` — `qosMplsIngressRule`, 7 attributes
+    - {ref}`tenant.mpls_custom_qos_policy.mpls_egress_rule <vocab-tenant-mpls_custom_qos_policy-mpls_egress_rule>` — `qosMplsEgressRule`, 7 attributes
+  - {ref}`tenant.dscp_translation_policy <vocab-tenant-dscp_translation_policy>` — `qosDscpTransPol`, 15 attributes
+  - {ref}`tenant.netflow_monitor <vocab-tenant-netflow_monitor>` — `netflowMonitorPol`, 4 attributes
+  - {ref}`tenant.netflow_exporter <vocab-tenant-netflow_exporter>` — `netflowExporterPol`, 10 attributes
+  - {ref}`tenant.netflow_record <vocab-tenant-netflow_record>` — `netflowRecordPol`, 6 attributes
+  - {ref}`tenant.span_source_group <vocab-tenant-span_source_group>` — `spanSrcGrp`, 5 attributes
+    - {ref}`tenant.span_source_group.span_source <vocab-tenant-span_source_group-span_source>` — `spanSrc`, 6 attributes
+    - {ref}`tenant.span_source_group.span_label <vocab-tenant-span_source_group-span_label>` — `spanSpanLbl`, 5 attributes
+  - {ref}`tenant.span_destination_group <vocab-tenant-span_destination_group>` — `spanDestGrp`, 4 attributes
+    - {ref}`tenant.span_destination_group.span_destination <vocab-tenant-span_destination_group-span_destination>` — `spanDest`, 4 attributes
+  - {ref}`tenant.monitoring_policy <vocab-tenant-monitoring_policy>` — `monEPGPol`, 4 attributes
+  - {ref}`tenant.management_profile <vocab-tenant-management_profile>` — `mgmtMgmtP`, 4 attributes
+    - {ref}`tenant.management_profile.in_band_epg <vocab-tenant-management_profile-in_band_epg>` — `mgmtInB`, 8 attributes
+      - {ref}`tenant.management_profile.in_band_epg.subnet <vocab-tenant-management_profile-in_band_epg-subnet>` — `fvSubnet`, 8 attributes
+      - {ref}`tenant.management_profile.in_band_epg.static_route <vocab-tenant-management_profile-in_band_epg-static_route>` — `mgmtStaticRoute`, 2 attributes
+    - {ref}`tenant.management_profile.out_of_band_epg <vocab-tenant-management_profile-out_of_band_epg>` — `mgmtOoB`, 3 attributes
+      - {ref}`tenant.management_profile.out_of_band_epg.static_route <vocab-tenant-management_profile-out_of_band_epg-static_route>` — `mgmtStaticRoute`, 2 attributes
+  - {ref}`tenant.external_management_entity <vocab-tenant-external_management_entity>` — `mgmtExtMgmtEntity`, 4 attributes
+    - {ref}`tenant.external_management_entity.external_management_epg <vocab-tenant-external_management_entity-external_management_epg>` — `mgmtInstP`, 3 attributes
+      - {ref}`tenant.external_management_entity.external_management_epg.external_subnet <vocab-tenant-external_management_entity-external_management_epg-external_subnet>` — `mgmtSubnet`, 3 attributes
+  - {ref}`tenant.access_client_profile <vocab-tenant-access_client_profile>` — `infraClP`, 4 attributes
+    - {ref}`tenant.access_client_profile.access_client_epg <vocab-tenant-access_client_profile-access_client_epg>` — `infraCEPg`, 7 attributes
+  - {ref}`tenant.access_function_profile <vocab-tenant-access_function_profile>` — `infraProvP`, 4 attributes
+    - {ref}`tenant.access_function_profile.access_function_provider <vocab-tenant-access_function_profile-access_function_provider>` — `infraPEPg`, 7 attributes
   - {ref}`tenant.service_container <vocab-tenant-service_container>` — `vnsSvcCont`, 0 attributes
     - {ref}`tenant.service_container.service_redirect_policy <vocab-tenant-service_container-service_redirect_policy>` — `vnsSvcRedirectPol`, 14 attributes
       - {ref}`tenant.service_container.service_redirect_policy.destination_of_redirected_traffic <vocab-tenant-service_container-service_redirect_policy-destination_of_redirected_traffic>` — `vnsRedirectDest`, 8 attributes
@@ -145,10 +246,48 @@ tenant/tenant
 tenant/tenant-app
 tenant/tenant-app-epg
 tenant/tenant-app-epg-static_path
+tenant/tenant-app-epg-fc_path
+tenant/tenant-app-epg-subnet
+tenant/tenant-app-epg-static_endpoint
+tenant/tenant-app-epg-static_endpoint-static_ip
+tenant/tenant-app-epg-criterion
+tenant/tenant-app-epg-criterion-sub_criterion
+tenant/tenant-app-epg-criterion-sub_criterion-vm_attribute
+tenant/tenant-app-epg-criterion-ip_attribute
+tenant/tenant-app-epg-criterion-mac_attribute
+tenant/tenant-app-epg-criterion-vm_attribute
+tenant/tenant-app-epg-criterion-dns_attribute
+tenant/tenant-app-epg-provider_label
+tenant/tenant-app-epg-consumer_label
+tenant/tenant-app-epg-provider_subject_label
+tenant/tenant-app-epg-consumer_subject_label
+tenant/tenant-app-epg-provider_contract_label
+tenant/tenant-app-epg-consumer_contract_label
+tenant/tenant-app-epg-virtual_ip
+tenant/tenant-app-esg
+tenant/tenant-app-esg-ep_selector
+tenant/tenant-app-esg-epg_selector
+tenant/tenant-app-esg-tag_selector
+tenant/tenant-app-esg-provider_label
+tenant/tenant-app-esg-consumer_label
+tenant/tenant-app-esg-provider_subject_label
+tenant/tenant-app-esg-consumer_subject_label
+tenant/tenant-app-esg-provider_contract_label
+tenant/tenant-app-esg-consumer_contract_label
 tenant/tenant-bd
 tenant/tenant-bd-subnet
 tenant/tenant-vrf
 tenant/tenant-vrf-pim
+tenant/tenant-vrf-vzany
+tenant/tenant-vrf-vzany-provider_label
+tenant/tenant-vrf-vzany-consumer_label
+tenant/tenant-vrf-vzany-provider_subject_label
+tenant/tenant-vrf-vzany-consumer_subject_label
+tenant/tenant-vrf-vzany-provider_contract_label
+tenant/tenant-vrf-vzany-consumer_contract_label
+tenant/tenant-vrf-fallback_route_group
+tenant/tenant-vrf-fallback_route_group-fallback_route
+tenant/tenant-vrf-fallback_route_group-fallback_member
 tenant/tenant-l3out
 tenant/tenant-l3out-node_profile
 tenant/tenant-l3out-node_profile-interface_profile
@@ -193,8 +332,8 @@ tenant/tenant-l3out-external_epg-consumer_contract_label
 tenant/tenant-l3out-external_epg-provider_contract_label
 tenant/tenant-l3out-external_epg-consumer_label
 tenant/tenant-l3out-external_epg-provider_label
-tenant/tenant-l3out-external_epg-vz_cons_subject_label
-tenant/tenant-l3out-external_epg-vz_prov_subject_label
+tenant/tenant-l3out-external_epg-consumer_subject_label
+tenant/tenant-l3out-external_epg-provider_subject_label
 tenant/tenant-l3out-bgp
 tenant/tenant-l3out-ospf
 tenant/tenant-l3out-eigrp
@@ -205,10 +344,45 @@ tenant/tenant-l3out-route_control_profile
 tenant/tenant-l3out-route_control_profile-route_control_context
 tenant/tenant-l3out-route_control_profile-route_control_context-route_context_scope
 tenant/tenant-l3out-route_target_instrumentation_profile
+tenant/tenant-l2out
+tenant/tenant-l2out-node_profile
+tenant/tenant-l2out-node_profile-interface_profile
+tenant/tenant-l2out-node_profile-interface_profile-static_path
+tenant/tenant-l2out-external_epg
+tenant/tenant-l2out-external_epg-subnet
+tenant/tenant-l2out-external_epg-provider_label
+tenant/tenant-l2out-external_epg-consumer_label
+tenant/tenant-l2out-external_epg-provider_subject_label
+tenant/tenant-l2out-external_epg-consumer_subject_label
+tenant/tenant-l2out-external_epg-provider_contract_label
+tenant/tenant-l2out-external_epg-consumer_contract_label
+tenant/tenant-dot1q_tunnel
+tenant/tenant-endpoint_tags
+tenant/tenant-endpoint_tags-mac_endpoint
+tenant/tenant-endpoint_tags-ip_endpoint
+tenant/tenant-ip_address_pool
+tenant/tenant-ip_address_pool-ip_address_block
 tenant/tenant-filter
 tenant/tenant-filter-entry
 tenant/tenant-contract
 tenant/tenant-contract-subject
+tenant/tenant-contract-subject-in_term
+tenant/tenant-contract-subject-out_term
+tenant/tenant-contract-subject-exception
+tenant/tenant-contract-subject-provider_subject_label
+tenant/tenant-contract-subject-consumer_subject_label
+tenant/tenant-contract-exception
+tenant/tenant-taboo_contract
+tenant/tenant-taboo_contract-subject
+tenant/tenant-imported_contract
+tenant/tenant-oob_contract
+tenant/tenant-oob_contract-subject
+tenant/tenant-oob_contract-subject-in_term
+tenant/tenant-oob_contract-subject-out_term
+tenant/tenant-oob_contract-subject-exception
+tenant/tenant-oob_contract-subject-provider_subject_label
+tenant/tenant-oob_contract-subject-consumer_subject_label
+tenant/tenant-oob_contract-exception
 tenant/tenant-bgp_timers_policy
 tenant/tenant-bgp_address_family_context_policy
 tenant/tenant-bgp_address_family_context_policy-bgp_additional_path_context_policy
@@ -261,6 +435,34 @@ tenant/tenant-tenant_keychain_policy
 tenant/tenant-tenant_keychain_policy-key_policy
 tenant/tenant-custom_qos_policy
 tenant/tenant-dpp_policy
+tenant/tenant-qos_requirement
+tenant/tenant-qos_requirement-dscp_marking
+tenant/tenant-mpls_custom_qos_policy
+tenant/tenant-mpls_custom_qos_policy-mpls_ingress_rule
+tenant/tenant-mpls_custom_qos_policy-mpls_egress_rule
+tenant/tenant-dscp_translation_policy
+tenant/tenant-netflow_monitor
+tenant/tenant-netflow_exporter
+tenant/tenant-netflow_record
+tenant/tenant-span_source_group
+tenant/tenant-span_source_group-span_source
+tenant/tenant-span_source_group-span_label
+tenant/tenant-span_destination_group
+tenant/tenant-span_destination_group-span_destination
+tenant/tenant-monitoring_policy
+tenant/tenant-management_profile
+tenant/tenant-management_profile-in_band_epg
+tenant/tenant-management_profile-in_band_epg-subnet
+tenant/tenant-management_profile-in_band_epg-static_route
+tenant/tenant-management_profile-out_of_band_epg
+tenant/tenant-management_profile-out_of_band_epg-static_route
+tenant/tenant-external_management_entity
+tenant/tenant-external_management_entity-external_management_epg
+tenant/tenant-external_management_entity-external_management_epg-external_subnet
+tenant/tenant-access_client_profile
+tenant/tenant-access_client_profile-access_client_epg
+tenant/tenant-access_function_profile
+tenant/tenant-access_function_profile-access_function_provider
 tenant/tenant-service_container
 tenant/tenant-service_container-service_redirect_policy
 tenant/tenant-service_container-service_redirect_policy-destination_of_redirected_traffic

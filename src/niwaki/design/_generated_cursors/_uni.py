@@ -19,6 +19,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Any, cast
 
 from niwaki.design._cursor import Cursor, _prune
+from niwaki.design._node import Ref
 
 if TYPE_CHECKING:
     from niwaki.design._generated_cursors._controller import ControllerCursor
@@ -221,6 +222,42 @@ class _UniMakers(Cursor):
             self._invoke_maker("l3_dom", (name,), _prune(params)),
         )
 
+    def l2_dom(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> L2DomCursor:
+        """Declare a ``l2extDomP`` child under the uni level.
+
+        The external bridged domain profile is a policy for managing the physical infrastructure,
+        such as ports/VLANS, that can be used by an L2 network bridged outside the fabric.
+
+        Args:
+            name: The name of the policy.
+            annotation: User annotation. Suggested format orchestrator:value
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "L2DomCursor",
+            self._invoke_maker("l2_dom", (name,), _prune(params)),
+        )
+
 
 class UniCursor(_UniMakers):
     """Typed cursor for ``polUni`` (uni level).
@@ -243,6 +280,52 @@ class UniCursor(_UniMakers):
         """Set ``polUni`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
+        return self
+
+
+class L2DomCursor(_UniMakers):
+    """Typed cursor for ``l2extDomP`` (l2_dom level).
+
+    Position: ``uni.l2_dom``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> L2DomCursor:
+        """Set ``l2extDomP`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        vlan_pool: str | Ref | None = None,
+    ) -> L2DomCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        vlan_pool: str | Ref | None = None,
+    ) -> L2DomCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -274,7 +357,7 @@ class L3DomCursor(_UniMakers):
     def bind(
         self,
         *,
-        vlan_pool: str | None = None,
+        vlan_pool: str | Ref | None = None,
     ) -> L3DomCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -284,7 +367,7 @@ class L3DomCursor(_UniMakers):
     def bind_dn(
         self,
         *,
-        vlan_pool: str | None = None,
+        vlan_pool: str | Ref | None = None,
     ) -> L3DomCursor:
         """Reference objects outside the design by raw DN."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -320,7 +403,7 @@ class PhysDomCursor(_UniMakers):
     def bind(
         self,
         *,
-        vlan_pool: str | None = None,
+        vlan_pool: str | Ref | None = None,
     ) -> PhysDomCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -330,7 +413,7 @@ class PhysDomCursor(_UniMakers):
     def bind_dn(
         self,
         *,
-        vlan_pool: str | None = None,
+        vlan_pool: str | Ref | None = None,
     ) -> PhysDomCursor:
         """Reference objects outside the design by raw DN."""
         params = {k: v for k, v in locals().items() if k != "self"}

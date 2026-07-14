@@ -4,6 +4,83 @@ All notable changes to this project are documented here.  The format follows
 [Keep a Changelog](https://keepachangelog.com/); versions follow semver
 (0.x — the API may still change between minor versions).
 
+## [0.8.0] — 2026-07-14
+
+### Added
+
+- **The EPG/ESG world enters the vocabulary.**  An application EPG now reaches
+  everything the APIC hangs under it:
+  `subnet()` (with its `l3out` and `nd_ra_prefix_policy` binds),
+  `static_endpoint()` (plus `static_ip()`, and the path/node it lives on),
+  `criterion()` — the uSeg selector, with `ip_attribute()`, `mac_attribute()`,
+  `vm_attribute()`, `dns_attribute()` and nested `sub_criterion()` —
+  `virtual_ip()` for L4-L7 VIPs, and `fc_path()` for Fibre-Channel paths.
+- **Endpoint security groups**: `app().esg()` with its selectors
+  (`ep_selector()`, `epg_selector()`, `tag_selector()`), its mandatory
+  `vrf` bind, and the contract verbs.
+- New EPG binds: `contract_master` (contract inheritance — one alias, EPG or
+  ESG alike), `imported_contract`, `taboo_contract`, `custom_qos_policy`,
+  `dpp_policy`, `monitoring_policy`, `trust_control_policy`; and the tenant
+  objects they point at: `taboo_contract()` (with its `subject()`),
+  `imported_contract()` and `monitoring_policy()`.
+- A third contract verb, `intra_epg()` (`fvRsIntraEpg`), on EPGs and ESGs.
+  Contract verbs are now fully data-driven: curating one in the vocabulary is
+  enough — the runtime no longer hardcodes the list.
+
+- **The contract world completes** (229 curated positions).  `vrf().vzany()`
+  arrives — contracts for a whole VRF, reached through relation classes of its
+  own (`vzRsAnyToProv` / `vzRsAnyToCons` / `vzRsAnyToConsIf`), which the
+  data-driven verbs absorb without a line of engine code.  A subject that stops
+  applying both ways gets one filter per direction with `in_term()` and
+  `out_term()`; `exception()` excludes an EPG from a contract, on the contract
+  or on the subject; `oob_contract()` covers out-of-band (management) contracts
+  with their own subjects.
+- The six contract labels (`provider_label()`, `consumer_label()`,
+  `provider_subject_label()`, `consumer_subject_label()`,
+  `provider_contract_label()`, `consumer_contract_label()`) are curated
+  wherever the MIT hangs them — EPG, ESG, vzAny, subject and external EPG — so
+  the `provider_label_match_criteria` attribute finally has labels to compare.
+
+- **`ref()` — a reference can configure the relationship itself.**  Most
+  relations are pure edges, but 26 curated binds resolve to a class that
+  carries fields of its own, and they were unreachable: the resolution
+  immediacy of an EPG-to-domain attachment, the `directives` of a filter under
+  a subject (this is where contract logging lives), the `direction` of a
+  route-control profile, a node's management address, an ERSPAN collector's
+  IP.  Wrap the target — `epg.bind(domain=ref("prod-phys",
+  resolution_immediacy="immediate"))` — anywhere a plain name goes, including
+  `bind_dn()` and the contract verbs.  The fields are validated against the
+  relation class at declaration time.
+
+- **Observability**: SPAN (`span_source_group()` with its sources, label and
+  filter group; `span_destination_group()` with its destinations), NetFlow
+  (`netflow_monitor()`, `netflow_exporter()`, `netflow_record()`) and QoS
+  requirements (`qos_requirement()`, with `ingress_dpp()`/`egress_dpp()` and
+  the EPG bind that reaches it).  SPAN and NetFlow are curated under the
+  tenant, under `infra` and under `fabric` alike.
+- **The L2 edge and management**: `l2out()` complete (node profile, interface
+  profile, static path, external EPG with labels and contract verbs), the
+  in-band and out-of-band management EPGs — which give the out-of-band
+  contract someone to provide and consume it — endpoint tags (what an ESG
+  `tag_selector` matches), IP address pools, and fallback route groups.
+- **The closed world is closed**: every curated `bind()` now has a declarable
+  target, except the ones the fabric discovers for you (`fabricNode`,
+  `fabricPathEp`), which is what `bind_dn()` is for.  293 curated positions,
+  up from 176 at the start of the wave.
+
+### Changed
+
+- **Renamed, on an L3Out external EPG**: the two subject-label makers were
+  curated before those classes had a name of their own and carried a generated
+  one.  They now speak the same word as everywhere else:
+  `.vz_prov_subject_label(...)` → `.provider_subject_label(...)` and
+  `.vz_cons_subject_label(...)` → `.consumer_subject_label(...)`.  Their
+  reference pages moved with them.
+- A verb's parameter is named after what it points at (`provide(contract)`,
+  `ingress_dpp(dpp_policy)`), and its flavor is read off the relation class
+  rather than assumed to be name-flavored.  Existing call sites are unaffected:
+  `provide(contract)` keeps its exact signature.
+
 ## [0.7.0] — 2026-07-13
 
 ### Added

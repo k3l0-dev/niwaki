@@ -13,7 +13,7 @@ The external network instance profile represents a group of external subnets tha
 | --- | --- |
 | ACI class | `l3extInstP` |
 | RN | `instP-{name}` |
-| Cursor | `ExternalEpgCursor` |
+| Cursor | `L3outExternalEpgCursor` |
 | Parent | {ref}`tenant.l3out <vocab-tenant-l3out>` |
 | Atomic | — |
 
@@ -42,8 +42,8 @@ Accepted as keyword arguments of `.external_epg(name)` and of `.set(**attrs)` on
 | `.provider_contract_label(name, **attrs)` | `vzProvCtrctLbl` | {ref}`tenant.l3out.external_epg.provider_contract_label <vocab-tenant-l3out-external_epg-provider_contract_label>` |
 | `.consumer_label(name, **attrs)` | `vzConsLbl` | {ref}`tenant.l3out.external_epg.consumer_label <vocab-tenant-l3out-external_epg-consumer_label>` |
 | `.provider_label(name, **attrs)` | `vzProvLbl` | {ref}`tenant.l3out.external_epg.provider_label <vocab-tenant-l3out-external_epg-provider_label>` |
-| `.vz_cons_subject_label(name, **attrs)` | `vzConsSubjLbl` | {ref}`tenant.l3out.external_epg.vz_cons_subject_label <vocab-tenant-l3out-external_epg-vz_cons_subject_label>` |
-| `.vz_prov_subject_label(name, **attrs)` | `vzProvSubjLbl` | {ref}`tenant.l3out.external_epg.vz_prov_subject_label <vocab-tenant-l3out-external_epg-vz_prov_subject_label>` |
+| `.consumer_subject_label(name, **attrs)` | `vzConsSubjLbl` | {ref}`tenant.l3out.external_epg.consumer_subject_label <vocab-tenant-l3out-external_epg-consumer_subject_label>` |
+| `.provider_subject_label(name, **attrs)` | `vzProvSubjLbl` | {ref}`tenant.l3out.external_epg.provider_subject_label <vocab-tenant-l3out-external_epg-provider_subject_label>` |
 
 ## Bind aliases
 

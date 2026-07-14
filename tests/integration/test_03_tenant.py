@@ -668,3 +668,378 @@ class Test3ProtocolPolicies:
         options = {o.name: o for o in tn.query("dhcpOption").fetch()}
         assert options["dns-server"].model_regex == "10.10.2.53"
         assert options["domain-name"].id == "15"
+
+
+# ── The EPG/ESG world (wave 2) ────────────────────────────────────────────────
+
+APP = "secure-shop"
+EPG_MASTER_DN = f"uni/tn-{TENANT}/ap-{APP}/epg-shop-master"
+EPG_SELECTED_DN = f"uni/tn-{TENANT}/ap-{APP}/epg-shop-selected"
+
+
+def epg_world_design() -> Cursor:
+    """Everything the APIC GUI hangs under an EPG and an ESG.
+
+    Attribute combinations, not one-shot samples: each enum of the new classes
+    (``fvStCEp.type``, ``fvCrtrn.match``/``scope``, ``fvVmAttr.type``/
+    ``operator``, ``fvTagSelector.valueOperator``, ESG/EPG ``prio`` and
+    ``pcEnfPref`` …) is exercised at least once, so ``test_02`` — a clean
+    replan — proves the whole surface persists as declared.
+
+    Declared parents (``vrf("prod")``, act-2's physical domain) are upserts
+    without attributes: this design coexists with the act-3 showcase in the
+    same tenant instead of fighting it.
+    """
+    return (
+        tenant(TENANT)
+        .vrf("prod")
+        .bd("secure-bd", unicast_routing=True, arp_flooding=True)
+            .bind(vrf="prod")
+            .subnet("10.30.1.1/24")
+        # Flood-on-encap gets its own BD: the APIC demands a flood BD for that
+        # flag, and then forbids microsegmentation on the same BD.
+        .bd("secure-bd-flood", unicast_routing=True, arp_flooding=True,
+            unknown_mac_unicast_action="flood")
+            .bind(vrf="prod")
+            .subnet("10.30.6.1/24")
+        .filter("secure-app").entry("https", tcp=8443)
+        # A contract belongs to one world: the APIC refuses the same one being
+        # provided/consumed by an EPG and an ESG at once.
+        .contract("secure-web").subject("web").bind(filter="secure-app")
+        .contract("secure-intra").subject("intra").bind(filter="secure-app")
+        .contract("secure-esg").subject("esg").bind(filter="secure-app")
+        .contract("secure-esg-intra").subject("esg-intra").bind(filter="secure-app")
+        .contract("secure-exported").subject("exported").bind(filter="secure-app")
+        .taboo_contract("secure-taboo").subject("deny-app").bind(filter="secure-app")
+        .imported_contract("secure-imported").bind(contract="secure-exported")
+        .monitoring_policy("secure-mon")
+        .custom_qos_policy("secure-qos")
+        .dpp_policy("secure-dpp", rate="100", rate_unit="mega", burst="200", burst_unit="mega")
+        .trust_control_policy("secure-trust", trust_arp=True, trust_nd=True)
+
+        .app(APP)
+            # ── The loaded EPG: every bind, every verb, every child ───────────
+            .epg("shop-web", qos_class="level4", preferred_group_member="exclude",
+                 flood_on_encap="disabled", shutdown=False)
+                .bind(bd="secure-bd", domain=PHYS_DOM, contract_master="shop-master",
+                      imported_contract="secure-imported", taboo_contract="secure-taboo",
+                      custom_qos_policy="secure-qos", dpp_policy="secure-dpp",
+                      monitoring_policy="secure-mon", trust_control_policy="secure-trust")
+                .provide("secure-web").consume("secure-web")
+                .static_path(VPC_PATH_DN, encap="vlan-210", mode="regular")
+                # Two EPG subnets: a shared-services gateway, and a host route.
+                # The APIC narrows fvSubnet by parent: a /32 must carry
+                # no-default-gateway, and "preferred" is a BD-only flag.
+                # "public,shared", not "shared,public": scope is a bitmask and
+                # the APIC echoes it in its own order — declare it canonically
+                # or every replan reports a phantom drift.
+                .subnet("10.30.5.1/24", scope="public,shared", ip_dp_learning="enabled")
+                .subnet("10.30.1.202/32", scope="private",
+                        subnet_control="no-default-gateway", ip_dp_learning="disabled")
+                # Static endpoints — one per naming type, on the act-2 vPC path.
+                .static_endpoint("00:11:22:33:44:AA", "silent-host",
+                                 encap="vlan-210", ip_address="10.30.1.51")
+                    .bind_dn(path=VPC_PATH_DN)
+                    .static_ip("10.30.1.52")
+                .static_endpoint("00:11:22:33:44:BB", "tep",
+                                 encap="vlan-210", ip_address="10.30.1.53")
+                    .bind_dn(path=VPC_PATH_DN)
+                # L4-L7 virtual IPs.
+                .virtual_ip("10.30.1.201")
+                .virtual_ip("10.30.1.202")
+                # Fibre-Channel path — a literal-DN maker, like static_path.
+                .fc_path("topology/pod-1/paths-101/pathep-[fc1/1]",
+                         vsan="vsan-100", vsan_mode="native")
+
+            # ── The contract master (inherited by shop-web) ───────────────────
+            .epg("shop-master", qos_class="level1")
+                .bind(bd="secure-bd")
+                .provide("secure-web")
+
+            # ── Governed by the ESG below: an EPG caught by an fvEPgSelector
+            # may not carry contracts of its own — security moves to the ESG.
+            .epg("shop-selected", qos_class="unspecified")
+                .bind(bd="secure-bd")
+
+            # ── Intra-EPG isolation + intra-EPG contract ──────────────────────
+            .epg("shop-isolated", policy_control_enforcement="enforced",
+                 qos_class="level2", flood_on_encap="disabled")
+                .bind(bd="secure-bd")
+                .intra_epg("secure-intra")
+
+            # ── Flood on encap — on the flood BD, away from the uSeg EPG ──────
+            .epg("shop-flood", qos_class="level6", flood_on_encap="enabled",
+                 preferred_group_member="include")
+                .bind(bd="secure-bd-flood")
+
+            # ── uSeg EPG: the criterion and its attribute selectors ───────────
+            .epg("shop-useg", attribute_based_epg=True, qos_class="level3")
+                .bind(bd="secure-bd", domain=PHYS_DOM)
+                .criterion(matching_rule_type="any", criterion_scope="scope-bd")
+                    .ip_attribute("ip-host", ip_address="10.30.1.60")
+                    .ip_attribute("ip-net", ip_address="10.30.2.0/24")
+                    .mac_attribute("mac-a", macaddress="00:11:22:33:44:CC")
+                    .mac_attribute("mac-b", macaddress="00:11:22:33:44:DD")
+                    .dns_attribute("dns-corp", domain_name_filter="*.corp.local")
+                    .vm_attribute("vm-guest-os", attribute_type="guest-os",
+                                  operator="contains",
+                                  custom_attribute_value_or_tag_name="Ubuntu")
+                    .vm_attribute("vm-name", attribute_type="vm-name", operator="equals",
+                                  custom_attribute_value_or_tag_name="web-01")
+                    .vm_attribute("vm-hv", attribute_type="hv", operator="startsWith",
+                                  custom_attribute_value_or_tag_name="esx-")
+                    .vm_attribute("vm-folder", attribute_type="vm-folder",
+                                  operator="endsWith",
+                                  custom_attribute_value_or_tag_name="/prod")
+                    # A nested criterion: "all of these" inside the "any" above.
+                    # (The MIT hangs IP and MAC attributes here too; the APIC
+                    # refuses both — a sub-criterion takes VM attributes only.)
+                    .sub_criterion("nested-all", matching_rule_type="all")
+                        .vm_attribute("nested-vm", attribute_type="vm-name",
+                                      operator="notEquals",
+                                      custom_attribute_value_or_tag_name="db-01")
+
+            # ── ESG: selectors, VRF scope, contract master ────────────────────
+            .esg("shop-esg", policy_control_enforcement="enforced", qos_class="level5",
+                 preferred_group_member="exclude", shutdown=False)
+                # (no taboo here: the APIC does not support taboo on an ESG)
+                .bind(vrf="prod", contract_master="shop-esg-master",
+                      custom_qos_policy="secure-qos")
+                .provide("secure-esg").consume("secure-esg").intra_epg("secure-esg-intra")
+                .ep_selector("ip=='10.30.1.70'")
+                .ep_selector("ip=='10.30.4.0/24'")
+                .epg_selector(EPG_SELECTED_DN)
+                # One selector per match operator.
+                .tag_selector("env", "prod", match_value_operator="equals")
+                .tag_selector("tier", "web", match_value_operator="contains")
+                .tag_selector("zone", "dmz-.*", match_value_operator="regex")
+
+            .esg("shop-esg-master", qos_class="unspecified")
+                .bind(vrf="prod")
+
+        # Sibling domain — re-roots on polUni, so it closes the chain.
+        .phys_dom(PHYS_DOM)          # cross-domain upsert: act 2 owns it
+    )  # fmt: skip
+
+
+class Test3EpgWorld:
+    """Tenants > Application Profiles > EPGs / ESGs — every folder, live.
+
+    Coverage argument: the design above places at least one instance on every
+    curated position of the EPG/ESG world, spanning each enum value; test_02
+    replans it and demands zero changes, so any property the fabric does not
+    store the way it was declared breaks convergence.
+    """
+
+    def test_01_the_epg_world_pushes_atomically(self, live_aci: Niwaki) -> None:
+        design = epg_world_design()
+        plan = design.push(live_aci, mode="plan")
+        assert plan.has_changes
+
+        report = design.push(live_aci)
+        assert report.request_count == 1
+
+    def test_02_every_property_round_trips(self, live_aci: Niwaki) -> None:
+        assert epg_world_design().push(live_aci, mode="plan").has_changes is False
+
+    def test_03_epg_children_read_back_typed(self, live_aci: Niwaki) -> None:
+        epg = live_aci.tenant(TENANT).app(APP).epg("shop-web")
+
+        subnets = {s.subnet: s for s in epg.query("fvSubnet").fetch()}
+        assert subnets["10.30.5.1/24"].scope == "public,shared"
+        assert subnets["10.30.1.202/32"].ip_dp_learning == "disabled"
+        assert subnets["10.30.1.202/32"].subnet_control == "no-default-gateway"
+
+        endpoints = {e.macaddress: e for e in epg.query("fvStCEp").fetch()}
+        assert {e.type for e in endpoints.values()} == {"silent-host", "tep"}
+        assert endpoints["00:11:22:33:44:AA"].ip_address == "10.30.1.51"
+
+        vips = {v.virtual_ip_address for v in epg.query("fvVip").fetch()}
+        assert vips == {"10.30.1.201", "10.30.1.202"}
+
+    def test_04_useg_criterion_reads_back(self, live_aci: Niwaki) -> None:
+        useg = live_aci.tenant(TENANT).app(APP).epg("shop-useg")
+        assert useg.read().attribute_based_epg is True
+
+        vm_attrs = {a.name: a for a in useg.query("fvVmAttr").fetch()}
+        assert {a.operator for a in vm_attrs.values()} == {
+            "contains",
+            "equals",
+            "startsWith",
+            "endsWith",
+            "notEquals",
+        }
+        assert vm_attrs["vm-guest-os"].attribute_type == "guest-os"
+
+        # The nested criterion carries its own attributes.
+        nested = useg.query("fvSCrtrn").fetch()
+        assert [c.name for c in nested] == ["nested-all"]
+        assert useg.query("fvIpAttr").count() == 2  # ip-host + ip-net
+
+    def test_05_esg_selectors_read_back(self, live_aci: Niwaki) -> None:
+        esg = live_aci.tenant(TENANT).app(APP).esg("shop-esg")
+        assert esg.read().policy_control_enforcement == "enforced"
+
+        tags = {t.key_tagtag_to_be_associated_with: t for t in esg.query("fvTagSelector").fetch()}
+        assert {t.match_value_operator for t in tags.values()} == {"equals", "contains", "regex"}
+
+        epg_selectors = esg.query("fvEPgSelector").fetch()
+        assert [s.epg_dn_to_be_associated for s in epg_selectors] == [EPG_SELECTED_DN]
+        assert esg.query("fvEPSelector").count() == 2
+
+    def test_06_contract_masters_resolved_closed_world(self, live_aci: Niwaki) -> None:
+        """One ``contract_master`` alias, two concrete classes (EPG and ESG)."""
+        app = live_aci.tenant(TENANT).app(APP)
+        epg_master = app.epg("shop-web").query("fvRsSecInherited").first()
+        esg_master = app.esg("shop-esg").query("fvRsSecInherited").first()
+        assert epg_master is not None and esg_master is not None
+        assert epg_master.target_dn == EPG_MASTER_DN
+        assert esg_master.target_dn == f"uni/tn-{TENANT}/ap-{APP}/esg-shop-esg-master"
+
+
+# ── The contract world (wave 2) ───────────────────────────────────────────────
+
+CONTRACT_APP = "secure-contracts"
+
+
+def contract_world_design() -> Cursor:
+    """Everything the APIC GUI hangs under Contracts — plus vzAny.
+
+    Attribute combinations again: each label kind on each carrier (EPG, ESG,
+    vzAny, subject), both label match criteria, both exception fields, both
+    subject styles (apply-both-ways vs one filter per direction), and vzAny's
+    own relation classes.
+    """
+    cfg = tenant(TENANT)
+    vrf = cfg.vrf("prod")  # upsert: the act-3 VRF, declared once
+    cfg.bd("secure-bd")  # upsert: the EPG-world BD, no attribute touched
+    cfg.filter("ctr-http").entry("http-alt", tcp=8081)
+    cfg.filter("ctr-any").entry("all", ethernet_type="unspecified")
+
+    # A contract applied both ways, with a contract-level exception.
+    web = cfg.contract("ctr-web", scope="context", qos_class_id="level2")
+    web.subject(
+        "both-ways",
+        reverse_filter_ports=True,
+        provider_label_match_type="AtleastOne",
+        consumer_label_match_type="All",
+    ).bind(filter="ctr-http")
+    web.exception("skip-dev-tenant", field="Tenant", cons_regex="dev-.*")
+
+    # A subject that stops applying both ways: one filter per direction.
+    directional = web.subject("directional", qos_class_id="level3")
+    directional.in_term(qos_class_id="level4").bind(filter="ctr-http")
+    directional.out_term(qos_class_id="level5").bind(filter="ctr-any")
+    directional.provider_subject_label("subj-gold", tag="green")
+    directional.consumer_subject_label("subj-silver", tag="blue", complement=True)
+
+    # A second contract, for vzAny only (a contract serves one world at a time).
+    cfg.contract("ctr-vrf-wide").subject("vrf-subj").bind(filter="ctr-any")
+    cfg.contract("ctr-exported").subject("exp-subj").bind(filter="ctr-http")
+    cfg.imported_contract("ctr-imported").bind(contract="ctr-exported")
+
+    # vzAny — contracts for the whole VRF, through Rs classes of its own.
+    vzany = vrf.vzany(match_type="AtleastOne")
+    vzany.provide("ctr-vrf-wide").consume("ctr-vrf-wide")
+    vzany.bind(imported_contract="ctr-imported")
+    vzany.provider_label("vrf-gold", tag="gold")
+    vzany.consumer_label("vrf-silver", tag="silver")
+    vzany.provider_contract_label("vrf-prov-ctrct", tag="red")
+    vzany.consumer_contract_label("vrf-cons-ctrct", tag="aqua")  # "cyan" reads back "aqua"
+
+    # The label vocabulary on an EPG and on an ESG — same words, same tags.
+    app = cfg.app(CONTRACT_APP)
+    epg = app.epg("ctr-epg", provider_label_match_criteria="AtleastOne")
+    epg.bind(bd="secure-bd")
+    epg.provide("ctr-web").consume("ctr-web")
+    epg.provider_label("epg-gold", tag="green", complement=False)
+    epg.consumer_label("epg-silver", tag="blue")
+    epg.provider_subject_label("epg-subj-gold", tag="teal")
+    epg.consumer_subject_label("epg-subj-silver", tag="olive", complement=True)
+    epg.provider_contract_label("epg-prov-ctrct", tag="orange")
+    epg.consumer_contract_label("epg-cons-ctrct", tag="purple")
+
+    esg = app.esg("ctr-esg", provider_label_match_criteria="AtmostOne")
+    esg.bind(vrf="prod")
+    esg.provider_label("esg-gold", tag="gold")
+    esg.consumer_label("esg-silver", tag="silver")
+    return cfg
+
+
+def oob_contract_design() -> Cursor:
+    """The out-of-band contract — it belongs to the management tenant."""
+    cfg = tenant("mgmt")  # upsert without attributes: mgmt ships with the APIC
+    # 2222, not 22: the APIC rewrites well-known ports to their names ("ssh").
+    cfg.filter("oob-ssh").entry("ssh-alt", tcp=2222)
+    oob = cfg.oob_contract("niwaki-oob", scope="context")
+    oob.subject("oob-subj").bind(filter="oob-ssh")
+    oob.exception("skip-mgmt-epg", field="EPg", prov_regex="mgmt-.*")
+    return cfg
+
+
+class Test3ContractWorld:
+    """Tenants > Contracts — subjects, directions, exceptions, labels, vzAny.
+
+    ``secure-bd`` comes from the EPG-world act: these two acts share the same
+    tenant, as an operator's tenant would.
+    """
+
+    def test_01_the_contract_world_pushes_atomically(self, live_aci: Niwaki) -> None:
+        design = contract_world_design()
+        assert design.push(live_aci, mode="plan").has_changes
+
+        report = design.push(live_aci)
+        assert report.request_count == 1
+
+    def test_02_every_property_round_trips(self, live_aci: Niwaki) -> None:
+        assert contract_world_design().push(live_aci, mode="plan").has_changes is False
+
+    def test_03_directional_subject_reads_back(self, live_aci: Niwaki) -> None:
+        """One filter per direction — the terminals are singletons."""
+        subj = live_aci.tenant(TENANT).contract("ctr-web").subject("directional")
+
+        in_term = subj.in_term().read()
+        out_term = subj.out_term().read()
+        assert (in_term.qos_class_id, out_term.qos_class_id) == ("level4", "level5")
+
+        filters = {f.name for f in subj.query("vzRsFiltAtt").fetch()}
+        assert filters == {"ctr-http", "ctr-any"}
+
+    def test_04_exceptions_hang_where_they_were_declared(self, live_aci: Niwaki) -> None:
+        contract = live_aci.tenant(TENANT).contract("ctr-web")
+        exceptions = {e.name: e for e in contract.query("vzException").fetch()}
+        assert exceptions["skip-dev-tenant"].field == "Tenant"
+        assert exceptions["skip-dev-tenant"].cons_regex == "dev-.*"
+
+    def test_05_vzany_carries_the_vrf_wide_contracts(self, live_aci: Niwaki) -> None:
+        """vzAny reaches contracts through vzRsAnyTo* — not the EPG classes."""
+        vrf = live_aci.tenant(TENANT).vrf("prod")
+        assert vrf.vzany().read().match_type == "AtleastOne"
+
+        assert vrf.query("vzRsAnyToProv").count() == 1
+        assert vrf.query("vzRsAnyToCons").count() == 1
+        assert vrf.query("vzRsAnyToConsIf").first() is not None
+
+        labels = {label.name for label in vrf.query("vzProvLbl").fetch()}
+        assert labels == {"vrf-gold"}
+
+    def test_06_labels_read_back_on_every_carrier(self, live_aci: Niwaki) -> None:
+        app = live_aci.tenant(TENANT).app(CONTRACT_APP)
+
+        epg_labels = {label.name: label for label in app.epg("ctr-epg").query("vzProvLbl").fetch()}
+        assert epg_labels["epg-gold"].tag == "green"
+        assert epg_labels["epg-gold"].complement is False
+
+        subj_labels = app.epg("ctr-epg").query("vzConsSubjLbl").fetch()
+        assert [label.complement for label in subj_labels] == [True]
+
+        esg_labels = {label.name for label in app.esg("ctr-esg").query("vzConsLbl").fetch()}
+        assert esg_labels == {"esg-silver"}
+
+    def test_07_the_oob_contract_lives_in_the_management_tenant(self, live_aci: Niwaki) -> None:
+        design = oob_contract_design()
+        design.push(live_aci)
+        assert design.push(live_aci, mode="plan").has_changes is False
+
+        oob = live_aci.tenant("mgmt").oob_contract("niwaki-oob").read()
+        assert oob.scope == "context"
