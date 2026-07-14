@@ -460,6 +460,238 @@ class _TenantMakers(Cursor):
             self._invoke_maker("contract", (name,), _prune(params)),
         )
 
+    def bgp_timers_policy(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        graceful_restart_controls: str | None = None,
+        hold_interval: str | None = None,
+        keepalive_interval: str | None = None,
+        max_as_limit: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        stale_interval: str | None = None,
+        userdom: str | None = None,
+    ) -> BgpTimersPolicyCursor:
+        """Declare a ``bgpCtxPol`` child under the tenant level.
+
+        The BGP timers policy uses timers to control periodic activities such as the frequency
+        keepalive messages that are sent to its peer, the amount of time the system waits to declare
+        a peer dead after keepalive messages stop being received, and the amount of time before
+        restarting a dead peer.
+
+        Args:
+            name: The context level policy name. This name can be up to 64 alphanumeric
+                characters.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            graceful_restart_controls: A property to determine whether the entity functions only
+                as a graceful restart helper, forwarding prefixes pointing to a restarting peer,
+                or whether graceful restart is enabled completely.
+            hold_interval: The time period to wait before declaring the neighbor device down.
+            keepalive_interval: The interval time between sending keepalive messages.
+            max_as_limit: Maximum AS limit, to discard routes that have excessive AS numbers
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            stale_interval: Maximum time that BGP keeps stale routes from the restarting BGP
+                peer.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "BgpTimersPolicyCursor",
+            self._invoke_maker("bgp_timers_policy", (name,), _prune(params)),
+        )
+
+    def bgp_address_family_context_policy(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        controls: str | None = None,
+        description: str | None = None,
+        ebgp_distance: str | None = None,
+        ibgp_distance: str | None = None,
+        local_distance: str | None = None,
+        max_ecmp_for_ebgp_routes: str | None = None,
+        max_ecmp_for_ibgp_routes: str | None = None,
+        max_local_ecmp_for_redistribute_rotes: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> BgpAddressFamilyContextPolicyCursor:
+        """Declare a ``bgpCtxAfPol`` child under the tenant level.
+
+        Args:
+            name: The name of the policy.
+            annotation: User annotation. Suggested format orchestrator:value
+            controls: The control state.
+            description: Specifies a description of the policy definition.
+            ebgp_distance: The administrative distance of eBGP routes.
+            ibgp_distance: The administrative distance of iBGP routes.
+            local_distance: The administrative distance of local routes.
+            max_ecmp_for_ebgp_routes: eBGP max-path
+            max_ecmp_for_ibgp_routes: iBGP max-path
+            max_local_ecmp_for_redistribute_rotes: Maximum number of equal-cost local paths for
+                redist
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "BgpAddressFamilyContextPolicyCursor",
+            self._invoke_maker("bgp_address_family_context_policy", (name,), _prune(params)),
+        )
+
+    def bgp_best_path_control_policy(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        best_path_control: BgpPathCtrlType | str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> BgpBestPathControlPolicyCursor:
+        """Declare a ``bgpBestPathCtrlPol`` child under the tenant level.
+
+        Args:
+            name: The name of the object.
+            annotation: User annotation. Suggested format orchestrator:value
+            best_path_control: Best Path control Values: ``asPathMultipathRelax``. Default:
+                ``asPathMultipathRelax``.
+            description: Specifies the description of a policy component.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "BgpBestPathControlPolicyCursor",
+            self._invoke_maker("bgp_best_path_control_policy", (name,), _prune(params)),
+        )
+
+    def bgp_peer_prefix_policy(
+        self,
+        name: str,
+        *,
+        max_prefix_action: BgpMaxPfxAct | str | None = None,
+        annotation: str | None = None,
+        description: str | None = None,
+        max_number_of_prefixes: int | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        prefix_limit_restart_time: str | None = None,
+        warning_threshold: str | None = None,
+        userdom: str | None = None,
+    ) -> BgpPeerPrefixPolicyCursor:
+        """Declare a ``bgpPeerPfxPol`` child under the tenant level.
+
+        The peer prefix policy defines how many prefixes can be received from a neighbor and the
+        action to take when the number of allowed prefixes is exceeded. This feature is commonly
+        used for external BGP peers, but can also be applied to internal BGP peers.
+
+        Args:
+            name: The peer prefix policy name. This name can be up to 64 alphanumeric
+                characters.
+            max_prefix_action: Action to be performed when the maximum prefix limit is reached.
+                Values: ``log``, ``reject``, ``restart``, ``shut``. Default: ``reject``.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            max_number_of_prefixes: Maximum number of prefixes allowed from the peer. Default:
+                ``20000``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            prefix_limit_restart_time: The period of time in minutes before restarting the peer
+                when the prefix limit is reached.
+            warning_threshold: The threshold percentage of the maximum number of prefixes before
+                a warning is issued. For example, if the maximum number of prefixes is 10 and
+                the threshold is 70%, a warning is issued when the number of prefixes exceeds 7
+                (70%).
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "BgpPeerPrefixPolicyCursor",
+            self._invoke_maker("bgp_peer_prefix_policy", (name,), _prune(params)),
+        )
+
+    def bgp_route_summarization_policy(
+        self,
+        name: str,
+        *,
+        address_type_af_controls: str | None = None,
+        annotation: str | None = None,
+        route_summarization_attribute_route_map: str | None = None,
+        summary_control: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> BgpRouteSummarizationPolicyCursor:
+        """Declare a ``bgpRtSummPol`` child under the tenant level.
+
+        Args:
+            name: The name of the object.
+            address_type_af_controls: Ucast/Mcast Addr Type AF Control
+            annotation: User annotation. Suggested format orchestrator:value
+            route_summarization_attribute_route_map: Summary attribute map
+            summary_control: Summary controlTODO: CHECK if this is user configurable
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "BgpRouteSummarizationPolicyCursor",
+            self._invoke_maker("bgp_route_summarization_policy", (name,), _prune(params)),
+        )
+
     def ospf_interface_policy(
         self,
         name: str,
@@ -537,6 +769,145 @@ class _TenantMakers(Cursor):
             self._invoke_maker("ospf_interface_policy", (name,), _prune(params)),
         )
 
+    def ospf_timers_policy(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        bandwidth_preference: int | None = None,
+        control_knobs: str | None = None,
+        description: str | None = None,
+        distance_preference: str | None = None,
+        graceful_restart_controls: str | None = None,
+        min_arrival_interval: int | None = None,
+        pacing_interval: str | None = None,
+        throttle_hold_interval: int | None = None,
+        throttle_max_interval: int | None = None,
+        throttle_start_wait_interval: int | None = None,
+        max_ecmp: str | None = None,
+        action: OspfMaxLsaAct | str | None = None,
+        maximum_of_non_self_generated_lsas: int | None = None,
+        reset_interval: int | None = None,
+        sleep_count: int | None = None,
+        sleep_interval: str | None = None,
+        threshold: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        max_hold_interval: int | None = None,
+        initial_delay_interval: int | None = None,
+        min_wait_time: int | None = None,
+        userdom: str | None = None,
+    ) -> OspfTimersPolicyCursor:
+        """Declare a ``ospfCtxPol`` child under the tenant level.
+
+        The context-level OSPF timer policy provides the Hello timer and Dead timer intervals
+        configuration.
+
+        Args:
+            name: The context-level OSPF policy name. This name can be between 1 and 64
+                alphanumeric characters. Note that you cannot change this name after the object
+                has been saved.
+            annotation: User annotation. Suggested format orchestrator:value
+            bandwidth_preference: The OSPF policy bandwidth reference. This is used to calculate
+                the default metrics for an interface. Default: ``40000``.
+            control_knobs: DOM controls
+            description: Specifies a description of the policy definition.
+            distance_preference: The preferred administrative distance.
+            graceful_restart_controls: The graceful restart controls.
+            min_arrival_interval: The minimum interval between the arrival of each link-state
+                advertisement (LSA). Default: ``1000``.
+            pacing_interval: The interval in which LSAs are grouped and refreshed, checksummed,
+                or aged. The duration of the LSA group pacing is inversely proportional to the
+                number of LSAs that the router is handling. For example, if you have about
+                10,000 LSAs, you should decrease the pacing interval.
+            throttle_hold_interval: The incremental time (in milliseconds) used to calculate the
+                subsequent rate limiting times for LSA generation. Default: ``5000``.
+            throttle_max_interval: The generation throttle maximum interval between LSAs.
+                Default: ``5000``.
+            throttle_start_wait_interval: The generation throttle start-wait interval between
+                LSAs. Default: ``0``.
+            max_ecmp: The maximum ECMP for the OSPF protocol.
+            action: The action to take when the maximum LSA limit is reached. Values: ``log``,
+                ``reject``, ``restart``. Default: ``reject``.
+            maximum_of_non_self_generated_lsas: The maximum number of LSAs that are not self-
+                generated. Default: ``20000``.
+            reset_interval: The time (in minutes) before the sleep count is reset to zero.
+                Default: ``10``.
+            sleep_count: The number of times the OSPF process can consecutively be placed into
+                the sleep state. Default: ``5``.
+            sleep_interval: The time (in minutes) to ignore all neighbors after the maximum
+                limit of LSAs has been exceeded.
+            threshold: The maximum link-state advertisement (LSA) threshold value (%) at which
+                to generate a warning message.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            max_hold_interval: The minimum hold time between SPF calculations. Default:
+                ``1000``.
+            initial_delay_interval: The initial delay interval for the SPF schedule. Default:
+                ``200``.
+            min_wait_time: The maximum interval between SPF calculations. Each interval after
+                the initial calculation is twice as long as the previous one until the wait
+                interval reaches the maximum wait time specified. Default: ``5000``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "OspfTimersPolicyCursor",
+            self._invoke_maker("ospf_timers_policy", (name,), _prune(params)),
+        )
+
+    def ospf_route_summarization_policy(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        area_range_cost: int | None = None,
+        description: str | None = None,
+        inter_area_summarization_enabled: bool | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        summary_route_tag: int | None = None,
+        userdom: str | None = None,
+    ) -> OspfRouteSummarizationPolicyCursor:
+        """Declare a ``ospfRtSummPol`` child under the tenant level.
+
+        External Route summarization abstract policy
+
+        Args:
+            name: The name of the object.
+            annotation: User annotation. Suggested format orchestrator:value
+            area_range_cost: Route summary cost Default: ``0``.
+            description: Specifies a description of the policy definition.
+            inter_area_summarization_enabled: Default: ``False``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            summary_route_tag: Route summary tag Default: ``0``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "OspfRouteSummarizationPolicyCursor",
+            self._invoke_maker("ospf_route_summarization_policy", (name,), _prune(params)),
+        )
+
     def eigrp_interface_policy(
         self,
         name: str,
@@ -590,6 +961,93 @@ class _TenantMakers(Cursor):
         return cast(
             "EigrpInterfacePolicyCursor",
             self._invoke_maker("eigrp_interface_policy", (name,), _prune(params)),
+        )
+
+    def eigrp_address_family_context_policy(
+        self,
+        name: str,
+        *,
+        active_timer: str | None = None,
+        annotation: str | None = None,
+        description: str | None = None,
+        external_distance: str | None = None,
+        internal_distance: str | None = None,
+        maximum_ecmp_paths: str | None = None,
+        metric_style: EigrpMetricStyle | str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> EigrpAddressFamilyContextPolicyCursor:
+        """Declare a ``eigrpCtxAfPol`` child under the tenant level.
+
+        An EIGRP context policy can be applied on one or more contexts under the tenant. EIGRP
+        context policies can be enabled on a context through a relation in the context per address
+        family.
+
+        Args:
+            name: The EIGRP Address Family Context policy name.
+            active_timer: The active timer interval, which specifies the length of time an EIGRP
+                route can stay in the Active state without a best path. When the time ends, the
+                route is moved to the Stuck-In-Active state.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            external_distance: The administrative distance preference for external routes.
+            internal_distance: The administrative distance preference for internal routes.
+            maximum_ecmp_paths: The maximum number of equal cost different paths.
+            metric_style: The metric version used for metric calculations. EIRGP supports 32 and
+                64 bit metrics. Values: ``narrow``, ``wide``. Default: ``narrow``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "EigrpAddressFamilyContextPolicyCursor",
+            self._invoke_maker("eigrp_address_family_context_policy", (name,), _prune(params)),
+        )
+
+    def eigrp_route_summarization_policy(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> EigrpRouteSummarizationPolicyCursor:
+        """Declare a ``eigrpRtSummPol`` child under the tenant level.
+
+        Args:
+            name: The name of the object.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "EigrpRouteSummarizationPolicyCursor",
+            self._invoke_maker("eigrp_route_summarization_policy", (name,), _prune(params)),
         )
 
     def hsrp_interface_policy(
@@ -694,117 +1152,6 @@ class _TenantMakers(Cursor):
         return cast(
             "HsrpGroupPolicyCursor",
             self._invoke_maker("hsrp_group_policy", (name,), _prune(params)),
-        )
-
-    def igmp_interface_policy(
-        self,
-        name: str,
-        *,
-        annotation: str | None = None,
-        description: str | None = None,
-        group_timeout: str | None = None,
-        controls: str | None = None,
-        last_member_query_count: str | None = None,
-        last_member_response_time: str | None = None,
-        display_name: str | None = None,
-        owner_key: str | None = None,
-        owner_tag: str | None = None,
-        querier_timeout: str | None = None,
-        query_interval: str | None = None,
-        robustness_factor: str | None = None,
-        response_interval: str | None = None,
-        startup_query_count: str | None = None,
-        startup_query_interval: str | None = None,
-        userdom: str | None = None,
-        version: IpmcifVer | str | None = None,
-    ) -> IgmpInterfacePolicyCursor:
-        """Declare a ``igmpIfPol`` child under the tenant level.
-
-        Interface-level IGMP policy
-
-        Args:
-            name: The name of the object.
-            annotation: User annotation. Suggested format orchestrator:value
-            description: Specifies a description of the policy definition.
-            group_timeout: Group Timeout
-            controls: Interface Control
-            last_member_query_count: Last member query count
-            last_member_response_time: Last member response time
-            owner_key: The key for enabling clients to own their data for entity correlation.
-            owner_tag: A tag for enabling clients to add their own data. For example, to
-                indicate who created this object.
-            querier_timeout: Querier timeout
-            query_interval: Query interval
-            robustness_factor: Robustness factor
-            response_interval: Query response interval
-            startup_query_count: Startup Query Count
-            startup_query_interval: Startup query interval
-            version: Interface version Values: ``v2``, ``v3``. Default: ``v2``.
-        """
-        params = {
-            k: v
-            for k, v in locals().items()
-            if k
-            not in (
-                "self",
-                "name",
-            )
-        }
-        return cast(
-            "IgmpInterfacePolicyCursor",
-            self._invoke_maker("igmp_interface_policy", (name,), _prune(params)),
-        )
-
-    def pim_interface_policy(
-        self,
-        name: str,
-        *,
-        annotation: str | None = None,
-        authentication_type: RtdmcAuthT | str | None = None,
-        interface_controls: str | None = None,
-        description: str | None = None,
-        designated_router_delay: str | None = None,
-        designated_router_priority: int | None = None,
-        hello_interval: int | None = None,
-        join_prune_interval_seconds: str | None = None,
-        display_name: str | None = None,
-        owner_key: str | None = None,
-        owner_tag: str | None = None,
-        secure_authentication_key: str | None = None,
-        userdom: str | None = None,
-    ) -> PimInterfacePolicyCursor:
-        """Declare a ``pimIfPol`` child under the tenant level.
-
-        Interface-level PIM-SM (sparse mode) policy.
-
-        Args:
-            name: Interface-level PIM-SM (sparse mode) policy name.
-            annotation: User annotation. Suggested format orchestrator:value
-            authentication_type: Authentication Type Values: ``ah-md5``, ``none``. Default:
-                ``none``.
-            interface_controls: Interface controls
-            description: Specifies a description of the policy definition.
-            designated_router_delay: Designated Router Delay
-            designated_router_priority: Designated Router Priority Default: ``1``.
-            hello_interval: Hello Traffic Policy Default: ``30000``.
-            join_prune_interval_seconds: JP Traffic Policy
-            owner_key: The key for enabling clients to own their data for entity correlation.
-            owner_tag: A tag for enabling clients to add their own data. For example, to
-                indicate who created this object.
-            secure_authentication_key: Secure Authentication key
-        """
-        params = {
-            k: v
-            for k, v in locals().items()
-            if k
-            not in (
-                "self",
-                "name",
-            )
-        }
-        return cast(
-            "PimInterfacePolicyCursor",
-            self._invoke_maker("pim_interface_policy", (name,), _prune(params)),
         )
 
     def bfd_interface_policy(
@@ -952,208 +1299,50 @@ class _TenantMakers(Cursor):
             self._invoke_maker("bfd_multihop_node_policy", (name,), _prune(params)),
         )
 
-    def bgp_peer_prefix_policy(
+    def igmp_interface_policy(
         self,
         name: str,
         *,
-        max_prefix_action: BgpMaxPfxAct | str | None = None,
         annotation: str | None = None,
         description: str | None = None,
-        max_number_of_prefixes: int | None = None,
+        group_timeout: str | None = None,
+        controls: str | None = None,
+        last_member_query_count: str | None = None,
+        last_member_response_time: str | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
-        prefix_limit_restart_time: str | None = None,
-        warning_threshold: str | None = None,
+        querier_timeout: str | None = None,
+        query_interval: str | None = None,
+        robustness_factor: str | None = None,
+        response_interval: str | None = None,
+        startup_query_count: str | None = None,
+        startup_query_interval: str | None = None,
         userdom: str | None = None,
-    ) -> BgpPeerPrefixPolicyCursor:
-        """Declare a ``bgpPeerPfxPol`` child under the tenant level.
+        version: IpmcifVer | str | None = None,
+    ) -> IgmpInterfacePolicyCursor:
+        """Declare a ``igmpIfPol`` child under the tenant level.
 
-        The peer prefix policy defines how many prefixes can be received from a neighbor and the
-        action to take when the number of allowed prefixes is exceeded. This feature is commonly
-        used for external BGP peers, but can also be applied to internal BGP peers.
-
-        Args:
-            name: The peer prefix policy name. This name can be up to 64 alphanumeric
-                characters.
-            max_prefix_action: Action to be performed when the maximum prefix limit is reached.
-                Values: ``log``, ``reject``, ``restart``, ``shut``. Default: ``reject``.
-            annotation: User annotation. Suggested format orchestrator:value
-            description: Specifies a description of the policy definition.
-            max_number_of_prefixes: Maximum number of prefixes allowed from the peer. Default:
-                ``20000``.
-            owner_key: The key for enabling clients to own their data for entity correlation.
-            owner_tag: A tag for enabling clients to add their own data. For example, to
-                indicate who created this object.
-            prefix_limit_restart_time: The period of time in minutes before restarting the peer
-                when the prefix limit is reached.
-            warning_threshold: The threshold percentage of the maximum number of prefixes before
-                a warning is issued. For example, if the maximum number of prefixes is 10 and
-                the threshold is 70%, a warning is issued when the number of prefixes exceeds 7
-                (70%).
-        """
-        params = {
-            k: v
-            for k, v in locals().items()
-            if k
-            not in (
-                "self",
-                "name",
-            )
-        }
-        return cast(
-            "BgpPeerPrefixPolicyCursor",
-            self._invoke_maker("bgp_peer_prefix_policy", (name,), _prune(params)),
-        )
-
-    def bgp_best_path_control_policy(
-        self,
-        name: str,
-        *,
-        annotation: str | None = None,
-        best_path_control: BgpPathCtrlType | str | None = None,
-        description: str | None = None,
-        display_name: str | None = None,
-        userdom: str | None = None,
-    ) -> BgpBestPathControlPolicyCursor:
-        """Declare a ``bgpBestPathCtrlPol`` child under the tenant level.
-
-        Args:
-            name: The name of the object.
-            annotation: User annotation. Suggested format orchestrator:value
-            best_path_control: Best Path control Values: ``asPathMultipathRelax``. Default:
-                ``asPathMultipathRelax``.
-            description: Specifies the description of a policy component.
-        """
-        params = {
-            k: v
-            for k, v in locals().items()
-            if k
-            not in (
-                "self",
-                "name",
-            )
-        }
-        return cast(
-            "BgpBestPathControlPolicyCursor",
-            self._invoke_maker("bgp_best_path_control_policy", (name,), _prune(params)),
-        )
-
-    def bgp_timers_policy(
-        self,
-        name: str,
-        *,
-        annotation: str | None = None,
-        description: str | None = None,
-        graceful_restart_controls: str | None = None,
-        hold_interval: str | None = None,
-        keepalive_interval: str | None = None,
-        max_as_limit: str | None = None,
-        display_name: str | None = None,
-        owner_key: str | None = None,
-        owner_tag: str | None = None,
-        stale_interval: str | None = None,
-        userdom: str | None = None,
-    ) -> BgpTimersPolicyCursor:
-        """Declare a ``bgpCtxPol`` child under the tenant level.
-
-        The BGP timers policy uses timers to control periodic activities such as the frequency
-        keepalive messages that are sent to its peer, the amount of time the system waits to declare
-        a peer dead after keepalive messages stop being received, and the amount of time before
-        restarting a dead peer.
-
-        Args:
-            name: The context level policy name. This name can be up to 64 alphanumeric
-                characters.
-            annotation: User annotation. Suggested format orchestrator:value
-            description: Specifies a description of the policy definition.
-            graceful_restart_controls: A property to determine whether the entity functions only
-                as a graceful restart helper, forwarding prefixes pointing to a restarting peer,
-                or whether graceful restart is enabled completely.
-            hold_interval: The time period to wait before declaring the neighbor device down.
-            keepalive_interval: The interval time between sending keepalive messages.
-            max_as_limit: Maximum AS limit, to discard routes that have excessive AS numbers
-            owner_key: The key for enabling clients to own their data for entity correlation.
-            owner_tag: A tag for enabling clients to add their own data. For example, to
-                indicate who created this object.
-            stale_interval: Maximum time that BGP keeps stale routes from the restarting BGP
-                peer.
-        """
-        params = {
-            k: v
-            for k, v in locals().items()
-            if k
-            not in (
-                "self",
-                "name",
-            )
-        }
-        return cast(
-            "BgpTimersPolicyCursor",
-            self._invoke_maker("bgp_timers_policy", (name,), _prune(params)),
-        )
-
-    def bgp_route_summarization_policy(
-        self,
-        name: str,
-        *,
-        address_type_af_controls: str | None = None,
-        annotation: str | None = None,
-        route_summarization_attribute_route_map: str | None = None,
-        summary_control: str | None = None,
-        description: str | None = None,
-        display_name: str | None = None,
-        owner_key: str | None = None,
-        owner_tag: str | None = None,
-        userdom: str | None = None,
-    ) -> BgpRouteSummarizationPolicyCursor:
-        """Declare a ``bgpRtSummPol`` child under the tenant level.
-
-        Args:
-            name: The name of the object.
-            address_type_af_controls: Ucast/Mcast Addr Type AF Control
-            annotation: User annotation. Suggested format orchestrator:value
-            route_summarization_attribute_route_map: Summary attribute map
-            summary_control: Summary controlTODO: CHECK if this is user configurable
-            description: Specifies a description of the policy definition.
-            owner_key: The key for enabling clients to own their data for entity correlation.
-            owner_tag: A tag for enabling clients to add their own data. For example, to
-                indicate who created this object.
-        """
-        params = {
-            k: v
-            for k, v in locals().items()
-            if k
-            not in (
-                "self",
-                "name",
-            )
-        }
-        return cast(
-            "BgpRouteSummarizationPolicyCursor",
-            self._invoke_maker("bgp_route_summarization_policy", (name,), _prune(params)),
-        )
-
-    def eigrp_route_summarization_policy(
-        self,
-        name: str,
-        *,
-        annotation: str | None = None,
-        description: str | None = None,
-        display_name: str | None = None,
-        owner_key: str | None = None,
-        owner_tag: str | None = None,
-        userdom: str | None = None,
-    ) -> EigrpRouteSummarizationPolicyCursor:
-        """Declare a ``eigrpRtSummPol`` child under the tenant level.
+        Interface-level IGMP policy
 
         Args:
             name: The name of the object.
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies a description of the policy definition.
+            group_timeout: Group Timeout
+            controls: Interface Control
+            last_member_query_count: Last member query count
+            last_member_response_time: Last member response time
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
+            querier_timeout: Querier timeout
+            query_interval: Query interval
+            robustness_factor: Robustness factor
+            response_interval: Query response interval
+            startup_query_count: Startup Query Count
+            startup_query_interval: Startup query interval
+            version: Interface version Values: ``v2``, ``v3``. Default: ``v2``.
         """
         params = {
             k: v
@@ -1165,38 +1354,161 @@ class _TenantMakers(Cursor):
             )
         }
         return cast(
-            "EigrpRouteSummarizationPolicyCursor",
-            self._invoke_maker("eigrp_route_summarization_policy", (name,), _prune(params)),
+            "IgmpInterfacePolicyCursor",
+            self._invoke_maker("igmp_interface_policy", (name,), _prune(params)),
         )
 
-    def ospf_route_summarization_policy(
+    def igmp_snoop_policy(
+        self,
+        name: str,
+        *,
+        admin_state: NwAdminSt | str | None = None,
+        annotation: str | None = None,
+        controls: str | None = None,
+        description: str | None = None,
+        last_member_query_interval: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        query_interval: str | None = None,
+        response_interval: str | None = None,
+        startup_query_count: str | None = None,
+        startup_query_interval: str | None = None,
+        userdom: str | None = None,
+        version: McastVer | str | None = None,
+    ) -> TenantIgmpSnoopPolicyCursor:
+        """Declare a ``igmpSnoopPol`` child under the tenant level.
+
+        The IGMP snooping policy streamlines multicast traffic handling for VLANs. By examining
+        (snooping) IGMP membership report messages from interested hosts, multicast traffic is
+        limited to the subset of VLAN interfaces on which the hosts reside.
+
+        Args:
+            name: The name of the IGMP Snoop policy
+            admin_state: Administrative State Values: ``disabled``, ``enabled``. Default:
+                ``enabled``.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            last_member_query_interval: When the last member query interval parameter is
+                configured, the software removes the group state if no host responds before the
+                timeout.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            response_interval: The IGMP snooping query response interval.
+            startup_query_count: The interval before the IGMP query begins.
+            startup_query_interval: The startup query interval. This configures the IGMP
+                snooping query interval at startup.
+            version: Version Values: ``unspecified``, ``v1``, ``v2``, ``v3``. Default: ``v3``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "TenantIgmpSnoopPolicyCursor",
+            self._invoke_maker("igmp_snoop_policy", (name,), _prune(params)),
+        )
+
+    def mld_snoop_policy(
+        self,
+        name: str,
+        *,
+        admin_state: NwAdminSt | str | None = None,
+        annotation: str | None = None,
+        controls: str | None = None,
+        description: str | None = None,
+        last_member_query_interval: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        query_interval: str | None = None,
+        response_interval: str | None = None,
+        startup_query_count: str | None = None,
+        startup_query_interval: str | None = None,
+        userdom: str | None = None,
+        version: McastVer2 | str | None = None,
+    ) -> TenantMldSnoopPolicyCursor:
+        """Declare a ``mldSnoopPol`` child under the tenant level.
+
+        The MLD snooping policy streamlines multicast traffic handling for VLANs. By examining
+        (snooping) MLD membership report messages from interested hosts, multicast traffic is
+        limited to the subset of VLAN interfaces on which the hosts reside.
+
+        Args:
+            name: The name of the MLD Snoop policy
+            admin_state: Values: ``disabled``, ``enabled``. Default: ``disabled``.
+            controls: Controls for MLD Snoop Policy
+            description: Specifies a description of the policy definition.
+            last_member_query_interval: When the last member query interval parameter is
+                configured, the software removes the group state if no host responds before the
+                timeout.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            query_interval: Query interval
+            response_interval: The snooping query response interval.
+            startup_query_count: The interval before the query begins.
+            startup_query_interval: The startup query interval. This configures the snooping
+                query interval at startup.
+            version: Version Values: ``unspecified``, ``v1``, ``v2``. Default: ``v2``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "TenantMldSnoopPolicyCursor",
+            self._invoke_maker("mld_snoop_policy", (name,), _prune(params)),
+        )
+
+    def pim_interface_policy(
         self,
         name: str,
         *,
         annotation: str | None = None,
-        area_range_cost: int | None = None,
+        authentication_type: RtdmcAuthT | str | None = None,
+        interface_controls: str | None = None,
         description: str | None = None,
-        inter_area_summarization_enabled: bool | None = None,
+        designated_router_delay: str | None = None,
+        designated_router_priority: int | None = None,
+        hello_interval: int | None = None,
+        join_prune_interval_seconds: str | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
-        summary_route_tag: int | None = None,
+        secure_authentication_key: str | None = None,
         userdom: str | None = None,
-    ) -> OspfRouteSummarizationPolicyCursor:
-        """Declare a ``ospfRtSummPol`` child under the tenant level.
+    ) -> PimInterfacePolicyCursor:
+        """Declare a ``pimIfPol`` child under the tenant level.
 
-        External Route summarization abstract policy
+        Interface-level PIM-SM (sparse mode) policy.
 
         Args:
-            name: The name of the object.
+            name: Interface-level PIM-SM (sparse mode) policy name.
             annotation: User annotation. Suggested format orchestrator:value
-            area_range_cost: Route summary cost Default: ``0``.
+            authentication_type: Authentication Type Values: ``ah-md5``, ``none``. Default:
+                ``none``.
+            interface_controls: Interface controls
             description: Specifies a description of the policy definition.
-            inter_area_summarization_enabled: Default: ``False``.
+            designated_router_delay: Designated Router Delay
+            designated_router_priority: Designated Router Priority Default: ``1``.
+            hello_interval: Hello Traffic Policy Default: ``30000``.
+            join_prune_interval_seconds: JP Traffic Policy
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
-            summary_route_tag: Route summary tag Default: ``0``.
+            secure_authentication_key: Secure Authentication key
         """
         params = {
             k: v
@@ -1208,11 +1520,11 @@ class _TenantMakers(Cursor):
             )
         }
         return cast(
-            "OspfRouteSummarizationPolicyCursor",
-            self._invoke_maker("ospf_route_summarization_policy", (name,), _prune(params)),
+            "PimInterfacePolicyCursor",
+            self._invoke_maker("pim_interface_policy", (name,), _prune(params)),
         )
 
-    def dhcp_option_policy(
+    def pim_route_map_policy(
         self,
         name: str,
         *,
@@ -1222,16 +1534,13 @@ class _TenantMakers(Cursor):
         owner_key: str | None = None,
         owner_tag: str | None = None,
         userdom: str | None = None,
-    ) -> DhcpOptionPolicyCursor:
-        """Declare a ``dhcpOptionPol`` child under the tenant level.
+    ) -> PimRouteMapPolicyCursor:
+        """Declare a ``pimRouteMapPol`` child under the tenant level.
 
-        The DHCP option policy, which defines lease duration, gateway routers, and other
-        configuration parameters in what are called DHCP options. Every DHCP server must have one or
-        more policies defined for it.
+        PIM route map policy
 
         Args:
-            name: The DHCP option policy name. This name can be up to 64 alphanumeric
-                characters.
+            name: The name of the route map policy.
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies a description of the policy definition.
             owner_key: The key for enabling clients to own their data for entity correlation.
@@ -1248,8 +1557,8 @@ class _TenantMakers(Cursor):
             )
         }
         return cast(
-            "DhcpOptionPolicyCursor",
-            self._invoke_maker("dhcp_option_policy", (name,), _prune(params)),
+            "PimRouteMapPolicyCursor",
+            self._invoke_maker("pim_route_map_policy", (name,), _prune(params)),
         )
 
     def nd_interface_policy(
@@ -1410,514 +1719,6 @@ class _TenantMakers(Cursor):
             self._invoke_maker("arp_interface_policy", (name,), _prune(params)),
         )
 
-    def custom_qos_policy(
-        self,
-        name: str,
-        *,
-        annotation: str | None = None,
-        description: str | None = None,
-        display_name: str | None = None,
-        owner_key: str | None = None,
-        owner_tag: str | None = None,
-        userdom: str | None = None,
-    ) -> CustomQosPolicyCursor:
-        """Declare a ``qosCustomPol`` child under the tenant level.
-
-        The custom QoS policy enables different levels of service to be assigned to network traffic,
-        including specifications for the Differentiated Services Code Point (DSCP) value(s), and the
-        802.1p Dot1p priority.
-
-        Args:
-            name: The policy name.
-            annotation: User annotation. Suggested format orchestrator:value
-            description: Specifies a description of the policy definition.
-            owner_key: The key for enabling clients to own their data for entity correlation.
-            owner_tag: A tag for enabling clients to add their own data. For example, to
-                indicate who created this object.
-        """
-        params = {
-            k: v
-            for k, v in locals().items()
-            if k
-            not in (
-                "self",
-                "name",
-            )
-        }
-        return cast(
-            "CustomQosPolicyCursor",
-            self._invoke_maker("custom_qos_policy", (name,), _prune(params)),
-        )
-
-    def tenant_keychain_policy(
-        self,
-        name: str,
-        *,
-        annotation: str | None = None,
-        description: str | None = None,
-        display_name: str | None = None,
-        owner_key: str | None = None,
-        owner_tag: str | None = None,
-        userdom: str | None = None,
-    ) -> TenantKeychainPolicyCursor:
-        """Declare a ``fvKeyChainPol`` child under the tenant level.
-
-        KeyChain Policy
-
-        Args:
-            name: The name of the object.
-            annotation: User annotation. Suggested format orchestrator:value
-            description: Specifies a description of the policy definition.
-            owner_key: The key for enabling clients to own their data for entity correlation.
-            owner_tag: A tag for enabling clients to add their own data. For example, to
-                indicate who created this object.
-        """
-        params = {
-            k: v
-            for k, v in locals().items()
-            if k
-            not in (
-                "self",
-                "name",
-            )
-        }
-        return cast(
-            "TenantKeychainPolicyCursor",
-            self._invoke_maker("tenant_keychain_policy", (name,), _prune(params)),
-        )
-
-    def mpls_interface_policy(
-        self,
-        name: str,
-        *,
-        annotation: str | None = None,
-        description: str | None = None,
-        display_name: str | None = None,
-        owner_key: str | None = None,
-        owner_tag: str | None = None,
-        userdom: str | None = None,
-    ) -> MplsInterfacePolicyCursor:
-        """Declare a ``mplsIfPol`` child under the tenant level.
-
-        Args:
-            name: The name of the object.
-            annotation: User annotation. Suggested format orchestrator:value
-            description: Specifies a description of the policy definition.
-            owner_key: The key for enabling clients to own their data for entity correlation.
-            owner_tag: A tag for enabling clients to add their own data. For example, to
-                indicate who created this object.
-        """
-        params = {
-            k: v
-            for k, v in locals().items()
-            if k
-            not in (
-                "self",
-                "name",
-            )
-        }
-        return cast(
-            "MplsInterfacePolicyCursor",
-            self._invoke_maker("mpls_interface_policy", (name,), _prune(params)),
-        )
-
-    def mpls_global_configuration(
-        self,
-        name: str,
-        *,
-        annotation: str | None = None,
-        description: str | None = None,
-        mpls_maximum_dynamic_label: int | None = None,
-        mpls_maximum_static_label: int | None = None,
-        mpls_minimum_dynamic_label: int | None = None,
-        mpls_minimum_static_label: int | None = None,
-        display_name: str | None = None,
-        owner_key: str | None = None,
-        owner_tag: str | None = None,
-        userdom: str | None = None,
-    ) -> MplsGlobalConfigurationCursor:
-        """Declare a ``mplsLabelPol`` child under the tenant level.
-
-        Args:
-            name: The name of the object.
-            annotation: User annotation. Suggested format orchestrator:value
-            description: Specifies a description of the policy definition.
-            mpls_maximum_dynamic_label: Default: ``525286``.
-            mpls_maximum_static_label: Default: ``0``.
-            mpls_minimum_dynamic_label: MPLS Label Dynamic Range Default: ``16``.
-            mpls_minimum_static_label: MPLS Label Static Range Default: ``0``.
-            owner_key: The key for enabling clients to own their data for entity correlation.
-            owner_tag: A tag for enabling clients to add their own data. For example, to
-                indicate who created this object.
-        """
-        params = {
-            k: v
-            for k, v in locals().items()
-            if k
-            not in (
-                "self",
-                "name",
-            )
-        }
-        return cast(
-            "MplsGlobalConfigurationCursor",
-            self._invoke_maker("mpls_global_configuration", (name,), _prune(params)),
-        )
-
-    def match_rule(
-        self,
-        name: str,
-        *,
-        annotation: str | None = None,
-        description: str | None = None,
-        display_name: str | None = None,
-        userdom: str | None = None,
-    ) -> MatchRuleCursor:
-        """Declare a ``rtctrlSubjP`` child under the tenant level.
-
-        The subject profile.
-
-        Args:
-            name: Naming property — forms the object's RN.
-            annotation: User annotation. Suggested format orchestrator:value
-            description: Specifies the description of a policy component.
-        """
-        params = {
-            k: v
-            for k, v in locals().items()
-            if k
-            not in (
-                "self",
-                "name",
-            )
-        }
-        return cast(
-            "MatchRuleCursor",
-            self._invoke_maker("match_rule", (name,), _prune(params)),
-        )
-
-    def action_rule_profile(
-        self,
-        name: str,
-        *,
-        annotation: str | None = None,
-        description: str | None = None,
-        display_name: str | None = None,
-        userdom: str | None = None,
-    ) -> ActionRuleProfileCursor:
-        """Declare a ``rtctrlAttrP`` child under the tenant level.
-
-        The action rule profile, which specifies actions for events that meet a configured action
-        rule.
-
-        Args:
-            name: The action rule name.
-            annotation: User annotation. Suggested format orchestrator:value
-            description: Specifies the description of a policy component.
-        """
-        params = {
-            k: v
-            for k, v in locals().items()
-            if k
-            not in (
-                "self",
-                "name",
-            )
-        }
-        return cast(
-            "ActionRuleProfileCursor",
-            self._invoke_maker("action_rule_profile", (name,), _prune(params)),
-        )
-
-    def bgp_address_family_context_policy(
-        self,
-        name: str,
-        *,
-        annotation: str | None = None,
-        controls: str | None = None,
-        description: str | None = None,
-        ebgp_distance: str | None = None,
-        ibgp_distance: str | None = None,
-        local_distance: str | None = None,
-        max_ecmp_for_ebgp_routes: str | None = None,
-        max_ecmp_for_ibgp_routes: str | None = None,
-        max_local_ecmp_for_redistribute_rotes: str | None = None,
-        display_name: str | None = None,
-        owner_key: str | None = None,
-        owner_tag: str | None = None,
-        userdom: str | None = None,
-    ) -> BgpAddressFamilyContextPolicyCursor:
-        """Declare a ``bgpCtxAfPol`` child under the tenant level.
-
-        Args:
-            name: The name of the policy.
-            annotation: User annotation. Suggested format orchestrator:value
-            controls: The control state.
-            description: Specifies a description of the policy definition.
-            ebgp_distance: The administrative distance of eBGP routes.
-            ibgp_distance: The administrative distance of iBGP routes.
-            local_distance: The administrative distance of local routes.
-            max_ecmp_for_ebgp_routes: eBGP max-path
-            max_ecmp_for_ibgp_routes: iBGP max-path
-            max_local_ecmp_for_redistribute_rotes: Maximum number of equal-cost local paths for
-                redist
-            owner_key: The key for enabling clients to own their data for entity correlation.
-            owner_tag: A tag for enabling clients to add their own data. For example, to
-                indicate who created this object.
-        """
-        params = {
-            k: v
-            for k, v in locals().items()
-            if k
-            not in (
-                "self",
-                "name",
-            )
-        }
-        return cast(
-            "BgpAddressFamilyContextPolicyCursor",
-            self._invoke_maker("bgp_address_family_context_policy", (name,), _prune(params)),
-        )
-
-    def eigrp_address_family_context_policy(
-        self,
-        name: str,
-        *,
-        active_timer: str | None = None,
-        annotation: str | None = None,
-        description: str | None = None,
-        external_distance: str | None = None,
-        internal_distance: str | None = None,
-        maximum_ecmp_paths: str | None = None,
-        metric_style: EigrpMetricStyle | str | None = None,
-        display_name: str | None = None,
-        owner_key: str | None = None,
-        owner_tag: str | None = None,
-        userdom: str | None = None,
-    ) -> EigrpAddressFamilyContextPolicyCursor:
-        """Declare a ``eigrpCtxAfPol`` child under the tenant level.
-
-        An EIGRP context policy can be applied on one or more contexts under the tenant. EIGRP
-        context policies can be enabled on a context through a relation in the context per address
-        family.
-
-        Args:
-            name: The EIGRP Address Family Context policy name.
-            active_timer: The active timer interval, which specifies the length of time an EIGRP
-                route can stay in the Active state without a best path. When the time ends, the
-                route is moved to the Stuck-In-Active state.
-            annotation: User annotation. Suggested format orchestrator:value
-            description: Specifies a description of the policy definition.
-            external_distance: The administrative distance preference for external routes.
-            internal_distance: The administrative distance preference for internal routes.
-            maximum_ecmp_paths: The maximum number of equal cost different paths.
-            metric_style: The metric version used for metric calculations. EIRGP supports 32 and
-                64 bit metrics. Values: ``narrow``, ``wide``. Default: ``narrow``.
-            owner_key: The key for enabling clients to own their data for entity correlation.
-            owner_tag: A tag for enabling clients to add their own data. For example, to
-                indicate who created this object.
-        """
-        params = {
-            k: v
-            for k, v in locals().items()
-            if k
-            not in (
-                "self",
-                "name",
-            )
-        }
-        return cast(
-            "EigrpAddressFamilyContextPolicyCursor",
-            self._invoke_maker("eigrp_address_family_context_policy", (name,), _prune(params)),
-        )
-
-    def ospf_timers_policy(
-        self,
-        name: str,
-        *,
-        annotation: str | None = None,
-        bandwidth_preference: int | None = None,
-        control_knobs: str | None = None,
-        description: str | None = None,
-        distance_preference: str | None = None,
-        graceful_restart_controls: str | None = None,
-        min_arrival_interval: int | None = None,
-        pacing_interval: str | None = None,
-        throttle_hold_interval: int | None = None,
-        throttle_max_interval: int | None = None,
-        throttle_start_wait_interval: int | None = None,
-        max_ecmp: str | None = None,
-        action: OspfMaxLsaAct | str | None = None,
-        maximum_of_non_self_generated_lsas: int | None = None,
-        reset_interval: int | None = None,
-        sleep_count: int | None = None,
-        sleep_interval: str | None = None,
-        threshold: str | None = None,
-        display_name: str | None = None,
-        owner_key: str | None = None,
-        owner_tag: str | None = None,
-        max_hold_interval: int | None = None,
-        initial_delay_interval: int | None = None,
-        min_wait_time: int | None = None,
-        userdom: str | None = None,
-    ) -> OspfTimersPolicyCursor:
-        """Declare a ``ospfCtxPol`` child under the tenant level.
-
-        The context-level OSPF timer policy provides the Hello timer and Dead timer intervals
-        configuration.
-
-        Args:
-            name: The context-level OSPF policy name. This name can be between 1 and 64
-                alphanumeric characters. Note that you cannot change this name after the object
-                has been saved.
-            annotation: User annotation. Suggested format orchestrator:value
-            bandwidth_preference: The OSPF policy bandwidth reference. This is used to calculate
-                the default metrics for an interface. Default: ``40000``.
-            control_knobs: DOM controls
-            description: Specifies a description of the policy definition.
-            distance_preference: The preferred administrative distance.
-            graceful_restart_controls: The graceful restart controls.
-            min_arrival_interval: The minimum interval between the arrival of each link-state
-                advertisement (LSA). Default: ``1000``.
-            pacing_interval: The interval in which LSAs are grouped and refreshed, checksummed,
-                or aged. The duration of the LSA group pacing is inversely proportional to the
-                number of LSAs that the router is handling. For example, if you have about
-                10,000 LSAs, you should decrease the pacing interval.
-            throttle_hold_interval: The incremental time (in milliseconds) used to calculate the
-                subsequent rate limiting times for LSA generation. Default: ``5000``.
-            throttle_max_interval: The generation throttle maximum interval between LSAs.
-                Default: ``5000``.
-            throttle_start_wait_interval: The generation throttle start-wait interval between
-                LSAs. Default: ``0``.
-            max_ecmp: The maximum ECMP for the OSPF protocol.
-            action: The action to take when the maximum LSA limit is reached. Values: ``log``,
-                ``reject``, ``restart``. Default: ``reject``.
-            maximum_of_non_self_generated_lsas: The maximum number of LSAs that are not self-
-                generated. Default: ``20000``.
-            reset_interval: The time (in minutes) before the sleep count is reset to zero.
-                Default: ``10``.
-            sleep_count: The number of times the OSPF process can consecutively be placed into
-                the sleep state. Default: ``5``.
-            sleep_interval: The time (in minutes) to ignore all neighbors after the maximum
-                limit of LSAs has been exceeded.
-            threshold: The maximum link-state advertisement (LSA) threshold value (%) at which
-                to generate a warning message.
-            owner_key: The key for enabling clients to own their data for entity correlation.
-            owner_tag: A tag for enabling clients to add their own data. For example, to
-                indicate who created this object.
-            max_hold_interval: The minimum hold time between SPF calculations. Default:
-                ``1000``.
-            initial_delay_interval: The initial delay interval for the SPF schedule. Default:
-                ``200``.
-            min_wait_time: The maximum interval between SPF calculations. Each interval after
-                the initial calculation is twice as long as the previous one until the wait
-                interval reaches the maximum wait time specified. Default: ``5000``.
-        """
-        params = {
-            k: v
-            for k, v in locals().items()
-            if k
-            not in (
-                "self",
-                "name",
-            )
-        }
-        return cast(
-            "OspfTimersPolicyCursor",
-            self._invoke_maker("ospf_timers_policy", (name,), _prune(params)),
-        )
-
-    def dpp_policy(
-        self,
-        name: str,
-        *,
-        admin_st: QosDppPolAdminState | str | None = None,
-        annotation: str | None = None,
-        excessive_burst: str | None = None,
-        excessive_burst_unit: DppBurstUnit | str | None = None,
-        burst: str | None = None,
-        burst_unit: DppBurstUnit | str | None = None,
-        confirm_action: DppConformRateAction | str | None = None,
-        conform_mark_cos: str | None = None,
-        conform_mark_dscp: str | None = None,
-        description: str | None = None,
-        exceed_action: DppExceedRateAction | str | None = None,
-        exceed_mark_cos: str | None = None,
-        exceed_mark_dscp: str | None = None,
-        bit_or_packet: DppMode | str | None = None,
-        display_name: str | None = None,
-        owner_key: str | None = None,
-        owner_tag: str | None = None,
-        peak_rate: str | None = None,
-        peak_rate_unit: DppRateUnit | str | None = None,
-        rate: str | None = None,
-        rate_unit: DppRateUnit | str | None = None,
-        policer_sharing_mode: DppSharingMode | str | None = None,
-        type: DppType | str | None = None,
-        userdom: str | None = None,
-        violate_action: DppViolateRateAction | str | None = None,
-        violate_mark_cos: str | None = None,
-        violate_mark_dscp: str | None = None,
-    ) -> TenantDppPolicyCursor:
-        """Declare a ``qosDppPol`` child under the tenant level.
-
-        Define a Data Plane Policing policy. User is supposed to use this in scenarios where the
-        incoming traffic need to be policed to certain levels
-
-        Args:
-            name: The name of the object.
-            admin_st: The Administrative state of the policy Values: ``disabled``, ``enabled``.
-                Default: ``disabled``.
-            annotation: User annotation. Suggested format orchestrator:value
-            excessive_burst: Excessive burst size (2R3C policer only)
-            excessive_burst_unit: Excessive Burst unit - none, Kilo, Mega, Giga, ms, us Values:
-                ``giga``, ``kilo``, ``mega``, ``msec``, ``unspecified``, ``usec``. Default:
-                ``unspecified``.
-            burst: Committed burst size, number of packets to absorb during a burst
-            burst_unit: Burst unit - byte, kbyte, mbyte etc. Values: ``giga``, ``kilo``,
-                ``mega``, ``msec``, ``unspecified``, ``usec``. Default: ``unspecified``.
-            confirm_action: Confirm action Values: ``drop``, ``mark``, ``transmit``. Default:
-                ``transmit``.
-            conform_mark_cos: Conform Mark cos
-            conform_mark_dscp: Conform Mark Dscp
-            description: Specifies a description of the policy definition.
-            exceed_action: Exceed action Values: ``drop``, ``mark``, ``transmit``. Default:
-                ``drop``.
-            exceed_mark_cos: Exceed Mark cos
-            exceed_mark_dscp: Exceed Mark Dscp
-            bit_or_packet: Policer mode - bytes or packet policer Values: ``bit``, ``packet``.
-                Default: ``bit``.
-            owner_key: The key for enabling clients to own their data for entity correlation.
-            owner_tag: A tag for enabling clients to add their own data. For example, to
-                indicate who created this object.
-            peak_rate: Peak rate (pir) (2R3C policer only)
-            peak_rate_unit: Peak Rate unit - none, Kilo, Mega, Giga Values: ``giga``, ``kilo``,
-                ``mega``, ``unspecified``. Default: ``unspecified``.
-            rate: Allowed rate, committed rate at which the packets are allowed into the system
-            rate_unit: Rate unit - bps, kbps, mbps, packets etc. Values: ``giga``, ``kilo``,
-                ``mega``, ``unspecified``. Default: ``unspecified``.
-            policer_sharing_mode: Policer sharing mode Values: ``dedicated``, ``shared``.
-                Default: ``dedicated``.
-            type: Policer type Values: ``1R2C``, ``2R3C``. Default: ``1R2C``.
-            violate_action: Violate action Values: ``drop``, ``mark``, ``transmit``. Default:
-                ``drop``.
-            violate_mark_cos: Violate Mark cos
-            violate_mark_dscp: Violate Mark Dscp
-        """
-        params = {
-            k: v
-            for k, v in locals().items()
-            if k
-            not in (
-                "self",
-                "name",
-            )
-        }
-        return cast(
-            "TenantDppPolicyCursor",
-            self._invoke_maker("dpp_policy", (name,), _prune(params)),
-        )
-
     def dhcp_relay_policy(
         self,
         name: str,
@@ -1962,51 +1763,31 @@ class _TenantMakers(Cursor):
             self._invoke_maker("dhcp_relay_policy", (name,), _prune(params)),
         )
 
-    def ep_retention_policy(
+    def dhcp_option_policy(
         self,
         name: str,
         *,
         annotation: str | None = None,
-        ep_bounce_age_interval: str | None = None,
-        ep_bounce_trigger: str | None = None,
         description: str | None = None,
-        ep_hold_interval: str | None = None,
-        local_ep_age_interval: str | None = None,
-        ep_move_frequency: str | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
-        remote_ep_age_interval: str | None = None,
         userdom: str | None = None,
-    ) -> EpRetentionPolicyCursor:
-        """Declare a ``fvEpRetPol`` child under the tenant level.
+    ) -> DhcpOptionPolicyCursor:
+        """Declare a ``dhcpOptionPol`` child under the tenant level.
 
-        The endpoint retention policy provides the parameters for the lifecycle of the endpoints.
+        The DHCP option policy, which defines lease duration, gateway routers, and other
+        configuration parameters in what are called DHCP options. Every DHCP server must have one or
+        more policies defined for it.
 
         Args:
-            name: The name for the endpoint retention policy.
+            name: The DHCP option policy name. This name can be up to 64 alphanumeric
+                characters.
             annotation: User annotation. Suggested format orchestrator:value
-            ep_bounce_age_interval: The aging interval for a bounce entry. When an endpoint (VM)
-                migrates to another switch, the endpoint is marked as bouncing for the specified
-                aging interval and is deleted afterwards.
-            ep_bounce_trigger: Specifies whether to install the bounce entry by RARP flood or by
-                COOP protocol.
             description: Specifies a description of the policy definition.
-            ep_hold_interval: A time period during which new endpoint learn events will not be
-                honored. This interval is triggered when the maximum endpoint move frequency is
-                exceeded.
-            local_ep_age_interval: The aging interval for all local endpoints learned in this
-                bridge domain. When 75% of the interval is reached, 3 ARP requests are sent to
-                verify the existence of the endpoint. If no response is received, the endpoint
-                is deleted.
-            ep_move_frequency: A maximum allowed number of endpoint moves per second. If the
-                move frequency is exceeded, the hold interval is triggered, and new endpoint
-                learn events will not be honored until after the hold interval expires.
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
-            remote_ep_age_interval: The aging interval for all remote endpoints learned in this
-                bridge domain.
         """
         params = {
             k: v
@@ -2018,35 +1799,8 @@ class _TenantMakers(Cursor):
             )
         }
         return cast(
-            "EpRetentionPolicyCursor",
-            self._invoke_maker("ep_retention_policy", (name,), _prune(params)),
-        )
-
-    def external_bridge_group_profile(
-        self,
-        name: str,
-        *,
-        annotation: str | None = None,
-        userdom: str | None = None,
-    ) -> ExternalBridgeGroupProfileCursor:
-        """Declare a ``l3extBdProfile`` child under the tenant level.
-
-        Args:
-            name: The name of the object.
-            annotation: User annotation. Suggested format orchestrator:value
-        """
-        params = {
-            k: v
-            for k, v in locals().items()
-            if k
-            not in (
-                "self",
-                "name",
-            )
-        }
-        return cast(
-            "ExternalBridgeGroupProfileCursor",
-            self._invoke_maker("external_bridge_group_profile", (name,), _prune(params)),
+            "DhcpOptionPolicyCursor",
+            self._invoke_maker("dhcp_option_policy", (name,), _prune(params)),
         )
 
     def fhs_bd_policy(
@@ -2140,48 +1894,33 @@ class _TenantMakers(Cursor):
             self._invoke_maker("trust_control_policy", (name,), _prune(params)),
         )
 
-    def igmp_snoop_policy(
+    def route_control_profile(
         self,
         name: str,
         *,
-        admin_state: NwAdminSt | str | None = None,
         annotation: str | None = None,
-        controls: str | None = None,
+        auto_continue: bool | None = None,
         description: str | None = None,
-        last_member_query_interval: str | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
-        query_interval: str | None = None,
-        response_interval: str | None = None,
-        startup_query_count: str | None = None,
-        startup_query_interval: str | None = None,
+        type: RtctrlPolicyType | str | None = None,
         userdom: str | None = None,
-        version: McastVer | str | None = None,
-    ) -> TenantIgmpSnoopPolicyCursor:
-        """Declare a ``igmpSnoopPol`` child under the tenant level.
+    ) -> TenantRouteControlProfileCursor:
+        """Declare a ``rtctrlProfile`` child under the tenant level.
 
-        The IGMP snooping policy streamlines multicast traffic handling for VLANs. By examining
-        (snooping) IGMP membership report messages from interested hosts, multicast traffic is
-        limited to the subset of VLAN interfaces on which the hosts reside.
+        The route control profile specifies policies for external networks. The layer 3 networks
+        outside the fabric, and reachable by a Tenant's applications, route to external networks.
 
         Args:
-            name: The name of the IGMP Snoop policy
-            admin_state: Administrative State Values: ``disabled``, ``enabled``. Default:
-                ``enabled``.
+            name: The name of the policy profile
             annotation: User annotation. Suggested format orchestrator:value
+            auto_continue: Default: ``False``.
             description: Specifies a description of the policy definition.
-            last_member_query_interval: When the last member query interval parameter is
-                configured, the software removes the group state if no host responds before the
-                timeout.
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
-            response_interval: The IGMP snooping query response interval.
-            startup_query_count: The interval before the IGMP query begins.
-            startup_query_interval: The startup query interval. This configures the IGMP
-                snooping query interval at startup.
-            version: Version Values: ``unspecified``, ``v1``, ``v2``, ``v3``. Default: ``v3``.
+            type: Values: ``combinable``, ``global``. Default: ``combinable``.
         """
         params = {
             k: v
@@ -2193,52 +1932,27 @@ class _TenantMakers(Cursor):
             )
         }
         return cast(
-            "TenantIgmpSnoopPolicyCursor",
-            self._invoke_maker("igmp_snoop_policy", (name,), _prune(params)),
+            "TenantRouteControlProfileCursor",
+            self._invoke_maker("route_control_profile", (name,), _prune(params)),
         )
 
-    def mld_snoop_policy(
+    def match_rule(
         self,
         name: str,
         *,
-        admin_state: NwAdminSt | str | None = None,
         annotation: str | None = None,
-        controls: str | None = None,
         description: str | None = None,
-        last_member_query_interval: str | None = None,
         display_name: str | None = None,
-        owner_key: str | None = None,
-        owner_tag: str | None = None,
-        query_interval: str | None = None,
-        response_interval: str | None = None,
-        startup_query_count: str | None = None,
-        startup_query_interval: str | None = None,
         userdom: str | None = None,
-        version: McastVer2 | str | None = None,
-    ) -> TenantMldSnoopPolicyCursor:
-        """Declare a ``mldSnoopPol`` child under the tenant level.
+    ) -> MatchRuleCursor:
+        """Declare a ``rtctrlSubjP`` child under the tenant level.
 
-        The MLD snooping policy streamlines multicast traffic handling for VLANs. By examining
-        (snooping) MLD membership report messages from interested hosts, multicast traffic is
-        limited to the subset of VLAN interfaces on which the hosts reside.
+        The subject profile.
 
         Args:
-            name: The name of the MLD Snoop policy
-            admin_state: Values: ``disabled``, ``enabled``. Default: ``disabled``.
-            controls: Controls for MLD Snoop Policy
-            description: Specifies a description of the policy definition.
-            last_member_query_interval: When the last member query interval parameter is
-                configured, the software removes the group state if no host responds before the
-                timeout.
-            owner_key: The key for enabling clients to own their data for entity correlation.
-            owner_tag: A tag for enabling clients to add their own data. For example, to
-                indicate who created this object.
-            query_interval: Query interval
-            response_interval: The snooping query response interval.
-            startup_query_count: The interval before the query begins.
-            startup_query_interval: The startup query interval. This configures the snooping
-                query interval at startup.
-            version: Version Values: ``unspecified``, ``v1``, ``v2``. Default: ``v2``.
+            name: Naming property — forms the object's RN.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
         """
         params = {
             k: v
@@ -2250,8 +1964,80 @@ class _TenantMakers(Cursor):
             )
         }
         return cast(
-            "TenantMldSnoopPolicyCursor",
-            self._invoke_maker("mld_snoop_policy", (name,), _prune(params)),
+            "MatchRuleCursor",
+            self._invoke_maker("match_rule", (name,), _prune(params)),
+        )
+
+    def action_rule_profile(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> ActionRuleProfileCursor:
+        """Declare a ``rtctrlAttrP`` child under the tenant level.
+
+        The action rule profile, which specifies actions for events that meet a configured action
+        rule.
+
+        Args:
+            name: The action rule name.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "ActionRuleProfileCursor",
+            self._invoke_maker("action_rule_profile", (name,), _prune(params)),
+        )
+
+    def route_tag_policy(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        route_tag: int | None = None,
+        userdom: str | None = None,
+    ) -> RouteTagPolicyCursor:
+        """Declare a ``l3extRouteTagPol`` child under the tenant level.
+
+        A route tag is used to assign a number to identify the policy.
+
+        Args:
+            name: The route tag policy name.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            route_tag: The color of a policy label. Default: ``4294967295``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "RouteTagPolicyCursor",
+            self._invoke_maker("route_tag_policy", (name,), _prune(params)),
         )
 
     def ip_sla_monitoring_policy(
@@ -2396,7 +2182,7 @@ class _TenantMakers(Cursor):
             self._invoke_maker("track_member", (name,), _prune(params)),
         )
 
-    def pim_route_map_policy(
+    def mpls_interface_policy(
         self,
         name: str,
         *,
@@ -2406,13 +2192,11 @@ class _TenantMakers(Cursor):
         owner_key: str | None = None,
         owner_tag: str | None = None,
         userdom: str | None = None,
-    ) -> PimRouteMapPolicyCursor:
-        """Declare a ``pimRouteMapPol`` child under the tenant level.
-
-        PIM route map policy
+    ) -> MplsInterfacePolicyCursor:
+        """Declare a ``mplsIfPol`` child under the tenant level.
 
         Args:
-            name: The name of the route map policy.
+            name: The name of the object.
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies a description of the policy definition.
             owner_key: The key for enabling clients to own their data for entity correlation.
@@ -2429,34 +2213,38 @@ class _TenantMakers(Cursor):
             )
         }
         return cast(
-            "PimRouteMapPolicyCursor",
-            self._invoke_maker("pim_route_map_policy", (name,), _prune(params)),
+            "MplsInterfacePolicyCursor",
+            self._invoke_maker("mpls_interface_policy", (name,), _prune(params)),
         )
 
-    def route_tag_policy(
+    def mpls_global_configuration(
         self,
         name: str,
         *,
         annotation: str | None = None,
         description: str | None = None,
+        mpls_maximum_dynamic_label: int | None = None,
+        mpls_maximum_static_label: int | None = None,
+        mpls_minimum_dynamic_label: int | None = None,
+        mpls_minimum_static_label: int | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
-        route_tag: int | None = None,
         userdom: str | None = None,
-    ) -> RouteTagPolicyCursor:
-        """Declare a ``l3extRouteTagPol`` child under the tenant level.
-
-        A route tag is used to assign a number to identify the policy.
+    ) -> MplsGlobalConfigurationCursor:
+        """Declare a ``mplsLabelPol`` child under the tenant level.
 
         Args:
-            name: The route tag policy name.
+            name: The name of the object.
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies a description of the policy definition.
+            mpls_maximum_dynamic_label: Default: ``525286``.
+            mpls_maximum_static_label: Default: ``0``.
+            mpls_minimum_dynamic_label: MPLS Label Dynamic Range Default: ``16``.
+            mpls_minimum_static_label: MPLS Label Static Range Default: ``0``.
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
-            route_tag: The color of a policy label. Default: ``4294967295``.
         """
         params = {
             k: v
@@ -2468,37 +2256,55 @@ class _TenantMakers(Cursor):
             )
         }
         return cast(
-            "RouteTagPolicyCursor",
-            self._invoke_maker("route_tag_policy", (name,), _prune(params)),
+            "MplsGlobalConfigurationCursor",
+            self._invoke_maker("mpls_global_configuration", (name,), _prune(params)),
         )
 
-    def route_control_profile(
+    def ep_retention_policy(
         self,
         name: str,
         *,
         annotation: str | None = None,
-        auto_continue: bool | None = None,
+        ep_bounce_age_interval: str | None = None,
+        ep_bounce_trigger: str | None = None,
         description: str | None = None,
+        ep_hold_interval: str | None = None,
+        local_ep_age_interval: str | None = None,
+        ep_move_frequency: str | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
-        type: RtctrlPolicyType | str | None = None,
+        remote_ep_age_interval: str | None = None,
         userdom: str | None = None,
-    ) -> TenantRouteControlProfileCursor:
-        """Declare a ``rtctrlProfile`` child under the tenant level.
+    ) -> EpRetentionPolicyCursor:
+        """Declare a ``fvEpRetPol`` child under the tenant level.
 
-        The route control profile specifies policies for external networks. The layer 3 networks
-        outside the fabric, and reachable by a Tenant's applications, route to external networks.
+        The endpoint retention policy provides the parameters for the lifecycle of the endpoints.
 
         Args:
-            name: The name of the policy profile
+            name: The name for the endpoint retention policy.
             annotation: User annotation. Suggested format orchestrator:value
-            auto_continue: Default: ``False``.
+            ep_bounce_age_interval: The aging interval for a bounce entry. When an endpoint (VM)
+                migrates to another switch, the endpoint is marked as bouncing for the specified
+                aging interval and is deleted afterwards.
+            ep_bounce_trigger: Specifies whether to install the bounce entry by RARP flood or by
+                COOP protocol.
             description: Specifies a description of the policy definition.
+            ep_hold_interval: A time period during which new endpoint learn events will not be
+                honored. This interval is triggered when the maximum endpoint move frequency is
+                exceeded.
+            local_ep_age_interval: The aging interval for all local endpoints learned in this
+                bridge domain. When 75% of the interval is reached, 3 ARP requests are sent to
+                verify the existence of the endpoint. If no response is received, the endpoint
+                is deleted.
+            ep_move_frequency: A maximum allowed number of endpoint moves per second. If the
+                move frequency is exceeded, the hold interval is triggered, and new endpoint
+                learn events will not be honored until after the hold interval expires.
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
-            type: Values: ``combinable``, ``global``. Default: ``combinable``.
+            remote_ep_age_interval: The aging interval for all remote endpoints learned in this
+                bridge domain.
         """
         params = {
             k: v
@@ -2510,8 +2316,202 @@ class _TenantMakers(Cursor):
             )
         }
         return cast(
-            "TenantRouteControlProfileCursor",
-            self._invoke_maker("route_control_profile", (name,), _prune(params)),
+            "EpRetentionPolicyCursor",
+            self._invoke_maker("ep_retention_policy", (name,), _prune(params)),
+        )
+
+    def external_bridge_group_profile(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        userdom: str | None = None,
+    ) -> ExternalBridgeGroupProfileCursor:
+        """Declare a ``l3extBdProfile`` child under the tenant level.
+
+        Args:
+            name: The name of the object.
+            annotation: User annotation. Suggested format orchestrator:value
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "ExternalBridgeGroupProfileCursor",
+            self._invoke_maker("external_bridge_group_profile", (name,), _prune(params)),
+        )
+
+    def tenant_keychain_policy(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> TenantKeychainPolicyCursor:
+        """Declare a ``fvKeyChainPol`` child under the tenant level.
+
+        KeyChain Policy
+
+        Args:
+            name: The name of the object.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "TenantKeychainPolicyCursor",
+            self._invoke_maker("tenant_keychain_policy", (name,), _prune(params)),
+        )
+
+    def custom_qos_policy(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> CustomQosPolicyCursor:
+        """Declare a ``qosCustomPol`` child under the tenant level.
+
+        The custom QoS policy enables different levels of service to be assigned to network traffic,
+        including specifications for the Differentiated Services Code Point (DSCP) value(s), and the
+        802.1p Dot1p priority.
+
+        Args:
+            name: The policy name.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "CustomQosPolicyCursor",
+            self._invoke_maker("custom_qos_policy", (name,), _prune(params)),
+        )
+
+    def dpp_policy(
+        self,
+        name: str,
+        *,
+        admin_st: QosDppPolAdminState | str | None = None,
+        annotation: str | None = None,
+        excessive_burst: str | None = None,
+        excessive_burst_unit: DppBurstUnit | str | None = None,
+        burst: str | None = None,
+        burst_unit: DppBurstUnit | str | None = None,
+        confirm_action: DppConformRateAction | str | None = None,
+        conform_mark_cos: str | None = None,
+        conform_mark_dscp: str | None = None,
+        description: str | None = None,
+        exceed_action: DppExceedRateAction | str | None = None,
+        exceed_mark_cos: str | None = None,
+        exceed_mark_dscp: str | None = None,
+        bit_or_packet: DppMode | str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        peak_rate: str | None = None,
+        peak_rate_unit: DppRateUnit | str | None = None,
+        rate: str | None = None,
+        rate_unit: DppRateUnit | str | None = None,
+        policer_sharing_mode: DppSharingMode | str | None = None,
+        type: DppType | str | None = None,
+        userdom: str | None = None,
+        violate_action: DppViolateRateAction | str | None = None,
+        violate_mark_cos: str | None = None,
+        violate_mark_dscp: str | None = None,
+    ) -> TenantDppPolicyCursor:
+        """Declare a ``qosDppPol`` child under the tenant level.
+
+        Define a Data Plane Policing policy. User is supposed to use this in scenarios where the
+        incoming traffic need to be policed to certain levels
+
+        Args:
+            name: The name of the object.
+            admin_st: The Administrative state of the policy Values: ``disabled``, ``enabled``.
+                Default: ``disabled``.
+            annotation: User annotation. Suggested format orchestrator:value
+            excessive_burst: Excessive burst size (2R3C policer only)
+            excessive_burst_unit: Excessive Burst unit - none, Kilo, Mega, Giga, ms, us Values:
+                ``giga``, ``kilo``, ``mega``, ``msec``, ``unspecified``, ``usec``. Default:
+                ``unspecified``.
+            burst: Committed burst size, number of packets to absorb during a burst
+            burst_unit: Burst unit - byte, kbyte, mbyte etc. Values: ``giga``, ``kilo``,
+                ``mega``, ``msec``, ``unspecified``, ``usec``. Default: ``unspecified``.
+            confirm_action: Confirm action Values: ``drop``, ``mark``, ``transmit``. Default:
+                ``transmit``.
+            conform_mark_cos: Conform Mark cos
+            conform_mark_dscp: Conform Mark Dscp
+            description: Specifies a description of the policy definition.
+            exceed_action: Exceed action Values: ``drop``, ``mark``, ``transmit``. Default:
+                ``drop``.
+            exceed_mark_cos: Exceed Mark cos
+            exceed_mark_dscp: Exceed Mark Dscp
+            bit_or_packet: Policer mode - bytes or packet policer Values: ``bit``, ``packet``.
+                Default: ``bit``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            peak_rate: Peak rate (pir) (2R3C policer only)
+            peak_rate_unit: Peak Rate unit - none, Kilo, Mega, Giga Values: ``giga``, ``kilo``,
+                ``mega``, ``unspecified``. Default: ``unspecified``.
+            rate: Allowed rate, committed rate at which the packets are allowed into the system
+            rate_unit: Rate unit - bps, kbps, mbps, packets etc. Values: ``giga``, ``kilo``,
+                ``mega``, ``unspecified``. Default: ``unspecified``.
+            policer_sharing_mode: Policer sharing mode Values: ``dedicated``, ``shared``.
+                Default: ``dedicated``.
+            type: Policer type Values: ``1R2C``, ``2R3C``. Default: ``1R2C``.
+            violate_action: Violate action Values: ``drop``, ``mark``, ``transmit``. Default:
+                ``drop``.
+            violate_mark_cos: Violate Mark cos
+            violate_mark_dscp: Violate Mark Dscp
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "TenantDppPolicyCursor",
+            self._invoke_maker("dpp_policy", (name,), _prune(params)),
         )
 
     def service_container(

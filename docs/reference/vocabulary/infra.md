@@ -10,9 +10,6 @@ Interface policies, VLAN pools, AAEPs, policy groups, interface and switch profi
 ## Positions
 
 - {ref}`infra <vocab-infra>` — `infraInfra`, 2 attributes
-  - {ref}`infra.dhcp_relay_policy <vocab-infra-dhcp_relay_policy>` — `dhcpRelayP`, 6 attributes
-    - {ref}`infra.dhcp_relay_policy.provider <vocab-infra-dhcp_relay_policy-provider>` — `dhcpRsProv`, 3 attributes
-  - {ref}`infra.dpp_policy <vocab-infra-dpp_policy>` — `qosDppPol`, 25 attributes
   - {ref}`infra.cdp_policy <vocab-infra-cdp_policy>` — `cdpIfPol`, 5 attributes
   - {ref}`infra.lldp_policy <vocab-infra-lldp_policy>` — `lldpIfPol`, 7 attributes
   - {ref}`infra.lacp_policy <vocab-infra-lacp_policy>` — `lacpLagPol`, 8 attributes
@@ -20,6 +17,9 @@ Interface policies, VLAN pools, AAEPs, policy groups, interface and switch profi
   - {ref}`infra.mcp_policy <vocab-infra-mcp_policy>` — `mcpIfPol`, 13 attributes
   - {ref}`infra.stp_policy <vocab-infra-stp_policy>` — `stpIfPol`, 5 attributes
   - {ref}`infra.storm_control_policy <vocab-infra-storm_control_policy>` — `stormctrlIfPol`, 24 attributes
+  - {ref}`infra.dhcp_relay_policy <vocab-infra-dhcp_relay_policy>` — `dhcpRelayP`, 6 attributes
+    - {ref}`infra.dhcp_relay_policy.provider <vocab-infra-dhcp_relay_policy-provider>` — `dhcpRsProv`, 3 attributes
+  - {ref}`infra.dpp_policy <vocab-infra-dpp_policy>` — `qosDppPol`, 25 attributes
   - {ref}`infra.vlan_pool <vocab-infra-vlan_pool>` — `fvnsVlanInstP`, 5 attributes
     - {ref}`infra.vlan_pool.range <vocab-infra-vlan_pool-range>` — `fvnsEncapBlk`, 6 attributes
   - {ref}`infra.aaep <vocab-infra-aaep>` — `infraAttEntityP`, 4 attributes
@@ -42,9 +42,6 @@ Interface policies, VLAN pools, AAEPs, policy groups, interface and switch profi
 :hidden:
 
 infra/infra
-infra/infra-dhcp_relay_policy
-infra/infra-dhcp_relay_policy-provider
-infra/infra-dpp_policy
 infra/infra-cdp_policy
 infra/infra-lldp_policy
 infra/infra-lacp_policy
@@ -52,6 +49,9 @@ infra/infra-link_level_policy
 infra/infra-mcp_policy
 infra/infra-stp_policy
 infra/infra-storm_control_policy
+infra/infra-dhcp_relay_policy
+infra/infra-dhcp_relay_policy-provider
+infra/infra-dpp_policy
 infra/infra-vlan_pool
 infra/infra-vlan_pool-range
 infra/infra-aaep

@@ -77,58 +77,58 @@ VRFs, bridge domains, application profiles, EPGs, contracts and filters — one 
     - {ref}`tenant.filter.entry <vocab-tenant-filter-entry>` — `vzEntry`, 17 attributes
   - {ref}`tenant.contract <vocab-tenant-contract>` — `vzBrCP`, 9 attributes
     - {ref}`tenant.contract.subject <vocab-tenant-contract-subject>` — `vzSubj`, 7 attributes
+  - {ref}`tenant.bgp_timers_policy <vocab-tenant-bgp_timers_policy>` — `bgpCtxPol`, 9 attributes
+  - {ref}`tenant.bgp_address_family_context_policy <vocab-tenant-bgp_address_family_context_policy>` — `bgpCtxAfPol`, 11 attributes
+    - {ref}`tenant.bgp_address_family_context_policy.bgp_additional_path_context_policy <vocab-tenant-bgp_address_family_context_policy-bgp_additional_path_context_policy>` — `bgpCtxAddlPathPol`, 5 attributes
+  - {ref}`tenant.bgp_best_path_control_policy <vocab-tenant-bgp_best_path_control_policy>` — `bgpBestPathCtrlPol`, 3 attributes
+  - {ref}`tenant.bgp_peer_prefix_policy <vocab-tenant-bgp_peer_prefix_policy>` — `bgpPeerPfxPol`, 8 attributes
+  - {ref}`tenant.bgp_route_summarization_policy <vocab-tenant-bgp_route_summarization_policy>` — `bgpRtSummPol`, 7 attributes
   - {ref}`tenant.ospf_interface_policy <vocab-tenant-ospf_interface_policy>` — `ospfIfPol`, 13 attributes
+  - {ref}`tenant.ospf_timers_policy <vocab-tenant-ospf_timers_policy>` — `ospfCtxPol`, 23 attributes
+  - {ref}`tenant.ospf_route_summarization_policy <vocab-tenant-ospf_route_summarization_policy>` — `ospfRtSummPol`, 7 attributes
   - {ref}`tenant.eigrp_interface_policy <vocab-tenant-eigrp_interface_policy>` — `eigrpIfPol`, 10 attributes
+  - {ref}`tenant.eigrp_address_family_context_policy <vocab-tenant-eigrp_address_family_context_policy>` — `eigrpCtxAfPol`, 9 attributes
+  - {ref}`tenant.eigrp_route_summarization_policy <vocab-tenant-eigrp_route_summarization_policy>` — `eigrpRtSummPol`, 4 attributes
   - {ref}`tenant.hsrp_interface_policy <vocab-tenant-hsrp_interface_policy>` — `hsrpIfPol`, 7 attributes
   - {ref}`tenant.hsrp_group_policy <vocab-tenant-hsrp_group_policy>` — `hsrpGroupPol`, 15 attributes
-  - {ref}`tenant.igmp_interface_policy <vocab-tenant-igmp_interface_policy>` — `igmpIfPol`, 15 attributes
-  - {ref}`tenant.pim_interface_policy <vocab-tenant-pim_interface_policy>` — `pimIfPol`, 11 attributes
   - {ref}`tenant.bfd_interface_policy <vocab-tenant-bfd_interface_policy>` — `bfdIfPol`, 11 attributes
   - {ref}`tenant.bfd_mh_interface_policy <vocab-tenant-bfd_mh_interface_policy>` — `bfdMhIfPol`, 8 attributes
   - {ref}`tenant.bfd_multihop_node_policy <vocab-tenant-bfd_multihop_node_policy>` — `bfdMhNodePol`, 8 attributes
-  - {ref}`tenant.bgp_peer_prefix_policy <vocab-tenant-bgp_peer_prefix_policy>` — `bgpPeerPfxPol`, 8 attributes
-  - {ref}`tenant.bgp_best_path_control_policy <vocab-tenant-bgp_best_path_control_policy>` — `bgpBestPathCtrlPol`, 3 attributes
-  - {ref}`tenant.bgp_timers_policy <vocab-tenant-bgp_timers_policy>` — `bgpCtxPol`, 9 attributes
-  - {ref}`tenant.bgp_route_summarization_policy <vocab-tenant-bgp_route_summarization_policy>` — `bgpRtSummPol`, 7 attributes
-  - {ref}`tenant.eigrp_route_summarization_policy <vocab-tenant-eigrp_route_summarization_policy>` — `eigrpRtSummPol`, 4 attributes
-  - {ref}`tenant.ospf_route_summarization_policy <vocab-tenant-ospf_route_summarization_policy>` — `ospfRtSummPol`, 7 attributes
-  - {ref}`tenant.dhcp_option_policy <vocab-tenant-dhcp_option_policy>` — `dhcpOptionPol`, 4 attributes
-    - {ref}`tenant.dhcp_option_policy.dhcp_option <vocab-tenant-dhcp_option_policy-dhcp_option>` — `dhcpOption`, 3 attributes
+  - {ref}`tenant.igmp_interface_policy <vocab-tenant-igmp_interface_policy>` — `igmpIfPol`, 15 attributes
+  - {ref}`tenant.igmp_snoop_policy <vocab-tenant-igmp_snoop_policy>` — `igmpSnoopPol`, 12 attributes
+  - {ref}`tenant.mld_snoop_policy <vocab-tenant-mld_snoop_policy>` — `mldSnoopPol`, 12 attributes
+  - {ref}`tenant.pim_interface_policy <vocab-tenant-pim_interface_policy>` — `pimIfPol`, 11 attributes
+  - {ref}`tenant.pim_route_map_policy <vocab-tenant-pim_route_map_policy>` — `pimRouteMapPol`, 4 attributes
+    - {ref}`tenant.pim_route_map_policy.pim_route_map_entry <vocab-tenant-pim_route_map_policy-pim_route_map_entry>` — `pimRouteMapEntry`, 7 attributes
   - {ref}`tenant.nd_interface_policy <vocab-tenant-nd_interface_policy>` — `ndIfPol`, 16 attributes
   - {ref}`tenant.nd_ra_prefix_policy <vocab-tenant-nd_ra_prefix_policy>` — `ndPfxPol`, 7 attributes
   - {ref}`tenant.arp_interface_policy <vocab-tenant-arp_interface_policy>` — `arpIfPol`, 5 attributes
-  - {ref}`tenant.custom_qos_policy <vocab-tenant-custom_qos_policy>` — `qosCustomPol`, 4 attributes
-  - {ref}`tenant.tenant_keychain_policy <vocab-tenant-tenant_keychain_policy>` — `fvKeyChainPol`, 4 attributes
-    - {ref}`tenant.tenant_keychain_policy.key_policy <vocab-tenant-tenant_keychain_policy-key_policy>` — `fvKeyPol`, 8 attributes
-  - {ref}`tenant.mpls_interface_policy <vocab-tenant-mpls_interface_policy>` — `mplsIfPol`, 4 attributes
-  - {ref}`tenant.mpls_global_configuration <vocab-tenant-mpls_global_configuration>` — `mplsLabelPol`, 8 attributes
-  - {ref}`tenant.match_rule <vocab-tenant-match_rule>` — `rtctrlSubjP`, 2 attributes
-  - {ref}`tenant.action_rule_profile <vocab-tenant-action_rule_profile>` — `rtctrlAttrP`, 2 attributes
-  - {ref}`tenant.bgp_address_family_context_policy <vocab-tenant-bgp_address_family_context_policy>` — `bgpCtxAfPol`, 11 attributes
-    - {ref}`tenant.bgp_address_family_context_policy.bgp_additional_path_context_policy <vocab-tenant-bgp_address_family_context_policy-bgp_additional_path_context_policy>` — `bgpCtxAddlPathPol`, 5 attributes
-  - {ref}`tenant.eigrp_address_family_context_policy <vocab-tenant-eigrp_address_family_context_policy>` — `eigrpCtxAfPol`, 9 attributes
-  - {ref}`tenant.ospf_timers_policy <vocab-tenant-ospf_timers_policy>` — `ospfCtxPol`, 23 attributes
-  - {ref}`tenant.dpp_policy <vocab-tenant-dpp_policy>` — `qosDppPol`, 25 attributes
   - {ref}`tenant.dhcp_relay_policy <vocab-tenant-dhcp_relay_policy>` — `dhcpRelayP`, 6 attributes
     - {ref}`tenant.dhcp_relay_policy.provider <vocab-tenant-dhcp_relay_policy-provider>` — `dhcpRsProv`, 3 attributes
-  - {ref}`tenant.ep_retention_policy <vocab-tenant-ep_retention_policy>` — `fvEpRetPol`, 10 attributes
-  - {ref}`tenant.external_bridge_group_profile <vocab-tenant-external_bridge_group_profile>` — `l3extBdProfile`, 1 attributes
+  - {ref}`tenant.dhcp_option_policy <vocab-tenant-dhcp_option_policy>` — `dhcpOptionPol`, 4 attributes
+    - {ref}`tenant.dhcp_option_policy.dhcp_option <vocab-tenant-dhcp_option_policy-dhcp_option>` — `dhcpOption`, 3 attributes
   - {ref}`tenant.fhs_bd_policy <vocab-tenant-fhs_bd_policy>` — `fhsBDPol`, 7 attributes
     - {ref}`tenant.fhs_bd_policy.ra_guard_policy <vocab-tenant-fhs_bd_policy-ra_guard_policy>` — `fhsRaGuardPol`, 11 attributes
   - {ref}`tenant.trust_control_policy <vocab-tenant-trust_control_policy>` — `fhsTrustCtrlPol`, 10 attributes
-  - {ref}`tenant.igmp_snoop_policy <vocab-tenant-igmp_snoop_policy>` — `igmpSnoopPol`, 12 attributes
-  - {ref}`tenant.mld_snoop_policy <vocab-tenant-mld_snoop_policy>` — `mldSnoopPol`, 12 attributes
+  - {ref}`tenant.route_control_profile <vocab-tenant-route_control_profile>` — `rtctrlProfile`, 6 attributes
+    - {ref}`tenant.route_control_profile.route_control_context <vocab-tenant-route_control_profile-route_control_context>` — `rtctrlCtxP`, 4 attributes
+      - {ref}`tenant.route_control_profile.route_control_context.route_context_scope <vocab-tenant-route_control_profile-route_control_context-route_context_scope>` — `rtctrlScope`, 2 attributes
+  - {ref}`tenant.match_rule <vocab-tenant-match_rule>` — `rtctrlSubjP`, 2 attributes
+  - {ref}`tenant.action_rule_profile <vocab-tenant-action_rule_profile>` — `rtctrlAttrP`, 2 attributes
+  - {ref}`tenant.route_tag_policy <vocab-tenant-route_tag_policy>` — `l3extRouteTagPol`, 5 attributes
   - {ref}`tenant.ip_sla_monitoring_policy <vocab-tenant-ip_sla_monitoring_policy>` — `fvIPSLAMonitoringPol`, 16 attributes
     - {ref}`tenant.ip_sla_monitoring_policy.icmp_echo_probe <vocab-tenant-ip_sla_monitoring_policy-icmp_echo_probe>` — `fvICMPProbe`, 4 attributes
     - {ref}`tenant.ip_sla_monitoring_policy.tcp_probe <vocab-tenant-ip_sla_monitoring_policy-tcp_probe>` — `fvTCPProbe`, 4 attributes
   - {ref}`tenant.track_list <vocab-tenant-track_list>` — `fvTrackList`, 9 attributes
   - {ref}`tenant.track_member <vocab-tenant-track_member>` — `fvTrackMember`, 6 attributes
-  - {ref}`tenant.pim_route_map_policy <vocab-tenant-pim_route_map_policy>` — `pimRouteMapPol`, 4 attributes
-    - {ref}`tenant.pim_route_map_policy.pim_route_map_entry <vocab-tenant-pim_route_map_policy-pim_route_map_entry>` — `pimRouteMapEntry`, 7 attributes
-  - {ref}`tenant.route_tag_policy <vocab-tenant-route_tag_policy>` — `l3extRouteTagPol`, 5 attributes
-  - {ref}`tenant.route_control_profile <vocab-tenant-route_control_profile>` — `rtctrlProfile`, 6 attributes
-    - {ref}`tenant.route_control_profile.route_control_context <vocab-tenant-route_control_profile-route_control_context>` — `rtctrlCtxP`, 4 attributes
-      - {ref}`tenant.route_control_profile.route_control_context.route_context_scope <vocab-tenant-route_control_profile-route_control_context-route_context_scope>` — `rtctrlScope`, 2 attributes
+  - {ref}`tenant.mpls_interface_policy <vocab-tenant-mpls_interface_policy>` — `mplsIfPol`, 4 attributes
+  - {ref}`tenant.mpls_global_configuration <vocab-tenant-mpls_global_configuration>` — `mplsLabelPol`, 8 attributes
+  - {ref}`tenant.ep_retention_policy <vocab-tenant-ep_retention_policy>` — `fvEpRetPol`, 10 attributes
+  - {ref}`tenant.external_bridge_group_profile <vocab-tenant-external_bridge_group_profile>` — `l3extBdProfile`, 1 attributes
+  - {ref}`tenant.tenant_keychain_policy <vocab-tenant-tenant_keychain_policy>` — `fvKeyChainPol`, 4 attributes
+    - {ref}`tenant.tenant_keychain_policy.key_policy <vocab-tenant-tenant_keychain_policy-key_policy>` — `fvKeyPol`, 8 attributes
+  - {ref}`tenant.custom_qos_policy <vocab-tenant-custom_qos_policy>` — `qosCustomPol`, 4 attributes
+  - {ref}`tenant.dpp_policy <vocab-tenant-dpp_policy>` — `qosDppPol`, 25 attributes
   - {ref}`tenant.service_container <vocab-tenant-service_container>` — `vnsSvcCont`, 0 attributes
     - {ref}`tenant.service_container.service_redirect_policy <vocab-tenant-service_container-service_redirect_policy>` — `vnsSvcRedirectPol`, 14 attributes
       - {ref}`tenant.service_container.service_redirect_policy.destination_of_redirected_traffic <vocab-tenant-service_container-service_redirect_policy-destination_of_redirected_traffic>` — `vnsRedirectDest`, 8 attributes
@@ -209,58 +209,58 @@ tenant/tenant-filter
 tenant/tenant-filter-entry
 tenant/tenant-contract
 tenant/tenant-contract-subject
+tenant/tenant-bgp_timers_policy
+tenant/tenant-bgp_address_family_context_policy
+tenant/tenant-bgp_address_family_context_policy-bgp_additional_path_context_policy
+tenant/tenant-bgp_best_path_control_policy
+tenant/tenant-bgp_peer_prefix_policy
+tenant/tenant-bgp_route_summarization_policy
 tenant/tenant-ospf_interface_policy
+tenant/tenant-ospf_timers_policy
+tenant/tenant-ospf_route_summarization_policy
 tenant/tenant-eigrp_interface_policy
+tenant/tenant-eigrp_address_family_context_policy
+tenant/tenant-eigrp_route_summarization_policy
 tenant/tenant-hsrp_interface_policy
 tenant/tenant-hsrp_group_policy
-tenant/tenant-igmp_interface_policy
-tenant/tenant-pim_interface_policy
 tenant/tenant-bfd_interface_policy
 tenant/tenant-bfd_mh_interface_policy
 tenant/tenant-bfd_multihop_node_policy
-tenant/tenant-bgp_peer_prefix_policy
-tenant/tenant-bgp_best_path_control_policy
-tenant/tenant-bgp_timers_policy
-tenant/tenant-bgp_route_summarization_policy
-tenant/tenant-eigrp_route_summarization_policy
-tenant/tenant-ospf_route_summarization_policy
-tenant/tenant-dhcp_option_policy
-tenant/tenant-dhcp_option_policy-dhcp_option
+tenant/tenant-igmp_interface_policy
+tenant/tenant-igmp_snoop_policy
+tenant/tenant-mld_snoop_policy
+tenant/tenant-pim_interface_policy
+tenant/tenant-pim_route_map_policy
+tenant/tenant-pim_route_map_policy-pim_route_map_entry
 tenant/tenant-nd_interface_policy
 tenant/tenant-nd_ra_prefix_policy
 tenant/tenant-arp_interface_policy
-tenant/tenant-custom_qos_policy
-tenant/tenant-tenant_keychain_policy
-tenant/tenant-tenant_keychain_policy-key_policy
-tenant/tenant-mpls_interface_policy
-tenant/tenant-mpls_global_configuration
-tenant/tenant-match_rule
-tenant/tenant-action_rule_profile
-tenant/tenant-bgp_address_family_context_policy
-tenant/tenant-bgp_address_family_context_policy-bgp_additional_path_context_policy
-tenant/tenant-eigrp_address_family_context_policy
-tenant/tenant-ospf_timers_policy
-tenant/tenant-dpp_policy
 tenant/tenant-dhcp_relay_policy
 tenant/tenant-dhcp_relay_policy-provider
-tenant/tenant-ep_retention_policy
-tenant/tenant-external_bridge_group_profile
+tenant/tenant-dhcp_option_policy
+tenant/tenant-dhcp_option_policy-dhcp_option
 tenant/tenant-fhs_bd_policy
 tenant/tenant-fhs_bd_policy-ra_guard_policy
 tenant/tenant-trust_control_policy
-tenant/tenant-igmp_snoop_policy
-tenant/tenant-mld_snoop_policy
+tenant/tenant-route_control_profile
+tenant/tenant-route_control_profile-route_control_context
+tenant/tenant-route_control_profile-route_control_context-route_context_scope
+tenant/tenant-match_rule
+tenant/tenant-action_rule_profile
+tenant/tenant-route_tag_policy
 tenant/tenant-ip_sla_monitoring_policy
 tenant/tenant-ip_sla_monitoring_policy-icmp_echo_probe
 tenant/tenant-ip_sla_monitoring_policy-tcp_probe
 tenant/tenant-track_list
 tenant/tenant-track_member
-tenant/tenant-pim_route_map_policy
-tenant/tenant-pim_route_map_policy-pim_route_map_entry
-tenant/tenant-route_tag_policy
-tenant/tenant-route_control_profile
-tenant/tenant-route_control_profile-route_control_context
-tenant/tenant-route_control_profile-route_control_context-route_context_scope
+tenant/tenant-mpls_interface_policy
+tenant/tenant-mpls_global_configuration
+tenant/tenant-ep_retention_policy
+tenant/tenant-external_bridge_group_profile
+tenant/tenant-tenant_keychain_policy
+tenant/tenant-tenant_keychain_policy-key_policy
+tenant/tenant-custom_qos_policy
+tenant/tenant-dpp_policy
 tenant/tenant-service_container
 tenant/tenant-service_container-service_redirect_policy
 tenant/tenant-service_container-service_redirect_policy-destination_of_redirected_traffic

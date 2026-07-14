@@ -30,8 +30,6 @@ Accepted as keyword arguments of `.infra()` and of `.set(**attrs)` on this curso
 
 | maker | creates | position |
 | --- | --- | --- |
-| `.dhcp_relay_policy(name, **attrs)` | `dhcpRelayP` | {ref}`infra.dhcp_relay_policy <vocab-infra-dhcp_relay_policy>` |
-| `.dpp_policy(name, **attrs)` | `qosDppPol` | {ref}`infra.dpp_policy <vocab-infra-dpp_policy>` |
 | `.cdp_policy(name, **attrs)` | `cdpIfPol` | {ref}`infra.cdp_policy <vocab-infra-cdp_policy>` |
 | `.lldp_policy(name, **attrs)` | `lldpIfPol` | {ref}`infra.lldp_policy <vocab-infra-lldp_policy>` |
 | `.lacp_policy(name, **attrs)` | `lacpLagPol` | {ref}`infra.lacp_policy <vocab-infra-lacp_policy>` |
@@ -39,6 +37,8 @@ Accepted as keyword arguments of `.infra()` and of `.set(**attrs)` on this curso
 | `.mcp_policy(name, **attrs)` | `mcpIfPol` | {ref}`infra.mcp_policy <vocab-infra-mcp_policy>` |
 | `.stp_policy(name, **attrs)` | `stpIfPol` | {ref}`infra.stp_policy <vocab-infra-stp_policy>` |
 | `.storm_control_policy(name, **attrs)` | `stormctrlIfPol` | {ref}`infra.storm_control_policy <vocab-infra-storm_control_policy>` |
+| `.dhcp_relay_policy(name, **attrs)` | `dhcpRelayP` | {ref}`infra.dhcp_relay_policy <vocab-infra-dhcp_relay_policy>` |
+| `.dpp_policy(name, **attrs)` | `qosDppPol` | {ref}`infra.dpp_policy <vocab-infra-dpp_policy>` |
 | `.vlan_pool(name, allocation_mode, **attrs)` | `fvnsVlanInstP` | {ref}`infra.vlan_pool <vocab-infra-vlan_pool>` |
 | `.aaep(name, **attrs)` | `infraAttEntityP` | {ref}`infra.aaep <vocab-infra-aaep>` |
 | `.func_profile(**attrs)` | `infraFuncP` | {ref}`infra.func_profile <vocab-infra-func_profile>` |

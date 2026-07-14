@@ -156,58 +156,93 @@ makers:
     phys_dom: physDomP
     l3_dom: l3extDomP
 
-  # ── Tenant world ────────────────────────────────────────────────────────────
+  # ══ Tenant world ═══════════════════════════════════════════════════════════
+  # Ordered like the APIC GUI tree under Tenants > <tenant>, so a new maker
+  # goes where an operator would look for it — not at the end of the list.
   fvTenant:
+    # ── Application Profiles ──────────────────────────────────────────────────
     app: fvAp
+
+    # ── Networking ────────────────────────────────────────────────────────────
     bd: fvBD
     vrf: fvCtx
     l3out: l3extOut
+
+    # ── Contracts ─────────────────────────────────────────────────────────────
     filter: vzFilter
     contract: vzBrCP
-    # Tenant-level protocol/QoS policies referenced by the L3Out binds (wave 1)
+
+    # ── Policies › Protocol › BGP ─────────────────────────────────────────────
+    bgp_timers_policy: bgpCtxPol
+    bgp_address_family_context_policy: bgpCtxAfPol
+    bgp_best_path_control_policy: bgpBestPathCtrlPol
+    bgp_peer_prefix_policy: bgpPeerPfxPol
+    bgp_route_summarization_policy: bgpRtSummPol
+
+    # ── Policies › Protocol › OSPF ────────────────────────────────────────────
     ospf_interface_policy: ospfIfPol
+    ospf_timers_policy: ospfCtxPol
+    ospf_route_summarization_policy: ospfRtSummPol
+
+    # ── Policies › Protocol › EIGRP ───────────────────────────────────────────
     eigrp_interface_policy: eigrpIfPol
+    eigrp_address_family_context_policy: eigrpCtxAfPol
+    eigrp_route_summarization_policy: eigrpRtSummPol
+
+    # ── Policies › Protocol › HSRP ────────────────────────────────────────────
     hsrp_interface_policy: hsrpIfPol
     hsrp_group_policy: hsrpGroupPol
-    igmp_interface_policy: igmpIfPol
-    pim_interface_policy: pimIfPol
+
+    # ── Policies › Protocol › BFD ─────────────────────────────────────────────
     bfd_interface_policy: bfdIfPol
     bfd_mh_interface_policy: bfdMhIfPol
     bfd_multihop_node_policy: bfdMhNodePol
-    bgp_peer_prefix_policy: bgpPeerPfxPol
-    bgp_best_path_control_policy: bgpBestPathCtrlPol
-    bgp_timers_policy: bgpCtxPol
-    bgp_route_summarization_policy: bgpRtSummPol
-    eigrp_route_summarization_policy: eigrpRtSummPol
-    ospf_route_summarization_policy: ospfRtSummPol
-    dhcp_option_policy: dhcpOptionPol
+
+    # ── Policies › Protocol › Multicast (IGMP, MLD, PIM) ──────────────────────
+    igmp_interface_policy: igmpIfPol
+    igmp_snoop_policy: igmpSnoopPol
+    mld_snoop_policy: mldSnoopPol
+    pim_interface_policy: pimIfPol
+    pim_route_map_policy: pimRouteMapPol
+
+    # ── Policies › Protocol › ND / ARP ────────────────────────────────────────
     nd_interface_policy: ndIfPol
     nd_ra_prefix_policy: ndPfxPol
     arp_interface_policy: arpIfPol
-    custom_qos_policy: qosCustomPol
-    tenant_keychain_policy: fvKeyChainPol
-    mpls_interface_policy: mplsIfPol
-    mpls_global_configuration: mplsLabelPol
-    match_rule: rtctrlSubjP
-    action_rule_profile: rtctrlAttrP
-    # Tenant > Policies > Protocol completion (wave 1bis, 2026-07-12)
-    bgp_address_family_context_policy: bgpCtxAfPol
-    eigrp_address_family_context_policy: eigrpCtxAfPol
-    ospf_timers_policy: ospfCtxPol
-    dpp_policy: qosDppPol
+
+    # ── Policies › Protocol › DHCP ────────────────────────────────────────────
     dhcp_relay_policy: dhcpRelayP
-    ep_retention_policy: fvEpRetPol
-    external_bridge_group_profile: l3extBdProfile
+    dhcp_option_policy: dhcpOptionPol
+
+    # ── Policies › Protocol › First Hop Security ──────────────────────────────
     fhs_bd_policy: fhsBDPol
     trust_control_policy: fhsTrustCtrlPol
-    igmp_snoop_policy: igmpSnoopPol
-    mld_snoop_policy: mldSnoopPol
+
+    # ── Policies › Protocol › Route control ───────────────────────────────────
+    route_control_profile: rtctrlProfile
+    match_rule: rtctrlSubjP
+    action_rule_profile: rtctrlAttrP
+    route_tag_policy: l3extRouteTagPol
+
+    # ── Policies › Protocol › IP SLA & tracking ───────────────────────────────
     ip_sla_monitoring_policy: fvIPSLAMonitoringPol
     track_list: fvTrackList
     track_member: fvTrackMember
-    pim_route_map_policy: pimRouteMapPol
-    route_tag_policy: l3extRouteTagPol
-    route_control_profile: rtctrlProfile
+
+    # ── Policies › Protocol › MPLS ────────────────────────────────────────────
+    mpls_interface_policy: mplsIfPol
+    mpls_global_configuration: mplsLabelPol
+
+    # ── Policies › Protocol › misc ────────────────────────────────────────────
+    ep_retention_policy: fvEpRetPol
+    external_bridge_group_profile: l3extBdProfile
+    tenant_keychain_policy: fvKeyChainPol
+
+    # ── Policies › QoS ────────────────────────────────────────────────────────
+    custom_qos_policy: qosCustomPol
+    dpp_policy: qosDppPol
+
+    # ── Services (L4-L7 policies, no service graph) ────────────────────────────
     service_container: vnsSvcCont
   fvAp:
     epg: fvAEPg
@@ -223,14 +258,20 @@ makers:
     subject: vzSubj
 
   # ── L3Out (wave 1, 2026-07-12) ──────────────────────────────────────────────
+  # ══ L3Out ══════════════════════════════════════════════════════════════════
   l3extOut:
+    # ── Logical Node Profiles / External EPGs ─────────────────────────────────
     node_profile: l3extLNodeP
     external_epg: l3extInstP
+
+    # ── Routing protocols enabled on the L3Out ────────────────────────────────
     bgp: bgpExtP
     ospf: ospfExtP
     eigrp: eigrpExtP
     pim_external: pimExtP
     mpls_external: mplsExtP
+
+    # ── Route control ─────────────────────────────────────────────────────────
     default_route_leak_policy: l3extDefaultRouteLeakP
     route_control_profile: rtctrlProfile
     route_target_instrumentation_profile: bgpRtTargetInstrP
@@ -312,9 +353,10 @@ makers:
     destination_of_redirected_traffic: vnsRedirectDest
 
   # ── Access policies (uni/infra) ─────────────────────────────────────────────
+  # ══ Access policies ════════════════════════════════════════════════════════
+  # Ordered like Fabric > Access Policies in the GUI.
   infraInfra:
-    dhcp_relay_policy: dhcpRelayP
-    dpp_policy: qosDppPol
+    # ── Policies › Interface ──────────────────────────────────────────────────
     cdp_policy: cdpIfPol
     lldp_policy: lldpIfPol
     lacp_policy: lacpLagPol
@@ -322,9 +364,21 @@ makers:
     mcp_policy: mcpIfPol
     stp_policy: stpIfPol
     storm_control_policy: stormctrlIfPol
+
+    # ── Policies › Protocol ───────────────────────────────────────────────────
+    dhcp_relay_policy: dhcpRelayP
+    dpp_policy: qosDppPol
+
+    # ── Pools ─────────────────────────────────────────────────────────────────
     vlan_pool: fvnsVlanInstP
+
+    # ── Policies › Global (AAEP) ──────────────────────────────────────────────
     aaep: infraAttEntityP
+
+    # ── Interfaces › Policy groups ────────────────────────────────────────────
     func_profile: infraFuncP
+
+    # ── Interfaces / Switches › Profiles ──────────────────────────────────────
     access_port_profile: infraAccPortP
     leaf_profile: infraNodeP
     spine_profile: infraSpineP

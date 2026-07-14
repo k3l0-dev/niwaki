@@ -58,141 +58,6 @@ class _InfraMakers(Cursor):
 
     __slots__ = ()
 
-    def dhcp_relay_policy(
-        self,
-        name: str,
-        *,
-        annotation: str | None = None,
-        description: str | None = None,
-        relay_mode: DhcpRelayVisibility | str | None = None,
-        display_name: str | None = None,
-        owner: DhcpOwner | str | None = None,
-        owner_key: str | None = None,
-        owner_tag: str | None = None,
-        userdom: str | None = None,
-    ) -> InfraDhcpRelayPolicyCursor:
-        """Declare a ``dhcpRelayP`` child under the infra level.
-
-        The DHCP relay profile, with one or more helper addresses in it, configures a DHCP relay
-        agent for forwarding DHCP packets to a remote server.
-
-        Args:
-            name: The DHCP relay policy name. This name can be up to 64 alphanumeric characters.
-            annotation: User annotation. Suggested format orchestrator:value
-            description: Specifies a description of the policy definition.
-            relay_mode: Represents the mode to be used for doing DHCP relay Values: ``not-
-                visible``, ``visible``. Default: ``visible``.
-            owner: Represents the target relay servers ownership Values: ``infra``, ``tenant``.
-                Default: ``infra``.
-            owner_key: The key for enabling clients to own their data for entity correlation.
-            owner_tag: A tag for enabling clients to add their own data. For example, to
-                indicate who created this object.
-        """
-        params = {
-            k: v
-            for k, v in locals().items()
-            if k
-            not in (
-                "self",
-                "name",
-            )
-        }
-        return cast(
-            "InfraDhcpRelayPolicyCursor",
-            self._invoke_maker("dhcp_relay_policy", (name,), _prune(params)),
-        )
-
-    def dpp_policy(
-        self,
-        name: str,
-        *,
-        admin_st: QosDppPolAdminState | str | None = None,
-        annotation: str | None = None,
-        excessive_burst: str | None = None,
-        excessive_burst_unit: DppBurstUnit | str | None = None,
-        burst: str | None = None,
-        burst_unit: DppBurstUnit | str | None = None,
-        confirm_action: DppConformRateAction | str | None = None,
-        conform_mark_cos: str | None = None,
-        conform_mark_dscp: str | None = None,
-        description: str | None = None,
-        exceed_action: DppExceedRateAction | str | None = None,
-        exceed_mark_cos: str | None = None,
-        exceed_mark_dscp: str | None = None,
-        bit_or_packet: DppMode | str | None = None,
-        display_name: str | None = None,
-        owner_key: str | None = None,
-        owner_tag: str | None = None,
-        peak_rate: str | None = None,
-        peak_rate_unit: DppRateUnit | str | None = None,
-        rate: str | None = None,
-        rate_unit: DppRateUnit | str | None = None,
-        policer_sharing_mode: DppSharingMode | str | None = None,
-        type: DppType | str | None = None,
-        userdom: str | None = None,
-        violate_action: DppViolateRateAction | str | None = None,
-        violate_mark_cos: str | None = None,
-        violate_mark_dscp: str | None = None,
-    ) -> InfraDppPolicyCursor:
-        """Declare a ``qosDppPol`` child under the infra level.
-
-        Define a Data Plane Policing policy. User is supposed to use this in scenarios where the
-        incoming traffic need to be policed to certain levels
-
-        Args:
-            name: The name of the object.
-            admin_st: The Administrative state of the policy Values: ``disabled``, ``enabled``.
-                Default: ``disabled``.
-            annotation: User annotation. Suggested format orchestrator:value
-            excessive_burst: Excessive burst size (2R3C policer only)
-            excessive_burst_unit: Excessive Burst unit - none, Kilo, Mega, Giga, ms, us Values:
-                ``giga``, ``kilo``, ``mega``, ``msec``, ``unspecified``, ``usec``. Default:
-                ``unspecified``.
-            burst: Committed burst size, number of packets to absorb during a burst
-            burst_unit: Burst unit - byte, kbyte, mbyte etc. Values: ``giga``, ``kilo``,
-                ``mega``, ``msec``, ``unspecified``, ``usec``. Default: ``unspecified``.
-            confirm_action: Confirm action Values: ``drop``, ``mark``, ``transmit``. Default:
-                ``transmit``.
-            conform_mark_cos: Conform Mark cos
-            conform_mark_dscp: Conform Mark Dscp
-            description: Specifies a description of the policy definition.
-            exceed_action: Exceed action Values: ``drop``, ``mark``, ``transmit``. Default:
-                ``drop``.
-            exceed_mark_cos: Exceed Mark cos
-            exceed_mark_dscp: Exceed Mark Dscp
-            bit_or_packet: Policer mode - bytes or packet policer Values: ``bit``, ``packet``.
-                Default: ``bit``.
-            owner_key: The key for enabling clients to own their data for entity correlation.
-            owner_tag: A tag for enabling clients to add their own data. For example, to
-                indicate who created this object.
-            peak_rate: Peak rate (pir) (2R3C policer only)
-            peak_rate_unit: Peak Rate unit - none, Kilo, Mega, Giga Values: ``giga``, ``kilo``,
-                ``mega``, ``unspecified``. Default: ``unspecified``.
-            rate: Allowed rate, committed rate at which the packets are allowed into the system
-            rate_unit: Rate unit - bps, kbps, mbps, packets etc. Values: ``giga``, ``kilo``,
-                ``mega``, ``unspecified``. Default: ``unspecified``.
-            policer_sharing_mode: Policer sharing mode Values: ``dedicated``, ``shared``.
-                Default: ``dedicated``.
-            type: Policer type Values: ``1R2C``, ``2R3C``. Default: ``1R2C``.
-            violate_action: Violate action Values: ``drop``, ``mark``, ``transmit``. Default:
-                ``drop``.
-            violate_mark_cos: Violate Mark cos
-            violate_mark_dscp: Violate Mark Dscp
-        """
-        params = {
-            k: v
-            for k, v in locals().items()
-            if k
-            not in (
-                "self",
-                "name",
-            )
-        }
-        return cast(
-            "InfraDppPolicyCursor",
-            self._invoke_maker("dpp_policy", (name,), _prune(params)),
-        )
-
     def cdp_policy(
         self,
         name: str,
@@ -584,6 +449,141 @@ class _InfraMakers(Cursor):
         return cast(
             "StormControlPolicyCursor",
             self._invoke_maker("storm_control_policy", (name,), _prune(params)),
+        )
+
+    def dhcp_relay_policy(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        relay_mode: DhcpRelayVisibility | str | None = None,
+        display_name: str | None = None,
+        owner: DhcpOwner | str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> InfraDhcpRelayPolicyCursor:
+        """Declare a ``dhcpRelayP`` child under the infra level.
+
+        The DHCP relay profile, with one or more helper addresses in it, configures a DHCP relay
+        agent for forwarding DHCP packets to a remote server.
+
+        Args:
+            name: The DHCP relay policy name. This name can be up to 64 alphanumeric characters.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            relay_mode: Represents the mode to be used for doing DHCP relay Values: ``not-
+                visible``, ``visible``. Default: ``visible``.
+            owner: Represents the target relay servers ownership Values: ``infra``, ``tenant``.
+                Default: ``infra``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "InfraDhcpRelayPolicyCursor",
+            self._invoke_maker("dhcp_relay_policy", (name,), _prune(params)),
+        )
+
+    def dpp_policy(
+        self,
+        name: str,
+        *,
+        admin_st: QosDppPolAdminState | str | None = None,
+        annotation: str | None = None,
+        excessive_burst: str | None = None,
+        excessive_burst_unit: DppBurstUnit | str | None = None,
+        burst: str | None = None,
+        burst_unit: DppBurstUnit | str | None = None,
+        confirm_action: DppConformRateAction | str | None = None,
+        conform_mark_cos: str | None = None,
+        conform_mark_dscp: str | None = None,
+        description: str | None = None,
+        exceed_action: DppExceedRateAction | str | None = None,
+        exceed_mark_cos: str | None = None,
+        exceed_mark_dscp: str | None = None,
+        bit_or_packet: DppMode | str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        peak_rate: str | None = None,
+        peak_rate_unit: DppRateUnit | str | None = None,
+        rate: str | None = None,
+        rate_unit: DppRateUnit | str | None = None,
+        policer_sharing_mode: DppSharingMode | str | None = None,
+        type: DppType | str | None = None,
+        userdom: str | None = None,
+        violate_action: DppViolateRateAction | str | None = None,
+        violate_mark_cos: str | None = None,
+        violate_mark_dscp: str | None = None,
+    ) -> InfraDppPolicyCursor:
+        """Declare a ``qosDppPol`` child under the infra level.
+
+        Define a Data Plane Policing policy. User is supposed to use this in scenarios where the
+        incoming traffic need to be policed to certain levels
+
+        Args:
+            name: The name of the object.
+            admin_st: The Administrative state of the policy Values: ``disabled``, ``enabled``.
+                Default: ``disabled``.
+            annotation: User annotation. Suggested format orchestrator:value
+            excessive_burst: Excessive burst size (2R3C policer only)
+            excessive_burst_unit: Excessive Burst unit - none, Kilo, Mega, Giga, ms, us Values:
+                ``giga``, ``kilo``, ``mega``, ``msec``, ``unspecified``, ``usec``. Default:
+                ``unspecified``.
+            burst: Committed burst size, number of packets to absorb during a burst
+            burst_unit: Burst unit - byte, kbyte, mbyte etc. Values: ``giga``, ``kilo``,
+                ``mega``, ``msec``, ``unspecified``, ``usec``. Default: ``unspecified``.
+            confirm_action: Confirm action Values: ``drop``, ``mark``, ``transmit``. Default:
+                ``transmit``.
+            conform_mark_cos: Conform Mark cos
+            conform_mark_dscp: Conform Mark Dscp
+            description: Specifies a description of the policy definition.
+            exceed_action: Exceed action Values: ``drop``, ``mark``, ``transmit``. Default:
+                ``drop``.
+            exceed_mark_cos: Exceed Mark cos
+            exceed_mark_dscp: Exceed Mark Dscp
+            bit_or_packet: Policer mode - bytes or packet policer Values: ``bit``, ``packet``.
+                Default: ``bit``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            peak_rate: Peak rate (pir) (2R3C policer only)
+            peak_rate_unit: Peak Rate unit - none, Kilo, Mega, Giga Values: ``giga``, ``kilo``,
+                ``mega``, ``unspecified``. Default: ``unspecified``.
+            rate: Allowed rate, committed rate at which the packets are allowed into the system
+            rate_unit: Rate unit - bps, kbps, mbps, packets etc. Values: ``giga``, ``kilo``,
+                ``mega``, ``unspecified``. Default: ``unspecified``.
+            policer_sharing_mode: Policer sharing mode Values: ``dedicated``, ``shared``.
+                Default: ``dedicated``.
+            type: Policer type Values: ``1R2C``, ``2R3C``. Default: ``1R2C``.
+            violate_action: Violate action Values: ``drop``, ``mark``, ``transmit``. Default:
+                ``drop``.
+            violate_mark_cos: Violate Mark cos
+            violate_mark_dscp: Violate Mark Dscp
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "InfraDppPolicyCursor",
+            self._invoke_maker("dpp_policy", (name,), _prune(params)),
         )
 
     def vlan_pool(
