@@ -23,6 +23,19 @@ generated and documented in the {doc}`DSL reference <../vocabulary/index>`.
 .. autofunction:: niwaki.design.controller
 ```
 
+## References that carry configuration
+
+A `bind()`, a `bind_dn()` or a verb usually takes a plain name; wrap the target
+in `ref()` when the relationship object itself carries configuration (a domain
+attachment's immediacy, a subject filter's log directive, a node's management
+address).
+
+```{eval-rst}
+.. autofunction:: niwaki.design.ref
+
+.. autoclass:: niwaki.design.Ref
+```
+
 ## Cursor
 
 Every position is a typed cursor subclass of `Cursor` — the makers and the
