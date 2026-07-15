@@ -34,6 +34,7 @@ class bgpRtTarget(ManagedObject):
     _write_access: ClassVar[frozenset[str]] = frozenset(
         ["admin", "tenant-connectivity", "tenant-ext-protocol"]
     )
+    _is_creatable: ClassVar[bool] = True
     _is_observable: ClassVar[bool] = False
     _is_faultable: ClassVar[bool] = False
     _is_health_scorable: ClassVar[bool] = False

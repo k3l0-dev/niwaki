@@ -32,6 +32,7 @@ class fabricLinkFlapPol(ManagedObject):
     _write_access: ClassVar[frozenset[str]] = frozenset(
         ["access-connectivity", "access-protocol", "admin", "custom-port-privilege"]
     )
+    _is_creatable: ClassVar[bool] = True
     _is_observable: ClassVar[bool] = True
     _is_faultable: ClassVar[bool] = False
     _is_health_scorable: ClassVar[bool] = True

@@ -13,7 +13,7 @@ Spine Selector
 | --- | --- |
 | ACI class | `infraSpineS` |
 | RN | `spines-{name}-typ-{selector_type}` |
-| Cursor | `SpineSelectorCursor` |
+| Cursor | `SpineProfileSpineSelectorCursor` |
 | Parent | {ref}`infra.spine_profile <vocab-infra-spine_profile>` |
 | Atomic | — |
 

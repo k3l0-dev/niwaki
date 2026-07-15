@@ -23,22 +23,119 @@ from niwaki.design._node import Ref
 from niwaki.design._generated_cursors._uni import _UniMakers
 
 if TYPE_CHECKING:
+    from niwaki.models._generated.enums.CallhomeMsgFormat import CallhomeMsgFormat
+    from niwaki.models._generated.enums.CallhomeUrgency import CallhomeUrgency
+    from niwaki.models._generated.enums.CommAdminState import CommAdminState
+    from niwaki.models._generated.enums.CommAllowCredentialState import CommAllowCredentialState
+    from niwaki.models._generated.enums.CommCipherState import CommCipherState
+    from niwaki.models._generated.enums.CommCliOnlyMode import CommCliOnlyMode
+    from niwaki.models._generated.enums.CommKexAlgorithmTypes import CommKexAlgorithmTypes
+    from niwaki.models._generated.enums.CommNodeExporter import CommNodeExporter
+    from niwaki.models._generated.enums.CommRedirect import CommRedirect
+    from niwaki.models._generated.enums.CommServerHeader import CommServerHeader
+    from niwaki.models._generated.enums.CommSshCipherTypes import CommSshCipherTypes
+    from niwaki.models._generated.enums.CommSshMacTypes import CommSshMacTypes
+    from niwaki.models._generated.enums.CommSslProtocolTypes import CommSslProtocolTypes
+    from niwaki.models._generated.enums.CommVisoreAccess import CommVisoreAccess
+    from niwaki.models._generated.enums.ConditionInitSevDir import ConditionInitSevDir
+    from niwaki.models._generated.enums.ConditionSevDir import ConditionSevDir
+    from niwaki.models._generated.enums.ConditionSeverity import ConditionSeverity
+    from niwaki.models._generated.enums.ConfigFormat import ConfigFormat
+    from niwaki.models._generated.enums.ConfigImportAction import ConfigImportAction
+    from niwaki.models._generated.enums.ConfigImportMode import ConfigImportMode
+    from niwaki.models._generated.enums.ConfigQueryTarget import ConfigQueryTarget
+    from niwaki.models._generated.enums.ConfigQueryType import ConfigQueryType
+    from niwaki.models._generated.enums.ConfigRspSubtreeDepth import ConfigRspSubtreeDepth
+    from niwaki.models._generated.enums.ConfigRspSubtreeInclude import ConfigRspSubtreeInclude
+    from niwaki.models._generated.enums.ConfigSnapshotAction import ConfigSnapshotAction
+    from niwaki.models._generated.enums.CoopAuthT import CoopAuthT
     from niwaki.models._generated.enums.DatetimeAdminState import DatetimeAdminState
+    from niwaki.models._generated.enums.DatetimeDisplayFormat import DatetimeDisplayFormat
+    from niwaki.models._generated.enums.DatetimeOffsetState import DatetimeOffsetState
+    from niwaki.models._generated.enums.DatetimeTimeZoneUTC import DatetimeTimeZoneUTC
     from niwaki.models._generated.enums.DatetimeTrueChimerStatus import DatetimeTrueChimerStatus
+    from niwaki.models._generated.enums.DbgexpCategory import DbgexpCategory
+    from niwaki.models._generated.enums.DbgexpCollectType import DbgexpCollectType
     from niwaki.models._generated.enums.DnsProtoPreference import DnsProtoPreference
+    from niwaki.models._generated.enums.EqptPsRdnM import EqptPsRdnM
+    from niwaki.models._generated.enums.FabricCardType import FabricCardType
+    from niwaki.models._generated.enums.FabricNodeControlBitMask import FabricNodeControlBitMask
     from niwaki.models._generated.enums.FabricPairT import FabricPairT
+    from niwaki.models._generated.enums.FabricPrioT import FabricPrioT
+    from niwaki.models._generated.enums.FabricSelector import FabricSelector
+    from niwaki.models._generated.enums.FabricSelector2 import FabricSelector2
+    from niwaki.models._generated.enums.FileAuthenticationType import FileAuthenticationType
+    from niwaki.models._generated.enums.FileTransferProtocol import FileTransferProtocol
+    from niwaki.models._generated.enums.FirmwareAuthPass import FirmwareAuthPass
+    from niwaki.models._generated.enums.FirmwareAuthenticationType import FirmwareAuthenticationType
+    from niwaki.models._generated.enums.FirmwareDownloadProtocol import FirmwareDownloadProtocol
+    from niwaki.models._generated.enums.FirmwareType import FirmwareType
     from niwaki.models._generated.enums.IpmcsnoopDomControl import IpmcsnoopDomControl
+    from niwaki.models._generated.enums.IsisLspFastFloodMode import IsisLspFastFloodMode
+    from niwaki.models._generated.enums.IsisLvlT import IsisLvlT
+    from niwaki.models._generated.enums.L1DACRateZR import L1DACRateZR
+    from niwaki.models._generated.enums.L1DACRateZRP import L1DACRateZRP
+    from niwaki.models._generated.enums.L1FECModeZR import L1FECModeZR
+    from niwaki.models._generated.enums.L1FECModeZRP import L1FECModeZRP
+    from niwaki.models._generated.enums.L1ModulationZR import L1ModulationZR
+    from niwaki.models._generated.enums.L1ModulationZRP import L1ModulationZRP
+    from niwaki.models._generated.enums.L1MuxponderZR import L1MuxponderZR
+    from niwaki.models._generated.enums.L1MuxponderZRP import L1MuxponderZRP
+    from niwaki.models._generated.enums.L1dwdmCarrierZR import L1dwdmCarrierZR
+    from niwaki.models._generated.enums.L1dwdmCarrierZRP import L1dwdmCarrierZRP
+    from niwaki.models._generated.enums.L3BfdIsisConfig import L3BfdIsisConfig
+    from niwaki.models._generated.enums.LatencyLatencyMode import LatencyLatencyMode
+    from niwaki.models._generated.enums.LicenseActionResult import LicenseActionResult
+    from niwaki.models._generated.enums.LicenseLicActionType import LicenseLicActionType
+    from niwaki.models._generated.enums.LicenseLicenseMode import LicenseLicenseMode
+    from niwaki.models._generated.enums.LicensePlrAdminState import LicensePlrAdminState
+    from niwaki.models._generated.enums.LicenseRegAdminState import LicenseRegAdminState
+    from niwaki.models._generated.enums.LldpAdminSt import LldpAdminSt
+    from niwaki.models._generated.enums.LldpDCBXPVerType import LldpDCBXPVerType
+    from niwaki.models._generated.enums.MacsecCipherSuite import MacsecCipherSuite
+    from niwaki.models._generated.enums.MacsecSecPolicy import MacsecSecPolicy
+    from niwaki.models._generated.enums.MaintNotifCond import MaintNotifCond
+    from niwaki.models._generated.enums.MaintRunMode import MaintRunMode
+    from niwaki.models._generated.enums.MaintSMUOperation import MaintSMUOperation
+    from niwaki.models._generated.enums.MaintSMUOperationFlags import MaintSMUOperationFlags
     from niwaki.models._generated.enums.McastVer import McastVer
     from niwaki.models._generated.enums.McastVer2 import McastVer2
+    from niwaki.models._generated.enums.MgmtMgmtIntfType import MgmtMgmtIntfType
     from niwaki.models._generated.enums.MonAdminState import MonAdminState
+    from niwaki.models._generated.enums.MonCompression import MonCompression
+    from niwaki.models._generated.enums.MonInclAction import MonInclAction
+    from niwaki.models._generated.enums.MonTargetScope2 import MonTargetScope2
+    from niwaki.models._generated.enums.NetflowAdminSt import NetflowAdminSt
     from niwaki.models._generated.enums.NwAdminSt import NwAdminSt
+    from niwaki.models._generated.enums.NwIfAdminSt import NwIfAdminSt
     from niwaki.models._generated.enums.PolColor import PolColor
+    from niwaki.models._generated.enums.PtpProfileTemplate import PtpProfileTemplate
+    from niwaki.models._generated.enums.ScalarEnum8 import ScalarEnum8
+    from niwaki.models._generated.enums.SnmpAuthType import SnmpAuthType
+    from niwaki.models._generated.enums.SnmpNotificationType import SnmpNotificationType
+    from niwaki.models._generated.enums.SnmpPrivType import SnmpPrivType
+    from niwaki.models._generated.enums.SnmpV3SecLvl import SnmpV3SecLvl
+    from niwaki.models._generated.enums.SnmpVersion import SnmpVersion
+    from niwaki.models._generated.enums.SpanAdminSt import SpanAdminSt
     from niwaki.models._generated.enums.SpanDirection import SpanDirection
     from niwaki.models._generated.enums.SpanErspanDestMode import SpanErspanDestMode
     from niwaki.models._generated.enums.SyslogFormatSetting import SyslogFormatSetting
     from niwaki.models._generated.enums.SyslogForwardingFacility import SyslogForwardingFacility
     from niwaki.models._generated.enums.SyslogProtocolType import SyslogProtocolType
     from niwaki.models._generated.enums.SyslogSeverity import SyslogSeverity
+    from niwaki.models._generated.enums.TacacsSwitchTacacsAudit import TacacsSwitchTacacsAudit
+    from niwaki.models._generated.enums.TacacsauthenticationProtocol import (
+        TacacsauthenticationProtocol,
+    )
+    from niwaki.models._generated.enums.TelemetryAdminState import TelemetryAdminState
+    from niwaki.models._generated.enums.TelemetryLatencyUnit import TelemetryLatencyUnit
+    from niwaki.models._generated.enums.TopoctrlDLbMode import TopoctrlDLbMode
+    from niwaki.models._generated.enums.TopoctrlLbMode import TopoctrlLbMode
+    from niwaki.models._generated.enums.TopoctrlPrioritization import TopoctrlPrioritization
+    from niwaki.models._generated.enums.TrigAdminState import TrigAdminState
+    from niwaki.models._generated.enums.TrigDay import TrigDay
+    from niwaki.models._generated.enums.TrigExecState import TrigExecState
+    from niwaki.models._generated.enums.XcvrOpticsAdminSt import XcvrOpticsAdminSt
 
 
 class _FabricMakers(Cursor):
@@ -261,7 +358,7 @@ class _FabricMakers(Cursor):
 
     def bgp_instance(
         self,
-        name: str,
+        name: str = "default",
         *,
         annotation: str | None = None,
         description: str | None = None,
@@ -449,6 +546,3084 @@ class _FabricMakers(Cursor):
             self._invoke_maker("span_destination_group", (name,), _prune(params)),
         )
 
+    def function_profile(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> FunctionProfileCursor:
+        """Declare a ``fabricFuncP`` child under the fabric level.
+
+        The port functions.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "FunctionProfileCursor",
+            self._invoke_maker("function_profile", (), _prune(params)),
+        )
+
+    def leaf_switch_profile(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> LeafSwitchProfileCursor:
+        """Declare a ``fabricLeafP`` child under the fabric level.
+
+        The leaf profile is a template used for deploying the leaf fabric configuration. It contains
+        leaf selectors and associates to card and port profiles.
+
+        Args:
+            name: The name of the leaf profile. This name can be up to 64 characters. Note that
+                you cannot change this name after the object has been saved.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "LeafSwitchProfileCursor",
+            self._invoke_maker("leaf_switch_profile", (name,), _prune(params)),
+        )
+
+    def spine_switch_profile(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> SpineSwitchProfileCursor:
+        """Declare a ``fabricSpineP`` child under the fabric level.
+
+        The spine profile is a template used for deploying the leaf fabric configuration. It
+        contains spine selectors and associates to card and port profiles.
+
+        Args:
+            name: The name of the spine profile. This name can be up to 64 characters. Note that
+                you cannot change this name after the object has been saved.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "SpineSwitchProfileCursor",
+            self._invoke_maker("spine_switch_profile", (name,), _prune(params)),
+        )
+
+    def leaf_fabric_interface_profile(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> LeafFabricInterfaceProfileCursor:
+        """Declare a ``fabricLePortP`` child under the fabric level.
+
+        The leaf fabric port profile contains leaf port selectors that can associate with their
+        respective policy groups.
+
+        Args:
+            name: The name of the leaf port profile. This name can be up to 64 characters. Note
+                that you cannot change this name after the object has been saved.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "LeafFabricInterfaceProfileCursor",
+            self._invoke_maker("leaf_fabric_interface_profile", (name,), _prune(params)),
+        )
+
+    def spine_fabric_interface_profile(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> SpineFabricInterfaceProfileCursor:
+        """Declare a ``fabricSpPortP`` child under the fabric level.
+
+        A spine port profile contains leaf port selectors that can associate with their respective
+        policy groups.
+
+        Args:
+            name: The name of the spine port profile. This name can be up to 64 characters. Note
+                that you cannot change this name after the object has been saved.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "SpineFabricInterfaceProfileCursor",
+            self._invoke_maker("spine_fabric_interface_profile", (name,), _prune(params)),
+        )
+
+    def leaf_module_profile(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> LeafModuleProfileCursor:
+        """Declare a ``fabricLeCardP`` child under the fabric level.
+
+        The leaf card profile is a template used for deploying the card fabric configuration on a
+        leaf.
+
+        Args:
+            name: The name of the leaf card profile. This name can be up to 64 characters. Note
+                that you cannot change this name after the object has been saved.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "LeafModuleProfileCursor",
+            self._invoke_maker("leaf_module_profile", (name,), _prune(params)),
+        )
+
+    def spine_module_profile(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> SpineModuleProfileCursor:
+        """Declare a ``fabricSpCardP`` child under the fabric level.
+
+        A spine card profile is used for deploying the card configuration on the spine.
+
+        Args:
+            name: The name of the spine card profile. This name can be up to 64 characters. Note
+                that you cannot change this name after the object has been saved.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "SpineModuleProfileCursor",
+            self._invoke_maker("spine_module_profile", (name,), _prune(params)),
+        )
+
+    def pod_profile(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> FabricPodProfileCursor:
+        """Declare a ``fabricPodP`` child under the fabric level.
+
+        A POD profile. This is a template used for deploying POD level configuration.
+
+        Args:
+            name: The name of the POD profile. This name can be up to 64 characters. Note that
+                you cannot change this name after the object has been saved.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "FabricPodProfileCursor",
+            self._invoke_maker("pod_profile", (name,), _prune(params)),
+        )
+
+    def fabric_link_level_policy(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        fabric_link_debounce_interval_msec: int | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> FabricLinkLevelPolicyCursor:
+        """Declare a ``fabricFIfPol`` child under the fabric level.
+
+        Args:
+            name: The name of the object.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            fabric_link_debounce_interval_msec: Administrative Fabric Port link debounce
+                interval Default: ``0``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "FabricLinkLevelPolicyCursor",
+            self._invoke_maker("fabric_link_level_policy", (name,), _prune(params)),
+        )
+
+    def fabric_link_flap_policy(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        max_flaps_allowed_per_time: int | None = None,
+        time_allowed_for_max_flaps: int | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> FabricLinkFlapPolicyCursor:
+        """Declare a ``fabricFLinkFlapPol`` child under the fabric level.
+
+        Args:
+            name: The name of the object.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            max_flaps_allowed_per_time: Default: ``30``.
+            time_allowed_for_max_flaps: Default: ``420``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "FabricLinkFlapPolicyCursor",
+            self._invoke_maker("fabric_link_flap_policy", (name,), _prune(params)),
+        )
+
+    def l3_interface_policy(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        bfd_isis_policy_configuration: L3BfdIsisConfig | str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> L3InterfacePolicyCursor:
+        """Declare a ``l3IfPol`` child under the fabric level.
+
+        L3 Interface Policy
+
+        Args:
+            name: The name of the object.
+            annotation: User annotation. Suggested format orchestrator:value
+            bfd_isis_policy_configuration: BFD ISIS Configuration Values: ``disabled``,
+                ``enabled``. Default: ``disabled``.
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "L3InterfacePolicyCursor",
+            self._invoke_maker("l3_interface_policy", (name,), _prune(params)),
+        )
+
+    def fabric_l2_mtu_policy(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        mtu_size_for_fabric_ports: int | None = None,
+        mtu_size_for_management_ports: int | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> FabricL2MtuPolicyCursor:
+        """Declare a ``l2InstPol`` child under the fabric level.
+
+        The Layer 2 instance policy is used for configuring fabric-wide layer 2 settings. Currently,
+        this policy contains only fabric MTU and management MTU configuration.
+
+        Args:
+            name: The Layer 2 instance policy name.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            mtu_size_for_fabric_ports: MTU Size for Fabric Ports Default: ``9000``.
+            mtu_size_for_management_ports: MTU Size for Management Ports Default: ``9000``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "FabricL2MtuPolicyCursor",
+            self._invoke_maker("fabric_l2_mtu_policy", (name,), _prune(params)),
+        )
+
+    def lldp_policy(
+        self,
+        name: str,
+        *,
+        receive_state: LldpAdminSt | str | None = None,
+        transmit_state: LldpAdminSt | str | None = None,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        dcbxp_version: LldpDCBXPVerType | str | None = None,
+        userdom: str | None = None,
+    ) -> FabricLldpPolicyCursor:
+        """Declare a ``lldpIfPol`` child under the fabric level.
+
+        The LLDP interface policy, which defines a common configuration that will apply to one or
+        more LLDP interfaces. LLDP uses the logical link control (LLC) services to transmit and
+        receive information to and from other LLDP agents.
+
+        Args:
+            name: LLDP interface policy name.
+            receive_state: Receive admin state Values: ``disabled``, ``enabled``. Default:
+                ``enabled``.
+            transmit_state: Transmit admin state Values: ``disabled``, ``enabled``. Default:
+                ``enabled``.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            dcbxp_version: Port DCBXP Version Values: ``CEE``, ``IEEE``. Default: ``CEE``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "FabricLldpPolicyCursor",
+            self._invoke_maker("lldp_policy", (name,), _prune(params)),
+        )
+
+    def macsec_fabric_interface_policy(
+        self,
+        name: str,
+        *,
+        admin_state: NwIfAdminSt | str | None = None,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        use_system_generated_keys: bool | None = None,
+        userdom: str | None = None,
+    ) -> MacsecFabricInterfacePolicyCursor:
+        """Declare a ``macsecFabIfPol`` child under the fabric level.
+
+        Fabric MACSEC Infra Policy
+
+        Args:
+            name: The name of the object.
+            admin_state: Admin state Values: ``disabled``, ``enabled``. Default: ``enabled``.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            use_system_generated_keys: Use System Generated keys Default: ``False``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "MacsecFabricInterfacePolicyCursor",
+            self._invoke_maker("macsec_fabric_interface_policy", (name,), _prune(params)),
+        )
+
+    def macsec_fabric(
+        self,
+        *,
+        annotation: str | None = None,
+        userdom: str | None = None,
+    ) -> MacsecFabricCursor:
+        """Declare a ``macsecFabPolCont`` child under the fabric level.
+
+        Fabric macsec policy container
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "MacsecFabricCursor",
+            self._invoke_maker("macsec_fabric", (), _prune(params)),
+        )
+
+    def isis_domain_policy(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        maximum_transmission_unit: int | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        metric: int | None = None,
+        userdom: str | None = None,
+    ) -> IsisDomainPolicyCursor:
+        """Declare a ``isisDomPol`` child under the fabric level.
+
+        The domain policy is used to configure IS-IS domain specific properties.
+
+        Args:
+            name: The IS-IS Domain policy name.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            maximum_transmission_unit: The IS-IS Domain policy LSP MTU. Default: ``1492``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            metric: Metric used for redistributed routes Default: ``63``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "IsisDomainPolicyCursor",
+            self._invoke_maker("isis_domain_policy", (name,), _prune(params)),
+        )
+
+    def coop_group_policy(
+        self,
+        name: str = "default",
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        authentication_type: CoopAuthT | str | None = None,
+        userdom: str | None = None,
+    ) -> CoopGroupPolicyCursor:
+        """Declare a ``coopPol`` child under the fabric level.
+
+        The COOP policy contains groups of Oracles nodes and COOP repositories.
+
+        Args:
+            name: Specifies the COOP policy name.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            authentication_type: The specific type of the object or component. Values:
+                ``compatible``, ``strict``. Default: ``compatible``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "CoopGroupPolicyCursor",
+            self._invoke_maker("coop_group_policy", (name,), _prune(params)),
+        )
+
+    def fabric_vxlan_policy(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        udp_port_number_for_vxlan_traffic: int | str | None = None,
+        userdom: str | None = None,
+    ) -> FabricVxlanPolicyCursor:
+        """Declare a ``l4VxlanInstPol`` child under the fabric level.
+
+        Args:
+            name: The name of the object.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            udp_port_number_for_vxlan_traffic: The port number. Default: ``48879``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "FabricVxlanPolicyCursor",
+            self._invoke_maker("fabric_vxlan_policy", (name,), _prune(params)),
+        )
+
+    def vpc_domain_policy(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        peer_dead_interval: int | None = None,
+        delay_restore_tmr: int | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> VpcDomainPolicyCursor:
+        """Declare a ``vpcInstPol`` child under the fabric level.
+
+        The node-level vPC domain policy, which is used to specify a vPC domain and is applied to
+        both vPC peer devices, the vPC peer keepalive link, the vPC peer link, and all the
+        PortChannels in the vPC domain connected to the downstream device. You can have only one vPC
+        domain ID on each device.
+
+        Args:
+            name: The vPC peer domain name.
+            annotation: User annotation. Suggested format orchestrator:value
+            peer_dead_interval: The vPC peer dead interval time. Default: ``200``.
+            delay_restore_tmr: Delay before restoring (bringing up) the VPCs Default: ``120``.
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "VpcDomainPolicyCursor",
+            self._invoke_maker("vpc_domain_policy", (name,), _prune(params)),
+        )
+
+    def power_supply_redundancy_policy(
+        self,
+        name: str,
+        *,
+        admin_redundancy_mode: EqptPsRdnM | str | None = None,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> PowerSupplyRedundancyPolicyCursor:
+        """Declare a ``psuInstPol`` child under the fabric level.
+
+        The power redundancy policy is for all power supply units on the fabric nodes (leaves and
+        spines) that are consuming the power supply policy through their respective selector profile
+        policy.
+
+        Args:
+            name: The power supply policy name. This name can be up to 64 alphanumeric
+                characters. Note that you cannot change this name after the object has been
+                saved.
+            admin_redundancy_mode: The administrative state of the power supply policy. Values:
+                ``comb``, ``insrc-rdn``, ``n-rdn``, ``not-supp``, ``ps-rdn``, ``rdn``, ``sinin-
+                rdn``, ``unknown``. Default: ``comb``.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "PowerSupplyRedundancyPolicyCursor",
+            self._invoke_maker("power_supply_redundancy_policy", (name,), _prune(params)),
+        )
+
+    def zr_policy(
+        self,
+        name: str,
+        *,
+        admin_st: XcvrOpticsAdminSt | str | None = None,
+        annotation: str | None = None,
+        chromatic_dispersion_maximum: int | None = None,
+        chromatic_dispersion_minimum: int | None = None,
+        dac_rate: L1DACRateZR | str | None = None,
+        description: str | None = None,
+        dwdm_carrier_grid_selector: L1dwdmCarrierZR | str | None = None,
+        fec_mode: L1FECModeZR | str | None = None,
+        frequency100_m_hz: int | None = None,
+        frequency50_g_hz: int | None = None,
+        itu_channel50_g_hz: int | None = None,
+        modulation: L1ModulationZR | str | None = None,
+        muxponder_mode: L1MuxponderZR | str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        transmitted_power: int | None = None,
+        userdom: str | None = None,
+        wavelength50_g_hz: int | None = None,
+    ) -> ZrPolicyCursor:
+        """Declare a ``xcvrZRFabIfPol`` child under the fabric level.
+
+        QDD-400G-ZR-S transceiver interface level policy
+
+        Args:
+            name: The name of the object.
+            admin_st: The administrative state of the object or policy. Values: ``disabled``,
+                ``enabled``. Default: ``disabled``.
+            annotation: User annotation. Suggested format orchestrator:value
+            chromatic_dispersion_maximum: Chromatic Dispersion max Default: ``2400``.
+            chromatic_dispersion_minimum: Chromatic Dispersion min Default: ``-2400``.
+            dac_rate: DAC rate Values: ``1x1``. Default: ``1x1``.
+            description: Specifies a description of the policy definition.
+            dwdm_carrier_grid_selector: DWDM Carrier Values: ``100MHzFrequency``,
+                ``50GHzFrequency``, ``50GHzITUchannel``, ``50GHzWavelength``. Default:
+                ``100MHzFrequency``.
+            fec_mode: FEC mode Values: ``cFEC``. Default: ``cFEC``.
+            frequency100_m_hz: Frequency 100MHz Default: ``1931000``.
+            frequency50_g_hz: Frequency 50GHz Default: ``19310``.
+            itu_channel50_g_hz: ITU Channel Default: ``61``.
+            modulation: Modulation Values: ``16QAM``. Default: ``16QAM``.
+            muxponder_mode: Muxponder Values: ``1x400``. Default: ``1x400``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            transmitted_power: Transmit Power Default: ``-190``.
+            wavelength50_g_hz: Wavelength Default: ``1552524``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "ZrPolicyCursor",
+            self._invoke_maker("zr_policy", (name,), _prune(params)),
+        )
+
+    def zrp_policy(
+        self,
+        name: str,
+        *,
+        admin_st: XcvrOpticsAdminSt | str | None = None,
+        annotation: str | None = None,
+        chromatic_dispersion_maximum: int | None = None,
+        chromatic_dispersion_minimum: int | None = None,
+        dac_rate: L1DACRateZRP | str | None = None,
+        description: str | None = None,
+        dwdm_carrier_grid_selector: L1dwdmCarrierZRP | str | None = None,
+        fec_mode: L1FECModeZRP | str | None = None,
+        frequency100_m_hz: int | None = None,
+        frequency50_g_hz: int | None = None,
+        itu_channel50_g_hz: int | None = None,
+        modulation: L1ModulationZRP | str | None = None,
+        muxponder_mode: L1MuxponderZRP | str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        transmitted_power: int | None = None,
+        userdom: str | None = None,
+        wavelength50_g_hz: int | None = None,
+    ) -> ZrpPolicyCursor:
+        """Declare a ``xcvrZRPFabIfPol`` child under the fabric level.
+
+        QDD-400G-ZRP-S transceiver interface level policy
+
+        Args:
+            name: The name of the object.
+            admin_st: The administrative state of the object or policy. Values: ``disabled``,
+                ``enabled``. Default: ``disabled``.
+            annotation: User annotation. Suggested format orchestrator:value
+            chromatic_dispersion_maximum: Chromatic Dispersion max Default: ``13000``.
+            chromatic_dispersion_minimum: Chromatic Dispersion min Default: ``-13000``.
+            dac_rate: DAC rate Values: ``1x1``, ``1x1.25``. Default: ``1x1.25``.
+            description: Specifies a description of the policy definition.
+            dwdm_carrier_grid_selector: DWDM Carrier Values: ``100MHzFrequency``,
+                ``50GHzFrequency``, ``50GHzITUchannel``, ``50GHzWavelength``. Default:
+                ``100MHzFrequency``.
+            fec_mode: FEC mode Values: ``cFEC``, ``oFEC``. Default: ``oFEC``.
+            frequency100_m_hz: Frequency 100MHz Default: ``1911500``.
+            frequency50_g_hz: Frequency 50GHz Default: ``19115``.
+            itu_channel50_g_hz: ITU Channel Default: ``1``.
+            modulation: Modulation Values: ``16QAM``. Default: ``16QAM``.
+            muxponder_mode: Muxponder Values: ``1x400``. Default: ``1x400``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            transmitted_power: Transmit Power Default: ``-190``.
+            wavelength50_g_hz: Wavelength Default: ``1528773``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "ZrpPolicyCursor",
+            self._invoke_maker("zrp_policy", (name,), _prune(params)),
+        )
+
+    def dwdm_policy(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        fcot_channel_number: int | str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> DwdmPolicyCursor:
+        """Declare a ``dwdmFabIfPol`` child under the fabric level.
+
+        Args:
+            name: The name of the object.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            fcot_channel_number: Default: ``Channel32``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "DwdmPolicyCursor",
+            self._invoke_maker("dwdm_policy", (name,), _prune(params)),
+        )
+
+    def wwn_inst_policy(
+        self,
+        name: str = "default",
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> WwnInstPolicyCursor:
+        """Declare a ``wwnInstPol`` child under the fabric level.
+
+        WWN Instance policy
+
+        Args:
+            name: The name of the object.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "WwnInstPolicyCursor",
+            self._invoke_maker("wwn_inst_policy", (name,), _prune(params)),
+        )
+
+    def load_balance_policy(
+        self,
+        name: str = "default",
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        dynamic_load_balancing_mode: TopoctrlDLbMode | str | None = None,
+        hash_gtp_policy: bool | None = None,
+        load_balancing_mode: TopoctrlLbMode | str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        prioritization_mode: TopoctrlPrioritization | str | None = None,
+        userdom: str | None = None,
+    ) -> FabricLoadBalancePolicyCursor:
+        """Declare a ``lbpPol`` child under the fabric level.
+
+        The load balancing policy options for balancing traffic among the available uplink ports.
+        Static hash load balancing is the traditional load balancing mechanism used in networks
+        where each flow is allocated to an uplink based on a hash of its 5-tuple.
+
+        Args:
+            name: The name of the load balancing policy.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            dynamic_load_balancing_mode: The dynamic load balancer (DLB) mode adjusts the
+                traffic allocations according to congestion levels. It measures the congestion
+                across the available paths and places the flows on the least congested paths,
+                which results in an optimal or near optimal placement of the data. Values:
+                ``aggressive``, ``conservative``, ``off``. Default: ``off``.
+            hash_gtp_policy: GTP Hash for Load Balancing Default: ``False``.
+            load_balancing_mode: The load balancer administrative state. In all modes of load
+                balancing, static or dynamic, the traffic is sent only on those uplinks or paths
+                that meet the criteria for equal cost multipath (ECMP); these paths are equal
+                and the lowest cost from a routing perspective. Values: ``lfr``,
+                ``traditional``. Default: ``traditional``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            prioritization_mode: Dynamic Packet Prioritization (DPP) prioritizes short flows
+                higher than long flows; a short flow is less than approximately 15 packets.
+                Short flows are more sensitive to latency than long ones. DPP can improve
+                overall application performance. Values: ``off``, ``on``. Default: ``off``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "FabricLoadBalancePolicyCursor",
+            self._invoke_maker("load_balance_policy", (name,), _prune(params)),
+        )
+
+    def global_ep_listen_policy(
+        self,
+        name: str = "default",
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        enabled: bool | None = None,
+        encap: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> GlobalEpListenPolicyCursor:
+        """Declare a ``fabricGlbEpListenPol`` child under the fabric level.
+
+        Global Ep listen policy: if enabled, we listen to all untagged end point on all leaf ports
+
+        Args:
+            name: The name of the object.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            enabled: Default: ``False``.
+            encap: The port encapsulation.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "GlobalEpListenPolicyCursor",
+            self._invoke_maker("global_ep_listen_policy", (name,), _prune(params)),
+        )
+
+    def fabric_node_control(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        fabric_node_control_bitmask: frozenset[FabricNodeControlBitMask]
+        | set[FabricNodeControlBitMask]
+        | str
+        | None = None,
+        description: str | None = None,
+        feature_selection: FabricPrioT | str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> FabricNodeControlCursor:
+        """Declare a ``fabricNodeControl`` child under the fabric level.
+
+        Fabric Node Control: It represents if the type is digital monitoring
+
+        Args:
+            name: The name of the object.
+            annotation: User annotation. Suggested format orchestrator:value
+            fabric_node_control_bitmask: control: The first bit tells if the type is digital
+                optical monitoring Default: ``PydanticUndefined``.
+            description: Specifies a description of the policy definition.
+            feature_selection: Feature Selection Values: ``analytics``, ``mixed``, ``netflow``,
+                ``telemetry``. Default: ``telemetry``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "FabricNodeControlCursor",
+            self._invoke_maker("fabric_node_control", (name,), _prune(params)),
+        )
+
+    def callhome_destination_group(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> CallhomeDestinationGroupCursor:
+        """Declare a ``callhomeGroup`` child under the fabric level.
+
+        Call Home provides an email-based notification for critical system policies. A range of
+        message formats are available for compatibility with pager services or XML-based automated
+        parsing applications.
+
+        Args:
+            name: The name for the Callhome destination group. This cannot be changed after the
+                policy has been created.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "CallhomeDestinationGroupCursor",
+            self._invoke_maker("callhome_destination_group", (name,), _prune(params)),
+        )
+
+    def smart_callhome_destination_group(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> SmartCallhomeDestinationGroupCursor:
+        """Declare a ``callhomeSmartGroup`` child under the fabric level.
+
+        Args:
+            name: The name of the object.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "SmartCallhomeDestinationGroupCursor",
+            self._invoke_maker("smart_callhome_destination_group", (name,), _prune(params)),
+        )
+
+    def callhome_inventory_policy(
+        self,
+        name: str,
+        *,
+        administrative_state: TrigExecState | str | None = None,
+        admin_state: MonAdminState | str | None = None,
+        annotation: str | None = None,
+        description: str | None = None,
+        maximum_retry: int | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> CallhomeInventoryPolicyCursor:
+        """Declare a ``callhomeInvP`` child under the fabric level.
+
+        The call home inventory policy is used to send Call Home messages with system inventory
+        information.
+
+        Args:
+            name: The name of the inventory policy. The inventory policy is for periodically
+                sending Call Home messages with system inventory information.
+            administrative_state: The administrative state of the executable policies. Values:
+                ``triggered``, ``untriggered``. Default: ``untriggered``.
+            admin_state: The enabled or disabled state of the inventory policy. If the policy is
+                disabled then no inventory messages are sent. Values: ``disabled``, ``enabled``.
+                Default: ``enabled``.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            maximum_retry: The maximum number of attempts to send an inventory message. Default:
+                ``1``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "CallhomeInventoryPolicyCursor",
+            self._invoke_maker("callhome_inventory_policy", (name,), _prune(params)),
+        )
+
+    def callhome_query_group(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> CallhomeQueryGroupCursor:
+        """Declare a ``callhomeQueryGroup`` child under the fabric level.
+
+        A Call Home query group is a set of Call Home query messages to be sent on returned objects.
+
+        Args:
+            name: The name for the query group.
+            annotation: User annotation. Suggested format orchestrator:value
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "CallhomeQueryGroupCursor",
+            self._invoke_maker("callhome_query_group", (name,), _prune(params)),
+        )
+
+    def snmp_policy(
+        self,
+        name: str,
+        *,
+        admin_state: NwAdminSt | str | None = None,
+        annotation: str | None = None,
+        contact: str | None = None,
+        description: str | None = None,
+        location: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> SnmpPolicyCursor:
+        """Declare a ``snmpPol`` child under the fabric level.
+
+        The SNMP policy enables you to monitor client group, v3 user, and/or community SNMP
+        policies. SNMP is an application-layer protocol that provides a message format for
+        communication between SNMP managers and agents.
+
+        Args:
+            name: The name of the SNMP policy. This name can be between 1 and 64 alphanumeric
+                characters.
+            admin_state: Indicates the administrative state of the SNMP policy. Values:
+                ``disabled``, ``enabled``. Default: ``disabled``.
+            annotation: User annotation. Suggested format orchestrator:value
+            contact: The contact name for the SNMP policy.
+            description: Specifies a description of the policy definition.
+            location: The location for the SNMP policy.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "SnmpPolicyCursor",
+            self._invoke_maker("snmp_policy", (name,), _prune(params)),
+        )
+
+    def snmp_monitoring_destination_group(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> SnmpMonitoringDestinationGroupCursor:
+        """Declare a ``snmpGroup`` child under the fabric level.
+
+        The SNMP destination group contains information needed to send traps or informs to a set of
+        destinations.. SNMP is an application-layer protocol that provides a message format for
+        communication between SNMP managers and agents.
+
+        Args:
+            name: The name of the destination group. This name can be between 1 and 64
+                alphanumeric characters.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "SnmpMonitoringDestinationGroupCursor",
+            self._invoke_maker("snmp_monitoring_destination_group", (name,), _prune(params)),
+        )
+
+    def snmp_trap_destination_info(
+        self,
+        apic_id: int,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> SnmpTrapDestinationInfoCursor:
+        """Declare a ``snmpCtrlrInst`` child under the fabric level.
+
+        Args:
+            apic_id: Naming property — forms the object's RN.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "apic_id",
+            )
+        }
+        return cast(
+            "SnmpTrapDestinationInfoCursor",
+            self._invoke_maker("snmp_trap_destination_info", (apic_id,), _prune(params)),
+        )
+
+    def tacacs_monitoring_destination_group(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> TacacsMonitoringDestinationGroupCursor:
+        """Declare a ``tacacsGroup`` child under the fabric level.
+
+        Group brings together all information needed to send audit logs to a set of destinations. It
+        is referenced by mon:Source, which determines which events generate logs.
+
+        Args:
+            name: The name of the object.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "TacacsMonitoringDestinationGroupCursor",
+            self._invoke_maker("tacacs_monitoring_destination_group", (name,), _prune(params)),
+        )
+
+    def mon_fabric_monitoring_policy(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> MonFabricMonitoringPolicyCursor:
+        """Declare a ``monFabricPol`` child under the fabric level.
+
+        Creates a policy which acts as a container for associated fabric monitoring policies. These
+        can include policies related to Event/Fault severity, the Fault lifecycle, and other such
+        monitoring policies.
+
+        Args:
+            name: The fabric monitoring policy name. This name can be up to 64 alphanumeric
+                characters. Note that you cannot change this name after the object has been
+                saved. This name cannot be changed after it has been created.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "MonFabricMonitoringPolicyCursor",
+            self._invoke_maker("mon_fabric_monitoring_policy", (name,), _prune(params)),
+        )
+
+    def mon_common_monitoring_policy(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> MonCommonMonitoringPolicyCursor:
+        """Declare a ``monCommonPol`` child under the fabric level.
+
+        The monitoring policy model for the common semantic scope, which is used when there is no
+        corresponding policy under the more specific infra or tenant scopes. In such cases, these
+        policies are used throughout the fabric except for objects attached to their own specific
+        policies.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "MonCommonMonitoringPolicyCursor",
+            self._invoke_maker("mon_common_monitoring_policy", (), _prune(params)),
+        )
+
+    def communication_policy(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> CommunicationPolicyCursor:
+        """Declare a ``commPol`` child under the fabric level.
+
+        The communication policy contains the service configuration for various services.
+
+        Args:
+            name: The name of the policy. This name can be up to 64 alphanumeric characters.
+                Note that you cannot change this name after the object has been saved.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "CommunicationPolicyCursor",
+            self._invoke_maker("communication_policy", (name,), _prune(params)),
+        )
+
+    def datetime_format(
+        self,
+        name: str = "default",
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_format: DatetimeDisplayFormat | str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        offset: DatetimeOffsetState | str | None = None,
+        time_zone: DatetimeTimeZoneUTC | str | None = None,
+        userdom: str | None = None,
+    ) -> DatetimeFormatCursor:
+        """Declare a ``datetimeFormat`` child under the fabric level.
+
+        The date/time format policy defines the time-zone for the entire fabric.
+
+        Args:
+            name: Naming property — forms the object's RN.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            display_format: The date/time display format selector. The display format can be UTC
+                or local. Values: ``local``, ``utc``. Default: ``local``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            offset: The display of the offset can be enabled or disabled. This enables you to
+                view the difference between the local time and the reference time. Values:
+                ``disabled``, ``enabled``. Default: ``enabled``.
+            time_zone: The time zone selection. This enables you to select a time zone for your
+                domain. Values: ``n120_America-Bahia``, ``n120_America-Godthab``,
+                ``n120_America-Miquelon``, ``n120_America-Montevideo``, ``n120_America-
+                Noronha``, ``n120_America-Sao_Paulo``, ``n120_Atlantic-South_Georgia``,
+                ``n150_America-St_Johns``, …. Default: ``p0_UTC``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "DatetimeFormatCursor",
+            self._invoke_maker("datetime_format", (name,), _prune(params)),
+        )
+
+    def proxy_server(
+        self,
+        *,
+        annotation: str | None = None,
+        http_url: str | None = None,
+        https_url: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> ProxyServerCursor:
+        """Declare a ``proxyServer`` child under the fabric level.
+
+        Policy to configure Proxy Server
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            http_url: Http URL
+            https_url: Https URL
+            name: The name of the object.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "ProxyServerCursor",
+            self._invoke_maker("proxy_server", (), _prune(params)),
+        )
+
+    def mgmt_connectivity_preference(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        management_interface_that_has_to_be_used: MgmtMgmtIntfType | str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> MgmtConnectivityPreferenceCursor:
+        """Declare a ``mgmtConnectivityPrefs`` child under the fabric level.
+
+        ConnectivityPrefs has the information about routing interface(oob/inb)
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            management_interface_that_has_to_be_used: Values: ``inband``, ``ooband``. Default:
+                ``inband``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "MgmtConnectivityPreferenceCursor",
+            self._invoke_maker("mgmt_connectivity_preference", (), _prune(params)),
+        )
+
+    def geo_site(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> GeoSiteCursor:
+        """Declare a ``geoSite`` child under the fabric level.
+
+        The geographical site of the fabric node.
+
+        Args:
+            name: The site name. The name can be up to 64 characters and must begin with an
+                alphanumeric character. The name can only contain alphanumeric characters and
+                the following symbols: - . : _
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "GeoSiteCursor",
+            self._invoke_maker("geo_site", (name,), _prune(params)),
+        )
+
+    def admin_down_policy(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> AdminDownPolicyCursor:
+        """Declare a ``fabricBlacklistPol`` child under the fabric level.
+
+        The blacklist policy.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "AdminDownPolicyCursor",
+            self._invoke_maker("admin_down_policy", (), _prune(params)),
+        )
+
+    def deployment_policy(
+        self,
+        name: str = "default",
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        show_usage_warning: bool | None = None,
+        userdom: str | None = None,
+    ) -> DeploymentPolicyCursor:
+        """Declare a ``fabricDeployPol`` child under the fabric level.
+
+        Deployment Policy
+
+        Args:
+            name: The name of the object.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            show_usage_warning: Indicates if current usage / deployment status will be displayed
+                before UI submits configuration changes Default: ``False``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "DeploymentPolicyCursor",
+            self._invoke_maker("deployment_policy", (name,), _prune(params)),
+        )
+
+    def out_of_service_fabric_policy(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> OutOfServiceFabricPolicyCursor:
+        """Declare a ``fabricOOServicePol`` child under the fabric level.
+
+        The service policy. This is used for listing equipment under maintenance.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "OutOfServiceFabricPolicyCursor",
+            self._invoke_maker("out_of_service_fabric_policy", (), _prune(params)),
+        )
+
+    def extended_fabric_equipment_policy(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        id: int | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> ExtendedFabricEquipmentPolicyCursor:
+        """Declare a ``fabricExtPol`` child under the fabric level.
+
+        The configuration of the extended fabric equipment, such as FEX.
+
+        Args:
+            name: Naming property — forms the object's RN.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            id: The extended chassis id associated with the interfaces Default: ``0``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "ExtendedFabricEquipmentPolicyCursor",
+            self._invoke_maker("extended_fabric_equipment_policy", (name,), _prune(params)),
+        )
+
+    def firmware_policy(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        whether_effective_on_reboot: bool | None = None,
+        ignore_compatibility_check: bool | None = None,
+        internal_label: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        sr_upgrade: bool | None = None,
+        version: str | None = None,
+        userdom: str | None = None,
+        target_firmware_version: str | None = None,
+        version_check_override: TrigAdminState | str | None = None,
+    ) -> FirmwarePolicyCursor:
+        """Declare a ``firmwareFwP`` child under the fabric level.
+
+        The firmware specification policy for a node.
+
+        Args:
+            name: The firmware policy name.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            whether_effective_on_reboot: A property that indicates if the selected firmware
+                version will be active after reboot. The firmware must be effective on an
+                unplanned reboot before the scheduled maintenance operation. Default: ``False``.
+            ignore_compatibility_check: A property for specifying whether compatibility checks
+                should be ignored when applying the firmware policy. Default: ``False``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            sr_upgrade: SR Firware Upgrade. Default: ``False``.
+            version: SR Firmware version desired.
+            target_firmware_version: The firmware version.
+            version_check_override: Values: ``trigger``, ``trigger-immediate``, ``triggered``,
+                ``untriggered``. Default: ``untriggered``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "FirmwarePolicyCursor",
+            self._invoke_maker("firmware_policy", (name,), _prune(params)),
+        )
+
+    def firmware_group(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        selector_type: FabricSelector | str | None = None,
+        userdom: str | None = None,
+    ) -> FirmwareGroupCursor:
+        """Declare a ``firmwareFwGrp`` child under the fabric level.
+
+        A firmware group is a set of nodes to which a firmware policy may be applied.
+
+        Args:
+            name: The name for the set of nodes to which the firmware version is applied.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            selector_type: Values: ``ALL``, ``ALL_IN_POD``, ``range``. Default: ``ALL``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "FirmwareGroupCursor",
+            self._invoke_maker("firmware_group", (name,), _prune(params)),
+        )
+
+    def catalog_firmware_policy(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        ignore_compatibility_check: bool | None = None,
+        internal_label: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        sr_upgrade: bool | None = None,
+        version: str | None = None,
+        userdom: str | None = None,
+        target_firmware_version: str | None = None,
+        version_check_override: TrigAdminState | str | None = None,
+    ) -> CatalogFirmwarePolicyCursor:
+        """Declare a ``firmwareCatFwP`` child under the fabric level.
+
+        The catalog firmware policy version.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            ignore_compatibility_check: A property for specifying whether compatibility checks
+                should be ignored when applying the firmware policy. Default: ``False``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            sr_upgrade: SR Firware Upgrade. Default: ``False``.
+            version: SR Firmware version desired.
+            target_firmware_version: The firmware version.
+            version_check_override: Values: ``trigger``, ``trigger-immediate``, ``triggered``,
+                ``untriggered``. Default: ``untriggered``.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "CatalogFirmwarePolicyCursor",
+            self._invoke_maker("catalog_firmware_policy", (), _prune(params)),
+        )
+
+    def firmware_repository_profile(
+        self,
+        *,
+        annotation: str | None = None,
+        default_switch_version: str | None = None,
+        description: str | None = None,
+        enforce_bootscript_version_validation: bool | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> FirmwareRepositoryProfileCursor:
+        """Declare a ``firmwareRepoP`` child under the fabric level.
+
+        The firmware repository population and maintenance information.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            default_switch_version: The firmware version used by the new switches joining the
+                cluster. Any new node that is attached to the fabric that is not running this
+                exact version will not be discovered.
+            description: Specifies a description of the policy definition.
+            enforce_bootscript_version_validation: Ensures that any switch discovered in the
+                fabric is upgraded or downgraded automatically to match the specified version.
+                Default: ``False``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "FirmwareRepositoryProfileCursor",
+            self._invoke_maker("firmware_repository_profile", (), _prune(params)),
+        )
+
+    def maintenance_policy(
+        self,
+        name: str,
+        *,
+        administrative_state: TrigExecState | str | None = None,
+        annotation: str | None = None,
+        description: str | None = None,
+        download_state: TrigExecState | str | None = None,
+        graceful_maintenance: bool | None = None,
+        ignore_compatibility: bool | None = None,
+        internal_label: str | None = None,
+        display_name: str | None = None,
+        notification_condition: MaintNotifCond | str | None = None,
+        scheduler_run_mode: MaintRunMode | str | None = None,
+        smu_operation_type: MaintSMUOperation | str | None = None,
+        smu_operation_flags: MaintSMUOperationFlags | str | None = None,
+        sr_upgrade: bool | None = None,
+        sr_version: str | None = None,
+        userdom: str | None = None,
+        version: str | None = None,
+        version_check_override: TrigAdminState | str | None = None,
+    ) -> MaintenancePolicyCursor:
+        """Declare a ``maintMaintP`` child under the fabric level.
+
+        The maintenance policy determines the pre-defined action to take when there is a disruptive
+        change made to the service profile associated with the node or set of nodes.
+
+        Args:
+            name: The name for the maintenance policy. The maintenance policy determines the
+                pre-defined action to take when there is a disruptive change made to the service
+                profile associated with the node or node group.
+            administrative_state: The administrative state of the executable policies. Values:
+                ``triggered``, ``untriggered``. Default: ``untriggered``.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            download_state: Values: ``triggered``, ``untriggered``. Default: ``untriggered``.
+            graceful_maintenance: Graceful maintenance. Describe graceful maintenance Default:
+                ``False``.
+            ignore_compatibility: Whether compatibility checks should be ignored when applying
+                this firmware policy. Default: ``False``.
+            internal_label: Firmware label - internal use only!
+            notification_condition: Specifies under what pause condition will admin be notified
+                via email/text as configured. This notification mechanism is independent of
+                events/faults. Values: ``notifyAlwaysBetweenSets``, ``notifyNever``,
+                ``notifyOnlyOnFailures``. Default: ``notifyOnlyOnFailures``.
+            scheduler_run_mode: Specifies whether to proceed automatically to next set of nodes
+                once a set of nodes have gone through maintenance successfully. Values:
+                ``pauseAlwaysBetweenSets``, ``pauseNever``, ``pauseOnlyOnFailures``. Default:
+                ``pauseOnlyOnFailures``.
+            smu_operation_type: Specifies SMU Operation Values: ``smuInstall``,
+                ``smuUninstall``. Default: ``smuInstall``.
+            smu_operation_flags: Values: ``patchHotSmu``, ``smuReloadImmediate``,
+                ``smuReloadSkip``. Default: ``smuReloadImmediate``.
+            sr_upgrade: Default: ``False``.
+            sr_version: srFirmware version desired.
+            version: Firmware version desired.
+            version_check_override: Version check override - directive to ignore version check
+                for next install. What is version check? During maintenance window, check
+                whether desired version matches running. If it does not match, perform
+                maintenance(install). If it does, do not perform any maintenance(install).
+                Values: ``trigger``, ``trigger-immediate``, ``triggered``, ``untriggered``.
+                Default: ``untriggered``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "MaintenancePolicyCursor",
+            self._invoke_maker("maintenance_policy", (name,), _prune(params)),
+        )
+
+    def maintenance_group(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        fwtype: FirmwareType | str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        selector_type: FabricSelector | str | None = None,
+        userdom: str | None = None,
+    ) -> MaintenanceGroupCursor:
+        """Declare a ``maintMaintGrp`` child under the fabric level.
+
+        The maintenance group is a set of nodes to which a maintenance policy may be applied. The
+        maintenance policy determines the pre-defined action to take when there is a disruptive
+        change made to the service profile associated with the node group.
+
+        Args:
+            name: The name for a set of nodes that a maintenance policy can be applied to. The
+                maintenance policy determines the pre-defined action to take when there is a
+                disruptive change made to the service profile associated with the node group.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            fwtype: Values: ``cApicPatch``, ``catalog``, ``ciscoDockerApp``, ``config``,
+                ``controller``, ``controllerPatch``, ``dockerApp``, ``plugin``, …. Default:
+                ``switch``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            selector_type: Values: ``ALL``, ``ALL_IN_POD``, ``range``. Default: ``ALL``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "MaintenanceGroupCursor",
+            self._invoke_maker("maintenance_group", (name,), _prune(params)),
+        )
+
+    def pod_maintenance_group(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        selector_type: FabricSelector2 | str | None = None,
+        userdom: str | None = None,
+    ) -> PodMaintenanceGroupCursor:
+        """Declare a ``maintPodMaintGrp`` child under the fabric level.
+
+        POD Maintenance Group. A set of PODs to which a maintenance policy may be applied.
+
+        Args:
+            name: The name of the object.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            selector_type: Values: ``ALL``, ``range``. Default: ``ALL``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "PodMaintenanceGroupCursor",
+            self._invoke_maker("pod_maintenance_group", (name,), _prune(params)),
+        )
+
+    def catalog_maintenance_policy(
+        self,
+        *,
+        administrative_state: TrigExecState | str | None = None,
+        annotation: str | None = None,
+        description: str | None = None,
+        download_state: TrigExecState | str | None = None,
+        graceful_maintenance: bool | None = None,
+        ignore_compatibility: bool | None = None,
+        internal_label: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        notification_condition: MaintNotifCond | str | None = None,
+        scheduler_run_mode: MaintRunMode | str | None = None,
+        sr_upgrade: bool | None = None,
+        sr_version: str | None = None,
+        userdom: str | None = None,
+        version: str | None = None,
+        version_check_override: TrigAdminState | str | None = None,
+    ) -> CatalogMaintenancePolicyCursor:
+        """Declare a ``maintCatMaintP`` child under the fabric level.
+
+        The catalog maintenance policy specifies when catalog maintenance takes place.
+
+        Args:
+            administrative_state: The administrative state of the executable policies. Values:
+                ``triggered``, ``untriggered``. Default: ``untriggered``.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            download_state: Values: ``triggered``, ``untriggered``. Default: ``untriggered``.
+            graceful_maintenance: Graceful maintenance. Describe graceful maintenance Default:
+                ``False``.
+            ignore_compatibility: Whether compatibility checks should be ignored when applying
+                this firmware policy. Default: ``False``.
+            internal_label: Firmware label - internal use only!
+            notification_condition: Specifies under what pause condition will admin be notified
+                via email/text as configured. This notification mechanism is independent of
+                events/faults. Values: ``notifyAlwaysBetweenSets``, ``notifyNever``,
+                ``notifyOnlyOnFailures``. Default: ``notifyOnlyOnFailures``.
+            scheduler_run_mode: Specifies whether to proceed automatically to next set of nodes
+                once a set of nodes have gone through maintenance successfully. Values:
+                ``pauseAlwaysBetweenSets``, ``pauseNever``, ``pauseOnlyOnFailures``. Default:
+                ``pauseOnlyOnFailures``.
+            sr_upgrade: Default: ``False``.
+            sr_version: srFirmware version desired.
+            version: Firmware version desired.
+            version_check_override: Version check override - directive to ignore version check
+                for next install. What is version check? During maintenance window, check
+                whether desired version matches running. If it does not match, perform
+                maintenance(install). If it does, do not perform any maintenance(install).
+                Values: ``trigger``, ``trigger-immediate``, ``triggered``, ``untriggered``.
+                Default: ``untriggered``.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "CatalogMaintenancePolicyCursor",
+            self._invoke_maker("catalog_maintenance_policy", (), _prune(params)),
+        )
+
+    def maintenance_notification_email(
+        self,
+        to: str,
+        *,
+        annotation: str | None = None,
+        userdom: str | None = None,
+    ) -> MaintenanceNotificationEmailCursor:
+        """Declare a ``maintEmailNotif`` child under the fabric level.
+
+        The email notification specification.
+
+        Args:
+            to: Naming property — forms the object's RN.
+            annotation: User annotation. Suggested format orchestrator:value
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "to",
+            )
+        }
+        return cast(
+            "MaintenanceNotificationEmailCursor",
+            self._invoke_maker("maintenance_notification_email", (to,), _prune(params)),
+        )
+
+    def maintenance_notification_text(
+        self,
+        to: str,
+        *,
+        annotation: str | None = None,
+        userdom: str | None = None,
+    ) -> MaintenanceNotificationTextCursor:
+        """Declare a ``maintTextNotif`` child under the fabric level.
+
+        The text notification specification.
+
+        Args:
+            to: Naming property — forms the object's RN.
+            annotation: User annotation. Suggested format orchestrator:value
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "to",
+            )
+        }
+        return cast(
+            "MaintenanceNotificationTextCursor",
+            self._invoke_maker("maintenance_notification_text", (to,), _prune(params)),
+        )
+
+    def configuration_export_policy(
+        self,
+        name: str,
+        *,
+        administrative_state: TrigExecState | str | None = None,
+        annotation: str | None = None,
+        description: str | None = None,
+        export_format: ConfigFormat | str | None = None,
+        include_secure_fields_in_export: bool | None = None,
+        max_snapshot_count: int | str | None = None,
+        display_name: str | None = None,
+        snapshot: bool | None = None,
+        dn_to_export: str | None = None,
+        userdom: str | None = None,
+    ) -> ConfigurationExportPolicyCursor:
+        """Declare a ``configExportP`` child under the fabric level.
+
+        A configuration export policy is used to backup the system configuration.
+
+        Args:
+            name: The name of the configuration export policy. For ease of reference, include
+                details such as: the format of the export, how often the policy will run, and
+                where the configuration will be exported. The name cannot be changed after the
+                policy has been created.
+            administrative_state: The administrative state of the executable policies. Values:
+                ``triggered``, ``untriggered``. Default: ``untriggered``.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            export_format: The data format to be used when exporting. Values: ``json``, ``xml``.
+                Default: ``json``.
+            include_secure_fields_in_export: Default: ``True``.
+            max_snapshot_count: Default: ``global-limit``.
+            snapshot: Default: ``False``.
+            dn_to_export: The distinguished name of the object to be exported. The policy
+                universe is exported by default.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "ConfigurationExportPolicyCursor",
+            self._invoke_maker("configuration_export_policy", (name,), _prune(params)),
+        )
+
+    def configuration_import_policy(
+        self,
+        name: str,
+        *,
+        administrative_state: TrigExecState | str | None = None,
+        annotation: str | None = None,
+        description: str | None = None,
+        fail_on_decrypt_errors: bool | None = None,
+        file_to_import: str | None = None,
+        import_mode: ConfigImportMode | str | None = None,
+        import_action_type: ConfigImportAction | str | None = None,
+        display_name: str | None = None,
+        snapshot: bool | None = None,
+        userdom: str | None = None,
+    ) -> ConfigurationImportPolicyCursor:
+        """Declare a ``configImportP`` child under the fabric level.
+
+        A configuration import policy specifies how to import a fabric configuration file.
+
+        Args:
+            name: The name of the import policy. For ease of reference, include details such as:
+                the full or partial name of the file to be imported, the type/mode of import,
+                and the remote location where the file is stored. The name cannot be changed
+                after the policy has been created.
+            administrative_state: The administrative state of the executable policies. Values:
+                ``triggered``, ``untriggered``. Default: ``untriggered``.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            fail_on_decrypt_errors: Default: ``True``.
+            file_to_import: The name of the file to be imported from the remote location listed
+                below.
+            import_mode: The import mode. The configuration data is imported per shard with each
+                shard holding certain part of the system configuration objects. Values:
+                ``atomic``, ``best-effort``. Default: ``atomic``.
+            import_action_type: The import type specifies whether the existing fabric
+                configuration will be merged or replaced with the backup configuration being
+                imported. Values: ``merge``, ``replace``. Default: ``merge``.
+            snapshot: Default: ``False``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "ConfigurationImportPolicyCursor",
+            self._invoke_maker("configuration_import_policy", (name,), _prune(params)),
+        )
+
+    def configuration_snapshot_manager_policy(
+        self,
+        name: str,
+        *,
+        administrative_state: TrigExecState | str | None = None,
+        annotation: str | None = None,
+        description: str | None = None,
+        file_name: str | None = None,
+        snapshot_manager_action: ConfigSnapshotAction | str | None = None,
+        display_name: str | None = None,
+        snapshot: bool | None = None,
+        userdom: str | None = None,
+    ) -> ConfigurationSnapshotManagerPolicyCursor:
+        """Declare a ``configSnapshotMgrP`` child under the fabric level.
+
+        Args:
+            name: The name of the object.
+            administrative_state: The administrative state of the executable policies. Values:
+                ``triggered``, ``untriggered``. Default: ``untriggered``.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            snapshot_manager_action: The BGP Domain mode. Values: ``download``, ``upload``.
+                Default: ``upload``.
+            snapshot: Default: ``False``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "ConfigurationSnapshotManagerPolicyCursor",
+            self._invoke_maker("configuration_snapshot_manager_policy", (name,), _prune(params)),
+        )
+
+    def configuration_snapshot_rollback_policy(
+        self,
+        name: str,
+        *,
+        administrative_state: TrigExecState | str | None = None,
+        annotation: str | None = None,
+        description: str | None = None,
+        import_mode: ConfigImportMode | str | None = None,
+        display_name: str | None = None,
+        preview_mode_nothing_is_applied: bool | None = None,
+        snapshot: bool | None = None,
+        snapshot_one: str | None = None,
+        snapshot_two: str | None = None,
+        userdom: str | None = None,
+    ) -> ConfigurationSnapshotRollbackPolicyCursor:
+        """Declare a ``configRollbackP`` child under the fabric level.
+
+        Args:
+            name: The name of the object.
+            administrative_state: The administrative state of the executable policies. Values:
+                ``triggered``, ``untriggered``. Default: ``untriggered``.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            import_mode: The BGP Domain mode. Values: ``atomic``, ``best-effort``. Default:
+                ``atomic``.
+            preview_mode_nothing_is_applied: Default: ``False``.
+            snapshot: Default: ``False``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "ConfigurationSnapshotRollbackPolicyCursor",
+            self._invoke_maker("configuration_snapshot_rollback_policy", (name,), _prune(params)),
+        )
+
+    def id_import_policy(
+        self,
+        name: str,
+        *,
+        administrative_state: TrigExecState | str | None = None,
+        annotation: str | None = None,
+        description: str | None = None,
+        id_file_to_import: str | None = None,
+        display_name: str | None = None,
+        snapshot: bool | None = None,
+        userdom: str | None = None,
+    ) -> IdImportPolicyCursor:
+        """Declare a ``configImportIdP`` child under the fabric level.
+
+        Args:
+            name: The name of the object.
+            administrative_state: The administrative state of the executable policies. Values:
+                ``triggered``, ``untriggered``. Default: ``untriggered``.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            snapshot: Default: ``False``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "IdImportPolicyCursor",
+            self._invoke_maker("id_import_policy", (name,), _prune(params)),
+        )
+
+    def scheduler(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> FabricSchedulerCursor:
+        """Declare a ``trigSchedP`` child under the fabric level.
+
+        The scheduler policy enables you to schedule a recurring or one-time window for the
+        execution of a task. Multiple scheduler policies can be created for the same time period.
+
+        Args:
+            name: The name for the scheduler policy.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "FabricSchedulerCursor",
+            self._invoke_maker("scheduler", (name,), _prune(params)),
+        )
+
+    def license_policy(
+        self,
+        *,
+        action_result: LicenseActionResult | str | None = None,
+        annotation: str | None = None,
+        authorization_code: str | None = None,
+        certificate: str | None = None,
+        force_re_register: bool | None = None,
+        hostname_privacy: bool | None = None,
+        ip_addr: str | None = None,
+        smart_licensing_action: LicenseLicActionType | str | None = None,
+        license_sync_freq: int | None = None,
+        smart_license_mode: LicenseLicenseMode | str | None = None,
+        plr_admin_state: LicensePlrAdminState | str | None = None,
+        proxy_server_port: int | None = None,
+        smart_licensing_admin_state: LicenseRegAdminState | str | None = None,
+        product_instance_id_token: str | None = None,
+        license_usage_reporting_interval_in_day: int | None = None,
+        url: str | None = None,
+        userdom: str | None = None,
+    ) -> LicensePolicyCursor:
+        """Declare a ``licenseLicPolicy`` child under the fabric level.
+
+        LicPolicy class represents license policy encapsulates user's configuration data used in
+        smart licensing management. Because user's configuration data shall support export/import,
+        the owner of LicensePolicy is PM.
+
+        Args:
+            action_result: actionResult is to indicate whether or not RUM report download or
+                Acknowledgement import is succeeded or failed. Values: ``create-rum-report-
+                failure``, ``create-rum-report-success``, ``none``. Default: ``none``.
+            annotation: User annotation. Suggested format orchestrator:value
+            authorization_code: Authorization code or permanent license installed by user.
+            force_re_register: To force re-register the product with CSSM, regardless whether or
+                not the product is alread registered. Per ELO requirement, let user decide if
+                he/she wants to force re-register. If forceRegister = false, SA returns an error
+                if the product is already registered. Default: ``False``.
+            hostname_privacy: Default: ``False``.
+            ip_addr: For Call Home HTTP proxy server
+            smart_licensing_action: Action for manually renewing ID certificate, license
+                authorization and so on. Based on action enum type, corresponding SA API is
+                invoked and SA return a formatted long string encapsulating the data. Values:
+                ``create-rum-report``, ``device-led-conversion``, ``disable-dev-cert``,
+                ``enable-dev-cert``, ``import-private-certificate``, ``install-rum-report-ack``,
+                ``modify-report-interval``, ``none``, …. Default: ``none``.
+            license_sync_freq: Default: ``60``.
+            smart_license_mode: Smart licensing mode. Values: ``cslu``, ``offline``, ``plr``,
+                ``proxy``, ``satellite``, ``smart-licensing``, ``transport-gateway``. Default:
+                ``smart-licensing``.
+            plr_admin_state: Admin state for triggering request/cancel/install/return
+                reservation action. Values: ``cancel``, ``install``, ``none``, ``request``,
+                ``return``, ``return-auth``. Default: ``none``.
+            proxy_server_port: The port number of third-party HTTP/HTTPs proxy server. When the
+                mode is not proxy, port is not required and can be ignored. Default: ``443``.
+            smart_licensing_admin_state: Admin state for triggering registration and
+                unregistration. Values: ``deregister``, ``none``, ``register``. Default:
+                ``none``.
+            product_instance_id_token: To register product with CSSM, a user need to input
+                registration token ID. The registration token ID is created by customer from
+                CSSM web site.
+            license_usage_reporting_interval_in_day: SLE policy allows a user to change license
+                reporting interval. Default value is 30 days, and min and max range is 1 - 90
+                days. Default: ``30``.
+            url: The url of remote manager (CSSM, Satellite manager or SCH gateway server). When
+                the mode is plr, url is not required and can be ignored.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "LicensePolicyCursor",
+            self._invoke_maker("license_policy", (), _prune(params)),
+        )
+
+    def remote_path(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        authentication_type_choice: FileAuthenticationType | str | None = None,
+        description: str | None = None,
+        host: str | None = None,
+        identity_private_key_contents: str | None = None,
+        ssh_private_key_passphrase: str | None = None,
+        identity_public_key_contents: str | None = None,
+        display_name: str | None = None,
+        protocol: FileTransferProtocol | str | None = None,
+        remote_path: str | None = None,
+        remote_port: int | None = None,
+        user_name: str | None = None,
+        password: str | None = None,
+        userdom: str | None = None,
+    ) -> RemotePathCursor:
+        """Declare a ``fileRemotePath`` child under the fabric level.
+
+        The remote destination path parameters for the data export.
+
+        Args:
+            name: The destination for data export.
+            annotation: User annotation. Suggested format orchestrator:value
+            authentication_type_choice: The OSPF authentication type specifier. The type options
+                are; default, md5, none, and simple. Values: ``usePassword``,
+                ``useSshKeyContents``. Default: ``usePassword``.
+            description: Specifies the description of a policy component.
+            host: Hostname or IP for export destination
+            ssh_private_key_passphrase: Passphrase given at the identity key creation.
+            identity_public_key_contents: Certificate contents for data transfer. Used for
+                credentials.
+            protocol: Transfer prtocol to be used for data export Values: ``ftp``, ``scp``,
+                ``sftp``. Default: ``sftp``.
+            remote_path: Path where data will reside in the destination
+            remote_port: Remote port for data export destination Default: ``0``.
+            user_name: Username to be used to transfer data to destination
+            password: Password to be used to transfer data to destination
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "RemotePathCursor",
+            self._invoke_maker("remote_path", (name,), _prune(params)),
+        )
+
+    def telemetry_enable_global_policy(
+        self,
+        *,
+        admin_state: TelemetryAdminState | str | None = None,
+        annotation: str | None = None,
+        userdom: str | None = None,
+    ) -> TelemetryEnableGlobalPolicyCursor:
+        """Declare a ``telemetryEnableP`` child under the fabric level.
+
+        Args:
+            admin_state: The administrative state of the object or policy. Values: ``disabled``,
+                ``enabled``. Default: ``enabled``.
+            annotation: User annotation. Suggested format orchestrator:value
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "TelemetryEnableGlobalPolicyCursor",
+            self._invoke_maker("telemetry_enable_global_policy", (), _prune(params)),
+        )
+
+    def flow_collector_policy(
+        self,
+        *,
+        admin_state: TelemetryAdminState | str | None = None,
+        annotation: str | None = None,
+        collector_placement: int | str | None = None,
+        description: str | None = None,
+        external_ip_where_collector_is_listening: str | None = None,
+        external_server_port: int | None = None,
+        enable_fte_instance: TelemetryAdminState | str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        software_hardware_based_record_export: bool | None = None,
+        userdom: str | None = None,
+    ) -> FlowCollectorPolicyCursor:
+        """Declare a ``telemetryFlowCollectorP`` child under the fabric level.
+
+        Args:
+            admin_state: The administrative state of the object or policy. Values: ``disabled``,
+                ``enabled``. Default: ``disabled``.
+            annotation: User annotation. Suggested format orchestrator:value
+            collector_placement: Default: ``apic``.
+            description: Specifies a description of the policy definition.
+            external_ip_where_collector_is_listening: External Server Ip and Port would be used
+                to export the streams to an external server
+            external_server_port: Default: ``0``.
+            enable_fte_instance: Enable FTE Values: ``disabled``, ``enabled``. Default:
+                ``disabled``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            software_hardware_based_record_export: Default: ``False``.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "FlowCollectorPolicyCursor",
+            self._invoke_maker("flow_collector_policy", (), _prune(params)),
+        )
+
+    def analytics_policy_container(
+        self,
+        *,
+        annotation: str | None = None,
+        userdom: str | None = None,
+    ) -> AnalyticsPolicyContainerCursor:
+        """Declare a ``analyticsCont`` child under the fabric level.
+
+        Container for analytics policies.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "AnalyticsPolicyContainerCursor",
+            self._invoke_maker("analytics_policy_container", (), _prune(params)),
+        )
+
+    def twamp_responder_policy(
+        self,
+        name: str,
+        *,
+        twamp_responder_enable_disable: NwAdminSt | str | None = None,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        twamp_responder_timeout: int | None = None,
+        userdom: str | None = None,
+    ) -> TwampResponderPolicyCursor:
+        """Declare a ``twampResponderPol`` child under the fabric level.
+
+        TWAMP Responder Policy.
+
+        Args:
+            name: Name of the TWAMP Responder Policy.
+            twamp_responder_enable_disable: Administrative state of the TWAMP Responder Policy.
+                Values: ``disabled``, ``enabled``. Default: ``disabled``.
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            twamp_responder_timeout: Number of seconds Session-Reflector must wait after
+                receiving a Stop-Sessions message Default: ``900``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "TwampResponderPolicyCursor",
+            self._invoke_maker("twamp_responder_policy", (name,), _prune(params)),
+        )
+
+    def twamp_server_policy(
+        self,
+        name: str,
+        *,
+        twamp_server_enable_disable: NwAdminSt | str | None = None,
+        annotation: str | None = None,
+        description: str | None = None,
+        twamp_server_inactivity_timer: int | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        twamp_server_port_number: int | None = None,
+        userdom: str | None = None,
+    ) -> TwampServerPolicyCursor:
+        """Declare a ``twampServerPol`` child under the fabric level.
+
+        Node level TWAMP policy
+
+        Args:
+            name: Name of the TWAMP Server Policy.
+            twamp_server_enable_disable: Admininstrative state of the TWAMP Server Policy.
+                Values: ``disabled``, ``enabled``. Default: ``disabled``.
+            description: Specifies a description of the policy definition.
+            twamp_server_inactivity_timer: Number of seconds before which TWAMP Server has to
+                finish establishing control session. Default: ``900``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            twamp_server_port_number: TWAMP server listening port number. Default: ``862``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "TwampServerPolicyCursor",
+            self._invoke_maker("twamp_server_policy", (name,), _prune(params)),
+        )
+
+    def core_export_policy(
+        self,
+        name: str,
+        *,
+        administrative_state: TrigExecState | str | None = None,
+        annotation: str | None = None,
+        apic_path: str | None = None,
+        app_name: str | None = None,
+        files_to_collect_and_export: DbgexpCollectType | str | None = None,
+        compression: MonCompression | str | None = None,
+        export_location: ScalarEnum8 | str | None = None,
+        include_db_metadata_file: bool | None = None,
+        description: str | None = None,
+        export_to_controller: bool | None = None,
+        export_to_intersight: bool | None = None,
+        extensive_logs: bool | None = None,
+        display_name: str | None = None,
+        include_pre_upgrade_logs: bool | None = None,
+        userdom: str | None = None,
+        vendor_name: str | None = None,
+    ) -> CoreExportPolicyCursor:
+        """Declare a ``dbgexpCoreP`` child under the fabric level.
+
+        The core policy provides a core file report containing data about the system and the
+        component at the time of the failure.
+
+        Args:
+            name: The name of the core file export policy.
+            administrative_state: The administrative state of the executable policies. Values:
+                ``triggered``, ``untriggered``. Default: ``untriggered``.
+            annotation: User annotation. Suggested format orchestrator:value
+            files_to_collect_and_export: The collection type for the core file. Values:
+                ``coreOnly``, ``techSup``. Default: ``coreOnly``.
+            compression: The compression format for core files. The format can either be gzip or
+                no compression. Values: ``gzip``, ``none``. Default: ``none``.
+            export_location: Values: ``apic``, ``apicx``. Default: ``apic``.
+            include_db_metadata_file: Default: ``True``.
+            description: Specifies the description of a policy component.
+            export_to_controller: Default: ``False``.
+            export_to_intersight: Default: ``False``.
+            extensive_logs: Default: ``False``.
+            include_pre_upgrade_logs: Default: ``False``.
+            vendor_name: The SFP transceiver vendor name (ASCII).
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "CoreExportPolicyCursor",
+            self._invoke_maker("core_export_policy", (name,), _prune(params)),
+        )
+
+    def techsupport_export_policy(
+        self,
+        name: str,
+        *,
+        administrative_state: TrigExecState | str | None = None,
+        annotation: str | None = None,
+        apic_path: str | None = None,
+        app_name: str | None = None,
+        category_of_feature_to_be_collected: frozenset[DbgexpCategory]
+        | set[DbgexpCategory]
+        | str
+        | None = None,
+        compression: MonCompression | str | None = None,
+        export_location: ScalarEnum8 | str | None = None,
+        include_db_metadata_file: bool | None = None,
+        description: str | None = None,
+        end_time_for_techsupport_collection: str | None = None,
+        export_to_controller: bool | None = None,
+        export_to_intersight: bool | None = None,
+        extensive_logs: bool | None = None,
+        display_name: str | None = None,
+        start_time_for_techsupport_collection: str | None = None,
+        include_pre_upgrade_logs: bool | None = None,
+        userdom: str | None = None,
+        vendor_name: str | None = None,
+    ) -> TechsupportExportPolicyCursor:
+        """Declare a ``dbgexpTechSupP`` child under the fabric level.
+
+        A tech support policy creates an archive containing configuration information, logs and
+        diagnostic data that will help TAC with troubleshooting and resolving a technical issue.
+
+        Args:
+            name: The name of the technical support export policy.
+            administrative_state: The administrative state of the executable policies. Values:
+                ``triggered``, ``untriggered``. Default: ``untriggered``.
+            annotation: User annotation. Suggested format orchestrator:value
+            category_of_feature_to_be_collected: The category name. This is the name of the
+                grouping used when calculating the healthscore. If unspecified, the child's
+                class name is used. Default: ``PydanticUndefined``.
+            compression: The compression format for technical support. The format can either be
+                gzip or no compression. Values: ``gzip``, ``none``. Default: ``gzip``.
+            export_location: Values: ``apic``, ``apicx``. Default: ``apic``.
+            include_db_metadata_file: Default: ``True``.
+            description: Specifies the description of a policy component.
+            export_to_controller: Default: ``False``.
+            export_to_intersight: Default: ``False``.
+            extensive_logs: Default: ``False``.
+            include_pre_upgrade_logs: Default: ``False``.
+            vendor_name: The SFP transceiver vendor name (ASCII).
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "TechsupportExportPolicyCursor",
+            self._invoke_maker("techsupport_export_policy", (name,), _prune(params)),
+        )
+
+    def ongoing_latency_mode(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        user_mode: LatencyLatencyMode | str | None = None,
+        userdom: str | None = None,
+    ) -> OngoingLatencyModeCursor:
+        """Declare a ``latencyOngoingMode`` child under the fabric level.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            user_mode: Values: ``average``, ``histogram``. Default: ``average``.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "OngoingLatencyModeCursor",
+            self._invoke_maker("ongoing_latency_mode", (), _prune(params)),
+        )
+
+    def ptp_latency_mode(
+        self,
+        *,
+        annotation: str | None = None,
+        announce_interval: int | None = None,
+        announce_timeout: int | None = None,
+        delay_request_interval: int | None = None,
+        ptp_profile_template: PtpProfileTemplate | str | None = None,
+        sync_interval: int | None = None,
+        ptp_global_domain: int | None = None,
+        is_count_valid: bool | None = None,
+        latency_policy_count: int | None = None,
+        ptp_global_priority_1_value: int | None = None,
+        ptp_global_priority_2_value: int | None = None,
+        state: NetflowAdminSt | str | None = None,
+        system_resolution_factor_for_max_latency: int | None = None,
+        ttag_ether_type0x8905_status: bool | None = None,
+        userdom: str | None = None,
+    ) -> PtpLatencyModeCursor:
+        """Declare a ``latencyPtpMode`` child under the fabric level.
+
+        Precision Time Protocol enable/disable flag
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            announce_interval: Fabric Interface Announce Interval Default: ``1``.
+            announce_timeout: Fabric Interace Announce timeout Default: ``3``.
+            delay_request_interval: Fabric Interace Minimum Delay Request Interval Default:
+                ``-2``.
+            ptp_profile_template: Fabric PTP profile Template Values: ``aes67``, ``default``,
+                ``smpte``, ``telecom_full_path``. Default: ``aes67``.
+            sync_interval: Fabric Interace Sync Interval Default: ``-3``.
+            ptp_global_domain: Default: ``0``.
+            is_count_valid: Flag to tell if the policy count is valid or not Default: ``False``.
+            latency_policy_count: Total number of active latency policies Default: ``0``.
+            ptp_global_priority_1_value: PTP Global properties Default: ``255``.
+            ptp_global_priority_2_value: Default: ``255``.
+            state: State of the PTP protocol Values: ``disabled``, ``enabled``. Default:
+                ``disabled``.
+            system_resolution_factor_for_max_latency: System Resolution factor, Value could be
+                (0 or 11 ) Default: ``0``.
+            ttag_ether_type0x8905_status: State of the ttag ether type Default: ``False``.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "PtpLatencyModeCursor",
+            self._invoke_maker("ptp_latency_mode", (), _prune(params)),
+        )
+
+    def vspan_session(
+        self,
+        name: str,
+        *,
+        admin_state: SpanAdminSt | str | None = None,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> FabricVspanSessionCursor:
+        """Declare a ``spanVSrcGrp`` child under the fabric level.
+
+        The VSPAN source group can contain a group of VSPAN sources. A VSPAN source is where network
+        traffic is sampled. A VSPAN source can be an endpoint group (EPG), one or more ports; or
+        port traffic filtered by an EPG (access VSPAN), a Layer 2 bridge domain, or a Layer 3
+        context (fabric VSPAN).
+
+        Args:
+            name: The name of the source group.
+            admin_state: Values: ``start``, ``stop``, ``unknown``. Default: ``start``.
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "FabricVspanSessionCursor",
+            self._invoke_maker("vspan_session", (name,), _prune(params)),
+        )
+
+    def vspan_destination_group(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> FabricVspanDestinationGroupCursor:
+        """Declare a ``spanVDestGrp`` child under the fabric level.
+
+        The VSPAN destination group contains a group of VSPAN destinations. A VSPAN destination is
+        where network traffic is sent for analysis by a network analyzer. A VSPAN destination can be
+        local or remote (VERSPAN).
+
+        Args:
+            name: The name of the VSPAN destination group.
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "FabricVspanDestinationGroupCursor",
+            self._invoke_maker("vspan_destination_group", (name,), _prune(params)),
+        )
+
 
 class FabricCursor(_FabricMakers, _UniMakers):
     """Typed cursor for ``fabricInst`` (fabric level).
@@ -472,6 +3647,98 @@ class FabricCursor(_FabricMakers, _UniMakers):
         userdom: str | None = None,
     ) -> FabricCursor:
         """Set ``fabricInst`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class AdminDownPolicyCursor(_FabricMakers, _UniMakers):
+    """Typed cursor for ``fabricBlacklistPol`` (admin_down_policy level).
+
+    Position: ``uni.fabric.admin_down_policy``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> AdminDownPolicyCursor:
+        """Set ``fabricBlacklistPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class _AnalyticsPolicyContainerMakers(Cursor):
+    """Makers declared at the analytics_policy_container level (``analyticsCont``)."""
+
+    __slots__ = ()
+
+    def analytics_cluster(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> AnalyticsClusterCursor:
+        """Declare a ``analyticsCluster`` child under the analytics_policy_container level.
+
+        Args:
+            name: Naming property — forms the object's RN.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "AnalyticsClusterCursor",
+            self._invoke_maker("analytics_cluster", (name,), _prune(params)),
+        )
+
+
+class AnalyticsPolicyContainerCursor(_AnalyticsPolicyContainerMakers, _FabricMakers, _UniMakers):
+    """Typed cursor for ``analyticsCont`` (analytics_policy_container level).
+
+    Position: ``uni.fabric.analytics_policy_container``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        userdom: str | None = None,
+    ) -> AnalyticsPolicyContainerCursor:
+        """Set ``analyticsCont`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
         return self
@@ -559,6 +3826,830 @@ class BgpInstanceCursor(_BgpInstanceMakers, _FabricMakers, _UniMakers):
         return self
 
 
+class _CallhomeDestinationGroupMakers(Cursor):
+    """Makers declared at the callhome_destination_group level (``callhomeGroup``)."""
+
+    __slots__ = ()
+
+    def callhome_destination(
+        self,
+        name: str,
+        *,
+        admin_state: MonAdminState | str | None = None,
+        annotation: str | None = None,
+        description: str | None = None,
+        destination_email_address: str | None = None,
+        message_format: CallhomeMsgFormat | str | None = None,
+        maximum_size: int | None = None,
+        display_name: str | None = None,
+        message_format_rfc_compliant: bool | None = None,
+        severity_level: CallhomeUrgency | str | None = None,
+        userdom: str | None = None,
+    ) -> CallhomeDestinationCursor:
+        """Declare a ``callhomeDest`` child under the callhome_destination_group level.
+
+        The Call Home destination profile contains the delivery information for receiving email-
+        based alert notifications of critical system policies. A range of message formats are
+        available for compatibility with pager services or XML-based automated parsing applications.
+
+        Args:
+            name: The user-defined name for the Call Home destination.
+            admin_state: The destination policy administrative state. If enabled, the system
+                uses the destination policy when an error matching the associated cause is
+                encountered. Otherwise, the system ignores the policy even if a matching error
+                occurs. By default, all policies are enabled. Values: ``disabled``, ``enabled``.
+                Default: ``enabled``.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            destination_email_address: This is the actual email address to which the message is
+                sent.
+            message_format: The Call Home destination message format. Values: ``aml``, ``short-
+                txt``, ``xml``. Default: ``xml``.
+            maximum_size: The maximum size (in bytes) for a Call Home message to a specific
+                destination. Default: ``1000000``.
+            message_format_rfc_compliant: Default: ``False``.
+            severity_level: The severity level for Call Home destinations. The Call Home
+                destination is an object that also contains the recipient's email address and a
+                format selection (.xml, .aml, or short-test). Values: ``alert``, ``critical``,
+                ``debug``, ``emergency``, ``error``, ``info``, ``notice``, ``warning``. Default:
+                ``alert``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "CallhomeDestinationCursor",
+            self._invoke_maker("callhome_destination", (name,), _prune(params)),
+        )
+
+    def callhome_protocol_profile(
+        self,
+        *,
+        contact_address: str | None = None,
+        admin_state: MonAdminState | str | None = None,
+        annotation: str | None = None,
+        contact_name: str | None = None,
+        contract_number: str | None = None,
+        customer_name: str | None = None,
+        description: str | None = None,
+        contact_email: str | None = None,
+        from_: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        contact_phone: str | None = None,
+        port: int | None = None,
+        password: str | None = None,
+        replyto_address: str | None = None,
+        secure_smtp: bool | None = None,
+        site: str | None = None,
+        userdom: str | None = None,
+        username: str | None = None,
+    ) -> CallhomeDestinationGroupCallhomeProtocolProfileCursor:
+        """Declare a ``callhomeProf`` child under the callhome_destination_group level.
+
+        Contains all site information and the address of the SMTP server used to send emails.
+
+        Args:
+            contact_address: The contact address of the customer.
+            admin_state: Values: ``disabled``, ``enabled``. Default: ``enabled``.
+            annotation: User annotation. Suggested format orchestrator:value
+            contact_name: The customer contact ID. Note that the customer ID associated with the
+                Smart Call Home configuration in Cisco UCS must be the CCO (Cisco.com) account
+                name associated with a support contract that includes Smart Call Home.
+            contract_number: The contract information provided by the customer.
+            customer_name: The customer for the Call Home profile.
+            description: Specifies the description of a policy component.
+            contact_email: The email address of the contact for the system or site. This address
+                is not necessarily the same as the reply-to addresses used in the outgoing
+                emails.
+            from_: The email address of the sender.
+            name: The user-configured profile name.
+            contact_phone: The contact phone number.
+            port: The SMTP server port number. The SMTP server address must be configured for
+                the Callhome functionality to work. Default: ``25``.
+            password: The system user password.
+            replyto_address: The Reply-To email address for emails sent using the destination
+                group policy.
+            secure_smtp: Default: ``False``.
+            site: The site ID provided by the customer. This is the ID of the network where the
+                site is deployed.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "CallhomeDestinationGroupCallhomeProtocolProfileCursor",
+            self._invoke_maker("callhome_protocol_profile", (), _prune(params)),
+        )
+
+
+class CallhomeDestinationGroupCursor(_CallhomeDestinationGroupMakers, _FabricMakers, _UniMakers):
+    """Typed cursor for ``callhomeGroup`` (callhome_destination_group level).
+
+    Position: ``uni.fabric.callhome_destination_group``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> CallhomeDestinationGroupCursor:
+        """Set ``callhomeGroup`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class CallhomeInventoryPolicyCursor(_FabricMakers, _UniMakers):
+    """Typed cursor for ``callhomeInvP`` (callhome_inventory_policy level).
+
+    Position: ``uni.fabric.callhome_inventory_policy``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        administrative_state: TrigExecState | str | None = None,
+        admin_state: MonAdminState | str | None = None,
+        annotation: str | None = None,
+        description: str | None = None,
+        maximum_retry: int | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> CallhomeInventoryPolicyCursor:
+        """Set ``callhomeInvP`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class _CallhomeQueryGroupMakers(Cursor):
+    """Makers declared at the callhome_query_group level (``callhomeQueryGroup``)."""
+
+    __slots__ = ()
+
+    def query(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        value: str | None = None,
+        display_name: str | None = None,
+        response_depth: ConfigRspSubtreeDepth | str | None = None,
+        response_data: frozenset[ConfigRspSubtreeInclude]
+        | set[ConfigRspSubtreeInclude]
+        | str
+        | None = None,
+        query_target: ConfigQueryTarget | str | None = None,
+        query_type: ConfigQueryType | str | None = None,
+        userdom: str | None = None,
+    ) -> QueryCursor:
+        """Declare a ``callhomeQuery`` child under the callhome_query_group level.
+
+        A query. This is a query object representing all information on returned objects.
+
+        Args:
+            name: The user-configured name for the query.
+            annotation: User annotation. Suggested format orchestrator:value
+            value: The query entity as a distinguished name or class name.
+            response_depth: The subtree information that should be included in objects returned
+                from the query. Values: ``children``, ``full``, ``no``. Default: ``no``.
+            response_data: The types of subtrees for the objects returned from the query.
+                Default: ``PydanticUndefined``.
+            query_target: A property to specify if the subtree information should be included
+                for the objects returned by this query. Values: ``children``, ``self``,
+                ``subtree``. Default: ``self``.
+            query_type: The type of query. The type can be a class-name or a distinguished-name.
+                Values: ``class``, ``dn``. Default: ``dn``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "QueryCursor",
+            self._invoke_maker("query", (name,), _prune(params)),
+        )
+
+
+class CallhomeQueryGroupCursor(_CallhomeQueryGroupMakers, _FabricMakers, _UniMakers):
+    """Typed cursor for ``callhomeQueryGroup`` (callhome_query_group level).
+
+    Position: ``uni.fabric.callhome_query_group``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> CallhomeQueryGroupCursor:
+        """Set ``callhomeQueryGroup`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class CatalogFirmwarePolicyCursor(_FabricMakers, _UniMakers):
+    """Typed cursor for ``firmwareCatFwP`` (catalog_firmware_policy level).
+
+    Position: ``uni.fabric.catalog_firmware_policy``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        ignore_compatibility_check: bool | None = None,
+        internal_label: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        sr_upgrade: bool | None = None,
+        version: str | None = None,
+        userdom: str | None = None,
+        target_firmware_version: str | None = None,
+        version_check_override: TrigAdminState | str | None = None,
+    ) -> CatalogFirmwarePolicyCursor:
+        """Set ``firmwareCatFwP`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class CatalogMaintenancePolicyCursor(_FabricMakers, _UniMakers):
+    """Typed cursor for ``maintCatMaintP`` (catalog_maintenance_policy level).
+
+    Position: ``uni.fabric.catalog_maintenance_policy``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        administrative_state: TrigExecState | str | None = None,
+        annotation: str | None = None,
+        description: str | None = None,
+        download_state: TrigExecState | str | None = None,
+        graceful_maintenance: bool | None = None,
+        ignore_compatibility: bool | None = None,
+        internal_label: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        notification_condition: MaintNotifCond | str | None = None,
+        scheduler_run_mode: MaintRunMode | str | None = None,
+        sr_upgrade: bool | None = None,
+        sr_version: str | None = None,
+        userdom: str | None = None,
+        version: str | None = None,
+        version_check_override: TrigAdminState | str | None = None,
+    ) -> CatalogMaintenancePolicyCursor:
+        """Set ``maintCatMaintP`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class _CommunicationPolicyMakers(Cursor):
+    """Makers declared at the communication_policy level (``commPol``)."""
+
+    __slots__ = ()
+
+    def http_service(
+        self,
+        *,
+        access_control_allow_credential: CommAllowCredentialState | str | None = None,
+        access_control_allow_origins: str | None = None,
+        admin_state: CommAdminState | str | None = None,
+        annotation: str | None = None,
+        cli_only_mode: CommCliOnlyMode | str | None = None,
+        description: str | None = None,
+        global_throttle_rate: int | None = None,
+        global_throttle_st: CommAdminState | str | None = None,
+        unit_of_rate_limit: str | None = None,
+        max_request_status_count: int | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        node_exporter_service: CommNodeExporter | str | None = None,
+        port: int | None = None,
+        redirect_state: CommRedirect | str | None = None,
+        server_header_response: CommServerHeader | str | None = None,
+        throttle_rate: int | None = None,
+        login_refresh_throttle_state: CommAdminState | str | None = None,
+        userdom: str | None = None,
+        visore_access: CommVisoreAccess | str | None = None,
+    ) -> HttpServiceCursor:
+        """Declare a ``commHttp`` child under the communication_policy level.
+
+        HTTP
+
+        Args:
+            access_control_allow_credential: Values: ``disabled``, ``enabled``. Default:
+                ``disabled``.
+            admin_state: The state of the HTTP communication service. This can be enabled or
+                disabled. Values: ``disabled``, ``enabled``. Default: ``disabled``.
+            annotation: User annotation. Suggested format orchestrator:value
+            cli_only_mode: Values: ``disabled``, ``enabled``. Default: ``disabled``.
+            description: Specifies the description of a policy component.
+            global_throttle_rate: Default: ``10000``.
+            global_throttle_st: Values: ``disabled``, ``enabled``. Default: ``disabled``.
+            max_request_status_count: Default: ``0``.
+            node_exporter_service: Values: ``disabled``, ``enabled``. Default: ``disabled``.
+            port: The port used for HTTP communication service. Default: ``80``.
+            redirect_state: The state of HTTPS communication service. This can be enabled or
+                disabled. Values: ``disabled``, ``enabled``, ``tested``. Default: ``disabled``.
+            server_header_response: Values: ``disabled``, ``enabled``. Default: ``enabled``.
+            throttle_rate: Default: ``2``.
+            login_refresh_throttle_state: Values: ``disabled``, ``enabled``. Default:
+                ``enabled``.
+            visore_access: Values: ``disabled``, ``enabled``. Default: ``enabled``.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "HttpServiceCursor",
+            self._invoke_maker("http_service", (), _prune(params)),
+        )
+
+    def http_ssl_configuration(
+        self,
+        *,
+        access_control_allow_credential: CommAllowCredentialState | str | None = None,
+        access_control_allow_origins: str | None = None,
+        admin_state: CommAdminState | str | None = None,
+        annotation: str | None = None,
+        cli_only_mode: CommCliOnlyMode | str | None = None,
+        client_cert_auth_state: CommAdminState | str | None = None,
+        description: str | None = None,
+        global_throttle_rate: int | None = None,
+        global_throttle_st: CommAdminState | str | None = None,
+        unit_of_rate_limit: str | None = None,
+        max_request_status_count: int | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        node_exporter_service: CommNodeExporter | str | None = None,
+        port: int | None = None,
+        referer: str | None = None,
+        server_header: CommServerHeader | str | None = None,
+        ssl_protocols: frozenset[CommSslProtocolTypes]
+        | set[CommSslProtocolTypes]
+        | str
+        | None = None,
+        throttle_rate: int | None = None,
+        login_refresh_throttle_state: CommAdminState | str | None = None,
+        userdom: str | None = None,
+        visore_access: CommVisoreAccess | str | None = None,
+    ) -> HttpSslConfigurationCursor:
+        """Declare a ``commHttps`` child under the communication_policy level.
+
+        HTTPS
+
+        Args:
+            access_control_allow_credential: Values: ``disabled``, ``enabled``. Default:
+                ``disabled``.
+            admin_state: The state of HTTPS communication service. This can be enabled or
+                disabled. Values: ``disabled``, ``enabled``. Default: ``enabled``.
+            annotation: User annotation. Suggested format orchestrator:value
+            cli_only_mode: Values: ``disabled``, ``enabled``. Default: ``disabled``.
+            client_cert_auth_state: Values: ``disabled``, ``enabled``. Default: ``disabled``.
+            description: Specifies the description of a policy component.
+            global_throttle_rate: Default: ``10000``.
+            global_throttle_st: Values: ``disabled``, ``enabled``. Default: ``disabled``.
+            max_request_status_count: Default: ``0``.
+            node_exporter_service: Values: ``disabled``, ``enabled``. Default: ``disabled``.
+            port: The port used for HTTPS communication service. Default: ``443``.
+            server_header: Values: ``disabled``, ``enabled``. Default: ``enabled``.
+            ssl_protocols: The Secure Socket Layer (SSL) protocol. Default:
+                ``PydanticUndefined``.
+            throttle_rate: Default: ``2``.
+            login_refresh_throttle_state: Values: ``disabled``, ``enabled``. Default:
+                ``enabled``.
+            visore_access: Values: ``disabled``, ``enabled``. Default: ``enabled``.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "HttpSslConfigurationCursor",
+            self._invoke_maker("http_ssl_configuration", (), _prune(params)),
+        )
+
+    def ssh_service(
+        self,
+        *,
+        admin_state: CommAdminState | str | None = None,
+        annotation: str | None = None,
+        description: str | None = None,
+        kex_algorithms: frozenset[CommKexAlgorithmTypes]
+        | set[CommKexAlgorithmTypes]
+        | str
+        | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        password_auth_state: CommAdminState | str | None = None,
+        port: int | None = None,
+        ssh_ciphers: frozenset[CommSshCipherTypes] | set[CommSshCipherTypes] | str | None = None,
+        ssh_macs: frozenset[CommSshMacTypes] | set[CommSshMacTypes] | str | None = None,
+        userdom: str | None = None,
+    ) -> SshServiceCursor:
+        """Declare a ``commSsh`` child under the communication_policy level.
+
+        Object that encompasses properties related to Secure Shell access to the APIC, namely admin-
+        state (default=enabled) and port(default=22).
+
+        Args:
+            admin_state: The state of SSH communication service. This can be enabled or
+                disabled. Values: ``disabled``, ``enabled``. Default: ``enabled``.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            kex_algorithms: Default: ``PydanticUndefined``.
+            password_auth_state: Values: ``disabled``, ``enabled``. Default: ``enabled``.
+            port: The SSH port. Default: ``22``.
+            ssh_ciphers: Default: ``PydanticUndefined``.
+            ssh_macs: Default: ``PydanticUndefined``.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "SshServiceCursor",
+            self._invoke_maker("ssh_service", (), _prune(params)),
+        )
+
+    def shellinabox_service(
+        self,
+        *,
+        admin_state: CommAdminState | str | None = None,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> ShellinaboxServiceCursor:
+        """Declare a ``commShellinabox`` child under the communication_policy level.
+
+        Args:
+            admin_state: The administrative state of the object or policy. Values: ``disabled``,
+                ``enabled``. Default: ``disabled``.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: The description of this configuration item.
+            name: The name of the object.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "ShellinaboxServiceCursor",
+            self._invoke_maker("shellinabox_service", (), _prune(params)),
+        )
+
+    def communication_setup(
+        self,
+        *,
+        annotation: str | None = None,
+        maximum_mos_in_query: int | None = None,
+        userdom: str | None = None,
+    ) -> CommunicationSetupCursor:
+        """Declare a ``commSetup`` child under the communication_policy level.
+
+        This is generated and used only by internal processes.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            maximum_mos_in_query: Default: ``100000``.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "CommunicationSetupCursor",
+            self._invoke_maker("communication_setup", (), _prune(params)),
+        )
+
+    def response_time(
+        self,
+        *,
+        annotation: str | None = None,
+        calc_window: int | None = None,
+        admin_state: CommAdminState | str | None = None,
+        resp_time_threshold: int | None = None,
+        set_the_value_for_n_in_top_n_requests: int | None = None,
+        userdom: str | None = None,
+    ) -> ResponseTimeCursor:
+        """Declare a ``commApiRespTime`` child under the communication_policy level.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            calc_window: Window in which averageTime, and number of requests that go beyond the
+                threshold is calculated Default: ``300``.
+            admin_state: Property is set to enable or disable the calculation Values:
+                ``disabled``, ``enabled``. Default: ``disabled``.
+            resp_time_threshold: An event will be created if the response time of any request in
+                the window is beyond this threshold Default: ``85000``.
+            set_the_value_for_n_in_top_n_requests: Property to set the number of slowest
+                requests to be seen Default: ``5``.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "ResponseTimeCursor",
+            self._invoke_maker("response_time", (), _prune(params)),
+        )
+
+    def restart(
+        self,
+        *,
+        annotation: str | None = None,
+        toggle_state_for_nginx_process_restart: CommRedirect | str | None = None,
+        userdom: str | None = None,
+    ) -> RestartCursor:
+        """Declare a ``commReconfig`` child under the communication_policy level.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            toggle_state_for_nginx_process_restart: Values: ``disabled``, ``enabled``,
+                ``tested``. Default: ``disabled``.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "RestartCursor",
+            self._invoke_maker("restart", (), _prune(params)),
+        )
+
+
+class CommunicationPolicyCursor(_CommunicationPolicyMakers, _FabricMakers, _UniMakers):
+    """Typed cursor for ``commPol`` (communication_policy level).
+
+    Position: ``uni.fabric.communication_policy``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> CommunicationPolicyCursor:
+        """Set ``commPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class ConfigurationExportPolicyCursor(_FabricMakers, _UniMakers):
+    """Typed cursor for ``configExportP`` (configuration_export_policy level).
+
+    Position: ``uni.fabric.configuration_export_policy``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        administrative_state: TrigExecState | str | None = None,
+        annotation: str | None = None,
+        description: str | None = None,
+        export_format: ConfigFormat | str | None = None,
+        include_secure_fields_in_export: bool | None = None,
+        max_snapshot_count: int | str | None = None,
+        display_name: str | None = None,
+        snapshot: bool | None = None,
+        dn_to_export: str | None = None,
+        userdom: str | None = None,
+    ) -> ConfigurationExportPolicyCursor:
+        """Set ``configExportP`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class ConfigurationImportPolicyCursor(_FabricMakers, _UniMakers):
+    """Typed cursor for ``configImportP`` (configuration_import_policy level).
+
+    Position: ``uni.fabric.configuration_import_policy``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        administrative_state: TrigExecState | str | None = None,
+        annotation: str | None = None,
+        description: str | None = None,
+        fail_on_decrypt_errors: bool | None = None,
+        file_to_import: str | None = None,
+        import_mode: ConfigImportMode | str | None = None,
+        import_action_type: ConfigImportAction | str | None = None,
+        display_name: str | None = None,
+        snapshot: bool | None = None,
+        userdom: str | None = None,
+    ) -> ConfigurationImportPolicyCursor:
+        """Set ``configImportP`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class ConfigurationSnapshotManagerPolicyCursor(_FabricMakers, _UniMakers):
+    """Typed cursor for ``configSnapshotMgrP`` (configuration_snapshot_manager_policy level).
+
+    Position: ``uni.fabric.configuration_snapshot_manager_policy``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        administrative_state: TrigExecState | str | None = None,
+        annotation: str | None = None,
+        description: str | None = None,
+        file_name: str | None = None,
+        snapshot_manager_action: ConfigSnapshotAction | str | None = None,
+        display_name: str | None = None,
+        snapshot: bool | None = None,
+        userdom: str | None = None,
+    ) -> ConfigurationSnapshotManagerPolicyCursor:
+        """Set ``configSnapshotMgrP`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class ConfigurationSnapshotRollbackPolicyCursor(_FabricMakers, _UniMakers):
+    """Typed cursor for ``configRollbackP`` (configuration_snapshot_rollback_policy level).
+
+    Position: ``uni.fabric.configuration_snapshot_rollback_policy``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        administrative_state: TrigExecState | str | None = None,
+        annotation: str | None = None,
+        description: str | None = None,
+        import_mode: ConfigImportMode | str | None = None,
+        display_name: str | None = None,
+        preview_mode_nothing_is_applied: bool | None = None,
+        snapshot: bool | None = None,
+        snapshot_one: str | None = None,
+        snapshot_two: str | None = None,
+        userdom: str | None = None,
+    ) -> ConfigurationSnapshotRollbackPolicyCursor:
+        """Set ``configRollbackP`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class CoopGroupPolicyCursor(_FabricMakers, _UniMakers):
+    """Typed cursor for ``coopPol`` (coop_group_policy level).
+
+    Position: ``uni.fabric.coop_group_policy``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        authentication_type: CoopAuthT | str | None = None,
+        userdom: str | None = None,
+    ) -> CoopGroupPolicyCursor:
+        """Set ``coopPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class CoreExportPolicyCursor(_FabricMakers, _UniMakers):
+    """Typed cursor for ``dbgexpCoreP`` (core_export_policy level).
+
+    Position: ``uni.fabric.core_export_policy``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        administrative_state: TrigExecState | str | None = None,
+        annotation: str | None = None,
+        apic_path: str | None = None,
+        app_name: str | None = None,
+        files_to_collect_and_export: DbgexpCollectType | str | None = None,
+        compression: MonCompression | str | None = None,
+        export_location: ScalarEnum8 | str | None = None,
+        include_db_metadata_file: bool | None = None,
+        description: str | None = None,
+        export_to_controller: bool | None = None,
+        export_to_intersight: bool | None = None,
+        extensive_logs: bool | None = None,
+        display_name: str | None = None,
+        include_pre_upgrade_logs: bool | None = None,
+        userdom: str | None = None,
+        vendor_name: str | None = None,
+    ) -> CoreExportPolicyCursor:
+        """Set ``dbgexpCoreP`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class DatetimeFormatCursor(_FabricMakers, _UniMakers):
+    """Typed cursor for ``datetimeFormat`` (datetime_format level).
+
+    Position: ``uni.fabric.datetime_format``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_format: DatetimeDisplayFormat | str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        offset: DatetimeOffsetState | str | None = None,
+        time_zone: DatetimeTimeZoneUTC | str | None = None,
+        userdom: str | None = None,
+    ) -> DatetimeFormatCursor:
+        """Set ``datetimeFormat`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
 class _DatetimePolicyMakers(Cursor):
     """Makers declared at the datetime_policy level (``datetimePol``)."""
 
@@ -637,6 +4728,34 @@ class DatetimePolicyCursor(_DatetimePolicyMakers, _FabricMakers, _UniMakers):
         userdom: str | None = None,
     ) -> DatetimePolicyCursor:
         """Set ``datetimePol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class DeploymentPolicyCursor(_FabricMakers, _UniMakers):
+    """Typed cursor for ``fabricDeployPol`` (deployment_policy level).
+
+    Position: ``uni.fabric.deployment_policy``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        show_usage_warning: bool | None = None,
+        userdom: str | None = None,
+    ) -> DeploymentPolicyCursor:
+        """Set ``fabricDeployPol`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
         return self
@@ -750,6 +4869,1235 @@ class DnsProfileCursor(_DnsProfileMakers, _FabricMakers, _UniMakers):
         return self
 
 
+class DwdmPolicyCursor(_FabricMakers, _UniMakers):
+    """Typed cursor for ``dwdmFabIfPol`` (dwdm_policy level).
+
+    Position: ``uni.fabric.dwdm_policy``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        fcot_channel_number: int | str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> DwdmPolicyCursor:
+        """Set ``dwdmFabIfPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class ExtendedFabricEquipmentPolicyCursor(_FabricMakers, _UniMakers):
+    """Typed cursor for ``fabricExtPol`` (extended_fabric_equipment_policy level).
+
+    Position: ``uni.fabric.extended_fabric_equipment_policy``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        id: int | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> ExtendedFabricEquipmentPolicyCursor:
+        """Set ``fabricExtPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class FabricL2MtuPolicyCursor(_FabricMakers, _UniMakers):
+    """Typed cursor for ``l2InstPol`` (fabric_l2_mtu_policy level).
+
+    Position: ``uni.fabric.fabric_l2_mtu_policy``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        mtu_size_for_fabric_ports: int | None = None,
+        mtu_size_for_management_ports: int | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> FabricL2MtuPolicyCursor:
+        """Set ``l2InstPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class FabricLinkFlapPolicyCursor(_FabricMakers, _UniMakers):
+    """Typed cursor for ``fabricFLinkFlapPol`` (fabric_link_flap_policy level).
+
+    Position: ``uni.fabric.fabric_link_flap_policy``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        max_flaps_allowed_per_time: int | None = None,
+        time_allowed_for_max_flaps: int | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> FabricLinkFlapPolicyCursor:
+        """Set ``fabricFLinkFlapPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class FabricLinkLevelPolicyCursor(_FabricMakers, _UniMakers):
+    """Typed cursor for ``fabricFIfPol`` (fabric_link_level_policy level).
+
+    Position: ``uni.fabric.fabric_link_level_policy``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        fabric_link_debounce_interval_msec: int | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> FabricLinkLevelPolicyCursor:
+        """Set ``fabricFIfPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class FabricNodeControlCursor(_FabricMakers, _UniMakers):
+    """Typed cursor for ``fabricNodeControl`` (fabric_node_control level).
+
+    Position: ``uni.fabric.fabric_node_control``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        fabric_node_control_bitmask: frozenset[FabricNodeControlBitMask]
+        | set[FabricNodeControlBitMask]
+        | str
+        | None = None,
+        description: str | None = None,
+        feature_selection: FabricPrioT | str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> FabricNodeControlCursor:
+        """Set ``fabricNodeControl`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class FabricVxlanPolicyCursor(_FabricMakers, _UniMakers):
+    """Typed cursor for ``l4VxlanInstPol`` (fabric_vxlan_policy level).
+
+    Position: ``uni.fabric.fabric_vxlan_policy``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        udp_port_number_for_vxlan_traffic: int | str | None = None,
+        userdom: str | None = None,
+    ) -> FabricVxlanPolicyCursor:
+        """Set ``l4VxlanInstPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class _FirmwareGroupMakers(Cursor):
+    """Makers declared at the firmware_group level (``firmwareFwGrp``)."""
+
+    __slots__ = ()
+
+    def node_block(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        from_node_id: int | None = None,
+        display_name: str | None = None,
+        to_node_id: int | None = None,
+        userdom: str | None = None,
+    ) -> FirmwareGroupNodeBlockCursor:
+        """Declare a ``fabricNodeBlk`` child under the firmware_group level.
+
+        The node block. This is a range of nodes. Each node block begins with the first port and
+        ends with the last port.
+
+        Args:
+            name: The name of the node block.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: The description of this configuration item.
+            from_node_id: Default: ``1``.
+            to_node_id: Default: ``1``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "FirmwareGroupNodeBlockCursor",
+            self._invoke_maker("node_block", (name,), _prune(params)),
+        )
+
+
+class FirmwareGroupCursor(_FirmwareGroupMakers, _FabricMakers, _UniMakers):
+    """Typed cursor for ``firmwareFwGrp`` (firmware_group level).
+
+    Position: ``uni.fabric.firmware_group``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        selector_type: FabricSelector | str | None = None,
+        userdom: str | None = None,
+    ) -> FirmwareGroupCursor:
+        """Set ``firmwareFwGrp`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class FirmwarePolicyCursor(_FabricMakers, _UniMakers):
+    """Typed cursor for ``firmwareFwP`` (firmware_policy level).
+
+    Position: ``uni.fabric.firmware_policy``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        whether_effective_on_reboot: bool | None = None,
+        ignore_compatibility_check: bool | None = None,
+        internal_label: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        sr_upgrade: bool | None = None,
+        version: str | None = None,
+        userdom: str | None = None,
+        target_firmware_version: str | None = None,
+        version_check_override: TrigAdminState | str | None = None,
+    ) -> FirmwarePolicyCursor:
+        """Set ``firmwareFwP`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class _FirmwareRepositoryProfileMakers(Cursor):
+    """Makers declared at the firmware_repository_profile level (``firmwareRepoP``)."""
+
+    __slots__ = ()
+
+    def cco_firmware_source(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        authentication_type: FirmwareAuthPass | str | None = None,
+        authentication_type_choice: FirmwareAuthenticationType | str | None = None,
+        description: str | None = None,
+        variable_to_reuse_download_task: bool | None = None,
+        ssh_private_key_content: str | None = None,
+        ssh_private_key_passphrase: str | None = None,
+        ssh_public_key_content: str | None = None,
+        load_catalog_if_exists_and_newer: bool | None = None,
+        display_name: str | None = None,
+        password: str | None = None,
+        polling_interval: int | None = None,
+        protocol: FirmwareDownloadProtocol | str | None = None,
+        url: str | None = None,
+        username: str | None = None,
+        userdom: str | None = None,
+    ) -> CcoFirmwareSourceCursor:
+        """Declare a ``firmwareCcoSource`` child under the firmware_repository_profile level.
+
+        Cisco.com is the source of images.
+
+        Args:
+            name: The name for applying cisco.com as the source of images.
+            annotation: User annotation. Suggested format orchestrator:value
+            authentication_type: The authentication type for the source. Values: ``key``,
+                ``password``. Default: ``password``.
+            authentication_type_choice: The OSPF authentication type specifier. The type options
+                are; default, md5, none, and simple. Values: ``usePassword``,
+                ``useSshKeyContents``. Default: ``usePassword``.
+            description: Specifies the description of a policy component.
+            variable_to_reuse_download_task: Download Task Flip. Default: ``True``.
+            ssh_private_key_passphrase: Passphrase given at the identity key creation.
+            ssh_public_key_content: Certificate contents for data transfer. Used for
+                credentials.
+            load_catalog_if_exists_and_newer: Default: ``True``.
+            password: The Firmware password or key string.
+            polling_interval: Polling interval in minutes. Default: ``0``.
+            protocol: The Firmware download protocol. Values: ``http``, ``local``, ``scp``,
+                ``usbkey``. Default: ``scp``.
+            url: The firmware URL for the image(s) on the source.
+            username: The username for the source.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "CcoFirmwareSourceCursor",
+            self._invoke_maker("cco_firmware_source", (name,), _prune(params)),
+        )
+
+    def firmware_download_task(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        authentication_type: FirmwareAuthPass | str | None = None,
+        authentication_type_choice: FirmwareAuthenticationType | str | None = None,
+        description: str | None = None,
+        variable_to_reuse_download_task: bool | None = None,
+        ssh_private_key_content: str | None = None,
+        ssh_private_key_passphrase: str | None = None,
+        ssh_public_key_content: str | None = None,
+        load_catalog_if_exists_and_newer: bool | None = None,
+        display_name: str | None = None,
+        password: str | None = None,
+        polling_interval: int | None = None,
+        protocol: FirmwareDownloadProtocol | str | None = None,
+        url: str | None = None,
+        username: str | None = None,
+        userdom: str | None = None,
+    ) -> FirmwareDownloadTaskCursor:
+        """Declare a ``firmwareOSource`` child under the firmware_repository_profile level.
+
+        An outside source of images, such as an HTTP or SCP server.
+
+        Args:
+            name: The identifying name for the outside source of images, such as an HTTP or SCP
+                server.
+            annotation: User annotation. Suggested format orchestrator:value
+            authentication_type: The authentication type for the source. Values: ``key``,
+                ``password``. Default: ``password``.
+            authentication_type_choice: The OSPF authentication type specifier. The type options
+                are; default, md5, none, and simple. Values: ``usePassword``,
+                ``useSshKeyContents``. Default: ``usePassword``.
+            description: Specifies the description of a policy component.
+            variable_to_reuse_download_task: Download Task Flip. Default: ``True``.
+            ssh_private_key_passphrase: Passphrase given at the identity key creation.
+            ssh_public_key_content: Certificate contents for data transfer. Used for
+                credentials.
+            load_catalog_if_exists_and_newer: Default: ``True``.
+            password: The Firmware password or key string.
+            polling_interval: Polling interval in minutes. Default: ``0``.
+            protocol: The Firmware download protocol. Values: ``http``, ``local``, ``scp``,
+                ``usbkey``. Default: ``scp``.
+            url: The firmware URL for the image(s) on the source.
+            username: The username for the source.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "FirmwareDownloadTaskCursor",
+            self._invoke_maker("firmware_download_task", (name,), _prune(params)),
+        )
+
+    def internal_firmware_source(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        authentication_type: FirmwareAuthPass | str | None = None,
+        authentication_type_choice: FirmwareAuthenticationType | str | None = None,
+        description: str | None = None,
+        variable_to_reuse_download_task: bool | None = None,
+        ssh_private_key_content: str | None = None,
+        ssh_private_key_passphrase: str | None = None,
+        ssh_public_key_content: str | None = None,
+        load_catalog_if_exists_and_newer: bool | None = None,
+        display_name: str | None = None,
+        password: str | None = None,
+        polling_interval: int | None = None,
+        protocol: FirmwareDownloadProtocol | str | None = None,
+        url: str | None = None,
+        username: str | None = None,
+        userdom: str | None = None,
+    ) -> InternalFirmwareSourceCursor:
+        """Declare a ``firmwareInternalSource`` child under the firmware_repository_profile level.
+
+        The internal source of firmware images, which contains images that are pre-packaged into the
+        controller.
+
+        Args:
+            name: Name of the internal firmware source.
+            annotation: User annotation. Suggested format orchestrator:value
+            authentication_type: The authentication type for the source. Values: ``key``,
+                ``password``. Default: ``password``.
+            authentication_type_choice: The OSPF authentication type specifier. The type options
+                are; default, md5, none, and simple. Values: ``usePassword``,
+                ``useSshKeyContents``. Default: ``usePassword``.
+            description: Specifies the description of a policy component.
+            variable_to_reuse_download_task: Download Task Flip. Default: ``True``.
+            ssh_private_key_passphrase: Passphrase given at the identity key creation.
+            ssh_public_key_content: Certificate contents for data transfer. Used for
+                credentials.
+            load_catalog_if_exists_and_newer: Default: ``True``.
+            password: The Firmware password or key string.
+            polling_interval: Polling interval in minutes. Default: ``0``.
+            protocol: The Firmware download protocol. Values: ``http``, ``local``, ``scp``,
+                ``usbkey``. Default: ``scp``.
+            url: The firmware URL for the image(s) on the source.
+            username: The username for the source.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "InternalFirmwareSourceCursor",
+            self._invoke_maker("internal_firmware_source", (name,), _prune(params)),
+        )
+
+
+class FirmwareRepositoryProfileCursor(_FirmwareRepositoryProfileMakers, _FabricMakers, _UniMakers):
+    """Typed cursor for ``firmwareRepoP`` (firmware_repository_profile level).
+
+    Position: ``uni.fabric.firmware_repository_profile``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        default_switch_version: str | None = None,
+        description: str | None = None,
+        enforce_bootscript_version_validation: bool | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> FirmwareRepositoryProfileCursor:
+        """Set ``firmwareRepoP`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class _FlowCollectorPolicyMakers(Cursor):
+    """Makers declared at the flow_collector_policy level (``telemetryFlowCollectorP``)."""
+
+    __slots__ = ()
+
+    def external_server(
+        self,
+        external_server_ip: str,
+        *,
+        admin_state: TelemetryAdminState | str | None = None,
+        annotation: str | None = None,
+        user_grpc_certificate: str | None = None,
+        hostname_associated_with_the_certificate: str | None = None,
+        remote_port: int | str | None = None,
+        userdom: str | None = None,
+    ) -> ExternalServerCursor:
+        """Declare a ``telemetryExternalServer`` child under the flow_collector_policy level.
+
+        Args:
+            external_server_ip: External Server Ip and Port would be used to export the streams
+                to an external server
+            admin_state: The administrative state of the object or policy. Values: ``disabled``,
+                ``enabled``. Default: ``enabled``.
+            annotation: User annotation. Suggested format orchestrator:value
+            hostname_associated_with_the_certificate: ignore, removed
+            remote_port: Default: ``unspecified``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "external_server_ip",
+            )
+        }
+        return cast(
+            "ExternalServerCursor",
+            self._invoke_maker("external_server", (external_server_ip,), _prune(params)),
+        )
+
+    def fte_events(
+        self,
+        name: str,
+        *,
+        acl_drops: bool | None = None,
+        sub_event_configuration_for_acl_span: bool | None = None,
+        analytics_changed_bit: bool | None = None,
+        analytics_changed_count: int | None = None,
+        analytics_changed_limit: int | None = None,
+        annotation: str | None = None,
+        black_hole: bool | None = None,
+        buffer_drops: bool | None = None,
+        description: str | None = None,
+        configure_fte_drop_events_flow_count: int | None = None,
+        configure_fte_event_export_max_value: int | None = None,
+        export_flow_bit: bool | None = None,
+        configure_fte_export_flow_bucket_count: int | None = None,
+        configure_fte_export_flow_bucket_limit: int | None = None,
+        first_packet_bit: bool | None = None,
+        configure_fte_first_packet_bucket_count: int | None = None,
+        configure_fte_first_packet_bucket_limit: int | None = None,
+        flow_type: int | None = None,
+        fwd_drops: bool | None = None,
+        group_drop_events: bool | None = None,
+        group_latency_events: bool | None = None,
+        configure_fte_latency_bucket_count: int | None = None,
+        configure_fte_latency_events_flow_count: int | None = None,
+        configure_fte_latency_bucket_limit: int | None = None,
+        configure_fte_latency_threshold_limit: int | None = None,
+        configure_fte_latency_threshold_unit: TelemetryLatencyUnit | str | None = None,
+        mouse_packet_bit: bool | None = None,
+        configure_fte_mouse_packet_bucket_count: int | None = None,
+        configure_fte_mouse_packet_bucket_limit: int | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        packet_disposition: bool | None = None,
+        packet_disposition_ids_drop: bool | None = None,
+        packet_disposition_policing_drop: bool | None = None,
+        packet_disposition_policy_applied: bool | None = None,
+        packet_disposition_policy_copy: bool | None = None,
+        packet_disposition_policy_drop: bool | None = None,
+        packet_disposition_policy_redirect: bool | None = None,
+        packet_disposition_rpf_port_sec_fail: bool | None = None,
+        packet_length: int | None = None,
+        packet_value_match_bit: bool | None = None,
+        packet_value_match_count: int | None = None,
+        packet_value_match_limit: int | None = None,
+        ping_of_death: bool | None = None,
+        receive_window_zero: bool | None = None,
+        configure_fte_rtt_ack_bucket_count: int | None = None,
+        configure_fte_rtt_ack_bucket_limit: int | None = None,
+        rtt_sample_ack_bit: bool | None = None,
+        rtt_sample_seq_bit: bool | None = None,
+        table_full_bit: bool | None = None,
+        configure_fte_table_full_bucket_count: int | None = None,
+        configure_fte_table_full_bucket_limit: int | None = None,
+        ttl_match_enable: bool | None = None,
+        ttl_match_value: int | None = None,
+        userdom: str | None = None,
+    ) -> FteEventsCursor:
+        """Declare a ``telemetryFteEventSetP`` child under the flow_collector_policy level.
+
+        FTE Events
+
+        Args:
+            name: The name of the object.
+            acl_drops: 11. Capture the acl drops for the FTE events under FTE Default:
+                ``False``.
+            sub_event_configuration_for_acl_span: 46. ACL span configuration Default: ``False``.
+            analytics_changed_bit: 04. Analytics Changed bit configuration Default: ``False``.
+            analytics_changed_count: 26. FTE analytics_changed Bucket count Default: ``0``.
+            analytics_changed_limit: 25. FTE Bucket analytics_changed limit Default: ``0``.
+            annotation: User annotation. Suggested format orchestrator:value
+            black_hole: 14. Capture the blackhole for the FTE events under FTE Default:
+                ``False``.
+            buffer_drops: 12. Capture the buffer drops for the FTE events under FTE Default:
+                ``False``.
+            description: The description of this configuration item.
+            configure_fte_drop_events_flow_count: 18. Drop events flow count under FTE Default:
+                ``0``.
+            configure_fte_event_export_max_value: 35. Event Export max Default: ``3``.
+            export_flow_bit: 01. Export Flow bit configuration Default: ``False``.
+            configure_fte_export_flow_bucket_count: 20. FTE export_flow Bucket count Default:
+                ``0``.
+            configure_fte_export_flow_bucket_limit: 19. FTE export_flow Bucket limit Default:
+                ``0``.
+            first_packet_bit: 02. First Pkt bit configuration Default: ``False``.
+            configure_fte_first_packet_bucket_count: 22. FTE first_pkt Bucket count Default:
+                ``0``.
+            configure_fte_first_packet_bucket_limit: 21. FTE first_pkt Bucket limit Default:
+                ``0``.
+            flow_type: 49. Flow Type Default: ``0``.
+            fwd_drops: 13. Capture the forward drops for the FTE events under FTE Default:
+                ``False``.
+            group_drop_events: 09. Dropped Event Groups for the FTE events under FTE Default:
+                ``False``.
+            group_latency_events: 10. Dropped Event Groups for the FTE events under FTE Default:
+                ``False``.
+            configure_fte_latency_bucket_count: 32. FTE rtt_sample_seq Bucket count Default:
+                ``0``.
+            configure_fte_latency_events_flow_count: 17. Latency events flow count under FTE
+                Default: ``0``.
+            configure_fte_latency_bucket_limit: 31. FTE rtt_sample_seq Bucket limit Default:
+                ``0``.
+            configure_fte_latency_threshold_limit: 15. Latency under FTE Default: ``0``.
+            configure_fte_latency_threshold_unit: 16. Latency Unit under FTE Values: ``micro-
+                sec``, ``milli-sec``. Default: ``micro-sec``.
+            mouse_packet_bit: 03. Mouse Pkt bit configuration Default: ``False``.
+            configure_fte_mouse_packet_bucket_count: 24. FTE Bucket mouse_pkt count Default:
+                ``0``.
+            configure_fte_mouse_packet_bucket_limit: 23. FTE Bucket mouse_pkt limit Default:
+                ``0``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            packet_disposition: 36. Packet value disposition configuration Default: ``False``.
+            packet_disposition_ids_drop: 39. Packet disposition ids_drop configuration Default:
+                ``False``.
+            packet_disposition_policing_drop: 38. Packet disposition policing_drop configuration
+                Default: ``False``.
+            packet_disposition_policy_applied: 43. Packet disposition policy_applied
+                configuration Default: ``False``.
+            packet_disposition_policy_copy: 42. Packet disposition policy_copy configuration
+                Default: ``False``.
+            packet_disposition_policy_drop: 40. Packet disposition policy_drop configuration
+                Default: ``False``.
+            packet_disposition_policy_redirect: 41. Packet disposition policy_redirect
+                configuration Default: ``False``.
+            packet_disposition_rpf_port_sec_fail: 37. Packet disposition rpf_port_sec_fail
+                configuration Default: ``False``.
+            packet_length: 50. Packet Length Default: ``0``.
+            packet_value_match_bit: 06. Pkt Value Match bit configuration Default: ``False``.
+            packet_value_match_count: 30. FTE pkt_value_match Bucket count Default: ``0``.
+            packet_value_match_limit: 29. FTE pkt_value_match Bucket limit Default: ``0``.
+            ping_of_death: 45. Ping of death configuration Default: ``False``.
+            receive_window_zero: 44. Receive window zero configuration Default: ``False``.
+            configure_fte_rtt_ack_bucket_count: 34. FTE rtt_sample_ack Bucket count Default:
+                ``0``.
+            configure_fte_rtt_ack_bucket_limit: 33. FTE rtt_sample_ack Bucket limit Default:
+                ``0``.
+            rtt_sample_ack_bit: 08. RTT Sample Ack bit configuration Default: ``False``.
+            rtt_sample_seq_bit: 07. RTT Sample Seq bit configuration Default: ``False``.
+            table_full_bit: 05. Table Full bit configuration Default: ``False``.
+            configure_fte_table_full_bucket_count: 28. FTE table_full Bucket count Default:
+                ``0``.
+            configure_fte_table_full_bucket_limit: 27. FTE table_full Bucket limit Default:
+                ``0``.
+            ttl_match_enable: 47. TTL match enable configuration Default: ``False``.
+            ttl_match_value: 48. TTL match value configuration Default: ``0``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "FteEventsCursor",
+            self._invoke_maker("fte_events", (name,), _prune(params)),
+        )
+
+
+class FlowCollectorPolicyCursor(_FlowCollectorPolicyMakers, _FabricMakers, _UniMakers):
+    """Typed cursor for ``telemetryFlowCollectorP`` (flow_collector_policy level).
+
+    Position: ``uni.fabric.flow_collector_policy``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        admin_state: TelemetryAdminState | str | None = None,
+        annotation: str | None = None,
+        collector_placement: int | str | None = None,
+        description: str | None = None,
+        external_ip_where_collector_is_listening: str | None = None,
+        external_server_port: int | None = None,
+        enable_fte_instance: TelemetryAdminState | str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        software_hardware_based_record_export: bool | None = None,
+        userdom: str | None = None,
+    ) -> FlowCollectorPolicyCursor:
+        """Set ``telemetryFlowCollectorP`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class _FunctionProfileMakers(Cursor):
+    """Makers declared at the function_profile level (``fabricFuncP``)."""
+
+    __slots__ = ()
+
+    def leaf_switch_policy_group(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> LeafSwitchPolicyGroupCursor:
+        """Declare a ``fabricLeNodePGrp`` child under the function_profile level.
+
+        A leaf node policy group enables you to apply policies to a group of leaf nodes.
+
+        Args:
+            name: The name of the leaf node policy group. This name can be up to 64 characters.
+                Note that you cannot change this name after the object has been saved.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "LeafSwitchPolicyGroupCursor",
+            self._invoke_maker("leaf_switch_policy_group", (name,), _prune(params)),
+        )
+
+    def spine_switch_policy_group(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> SpineSwitchPolicyGroupCursor:
+        """Declare a ``fabricSpNodePGrp`` child under the function_profile level.
+
+        A spine node policy group enables you to apply policies to a group of spine nodes.
+
+        Args:
+            name: The name of the spine node policy group. This name can be up to 64 characters.
+                Note that you cannot change this name after the object has been saved.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "SpineSwitchPolicyGroupCursor",
+            self._invoke_maker("spine_switch_policy_group", (name,), _prune(params)),
+        )
+
+    def leaf_fabric_port_policy_group(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> LeafFabricPortPolicyGroupCursor:
+        """Declare a ``fabricLePortPGrp`` child under the function_profile level.
+
+        The leaf port policy group enables you to apply policies to a group of leaf ports.
+
+        Args:
+            name: The name of the leaf port policy group. The name can be up to 64 characters.
+                Note that you cannot change this name after the object has been saved.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "LeafFabricPortPolicyGroupCursor",
+            self._invoke_maker("leaf_fabric_port_policy_group", (name,), _prune(params)),
+        )
+
+    def spine_fabric_port_policy_group(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> SpineFabricPortPolicyGroupCursor:
+        """Declare a ``fabricSpPortPGrp`` child under the function_profile level.
+
+        A spine port policy group enables you to apply policies to a group of spine ports.
+
+        Args:
+            name: The name of the spine port policy group. This name can be up to 64 characters.
+                Note that you cannot change this name after the object has been saved.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "SpineFabricPortPolicyGroupCursor",
+            self._invoke_maker("spine_fabric_port_policy_group", (name,), _prune(params)),
+        )
+
+    def leaf_module_policy_group(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> LeafModulePolicyGroupCursor:
+        """Declare a ``fabricLeCardPGrp`` child under the function_profile level.
+
+        A leaf card policy group enables you to apply policies to a group of leaf cards.
+
+        Args:
+            name: The name of the leaf card policy group. This name can be up to 64 characters.
+                Note that you cannot change this name after the object has been saved.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "LeafModulePolicyGroupCursor",
+            self._invoke_maker("leaf_module_policy_group", (name,), _prune(params)),
+        )
+
+    def spine_module_policy_group(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> SpineModulePolicyGroupCursor:
+        """Declare a ``fabricSpCardPGrp`` child under the function_profile level.
+
+        A spine card policy group enables you to apply policies to a group of spine cards.
+
+        Args:
+            name: The name of the spine card policy group. This name can be up to 64 characters.
+                Note that you cannot change this name after the object has been saved.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "SpineModulePolicyGroupCursor",
+            self._invoke_maker("spine_module_policy_group", (name,), _prune(params)),
+        )
+
+    def pod_policy_group(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> PodPolicyGroupCursor:
+        """Declare a ``fabricPodPGrp`` child under the function_profile level.
+
+        A POD policy group enables you to apply policies to the leaf nodes that are part of this
+        POD.
+
+        Args:
+            name: The name of the POD policy group. The name can be up to 64 characters. Note
+                that you cannot change this name after the object has been saved.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "PodPolicyGroupCursor",
+            self._invoke_maker("pod_policy_group", (name,), _prune(params)),
+        )
+
+    def controller_policy_group(
+        self,
+        name: str = "default",
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> ControllerPolicyGroupCursor:
+        """Declare a ``fabricCtrlrPGrp`` child under the function_profile level.
+
+        The controller policy group enables you to apply policies to a group of controllers.
+
+        Args:
+            name: The name of a controller policy group. This name can be up to 64 alphanumeric
+                characters.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "ControllerPolicyGroupCursor",
+            self._invoke_maker("controller_policy_group", (name,), _prune(params)),
+        )
+
+
+class FunctionProfileCursor(_FunctionProfileMakers, _FabricMakers, _UniMakers):
+    """Typed cursor for ``fabricFuncP`` (function_profile level).
+
+    Position: ``uni.fabric.function_profile``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> FunctionProfileCursor:
+        """Set ``fabricFuncP`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class _GeoSiteMakers(Cursor):
+    """Makers declared at the geo_site level (``geoSite``)."""
+
+    __slots__ = ()
+
+    def geo_building(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> GeoBuildingCursor:
+        """Declare a ``geoBuilding`` child under the geo_site level.
+
+        The building identifier where the node is located.
+
+        Args:
+            name: The building name. The name can be up to 64 characters and must begin with an
+                alphanumeric character. The name can only contain alphanumeric characters and
+                the following symbols: - . : _
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "GeoBuildingCursor",
+            self._invoke_maker("geo_building", (name,), _prune(params)),
+        )
+
+
+class GeoSiteCursor(_GeoSiteMakers, _FabricMakers, _UniMakers):
+    """Typed cursor for ``geoSite`` (geo_site level).
+
+    Position: ``uni.fabric.geo_site``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> GeoSiteCursor:
+        """Set ``geoSite`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class GlobalEpListenPolicyCursor(_FabricMakers, _UniMakers):
+    """Typed cursor for ``fabricGlbEpListenPol`` (global_ep_listen_policy level).
+
+    Position: ``uni.fabric.global_ep_listen_policy``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        enabled: bool | None = None,
+        encap: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> GlobalEpListenPolicyCursor:
+        """Set ``fabricGlbEpListenPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class IdImportPolicyCursor(_FabricMakers, _UniMakers):
+    """Typed cursor for ``configImportIdP`` (id_import_policy level).
+
+    Position: ``uni.fabric.id_import_policy``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        administrative_state: TrigExecState | str | None = None,
+        annotation: str | None = None,
+        description: str | None = None,
+        id_file_to_import: str | None = None,
+        display_name: str | None = None,
+        snapshot: bool | None = None,
+        userdom: str | None = None,
+    ) -> IdImportPolicyCursor:
+        """Set ``configImportIdP`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
 class FabricIgmpSnoopPolicyCursor(_FabricMakers, _UniMakers):
     """Typed cursor for ``igmpSnoopPol`` (igmp_snoop_policy level).
 
@@ -785,6 +6133,809 @@ class FabricIgmpSnoopPolicyCursor(_FabricMakers, _UniMakers):
         return self
 
 
+class _IsisDomainPolicyMakers(Cursor):
+    """Makers declared at the isis_domain_policy level (``isisDomPol``)."""
+
+    __slots__ = ()
+
+    def isis_level(
+        self,
+        type: IsisLvlT | str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        lsp_fast_flood: IsisLspFastFloodMode | str | None = None,
+        lsp_generation_initial_wait_inerval: int | None = None,
+        lsp_generation_maximal_wait_inerval: int | None = None,
+        lsp_generation_secondary_wait_inerval: int | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        spf_comp_init_intvl: int | None = None,
+        spf_comp_max_intvl: int | None = None,
+        spf_comp_sec_intvl: int | None = None,
+        userdom: str | None = None,
+    ) -> IsisLevelCursor:
+        """Declare a ``isisLvlComp`` child under the isis_domain_policy level.
+
+        Per-level IS-IS vrf information.
+
+        Args:
+            type: Naming property — forms the object's RN.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            lsp_fast_flood: The IS-IS Fast-Flooding of LSPs improves Intermediate System-to-
+                Intermediate System (IS-IS) convergence time when new link-state packets (LSPs)
+                are generated in the network and shortest path first (SPF) is triggered by the
+                new LSPs. Values: ``disabled``, ``enabled``. Default: ``enabled``.
+            lsp_generation_initial_wait_inerval: The LSP generation initial wait interval. This
+                is used in the LSP generation interval for the LSP MTU. Default: ``50``.
+            lsp_generation_maximal_wait_inerval: The LSP generation maximum wait interval. This
+                is used in the LSP generation interval for the LSP MTU. Default: ``8000``.
+            lsp_generation_secondary_wait_inerval: The LSP generation second wait interval. This
+                is used in the LSP generation interval for the LSP MTU. Default: ``50``.
+            spf_comp_init_intvl: The SPF computation frequency initial wait interval. This is
+                used in the SPF computations for the LSP MTU. Default: ``50``.
+            spf_comp_max_intvl: The SPF computation frequency maximum wait interval. This is
+                used in the SPF computations for the LSP MTU. Default: ``8000``.
+            spf_comp_sec_intvl: The SPF computation frequency second wait interval. This is used
+                in the SPF computations for the LSP MTU. Default: ``50``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "type",
+            )
+        }
+        return cast(
+            "IsisLevelCursor",
+            self._invoke_maker("isis_level", (type,), _prune(params)),
+        )
+
+
+class IsisDomainPolicyCursor(_IsisDomainPolicyMakers, _FabricMakers, _UniMakers):
+    """Typed cursor for ``isisDomPol`` (isis_domain_policy level).
+
+    Position: ``uni.fabric.isis_domain_policy``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        maximum_transmission_unit: int | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        metric: int | None = None,
+        userdom: str | None = None,
+    ) -> IsisDomainPolicyCursor:
+        """Set ``isisDomPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class L3InterfacePolicyCursor(_FabricMakers, _UniMakers):
+    """Typed cursor for ``l3IfPol`` (l3_interface_policy level).
+
+    Position: ``uni.fabric.l3_interface_policy``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        bfd_isis_policy_configuration: L3BfdIsisConfig | str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> L3InterfacePolicyCursor:
+        """Set ``l3IfPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class _LeafFabricInterfaceProfileMakers(Cursor):
+    """Makers declared at the leaf_fabric_interface_profile level (``fabricLePortP``)."""
+
+    __slots__ = ()
+
+    def leaf_fabric_port_selector(
+        self,
+        name: str,
+        selector_type: FabricSelector2 | str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> LeafFabricPortSelectorCursor:
+        """Declare a ``fabricLFPortS`` child under the leaf_fabric_interface_profile level.
+
+        The leaf fabric port selector. This object enables you to specify leaf fabric ports with
+        your leaf fabric port profile.
+
+        Args:
+            name: The name of the leaf fabric port selector. This name can be up to 64
+                characters. Note that you cannot change this name after the object has been
+                saved.
+            selector_type: The type of the leaf fabric port selector.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+                "selector_type",
+            )
+        }
+        return cast(
+            "LeafFabricPortSelectorCursor",
+            self._invoke_maker(
+                "leaf_fabric_port_selector",
+                (
+                    name,
+                    selector_type,
+                ),
+                _prune(params),
+            ),
+        )
+
+
+class LeafFabricInterfaceProfileCursor(
+    _LeafFabricInterfaceProfileMakers, _FabricMakers, _UniMakers
+):
+    """Typed cursor for ``fabricLePortP`` (leaf_fabric_interface_profile level).
+
+    Position: ``uni.fabric.leaf_fabric_interface_profile``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> LeafFabricInterfaceProfileCursor:
+        """Set ``fabricLePortP`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class _LeafModuleProfileMakers(Cursor):
+    """Makers declared at the leaf_module_profile level (``fabricLeCardP``)."""
+
+    __slots__ = ()
+
+    def leaf_module_selector(
+        self,
+        module_selector_type: FabricCardType | str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> LeafModuleSelectorCursor:
+        """Declare a ``fabricLeCardS`` child under the leaf_module_profile level.
+
+        The leaf card selector policy information.
+
+        Args:
+            module_selector_type: The type of the leaf card selector.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "module_selector_type",
+            )
+        }
+        return cast(
+            "LeafModuleSelectorCursor",
+            self._invoke_maker("leaf_module_selector", (module_selector_type,), _prune(params)),
+        )
+
+
+class LeafModuleProfileCursor(_LeafModuleProfileMakers, _FabricMakers, _UniMakers):
+    """Typed cursor for ``fabricLeCardP`` (leaf_module_profile level).
+
+    Position: ``uni.fabric.leaf_module_profile``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> LeafModuleProfileCursor:
+        """Set ``fabricLeCardP`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class _LeafSwitchProfileMakers(Cursor):
+    """Makers declared at the leaf_switch_profile level (``fabricLeafP``)."""
+
+    __slots__ = ()
+
+    def switch_association(
+        self,
+        name: str,
+        selector_type: FabricSelector | str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> SwitchAssociationCursor:
+        """Declare a ``fabricLeafS`` child under the leaf_switch_profile level.
+
+        The leaf selector. This enables you to select all or a range of leaves.
+
+        Args:
+            name: The name of the leaf selector. This name can be up to 64 characters. Note that
+                you cannot change this name after the object has been saved.
+            selector_type: The type of the leaf selector. The type determines how the selection
+                is made: all, individual, or a range.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+                "selector_type",
+            )
+        }
+        return cast(
+            "SwitchAssociationCursor",
+            self._invoke_maker(
+                "switch_association",
+                (
+                    name,
+                    selector_type,
+                ),
+                _prune(params),
+            ),
+        )
+
+
+class LeafSwitchProfileCursor(_LeafSwitchProfileMakers, _FabricMakers, _UniMakers):
+    """Typed cursor for ``fabricLeafP`` (leaf_switch_profile level).
+
+    Position: ``uni.fabric.leaf_switch_profile``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> LeafSwitchProfileCursor:
+        """Set ``fabricLeafP`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        interface_profile: str | Ref | None = None,
+    ) -> LeafSwitchProfileCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        interface_profile: str | Ref | None = None,
+    ) -> LeafSwitchProfileCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class LicensePolicyCursor(_FabricMakers, _UniMakers):
+    """Typed cursor for ``licenseLicPolicy`` (license_policy level).
+
+    Position: ``uni.fabric.license_policy``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        action_result: LicenseActionResult | str | None = None,
+        annotation: str | None = None,
+        authorization_code: str | None = None,
+        certificate: str | None = None,
+        force_re_register: bool | None = None,
+        hostname_privacy: bool | None = None,
+        ip_addr: str | None = None,
+        smart_licensing_action: LicenseLicActionType | str | None = None,
+        license_sync_freq: int | None = None,
+        smart_license_mode: LicenseLicenseMode | str | None = None,
+        plr_admin_state: LicensePlrAdminState | str | None = None,
+        proxy_server_port: int | None = None,
+        smart_licensing_admin_state: LicenseRegAdminState | str | None = None,
+        product_instance_id_token: str | None = None,
+        license_usage_reporting_interval_in_day: int | None = None,
+        url: str | None = None,
+        userdom: str | None = None,
+    ) -> LicensePolicyCursor:
+        """Set ``licenseLicPolicy`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class FabricLldpPolicyCursor(_FabricMakers, _UniMakers):
+    """Typed cursor for ``lldpIfPol`` (lldp_policy level).
+
+    Position: ``uni.fabric.lldp_policy``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        receive_state: LldpAdminSt | str | None = None,
+        transmit_state: LldpAdminSt | str | None = None,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        dcbxp_version: LldpDCBXPVerType | str | None = None,
+        userdom: str | None = None,
+    ) -> FabricLldpPolicyCursor:
+        """Set ``lldpIfPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class FabricLoadBalancePolicyCursor(_FabricMakers, _UniMakers):
+    """Typed cursor for ``lbpPol`` (load_balance_policy level).
+
+    Position: ``uni.fabric.load_balance_policy``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        dynamic_load_balancing_mode: TopoctrlDLbMode | str | None = None,
+        hash_gtp_policy: bool | None = None,
+        load_balancing_mode: TopoctrlLbMode | str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        prioritization_mode: TopoctrlPrioritization | str | None = None,
+        userdom: str | None = None,
+    ) -> FabricLoadBalancePolicyCursor:
+        """Set ``lbpPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class _MacsecFabricMakers(Cursor):
+    """Makers declared at the macsec_fabric level (``macsecFabPolCont``)."""
+
+    __slots__ = ()
+
+    def parameters_policy(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        cipher_suite: MacsecCipherSuite | str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        replay_window: int | None = None,
+        sak_expiry_time: int | str | None = None,
+        security_policy: MacsecSecPolicy | str | None = None,
+        userdom: str | None = None,
+    ) -> MacsecFabricParametersPolicyCursor:
+        """Declare a ``macsecFabParamPol`` child under the macsec_fabric level.
+
+        MACSEC Fab Parameter Policy
+
+        Args:
+            name: The name of the object.
+            annotation: User annotation. Suggested format orchestrator:value
+            cipher_suite: Cipher Suite Values: ``gcm-aes-128``, ``gcm-aes-256``, ``gcm-aes-
+                xpn-128``, ``gcm-aes-xpn-256``. Default: ``gcm-aes-xpn-256``.
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            replay_window: Replay Protection Window Size Default: ``64``.
+            sak_expiry_time: SAK Expiry Time Default: ``disabled``.
+            security_policy: Security Policy Values: ``must-secure``, ``should-secure``.
+                Default: ``should-secure``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "MacsecFabricParametersPolicyCursor",
+            self._invoke_maker("parameters_policy", (name,), _prune(params)),
+        )
+
+    def keychain_policy(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> MacsecFabricKeychainPolicyCursor:
+        """Declare a ``macsecKeyChainPol`` child under the macsec_fabric level.
+
+        MACSEC KeyChain Policy
+
+        Args:
+            name: The name of the object.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "MacsecFabricKeychainPolicyCursor",
+            self._invoke_maker("keychain_policy", (name,), _prune(params)),
+        )
+
+
+class MacsecFabricCursor(_MacsecFabricMakers, _FabricMakers, _UniMakers):
+    """Typed cursor for ``macsecFabPolCont`` (macsec_fabric level).
+
+    Position: ``uni.fabric.macsec_fabric``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        userdom: str | None = None,
+    ) -> MacsecFabricCursor:
+        """Set ``macsecFabPolCont`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class MacsecFabricInterfacePolicyCursor(_FabricMakers, _UniMakers):
+    """Typed cursor for ``macsecFabIfPol`` (macsec_fabric_interface_policy level).
+
+    Position: ``uni.fabric.macsec_fabric_interface_policy``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        admin_state: NwIfAdminSt | str | None = None,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        use_system_generated_keys: bool | None = None,
+        userdom: str | None = None,
+    ) -> MacsecFabricInterfacePolicyCursor:
+        """Set ``macsecFabIfPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class _MaintenanceGroupMakers(Cursor):
+    """Makers declared at the maintenance_group level (``maintMaintGrp``)."""
+
+    __slots__ = ()
+
+    def node_block(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        from_node_id: int | None = None,
+        display_name: str | None = None,
+        to_node_id: int | None = None,
+        userdom: str | None = None,
+    ) -> MaintenanceGroupNodeBlockCursor:
+        """Declare a ``fabricNodeBlk`` child under the maintenance_group level.
+
+        The node block. This is a range of nodes. Each node block begins with the first port and
+        ends with the last port.
+
+        Args:
+            name: The name of the node block.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: The description of this configuration item.
+            from_node_id: Default: ``1``.
+            to_node_id: Default: ``1``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "MaintenanceGroupNodeBlockCursor",
+            self._invoke_maker("node_block", (name,), _prune(params)),
+        )
+
+
+class MaintenanceGroupCursor(_MaintenanceGroupMakers, _FabricMakers, _UniMakers):
+    """Typed cursor for ``maintMaintGrp`` (maintenance_group level).
+
+    Position: ``uni.fabric.maintenance_group``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        fwtype: FirmwareType | str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        selector_type: FabricSelector | str | None = None,
+        userdom: str | None = None,
+    ) -> MaintenanceGroupCursor:
+        """Set ``maintMaintGrp`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class MaintenanceNotificationEmailCursor(_FabricMakers, _UniMakers):
+    """Typed cursor for ``maintEmailNotif`` (maintenance_notification_email level).
+
+    Position: ``uni.fabric.maintenance_notification_email``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        userdom: str | None = None,
+    ) -> MaintenanceNotificationEmailCursor:
+        """Set ``maintEmailNotif`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class MaintenanceNotificationTextCursor(_FabricMakers, _UniMakers):
+    """Typed cursor for ``maintTextNotif`` (maintenance_notification_text level).
+
+    Position: ``uni.fabric.maintenance_notification_text``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        userdom: str | None = None,
+    ) -> MaintenanceNotificationTextCursor:
+        """Set ``maintTextNotif`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class MaintenancePolicyCursor(_FabricMakers, _UniMakers):
+    """Typed cursor for ``maintMaintP`` (maintenance_policy level).
+
+    Position: ``uni.fabric.maintenance_policy``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        administrative_state: TrigExecState | str | None = None,
+        annotation: str | None = None,
+        description: str | None = None,
+        download_state: TrigExecState | str | None = None,
+        graceful_maintenance: bool | None = None,
+        ignore_compatibility: bool | None = None,
+        internal_label: str | None = None,
+        display_name: str | None = None,
+        notification_condition: MaintNotifCond | str | None = None,
+        scheduler_run_mode: MaintRunMode | str | None = None,
+        smu_operation_type: MaintSMUOperation | str | None = None,
+        smu_operation_flags: MaintSMUOperationFlags | str | None = None,
+        sr_upgrade: bool | None = None,
+        sr_version: str | None = None,
+        userdom: str | None = None,
+        version: str | None = None,
+        version_check_override: TrigAdminState | str | None = None,
+    ) -> MaintenancePolicyCursor:
+        """Set ``maintMaintP`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class MgmtConnectivityPreferenceCursor(_FabricMakers, _UniMakers):
+    """Typed cursor for ``mgmtConnectivityPrefs`` (mgmt_connectivity_preference level).
+
+    Position: ``uni.fabric.mgmt_connectivity_preference``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        management_interface_that_has_to_be_used: MgmtMgmtIntfType | str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> MgmtConnectivityPreferenceCursor:
+        """Set ``mgmtConnectivityPrefs`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
 class FabricMldSnoopPolicyCursor(_FabricMakers, _UniMakers):
     """Typed cursor for ``mldSnoopPol`` (mld_snoop_policy level).
 
@@ -815,6 +6966,1512 @@ class FabricMldSnoopPolicyCursor(_FabricMakers, _UniMakers):
         version: McastVer2 | str | None = None,
     ) -> FabricMldSnoopPolicyCursor:
         """Set ``mldSnoopPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class _MonCommonMonitoringPolicyMakers(Cursor):
+    """Makers declared at the mon_common_monitoring_policy level (``monCommonPol``)."""
+
+    __slots__ = ()
+
+    def syslog_source(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        include_action: frozenset[MonInclAction] | set[MonInclAction] | str | None = None,
+        min_severity: SyslogSeverity | str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> MonCommonMonitoringPolicySyslogSourceCursor:
+        """Declare a ``syslogSrc`` child under the mon_common_monitoring_policy level.
+
+        The syslog source configures a syslog source that specifies the minimum severity of items to
+        be sent as syslog messages to the syslog servers in the destination group.
+
+        Args:
+            name: The name for the system logging source.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            include_action: Default: ``PydanticUndefined``.
+            min_severity: The minimum severity level of messages to be sent. Values: ``alerts``,
+                ``critical``, ``debugging``, ``emergencies``, ``errors``, ``information``,
+                ``notifications``, ``warnings``. Default: ``warnings``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "MonCommonMonitoringPolicySyslogSourceCursor",
+            self._invoke_maker("syslog_source", (name,), _prune(params)),
+        )
+
+    def snmp_source(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        include_action: frozenset[MonInclAction] | set[MonInclAction] | str | None = None,
+        min_severity: ConditionSeverity | str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> MonCommonMonitoringPolicySnmpSourceCursor:
+        """Declare a ``snmpSrc`` child under the mon_common_monitoring_policy level.
+
+        The SNMP source profile determines the fault information, severity level, and destination
+        for sending messages to the SNMP destination. SNMP is an application-layer protocol that
+        provides a message format for communication between SNMP managers and agents.
+
+        Args:
+            name: The name for the SNMP source. This name can be between 1 and 64 alphanumeric
+                characters.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            include_action: The options to include for the SNMP source. Default:
+                ``PydanticUndefined``.
+            min_severity: The minimum severity level of SNMP traps. SNMP traps enable an agent
+                to notify the management station of significant events by way of an unsolicited
+                SNMP message. Values: ``cleared``, ``critical``, ``info``, ``major``, ``minor``,
+                ``warning``. Default: ``info``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "MonCommonMonitoringPolicySnmpSourceCursor",
+            self._invoke_maker("snmp_source", (name,), _prune(params)),
+        )
+
+    def callhome_source(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        include_action: frozenset[MonInclAction] | set[MonInclAction] | str | None = None,
+        display_name: str | None = None,
+        message_severity: CallhomeUrgency | str | None = None,
+        userdom: str | None = None,
+    ) -> MonCommonMonitoringPolicyCallhomeSourceCursor:
+        """Declare a ``callhomeSrc`` child under the mon_common_monitoring_policy level.
+
+        The call home source profile determines the information to deliver and the urgency level for
+        sending email-based alert notifications to a call home destination. A range of message
+        formats are available for compatibility with pager services or XML-based automated parsing
+        applications.
+
+        Args:
+            name: The name for the source.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            include_action: Default: ``PydanticUndefined``.
+            message_severity: The severity level for messages generated from a specific source.
+                Values: ``alert``, ``critical``, ``debug``, ``emergency``, ``error``, ``info``,
+                ``notice``, ``warning``. Default: ``alert``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "MonCommonMonitoringPolicyCallhomeSourceCursor",
+            self._invoke_maker("callhome_source", (name,), _prune(params)),
+        )
+
+    def smart_callhome_source(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> MonCommonMonitoringPolicySmartCallhomeSourceCursor:
+        """Declare a ``callhomeSmartSrc`` child under the mon_common_monitoring_policy level.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "MonCommonMonitoringPolicySmartCallhomeSourceCursor",
+            self._invoke_maker("smart_callhome_source", (), _prune(params)),
+        )
+
+    def tacacs_source(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        include_action: frozenset[MonInclAction] | set[MonInclAction] | str | None = None,
+        min_sev: ConditionSeverity | str | None = None,
+        display_name: str | None = None,
+        switch_tacacs_audit: TacacsSwitchTacacsAudit | str | None = None,
+        userdom: str | None = None,
+    ) -> MonCommonMonitoringPolicyTacacsSourceCursor:
+        """Declare a ``tacacsSrc`` child under the mon_common_monitoring_policy level.
+
+        Args:
+            name: The name of the object.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            include_action: The information to include for the call home source. Default:
+                ``PydanticUndefined``.
+            min_sev: Values: ``cleared``, ``critical``, ``info``, ``major``, ``minor``,
+                ``warning``. Default: ``info``.
+            switch_tacacs_audit: Values: ``disabled``, ``enabled``. Default: ``disabled``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "MonCommonMonitoringPolicyTacacsSourceCursor",
+            self._invoke_maker("tacacs_source", (name,), _prune(params)),
+        )
+
+    def fault_severity_assignment_policy(
+        self,
+        condition_code: int | str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        initial_severity: ConditionInitSevDir | str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        target_severity: ConditionSevDir | str | None = None,
+        userdom: str | None = None,
+        health_score_weight: int | None = None,
+    ) -> MonCommonMonitoringPolicyFaultSeverityAssignmentPolicyCursor:
+        """Declare a ``faultSevAsnP`` child under the mon_common_monitoring_policy level.
+
+        The initial and target severities for a specific fault can be specified in a custom or
+        default monitoring policy directly under an observable target object.
+
+        Args:
+            condition_code: Contains a category code that helps to categorize and identify
+                different types of fault severity assignment policy objects.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            initial_severity: The policy for assignment of initial severity is assigned at
+                condition detection or when a fault object is created. If inherit is selected, a
+                less precise (or default) definition is applied. If squelched is selected, a
+                fault object is never raised, and the corresponding condition is ignored.
+                Values: ``cleared``, ``critical``, ``info``, ``inherit``, ``major``, ``minor``,
+                ``squelched``, ``warning``. Default: ``inherit``.
+            target_severity: The policy for assignment of target severity is the severity level
+                that a fault object reaches after a maturity soaking interval. If inherit is
+                selected, a less precise (or default) definition will be applied. Values:
+                ``cleared``, ``critical``, ``info``, ``inherit``, ``major``, ``minor``,
+                ``warning``. Default: ``inherit``.
+            health_score_weight: The weight of the fault in calculating the health score of an
+                object. A higher weight causes a higher degradation of the health score of the
+                affected object. Default: ``100``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "condition_code",
+            )
+        }
+        return cast(
+            "MonCommonMonitoringPolicyFaultSeverityAssignmentPolicyCursor",
+            self._invoke_maker(
+                "fault_severity_assignment_policy", (condition_code,), _prune(params)
+            ),
+        )
+
+    def event_severity_assignment_policy(
+        self,
+        condition_code: int | str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        initial_severity: ConditionInitSevDir | str | None = None,
+        userdom: str | None = None,
+    ) -> MonCommonMonitoringPolicyEventSeverityAssignmentPolicyCursor:
+        """Declare a ``eventSevAsnP`` child under the mon_common_monitoring_policy level.
+
+        Represents a policy that specifies the initial and target severity for a specific event.
+
+        Args:
+            condition_code: Contains a category code that helps to categorize and identify
+                different types of event severity assignment policy objects.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            initial_severity: The policy for assigning severity at condition detection or when
+                an event object is created. Values: ``cleared``, ``critical``, ``info``,
+                ``inherit``, ``major``, ``minor``, ``squelched``, ``warning``. Default:
+                ``inherit``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "condition_code",
+            )
+        }
+        return cast(
+            "MonCommonMonitoringPolicyEventSeverityAssignmentPolicyCursor",
+            self._invoke_maker(
+                "event_severity_assignment_policy", (condition_code,), _prune(params)
+            ),
+        )
+
+
+class MonCommonMonitoringPolicyCursor(_MonCommonMonitoringPolicyMakers, _FabricMakers, _UniMakers):
+    """Typed cursor for ``monCommonPol`` (mon_common_monitoring_policy level).
+
+    Position: ``uni.fabric.mon_common_monitoring_policy``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> MonCommonMonitoringPolicyCursor:
+        """Set ``monCommonPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class _MonFabricMonitoringPolicyMakers(Cursor):
+    """Makers declared at the mon_fabric_monitoring_policy level (``monFabricPol``)."""
+
+    __slots__ = ()
+
+    def monitoring_target(
+        self,
+        target_scope: MonTargetScope2 | str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        mon_fabrictarget_name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> MonFabricMonitoringPolicyMonitoringTargetCursor:
+        """Declare a ``monFabricTarget`` child under the mon_fabric_monitoring_policy level.
+
+        The monitoring target policy model for the fabric semantic scope.
+
+        Args:
+            target_scope: The class of objects that is applicable to the child monitoring
+                policy.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "target_scope",
+            )
+        }
+        return cast(
+            "MonFabricMonitoringPolicyMonitoringTargetCursor",
+            self._invoke_maker("monitoring_target", (target_scope,), _prune(params)),
+        )
+
+    def syslog_source(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        include_action: frozenset[MonInclAction] | set[MonInclAction] | str | None = None,
+        min_severity: SyslogSeverity | str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> MonFabricMonitoringPolicySyslogSourceCursor:
+        """Declare a ``syslogSrc`` child under the mon_fabric_monitoring_policy level.
+
+        The syslog source configures a syslog source that specifies the minimum severity of items to
+        be sent as syslog messages to the syslog servers in the destination group.
+
+        Args:
+            name: The name for the system logging source.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            include_action: Default: ``PydanticUndefined``.
+            min_severity: The minimum severity level of messages to be sent. Values: ``alerts``,
+                ``critical``, ``debugging``, ``emergencies``, ``errors``, ``information``,
+                ``notifications``, ``warnings``. Default: ``warnings``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "MonFabricMonitoringPolicySyslogSourceCursor",
+            self._invoke_maker("syslog_source", (name,), _prune(params)),
+        )
+
+    def snmp_source(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        include_action: frozenset[MonInclAction] | set[MonInclAction] | str | None = None,
+        min_severity: ConditionSeverity | str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> MonFabricMonitoringPolicySnmpSourceCursor:
+        """Declare a ``snmpSrc`` child under the mon_fabric_monitoring_policy level.
+
+        The SNMP source profile determines the fault information, severity level, and destination
+        for sending messages to the SNMP destination. SNMP is an application-layer protocol that
+        provides a message format for communication between SNMP managers and agents.
+
+        Args:
+            name: The name for the SNMP source. This name can be between 1 and 64 alphanumeric
+                characters.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            include_action: The options to include for the SNMP source. Default:
+                ``PydanticUndefined``.
+            min_severity: The minimum severity level of SNMP traps. SNMP traps enable an agent
+                to notify the management station of significant events by way of an unsolicited
+                SNMP message. Values: ``cleared``, ``critical``, ``info``, ``major``, ``minor``,
+                ``warning``. Default: ``info``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "MonFabricMonitoringPolicySnmpSourceCursor",
+            self._invoke_maker("snmp_source", (name,), _prune(params)),
+        )
+
+    def callhome_source(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        include_action: frozenset[MonInclAction] | set[MonInclAction] | str | None = None,
+        display_name: str | None = None,
+        message_severity: CallhomeUrgency | str | None = None,
+        userdom: str | None = None,
+    ) -> MonFabricMonitoringPolicyCallhomeSourceCursor:
+        """Declare a ``callhomeSrc`` child under the mon_fabric_monitoring_policy level.
+
+        The call home source profile determines the information to deliver and the urgency level for
+        sending email-based alert notifications to a call home destination. A range of message
+        formats are available for compatibility with pager services or XML-based automated parsing
+        applications.
+
+        Args:
+            name: The name for the source.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            include_action: Default: ``PydanticUndefined``.
+            message_severity: The severity level for messages generated from a specific source.
+                Values: ``alert``, ``critical``, ``debug``, ``emergency``, ``error``, ``info``,
+                ``notice``, ``warning``. Default: ``alert``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "MonFabricMonitoringPolicyCallhomeSourceCursor",
+            self._invoke_maker("callhome_source", (name,), _prune(params)),
+        )
+
+    def smart_callhome_source(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> MonFabricMonitoringPolicySmartCallhomeSourceCursor:
+        """Declare a ``callhomeSmartSrc`` child under the mon_fabric_monitoring_policy level.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "MonFabricMonitoringPolicySmartCallhomeSourceCursor",
+            self._invoke_maker("smart_callhome_source", (), _prune(params)),
+        )
+
+    def tacacs_source(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        include_action: frozenset[MonInclAction] | set[MonInclAction] | str | None = None,
+        min_sev: ConditionSeverity | str | None = None,
+        display_name: str | None = None,
+        switch_tacacs_audit: TacacsSwitchTacacsAudit | str | None = None,
+        userdom: str | None = None,
+    ) -> MonFabricMonitoringPolicyTacacsSourceCursor:
+        """Declare a ``tacacsSrc`` child under the mon_fabric_monitoring_policy level.
+
+        Args:
+            name: The name of the object.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            include_action: The information to include for the call home source. Default:
+                ``PydanticUndefined``.
+            min_sev: Values: ``cleared``, ``critical``, ``info``, ``major``, ``minor``,
+                ``warning``. Default: ``info``.
+            switch_tacacs_audit: Values: ``disabled``, ``enabled``. Default: ``disabled``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "MonFabricMonitoringPolicyTacacsSourceCursor",
+            self._invoke_maker("tacacs_source", (name,), _prune(params)),
+        )
+
+
+class MonFabricMonitoringPolicyCursor(_MonFabricMonitoringPolicyMakers, _FabricMakers, _UniMakers):
+    """Typed cursor for ``monFabricPol`` (mon_fabric_monitoring_policy level).
+
+    Position: ``uni.fabric.mon_fabric_monitoring_policy``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> MonFabricMonitoringPolicyCursor:
+        """Set ``monFabricPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class OngoingLatencyModeCursor(_FabricMakers, _UniMakers):
+    """Typed cursor for ``latencyOngoingMode`` (ongoing_latency_mode level).
+
+    Position: ``uni.fabric.ongoing_latency_mode``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        user_mode: LatencyLatencyMode | str | None = None,
+        userdom: str | None = None,
+    ) -> OngoingLatencyModeCursor:
+        """Set ``latencyOngoingMode`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class OutOfServiceFabricPolicyCursor(_FabricMakers, _UniMakers):
+    """Typed cursor for ``fabricOOServicePol`` (out_of_service_fabric_policy level).
+
+    Position: ``uni.fabric.out_of_service_fabric_policy``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> OutOfServiceFabricPolicyCursor:
+        """Set ``fabricOOServicePol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class _PodMaintenanceGroupMakers(Cursor):
+    """Makers declared at the pod_maintenance_group level (``maintPodMaintGrp``)."""
+
+    __slots__ = ()
+
+    def pod_block(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        from_pod_id: int | None = None,
+        display_name: str | None = None,
+        to_pod_id: int | None = None,
+        userdom: str | None = None,
+    ) -> PodMaintenanceGroupPodBlockCursor:
+        """Declare a ``fabricPodBlk`` child under the pod_maintenance_group level.
+
+        A POD block.
+
+        Args:
+            name: Naming property — forms the object's RN.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: The description of this configuration item.
+            from_pod_id: Default: ``1``.
+            to_pod_id: Default: ``1``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "PodMaintenanceGroupPodBlockCursor",
+            self._invoke_maker("pod_block", (name,), _prune(params)),
+        )
+
+
+class PodMaintenanceGroupCursor(_PodMaintenanceGroupMakers, _FabricMakers, _UniMakers):
+    """Typed cursor for ``maintPodMaintGrp`` (pod_maintenance_group level).
+
+    Position: ``uni.fabric.pod_maintenance_group``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        selector_type: FabricSelector2 | str | None = None,
+        userdom: str | None = None,
+    ) -> PodMaintenanceGroupCursor:
+        """Set ``maintPodMaintGrp`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class _FabricPodProfileMakers(Cursor):
+    """Makers declared at the pod_profile level (``fabricPodP``)."""
+
+    __slots__ = ()
+
+    def pod_selector(
+        self,
+        name: str,
+        selector_type: FabricSelector2 | str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> FabricPodProfilePodSelectorCursor:
+        """Declare a ``fabricPodS`` child under the pod_profile level.
+
+        The POD selector enables you to select all or a range of PODs.
+
+        Args:
+            name: The name of the POD selector. This name can be up to 64 characters. Note that
+                you cannot change this name after the object has been saved.
+            selector_type: The type of the POD selector. The type determines how the selection
+                is made: all or a range.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+                "selector_type",
+            )
+        }
+        return cast(
+            "FabricPodProfilePodSelectorCursor",
+            self._invoke_maker(
+                "pod_selector",
+                (
+                    name,
+                    selector_type,
+                ),
+                _prune(params),
+            ),
+        )
+
+
+class FabricPodProfileCursor(_FabricPodProfileMakers, _FabricMakers, _UniMakers):
+    """Typed cursor for ``fabricPodP`` (pod_profile level).
+
+    Position: ``uni.fabric.pod_profile``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> FabricPodProfileCursor:
+        """Set ``fabricPodP`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class PowerSupplyRedundancyPolicyCursor(_FabricMakers, _UniMakers):
+    """Typed cursor for ``psuInstPol`` (power_supply_redundancy_policy level).
+
+    Position: ``uni.fabric.power_supply_redundancy_policy``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        admin_redundancy_mode: EqptPsRdnM | str | None = None,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> PowerSupplyRedundancyPolicyCursor:
+        """Set ``psuInstPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class _ProxyServerMakers(Cursor):
+    """Makers declared at the proxy_server level (``proxyServer``)."""
+
+    __slots__ = ()
+
+    def ignore_host(
+        self,
+        hosts: str,
+        *,
+        annotation: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> IgnoreHostCursor:
+        """Declare a ``proxyIgnoreHost`` child under the proxy_server level.
+
+        Policy to configure ProxyIgnoreHost
+
+        Args:
+            hosts: Naming property — forms the object's RN.
+            annotation: User annotation. Suggested format orchestrator:value
+            name: The name of the object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "hosts",
+            )
+        }
+        return cast(
+            "IgnoreHostCursor",
+            self._invoke_maker("ignore_host", (hosts,), _prune(params)),
+        )
+
+
+class ProxyServerCursor(_ProxyServerMakers, _FabricMakers, _UniMakers):
+    """Typed cursor for ``proxyServer`` (proxy_server level).
+
+    Position: ``uni.fabric.proxy_server``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        http_url: str | None = None,
+        https_url: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> ProxyServerCursor:
+        """Set ``proxyServer`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class PtpLatencyModeCursor(_FabricMakers, _UniMakers):
+    """Typed cursor for ``latencyPtpMode`` (ptp_latency_mode level).
+
+    Position: ``uni.fabric.ptp_latency_mode``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        announce_interval: int | None = None,
+        announce_timeout: int | None = None,
+        delay_request_interval: int | None = None,
+        ptp_profile_template: PtpProfileTemplate | str | None = None,
+        sync_interval: int | None = None,
+        ptp_global_domain: int | None = None,
+        is_count_valid: bool | None = None,
+        latency_policy_count: int | None = None,
+        ptp_global_priority_1_value: int | None = None,
+        ptp_global_priority_2_value: int | None = None,
+        state: NetflowAdminSt | str | None = None,
+        system_resolution_factor_for_max_latency: int | None = None,
+        ttag_ether_type0x8905_status: bool | None = None,
+        userdom: str | None = None,
+    ) -> PtpLatencyModeCursor:
+        """Set ``latencyPtpMode`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class RemotePathCursor(_FabricMakers, _UniMakers):
+    """Typed cursor for ``fileRemotePath`` (remote_path level).
+
+    Position: ``uni.fabric.remote_path``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        authentication_type_choice: FileAuthenticationType | str | None = None,
+        description: str | None = None,
+        host: str | None = None,
+        identity_private_key_contents: str | None = None,
+        ssh_private_key_passphrase: str | None = None,
+        identity_public_key_contents: str | None = None,
+        display_name: str | None = None,
+        protocol: FileTransferProtocol | str | None = None,
+        remote_path: str | None = None,
+        remote_port: int | None = None,
+        user_name: str | None = None,
+        password: str | None = None,
+        userdom: str | None = None,
+    ) -> RemotePathCursor:
+        """Set ``fileRemotePath`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class _FabricSchedulerMakers(Cursor):
+    """Makers declared at the scheduler level (``trigSchedP``)."""
+
+    __slots__ = ()
+
+    def one_time_window(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        maximum_concurrent_tasks: int | str | None = None,
+        date_and_time: str | None = None,
+        display_name: str | None = None,
+        delay_between_node_upgrades: int | None = None,
+        proc_break: str | None = None,
+        proc_cap: int | str | None = None,
+        maximum_running_time: str | None = None,
+        userdom: str | None = None,
+    ) -> FabricSchedulerOneTimeWindowCursor:
+        """Declare a ``trigAbsWindowP`` child under the scheduler level.
+
+        A schedule window with absolute start and end times.
+
+        Args:
+            name: The name of the schedule window.
+            annotation: User annotation. Suggested format orchestrator:value
+            maximum_concurrent_tasks: The concurrency capacity limit. This is the maximum number
+                of tasks that can be processed concurrently. Default: ``unlimited``.
+            date_and_time: The date that the schedule window starts.
+            delay_between_node_upgrades: Delay between node upgrades in seconds. This is
+                applicable only for concurCap 1. Default: ``0``.
+            proc_break: A period of time taken between processing of items within the
+                concurrency cap.
+            proc_cap: Processing size capacity limitation specification. Indicates the limit of
+                items to be processed within this window. Default: ``unlimited``.
+            maximum_running_time: The processing time capacity limit. This is the maximum
+                duration of the window.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "FabricSchedulerOneTimeWindowCursor",
+            self._invoke_maker("one_time_window", (name,), _prune(params)),
+        )
+
+    def recurring_window(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        maximum_concurrent_tasks: int | str | None = None,
+        recurring_window_schedule_day: TrigDay | str | None = None,
+        schedule_hour: int | None = None,
+        schedule_minute: int | None = None,
+        display_name: str | None = None,
+        delay_between_node_upgrades: int | None = None,
+        proc_break: str | None = None,
+        proc_cap: int | str | None = None,
+        maximum_running_time: str | None = None,
+        userdom: str | None = None,
+    ) -> FabricSchedulerRecurringWindowCursor:
+        """Declare a ``trigRecurrWindowP`` child under the scheduler level.
+
+        A schedule window that triggers a task every 24 hours.
+
+        Args:
+            name: The name of the recurring schedule window.
+            annotation: User annotation. Suggested format orchestrator:value
+            maximum_concurrent_tasks: The concurrency capacity limit. This is the maximum number
+                of tasks that can be processed concurrently. Default: ``unlimited``.
+            recurring_window_schedule_day: The day of the week that the recurring window begins.
+                Values: ``Friday``, ``Monday``, ``Saturday``, ``Sunday``, ``Thursday``,
+                ``Tuesday``, ``Wednesday``, ``even-day``, …. Default: ``every-day``.
+            schedule_hour: The hour that the recurring window begins. Default: ``0``.
+            schedule_minute: The minute that the recurring window begins. Default: ``0``.
+            delay_between_node_upgrades: Delay between node upgrades in seconds. This is
+                applicable only for concurCap 1. Default: ``0``.
+            proc_break: A period of time taken between processing of items within the
+                concurrency cap.
+            proc_cap: Processing size capacity limitation specification. Indicates the limit of
+                items to be processed within this window. Default: ``unlimited``.
+            maximum_running_time: The processing time capacity limit. This is the maximum
+                duration of the window.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "FabricSchedulerRecurringWindowCursor",
+            self._invoke_maker("recurring_window", (name,), _prune(params)),
+        )
+
+
+class FabricSchedulerCursor(_FabricSchedulerMakers, _FabricMakers, _UniMakers):
+    """Typed cursor for ``trigSchedP`` (scheduler level).
+
+    Position: ``uni.fabric.scheduler``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> FabricSchedulerCursor:
+        """Set ``trigSchedP`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class _SmartCallhomeDestinationGroupMakers(Cursor):
+    """Makers declared at the smart_callhome_destination_group level (``callhomeSmartGroup``)."""
+
+    __slots__ = ()
+
+    def smart_callhome_destination(
+        self,
+        name: str,
+        *,
+        admin_state: MonAdminState | str | None = None,
+        annotation: str | None = None,
+        description: str | None = None,
+        destination_email_address: str | None = None,
+        message_format: CallhomeMsgFormat | str | None = None,
+        display_name: str | None = None,
+        message_format_rfc_compliant: bool | None = None,
+        userdom: str | None = None,
+    ) -> SmartCallhomeDestinationCursor:
+        """Declare a ``callhomeSmartDest`` child under the smart_callhome_destination_group level.
+
+        Args:
+            name: The name of the object.
+            admin_state: The destination policy administrative state. If enabled, the system
+                uses the destination policy when an error matching the associated cause is
+                encountered. Otherwise, the system ignores the policy even if a matching error
+                occurs. By default, all policies are enabled. Values: ``disabled``, ``enabled``.
+                Default: ``enabled``.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            destination_email_address: This is the actual email address to which the message is
+                sent.
+            message_format: The Call Home destination message format. Values: ``aml``, ``short-
+                txt``, ``xml``. Default: ``xml``.
+            message_format_rfc_compliant: Default: ``False``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "SmartCallhomeDestinationCursor",
+            self._invoke_maker("smart_callhome_destination", (name,), _prune(params)),
+        )
+
+    def callhome_protocol_profile(
+        self,
+        *,
+        contact_address: str | None = None,
+        admin_state: MonAdminState | str | None = None,
+        annotation: str | None = None,
+        contact_name: str | None = None,
+        contract_number: str | None = None,
+        customer_name: str | None = None,
+        description: str | None = None,
+        contact_email: str | None = None,
+        from_: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        contact_phone: str | None = None,
+        port: int | None = None,
+        password: str | None = None,
+        replyto_address: str | None = None,
+        secure_smtp: bool | None = None,
+        site: str | None = None,
+        userdom: str | None = None,
+        username: str | None = None,
+    ) -> SmartCallhomeDestinationGroupCallhomeProtocolProfileCursor:
+        """Declare a ``callhomeProf`` child under the smart_callhome_destination_group level.
+
+        Contains all site information and the address of the SMTP server used to send emails.
+
+        Args:
+            contact_address: The contact address of the customer.
+            admin_state: Values: ``disabled``, ``enabled``. Default: ``enabled``.
+            annotation: User annotation. Suggested format orchestrator:value
+            contact_name: The customer contact ID. Note that the customer ID associated with the
+                Smart Call Home configuration in Cisco UCS must be the CCO (Cisco.com) account
+                name associated with a support contract that includes Smart Call Home.
+            contract_number: The contract information provided by the customer.
+            customer_name: The customer for the Call Home profile.
+            description: Specifies the description of a policy component.
+            contact_email: The email address of the contact for the system or site. This address
+                is not necessarily the same as the reply-to addresses used in the outgoing
+                emails.
+            from_: The email address of the sender.
+            name: The user-configured profile name.
+            contact_phone: The contact phone number.
+            port: The SMTP server port number. The SMTP server address must be configured for
+                the Callhome functionality to work. Default: ``25``.
+            password: The system user password.
+            replyto_address: The Reply-To email address for emails sent using the destination
+                group policy.
+            secure_smtp: Default: ``False``.
+            site: The site ID provided by the customer. This is the ID of the network where the
+                site is deployed.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "SmartCallhomeDestinationGroupCallhomeProtocolProfileCursor",
+            self._invoke_maker("callhome_protocol_profile", (), _prune(params)),
+        )
+
+
+class SmartCallhomeDestinationGroupCursor(
+    _SmartCallhomeDestinationGroupMakers, _FabricMakers, _UniMakers
+):
+    """Typed cursor for ``callhomeSmartGroup`` (smart_callhome_destination_group level).
+
+    Position: ``uni.fabric.smart_callhome_destination_group``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> SmartCallhomeDestinationGroupCursor:
+        """Set ``callhomeSmartGroup`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class _SnmpMonitoringDestinationGroupMakers(Cursor):
+    """Makers declared at the snmp_monitoring_destination_group level (``snmpGroup``)."""
+
+    __slots__ = ()
+
+    def snmp_trap_destination(
+        self,
+        host: str,
+        port: int,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        notif_t: SnmpNotificationType | str | None = None,
+        security_name: str | None = None,
+        userdom: str | None = None,
+        v3_security_level: SnmpV3SecLvl | str | None = None,
+        version: SnmpVersion | str | None = None,
+    ) -> SnmpTrapDestinationCursor:
+        """Declare a ``snmpTrapDest`` child under the snmp_monitoring_destination_group level.
+
+        A destination to which traps and informs are sent.
+
+        Args:
+            host: The host for the SNMP trap destination. SNMP traps enable an agent to notify
+                the management station of significant events by way of an unsolicited SNMP
+                message.
+            port: The service port of the SNMP trap destination. SNMP traps enable an agent to
+                notify the management station of significant events by way of an unsolicited
+                SNMP message.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            notif_t: Values: ``traps``. Default: ``traps``.
+            security_name: The SNMP destination security name.
+            v3_security_level: The SNMP V3 security level for the destination path. Values:
+                ``auth``, ``noauth``, ``priv``. Default: ``noauth``.
+            version: The CDP version supported by the device. Values: ``v1``, ``v2c``, ``v3``.
+                Default: ``v2c``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "host",
+                "port",
+            )
+        }
+        return cast(
+            "SnmpTrapDestinationCursor",
+            self._invoke_maker(
+                "snmp_trap_destination",
+                (
+                    host,
+                    port,
+                ),
+                _prune(params),
+            ),
+        )
+
+
+class SnmpMonitoringDestinationGroupCursor(
+    _SnmpMonitoringDestinationGroupMakers, _FabricMakers, _UniMakers
+):
+    """Typed cursor for ``snmpGroup`` (snmp_monitoring_destination_group level).
+
+    Position: ``uni.fabric.snmp_monitoring_destination_group``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> SnmpMonitoringDestinationGroupCursor:
+        """Set ``snmpGroup`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class _SnmpPolicyMakers(Cursor):
+    """Makers declared at the snmp_policy level (``snmpPol``)."""
+
+    __slots__ = ()
+
+    def snmp_community(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> SnmpCommunityCursor:
+        """Declare a ``snmpCommunityP`` child under the snmp_policy level.
+
+        The SNMP community profile enables access to the router or switch statistics for monitoring.
+        SNMP is an application-layer protocol that provides a message format for communication
+        between SNMP managers and agents.
+
+        Args:
+            name: The name of the community profile. This name can be between 1 and 64
+                alphanumeric characters.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "SnmpCommunityCursor",
+            self._invoke_maker("snmp_community", (name,), _prune(params)),
+        )
+
+    def user_profile(
+        self,
+        name: str,
+        *,
+        authentication_key: str | None = None,
+        authentication_type: SnmpAuthType | str | None = None,
+        privacy_key: str | None = None,
+        privacy: SnmpPrivType | str | None = None,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> UserProfileCursor:
+        """Declare a ``snmpUserP`` child under the snmp_policy level.
+
+        The SNMP user profile is used to associate users with SNMP policies for monitoring devices
+        in a network. SNMP is an application-layer protocol that provides a message format for
+        communication between SNMP managers and agents.
+
+        Args:
+            name: The name of the user profile. This name can be between 1 and 64 alphanumeric
+                characters provided the name starts with an alphabet.
+            authentication_key: The authentication key for the user profile. The key can be any
+                case-sensitive alphanumeric string up to 64 chars.
+            authentication_type: The authentication type for the user profile. The
+                authentication type is a message authentication code (MAC) that is used between
+                two parties sharing a secret key to validate information transmitted between
+                them. HMAC (Hash MAC) is based on cryptographic hash functions. Values: ``hmac-
+                md5-96``, ``hmac-sha1-96``, ``hmac-sha2-224``, ``hmac-sha2-256``, ``hmac-
+                sha2-384``, ``hmac-sha2-512``. Default: ``hmac-sha1-96``.
+            privacy_key: The privacy key for the user profile.
+            privacy: The encryption type for the user profile. Values: ``aes-128``, ``des``,
+                ``none``. Default: ``none``.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "UserProfileCursor",
+            self._invoke_maker("user_profile", (name,), _prune(params)),
+        )
+
+    def snmp_client_group_profile(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> SnmpClientGroupProfileCursor:
+        """Declare a ``snmpClientGrpP`` child under the snmp_policy level.
+
+        A client group is a group of client IP addresses that allows SNMP access to routers or
+        switches.
+
+        Args:
+            name: The name of the client group profile. This name can be between 1 and 64
+                alphanumeric characters.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "SnmpClientGroupProfileCursor",
+            self._invoke_maker("snmp_client_group_profile", (name,), _prune(params)),
+        )
+
+    def client_entry(
+        self,
+        external_trap_server_address: str,
+        *,
+        annotation: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        external_trap_server_port: int | None = None,
+        userdom: str | None = None,
+    ) -> SnmpPolicyClientEntryCursor:
+        """Declare a ``snmpTrapFwdServerP`` child under the snmp_policy level.
+
+        Client entry
+
+        Args:
+            external_trap_server_address: IP address entry
+            annotation: User annotation. Suggested format orchestrator:value
+            external_trap_server_port: The service port number for the LDAP service. Default:
+                ``162``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "external_trap_server_address",
+            )
+        }
+        return cast(
+            "SnmpPolicyClientEntryCursor",
+            self._invoke_maker("client_entry", (external_trap_server_address,), _prune(params)),
+        )
+
+
+class SnmpPolicyCursor(_SnmpPolicyMakers, _FabricMakers, _UniMakers):
+    """Typed cursor for ``snmpPol`` (snmp_policy level).
+
+    Position: ``uni.fabric.snmp_policy``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        admin_state: NwAdminSt | str | None = None,
+        annotation: str | None = None,
+        contact: str | None = None,
+        description: str | None = None,
+        location: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> SnmpPolicyCursor:
+        """Set ``snmpPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class SnmpTrapDestinationInfoCursor(_FabricMakers, _UniMakers):
+    """Typed cursor for ``snmpCtrlrInst`` (snmp_trap_destination_info level).
+
+    Position: ``uni.fabric.snmp_trap_destination_info``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> SnmpTrapDestinationInfoCursor:
+        """Set ``snmpCtrlrInst`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
         return self
@@ -1112,6 +8769,265 @@ class FabricSpanSourceGroupCursor(_FabricSpanSourceGroupMakers, _FabricMakers, _
         return self
 
 
+class _SpineFabricInterfaceProfileMakers(Cursor):
+    """Makers declared at the spine_fabric_interface_profile level (``fabricSpPortP``)."""
+
+    __slots__ = ()
+
+    def spine_fabric_port_selector(
+        self,
+        name: str,
+        selector_type: FabricSelector2 | str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> SpineFabricPortSelectorCursor:
+        """Declare a ``fabricSFPortS`` child under the spine_fabric_interface_profile level.
+
+        The spine fabric port selector. This enables you to specify spine fabric ports with your
+        spine fabric port profile.
+
+        Args:
+            name: The name of the spine fabric port selector. This name can be up to 64
+                characters. Note that you cannot change this name after the object has been
+                saved
+            selector_type: The type of the spine fabric port selector. The spine fabric port
+                selector is used to select spine fabric ports.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+                "selector_type",
+            )
+        }
+        return cast(
+            "SpineFabricPortSelectorCursor",
+            self._invoke_maker(
+                "spine_fabric_port_selector",
+                (
+                    name,
+                    selector_type,
+                ),
+                _prune(params),
+            ),
+        )
+
+
+class SpineFabricInterfaceProfileCursor(
+    _SpineFabricInterfaceProfileMakers, _FabricMakers, _UniMakers
+):
+    """Typed cursor for ``fabricSpPortP`` (spine_fabric_interface_profile level).
+
+    Position: ``uni.fabric.spine_fabric_interface_profile``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> SpineFabricInterfaceProfileCursor:
+        """Set ``fabricSpPortP`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class _SpineModuleProfileMakers(Cursor):
+    """Makers declared at the spine_module_profile level (``fabricSpCardP``)."""
+
+    __slots__ = ()
+
+    def spine_module_selector(
+        self,
+        module_selector_type: FabricCardType | str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> SpineModuleSelectorCursor:
+        """Declare a ``fabricSpCardS`` child under the spine_module_profile level.
+
+        A card selector. This is a range of cards on the spine.
+
+        Args:
+            module_selector_type: The type of the spine card selector.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "module_selector_type",
+            )
+        }
+        return cast(
+            "SpineModuleSelectorCursor",
+            self._invoke_maker("spine_module_selector", (module_selector_type,), _prune(params)),
+        )
+
+
+class SpineModuleProfileCursor(_SpineModuleProfileMakers, _FabricMakers, _UniMakers):
+    """Typed cursor for ``fabricSpCardP`` (spine_module_profile level).
+
+    Position: ``uni.fabric.spine_module_profile``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> SpineModuleProfileCursor:
+        """Set ``fabricSpCardP`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class _SpineSwitchProfileMakers(Cursor):
+    """Makers declared at the spine_switch_profile level (``fabricSpineP``)."""
+
+    __slots__ = ()
+
+    def spine_selector(
+        self,
+        name: str,
+        selector_type: FabricSelector | str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> SpineSwitchProfileSpineSelectorCursor:
+        """Declare a ``fabricSpineS`` child under the spine_switch_profile level.
+
+        The spine selector. This enables you to select all or a range of spines.
+
+        Args:
+            name: The name of the spine selector. This name can be up to 64 characters. Note
+                that you cannot change this name after the object has been saved.
+            selector_type: The type of the spine selector. This determines how the selection is
+                made: all, individual, or a range.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+                "selector_type",
+            )
+        }
+        return cast(
+            "SpineSwitchProfileSpineSelectorCursor",
+            self._invoke_maker(
+                "spine_selector",
+                (
+                    name,
+                    selector_type,
+                ),
+                _prune(params),
+            ),
+        )
+
+
+class SpineSwitchProfileCursor(_SpineSwitchProfileMakers, _FabricMakers, _UniMakers):
+    """Typed cursor for ``fabricSpineP`` (spine_switch_profile level).
+
+    Position: ``uni.fabric.spine_switch_profile``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> SpineSwitchProfileCursor:
+        """Set ``fabricSpineP`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        interface_profile: str | Ref | None = None,
+    ) -> SpineSwitchProfileCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        interface_profile: str | Ref | None = None,
+    ) -> SpineSwitchProfileCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
 class _SyslogGroupMakers(Cursor):
     """Makers declared at the syslog_group level (``syslogGroup``)."""
 
@@ -1200,6 +9116,242 @@ class SyslogGroupCursor(_SyslogGroupMakers, _FabricMakers, _UniMakers):
         return self
 
 
+class _TacacsMonitoringDestinationGroupMakers(Cursor):
+    """Makers declared at the tacacs_monitoring_destination_group level (``tacacsGroup``)."""
+
+    __slots__ = ()
+
+    def tacacs_destination(
+        self,
+        host: str,
+        port: int,
+        *,
+        annotation: str | None = None,
+        authentication_protocol: TacacsauthenticationProtocol | str | None = None,
+        description: str | None = None,
+        key: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        send_changes_as_command_arguments: bool | None = None,
+        userdom: str | None = None,
+    ) -> TacacsDestinationCursor:
+        """Declare a ``tacacsTacacsDest`` child under the tacacs_monitoring_destination_group level.
+
+        A destination to send audit logs
+
+        Args:
+            host: Hostname or IP for export destination
+            port: Port
+            annotation: User annotation. Suggested format orchestrator:value
+            authentication_protocol: Values: ``chap``, ``mschap``, ``pap``. Default: ``pap``.
+            description: Specifies the description of a policy component.
+            key: The key or password used to uniquely identify this configuration object.
+            send_changes_as_command_arguments: Default: ``False``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "host",
+                "port",
+            )
+        }
+        return cast(
+            "TacacsDestinationCursor",
+            self._invoke_maker(
+                "tacacs_destination",
+                (
+                    host,
+                    port,
+                ),
+                _prune(params),
+            ),
+        )
+
+
+class TacacsMonitoringDestinationGroupCursor(
+    _TacacsMonitoringDestinationGroupMakers, _FabricMakers, _UniMakers
+):
+    """Typed cursor for ``tacacsGroup`` (tacacs_monitoring_destination_group level).
+
+    Position: ``uni.fabric.tacacs_monitoring_destination_group``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> TacacsMonitoringDestinationGroupCursor:
+        """Set ``tacacsGroup`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class TechsupportExportPolicyCursor(_FabricMakers, _UniMakers):
+    """Typed cursor for ``dbgexpTechSupP`` (techsupport_export_policy level).
+
+    Position: ``uni.fabric.techsupport_export_policy``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        administrative_state: TrigExecState | str | None = None,
+        annotation: str | None = None,
+        apic_path: str | None = None,
+        app_name: str | None = None,
+        category_of_feature_to_be_collected: frozenset[DbgexpCategory]
+        | set[DbgexpCategory]
+        | str
+        | None = None,
+        compression: MonCompression | str | None = None,
+        export_location: ScalarEnum8 | str | None = None,
+        include_db_metadata_file: bool | None = None,
+        description: str | None = None,
+        end_time_for_techsupport_collection: str | None = None,
+        export_to_controller: bool | None = None,
+        export_to_intersight: bool | None = None,
+        extensive_logs: bool | None = None,
+        display_name: str | None = None,
+        start_time_for_techsupport_collection: str | None = None,
+        include_pre_upgrade_logs: bool | None = None,
+        userdom: str | None = None,
+        vendor_name: str | None = None,
+    ) -> TechsupportExportPolicyCursor:
+        """Set ``dbgexpTechSupP`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class TelemetryEnableGlobalPolicyCursor(_FabricMakers, _UniMakers):
+    """Typed cursor for ``telemetryEnableP`` (telemetry_enable_global_policy level).
+
+    Position: ``uni.fabric.telemetry_enable_global_policy``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        admin_state: TelemetryAdminState | str | None = None,
+        annotation: str | None = None,
+        userdom: str | None = None,
+    ) -> TelemetryEnableGlobalPolicyCursor:
+        """Set ``telemetryEnableP`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class TwampResponderPolicyCursor(_FabricMakers, _UniMakers):
+    """Typed cursor for ``twampResponderPol`` (twamp_responder_policy level).
+
+    Position: ``uni.fabric.twamp_responder_policy``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        twamp_responder_enable_disable: NwAdminSt | str | None = None,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        twamp_responder_timeout: int | None = None,
+        userdom: str | None = None,
+    ) -> TwampResponderPolicyCursor:
+        """Set ``twampResponderPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class TwampServerPolicyCursor(_FabricMakers, _UniMakers):
+    """Typed cursor for ``twampServerPol`` (twamp_server_policy level).
+
+    Position: ``uni.fabric.twamp_server_policy``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        twamp_server_enable_disable: NwAdminSt | str | None = None,
+        annotation: str | None = None,
+        description: str | None = None,
+        twamp_server_inactivity_timer: int | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        twamp_server_port_number: int | None = None,
+        userdom: str | None = None,
+    ) -> TwampServerPolicyCursor:
+        """Set ``twampServerPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class VpcDomainPolicyCursor(_FabricMakers, _UniMakers):
+    """Typed cursor for ``vpcInstPol`` (vpc_domain_policy level).
+
+    Position: ``uni.fabric.vpc_domain_policy``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        peer_dead_interval: int | None = None,
+        delay_restore_tmr: int | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> VpcDomainPolicyCursor:
+        """Set ``vpcInstPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
 class _VpcProtectionMakers(Cursor):
     """Makers declared at the vpc_protection level (``fabricProtPol``)."""
 
@@ -1264,6 +9416,329 @@ class VpcProtectionCursor(_VpcProtectionMakers, _FabricMakers, _UniMakers):
         userdom: str | None = None,
     ) -> VpcProtectionCursor:
         """Set ``fabricProtPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class _FabricVspanDestinationGroupMakers(Cursor):
+    """Makers declared at the vspan_destination_group level (``spanVDestGrp``)."""
+
+    __slots__ = ()
+
+    def vspan_vdestination(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> FabricVspanDestinationGroupVspanVdestinationCursor:
+        """Declare a ``spanVDest`` child under the vspan_destination_group level.
+
+        The VSPAN destination is where network traffic is sent for analysis by a network analyzer. A
+        VSPAN destination can be local or remote (VERSPAN). When you create a traffic monitoring
+        session, you must select a VSPAN source and a VSPAN destination.
+
+        Args:
+            name: The name of the destination.
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "FabricVspanDestinationGroupVspanVdestinationCursor",
+            self._invoke_maker("vspan_vdestination", (name,), _prune(params)),
+        )
+
+
+class FabricVspanDestinationGroupCursor(
+    _FabricVspanDestinationGroupMakers, _FabricMakers, _UniMakers
+):
+    """Typed cursor for ``spanVDestGrp`` (vspan_destination_group level).
+
+    Position: ``uni.fabric.vspan_destination_group``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> FabricVspanDestinationGroupCursor:
+        """Set ``spanVDestGrp`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class _FabricVspanSessionMakers(Cursor):
+    """Makers declared at the vspan_session level (``spanVSrcGrp``)."""
+
+    __slots__ = ()
+
+    def vspan_vsource(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        direction_ingress_egress_both: SpanDirection | str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> FabricVspanSessionVspanVsourceCursor:
+        """Declare a ``spanVSrc`` child under the vspan_session level.
+
+        The VSPAN source, which is where traffic is sampled. A VSPAN source can be an endpoint group
+        (EPG), one or more ports, or port traffic filtered by an EPG (Access VSPAN), a Layer 2
+        bridge domain, or a Layer 3 context (Fabric VSPAN).
+
+        Args:
+            name: The name of the source.
+            description: Specifies a description of the policy definition.
+            direction_ingress_egress_both: The direction of the packets to monitor Values:
+                ``both``, ``in``, ``out``. Default: ``both``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "FabricVspanSessionVspanVsourceCursor",
+            self._invoke_maker("vspan_vsource", (name,), _prune(params)),
+        )
+
+    def span_label(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        tag: PolColor | str | None = None,
+        userdom: str | None = None,
+    ) -> FabricVspanSessionSpanLabelCursor:
+        """Declare a ``spanSpanLbl`` child under the vspan_session level.
+
+        The SPAN label is used for SPAN label parameters.
+
+        Args:
+            name: The name of the label that is used to match SPAN sources with SPAN
+                destination(s).
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            tag: Specifies the color of a policy label. Values: ``alice-blue``, ``antique-
+                white``, ``aqua``, ``aquamarine``, ``azure``, ``beige``, ``bisque``, ``black``,
+                …. Default: ``alice-blue``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "FabricVspanSessionSpanLabelCursor",
+            self._invoke_maker("span_label", (name,), _prune(params)),
+        )
+
+
+class FabricVspanSessionCursor(_FabricVspanSessionMakers, _FabricMakers, _UniMakers):
+    """Typed cursor for ``spanVSrcGrp`` (vspan_session level).
+
+    Position: ``uni.fabric.vspan_session``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        admin_state: SpanAdminSt | str | None = None,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> FabricVspanSessionCursor:
+        """Set ``spanVSrcGrp`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class WwnInstPolicyCursor(_FabricMakers, _UniMakers):
+    """Typed cursor for ``wwnInstPol`` (wwn_inst_policy level).
+
+    Position: ``uni.fabric.wwn_inst_policy``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> WwnInstPolicyCursor:
+        """Set ``wwnInstPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class ZrPolicyCursor(_FabricMakers, _UniMakers):
+    """Typed cursor for ``xcvrZRFabIfPol`` (zr_policy level).
+
+    Position: ``uni.fabric.zr_policy``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        admin_st: XcvrOpticsAdminSt | str | None = None,
+        annotation: str | None = None,
+        chromatic_dispersion_maximum: int | None = None,
+        chromatic_dispersion_minimum: int | None = None,
+        dac_rate: L1DACRateZR | str | None = None,
+        description: str | None = None,
+        dwdm_carrier_grid_selector: L1dwdmCarrierZR | str | None = None,
+        fec_mode: L1FECModeZR | str | None = None,
+        frequency100_m_hz: int | None = None,
+        frequency50_g_hz: int | None = None,
+        itu_channel50_g_hz: int | None = None,
+        modulation: L1ModulationZR | str | None = None,
+        muxponder_mode: L1MuxponderZR | str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        transmitted_power: int | None = None,
+        userdom: str | None = None,
+        wavelength50_g_hz: int | None = None,
+    ) -> ZrPolicyCursor:
+        """Set ``xcvrZRFabIfPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class ZrpPolicyCursor(_FabricMakers, _UniMakers):
+    """Typed cursor for ``xcvrZRPFabIfPol`` (zrp_policy level).
+
+    Position: ``uni.fabric.zrp_policy``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        admin_st: XcvrOpticsAdminSt | str | None = None,
+        annotation: str | None = None,
+        chromatic_dispersion_maximum: int | None = None,
+        chromatic_dispersion_minimum: int | None = None,
+        dac_rate: L1DACRateZRP | str | None = None,
+        description: str | None = None,
+        dwdm_carrier_grid_selector: L1dwdmCarrierZRP | str | None = None,
+        fec_mode: L1FECModeZRP | str | None = None,
+        frequency100_m_hz: int | None = None,
+        frequency50_g_hz: int | None = None,
+        itu_channel50_g_hz: int | None = None,
+        modulation: L1ModulationZRP | str | None = None,
+        muxponder_mode: L1MuxponderZRP | str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        transmitted_power: int | None = None,
+        userdom: str | None = None,
+        wavelength50_g_hz: int | None = None,
+    ) -> ZrpPolicyCursor:
+        """Set ``xcvrZRPFabIfPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class AnalyticsClusterCursor(_AnalyticsPolicyContainerMakers, _FabricMakers, _UniMakers):
+    """Typed cursor for ``analyticsCluster`` (analytics_cluster level).
+
+    Position: ``uni.fabric.analytics_policy_container.analytics_cluster``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> AnalyticsClusterCursor:
+        """Set ``analyticsCluster`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
         return self
@@ -1363,6 +9838,373 @@ class RouteReflectorCursor(_RouteReflectorMakers, _BgpInstanceMakers, _FabricMak
         return self
 
 
+class CallhomeDestinationCursor(_CallhomeDestinationGroupMakers, _FabricMakers, _UniMakers):
+    """Typed cursor for ``callhomeDest`` (callhome_destination level).
+
+    Position: ``uni.fabric.callhome_destination_group.callhome_destination``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        admin_state: MonAdminState | str | None = None,
+        annotation: str | None = None,
+        description: str | None = None,
+        destination_email_address: str | None = None,
+        message_format: CallhomeMsgFormat | str | None = None,
+        maximum_size: int | None = None,
+        display_name: str | None = None,
+        message_format_rfc_compliant: bool | None = None,
+        severity_level: CallhomeUrgency | str | None = None,
+        userdom: str | None = None,
+    ) -> CallhomeDestinationCursor:
+        """Set ``callhomeDest`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class CallhomeDestinationGroupCallhomeProtocolProfileCursor(
+    _CallhomeDestinationGroupMakers, _FabricMakers, _UniMakers
+):
+    """Typed cursor for ``callhomeProf`` (callhome_protocol_profile level).
+
+    Position: ``uni.fabric.callhome_destination_group.callhome_protocol_profile``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        contact_address: str | None = None,
+        admin_state: MonAdminState | str | None = None,
+        annotation: str | None = None,
+        contact_name: str | None = None,
+        contract_number: str | None = None,
+        customer_name: str | None = None,
+        description: str | None = None,
+        contact_email: str | None = None,
+        from_: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        contact_phone: str | None = None,
+        port: int | None = None,
+        password: str | None = None,
+        replyto_address: str | None = None,
+        secure_smtp: bool | None = None,
+        site: str | None = None,
+        userdom: str | None = None,
+        username: str | None = None,
+    ) -> CallhomeDestinationGroupCallhomeProtocolProfileCursor:
+        """Set ``callhomeProf`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class QueryCursor(_CallhomeQueryGroupMakers, _FabricMakers, _UniMakers):
+    """Typed cursor for ``callhomeQuery`` (query level).
+
+    Position: ``uni.fabric.callhome_query_group.query``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        value: str | None = None,
+        display_name: str | None = None,
+        response_depth: ConfigRspSubtreeDepth | str | None = None,
+        response_data: frozenset[ConfigRspSubtreeInclude]
+        | set[ConfigRspSubtreeInclude]
+        | str
+        | None = None,
+        query_target: ConfigQueryTarget | str | None = None,
+        query_type: ConfigQueryType | str | None = None,
+        userdom: str | None = None,
+    ) -> QueryCursor:
+        """Set ``callhomeQuery`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class CommunicationSetupCursor(_CommunicationPolicyMakers, _FabricMakers, _UniMakers):
+    """Typed cursor for ``commSetup`` (communication_setup level).
+
+    Position: ``uni.fabric.communication_policy.communication_setup``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        maximum_mos_in_query: int | None = None,
+        userdom: str | None = None,
+    ) -> CommunicationSetupCursor:
+        """Set ``commSetup`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class HttpServiceCursor(_CommunicationPolicyMakers, _FabricMakers, _UniMakers):
+    """Typed cursor for ``commHttp`` (http_service level).
+
+    Position: ``uni.fabric.communication_policy.http_service``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        access_control_allow_credential: CommAllowCredentialState | str | None = None,
+        access_control_allow_origins: str | None = None,
+        admin_state: CommAdminState | str | None = None,
+        annotation: str | None = None,
+        cli_only_mode: CommCliOnlyMode | str | None = None,
+        description: str | None = None,
+        global_throttle_rate: int | None = None,
+        global_throttle_st: CommAdminState | str | None = None,
+        unit_of_rate_limit: str | None = None,
+        max_request_status_count: int | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        node_exporter_service: CommNodeExporter | str | None = None,
+        port: int | None = None,
+        redirect_state: CommRedirect | str | None = None,
+        server_header_response: CommServerHeader | str | None = None,
+        throttle_rate: int | None = None,
+        login_refresh_throttle_state: CommAdminState | str | None = None,
+        userdom: str | None = None,
+        visore_access: CommVisoreAccess | str | None = None,
+    ) -> HttpServiceCursor:
+        """Set ``commHttp`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class _HttpSslConfigurationMakers(Cursor):
+    """Makers declared at the http_ssl_configuration level (``commHttps``)."""
+
+    __slots__ = ()
+
+    def ssl_cipher(
+        self,
+        cipher_name: str,
+        *,
+        annotation: str | None = None,
+        cipher_state: CommCipherState | str | None = None,
+        userdom: str | None = None,
+    ) -> SslCipherCursor:
+        """Declare a ``commCipher`` child under the http_ssl_configuration level.
+
+        Args:
+            cipher_name: An object identifier.
+            annotation: User annotation. Suggested format orchestrator:value
+            cipher_state: The state of the relationship. Values: ``disabled``, ``enabled``.
+                Default: ``enabled``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "cipher_name",
+            )
+        }
+        return cast(
+            "SslCipherCursor",
+            self._invoke_maker("ssl_cipher", (cipher_name,), _prune(params)),
+        )
+
+
+class HttpSslConfigurationCursor(
+    _HttpSslConfigurationMakers, _CommunicationPolicyMakers, _FabricMakers, _UniMakers
+):
+    """Typed cursor for ``commHttps`` (http_ssl_configuration level).
+
+    Position: ``uni.fabric.communication_policy.http_ssl_configuration``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        access_control_allow_credential: CommAllowCredentialState | str | None = None,
+        access_control_allow_origins: str | None = None,
+        admin_state: CommAdminState | str | None = None,
+        annotation: str | None = None,
+        cli_only_mode: CommCliOnlyMode | str | None = None,
+        client_cert_auth_state: CommAdminState | str | None = None,
+        description: str | None = None,
+        global_throttle_rate: int | None = None,
+        global_throttle_st: CommAdminState | str | None = None,
+        unit_of_rate_limit: str | None = None,
+        max_request_status_count: int | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        node_exporter_service: CommNodeExporter | str | None = None,
+        port: int | None = None,
+        referer: str | None = None,
+        server_header: CommServerHeader | str | None = None,
+        ssl_protocols: frozenset[CommSslProtocolTypes]
+        | set[CommSslProtocolTypes]
+        | str
+        | None = None,
+        throttle_rate: int | None = None,
+        login_refresh_throttle_state: CommAdminState | str | None = None,
+        userdom: str | None = None,
+        visore_access: CommVisoreAccess | str | None = None,
+    ) -> HttpSslConfigurationCursor:
+        """Set ``commHttps`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class ResponseTimeCursor(_CommunicationPolicyMakers, _FabricMakers, _UniMakers):
+    """Typed cursor for ``commApiRespTime`` (response_time level).
+
+    Position: ``uni.fabric.communication_policy.response_time``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        calc_window: int | None = None,
+        admin_state: CommAdminState | str | None = None,
+        resp_time_threshold: int | None = None,
+        set_the_value_for_n_in_top_n_requests: int | None = None,
+        userdom: str | None = None,
+    ) -> ResponseTimeCursor:
+        """Set ``commApiRespTime`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class RestartCursor(_CommunicationPolicyMakers, _FabricMakers, _UniMakers):
+    """Typed cursor for ``commReconfig`` (restart level).
+
+    Position: ``uni.fabric.communication_policy.restart``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        toggle_state_for_nginx_process_restart: CommRedirect | str | None = None,
+        userdom: str | None = None,
+    ) -> RestartCursor:
+        """Set ``commReconfig`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class ShellinaboxServiceCursor(_CommunicationPolicyMakers, _FabricMakers, _UniMakers):
+    """Typed cursor for ``commShellinabox`` (shellinabox_service level).
+
+    Position: ``uni.fabric.communication_policy.shellinabox_service``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        admin_state: CommAdminState | str | None = None,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> ShellinaboxServiceCursor:
+        """Set ``commShellinabox`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class SshServiceCursor(_CommunicationPolicyMakers, _FabricMakers, _UniMakers):
+    """Typed cursor for ``commSsh`` (ssh_service level).
+
+    Position: ``uni.fabric.communication_policy.ssh_service``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        admin_state: CommAdminState | str | None = None,
+        annotation: str | None = None,
+        description: str | None = None,
+        kex_algorithms: frozenset[CommKexAlgorithmTypes]
+        | set[CommKexAlgorithmTypes]
+        | str
+        | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        password_auth_state: CommAdminState | str | None = None,
+        port: int | None = None,
+        ssh_ciphers: frozenset[CommSshCipherTypes] | set[CommSshCipherTypes] | str | None = None,
+        ssh_macs: frozenset[CommSshMacTypes] | set[CommSshMacTypes] | str | None = None,
+        userdom: str | None = None,
+    ) -> SshServiceCursor:
+        """Set ``commSsh`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
 class NtpProviderCursor(_DatetimePolicyMakers, _FabricMakers, _UniMakers):
     """Typed cursor for ``datetimeNtpProv`` (ntp_provider level).
 
@@ -1440,6 +10282,2537 @@ class DnsProfileProviderCursor(_DnsProfileMakers, _FabricMakers, _UniMakers):
         userdom: str | None = None,
     ) -> DnsProfileProviderCursor:
         """Set ``dnsProv`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class FirmwareGroupNodeBlockCursor(_FirmwareGroupMakers, _FabricMakers, _UniMakers):
+    """Typed cursor for ``fabricNodeBlk`` (node_block level).
+
+    Position: ``uni.fabric.firmware_group.node_block``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        from_node_id: int | None = None,
+        display_name: str | None = None,
+        to_node_id: int | None = None,
+        userdom: str | None = None,
+    ) -> FirmwareGroupNodeBlockCursor:
+        """Set ``fabricNodeBlk`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class CcoFirmwareSourceCursor(_FirmwareRepositoryProfileMakers, _FabricMakers, _UniMakers):
+    """Typed cursor for ``firmwareCcoSource`` (cco_firmware_source level).
+
+    Position: ``uni.fabric.firmware_repository_profile.cco_firmware_source``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        authentication_type: FirmwareAuthPass | str | None = None,
+        authentication_type_choice: FirmwareAuthenticationType | str | None = None,
+        description: str | None = None,
+        variable_to_reuse_download_task: bool | None = None,
+        ssh_private_key_content: str | None = None,
+        ssh_private_key_passphrase: str | None = None,
+        ssh_public_key_content: str | None = None,
+        load_catalog_if_exists_and_newer: bool | None = None,
+        display_name: str | None = None,
+        password: str | None = None,
+        polling_interval: int | None = None,
+        protocol: FirmwareDownloadProtocol | str | None = None,
+        url: str | None = None,
+        username: str | None = None,
+        userdom: str | None = None,
+    ) -> CcoFirmwareSourceCursor:
+        """Set ``firmwareCcoSource`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class FirmwareDownloadTaskCursor(_FirmwareRepositoryProfileMakers, _FabricMakers, _UniMakers):
+    """Typed cursor for ``firmwareOSource`` (firmware_download_task level).
+
+    Position: ``uni.fabric.firmware_repository_profile.firmware_download_task``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        authentication_type: FirmwareAuthPass | str | None = None,
+        authentication_type_choice: FirmwareAuthenticationType | str | None = None,
+        description: str | None = None,
+        variable_to_reuse_download_task: bool | None = None,
+        ssh_private_key_content: str | None = None,
+        ssh_private_key_passphrase: str | None = None,
+        ssh_public_key_content: str | None = None,
+        load_catalog_if_exists_and_newer: bool | None = None,
+        display_name: str | None = None,
+        password: str | None = None,
+        polling_interval: int | None = None,
+        protocol: FirmwareDownloadProtocol | str | None = None,
+        url: str | None = None,
+        username: str | None = None,
+        userdom: str | None = None,
+    ) -> FirmwareDownloadTaskCursor:
+        """Set ``firmwareOSource`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class InternalFirmwareSourceCursor(_FirmwareRepositoryProfileMakers, _FabricMakers, _UniMakers):
+    """Typed cursor for ``firmwareInternalSource`` (internal_firmware_source level).
+
+    Position: ``uni.fabric.firmware_repository_profile.internal_firmware_source``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        authentication_type: FirmwareAuthPass | str | None = None,
+        authentication_type_choice: FirmwareAuthenticationType | str | None = None,
+        description: str | None = None,
+        variable_to_reuse_download_task: bool | None = None,
+        ssh_private_key_content: str | None = None,
+        ssh_private_key_passphrase: str | None = None,
+        ssh_public_key_content: str | None = None,
+        load_catalog_if_exists_and_newer: bool | None = None,
+        display_name: str | None = None,
+        password: str | None = None,
+        polling_interval: int | None = None,
+        protocol: FirmwareDownloadProtocol | str | None = None,
+        url: str | None = None,
+        username: str | None = None,
+        userdom: str | None = None,
+    ) -> InternalFirmwareSourceCursor:
+        """Set ``firmwareInternalSource`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class ExternalServerCursor(_FlowCollectorPolicyMakers, _FabricMakers, _UniMakers):
+    """Typed cursor for ``telemetryExternalServer`` (external_server level).
+
+    Position: ``uni.fabric.flow_collector_policy.external_server``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        admin_state: TelemetryAdminState | str | None = None,
+        annotation: str | None = None,
+        user_grpc_certificate: str | None = None,
+        hostname_associated_with_the_certificate: str | None = None,
+        remote_port: int | str | None = None,
+        userdom: str | None = None,
+    ) -> ExternalServerCursor:
+        """Set ``telemetryExternalServer`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class FteEventsCursor(_FlowCollectorPolicyMakers, _FabricMakers, _UniMakers):
+    """Typed cursor for ``telemetryFteEventSetP`` (fte_events level).
+
+    Position: ``uni.fabric.flow_collector_policy.fte_events``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        acl_drops: bool | None = None,
+        sub_event_configuration_for_acl_span: bool | None = None,
+        analytics_changed_bit: bool | None = None,
+        analytics_changed_count: int | None = None,
+        analytics_changed_limit: int | None = None,
+        annotation: str | None = None,
+        black_hole: bool | None = None,
+        buffer_drops: bool | None = None,
+        description: str | None = None,
+        configure_fte_drop_events_flow_count: int | None = None,
+        configure_fte_event_export_max_value: int | None = None,
+        export_flow_bit: bool | None = None,
+        configure_fte_export_flow_bucket_count: int | None = None,
+        configure_fte_export_flow_bucket_limit: int | None = None,
+        first_packet_bit: bool | None = None,
+        configure_fte_first_packet_bucket_count: int | None = None,
+        configure_fte_first_packet_bucket_limit: int | None = None,
+        flow_type: int | None = None,
+        fwd_drops: bool | None = None,
+        group_drop_events: bool | None = None,
+        group_latency_events: bool | None = None,
+        configure_fte_latency_bucket_count: int | None = None,
+        configure_fte_latency_events_flow_count: int | None = None,
+        configure_fte_latency_bucket_limit: int | None = None,
+        configure_fte_latency_threshold_limit: int | None = None,
+        configure_fte_latency_threshold_unit: TelemetryLatencyUnit | str | None = None,
+        mouse_packet_bit: bool | None = None,
+        configure_fte_mouse_packet_bucket_count: int | None = None,
+        configure_fte_mouse_packet_bucket_limit: int | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        packet_disposition: bool | None = None,
+        packet_disposition_ids_drop: bool | None = None,
+        packet_disposition_policing_drop: bool | None = None,
+        packet_disposition_policy_applied: bool | None = None,
+        packet_disposition_policy_copy: bool | None = None,
+        packet_disposition_policy_drop: bool | None = None,
+        packet_disposition_policy_redirect: bool | None = None,
+        packet_disposition_rpf_port_sec_fail: bool | None = None,
+        packet_length: int | None = None,
+        packet_value_match_bit: bool | None = None,
+        packet_value_match_count: int | None = None,
+        packet_value_match_limit: int | None = None,
+        ping_of_death: bool | None = None,
+        receive_window_zero: bool | None = None,
+        configure_fte_rtt_ack_bucket_count: int | None = None,
+        configure_fte_rtt_ack_bucket_limit: int | None = None,
+        rtt_sample_ack_bit: bool | None = None,
+        rtt_sample_seq_bit: bool | None = None,
+        table_full_bit: bool | None = None,
+        configure_fte_table_full_bucket_count: int | None = None,
+        configure_fte_table_full_bucket_limit: int | None = None,
+        ttl_match_enable: bool | None = None,
+        ttl_match_value: int | None = None,
+        userdom: str | None = None,
+    ) -> FteEventsCursor:
+        """Set ``telemetryFteEventSetP`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class ControllerPolicyGroupCursor(_FunctionProfileMakers, _FabricMakers, _UniMakers):
+    """Typed cursor for ``fabricCtrlrPGrp`` (controller_policy_group level).
+
+    Position: ``uni.fabric.function_profile.controller_policy_group``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> ControllerPolicyGroupCursor:
+        """Set ``fabricCtrlrPGrp`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class LeafFabricPortPolicyGroupCursor(_FunctionProfileMakers, _FabricMakers, _UniMakers):
+    """Typed cursor for ``fabricLePortPGrp`` (leaf_fabric_port_policy_group level).
+
+    Position: ``uni.fabric.function_profile.leaf_fabric_port_policy_group``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> LeafFabricPortPolicyGroupCursor:
+        """Set ``fabricLePortPGrp`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        link_level: str | Ref | None = None,
+        link_flap: str | Ref | None = None,
+        l3_interface: str | Ref | None = None,
+        macsec: str | Ref | None = None,
+        dwdm: str | Ref | None = None,
+        zr: str | Ref | None = None,
+    ) -> LeafFabricPortPolicyGroupCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        zr: str | Ref | None = None,
+    ) -> LeafFabricPortPolicyGroupCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class LeafModulePolicyGroupCursor(_FunctionProfileMakers, _FabricMakers, _UniMakers):
+    """Typed cursor for ``fabricLeCardPGrp`` (leaf_module_policy_group level).
+
+    Position: ``uni.fabric.function_profile.leaf_module_policy_group``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> LeafModulePolicyGroupCursor:
+        """Set ``fabricLeCardPGrp`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class LeafSwitchPolicyGroupCursor(_FunctionProfileMakers, _FabricMakers, _UniMakers):
+    """Typed cursor for ``fabricLeNodePGrp`` (leaf_switch_policy_group level).
+
+    Position: ``uni.fabric.function_profile.leaf_switch_policy_group``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> LeafSwitchPolicyGroupCursor:
+        """Set ``fabricLeNodePGrp`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        psu_redundancy: str | Ref | None = None,
+        node_control: str | Ref | None = None,
+    ) -> LeafSwitchPolicyGroupCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+
+class PodPolicyGroupCursor(_FunctionProfileMakers, _FabricMakers, _UniMakers):
+    """Typed cursor for ``fabricPodPGrp`` (pod_policy_group level).
+
+    Position: ``uni.fabric.function_profile.pod_policy_group``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> PodPolicyGroupCursor:
+        """Set ``fabricPodPGrp`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class SpineFabricPortPolicyGroupCursor(_FunctionProfileMakers, _FabricMakers, _UniMakers):
+    """Typed cursor for ``fabricSpPortPGrp`` (spine_fabric_port_policy_group level).
+
+    Position: ``uni.fabric.function_profile.spine_fabric_port_policy_group``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> SpineFabricPortPolicyGroupCursor:
+        """Set ``fabricSpPortPGrp`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        link_level: str | Ref | None = None,
+        l3_interface: str | Ref | None = None,
+        macsec: str | Ref | None = None,
+    ) -> SpineFabricPortPolicyGroupCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+
+class SpineModulePolicyGroupCursor(_FunctionProfileMakers, _FabricMakers, _UniMakers):
+    """Typed cursor for ``fabricSpCardPGrp`` (spine_module_policy_group level).
+
+    Position: ``uni.fabric.function_profile.spine_module_policy_group``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> SpineModulePolicyGroupCursor:
+        """Set ``fabricSpCardPGrp`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class SpineSwitchPolicyGroupCursor(_FunctionProfileMakers, _FabricMakers, _UniMakers):
+    """Typed cursor for ``fabricSpNodePGrp`` (spine_switch_policy_group level).
+
+    Position: ``uni.fabric.function_profile.spine_switch_policy_group``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> SpineSwitchPolicyGroupCursor:
+        """Set ``fabricSpNodePGrp`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        node_control: str | Ref | None = None,
+    ) -> SpineSwitchPolicyGroupCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+
+class _GeoBuildingMakers(Cursor):
+    """Makers declared at the geo_building level (``geoBuilding``)."""
+
+    __slots__ = ()
+
+    def geo_floor(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> GeoFloorCursor:
+        """Declare a ``geoFloor`` child under the geo_building level.
+
+        The floor number of the building where the node is located.
+
+        Args:
+            name: The floor name. The name can be up to 64 characters and must begin with an
+                alphanumeric character. The name can only contain alphanumeric characters and
+                the following symbols: - . : _
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "GeoFloorCursor",
+            self._invoke_maker("geo_floor", (name,), _prune(params)),
+        )
+
+
+class GeoBuildingCursor(_GeoBuildingMakers, _GeoSiteMakers, _FabricMakers, _UniMakers):
+    """Typed cursor for ``geoBuilding`` (geo_building level).
+
+    Position: ``uni.fabric.geo_site.geo_building``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> GeoBuildingCursor:
+        """Set ``geoBuilding`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class IsisLevelCursor(_IsisDomainPolicyMakers, _FabricMakers, _UniMakers):
+    """Typed cursor for ``isisLvlComp`` (isis_level level).
+
+    Position: ``uni.fabric.isis_domain_policy.isis_level``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        lsp_fast_flood: IsisLspFastFloodMode | str | None = None,
+        lsp_generation_initial_wait_inerval: int | None = None,
+        lsp_generation_maximal_wait_inerval: int | None = None,
+        lsp_generation_secondary_wait_inerval: int | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        spf_comp_init_intvl: int | None = None,
+        spf_comp_max_intvl: int | None = None,
+        spf_comp_sec_intvl: int | None = None,
+        userdom: str | None = None,
+    ) -> IsisLevelCursor:
+        """Set ``isisLvlComp`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class _LeafFabricPortSelectorMakers(Cursor):
+    """Makers declared at the leaf_fabric_port_selector level (``fabricLFPortS``)."""
+
+    __slots__ = ()
+
+    def port_block(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        from_module_id: int | None = None,
+        from_port_id: int | None = None,
+        display_name: str | None = None,
+        to_module_id: int | None = None,
+        to_port_id: int | None = None,
+        userdom: str | None = None,
+    ) -> LeafFabricPortSelectorPortBlockCursor:
+        """Declare a ``fabricPortBlk`` child under the leaf_fabric_port_selector level.
+
+        A port block. This represents a range of ports and a range of cards. Each port block starts
+        with the first port and first card and ends with the last port and last card.
+
+        Args:
+            name: Naming property — forms the object's RN.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: The description of this configuration item.
+            from_module_id: Default: ``1``.
+            from_port_id: Default: ``1``.
+            to_module_id: Default: ``1``.
+            to_port_id: Default: ``1``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "LeafFabricPortSelectorPortBlockCursor",
+            self._invoke_maker("port_block", (name,), _prune(params)),
+        )
+
+    def fabric_sub_port_block(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        from_module_id: int | None = None,
+        from_port_id: int | None = None,
+        from_sub_port_id: int | None = None,
+        display_name: str | None = None,
+        to_module_id: int | None = None,
+        to_port_id: int | None = None,
+        to_sub_port_id: int | None = None,
+        userdom: str | None = None,
+    ) -> LeafFabricPortSelectorFabricSubPortBlockCursor:
+        """Declare a ``fabricSubPortBlk`` child under the leaf_fabric_port_selector level.
+
+        Fabric sub port (breakout) block
+
+        Args:
+            name: The name of the object.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: The description of this configuration item.
+            from_module_id: Default: ``1``.
+            from_port_id: Default: ``1``.
+            from_sub_port_id: Default: ``1``.
+            to_module_id: Default: ``1``.
+            to_port_id: Default: ``1``.
+            to_sub_port_id: Default: ``1``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "LeafFabricPortSelectorFabricSubPortBlockCursor",
+            self._invoke_maker("fabric_sub_port_block", (name,), _prune(params)),
+        )
+
+
+class LeafFabricPortSelectorCursor(
+    _LeafFabricPortSelectorMakers, _LeafFabricInterfaceProfileMakers, _FabricMakers, _UniMakers
+):
+    """Typed cursor for ``fabricLFPortS`` (leaf_fabric_port_selector level).
+
+    Position: ``uni.fabric.leaf_fabric_interface_profile.leaf_fabric_port_selector``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> LeafFabricPortSelectorCursor:
+        """Set ``fabricLFPortS`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        policy_group: str | Ref | None = None,
+    ) -> LeafFabricPortSelectorCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        policy_group: str | Ref | None = None,
+    ) -> LeafFabricPortSelectorCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class LeafModuleSelectorCursor(_LeafModuleProfileMakers, _FabricMakers, _UniMakers):
+    """Typed cursor for ``fabricLeCardS`` (leaf_module_selector level).
+
+    Position: ``uni.fabric.leaf_module_profile.leaf_module_selector``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> LeafModuleSelectorCursor:
+        """Set ``fabricLeCardS`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        policy_group: str | Ref | None = None,
+    ) -> LeafModuleSelectorCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        policy_group: str | Ref | None = None,
+    ) -> LeafModuleSelectorCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class _SwitchAssociationMakers(Cursor):
+    """Makers declared at the switch_association level (``fabricLeafS``)."""
+
+    __slots__ = ()
+
+    def node_block(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        from_node_id: int | None = None,
+        display_name: str | None = None,
+        to_node_id: int | None = None,
+        userdom: str | None = None,
+    ) -> SwitchAssociationNodeBlockCursor:
+        """Declare a ``fabricNodeBlk`` child under the switch_association level.
+
+        The node block. This is a range of nodes. Each node block begins with the first port and
+        ends with the last port.
+
+        Args:
+            name: The name of the node block.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: The description of this configuration item.
+            from_node_id: Default: ``1``.
+            to_node_id: Default: ``1``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "SwitchAssociationNodeBlockCursor",
+            self._invoke_maker("node_block", (name,), _prune(params)),
+        )
+
+
+class SwitchAssociationCursor(
+    _SwitchAssociationMakers, _LeafSwitchProfileMakers, _FabricMakers, _UniMakers
+):
+    """Typed cursor for ``fabricLeafS`` (switch_association level).
+
+    Position: ``uni.fabric.leaf_switch_profile.switch_association``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> SwitchAssociationCursor:
+        """Set ``fabricLeafS`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        policy_group: str | Ref | None = None,
+        interface_profile: str | Ref | None = None,
+    ) -> SwitchAssociationCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        policy_group: str | Ref | None = None,
+        interface_profile: str | Ref | None = None,
+    ) -> SwitchAssociationCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class _MacsecFabricKeychainPolicyMakers(Cursor):
+    """Makers declared at the keychain_policy level (``macsecKeyChainPol``)."""
+
+    __slots__ = ()
+
+    def key_policy(
+        self,
+        key_name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        end_time: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        pre_shared_key: str | None = None,
+        start_time: str | None = None,
+        userdom: str | None = None,
+    ) -> MacsecFabricKeychainPolicyKeyPolicyCursor:
+        """Declare a ``macsecKeyPol`` child under the keychain_policy level.
+
+        MACSEC Key Policy
+
+        Args:
+            key_name: key name
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            end_time: end time
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            pre_shared_key: pre-shared key
+            start_time: start-time
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "key_name",
+            )
+        }
+        return cast(
+            "MacsecFabricKeychainPolicyKeyPolicyCursor",
+            self._invoke_maker("key_policy", (key_name,), _prune(params)),
+        )
+
+
+class MacsecFabricKeychainPolicyCursor(
+    _MacsecFabricKeychainPolicyMakers, _MacsecFabricMakers, _FabricMakers, _UniMakers
+):
+    """Typed cursor for ``macsecKeyChainPol`` (keychain_policy level).
+
+    Position: ``uni.fabric.macsec_fabric.keychain_policy``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> MacsecFabricKeychainPolicyCursor:
+        """Set ``macsecKeyChainPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class MacsecFabricParametersPolicyCursor(_MacsecFabricMakers, _FabricMakers, _UniMakers):
+    """Typed cursor for ``macsecFabParamPol`` (parameters_policy level).
+
+    Position: ``uni.fabric.macsec_fabric.parameters_policy``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        cipher_suite: MacsecCipherSuite | str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        replay_window: int | None = None,
+        sak_expiry_time: int | str | None = None,
+        security_policy: MacsecSecPolicy | str | None = None,
+        userdom: str | None = None,
+    ) -> MacsecFabricParametersPolicyCursor:
+        """Set ``macsecFabParamPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class MaintenanceGroupNodeBlockCursor(_MaintenanceGroupMakers, _FabricMakers, _UniMakers):
+    """Typed cursor for ``fabricNodeBlk`` (node_block level).
+
+    Position: ``uni.fabric.maintenance_group.node_block``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        from_node_id: int | None = None,
+        display_name: str | None = None,
+        to_node_id: int | None = None,
+        userdom: str | None = None,
+    ) -> MaintenanceGroupNodeBlockCursor:
+        """Set ``fabricNodeBlk`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class MonCommonMonitoringPolicyCallhomeSourceCursor(
+    _MonCommonMonitoringPolicyMakers, _FabricMakers, _UniMakers
+):
+    """Typed cursor for ``callhomeSrc`` (callhome_source level).
+
+    Position: ``uni.fabric.mon_common_monitoring_policy.callhome_source``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        include_action: frozenset[MonInclAction] | set[MonInclAction] | str | None = None,
+        display_name: str | None = None,
+        message_severity: CallhomeUrgency | str | None = None,
+        userdom: str | None = None,
+    ) -> MonCommonMonitoringPolicyCallhomeSourceCursor:
+        """Set ``callhomeSrc`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class _MonCommonMonitoringPolicyEventSeverityAssignmentPolicyMakers(Cursor):
+    """Makers declared at the event_severity_assignment_policy level (``eventSevAsnP``)."""
+
+    __slots__ = ()
+
+    def syslog_source(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        include_action: frozenset[MonInclAction] | set[MonInclAction] | str | None = None,
+        min_severity: SyslogSeverity | str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> MonCommonMonitoringPolicyEventSeverityAssignmentPolicySyslogSourceCursor:
+        """Declare a ``syslogSrc`` child under the event_severity_assignment_policy level.
+
+        The syslog source configures a syslog source that specifies the minimum severity of items to
+        be sent as syslog messages to the syslog servers in the destination group.
+
+        Args:
+            name: The name for the system logging source.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            include_action: Default: ``PydanticUndefined``.
+            min_severity: The minimum severity level of messages to be sent. Values: ``alerts``,
+                ``critical``, ``debugging``, ``emergencies``, ``errors``, ``information``,
+                ``notifications``, ``warnings``. Default: ``warnings``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "MonCommonMonitoringPolicyEventSeverityAssignmentPolicySyslogSourceCursor",
+            self._invoke_maker("syslog_source", (name,), _prune(params)),
+        )
+
+    def snmp_source(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        include_action: frozenset[MonInclAction] | set[MonInclAction] | str | None = None,
+        min_severity: ConditionSeverity | str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> MonCommonMonitoringPolicyEventSeverityAssignmentPolicySnmpSourceCursor:
+        """Declare a ``snmpSrc`` child under the event_severity_assignment_policy level.
+
+        The SNMP source profile determines the fault information, severity level, and destination
+        for sending messages to the SNMP destination. SNMP is an application-layer protocol that
+        provides a message format for communication between SNMP managers and agents.
+
+        Args:
+            name: The name for the SNMP source. This name can be between 1 and 64 alphanumeric
+                characters.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            include_action: The options to include for the SNMP source. Default:
+                ``PydanticUndefined``.
+            min_severity: The minimum severity level of SNMP traps. SNMP traps enable an agent
+                to notify the management station of significant events by way of an unsolicited
+                SNMP message. Values: ``cleared``, ``critical``, ``info``, ``major``, ``minor``,
+                ``warning``. Default: ``info``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "MonCommonMonitoringPolicyEventSeverityAssignmentPolicySnmpSourceCursor",
+            self._invoke_maker("snmp_source", (name,), _prune(params)),
+        )
+
+    def callhome_source(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        include_action: frozenset[MonInclAction] | set[MonInclAction] | str | None = None,
+        display_name: str | None = None,
+        message_severity: CallhomeUrgency | str | None = None,
+        userdom: str | None = None,
+    ) -> MonCommonMonitoringPolicyEventSeverityAssignmentPolicyCallhomeSourceCursor:
+        """Declare a ``callhomeSrc`` child under the event_severity_assignment_policy level.
+
+        The call home source profile determines the information to deliver and the urgency level for
+        sending email-based alert notifications to a call home destination. A range of message
+        formats are available for compatibility with pager services or XML-based automated parsing
+        applications.
+
+        Args:
+            name: The name for the source.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            include_action: Default: ``PydanticUndefined``.
+            message_severity: The severity level for messages generated from a specific source.
+                Values: ``alert``, ``critical``, ``debug``, ``emergency``, ``error``, ``info``,
+                ``notice``, ``warning``. Default: ``alert``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "MonCommonMonitoringPolicyEventSeverityAssignmentPolicyCallhomeSourceCursor",
+            self._invoke_maker("callhome_source", (name,), _prune(params)),
+        )
+
+    def smart_callhome_source(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> MonCommonMonitoringPolicyEventSeverityAssignmentPolicySmartCallhomeSourceCursor:
+        """Declare a ``callhomeSmartSrc`` child under the event_severity_assignment_policy level.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "MonCommonMonitoringPolicyEventSeverityAssignmentPolicySmartCallhomeSourceCursor",
+            self._invoke_maker("smart_callhome_source", (), _prune(params)),
+        )
+
+    def tacacs_source(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        include_action: frozenset[MonInclAction] | set[MonInclAction] | str | None = None,
+        min_sev: ConditionSeverity | str | None = None,
+        display_name: str | None = None,
+        switch_tacacs_audit: TacacsSwitchTacacsAudit | str | None = None,
+        userdom: str | None = None,
+    ) -> MonCommonMonitoringPolicyEventSeverityAssignmentPolicyTacacsSourceCursor:
+        """Declare a ``tacacsSrc`` child under the event_severity_assignment_policy level.
+
+        Args:
+            name: The name of the object.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            include_action: The information to include for the call home source. Default:
+                ``PydanticUndefined``.
+            min_sev: Values: ``cleared``, ``critical``, ``info``, ``major``, ``minor``,
+                ``warning``. Default: ``info``.
+            switch_tacacs_audit: Values: ``disabled``, ``enabled``. Default: ``disabled``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "MonCommonMonitoringPolicyEventSeverityAssignmentPolicyTacacsSourceCursor",
+            self._invoke_maker("tacacs_source", (name,), _prune(params)),
+        )
+
+
+class MonCommonMonitoringPolicyEventSeverityAssignmentPolicyCursor(
+    _MonCommonMonitoringPolicyEventSeverityAssignmentPolicyMakers,
+    _MonCommonMonitoringPolicyMakers,
+    _FabricMakers,
+    _UniMakers,
+):
+    """Typed cursor for ``eventSevAsnP`` (event_severity_assignment_policy level).
+
+    Position: ``uni.fabric.mon_common_monitoring_policy.event_severity_assignment_policy``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        initial_severity: ConditionInitSevDir | str | None = None,
+        userdom: str | None = None,
+    ) -> MonCommonMonitoringPolicyEventSeverityAssignmentPolicyCursor:
+        """Set ``eventSevAsnP`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class _MonCommonMonitoringPolicyFaultSeverityAssignmentPolicyMakers(Cursor):
+    """Makers declared at the fault_severity_assignment_policy level (``faultSevAsnP``)."""
+
+    __slots__ = ()
+
+    def syslog_source(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        include_action: frozenset[MonInclAction] | set[MonInclAction] | str | None = None,
+        min_severity: SyslogSeverity | str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> MonCommonMonitoringPolicyFaultSeverityAssignmentPolicySyslogSourceCursor:
+        """Declare a ``syslogSrc`` child under the fault_severity_assignment_policy level.
+
+        The syslog source configures a syslog source that specifies the minimum severity of items to
+        be sent as syslog messages to the syslog servers in the destination group.
+
+        Args:
+            name: The name for the system logging source.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            include_action: Default: ``PydanticUndefined``.
+            min_severity: The minimum severity level of messages to be sent. Values: ``alerts``,
+                ``critical``, ``debugging``, ``emergencies``, ``errors``, ``information``,
+                ``notifications``, ``warnings``. Default: ``warnings``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "MonCommonMonitoringPolicyFaultSeverityAssignmentPolicySyslogSourceCursor",
+            self._invoke_maker("syslog_source", (name,), _prune(params)),
+        )
+
+    def snmp_source(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        include_action: frozenset[MonInclAction] | set[MonInclAction] | str | None = None,
+        min_severity: ConditionSeverity | str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> MonCommonMonitoringPolicyFaultSeverityAssignmentPolicySnmpSourceCursor:
+        """Declare a ``snmpSrc`` child under the fault_severity_assignment_policy level.
+
+        The SNMP source profile determines the fault information, severity level, and destination
+        for sending messages to the SNMP destination. SNMP is an application-layer protocol that
+        provides a message format for communication between SNMP managers and agents.
+
+        Args:
+            name: The name for the SNMP source. This name can be between 1 and 64 alphanumeric
+                characters.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            include_action: The options to include for the SNMP source. Default:
+                ``PydanticUndefined``.
+            min_severity: The minimum severity level of SNMP traps. SNMP traps enable an agent
+                to notify the management station of significant events by way of an unsolicited
+                SNMP message. Values: ``cleared``, ``critical``, ``info``, ``major``, ``minor``,
+                ``warning``. Default: ``info``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "MonCommonMonitoringPolicyFaultSeverityAssignmentPolicySnmpSourceCursor",
+            self._invoke_maker("snmp_source", (name,), _prune(params)),
+        )
+
+    def callhome_source(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        include_action: frozenset[MonInclAction] | set[MonInclAction] | str | None = None,
+        display_name: str | None = None,
+        message_severity: CallhomeUrgency | str | None = None,
+        userdom: str | None = None,
+    ) -> MonCommonMonitoringPolicyFaultSeverityAssignmentPolicyCallhomeSourceCursor:
+        """Declare a ``callhomeSrc`` child under the fault_severity_assignment_policy level.
+
+        The call home source profile determines the information to deliver and the urgency level for
+        sending email-based alert notifications to a call home destination. A range of message
+        formats are available for compatibility with pager services or XML-based automated parsing
+        applications.
+
+        Args:
+            name: The name for the source.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            include_action: Default: ``PydanticUndefined``.
+            message_severity: The severity level for messages generated from a specific source.
+                Values: ``alert``, ``critical``, ``debug``, ``emergency``, ``error``, ``info``,
+                ``notice``, ``warning``. Default: ``alert``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "MonCommonMonitoringPolicyFaultSeverityAssignmentPolicyCallhomeSourceCursor",
+            self._invoke_maker("callhome_source", (name,), _prune(params)),
+        )
+
+    def smart_callhome_source(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> MonCommonMonitoringPolicyFaultSeverityAssignmentPolicySmartCallhomeSourceCursor:
+        """Declare a ``callhomeSmartSrc`` child under the fault_severity_assignment_policy level.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "MonCommonMonitoringPolicyFaultSeverityAssignmentPolicySmartCallhomeSourceCursor",
+            self._invoke_maker("smart_callhome_source", (), _prune(params)),
+        )
+
+    def tacacs_source(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        include_action: frozenset[MonInclAction] | set[MonInclAction] | str | None = None,
+        min_sev: ConditionSeverity | str | None = None,
+        display_name: str | None = None,
+        switch_tacacs_audit: TacacsSwitchTacacsAudit | str | None = None,
+        userdom: str | None = None,
+    ) -> MonCommonMonitoringPolicyFaultSeverityAssignmentPolicyTacacsSourceCursor:
+        """Declare a ``tacacsSrc`` child under the fault_severity_assignment_policy level.
+
+        Args:
+            name: The name of the object.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            include_action: The information to include for the call home source. Default:
+                ``PydanticUndefined``.
+            min_sev: Values: ``cleared``, ``critical``, ``info``, ``major``, ``minor``,
+                ``warning``. Default: ``info``.
+            switch_tacacs_audit: Values: ``disabled``, ``enabled``. Default: ``disabled``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "MonCommonMonitoringPolicyFaultSeverityAssignmentPolicyTacacsSourceCursor",
+            self._invoke_maker("tacacs_source", (name,), _prune(params)),
+        )
+
+
+class MonCommonMonitoringPolicyFaultSeverityAssignmentPolicyCursor(
+    _MonCommonMonitoringPolicyFaultSeverityAssignmentPolicyMakers,
+    _MonCommonMonitoringPolicyMakers,
+    _FabricMakers,
+    _UniMakers,
+):
+    """Typed cursor for ``faultSevAsnP`` (fault_severity_assignment_policy level).
+
+    Position: ``uni.fabric.mon_common_monitoring_policy.fault_severity_assignment_policy``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        initial_severity: ConditionInitSevDir | str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        target_severity: ConditionSevDir | str | None = None,
+        userdom: str | None = None,
+        health_score_weight: int | None = None,
+    ) -> MonCommonMonitoringPolicyFaultSeverityAssignmentPolicyCursor:
+        """Set ``faultSevAsnP`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class MonCommonMonitoringPolicySmartCallhomeSourceCursor(
+    _MonCommonMonitoringPolicyMakers, _FabricMakers, _UniMakers
+):
+    """Typed cursor for ``callhomeSmartSrc`` (smart_callhome_source level).
+
+    Position: ``uni.fabric.mon_common_monitoring_policy.smart_callhome_source``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> MonCommonMonitoringPolicySmartCallhomeSourceCursor:
+        """Set ``callhomeSmartSrc`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class MonCommonMonitoringPolicySnmpSourceCursor(
+    _MonCommonMonitoringPolicyMakers, _FabricMakers, _UniMakers
+):
+    """Typed cursor for ``snmpSrc`` (snmp_source level).
+
+    Position: ``uni.fabric.mon_common_monitoring_policy.snmp_source``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        include_action: frozenset[MonInclAction] | set[MonInclAction] | str | None = None,
+        min_severity: ConditionSeverity | str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> MonCommonMonitoringPolicySnmpSourceCursor:
+        """Set ``snmpSrc`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class MonCommonMonitoringPolicySyslogSourceCursor(
+    _MonCommonMonitoringPolicyMakers, _FabricMakers, _UniMakers
+):
+    """Typed cursor for ``syslogSrc`` (syslog_source level).
+
+    Position: ``uni.fabric.mon_common_monitoring_policy.syslog_source``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        include_action: frozenset[MonInclAction] | set[MonInclAction] | str | None = None,
+        min_severity: SyslogSeverity | str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> MonCommonMonitoringPolicySyslogSourceCursor:
+        """Set ``syslogSrc`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class MonCommonMonitoringPolicyTacacsSourceCursor(
+    _MonCommonMonitoringPolicyMakers, _FabricMakers, _UniMakers
+):
+    """Typed cursor for ``tacacsSrc`` (tacacs_source level).
+
+    Position: ``uni.fabric.mon_common_monitoring_policy.tacacs_source``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        include_action: frozenset[MonInclAction] | set[MonInclAction] | str | None = None,
+        min_sev: ConditionSeverity | str | None = None,
+        display_name: str | None = None,
+        switch_tacacs_audit: TacacsSwitchTacacsAudit | str | None = None,
+        userdom: str | None = None,
+    ) -> MonCommonMonitoringPolicyTacacsSourceCursor:
+        """Set ``tacacsSrc`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class MonFabricMonitoringPolicyCallhomeSourceCursor(
+    _MonFabricMonitoringPolicyMakers, _FabricMakers, _UniMakers
+):
+    """Typed cursor for ``callhomeSrc`` (callhome_source level).
+
+    Position: ``uni.fabric.mon_fabric_monitoring_policy.callhome_source``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        include_action: frozenset[MonInclAction] | set[MonInclAction] | str | None = None,
+        display_name: str | None = None,
+        message_severity: CallhomeUrgency | str | None = None,
+        userdom: str | None = None,
+    ) -> MonFabricMonitoringPolicyCallhomeSourceCursor:
+        """Set ``callhomeSrc`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class _MonFabricMonitoringPolicyMonitoringTargetMakers(Cursor):
+    """Makers declared at the monitoring_target level (``monFabricTarget``)."""
+
+    __slots__ = ()
+
+    def syslog_source(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        include_action: frozenset[MonInclAction] | set[MonInclAction] | str | None = None,
+        min_severity: SyslogSeverity | str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> MonFabricMonitoringPolicyMonitoringTargetSyslogSourceCursor:
+        """Declare a ``syslogSrc`` child under the monitoring_target level.
+
+        The syslog source configures a syslog source that specifies the minimum severity of items to
+        be sent as syslog messages to the syslog servers in the destination group.
+
+        Args:
+            name: The name for the system logging source.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            include_action: Default: ``PydanticUndefined``.
+            min_severity: The minimum severity level of messages to be sent. Values: ``alerts``,
+                ``critical``, ``debugging``, ``emergencies``, ``errors``, ``information``,
+                ``notifications``, ``warnings``. Default: ``warnings``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "MonFabricMonitoringPolicyMonitoringTargetSyslogSourceCursor",
+            self._invoke_maker("syslog_source", (name,), _prune(params)),
+        )
+
+    def snmp_source(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        include_action: frozenset[MonInclAction] | set[MonInclAction] | str | None = None,
+        min_severity: ConditionSeverity | str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> MonFabricMonitoringPolicyMonitoringTargetSnmpSourceCursor:
+        """Declare a ``snmpSrc`` child under the monitoring_target level.
+
+        The SNMP source profile determines the fault information, severity level, and destination
+        for sending messages to the SNMP destination. SNMP is an application-layer protocol that
+        provides a message format for communication between SNMP managers and agents.
+
+        Args:
+            name: The name for the SNMP source. This name can be between 1 and 64 alphanumeric
+                characters.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            include_action: The options to include for the SNMP source. Default:
+                ``PydanticUndefined``.
+            min_severity: The minimum severity level of SNMP traps. SNMP traps enable an agent
+                to notify the management station of significant events by way of an unsolicited
+                SNMP message. Values: ``cleared``, ``critical``, ``info``, ``major``, ``minor``,
+                ``warning``. Default: ``info``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "MonFabricMonitoringPolicyMonitoringTargetSnmpSourceCursor",
+            self._invoke_maker("snmp_source", (name,), _prune(params)),
+        )
+
+    def callhome_source(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        include_action: frozenset[MonInclAction] | set[MonInclAction] | str | None = None,
+        display_name: str | None = None,
+        message_severity: CallhomeUrgency | str | None = None,
+        userdom: str | None = None,
+    ) -> MonFabricMonitoringPolicyMonitoringTargetCallhomeSourceCursor:
+        """Declare a ``callhomeSrc`` child under the monitoring_target level.
+
+        The call home source profile determines the information to deliver and the urgency level for
+        sending email-based alert notifications to a call home destination. A range of message
+        formats are available for compatibility with pager services or XML-based automated parsing
+        applications.
+
+        Args:
+            name: The name for the source.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            include_action: Default: ``PydanticUndefined``.
+            message_severity: The severity level for messages generated from a specific source.
+                Values: ``alert``, ``critical``, ``debug``, ``emergency``, ``error``, ``info``,
+                ``notice``, ``warning``. Default: ``alert``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "MonFabricMonitoringPolicyMonitoringTargetCallhomeSourceCursor",
+            self._invoke_maker("callhome_source", (name,), _prune(params)),
+        )
+
+    def smart_callhome_source(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> MonFabricMonitoringPolicyMonitoringTargetSmartCallhomeSourceCursor:
+        """Declare a ``callhomeSmartSrc`` child under the monitoring_target level.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "MonFabricMonitoringPolicyMonitoringTargetSmartCallhomeSourceCursor",
+            self._invoke_maker("smart_callhome_source", (), _prune(params)),
+        )
+
+    def tacacs_source(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        include_action: frozenset[MonInclAction] | set[MonInclAction] | str | None = None,
+        min_sev: ConditionSeverity | str | None = None,
+        display_name: str | None = None,
+        switch_tacacs_audit: TacacsSwitchTacacsAudit | str | None = None,
+        userdom: str | None = None,
+    ) -> MonFabricMonitoringPolicyMonitoringTargetTacacsSourceCursor:
+        """Declare a ``tacacsSrc`` child under the monitoring_target level.
+
+        Args:
+            name: The name of the object.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            include_action: The information to include for the call home source. Default:
+                ``PydanticUndefined``.
+            min_sev: Values: ``cleared``, ``critical``, ``info``, ``major``, ``minor``,
+                ``warning``. Default: ``info``.
+            switch_tacacs_audit: Values: ``disabled``, ``enabled``. Default: ``disabled``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "MonFabricMonitoringPolicyMonitoringTargetTacacsSourceCursor",
+            self._invoke_maker("tacacs_source", (name,), _prune(params)),
+        )
+
+    def fault_severity_assignment_policy(
+        self,
+        condition_code: int | str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        initial_severity: ConditionInitSevDir | str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        target_severity: ConditionSevDir | str | None = None,
+        userdom: str | None = None,
+        health_score_weight: int | None = None,
+    ) -> MonFabricMonitoringPolicyMonitoringTargetFaultSeverityAssignmentPolicyCursor:
+        """Declare a ``faultSevAsnP`` child under the monitoring_target level.
+
+        The initial and target severities for a specific fault can be specified in a custom or
+        default monitoring policy directly under an observable target object.
+
+        Args:
+            condition_code: Contains a category code that helps to categorize and identify
+                different types of fault severity assignment policy objects.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            initial_severity: The policy for assignment of initial severity is assigned at
+                condition detection or when a fault object is created. If inherit is selected, a
+                less precise (or default) definition is applied. If squelched is selected, a
+                fault object is never raised, and the corresponding condition is ignored.
+                Values: ``cleared``, ``critical``, ``info``, ``inherit``, ``major``, ``minor``,
+                ``squelched``, ``warning``. Default: ``inherit``.
+            target_severity: The policy for assignment of target severity is the severity level
+                that a fault object reaches after a maturity soaking interval. If inherit is
+                selected, a less precise (or default) definition will be applied. Values:
+                ``cleared``, ``critical``, ``info``, ``inherit``, ``major``, ``minor``,
+                ``warning``. Default: ``inherit``.
+            health_score_weight: The weight of the fault in calculating the health score of an
+                object. A higher weight causes a higher degradation of the health score of the
+                affected object. Default: ``100``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "condition_code",
+            )
+        }
+        return cast(
+            "MonFabricMonitoringPolicyMonitoringTargetFaultSeverityAssignmentPolicyCursor",
+            self._invoke_maker(
+                "fault_severity_assignment_policy", (condition_code,), _prune(params)
+            ),
+        )
+
+    def event_severity_assignment_policy(
+        self,
+        condition_code: int | str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        initial_severity: ConditionInitSevDir | str | None = None,
+        userdom: str | None = None,
+    ) -> MonFabricMonitoringPolicyMonitoringTargetEventSeverityAssignmentPolicyCursor:
+        """Declare a ``eventSevAsnP`` child under the monitoring_target level.
+
+        Represents a policy that specifies the initial and target severity for a specific event.
+
+        Args:
+            condition_code: Contains a category code that helps to categorize and identify
+                different types of event severity assignment policy objects.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            initial_severity: The policy for assigning severity at condition detection or when
+                an event object is created. Values: ``cleared``, ``critical``, ``info``,
+                ``inherit``, ``major``, ``minor``, ``squelched``, ``warning``. Default:
+                ``inherit``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "condition_code",
+            )
+        }
+        return cast(
+            "MonFabricMonitoringPolicyMonitoringTargetEventSeverityAssignmentPolicyCursor",
+            self._invoke_maker(
+                "event_severity_assignment_policy", (condition_code,), _prune(params)
+            ),
+        )
+
+
+class MonFabricMonitoringPolicyMonitoringTargetCursor(
+    _MonFabricMonitoringPolicyMonitoringTargetMakers,
+    _MonFabricMonitoringPolicyMakers,
+    _FabricMakers,
+    _UniMakers,
+):
+    """Typed cursor for ``monFabricTarget`` (monitoring_target level).
+
+    Position: ``uni.fabric.mon_fabric_monitoring_policy.monitoring_target``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        mon_fabrictarget_name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> MonFabricMonitoringPolicyMonitoringTargetCursor:
+        """Set ``monFabricTarget`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class MonFabricMonitoringPolicySmartCallhomeSourceCursor(
+    _MonFabricMonitoringPolicyMakers, _FabricMakers, _UniMakers
+):
+    """Typed cursor for ``callhomeSmartSrc`` (smart_callhome_source level).
+
+    Position: ``uni.fabric.mon_fabric_monitoring_policy.smart_callhome_source``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> MonFabricMonitoringPolicySmartCallhomeSourceCursor:
+        """Set ``callhomeSmartSrc`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class MonFabricMonitoringPolicySnmpSourceCursor(
+    _MonFabricMonitoringPolicyMakers, _FabricMakers, _UniMakers
+):
+    """Typed cursor for ``snmpSrc`` (snmp_source level).
+
+    Position: ``uni.fabric.mon_fabric_monitoring_policy.snmp_source``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        include_action: frozenset[MonInclAction] | set[MonInclAction] | str | None = None,
+        min_severity: ConditionSeverity | str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> MonFabricMonitoringPolicySnmpSourceCursor:
+        """Set ``snmpSrc`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class MonFabricMonitoringPolicySyslogSourceCursor(
+    _MonFabricMonitoringPolicyMakers, _FabricMakers, _UniMakers
+):
+    """Typed cursor for ``syslogSrc`` (syslog_source level).
+
+    Position: ``uni.fabric.mon_fabric_monitoring_policy.syslog_source``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        include_action: frozenset[MonInclAction] | set[MonInclAction] | str | None = None,
+        min_severity: SyslogSeverity | str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> MonFabricMonitoringPolicySyslogSourceCursor:
+        """Set ``syslogSrc`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class MonFabricMonitoringPolicyTacacsSourceCursor(
+    _MonFabricMonitoringPolicyMakers, _FabricMakers, _UniMakers
+):
+    """Typed cursor for ``tacacsSrc`` (tacacs_source level).
+
+    Position: ``uni.fabric.mon_fabric_monitoring_policy.tacacs_source``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        include_action: frozenset[MonInclAction] | set[MonInclAction] | str | None = None,
+        min_sev: ConditionSeverity | str | None = None,
+        display_name: str | None = None,
+        switch_tacacs_audit: TacacsSwitchTacacsAudit | str | None = None,
+        userdom: str | None = None,
+    ) -> MonFabricMonitoringPolicyTacacsSourceCursor:
+        """Set ``tacacsSrc`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class PodMaintenanceGroupPodBlockCursor(_PodMaintenanceGroupMakers, _FabricMakers, _UniMakers):
+    """Typed cursor for ``fabricPodBlk`` (pod_block level).
+
+    Position: ``uni.fabric.pod_maintenance_group.pod_block``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        from_pod_id: int | None = None,
+        display_name: str | None = None,
+        to_pod_id: int | None = None,
+        userdom: str | None = None,
+    ) -> PodMaintenanceGroupPodBlockCursor:
+        """Set ``fabricPodBlk`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class _FabricPodProfilePodSelectorMakers(Cursor):
+    """Makers declared at the pod_selector level (``fabricPodS``)."""
+
+    __slots__ = ()
+
+    def pod_block(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        from_pod_id: int | None = None,
+        display_name: str | None = None,
+        to_pod_id: int | None = None,
+        userdom: str | None = None,
+    ) -> FabricPodProfilePodSelectorPodBlockCursor:
+        """Declare a ``fabricPodBlk`` child under the pod_selector level.
+
+        A POD block.
+
+        Args:
+            name: Naming property — forms the object's RN.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: The description of this configuration item.
+            from_pod_id: Default: ``1``.
+            to_pod_id: Default: ``1``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "FabricPodProfilePodSelectorPodBlockCursor",
+            self._invoke_maker("pod_block", (name,), _prune(params)),
+        )
+
+
+class FabricPodProfilePodSelectorCursor(
+    _FabricPodProfilePodSelectorMakers, _FabricPodProfileMakers, _FabricMakers, _UniMakers
+):
+    """Typed cursor for ``fabricPodS`` (pod_selector level).
+
+    Position: ``uni.fabric.pod_profile.pod_selector``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> FabricPodProfilePodSelectorCursor:
+        """Set ``fabricPodS`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        policy_group: str | Ref | None = None,
+    ) -> FabricPodProfilePodSelectorCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        policy_group: str | Ref | None = None,
+    ) -> FabricPodProfilePodSelectorCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class IgnoreHostCursor(_ProxyServerMakers, _FabricMakers, _UniMakers):
+    """Typed cursor for ``proxyIgnoreHost`` (ignore_host level).
+
+    Position: ``uni.fabric.proxy_server.ignore_host``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> IgnoreHostCursor:
+        """Set ``proxyIgnoreHost`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class FabricSchedulerOneTimeWindowCursor(_FabricSchedulerMakers, _FabricMakers, _UniMakers):
+    """Typed cursor for ``trigAbsWindowP`` (one_time_window level).
+
+    Position: ``uni.fabric.scheduler.one_time_window``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        maximum_concurrent_tasks: int | str | None = None,
+        date_and_time: str | None = None,
+        display_name: str | None = None,
+        delay_between_node_upgrades: int | None = None,
+        proc_break: str | None = None,
+        proc_cap: int | str | None = None,
+        maximum_running_time: str | None = None,
+        userdom: str | None = None,
+    ) -> FabricSchedulerOneTimeWindowCursor:
+        """Set ``trigAbsWindowP`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class FabricSchedulerRecurringWindowCursor(_FabricSchedulerMakers, _FabricMakers, _UniMakers):
+    """Typed cursor for ``trigRecurrWindowP`` (recurring_window level).
+
+    Position: ``uni.fabric.scheduler.recurring_window``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        maximum_concurrent_tasks: int | str | None = None,
+        recurring_window_schedule_day: TrigDay | str | None = None,
+        schedule_hour: int | None = None,
+        schedule_minute: int | None = None,
+        display_name: str | None = None,
+        delay_between_node_upgrades: int | None = None,
+        proc_break: str | None = None,
+        proc_cap: int | str | None = None,
+        maximum_running_time: str | None = None,
+        userdom: str | None = None,
+    ) -> FabricSchedulerRecurringWindowCursor:
+        """Set ``trigRecurrWindowP`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class SmartCallhomeDestinationGroupCallhomeProtocolProfileCursor(
+    _SmartCallhomeDestinationGroupMakers, _FabricMakers, _UniMakers
+):
+    """Typed cursor for ``callhomeProf`` (callhome_protocol_profile level).
+
+    Position: ``uni.fabric.smart_callhome_destination_group.callhome_protocol_profile``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        contact_address: str | None = None,
+        admin_state: MonAdminState | str | None = None,
+        annotation: str | None = None,
+        contact_name: str | None = None,
+        contract_number: str | None = None,
+        customer_name: str | None = None,
+        description: str | None = None,
+        contact_email: str | None = None,
+        from_: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        contact_phone: str | None = None,
+        port: int | None = None,
+        password: str | None = None,
+        replyto_address: str | None = None,
+        secure_smtp: bool | None = None,
+        site: str | None = None,
+        userdom: str | None = None,
+        username: str | None = None,
+    ) -> SmartCallhomeDestinationGroupCallhomeProtocolProfileCursor:
+        """Set ``callhomeProf`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class SmartCallhomeDestinationCursor(
+    _SmartCallhomeDestinationGroupMakers, _FabricMakers, _UniMakers
+):
+    """Typed cursor for ``callhomeSmartDest`` (smart_callhome_destination level).
+
+    Position: ``uni.fabric.smart_callhome_destination_group.smart_callhome_destination``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        admin_state: MonAdminState | str | None = None,
+        annotation: str | None = None,
+        description: str | None = None,
+        destination_email_address: str | None = None,
+        message_format: CallhomeMsgFormat | str | None = None,
+        display_name: str | None = None,
+        message_format_rfc_compliant: bool | None = None,
+        userdom: str | None = None,
+    ) -> SmartCallhomeDestinationCursor:
+        """Set ``callhomeSmartDest`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class SnmpTrapDestinationCursor(_SnmpMonitoringDestinationGroupMakers, _FabricMakers, _UniMakers):
+    """Typed cursor for ``snmpTrapDest`` (snmp_trap_destination level).
+
+    Position: ``uni.fabric.snmp_monitoring_destination_group.snmp_trap_destination``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        notif_t: SnmpNotificationType | str | None = None,
+        security_name: str | None = None,
+        userdom: str | None = None,
+        v3_security_level: SnmpV3SecLvl | str | None = None,
+        version: SnmpVersion | str | None = None,
+    ) -> SnmpTrapDestinationCursor:
+        """Set ``snmpTrapDest`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class SnmpPolicyClientEntryCursor(_SnmpPolicyMakers, _FabricMakers, _UniMakers):
+    """Typed cursor for ``snmpTrapFwdServerP`` (client_entry level).
+
+    Position: ``uni.fabric.snmp_policy.client_entry``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        external_trap_server_port: int | None = None,
+        userdom: str | None = None,
+    ) -> SnmpPolicyClientEntryCursor:
+        """Set ``snmpTrapFwdServerP`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class _SnmpClientGroupProfileMakers(Cursor):
+    """Makers declared at the snmp_client_group_profile level (``snmpClientGrpP``)."""
+
+    __slots__ = ()
+
+    def client_entry(
+        self,
+        client_address: str,
+        *,
+        annotation: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> SnmpClientGroupProfileClientEntryCursor:
+        """Declare a ``snmpClientP`` child under the snmp_client_group_profile level.
+
+        The client profile information.
+
+        Args:
+            client_address: The SNMP client profile IP address.
+            annotation: User annotation. Suggested format orchestrator:value
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "client_address",
+            )
+        }
+        return cast(
+            "SnmpClientGroupProfileClientEntryCursor",
+            self._invoke_maker("client_entry", (client_address,), _prune(params)),
+        )
+
+
+class SnmpClientGroupProfileCursor(
+    _SnmpClientGroupProfileMakers, _SnmpPolicyMakers, _FabricMakers, _UniMakers
+):
+    """Typed cursor for ``snmpClientGrpP`` (snmp_client_group_profile level).
+
+    Position: ``uni.fabric.snmp_policy.snmp_client_group_profile``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> SnmpClientGroupProfileCursor:
+        """Set ``snmpClientGrpP`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class SnmpCommunityCursor(_SnmpPolicyMakers, _FabricMakers, _UniMakers):
+    """Typed cursor for ``snmpCommunityP`` (snmp_community level).
+
+    Position: ``uni.fabric.snmp_policy.snmp_community``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> SnmpCommunityCursor:
+        """Set ``snmpCommunityP`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class UserProfileCursor(_SnmpPolicyMakers, _FabricMakers, _UniMakers):
+    """Typed cursor for ``snmpUserP`` (user_profile level).
+
+    Position: ``uni.fabric.snmp_policy.user_profile``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        authentication_key: str | None = None,
+        authentication_type: SnmpAuthType | str | None = None,
+        privacy_key: str | None = None,
+        privacy: SnmpPrivType | str | None = None,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> UserProfileCursor:
+        """Set ``snmpUserP`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
         return self
@@ -1758,6 +13131,288 @@ class FabricSpanSourceGroupVspanSourceDefCursor(
         return self
 
 
+class _SpineFabricPortSelectorMakers(Cursor):
+    """Makers declared at the spine_fabric_port_selector level (``fabricSFPortS``)."""
+
+    __slots__ = ()
+
+    def port_block(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        from_module_id: int | None = None,
+        from_port_id: int | None = None,
+        display_name: str | None = None,
+        to_module_id: int | None = None,
+        to_port_id: int | None = None,
+        userdom: str | None = None,
+    ) -> SpineFabricPortSelectorPortBlockCursor:
+        """Declare a ``fabricPortBlk`` child under the spine_fabric_port_selector level.
+
+        A port block. This represents a range of ports and a range of cards. Each port block starts
+        with the first port and first card and ends with the last port and last card.
+
+        Args:
+            name: Naming property — forms the object's RN.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: The description of this configuration item.
+            from_module_id: Default: ``1``.
+            from_port_id: Default: ``1``.
+            to_module_id: Default: ``1``.
+            to_port_id: Default: ``1``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "SpineFabricPortSelectorPortBlockCursor",
+            self._invoke_maker("port_block", (name,), _prune(params)),
+        )
+
+    def fabric_sub_port_block(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        from_module_id: int | None = None,
+        from_port_id: int | None = None,
+        from_sub_port_id: int | None = None,
+        display_name: str | None = None,
+        to_module_id: int | None = None,
+        to_port_id: int | None = None,
+        to_sub_port_id: int | None = None,
+        userdom: str | None = None,
+    ) -> SpineFabricPortSelectorFabricSubPortBlockCursor:
+        """Declare a ``fabricSubPortBlk`` child under the spine_fabric_port_selector level.
+
+        Fabric sub port (breakout) block
+
+        Args:
+            name: The name of the object.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: The description of this configuration item.
+            from_module_id: Default: ``1``.
+            from_port_id: Default: ``1``.
+            from_sub_port_id: Default: ``1``.
+            to_module_id: Default: ``1``.
+            to_port_id: Default: ``1``.
+            to_sub_port_id: Default: ``1``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "SpineFabricPortSelectorFabricSubPortBlockCursor",
+            self._invoke_maker("fabric_sub_port_block", (name,), _prune(params)),
+        )
+
+
+class SpineFabricPortSelectorCursor(
+    _SpineFabricPortSelectorMakers, _SpineFabricInterfaceProfileMakers, _FabricMakers, _UniMakers
+):
+    """Typed cursor for ``fabricSFPortS`` (spine_fabric_port_selector level).
+
+    Position: ``uni.fabric.spine_fabric_interface_profile.spine_fabric_port_selector``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> SpineFabricPortSelectorCursor:
+        """Set ``fabricSFPortS`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        policy_group: str | Ref | None = None,
+    ) -> SpineFabricPortSelectorCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        policy_group: str | Ref | None = None,
+    ) -> SpineFabricPortSelectorCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class SpineModuleSelectorCursor(_SpineModuleProfileMakers, _FabricMakers, _UniMakers):
+    """Typed cursor for ``fabricSpCardS`` (spine_module_selector level).
+
+    Position: ``uni.fabric.spine_module_profile.spine_module_selector``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> SpineModuleSelectorCursor:
+        """Set ``fabricSpCardS`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        policy_group: str | Ref | None = None,
+    ) -> SpineModuleSelectorCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        policy_group: str | Ref | None = None,
+    ) -> SpineModuleSelectorCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class _SpineSwitchProfileSpineSelectorMakers(Cursor):
+    """Makers declared at the spine_selector level (``fabricSpineS``)."""
+
+    __slots__ = ()
+
+    def node_block(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        from_node_id: int | None = None,
+        display_name: str | None = None,
+        to_node_id: int | None = None,
+        userdom: str | None = None,
+    ) -> SpineSwitchProfileSpineSelectorNodeBlockCursor:
+        """Declare a ``fabricNodeBlk`` child under the spine_selector level.
+
+        The node block. This is a range of nodes. Each node block begins with the first port and
+        ends with the last port.
+
+        Args:
+            name: The name of the node block.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: The description of this configuration item.
+            from_node_id: Default: ``1``.
+            to_node_id: Default: ``1``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "SpineSwitchProfileSpineSelectorNodeBlockCursor",
+            self._invoke_maker("node_block", (name,), _prune(params)),
+        )
+
+
+class SpineSwitchProfileSpineSelectorCursor(
+    _SpineSwitchProfileSpineSelectorMakers, _SpineSwitchProfileMakers, _FabricMakers, _UniMakers
+):
+    """Typed cursor for ``fabricSpineS`` (spine_selector level).
+
+    Position: ``uni.fabric.spine_switch_profile.spine_selector``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> SpineSwitchProfileSpineSelectorCursor:
+        """Set ``fabricSpineS`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        policy_group: str | Ref | None = None,
+        interface_profile: str | Ref | None = None,
+    ) -> SpineSwitchProfileSpineSelectorCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        policy_group: str | Ref | None = None,
+        interface_profile: str | Ref | None = None,
+    ) -> SpineSwitchProfileSpineSelectorCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
 class RemoteDestinationCursor(_SyslogGroupMakers, _FabricMakers, _UniMakers):
     """Typed cursor for ``syslogRemoteDest`` (remote_destination level).
 
@@ -1785,6 +13440,35 @@ class RemoteDestinationCursor(_SyslogGroupMakers, _FabricMakers, _UniMakers):
         userdom: str | None = None,
     ) -> RemoteDestinationCursor:
         """Set ``syslogRemoteDest`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class TacacsDestinationCursor(_TacacsMonitoringDestinationGroupMakers, _FabricMakers, _UniMakers):
+    """Typed cursor for ``tacacsTacacsDest`` (tacacs_destination level).
+
+    Position: ``uni.fabric.tacacs_monitoring_destination_group.tacacs_destination``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        authentication_protocol: TacacsauthenticationProtocol | str | None = None,
+        description: str | None = None,
+        key: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        send_changes_as_command_arguments: bool | None = None,
+        userdom: str | None = None,
+    ) -> TacacsDestinationCursor:
+        """Set ``tacacsTacacsDest`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
         return self
@@ -1856,6 +13540,140 @@ class VpcPairCursor(_VpcPairMakers, _VpcProtectionMakers, _FabricMakers, _UniMak
         return self
 
 
+class _FabricVspanDestinationGroupVspanVdestinationMakers(Cursor):
+    """Makers declared at the vspan_vdestination level (``spanVDest``)."""
+
+    __slots__ = ()
+
+    def vspan_destination_epg_summary(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        dscp: int | str | None = None,
+        destination_ip: str | None = None,
+        flow_id: int | None = None,
+        mode: SpanErspanDestMode | str | None = None,
+        mtu: int | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        source_ip_of_erspan_packet: str | None = None,
+        time_to_live: int | str | None = None,
+        userdom: str | None = None,
+        vrf: str | None = None,
+    ) -> FabricVspanDestinationGroupVspanVdestinationVspanDestinationEpgSummaryCursor:
+        """Declare a ``spanVEpgSummary`` child under the vspan_vdestination level.
+
+        The VEpg summary.
+
+        Args:
+            description: Specifies a description of the policy definition.
+            dscp: Default: ``unspecified``.
+            flow_id: Default: ``1``.
+            mode: Values: ``not-visible``, ``visible``. Default: ``not-visible``.
+            mtu: Default: ``1518``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            time_to_live: Default: ``64``.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "FabricVspanDestinationGroupVspanVdestinationVspanDestinationEpgSummaryCursor",
+            self._invoke_maker("vspan_destination_epg_summary", (), _prune(params)),
+        )
+
+
+class FabricVspanDestinationGroupVspanVdestinationCursor(
+    _FabricVspanDestinationGroupVspanVdestinationMakers,
+    _FabricVspanDestinationGroupMakers,
+    _FabricMakers,
+    _UniMakers,
+):
+    """Typed cursor for ``spanVDest`` (vspan_vdestination level).
+
+    Position: ``uni.fabric.vspan_destination_group.vspan_vdestination``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> FabricVspanDestinationGroupVspanVdestinationCursor:
+        """Set ``spanVDest`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class FabricVspanSessionSpanLabelCursor(_FabricVspanSessionMakers, _FabricMakers, _UniMakers):
+    """Typed cursor for ``spanSpanLbl`` (span_label level).
+
+    Position: ``uni.fabric.vspan_session.span_label``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        tag: PolColor | str | None = None,
+        userdom: str | None = None,
+    ) -> FabricVspanSessionSpanLabelCursor:
+        """Set ``spanSpanLbl`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class FabricVspanSessionVspanVsourceCursor(_FabricVspanSessionMakers, _FabricMakers, _UniMakers):
+    """Typed cursor for ``spanVSrc`` (vspan_vsource level).
+
+    Position: ``uni.fabric.vspan_session.vspan_vsource``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        direction_ingress_egress_both: SpanDirection | str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> FabricVspanSessionVspanVsourceCursor:
+        """Set ``spanVSrc`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
 class RouteReflectorNodeCursor(
     _RouteReflectorMakers, _BgpInstanceMakers, _FabricMakers, _UniMakers
 ):
@@ -1879,6 +13697,1287 @@ class RouteReflectorNodeCursor(
         userdom: str | None = None,
     ) -> RouteReflectorNodeCursor:
         """Set ``bgpRRNodePEp`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class SslCipherCursor(
+    _HttpSslConfigurationMakers, _CommunicationPolicyMakers, _FabricMakers, _UniMakers
+):
+    """Typed cursor for ``commCipher`` (ssl_cipher level).
+
+    Position: ``uni.fabric.communication_policy.http_ssl_configuration.ssl_cipher``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        cipher_state: CommCipherState | str | None = None,
+        userdom: str | None = None,
+    ) -> SslCipherCursor:
+        """Set ``commCipher`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class _GeoFloorMakers(Cursor):
+    """Makers declared at the geo_floor level (``geoFloor``)."""
+
+    __slots__ = ()
+
+    def geo_room(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> GeoRoomCursor:
+        """Declare a ``geoRoom`` child under the geo_floor level.
+
+        The room name or number where the node is located.
+
+        Args:
+            name: The room name. The name can be up to 64 characters and must begin with an
+                alphanumeric character. The name can only contain alphanumeric characters and
+                the following symbols: - . : _
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "GeoRoomCursor",
+            self._invoke_maker("geo_room", (name,), _prune(params)),
+        )
+
+
+class GeoFloorCursor(
+    _GeoFloorMakers, _GeoBuildingMakers, _GeoSiteMakers, _FabricMakers, _UniMakers
+):
+    """Typed cursor for ``geoFloor`` (geo_floor level).
+
+    Position: ``uni.fabric.geo_site.geo_building.geo_floor``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> GeoFloorCursor:
+        """Set ``geoFloor`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class LeafFabricPortSelectorFabricSubPortBlockCursor(
+    _LeafFabricPortSelectorMakers, _LeafFabricInterfaceProfileMakers, _FabricMakers, _UniMakers
+):
+    """Typed cursor for ``fabricSubPortBlk`` (fabric_sub_port_block level).
+
+    Position: ``uni.fabric.leaf_fabric_interface_profile.leaf_fabric_port_selector.fabric_sub_port_block``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        from_module_id: int | None = None,
+        from_port_id: int | None = None,
+        from_sub_port_id: int | None = None,
+        display_name: str | None = None,
+        to_module_id: int | None = None,
+        to_port_id: int | None = None,
+        to_sub_port_id: int | None = None,
+        userdom: str | None = None,
+    ) -> LeafFabricPortSelectorFabricSubPortBlockCursor:
+        """Set ``fabricSubPortBlk`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        policy_group: str | Ref | None = None,
+    ) -> LeafFabricPortSelectorFabricSubPortBlockCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        policy_group: str | Ref | None = None,
+    ) -> LeafFabricPortSelectorFabricSubPortBlockCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class LeafFabricPortSelectorPortBlockCursor(
+    _LeafFabricPortSelectorMakers, _LeafFabricInterfaceProfileMakers, _FabricMakers, _UniMakers
+):
+    """Typed cursor for ``fabricPortBlk`` (port_block level).
+
+    Position: ``uni.fabric.leaf_fabric_interface_profile.leaf_fabric_port_selector.port_block``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        from_module_id: int | None = None,
+        from_port_id: int | None = None,
+        display_name: str | None = None,
+        to_module_id: int | None = None,
+        to_port_id: int | None = None,
+        userdom: str | None = None,
+    ) -> LeafFabricPortSelectorPortBlockCursor:
+        """Set ``fabricPortBlk`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        policy_group: str | Ref | None = None,
+    ) -> LeafFabricPortSelectorPortBlockCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        policy_group: str | Ref | None = None,
+    ) -> LeafFabricPortSelectorPortBlockCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class SwitchAssociationNodeBlockCursor(
+    _SwitchAssociationMakers, _LeafSwitchProfileMakers, _FabricMakers, _UniMakers
+):
+    """Typed cursor for ``fabricNodeBlk`` (node_block level).
+
+    Position: ``uni.fabric.leaf_switch_profile.switch_association.node_block``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        from_node_id: int | None = None,
+        display_name: str | None = None,
+        to_node_id: int | None = None,
+        userdom: str | None = None,
+    ) -> SwitchAssociationNodeBlockCursor:
+        """Set ``fabricNodeBlk`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        policy_group: str | Ref | None = None,
+        interface_profile: str | Ref | None = None,
+    ) -> SwitchAssociationNodeBlockCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        policy_group: str | Ref | None = None,
+        interface_profile: str | Ref | None = None,
+    ) -> SwitchAssociationNodeBlockCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class MacsecFabricKeychainPolicyKeyPolicyCursor(
+    _MacsecFabricKeychainPolicyMakers, _MacsecFabricMakers, _FabricMakers, _UniMakers
+):
+    """Typed cursor for ``macsecKeyPol`` (key_policy level).
+
+    Position: ``uni.fabric.macsec_fabric.keychain_policy.key_policy``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        end_time: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        pre_shared_key: str | None = None,
+        start_time: str | None = None,
+        userdom: str | None = None,
+    ) -> MacsecFabricKeychainPolicyKeyPolicyCursor:
+        """Set ``macsecKeyPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class MonCommonMonitoringPolicyEventSeverityAssignmentPolicyCallhomeSourceCursor(
+    _MonCommonMonitoringPolicyEventSeverityAssignmentPolicyMakers,
+    _MonCommonMonitoringPolicyMakers,
+    _FabricMakers,
+    _UniMakers,
+):
+    """Typed cursor for ``callhomeSrc`` (callhome_source level).
+
+    Position: ``uni.fabric.mon_common_monitoring_policy.event_severity_assignment_policy.callhome_source``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        include_action: frozenset[MonInclAction] | set[MonInclAction] | str | None = None,
+        display_name: str | None = None,
+        message_severity: CallhomeUrgency | str | None = None,
+        userdom: str | None = None,
+    ) -> MonCommonMonitoringPolicyEventSeverityAssignmentPolicyCallhomeSourceCursor:
+        """Set ``callhomeSrc`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class MonCommonMonitoringPolicyEventSeverityAssignmentPolicySmartCallhomeSourceCursor(
+    _MonCommonMonitoringPolicyEventSeverityAssignmentPolicyMakers,
+    _MonCommonMonitoringPolicyMakers,
+    _FabricMakers,
+    _UniMakers,
+):
+    """Typed cursor for ``callhomeSmartSrc`` (smart_callhome_source level).
+
+    Position: ``uni.fabric.mon_common_monitoring_policy.event_severity_assignment_policy.smart_callhome_source``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> MonCommonMonitoringPolicyEventSeverityAssignmentPolicySmartCallhomeSourceCursor:
+        """Set ``callhomeSmartSrc`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class MonCommonMonitoringPolicyEventSeverityAssignmentPolicySnmpSourceCursor(
+    _MonCommonMonitoringPolicyEventSeverityAssignmentPolicyMakers,
+    _MonCommonMonitoringPolicyMakers,
+    _FabricMakers,
+    _UniMakers,
+):
+    """Typed cursor for ``snmpSrc`` (snmp_source level).
+
+    Position: ``uni.fabric.mon_common_monitoring_policy.event_severity_assignment_policy.snmp_source``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        include_action: frozenset[MonInclAction] | set[MonInclAction] | str | None = None,
+        min_severity: ConditionSeverity | str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> MonCommonMonitoringPolicyEventSeverityAssignmentPolicySnmpSourceCursor:
+        """Set ``snmpSrc`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class MonCommonMonitoringPolicyEventSeverityAssignmentPolicySyslogSourceCursor(
+    _MonCommonMonitoringPolicyEventSeverityAssignmentPolicyMakers,
+    _MonCommonMonitoringPolicyMakers,
+    _FabricMakers,
+    _UniMakers,
+):
+    """Typed cursor for ``syslogSrc`` (syslog_source level).
+
+    Position: ``uni.fabric.mon_common_monitoring_policy.event_severity_assignment_policy.syslog_source``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        include_action: frozenset[MonInclAction] | set[MonInclAction] | str | None = None,
+        min_severity: SyslogSeverity | str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> MonCommonMonitoringPolicyEventSeverityAssignmentPolicySyslogSourceCursor:
+        """Set ``syslogSrc`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class MonCommonMonitoringPolicyEventSeverityAssignmentPolicyTacacsSourceCursor(
+    _MonCommonMonitoringPolicyEventSeverityAssignmentPolicyMakers,
+    _MonCommonMonitoringPolicyMakers,
+    _FabricMakers,
+    _UniMakers,
+):
+    """Typed cursor for ``tacacsSrc`` (tacacs_source level).
+
+    Position: ``uni.fabric.mon_common_monitoring_policy.event_severity_assignment_policy.tacacs_source``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        include_action: frozenset[MonInclAction] | set[MonInclAction] | str | None = None,
+        min_sev: ConditionSeverity | str | None = None,
+        display_name: str | None = None,
+        switch_tacacs_audit: TacacsSwitchTacacsAudit | str | None = None,
+        userdom: str | None = None,
+    ) -> MonCommonMonitoringPolicyEventSeverityAssignmentPolicyTacacsSourceCursor:
+        """Set ``tacacsSrc`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class MonCommonMonitoringPolicyFaultSeverityAssignmentPolicyCallhomeSourceCursor(
+    _MonCommonMonitoringPolicyFaultSeverityAssignmentPolicyMakers,
+    _MonCommonMonitoringPolicyMakers,
+    _FabricMakers,
+    _UniMakers,
+):
+    """Typed cursor for ``callhomeSrc`` (callhome_source level).
+
+    Position: ``uni.fabric.mon_common_monitoring_policy.fault_severity_assignment_policy.callhome_source``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        include_action: frozenset[MonInclAction] | set[MonInclAction] | str | None = None,
+        display_name: str | None = None,
+        message_severity: CallhomeUrgency | str | None = None,
+        userdom: str | None = None,
+    ) -> MonCommonMonitoringPolicyFaultSeverityAssignmentPolicyCallhomeSourceCursor:
+        """Set ``callhomeSrc`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class MonCommonMonitoringPolicyFaultSeverityAssignmentPolicySmartCallhomeSourceCursor(
+    _MonCommonMonitoringPolicyFaultSeverityAssignmentPolicyMakers,
+    _MonCommonMonitoringPolicyMakers,
+    _FabricMakers,
+    _UniMakers,
+):
+    """Typed cursor for ``callhomeSmartSrc`` (smart_callhome_source level).
+
+    Position: ``uni.fabric.mon_common_monitoring_policy.fault_severity_assignment_policy.smart_callhome_source``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> MonCommonMonitoringPolicyFaultSeverityAssignmentPolicySmartCallhomeSourceCursor:
+        """Set ``callhomeSmartSrc`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class MonCommonMonitoringPolicyFaultSeverityAssignmentPolicySnmpSourceCursor(
+    _MonCommonMonitoringPolicyFaultSeverityAssignmentPolicyMakers,
+    _MonCommonMonitoringPolicyMakers,
+    _FabricMakers,
+    _UniMakers,
+):
+    """Typed cursor for ``snmpSrc`` (snmp_source level).
+
+    Position: ``uni.fabric.mon_common_monitoring_policy.fault_severity_assignment_policy.snmp_source``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        include_action: frozenset[MonInclAction] | set[MonInclAction] | str | None = None,
+        min_severity: ConditionSeverity | str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> MonCommonMonitoringPolicyFaultSeverityAssignmentPolicySnmpSourceCursor:
+        """Set ``snmpSrc`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class MonCommonMonitoringPolicyFaultSeverityAssignmentPolicySyslogSourceCursor(
+    _MonCommonMonitoringPolicyFaultSeverityAssignmentPolicyMakers,
+    _MonCommonMonitoringPolicyMakers,
+    _FabricMakers,
+    _UniMakers,
+):
+    """Typed cursor for ``syslogSrc`` (syslog_source level).
+
+    Position: ``uni.fabric.mon_common_monitoring_policy.fault_severity_assignment_policy.syslog_source``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        include_action: frozenset[MonInclAction] | set[MonInclAction] | str | None = None,
+        min_severity: SyslogSeverity | str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> MonCommonMonitoringPolicyFaultSeverityAssignmentPolicySyslogSourceCursor:
+        """Set ``syslogSrc`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class MonCommonMonitoringPolicyFaultSeverityAssignmentPolicyTacacsSourceCursor(
+    _MonCommonMonitoringPolicyFaultSeverityAssignmentPolicyMakers,
+    _MonCommonMonitoringPolicyMakers,
+    _FabricMakers,
+    _UniMakers,
+):
+    """Typed cursor for ``tacacsSrc`` (tacacs_source level).
+
+    Position: ``uni.fabric.mon_common_monitoring_policy.fault_severity_assignment_policy.tacacs_source``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        include_action: frozenset[MonInclAction] | set[MonInclAction] | str | None = None,
+        min_sev: ConditionSeverity | str | None = None,
+        display_name: str | None = None,
+        switch_tacacs_audit: TacacsSwitchTacacsAudit | str | None = None,
+        userdom: str | None = None,
+    ) -> MonCommonMonitoringPolicyFaultSeverityAssignmentPolicyTacacsSourceCursor:
+        """Set ``tacacsSrc`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class MonFabricMonitoringPolicyMonitoringTargetCallhomeSourceCursor(
+    _MonFabricMonitoringPolicyMonitoringTargetMakers,
+    _MonFabricMonitoringPolicyMakers,
+    _FabricMakers,
+    _UniMakers,
+):
+    """Typed cursor for ``callhomeSrc`` (callhome_source level).
+
+    Position: ``uni.fabric.mon_fabric_monitoring_policy.monitoring_target.callhome_source``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        include_action: frozenset[MonInclAction] | set[MonInclAction] | str | None = None,
+        display_name: str | None = None,
+        message_severity: CallhomeUrgency | str | None = None,
+        userdom: str | None = None,
+    ) -> MonFabricMonitoringPolicyMonitoringTargetCallhomeSourceCursor:
+        """Set ``callhomeSrc`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class _MonFabricMonitoringPolicyMonitoringTargetEventSeverityAssignmentPolicyMakers(Cursor):
+    """Makers declared at the event_severity_assignment_policy level (``eventSevAsnP``)."""
+
+    __slots__ = ()
+
+    def syslog_source(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        include_action: frozenset[MonInclAction] | set[MonInclAction] | str | None = None,
+        min_severity: SyslogSeverity | str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> MonFabricMonitoringPolicyMonitoringTargetEventSeverityAssignmentPolicySyslogSourceCursor:
+        """Declare a ``syslogSrc`` child under the event_severity_assignment_policy level.
+
+        The syslog source configures a syslog source that specifies the minimum severity of items to
+        be sent as syslog messages to the syslog servers in the destination group.
+
+        Args:
+            name: The name for the system logging source.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            include_action: Default: ``PydanticUndefined``.
+            min_severity: The minimum severity level of messages to be sent. Values: ``alerts``,
+                ``critical``, ``debugging``, ``emergencies``, ``errors``, ``information``,
+                ``notifications``, ``warnings``. Default: ``warnings``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "MonFabricMonitoringPolicyMonitoringTargetEventSeverityAssignmentPolicySyslogSourceCursor",
+            self._invoke_maker("syslog_source", (name,), _prune(params)),
+        )
+
+    def snmp_source(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        include_action: frozenset[MonInclAction] | set[MonInclAction] | str | None = None,
+        min_severity: ConditionSeverity | str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> MonFabricMonitoringPolicyMonitoringTargetEventSeverityAssignmentPolicySnmpSourceCursor:
+        """Declare a ``snmpSrc`` child under the event_severity_assignment_policy level.
+
+        The SNMP source profile determines the fault information, severity level, and destination
+        for sending messages to the SNMP destination. SNMP is an application-layer protocol that
+        provides a message format for communication between SNMP managers and agents.
+
+        Args:
+            name: The name for the SNMP source. This name can be between 1 and 64 alphanumeric
+                characters.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            include_action: The options to include for the SNMP source. Default:
+                ``PydanticUndefined``.
+            min_severity: The minimum severity level of SNMP traps. SNMP traps enable an agent
+                to notify the management station of significant events by way of an unsolicited
+                SNMP message. Values: ``cleared``, ``critical``, ``info``, ``major``, ``minor``,
+                ``warning``. Default: ``info``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "MonFabricMonitoringPolicyMonitoringTargetEventSeverityAssignmentPolicySnmpSourceCursor",
+            self._invoke_maker("snmp_source", (name,), _prune(params)),
+        )
+
+    def callhome_source(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        include_action: frozenset[MonInclAction] | set[MonInclAction] | str | None = None,
+        display_name: str | None = None,
+        message_severity: CallhomeUrgency | str | None = None,
+        userdom: str | None = None,
+    ) -> MonFabricMonitoringPolicyMonitoringTargetEventSeverityAssignmentPolicyCallhomeSourceCursor:
+        """Declare a ``callhomeSrc`` child under the event_severity_assignment_policy level.
+
+        The call home source profile determines the information to deliver and the urgency level for
+        sending email-based alert notifications to a call home destination. A range of message
+        formats are available for compatibility with pager services or XML-based automated parsing
+        applications.
+
+        Args:
+            name: The name for the source.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            include_action: Default: ``PydanticUndefined``.
+            message_severity: The severity level for messages generated from a specific source.
+                Values: ``alert``, ``critical``, ``debug``, ``emergency``, ``error``, ``info``,
+                ``notice``, ``warning``. Default: ``alert``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "MonFabricMonitoringPolicyMonitoringTargetEventSeverityAssignmentPolicyCallhomeSourceCursor",
+            self._invoke_maker("callhome_source", (name,), _prune(params)),
+        )
+
+    def smart_callhome_source(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> MonFabricMonitoringPolicyMonitoringTargetEventSeverityAssignmentPolicySmartCallhomeSourceCursor:
+        """Declare a ``callhomeSmartSrc`` child under the event_severity_assignment_policy level.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "MonFabricMonitoringPolicyMonitoringTargetEventSeverityAssignmentPolicySmartCallhomeSourceCursor",
+            self._invoke_maker("smart_callhome_source", (), _prune(params)),
+        )
+
+    def tacacs_source(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        include_action: frozenset[MonInclAction] | set[MonInclAction] | str | None = None,
+        min_sev: ConditionSeverity | str | None = None,
+        display_name: str | None = None,
+        switch_tacacs_audit: TacacsSwitchTacacsAudit | str | None = None,
+        userdom: str | None = None,
+    ) -> MonFabricMonitoringPolicyMonitoringTargetEventSeverityAssignmentPolicyTacacsSourceCursor:
+        """Declare a ``tacacsSrc`` child under the event_severity_assignment_policy level.
+
+        Args:
+            name: The name of the object.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            include_action: The information to include for the call home source. Default:
+                ``PydanticUndefined``.
+            min_sev: Values: ``cleared``, ``critical``, ``info``, ``major``, ``minor``,
+                ``warning``. Default: ``info``.
+            switch_tacacs_audit: Values: ``disabled``, ``enabled``. Default: ``disabled``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "MonFabricMonitoringPolicyMonitoringTargetEventSeverityAssignmentPolicyTacacsSourceCursor",
+            self._invoke_maker("tacacs_source", (name,), _prune(params)),
+        )
+
+
+class MonFabricMonitoringPolicyMonitoringTargetEventSeverityAssignmentPolicyCursor(
+    _MonFabricMonitoringPolicyMonitoringTargetEventSeverityAssignmentPolicyMakers,
+    _MonFabricMonitoringPolicyMonitoringTargetMakers,
+    _MonFabricMonitoringPolicyMakers,
+    _FabricMakers,
+    _UniMakers,
+):
+    """Typed cursor for ``eventSevAsnP`` (event_severity_assignment_policy level).
+
+    Position: ``uni.fabric.mon_fabric_monitoring_policy.monitoring_target.event_severity_assignment_policy``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        initial_severity: ConditionInitSevDir | str | None = None,
+        userdom: str | None = None,
+    ) -> MonFabricMonitoringPolicyMonitoringTargetEventSeverityAssignmentPolicyCursor:
+        """Set ``eventSevAsnP`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class _MonFabricMonitoringPolicyMonitoringTargetFaultSeverityAssignmentPolicyMakers(Cursor):
+    """Makers declared at the fault_severity_assignment_policy level (``faultSevAsnP``)."""
+
+    __slots__ = ()
+
+    def syslog_source(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        include_action: frozenset[MonInclAction] | set[MonInclAction] | str | None = None,
+        min_severity: SyslogSeverity | str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> MonFabricMonitoringPolicyMonitoringTargetFaultSeverityAssignmentPolicySyslogSourceCursor:
+        """Declare a ``syslogSrc`` child under the fault_severity_assignment_policy level.
+
+        The syslog source configures a syslog source that specifies the minimum severity of items to
+        be sent as syslog messages to the syslog servers in the destination group.
+
+        Args:
+            name: The name for the system logging source.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            include_action: Default: ``PydanticUndefined``.
+            min_severity: The minimum severity level of messages to be sent. Values: ``alerts``,
+                ``critical``, ``debugging``, ``emergencies``, ``errors``, ``information``,
+                ``notifications``, ``warnings``. Default: ``warnings``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "MonFabricMonitoringPolicyMonitoringTargetFaultSeverityAssignmentPolicySyslogSourceCursor",
+            self._invoke_maker("syslog_source", (name,), _prune(params)),
+        )
+
+    def snmp_source(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        include_action: frozenset[MonInclAction] | set[MonInclAction] | str | None = None,
+        min_severity: ConditionSeverity | str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> MonFabricMonitoringPolicyMonitoringTargetFaultSeverityAssignmentPolicySnmpSourceCursor:
+        """Declare a ``snmpSrc`` child under the fault_severity_assignment_policy level.
+
+        The SNMP source profile determines the fault information, severity level, and destination
+        for sending messages to the SNMP destination. SNMP is an application-layer protocol that
+        provides a message format for communication between SNMP managers and agents.
+
+        Args:
+            name: The name for the SNMP source. This name can be between 1 and 64 alphanumeric
+                characters.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            include_action: The options to include for the SNMP source. Default:
+                ``PydanticUndefined``.
+            min_severity: The minimum severity level of SNMP traps. SNMP traps enable an agent
+                to notify the management station of significant events by way of an unsolicited
+                SNMP message. Values: ``cleared``, ``critical``, ``info``, ``major``, ``minor``,
+                ``warning``. Default: ``info``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "MonFabricMonitoringPolicyMonitoringTargetFaultSeverityAssignmentPolicySnmpSourceCursor",
+            self._invoke_maker("snmp_source", (name,), _prune(params)),
+        )
+
+    def callhome_source(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        include_action: frozenset[MonInclAction] | set[MonInclAction] | str | None = None,
+        display_name: str | None = None,
+        message_severity: CallhomeUrgency | str | None = None,
+        userdom: str | None = None,
+    ) -> MonFabricMonitoringPolicyMonitoringTargetFaultSeverityAssignmentPolicyCallhomeSourceCursor:
+        """Declare a ``callhomeSrc`` child under the fault_severity_assignment_policy level.
+
+        The call home source profile determines the information to deliver and the urgency level for
+        sending email-based alert notifications to a call home destination. A range of message
+        formats are available for compatibility with pager services or XML-based automated parsing
+        applications.
+
+        Args:
+            name: The name for the source.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            include_action: Default: ``PydanticUndefined``.
+            message_severity: The severity level for messages generated from a specific source.
+                Values: ``alert``, ``critical``, ``debug``, ``emergency``, ``error``, ``info``,
+                ``notice``, ``warning``. Default: ``alert``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "MonFabricMonitoringPolicyMonitoringTargetFaultSeverityAssignmentPolicyCallhomeSourceCursor",
+            self._invoke_maker("callhome_source", (name,), _prune(params)),
+        )
+
+    def smart_callhome_source(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> MonFabricMonitoringPolicyMonitoringTargetFaultSeverityAssignmentPolicySmartCallhomeSourceCursor:
+        """Declare a ``callhomeSmartSrc`` child under the fault_severity_assignment_policy level.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "MonFabricMonitoringPolicyMonitoringTargetFaultSeverityAssignmentPolicySmartCallhomeSourceCursor",
+            self._invoke_maker("smart_callhome_source", (), _prune(params)),
+        )
+
+    def tacacs_source(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        include_action: frozenset[MonInclAction] | set[MonInclAction] | str | None = None,
+        min_sev: ConditionSeverity | str | None = None,
+        display_name: str | None = None,
+        switch_tacacs_audit: TacacsSwitchTacacsAudit | str | None = None,
+        userdom: str | None = None,
+    ) -> MonFabricMonitoringPolicyMonitoringTargetFaultSeverityAssignmentPolicyTacacsSourceCursor:
+        """Declare a ``tacacsSrc`` child under the fault_severity_assignment_policy level.
+
+        Args:
+            name: The name of the object.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            include_action: The information to include for the call home source. Default:
+                ``PydanticUndefined``.
+            min_sev: Values: ``cleared``, ``critical``, ``info``, ``major``, ``minor``,
+                ``warning``. Default: ``info``.
+            switch_tacacs_audit: Values: ``disabled``, ``enabled``. Default: ``disabled``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "MonFabricMonitoringPolicyMonitoringTargetFaultSeverityAssignmentPolicyTacacsSourceCursor",
+            self._invoke_maker("tacacs_source", (name,), _prune(params)),
+        )
+
+
+class MonFabricMonitoringPolicyMonitoringTargetFaultSeverityAssignmentPolicyCursor(
+    _MonFabricMonitoringPolicyMonitoringTargetFaultSeverityAssignmentPolicyMakers,
+    _MonFabricMonitoringPolicyMonitoringTargetMakers,
+    _MonFabricMonitoringPolicyMakers,
+    _FabricMakers,
+    _UniMakers,
+):
+    """Typed cursor for ``faultSevAsnP`` (fault_severity_assignment_policy level).
+
+    Position: ``uni.fabric.mon_fabric_monitoring_policy.monitoring_target.fault_severity_assignment_policy``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        initial_severity: ConditionInitSevDir | str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        target_severity: ConditionSevDir | str | None = None,
+        userdom: str | None = None,
+        health_score_weight: int | None = None,
+    ) -> MonFabricMonitoringPolicyMonitoringTargetFaultSeverityAssignmentPolicyCursor:
+        """Set ``faultSevAsnP`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class MonFabricMonitoringPolicyMonitoringTargetSmartCallhomeSourceCursor(
+    _MonFabricMonitoringPolicyMonitoringTargetMakers,
+    _MonFabricMonitoringPolicyMakers,
+    _FabricMakers,
+    _UniMakers,
+):
+    """Typed cursor for ``callhomeSmartSrc`` (smart_callhome_source level).
+
+    Position: ``uni.fabric.mon_fabric_monitoring_policy.monitoring_target.smart_callhome_source``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> MonFabricMonitoringPolicyMonitoringTargetSmartCallhomeSourceCursor:
+        """Set ``callhomeSmartSrc`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class MonFabricMonitoringPolicyMonitoringTargetSnmpSourceCursor(
+    _MonFabricMonitoringPolicyMonitoringTargetMakers,
+    _MonFabricMonitoringPolicyMakers,
+    _FabricMakers,
+    _UniMakers,
+):
+    """Typed cursor for ``snmpSrc`` (snmp_source level).
+
+    Position: ``uni.fabric.mon_fabric_monitoring_policy.monitoring_target.snmp_source``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        include_action: frozenset[MonInclAction] | set[MonInclAction] | str | None = None,
+        min_severity: ConditionSeverity | str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> MonFabricMonitoringPolicyMonitoringTargetSnmpSourceCursor:
+        """Set ``snmpSrc`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class MonFabricMonitoringPolicyMonitoringTargetSyslogSourceCursor(
+    _MonFabricMonitoringPolicyMonitoringTargetMakers,
+    _MonFabricMonitoringPolicyMakers,
+    _FabricMakers,
+    _UniMakers,
+):
+    """Typed cursor for ``syslogSrc`` (syslog_source level).
+
+    Position: ``uni.fabric.mon_fabric_monitoring_policy.monitoring_target.syslog_source``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        include_action: frozenset[MonInclAction] | set[MonInclAction] | str | None = None,
+        min_severity: SyslogSeverity | str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> MonFabricMonitoringPolicyMonitoringTargetSyslogSourceCursor:
+        """Set ``syslogSrc`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class MonFabricMonitoringPolicyMonitoringTargetTacacsSourceCursor(
+    _MonFabricMonitoringPolicyMonitoringTargetMakers,
+    _MonFabricMonitoringPolicyMakers,
+    _FabricMakers,
+    _UniMakers,
+):
+    """Typed cursor for ``tacacsSrc`` (tacacs_source level).
+
+    Position: ``uni.fabric.mon_fabric_monitoring_policy.monitoring_target.tacacs_source``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        include_action: frozenset[MonInclAction] | set[MonInclAction] | str | None = None,
+        min_sev: ConditionSeverity | str | None = None,
+        display_name: str | None = None,
+        switch_tacacs_audit: TacacsSwitchTacacsAudit | str | None = None,
+        userdom: str | None = None,
+    ) -> MonFabricMonitoringPolicyMonitoringTargetTacacsSourceCursor:
+        """Set ``tacacsSrc`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class FabricPodProfilePodSelectorPodBlockCursor(
+    _FabricPodProfilePodSelectorMakers, _FabricPodProfileMakers, _FabricMakers, _UniMakers
+):
+    """Typed cursor for ``fabricPodBlk`` (pod_block level).
+
+    Position: ``uni.fabric.pod_profile.pod_selector.pod_block``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        from_pod_id: int | None = None,
+        display_name: str | None = None,
+        to_pod_id: int | None = None,
+        userdom: str | None = None,
+    ) -> FabricPodProfilePodSelectorPodBlockCursor:
+        """Set ``fabricPodBlk`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        policy_group: str | Ref | None = None,
+    ) -> FabricPodProfilePodSelectorPodBlockCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        policy_group: str | Ref | None = None,
+    ) -> FabricPodProfilePodSelectorPodBlockCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class SnmpClientGroupProfileClientEntryCursor(
+    _SnmpClientGroupProfileMakers, _SnmpPolicyMakers, _FabricMakers, _UniMakers
+):
+    """Typed cursor for ``snmpClientP`` (client_entry level).
+
+    Position: ``uni.fabric.snmp_policy.snmp_client_group_profile.client_entry``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> SnmpClientGroupProfileClientEntryCursor:
+        """Set ``snmpClientP`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
         return self
@@ -1949,6 +15048,161 @@ class FabricSpanDestinationGroupSpanDestinationVspanEpgSummaryCursor(
         return self
 
 
+class SpineFabricPortSelectorFabricSubPortBlockCursor(
+    _SpineFabricPortSelectorMakers, _SpineFabricInterfaceProfileMakers, _FabricMakers, _UniMakers
+):
+    """Typed cursor for ``fabricSubPortBlk`` (fabric_sub_port_block level).
+
+    Position: ``uni.fabric.spine_fabric_interface_profile.spine_fabric_port_selector.fabric_sub_port_block``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        from_module_id: int | None = None,
+        from_port_id: int | None = None,
+        from_sub_port_id: int | None = None,
+        display_name: str | None = None,
+        to_module_id: int | None = None,
+        to_port_id: int | None = None,
+        to_sub_port_id: int | None = None,
+        userdom: str | None = None,
+    ) -> SpineFabricPortSelectorFabricSubPortBlockCursor:
+        """Set ``fabricSubPortBlk`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        policy_group: str | Ref | None = None,
+    ) -> SpineFabricPortSelectorFabricSubPortBlockCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        policy_group: str | Ref | None = None,
+    ) -> SpineFabricPortSelectorFabricSubPortBlockCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class SpineFabricPortSelectorPortBlockCursor(
+    _SpineFabricPortSelectorMakers, _SpineFabricInterfaceProfileMakers, _FabricMakers, _UniMakers
+):
+    """Typed cursor for ``fabricPortBlk`` (port_block level).
+
+    Position: ``uni.fabric.spine_fabric_interface_profile.spine_fabric_port_selector.port_block``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        from_module_id: int | None = None,
+        from_port_id: int | None = None,
+        display_name: str | None = None,
+        to_module_id: int | None = None,
+        to_port_id: int | None = None,
+        userdom: str | None = None,
+    ) -> SpineFabricPortSelectorPortBlockCursor:
+        """Set ``fabricPortBlk`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        policy_group: str | Ref | None = None,
+    ) -> SpineFabricPortSelectorPortBlockCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        policy_group: str | Ref | None = None,
+    ) -> SpineFabricPortSelectorPortBlockCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class SpineSwitchProfileSpineSelectorNodeBlockCursor(
+    _SpineSwitchProfileSpineSelectorMakers, _SpineSwitchProfileMakers, _FabricMakers, _UniMakers
+):
+    """Typed cursor for ``fabricNodeBlk`` (node_block level).
+
+    Position: ``uni.fabric.spine_switch_profile.spine_selector.node_block``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        from_node_id: int | None = None,
+        display_name: str | None = None,
+        to_node_id: int | None = None,
+        userdom: str | None = None,
+    ) -> SpineSwitchProfileSpineSelectorNodeBlockCursor:
+        """Set ``fabricNodeBlk`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        policy_group: str | Ref | None = None,
+        interface_profile: str | Ref | None = None,
+    ) -> SpineSwitchProfileSpineSelectorNodeBlockCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        policy_group: str | Ref | None = None,
+        interface_profile: str | Ref | None = None,
+    ) -> SpineSwitchProfileSpineSelectorNodeBlockCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
 class VpcPairNodeCursor(_VpcPairMakers, _VpcProtectionMakers, _FabricMakers, _UniMakers):
     """Typed cursor for ``fabricNodePEp`` (node level).
 
@@ -1971,6 +15225,611 @@ class VpcPairNodeCursor(_VpcPairMakers, _VpcProtectionMakers, _FabricMakers, _Un
         userdom: str | None = None,
     ) -> VpcPairNodeCursor:
         """Set ``fabricNodePEp`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class FabricVspanDestinationGroupVspanVdestinationVspanDestinationEpgSummaryCursor(
+    _FabricVspanDestinationGroupVspanVdestinationMakers,
+    _FabricVspanDestinationGroupMakers,
+    _FabricMakers,
+    _UniMakers,
+):
+    """Typed cursor for ``spanVEpgSummary`` (vspan_destination_epg_summary level).
+
+    Position: ``uni.fabric.vspan_destination_group.vspan_vdestination.vspan_destination_epg_summary``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        dscp: int | str | None = None,
+        destination_ip: str | None = None,
+        flow_id: int | None = None,
+        mode: SpanErspanDestMode | str | None = None,
+        mtu: int | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        source_ip_of_erspan_packet: str | None = None,
+        time_to_live: int | str | None = None,
+        userdom: str | None = None,
+        vrf: str | None = None,
+    ) -> FabricVspanDestinationGroupVspanVdestinationVspanDestinationEpgSummaryCursor:
+        """Set ``spanVEpgSummary`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class _GeoRoomMakers(Cursor):
+    """Makers declared at the geo_room level (``geoRoom``)."""
+
+    __slots__ = ()
+
+    def geo_row(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> GeoRowCursor:
+        """Declare a ``geoRow`` child under the geo_room level.
+
+        The row name where the node is located.
+
+        Args:
+            name: The row name. The name can be up to 64 characters and must begin with an
+                alphanumberic character. The name can only contain alphanumeric characters and
+                the following symbols: - . : _
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "GeoRowCursor",
+            self._invoke_maker("geo_row", (name,), _prune(params)),
+        )
+
+    def geo_rack(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> GeoRoomGeoRackCursor:
+        """Declare a ``geoRack`` child under the geo_room level.
+
+        The rack identifier where the node is located.
+
+        Args:
+            name: The rack name. The name can be up to 64 characters and must begin with an
+                alphanumeric character. The name can only contain alphanumeric characters and
+                the following symbols: - . : _
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "GeoRoomGeoRackCursor",
+            self._invoke_maker("geo_rack", (name,), _prune(params)),
+        )
+
+
+class GeoRoomCursor(
+    _GeoRoomMakers, _GeoFloorMakers, _GeoBuildingMakers, _GeoSiteMakers, _FabricMakers, _UniMakers
+):
+    """Typed cursor for ``geoRoom`` (geo_room level).
+
+    Position: ``uni.fabric.geo_site.geo_building.geo_floor.geo_room``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> GeoRoomCursor:
+        """Set ``geoRoom`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class MonFabricMonitoringPolicyMonitoringTargetEventSeverityAssignmentPolicyCallhomeSourceCursor(
+    _MonFabricMonitoringPolicyMonitoringTargetEventSeverityAssignmentPolicyMakers,
+    _MonFabricMonitoringPolicyMonitoringTargetMakers,
+    _MonFabricMonitoringPolicyMakers,
+    _FabricMakers,
+    _UniMakers,
+):
+    """Typed cursor for ``callhomeSrc`` (callhome_source level).
+
+    Position: ``uni.fabric.mon_fabric_monitoring_policy.monitoring_target.event_severity_assignment_policy.callhome_source``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        include_action: frozenset[MonInclAction] | set[MonInclAction] | str | None = None,
+        display_name: str | None = None,
+        message_severity: CallhomeUrgency | str | None = None,
+        userdom: str | None = None,
+    ) -> MonFabricMonitoringPolicyMonitoringTargetEventSeverityAssignmentPolicyCallhomeSourceCursor:
+        """Set ``callhomeSrc`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class MonFabricMonitoringPolicyMonitoringTargetEventSeverityAssignmentPolicySmartCallhomeSourceCursor(
+    _MonFabricMonitoringPolicyMonitoringTargetEventSeverityAssignmentPolicyMakers,
+    _MonFabricMonitoringPolicyMonitoringTargetMakers,
+    _MonFabricMonitoringPolicyMakers,
+    _FabricMakers,
+    _UniMakers,
+):
+    """Typed cursor for ``callhomeSmartSrc`` (smart_callhome_source level).
+
+    Position: ``uni.fabric.mon_fabric_monitoring_policy.monitoring_target.event_severity_assignment_policy.smart_callhome_source``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> MonFabricMonitoringPolicyMonitoringTargetEventSeverityAssignmentPolicySmartCallhomeSourceCursor:
+        """Set ``callhomeSmartSrc`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class MonFabricMonitoringPolicyMonitoringTargetEventSeverityAssignmentPolicySnmpSourceCursor(
+    _MonFabricMonitoringPolicyMonitoringTargetEventSeverityAssignmentPolicyMakers,
+    _MonFabricMonitoringPolicyMonitoringTargetMakers,
+    _MonFabricMonitoringPolicyMakers,
+    _FabricMakers,
+    _UniMakers,
+):
+    """Typed cursor for ``snmpSrc`` (snmp_source level).
+
+    Position: ``uni.fabric.mon_fabric_monitoring_policy.monitoring_target.event_severity_assignment_policy.snmp_source``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        include_action: frozenset[MonInclAction] | set[MonInclAction] | str | None = None,
+        min_severity: ConditionSeverity | str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> MonFabricMonitoringPolicyMonitoringTargetEventSeverityAssignmentPolicySnmpSourceCursor:
+        """Set ``snmpSrc`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class MonFabricMonitoringPolicyMonitoringTargetEventSeverityAssignmentPolicySyslogSourceCursor(
+    _MonFabricMonitoringPolicyMonitoringTargetEventSeverityAssignmentPolicyMakers,
+    _MonFabricMonitoringPolicyMonitoringTargetMakers,
+    _MonFabricMonitoringPolicyMakers,
+    _FabricMakers,
+    _UniMakers,
+):
+    """Typed cursor for ``syslogSrc`` (syslog_source level).
+
+    Position: ``uni.fabric.mon_fabric_monitoring_policy.monitoring_target.event_severity_assignment_policy.syslog_source``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        include_action: frozenset[MonInclAction] | set[MonInclAction] | str | None = None,
+        min_severity: SyslogSeverity | str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> MonFabricMonitoringPolicyMonitoringTargetEventSeverityAssignmentPolicySyslogSourceCursor:
+        """Set ``syslogSrc`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class MonFabricMonitoringPolicyMonitoringTargetEventSeverityAssignmentPolicyTacacsSourceCursor(
+    _MonFabricMonitoringPolicyMonitoringTargetEventSeverityAssignmentPolicyMakers,
+    _MonFabricMonitoringPolicyMonitoringTargetMakers,
+    _MonFabricMonitoringPolicyMakers,
+    _FabricMakers,
+    _UniMakers,
+):
+    """Typed cursor for ``tacacsSrc`` (tacacs_source level).
+
+    Position: ``uni.fabric.mon_fabric_monitoring_policy.monitoring_target.event_severity_assignment_policy.tacacs_source``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        include_action: frozenset[MonInclAction] | set[MonInclAction] | str | None = None,
+        min_sev: ConditionSeverity | str | None = None,
+        display_name: str | None = None,
+        switch_tacacs_audit: TacacsSwitchTacacsAudit | str | None = None,
+        userdom: str | None = None,
+    ) -> MonFabricMonitoringPolicyMonitoringTargetEventSeverityAssignmentPolicyTacacsSourceCursor:
+        """Set ``tacacsSrc`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class MonFabricMonitoringPolicyMonitoringTargetFaultSeverityAssignmentPolicyCallhomeSourceCursor(
+    _MonFabricMonitoringPolicyMonitoringTargetFaultSeverityAssignmentPolicyMakers,
+    _MonFabricMonitoringPolicyMonitoringTargetMakers,
+    _MonFabricMonitoringPolicyMakers,
+    _FabricMakers,
+    _UniMakers,
+):
+    """Typed cursor for ``callhomeSrc`` (callhome_source level).
+
+    Position: ``uni.fabric.mon_fabric_monitoring_policy.monitoring_target.fault_severity_assignment_policy.callhome_source``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        include_action: frozenset[MonInclAction] | set[MonInclAction] | str | None = None,
+        display_name: str | None = None,
+        message_severity: CallhomeUrgency | str | None = None,
+        userdom: str | None = None,
+    ) -> MonFabricMonitoringPolicyMonitoringTargetFaultSeverityAssignmentPolicyCallhomeSourceCursor:
+        """Set ``callhomeSrc`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class MonFabricMonitoringPolicyMonitoringTargetFaultSeverityAssignmentPolicySmartCallhomeSourceCursor(
+    _MonFabricMonitoringPolicyMonitoringTargetFaultSeverityAssignmentPolicyMakers,
+    _MonFabricMonitoringPolicyMonitoringTargetMakers,
+    _MonFabricMonitoringPolicyMakers,
+    _FabricMakers,
+    _UniMakers,
+):
+    """Typed cursor for ``callhomeSmartSrc`` (smart_callhome_source level).
+
+    Position: ``uni.fabric.mon_fabric_monitoring_policy.monitoring_target.fault_severity_assignment_policy.smart_callhome_source``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> MonFabricMonitoringPolicyMonitoringTargetFaultSeverityAssignmentPolicySmartCallhomeSourceCursor:
+        """Set ``callhomeSmartSrc`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class MonFabricMonitoringPolicyMonitoringTargetFaultSeverityAssignmentPolicySnmpSourceCursor(
+    _MonFabricMonitoringPolicyMonitoringTargetFaultSeverityAssignmentPolicyMakers,
+    _MonFabricMonitoringPolicyMonitoringTargetMakers,
+    _MonFabricMonitoringPolicyMakers,
+    _FabricMakers,
+    _UniMakers,
+):
+    """Typed cursor for ``snmpSrc`` (snmp_source level).
+
+    Position: ``uni.fabric.mon_fabric_monitoring_policy.monitoring_target.fault_severity_assignment_policy.snmp_source``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        include_action: frozenset[MonInclAction] | set[MonInclAction] | str | None = None,
+        min_severity: ConditionSeverity | str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> MonFabricMonitoringPolicyMonitoringTargetFaultSeverityAssignmentPolicySnmpSourceCursor:
+        """Set ``snmpSrc`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class MonFabricMonitoringPolicyMonitoringTargetFaultSeverityAssignmentPolicySyslogSourceCursor(
+    _MonFabricMonitoringPolicyMonitoringTargetFaultSeverityAssignmentPolicyMakers,
+    _MonFabricMonitoringPolicyMonitoringTargetMakers,
+    _MonFabricMonitoringPolicyMakers,
+    _FabricMakers,
+    _UniMakers,
+):
+    """Typed cursor for ``syslogSrc`` (syslog_source level).
+
+    Position: ``uni.fabric.mon_fabric_monitoring_policy.monitoring_target.fault_severity_assignment_policy.syslog_source``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        include_action: frozenset[MonInclAction] | set[MonInclAction] | str | None = None,
+        min_severity: SyslogSeverity | str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> MonFabricMonitoringPolicyMonitoringTargetFaultSeverityAssignmentPolicySyslogSourceCursor:
+        """Set ``syslogSrc`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class MonFabricMonitoringPolicyMonitoringTargetFaultSeverityAssignmentPolicyTacacsSourceCursor(
+    _MonFabricMonitoringPolicyMonitoringTargetFaultSeverityAssignmentPolicyMakers,
+    _MonFabricMonitoringPolicyMonitoringTargetMakers,
+    _MonFabricMonitoringPolicyMakers,
+    _FabricMakers,
+    _UniMakers,
+):
+    """Typed cursor for ``tacacsSrc`` (tacacs_source level).
+
+    Position: ``uni.fabric.mon_fabric_monitoring_policy.monitoring_target.fault_severity_assignment_policy.tacacs_source``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        include_action: frozenset[MonInclAction] | set[MonInclAction] | str | None = None,
+        min_sev: ConditionSeverity | str | None = None,
+        display_name: str | None = None,
+        switch_tacacs_audit: TacacsSwitchTacacsAudit | str | None = None,
+        userdom: str | None = None,
+    ) -> MonFabricMonitoringPolicyMonitoringTargetFaultSeverityAssignmentPolicyTacacsSourceCursor:
+        """Set ``tacacsSrc`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class GeoRoomGeoRackCursor(
+    _GeoRoomMakers, _GeoFloorMakers, _GeoBuildingMakers, _GeoSiteMakers, _FabricMakers, _UniMakers
+):
+    """Typed cursor for ``geoRack`` (geo_rack level).
+
+    Position: ``uni.fabric.geo_site.geo_building.geo_floor.geo_room.geo_rack``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> GeoRoomGeoRackCursor:
+        """Set ``geoRack`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class _GeoRowMakers(Cursor):
+    """Makers declared at the geo_row level (``geoRow``)."""
+
+    __slots__ = ()
+
+    def geo_rack(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> GeoRowGeoRackCursor:
+        """Declare a ``geoRack`` child under the geo_row level.
+
+        The rack identifier where the node is located.
+
+        Args:
+            name: The rack name. The name can be up to 64 characters and must begin with an
+                alphanumeric character. The name can only contain alphanumeric characters and
+                the following symbols: - . : _
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "GeoRowGeoRackCursor",
+            self._invoke_maker("geo_rack", (name,), _prune(params)),
+        )
+
+
+class GeoRowCursor(
+    _GeoRowMakers,
+    _GeoRoomMakers,
+    _GeoFloorMakers,
+    _GeoBuildingMakers,
+    _GeoSiteMakers,
+    _FabricMakers,
+    _UniMakers,
+):
+    """Typed cursor for ``geoRow`` (geo_row level).
+
+    Position: ``uni.fabric.geo_site.geo_building.geo_floor.geo_room.geo_row``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> GeoRowCursor:
+        """Set ``geoRow`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class GeoRowGeoRackCursor(
+    _GeoRowMakers,
+    _GeoRoomMakers,
+    _GeoFloorMakers,
+    _GeoBuildingMakers,
+    _GeoSiteMakers,
+    _FabricMakers,
+    _UniMakers,
+):
+    """Typed cursor for ``geoRack`` (geo_rack level).
+
+    Position: ``uni.fabric.geo_site.geo_building.geo_floor.geo_room.geo_row.geo_rack``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> GeoRowGeoRackCursor:
+        """Set ``geoRack`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
         return self

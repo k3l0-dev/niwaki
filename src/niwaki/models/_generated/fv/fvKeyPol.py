@@ -35,6 +35,7 @@ class fvKeyPol(ManagedObject):
     _write_access: ClassVar[frozenset[str]] = frozenset(
         ["access-protocol", "admin", "fabric-protocol"]
     )
+    _is_creatable: ClassVar[bool] = True
     _is_observable: ClassVar[bool] = True
     _is_faultable: ClassVar[bool] = False
     _is_health_scorable: ClassVar[bool] = True

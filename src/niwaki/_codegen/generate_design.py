@@ -381,17 +381,41 @@ def _naming_params(
     return names, types, enum_imports
 
 
+def _singleton_naming_default(
+    cls: type[ManagedObject], naming: list[str], naming_types: dict[str, str]
+) -> str | None:
+    """The default ``name`` for a maker that targets a non-creatable singleton.
+
+    A class the APIC will not let you create (``_is_creatable`` False) and that
+    is named only by a plain-string ``name`` is a default singleton: there is one
+    instance, conventionally named ``"default"`` (``qosInstPol`` →
+    ``uni/infra/qosinst-default``).  The maker defaults ``name`` to ``"default"``
+    so it reads as the singleton it is — ``.qos_instance_policy()`` — while still
+    accepting an explicit name for the rare non-default system instance.
+
+    Returns the quoted default (``'"default"'``) or ``None`` when the maker keeps
+    a required name (creatable classes, multi-prop or enum-named singletons).
+    """
+    if cls._is_creatable:  # pyright: ignore[reportPrivateUsage]
+        return None
+    if naming == ["name"] and naming_types.get("name", "str") == "str":
+        return '"default"'
+    return None
+
+
 def _render_signature(
     method: str,
     naming: list[str],
     keyword_params: list[tuple[str, str]],
     return_type: str,
     naming_types: dict[str, str] | None = None,
+    naming_default: str | None = None,
 ) -> list[str]:
     """Render a def line with one parameter per line (ruff-format friendly)."""
     types = naming_types or {}
     lines = [f"    def {method}(", "        self,"]
-    lines.extend(f"        {p}: {types.get(p, 'str')}," for p in naming)
+    default_suffix = f" = {naming_default}" if naming_default else ""
+    lines.extend(f"        {p}: {types.get(p, 'str')}{default_suffix}," for p in naming)
     if keyword_params:
         lines.append("        *,")
         lines.extend(f"        {name}: {type_str} = None," for name, type_str in keyword_params)
@@ -495,7 +519,10 @@ def _render_maker(
     enum_imports |= imports | naming_enums
     sugar = _sugar_params(child_aci)
     keyword_params = sugar + params
-    lines = _render_signature(label, naming, keyword_params, return_type, naming_types)
+    naming_default = _singleton_naming_default(child_cls, naming, naming_types)
+    lines = _render_signature(
+        label, naming, keyword_params, return_type, naming_types, naming_default
+    )
 
     summary = f"Declare a ``{child_aci}`` child under the {owner_label} level."
     class_comment = _docstring_safe(getattr(child_cls, "__doc__", "") or "")

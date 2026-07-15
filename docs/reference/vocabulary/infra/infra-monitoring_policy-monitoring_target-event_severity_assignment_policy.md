@@ -13,7 +13,7 @@ Represents a policy that specifies the initial and target severity for a specifi
 | --- | --- |
 | ACI class | `eventSevAsnP` |
 | RN | `esevp-{condition_code}` |
-| Cursor | `EventSeverityAssignmentPolicyCursor` |
+| Cursor | `MonitoringPolicyMonitoringTargetEventSeverityAssignmentPolicyCursor` |
 | Parent | {ref}`infra.monitoring_policy.monitoring_target <vocab-infra-monitoring_policy-monitoring_target>` |
 | Atomic | — |
 

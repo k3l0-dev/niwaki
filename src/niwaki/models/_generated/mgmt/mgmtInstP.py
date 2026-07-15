@@ -80,6 +80,7 @@ class mgmtInstP(ManagedObject):
     _write_access: ClassVar[frozenset[str]] = frozenset(
         ["admin", "tenant-connectivity", "tenant-epg", "tenant-network-profile"]
     )
+    _is_creatable: ClassVar[bool] = True
     _is_observable: ClassVar[bool] = True
     _is_faultable: ClassVar[bool] = True
     _is_health_scorable: ClassVar[bool] = True

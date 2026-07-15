@@ -13,7 +13,7 @@ POD Selector
 | --- | --- |
 | ACI class | `infraPodS` |
 | RN | `pods-{name}-typ-{selector_type}` |
-| Cursor | `PodSelectorCursor` |
+| Cursor | `InfraPodProfilePodSelectorCursor` |
 | Parent | {ref}`infra.pod_profile <vocab-infra-pod_profile>` |
 | Atomic | — |
 

@@ -85,6 +85,7 @@ class physDomP(ManagedObject):
     _write_access: ClassVar[frozenset[str]] = frozenset(
         ["admin", "tenant-epg", "tenant-ext-connectivity", "tenant-network-profile", "vmm-policy"]
     )
+    _is_creatable: ClassVar[bool] = True
     _is_observable: ClassVar[bool] = True
     _is_faultable: ClassVar[bool] = True
     _is_health_scorable: ClassVar[bool] = True

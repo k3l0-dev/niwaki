@@ -12,6 +12,18 @@ Fabric membership (node registration) under `uni/controller`.  Root factory: `co
 - {ref}`controller <vocab-controller>` — `ctrlrInst`, 3 attributes
   - {ref}`controller.fabric_membership <vocab-controller-fabric_membership>` — `fabricNodeIdentPol`, 4 attributes
     - {ref}`controller.fabric_membership.fabric_node_member <vocab-controller-fabric_membership-fabric_node_member>` — `fabricNodeIdentP`, 9 attributes
+  - {ref}`controller.cluster_policy <vocab-controller-cluster_policy>` — `infraClusterPol`, 7 attributes
+  - {ref}`controller.controller_audit_log_retention_policy <vocab-controller-controller_audit_log_retention_policy>` — `aaaCtrlrRetP`, 6 attributes
+  - {ref}`controller.controller_firmware_policy <vocab-controller-controller_firmware_policy>` — `firmwareCtrlrFwP`, 11 attributes
+  - {ref}`controller.controller_maintenance_policy <vocab-controller-controller_maintenance_policy>` — `maintCtrlrMaintP`, 16 attributes
+  - {ref}`controller.fabric_firsttime_setup_policy <vocab-controller-fabric_firsttime_setup_policy>` — `fabricSetupPol`, 4 attributes
+    - {ref}`controller.fabric_firsttime_setup_policy.pod_setup <vocab-controller-fabric_firsttime_setup_policy-pod_setup>` — `fabricSetupP`, 5 attributes
+  - {ref}`controller.drr_policy <vocab-controller-drr_policy>` — `infraDRRPol`, 5 attributes
+  - {ref}`controller.scheduler <vocab-controller-scheduler>` — `trigSchedP`, 4 attributes
+    - {ref}`controller.scheduler.one_time_window <vocab-controller-scheduler-one_time_window>` — `trigAbsWindowP`, 7 attributes
+    - {ref}`controller.scheduler.recurring_window <vocab-controller-scheduler-recurring_window>` — `trigRecurrWindowP`, 9 attributes
+  - {ref}`controller.cimc_node <vocab-controller-cimc_node>` — `ctrlrCimcNode`, 6 attributes
+  - {ref}`controller.controller_cores_policy <vocab-controller-controller_cores_policy>` — `svccoreCtrlrPol`, 5 attributes
 
 ```{toctree}
 :maxdepth: 1
@@ -20,4 +32,16 @@ Fabric membership (node registration) under `uni/controller`.  Root factory: `co
 controller/controller
 controller/controller-fabric_membership
 controller/controller-fabric_membership-fabric_node_member
+controller/controller-cluster_policy
+controller/controller-controller_audit_log_retention_policy
+controller/controller-controller_firmware_policy
+controller/controller-controller_maintenance_policy
+controller/controller-fabric_firsttime_setup_policy
+controller/controller-fabric_firsttime_setup_policy-pod_setup
+controller/controller-drr_policy
+controller/controller-scheduler
+controller/controller-scheduler-one_time_window
+controller/controller-scheduler-recurring_window
+controller/controller-cimc_node
+controller/controller-controller_cores_policy
 ```

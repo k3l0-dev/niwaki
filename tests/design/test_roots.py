@@ -132,7 +132,9 @@ class TestPositionDispatch:
             .node_block("b1", from_node_id=201, to_node_id=201)
         )
         assert type(leaf_blk).__name__ == "LeafSelectorNodeBlockCursor"
-        assert type(spine_blk).__name__ == "SpineSelectorNodeBlockCursor"
+        # Fabric also has a spine_selector → node_block path, so the infra one
+        # disambiguates on its profile-level ancestor.
+        assert type(spine_blk).__name__ == "SpineProfileSpineSelectorNodeBlockCursor"
         assert leaf_blk.design_node.position == "infra.leaf_profile.leaf_selector.node_block"
         assert spine_blk.design_node.position == "infra.spine_profile.spine_selector.node_block"
 

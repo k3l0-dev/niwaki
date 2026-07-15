@@ -40,3 +40,78 @@ Accepted as keyword arguments of `.fabric()` and of `.set(**attrs)` on this curs
 | `.vpc_protection(**attrs)` | `fabricProtPol` | {ref}`fabric.vpc_protection <vocab-fabric-vpc_protection>` |
 | `.span_source_group(name, **attrs)` | `spanSrcGrp` | {ref}`fabric.span_source_group <vocab-fabric-span_source_group>` |
 | `.span_destination_group(name, **attrs)` | `spanDestGrp` | {ref}`fabric.span_destination_group <vocab-fabric-span_destination_group>` |
+| `.function_profile(**attrs)` | `fabricFuncP` | {ref}`fabric.function_profile <vocab-fabric-function_profile>` |
+| `.leaf_switch_profile(name, **attrs)` | `fabricLeafP` | {ref}`fabric.leaf_switch_profile <vocab-fabric-leaf_switch_profile>` |
+| `.spine_switch_profile(name, **attrs)` | `fabricSpineP` | {ref}`fabric.spine_switch_profile <vocab-fabric-spine_switch_profile>` |
+| `.leaf_fabric_interface_profile(name, **attrs)` | `fabricLePortP` | {ref}`fabric.leaf_fabric_interface_profile <vocab-fabric-leaf_fabric_interface_profile>` |
+| `.spine_fabric_interface_profile(name, **attrs)` | `fabricSpPortP` | {ref}`fabric.spine_fabric_interface_profile <vocab-fabric-spine_fabric_interface_profile>` |
+| `.leaf_module_profile(name, **attrs)` | `fabricLeCardP` | {ref}`fabric.leaf_module_profile <vocab-fabric-leaf_module_profile>` |
+| `.spine_module_profile(name, **attrs)` | `fabricSpCardP` | {ref}`fabric.spine_module_profile <vocab-fabric-spine_module_profile>` |
+| `.pod_profile(name, **attrs)` | `fabricPodP` | {ref}`fabric.pod_profile <vocab-fabric-pod_profile>` |
+| `.fabric_link_level_policy(name, **attrs)` | `fabricFIfPol` | {ref}`fabric.fabric_link_level_policy <vocab-fabric-fabric_link_level_policy>` |
+| `.fabric_link_flap_policy(name, **attrs)` | `fabricFLinkFlapPol` | {ref}`fabric.fabric_link_flap_policy <vocab-fabric-fabric_link_flap_policy>` |
+| `.l3_interface_policy(name, **attrs)` | `l3IfPol` | {ref}`fabric.l3_interface_policy <vocab-fabric-l3_interface_policy>` |
+| `.fabric_l2_mtu_policy(name, **attrs)` | `l2InstPol` | {ref}`fabric.fabric_l2_mtu_policy <vocab-fabric-fabric_l2_mtu_policy>` |
+| `.lldp_policy(name, **attrs)` | `lldpIfPol` | {ref}`fabric.lldp_policy <vocab-fabric-lldp_policy>` |
+| `.macsec_fabric_interface_policy(name, **attrs)` | `macsecFabIfPol` | {ref}`fabric.macsec_fabric_interface_policy <vocab-fabric-macsec_fabric_interface_policy>` |
+| `.macsec_fabric(**attrs)` | `macsecFabPolCont` | {ref}`fabric.macsec_fabric <vocab-fabric-macsec_fabric>` |
+| `.isis_domain_policy(name, **attrs)` | `isisDomPol` | {ref}`fabric.isis_domain_policy <vocab-fabric-isis_domain_policy>` |
+| `.coop_group_policy(name, **attrs)` | `coopPol` | {ref}`fabric.coop_group_policy <vocab-fabric-coop_group_policy>` |
+| `.fabric_vxlan_policy(name, **attrs)` | `l4VxlanInstPol` | {ref}`fabric.fabric_vxlan_policy <vocab-fabric-fabric_vxlan_policy>` |
+| `.vpc_domain_policy(name, **attrs)` | `vpcInstPol` | {ref}`fabric.vpc_domain_policy <vocab-fabric-vpc_domain_policy>` |
+| `.power_supply_redundancy_policy(name, **attrs)` | `psuInstPol` | {ref}`fabric.power_supply_redundancy_policy <vocab-fabric-power_supply_redundancy_policy>` |
+| `.zr_policy(name, **attrs)` | `xcvrZRFabIfPol` | {ref}`fabric.zr_policy <vocab-fabric-zr_policy>` |
+| `.zrp_policy(name, **attrs)` | `xcvrZRPFabIfPol` | {ref}`fabric.zrp_policy <vocab-fabric-zrp_policy>` |
+| `.dwdm_policy(name, **attrs)` | `dwdmFabIfPol` | {ref}`fabric.dwdm_policy <vocab-fabric-dwdm_policy>` |
+| `.wwn_inst_policy(name, **attrs)` | `wwnInstPol` | {ref}`fabric.wwn_inst_policy <vocab-fabric-wwn_inst_policy>` |
+| `.load_balance_policy(name, **attrs)` | `lbpPol` | {ref}`fabric.load_balance_policy <vocab-fabric-load_balance_policy>` |
+| `.global_ep_listen_policy(name, **attrs)` | `fabricGlbEpListenPol` | {ref}`fabric.global_ep_listen_policy <vocab-fabric-global_ep_listen_policy>` |
+| `.fabric_node_control(name, **attrs)` | `fabricNodeControl` | {ref}`fabric.fabric_node_control <vocab-fabric-fabric_node_control>` |
+| `.callhome_destination_group(name, **attrs)` | `callhomeGroup` | {ref}`fabric.callhome_destination_group <vocab-fabric-callhome_destination_group>` |
+| `.smart_callhome_destination_group(name, **attrs)` | `callhomeSmartGroup` | {ref}`fabric.smart_callhome_destination_group <vocab-fabric-smart_callhome_destination_group>` |
+| `.callhome_inventory_policy(name, **attrs)` | `callhomeInvP` | {ref}`fabric.callhome_inventory_policy <vocab-fabric-callhome_inventory_policy>` |
+| `.callhome_query_group(name, **attrs)` | `callhomeQueryGroup` | {ref}`fabric.callhome_query_group <vocab-fabric-callhome_query_group>` |
+| `.snmp_policy(name, **attrs)` | `snmpPol` | {ref}`fabric.snmp_policy <vocab-fabric-snmp_policy>` |
+| `.snmp_monitoring_destination_group(name, **attrs)` | `snmpGroup` | {ref}`fabric.snmp_monitoring_destination_group <vocab-fabric-snmp_monitoring_destination_group>` |
+| `.snmp_trap_destination_info(apic_id, **attrs)` | `snmpCtrlrInst` | {ref}`fabric.snmp_trap_destination_info <vocab-fabric-snmp_trap_destination_info>` |
+| `.tacacs_monitoring_destination_group(name, **attrs)` | `tacacsGroup` | {ref}`fabric.tacacs_monitoring_destination_group <vocab-fabric-tacacs_monitoring_destination_group>` |
+| `.mon_fabric_monitoring_policy(name, **attrs)` | `monFabricPol` | {ref}`fabric.mon_fabric_monitoring_policy <vocab-fabric-mon_fabric_monitoring_policy>` |
+| `.mon_common_monitoring_policy(**attrs)` | `monCommonPol` | {ref}`fabric.mon_common_monitoring_policy <vocab-fabric-mon_common_monitoring_policy>` |
+| `.communication_policy(name, **attrs)` | `commPol` | {ref}`fabric.communication_policy <vocab-fabric-communication_policy>` |
+| `.datetime_format(name, **attrs)` | `datetimeFormat` | {ref}`fabric.datetime_format <vocab-fabric-datetime_format>` |
+| `.proxy_server(**attrs)` | `proxyServer` | {ref}`fabric.proxy_server <vocab-fabric-proxy_server>` |
+| `.mgmt_connectivity_preference(**attrs)` | `mgmtConnectivityPrefs` | {ref}`fabric.mgmt_connectivity_preference <vocab-fabric-mgmt_connectivity_preference>` |
+| `.geo_site(name, **attrs)` | `geoSite` | {ref}`fabric.geo_site <vocab-fabric-geo_site>` |
+| `.admin_down_policy(**attrs)` | `fabricBlacklistPol` | {ref}`fabric.admin_down_policy <vocab-fabric-admin_down_policy>` |
+| `.deployment_policy(name, **attrs)` | `fabricDeployPol` | {ref}`fabric.deployment_policy <vocab-fabric-deployment_policy>` |
+| `.out_of_service_fabric_policy(**attrs)` | `fabricOOServicePol` | {ref}`fabric.out_of_service_fabric_policy <vocab-fabric-out_of_service_fabric_policy>` |
+| `.extended_fabric_equipment_policy(name, **attrs)` | `fabricExtPol` | {ref}`fabric.extended_fabric_equipment_policy <vocab-fabric-extended_fabric_equipment_policy>` |
+| `.firmware_policy(name, **attrs)` | `firmwareFwP` | {ref}`fabric.firmware_policy <vocab-fabric-firmware_policy>` |
+| `.firmware_group(name, **attrs)` | `firmwareFwGrp` | {ref}`fabric.firmware_group <vocab-fabric-firmware_group>` |
+| `.catalog_firmware_policy(**attrs)` | `firmwareCatFwP` | {ref}`fabric.catalog_firmware_policy <vocab-fabric-catalog_firmware_policy>` |
+| `.firmware_repository_profile(**attrs)` | `firmwareRepoP` | {ref}`fabric.firmware_repository_profile <vocab-fabric-firmware_repository_profile>` |
+| `.maintenance_policy(name, **attrs)` | `maintMaintP` | {ref}`fabric.maintenance_policy <vocab-fabric-maintenance_policy>` |
+| `.maintenance_group(name, **attrs)` | `maintMaintGrp` | {ref}`fabric.maintenance_group <vocab-fabric-maintenance_group>` |
+| `.pod_maintenance_group(name, **attrs)` | `maintPodMaintGrp` | {ref}`fabric.pod_maintenance_group <vocab-fabric-pod_maintenance_group>` |
+| `.catalog_maintenance_policy(**attrs)` | `maintCatMaintP` | {ref}`fabric.catalog_maintenance_policy <vocab-fabric-catalog_maintenance_policy>` |
+| `.maintenance_notification_email(to, **attrs)` | `maintEmailNotif` | {ref}`fabric.maintenance_notification_email <vocab-fabric-maintenance_notification_email>` |
+| `.maintenance_notification_text(to, **attrs)` | `maintTextNotif` | {ref}`fabric.maintenance_notification_text <vocab-fabric-maintenance_notification_text>` |
+| `.configuration_export_policy(name, **attrs)` | `configExportP` | {ref}`fabric.configuration_export_policy <vocab-fabric-configuration_export_policy>` |
+| `.configuration_import_policy(name, **attrs)` | `configImportP` | {ref}`fabric.configuration_import_policy <vocab-fabric-configuration_import_policy>` |
+| `.configuration_snapshot_manager_policy(name, **attrs)` | `configSnapshotMgrP` | {ref}`fabric.configuration_snapshot_manager_policy <vocab-fabric-configuration_snapshot_manager_policy>` |
+| `.configuration_snapshot_rollback_policy(name, **attrs)` | `configRollbackP` | {ref}`fabric.configuration_snapshot_rollback_policy <vocab-fabric-configuration_snapshot_rollback_policy>` |
+| `.id_import_policy(name, **attrs)` | `configImportIdP` | {ref}`fabric.id_import_policy <vocab-fabric-id_import_policy>` |
+| `.scheduler(name, **attrs)` | `trigSchedP` | {ref}`fabric.scheduler <vocab-fabric-scheduler>` |
+| `.license_policy(**attrs)` | `licenseLicPolicy` | {ref}`fabric.license_policy <vocab-fabric-license_policy>` |
+| `.remote_path(name, **attrs)` | `fileRemotePath` | {ref}`fabric.remote_path <vocab-fabric-remote_path>` |
+| `.telemetry_enable_global_policy(**attrs)` | `telemetryEnableP` | {ref}`fabric.telemetry_enable_global_policy <vocab-fabric-telemetry_enable_global_policy>` |
+| `.flow_collector_policy(**attrs)` | `telemetryFlowCollectorP` | {ref}`fabric.flow_collector_policy <vocab-fabric-flow_collector_policy>` |
+| `.analytics_policy_container(**attrs)` | `analyticsCont` | {ref}`fabric.analytics_policy_container <vocab-fabric-analytics_policy_container>` |
+| `.twamp_responder_policy(name, **attrs)` | `twampResponderPol` | {ref}`fabric.twamp_responder_policy <vocab-fabric-twamp_responder_policy>` |
+| `.twamp_server_policy(name, **attrs)` | `twampServerPol` | {ref}`fabric.twamp_server_policy <vocab-fabric-twamp_server_policy>` |
+| `.core_export_policy(name, **attrs)` | `dbgexpCoreP` | {ref}`fabric.core_export_policy <vocab-fabric-core_export_policy>` |
+| `.techsupport_export_policy(name, **attrs)` | `dbgexpTechSupP` | {ref}`fabric.techsupport_export_policy <vocab-fabric-techsupport_export_policy>` |
+| `.ongoing_latency_mode(**attrs)` | `latencyOngoingMode` | {ref}`fabric.ongoing_latency_mode <vocab-fabric-ongoing_latency_mode>` |
+| `.ptp_latency_mode(**attrs)` | `latencyPtpMode` | {ref}`fabric.ptp_latency_mode <vocab-fabric-ptp_latency_mode>` |
+| `.vspan_session(name, **attrs)` | `spanVSrcGrp` | {ref}`fabric.vspan_session <vocab-fabric-vspan_session>` |
+| `.vspan_destination_group(name, **attrs)` | `spanVDestGrp` | {ref}`fabric.vspan_destination_group <vocab-fabric-vspan_destination_group>` |

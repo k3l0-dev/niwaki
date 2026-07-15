@@ -166,6 +166,10 @@ def extract_classes() -> dict[str, dict[str, Any]]:
             "relation_info": extract_relation_info(relation_info),
             "fault_codes": dict(sorted(faults.items())),
             "write_access": sorted(obj.get("writeAccess", [])),
+            # ``always`` is the only user-creatable state; ``never`` (default
+            # singletons, non-creatable carriers) and ``derived`` (system-managed)
+            # cannot be POST-created with a fresh name.
+            "is_creatable": obj.get("isCreatableDeletable") == "always",
             "is_observable": bool(obj.get("isObservable")),
             "is_faultable": bool(obj.get("isFaultable")),
             "is_health_scorable": bool(obj.get("isHealthScorable")),

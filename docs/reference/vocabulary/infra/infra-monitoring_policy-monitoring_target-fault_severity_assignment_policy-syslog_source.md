@@ -13,7 +13,7 @@ The syslog source configures a syslog source that specifies the minimum severity
 | --- | --- |
 | ACI class | `syslogSrc` |
 | RN | `slsrc-{name}` |
-| Cursor | `FaultSeverityAssignmentPolicySyslogSourceCursor` |
+| Cursor | `MonitoringPolicyMonitoringTargetFaultSeverityAssignmentPolicySyslogSourceCursor` |
 | Parent | {ref}`infra.monitoring_policy.monitoring_target.fault_severity_assignment_policy <vocab-infra-monitoring_policy-monitoring_target-fault_severity_assignment_policy>` |
 | Atomic | — |
 

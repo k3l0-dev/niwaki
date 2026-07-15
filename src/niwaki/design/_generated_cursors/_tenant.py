@@ -3557,7 +3557,7 @@ class _TenantMakers(Cursor):
 
     def dscp_translation_policy(
         self,
-        name: str,
+        name: str = "default",
         *,
         admin_state: NwAdminSt | str | None = None,
         annotation: str | None = None,
@@ -3868,7 +3868,7 @@ class _TenantMakers(Cursor):
 
     def management_profile(
         self,
-        name: str,
+        name: str = "default",
         *,
         annotation: str | None = None,
         description: str | None = None,
@@ -3908,7 +3908,7 @@ class _TenantMakers(Cursor):
 
     def external_management_entity(
         self,
-        name: str,
+        name: str = "default",
         *,
         annotation: str | None = None,
         description: str | None = None,

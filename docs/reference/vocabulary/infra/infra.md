@@ -51,6 +51,7 @@ Accepted as keyword arguments of `.infra()` and of `.set(**attrs)` on this curso
 | `.fc_fabric_policy(name, **attrs)` | `fcFabricPol` | {ref}`infra.fc_fabric_policy <vocab-infra-fc_fabric_policy>` |
 | `.vsan_attributes(name, **attrs)` | `fcVsanAttrP` | {ref}`infra.vsan_attributes <vocab-infra-vsan_attributes>` |
 | `.synce_policy(name, **attrs)` | `synceInstPol` | {ref}`infra.synce_policy <vocab-infra-synce_policy>` |
+| `.mst_policy(name, **attrs)` | `stpInstPol` | {ref}`infra.mst_policy <vocab-infra-mst_policy>` |
 | `.macsec(**attrs)` | `macsecPolCont` | {ref}`infra.macsec <vocab-infra-macsec>` |
 | `.dhcp_relay_policy(name, **attrs)` | `dhcpRelayP` | {ref}`infra.dhcp_relay_policy <vocab-infra-dhcp_relay_policy>` |
 | `.dpp_policy(name, **attrs)` | `qosDppPol` | {ref}`infra.dpp_policy <vocab-infra-dpp_policy>` |

@@ -34,6 +34,10 @@ Interface policies, VLAN pools, AAEPs, policy groups, interface and switch profi
   - {ref}`infra.vsan_attributes <vocab-infra-vsan_attributes>` — `fcVsanAttrP`, 4 attributes
     - {ref}`infra.vsan_attributes.vsan_attribute_entry <vocab-infra-vsan_attributes-vsan_attribute_entry>` — `fcVsanAttrPEntry`, 3 attributes
   - {ref}`infra.synce_policy <vocab-infra-synce_policy>` — `synceInstPol`, 7 attributes
+  - {ref}`infra.mst_policy <vocab-infra-mst_policy>` — `stpInstPol`, 5 attributes
+    - {ref}`infra.mst_policy.mst_region <vocab-infra-mst_policy-mst_region>` — `stpMstRegionPol`, 4 attributes
+      - {ref}`infra.mst_policy.mst_region.mst_domain <vocab-infra-mst_policy-mst_region-mst_domain>` — `stpMstDomPol`, 3 attributes
+        - {ref}`infra.mst_policy.mst_region.mst_domain.range <vocab-infra-mst_policy-mst_region-mst_domain-range>` — `fvnsEncapBlk`, 6 attributes
   - {ref}`infra.macsec <vocab-infra-macsec>` — `macsecPolCont`, 0 attributes
     - {ref}`infra.macsec.parameters_policy <vocab-infra-macsec-parameters_policy>` — `macsecParamPol`, 10 attributes
     - {ref}`infra.macsec.keychain_policy <vocab-infra-macsec-keychain_policy>` — `macsecKeyChainPol`, 4 attributes
@@ -221,6 +225,10 @@ infra/infra-fc_fabric_policy
 infra/infra-vsan_attributes
 infra/infra-vsan_attributes-vsan_attribute_entry
 infra/infra-synce_policy
+infra/infra-mst_policy
+infra/infra-mst_policy-mst_region
+infra/infra-mst_policy-mst_region-mst_domain
+infra/infra-mst_policy-mst_region-mst_domain-range
 infra/infra-macsec
 infra/infra-macsec-parameters_policy
 infra/infra-macsec-keychain_policy

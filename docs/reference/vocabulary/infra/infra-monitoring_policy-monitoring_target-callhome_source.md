@@ -13,7 +13,7 @@ The call home source profile determines the information to deliver and the urgen
 | --- | --- |
 | ACI class | `callhomeSrc` |
 | RN | `chsrc-{name}` |
-| Cursor | `MonitoringTargetCallhomeSourceCursor` |
+| Cursor | `MonitoringPolicyMonitoringTargetCallhomeSourceCursor` |
 | Parent | {ref}`infra.monitoring_policy.monitoring_target <vocab-infra-monitoring_policy-monitoring_target>` |
 | Atomic | — |
 

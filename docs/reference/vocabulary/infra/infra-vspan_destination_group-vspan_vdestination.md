@@ -13,7 +13,7 @@ The VSPAN destination is where network traffic is sent for analysis by a network
 | --- | --- |
 | ACI class | `spanVDest` |
 | RN | `vdest-{name}` |
-| Cursor | `VspanVdestinationCursor` |
+| Cursor | `InfraVspanDestinationGroupVspanVdestinationCursor` |
 | Parent | {ref}`infra.vspan_destination_group <vocab-infra-vspan_destination_group>` |
 | Atomic | — |
 

@@ -32,6 +32,7 @@ class eqptLPort(ManagedObject):
     _write_access: ClassVar[frozenset[str]] = frozenset(
         ["access-equipment", "admin", "fabric-equipment"]
     )
+    _is_creatable: ClassVar[bool] = False
     _is_observable: ClassVar[bool] = False
     _is_faultable: ClassVar[bool] = False
     _is_health_scorable: ClassVar[bool] = False

@@ -44,6 +44,7 @@ class arpIf(ManagedObject):
             "tenant-protocol",
         ]
     )
+    _is_creatable: ClassVar[bool] = False
     _is_observable: ClassVar[bool] = True
     _is_faultable: ClassVar[bool] = False
     _is_health_scorable: ClassVar[bool] = True

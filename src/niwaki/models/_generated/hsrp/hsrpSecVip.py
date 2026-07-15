@@ -62,6 +62,7 @@ class hsrpSecVip(ManagedObject):
     _write_access: ClassVar[frozenset[str]] = frozenset(
         ["admin", "tenant-ext-connectivity", "tenant-ext-protocol"]
     )
+    _is_creatable: ClassVar[bool] = True
     _is_observable: ClassVar[bool] = True
     _is_faultable: ClassVar[bool] = True
     _is_health_scorable: ClassVar[bool] = True

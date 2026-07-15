@@ -13,7 +13,7 @@ The SPAN label is used for SPAN label parameters.
 | --- | --- |
 | ACI class | `spanSpanLbl` |
 | RN | `spanlbl-{name}` |
-| Cursor | `VspanSessionSpanLabelCursor` |
+| Cursor | `InfraVspanSessionSpanLabelCursor` |
 | Parent | {ref}`infra.vspan_session <vocab-infra-vspan_session>` |
 | Atomic | — |
 

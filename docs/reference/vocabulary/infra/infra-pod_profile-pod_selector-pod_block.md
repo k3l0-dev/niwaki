@@ -11,7 +11,7 @@ Re-generate: uv run python -m niwaki._codegen.generate_docs
 | --- | --- |
 | ACI class | `infraPodBlk` |
 | RN | `podblk-{name}` |
-| Cursor | `PodSelectorPodBlockCursor` |
+| Cursor | `InfraPodProfilePodSelectorPodBlockCursor` |
 | Parent | {ref}`infra.pod_profile.pod_selector <vocab-infra-pod_profile-pod_selector>` |
 | Atomic | — |
 

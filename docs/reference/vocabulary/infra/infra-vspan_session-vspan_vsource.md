@@ -13,7 +13,7 @@ The VSPAN source, which is where traffic is sampled. A VSPAN source can be an en
 | --- | --- |
 | ACI class | `spanVSrc` |
 | RN | `vsrc-{name}` |
-| Cursor | `VspanVsourceCursor` |
+| Cursor | `InfraVspanSessionVspanVsourceCursor` |
 | Parent | {ref}`infra.vspan_session <vocab-infra-vspan_session>` |
 | Atomic | — |
 

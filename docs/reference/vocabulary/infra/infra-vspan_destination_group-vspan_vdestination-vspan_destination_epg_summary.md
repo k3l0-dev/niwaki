@@ -13,7 +13,7 @@ The VEpg summary.
 | --- | --- |
 | ACI class | `spanVEpgSummary` |
 | RN | `vepgsummary` |
-| Cursor | `VspanDestinationEpgSummaryCursor` |
+| Cursor | `InfraVspanDestinationGroupVspanVdestinationVspanDestinationEpgSummaryCursor` |
 | Parent | {ref}`infra.vspan_destination_group.vspan_vdestination <vocab-infra-vspan_destination_group-vspan_vdestination>` |
 | Atomic | — |
 

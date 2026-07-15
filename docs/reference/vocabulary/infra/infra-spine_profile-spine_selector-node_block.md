@@ -13,7 +13,7 @@ A node block is a range of nodes. Each node block begins with the first port and
 | --- | --- |
 | ACI class | `infraNodeBlk` |
 | RN | `nodeblk-{name}` |
-| Cursor | `SpineSelectorNodeBlockCursor` |
+| Cursor | `SpineProfileSpineSelectorNodeBlockCursor` |
 | Parent | {ref}`infra.spine_profile.spine_selector <vocab-infra-spine_profile-spine_selector>` |
 | Atomic | — |
 

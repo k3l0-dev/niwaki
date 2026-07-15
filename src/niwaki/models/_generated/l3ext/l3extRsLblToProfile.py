@@ -41,6 +41,7 @@ class l3extRsLblToProfile(ManagedObject):
     # ── Semantic metadata (from APIC schema) ───────────────────────────────────
     _mo_category: ClassVar[str] = "RelationshipToLocal"
     _write_access: ClassVar[frozenset[str]] = frozenset(["admin", "tenant-ext-connectivity"])
+    _is_creatable: ClassVar[bool] = True
     _is_observable: ClassVar[bool] = True
     _is_faultable: ClassVar[bool] = True
     _is_health_scorable: ClassVar[bool] = True

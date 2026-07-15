@@ -23,8 +23,18 @@ from niwaki.design._node import Ref
 from niwaki.design._generated_cursors._uni import _UniMakers
 
 if TYPE_CHECKING:
+    from niwaki.models._generated.enums.FirmwareAdminStatus import FirmwareAdminStatus
+    from niwaki.models._generated.enums.InfraDRRMode import InfraDRRMode
+    from niwaki.models._generated.enums.MaintNotifCond import MaintNotifCond
+    from niwaki.models._generated.enums.MaintRunMode import MaintRunMode
+    from niwaki.models._generated.enums.MaintSMUOperation import MaintSMUOperation
+    from niwaki.models._generated.enums.SvccoreAdminSt import SvccoreAdminSt
     from niwaki.models._generated.enums.TopNodeRoleP import TopNodeRoleP
     from niwaki.models._generated.enums.TopNodeType import TopNodeType
+    from niwaki.models._generated.enums.TopPodType import TopPodType
+    from niwaki.models._generated.enums.TrigAdminState import TrigAdminState
+    from niwaki.models._generated.enums.TrigDay import TrigDay
+    from niwaki.models._generated.enums.TrigExecState import TrigExecState
 
 
 class _ControllerMakers(Cursor):
@@ -60,6 +70,360 @@ class _ControllerMakers(Cursor):
             self._invoke_maker("fabric_membership", (), _prune(params)),
         )
 
+    def cluster_policy(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        force_cluster_size_change: bool | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        cluster_size_shrink_trigger: bool | None = None,
+        required_size: int | str | None = None,
+        userdom: str | None = None,
+    ) -> ClusterPolicyCursor:
+        """Declare a ``infraClusterPol`` child under the controller level.
+
+        The cluster policy is used to set the size of the cluster.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            force_cluster_size_change: Default: ``False``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            cluster_size_shrink_trigger: Default: ``False``.
+            required_size: The size of the cluster. Default: ``undefined``.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "ClusterPolicyCursor",
+            self._invoke_maker("cluster_policy", (), _prune(params)),
+        )
+
+    def controller_audit_log_retention_policy(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        maximum_size: int | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        purge_window_size: int | None = None,
+        userdom: str | None = None,
+    ) -> ControllerAuditLogRetentionPolicyCursor:
+        """Declare a ``aaaCtrlrRetP`` child under the controller level.
+
+        The controller audit log retention policy specifies the maximum number of controller audit
+        log records to be retained and the maximum number of controller audit log records to be
+        deleted in a 30-second period.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            maximum_size: The maximum number of audit records to be maintained in the audit log.
+                Default: ``500000``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            purge_window_size: The maximum number of records to be deleted in a 30-second
+                period. The number of records should be chosen to avoid spikes in I/O and CPU
+                utilization. Default: ``250``.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "ControllerAuditLogRetentionPolicyCursor",
+            self._invoke_maker("controller_audit_log_retention_policy", (), _prune(params)),
+        )
+
+    def controller_firmware_policy(
+        self,
+        *,
+        admin_state: FirmwareAdminStatus | str | None = None,
+        annotation: str | None = None,
+        description: str | None = None,
+        ignore_compatibility_check: bool | None = None,
+        internal_label: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        sr_upgrade: bool | None = None,
+        version: str | None = None,
+        userdom: str | None = None,
+        target_firmware_version: str | None = None,
+        version_check_override: TrigAdminState | str | None = None,
+    ) -> ControllerFirmwarePolicyCursor:
+        """Declare a ``firmwareCtrlrFwP`` child under the controller level.
+
+        The firmware policy specification for the controller.
+
+        Args:
+            admin_state: Values: ``down``, ``up``. Default: ``up``.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            ignore_compatibility_check: A property for specifying whether compatibility checks
+                should be ignored when applying the firmware policy. Default: ``False``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            sr_upgrade: SR Firware Upgrade. Default: ``False``.
+            version: SR Firmware version desired.
+            target_firmware_version: The firmware version.
+            version_check_override: Values: ``trigger``, ``trigger-immediate``, ``triggered``,
+                ``untriggered``. Default: ``untriggered``.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "ControllerFirmwarePolicyCursor",
+            self._invoke_maker("controller_firmware_policy", (), _prune(params)),
+        )
+
+    def controller_maintenance_policy(
+        self,
+        *,
+        administrative_state: TrigExecState | str | None = None,
+        admin_state: FirmwareAdminStatus | str | None = None,
+        annotation: str | None = None,
+        description: str | None = None,
+        download_state: TrigExecState | str | None = None,
+        graceful_maintenance: bool | None = None,
+        ignore_compatibility: bool | None = None,
+        internal_label: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        notification_condition: MaintNotifCond | str | None = None,
+        whether_latest: bool | None = None,
+        scheduler_run_mode: MaintRunMode | str | None = None,
+        smu_operation_type: MaintSMUOperation | str | None = None,
+        sr_upgrade: bool | None = None,
+        sr_version: str | None = None,
+        userdom: str | None = None,
+        version: str | None = None,
+        version_check_override: TrigAdminState | str | None = None,
+    ) -> ControllerMaintenancePolicyCursor:
+        """Declare a ``maintCtrlrMaintP`` child under the controller level.
+
+        The controller maintenance policy specification describes when and how maintenance takes
+        place.
+
+        Args:
+            administrative_state: The administrative state of the executable policies. Values:
+                ``triggered``, ``untriggered``. Default: ``untriggered``.
+            admin_state: Values: ``down``, ``up``. Default: ``up``.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            download_state: Values: ``triggered``, ``untriggered``. Default: ``untriggered``.
+            graceful_maintenance: Graceful maintenance. Describe graceful maintenance Default:
+                ``False``.
+            ignore_compatibility: Whether compatibility checks should be ignored when applying
+                this firmware policy. Default: ``False``.
+            internal_label: Firmware label - internal use only!
+            notification_condition: Specifies under what pause condition will admin be notified
+                via email/text as configured. This notification mechanism is independent of
+                events/faults. Values: ``notifyAlwaysBetweenSets``, ``notifyNever``,
+                ``notifyOnlyOnFailures``. Default: ``notifyOnlyOnFailures``.
+            whether_latest: Flag to turn on parallel upgrade of APICs, trades off availability
+                to speed. Default: ``False``.
+            scheduler_run_mode: Specifies whether to proceed automatically to next set of nodes
+                once a set of nodes have gone through maintenance successfully. Values:
+                ``pauseAlwaysBetweenSets``, ``pauseNever``, ``pauseOnlyOnFailures``. Default:
+                ``pauseOnlyOnFailures``.
+            smu_operation_type: Specifies SMU Operation Values: ``smuInstall``,
+                ``smuUninstall``. Default: ``smuInstall``.
+            sr_upgrade: Default: ``False``.
+            sr_version: srFirmware version desired.
+            version: Firmware version desired.
+            version_check_override: Version check override - directive to ignore version check
+                for next install. What is version check? During maintenance window, check
+                whether desired version matches running. If it does not match, perform
+                maintenance(install). If it does, do not perform any maintenance(install).
+                Values: ``trigger``, ``trigger-immediate``, ``triggered``, ``untriggered``.
+                Default: ``untriggered``.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "ControllerMaintenancePolicyCursor",
+            self._invoke_maker("controller_maintenance_policy", (), _prune(params)),
+        )
+
+    def fabric_firsttime_setup_policy(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> FabricFirsttimeSetupPolicyCursor:
+        """Declare a ``fabricSetupPol`` child under the controller level.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "FabricFirsttimeSetupPolicyCursor",
+            self._invoke_maker("fabric_firsttime_setup_policy", (), _prune(params)),
+        )
+
+    def drr_policy(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        required_mode: InfraDRRMode | str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> DrrPolicyCursor:
+        """Declare a ``infraDRRPol`` child under the controller level.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            required_mode: The BGP Domain mode. Values: ``OFF``, ``ON``. Default: ``OFF``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "DrrPolicyCursor",
+            self._invoke_maker("drr_policy", (), _prune(params)),
+        )
+
+    def scheduler(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> ControllerSchedulerCursor:
+        """Declare a ``trigSchedP`` child under the controller level.
+
+        The scheduler policy enables you to schedule a recurring or one-time window for the
+        execution of a task. Multiple scheduler policies can be created for the same time period.
+
+        Args:
+            name: The name for the scheduler policy.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "ControllerSchedulerCursor",
+            self._invoke_maker("scheduler", (name,), _prune(params)),
+        )
+
+    def cimc_node(
+        self,
+        apic_id: int,
+        *,
+        annotation: str | None = None,
+        cimc_ipv4_address_address_mask: str | None = None,
+        cimc_ipv4_gateway_address_address: str | None = None,
+        cimc_ipv6_address_address_mask: str | None = None,
+        cimc_ipv6_gateway_address_address: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> CimcNodeCursor:
+        """Declare a ``ctrlrCimcNode`` child under the controller level.
+
+        Policy to configure CIMC server
+
+        Args:
+            apic_id: Naming property — forms the object's RN.
+            annotation: User annotation. Suggested format orchestrator:value
+            cimc_ipv4_address_address_mask: IPv4 address prefix
+            cimc_ipv4_gateway_address_address: IPv4 Gateway address
+            cimc_ipv6_address_address_mask: IPv6 address prefix
+            cimc_ipv6_gateway_address_address: IPv6 Gateway address
+            name: The name of the object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "apic_id",
+            )
+        }
+        return cast(
+            "CimcNodeCursor",
+            self._invoke_maker("cimc_node", (apic_id,), _prune(params)),
+        )
+
+    def controller_cores_policy(
+        self,
+        name: str,
+        *,
+        administrative_state: SvccoreAdminSt | str | None = None,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> ControllerCoresPolicyCursor:
+        """Declare a ``svccoreCtrlrPol`` child under the controller level.
+
+        A controller core retention policy.
+
+        Args:
+            name: Naming property — forms the object's RN.
+            administrative_state: Administrative state of the monitoring policy Values:
+                ``disabled``, ``enabled``. Default: ``disabled``.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "ControllerCoresPolicyCursor",
+            self._invoke_maker("controller_cores_policy", (name,), _prune(params)),
+        )
+
 
 class ControllerCursor(_ControllerMakers, _UniMakers):
     """Typed cursor for ``ctrlrInst`` (controller level).
@@ -83,6 +447,298 @@ class ControllerCursor(_ControllerMakers, _UniMakers):
         userdom: str | None = None,
     ) -> ControllerCursor:
         """Set ``ctrlrInst`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class CimcNodeCursor(_ControllerMakers, _UniMakers):
+    """Typed cursor for ``ctrlrCimcNode`` (cimc_node level).
+
+    Position: ``uni.controller.cimc_node``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        cimc_ipv4_address_address_mask: str | None = None,
+        cimc_ipv4_gateway_address_address: str | None = None,
+        cimc_ipv6_address_address_mask: str | None = None,
+        cimc_ipv6_gateway_address_address: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> CimcNodeCursor:
+        """Set ``ctrlrCimcNode`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class ClusterPolicyCursor(_ControllerMakers, _UniMakers):
+    """Typed cursor for ``infraClusterPol`` (cluster_policy level).
+
+    Position: ``uni.controller.cluster_policy``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        force_cluster_size_change: bool | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        cluster_size_shrink_trigger: bool | None = None,
+        required_size: int | str | None = None,
+        userdom: str | None = None,
+    ) -> ClusterPolicyCursor:
+        """Set ``infraClusterPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class ControllerAuditLogRetentionPolicyCursor(_ControllerMakers, _UniMakers):
+    """Typed cursor for ``aaaCtrlrRetP`` (controller_audit_log_retention_policy level).
+
+    Position: ``uni.controller.controller_audit_log_retention_policy``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        maximum_size: int | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        purge_window_size: int | None = None,
+        userdom: str | None = None,
+    ) -> ControllerAuditLogRetentionPolicyCursor:
+        """Set ``aaaCtrlrRetP`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class ControllerCoresPolicyCursor(_ControllerMakers, _UniMakers):
+    """Typed cursor for ``svccoreCtrlrPol`` (controller_cores_policy level).
+
+    Position: ``uni.controller.controller_cores_policy``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        administrative_state: SvccoreAdminSt | str | None = None,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> ControllerCoresPolicyCursor:
+        """Set ``svccoreCtrlrPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class ControllerFirmwarePolicyCursor(_ControllerMakers, _UniMakers):
+    """Typed cursor for ``firmwareCtrlrFwP`` (controller_firmware_policy level).
+
+    Position: ``uni.controller.controller_firmware_policy``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        admin_state: FirmwareAdminStatus | str | None = None,
+        annotation: str | None = None,
+        description: str | None = None,
+        ignore_compatibility_check: bool | None = None,
+        internal_label: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        sr_upgrade: bool | None = None,
+        version: str | None = None,
+        userdom: str | None = None,
+        target_firmware_version: str | None = None,
+        version_check_override: TrigAdminState | str | None = None,
+    ) -> ControllerFirmwarePolicyCursor:
+        """Set ``firmwareCtrlrFwP`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class ControllerMaintenancePolicyCursor(_ControllerMakers, _UniMakers):
+    """Typed cursor for ``maintCtrlrMaintP`` (controller_maintenance_policy level).
+
+    Position: ``uni.controller.controller_maintenance_policy``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        administrative_state: TrigExecState | str | None = None,
+        admin_state: FirmwareAdminStatus | str | None = None,
+        annotation: str | None = None,
+        description: str | None = None,
+        download_state: TrigExecState | str | None = None,
+        graceful_maintenance: bool | None = None,
+        ignore_compatibility: bool | None = None,
+        internal_label: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        notification_condition: MaintNotifCond | str | None = None,
+        whether_latest: bool | None = None,
+        scheduler_run_mode: MaintRunMode | str | None = None,
+        smu_operation_type: MaintSMUOperation | str | None = None,
+        sr_upgrade: bool | None = None,
+        sr_version: str | None = None,
+        userdom: str | None = None,
+        version: str | None = None,
+        version_check_override: TrigAdminState | str | None = None,
+    ) -> ControllerMaintenancePolicyCursor:
+        """Set ``maintCtrlrMaintP`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class DrrPolicyCursor(_ControllerMakers, _UniMakers):
+    """Typed cursor for ``infraDRRPol`` (drr_policy level).
+
+    Position: ``uni.controller.drr_policy``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        required_mode: InfraDRRMode | str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> DrrPolicyCursor:
+        """Set ``infraDRRPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class _FabricFirsttimeSetupPolicyMakers(Cursor):
+    """Makers declared at the fabric_firsttime_setup_policy level (``fabricSetupPol``)."""
+
+    __slots__ = ()
+
+    def pod_setup(
+        self,
+        pod_identifier: int,
+        *,
+        pod_type: TopPodType | str | None = None,
+        infra_tep_address_pool: str | None = None,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> PodSetupCursor:
+        """Declare a ``fabricSetupP`` child under the fabric_firsttime_setup_policy level.
+
+        Args:
+            pod_identifier: The POD identifier.
+            pod_type: Values: ``physical``, ``virtual``. Default: ``physical``.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "pod_identifier",
+            )
+        }
+        return cast(
+            "PodSetupCursor",
+            self._invoke_maker("pod_setup", (pod_identifier,), _prune(params)),
+        )
+
+
+class FabricFirsttimeSetupPolicyCursor(
+    _FabricFirsttimeSetupPolicyMakers, _ControllerMakers, _UniMakers
+):
+    """Typed cursor for ``fabricSetupPol`` (fabric_firsttime_setup_policy level).
+
+    Position: ``uni.controller.fabric_firsttime_setup_policy``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> FabricFirsttimeSetupPolicyCursor:
+        """Set ``fabricSetupPol`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
         return self
@@ -169,6 +825,167 @@ class FabricMembershipCursor(_FabricMembershipMakers, _ControllerMakers, _UniMak
         return self
 
 
+class _ControllerSchedulerMakers(Cursor):
+    """Makers declared at the scheduler level (``trigSchedP``)."""
+
+    __slots__ = ()
+
+    def one_time_window(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        maximum_concurrent_tasks: int | str | None = None,
+        date_and_time: str | None = None,
+        display_name: str | None = None,
+        delay_between_node_upgrades: int | None = None,
+        proc_break: str | None = None,
+        proc_cap: int | str | None = None,
+        maximum_running_time: str | None = None,
+        userdom: str | None = None,
+    ) -> ControllerSchedulerOneTimeWindowCursor:
+        """Declare a ``trigAbsWindowP`` child under the scheduler level.
+
+        A schedule window with absolute start and end times.
+
+        Args:
+            name: The name of the schedule window.
+            annotation: User annotation. Suggested format orchestrator:value
+            maximum_concurrent_tasks: The concurrency capacity limit. This is the maximum number
+                of tasks that can be processed concurrently. Default: ``unlimited``.
+            date_and_time: The date that the schedule window starts.
+            delay_between_node_upgrades: Delay between node upgrades in seconds. This is
+                applicable only for concurCap 1. Default: ``0``.
+            proc_break: A period of time taken between processing of items within the
+                concurrency cap.
+            proc_cap: Processing size capacity limitation specification. Indicates the limit of
+                items to be processed within this window. Default: ``unlimited``.
+            maximum_running_time: The processing time capacity limit. This is the maximum
+                duration of the window.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "ControllerSchedulerOneTimeWindowCursor",
+            self._invoke_maker("one_time_window", (name,), _prune(params)),
+        )
+
+    def recurring_window(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        maximum_concurrent_tasks: int | str | None = None,
+        recurring_window_schedule_day: TrigDay | str | None = None,
+        schedule_hour: int | None = None,
+        schedule_minute: int | None = None,
+        display_name: str | None = None,
+        delay_between_node_upgrades: int | None = None,
+        proc_break: str | None = None,
+        proc_cap: int | str | None = None,
+        maximum_running_time: str | None = None,
+        userdom: str | None = None,
+    ) -> ControllerSchedulerRecurringWindowCursor:
+        """Declare a ``trigRecurrWindowP`` child under the scheduler level.
+
+        A schedule window that triggers a task every 24 hours.
+
+        Args:
+            name: The name of the recurring schedule window.
+            annotation: User annotation. Suggested format orchestrator:value
+            maximum_concurrent_tasks: The concurrency capacity limit. This is the maximum number
+                of tasks that can be processed concurrently. Default: ``unlimited``.
+            recurring_window_schedule_day: The day of the week that the recurring window begins.
+                Values: ``Friday``, ``Monday``, ``Saturday``, ``Sunday``, ``Thursday``,
+                ``Tuesday``, ``Wednesday``, ``even-day``, …. Default: ``every-day``.
+            schedule_hour: The hour that the recurring window begins. Default: ``0``.
+            schedule_minute: The minute that the recurring window begins. Default: ``0``.
+            delay_between_node_upgrades: Delay between node upgrades in seconds. This is
+                applicable only for concurCap 1. Default: ``0``.
+            proc_break: A period of time taken between processing of items within the
+                concurrency cap.
+            proc_cap: Processing size capacity limitation specification. Indicates the limit of
+                items to be processed within this window. Default: ``unlimited``.
+            maximum_running_time: The processing time capacity limit. This is the maximum
+                duration of the window.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "ControllerSchedulerRecurringWindowCursor",
+            self._invoke_maker("recurring_window", (name,), _prune(params)),
+        )
+
+
+class ControllerSchedulerCursor(_ControllerSchedulerMakers, _ControllerMakers, _UniMakers):
+    """Typed cursor for ``trigSchedP`` (scheduler level).
+
+    Position: ``uni.controller.scheduler``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> ControllerSchedulerCursor:
+        """Set ``trigSchedP`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class PodSetupCursor(_FabricFirsttimeSetupPolicyMakers, _ControllerMakers, _UniMakers):
+    """Typed cursor for ``fabricSetupP`` (pod_setup level).
+
+    Position: ``uni.controller.fabric_firsttime_setup_policy.pod_setup``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        pod_type: TopPodType | str | None = None,
+        infra_tep_address_pool: str | None = None,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> PodSetupCursor:
+        """Set ``fabricSetupP`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
 class FabricNodeMemberCursor(_FabricMembershipMakers, _ControllerMakers, _UniMakers):
     """Typed cursor for ``fabricNodeIdentP`` (fabric_node_member level).
 
@@ -196,6 +1013,72 @@ class FabricNodeMemberCursor(_FabricMembershipMakers, _ControllerMakers, _UniMak
         userdom: str | None = None,
     ) -> FabricNodeMemberCursor:
         """Set ``fabricNodeIdentP`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class ControllerSchedulerOneTimeWindowCursor(
+    _ControllerSchedulerMakers, _ControllerMakers, _UniMakers
+):
+    """Typed cursor for ``trigAbsWindowP`` (one_time_window level).
+
+    Position: ``uni.controller.scheduler.one_time_window``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        maximum_concurrent_tasks: int | str | None = None,
+        date_and_time: str | None = None,
+        display_name: str | None = None,
+        delay_between_node_upgrades: int | None = None,
+        proc_break: str | None = None,
+        proc_cap: int | str | None = None,
+        maximum_running_time: str | None = None,
+        userdom: str | None = None,
+    ) -> ControllerSchedulerOneTimeWindowCursor:
+        """Set ``trigAbsWindowP`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class ControllerSchedulerRecurringWindowCursor(
+    _ControllerSchedulerMakers, _ControllerMakers, _UniMakers
+):
+    """Typed cursor for ``trigRecurrWindowP`` (recurring_window level).
+
+    Position: ``uni.controller.scheduler.recurring_window``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        maximum_concurrent_tasks: int | str | None = None,
+        recurring_window_schedule_day: TrigDay | str | None = None,
+        schedule_hour: int | None = None,
+        schedule_minute: int | None = None,
+        display_name: str | None = None,
+        delay_between_node_upgrades: int | None = None,
+        proc_break: str | None = None,
+        proc_cap: int | str | None = None,
+        maximum_running_time: str | None = None,
+        userdom: str | None = None,
+    ) -> ControllerSchedulerRecurringWindowCursor:
+        """Set ``trigRecurrWindowP`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
         return self

@@ -13,7 +13,7 @@ MACSEC Access Parameters Policy
 | --- | --- |
 | ACI class | `macsecParamPol` |
 | RN | `paramp-{name}` |
-| Cursor | `ParametersPolicyCursor` |
+| Cursor | `MacsecParametersPolicyCursor` |
 | Parent | {ref}`infra.macsec <vocab-infra-macsec>` |
 | Atomic | — |
 

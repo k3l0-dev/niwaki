@@ -13,7 +13,7 @@ The SNMP source profile determines the fault information, severity level, and de
 | --- | --- |
 | ACI class | `snmpSrc` |
 | RN | `snmpsrc-{name}` |
-| Cursor | `FaultSeverityAssignmentPolicySnmpSourceCursor` |
+| Cursor | `MonitoringPolicyMonitoringTargetFaultSeverityAssignmentPolicySnmpSourceCursor` |
 | Parent | {ref}`infra.monitoring_policy.monitoring_target.fault_severity_assignment_policy <vocab-infra-monitoring_policy-monitoring_target-fault_severity_assignment_policy>` |
 | Atomic | — |
 

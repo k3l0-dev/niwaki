@@ -13,7 +13,7 @@ The VSPAN source group can contain a group of VSPAN sources. A VSPAN source is w
 | --- | --- |
 | ACI class | `spanVSrcGrp` |
 | RN | `vsrcgrp-{name}` |
-| Cursor | `VspanSessionCursor` |
+| Cursor | `InfraVspanSessionCursor` |
 | Parent | {ref}`infra <vocab-infra>` |
 | Atomic | — |
 

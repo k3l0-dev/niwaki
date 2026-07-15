@@ -13,7 +13,7 @@ Creating a monitoring target will allow you to associate certain monitoring poli
 | --- | --- |
 | ACI class | `monInfraTarget` |
 | RN | `tarinfra-{target_scope}` |
-| Cursor | `MonitoringTargetCursor` |
+| Cursor | `MonitoringPolicyMonitoringTargetCursor` |
 | Parent | {ref}`infra.monitoring_policy <vocab-infra-monitoring_policy>` |
 | Atomic | — |
 

@@ -871,6 +871,7 @@ makers:
     fc_fabric_policy: fcFabricPol
     vsan_attributes: fcVsanAttrP
     synce_policy: synceInstPol
+    mst_policy: stpInstPol
     macsec: macsecPolCont
 
     # ── Policies › Protocol ───────────────────────────────────────────────────
@@ -1022,6 +1023,12 @@ makers:
     keychain_policy: macsecKeyChainPol
   macsecKeyChainPol:
     key_policy: macsecKeyPol
+  stpInstPol:
+    mst_region: stpMstRegionPol
+  stpMstRegionPol:
+    mst_domain: stpMstDomPol
+  stpMstDomPol:
+    range: fvnsEncapBlk
 
   # ── QoS / control-plane sub-structure (wave 4) ───────────────────────────────
   qosInstPol:
@@ -1115,6 +1122,221 @@ makers:
     # ── Fabric SPAN (same makers as the tenant and access ones) ───────────────
     span_source_group: spanSrcGrp
     span_destination_group: spanDestGrp
+
+    # ── Interfaces / Switches › Profiles (fabric ports, F1) ───────────────────
+    function_profile: fabricFuncP
+    leaf_switch_profile: fabricLeafP
+    spine_switch_profile: fabricSpineP
+    leaf_fabric_interface_profile: fabricLePortP
+    spine_fabric_interface_profile: fabricSpPortP
+    leaf_module_profile: fabricLeCardP
+    spine_module_profile: fabricSpCardP
+    pod_profile: fabricPodP
+
+    # ── Interface / protocol policies (F2) ────────────────────────────────────
+    fabric_link_level_policy: fabricFIfPol
+    fabric_link_flap_policy: fabricFLinkFlapPol
+    l3_interface_policy: l3IfPol
+    fabric_l2_mtu_policy: l2InstPol
+    lldp_policy: lldpIfPol
+    macsec_fabric_interface_policy: macsecFabIfPol
+    macsec_fabric: macsecFabPolCont
+    isis_domain_policy: isisDomPol
+    coop_group_policy: coopPol
+    fabric_vxlan_policy: l4VxlanInstPol
+    vpc_domain_policy: vpcInstPol
+    power_supply_redundancy_policy: psuInstPol
+    zr_policy: xcvrZRFabIfPol
+    zrp_policy: xcvrZRPFabIfPol
+    dwdm_policy: dwdmFabIfPol
+    wwn_inst_policy: wwnInstPol
+    load_balance_policy: lbpPol
+    global_ep_listen_policy: fabricGlbEpListenPol
+    fabric_node_control: fabricNodeControl
+
+    # ── Monitoring destinations & policies (F3) ───────────────────────────────
+    callhome_destination_group: callhomeGroup
+    smart_callhome_destination_group: callhomeSmartGroup
+    callhome_inventory_policy: callhomeInvP
+    callhome_query_group: callhomeQueryGroup
+    snmp_policy: snmpPol
+    snmp_monitoring_destination_group: snmpGroup
+    snmp_trap_destination_info: snmpCtrlrInst
+    tacacs_monitoring_destination_group: tacacsGroup
+    mon_fabric_monitoring_policy: monFabricPol
+    mon_common_monitoring_policy: monCommonPol
+
+    # ── System / global (F4) ──────────────────────────────────────────────────
+    communication_policy: commPol
+    datetime_format: datetimeFormat
+    proxy_server: proxyServer
+    mgmt_connectivity_preference: mgmtConnectivityPrefs
+    geo_site: geoSite
+    admin_down_policy: fabricBlacklistPol
+    deployment_policy: fabricDeployPol
+    out_of_service_fabric_policy: fabricOOServicePol
+    extended_fabric_equipment_policy: fabricExtPol
+
+    # ── Firmware / maintenance / config management (F5) ───────────────────────
+    firmware_policy: firmwareFwP
+    firmware_group: firmwareFwGrp
+    catalog_firmware_policy: firmwareCatFwP
+    firmware_repository_profile: firmwareRepoP
+    maintenance_policy: maintMaintP
+    maintenance_group: maintMaintGrp
+    pod_maintenance_group: maintPodMaintGrp
+    catalog_maintenance_policy: maintCatMaintP
+    maintenance_notification_email: maintEmailNotif
+    maintenance_notification_text: maintTextNotif
+    configuration_export_policy: configExportP
+    configuration_import_policy: configImportP
+    configuration_snapshot_manager_policy: configSnapshotMgrP
+    configuration_snapshot_rollback_policy: configRollbackP
+    id_import_policy: configImportIdP
+    scheduler: trigSchedP
+    license_policy: licenseLicPolicy
+    remote_path: fileRemotePath
+
+    # ── Telemetry / analytics / VSPAN / diagnostics-export (F6) ───────────────
+    # (the flow/log/stats server groups + server container are deprecated in 6.0)
+    telemetry_enable_global_policy: telemetryEnableP
+    flow_collector_policy: telemetryFlowCollectorP
+    analytics_policy_container: analyticsCont
+    twamp_responder_policy: twampResponderPol
+    twamp_server_policy: twampServerPol
+    core_export_policy: dbgexpCoreP
+    techsupport_export_policy: dbgexpTechSupP
+    ongoing_latency_mode: latencyOngoingMode
+    ptp_latency_mode: latencyPtpMode
+    vspan_session: spanVSrcGrp
+    vspan_destination_group: spanVDestGrp
+  fabricFuncP:
+    leaf_switch_policy_group: fabricLeNodePGrp
+    spine_switch_policy_group: fabricSpNodePGrp
+    leaf_fabric_port_policy_group: fabricLePortPGrp
+    spine_fabric_port_policy_group: fabricSpPortPGrp
+    leaf_module_policy_group: fabricLeCardPGrp
+    spine_module_policy_group: fabricSpCardPGrp
+    pod_policy_group: fabricPodPGrp
+    controller_policy_group: fabricCtrlrPGrp
+  fabricLeafP:
+    switch_association: fabricLeafS
+  fabricLeafS:
+    node_block: fabricNodeBlk
+  fabricSpineP:
+    spine_selector: fabricSpineS
+  fabricSpineS:
+    node_block: fabricNodeBlk
+  fabricLePortP:
+    leaf_fabric_port_selector: fabricLFPortS
+  fabricLFPortS:
+    port_block: fabricPortBlk
+    fabric_sub_port_block: fabricSubPortBlk
+  fabricSpPortP:
+    spine_fabric_port_selector: fabricSFPortS
+  fabricSFPortS:
+    port_block: fabricPortBlk
+    fabric_sub_port_block: fabricSubPortBlk
+  fabricLeCardP:
+    leaf_module_selector: fabricLeCardS
+  fabricSpCardP:
+    spine_module_selector: fabricSpCardS
+  fabricPodP:
+    pod_selector: fabricPodS
+  fabricPodS:
+    pod_block: fabricPodBlk
+  macsecFabPolCont:
+    parameters_policy: macsecFabParamPol
+    keychain_policy: macsecKeyChainPol
+  isisDomPol:
+    isis_level: isisLvlComp
+  # ── Monitoring destinations & sources sub-structure (F3) ──────────────────────
+  callhomeGroup:
+    callhome_destination: callhomeDest
+    callhome_protocol_profile: callhomeProf
+  callhomeSmartGroup:
+    smart_callhome_destination: callhomeSmartDest
+    callhome_protocol_profile: callhomeProf
+  callhomeQueryGroup:
+    query: callhomeQuery
+  snmpPol:
+    snmp_community: snmpCommunityP
+    user_profile: snmpUserP
+    snmp_client_group_profile: snmpClientGrpP
+    client_entry: snmpTrapFwdServerP
+  snmpClientGrpP:
+    client_entry: snmpClientP
+  snmpGroup:
+    snmp_trap_destination: snmpTrapDest
+  tacacsGroup:
+    tacacs_destination: tacacsTacacsDest
+  monFabricPol:
+    monitoring_target: monFabricTarget
+    syslog_source: syslogSrc
+    snmp_source: snmpSrc
+    callhome_source: callhomeSrc
+    smart_callhome_source: callhomeSmartSrc
+    tacacs_source: tacacsSrc
+  monFabricTarget:
+    syslog_source: syslogSrc
+    snmp_source: snmpSrc
+    callhome_source: callhomeSrc
+    smart_callhome_source: callhomeSmartSrc
+    tacacs_source: tacacsSrc
+    fault_severity_assignment_policy: faultSevAsnP
+    event_severity_assignment_policy: eventSevAsnP
+  monCommonPol:
+    syslog_source: syslogSrc
+    snmp_source: snmpSrc
+    callhome_source: callhomeSrc
+    smart_callhome_source: callhomeSmartSrc
+    tacacs_source: tacacsSrc
+    fault_severity_assignment_policy: faultSevAsnP
+    event_severity_assignment_policy: eventSevAsnP
+  # ── System / global sub-structure (F4) ───────────────────────────────────────
+  commPol:
+    http_service: commHttp
+    http_ssl_configuration: commHttps
+    ssh_service: commSsh
+    shellinabox_service: commShellinabox
+    communication_setup: commSetup
+    response_time: commApiRespTime
+    restart: commReconfig
+  commHttps:
+    ssl_cipher: commCipher
+  geoSite:
+    geo_building: geoBuilding
+  geoBuilding:
+    geo_floor: geoFloor
+  geoFloor:
+    geo_room: geoRoom
+  geoRoom:
+    geo_row: geoRow
+    geo_rack: geoRack
+  geoRow:
+    geo_rack: geoRack
+  proxyServer:
+    ignore_host: proxyIgnoreHost
+  # ── Firmware / maintenance / scheduler sub-structure (F5) ─────────────────────
+  firmwareFwGrp:
+    node_block: fabricNodeBlk
+  firmwareRepoP:
+    cco_firmware_source: firmwareCcoSource
+    firmware_download_task: firmwareOSource
+    internal_firmware_source: firmwareInternalSource
+  maintMaintGrp:
+    node_block: fabricNodeBlk
+  maintPodMaintGrp:
+    pod_block: fabricPodBlk
+  trigSchedP:
+    one_time_window: trigAbsWindowP
+    recurring_window: trigRecurrWindowP
+  # ── Telemetry / analytics sub-structure (F6) ──────────────────────────────────
+  telemetryFlowCollectorP:
+    external_server: telemetryExternalServer
+    fte_events: telemetryFteEventSetP
+  analyticsCont:
+    analytics_cluster: analyticsCluster
   datetimePol:
     ntp_provider: datetimeNtpProv
   dnsProfile:
@@ -1135,8 +1357,19 @@ makers:
   # ── Controller (uni/controller) ─────────────────────────────────────────────
   ctrlrInst:
     fabric_membership: fabricNodeIdentPol
+    cluster_policy: infraClusterPol
+    controller_audit_log_retention_policy: aaaCtrlrRetP
+    controller_firmware_policy: firmwareCtrlrFwP
+    controller_maintenance_policy: maintCtrlrMaintP
+    fabric_firsttime_setup_policy: fabricSetupPol
+    drr_policy: infraDRRPol
+    scheduler: trigSchedP
+    cimc_node: ctrlrCimcNode
+    controller_cores_policy: svccoreCtrlrPol
   fabricNodeIdentPol:
     fabric_node_member: fabricNodeIdentP
+  fabricSetupPol:
+    pod_setup: fabricSetupP
 
 binds:
   # ── Multicast filters reference a PIM route-map (wave: 2026-07-15) ───────────
@@ -1441,6 +1674,7 @@ binds:
     fc_instance: fcInstPol
     fc_fabric: fcFabricPol
     synce_policy: synceInstPol
+    spanning_tree: stpInstPol
     dot1x: l2NodeAuthPol
     copp: coppLeafProfile
     copp_prefilter: iaclLeafProfile
@@ -1473,6 +1707,43 @@ binds:
     interface_profile: infraAccPortP
   infraSpineP:
     interface_profile: infraSpAccPortP
+
+  # ── Fabric ports charpente (F1) ──────────────────────────────────────────────
+  fabricLeafP:
+    interface_profile: fabricLePortP
+  fabricSpineP:
+    interface_profile: fabricSpPortP
+  fabricLeafS:
+    policy_group: fabricLeNodePGrp
+  fabricSpineS:
+    policy_group: fabricSpNodePGrp
+  fabricLFPortS:
+    policy_group: fabricLePortPGrp
+  fabricSFPortS:
+    policy_group: fabricSpPortPGrp
+  fabricLeCardS:
+    policy_group: fabricLeCardPGrp
+  fabricSpCardS:
+    policy_group: fabricSpCardPGrp
+  fabricPodS:
+    policy_group: fabricPodPGrp
+  # ── Fabric interface/protocol policies wired into the groups (F2) ────────────
+  fabricLeNodePGrp:
+    psu_redundancy: psuInstPol
+    node_control: fabricNodeControl
+  fabricSpNodePGrp:
+    node_control: fabricNodeControl
+  fabricLePortPGrp:
+    link_level: fabricFIfPol
+    link_flap: fabricFLinkFlapPol
+    l3_interface: l3IfPol
+    macsec: macsecFabIfPol
+    dwdm: dwdmFabIfPol
+    zr: xcvrZRFabIfPol
+  fabricSpPortPGrp:
+    link_level: fabricFIfPol
+    l3_interface: l3IfPol
+    macsec: macsecFabIfPol
 
 verbs:
   fvAEPg:

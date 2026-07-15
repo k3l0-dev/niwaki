@@ -72,6 +72,7 @@ class {{ class_name }}(ManagedObject):
     # ── Semantic metadata (from APIC schema) ───────────────────────────────────
     _mo_category:        ClassVar[str]            = "{{ mo_category }}"
     _write_access:       ClassVar[frozenset[str]] = frozenset({{ write_access | tojson }})
+    _is_creatable:       ClassVar[bool]           = {{ is_creatable }}
     _is_observable:      ClassVar[bool]           = {{ is_observable }}
     _is_faultable:       ClassVar[bool]           = {{ is_faultable }}
     _is_health_scorable: ClassVar[bool]           = {{ is_health_scorable }}

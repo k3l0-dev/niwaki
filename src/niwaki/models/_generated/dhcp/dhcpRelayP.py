@@ -36,6 +36,7 @@ class dhcpRelayP(ManagedObject):
     _write_access: ClassVar[frozenset[str]] = frozenset(
         ["admin", "custom-port-privilege", "tenant-protocol"]
     )
+    _is_creatable: ClassVar[bool] = True
     _is_observable: ClassVar[bool] = True
     _is_faultable: ClassVar[bool] = False
     _is_health_scorable: ClassVar[bool] = True

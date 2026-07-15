@@ -13,7 +13,7 @@ The VSPAN destination group contains a group of VSPAN destinations. A VSPAN dest
 | --- | --- |
 | ACI class | `spanVDestGrp` |
 | RN | `vdestgrp-{name}` |
-| Cursor | `VspanDestinationGroupCursor` |
+| Cursor | `InfraVspanDestinationGroupCursor` |
 | Parent | {ref}`infra <vocab-infra>` |
 | Atomic | — |
 

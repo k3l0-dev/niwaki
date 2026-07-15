@@ -564,6 +564,7 @@ def _render_class(
         line.replace("\\", "\\\\").replace('"""', "'''") for line in config_issue_display
     ]
     write_access = meta.get("write_access", [])
+    is_creatable = meta.get("is_creatable", True)
     is_observable = meta.get("is_observable", False)
     is_faultable = meta.get("is_faultable", False)
     is_health_scorable = meta.get("is_health_scorable", False)
@@ -594,6 +595,7 @@ def _render_class(
         relation_info=relation_info,
         relation_info_repr=repr(relation_info),
         write_access=write_access,
+        is_creatable=is_creatable,
         is_observable=is_observable,
         is_faultable=is_faultable,
         is_health_scorable=is_health_scorable,

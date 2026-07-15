@@ -5,13 +5,13 @@ Re-generate: uv run python -m niwaki._codegen.generate_docs
 
 # Coverage matrix
 
-**605 curated positions** across the four design domains plus the `uni`-level domains.  Everything else in the 2,222 generated classes stays reachable through `.mo(Class, ...)` and `bind_dn(alias=dn)` — see the design guide.
+**804 curated positions** across the four design domains plus the `uni`-level domains.  Everything else in the 2,222 generated classes stays reachable through `.mo(Class, ...)` and `bind_dn(alias=dn)` — see the design guide.
 
 ## fabric
 
 | position | ACI class | makers | bind aliases | verbs | sugar | atomic |
 | --- | --- | --- | --- | --- | --- | --- |
-| {ref}`fabric <vocab-fabric>` | `fabricInst` | 9 | — | — | — | — |
+| {ref}`fabric <vocab-fabric>` | `fabricInst` | 84 | — | — | — | — |
 | {ref}`fabric.igmp_snoop_policy <vocab-fabric-igmp_snoop_policy>` | `igmpSnoopPol` | — | — | — | — | — |
 | {ref}`fabric.mld_snoop_policy <vocab-fabric-mld_snoop_policy>` | `mldSnoopPol` | — | — | — | — | — |
 | {ref}`fabric.datetime_policy <vocab-fabric-datetime_policy>` | `datetimePol` | 1 | — | — | — | — |
@@ -36,12 +36,195 @@ Re-generate: uv run python -m niwaki._codegen.generate_docs
 | {ref}`fabric.span_destination_group <vocab-fabric-span_destination_group>` | `spanDestGrp` | 1 | — | — | — | — |
 | {ref}`fabric.span_destination_group.span_destination <vocab-fabric-span_destination_group-span_destination>` | `spanDest` | 1 | `epg=`, `path=`, `apic_node=` | — | — | — |
 | {ref}`fabric.span_destination_group.span_destination.vspan_epg_summary <vocab-fabric-span_destination_group-span_destination-vspan_epg_summary>` | `spanVEpgSummary` | — | — | — | — | — |
+| {ref}`fabric.function_profile <vocab-fabric-function_profile>` | `fabricFuncP` | 8 | — | — | — | — |
+| {ref}`fabric.function_profile.leaf_switch_policy_group <vocab-fabric-function_profile-leaf_switch_policy_group>` | `fabricLeNodePGrp` | — | `psu_redundancy=`, `node_control=` | — | — | — |
+| {ref}`fabric.function_profile.spine_switch_policy_group <vocab-fabric-function_profile-spine_switch_policy_group>` | `fabricSpNodePGrp` | — | `node_control=` | — | — | — |
+| {ref}`fabric.function_profile.leaf_fabric_port_policy_group <vocab-fabric-function_profile-leaf_fabric_port_policy_group>` | `fabricLePortPGrp` | — | `link_level=`, `link_flap=`, `l3_interface=`, `macsec=`, `dwdm=`, `zr=` | — | — | — |
+| {ref}`fabric.function_profile.spine_fabric_port_policy_group <vocab-fabric-function_profile-spine_fabric_port_policy_group>` | `fabricSpPortPGrp` | — | `link_level=`, `l3_interface=`, `macsec=` | — | — | — |
+| {ref}`fabric.function_profile.leaf_module_policy_group <vocab-fabric-function_profile-leaf_module_policy_group>` | `fabricLeCardPGrp` | — | — | — | — | — |
+| {ref}`fabric.function_profile.spine_module_policy_group <vocab-fabric-function_profile-spine_module_policy_group>` | `fabricSpCardPGrp` | — | — | — | — | — |
+| {ref}`fabric.function_profile.pod_policy_group <vocab-fabric-function_profile-pod_policy_group>` | `fabricPodPGrp` | — | — | — | — | — |
+| {ref}`fabric.function_profile.controller_policy_group <vocab-fabric-function_profile-controller_policy_group>` | `fabricCtrlrPGrp` | — | — | — | — | — |
+| {ref}`fabric.leaf_switch_profile <vocab-fabric-leaf_switch_profile>` | `fabricLeafP` | 1 | `interface_profile=` | — | — | — |
+| {ref}`fabric.leaf_switch_profile.switch_association <vocab-fabric-leaf_switch_profile-switch_association>` | `fabricLeafS` | 1 | `policy_group=` | — | — | — |
+| {ref}`fabric.leaf_switch_profile.switch_association.node_block <vocab-fabric-leaf_switch_profile-switch_association-node_block>` | `fabricNodeBlk` | — | — | — | — | — |
+| {ref}`fabric.spine_switch_profile <vocab-fabric-spine_switch_profile>` | `fabricSpineP` | 1 | `interface_profile=` | — | — | — |
+| {ref}`fabric.spine_switch_profile.spine_selector <vocab-fabric-spine_switch_profile-spine_selector>` | `fabricSpineS` | 1 | `policy_group=` | — | — | — |
+| {ref}`fabric.spine_switch_profile.spine_selector.node_block <vocab-fabric-spine_switch_profile-spine_selector-node_block>` | `fabricNodeBlk` | — | — | — | — | — |
+| {ref}`fabric.leaf_fabric_interface_profile <vocab-fabric-leaf_fabric_interface_profile>` | `fabricLePortP` | 1 | — | — | — | — |
+| {ref}`fabric.leaf_fabric_interface_profile.leaf_fabric_port_selector <vocab-fabric-leaf_fabric_interface_profile-leaf_fabric_port_selector>` | `fabricLFPortS` | 2 | `policy_group=` | — | — | — |
+| {ref}`fabric.leaf_fabric_interface_profile.leaf_fabric_port_selector.port_block <vocab-fabric-leaf_fabric_interface_profile-leaf_fabric_port_selector-port_block>` | `fabricPortBlk` | — | — | — | — | — |
+| {ref}`fabric.leaf_fabric_interface_profile.leaf_fabric_port_selector.fabric_sub_port_block <vocab-fabric-leaf_fabric_interface_profile-leaf_fabric_port_selector-fabric_sub_port_block>` | `fabricSubPortBlk` | — | — | — | — | — |
+| {ref}`fabric.spine_fabric_interface_profile <vocab-fabric-spine_fabric_interface_profile>` | `fabricSpPortP` | 1 | — | — | — | — |
+| {ref}`fabric.spine_fabric_interface_profile.spine_fabric_port_selector <vocab-fabric-spine_fabric_interface_profile-spine_fabric_port_selector>` | `fabricSFPortS` | 2 | `policy_group=` | — | — | — |
+| {ref}`fabric.spine_fabric_interface_profile.spine_fabric_port_selector.port_block <vocab-fabric-spine_fabric_interface_profile-spine_fabric_port_selector-port_block>` | `fabricPortBlk` | — | — | — | — | — |
+| {ref}`fabric.spine_fabric_interface_profile.spine_fabric_port_selector.fabric_sub_port_block <vocab-fabric-spine_fabric_interface_profile-spine_fabric_port_selector-fabric_sub_port_block>` | `fabricSubPortBlk` | — | — | — | — | — |
+| {ref}`fabric.leaf_module_profile <vocab-fabric-leaf_module_profile>` | `fabricLeCardP` | 1 | — | — | — | — |
+| {ref}`fabric.leaf_module_profile.leaf_module_selector <vocab-fabric-leaf_module_profile-leaf_module_selector>` | `fabricLeCardS` | — | `policy_group=` | — | — | — |
+| {ref}`fabric.spine_module_profile <vocab-fabric-spine_module_profile>` | `fabricSpCardP` | 1 | — | — | — | — |
+| {ref}`fabric.spine_module_profile.spine_module_selector <vocab-fabric-spine_module_profile-spine_module_selector>` | `fabricSpCardS` | — | `policy_group=` | — | — | — |
+| {ref}`fabric.pod_profile <vocab-fabric-pod_profile>` | `fabricPodP` | 1 | — | — | — | — |
+| {ref}`fabric.pod_profile.pod_selector <vocab-fabric-pod_profile-pod_selector>` | `fabricPodS` | 1 | `policy_group=` | — | — | — |
+| {ref}`fabric.pod_profile.pod_selector.pod_block <vocab-fabric-pod_profile-pod_selector-pod_block>` | `fabricPodBlk` | — | — | — | — | — |
+| {ref}`fabric.fabric_link_level_policy <vocab-fabric-fabric_link_level_policy>` | `fabricFIfPol` | — | — | — | — | — |
+| {ref}`fabric.fabric_link_flap_policy <vocab-fabric-fabric_link_flap_policy>` | `fabricFLinkFlapPol` | — | — | — | — | — |
+| {ref}`fabric.l3_interface_policy <vocab-fabric-l3_interface_policy>` | `l3IfPol` | — | — | — | — | — |
+| {ref}`fabric.fabric_l2_mtu_policy <vocab-fabric-fabric_l2_mtu_policy>` | `l2InstPol` | — | — | — | — | — |
+| {ref}`fabric.lldp_policy <vocab-fabric-lldp_policy>` | `lldpIfPol` | — | — | — | — | — |
+| {ref}`fabric.macsec_fabric_interface_policy <vocab-fabric-macsec_fabric_interface_policy>` | `macsecFabIfPol` | — | — | — | — | — |
+| {ref}`fabric.macsec_fabric <vocab-fabric-macsec_fabric>` | `macsecFabPolCont` | 2 | — | — | — | — |
+| {ref}`fabric.macsec_fabric.parameters_policy <vocab-fabric-macsec_fabric-parameters_policy>` | `macsecFabParamPol` | — | — | — | — | — |
+| {ref}`fabric.macsec_fabric.keychain_policy <vocab-fabric-macsec_fabric-keychain_policy>` | `macsecKeyChainPol` | 1 | — | — | — | — |
+| {ref}`fabric.macsec_fabric.keychain_policy.key_policy <vocab-fabric-macsec_fabric-keychain_policy-key_policy>` | `macsecKeyPol` | — | — | — | — | — |
+| {ref}`fabric.isis_domain_policy <vocab-fabric-isis_domain_policy>` | `isisDomPol` | 1 | — | — | — | — |
+| {ref}`fabric.isis_domain_policy.isis_level <vocab-fabric-isis_domain_policy-isis_level>` | `isisLvlComp` | — | — | — | — | — |
+| {ref}`fabric.coop_group_policy <vocab-fabric-coop_group_policy>` | `coopPol` | — | — | — | — | — |
+| {ref}`fabric.fabric_vxlan_policy <vocab-fabric-fabric_vxlan_policy>` | `l4VxlanInstPol` | — | — | — | — | — |
+| {ref}`fabric.vpc_domain_policy <vocab-fabric-vpc_domain_policy>` | `vpcInstPol` | — | — | — | — | — |
+| {ref}`fabric.power_supply_redundancy_policy <vocab-fabric-power_supply_redundancy_policy>` | `psuInstPol` | — | — | — | — | — |
+| {ref}`fabric.zr_policy <vocab-fabric-zr_policy>` | `xcvrZRFabIfPol` | — | — | — | — | — |
+| {ref}`fabric.zrp_policy <vocab-fabric-zrp_policy>` | `xcvrZRPFabIfPol` | — | — | — | — | — |
+| {ref}`fabric.dwdm_policy <vocab-fabric-dwdm_policy>` | `dwdmFabIfPol` | — | — | — | — | — |
+| {ref}`fabric.wwn_inst_policy <vocab-fabric-wwn_inst_policy>` | `wwnInstPol` | — | — | — | — | — |
+| {ref}`fabric.load_balance_policy <vocab-fabric-load_balance_policy>` | `lbpPol` | — | — | — | — | — |
+| {ref}`fabric.global_ep_listen_policy <vocab-fabric-global_ep_listen_policy>` | `fabricGlbEpListenPol` | — | — | — | — | — |
+| {ref}`fabric.fabric_node_control <vocab-fabric-fabric_node_control>` | `fabricNodeControl` | — | — | — | — | — |
+| {ref}`fabric.callhome_destination_group <vocab-fabric-callhome_destination_group>` | `callhomeGroup` | 2 | — | — | — | — |
+| {ref}`fabric.callhome_destination_group.callhome_destination <vocab-fabric-callhome_destination_group-callhome_destination>` | `callhomeDest` | — | — | — | — | — |
+| {ref}`fabric.callhome_destination_group.callhome_protocol_profile <vocab-fabric-callhome_destination_group-callhome_protocol_profile>` | `callhomeProf` | — | — | — | — | — |
+| {ref}`fabric.smart_callhome_destination_group <vocab-fabric-smart_callhome_destination_group>` | `callhomeSmartGroup` | 2 | — | — | — | — |
+| {ref}`fabric.smart_callhome_destination_group.smart_callhome_destination <vocab-fabric-smart_callhome_destination_group-smart_callhome_destination>` | `callhomeSmartDest` | — | — | — | — | — |
+| {ref}`fabric.smart_callhome_destination_group.callhome_protocol_profile <vocab-fabric-smart_callhome_destination_group-callhome_protocol_profile>` | `callhomeProf` | — | — | — | — | — |
+| {ref}`fabric.callhome_inventory_policy <vocab-fabric-callhome_inventory_policy>` | `callhomeInvP` | — | — | — | — | — |
+| {ref}`fabric.callhome_query_group <vocab-fabric-callhome_query_group>` | `callhomeQueryGroup` | 1 | — | — | — | — |
+| {ref}`fabric.callhome_query_group.query <vocab-fabric-callhome_query_group-query>` | `callhomeQuery` | — | — | — | — | — |
+| {ref}`fabric.snmp_policy <vocab-fabric-snmp_policy>` | `snmpPol` | 4 | — | — | — | — |
+| {ref}`fabric.snmp_policy.snmp_community <vocab-fabric-snmp_policy-snmp_community>` | `snmpCommunityP` | — | — | — | — | — |
+| {ref}`fabric.snmp_policy.user_profile <vocab-fabric-snmp_policy-user_profile>` | `snmpUserP` | — | — | — | — | — |
+| {ref}`fabric.snmp_policy.snmp_client_group_profile <vocab-fabric-snmp_policy-snmp_client_group_profile>` | `snmpClientGrpP` | 1 | — | — | — | — |
+| {ref}`fabric.snmp_policy.snmp_client_group_profile.client_entry <vocab-fabric-snmp_policy-snmp_client_group_profile-client_entry>` | `snmpClientP` | — | — | — | — | — |
+| {ref}`fabric.snmp_policy.client_entry <vocab-fabric-snmp_policy-client_entry>` | `snmpTrapFwdServerP` | — | — | — | — | — |
+| {ref}`fabric.snmp_monitoring_destination_group <vocab-fabric-snmp_monitoring_destination_group>` | `snmpGroup` | 1 | — | — | — | — |
+| {ref}`fabric.snmp_monitoring_destination_group.snmp_trap_destination <vocab-fabric-snmp_monitoring_destination_group-snmp_trap_destination>` | `snmpTrapDest` | — | — | — | — | — |
+| {ref}`fabric.snmp_trap_destination_info <vocab-fabric-snmp_trap_destination_info>` | `snmpCtrlrInst` | — | — | — | — | — |
+| {ref}`fabric.tacacs_monitoring_destination_group <vocab-fabric-tacacs_monitoring_destination_group>` | `tacacsGroup` | 1 | — | — | — | — |
+| {ref}`fabric.tacacs_monitoring_destination_group.tacacs_destination <vocab-fabric-tacacs_monitoring_destination_group-tacacs_destination>` | `tacacsTacacsDest` | — | — | — | — | — |
+| {ref}`fabric.mon_fabric_monitoring_policy <vocab-fabric-mon_fabric_monitoring_policy>` | `monFabricPol` | 6 | — | — | — | — |
+| {ref}`fabric.mon_fabric_monitoring_policy.monitoring_target <vocab-fabric-mon_fabric_monitoring_policy-monitoring_target>` | `monFabricTarget` | 7 | — | — | — | — |
+| {ref}`fabric.mon_fabric_monitoring_policy.monitoring_target.syslog_source <vocab-fabric-mon_fabric_monitoring_policy-monitoring_target-syslog_source>` | `syslogSrc` | — | — | — | — | — |
+| {ref}`fabric.mon_fabric_monitoring_policy.monitoring_target.snmp_source <vocab-fabric-mon_fabric_monitoring_policy-monitoring_target-snmp_source>` | `snmpSrc` | — | — | — | — | — |
+| {ref}`fabric.mon_fabric_monitoring_policy.monitoring_target.callhome_source <vocab-fabric-mon_fabric_monitoring_policy-monitoring_target-callhome_source>` | `callhomeSrc` | — | — | — | — | — |
+| {ref}`fabric.mon_fabric_monitoring_policy.monitoring_target.smart_callhome_source <vocab-fabric-mon_fabric_monitoring_policy-monitoring_target-smart_callhome_source>` | `callhomeSmartSrc` | — | — | — | — | — |
+| {ref}`fabric.mon_fabric_monitoring_policy.monitoring_target.tacacs_source <vocab-fabric-mon_fabric_monitoring_policy-monitoring_target-tacacs_source>` | `tacacsSrc` | — | — | — | — | — |
+| {ref}`fabric.mon_fabric_monitoring_policy.monitoring_target.fault_severity_assignment_policy <vocab-fabric-mon_fabric_monitoring_policy-monitoring_target-fault_severity_assignment_policy>` | `faultSevAsnP` | 5 | — | — | — | — |
+| {ref}`fabric.mon_fabric_monitoring_policy.monitoring_target.fault_severity_assignment_policy.syslog_source <vocab-fabric-mon_fabric_monitoring_policy-monitoring_target-fault_severity_assignment_policy-syslog_source>` | `syslogSrc` | — | — | — | — | — |
+| {ref}`fabric.mon_fabric_monitoring_policy.monitoring_target.fault_severity_assignment_policy.snmp_source <vocab-fabric-mon_fabric_monitoring_policy-monitoring_target-fault_severity_assignment_policy-snmp_source>` | `snmpSrc` | — | — | — | — | — |
+| {ref}`fabric.mon_fabric_monitoring_policy.monitoring_target.fault_severity_assignment_policy.callhome_source <vocab-fabric-mon_fabric_monitoring_policy-monitoring_target-fault_severity_assignment_policy-callhome_source>` | `callhomeSrc` | — | — | — | — | — |
+| {ref}`fabric.mon_fabric_monitoring_policy.monitoring_target.fault_severity_assignment_policy.smart_callhome_source <vocab-fabric-mon_fabric_monitoring_policy-monitoring_target-fault_severity_assignment_policy-smart_callhome_source>` | `callhomeSmartSrc` | — | — | — | — | — |
+| {ref}`fabric.mon_fabric_monitoring_policy.monitoring_target.fault_severity_assignment_policy.tacacs_source <vocab-fabric-mon_fabric_monitoring_policy-monitoring_target-fault_severity_assignment_policy-tacacs_source>` | `tacacsSrc` | — | — | — | — | — |
+| {ref}`fabric.mon_fabric_monitoring_policy.monitoring_target.event_severity_assignment_policy <vocab-fabric-mon_fabric_monitoring_policy-monitoring_target-event_severity_assignment_policy>` | `eventSevAsnP` | 5 | — | — | — | — |
+| {ref}`fabric.mon_fabric_monitoring_policy.monitoring_target.event_severity_assignment_policy.syslog_source <vocab-fabric-mon_fabric_monitoring_policy-monitoring_target-event_severity_assignment_policy-syslog_source>` | `syslogSrc` | — | — | — | — | — |
+| {ref}`fabric.mon_fabric_monitoring_policy.monitoring_target.event_severity_assignment_policy.snmp_source <vocab-fabric-mon_fabric_monitoring_policy-monitoring_target-event_severity_assignment_policy-snmp_source>` | `snmpSrc` | — | — | — | — | — |
+| {ref}`fabric.mon_fabric_monitoring_policy.monitoring_target.event_severity_assignment_policy.callhome_source <vocab-fabric-mon_fabric_monitoring_policy-monitoring_target-event_severity_assignment_policy-callhome_source>` | `callhomeSrc` | — | — | — | — | — |
+| {ref}`fabric.mon_fabric_monitoring_policy.monitoring_target.event_severity_assignment_policy.smart_callhome_source <vocab-fabric-mon_fabric_monitoring_policy-monitoring_target-event_severity_assignment_policy-smart_callhome_source>` | `callhomeSmartSrc` | — | — | — | — | — |
+| {ref}`fabric.mon_fabric_monitoring_policy.monitoring_target.event_severity_assignment_policy.tacacs_source <vocab-fabric-mon_fabric_monitoring_policy-monitoring_target-event_severity_assignment_policy-tacacs_source>` | `tacacsSrc` | — | — | — | — | — |
+| {ref}`fabric.mon_fabric_monitoring_policy.syslog_source <vocab-fabric-mon_fabric_monitoring_policy-syslog_source>` | `syslogSrc` | — | — | — | — | — |
+| {ref}`fabric.mon_fabric_monitoring_policy.snmp_source <vocab-fabric-mon_fabric_monitoring_policy-snmp_source>` | `snmpSrc` | — | — | — | — | — |
+| {ref}`fabric.mon_fabric_monitoring_policy.callhome_source <vocab-fabric-mon_fabric_monitoring_policy-callhome_source>` | `callhomeSrc` | — | — | — | — | — |
+| {ref}`fabric.mon_fabric_monitoring_policy.smart_callhome_source <vocab-fabric-mon_fabric_monitoring_policy-smart_callhome_source>` | `callhomeSmartSrc` | — | — | — | — | — |
+| {ref}`fabric.mon_fabric_monitoring_policy.tacacs_source <vocab-fabric-mon_fabric_monitoring_policy-tacacs_source>` | `tacacsSrc` | — | — | — | — | — |
+| {ref}`fabric.mon_common_monitoring_policy <vocab-fabric-mon_common_monitoring_policy>` | `monCommonPol` | 7 | — | — | — | — |
+| {ref}`fabric.mon_common_monitoring_policy.syslog_source <vocab-fabric-mon_common_monitoring_policy-syslog_source>` | `syslogSrc` | — | — | — | — | — |
+| {ref}`fabric.mon_common_monitoring_policy.snmp_source <vocab-fabric-mon_common_monitoring_policy-snmp_source>` | `snmpSrc` | — | — | — | — | — |
+| {ref}`fabric.mon_common_monitoring_policy.callhome_source <vocab-fabric-mon_common_monitoring_policy-callhome_source>` | `callhomeSrc` | — | — | — | — | — |
+| {ref}`fabric.mon_common_monitoring_policy.smart_callhome_source <vocab-fabric-mon_common_monitoring_policy-smart_callhome_source>` | `callhomeSmartSrc` | — | — | — | — | — |
+| {ref}`fabric.mon_common_monitoring_policy.tacacs_source <vocab-fabric-mon_common_monitoring_policy-tacacs_source>` | `tacacsSrc` | — | — | — | — | — |
+| {ref}`fabric.mon_common_monitoring_policy.fault_severity_assignment_policy <vocab-fabric-mon_common_monitoring_policy-fault_severity_assignment_policy>` | `faultSevAsnP` | 5 | — | — | — | — |
+| {ref}`fabric.mon_common_monitoring_policy.fault_severity_assignment_policy.syslog_source <vocab-fabric-mon_common_monitoring_policy-fault_severity_assignment_policy-syslog_source>` | `syslogSrc` | — | — | — | — | — |
+| {ref}`fabric.mon_common_monitoring_policy.fault_severity_assignment_policy.snmp_source <vocab-fabric-mon_common_monitoring_policy-fault_severity_assignment_policy-snmp_source>` | `snmpSrc` | — | — | — | — | — |
+| {ref}`fabric.mon_common_monitoring_policy.fault_severity_assignment_policy.callhome_source <vocab-fabric-mon_common_monitoring_policy-fault_severity_assignment_policy-callhome_source>` | `callhomeSrc` | — | — | — | — | — |
+| {ref}`fabric.mon_common_monitoring_policy.fault_severity_assignment_policy.smart_callhome_source <vocab-fabric-mon_common_monitoring_policy-fault_severity_assignment_policy-smart_callhome_source>` | `callhomeSmartSrc` | — | — | — | — | — |
+| {ref}`fabric.mon_common_monitoring_policy.fault_severity_assignment_policy.tacacs_source <vocab-fabric-mon_common_monitoring_policy-fault_severity_assignment_policy-tacacs_source>` | `tacacsSrc` | — | — | — | — | — |
+| {ref}`fabric.mon_common_monitoring_policy.event_severity_assignment_policy <vocab-fabric-mon_common_monitoring_policy-event_severity_assignment_policy>` | `eventSevAsnP` | 5 | — | — | — | — |
+| {ref}`fabric.mon_common_monitoring_policy.event_severity_assignment_policy.syslog_source <vocab-fabric-mon_common_monitoring_policy-event_severity_assignment_policy-syslog_source>` | `syslogSrc` | — | — | — | — | — |
+| {ref}`fabric.mon_common_monitoring_policy.event_severity_assignment_policy.snmp_source <vocab-fabric-mon_common_monitoring_policy-event_severity_assignment_policy-snmp_source>` | `snmpSrc` | — | — | — | — | — |
+| {ref}`fabric.mon_common_monitoring_policy.event_severity_assignment_policy.callhome_source <vocab-fabric-mon_common_monitoring_policy-event_severity_assignment_policy-callhome_source>` | `callhomeSrc` | — | — | — | — | — |
+| {ref}`fabric.mon_common_monitoring_policy.event_severity_assignment_policy.smart_callhome_source <vocab-fabric-mon_common_monitoring_policy-event_severity_assignment_policy-smart_callhome_source>` | `callhomeSmartSrc` | — | — | — | — | — |
+| {ref}`fabric.mon_common_monitoring_policy.event_severity_assignment_policy.tacacs_source <vocab-fabric-mon_common_monitoring_policy-event_severity_assignment_policy-tacacs_source>` | `tacacsSrc` | — | — | — | — | — |
+| {ref}`fabric.communication_policy <vocab-fabric-communication_policy>` | `commPol` | 7 | — | — | — | — |
+| {ref}`fabric.communication_policy.http_service <vocab-fabric-communication_policy-http_service>` | `commHttp` | — | — | — | — | — |
+| {ref}`fabric.communication_policy.http_ssl_configuration <vocab-fabric-communication_policy-http_ssl_configuration>` | `commHttps` | 1 | — | — | — | — |
+| {ref}`fabric.communication_policy.http_ssl_configuration.ssl_cipher <vocab-fabric-communication_policy-http_ssl_configuration-ssl_cipher>` | `commCipher` | — | — | — | — | — |
+| {ref}`fabric.communication_policy.ssh_service <vocab-fabric-communication_policy-ssh_service>` | `commSsh` | — | — | — | — | — |
+| {ref}`fabric.communication_policy.shellinabox_service <vocab-fabric-communication_policy-shellinabox_service>` | `commShellinabox` | — | — | — | — | — |
+| {ref}`fabric.communication_policy.communication_setup <vocab-fabric-communication_policy-communication_setup>` | `commSetup` | — | — | — | — | — |
+| {ref}`fabric.communication_policy.response_time <vocab-fabric-communication_policy-response_time>` | `commApiRespTime` | — | — | — | — | — |
+| {ref}`fabric.communication_policy.restart <vocab-fabric-communication_policy-restart>` | `commReconfig` | — | — | — | — | — |
+| {ref}`fabric.datetime_format <vocab-fabric-datetime_format>` | `datetimeFormat` | — | — | — | — | — |
+| {ref}`fabric.proxy_server <vocab-fabric-proxy_server>` | `proxyServer` | 1 | — | — | — | — |
+| {ref}`fabric.proxy_server.ignore_host <vocab-fabric-proxy_server-ignore_host>` | `proxyIgnoreHost` | — | — | — | — | — |
+| {ref}`fabric.mgmt_connectivity_preference <vocab-fabric-mgmt_connectivity_preference>` | `mgmtConnectivityPrefs` | — | — | — | — | — |
+| {ref}`fabric.geo_site <vocab-fabric-geo_site>` | `geoSite` | 1 | — | — | — | — |
+| {ref}`fabric.geo_site.geo_building <vocab-fabric-geo_site-geo_building>` | `geoBuilding` | 1 | — | — | — | — |
+| {ref}`fabric.geo_site.geo_building.geo_floor <vocab-fabric-geo_site-geo_building-geo_floor>` | `geoFloor` | 1 | — | — | — | — |
+| {ref}`fabric.geo_site.geo_building.geo_floor.geo_room <vocab-fabric-geo_site-geo_building-geo_floor-geo_room>` | `geoRoom` | 2 | — | — | — | — |
+| {ref}`fabric.geo_site.geo_building.geo_floor.geo_room.geo_row <vocab-fabric-geo_site-geo_building-geo_floor-geo_room-geo_row>` | `geoRow` | 1 | — | — | — | — |
+| {ref}`fabric.geo_site.geo_building.geo_floor.geo_room.geo_row.geo_rack <vocab-fabric-geo_site-geo_building-geo_floor-geo_room-geo_row-geo_rack>` | `geoRack` | — | — | — | — | — |
+| {ref}`fabric.geo_site.geo_building.geo_floor.geo_room.geo_rack <vocab-fabric-geo_site-geo_building-geo_floor-geo_room-geo_rack>` | `geoRack` | — | — | — | — | — |
+| {ref}`fabric.admin_down_policy <vocab-fabric-admin_down_policy>` | `fabricBlacklistPol` | — | — | — | — | — |
+| {ref}`fabric.deployment_policy <vocab-fabric-deployment_policy>` | `fabricDeployPol` | — | — | — | — | — |
+| {ref}`fabric.out_of_service_fabric_policy <vocab-fabric-out_of_service_fabric_policy>` | `fabricOOServicePol` | — | — | — | — | — |
+| {ref}`fabric.extended_fabric_equipment_policy <vocab-fabric-extended_fabric_equipment_policy>` | `fabricExtPol` | — | — | — | — | — |
+| {ref}`fabric.firmware_policy <vocab-fabric-firmware_policy>` | `firmwareFwP` | — | — | — | — | — |
+| {ref}`fabric.firmware_group <vocab-fabric-firmware_group>` | `firmwareFwGrp` | 1 | — | — | — | — |
+| {ref}`fabric.firmware_group.node_block <vocab-fabric-firmware_group-node_block>` | `fabricNodeBlk` | — | — | — | — | — |
+| {ref}`fabric.catalog_firmware_policy <vocab-fabric-catalog_firmware_policy>` | `firmwareCatFwP` | — | — | — | — | — |
+| {ref}`fabric.firmware_repository_profile <vocab-fabric-firmware_repository_profile>` | `firmwareRepoP` | 3 | — | — | — | — |
+| {ref}`fabric.firmware_repository_profile.cco_firmware_source <vocab-fabric-firmware_repository_profile-cco_firmware_source>` | `firmwareCcoSource` | — | — | — | — | — |
+| {ref}`fabric.firmware_repository_profile.firmware_download_task <vocab-fabric-firmware_repository_profile-firmware_download_task>` | `firmwareOSource` | — | — | — | — | — |
+| {ref}`fabric.firmware_repository_profile.internal_firmware_source <vocab-fabric-firmware_repository_profile-internal_firmware_source>` | `firmwareInternalSource` | — | — | — | — | — |
+| {ref}`fabric.maintenance_policy <vocab-fabric-maintenance_policy>` | `maintMaintP` | — | — | — | — | — |
+| {ref}`fabric.maintenance_group <vocab-fabric-maintenance_group>` | `maintMaintGrp` | 1 | — | — | — | — |
+| {ref}`fabric.maintenance_group.node_block <vocab-fabric-maintenance_group-node_block>` | `fabricNodeBlk` | — | — | — | — | — |
+| {ref}`fabric.pod_maintenance_group <vocab-fabric-pod_maintenance_group>` | `maintPodMaintGrp` | 1 | — | — | — | — |
+| {ref}`fabric.pod_maintenance_group.pod_block <vocab-fabric-pod_maintenance_group-pod_block>` | `fabricPodBlk` | — | — | — | — | — |
+| {ref}`fabric.catalog_maintenance_policy <vocab-fabric-catalog_maintenance_policy>` | `maintCatMaintP` | — | — | — | — | — |
+| {ref}`fabric.maintenance_notification_email <vocab-fabric-maintenance_notification_email>` | `maintEmailNotif` | — | — | — | — | — |
+| {ref}`fabric.maintenance_notification_text <vocab-fabric-maintenance_notification_text>` | `maintTextNotif` | — | — | — | — | — |
+| {ref}`fabric.configuration_export_policy <vocab-fabric-configuration_export_policy>` | `configExportP` | — | — | — | — | — |
+| {ref}`fabric.configuration_import_policy <vocab-fabric-configuration_import_policy>` | `configImportP` | — | — | — | — | — |
+| {ref}`fabric.configuration_snapshot_manager_policy <vocab-fabric-configuration_snapshot_manager_policy>` | `configSnapshotMgrP` | — | — | — | — | — |
+| {ref}`fabric.configuration_snapshot_rollback_policy <vocab-fabric-configuration_snapshot_rollback_policy>` | `configRollbackP` | — | — | — | — | — |
+| {ref}`fabric.id_import_policy <vocab-fabric-id_import_policy>` | `configImportIdP` | — | — | — | — | — |
+| {ref}`fabric.scheduler <vocab-fabric-scheduler>` | `trigSchedP` | 2 | — | — | — | — |
+| {ref}`fabric.scheduler.one_time_window <vocab-fabric-scheduler-one_time_window>` | `trigAbsWindowP` | — | — | — | — | — |
+| {ref}`fabric.scheduler.recurring_window <vocab-fabric-scheduler-recurring_window>` | `trigRecurrWindowP` | — | — | — | — | — |
+| {ref}`fabric.license_policy <vocab-fabric-license_policy>` | `licenseLicPolicy` | — | — | — | — | — |
+| {ref}`fabric.remote_path <vocab-fabric-remote_path>` | `fileRemotePath` | — | — | — | — | — |
+| {ref}`fabric.telemetry_enable_global_policy <vocab-fabric-telemetry_enable_global_policy>` | `telemetryEnableP` | — | — | — | — | — |
+| {ref}`fabric.flow_collector_policy <vocab-fabric-flow_collector_policy>` | `telemetryFlowCollectorP` | 2 | — | — | — | — |
+| {ref}`fabric.flow_collector_policy.external_server <vocab-fabric-flow_collector_policy-external_server>` | `telemetryExternalServer` | — | — | — | — | — |
+| {ref}`fabric.flow_collector_policy.fte_events <vocab-fabric-flow_collector_policy-fte_events>` | `telemetryFteEventSetP` | — | — | — | — | — |
+| {ref}`fabric.analytics_policy_container <vocab-fabric-analytics_policy_container>` | `analyticsCont` | 1 | — | — | — | — |
+| {ref}`fabric.analytics_policy_container.analytics_cluster <vocab-fabric-analytics_policy_container-analytics_cluster>` | `analyticsCluster` | — | — | — | — | — |
+| {ref}`fabric.twamp_responder_policy <vocab-fabric-twamp_responder_policy>` | `twampResponderPol` | — | — | — | — | — |
+| {ref}`fabric.twamp_server_policy <vocab-fabric-twamp_server_policy>` | `twampServerPol` | — | — | — | — | — |
+| {ref}`fabric.core_export_policy <vocab-fabric-core_export_policy>` | `dbgexpCoreP` | — | — | — | — | — |
+| {ref}`fabric.techsupport_export_policy <vocab-fabric-techsupport_export_policy>` | `dbgexpTechSupP` | — | — | — | — | — |
+| {ref}`fabric.ongoing_latency_mode <vocab-fabric-ongoing_latency_mode>` | `latencyOngoingMode` | — | — | — | — | — |
+| {ref}`fabric.ptp_latency_mode <vocab-fabric-ptp_latency_mode>` | `latencyPtpMode` | — | — | — | — | — |
+| {ref}`fabric.vspan_session <vocab-fabric-vspan_session>` | `spanVSrcGrp` | 2 | — | — | — | — |
+| {ref}`fabric.vspan_session.vspan_vsource <vocab-fabric-vspan_session-vspan_vsource>` | `spanVSrc` | — | — | — | — | — |
+| {ref}`fabric.vspan_session.span_label <vocab-fabric-vspan_session-span_label>` | `spanSpanLbl` | — | — | — | — | — |
+| {ref}`fabric.vspan_destination_group <vocab-fabric-vspan_destination_group>` | `spanVDestGrp` | 1 | — | — | — | — |
+| {ref}`fabric.vspan_destination_group.vspan_vdestination <vocab-fabric-vspan_destination_group-vspan_vdestination>` | `spanVDest` | 1 | — | — | — | — |
+| {ref}`fabric.vspan_destination_group.vspan_vdestination.vspan_destination_epg_summary <vocab-fabric-vspan_destination_group-vspan_vdestination-vspan_destination_epg_summary>` | `spanVEpgSummary` | — | — | — | — | — |
 
 ## infra
 
 | position | ACI class | makers | bind aliases | verbs | sugar | atomic |
 | --- | --- | --- | --- | --- | --- | --- |
-| {ref}`infra <vocab-infra>` | `infraInfra` | 83 | — | — | — | — |
+| {ref}`infra <vocab-infra>` | `infraInfra` | 84 | — | — | — | — |
 | {ref}`infra.cdp_policy <vocab-infra-cdp_policy>` | `cdpIfPol` | — | — | — | — | — |
 | {ref}`infra.lldp_policy <vocab-infra-lldp_policy>` | `lldpIfPol` | — | — | — | — | — |
 | {ref}`infra.lacp_policy <vocab-infra-lacp_policy>` | `lacpLagPol` | 1 | — | — | — | — |
@@ -66,6 +249,10 @@ Re-generate: uv run python -m niwaki._codegen.generate_docs
 | {ref}`infra.vsan_attributes <vocab-infra-vsan_attributes>` | `fcVsanAttrP` | 1 | — | — | — | — |
 | {ref}`infra.vsan_attributes.vsan_attribute_entry <vocab-infra-vsan_attributes-vsan_attribute_entry>` | `fcVsanAttrPEntry` | — | — | — | — | — |
 | {ref}`infra.synce_policy <vocab-infra-synce_policy>` | `synceInstPol` | — | — | — | — | — |
+| {ref}`infra.mst_policy <vocab-infra-mst_policy>` | `stpInstPol` | 1 | — | — | — | — |
+| {ref}`infra.mst_policy.mst_region <vocab-infra-mst_policy-mst_region>` | `stpMstRegionPol` | 1 | — | — | — | — |
+| {ref}`infra.mst_policy.mst_region.mst_domain <vocab-infra-mst_policy-mst_region-mst_domain>` | `stpMstDomPol` | 1 | — | — | — | — |
+| {ref}`infra.mst_policy.mst_region.mst_domain.range <vocab-infra-mst_policy-mst_region-mst_domain-range>` | `fvnsEncapBlk` | — | — | — | — | — |
 | {ref}`infra.macsec <vocab-infra-macsec>` | `macsecPolCont` | 2 | — | — | — | — |
 | {ref}`infra.macsec.parameters_policy <vocab-infra-macsec-parameters_policy>` | `macsecParamPol` | — | — | — | — | — |
 | {ref}`infra.macsec.keychain_policy <vocab-infra-macsec-keychain_policy>` | `macsecKeyChainPol` | 1 | — | — | — | — |
@@ -140,7 +327,7 @@ Re-generate: uv run python -m niwaki._codegen.generate_docs
 | {ref}`infra.func_profile.fc_port_channel <vocab-infra-func_profile-fc_port_channel>` | `infraFcAccBndlGrp` | — | `aaep=`, `lacp=`, `fc_interface=` | — | — | — |
 | {ref}`infra.func_profile.fc_port_channel_override <vocab-infra-func_profile-fc_port_channel_override>` | `infraFcAccBndlPolGrp` | — | `aaep=`, `lacp=`, `fc_interface=` | — | — | — |
 | {ref}`infra.func_profile.spine_access_group <vocab-infra-func_profile-spine_access_group>` | `infraSpAccPortGrp` | — | `aaep=`, `cdp=`, `link_level=`, `macsec=`, `link_flap=`, `copp=` | — | — | — |
-| {ref}`infra.func_profile.leaf_switch_group <vocab-infra-func_profile-leaf_switch_group>` | `infraAccNodePGrp` | — | `cdp=`, `lldp=`, `poe_policy=`, `fc_instance=`, `fc_fabric=`, `synce_policy=`, `dot1x=`, `copp=`, `copp_prefilter=`, `fast_link_failover=`, `forwarding_scale=`, `flash_config=`, `usb_config=`, `monitoring=`, `ptp=`, `netflow_node=`, `bfd_ipv4=`, `bfd_ipv6=`, `bfd_ipv4_mh=`, `bfd_ipv6_mh=` | — | — | — |
+| {ref}`infra.func_profile.leaf_switch_group <vocab-infra-func_profile-leaf_switch_group>` | `infraAccNodePGrp` | — | `cdp=`, `lldp=`, `poe_policy=`, `fc_instance=`, `fc_fabric=`, `synce_policy=`, `spanning_tree=`, `dot1x=`, `copp=`, `copp_prefilter=`, `fast_link_failover=`, `forwarding_scale=`, `flash_config=`, `usb_config=`, `monitoring=`, `ptp=`, `netflow_node=`, `bfd_ipv4=`, `bfd_ipv6=`, `bfd_ipv4_mh=`, `bfd_ipv6_mh=` | — | — | — |
 | {ref}`infra.func_profile.spine_switch_group <vocab-infra-func_profile-spine_switch_group>` | `infraSpineAccNodePGrp` | — | `cdp=`, `lldp=`, `copp=`, `copp_prefilter=`, `usb_config=`, `bfd_ipv4=`, `bfd_ipv6=` | — | — | — |
 | {ref}`infra.func_profile.access_card_group <vocab-infra-func_profile-access_card_group>` | `infraAccCardPGrp` | — | — | — | — | — |
 | {ref}`infra.func_profile.managed_node_connectivity_group <vocab-infra-func_profile-managed_node_connectivity_group>` | `mgmtGrp` | 2 | — | — | — | — |
@@ -624,9 +811,21 @@ Re-generate: uv run python -m niwaki._codegen.generate_docs
 
 | position | ACI class | makers | bind aliases | verbs | sugar | atomic |
 | --- | --- | --- | --- | --- | --- | --- |
-| {ref}`controller <vocab-controller>` | `ctrlrInst` | 1 | — | — | — | — |
+| {ref}`controller <vocab-controller>` | `ctrlrInst` | 10 | — | — | — | — |
 | {ref}`controller.fabric_membership <vocab-controller-fabric_membership>` | `fabricNodeIdentPol` | 1 | — | — | — | — |
 | {ref}`controller.fabric_membership.fabric_node_member <vocab-controller-fabric_membership-fabric_node_member>` | `fabricNodeIdentP` | — | — | — | — | — |
+| {ref}`controller.cluster_policy <vocab-controller-cluster_policy>` | `infraClusterPol` | — | — | — | — | — |
+| {ref}`controller.controller_audit_log_retention_policy <vocab-controller-controller_audit_log_retention_policy>` | `aaaCtrlrRetP` | — | — | — | — | — |
+| {ref}`controller.controller_firmware_policy <vocab-controller-controller_firmware_policy>` | `firmwareCtrlrFwP` | — | — | — | — | — |
+| {ref}`controller.controller_maintenance_policy <vocab-controller-controller_maintenance_policy>` | `maintCtrlrMaintP` | — | — | — | — | — |
+| {ref}`controller.fabric_firsttime_setup_policy <vocab-controller-fabric_firsttime_setup_policy>` | `fabricSetupPol` | 1 | — | — | — | — |
+| {ref}`controller.fabric_firsttime_setup_policy.pod_setup <vocab-controller-fabric_firsttime_setup_policy-pod_setup>` | `fabricSetupP` | — | — | — | — | — |
+| {ref}`controller.drr_policy <vocab-controller-drr_policy>` | `infraDRRPol` | — | — | — | — | — |
+| {ref}`controller.scheduler <vocab-controller-scheduler>` | `trigSchedP` | 2 | — | — | — | — |
+| {ref}`controller.scheduler.one_time_window <vocab-controller-scheduler-one_time_window>` | `trigAbsWindowP` | — | — | — | — | — |
+| {ref}`controller.scheduler.recurring_window <vocab-controller-scheduler-recurring_window>` | `trigRecurrWindowP` | — | — | — | — | — |
+| {ref}`controller.cimc_node <vocab-controller-cimc_node>` | `ctrlrCimcNode` | — | — | — | — | — |
+| {ref}`controller.controller_cores_policy <vocab-controller-controller_cores_policy>` | `svccoreCtrlrPol` | — | — | — | — | — |
 
 ## domains under `uni`
 

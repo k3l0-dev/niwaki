@@ -41,6 +41,10 @@ _MAKER_RENAMES = {
     ("infraInfra", "fc_fabric_policy"): "fibre_channel_fabric_level_policy",
     ("infraInfra", "macsec_interface_policy"): "macsec_access_interface_policy",
     ("infraInfra", "macsec"): "macsec_access_policy_container",
+    ("infraInfra", "mst_policy"): "spanning_tree_policy",
+    ("stpInstPol", "mst_region"): "spanning_tree_policy_region",
+    ("stpMstRegionPol", "mst_domain"): "spanning_tree_domain_policy",
+    ("stpMstDomPol", "range"): "ranges",
     ("infraInfra", "dot1x_node_authentication"): "802_1x_node_authentication_policy",
     ("infraInfra", "dot1x_port_authentication"): "802_1x_port_authentication_policy",
     ("l2PortAuthPol", "dot1x_port_authentication_config"): (
@@ -72,6 +76,26 @@ _MAKER_RENAMES = {
     ("infrazoneZone", "pod_group"): "zone_pod_group",
     ("mgmtGrp", "inband_zone"): "inb_managed_nodes_zone",
     ("mgmtGrp", "oob_zone"): "oob_managed_nodes_zone",
+    # Fabric F2 — interface / protocol policies
+    ("fabricInst", "macsec_fabric"): "macsec_fabric_policy_container",
+    ("fabricInst", "zr_policy"): "zr_s_policy",
+    ("fabricInst", "zrp_policy"): "zrp_s_policy",
+    ("fabricInst", "dwdm_policy"): "profiles_for_dwdm_to_be_applied_at_the_interface_level",
+    ("macsecFabPolCont", "parameters_policy"): "macsec_fabric_parameters_policy",
+    ("macsecFabPolCont", "keychain_policy"): "macsec_keychain_policy",
+    # Fabric F4 — system / global
+    ("commPol", "response_time"): "response_time_configurable",
+    ("commPol", "restart"): "communication_restart_with_applied_config",
+    ("commHttps", "ssl_cipher"): "http_ssl_cipher_configuration",
+    # Fabric F5 — firmware / maintenance / config
+    ("fabricInst", "maintenance_group"): "maint_pod_maintenance_group",
+    ("fabricInst", "pod_maintenance_group"): "maint_pod_pod_maintenance_group",
+    ("fabricInst", "catalog_maintenance_policy"): "catalog_maitenance_policy",
+    ("fabricInst", "remote_path"): "remote_path_of_a_file",
+    # Fabric F6 — telemetry / analytics / VSPAN
+    ("fabricInst", "ptp_latency_mode"): "precision_time_protocol_enabled_disabled",
+    ("telemetryFlowCollectorP", "external_server"): "external_server_associated_with_policy",
+    ("telemetryFlowCollectorP", "fte_events"): "telemetry_configure_fte_events_information",
     # Wave 6 — observability & timing
     ("infraInfra", "netflow_vmm_exporter"): "vmm_external_collector_reachability",
     ("infraInfra", "ptp_domain"): ("user_configured_ptp_domain_will_be_associated_with_interface"),
@@ -92,6 +116,8 @@ _MAKER_RENAMES = {
     ("fabricProtPol", "vpc_pair"): "vpc_explicit_protection_group",
     ("fabricExplicitGEp", "node"): "node_policy_end_point",
     ("ctrlrInst", "fabric_membership"): "fabric_membership_policy",
+    ("ctrlrInst", "controller_cores_policy"): "policy_for_cores_generated_at_ctrlrs",
+    ("fabricSetupPol", "pod_setup"): "fabric_setup_policy_for_a_pod",
     # On a dhcp_relay_policy cursor, .provider() reads naturally — the dhcp_
     # prefix is redundant at that position (same call as dnsProfile.provider).
     ("dhcpRelayP", "provider"): "dhcp_provider",

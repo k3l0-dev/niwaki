@@ -41,6 +41,7 @@ class cloudsecSpTxKeySt(ManagedObject):
             "tenant-protocol",
         ]
     )
+    _is_creatable: ClassVar[bool] = True
     _is_observable: ClassVar[bool] = True
     _is_faultable: ClassVar[bool] = True
     _is_health_scorable: ClassVar[bool] = True

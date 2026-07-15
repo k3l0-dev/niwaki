@@ -5,7 +5,7 @@ Re-generate: uv run python -m niwaki._codegen.generate_docs
 
 # Enums
 
-The 268 enum types reachable from the curated vocabulary — every constrained parameter of every maker.  A parameter typed as an enum also accepts the plain string; the value is validated at the call site either way.
+The 352 enum types reachable from the curated vocabulary — every constrained parameter of every maker.  A parameter typed as an enum also accepts the plain string; the value is validated at the call site either way.
 
 The remaining generated enums back the non-curated classes and live in `niwaki.models._generated.enums`.
 
@@ -361,6 +361,18 @@ Used by: {ref}`tenant.bgp_route_summarization_policy <vocab-tenant-bgp_route_sum
 
 Used by: {ref}`tenant.l3out.node_profile.infra_peer_connectivity_profile <vocab-tenant-l3out-node_profile-infra_peer_connectivity_profile>`, {ref}`tenant.l3out.node_profile.interface_profile.floating_svi.infra_peer_connectivity_profile <vocab-tenant-l3out-node_profile-interface_profile-floating_svi-infra_peer_connectivity_profile>`
 
+(enum-callhomemsgformat)=
+
+## `CallhomeMsgFormat`
+
+| value | meaning |
+| --- | --- |
+| `aml` | — |
+| `short-txt` | — |
+| `xml` | — |
+
+Used by: {ref}`fabric.callhome_destination_group.callhome_destination <vocab-fabric-callhome_destination_group-callhome_destination>`, {ref}`fabric.smart_callhome_destination_group.smart_callhome_destination <vocab-fabric-smart_callhome_destination_group-smart_callhome_destination>`
+
 (enum-callhomeurgency)=
 
 ## `CallhomeUrgency`
@@ -376,7 +388,156 @@ Used by: {ref}`tenant.l3out.node_profile.infra_peer_connectivity_profile <vocab-
 | `notice` | — |
 | `warning` | — |
 
-Used by: {ref}`infra.monitoring_policy.callhome_source <vocab-infra-monitoring_policy-callhome_source>`, {ref}`infra.monitoring_policy.monitoring_target.callhome_source <vocab-infra-monitoring_policy-monitoring_target-callhome_source>`, {ref}`infra.monitoring_policy.monitoring_target.event_severity_assignment_policy.callhome_source <vocab-infra-monitoring_policy-monitoring_target-event_severity_assignment_policy-callhome_source>`, {ref}`infra.monitoring_policy.monitoring_target.fault_severity_assignment_policy.callhome_source <vocab-infra-monitoring_policy-monitoring_target-fault_severity_assignment_policy-callhome_source>`
+Used by: {ref}`fabric.callhome_destination_group.callhome_destination <vocab-fabric-callhome_destination_group-callhome_destination>`, {ref}`fabric.mon_common_monitoring_policy.callhome_source <vocab-fabric-mon_common_monitoring_policy-callhome_source>`, {ref}`fabric.mon_common_monitoring_policy.event_severity_assignment_policy.callhome_source <vocab-fabric-mon_common_monitoring_policy-event_severity_assignment_policy-callhome_source>`, {ref}`fabric.mon_common_monitoring_policy.fault_severity_assignment_policy.callhome_source <vocab-fabric-mon_common_monitoring_policy-fault_severity_assignment_policy-callhome_source>`, {ref}`fabric.mon_fabric_monitoring_policy.callhome_source <vocab-fabric-mon_fabric_monitoring_policy-callhome_source>`, {ref}`fabric.mon_fabric_monitoring_policy.monitoring_target.callhome_source <vocab-fabric-mon_fabric_monitoring_policy-monitoring_target-callhome_source>`, {ref}`fabric.mon_fabric_monitoring_policy.monitoring_target.event_severity_assignment_policy.callhome_source <vocab-fabric-mon_fabric_monitoring_policy-monitoring_target-event_severity_assignment_policy-callhome_source>`, {ref}`fabric.mon_fabric_monitoring_policy.monitoring_target.fault_severity_assignment_policy.callhome_source <vocab-fabric-mon_fabric_monitoring_policy-monitoring_target-fault_severity_assignment_policy-callhome_source>` *(+4 more)*
+
+(enum-commadminstate)=
+
+## `CommAdminState`
+
+| value | meaning |
+| --- | --- |
+| `disabled` | — |
+| `enabled` | — |
+
+Used by: {ref}`fabric.communication_policy.http_service <vocab-fabric-communication_policy-http_service>`, {ref}`fabric.communication_policy.http_ssl_configuration <vocab-fabric-communication_policy-http_ssl_configuration>`, {ref}`fabric.communication_policy.response_time <vocab-fabric-communication_policy-response_time>`, {ref}`fabric.communication_policy.shellinabox_service <vocab-fabric-communication_policy-shellinabox_service>`, {ref}`fabric.communication_policy.ssh_service <vocab-fabric-communication_policy-ssh_service>`
+
+(enum-commallowcredentialstate)=
+
+## `CommAllowCredentialState`
+
+| value | meaning |
+| --- | --- |
+| `disabled` | — |
+| `enabled` | — |
+
+Used by: {ref}`fabric.communication_policy.http_service <vocab-fabric-communication_policy-http_service>`, {ref}`fabric.communication_policy.http_ssl_configuration <vocab-fabric-communication_policy-http_ssl_configuration>`
+
+(enum-commcipherstate)=
+
+## `CommCipherState`
+
+| value | meaning |
+| --- | --- |
+| `disabled` | — |
+| `enabled` | — |
+
+Used by: {ref}`fabric.communication_policy.http_ssl_configuration.ssl_cipher <vocab-fabric-communication_policy-http_ssl_configuration-ssl_cipher>`
+
+(enum-commclionlymode)=
+
+## `CommCliOnlyMode`
+
+| value | meaning |
+| --- | --- |
+| `disabled` | — |
+| `enabled` | — |
+
+Used by: {ref}`fabric.communication_policy.http_service <vocab-fabric-communication_policy-http_service>`, {ref}`fabric.communication_policy.http_ssl_configuration <vocab-fabric-communication_policy-http_ssl_configuration>`
+
+(enum-commkexalgorithmtypes)=
+
+## `CommKexAlgorithmTypes`
+
+| value | meaning |
+| --- | --- |
+| `diffie-hellman-group1-sha1` | — |
+| `diffie-hellman-group14-sha1` | — |
+| `diffie-hellman-group14-sha256` | — |
+| `curve25519-sha256@libssh.org` | — |
+| `ecdh-sha2-nistp384` | — |
+| `ecdh-sha2-nistp521` | — |
+| `ecdh-sha2-nistp256` | — |
+| `curve25519-sha256` | — |
+| `diffie-hellman-group16-sha512` | — |
+
+Used by: {ref}`fabric.communication_policy.ssh_service <vocab-fabric-communication_policy-ssh_service>`
+
+(enum-commnodeexporter)=
+
+## `CommNodeExporter`
+
+| value | meaning |
+| --- | --- |
+| `disabled` | — |
+| `enabled` | — |
+
+Used by: {ref}`fabric.communication_policy.http_service <vocab-fabric-communication_policy-http_service>`, {ref}`fabric.communication_policy.http_ssl_configuration <vocab-fabric-communication_policy-http_ssl_configuration>`
+
+(enum-commredirect)=
+
+## `CommRedirect`
+
+| value | meaning |
+| --- | --- |
+| `disabled` | — |
+| `enabled` | — |
+| `tested` | — |
+
+Used by: {ref}`fabric.communication_policy.http_service <vocab-fabric-communication_policy-http_service>`, {ref}`fabric.communication_policy.restart <vocab-fabric-communication_policy-restart>`
+
+(enum-commserverheader)=
+
+## `CommServerHeader`
+
+| value | meaning |
+| --- | --- |
+| `disabled` | — |
+| `enabled` | — |
+
+Used by: {ref}`fabric.communication_policy.http_service <vocab-fabric-communication_policy-http_service>`, {ref}`fabric.communication_policy.http_ssl_configuration <vocab-fabric-communication_policy-http_ssl_configuration>`
+
+(enum-commsshciphertypes)=
+
+## `CommSshCipherTypes`
+
+| value | meaning |
+| --- | --- |
+| `aes128-ctr` | — |
+| `aes192-ctr` | — |
+| `aes256-ctr` | — |
+| `aes128-gcm@openssh.com` | — |
+| `chacha20-poly1305@openssh.com` | — |
+| `aes256-gcm@openssh.com` | — |
+
+Used by: {ref}`fabric.communication_policy.ssh_service <vocab-fabric-communication_policy-ssh_service>`
+
+(enum-commsshmactypes)=
+
+## `CommSshMacTypes`
+
+| value | meaning |
+| --- | --- |
+| `hmac-sha1` | — |
+| `hmac-sha2-256` | — |
+| `hmac-sha2-512` | — |
+| `hmac-sha2-256-etm@openssh.com` | — |
+| `hmac-sha2-512-etm@openssh.com` | — |
+
+Used by: {ref}`fabric.communication_policy.ssh_service <vocab-fabric-communication_policy-ssh_service>`
+
+(enum-commsslprotocoltypes)=
+
+## `CommSslProtocolTypes`
+
+| value | meaning |
+| --- | --- |
+| `TLSv1` | — |
+| `TLSv1.1` | — |
+| `TLSv1.2` | — |
+| `TLSv1.3` | — |
+
+Used by: {ref}`fabric.communication_policy.http_ssl_configuration <vocab-fabric-communication_policy-http_ssl_configuration>`
+
+(enum-commvisoreaccess)=
+
+## `CommVisoreAccess`
+
+| value | meaning |
+| --- | --- |
+| `disabled` | — |
+| `enabled` | — |
+
+Used by: {ref}`fabric.communication_policy.http_service <vocab-fabric-communication_policy-http_service>`, {ref}`fabric.communication_policy.http_ssl_configuration <vocab-fabric-communication_policy-http_ssl_configuration>`
 
 (enum-conditioninitsevdir)=
 
@@ -393,7 +554,7 @@ Used by: {ref}`infra.monitoring_policy.callhome_source <vocab-infra-monitoring_p
 | `squelched` | — |
 | `warning` | The Warning severity level indicates the detection of a potential or impending service affecting fault, before any significant effects have been felt. |
 
-Used by: {ref}`infra.monitoring_policy.monitoring_target.event_severity_assignment_policy <vocab-infra-monitoring_policy-monitoring_target-event_severity_assignment_policy>`, {ref}`infra.monitoring_policy.monitoring_target.fault_severity_assignment_policy <vocab-infra-monitoring_policy-monitoring_target-fault_severity_assignment_policy>`
+Used by: {ref}`fabric.mon_common_monitoring_policy.event_severity_assignment_policy <vocab-fabric-mon_common_monitoring_policy-event_severity_assignment_policy>`, {ref}`fabric.mon_common_monitoring_policy.fault_severity_assignment_policy <vocab-fabric-mon_common_monitoring_policy-fault_severity_assignment_policy>`, {ref}`fabric.mon_fabric_monitoring_policy.monitoring_target.event_severity_assignment_policy <vocab-fabric-mon_fabric_monitoring_policy-monitoring_target-event_severity_assignment_policy>`, {ref}`fabric.mon_fabric_monitoring_policy.monitoring_target.fault_severity_assignment_policy <vocab-fabric-mon_fabric_monitoring_policy-monitoring_target-fault_severity_assignment_policy>`, {ref}`infra.monitoring_policy.monitoring_target.event_severity_assignment_policy <vocab-infra-monitoring_policy-monitoring_target-event_severity_assignment_policy>`, {ref}`infra.monitoring_policy.monitoring_target.fault_severity_assignment_policy <vocab-infra-monitoring_policy-monitoring_target-fault_severity_assignment_policy>`
 
 (enum-conditionsevdir)=
 
@@ -409,7 +570,7 @@ Used by: {ref}`infra.monitoring_policy.monitoring_target.event_severity_assignme
 | `minor` | The Minor severity level indicates the existence of a non-service affecting fault condition and that corrective action should be taken in order to prevent a more serious (for example, service affecting) fault. |
 | `warning` | The Warning severity level indicates the detection of a potential or impending service affecting fault, before any significant effects have been felt. |
 
-Used by: {ref}`infra.monitoring_policy.monitoring_target.fault_severity_assignment_policy <vocab-infra-monitoring_policy-monitoring_target-fault_severity_assignment_policy>`
+Used by: {ref}`fabric.mon_common_monitoring_policy.fault_severity_assignment_policy <vocab-fabric-mon_common_monitoring_policy-fault_severity_assignment_policy>`, {ref}`fabric.mon_fabric_monitoring_policy.monitoring_target.fault_severity_assignment_policy <vocab-fabric-mon_fabric_monitoring_policy-monitoring_target-fault_severity_assignment_policy>`, {ref}`infra.monitoring_policy.monitoring_target.fault_severity_assignment_policy <vocab-infra-monitoring_policy-monitoring_target-fault_severity_assignment_policy>`
 
 (enum-conditionseverity)=
 
@@ -424,7 +585,134 @@ Used by: {ref}`infra.monitoring_policy.monitoring_target.fault_severity_assignme
 | `minor` | The Minor severity level indicates the existence of a non-service affecting fault condition and that corrective action should be taken in order to prevent a more serious (for example, service affecting) fault. |
 | `warning` | The Warning severity level indicates the detection of a potential or impending service affecting fault, before any significant effects have been felt. |
 
-Used by: {ref}`infra.monitoring_policy.monitoring_target.event_severity_assignment_policy.snmp_source <vocab-infra-monitoring_policy-monitoring_target-event_severity_assignment_policy-snmp_source>`, {ref}`infra.monitoring_policy.monitoring_target.event_severity_assignment_policy.tacacs_source <vocab-infra-monitoring_policy-monitoring_target-event_severity_assignment_policy-tacacs_source>`, {ref}`infra.monitoring_policy.monitoring_target.fault_severity_assignment_policy.snmp_source <vocab-infra-monitoring_policy-monitoring_target-fault_severity_assignment_policy-snmp_source>`, {ref}`infra.monitoring_policy.monitoring_target.fault_severity_assignment_policy.tacacs_source <vocab-infra-monitoring_policy-monitoring_target-fault_severity_assignment_policy-tacacs_source>`, {ref}`infra.monitoring_policy.monitoring_target.snmp_source <vocab-infra-monitoring_policy-monitoring_target-snmp_source>`, {ref}`infra.monitoring_policy.monitoring_target.tacacs_source <vocab-infra-monitoring_policy-monitoring_target-tacacs_source>`, {ref}`infra.monitoring_policy.snmp_source <vocab-infra-monitoring_policy-snmp_source>`, {ref}`infra.monitoring_policy.tacacs_source <vocab-infra-monitoring_policy-tacacs_source>`
+Used by: {ref}`fabric.mon_common_monitoring_policy.event_severity_assignment_policy.snmp_source <vocab-fabric-mon_common_monitoring_policy-event_severity_assignment_policy-snmp_source>`, {ref}`fabric.mon_common_monitoring_policy.event_severity_assignment_policy.tacacs_source <vocab-fabric-mon_common_monitoring_policy-event_severity_assignment_policy-tacacs_source>`, {ref}`fabric.mon_common_monitoring_policy.fault_severity_assignment_policy.snmp_source <vocab-fabric-mon_common_monitoring_policy-fault_severity_assignment_policy-snmp_source>`, {ref}`fabric.mon_common_monitoring_policy.fault_severity_assignment_policy.tacacs_source <vocab-fabric-mon_common_monitoring_policy-fault_severity_assignment_policy-tacacs_source>`, {ref}`fabric.mon_common_monitoring_policy.snmp_source <vocab-fabric-mon_common_monitoring_policy-snmp_source>`, {ref}`fabric.mon_common_monitoring_policy.tacacs_source <vocab-fabric-mon_common_monitoring_policy-tacacs_source>`, {ref}`fabric.mon_fabric_monitoring_policy.monitoring_target.event_severity_assignment_policy.snmp_source <vocab-fabric-mon_fabric_monitoring_policy-monitoring_target-event_severity_assignment_policy-snmp_source>`, {ref}`fabric.mon_fabric_monitoring_policy.monitoring_target.event_severity_assignment_policy.tacacs_source <vocab-fabric-mon_fabric_monitoring_policy-monitoring_target-event_severity_assignment_policy-tacacs_source>` *(+14 more)*
+
+(enum-configformat)=
+
+## `ConfigFormat`
+
+| value | meaning |
+| --- | --- |
+| `json` | — |
+| `xml` | — |
+
+Used by: {ref}`fabric.configuration_export_policy <vocab-fabric-configuration_export_policy>`
+
+(enum-configimportaction)=
+
+## `ConfigImportAction`
+
+| value | meaning |
+| --- | --- |
+| `merge` | — |
+| `replace` | — |
+
+Used by: {ref}`fabric.configuration_import_policy <vocab-fabric-configuration_import_policy>`
+
+(enum-configimportmode)=
+
+## `ConfigImportMode`
+
+| value | meaning |
+| --- | --- |
+| `atomic` | — |
+| `best-effort` | — |
+
+Used by: {ref}`fabric.configuration_import_policy <vocab-fabric-configuration_import_policy>`, {ref}`fabric.configuration_snapshot_rollback_policy <vocab-fabric-configuration_snapshot_rollback_policy>`
+
+(enum-configquerytarget)=
+
+## `ConfigQueryTarget`
+
+| value | meaning |
+| --- | --- |
+| `children` | — |
+| `self` | — |
+| `subtree` | — |
+
+Used by: {ref}`fabric.callhome_query_group.query <vocab-fabric-callhome_query_group-query>`
+
+(enum-configquerytype)=
+
+## `ConfigQueryType`
+
+| value | meaning |
+| --- | --- |
+| `class` | — |
+| `dn` | — |
+
+Used by: {ref}`fabric.callhome_query_group.query <vocab-fabric-callhome_query_group-query>`
+
+(enum-configrspsubtreedepth)=
+
+## `ConfigRspSubtreeDepth`
+
+| value | meaning |
+| --- | --- |
+| `children` | — |
+| `full` | — |
+| `no` | — |
+
+Used by: {ref}`fabric.callhome_query_group.query <vocab-fabric-callhome_query_group-query>`
+
+(enum-configrspsubtreeinclude)=
+
+## `ConfigRspSubtreeInclude`
+
+| value | meaning |
+| --- | --- |
+| `none` | — |
+| `tasks` | — |
+| `faults` | — |
+| `stats` | — |
+| `config-only` | — |
+| `relations` | — |
+| `no-scoped` | — |
+| `state` | — |
+| `health` | — |
+| `fault-records` | — |
+| `audit-logs` | — |
+| `event-logs` | — |
+| `required` | — |
+| `count` | — |
+| `health-records` | — |
+| `port-deployment` | — |
+| `deployment` | — |
+| `local-prefix` | — |
+| `fault-count` | — |
+| `relations-with-parent` | — |
+| `record-subtree` | — |
+| `add-mo-list` | — |
+| `deployment-records` | — |
+| `ep-records` | — |
+| `full-deployment` | — |
+| `custom-path-hop` | — |
+| `pending-deployment` | — |
+| `tags` | — |
+
+Used by: {ref}`fabric.callhome_query_group.query <vocab-fabric-callhome_query_group-query>`
+
+(enum-configsnapshotaction)=
+
+## `ConfigSnapshotAction`
+
+| value | meaning |
+| --- | --- |
+| `download` | — |
+| `upload` | — |
+
+Used by: {ref}`fabric.configuration_snapshot_manager_policy <vocab-fabric-configuration_snapshot_manager_policy>`
+
+(enum-coopautht)=
+
+## `CoopAuthT`
+
+| value | meaning |
+| --- | --- |
+| `compatible` | Compatible Type |
+| `strict` | Strict Type |
+
+Used by: {ref}`fabric.coop_group_policy <vocab-fabric-coop_group_policy>`
 
 (enum-coppprofiletype)=
 
@@ -469,6 +757,453 @@ Used by: {ref}`infra.copp_interface_policy.protocol_class <vocab-infra-copp_inte
 
 Used by: {ref}`fabric.datetime_policy <vocab-fabric-datetime_policy>`
 
+(enum-datetimedisplayformat)=
+
+## `DatetimeDisplayFormat`
+
+| value | meaning |
+| --- | --- |
+| `local` | Local time, of the form YYYY-MM-DDThh:mm:ss.mmm |
+| `utc` | Coordinated Universal Time (UTC), of the form YYYY-MM-DDThh:mm:ss.mmm |
+
+Used by: {ref}`fabric.datetime_format <vocab-fabric-datetime_format>`
+
+(enum-datetimeoffsetstate)=
+
+## `DatetimeOffsetState`
+
+| value | meaning |
+| --- | --- |
+| `disabled` | Disabled |
+| `enabled` | Enabled |
+
+Used by: {ref}`fabric.datetime_format <vocab-fabric-datetime_format>`
+
+(enum-datetimetimezoneutc)=
+
+## `DatetimeTimeZoneUTC`
+
+| value | meaning |
+| --- | --- |
+| `n120_America-Bahia` | — |
+| `n120_America-Godthab` | — |
+| `n120_America-Miquelon` | — |
+| `n120_America-Montevideo` | — |
+| `n120_America-Noronha` | — |
+| `n120_America-Sao_Paulo` | — |
+| `n120_Atlantic-South_Georgia` | — |
+| `n150_America-St_Johns` | — |
+| `n180_America-Araguaina` | — |
+| `n180_America-Argentina-Buenos_Aires` | — |
+| `n180_America-Argentina-Catamarca` | — |
+| `n180_America-Argentina-Cordoba` | — |
+| `n180_America-Argentina-Jujuy` | — |
+| `n180_America-Argentina-La_Rioja` | — |
+| `n180_America-Argentina-Mendoza` | — |
+| `n180_America-Argentina-Rio_Gallegos` | — |
+| `n180_America-Argentina-Salta` | — |
+| `n180_America-Argentina-San_Juan` | — |
+| `n180_America-Argentina-San_Luis` | — |
+| `n180_America-Argentina-Tucuman` | — |
+| `n180_America-Argentina-Ushuaia` | — |
+| `n180_America-Asuncion` | — |
+| `n180_America-Belem` | — |
+| `n180_America-Campo_Grande` | — |
+| `n180_America-Cayenne` | — |
+| `n180_America-Cuiaba` | — |
+| `n180_America-Fortaleza` | — |
+| `n180_America-Glace_Bay` | — |
+| `n180_America-Goose_Bay` | — |
+| `n180_America-Halifax` | — |
+| `n180_America-Maceio` | — |
+| `n180_America-Moncton` | — |
+| `n180_America-Paramaribo` | — |
+| `n180_America-Recife` | — |
+| `n180_America-Santarem` | — |
+| `n180_America-Santiago` | — |
+| `n180_America-Thule` | — |
+| `n180_Antarctica-Palmer` | — |
+| `n180_Antarctica-Rothera` | — |
+| `n180_Atlantic-Bermuda` | — |
+| `n180_Atlantic-Stanley` | — |
+| `n240_America-Anguilla` | — |
+| `n240_America-Antigua` | — |
+| `n240_America-Aruba` | — |
+| `n240_America-Barbados` | — |
+| `n240_America-Blanc_Sablon` | — |
+| `n240_America-Boa_Vista` | — |
+| `n240_America-Curacao` | — |
+| `n240_America-Detroit` | — |
+| `n240_America-Dominica` | — |
+| `n240_America-Eirunepe` | — |
+| `n240_America-Grand_Turk` | — |
+| `n240_America-Grenada` | — |
+| `n240_America-Guadeloupe` | — |
+| `n240_America-Guyana` | — |
+| `n240_America-Havana` | — |
+| `n240_America-Indiana-Indianapolis` | — |
+| `n240_America-Indiana-Marengo` | — |
+| `n240_America-Indiana-Petersburg` | — |
+| `n240_America-Indiana-Vevay` | — |
+| `n240_America-Indiana-Vincennes` | — |
+| `n240_America-Indiana-Winamac` | — |
+| `n240_America-Iqaluit` | — |
+| `n240_America-Kentucky-Louisville` | — |
+| `n240_America-Kentucky-Monticello` | — |
+| `n240_America-Kralendijk` | — |
+| `n240_America-La_Paz` | — |
+| `n240_America-Lower_Princes` | — |
+| `n240_America-Manaus` | — |
+| `n240_America-Marigot` | — |
+| `n240_America-Martinique` | — |
+| `n240_America-Montreal` | — |
+| `n240_America-Montserrat` | — |
+| `n240_America-Nassau` | — |
+| `n240_America-New_York` | — |
+| `n240_America-Nipigon` | — |
+| `n240_America-Pangnirtung` | — |
+| `n240_America-Port_au_Prince` | — |
+| `n240_America-Port_of_Spain` | — |
+| `n240_America-Porto_Velho` | — |
+| `n240_America-Puerto_Rico` | — |
+| `n240_America-Rio_Branco` | — |
+| `n240_America-Santo_Domingo` | — |
+| `n240_America-St_Barthelemy` | — |
+| `n240_America-St_Kitts` | — |
+| `n240_America-St_Lucia` | — |
+| `n240_America-St_Thomas` | — |
+| `n240_America-St_Vincent` | — |
+| `n240_America-Thunder_Bay` | — |
+| `n240_America-Toronto` | — |
+| `n240_America-Tortola` | — |
+| `n270_America-Caracas` | — |
+| `n300_America-Atikokan` | — |
+| `n300_America-Bahia_Banderas` | — |
+| `n300_America-Bogota` | — |
+| `n300_America-Cancun` | — |
+| `n300_America-Cayman` | — |
+| `n300_America-Chicago` | — |
+| `n300_America-Guayaquil` | — |
+| `n300_America-Indiana-Knox` | — |
+| `n300_America-Indiana-Tell_City` | — |
+| `n300_America-Jamaica` | — |
+| `n300_America-Lima` | — |
+| `n300_America-Matamoros` | — |
+| `n300_America-Menominee` | — |
+| `n300_America-Merida` | — |
+| `n300_America-Mexico_City` | — |
+| `n300_America-Monterrey` | — |
+| `n300_America-North_Dakota-Beulah` | — |
+| `n300_America-North_Dakota-Center` | — |
+| `n300_America-North_Dakota-New_Salem` | — |
+| `n300_America-Panama` | — |
+| `n300_America-Rainy_River` | — |
+| `n300_America-Rankin_Inlet` | — |
+| `n300_America-Resolute` | — |
+| `n300_America-Winnipeg` | — |
+| `n300_Pacific-Easter` | — |
+| `n360_America-Belize` | — |
+| `n360_America-Boise` | — |
+| `n360_America-Cambridge_Bay` | — |
+| `n360_America-Chihuahua` | — |
+| `n360_America-Costa_Rica` | — |
+| `n360_America-Denver` | — |
+| `n360_America-Edmonton` | — |
+| `n360_America-El_Salvador` | — |
+| `n360_America-Guatemala` | — |
+| `n360_America-Inuvik` | — |
+| `n360_America-Managua` | — |
+| `n360_America-Mazatlan` | — |
+| `n360_America-Ojinaga` | — |
+| `n360_America-Regina` | — |
+| `n360_America-Shiprock` | — |
+| `n360_America-Swift_Current` | — |
+| `n360_America-Tegucigalpa` | — |
+| `n360_America-Yellowknife` | — |
+| `n360_Pacific-Galapagos` | — |
+| `n420_America-Creston` | — |
+| `n420_America-Dawson` | — |
+| `n420_America-Dawson_Creek` | — |
+| `n420_America-Hermosillo` | — |
+| `n420_America-Los_Angeles` | — |
+| `n420_America-Phoenix` | — |
+| `n420_America-Santa_Isabel` | — |
+| `n420_America-Tijuana` | — |
+| `n420_America-Vancouver` | — |
+| `n420_America-Whitehorse` | — |
+| `n480_America-Anchorage` | — |
+| `n480_America-Juneau` | — |
+| `n480_America-Metlakatla` | — |
+| `n480_America-Nome` | — |
+| `n480_America-Sitka` | — |
+| `n480_America-Yakutat` | — |
+| `n480_Pacific-Pitcairn` | — |
+| `n540_America-Adak` | — |
+| `n540_Pacific-Gambier` | — |
+| `n570_Pacific-Marquesas` | — |
+| `n600_Pacific-Honolulu` | — |
+| `n600_Pacific-Johnston` | — |
+| `n600_Pacific-Rarotonga` | — |
+| `n600_Pacific-Tahiti` | — |
+| `n60_Atlantic-Cape_Verde` | — |
+| `n660_Pacific-Midway` | — |
+| `n660_Pacific-Niue` | — |
+| `n660_Pacific-Pago_Pago` | — |
+| `p0_Africa-Abidjan` | — |
+| `p0_Africa-Accra` | — |
+| `p0_Africa-Bamako` | — |
+| `p0_Africa-Banjul` | — |
+| `p0_Africa-Bissau` | — |
+| `p0_Africa-Conakry` | — |
+| `p0_Africa-Dakar` | — |
+| `p0_Africa-El_Aaiun` | — |
+| `p0_Africa-Freetown` | — |
+| `p0_Africa-Lome` | — |
+| `p0_Africa-Monrovia` | — |
+| `p0_Africa-Nouakchott` | — |
+| `p0_Africa-Ouagadougou` | — |
+| `p0_Africa-Sao_Tome` | — |
+| `p0_America-Danmarkshavn` | — |
+| `p0_America-Scoresbysund` | — |
+| `p0_Atlantic-Azores` | — |
+| `p0_Atlantic-Reykjavik` | — |
+| `p0_Atlantic-St_Helena` | — |
+| `p0_UTC` | — |
+| `p120_Africa-Blantyre` | — |
+| `p120_Africa-Bujumbura` | — |
+| `p120_Africa-Cairo` | — |
+| `p120_Africa-Ceuta` | — |
+| `p120_Africa-Gaborone` | — |
+| `p120_Africa-Harare` | — |
+| `p120_Africa-Johannesburg` | — |
+| `p120_Africa-Kigali` | — |
+| `p120_Africa-Lubumbashi` | — |
+| `p120_Africa-Lusaka` | — |
+| `p120_Africa-Maputo` | — |
+| `p120_Africa-Maseru` | — |
+| `p120_Africa-Mbabane` | — |
+| `p120_Africa-Tripoli` | — |
+| `p120_Africa-Windhoek` | — |
+| `p120_Arctic-Longyearbyen` | — |
+| `p120_Europe-Amsterdam` | — |
+| `p120_Europe-Andorra` | — |
+| `p120_Europe-Belgrade` | — |
+| `p120_Europe-Berlin` | — |
+| `p120_Europe-Bratislava` | — |
+| `p120_Europe-Brussels` | — |
+| `p120_Europe-Budapest` | — |
+| `p120_Europe-Copenhagen` | — |
+| `p120_Europe-Gibraltar` | — |
+| `p120_Europe-Ljubljana` | — |
+| `p120_Europe-Luxembourg` | — |
+| `p120_Europe-Madrid` | — |
+| `p120_Europe-Malta` | — |
+| `p120_Europe-Monaco` | — |
+| `p120_Europe-Oslo` | — |
+| `p120_Europe-Paris` | — |
+| `p120_Europe-Podgorica` | — |
+| `p120_Europe-Prague` | — |
+| `p120_Europe-Rome` | — |
+| `p120_Europe-San_Marino` | — |
+| `p120_Europe-Sarajevo` | — |
+| `p120_Europe-Skopje` | — |
+| `p120_Europe-Stockholm` | — |
+| `p120_Europe-Tirane` | — |
+| `p120_Europe-Vaduz` | — |
+| `p120_Europe-Vatican` | — |
+| `p120_Europe-Vienna` | — |
+| `p120_Europe-Warsaw` | — |
+| `p120_Europe-Zagreb` | — |
+| `p120_Europe-Zurich` | — |
+| `p180_Africa-Addis_Ababa` | — |
+| `p180_Africa-Asmara` | — |
+| `p180_Africa-Dar_es_Salaam` | — |
+| `p180_Africa-Djibouti` | — |
+| `p180_Africa-Juba` | — |
+| `p180_Africa-Kampala` | — |
+| `p180_Africa-Khartoum` | — |
+| `p180_Africa-Mogadishu` | — |
+| `p180_Africa-Nairobi` | — |
+| `p180_Antarctica-Syowa` | — |
+| `p180_Asia-Aden` | — |
+| `p180_Asia-Amman` | — |
+| `p180_Asia-Baghdad` | — |
+| `p180_Asia-Bahrain` | — |
+| `p180_Asia-Beirut` | — |
+| `p180_Asia-Damascus` | — |
+| `p180_Asia-Gaza` | — |
+| `p180_Asia-Hebron` | — |
+| `p180_Asia-Jerusalem` | — |
+| `p180_Asia-Kuwait` | — |
+| `p180_Asia-Nicosia` | — |
+| `p180_Asia-Qatar` | — |
+| `p180_Asia-Riyadh` | — |
+| `p180_Europe-Athens` | — |
+| `p180_Europe-Bucharest` | — |
+| `p180_Europe-Chisinau` | — |
+| `p180_Europe-Helsinki` | — |
+| `p180_Europe-Istanbul` | — |
+| `p180_Europe-Kaliningrad` | — |
+| `p180_Europe-Kiev` | — |
+| `p180_Europe-Mariehamn` | — |
+| `p180_Europe-Minsk` | — |
+| `p180_Europe-Riga` | — |
+| `p180_Europe-Simferopol` | — |
+| `p180_Europe-Sofia` | — |
+| `p180_Europe-Tallinn` | — |
+| `p180_Europe-Uzhgorod` | — |
+| `p180_Europe-Vilnius` | — |
+| `p180_Europe-Zaporozhye` | — |
+| `p180_Indian-Antananarivo` | — |
+| `p180_Indian-Comoro` | — |
+| `p180_Indian-Mayotte` | — |
+| `p240_Asia-Dubai` | — |
+| `p240_Asia-Muscat` | — |
+| `p240_Asia-Tbilisi` | — |
+| `p240_Asia-Yerevan` | — |
+| `p240_Europe-Moscow` | — |
+| `p240_Europe-Samara` | — |
+| `p240_Europe-Volgograd` | — |
+| `p240_Indian-Mahe` | — |
+| `p240_Indian-Mauritius` | — |
+| `p240_Indian-Reunion` | — |
+| `p270_Asia-Kabul` | — |
+| `p270_Asia-Tehran` | — |
+| `p300_Antarctica-Mawson` | — |
+| `p300_Asia-Aqtau` | — |
+| `p300_Asia-Aqtobe` | — |
+| `p300_Asia-Ashgabat` | — |
+| `p300_Asia-Baku` | — |
+| `p300_Asia-Dushanbe` | — |
+| `p300_Asia-Karachi` | — |
+| `p300_Asia-Oral` | — |
+| `p300_Asia-Samarkand` | — |
+| `p300_Asia-Tashkent` | — |
+| `p300_Indian-Kerguelen` | — |
+| `p300_Indian-Maldives` | — |
+| `p330_Asia-Colombo` | — |
+| `p330_Asia-Kolkata` | — |
+| `p345_Asia-Kathmandu` | — |
+| `p360_Antarctica-Vostok` | — |
+| `p360_Asia-Almaty` | — |
+| `p360_Asia-Bishkek` | — |
+| `p360_Asia-Dhaka` | — |
+| `p360_Asia-Qyzylorda` | — |
+| `p360_Asia-Thimphu` | — |
+| `p360_Asia-Yekaterinburg` | — |
+| `p360_Indian-Chagos` | — |
+| `p390_Asia-Rangoon` | — |
+| `p390_Indian-Cocos` | — |
+| `p420_Antarctica-Davis` | — |
+| `p420_Asia-Bangkok` | — |
+| `p420_Asia-Ho_Chi_Minh` | — |
+| `p420_Asia-Hovd` | — |
+| `p420_Asia-Jakarta` | — |
+| `p420_Asia-Novokuznetsk` | — |
+| `p420_Asia-Novosibirsk` | — |
+| `p420_Asia-Omsk` | — |
+| `p420_Asia-Phnom_Penh` | — |
+| `p420_Asia-Pontianak` | — |
+| `p420_Asia-Vientiane` | — |
+| `p420_Indian-Christmas` | — |
+| `p480_Antarctica-Casey` | — |
+| `p480_Asia-Brunei` | — |
+| `p480_Asia-Choibalsan` | — |
+| `p480_Asia-Chongqing` | — |
+| `p480_Asia-Harbin` | — |
+| `p480_Asia-Hong_Kong` | — |
+| `p480_Asia-Kashgar` | — |
+| `p480_Asia-Krasnoyarsk` | — |
+| `p480_Asia-Kuala_Lumpur` | — |
+| `p480_Asia-Kuching` | — |
+| `p480_Asia-Macau` | — |
+| `p480_Asia-Makassar` | — |
+| `p480_Asia-Manila` | — |
+| `p480_Asia-Shanghai` | — |
+| `p480_Asia-Singapore` | — |
+| `p480_Asia-Taipei` | — |
+| `p480_Asia-Ulaanbaatar` | — |
+| `p480_Asia-Urumqi` | — |
+| `p480_Australia-Perth` | — |
+| `p525_Australia-Eucla` | — |
+| `p540_Asia-Dili` | — |
+| `p540_Asia-Irkutsk` | — |
+| `p540_Asia-Jayapura` | — |
+| `p540_Asia-Pyongyang` | — |
+| `p540_Asia-Seoul` | — |
+| `p540_Asia-Tokyo` | — |
+| `p540_Pacific-Palau` | — |
+| `p570_Australia-Darwin` | — |
+| `p600_Antarctica-DumontDUrville` | — |
+| `p600_Asia-Yakutsk` | — |
+| `p600_Australia-Brisbane` | — |
+| `p600_Australia-Lindeman` | — |
+| `p600_Pacific-Chuuk` | — |
+| `p600_Pacific-Guam` | — |
+| `p600_Pacific-Port_Moresby` | — |
+| `p600_Pacific-Saipan` | — |
+| `p60_Africa-Algiers` | — |
+| `p60_Africa-Bangui` | — |
+| `p60_Africa-Brazzaville` | — |
+| `p60_Africa-Casablanca` | — |
+| `p60_Africa-Douala` | — |
+| `p60_Africa-Kinshasa` | — |
+| `p60_Africa-Lagos` | — |
+| `p60_Africa-Libreville` | — |
+| `p60_Africa-Luanda` | — |
+| `p60_Africa-Malabo` | — |
+| `p60_Africa-Ndjamena` | — |
+| `p60_Africa-Niamey` | — |
+| `p60_Africa-Porto_Novo` | — |
+| `p60_Africa-Tunis` | — |
+| `p60_Atlantic-Canary` | — |
+| `p60_Atlantic-Faroe` | — |
+| `p60_Atlantic-Madeira` | — |
+| `p60_Europe-Dublin` | — |
+| `p60_Europe-Guernsey` | — |
+| `p60_Europe-Isle_of_Man` | — |
+| `p60_Europe-Jersey` | — |
+| `p60_Europe-Lisbon` | — |
+| `p60_Europe-London` | — |
+| `p630_Australia-Adelaide` | — |
+| `p630_Australia-Broken_Hill` | — |
+| `p660_Antarctica-Macquarie` | — |
+| `p660_Asia-Sakhalin` | — |
+| `p660_Asia-Vladivostok` | — |
+| `p660_Australia-Currie` | — |
+| `p660_Australia-Hobart` | — |
+| `p660_Australia-Lord_Howe` | — |
+| `p660_Australia-Melbourne` | — |
+| `p660_Australia-Sydney` | — |
+| `p660_Pacific-Efate` | — |
+| `p660_Pacific-Guadalcanal` | — |
+| `p660_Pacific-Kosrae` | — |
+| `p660_Pacific-Noumea` | — |
+| `p660_Pacific-Pohnpei` | — |
+| `p690_Pacific-Norfolk` | — |
+| `p720_Asia-Anadyr` | — |
+| `p720_Asia-Kamchatka` | — |
+| `p720_Asia-Magadan` | — |
+| `p720_Pacific-Funafuti` | — |
+| `p720_Pacific-Kwajalein` | — |
+| `p720_Pacific-Majuro` | — |
+| `p720_Pacific-Nauru` | — |
+| `p720_Pacific-Tarawa` | — |
+| `p720_Pacific-Wake` | — |
+| `p720_Pacific-Wallis` | — |
+| `p780_Antarctica-McMurdo` | — |
+| `p780_Antarctica-South_Pole` | — |
+| `p780_Pacific-Auckland` | — |
+| `p780_Pacific-Enderbury` | — |
+| `p780_Pacific-Fakaofo` | — |
+| `p780_Pacific-Fiji` | — |
+| `p780_Pacific-Tongatapu` | — |
+| `p825_Pacific-Chatham` | — |
+| `p840_Pacific-Apia` | — |
+| `p840_Pacific-Kiritimati` | — |
+
+Used by: {ref}`fabric.datetime_format <vocab-fabric-datetime_format>`
+
 (enum-datetimetruechimerstatus)=
 
 ## `DatetimeTrueChimerStatus`
@@ -479,6 +1214,36 @@ Used by: {ref}`fabric.datetime_policy <vocab-fabric-datetime_policy>`
 | `enabled` | — |
 
 Used by: {ref}`fabric.datetime_policy.ntp_provider <vocab-fabric-datetime_policy-ntp_provider>`
+
+(enum-dbgexpcategory)=
+
+## `DbgexpCategory`
+
+| value | meaning |
+| --- | --- |
+| `all` | — |
+| `policy` | — |
+| `L4L7` | — |
+| `virtualization` | — |
+| `monitoring` | — |
+| `infra` | — |
+| `stats` | — |
+| `forwarding` | — |
+| `nx-os` | — |
+| `dme` | — |
+
+Used by: {ref}`fabric.techsupport_export_policy <vocab-fabric-techsupport_export_policy>`
+
+(enum-dbgexpcollecttype)=
+
+## `DbgexpCollectType`
+
+| value | meaning |
+| --- | --- |
+| `coreOnly` | — |
+| `techSup` | — |
+
+Used by: {ref}`fabric.core_export_policy <vocab-fabric-core_export_policy>`
 
 (enum-dhcpaddrpreferences)=
 
@@ -706,6 +1471,23 @@ Used by: {ref}`tenant.eigrp_address_family_context_policy <vocab-tenant-eigrp_ad
 
 Used by: {ref}`infra.func_profile.breakout_group <vocab-infra-func_profile-breakout_group>`
 
+(enum-eqptpsrdnm)=
+
+## `EqptPsRdnM`
+
+| value | meaning |
+| --- | --- |
+| `comb` | The combined output of the power supplies are available to operate the system when there are more than one matched power supply in the system |
+| `insrc-rdn` | Only the input power redundancy is enabled in the systems which support multiple levels of redundancy |
+| `n-rdn` | There is only one power supply or there are unmatched power supplies in the system |
+| `not-supp` | not supported by this system |
+| `ps-rdn` | Only the power output redundancy is enabled in the systems which support multiple levels of redundancy |
+| `rdn` | A single power supply output can power the entire system, although there are more than one matched supply in the system |
+| `sinin-rdn` | Only the power redundancy with single input is enabled in the systems which support multiple levels of redundancy |
+| `unknown` | unknown |
+
+Used by: {ref}`fabric.power_supply_redundancy_policy <vocab-fabric-power_supply_redundancy_policy>`
+
 (enum-extnwifinstt)=
 
 ## `ExtnwIfInstT`
@@ -731,7 +1513,18 @@ Used by: {ref}`tenant.l3out.node_profile.interface_profile.floating_svi <vocab-t
 | `switchingFabric` | — |
 | `sysController` | — |
 
-Used by: {ref}`infra.access_module_profile.access_module_selector <vocab-infra-access_module_profile-access_module_selector>`
+Used by: {ref}`fabric.leaf_module_profile.leaf_module_selector <vocab-fabric-leaf_module_profile-leaf_module_selector>`, {ref}`fabric.spine_module_profile.spine_module_selector <vocab-fabric-spine_module_profile-spine_module_selector>`, {ref}`infra.access_module_profile.access_module_selector <vocab-infra-access_module_profile-access_module_selector>`
+
+(enum-fabricnodecontrolbitmask)=
+
+## `FabricNodeControlBitMask`
+
+| value | meaning |
+| --- | --- |
+| `None` | — |
+| `Dom` | — |
+
+Used by: {ref}`fabric.fabric_node_control <vocab-fabric-fabric_node_control>`
 
 (enum-fabricpcaction)=
 
@@ -756,6 +1549,19 @@ Used by: {ref}`infra.port_bundle_configuration <vocab-infra-port_bundle_configur
 
 Used by: {ref}`fabric.vpc_protection <vocab-fabric-vpc_protection>`
 
+(enum-fabricpriot)=
+
+## `FabricPrioT`
+
+| value | meaning |
+| --- | --- |
+| `analytics` | Analytics Priority |
+| `mixed` | Mixed Priority |
+| `netflow` | Netflow Priority |
+| `telemetry` | Telemetry Priority |
+
+Used by: {ref}`fabric.fabric_node_control <vocab-fabric-fabric_node_control>`
+
 (enum-fabricselector)=
 
 ## `FabricSelector`
@@ -766,7 +1572,7 @@ Used by: {ref}`fabric.vpc_protection <vocab-fabric-vpc_protection>`
 | `ALL_IN_POD` | — |
 | `range` | — |
 
-Used by: {ref}`infra.dhcp_node_group <vocab-infra-dhcp_node_group>`, {ref}`infra.infrastructure_zoning_profile.infrastructure_zone.node_group <vocab-infra-infrastructure_zoning_profile-infrastructure_zone-node_group>`, {ref}`infra.leaf_profile.leaf_selector <vocab-infra-leaf_profile-leaf_selector>`, {ref}`infra.node_management_address <vocab-infra-node_management_address>`, {ref}`infra.spine_profile.spine_selector <vocab-infra-spine_profile-spine_selector>`
+Used by: {ref}`fabric.firmware_group <vocab-fabric-firmware_group>`, {ref}`fabric.leaf_switch_profile.switch_association <vocab-fabric-leaf_switch_profile-switch_association>`, {ref}`fabric.maintenance_group <vocab-fabric-maintenance_group>`, {ref}`fabric.spine_switch_profile.spine_selector <vocab-fabric-spine_switch_profile-spine_selector>`, {ref}`infra.dhcp_node_group <vocab-infra-dhcp_node_group>`, {ref}`infra.infrastructure_zoning_profile.infrastructure_zone.node_group <vocab-infra-infrastructure_zoning_profile-infrastructure_zone-node_group>`, {ref}`infra.leaf_profile.leaf_selector <vocab-infra-leaf_profile-leaf_selector>`, {ref}`infra.node_management_address <vocab-infra-node_management_address>` *(+1 more)*
 
 (enum-fabricselector2)=
 
@@ -777,7 +1583,7 @@ Used by: {ref}`infra.dhcp_node_group <vocab-infra-dhcp_node_group>`, {ref}`infra
 | `ALL` | — |
 | `range` | — |
 
-Used by: {ref}`infra.access_port_profile.port_selector <vocab-infra-access_port_profile-port_selector>`, {ref}`infra.dhcp_pod_group <vocab-infra-dhcp_pod_group>`, {ref}`infra.fex_profile.port_selector <vocab-infra-fex_profile-port_selector>`, {ref}`infra.infrastructure_zoning_profile.infrastructure_zone.pod_group <vocab-infra-infrastructure_zoning_profile-infrastructure_zone-pod_group>`, {ref}`infra.pod_management_address <vocab-infra-pod_management_address>`, {ref}`infra.pod_profile.pod_selector <vocab-infra-pod_profile-pod_selector>`, {ref}`infra.spine_interface_profile.port_selector <vocab-infra-spine_interface_profile-port_selector>`
+Used by: {ref}`fabric.leaf_fabric_interface_profile.leaf_fabric_port_selector <vocab-fabric-leaf_fabric_interface_profile-leaf_fabric_port_selector>`, {ref}`fabric.pod_maintenance_group <vocab-fabric-pod_maintenance_group>`, {ref}`fabric.pod_profile.pod_selector <vocab-fabric-pod_profile-pod_selector>`, {ref}`fabric.spine_fabric_interface_profile.spine_fabric_port_selector <vocab-fabric-spine_fabric_interface_profile-spine_fabric_port_selector>`, {ref}`infra.access_port_profile.port_selector <vocab-infra-access_port_profile-port_selector>`, {ref}`infra.dhcp_pod_group <vocab-infra-dhcp_pod_group>`, {ref}`infra.fex_profile.port_selector <vocab-infra-fex_profile-port_selector>`, {ref}`infra.infrastructure_zoning_profile.infrastructure_zone.pod_group <vocab-infra-infrastructure_zoning_profile-infrastructure_zone-pod_group>` *(+3 more)*
 
 (enum-fcifmode)=
 
@@ -839,6 +1645,96 @@ Used by: {ref}`tenant.fhs_bd_policy <vocab-tenant-fhs_bd_policy>`
 | `medium` | Allowed Max Router Preference Medium |
 
 Used by: {ref}`tenant.fhs_bd_policy.ra_guard_policy <vocab-tenant-fhs_bd_policy-ra_guard_policy>`
+
+(enum-fileauthenticationtype)=
+
+## `FileAuthenticationType`
+
+| value | meaning |
+| --- | --- |
+| `usePassword` | — |
+| `useSshKeyContents` | — |
+
+Used by: {ref}`fabric.remote_path <vocab-fabric-remote_path>`
+
+(enum-filetransferprotocol)=
+
+## `FileTransferProtocol`
+
+| value | meaning |
+| --- | --- |
+| `ftp` | — |
+| `scp` | — |
+| `sftp` | — |
+
+Used by: {ref}`fabric.remote_path <vocab-fabric-remote_path>`
+
+(enum-firmwareadminstatus)=
+
+## `FirmwareAdminStatus`
+
+| value | meaning |
+| --- | --- |
+| `down` | — |
+| `up` | — |
+
+Used by: {ref}`controller.controller_firmware_policy <vocab-controller-controller_firmware_policy>`, {ref}`controller.controller_maintenance_policy <vocab-controller-controller_maintenance_policy>`
+
+(enum-firmwareauthpass)=
+
+## `FirmwareAuthPass`
+
+| value | meaning |
+| --- | --- |
+| `key` | Key based authentication. |
+| `password` | Password based authentication. |
+
+Used by: {ref}`fabric.firmware_repository_profile.cco_firmware_source <vocab-fabric-firmware_repository_profile-cco_firmware_source>`, {ref}`fabric.firmware_repository_profile.firmware_download_task <vocab-fabric-firmware_repository_profile-firmware_download_task>`, {ref}`fabric.firmware_repository_profile.internal_firmware_source <vocab-fabric-firmware_repository_profile-internal_firmware_source>`
+
+(enum-firmwareauthenticationtype)=
+
+## `FirmwareAuthenticationType`
+
+| value | meaning |
+| --- | --- |
+| `usePassword` | — |
+| `useSshKeyContents` | — |
+
+Used by: {ref}`fabric.firmware_repository_profile.cco_firmware_source <vocab-fabric-firmware_repository_profile-cco_firmware_source>`, {ref}`fabric.firmware_repository_profile.firmware_download_task <vocab-fabric-firmware_repository_profile-firmware_download_task>`, {ref}`fabric.firmware_repository_profile.internal_firmware_source <vocab-fabric-firmware_repository_profile-internal_firmware_source>`
+
+(enum-firmwaredownloadprotocol)=
+
+## `FirmwareDownloadProtocol`
+
+| value | meaning |
+| --- | --- |
+| `http` | — |
+| `local` | — |
+| `scp` | — |
+| `usbkey` | — |
+
+Used by: {ref}`fabric.firmware_repository_profile.cco_firmware_source <vocab-fabric-firmware_repository_profile-cco_firmware_source>`, {ref}`fabric.firmware_repository_profile.firmware_download_task <vocab-fabric-firmware_repository_profile-firmware_download_task>`, {ref}`fabric.firmware_repository_profile.internal_firmware_source <vocab-fabric-firmware_repository_profile-internal_firmware_source>`
+
+(enum-firmwaretype)=
+
+## `FirmwareType`
+
+| value | meaning |
+| --- | --- |
+| `cApicPatch` | cAPIC Patch |
+| `catalog` | Catalog |
+| `ciscoDockerApp` | ciscoDockerApp |
+| `config` | ConfigFile |
+| `controller` | Controller software |
+| `controllerPatch` | APIC Patch |
+| `dockerApp` | dockerApp |
+| `plugin` | Plugin |
+| `pluginPackage` | PluginPackage |
+| `switch` | Switch software |
+| `switchPatch` | Switch Patch |
+| `vpod` | VPod (vspine/vleaf software ) |
+
+Used by: {ref}`fabric.maintenance_group <vocab-fabric-maintenance_group>`
 
 (enum-fmcastuseconfiguredsystemgipot)=
 
@@ -1131,7 +2027,7 @@ Used by: {ref}`infra.vlan_pool <vocab-infra-vlan_pool>`, {ref}`infra.vsan_pool <
 | `inherit` | — |
 | `static` | — |
 
-Used by: {ref}`infra.vlan_pool.range <vocab-infra-vlan_pool-range>`, {ref}`infra.vsan_pool.range <vocab-infra-vsan_pool-range>`, {ref}`infra.vxlan_pool.range <vocab-infra-vxlan_pool-range>`
+Used by: {ref}`infra.mst_policy.mst_region.mst_domain.range <vocab-infra-mst_policy-mst_region-mst_domain-range>`, {ref}`infra.vlan_pool.range <vocab-infra-vlan_pool-range>`, {ref}`infra.vsan_pool.range <vocab-infra-vsan_pool-range>`, {ref}`infra.vxlan_pool.range <vocab-infra-vxlan_pool-range>`
 
 (enum-fvnsblkrole)=
 
@@ -1142,7 +2038,7 @@ Used by: {ref}`infra.vlan_pool.range <vocab-infra-vlan_pool-range>`, {ref}`infra
 | `external` | — |
 | `internal` | — |
 
-Used by: {ref}`infra.vlan_pool.range <vocab-infra-vlan_pool-range>`, {ref}`infra.vsan_pool.range <vocab-infra-vsan_pool-range>`, {ref}`infra.vxlan_pool.range <vocab-infra-vxlan_pool-range>`
+Used by: {ref}`infra.mst_policy.mst_region.mst_domain.range <vocab-infra-mst_policy-mst_region-mst_domain-range>`, {ref}`infra.vlan_pool.range <vocab-infra-vlan_pool-range>`, {ref}`infra.vsan_pool.range <vocab-infra-vsan_pool-range>`, {ref}`infra.vxlan_pool.range <vocab-infra-vxlan_pool-range>`
 
 (enum-fvslatype)=
 
@@ -1383,6 +2279,17 @@ Used by: {ref}`tenant.hsrp_interface_policy <vocab-tenant-hsrp_interface_policy>
 
 Used by: {ref}`tenant.l3out.node_profile.interface_profile.hsrp_interface <vocab-tenant-l3out-node_profile-interface_profile-hsrp_interface>`
 
+(enum-infradrrmode)=
+
+## `InfraDRRMode`
+
+| value | meaning |
+| --- | --- |
+| `OFF` | — |
+| `ON` | — |
+
+Used by: {ref}`controller.drr_policy <vocab-controller-drr_policy>`
+
 (enum-infralagt)=
 
 ## `InfraLagT`
@@ -1502,6 +2409,28 @@ Used by: {ref}`tenant.igmp_interface_policy <vocab-tenant-igmp_interface_policy>
 
 Used by: {ref}`fabric.igmp_snoop_policy <vocab-fabric-igmp_snoop_policy>`, {ref}`fabric.mld_snoop_policy <vocab-fabric-mld_snoop_policy>`, {ref}`tenant.igmp_snoop_policy <vocab-tenant-igmp_snoop_policy>`, {ref}`tenant.mld_snoop_policy <vocab-tenant-mld_snoop_policy>`
 
+(enum-isislspfastfloodmode)=
+
+## `IsisLspFastFloodMode`
+
+| value | meaning |
+| --- | --- |
+| `disabled` | Disabled |
+| `enabled` | Enabled |
+
+Used by: {ref}`fabric.isis_domain_policy.isis_level <vocab-fabric-isis_domain_policy-isis_level>`
+
+(enum-isislvlt)=
+
+## `IsisLvlT`
+
+| value | meaning |
+| --- | --- |
+| `l1` | L1 type |
+| `l2` | L2 type |
+
+Used by: {ref}`fabric.isis_domain_policy.isis_level <vocab-fabric-isis_domain_policy-isis_level>`
+
 (enum-l1autoneg)=
 
 ## `L1AutoNeg`
@@ -1525,6 +2454,27 @@ Used by: {ref}`infra.link_level_policy <vocab-infra-link_level_policy>`
 | `off` | — |
 
 Used by: {ref}`infra.slow_drain_policy <vocab-infra-slow_drain_policy>`
+
+(enum-l1dacratezr)=
+
+## `L1DACRateZR`
+
+| value | meaning |
+| --- | --- |
+| `1x1` | — |
+
+Used by: {ref}`fabric.zr_policy <vocab-fabric-zr_policy>`
+
+(enum-l1dacratezrp)=
+
+## `L1DACRateZRP`
+
+| value | meaning |
+| --- | --- |
+| `1x1` | — |
+| `1x1.25` | — |
+
+Used by: {ref}`fabric.zrp_policy <vocab-fabric-zrp_policy>`
 
 (enum-l1emiretrain)=
 
@@ -1553,6 +2503,27 @@ Used by: {ref}`infra.link_level_policy <vocab-infra-link_level_policy>`
 | `kp-fec` | — |
 
 Used by: {ref}`infra.link_level_policy <vocab-infra-link_level_policy>`
+
+(enum-l1fecmodezr)=
+
+## `L1FECModeZR`
+
+| value | meaning |
+| --- | --- |
+| `cFEC` | — |
+
+Used by: {ref}`fabric.zr_policy <vocab-fabric-zr_policy>`
+
+(enum-l1fecmodezrp)=
+
+## `L1FECModeZRP`
+
+| value | meaning |
+| --- | --- |
+| `cFEC` | — |
+| `oFEC` | — |
+
+Used by: {ref}`fabric.zrp_policy <vocab-fabric-zrp_policy>`
 
 (enum-l1fcmaxspeed)=
 
@@ -1604,6 +2575,46 @@ Used by: {ref}`infra.fc_interface_policy <vocab-infra-fc_interface_policy>`
 | `on` | — |
 
 Used by: {ref}`infra.llfc_interface_policy <vocab-infra-llfc_interface_policy>`
+
+(enum-l1modulationzr)=
+
+## `L1ModulationZR`
+
+| value | meaning |
+| --- | --- |
+| `16QAM` | — |
+
+Used by: {ref}`fabric.zr_policy <vocab-fabric-zr_policy>`
+
+(enum-l1modulationzrp)=
+
+## `L1ModulationZRP`
+
+| value | meaning |
+| --- | --- |
+| `16QAM` | — |
+
+Used by: {ref}`fabric.zrp_policy <vocab-fabric-zrp_policy>`
+
+(enum-l1muxponderzr)=
+
+## `L1MuxponderZR`
+
+| value | meaning |
+| --- | --- |
+| `1x400` | — |
+
+Used by: {ref}`fabric.zr_policy <vocab-fabric-zr_policy>`
+
+(enum-l1muxponderzrp)=
+
+## `L1MuxponderZRP`
+
+| value | meaning |
+| --- | --- |
+| `1x400` | — |
+
+Used by: {ref}`fabric.zrp_policy <vocab-fabric-zrp_policy>`
 
 (enum-l1pktt)=
 
@@ -1694,6 +2705,32 @@ Used by: {ref}`infra.storm_control_policy <vocab-infra-storm_control_policy>`
 | `Valid` | — |
 
 Used by: {ref}`infra.storm_control_policy <vocab-infra-storm_control_policy>`
+
+(enum-l1dwdmcarrierzr)=
+
+## `L1dwdmCarrierZR`
+
+| value | meaning |
+| --- | --- |
+| `100MHzFrequency` | — |
+| `50GHzFrequency` | — |
+| `50GHzITUchannel` | — |
+| `50GHzWavelength` | — |
+
+Used by: {ref}`fabric.zr_policy <vocab-fabric-zr_policy>`
+
+(enum-l1dwdmcarrierzrp)=
+
+## `L1dwdmCarrierZRP`
+
+| value | meaning |
+| --- | --- |
+| `100MHzFrequency` | — |
+| `50GHzFrequency` | — |
+| `50GHzITUchannel` | — |
+| `50GHzWavelength` | — |
+
+Used by: {ref}`fabric.zrp_policy <vocab-fabric-zrp_policy>`
 
 (enum-l2bouncetrig)=
 
@@ -1827,6 +2864,17 @@ Used by: {ref}`infra.l2_interface_policy <vocab-infra-l2_interface_policy>`
 | `vtp` | — |
 
 Used by: {ref}`tenant.dot1q_tunnel <vocab-tenant-dot1q_tunnel>`
+
+(enum-l3bfdisisconfig)=
+
+## `L3BfdIsisConfig`
+
+| value | meaning |
+| --- | --- |
+| `disabled` | — |
+| `enabled` | — |
+
+Used by: {ref}`fabric.l3_interface_policy <vocab-fabric-l3_interface_policy>`
 
 (enum-l3extalways)=
 
@@ -2021,6 +3069,17 @@ Used by: {ref}`infra.lacp_policy <vocab-infra-lacp_policy>`
 
 Used by: {ref}`infra.lacp_member_policy <vocab-infra-lacp_member_policy>`
 
+(enum-latencylatencymode)=
+
+## `LatencyLatencyMode`
+
+| value | meaning |
+| --- | --- |
+| `average` | — |
+| `histogram` | — |
+
+Used by: {ref}`fabric.ongoing_latency_mode <vocab-fabric-ongoing_latency_mode>`
+
 (enum-leakroutescp)=
 
 ## `LeakRouteScp`
@@ -2044,6 +3103,100 @@ Used by: {ref}`tenant.vrf.leak_routes.internal_subnet <vocab-tenant-vrf-leak_rou
 
 Used by: {ref}`tenant.vrf.leak_routes.external_prefix.leak_to <vocab-tenant-vrf-leak_routes-external_prefix-leak_to>`, {ref}`tenant.vrf.leak_routes.internal_prefix.leak_to <vocab-tenant-vrf-leak_routes-internal_prefix-leak_to>`, {ref}`tenant.vrf.leak_routes.internal_subnet.leak_to <vocab-tenant-vrf-leak_routes-internal_subnet-leak_to>`
 
+(enum-licenseactionresult)=
+
+## `LicenseActionResult`
+
+| value | meaning |
+| --- | --- |
+| `create-rum-report-failure` | — |
+| `create-rum-report-success` | — |
+| `none` | — |
+
+Used by: {ref}`fabric.license_policy <vocab-fabric-license_policy>`
+
+(enum-licenselicactiontype)=
+
+## `LicenseLicActionType`
+
+| value | meaning |
+| --- | --- |
+| `create-rum-report` | — |
+| `device-led-conversion` | — |
+| `disable-dev-cert` | — |
+| `enable-dev-cert` | — |
+| `import-private-certificate` | — |
+| `install-rum-report-ack` | — |
+| `modify-report-interval` | — |
+| `none` | — |
+| `remove-private-certificate` | — |
+| `renew-id-cert` | — |
+| `renew-license-auth` | — |
+| `show-license-all` | — |
+| `show-license-status` | — |
+| `show-license-summary` | — |
+| `show-license-tech-support` | — |
+| `show-license-udi` | — |
+| `show-license-usage` | — |
+| `test-expire-ack-deadline` | — |
+| `test-expire-auth` | — |
+| `test-expire-auth-renew` | — |
+| `test-expire-eval` | — |
+| `test-expire-eval-warn` | — |
+| `test-expire-idcert` | — |
+| `test-expire-idcert-renew` | — |
+| `test-expire-registration` | — |
+| `test-expire-reservation` | — |
+| `test-plr-auth-failed` | — |
+| `test-plr-cancel` | — |
+| `test-plr-install` | — |
+| `test-plr-return` | — |
+
+Used by: {ref}`fabric.license_policy <vocab-fabric-license_policy>`
+
+(enum-licenselicensemode)=
+
+## `LicenseLicenseMode`
+
+| value | meaning |
+| --- | --- |
+| `cslu` | — |
+| `offline` | — |
+| `plr` | — |
+| `proxy` | — |
+| `satellite` | — |
+| `smart-licensing` | — |
+| `transport-gateway` | — |
+
+Used by: {ref}`fabric.license_policy <vocab-fabric-license_policy>`
+
+(enum-licenseplradminstate)=
+
+## `LicensePlrAdminState`
+
+| value | meaning |
+| --- | --- |
+| `cancel` | — |
+| `install` | — |
+| `none` | — |
+| `request` | — |
+| `return` | — |
+| `return-auth` | — |
+
+Used by: {ref}`fabric.license_policy <vocab-fabric-license_policy>`
+
+(enum-licenseregadminstate)=
+
+## `LicenseRegAdminState`
+
+| value | meaning |
+| --- | --- |
+| `deregister` | — |
+| `none` | — |
+| `register` | — |
+
+Used by: {ref}`fabric.license_policy <vocab-fabric-license_policy>`
+
 (enum-lldpadminst)=
 
 ## `LldpAdminSt`
@@ -2053,7 +3206,7 @@ Used by: {ref}`tenant.vrf.leak_routes.external_prefix.leak_to <vocab-tenant-vrf-
 | `disabled` | Administrative state is disabled |
 | `enabled` | Administrative state is enabled |
 
-Used by: {ref}`infra.lldp_policy <vocab-infra-lldp_policy>`
+Used by: {ref}`fabric.lldp_policy <vocab-fabric-lldp_policy>`, {ref}`infra.lldp_policy <vocab-infra-lldp_policy>`
 
 (enum-lldpdcbxpvertype)=
 
@@ -2064,7 +3217,7 @@ Used by: {ref}`infra.lldp_policy <vocab-infra-lldp_policy>`
 | `CEE` | const name="CIN" value="1" label="CIN"/ |
 | `IEEE` | — |
 
-Used by: {ref}`infra.lldp_policy <vocab-infra-lldp_policy>`
+Used by: {ref}`fabric.lldp_policy <vocab-fabric-lldp_policy>`, {ref}`infra.lldp_policy <vocab-infra-lldp_policy>`
 
 (enum-macsecciphersuite)=
 
@@ -2077,7 +3230,7 @@ Used by: {ref}`infra.lldp_policy <vocab-infra-lldp_policy>`
 | `gcm-aes-xpn-128` | gcm-aes-xpn-128 |
 | `gcm-aes-xpn-256` | gcm-aes-xpn-256 |
 
-Used by: {ref}`infra.macsec.parameters_policy <vocab-infra-macsec-parameters_policy>`
+Used by: {ref}`fabric.macsec_fabric.parameters_policy <vocab-fabric-macsec_fabric-parameters_policy>`, {ref}`infra.macsec.parameters_policy <vocab-infra-macsec-parameters_policy>`
 
 (enum-macsecconfoffset)=
 
@@ -2100,7 +3253,54 @@ Used by: {ref}`infra.macsec.parameters_policy <vocab-infra-macsec-parameters_pol
 | `must-secure` | must-secure |
 | `should-secure` | should-secure |
 
-Used by: {ref}`infra.macsec.parameters_policy <vocab-infra-macsec-parameters_policy>`
+Used by: {ref}`fabric.macsec_fabric.parameters_policy <vocab-fabric-macsec_fabric-parameters_policy>`, {ref}`infra.macsec.parameters_policy <vocab-infra-macsec-parameters_policy>`
+
+(enum-maintnotifcond)=
+
+## `MaintNotifCond`
+
+| value | meaning |
+| --- | --- |
+| `notifyAlwaysBetweenSets` | Always notify admin after a maintenance set. |
+| `notifyNever` | Never notify admin after a maintenance set. |
+| `notifyOnlyOnFailures` | Notify admin after a maintenance set, only if there were failures in the set. |
+
+Used by: {ref}`controller.controller_maintenance_policy <vocab-controller-controller_maintenance_policy>`, {ref}`fabric.catalog_maintenance_policy <vocab-fabric-catalog_maintenance_policy>`, {ref}`fabric.maintenance_policy <vocab-fabric-maintenance_policy>`
+
+(enum-maintrunmode)=
+
+## `MaintRunMode`
+
+| value | meaning |
+| --- | --- |
+| `pauseAlwaysBetweenSets` | Pause the scheduler after running a maintenance set irrespective of upgrade status of nodes in the set. |
+| `pauseNever` | Do not pause the scheduler after a maintenance set, irrespective of upgrade status of nodes in the set. |
+| `pauseOnlyOnFailures` | Pause the scheduler upon a failure of maintenance operation. |
+
+Used by: {ref}`controller.controller_maintenance_policy <vocab-controller-controller_maintenance_policy>`, {ref}`fabric.catalog_maintenance_policy <vocab-fabric-catalog_maintenance_policy>`, {ref}`fabric.maintenance_policy <vocab-fabric-maintenance_policy>`
+
+(enum-maintsmuoperation)=
+
+## `MaintSMUOperation`
+
+| value | meaning |
+| --- | --- |
+| `smuInstall` | SMU patch install operation. |
+| `smuUninstall` | SMU patch uninstall operation. |
+
+Used by: {ref}`controller.controller_maintenance_policy <vocab-controller-controller_maintenance_policy>`, {ref}`fabric.maintenance_policy <vocab-fabric-maintenance_policy>`
+
+(enum-maintsmuoperationflags)=
+
+## `MaintSMUOperationFlags`
+
+| value | meaning |
+| --- | --- |
+| `patchHotSmu` | SMU operation flags to indicate hot SMU. Node does not need a reload on hot SMU Install/Uninstall. Operator does not need to perform reload to make hot SMU to take affect. |
+| `smuReloadImmediate` | SMU operation flags to indicate if node should be reloaded immediately on SMU Install/Uninstall. |
+| `smuReloadSkip` | SMU operation flags to indicate if node should skip auto reload on SMU Install/Uninstall. Operator would perform the usual reload (or mode reload) later to make SMU to take affect. |
+
+Used by: {ref}`fabric.maintenance_policy <vocab-fabric-maintenance_policy>`
 
 (enum-mcastver)=
 
@@ -2149,6 +3349,17 @@ Used by: {ref}`infra.mcp_policy <vocab-infra-mcp_policy>`
 
 Used by: {ref}`infra.mcp_policy <vocab-infra-mcp_policy>`
 
+(enum-mgmtmgmtintftype)=
+
+## `MgmtMgmtIntfType`
+
+| value | meaning |
+| --- | --- |
+| `inband` | — |
+| `ooband` | — |
+
+Used by: {ref}`fabric.mgmt_connectivity_preference <vocab-fabric-mgmt_connectivity_preference>`
+
 (enum-monadminstate)=
 
 ## `MonAdminState`
@@ -2158,7 +3369,18 @@ Used by: {ref}`infra.mcp_policy <vocab-infra-mcp_policy>`
 | `disabled` | — |
 | `enabled` | — |
 
-Used by: {ref}`fabric.syslog_group.remote_destination <vocab-fabric-syslog_group-remote_destination>`
+Used by: {ref}`fabric.callhome_destination_group.callhome_destination <vocab-fabric-callhome_destination_group-callhome_destination>`, {ref}`fabric.callhome_destination_group.callhome_protocol_profile <vocab-fabric-callhome_destination_group-callhome_protocol_profile>`, {ref}`fabric.callhome_inventory_policy <vocab-fabric-callhome_inventory_policy>`, {ref}`fabric.smart_callhome_destination_group.callhome_protocol_profile <vocab-fabric-smart_callhome_destination_group-callhome_protocol_profile>`, {ref}`fabric.smart_callhome_destination_group.smart_callhome_destination <vocab-fabric-smart_callhome_destination_group-smart_callhome_destination>`, {ref}`fabric.syslog_group.remote_destination <vocab-fabric-syslog_group-remote_destination>`
+
+(enum-moncompression)=
+
+## `MonCompression`
+
+| value | meaning |
+| --- | --- |
+| `gzip` | — |
+| `none` | — |
+
+Used by: {ref}`fabric.core_export_policy <vocab-fabric-core_export_policy>`, {ref}`fabric.techsupport_export_policy <vocab-fabric-techsupport_export_policy>`
 
 (enum-moninclaction)=
 
@@ -2173,7 +3395,7 @@ Used by: {ref}`fabric.syslog_group.remote_destination <vocab-fabric-syslog_group
 | `session` | — |
 | `all` | — |
 
-Used by: {ref}`infra.monitoring_policy.callhome_source <vocab-infra-monitoring_policy-callhome_source>`, {ref}`infra.monitoring_policy.monitoring_target.callhome_source <vocab-infra-monitoring_policy-monitoring_target-callhome_source>`, {ref}`infra.monitoring_policy.monitoring_target.event_severity_assignment_policy.callhome_source <vocab-infra-monitoring_policy-monitoring_target-event_severity_assignment_policy-callhome_source>`, {ref}`infra.monitoring_policy.monitoring_target.event_severity_assignment_policy.snmp_source <vocab-infra-monitoring_policy-monitoring_target-event_severity_assignment_policy-snmp_source>`, {ref}`infra.monitoring_policy.monitoring_target.event_severity_assignment_policy.syslog_source <vocab-infra-monitoring_policy-monitoring_target-event_severity_assignment_policy-syslog_source>`, {ref}`infra.monitoring_policy.monitoring_target.event_severity_assignment_policy.tacacs_source <vocab-infra-monitoring_policy-monitoring_target-event_severity_assignment_policy-tacacs_source>`, {ref}`infra.monitoring_policy.monitoring_target.fault_severity_assignment_policy.callhome_source <vocab-infra-monitoring_policy-monitoring_target-fault_severity_assignment_policy-callhome_source>`, {ref}`infra.monitoring_policy.monitoring_target.fault_severity_assignment_policy.snmp_source <vocab-infra-monitoring_policy-monitoring_target-fault_severity_assignment_policy-snmp_source>` *(+8 more)*
+Used by: {ref}`fabric.mon_common_monitoring_policy.callhome_source <vocab-fabric-mon_common_monitoring_policy-callhome_source>`, {ref}`fabric.mon_common_monitoring_policy.event_severity_assignment_policy.callhome_source <vocab-fabric-mon_common_monitoring_policy-event_severity_assignment_policy-callhome_source>`, {ref}`fabric.mon_common_monitoring_policy.event_severity_assignment_policy.snmp_source <vocab-fabric-mon_common_monitoring_policy-event_severity_assignment_policy-snmp_source>`, {ref}`fabric.mon_common_monitoring_policy.event_severity_assignment_policy.syslog_source <vocab-fabric-mon_common_monitoring_policy-event_severity_assignment_policy-syslog_source>`, {ref}`fabric.mon_common_monitoring_policy.event_severity_assignment_policy.tacacs_source <vocab-fabric-mon_common_monitoring_policy-event_severity_assignment_policy-tacacs_source>`, {ref}`fabric.mon_common_monitoring_policy.fault_severity_assignment_policy.callhome_source <vocab-fabric-mon_common_monitoring_policy-fault_severity_assignment_policy-callhome_source>`, {ref}`fabric.mon_common_monitoring_policy.fault_severity_assignment_policy.snmp_source <vocab-fabric-mon_common_monitoring_policy-fault_severity_assignment_policy-snmp_source>`, {ref}`fabric.mon_common_monitoring_policy.fault_severity_assignment_policy.syslog_source <vocab-fabric-mon_common_monitoring_policy-fault_severity_assignment_policy-syslog_source>` *(+36 more)*
 
 (enum-montargetscope)=
 
@@ -3155,6 +4377,1574 @@ Used by: {ref}`infra.monitoring_policy.callhome_source <vocab-infra-monitoring_p
 
 Used by: {ref}`tenant.monitoring_policy.target <vocab-tenant-monitoring_policy-target>`
 
+(enum-montargetscope2)=
+
+## `MonTargetScope2`
+
+| value | meaning |
+| --- | --- |
+| `aaaAppUser` | — |
+| `aaaCtrlrFipsState` | — |
+| `aaaDomainRef` | — |
+| `aaaDuoEp` | — |
+| `aaaIDomainRef` | — |
+| `aaaLdapEp` | — |
+| `aaaLdapProvider` | — |
+| `aaaOauthEp` | — |
+| `aaaOauthProvider` | — |
+| `aaaRadiusEp` | — |
+| `aaaRadiusProvider` | — |
+| `aaaRsaEp` | — |
+| `aaaRsaProvider` | — |
+| `aaaSamlEncCert` | — |
+| `aaaSamlEp` | — |
+| `aaaSamlProvider` | — |
+| `aaaSecRelnHolder` | — |
+| `aaaTacacsPlusEp` | — |
+| `aaaTacacsPlusProvider` | — |
+| `aaaUser` | — |
+| `aaaUserCert` | — |
+| `aaaUserEp` | — |
+| `acEntity` | — |
+| `acLatencyInst` | — |
+| `acRuleIp` | — |
+| `acllogCont` | — |
+| `acllogCtx` | — |
+| `acllogDropL2Flow` | — |
+| `acllogDropL2Pkt` | — |
+| `acllogDropL3Flow` | — |
+| `acllogDropL3Pkt` | — |
+| `acllogPermitL2Flow` | — |
+| `acllogPermitL2Pkt` | — |
+| `acllogPermitL3Flow` | — |
+| `acllogPermitL3Pkt` | — |
+| `acllogTenant` | — |
+| `actionLCont` | — |
+| `actionLSubj` | — |
+| `actionRsLSubjToDomainRef` | — |
+| `actrlEntity` | — |
+| `actrlFlt` | — |
+| `actrlInst` | — |
+| `actrlScope` | — |
+| `actrlSiteScope` | — |
+| `actrlStatsReport` | — |
+| `aibEntity` | — |
+| `analyticsBDTarget` | — |
+| `analyticsCollector` | — |
+| `analyticsCollectorBucket` | — |
+| `analyticsController` | — |
+| `analyticsEntity` | — |
+| `analyticsFwdInstTarget` | — |
+| `analyticsHwTelemetry` | — |
+| `analyticsInst` | — |
+| `analyticsMonitor` | — |
+| `analyticsPhysIfTarget` | — |
+| `analyticsRecordP` | — |
+| `analyticsRsCollectorAtt` | — |
+| `analyticsRsMonitorAtt` | — |
+| `analyticsRsPolicyAtt` | — |
+| `analyticsRsProfAtt` | — |
+| `analyticsRsRecordPAtt` | — |
+| `analyticsRsRecordSsxAtt` | — |
+| `analyticsRsTargetToAcl` | — |
+| `apphostingAppConf` | — |
+| `apphostingAppHosting` | — |
+| `arpDom` | — |
+| `arpEntity` | — |
+| `arpIf` | — |
+| `arpInst` | — |
+| `arpStAdjEp` | — |
+| `bfdAuthP` | — |
+| `bfdEntity` | — |
+| `bfdIf` | — |
+| `bfdIfAf` | — |
+| `bfdInst` | — |
+| `bfdInstAf` | — |
+| `bfdKaP` | — |
+| `bfdMhAuthP` | — |
+| `bfdMhIfAf` | — |
+| `bfdMhKaP` | — |
+| `bfdRsMbrSess` | — |
+| `bfdSess` | — |
+| `bfdSessStats` | — |
+| `bgpAsP` | — |
+| `bgpDataPlaneIfP` | — |
+| `bgpDom` | — |
+| `bgpDomainIdBase` | — |
+| `bgpEntity` | — |
+| `bgpExtIntersiteRRP` | — |
+| `bgpExtRRP` | — |
+| `bgpInfraPeerDef` | — |
+| `bgpInfraPeerP` | — |
+| `bgpInst` | — |
+| `bgpInstPol` | — |
+| `bgpInvalidRREp` | — |
+| `bgpLocalAsnP` | — |
+| `bgpPeer` | — |
+| `bgpPeerAfEntry` | — |
+| `bgpPeerEntry` | — |
+| `bgpPeerEntryStats` | — |
+| `bgpPeerEvents` | — |
+| `bgpRRNodePEp` | — |
+| `bgpRRP` | — |
+| `bgpRsPeerPfxPol` | — |
+| `bgpSiteOfOriginDef` | — |
+| `callhomeDest` | — |
+| `callhomeDestReachState` | — |
+| `callhomeDestState` | — |
+| `callhomeGroup` | — |
+| `callhomeInvP` | — |
+| `callhomeInvTask` | — |
+| `callhomeProf` | — |
+| `callhomeRsDestGroup` | — |
+| `callhomeRsDestGroupRel` | — |
+| `callhomeRsInvScheduler` | — |
+| `callhomeRsQueryGroupRel` | — |
+| `callhomeRsSmartdestGroup` | — |
+| `callhomeSmartDest` | — |
+| `callhomeSmartGroup` | — |
+| `callhomeSmartSrc` | — |
+| `callhomeSmtpServer` | — |
+| `callhomeSrc` | — |
+| `capCat` | — |
+| `cdpAdjEp` | — |
+| `cdpIf` | — |
+| `cdpIfPol` | — |
+| `cdpInst` | — |
+| `cloudAccount` | — |
+| `cloudBgpAsP` | — |
+| `cloudCDevDef` | — |
+| `cloudCredentials` | — |
+| `cloudDomP` | — |
+| `cloudHealthTotal` | — |
+| `cloudISvcEPg` | — |
+| `cloudLDevDef` | — |
+| `cloudLIfDef` | — |
+| `cloudListenerDef` | — |
+| `cloudListenerRuleDef` | — |
+| `cloudNaming` | — |
+| `cloudProvP` | — |
+| `cloudRegion` | — |
+| `cloudResourceGroup` | — |
+| `cloudRsAD` | — |
+| `cloudRsAccountToAccessPolicy` | — |
+| `cloudRsActionDefToPoolDef` | — |
+| `cloudRsCredentials` | — |
+| `cloudRsDomPToAccessPolicy` | — |
+| `cloudRsLIfToCloudSubnet` | — |
+| `cloudRsSvcEPgCtx` | — |
+| `cloudRtCloudAccount` | — |
+| `cloudRuleActionDef` | — |
+| `cloudSvcDefCont` | — |
+| `cloudSvcPolicyDef` | — |
+| `cloudTenantSvcDef` | — |
+| `cloudsecDom` | — |
+| `cloudsecEntity` | — |
+| `cloudsecIf` | — |
+| `cloudsecInst` | — |
+| `cloudsecKeyStCont` | — |
+| `cloudsecSaPeer` | — |
+| `cloudsecSaRxKey` | — |
+| `cloudsecSaTxKey` | — |
+| `cloudsecSiteRxKeySt` | — |
+| `cloudsecSiteTxKeySt` | — |
+| `cloudsecSpRxKeySt` | — |
+| `cloudsecSpTxKeySt` | — |
+| `cnwAggrIf` | — |
+| `cnwPhysIf` | — |
+| `commApiAvgRespTime` | — |
+| `commHttp` | — |
+| `commHttps` | — |
+| `commPol` | — |
+| `commRsClientCertCA` | — |
+| `commRsKeyRing` | — |
+| `commWebServer` | — |
+| `compEpPConn` | — |
+| `compPrimaryEncapDef` | — |
+| `compRsCtrlrP` | — |
+| `compRsUsegEpPD` | — |
+| `conditionNodePolGrp` | — |
+| `conditionPodPolGrp` | — |
+| `conditionRsNodeAaaRecRetP` | — |
+| `conditionRsNodeEventRecRetP` | — |
+| `conditionRsNodeFaultRecRetP` | — |
+| `conditionRsNodeHealthRecRetP` | — |
+| `conditionRsToNodePolGrp` | — |
+| `configBackupStatusCont` | — |
+| `configDumpP` | — |
+| `configExportP` | — |
+| `configImportIdP` | — |
+| `configImportP` | — |
+| `configJob` | — |
+| `configJobCont` | — |
+| `configRollbackP` | — |
+| `configRsExportDestination` | — |
+| `configRsExportScheduler` | — |
+| `configRsImportSource` | — |
+| `configRsRemotePath` | — |
+| `configSnapshotMgrP` | — |
+| `configSubJob` | — |
+| `coopDb` | — |
+| `coopDom` | — |
+| `coopEntity` | — |
+| `coopEpDamp` | — |
+| `coopInst` | — |
+| `coopOracleAdj` | — |
+| `coopRepP` | — |
+| `coppClass` | — |
+| `coppEntity` | — |
+| `coppFilter` | — |
+| `coppIf` | — |
+| `coppRule` | — |
+| `ctrlrInst` | — |
+| `ctxApplication` | — |
+| `ctxLocal` | — |
+| `datetimeClkPol` | — |
+| `datetimeConfIssues` | — |
+| `datetimeNtpProv` | — |
+| `datetimeNtpProvider` | — |
+| `datetimeNtpProviderStatus` | — |
+| `datetimeNtpq` | — |
+| `datetimePol` | — |
+| `datetimeRsNtpProvToNtpAuthKey` | — |
+| `datetimeRsNtpProvToNtpAuthKey2` | — |
+| `datetimeRsNtpProvToNtpIFFClientKey` | — |
+| `dbgAC` | — |
+| `dbgAcPath` | — |
+| `dbgAcTrail` | — |
+| `dbgAnyToEpRslt` | — |
+| `dbgCores` | — |
+| `dbgDVPCPath` | — |
+| `dbgEpToAnyRslt` | — |
+| `dbgEpToEpRslt` | — |
+| `dbgEpToEpgRslt` | — |
+| `dbgEpToIpRslt` | — |
+| `dbgEpgToEpRslt` | — |
+| `dbgEpgToEpgRslt` | — |
+| `dbgEpgToIpRslt` | — |
+| `dbgExpertRslt` | — |
+| `dbgFiveTupleRslt` | — |
+| `dbgIpToEpRslt` | — |
+| `dbgIpToEpgRslt` | — |
+| `dbgIpToIpRslt` | — |
+| `dbgNDbgs` | — |
+| `dbgProfile` | — |
+| `dbgRemotePort` | — |
+| `dbgRsTenantToDomainRef` | — |
+| `dbgSDVPCPath` | — |
+| `dbgSVPCPath` | — |
+| `dbgTenant` | — |
+| `dbgexpCoreP` | — |
+| `dbgexpRsData` | — |
+| `dbgexpRsExportDest` | — |
+| `dbgexpRsTSOnDScheduler` | — |
+| `dbgexpRsTSScheduler` | — |
+| `dbgexpRsUserCtx` | — |
+| `dbgexpTechSupODev` | — |
+| `dbgexpTechSupOnD` | — |
+| `dbgexpTechSupP` | — |
+| `dbgexpTechSupVmm` | — |
+| `dhcpClientIf` | — |
+| `dhcpDiscNode` | — |
+| `dhcpEntity` | — |
+| `dhcpInst` | — |
+| `dhcpNodeConvP` | — |
+| `dhcpNodeConvPOper` | — |
+| `dhcpNodeGrp` | — |
+| `dhcpNodeIdentPOper` | — |
+| `dhcpOptionDef` | — |
+| `dhcpPodGrp` | — |
+| `dhcpProvDhcp` | — |
+| `dhcpRelayAddr` | — |
+| `dhcpRelayIf` | — |
+| `dhcpRelayP` | — |
+| `dhcpRsProv` | — |
+| `dhcpRsRelayP` | — |
+| `dhcpRsToNodeGrp` | — |
+| `dhcpServerInfo` | — |
+| `dnsConfIssues` | — |
+| `dnsProfile` | — |
+| `dot1xDAEp` | — |
+| `dot1xDUEp` | — |
+| `dot1xEntity` | — |
+| `dot1xIf` | — |
+| `dot1xInst` | — |
+| `dot1xNic` | — |
+| `dot1xVDAEp` | — |
+| `dppCkt` | — |
+| `dppClass` | — |
+| `dppEntity` | — |
+| `dppIf` | — |
+| `edmRsExtDevDomP` | — |
+| `eigrpAdjEp` | — |
+| `eigrpInst` | — |
+| `eptrkIpEpExec` | — |
+| `eptrkMacEpExec` | — |
+| `eqptAsic` | — |
+| `eqptBSlot` | — |
+| `eqptBoard` | — |
+| `eqptBrkoutPortP` | — |
+| `eqptCh` | — |
+| `eqptCpuP` | — |
+| `eqptEntity` | — |
+| `eqptExtCh` | — |
+| `eqptExtChCardSlot` | — |
+| `eqptFC` | — |
+| `eqptFCSlot` | — |
+| `eqptFabP` | — |
+| `eqptFan` | — |
+| `eqptFeatureEx` | — |
+| `eqptFlash` | — |
+| `eqptFpga` | — |
+| `eqptFt` | — |
+| `eqptFtSlot` | — |
+| `eqptLC` | — |
+| `eqptLCSlot` | — |
+| `eqptLEM` | — |
+| `eqptNSlot` | — |
+| `eqptNic` | — |
+| `eqptPortP` | — |
+| `eqptPsgP` | — |
+| `eqptPsu` | — |
+| `eqptPsuSlot` | — |
+| `eqptReloadSwitch` | — |
+| `eqptSensor` | — |
+| `eqptSlotP` | — |
+| `eqptSpromBP` | — |
+| `eqptSpromCH` | — |
+| `eqptSpromFan` | — |
+| `eqptSpromLc` | — |
+| `eqptSpromPsu` | — |
+| `eqptSpromSup` | — |
+| `eqptStorage` | — |
+| `eqptSupC` | — |
+| `eqptSupCSlot` | — |
+| `eqptSysC` | — |
+| `eqptSysCSlot` | — |
+| `eqptcapacityEntity` | — |
+| `eqptcapacityFSPartition` | — |
+| `eqptdiagEntity` | — |
+| `eqptdiagOnDRule` | — |
+| `eqptdiagOnDSubj` | — |
+| `eqptdiagRule` | — |
+| `eqptdiagSubj` | — |
+| `ethpmDOMRxPwrStats` | — |
+| `ethpmDOMStats` | — |
+| `ethpmDOMTxPwrStats` | — |
+| `ethpmFault` | — |
+| `ethpmFcot` | — |
+| `ethpmFcotDD` | — |
+| `ethpmFcotX2` | — |
+| `ethpmPhysIf` | — |
+| `eventSevAsnP` | — |
+| `extdevAssociatedAppsCont` | — |
+| `extdevDomainCont` | — |
+| `extdevGroupP` | — |
+| `extdevMgrP` | — |
+| `extdevNicProf` | — |
+| `extdevRsDomDef` | — |
+| `extdevRsFromDevMgrToApp` | — |
+| `extdevRsNicProfToDomP` | — |
+| `extdevSwMgrFlags` | — |
+| `extdevSwMgrPolCont` | — |
+| `extdevUplinkProf` | — |
+| `fabricAssociatedSetupP` | — |
+| `fabricAutoGEp` | — |
+| `fabricCreatedBy` | — |
+| `fabricCtrlrConfigP` | — |
+| `fabricCtrlrP` | — |
+| `fabricCtrlrPGrp` | — |
+| `fabricCtrlrS` | — |
+| `fabricDecommissionJob` | — |
+| `fabricExplicitGEp` | — |
+| `fabricExtPathEpCont` | — |
+| `fabricExtProtPathEpCont` | — |
+| `fabricExtRoutableNodeDef` | — |
+| `fabricExtRoutableNodeIp` | — |
+| `fabricExtRoutablePodSubnetCont` | — |
+| `fabricExtRoutableSubnetCont` | — |
+| `fabricExtSetupP` | — |
+| `fabricFIfPol` | — |
+| `fabricFLinkFlapPol` | — |
+| `fabricFailedDecommissionNode` | — |
+| `fabricFuncP` | — |
+| `fabricGroupRef` | — |
+| `fabricHIfPol` | — |
+| `fabricHeartbeat` | — |
+| `fabricIPV4AutoG` | — |
+| `fabricIPV4ExpG` | — |
+| `fabricIPV4ProtPol` | — |
+| `fabricIPV6AutoG` | — |
+| `fabricIPV6ExpG` | — |
+| `fabricIPV6ProtPol` | — |
+| `fabricInst` | — |
+| `fabricLFPathS` | — |
+| `fabricLFPortS` | — |
+| `fabricLeBrkoutPortGrp` | — |
+| `fabricLeCardP` | — |
+| `fabricLeCardPGrp` | — |
+| `fabricLeCardS` | — |
+| `fabricLeNodePGrp` | — |
+| `fabricLePortP` | — |
+| `fabricLePortPGrp` | — |
+| `fabricLeafP` | — |
+| `fabricLeafS` | — |
+| `fabricLink` | — |
+| `fabricLinkCont` | — |
+| `fabricLinkFlapPol` | — |
+| `fabricLocale` | — |
+| `fabricLooseNode` | — |
+| `fabricMACProtPol` | — |
+| `fabricMacAutoG` | — |
+| `fabricMacExpG` | — |
+| `fabricNode` | — |
+| `fabricNodeCfg` | — |
+| `fabricNodeCfgCont` | — |
+| `fabricNodeIdentP` | — |
+| `fabricNodeIdentPol` | — |
+| `fabricNodeInfo` | — |
+| `fabricNodePEp` | — |
+| `fabricNodeTaskHolder` | — |
+| `fabricOLeafS` | — |
+| `fabricOOServicePol` | — |
+| `fabricOSpineS` | — |
+| `fabricOosPathIssues` | — |
+| `fabricPath` | — |
+| `fabricPathEp` | — |
+| `fabricPathEpCleanup` | — |
+| `fabricPathEpCleanupShard` | — |
+| `fabricPathEpCont` | — |
+| `fabricPmPathEpCleanup` | — |
+| `fabricPod` | — |
+| `fabricPodP` | — |
+| `fabricPodPGrp` | — |
+| `fabricPodS` | — |
+| `fabricPodTaskHolder` | — |
+| `fabricProtChainP` | — |
+| `fabricProtPathEpCont` | — |
+| `fabricProtPol` | — |
+| `fabricRsApplCoreP` | — |
+| `fabricRsApplMonPol` | — |
+| `fabricRsApplTechSupOnD` | — |
+| `fabricRsApplTechSupOnDemand` | — |
+| `fabricRsApplTechSupP` | — |
+| `fabricRsApplTechSupPSched` | — |
+| `fabricRsCallhomeInvPol` | — |
+| `fabricRsCommPol` | — |
+| `fabricRsCtrlrPGrp` | — |
+| `fabricRsCtrlrPolGroup` | — |
+| `fabricRsDecommissionNode` | — |
+| `fabricRsDwdmFabIfPol` | — |
+| `fabricRsFIfPol` | — |
+| `fabricRsFLinkFlapPol` | — |
+| `fabricRsInterfacePolProfile` | — |
+| `fabricRsL3IfPol` | — |
+| `fabricRsLeCardP` | — |
+| `fabricRsLeCardPGrp` | — |
+| `fabricRsLeNodeP` | — |
+| `fabricRsLeNodePGrp` | — |
+| `fabricRsLePortP` | — |
+| `fabricRsLePortPGrp` | — |
+| `fabricRsMacsecFabIfPol` | — |
+| `fabricRsMacsecPol` | — |
+| `fabricRsModulePolProfile` | — |
+| `fabricRsMonIfFabricPol` | — |
+| `fabricRsMonInstFabricPol` | — |
+| `fabricRsMonModuleFabricPol` | — |
+| `fabricRsNodeCfgSrv` | — |
+| `fabricRsNodeCoreP` | — |
+| `fabricRsNodeCtrl` | — |
+| `fabricRsNodeFlowServers` | — |
+| `fabricRsNodeGroup` | — |
+| `fabricRsNodeOverride` | — |
+| `fabricRsNodePolGroup` | — |
+| `fabricRsNodeTechSupP` | — |
+| `fabricRsOLeafSToLeNodePGrp` | — |
+| `fabricRsOSpineSToSpNodePGrp` | — |
+| `fabricRsOosPath` | — |
+| `fabricRsOosSlot` | — |
+| `fabricRsOpticsFabIfPol` | — |
+| `fabricRsPathToLePortPGrp` | — |
+| `fabricRsPathToSpPortPGrp` | — |
+| `fabricRsPodPGrp` | — |
+| `fabricRsPodPGrpBGPRRP` | — |
+| `fabricRsPodPGrpCoopP` | — |
+| `fabricRsPodPGrpIsisDomP` | — |
+| `fabricRsPodPolGroup` | — |
+| `fabricRsPsuInstPol` | — |
+| `fabricRsRemoteStatsServer` | — |
+| `fabricRsResAuditSwRetP` | — |
+| `fabricRsResCatFwP` | — |
+| `fabricRsResCoopPol` | — |
+| `fabricRsResCoreP` | — |
+| `fabricRsResEventSwRetP` | — |
+| `fabricRsResFabricIPV4ProtPol` | — |
+| `fabricRsResFabricIPV6ProtPol` | — |
+| `fabricRsResFabricMACProtPol` | — |
+| `fabricRsResFabricProtChainP` | — |
+| `fabricRsResFaultSwRetP` | — |
+| `fabricRsResHealthPols` | — |
+| `fabricRsResHealthSwRetP` | — |
+| `fabricRsResL2InstPol` | — |
+| `fabricRsResLbPol` | — |
+| `fabricRsResLldpInstPol` | — |
+| `fabricRsResMonCommonPol` | — |
+| `fabricRsResMonFabricPol` | — |
+| `fabricRsResOngoingAcMode` | — |
+| `fabricRsResPsuInstPol` | — |
+| `fabricRsResTechSupP` | — |
+| `fabricRsSnmpPol` | — |
+| `fabricRsSpCardP` | — |
+| `fabricRsSpCardPGrp` | — |
+| `fabricRsSpNodeP` | — |
+| `fabricRsSpNodePGrp` | — |
+| `fabricRsSpPortP` | — |
+| `fabricRsSpPortPGrp` | — |
+| `fabricRsTimePol` | — |
+| `fabricRsToFabricIPV6ProtPol` | — |
+| `fabricRsToFabricPathS` | — |
+| `fabricRsTwampResponderPol` | — |
+| `fabricRsTwampServerPol` | — |
+| `fabricRsVpcInstPol` | — |
+| `fabricSFPathS` | — |
+| `fabricSFPortS` | — |
+| `fabricSelectorIssues` | — |
+| `fabricSetupP` | — |
+| `fabricSetupPol` | — |
+| `fabricShardTaskHolder` | — |
+| `fabricSpBrkoutPortGrp` | — |
+| `fabricSpCardP` | — |
+| `fabricSpCardPGrp` | — |
+| `fabricSpCardS` | — |
+| `fabricSpNodePGrp` | — |
+| `fabricSpPortP` | — |
+| `fabricSpPortPGrp` | — |
+| `fabricSpineP` | — |
+| `fabricSpineS` | — |
+| `fabricSubsDfltPolicy` | — |
+| `fabricSummaryCont` | — |
+| `fabricTopology` | — |
+| `fabricTrail` | — |
+| `fabricVmmDecommissionJob` | — |
+| `faultSevAsnP` | — |
+| `fcAllocEncapCont` | — |
+| `fcDomP` | — |
+| `fcEncapInstDef` | — |
+| `fcEntity` | — |
+| `fcRsVsanAttr` | — |
+| `fcRsVsanNs` | — |
+| `fcpmFcAggrIf` | — |
+| `fcpmFcPhysIf` | — |
+| `fcpmFcot` | — |
+| `fcpmFcotX2` | — |
+| `fhsBD` | — |
+| `fhsCktEp` | — |
+| `fhsDom` | — |
+| `fhsEntity` | — |
+| `fhsInst` | — |
+| `fhsIpInspect` | — |
+| `fhsIpInspectProto` | — |
+| `fhsRaGuard` | — |
+| `fhsSrcGuard` | — |
+| `fhsTrustCtrl` | — |
+| `fhsViolationEvent` | — |
+| `fileRemotePath` | — |
+| `fileRsARemoteHostToEpp` | — |
+| `firmwareCardRunning` | — |
+| `firmwareCcoSource` | — |
+| `firmwareCompRunning` | — |
+| `firmwareCtrlrFwStatusCont` | — |
+| `firmwareDownload` | — |
+| `firmwareFwGrp` | — |
+| `firmwareFwStatusCont` | — |
+| `firmwareInternalSource` | — |
+| `firmwareOSource` | — |
+| `firmwarePodFwGrp` | — |
+| `firmwareRepoP` | — |
+| `firmwareRsFwgrpp` | — |
+| `firmwareRsToFwGrp` | — |
+| `fmcastTreeEp` | — |
+| `fteCollectorBucket` | — |
+| `fteFte` | — |
+| `fteInst` | — |
+| `fteMonitor` | — |
+| `fteRsCollectorAtt` | — |
+| `fteRsEventsAtt` | — |
+| `fteRsRecordAtt` | — |
+| `fvCEp` | — |
+| `fvCollectionCont` | — |
+| `fvCtrctCtxDefCont` | — |
+| `fvCtxSharedServiceUpdate` | — |
+| `fvDisableDPLearning` | — |
+| `fvDomDef` | — |
+| `fvEpAnycast` | — |
+| `fvEpNlb` | — |
+| `fvEpReachability` | — |
+| `fvExtTepPoolDef` | — |
+| `fvFabricExtConnPDef` | — |
+| `fvImplEpAnycast` | — |
+| `fvImplSubnet` | — |
+| `fvIp` | — |
+| `fvLocalBdDef` | — |
+| `fvLocalCtxDef` | — |
+| `fvLocalCtxPcTagDef` | — |
+| `fvLocalEPgDef` | — |
+| `fvLocalInstPDef` | — |
+| `fvNodeDef` | — |
+| `fvNwIssues` | — |
+| `fvNwIssuesExtended` | — |
+| `fvOrchsInfo` | — |
+| `fvPodConnPDef` | — |
+| `fvPodDhcpServerInfo` | — |
+| `fvRInfoHolder` | — |
+| `fvRemoteBdDef` | — |
+| `fvRemoteCtxDef` | — |
+| `fvRemoteCtxPcTagDef` | — |
+| `fvRemoteEPgDef` | — |
+| `fvRemoteInstPDef` | — |
+| `fvRsBDSubnetToOut` | — |
+| `fvRsBDSubnetToProfile` | — |
+| `fvRsCons` | — |
+| `fvRsConsIf` | — |
+| `fvRsCustQosPol` | — |
+| `fvRsDomDefNsLocal` | — |
+| `fvRsIntraEpg` | — |
+| `fvRsNdPfxPol` | — |
+| `fvRsProtBy` | — |
+| `fvRsProv` | — |
+| `fvRsSecInherited` | — |
+| `fvRtDestEpg` | — |
+| `fvRtProv` | — |
+| `fvRtToEp` | — |
+| `fvRtToEpForEpToEp` | — |
+| `fvRtToEpForEpgToEp` | — |
+| `fvRtToEpIp` | — |
+| `fvRtToEpIpForEpToEp` | — |
+| `fvRtToEpIpForEpgToEp` | — |
+| `fvRtdEpPInfoCont` | — |
+| `fvRtdEpPInfoHolder` | — |
+| `fvSharedService` | — |
+| `fvSite` | — |
+| `fvSiteCont` | — |
+| `fvStorageIssues` | — |
+| `fvSubnet` | — |
+| `fvTabooCtxDefCont` | — |
+| `fvVDEp` | — |
+| `fvVNode` | — |
+| `fvcapScopeReg` | — |
+| `fvnsEncapBlk` | — |
+| `fvnsMcastAddrBlk` | — |
+| `fvnsMcastAddrInstP` | — |
+| `fvnsVlanInstDef` | — |
+| `fvnsVlanInstP` | — |
+| `fvnsVsanInstP` | — |
+| `fvnsVxlanInstDef` | — |
+| `fvnsVxlanInstP` | — |
+| `hostprotFilterContainerDef` | — |
+| `hostprotNamespace` | — |
+| `hostprotNamespaceDef` | — |
+| `hostprotPodFilterDef` | — |
+| `hostprotPolDef` | — |
+| `hostprotRemoteIp` | — |
+| `hostprotRemoteIpContainer` | — |
+| `hostprotRuleDef` | — |
+| `hostprotSubjDef` | — |
+| `hsrpAddr` | — |
+| `hsrpDom` | — |
+| `hsrpEntity` | — |
+| `hsrpGroupV1` | — |
+| `hsrpGroupV2` | — |
+| `hsrpIf` | — |
+| `hsrpInst` | — |
+| `iaclEntry` | — |
+| `iaclLeafProfile` | — |
+| `iaclSpineProfile` | — |
+| `igmpDom` | — |
+| `igmpEntity` | — |
+| `igmpIf` | — |
+| `igmpInst` | — |
+| `igmpResP` | — |
+| `igmpStRepP` | — |
+| `igmpsnoopDom` | — |
+| `igmpsnoopEntity` | — |
+| `igmpsnoopInst` | — |
+| `igmpsnoopQuerierSt` | — |
+| `igmpsnoopRtrIf` | — |
+| `imMgmtIf` | — |
+| `imginstallRslt` | — |
+| `infraAccBndlGrp` | — |
+| `infraAccBndlPolGrp` | — |
+| `infraAccBndlSubgrp` | — |
+| `infraAccCardP` | — |
+| `infraAccCardPGrp` | — |
+| `infraAccGrpCfg` | — |
+| `infraAccNodePGrp` | — |
+| `infraAccPortGrp` | — |
+| `infraAccPortP` | — |
+| `infraAssocEncapInstDef` | — |
+| `infraAttEntityP` | — |
+| `infraAttPolicyGroup` | — |
+| `infraBoot` | — |
+| `infraBrkoutPortGrp` | — |
+| `infraCardS` | — |
+| `infraClSzEqObst` | — |
+| `infraClusterPol` | — |
+| `infraConnFexS` | — |
+| `infraConnNodeS` | — |
+| `infraCont` | — |
+| `infraContNS` | — |
+| `infraEpPD` | — |
+| `infraFabricRecovery` | — |
+| `infraFailedAutoUpgrade` | — |
+| `infraFailedClusterShrink` | — |
+| `infraFcAccBndlGrp` | — |
+| `infraFcAccBndlPolGrp` | — |
+| `infraFcAccPortGrp` | — |
+| `infraFexBndlGrp` | — |
+| `infraFexCfg` | — |
+| `infraFexP` | — |
+| `infraFuncP` | — |
+| `infraGeneric` | — |
+| `infraHConnPortS` | — |
+| `infraHPathS` | — |
+| `infraHPortS` | — |
+| `infraHostCfg` | — |
+| `infraIlClMsgSrc` | — |
+| `infraImage` | — |
+| `infraIncmptblClsPeer` | — |
+| `infraIncorrectCntrlSbstState` | — |
+| `infraInfra` | — |
+| `infraLeafS` | — |
+| `infraLoNode` | — |
+| `infraMgmt` | — |
+| `infraNodeCfg` | — |
+| `infraNodeCfgCont` | — |
+| `infraNodeP` | — |
+| `infraNonCompliantNode` | — |
+| `infraNsIssues` | — |
+| `infraOLeafS` | — |
+| `infraPeNode` | — |
+| `infraPodP` | — |
+| `infraPortBlk` | — |
+| `infraPortDirecPol` | — |
+| `infraPreProv` | — |
+| `infraProvAcc` | — |
+| `infraProvFloatingSvi` | — |
+| `infraRecoveryNodeTask` | — |
+| `infraReplica` | — |
+| `infraRsAccBaseGrp` | — |
+| `infraRsAccBndlSubgrp` | — |
+| `infraRsAccCardP` | — |
+| `infraRsAccNodePGrp` | — |
+| `infraRsAccPortP` | — |
+| `infraRsAttEntP` | — |
+| `infraRsBfdIpv4InstPol` | — |
+| `infraRsBfdIpv6InstPol` | — |
+| `infraRsBfdMhIpv4InstPol` | — |
+| `infraRsBfdMhIpv6InstPol` | — |
+| `infraRsBndlGrp` | — |
+| `infraRsCardPGrp` | — |
+| `infraRsCdpIfPol` | — |
+| `infraRsConnFexS` | — |
+| `infraRsConnPortS` | — |
+| `infraRsCoppIfPol` | — |
+| `infraRsDomP` | — |
+| `infraRsDwdmIfPol` | — |
+| `infraRsEquipmentFlashConfigPol` | — |
+| `infraRsFabricNode` | — |
+| `infraRsFcAttEntP` | — |
+| `infraRsFcFabricPol` | — |
+| `infraRsFcIfPol` | — |
+| `infraRsFcInstPol` | — |
+| `infraRsFcL2IfPol` | — |
+| `infraRsFcLagPol` | — |
+| `infraRsFexGrp` | — |
+| `infraRsFuncToEpg` | — |
+| `infraRsFuncToVirtualLIfPAttEntPCont` | — |
+| `infraRsHIfPol` | — |
+| `infraRsIaclLeafProfile` | — |
+| `infraRsIaclSpineProfile` | — |
+| `infraRsInfraNodeOverride` | — |
+| `infraRsInterfacePolProfile` | — |
+| `infraRsL2IfPol` | — |
+| `infraRsL2InstPol` | — |
+| `infraRsL2NodeAuthPol` | — |
+| `infraRsL2PortAuthPol` | — |
+| `infraRsL2PortSecurityPol` | — |
+| `infraRsLacpIfPol` | — |
+| `infraRsLacpInterfacePol` | — |
+| `infraRsLacpPol` | — |
+| `infraRsLeafCoppProfile` | — |
+| `infraRsLeafPGrpToCdpIfPol` | — |
+| `infraRsLeafPGrpToLldpIfPol` | — |
+| `infraRsLeafTopoctrlUsbConfigProfilePol` | — |
+| `infraRsLinkFlapPol` | — |
+| `infraRsLldpIfPol` | — |
+| `infraRsMacsecIfPol` | — |
+| `infraRsMcpIfPol` | — |
+| `infraRsModulePolProfile` | — |
+| `infraRsMonBrkoutInfraPol` | — |
+| `infraRsMonFexInfraPol` | — |
+| `infraRsMonIfInfraPol` | — |
+| `infraRsMonModuleInfraPol` | — |
+| `infraRsMonNodeInfraPol` | — |
+| `infraRsMstInstPol` | — |
+| `infraRsNetflowMonitorPol` | — |
+| `infraRsNetflowNodePol` | — |
+| `infraRsNodeP` | — |
+| `infraRsNodePolGroup` | — |
+| `infraRsOLeafSToAccNodePGrp` | — |
+| `infraRsOpticsIfPol` | — |
+| `infraRsOverrideCdpIfPol` | — |
+| `infraRsOverrideFwPol` | — |
+| `infraRsOverrideLacpPol` | — |
+| `infraRsOverrideLldpIfPol` | — |
+| `infraRsOverrideMcpIfPol` | — |
+| `infraRsOverrideStpPol` | — |
+| `infraRsPathToAccBaseGrp` | — |
+| `infraRsPathToSpAccGrp` | — |
+| `infraRsPoeIfPol` | — |
+| `infraRsPoeInstPol` | — |
+| `infraRsPortDirection` | — |
+| `infraRsPtpInstPol` | — |
+| `infraRsQosDppIfPol` | — |
+| `infraRsQosEgressDppIfPol` | — |
+| `infraRsQosIngressDppIfPol` | — |
+| `infraRsQosLlfcIfPol` | — |
+| `infraRsQosPfcIfPol` | — |
+| `infraRsQosSdIfPol` | — |
+| `infraRsResCdpIfPol` | — |
+| `infraRsResErrDisRecoverPol` | — |
+| `infraRsResHIfPol` | — |
+| `infraRsResLacpIfPol` | — |
+| `infraRsResLacpLagPol` | — |
+| `infraRsResLinkFlapPol` | — |
+| `infraRsResLldpIfPol` | — |
+| `infraRsResLoopProtectPol` | — |
+| `infraRsResMcpIfPol` | — |
+| `infraRsResMcpInstPol` | — |
+| `infraRsResMonInfraPol` | — |
+| `infraRsResNwsFwPol` | — |
+| `infraRsResQoSPol` | — |
+| `infraRsResQosInstPol` | — |
+| `infraRsSpAccGrp` | — |
+| `infraRsSpAccPortP` | — |
+| `infraRsSpanVDestGrp` | — |
+| `infraRsSpanVSrcGrp` | — |
+| `infraRsSpineAccNodePGrp` | — |
+| `infraRsSpineBfdIpv4InstPol` | — |
+| `infraRsSpineBfdIpv6InstPol` | — |
+| `infraRsSpineCoppProfile` | — |
+| `infraRsSpinePGrpToCdpIfPol` | — |
+| `infraRsSpinePGrpToLldpIfPol` | — |
+| `infraRsSpineTopoctrlUsbConfigProfilePol` | — |
+| `infraRsStormctrlIfPol` | — |
+| `infraRsStpIfPol` | — |
+| `infraRsSubPortAccBndlSubgrp` | — |
+| `infraRsSynceEthIfPol` | — |
+| `infraRsSynceEthIfPolBndlGrp` | — |
+| `infraRsSynceInstPol` | — |
+| `infraRsToBfdIpv4InstPol` | — |
+| `infraRsToBfdIpv6InstPol` | — |
+| `infraRsToEncapInstDef` | — |
+| `infraRsToEpControlP` | — |
+| `infraRsToEpLoopProtectP` | — |
+| `infraRsToErrDisRecoverPol` | — |
+| `infraRsToInfraPathS` | — |
+| `infraRsToInterfacePolProfile` | — |
+| `infraRsToInterfacePolProfileOpt` | — |
+| `infraRsToInterfaceSpPolProfile` | — |
+| `infraRsToMcpIfPol` | — |
+| `infraRsToMcpInstPol` | — |
+| `infraRsToVsanAttr` | — |
+| `infraRsToVsanEncapInstDef` | — |
+| `infraRsTopoctrlFastLinkFailoverInstPol` | — |
+| `infraRsTopoctrlFwdScaleProfPol` | — |
+| `infraRsVipAddrNs` | — |
+| `infraRsVlanNs` | — |
+| `infraRsVpcBndlGrp` | — |
+| `infraRsWwnInstPol` | — |
+| `infraRtDomDef` | — |
+| `infraSHPathS` | — |
+| `infraSHPortS` | — |
+| `infraSelectorIssues` | — |
+| `infraService` | — |
+| `infraSnNode` | — |
+| `infraSpAccPortGrp` | — |
+| `infraSpAccPortP` | — |
+| `infraSpineAccNodePGrp` | — |
+| `infraSpineP` | — |
+| `infraSpineS` | — |
+| `infraStandbyApicDeleted` | — |
+| `infraStorage` | — |
+| `infraSubPortBlk` | — |
+| `infraSubsDfltPolicy` | — |
+| `infraSummaryCont` | — |
+| `infraWiNode` | — |
+| `infrazoneNodeGrp` | — |
+| `infrazonePodGrp` | — |
+| `infrazoneRsToNodeGrp` | — |
+| `infrazoneZone` | — |
+| `infrazoneZoneP` | — |
+| `ipNexthopEpP` | — |
+| `ipv4Addr` | — |
+| `ipv4Dom` | — |
+| `ipv4Entity` | — |
+| `ipv4If` | — |
+| `ipv4Inst` | — |
+| `ipv4L3AnycastEP` | — |
+| `ipv4Nexthop` | — |
+| `ipv4NexthopEP` | — |
+| `ipv4NlbVip` | — |
+| `ipv4Route` | — |
+| `ipv4RouteEP` | — |
+| `ipv6Addr` | — |
+| `ipv6Dom` | — |
+| `ipv6Entity` | — |
+| `ipv6If` | — |
+| `ipv6Inst` | — |
+| `ipv6L3AnycastEP` | — |
+| `ipv6Nexthop` | — |
+| `ipv6NexthopEP` | — |
+| `ipv6NlbVip` | — |
+| `ipv6Route` | — |
+| `ipv6RouteEP` | — |
+| `isisAdjEp` | — |
+| `isisDb` | — |
+| `isisDom` | — |
+| `isisDomLvl` | — |
+| `isisEntity` | — |
+| `isisExtIf` | — |
+| `isisFmcastTree` | — |
+| `isisGrpRec` | — |
+| `isisIf` | — |
+| `isisIfLvl` | — |
+| `isisInst` | — |
+| `isisRoute` | — |
+| `isisRsNhAtt` | — |
+| `kcEntry` | — |
+| `kcMACSecKey` | — |
+| `l1FcPhysIf` | — |
+| `l1LinkLevelFlowCtrlP` | — |
+| `l1PhysIf` | — |
+| `l1PrioFlowCtrlP` | — |
+| `l1RtEncPhysRtdConf` | — |
+| `l1StormCtrlP` | — |
+| `l1VethIf` | — |
+| `l2BrIf` | — |
+| `l2ExtIf` | — |
+| `l2FcAggrIf` | — |
+| `l2FcBrIf` | — |
+| `l2InbandIf` | — |
+| `l2NodeAuthPol` | — |
+| `l2PortSecurityPolDef` | — |
+| `l2RsAaaRadiusProviderGroup` | — |
+| `l2RsSrvExtIfMap` | — |
+| `l2TrafficMapConfIssue` | — |
+| `l2VfcIf` | — |
+| `l2extDomP` | — |
+| `l3extDomP` | — |
+| `l3extFabricExtRoutingPDef` | — |
+| `l3extRsSubnetToProfile` | — |
+| `l3extSubnetDef` | — |
+| `l3extSummSubnetConfigIssues` | — |
+| `lacpIf` | — |
+| `lacpIfPol` | — |
+| `lacpInst` | — |
+| `lacpLagPol` | — |
+| `latencyOnGoingCont` | — |
+| `latencyPath` | — |
+| `latencyPtpMode` | — |
+| `leqptLooseNode` | — |
+| `leqptRsLsNodeToIf` | — |
+| `lldpAdjEp` | — |
+| `lldpCtrlrAdjEp` | — |
+| `lldpEntity` | — |
+| `lldpIf` | — |
+| `lldpIfPol` | — |
+| `lldpInst` | — |
+| `lldpInvalidAciAdjEp` | — |
+| `macsecEntity` | — |
+| `macsecFabIf` | — |
+| `macsecFabIfPol` | — |
+| `macsecFabParamPol` | — |
+| `macsecFabPolCont` | — |
+| `macsecIf` | — |
+| `macsecIfPol` | — |
+| `macsecInst` | — |
+| `macsecKeyChainPol` | — |
+| `macsecKeyPol` | — |
+| `macsecParamPol` | — |
+| `macsecPolCont` | — |
+| `macsecRsToKeyChainPol` | — |
+| `macsecRsToParamPol` | — |
+| `maintCatMaintP` | — |
+| `maintCtrlrMaintP` | — |
+| `maintMaintGrp` | — |
+| `maintMaintP` | — |
+| `maintMaintPOnD` | — |
+| `maintNodeInMaint` | — |
+| `maintPodMaintGrp` | — |
+| `maintRsMgrpp` | — |
+| `maintRsPolCtrlrScheduler` | — |
+| `maintRsPolNotif` | — |
+| `maintRsPolScheduler` | — |
+| `maintRsToMaintGrp` | — |
+| `maintUpgJob` | — |
+| `maintUpgJobFault` | — |
+| `mcpEntity` | — |
+| `mcpIf` | — |
+| `mcpInst` | — |
+| `mdpAgTunInfoHolder` | — |
+| `mdpConsumedServiceDef` | — |
+| `mdpDestGrpInfoHolder` | — |
+| `mdpLeafP` | — |
+| `mdpLocalDomP` | — |
+| `mdpPolCont` | — |
+| `mdpPolDefCont` | — |
+| `mdpProviderDef` | — |
+| `mdpProviderP` | — |
+| `mdpRemoteCtxDef` | — |
+| `mdpRsRemoteCtxDefToMultiDomCtxDef` | — |
+| `mdpRsTenantInfoDefToMdpPolDefCont` | — |
+| `mdpRsToMdpServiceDef` | — |
+| `mdpTenantDefCont` | — |
+| `mdpTenantInfoDef` | — |
+| `mdpTunInfoHolder` | — |
+| `mdpTypeInfoHolder` | — |
+| `mgmtGrp` | — |
+| `mgmtInBZone` | — |
+| `mgmtMgmtIf` | — |
+| `mgmtNodeGrp` | — |
+| `mgmtOoBZone` | — |
+| `mgmtPodGrp` | — |
+| `mgmtRsAddrInst` | — |
+| `mgmtRsGrp` | — |
+| `mgmtRsInB` | — |
+| `mgmtRsInbEpg` | — |
+| `mgmtRsOoB` | — |
+| `mgmtRsOobEpg` | — |
+| `mgmtRsToNodeGrp` | — |
+| `mldsnoopDom` | — |
+| `mldsnoopEntity` | — |
+| `mldsnoopInst` | — |
+| `mldsnoopQuerierSt` | — |
+| `mldsnoopRtrIf` | — |
+| `monFabricPol` | — |
+| `monFabricTarget` | — |
+| `monitorInst` | — |
+| `monitorIntfP` | — |
+| `monitorIntfPolGrp` | — |
+| `monitorIntfS` | — |
+| `monitorNodeCfg` | — |
+| `monitorNodeCfgCont` | — |
+| `monitorNodeP` | — |
+| `monitorNodePolGrp` | — |
+| `monitorNodeS` | — |
+| `monitorRsCfgToNodePolGrp` | — |
+| `monitorRsCfgToProfile` | — |
+| `monitorRsIntfPolGrp` | — |
+| `monitorRsIntfProfile` | — |
+| `monitorRsNodePolGrp` | — |
+| `monitorRsTelemetryNodePol` | — |
+| `monitorRsTelemetryPol` | — |
+| `multidomainMultiDomainIps` | — |
+| `ndDom` | — |
+| `ndEntity` | — |
+| `ndIf` | — |
+| `ndInst` | — |
+| `ndStAdjEp` | — |
+| `netflowExporterPol` | — |
+| `netflowMonitorPol` | — |
+| `netflowRsExporterToCtx` | — |
+| `netflowRsExporterToEPg` | — |
+| `netflowRsMonitorToExporter` | — |
+| `netflowRsMonitorToRecord` | — |
+| `nwConnGrp` | — |
+| `nwPathEp` | — |
+| `nwsFwPol` | — |
+| `nwsRsNwsSyslogSrcToDestGroup` | — |
+| `nwsSyslogSrc` | — |
+| `oamRsSrcEncap` | — |
+| `opflexEncapCont` | — |
+| `opflexIDEp` | — |
+| `opflexIDEpFaultInfo` | — |
+| `opflexODev` | — |
+| `opflexODevFaultInfo` | — |
+| `opflexPathAtt` | — |
+| `opflexpAgentIDEpFaultInfo` | — |
+| `opflexpAgentODevFaultInfo` | — |
+| `opflexpVmmIDEpFaultInfo` | — |
+| `opflexpVmmODevFaultInfo` | — |
+| `ospfAdjEp` | — |
+| `ospfAdjOper` | — |
+| `ospfDom` | — |
+| `ospfDomOper` | — |
+| `ospfEntity` | — |
+| `ospfIf` | — |
+| `ospfIfOper` | — |
+| `ospfIfStats` | — |
+| `ospfInst` | — |
+| `ospfInstOper` | — |
+| `ospfMaxLsaOpSt` | — |
+| `ospfMaxLsaP` | — |
+| `ospfv3AdjEp` | — |
+| `ospfv3Dom` | — |
+| `ospfv3Entity` | — |
+| `ospfv3If` | — |
+| `ospfv3Inst` | — |
+| `ospfv3MaxLsaOpSt` | — |
+| `ospfv3MaxLsaP` | — |
+| `patchingEntity` | — |
+| `patchingInst` | — |
+| `patchingPatch` | — |
+| `pcAggrMbrIf` | — |
+| `pcFcAggrIf` | — |
+| `pcFcAggrMbrIf` | — |
+| `pcRsFcMbrIfs` | — |
+| `physDomP` | — |
+| `pim6Dom` | — |
+| `pim6Entity` | — |
+| `pim6Inst` | — |
+| `pimDom` | — |
+| `pimEntity` | — |
+| `pimInst` | — |
+| `pimInterVRF` | — |
+| `pimInterVRFP` | — |
+| `pingExecFab` | — |
+| `pingExecTn` | — |
+| `pkiEp` | — |
+| `pkiFabricCommunicationEp` | — |
+| `pkiFabricNodeSSLCertificate` | — |
+| `pkiKeyRing` | — |
+| `pkiTP` | — |
+| `plannerAzureDomain` | — |
+| `plannerAzureDomainTmpl` | — |
+| `plannerBdTmpl` | — |
+| `plannerConfigTmpl` | — |
+| `plannerCont` | — |
+| `plannerDeployment` | — |
+| `plannerEpgTmpl` | — |
+| `plannerFexTmpl` | — |
+| `plannerGraphNode` | — |
+| `plannerGraphTmpl` | — |
+| `plannerL2OutTmpl` | — |
+| `plannerL3OutTmpl` | — |
+| `plannerL4L7ClusterTmpl` | — |
+| `plannerLeaf` | — |
+| `plannerLeafTmpl` | — |
+| `plannerRsAzureDomainLabel` | — |
+| `plannerRsAzureDomainTmpl` | — |
+| `plannerRsBdVrf` | — |
+| `plannerRsClusterLabel` | — |
+| `plannerRsConnectedLeaf` | — |
+| `plannerRsConnectedSpine` | — |
+| `plannerRsConsumedContracts` | — |
+| `plannerRsDeployedFex` | — |
+| `plannerRsDeployedObject` | — |
+| `plannerRsEpgBd` | — |
+| `plannerRsEpgLabel` | — |
+| `plannerRsExistingTopoDeplPref` | — |
+| `plannerRsFexLabel` | — |
+| `plannerRsGraphBd` | — |
+| `plannerRsGraphCluster` | — |
+| `plannerRsGraphContracts` | — |
+| `plannerRsGraphL3Out` | — |
+| `plannerRsL2OutBd` | — |
+| `plannerRsL3OutVrf` | — |
+| `plannerRsLeafLabels` | — |
+| `plannerRsProvidedContracts` | — |
+| `plannerRsToConsumerBd` | — |
+| `plannerRsToConsumerL3Out` | — |
+| `plannerRsToProviderBd` | — |
+| `plannerRsToProviderL3Out` | — |
+| `plannerRsVmwareDomainLabel` | — |
+| `plannerRsVmwareDomainTmpl` | — |
+| `plannerTenantTmpl` | — |
+| `plannerVmwareDomain` | — |
+| `plannerVmwareDomainTmpl` | — |
+| `poeEntity` | — |
+| `poeIf` | — |
+| `poeIfPol` | — |
+| `poeInst` | — |
+| `poeNic` | — |
+| `poeRsPoeEpg` | — |
+| `poeVDAEp` | — |
+| `polDefRelnHolder` | — |
+| `polNdoProfile` | — |
+| `polResPolCont` | — |
+| `polRsClusterPolRel` | — |
+| `polRsCtrlrFipsMode` | — |
+| `polRsDbgrConfigExportP` | — |
+| `polRsDbgrConfigImportIdP` | — |
+| `polRsDbgrConfigImportP` | — |
+| `polRsDbgrConfigRollbackP` | — |
+| `polRsDbgrConfigSnapshotMgrP` | — |
+| `polRsDockerImage` | — |
+| `polRsExportPRel` | — |
+| `polRsFabricSelfCAEp` | — |
+| `polRsFabricipv4expg` | — |
+| `polRsFabricmacexpg` | — |
+| `polRsFirmwareRepoP` | — |
+| `polRsPlgnFirmware` | — |
+| `polRsPluginPol` | — |
+| `polRsScriptHandlerLock` | — |
+| `polRsTroubleshootSessionRel` | — |
+| `polRsVnsmdev` | — |
+| `polRsVnsmdfctcat` | — |
+| `polUni` | — |
+| `procApp` | — |
+| `procContainer` | — |
+| `procEntity` | — |
+| `procEntry` | — |
+| `procJob` | — |
+| `procMemUsage` | — |
+| `procMemory` | — |
+| `procPlatform` | — |
+| `procProc` | — |
+| `procSystem` | — |
+| `ptpEntity` | — |
+| `ptpIf` | — |
+| `ptpInst` | — |
+| `qosDppPol` | — |
+| `qosmEntity` | — |
+| `qosmGlobalEgressMplsRule` | — |
+| `qosmGlobalIngressMplsRule` | — |
+| `qosmIf` | — |
+| `qosmIfClass` | — |
+| `qospClass` | — |
+| `qospDot1pRule` | — |
+| `qospDscpRule` | — |
+| `quotaConf` | — |
+| `quotaCont` | — |
+| `radiusEntity` | — |
+| `radiusInst` | — |
+| `radiusServerHost` | — |
+| `recoveryReconcileConfigP` | — |
+| `resConsumer` | — |
+| `rmonIfStorm` | — |
+| `rpmEntity` | — |
+| `satmDExtCh` | — |
+| `satmEntity` | — |
+| `satmFabP` | — |
+| `satmRemoteFcot` | — |
+| `satmRemoteFcotX2` | — |
+| `segrtEntity` | — |
+| `segrtInst` | — |
+| `segrtMpls` | — |
+| `segrtSrgb` | — |
+| `slaEntity` | — |
+| `slaICMPEcho` | — |
+| `slaInst` | — |
+| `slaOpCont` | — |
+| `slaTCPConnect` | — |
+| `snmpClient` | — |
+| `snmpClientGrp` | — |
+| `snmpCommSecP` | — |
+| `snmpConfIssues` | — |
+| `snmpEntity` | — |
+| `snmpGroup` | — |
+| `snmpInst` | — |
+| `snmpPol` | — |
+| `snmpRsCommToCtxAtt` | — |
+| `snmpRsDestGroup` | — |
+| `snmpSrc` | — |
+| `snmpTrapDest` | — |
+| `snmpUserSecP` | — |
+| `spanAcct` | — |
+| `spanDest` | — |
+| `spanDestGrp` | — |
+| `spanERDestination` | — |
+| `spanEntity` | — |
+| `spanEpgSummary` | — |
+| `spanExtended` | — |
+| `spanFabSource` | — |
+| `spanFltEntry` | — |
+| `spanFltGrp` | — |
+| `spanLDestination` | — |
+| `spanRsDestApic` | — |
+| `spanRsDestEpg` | — |
+| `spanRsDestPathEp` | — |
+| `spanRsDestToVPort` | — |
+| `spanRsDestToVPortDef` | — |
+| `spanRsProvDestGrp` | — |
+| `spanRsProvToVDestGrp` | — |
+| `spanRsSessionToDomainRef` | — |
+| `spanRsSpanSrcToFltGrpAtt` | — |
+| `spanRsSpanSrcToL1IfAtt` | — |
+| `spanRsSpanSrcToL2CktEpAtt` | — |
+| `spanRsSpanSrcToL3OutAtt` | — |
+| `spanRsSpanSsnToFltGrpAtt` | — |
+| `spanRsSrcToBDDef` | — |
+| `spanRsSrcToCtxDef` | — |
+| `spanRsSrcToEpP` | — |
+| `spanRsSrcToEpg` | — |
+| `spanRsSrcToPathEp` | — |
+| `spanRsSrcToVPort` | — |
+| `spanRsSrcToVPortDef` | — |
+| `spanRsVSrcGrpToFilterGrp` | — |
+| `spanSession` | — |
+| `spanSource` | — |
+| `spanSpanLbl` | — |
+| `spanSpanLblDef` | — |
+| `spanSpanProv` | — |
+| `spanSrc` | — |
+| `spanSrcDef` | — |
+| `spanSrcGrp` | — |
+| `spanTaskParam` | — |
+| `spanVDest` | — |
+| `spanVDestGrp` | — |
+| `spanVEpgSummary` | — |
+| `spanVEpgSummaryDef` | — |
+| `spanVSpanProv` | — |
+| `spanVSrc` | — |
+| `spanVSrcDef` | — |
+| `spanVSrcGrp` | — |
+| `statsDestP` | — |
+| `statsExportJob` | — |
+| `statsExportP` | — |
+| `statsExportStatusCont` | — |
+| `statsReportable` | — |
+| `statsShardExportSubJob` | — |
+| `stormctrlIfPol` | — |
+| `stpAllocEncapBlkDef` | — |
+| `stpAllocEncapCont` | — |
+| `stpEncapInstDef` | — |
+| `stpIfPol` | — |
+| `stpInstPol` | — |
+| `stpMstDomPol` | — |
+| `stpMstRegionPol` | — |
+| `svccopyDest` | — |
+| `svccopyEntity` | — |
+| `svccopyInst` | — |
+| `svccoreCtrlr` | — |
+| `svccoreNode` | — |
+| `svcredirAclRule` | — |
+| `svcredirDest` | — |
+| `svcredirDestGrp` | — |
+| `svcredirDestmon` | — |
+| `svcredirEntity` | — |
+| `svcredirHealthGrp` | — |
+| `svcredirHealthGrpDest` | — |
+| `svcredirInst` | — |
+| `svcredirRsBackupDestAtt` | — |
+| `svcredirRsDestAtt` | — |
+| `synceEntity` | — |
+| `synceEthIf` | — |
+| `synceEthIfPol` | — |
+| `synceInst` | — |
+| `syntheticIfcCTestObj` | — |
+| `syntheticIfcTLTestObj` | — |
+| `syntheticRsToAObj` | — |
+| `syntheticRsToObj` | — |
+| `syntheticSwCTestObj` | — |
+| `syntheticSwTLTestObj` | — |
+| `sysdebugCore` | — |
+| `sysdebugCoreFileRepository` | — |
+| `sysdebugEp` | — |
+| `sysdebugLogControlEp` | — |
+| `sysdebugTechSupFileRepository` | — |
+| `sysdebugTechSupport` | — |
+| `syslogDestState` | — |
+| `syslogGroup` | — |
+| `syslogRemoteDest` | — |
+| `syslogRsDestGroup` | — |
+| `syslogSrc` | — |
+| `tacacsGroup` | — |
+| `tacacsRsDestGroup` | — |
+| `tacacsSrc` | — |
+| `tacacsTacacsDest` | — |
+| `tagAliasDef` | — |
+| `tagAliasDelInst` | — |
+| `tagAliasInst` | — |
+| `tagDef` | — |
+| `tagInst` | — |
+| `tagRef` | — |
+| `telemetryAlert` | — |
+| `telemetryCollectorProvider` | — |
+| `telemetryFlowServerGrp` | — |
+| `telemetryLogServerGrp` | — |
+| `telemetryPodLogServerGrp` | — |
+| `telemetryProvider` | — |
+| `telemetryRequirement` | — |
+| `telemetryRsToCtxDef` | — |
+| `telemetryRsToFlowServerGrp` | — |
+| `telemetryRsToFltPolGrp` | — |
+| `telemetryRsToInbCtxDef` | — |
+| `telemetryRsToLogServerGrp` | — |
+| `telemetryRsToRemoteLogServer` | — |
+| `telemetryRsToRemoteStatsServer` | — |
+| `telemetryRsToStatsServerGrp` | — |
+| `telemetryServers` | — |
+| `telemetrySnCertDownloadStatus` | — |
+| `telemetryStatsServerGrp` | — |
+| `telemetryStatsServerP` | — |
+| `thirdpartyappAppGlobalConfig` | — |
+| `thirdpartyappPodGrp` | — |
+| `thirdpartyappRsToGlobalConfig` | — |
+| `thirdpartyappRsToNodeGlobalConfig` | — |
+| `topSystem` | — |
+| `topoctrlEndpointControlP` | — |
+| `topoctrlEntity` | — |
+| `topoctrlHashP` | — |
+| `tracerouteExecFab` | — |
+| `tracerouteExecTn` | — |
+| `traceroutepTrNode` | — |
+| `trigRoProxy` | — |
+| `trigRoProxyCont` | — |
+| `trigRsTriggerable` | — |
+| `trigSchedP` | — |
+| `troubleshootRsSessionScheduler` | — |
+| `troubleshootSession` | — |
+| `tunnelIf` | — |
+| `twampEntity` | — |
+| `twampResponderInst` | — |
+| `twampServerInst` | — |
+| `unifiedportsEntity` | — |
+| `unifiedportsIf` | — |
+| `unspecified` | — |
+| `uribv4Db` | — |
+| `uribv4Dom` | — |
+| `uribv4Entity` | — |
+| `uribv4Nexthop` | — |
+| `uribv4Route` | — |
+| `uribv4RouteOwner` | — |
+| `usrsyslogRecord` | — |
+| `usrtacacsRecord` | — |
+| `vethEntity` | — |
+| `vethInst` | — |
+| `vnsAbsCfgRel` | — |
+| `vnsAbsDevCfg` | — |
+| `vnsAbsFolder` | — |
+| `vnsAbsFuncCfg` | — |
+| `vnsAbsFuncProf` | — |
+| `vnsAbsFuncProfContr` | — |
+| `vnsAbsFuncProfGrp` | — |
+| `vnsAbsGrpCfg` | — |
+| `vnsAbsParam` | — |
+| `vnsAdjacencyDefCont` | — |
+| `vnsCDev` | — |
+| `vnsCDevState` | — |
+| `vnsCFolder` | — |
+| `vnsCIf` | — |
+| `vnsCMgmt` | — |
+| `vnsCMgmtProxy` | — |
+| `vnsCParam` | — |
+| `vnsCRel` | — |
+| `vnsCfgRelInst` | — |
+| `vnsCfgRoot` | — |
+| `vnsClusterCfg` | — |
+| `vnsConfIssue` | — |
+| `vnsCopyAdjacencyDef` | — |
+| `vnsCtrlrEpProxy` | — |
+| `vnsDevCfg` | — |
+| `vnsDevConfIssue` | — |
+| `vnsDevFolder` | — |
+| `vnsDevHealth` | — |
+| `vnsDevParam` | — |
+| `vnsDevPing` | — |
+| `vnsDevScript` | — |
+| `vnsEPpContr` | — |
+| `vnsEPpInfo` | — |
+| `vnsFolderInst` | — |
+| `vnsGFolder` | — |
+| `vnsGParam` | — |
+| `vnsGRel` | — |
+| `vnsLDevOperInfo` | — |
+| `vnsLIf` | — |
+| `vnsMChassis` | — |
+| `vnsMConn` | — |
+| `vnsMDev` | — |
+| `vnsMDevCfg` | — |
+| `vnsMDevMgr` | — |
+| `vnsMDfct` | — |
+| `vnsMDfcts` | — |
+| `vnsMFolder` | — |
+| `vnsMFunc` | — |
+| `vnsMGrpCfg` | — |
+| `vnsMParam` | — |
+| `vnsMRel` | — |
+| `vnsMgmtLIf` | — |
+| `vnsParamInst` | — |
+| `vnsRTInfo` | — |
+| `vnsRndrInfo` | — |
+| `vnsRsALDevToDevMgr` | — |
+| `vnsRsALDevToDomP` | — |
+| `vnsRsALDevToPhysDomP` | — |
+| `vnsRsALDevToVxlanInstP` | — |
+| `vnsRsCDevTemplateToAddrInst` | — |
+| `vnsRsCDevToChassis` | — |
+| `vnsRsCDevToCtrlrP` | — |
+| `vnsRsCIfAtt` | — |
+| `vnsRsCIfAttN` | — |
+| `vnsRsCIfPathAtt` | — |
+| `vnsRsCfgToConn` | — |
+| `vnsRsCfgToVConn` | — |
+| `vnsRsConnector` | — |
+| `vnsRsDevEpg` | — |
+| `vnsRsDevFolderToMFolder` | — |
+| `vnsRsDevPingToCDev` | — |
+| `vnsRsDfctToCat` | — |
+| `vnsRsFolderInstToMFolder` | — |
+| `vnsRsInterface` | — |
+| `vnsRsLIfDomP` | — |
+| `vnsRsMChassisToMDev` | — |
+| `vnsRsMDevAtt` | — |
+| `vnsRsMDevMgrToMDev` | — |
+| `vnsRsMetaIf` | — |
+| `vnsRsProfToCloudModeMDev` | — |
+| `vnsRsProfToMFunc` | — |
+| `vnsRsScopeToTerm` | — |
+| `vnsRsScriptHandlerStateToDomainRef` | — |
+| `vnsRsVDevDomainRefContToDomainRef` | — |
+| `vnsRsVDevToDomainRef` | — |
+| `vnsRsVLIfP` | — |
+| `vnsSDEPpInfo` | — |
+| `vnsSHSEPpInfo` | — |
+| `vnsSLDevInst` | — |
+| `vnsScriptHandlerState` | — |
+| `vnsScriptHandlerUserState` | — |
+| `vnsSvcPkgSource` | — |
+| `vnsSvcPol` | — |
+| `vnsSvcVipUpdate` | — |
+| `vnsVBgpDevCfg` | — |
+| `vnsVBgpVEncapAsc` | — |
+| `vnsVConn` | — |
+| `vnsVDev` | — |
+| `vnsVDevDomainRefCont` | — |
+| `vnsVDevOperInfo` | — |
+| `vnsVEncap` | — |
+| `vnsVEncapAsc` | — |
+| `vnsVFunc` | — |
+| `vnsVGrp` | — |
+| `vnsVGrpP` | — |
+| `vnsVIf` | — |
+| `vnsVOspfDevCfg` | — |
+| `vnsVOspfVEncapAsc` | — |
+| `vnsVmmConfigFile` | — |
+| `vpcDom` | — |
+| `vpcEntity` | — |
+| `vpcIf` | — |
+| `vpcInst` | — |
+| `vpcKeepalive` | — |
+| `vpcRsVpcConf` | — |
+| `vsanmgrEntity` | — |
+| `vsanmgrInst` | — |
+| `vzAnyDef` | — |
+| `vzAnyDefCont` | — |
+| `vzAnyGroupDef` | — |
+| `vzFromEPg` | — |
+| `vzRsFiltGraphAtt` | — |
+| `vzRsRFltAtt` | — |
+| `vzToEPg` | — |
+| `vzToEPgAny` | — |
+| `wwnEntity` | — |
+| `wwnOui` | — |
+| `xcvrZRFabIfPol` | — |
+| `xcvrZRPFabIfPol` | — |
+
+Used by: {ref}`fabric.mon_fabric_monitoring_policy.monitoring_target <vocab-fabric-mon_fabric_monitoring_policy-monitoring_target>`
+
 (enum-montargetscope3)=
 
 ## `MonTargetScope3`
@@ -3458,6 +6248,17 @@ Used by: {ref}`tenant.nd_interface_policy <vocab-tenant-nd_interface_policy>`
 
 Used by: {ref}`tenant.nd_ra_prefix_policy <vocab-tenant-nd_ra_prefix_policy>`
 
+(enum-netflowadminst)=
+
+## `NetflowAdminSt`
+
+| value | meaning |
+| --- | --- |
+| `disabled` | Disabled |
+| `enabled` | Enabled |
+
+Used by: {ref}`fabric.ptp_latency_mode <vocab-fabric-ptp_latency_mode>`
+
 (enum-netflowsrciptype)=
 
 ## `NetflowSrcIpType`
@@ -3491,7 +6292,7 @@ Used by: {ref}`tenant.host_protection.subject.rule <vocab-tenant-host_protection
 | `disabled` | Disabled |
 | `enabled` | Enabled |
 
-Used by: {ref}`fabric.igmp_snoop_policy <vocab-fabric-igmp_snoop_policy>`, {ref}`fabric.mld_snoop_policy <vocab-fabric-mld_snoop_policy>`, {ref}`fabric.span_source_group <vocab-fabric-span_source_group>`, {ref}`infra.dot1x_port_authentication <vocab-infra-dot1x_port_authentication>`, {ref}`infra.poe_interface_policy <vocab-infra-poe_interface_policy>`, {ref}`infra.qos_instance_policy.qos_class_policy <vocab-infra-qos_instance_policy-qos_class_policy>`, {ref}`infra.span_source_group <vocab-infra-span_source_group>`, {ref}`infra.synce_interface_policy <vocab-infra-synce_interface_policy>` *(+13 more)*
+Used by: {ref}`fabric.igmp_snoop_policy <vocab-fabric-igmp_snoop_policy>`, {ref}`fabric.mld_snoop_policy <vocab-fabric-mld_snoop_policy>`, {ref}`fabric.snmp_policy <vocab-fabric-snmp_policy>`, {ref}`fabric.span_source_group <vocab-fabric-span_source_group>`, {ref}`fabric.twamp_responder_policy <vocab-fabric-twamp_responder_policy>`, {ref}`fabric.twamp_server_policy <vocab-fabric-twamp_server_policy>`, {ref}`infra.dot1x_port_authentication <vocab-infra-dot1x_port_authentication>`, {ref}`infra.poe_interface_policy <vocab-infra-poe_interface_policy>` *(+16 more)*
 
 (enum-nwifadminst)=
 
@@ -3502,7 +6303,7 @@ Used by: {ref}`fabric.igmp_snoop_policy <vocab-fabric-igmp_snoop_policy>`, {ref}
 | `disabled` | Disabled |
 | `enabled` | Enabled |
 
-Used by: {ref}`infra.cdp_policy <vocab-infra-cdp_policy>`, {ref}`infra.macsec_interface_policy <vocab-infra-macsec_interface_policy>`, {ref}`infra.mcp_policy <vocab-infra-mcp_policy>`
+Used by: {ref}`fabric.macsec_fabric_interface_policy <vocab-fabric-macsec_fabric_interface_policy>`, {ref}`infra.cdp_policy <vocab-infra-cdp_policy>`, {ref}`infra.macsec_interface_policy <vocab-infra-macsec_interface_policy>`, {ref}`infra.mcp_policy <vocab-infra-mcp_policy>`
 
 (enum-nwinstctrl)=
 
@@ -3831,7 +6632,7 @@ Used by: {ref}`infra.poe_policy <vocab-infra-poe_policy>`
 | `yellow` | — |
 | `yellow-green` | — |
 
-Used by: {ref}`fabric.span_source_group.span_label <vocab-fabric-span_source_group-span_label>`, {ref}`infra.span_source_group.span_label <vocab-infra-span_source_group-span_label>`, {ref}`infra.vspan_session.span_label <vocab-infra-vspan_session-span_label>`, {ref}`tenant.app.epg.consumer_contract_label <vocab-tenant-app-epg-consumer_contract_label>`, {ref}`tenant.app.epg.consumer_label <vocab-tenant-app-epg-consumer_label>`, {ref}`tenant.app.epg.consumer_subject_label <vocab-tenant-app-epg-consumer_subject_label>`, {ref}`tenant.app.epg.provider_contract_label <vocab-tenant-app-epg-provider_contract_label>`, {ref}`tenant.app.epg.provider_label <vocab-tenant-app-epg-provider_label>` *(+38 more)*
+Used by: {ref}`fabric.span_source_group.span_label <vocab-fabric-span_source_group-span_label>`, {ref}`fabric.vspan_session.span_label <vocab-fabric-vspan_session-span_label>`, {ref}`infra.span_source_group.span_label <vocab-infra-span_source_group-span_label>`, {ref}`infra.vspan_session.span_label <vocab-infra-vspan_session-span_label>`, {ref}`tenant.app.epg.consumer_contract_label <vocab-tenant-app-epg-consumer_contract_label>`, {ref}`tenant.app.epg.consumer_label <vocab-tenant-app-epg-consumer_label>`, {ref}`tenant.app.epg.consumer_subject_label <vocab-tenant-app-epg-consumer_subject_label>`, {ref}`tenant.app.epg.provider_contract_label <vocab-tenant-app-epg-provider_contract_label>` *(+39 more)*
 
 (enum-ptpnodeproftemplate)=
 
@@ -3854,7 +6655,7 @@ Used by: {ref}`infra.ptp_node_policy <vocab-infra-ptp_node_policy>`
 | `smpte` | — |
 | `telecom_full_path` | — |
 
-Used by: {ref}`infra.ptp_profile <vocab-infra-ptp_profile>`, {ref}`infra.ptp_profile_template <vocab-infra-ptp_profile_template>`
+Used by: {ref}`fabric.ptp_latency_mode <vocab-fabric-ptp_latency_mode>`, {ref}`infra.ptp_profile <vocab-infra-ptp_profile>`, {ref}`infra.ptp_profile_template <vocab-infra-ptp_profile_template>`
 
 (enum-ptpptpoperatingmode)=
 
@@ -4224,6 +7025,78 @@ Used by: {ref}`tenant.action_rule_profile.set_as_path <vocab-tenant-action_rule_
 
 Used by: {ref}`tenant.action_rule_profile.add_community <vocab-tenant-action_rule_profile-add_community>`, {ref}`tenant.action_rule_profile.set_community <vocab-tenant-action_rule_profile-set_community>`
 
+(enum-scalarenum8)=
+
+## `ScalarEnum8`
+
+| value | meaning |
+| --- | --- |
+| `apic` | — |
+| `apicx` | — |
+
+Used by: {ref}`fabric.core_export_policy <vocab-fabric-core_export_policy>`, {ref}`fabric.techsupport_export_policy <vocab-fabric-techsupport_export_policy>`
+
+(enum-snmpauthtype)=
+
+## `SnmpAuthType`
+
+| value | meaning |
+| --- | --- |
+| `hmac-md5-96` | md5 |
+| `hmac-sha1-96` | sha1 |
+| `hmac-sha2-224` | sha2 |
+| `hmac-sha2-256` | sha2 |
+| `hmac-sha2-384` | sha2 |
+| `hmac-sha2-512` | sha2 |
+
+Used by: {ref}`fabric.snmp_policy.user_profile <vocab-fabric-snmp_policy-user_profile>`
+
+(enum-snmpnotificationtype)=
+
+## `SnmpNotificationType`
+
+| value | meaning |
+| --- | --- |
+| `traps` | — |
+
+Used by: {ref}`fabric.snmp_monitoring_destination_group.snmp_trap_destination <vocab-fabric-snmp_monitoring_destination_group-snmp_trap_destination>`
+
+(enum-snmpprivtype)=
+
+## `SnmpPrivType`
+
+| value | meaning |
+| --- | --- |
+| `aes-128` | AES-128 |
+| `des` | des |
+| `none` | — |
+
+Used by: {ref}`fabric.snmp_policy.user_profile <vocab-fabric-snmp_policy-user_profile>`
+
+(enum-snmpv3seclvl)=
+
+## `SnmpV3SecLvl`
+
+| value | meaning |
+| --- | --- |
+| `auth` | — |
+| `noauth` | — |
+| `priv` | — |
+
+Used by: {ref}`fabric.snmp_monitoring_destination_group.snmp_trap_destination <vocab-fabric-snmp_monitoring_destination_group-snmp_trap_destination>`
+
+(enum-snmpversion)=
+
+## `SnmpVersion`
+
+| value | meaning |
+| --- | --- |
+| `v1` | — |
+| `v2c` | — |
+| `v3` | — |
+
+Used by: {ref}`fabric.snmp_monitoring_destination_group.snmp_trap_destination <vocab-fabric-snmp_monitoring_destination_group-snmp_trap_destination>`
+
 (enum-spanadminst)=
 
 ## `SpanAdminSt`
@@ -4234,7 +7107,7 @@ Used by: {ref}`tenant.action_rule_profile.add_community <vocab-tenant-action_rul
 | `stop` | — |
 | `unknown` | — |
 
-Used by: {ref}`infra.vspan_session <vocab-infra-vspan_session>`
+Used by: {ref}`fabric.vspan_session <vocab-fabric-vspan_session>`, {ref}`infra.vspan_session <vocab-infra-vspan_session>`
 
 (enum-spandirection)=
 
@@ -4246,7 +7119,7 @@ Used by: {ref}`infra.vspan_session <vocab-infra-vspan_session>`
 | `in` | Incoming |
 | `out` | Outgoing |
 
-Used by: {ref}`fabric.span_source_group.span_source <vocab-fabric-span_source_group-span_source>`, {ref}`fabric.span_source_group.vspan_source <vocab-fabric-span_source_group-vspan_source>`, {ref}`fabric.span_source_group.vspan_source_def <vocab-fabric-span_source_group-vspan_source_def>`, {ref}`infra.span_source_group.span_source <vocab-infra-span_source_group-span_source>`, {ref}`infra.span_source_group.vspan_source <vocab-infra-span_source_group-vspan_source>`, {ref}`infra.span_source_group.vspan_source_def <vocab-infra-span_source_group-vspan_source_def>`, {ref}`infra.vspan_session.vspan_vsource <vocab-infra-vspan_session-vspan_vsource>`, {ref}`tenant.span_source_group.span_source <vocab-tenant-span_source_group-span_source>` *(+2 more)*
+Used by: {ref}`fabric.span_source_group.span_source <vocab-fabric-span_source_group-span_source>`, {ref}`fabric.span_source_group.vspan_source <vocab-fabric-span_source_group-vspan_source>`, {ref}`fabric.span_source_group.vspan_source_def <vocab-fabric-span_source_group-vspan_source_def>`, {ref}`fabric.vspan_session.vspan_vsource <vocab-fabric-vspan_session-vspan_vsource>`, {ref}`infra.span_source_group.span_source <vocab-infra-span_source_group-span_source>`, {ref}`infra.span_source_group.vspan_source <vocab-infra-span_source_group-vspan_source>`, {ref}`infra.span_source_group.vspan_source_def <vocab-infra-span_source_group-vspan_source_def>`, {ref}`infra.vspan_session.vspan_vsource <vocab-infra-vspan_session-vspan_vsource>` *(+3 more)*
 
 (enum-spanerspandestmode)=
 
@@ -4257,7 +7130,7 @@ Used by: {ref}`fabric.span_source_group.span_source <vocab-fabric-span_source_gr
 | `not-visible` | The ERSPAN dest. may or may not be in a diffenet private network but the ip address of the ERSPAN destination will not get leaked into the consumers private network |
 | `visible` | The ERSPAN dest. is in a diffenet private network. The ip address of the ERSPAN dest. will get leaked into the consumers private network. Hence the ERSPAN destination IP address must not overlap with esiting IP addresses in the Source EPGs whose traffic is being remote spanned. |
 
-Used by: {ref}`fabric.span_destination_group.span_destination.vspan_epg_summary <vocab-fabric-span_destination_group-span_destination-vspan_epg_summary>`, {ref}`infra.span_destination_group.span_destination.vspan_epg_summary <vocab-infra-span_destination_group-span_destination-vspan_epg_summary>`, {ref}`infra.vspan_destination_group.vspan_vdestination.vspan_destination_epg_summary <vocab-infra-vspan_destination_group-vspan_vdestination-vspan_destination_epg_summary>`, {ref}`tenant.span_destination_group.span_destination.vspan_epg_summary <vocab-tenant-span_destination_group-span_destination-vspan_epg_summary>`
+Used by: {ref}`fabric.span_destination_group.span_destination.vspan_epg_summary <vocab-fabric-span_destination_group-span_destination-vspan_epg_summary>`, {ref}`fabric.vspan_destination_group.vspan_vdestination.vspan_destination_epg_summary <vocab-fabric-vspan_destination_group-vspan_vdestination-vspan_destination_epg_summary>`, {ref}`infra.span_destination_group.span_destination.vspan_epg_summary <vocab-infra-span_destination_group-span_destination-vspan_epg_summary>`, {ref}`infra.vspan_destination_group.vspan_vdestination.vspan_destination_epg_summary <vocab-infra-vspan_destination_group-vspan_vdestination-vspan_destination_epg_summary>`, {ref}`tenant.span_destination_group.span_destination.vspan_epg_summary <vocab-tenant-span_destination_group-span_destination-vspan_epg_summary>`
 
 (enum-stpifcontrol)=
 
@@ -4270,6 +7143,27 @@ Used by: {ref}`fabric.span_destination_group.span_destination.vspan_epg_summary 
 | `bpdu-filter` | BPDU filter enabled |
 
 Used by: {ref}`infra.stp_policy <vocab-infra-stp_policy>`
+
+(enum-stpinstpolctrl)=
+
+## `StpInstPolCtrl`
+
+| value | meaning |
+| --- | --- |
+| `extchp-bpdu-filter` | Enable bpdu filter behavior for extended chassis interfaces |
+
+Used by: {ref}`infra.mst_policy <vocab-infra-mst_policy>`
+
+(enum-svccoreadminst)=
+
+## `SvccoreAdminSt`
+
+| value | meaning |
+| --- | --- |
+| `disabled` | Entity admin state enabled |
+| `enabled` | Entity admin state enabled |
+
+Used by: {ref}`controller.controller_cores_policy <vocab-controller-controller_cores_policy>`
 
 (enum-sviautostate)=
 
@@ -4408,7 +7302,7 @@ Used by: {ref}`fabric.syslog_group.remote_destination <vocab-fabric-syslog_group
 | `notifications` | — |
 | `warnings` | — |
 
-Used by: {ref}`fabric.syslog_group.remote_destination <vocab-fabric-syslog_group-remote_destination>`, {ref}`infra.monitoring_policy.monitoring_target.event_severity_assignment_policy.syslog_source <vocab-infra-monitoring_policy-monitoring_target-event_severity_assignment_policy-syslog_source>`, {ref}`infra.monitoring_policy.monitoring_target.fault_severity_assignment_policy.syslog_source <vocab-infra-monitoring_policy-monitoring_target-fault_severity_assignment_policy-syslog_source>`, {ref}`infra.monitoring_policy.monitoring_target.syslog_source <vocab-infra-monitoring_policy-monitoring_target-syslog_source>`, {ref}`infra.monitoring_policy.syslog_source <vocab-infra-monitoring_policy-syslog_source>`
+Used by: {ref}`fabric.mon_common_monitoring_policy.event_severity_assignment_policy.syslog_source <vocab-fabric-mon_common_monitoring_policy-event_severity_assignment_policy-syslog_source>`, {ref}`fabric.mon_common_monitoring_policy.fault_severity_assignment_policy.syslog_source <vocab-fabric-mon_common_monitoring_policy-fault_severity_assignment_policy-syslog_source>`, {ref}`fabric.mon_common_monitoring_policy.syslog_source <vocab-fabric-mon_common_monitoring_policy-syslog_source>`, {ref}`fabric.mon_fabric_monitoring_policy.monitoring_target.event_severity_assignment_policy.syslog_source <vocab-fabric-mon_fabric_monitoring_policy-monitoring_target-event_severity_assignment_policy-syslog_source>`, {ref}`fabric.mon_fabric_monitoring_policy.monitoring_target.fault_severity_assignment_policy.syslog_source <vocab-fabric-mon_fabric_monitoring_policy-monitoring_target-fault_severity_assignment_policy-syslog_source>`, {ref}`fabric.mon_fabric_monitoring_policy.monitoring_target.syslog_source <vocab-fabric-mon_fabric_monitoring_policy-monitoring_target-syslog_source>`, {ref}`fabric.mon_fabric_monitoring_policy.syslog_source <vocab-fabric-mon_fabric_monitoring_policy-syslog_source>`, {ref}`fabric.syslog_group.remote_destination <vocab-fabric-syslog_group-remote_destination>` *(+4 more)*
 
 (enum-tacacsswitchtacacsaudit)=
 
@@ -4419,7 +7313,41 @@ Used by: {ref}`fabric.syslog_group.remote_destination <vocab-fabric-syslog_group
 | `disabled` | — |
 | `enabled` | — |
 
-Used by: {ref}`infra.monitoring_policy.monitoring_target.event_severity_assignment_policy.tacacs_source <vocab-infra-monitoring_policy-monitoring_target-event_severity_assignment_policy-tacacs_source>`, {ref}`infra.monitoring_policy.monitoring_target.fault_severity_assignment_policy.tacacs_source <vocab-infra-monitoring_policy-monitoring_target-fault_severity_assignment_policy-tacacs_source>`, {ref}`infra.monitoring_policy.monitoring_target.tacacs_source <vocab-infra-monitoring_policy-monitoring_target-tacacs_source>`, {ref}`infra.monitoring_policy.tacacs_source <vocab-infra-monitoring_policy-tacacs_source>`
+Used by: {ref}`fabric.mon_common_monitoring_policy.event_severity_assignment_policy.tacacs_source <vocab-fabric-mon_common_monitoring_policy-event_severity_assignment_policy-tacacs_source>`, {ref}`fabric.mon_common_monitoring_policy.fault_severity_assignment_policy.tacacs_source <vocab-fabric-mon_common_monitoring_policy-fault_severity_assignment_policy-tacacs_source>`, {ref}`fabric.mon_common_monitoring_policy.tacacs_source <vocab-fabric-mon_common_monitoring_policy-tacacs_source>`, {ref}`fabric.mon_fabric_monitoring_policy.monitoring_target.event_severity_assignment_policy.tacacs_source <vocab-fabric-mon_fabric_monitoring_policy-monitoring_target-event_severity_assignment_policy-tacacs_source>`, {ref}`fabric.mon_fabric_monitoring_policy.monitoring_target.fault_severity_assignment_policy.tacacs_source <vocab-fabric-mon_fabric_monitoring_policy-monitoring_target-fault_severity_assignment_policy-tacacs_source>`, {ref}`fabric.mon_fabric_monitoring_policy.monitoring_target.tacacs_source <vocab-fabric-mon_fabric_monitoring_policy-monitoring_target-tacacs_source>`, {ref}`fabric.mon_fabric_monitoring_policy.tacacs_source <vocab-fabric-mon_fabric_monitoring_policy-tacacs_source>`, {ref}`infra.monitoring_policy.monitoring_target.event_severity_assignment_policy.tacacs_source <vocab-infra-monitoring_policy-monitoring_target-event_severity_assignment_policy-tacacs_source>` *(+3 more)*
+
+(enum-tacacsauthenticationprotocol)=
+
+## `TacacsauthenticationProtocol`
+
+| value | meaning |
+| --- | --- |
+| `chap` | — |
+| `mschap` | — |
+| `pap` | — |
+
+Used by: {ref}`fabric.tacacs_monitoring_destination_group.tacacs_destination <vocab-fabric-tacacs_monitoring_destination_group-tacacs_destination>`
+
+(enum-telemetryadminstate)=
+
+## `TelemetryAdminState`
+
+| value | meaning |
+| --- | --- |
+| `disabled` | — |
+| `enabled` | — |
+
+Used by: {ref}`fabric.flow_collector_policy <vocab-fabric-flow_collector_policy>`, {ref}`fabric.flow_collector_policy.external_server <vocab-fabric-flow_collector_policy-external_server>`, {ref}`fabric.telemetry_enable_global_policy <vocab-fabric-telemetry_enable_global_policy>`
+
+(enum-telemetrylatencyunit)=
+
+## `TelemetryLatencyUnit`
+
+| value | meaning |
+| --- | --- |
+| `micro-sec` | micro sec |
+| `milli-sec` | milli sec |
+
+Used by: {ref}`fabric.flow_collector_policy.fte_events <vocab-fabric-flow_collector_policy-fte_events>`
 
 (enum-topnoderolep)=
 
@@ -4446,6 +7374,17 @@ Used by: {ref}`controller.fabric_membership.fabric_node_member <vocab-controller
 
 Used by: {ref}`controller.fabric_membership.fabric_node_member <vocab-controller-fabric_membership-fabric_node_member>`
 
+(enum-toppodtype)=
+
+## `TopPodType`
+
+| value | meaning |
+| --- | --- |
+| `physical` | — |
+| `virtual` | — |
+
+Used by: {ref}`controller.fabric_firsttime_setup_policy.pod_setup <vocab-controller-fabric_firsttime_setup_policy-pod_setup>`
+
 (enum-topoctrladminstate)=
 
 ## `TopoctrlAdminState`
@@ -4456,6 +7395,18 @@ Used by: {ref}`controller.fabric_membership.fabric_node_member <vocab-controller
 | `on` | — |
 
 Used by: {ref}`infra.port_tracking <vocab-infra-port_tracking>`
+
+(enum-topoctrldlbmode)=
+
+## `TopoctrlDLbMode`
+
+| value | meaning |
+| --- | --- |
+| `aggressive` | Aggressive |
+| `conservative` | conservative |
+| `off` | off |
+
+Used by: {ref}`fabric.load_balance_policy <vocab-fabric-load_balance_policy>`
 
 (enum-topoctrlfastlinkfailovermodetype)=
 
@@ -4485,6 +7436,17 @@ Used by: {ref}`infra.fast_link_failover_policy <vocab-infra-fast_link_failover_p
 
 Used by: {ref}`infra.forwarding_scale_profile_policy <vocab-infra-forwarding_scale_profile_policy>`
 
+(enum-topoctrllbmode)=
+
+## `TopoctrlLbMode`
+
+| value | meaning |
+| --- | --- |
+| `lfr` | Link Failure Resiliency |
+| `traditional` | traditional |
+
+Used by: {ref}`fabric.load_balance_policy <vocab-fabric-load_balance_policy>`
+
 (enum-topoctrlmsstypes)=
 
 ## `TopoctrlMssTypes`
@@ -4498,6 +7460,17 @@ Used by: {ref}`infra.forwarding_scale_profile_policy <vocab-infra-forwarding_sca
 
 Used by: {ref}`infra.tcp_mss_policy <vocab-infra-tcp_mss_policy>`
 
+(enum-topoctrlprioritization)=
+
+## `TopoctrlPrioritization`
+
+| value | meaning |
+| --- | --- |
+| `off` | off |
+| `on` | on |
+
+Used by: {ref}`fabric.load_balance_policy <vocab-fabric-load_balance_policy>`
+
 (enum-tracklistobj)=
 
 ## `TrackListObj`
@@ -4508,6 +7481,49 @@ Used by: {ref}`infra.tcp_mss_policy <vocab-infra-tcp_mss_policy>`
 | `weight` | Assign a weight value to each object in the tracked list, and a weight threshold for the track list. If the combined weights of all UP objects exceeds the track list weight UP threshold, the track list is in an UP state. |
 
 Used by: {ref}`tenant.track_list <vocab-tenant-track_list>`
+
+(enum-trigadminstate)=
+
+## `TrigAdminState`
+
+| value | meaning |
+| --- | --- |
+| `trigger` | — |
+| `trigger-immediate` | — |
+| `triggered` | — |
+| `untriggered` | — |
+
+Used by: {ref}`controller.controller_firmware_policy <vocab-controller-controller_firmware_policy>`, {ref}`controller.controller_maintenance_policy <vocab-controller-controller_maintenance_policy>`, {ref}`fabric.catalog_firmware_policy <vocab-fabric-catalog_firmware_policy>`, {ref}`fabric.catalog_maintenance_policy <vocab-fabric-catalog_maintenance_policy>`, {ref}`fabric.firmware_policy <vocab-fabric-firmware_policy>`, {ref}`fabric.maintenance_policy <vocab-fabric-maintenance_policy>`
+
+(enum-trigday)=
+
+## `TrigDay`
+
+| value | meaning |
+| --- | --- |
+| `Friday` | — |
+| `Monday` | — |
+| `Saturday` | — |
+| `Sunday` | — |
+| `Thursday` | — |
+| `Tuesday` | — |
+| `Wednesday` | — |
+| `even-day` | — |
+| `every-day` | — |
+| `odd-day` | — |
+
+Used by: {ref}`controller.scheduler.recurring_window <vocab-controller-scheduler-recurring_window>`, {ref}`fabric.scheduler.recurring_window <vocab-fabric-scheduler-recurring_window>`
+
+(enum-trigexecstate)=
+
+## `TrigExecState`
+
+| value | meaning |
+| --- | --- |
+| `triggered` | — |
+| `untriggered` | — |
+
+Used by: {ref}`controller.controller_maintenance_policy <vocab-controller-controller_maintenance_policy>`, {ref}`fabric.callhome_inventory_policy <vocab-fabric-callhome_inventory_policy>`, {ref}`fabric.catalog_maintenance_policy <vocab-fabric-catalog_maintenance_policy>`, {ref}`fabric.configuration_export_policy <vocab-fabric-configuration_export_policy>`, {ref}`fabric.configuration_import_policy <vocab-fabric-configuration_import_policy>`, {ref}`fabric.configuration_snapshot_manager_policy <vocab-fabric-configuration_snapshot_manager_policy>`, {ref}`fabric.configuration_snapshot_rollback_policy <vocab-fabric-configuration_snapshot_rollback_policy>`, {ref}`fabric.core_export_policy <vocab-fabric-core_export_policy>` *(+3 more)*
 
 (enum-vmmstatsmode)=
 
@@ -4688,3 +7704,14 @@ Used by: {ref}`tenant.contract <vocab-tenant-contract>`, {ref}`tenant.oob_contra
 | `Tenant` | — |
 
 Used by: {ref}`tenant.contract.exception <vocab-tenant-contract-exception>`, {ref}`tenant.contract.subject.exception <vocab-tenant-contract-subject-exception>`, {ref}`tenant.oob_contract.exception <vocab-tenant-oob_contract-exception>`, {ref}`tenant.oob_contract.subject.exception <vocab-tenant-oob_contract-subject-exception>`
+
+(enum-xcvropticsadminst)=
+
+## `XcvrOpticsAdminSt`
+
+| value | meaning |
+| --- | --- |
+| `disabled` | — |
+| `enabled` | — |
+
+Used by: {ref}`fabric.zr_policy <vocab-fabric-zr_policy>`, {ref}`fabric.zrp_policy <vocab-fabric-zrp_policy>`

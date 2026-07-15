@@ -40,6 +40,7 @@ Lazy references, resolved closed-world at push time.
 | `fc_instance=` | `fcInstPol` | name | `infraRsFcInstPol` |
 | `fc_fabric=` | `fcFabricPol` | name | `infraRsFcFabricPol` |
 | `synce_policy=` | `synceInstPol` | name | `infraRsSynceInstPol` |
+| `spanning_tree=` | `stpInstPol` | name | `infraRsMstInstPol` |
 | `dot1x=` | `l2NodeAuthPol` | name | `infraRsL2NodeAuthPol` |
 | `copp=` | `coppLeafProfile` | name | `infraRsLeafCoppProfile` |
 | `copp_prefilter=` | `iaclLeafProfile` | name | `infraRsIaclLeafProfile` |

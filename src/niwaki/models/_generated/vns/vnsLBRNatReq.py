@@ -34,6 +34,7 @@ class vnsLBRNatReq(ManagedObject):
     _write_access: ClassVar[frozenset[str]] = frozenset(
         ["admin", "nw-svc-params", "tenant-epg", "tenant-network-profile"]
     )
+    _is_creatable: ClassVar[bool] = True
     _is_observable: ClassVar[bool] = False
     _is_faultable: ClassVar[bool] = False
     _is_health_scorable: ClassVar[bool] = False

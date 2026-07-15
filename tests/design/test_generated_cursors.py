@@ -102,6 +102,17 @@ class TestSignatures:
         assert "provide" in EpgCursor.__dict__
         assert "consume" in EpgCursor.__dict__
 
+    def test_non_creatable_singleton_maker_defaults_its_name(self) -> None:
+        """A maker for a non-creatable, name-only singleton defaults ``name`` to
+        ``"default"`` (B1) — ``.qos_instance_policy()`` reads as the singleton it
+        is — while a creatable class keeps a required name."""
+        from niwaki.design._generated_cursors import InfraCursor
+
+        singleton = inspect.signature(InfraCursor.qos_instance_policy).parameters["name"]
+        assert singleton.default == "default"
+        creatable = inspect.signature(InfraCursor.cdp_policy).parameters["name"]
+        assert creatable.default is inspect.Parameter.empty
+
     def test_tenant_factory_is_typed(self) -> None:
         params = inspect.signature(tenant).parameters
         assert "description" in params
@@ -131,7 +142,9 @@ class TestConsistency:
         spine = CURSOR_FOR["infra.spine_profile.spine_selector.node_block"]
         assert leaf is not spine
         assert leaf.__name__ == "LeafSelectorNodeBlockCursor"
-        assert spine.__name__ == "SpineSelectorNodeBlockCursor"
+        # Fabric also has a spine_selector → node_block path, so the infra one
+        # disambiguates on its profile-level ancestor.
+        assert spine.__name__ == "SpineProfileSpineSelectorNodeBlockCursor"
 
     def test_regeneration_matches_curation(self) -> None:
         """render_all() stays parseable and emits one cursor per curated position."""

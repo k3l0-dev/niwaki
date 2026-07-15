@@ -13,7 +13,7 @@ MACSEC Key Policy
 | --- | --- |
 | ACI class | `macsecKeyPol` |
 | RN | `keyp-{key_name}` |
-| Cursor | `KeychainPolicyKeyPolicyCursor` |
+| Cursor | `MacsecKeychainPolicyKeyPolicyCursor` |
 | Parent | {ref}`infra.macsec.keychain_policy <vocab-infra-macsec-keychain_policy>` |
 | Atomic | — |
 

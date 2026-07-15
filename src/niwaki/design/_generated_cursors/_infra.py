@@ -121,6 +121,7 @@ if TYPE_CHECKING:
     from niwaki.models._generated.enums.SpanDirection import SpanDirection
     from niwaki.models._generated.enums.SpanErspanDestMode import SpanErspanDestMode
     from niwaki.models._generated.enums.StpIfControl import StpIfControl
+    from niwaki.models._generated.enums.StpInstPolCtrl import StpInstPolCtrl
     from niwaki.models._generated.enums.SynceGqloptype import SynceGqloptype
     from niwaki.models._generated.enums.SynceQloptype import SynceQloptype
     from niwaki.models._generated.enums.SynceQlvalue import SynceQlvalue
@@ -194,7 +195,7 @@ class _InfraMakers(Cursor):
         owner_tag: str | None = None,
         dcbxp_version: LldpDCBXPVerType | str | None = None,
         userdom: str | None = None,
-    ) -> LldpPolicyCursor:
+    ) -> InfraLldpPolicyCursor:
         """Declare a ``lldpIfPol`` child under the infra level.
 
         The LLDP interface policy, which defines a common configuration that will apply to one or
@@ -224,7 +225,7 @@ class _InfraMakers(Cursor):
             )
         }
         return cast(
-            "LldpPolicyCursor",
+            "InfraLldpPolicyCursor",
             self._invoke_maker("lldp_policy", (name,), _prune(params)),
         )
 
@@ -1170,6 +1171,48 @@ class _InfraMakers(Cursor):
             self._invoke_maker("synce_policy", (name,), _prune(params)),
         )
 
+    def mst_policy(
+        self,
+        name: str = "default",
+        *,
+        annotation: str | None = None,
+        controls: frozenset[StpInstPolCtrl] | set[StpInstPolCtrl] | str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> MstPolicyCursor:
+        """Declare a ``stpInstPol`` child under the infra level.
+
+        The spanning Tree Protocol (STP) instance policy, which enables you to set the bridge
+        protocol data unit (BPDU) guard policy or filter. BDPUs are packets that run the STP
+        protocol. The specification for STP is IEEE 802.1D.
+
+        Args:
+            name: The Spanning Tree policy (STP) name.
+            annotation: User annotation. Suggested format orchestrator:value
+            controls: The interface level control that enables the BPDU filter for extended
+                chassis ports. Default: ``PydanticUndefined``.
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "MstPolicyCursor",
+            self._invoke_maker("mst_policy", (name,), _prune(params)),
+        )
+
     def macsec(
         self,
         *,
@@ -1328,7 +1371,7 @@ class _InfraMakers(Cursor):
 
     def qos_instance_policy(
         self,
-        name: str,
+        name: str = "default",
         *,
         e_trap_flow_age_out_timer: int | None = None,
         track_activeness_of_elephant_flow: int | None = None,
@@ -1759,7 +1802,7 @@ class _InfraMakers(Cursor):
 
     def tcp_mss_policy(
         self,
-        name: str,
+        name: str = "default",
         *,
         annotation: str | None = None,
         description: str | None = None,
@@ -1869,7 +1912,7 @@ class _InfraMakers(Cursor):
 
     def port_tracking(
         self,
-        name: str,
+        name: str = "default",
         *,
         port_tracking_state: TopoctrlAdminState | str | None = None,
         annotation: str | None = None,
@@ -2206,7 +2249,7 @@ class _InfraMakers(Cursor):
 
     def infrastructure_zoning_profile(
         self,
-        name: str,
+        name: str = "default",
         *,
         annotation: str | None = None,
         description: str | None = None,
@@ -2872,7 +2915,7 @@ class _InfraMakers(Cursor):
         owner_key: str | None = None,
         owner_tag: str | None = None,
         userdom: str | None = None,
-    ) -> PodProfileCursor:
+    ) -> InfraPodProfileCursor:
         """Declare a ``infraPodP`` child under the infra level.
 
         Pod Profile: It represents the template used for deploying POD level configuration
@@ -2895,7 +2938,7 @@ class _InfraMakers(Cursor):
             )
         }
         return cast(
-            "PodProfileCursor",
+            "InfraPodProfileCursor",
             self._invoke_maker("pod_profile", (name,), _prune(params)),
         )
 
@@ -3281,7 +3324,7 @@ class _InfraMakers(Cursor):
         owner_key: str | None = None,
         owner_tag: str | None = None,
         userdom: str | None = None,
-    ) -> VspanSessionCursor:
+    ) -> InfraVspanSessionCursor:
         """Declare a ``spanVSrcGrp`` child under the infra level.
 
         The VSPAN source group can contain a group of VSPAN sources. A VSPAN source is where network
@@ -3307,7 +3350,7 @@ class _InfraMakers(Cursor):
             )
         }
         return cast(
-            "VspanSessionCursor",
+            "InfraVspanSessionCursor",
             self._invoke_maker("vspan_session", (name,), _prune(params)),
         )
 
@@ -3321,7 +3364,7 @@ class _InfraMakers(Cursor):
         owner_key: str | None = None,
         owner_tag: str | None = None,
         userdom: str | None = None,
-    ) -> VspanDestinationGroupCursor:
+    ) -> InfraVspanDestinationGroupCursor:
         """Declare a ``spanVDestGrp`` child under the infra level.
 
         The VSPAN destination group contains a group of VSPAN destinations. A VSPAN destination is
@@ -3345,7 +3388,7 @@ class _InfraMakers(Cursor):
             )
         }
         return cast(
-            "VspanDestinationGroupCursor",
+            "InfraVspanDestinationGroupCursor",
             self._invoke_maker("vspan_destination_group", (name,), _prune(params)),
         )
 
@@ -6128,7 +6171,7 @@ class _LacpPolicyMakers(Cursor):
         owner_key: str | None = None,
         owner_tag: str | None = None,
         userdom: str | None = None,
-    ) -> LoadBalancePolicyCursor:
+    ) -> LacpPolicyLoadBalancePolicyCursor:
         """Declare a ``l2LoadBalancePol`` child under the lacp_policy level.
 
         Args:
@@ -6141,7 +6184,7 @@ class _LacpPolicyMakers(Cursor):
         """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
-            "LoadBalancePolicyCursor",
+            "LacpPolicyLoadBalancePolicyCursor",
             self._invoke_maker("load_balance_policy", (), _prune(params)),
         )
 
@@ -6340,7 +6383,7 @@ class LinkLevelPolicyCursor(_InfraMakers, _UniMakers):
         return self
 
 
-class LldpPolicyCursor(_InfraMakers, _UniMakers):
+class InfraLldpPolicyCursor(_InfraMakers, _UniMakers):
     """Typed cursor for ``lldpIfPol`` (lldp_policy level).
 
     Position: ``uni.infra.lldp_policy``
@@ -6363,7 +6406,7 @@ class LldpPolicyCursor(_InfraMakers, _UniMakers):
         owner_tag: str | None = None,
         dcbxp_version: LldpDCBXPVerType | str | None = None,
         userdom: str | None = None,
-    ) -> LldpPolicyCursor:
+    ) -> InfraLldpPolicyCursor:
         """Set ``lldpIfPol`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
@@ -6420,7 +6463,7 @@ class _MacsecMakers(Cursor):
         sak_expiry_time: int | str | None = None,
         security_policy: MacsecSecPolicy | str | None = None,
         userdom: str | None = None,
-    ) -> ParametersPolicyCursor:
+    ) -> MacsecParametersPolicyCursor:
         """Declare a ``macsecParamPol`` child under the macsec level.
 
         MACSEC Access Parameters Policy
@@ -6452,7 +6495,7 @@ class _MacsecMakers(Cursor):
             )
         }
         return cast(
-            "ParametersPolicyCursor",
+            "MacsecParametersPolicyCursor",
             self._invoke_maker("parameters_policy", (name,), _prune(params)),
         )
 
@@ -6466,7 +6509,7 @@ class _MacsecMakers(Cursor):
         owner_key: str | None = None,
         owner_tag: str | None = None,
         userdom: str | None = None,
-    ) -> KeychainPolicyCursor:
+    ) -> MacsecKeychainPolicyCursor:
         """Declare a ``macsecKeyChainPol`` child under the macsec level.
 
         MACSEC KeyChain Policy
@@ -6489,7 +6532,7 @@ class _MacsecMakers(Cursor):
             )
         }
         return cast(
-            "KeychainPolicyCursor",
+            "MacsecKeychainPolicyCursor",
             self._invoke_maker("keychain_policy", (name,), _prune(params)),
         )
 
@@ -6692,7 +6735,7 @@ class _InfraMonitoringPolicyMakers(Cursor):
         mon_infratarget_name: str | None = None,
         display_name: str | None = None,
         userdom: str | None = None,
-    ) -> MonitoringTargetCursor:
+    ) -> MonitoringPolicyMonitoringTargetCursor:
         """Declare a ``monInfraTarget`` child under the monitoring_policy level.
 
         Creating a monitoring target will allow you to associate certain monitoring policies to the
@@ -6713,7 +6756,7 @@ class _InfraMonitoringPolicyMakers(Cursor):
             )
         }
         return cast(
-            "MonitoringTargetCursor",
+            "MonitoringPolicyMonitoringTargetCursor",
             self._invoke_maker("monitoring_target", (target_scope,), _prune(params)),
         )
 
@@ -6922,6 +6965,78 @@ class InfraMonitoringPolicyCursor(_InfraMonitoringPolicyMakers, _InfraMakers, _U
         userdom: str | None = None,
     ) -> InfraMonitoringPolicyCursor:
         """Set ``monInfraPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class _MstPolicyMakers(Cursor):
+    """Makers declared at the mst_policy level (``stpInstPol``)."""
+
+    __slots__ = ()
+
+    def mst_region(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        region_name: str | None = None,
+        region_revision: int | None = None,
+        userdom: str | None = None,
+    ) -> MstRegionCursor:
+        """Declare a ``stpMstRegionPol`` child under the mst_policy level.
+
+        The MST region policy enables switches to participate in MST instances when you consistently
+        configure the switches with the same MST configuration information. A collection of
+        interconnected switches that have the same MST configuration is an MST region.
+
+        Args:
+            name: The MST region policy name.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            region_name: The MST region policy region name.
+            region_revision: The MST region policy revision number. Default: ``0``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "MstRegionCursor",
+            self._invoke_maker("mst_region", (name,), _prune(params)),
+        )
+
+
+class MstPolicyCursor(_MstPolicyMakers, _InfraMakers, _UniMakers):
+    """Typed cursor for ``stpInstPol`` (mst_policy level).
+
+    Position: ``uni.infra.mst_policy``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        controls: frozenset[StpInstPolCtrl] | set[StpInstPolCtrl] | str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> MstPolicyCursor:
+        """Set ``stpInstPol`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
         return self
@@ -7284,7 +7399,7 @@ class PodManagementAddressCursor(_PodManagementAddressMakers, _InfraMakers, _Uni
         return self
 
 
-class _PodProfileMakers(Cursor):
+class _InfraPodProfileMakers(Cursor):
     """Makers declared at the pod_profile level (``infraPodP``)."""
 
     __slots__ = ()
@@ -7300,7 +7415,7 @@ class _PodProfileMakers(Cursor):
         owner_key: str | None = None,
         owner_tag: str | None = None,
         userdom: str | None = None,
-    ) -> PodSelectorCursor:
+    ) -> InfraPodProfilePodSelectorCursor:
         """Declare a ``infraPodS`` child under the pod_profile level.
 
         POD Selector
@@ -7325,7 +7440,7 @@ class _PodProfileMakers(Cursor):
             )
         }
         return cast(
-            "PodSelectorCursor",
+            "InfraPodProfilePodSelectorCursor",
             self._invoke_maker(
                 "pod_selector",
                 (
@@ -7337,7 +7452,7 @@ class _PodProfileMakers(Cursor):
         )
 
 
-class PodProfileCursor(_PodProfileMakers, _InfraMakers, _UniMakers):
+class InfraPodProfileCursor(_InfraPodProfileMakers, _InfraMakers, _UniMakers):
     """Typed cursor for ``infraPodP`` (pod_profile level).
 
     Position: ``uni.infra.pod_profile``
@@ -7357,7 +7472,7 @@ class PodProfileCursor(_PodProfileMakers, _InfraMakers, _UniMakers):
         owner_key: str | None = None,
         owner_tag: str | None = None,
         userdom: str | None = None,
-    ) -> PodProfileCursor:
+    ) -> InfraPodProfileCursor:
         """Set ``infraPodP`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
@@ -8164,7 +8279,7 @@ class _SpineProfileMakers(Cursor):
         owner_key: str | None = None,
         owner_tag: str | None = None,
         userdom: str | None = None,
-    ) -> SpineSelectorCursor:
+    ) -> SpineProfileSpineSelectorCursor:
         """Declare a ``infraSpineS`` child under the spine_profile level.
 
         Spine Selector
@@ -8189,7 +8304,7 @@ class _SpineProfileMakers(Cursor):
             )
         }
         return cast(
-            "SpineSelectorCursor",
+            "SpineProfileSpineSelectorCursor",
             self._invoke_maker(
                 "spine_selector",
                 (
@@ -8706,7 +8821,7 @@ class VsanPoolCursor(_VsanPoolMakers, _InfraMakers, _UniMakers):
         return self
 
 
-class _VspanDestinationGroupMakers(Cursor):
+class _InfraVspanDestinationGroupMakers(Cursor):
     """Makers declared at the vspan_destination_group level (``spanVDestGrp``)."""
 
     __slots__ = ()
@@ -8721,7 +8836,7 @@ class _VspanDestinationGroupMakers(Cursor):
         owner_key: str | None = None,
         owner_tag: str | None = None,
         userdom: str | None = None,
-    ) -> VspanVdestinationCursor:
+    ) -> InfraVspanDestinationGroupVspanVdestinationCursor:
         """Declare a ``spanVDest`` child under the vspan_destination_group level.
 
         The VSPAN destination is where network traffic is sent for analysis by a network analyzer. A
@@ -8745,12 +8860,12 @@ class _VspanDestinationGroupMakers(Cursor):
             )
         }
         return cast(
-            "VspanVdestinationCursor",
+            "InfraVspanDestinationGroupVspanVdestinationCursor",
             self._invoke_maker("vspan_vdestination", (name,), _prune(params)),
         )
 
 
-class VspanDestinationGroupCursor(_VspanDestinationGroupMakers, _InfraMakers, _UniMakers):
+class InfraVspanDestinationGroupCursor(_InfraVspanDestinationGroupMakers, _InfraMakers, _UniMakers):
     """Typed cursor for ``spanVDestGrp`` (vspan_destination_group level).
 
     Position: ``uni.infra.vspan_destination_group``
@@ -8770,14 +8885,14 @@ class VspanDestinationGroupCursor(_VspanDestinationGroupMakers, _InfraMakers, _U
         owner_key: str | None = None,
         owner_tag: str | None = None,
         userdom: str | None = None,
-    ) -> VspanDestinationGroupCursor:
+    ) -> InfraVspanDestinationGroupCursor:
         """Set ``spanVDestGrp`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
         return self
 
 
-class _VspanSessionMakers(Cursor):
+class _InfraVspanSessionMakers(Cursor):
     """Makers declared at the vspan_session level (``spanVSrcGrp``)."""
 
     __slots__ = ()
@@ -8793,7 +8908,7 @@ class _VspanSessionMakers(Cursor):
         owner_key: str | None = None,
         owner_tag: str | None = None,
         userdom: str | None = None,
-    ) -> VspanVsourceCursor:
+    ) -> InfraVspanSessionVspanVsourceCursor:
         """Declare a ``spanVSrc`` child under the vspan_session level.
 
         The VSPAN source, which is where traffic is sampled. A VSPAN source can be an endpoint group
@@ -8819,7 +8934,7 @@ class _VspanSessionMakers(Cursor):
             )
         }
         return cast(
-            "VspanVsourceCursor",
+            "InfraVspanSessionVspanVsourceCursor",
             self._invoke_maker("vspan_vsource", (name,), _prune(params)),
         )
 
@@ -8834,7 +8949,7 @@ class _VspanSessionMakers(Cursor):
         owner_tag: str | None = None,
         tag: PolColor | str | None = None,
         userdom: str | None = None,
-    ) -> VspanSessionSpanLabelCursor:
+    ) -> InfraVspanSessionSpanLabelCursor:
         """Declare a ``spanSpanLbl`` child under the vspan_session level.
 
         The SPAN label is used for SPAN label parameters.
@@ -8860,12 +8975,12 @@ class _VspanSessionMakers(Cursor):
             )
         }
         return cast(
-            "VspanSessionSpanLabelCursor",
+            "InfraVspanSessionSpanLabelCursor",
             self._invoke_maker("span_label", (name,), _prune(params)),
         )
 
 
-class VspanSessionCursor(_VspanSessionMakers, _InfraMakers, _UniMakers):
+class InfraVspanSessionCursor(_InfraVspanSessionMakers, _InfraMakers, _UniMakers):
     """Typed cursor for ``spanVSrcGrp`` (vspan_session level).
 
     Position: ``uni.infra.vspan_session``
@@ -8886,7 +9001,7 @@ class VspanSessionCursor(_VspanSessionMakers, _InfraMakers, _UniMakers):
         owner_key: str | None = None,
         owner_tag: str | None = None,
         userdom: str | None = None,
-    ) -> VspanSessionCursor:
+    ) -> InfraVspanSessionCursor:
         """Set ``spanVSrcGrp`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
@@ -9956,6 +10071,7 @@ class LeafSwitchGroupCursor(_FuncProfileMakers, _InfraMakers, _UniMakers):
         fc_instance: str | Ref | None = None,
         fc_fabric: str | Ref | None = None,
         synce_policy: str | Ref | None = None,
+        spanning_tree: str | Ref | None = None,
         dot1x: str | Ref | None = None,
         copp: str | Ref | None = None,
         copp_prefilter: str | Ref | None = None,
@@ -10432,7 +10548,7 @@ class InfrastructureZoneCursor(
         return self
 
 
-class LoadBalancePolicyCursor(_LacpPolicyMakers, _InfraMakers, _UniMakers):
+class LacpPolicyLoadBalancePolicyCursor(_LacpPolicyMakers, _InfraMakers, _UniMakers):
     """Typed cursor for ``l2LoadBalancePol`` (load_balance_policy level).
 
     Position: ``uni.infra.lacp_policy.load_balance_policy``
@@ -10454,7 +10570,7 @@ class LoadBalancePolicyCursor(_LacpPolicyMakers, _InfraMakers, _UniMakers):
         owner_key: str | None = None,
         owner_tag: str | None = None,
         userdom: str | None = None,
-    ) -> LoadBalancePolicyCursor:
+    ) -> LacpPolicyLoadBalancePolicyCursor:
         """Set ``l2LoadBalancePol`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
@@ -10551,7 +10667,7 @@ class LeafSelectorCursor(_LeafSelectorMakers, _LeafProfileMakers, _InfraMakers, 
         return self
 
 
-class _KeychainPolicyMakers(Cursor):
+class _MacsecKeychainPolicyMakers(Cursor):
     """Makers declared at the keychain_policy level (``macsecKeyChainPol``)."""
 
     __slots__ = ()
@@ -10570,7 +10686,7 @@ class _KeychainPolicyMakers(Cursor):
         pre_shared_key: str | None = None,
         start_time: str | None = None,
         userdom: str | None = None,
-    ) -> KeychainPolicyKeyPolicyCursor:
+    ) -> MacsecKeychainPolicyKeyPolicyCursor:
         """Declare a ``macsecKeyPol`` child under the keychain_policy level.
 
         MACSEC Key Policy
@@ -10596,12 +10712,14 @@ class _KeychainPolicyMakers(Cursor):
             )
         }
         return cast(
-            "KeychainPolicyKeyPolicyCursor",
+            "MacsecKeychainPolicyKeyPolicyCursor",
             self._invoke_maker("key_policy", (key_name,), _prune(params)),
         )
 
 
-class KeychainPolicyCursor(_KeychainPolicyMakers, _MacsecMakers, _InfraMakers, _UniMakers):
+class MacsecKeychainPolicyCursor(
+    _MacsecKeychainPolicyMakers, _MacsecMakers, _InfraMakers, _UniMakers
+):
     """Typed cursor for ``macsecKeyChainPol`` (keychain_policy level).
 
     Position: ``uni.infra.macsec.keychain_policy``
@@ -10621,14 +10739,14 @@ class KeychainPolicyCursor(_KeychainPolicyMakers, _MacsecMakers, _InfraMakers, _
         owner_key: str | None = None,
         owner_tag: str | None = None,
         userdom: str | None = None,
-    ) -> KeychainPolicyCursor:
+    ) -> MacsecKeychainPolicyCursor:
         """Set ``macsecKeyChainPol`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
         return self
 
 
-class ParametersPolicyCursor(_MacsecMakers, _InfraMakers, _UniMakers):
+class MacsecParametersPolicyCursor(_MacsecMakers, _InfraMakers, _UniMakers):
     """Typed cursor for ``macsecParamPol`` (parameters_policy level).
 
     Position: ``uni.infra.macsec.parameters_policy``
@@ -10654,7 +10772,7 @@ class ParametersPolicyCursor(_MacsecMakers, _InfraMakers, _UniMakers):
         sak_expiry_time: int | str | None = None,
         security_policy: MacsecSecPolicy | str | None = None,
         userdom: str | None = None,
-    ) -> ParametersPolicyCursor:
+    ) -> MacsecParametersPolicyCursor:
         """Set ``macsecParamPol`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
@@ -10714,7 +10832,7 @@ class MonitoringPolicyCallhomeSourceCursor(_InfraMonitoringPolicyMakers, _InfraM
         return self
 
 
-class _MonitoringTargetMakers(Cursor):
+class _MonitoringPolicyMonitoringTargetMakers(Cursor):
     """Makers declared at the monitoring_target level (``monInfraTarget``)."""
 
     __slots__ = ()
@@ -10729,7 +10847,7 @@ class _MonitoringTargetMakers(Cursor):
         min_severity: SyslogSeverity | str | None = None,
         display_name: str | None = None,
         userdom: str | None = None,
-    ) -> MonitoringTargetSyslogSourceCursor:
+    ) -> MonitoringPolicyMonitoringTargetSyslogSourceCursor:
         """Declare a ``syslogSrc`` child under the monitoring_target level.
 
         The syslog source configures a syslog source that specifies the minimum severity of items to
@@ -10754,7 +10872,7 @@ class _MonitoringTargetMakers(Cursor):
             )
         }
         return cast(
-            "MonitoringTargetSyslogSourceCursor",
+            "MonitoringPolicyMonitoringTargetSyslogSourceCursor",
             self._invoke_maker("syslog_source", (name,), _prune(params)),
         )
 
@@ -10768,7 +10886,7 @@ class _MonitoringTargetMakers(Cursor):
         min_severity: ConditionSeverity | str | None = None,
         display_name: str | None = None,
         userdom: str | None = None,
-    ) -> MonitoringTargetSnmpSourceCursor:
+    ) -> MonitoringPolicyMonitoringTargetSnmpSourceCursor:
         """Declare a ``snmpSrc`` child under the monitoring_target level.
 
         The SNMP source profile determines the fault information, severity level, and destination
@@ -10797,7 +10915,7 @@ class _MonitoringTargetMakers(Cursor):
             )
         }
         return cast(
-            "MonitoringTargetSnmpSourceCursor",
+            "MonitoringPolicyMonitoringTargetSnmpSourceCursor",
             self._invoke_maker("snmp_source", (name,), _prune(params)),
         )
 
@@ -10811,7 +10929,7 @@ class _MonitoringTargetMakers(Cursor):
         display_name: str | None = None,
         message_severity: CallhomeUrgency | str | None = None,
         userdom: str | None = None,
-    ) -> MonitoringTargetCallhomeSourceCursor:
+    ) -> MonitoringPolicyMonitoringTargetCallhomeSourceCursor:
         """Declare a ``callhomeSrc`` child under the monitoring_target level.
 
         The call home source profile determines the information to deliver and the urgency level for
@@ -10838,7 +10956,7 @@ class _MonitoringTargetMakers(Cursor):
             )
         }
         return cast(
-            "MonitoringTargetCallhomeSourceCursor",
+            "MonitoringPolicyMonitoringTargetCallhomeSourceCursor",
             self._invoke_maker("callhome_source", (name,), _prune(params)),
         )
 
@@ -10850,7 +10968,7 @@ class _MonitoringTargetMakers(Cursor):
         name: str | None = None,
         display_name: str | None = None,
         userdom: str | None = None,
-    ) -> MonitoringTargetSmartCallhomeSourceCursor:
+    ) -> MonitoringPolicyMonitoringTargetSmartCallhomeSourceCursor:
         """Declare a ``callhomeSmartSrc`` child under the monitoring_target level.
 
         Args:
@@ -10859,7 +10977,7 @@ class _MonitoringTargetMakers(Cursor):
         """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
-            "MonitoringTargetSmartCallhomeSourceCursor",
+            "MonitoringPolicyMonitoringTargetSmartCallhomeSourceCursor",
             self._invoke_maker("smart_callhome_source", (), _prune(params)),
         )
 
@@ -10874,7 +10992,7 @@ class _MonitoringTargetMakers(Cursor):
         display_name: str | None = None,
         switch_tacacs_audit: TacacsSwitchTacacsAudit | str | None = None,
         userdom: str | None = None,
-    ) -> MonitoringTargetTacacsSourceCursor:
+    ) -> MonitoringPolicyMonitoringTargetTacacsSourceCursor:
         """Declare a ``tacacsSrc`` child under the monitoring_target level.
 
         Args:
@@ -10897,7 +11015,7 @@ class _MonitoringTargetMakers(Cursor):
             )
         }
         return cast(
-            "MonitoringTargetTacacsSourceCursor",
+            "MonitoringPolicyMonitoringTargetTacacsSourceCursor",
             self._invoke_maker("tacacs_source", (name,), _prune(params)),
         )
 
@@ -10913,7 +11031,7 @@ class _MonitoringTargetMakers(Cursor):
         target_severity: ConditionSevDir | str | None = None,
         userdom: str | None = None,
         health_score_weight: int | None = None,
-    ) -> FaultSeverityAssignmentPolicyCursor:
+    ) -> MonitoringPolicyMonitoringTargetFaultSeverityAssignmentPolicyCursor:
         """Declare a ``faultSevAsnP`` child under the monitoring_target level.
 
         The initial and target severities for a specific fault can be specified in a custom or
@@ -10949,7 +11067,7 @@ class _MonitoringTargetMakers(Cursor):
             )
         }
         return cast(
-            "FaultSeverityAssignmentPolicyCursor",
+            "MonitoringPolicyMonitoringTargetFaultSeverityAssignmentPolicyCursor",
             self._invoke_maker(
                 "fault_severity_assignment_policy", (condition_code,), _prune(params)
             ),
@@ -10965,7 +11083,7 @@ class _MonitoringTargetMakers(Cursor):
         display_name: str | None = None,
         initial_severity: ConditionInitSevDir | str | None = None,
         userdom: str | None = None,
-    ) -> EventSeverityAssignmentPolicyCursor:
+    ) -> MonitoringPolicyMonitoringTargetEventSeverityAssignmentPolicyCursor:
         """Declare a ``eventSevAsnP`` child under the monitoring_target level.
 
         Represents a policy that specifies the initial and target severity for a specific event.
@@ -10990,15 +11108,15 @@ class _MonitoringTargetMakers(Cursor):
             )
         }
         return cast(
-            "EventSeverityAssignmentPolicyCursor",
+            "MonitoringPolicyMonitoringTargetEventSeverityAssignmentPolicyCursor",
             self._invoke_maker(
                 "event_severity_assignment_policy", (condition_code,), _prune(params)
             ),
         )
 
 
-class MonitoringTargetCursor(
-    _MonitoringTargetMakers, _InfraMonitoringPolicyMakers, _InfraMakers, _UniMakers
+class MonitoringPolicyMonitoringTargetCursor(
+    _MonitoringPolicyMonitoringTargetMakers, _InfraMonitoringPolicyMakers, _InfraMakers, _UniMakers
 ):
     """Typed cursor for ``monInfraTarget`` (monitoring_target level).
 
@@ -11018,7 +11136,7 @@ class MonitoringTargetCursor(
         mon_infratarget_name: str | None = None,
         display_name: str | None = None,
         userdom: str | None = None,
-    ) -> MonitoringTargetCursor:
+    ) -> MonitoringPolicyMonitoringTargetCursor:
         """Set ``monInfraTarget`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
@@ -11135,6 +11253,75 @@ class MonitoringPolicyTacacsSourceCursor(_InfraMonitoringPolicyMakers, _InfraMak
         return self
 
 
+class _MstRegionMakers(Cursor):
+    """Makers declared at the mst_region level (``stpMstRegionPol``)."""
+
+    __slots__ = ()
+
+    def mst_domain(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        mst_instance: int | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> MstDomainCursor:
+        """Declare a ``stpMstDomPol`` child under the mst_region level.
+
+        The MST domain policy enables you to assign two or more VLANs to a spanning tree instance.
+        MST is not the default spanning tree mode; Rapid per VLAN Spanning Tree (Rapid PVST+) is the
+        default mode.
+
+        Args:
+            name: The multiple instance STP domain policy name.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            mst_instance: The MST domain policy identifier. Default: ``1``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "MstDomainCursor",
+            self._invoke_maker("mst_domain", (name,), _prune(params)),
+        )
+
+
+class MstRegionCursor(_MstRegionMakers, _MstPolicyMakers, _InfraMakers, _UniMakers):
+    """Typed cursor for ``stpMstRegionPol`` (mst_region level).
+
+    Position: ``uni.infra.mst_policy.mst_region``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        region_name: str | None = None,
+        region_revision: int | None = None,
+        userdom: str | None = None,
+    ) -> MstRegionCursor:
+        """Set ``stpMstRegionPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
 class NodeManagementAddressNodeBlockCursor(_NodeManagementAddressMakers, _InfraMakers, _UniMakers):
     """Typed cursor for ``infraNodeBlk`` (node_block level).
 
@@ -11189,7 +11376,7 @@ class PodManagementAddressPodBlockCursor(_PodManagementAddressMakers, _InfraMake
         return self
 
 
-class _PodSelectorMakers(Cursor):
+class _InfraPodProfilePodSelectorMakers(Cursor):
     """Makers declared at the pod_selector level (``infraPodS``)."""
 
     __slots__ = ()
@@ -11204,7 +11391,7 @@ class _PodSelectorMakers(Cursor):
         display_name: str | None = None,
         to_pod_id: int | None = None,
         userdom: str | None = None,
-    ) -> PodSelectorPodBlockCursor:
+    ) -> InfraPodProfilePodSelectorPodBlockCursor:
         """Declare a ``infraPodBlk`` child under the pod_selector level.
 
         Args:
@@ -11224,12 +11411,14 @@ class _PodSelectorMakers(Cursor):
             )
         }
         return cast(
-            "PodSelectorPodBlockCursor",
+            "InfraPodProfilePodSelectorPodBlockCursor",
             self._invoke_maker("pod_block", (name,), _prune(params)),
         )
 
 
-class PodSelectorCursor(_PodSelectorMakers, _PodProfileMakers, _InfraMakers, _UniMakers):
+class InfraPodProfilePodSelectorCursor(
+    _InfraPodProfilePodSelectorMakers, _InfraPodProfileMakers, _InfraMakers, _UniMakers
+):
     """Typed cursor for ``infraPodS`` (pod_selector level).
 
     Position: ``uni.infra.pod_profile.pod_selector``
@@ -11249,7 +11438,7 @@ class PodSelectorCursor(_PodSelectorMakers, _PodProfileMakers, _InfraMakers, _Un
         owner_key: str | None = None,
         owner_tag: str | None = None,
         userdom: str | None = None,
-    ) -> PodSelectorCursor:
+    ) -> InfraPodProfilePodSelectorCursor:
         """Set ``infraPodS`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
@@ -11951,7 +12140,7 @@ class SpineInterfaceProfilePortSelectorCursor(
         return self
 
 
-class _SpineSelectorMakers(Cursor):
+class _SpineProfileSpineSelectorMakers(Cursor):
     """Makers declared at the spine_selector level (``infraSpineS``)."""
 
     __slots__ = ()
@@ -11966,7 +12155,7 @@ class _SpineSelectorMakers(Cursor):
         display_name: str | None = None,
         to_node_id: int | None = None,
         userdom: str | None = None,
-    ) -> SpineSelectorNodeBlockCursor:
+    ) -> SpineProfileSpineSelectorNodeBlockCursor:
         """Declare a ``infraNodeBlk`` child under the spine_selector level.
 
         A node block is a range of nodes. Each node block begins with the first port and ends with
@@ -11989,12 +12178,14 @@ class _SpineSelectorMakers(Cursor):
             )
         }
         return cast(
-            "SpineSelectorNodeBlockCursor",
+            "SpineProfileSpineSelectorNodeBlockCursor",
             self._invoke_maker("node_block", (name,), _prune(params)),
         )
 
 
-class SpineSelectorCursor(_SpineSelectorMakers, _SpineProfileMakers, _InfraMakers, _UniMakers):
+class SpineProfileSpineSelectorCursor(
+    _SpineProfileSpineSelectorMakers, _SpineProfileMakers, _InfraMakers, _UniMakers
+):
     """Typed cursor for ``infraSpineS`` (spine_selector level).
 
     Position: ``uni.infra.spine_profile.spine_selector``
@@ -12014,7 +12205,7 @@ class SpineSelectorCursor(_SpineSelectorMakers, _SpineProfileMakers, _InfraMaker
         owner_key: str | None = None,
         owner_tag: str | None = None,
         userdom: str | None = None,
-    ) -> SpineSelectorCursor:
+    ) -> SpineProfileSpineSelectorCursor:
         """Set ``infraSpineS`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
@@ -12024,7 +12215,7 @@ class SpineSelectorCursor(_SpineSelectorMakers, _SpineProfileMakers, _InfraMaker
         self,
         *,
         interface_profile: str | Ref | None = None,
-    ) -> SpineSelectorCursor:
+    ) -> SpineProfileSpineSelectorCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind(self, **_prune(params))
@@ -12034,7 +12225,7 @@ class SpineSelectorCursor(_SpineSelectorMakers, _SpineProfileMakers, _InfraMaker
         self,
         *,
         interface_profile: str | Ref | None = None,
-    ) -> SpineSelectorCursor:
+    ) -> SpineProfileSpineSelectorCursor:
         """Reference objects outside the design by raw DN."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind_dn(self, **_prune(params))
@@ -12122,7 +12313,7 @@ class VsanPoolRangeCursor(_VsanPoolMakers, _InfraMakers, _UniMakers):
         return self
 
 
-class _VspanVdestinationMakers(Cursor):
+class _InfraVspanDestinationGroupVspanVdestinationMakers(Cursor):
     """Makers declared at the vspan_vdestination level (``spanVDest``)."""
 
     __slots__ = ()
@@ -12145,7 +12336,7 @@ class _VspanVdestinationMakers(Cursor):
         time_to_live: int | str | None = None,
         userdom: str | None = None,
         vrf: str | None = None,
-    ) -> VspanDestinationEpgSummaryCursor:
+    ) -> InfraVspanDestinationGroupVspanVdestinationVspanDestinationEpgSummaryCursor:
         """Declare a ``spanVEpgSummary`` child under the vspan_vdestination level.
 
         The VEpg summary.
@@ -12163,13 +12354,16 @@ class _VspanVdestinationMakers(Cursor):
         """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
-            "VspanDestinationEpgSummaryCursor",
+            "InfraVspanDestinationGroupVspanVdestinationVspanDestinationEpgSummaryCursor",
             self._invoke_maker("vspan_destination_epg_summary", (), _prune(params)),
         )
 
 
-class VspanVdestinationCursor(
-    _VspanVdestinationMakers, _VspanDestinationGroupMakers, _InfraMakers, _UniMakers
+class InfraVspanDestinationGroupVspanVdestinationCursor(
+    _InfraVspanDestinationGroupVspanVdestinationMakers,
+    _InfraVspanDestinationGroupMakers,
+    _InfraMakers,
+    _UniMakers,
 ):
     """Typed cursor for ``spanVDest`` (vspan_vdestination level).
 
@@ -12190,14 +12384,14 @@ class VspanVdestinationCursor(
         owner_key: str | None = None,
         owner_tag: str | None = None,
         userdom: str | None = None,
-    ) -> VspanVdestinationCursor:
+    ) -> InfraVspanDestinationGroupVspanVdestinationCursor:
         """Set ``spanVDest`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
         return self
 
 
-class VspanSessionSpanLabelCursor(_VspanSessionMakers, _InfraMakers, _UniMakers):
+class InfraVspanSessionSpanLabelCursor(_InfraVspanSessionMakers, _InfraMakers, _UniMakers):
     """Typed cursor for ``spanSpanLbl`` (span_label level).
 
     Position: ``uni.infra.vspan_session.span_label``
@@ -12218,14 +12412,14 @@ class VspanSessionSpanLabelCursor(_VspanSessionMakers, _InfraMakers, _UniMakers)
         owner_tag: str | None = None,
         tag: PolColor | str | None = None,
         userdom: str | None = None,
-    ) -> VspanSessionSpanLabelCursor:
+    ) -> InfraVspanSessionSpanLabelCursor:
         """Set ``spanSpanLbl`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
         return self
 
 
-class VspanVsourceCursor(_VspanSessionMakers, _InfraMakers, _UniMakers):
+class InfraVspanSessionVspanVsourceCursor(_InfraVspanSessionMakers, _InfraMakers, _UniMakers):
     """Typed cursor for ``spanVSrc`` (vspan_vsource level).
 
     Position: ``uni.infra.vspan_session.vspan_vsource``
@@ -12246,7 +12440,7 @@ class VspanVsourceCursor(_VspanSessionMakers, _InfraMakers, _UniMakers):
         owner_key: str | None = None,
         owner_tag: str | None = None,
         userdom: str | None = None,
-    ) -> VspanVsourceCursor:
+    ) -> InfraVspanSessionVspanVsourceCursor:
         """Set ``spanVSrc`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
@@ -12804,7 +12998,9 @@ class LeafSelectorNodeBlockCursor(
         return self
 
 
-class KeychainPolicyKeyPolicyCursor(_KeychainPolicyMakers, _MacsecMakers, _InfraMakers, _UniMakers):
+class MacsecKeychainPolicyKeyPolicyCursor(
+    _MacsecKeychainPolicyMakers, _MacsecMakers, _InfraMakers, _UniMakers
+):
     """Typed cursor for ``macsecKeyPol`` (key_policy level).
 
     Position: ``uni.infra.macsec.keychain_policy.key_policy``
@@ -12828,15 +13024,15 @@ class KeychainPolicyKeyPolicyCursor(_KeychainPolicyMakers, _MacsecMakers, _Infra
         pre_shared_key: str | None = None,
         start_time: str | None = None,
         userdom: str | None = None,
-    ) -> KeychainPolicyKeyPolicyCursor:
+    ) -> MacsecKeychainPolicyKeyPolicyCursor:
         """Set ``macsecKeyPol`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
         return self
 
 
-class MonitoringTargetCallhomeSourceCursor(
-    _MonitoringTargetMakers, _InfraMonitoringPolicyMakers, _InfraMakers, _UniMakers
+class MonitoringPolicyMonitoringTargetCallhomeSourceCursor(
+    _MonitoringPolicyMonitoringTargetMakers, _InfraMonitoringPolicyMakers, _InfraMakers, _UniMakers
 ):
     """Typed cursor for ``callhomeSrc`` (callhome_source level).
 
@@ -12857,14 +13053,14 @@ class MonitoringTargetCallhomeSourceCursor(
         display_name: str | None = None,
         message_severity: CallhomeUrgency | str | None = None,
         userdom: str | None = None,
-    ) -> MonitoringTargetCallhomeSourceCursor:
+    ) -> MonitoringPolicyMonitoringTargetCallhomeSourceCursor:
         """Set ``callhomeSrc`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
         return self
 
 
-class _EventSeverityAssignmentPolicyMakers(Cursor):
+class _MonitoringPolicyMonitoringTargetEventSeverityAssignmentPolicyMakers(Cursor):
     """Makers declared at the event_severity_assignment_policy level (``eventSevAsnP``)."""
 
     __slots__ = ()
@@ -12879,7 +13075,7 @@ class _EventSeverityAssignmentPolicyMakers(Cursor):
         min_severity: SyslogSeverity | str | None = None,
         display_name: str | None = None,
         userdom: str | None = None,
-    ) -> EventSeverityAssignmentPolicySyslogSourceCursor:
+    ) -> MonitoringPolicyMonitoringTargetEventSeverityAssignmentPolicySyslogSourceCursor:
         """Declare a ``syslogSrc`` child under the event_severity_assignment_policy level.
 
         The syslog source configures a syslog source that specifies the minimum severity of items to
@@ -12904,7 +13100,7 @@ class _EventSeverityAssignmentPolicyMakers(Cursor):
             )
         }
         return cast(
-            "EventSeverityAssignmentPolicySyslogSourceCursor",
+            "MonitoringPolicyMonitoringTargetEventSeverityAssignmentPolicySyslogSourceCursor",
             self._invoke_maker("syslog_source", (name,), _prune(params)),
         )
 
@@ -12918,7 +13114,7 @@ class _EventSeverityAssignmentPolicyMakers(Cursor):
         min_severity: ConditionSeverity | str | None = None,
         display_name: str | None = None,
         userdom: str | None = None,
-    ) -> EventSeverityAssignmentPolicySnmpSourceCursor:
+    ) -> MonitoringPolicyMonitoringTargetEventSeverityAssignmentPolicySnmpSourceCursor:
         """Declare a ``snmpSrc`` child under the event_severity_assignment_policy level.
 
         The SNMP source profile determines the fault information, severity level, and destination
@@ -12947,7 +13143,7 @@ class _EventSeverityAssignmentPolicyMakers(Cursor):
             )
         }
         return cast(
-            "EventSeverityAssignmentPolicySnmpSourceCursor",
+            "MonitoringPolicyMonitoringTargetEventSeverityAssignmentPolicySnmpSourceCursor",
             self._invoke_maker("snmp_source", (name,), _prune(params)),
         )
 
@@ -12961,7 +13157,7 @@ class _EventSeverityAssignmentPolicyMakers(Cursor):
         display_name: str | None = None,
         message_severity: CallhomeUrgency | str | None = None,
         userdom: str | None = None,
-    ) -> EventSeverityAssignmentPolicyCallhomeSourceCursor:
+    ) -> MonitoringPolicyMonitoringTargetEventSeverityAssignmentPolicyCallhomeSourceCursor:
         """Declare a ``callhomeSrc`` child under the event_severity_assignment_policy level.
 
         The call home source profile determines the information to deliver and the urgency level for
@@ -12988,7 +13184,7 @@ class _EventSeverityAssignmentPolicyMakers(Cursor):
             )
         }
         return cast(
-            "EventSeverityAssignmentPolicyCallhomeSourceCursor",
+            "MonitoringPolicyMonitoringTargetEventSeverityAssignmentPolicyCallhomeSourceCursor",
             self._invoke_maker("callhome_source", (name,), _prune(params)),
         )
 
@@ -13000,7 +13196,7 @@ class _EventSeverityAssignmentPolicyMakers(Cursor):
         name: str | None = None,
         display_name: str | None = None,
         userdom: str | None = None,
-    ) -> EventSeverityAssignmentPolicySmartCallhomeSourceCursor:
+    ) -> MonitoringPolicyMonitoringTargetEventSeverityAssignmentPolicySmartCallhomeSourceCursor:
         """Declare a ``callhomeSmartSrc`` child under the event_severity_assignment_policy level.
 
         Args:
@@ -13009,7 +13205,7 @@ class _EventSeverityAssignmentPolicyMakers(Cursor):
         """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
-            "EventSeverityAssignmentPolicySmartCallhomeSourceCursor",
+            "MonitoringPolicyMonitoringTargetEventSeverityAssignmentPolicySmartCallhomeSourceCursor",
             self._invoke_maker("smart_callhome_source", (), _prune(params)),
         )
 
@@ -13024,7 +13220,7 @@ class _EventSeverityAssignmentPolicyMakers(Cursor):
         display_name: str | None = None,
         switch_tacacs_audit: TacacsSwitchTacacsAudit | str | None = None,
         userdom: str | None = None,
-    ) -> EventSeverityAssignmentPolicyTacacsSourceCursor:
+    ) -> MonitoringPolicyMonitoringTargetEventSeverityAssignmentPolicyTacacsSourceCursor:
         """Declare a ``tacacsSrc`` child under the event_severity_assignment_policy level.
 
         Args:
@@ -13047,14 +13243,14 @@ class _EventSeverityAssignmentPolicyMakers(Cursor):
             )
         }
         return cast(
-            "EventSeverityAssignmentPolicyTacacsSourceCursor",
+            "MonitoringPolicyMonitoringTargetEventSeverityAssignmentPolicyTacacsSourceCursor",
             self._invoke_maker("tacacs_source", (name,), _prune(params)),
         )
 
 
-class EventSeverityAssignmentPolicyCursor(
-    _EventSeverityAssignmentPolicyMakers,
-    _MonitoringTargetMakers,
+class MonitoringPolicyMonitoringTargetEventSeverityAssignmentPolicyCursor(
+    _MonitoringPolicyMonitoringTargetEventSeverityAssignmentPolicyMakers,
+    _MonitoringPolicyMonitoringTargetMakers,
     _InfraMonitoringPolicyMakers,
     _InfraMakers,
     _UniMakers,
@@ -13078,14 +13274,14 @@ class EventSeverityAssignmentPolicyCursor(
         display_name: str | None = None,
         initial_severity: ConditionInitSevDir | str | None = None,
         userdom: str | None = None,
-    ) -> EventSeverityAssignmentPolicyCursor:
+    ) -> MonitoringPolicyMonitoringTargetEventSeverityAssignmentPolicyCursor:
         """Set ``eventSevAsnP`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
         return self
 
 
-class _FaultSeverityAssignmentPolicyMakers(Cursor):
+class _MonitoringPolicyMonitoringTargetFaultSeverityAssignmentPolicyMakers(Cursor):
     """Makers declared at the fault_severity_assignment_policy level (``faultSevAsnP``)."""
 
     __slots__ = ()
@@ -13100,7 +13296,7 @@ class _FaultSeverityAssignmentPolicyMakers(Cursor):
         min_severity: SyslogSeverity | str | None = None,
         display_name: str | None = None,
         userdom: str | None = None,
-    ) -> FaultSeverityAssignmentPolicySyslogSourceCursor:
+    ) -> MonitoringPolicyMonitoringTargetFaultSeverityAssignmentPolicySyslogSourceCursor:
         """Declare a ``syslogSrc`` child under the fault_severity_assignment_policy level.
 
         The syslog source configures a syslog source that specifies the minimum severity of items to
@@ -13125,7 +13321,7 @@ class _FaultSeverityAssignmentPolicyMakers(Cursor):
             )
         }
         return cast(
-            "FaultSeverityAssignmentPolicySyslogSourceCursor",
+            "MonitoringPolicyMonitoringTargetFaultSeverityAssignmentPolicySyslogSourceCursor",
             self._invoke_maker("syslog_source", (name,), _prune(params)),
         )
 
@@ -13139,7 +13335,7 @@ class _FaultSeverityAssignmentPolicyMakers(Cursor):
         min_severity: ConditionSeverity | str | None = None,
         display_name: str | None = None,
         userdom: str | None = None,
-    ) -> FaultSeverityAssignmentPolicySnmpSourceCursor:
+    ) -> MonitoringPolicyMonitoringTargetFaultSeverityAssignmentPolicySnmpSourceCursor:
         """Declare a ``snmpSrc`` child under the fault_severity_assignment_policy level.
 
         The SNMP source profile determines the fault information, severity level, and destination
@@ -13168,7 +13364,7 @@ class _FaultSeverityAssignmentPolicyMakers(Cursor):
             )
         }
         return cast(
-            "FaultSeverityAssignmentPolicySnmpSourceCursor",
+            "MonitoringPolicyMonitoringTargetFaultSeverityAssignmentPolicySnmpSourceCursor",
             self._invoke_maker("snmp_source", (name,), _prune(params)),
         )
 
@@ -13182,7 +13378,7 @@ class _FaultSeverityAssignmentPolicyMakers(Cursor):
         display_name: str | None = None,
         message_severity: CallhomeUrgency | str | None = None,
         userdom: str | None = None,
-    ) -> FaultSeverityAssignmentPolicyCallhomeSourceCursor:
+    ) -> MonitoringPolicyMonitoringTargetFaultSeverityAssignmentPolicyCallhomeSourceCursor:
         """Declare a ``callhomeSrc`` child under the fault_severity_assignment_policy level.
 
         The call home source profile determines the information to deliver and the urgency level for
@@ -13209,7 +13405,7 @@ class _FaultSeverityAssignmentPolicyMakers(Cursor):
             )
         }
         return cast(
-            "FaultSeverityAssignmentPolicyCallhomeSourceCursor",
+            "MonitoringPolicyMonitoringTargetFaultSeverityAssignmentPolicyCallhomeSourceCursor",
             self._invoke_maker("callhome_source", (name,), _prune(params)),
         )
 
@@ -13221,7 +13417,7 @@ class _FaultSeverityAssignmentPolicyMakers(Cursor):
         name: str | None = None,
         display_name: str | None = None,
         userdom: str | None = None,
-    ) -> FaultSeverityAssignmentPolicySmartCallhomeSourceCursor:
+    ) -> MonitoringPolicyMonitoringTargetFaultSeverityAssignmentPolicySmartCallhomeSourceCursor:
         """Declare a ``callhomeSmartSrc`` child under the fault_severity_assignment_policy level.
 
         Args:
@@ -13230,7 +13426,7 @@ class _FaultSeverityAssignmentPolicyMakers(Cursor):
         """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
-            "FaultSeverityAssignmentPolicySmartCallhomeSourceCursor",
+            "MonitoringPolicyMonitoringTargetFaultSeverityAssignmentPolicySmartCallhomeSourceCursor",
             self._invoke_maker("smart_callhome_source", (), _prune(params)),
         )
 
@@ -13245,7 +13441,7 @@ class _FaultSeverityAssignmentPolicyMakers(Cursor):
         display_name: str | None = None,
         switch_tacacs_audit: TacacsSwitchTacacsAudit | str | None = None,
         userdom: str | None = None,
-    ) -> FaultSeverityAssignmentPolicyTacacsSourceCursor:
+    ) -> MonitoringPolicyMonitoringTargetFaultSeverityAssignmentPolicyTacacsSourceCursor:
         """Declare a ``tacacsSrc`` child under the fault_severity_assignment_policy level.
 
         Args:
@@ -13268,14 +13464,14 @@ class _FaultSeverityAssignmentPolicyMakers(Cursor):
             )
         }
         return cast(
-            "FaultSeverityAssignmentPolicyTacacsSourceCursor",
+            "MonitoringPolicyMonitoringTargetFaultSeverityAssignmentPolicyTacacsSourceCursor",
             self._invoke_maker("tacacs_source", (name,), _prune(params)),
         )
 
 
-class FaultSeverityAssignmentPolicyCursor(
-    _FaultSeverityAssignmentPolicyMakers,
-    _MonitoringTargetMakers,
+class MonitoringPolicyMonitoringTargetFaultSeverityAssignmentPolicyCursor(
+    _MonitoringPolicyMonitoringTargetFaultSeverityAssignmentPolicyMakers,
+    _MonitoringPolicyMonitoringTargetMakers,
     _InfraMonitoringPolicyMakers,
     _InfraMakers,
     _UniMakers,
@@ -13301,15 +13497,15 @@ class FaultSeverityAssignmentPolicyCursor(
         target_severity: ConditionSevDir | str | None = None,
         userdom: str | None = None,
         health_score_weight: int | None = None,
-    ) -> FaultSeverityAssignmentPolicyCursor:
+    ) -> MonitoringPolicyMonitoringTargetFaultSeverityAssignmentPolicyCursor:
         """Set ``faultSevAsnP`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
         return self
 
 
-class MonitoringTargetSmartCallhomeSourceCursor(
-    _MonitoringTargetMakers, _InfraMonitoringPolicyMakers, _InfraMakers, _UniMakers
+class MonitoringPolicyMonitoringTargetSmartCallhomeSourceCursor(
+    _MonitoringPolicyMonitoringTargetMakers, _InfraMonitoringPolicyMakers, _InfraMakers, _UniMakers
 ):
     """Typed cursor for ``callhomeSmartSrc`` (smart_callhome_source level).
 
@@ -13329,15 +13525,15 @@ class MonitoringTargetSmartCallhomeSourceCursor(
         name: str | None = None,
         display_name: str | None = None,
         userdom: str | None = None,
-    ) -> MonitoringTargetSmartCallhomeSourceCursor:
+    ) -> MonitoringPolicyMonitoringTargetSmartCallhomeSourceCursor:
         """Set ``callhomeSmartSrc`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
         return self
 
 
-class MonitoringTargetSnmpSourceCursor(
-    _MonitoringTargetMakers, _InfraMonitoringPolicyMakers, _InfraMakers, _UniMakers
+class MonitoringPolicyMonitoringTargetSnmpSourceCursor(
+    _MonitoringPolicyMonitoringTargetMakers, _InfraMonitoringPolicyMakers, _InfraMakers, _UniMakers
 ):
     """Typed cursor for ``snmpSrc`` (snmp_source level).
 
@@ -13358,15 +13554,15 @@ class MonitoringTargetSnmpSourceCursor(
         min_severity: ConditionSeverity | str | None = None,
         display_name: str | None = None,
         userdom: str | None = None,
-    ) -> MonitoringTargetSnmpSourceCursor:
+    ) -> MonitoringPolicyMonitoringTargetSnmpSourceCursor:
         """Set ``snmpSrc`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
         return self
 
 
-class MonitoringTargetSyslogSourceCursor(
-    _MonitoringTargetMakers, _InfraMonitoringPolicyMakers, _InfraMakers, _UniMakers
+class MonitoringPolicyMonitoringTargetSyslogSourceCursor(
+    _MonitoringPolicyMonitoringTargetMakers, _InfraMonitoringPolicyMakers, _InfraMakers, _UniMakers
 ):
     """Typed cursor for ``syslogSrc`` (syslog_source level).
 
@@ -13387,15 +13583,15 @@ class MonitoringTargetSyslogSourceCursor(
         min_severity: SyslogSeverity | str | None = None,
         display_name: str | None = None,
         userdom: str | None = None,
-    ) -> MonitoringTargetSyslogSourceCursor:
+    ) -> MonitoringPolicyMonitoringTargetSyslogSourceCursor:
         """Set ``syslogSrc`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
         return self
 
 
-class MonitoringTargetTacacsSourceCursor(
-    _MonitoringTargetMakers, _InfraMonitoringPolicyMakers, _InfraMakers, _UniMakers
+class MonitoringPolicyMonitoringTargetTacacsSourceCursor(
+    _MonitoringPolicyMonitoringTargetMakers, _InfraMonitoringPolicyMakers, _InfraMakers, _UniMakers
 ):
     """Typed cursor for ``tacacsSrc`` (tacacs_source level).
 
@@ -13417,14 +13613,99 @@ class MonitoringTargetTacacsSourceCursor(
         display_name: str | None = None,
         switch_tacacs_audit: TacacsSwitchTacacsAudit | str | None = None,
         userdom: str | None = None,
-    ) -> MonitoringTargetTacacsSourceCursor:
+    ) -> MonitoringPolicyMonitoringTargetTacacsSourceCursor:
         """Set ``tacacsSrc`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
         return self
 
 
-class PodSelectorPodBlockCursor(_PodSelectorMakers, _PodProfileMakers, _InfraMakers, _UniMakers):
+class _MstDomainMakers(Cursor):
+    """Makers declared at the mst_domain level (``stpMstDomPol``)."""
+
+    __slots__ = ()
+
+    def range(
+        self,
+        from_: str,
+        to: str,
+        *,
+        allocation_mode: FvnsBlkAllocMode | str | None = None,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        role: FvnsBlkRole | str | None = None,
+        userdom: str | None = None,
+    ) -> MstDomainRangeCursor:
+        """Declare a ``fvnsEncapBlk`` child under the mst_domain level.
+
+        The VLAN encapsulation block.
+
+        Args:
+            from_: Start of the encapsulation block.
+            to: End of the encapsulation block.
+            allocation_mode: Values: ``dynamic``, ``inherit``, ``static``. Default: ``inherit``.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            role: Role of the block. @@@ used only for domain in AVE mode @@@ external: On-the-
+                wire encap. PVLAN/Access determined by the domain @@@ Internal: Encaps used
+                internally Values: ``external``, ``internal``. Default: ``external``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "from_",
+                "to",
+            )
+        }
+        return cast(
+            "MstDomainRangeCursor",
+            self._invoke_maker(
+                "range",
+                (
+                    from_,
+                    to,
+                ),
+                _prune(params),
+            ),
+        )
+
+
+class MstDomainCursor(
+    _MstDomainMakers, _MstRegionMakers, _MstPolicyMakers, _InfraMakers, _UniMakers
+):
+    """Typed cursor for ``stpMstDomPol`` (mst_domain level).
+
+    Position: ``uni.infra.mst_policy.mst_region.mst_domain``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        mst_instance: int | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> MstDomainCursor:
+        """Set ``stpMstDomPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class InfraPodProfilePodSelectorPodBlockCursor(
+    _InfraPodProfilePodSelectorMakers, _InfraPodProfileMakers, _InfraMakers, _UniMakers
+):
     """Typed cursor for ``infraPodBlk`` (pod_block level).
 
     Position: ``uni.infra.pod_profile.pod_selector.pod_block``
@@ -13444,7 +13725,7 @@ class PodSelectorPodBlockCursor(_PodSelectorMakers, _PodProfileMakers, _InfraMak
         display_name: str | None = None,
         to_pod_id: int | None = None,
         userdom: str | None = None,
-    ) -> PodSelectorPodBlockCursor:
+    ) -> InfraPodProfilePodSelectorPodBlockCursor:
         """Set ``infraPodBlk`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
@@ -13814,8 +14095,8 @@ class SpineInterfaceProfilePortSelectorSubPortBlockCursor(
         return self
 
 
-class SpineSelectorNodeBlockCursor(
-    _SpineSelectorMakers, _SpineProfileMakers, _InfraMakers, _UniMakers
+class SpineProfileSpineSelectorNodeBlockCursor(
+    _SpineProfileSpineSelectorMakers, _SpineProfileMakers, _InfraMakers, _UniMakers
 ):
     """Typed cursor for ``infraNodeBlk`` (node_block level).
 
@@ -13836,7 +14117,7 @@ class SpineSelectorNodeBlockCursor(
         display_name: str | None = None,
         to_node_id: int | None = None,
         userdom: str | None = None,
-    ) -> SpineSelectorNodeBlockCursor:
+    ) -> SpineProfileSpineSelectorNodeBlockCursor:
         """Set ``infraNodeBlk`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
@@ -13846,7 +14127,7 @@ class SpineSelectorNodeBlockCursor(
         self,
         *,
         interface_profile: str | Ref | None = None,
-    ) -> SpineSelectorNodeBlockCursor:
+    ) -> SpineProfileSpineSelectorNodeBlockCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind(self, **_prune(params))
@@ -13856,15 +14137,18 @@ class SpineSelectorNodeBlockCursor(
         self,
         *,
         interface_profile: str | Ref | None = None,
-    ) -> SpineSelectorNodeBlockCursor:
+    ) -> SpineProfileSpineSelectorNodeBlockCursor:
         """Reference objects outside the design by raw DN."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind_dn(self, **_prune(params))
         return self
 
 
-class VspanDestinationEpgSummaryCursor(
-    _VspanVdestinationMakers, _VspanDestinationGroupMakers, _InfraMakers, _UniMakers
+class InfraVspanDestinationGroupVspanVdestinationVspanDestinationEpgSummaryCursor(
+    _InfraVspanDestinationGroupVspanVdestinationMakers,
+    _InfraVspanDestinationGroupMakers,
+    _InfraMakers,
+    _UniMakers,
 ):
     """Typed cursor for ``spanVEpgSummary`` (vspan_destination_epg_summary level).
 
@@ -13894,7 +14178,7 @@ class VspanDestinationEpgSummaryCursor(
         time_to_live: int | str | None = None,
         userdom: str | None = None,
         vrf: str | None = None,
-    ) -> VspanDestinationEpgSummaryCursor:
+    ) -> InfraVspanDestinationGroupVspanVdestinationVspanDestinationEpgSummaryCursor:
         """Set ``spanVEpgSummary`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
@@ -13967,9 +14251,9 @@ class PodGroupPodBlockCursor(
         return self
 
 
-class EventSeverityAssignmentPolicyCallhomeSourceCursor(
-    _EventSeverityAssignmentPolicyMakers,
-    _MonitoringTargetMakers,
+class MonitoringPolicyMonitoringTargetEventSeverityAssignmentPolicyCallhomeSourceCursor(
+    _MonitoringPolicyMonitoringTargetEventSeverityAssignmentPolicyMakers,
+    _MonitoringPolicyMonitoringTargetMakers,
     _InfraMonitoringPolicyMakers,
     _InfraMakers,
     _UniMakers,
@@ -13993,16 +14277,16 @@ class EventSeverityAssignmentPolicyCallhomeSourceCursor(
         display_name: str | None = None,
         message_severity: CallhomeUrgency | str | None = None,
         userdom: str | None = None,
-    ) -> EventSeverityAssignmentPolicyCallhomeSourceCursor:
+    ) -> MonitoringPolicyMonitoringTargetEventSeverityAssignmentPolicyCallhomeSourceCursor:
         """Set ``callhomeSrc`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
         return self
 
 
-class EventSeverityAssignmentPolicySmartCallhomeSourceCursor(
-    _EventSeverityAssignmentPolicyMakers,
-    _MonitoringTargetMakers,
+class MonitoringPolicyMonitoringTargetEventSeverityAssignmentPolicySmartCallhomeSourceCursor(
+    _MonitoringPolicyMonitoringTargetEventSeverityAssignmentPolicyMakers,
+    _MonitoringPolicyMonitoringTargetMakers,
     _InfraMonitoringPolicyMakers,
     _InfraMakers,
     _UniMakers,
@@ -14025,16 +14309,16 @@ class EventSeverityAssignmentPolicySmartCallhomeSourceCursor(
         name: str | None = None,
         display_name: str | None = None,
         userdom: str | None = None,
-    ) -> EventSeverityAssignmentPolicySmartCallhomeSourceCursor:
+    ) -> MonitoringPolicyMonitoringTargetEventSeverityAssignmentPolicySmartCallhomeSourceCursor:
         """Set ``callhomeSmartSrc`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
         return self
 
 
-class EventSeverityAssignmentPolicySnmpSourceCursor(
-    _EventSeverityAssignmentPolicyMakers,
-    _MonitoringTargetMakers,
+class MonitoringPolicyMonitoringTargetEventSeverityAssignmentPolicySnmpSourceCursor(
+    _MonitoringPolicyMonitoringTargetEventSeverityAssignmentPolicyMakers,
+    _MonitoringPolicyMonitoringTargetMakers,
     _InfraMonitoringPolicyMakers,
     _InfraMakers,
     _UniMakers,
@@ -14058,16 +14342,16 @@ class EventSeverityAssignmentPolicySnmpSourceCursor(
         min_severity: ConditionSeverity | str | None = None,
         display_name: str | None = None,
         userdom: str | None = None,
-    ) -> EventSeverityAssignmentPolicySnmpSourceCursor:
+    ) -> MonitoringPolicyMonitoringTargetEventSeverityAssignmentPolicySnmpSourceCursor:
         """Set ``snmpSrc`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
         return self
 
 
-class EventSeverityAssignmentPolicySyslogSourceCursor(
-    _EventSeverityAssignmentPolicyMakers,
-    _MonitoringTargetMakers,
+class MonitoringPolicyMonitoringTargetEventSeverityAssignmentPolicySyslogSourceCursor(
+    _MonitoringPolicyMonitoringTargetEventSeverityAssignmentPolicyMakers,
+    _MonitoringPolicyMonitoringTargetMakers,
     _InfraMonitoringPolicyMakers,
     _InfraMakers,
     _UniMakers,
@@ -14091,16 +14375,16 @@ class EventSeverityAssignmentPolicySyslogSourceCursor(
         min_severity: SyslogSeverity | str | None = None,
         display_name: str | None = None,
         userdom: str | None = None,
-    ) -> EventSeverityAssignmentPolicySyslogSourceCursor:
+    ) -> MonitoringPolicyMonitoringTargetEventSeverityAssignmentPolicySyslogSourceCursor:
         """Set ``syslogSrc`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
         return self
 
 
-class EventSeverityAssignmentPolicyTacacsSourceCursor(
-    _EventSeverityAssignmentPolicyMakers,
-    _MonitoringTargetMakers,
+class MonitoringPolicyMonitoringTargetEventSeverityAssignmentPolicyTacacsSourceCursor(
+    _MonitoringPolicyMonitoringTargetEventSeverityAssignmentPolicyMakers,
+    _MonitoringPolicyMonitoringTargetMakers,
     _InfraMonitoringPolicyMakers,
     _InfraMakers,
     _UniMakers,
@@ -14125,16 +14409,16 @@ class EventSeverityAssignmentPolicyTacacsSourceCursor(
         display_name: str | None = None,
         switch_tacacs_audit: TacacsSwitchTacacsAudit | str | None = None,
         userdom: str | None = None,
-    ) -> EventSeverityAssignmentPolicyTacacsSourceCursor:
+    ) -> MonitoringPolicyMonitoringTargetEventSeverityAssignmentPolicyTacacsSourceCursor:
         """Set ``tacacsSrc`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
         return self
 
 
-class FaultSeverityAssignmentPolicyCallhomeSourceCursor(
-    _FaultSeverityAssignmentPolicyMakers,
-    _MonitoringTargetMakers,
+class MonitoringPolicyMonitoringTargetFaultSeverityAssignmentPolicyCallhomeSourceCursor(
+    _MonitoringPolicyMonitoringTargetFaultSeverityAssignmentPolicyMakers,
+    _MonitoringPolicyMonitoringTargetMakers,
     _InfraMonitoringPolicyMakers,
     _InfraMakers,
     _UniMakers,
@@ -14158,16 +14442,16 @@ class FaultSeverityAssignmentPolicyCallhomeSourceCursor(
         display_name: str | None = None,
         message_severity: CallhomeUrgency | str | None = None,
         userdom: str | None = None,
-    ) -> FaultSeverityAssignmentPolicyCallhomeSourceCursor:
+    ) -> MonitoringPolicyMonitoringTargetFaultSeverityAssignmentPolicyCallhomeSourceCursor:
         """Set ``callhomeSrc`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
         return self
 
 
-class FaultSeverityAssignmentPolicySmartCallhomeSourceCursor(
-    _FaultSeverityAssignmentPolicyMakers,
-    _MonitoringTargetMakers,
+class MonitoringPolicyMonitoringTargetFaultSeverityAssignmentPolicySmartCallhomeSourceCursor(
+    _MonitoringPolicyMonitoringTargetFaultSeverityAssignmentPolicyMakers,
+    _MonitoringPolicyMonitoringTargetMakers,
     _InfraMonitoringPolicyMakers,
     _InfraMakers,
     _UniMakers,
@@ -14190,16 +14474,16 @@ class FaultSeverityAssignmentPolicySmartCallhomeSourceCursor(
         name: str | None = None,
         display_name: str | None = None,
         userdom: str | None = None,
-    ) -> FaultSeverityAssignmentPolicySmartCallhomeSourceCursor:
+    ) -> MonitoringPolicyMonitoringTargetFaultSeverityAssignmentPolicySmartCallhomeSourceCursor:
         """Set ``callhomeSmartSrc`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
         return self
 
 
-class FaultSeverityAssignmentPolicySnmpSourceCursor(
-    _FaultSeverityAssignmentPolicyMakers,
-    _MonitoringTargetMakers,
+class MonitoringPolicyMonitoringTargetFaultSeverityAssignmentPolicySnmpSourceCursor(
+    _MonitoringPolicyMonitoringTargetFaultSeverityAssignmentPolicyMakers,
+    _MonitoringPolicyMonitoringTargetMakers,
     _InfraMonitoringPolicyMakers,
     _InfraMakers,
     _UniMakers,
@@ -14223,16 +14507,16 @@ class FaultSeverityAssignmentPolicySnmpSourceCursor(
         min_severity: ConditionSeverity | str | None = None,
         display_name: str | None = None,
         userdom: str | None = None,
-    ) -> FaultSeverityAssignmentPolicySnmpSourceCursor:
+    ) -> MonitoringPolicyMonitoringTargetFaultSeverityAssignmentPolicySnmpSourceCursor:
         """Set ``snmpSrc`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
         return self
 
 
-class FaultSeverityAssignmentPolicySyslogSourceCursor(
-    _FaultSeverityAssignmentPolicyMakers,
-    _MonitoringTargetMakers,
+class MonitoringPolicyMonitoringTargetFaultSeverityAssignmentPolicySyslogSourceCursor(
+    _MonitoringPolicyMonitoringTargetFaultSeverityAssignmentPolicyMakers,
+    _MonitoringPolicyMonitoringTargetMakers,
     _InfraMonitoringPolicyMakers,
     _InfraMakers,
     _UniMakers,
@@ -14256,16 +14540,16 @@ class FaultSeverityAssignmentPolicySyslogSourceCursor(
         min_severity: SyslogSeverity | str | None = None,
         display_name: str | None = None,
         userdom: str | None = None,
-    ) -> FaultSeverityAssignmentPolicySyslogSourceCursor:
+    ) -> MonitoringPolicyMonitoringTargetFaultSeverityAssignmentPolicySyslogSourceCursor:
         """Set ``syslogSrc`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
         return self
 
 
-class FaultSeverityAssignmentPolicyTacacsSourceCursor(
-    _FaultSeverityAssignmentPolicyMakers,
-    _MonitoringTargetMakers,
+class MonitoringPolicyMonitoringTargetFaultSeverityAssignmentPolicyTacacsSourceCursor(
+    _MonitoringPolicyMonitoringTargetFaultSeverityAssignmentPolicyMakers,
+    _MonitoringPolicyMonitoringTargetMakers,
     _InfraMonitoringPolicyMakers,
     _InfraMakers,
     _UniMakers,
@@ -14290,8 +14574,38 @@ class FaultSeverityAssignmentPolicyTacacsSourceCursor(
         display_name: str | None = None,
         switch_tacacs_audit: TacacsSwitchTacacsAudit | str | None = None,
         userdom: str | None = None,
-    ) -> FaultSeverityAssignmentPolicyTacacsSourceCursor:
+    ) -> MonitoringPolicyMonitoringTargetFaultSeverityAssignmentPolicyTacacsSourceCursor:
         """Set ``tacacsSrc`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class MstDomainRangeCursor(
+    _MstDomainMakers, _MstRegionMakers, _MstPolicyMakers, _InfraMakers, _UniMakers
+):
+    """Typed cursor for ``fvnsEncapBlk`` (range level).
+
+    Position: ``uni.infra.mst_policy.mst_region.mst_domain.range``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        allocation_mode: FvnsBlkAllocMode | str | None = None,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        role: FvnsBlkRole | str | None = None,
+        userdom: str | None = None,
+    ) -> MstDomainRangeCursor:
+        """Set ``fvnsEncapBlk`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
         return self

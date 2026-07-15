@@ -13,7 +13,7 @@ The LLDP interface policy, which defines a common configuration that will apply 
 | --- | --- |
 | ACI class | `lldpIfPol` |
 | RN | `lldpIfP-{name}` |
-| Cursor | `LldpPolicyCursor` |
+| Cursor | `InfraLldpPolicyCursor` |
 | Parent | {ref}`infra <vocab-infra>` |
 | Atomic | — |
 

@@ -13,7 +13,7 @@ Pod Profile: It represents the template used for deploying POD level configurati
 | --- | --- |
 | ACI class | `infraPodP` |
 | RN | `podprof-{name}` |
-| Cursor | `PodProfileCursor` |
+| Cursor | `InfraPodProfileCursor` |
 | Parent | {ref}`infra <vocab-infra>` |
 | Atomic | — |
 

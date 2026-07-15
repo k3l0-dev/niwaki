@@ -11,7 +11,7 @@ Re-generate: uv run python -m niwaki._codegen.generate_docs
 | --- | --- |
 | ACI class | `l2LoadBalancePol` |
 | RN | `loadbalanceP` |
-| Cursor | `LoadBalancePolicyCursor` |
+| Cursor | `LacpPolicyLoadBalancePolicyCursor` |
 | Parent | {ref}`infra.lacp_policy <vocab-infra-lacp_policy>` |
 | Atomic | — |
 

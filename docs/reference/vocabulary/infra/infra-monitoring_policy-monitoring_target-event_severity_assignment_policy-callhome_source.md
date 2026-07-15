@@ -13,7 +13,7 @@ The call home source profile determines the information to deliver and the urgen
 | --- | --- |
 | ACI class | `callhomeSrc` |
 | RN | `chsrc-{name}` |
-| Cursor | `EventSeverityAssignmentPolicyCallhomeSourceCursor` |
+| Cursor | `MonitoringPolicyMonitoringTargetEventSeverityAssignmentPolicyCallhomeSourceCursor` |
 | Parent | {ref}`infra.monitoring_policy.monitoring_target.event_severity_assignment_policy <vocab-infra-monitoring_policy-monitoring_target-event_severity_assignment_policy>` |
 | Atomic | — |
 

@@ -13,7 +13,7 @@ The initial and target severities for a specific fault can be specified in a cus
 | --- | --- |
 | ACI class | `faultSevAsnP` |
 | RN | `fsevp-{condition_code}` |
-| Cursor | `FaultSeverityAssignmentPolicyCursor` |
+| Cursor | `MonitoringPolicyMonitoringTargetFaultSeverityAssignmentPolicyCursor` |
 | Parent | {ref}`infra.monitoring_policy.monitoring_target <vocab-infra-monitoring_policy-monitoring_target>` |
 | Atomic | — |
 

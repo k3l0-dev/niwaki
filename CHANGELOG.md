@@ -4,6 +4,42 @@ All notable changes to this project are documented here.  The format follows
 [Keep a Changelog](https://keepachangelog.com/); versions follow semver
 (0.x — the API may still change between minor versions).
 
+## [0.12.0] — 2026-07-15
+
+The fabric-policy (`fabric`) and controller (`controller`) domains join the
+tenant and access-policy planes as first-class, live-verified vocabulary, and
+non-creatable default singletons finally read as the singletons they are.
+
+### Added
+
+- **Fabric policies (six waves).**  The fabric-internal ports charpente
+  (leaf/spine switch, interface and module profiles, selectors, policy groups,
+  pod profile); fabric interface and protocol policies (link-level, link-flap,
+  L3, L2 MTU, MACsec fabric, ISIS, COOP, fabric VXLAN, vPC domain, PSU
+  redundancy, WWN, load-balance, ZR/ZRP/DWDM optics, node control); fabric
+  monitoring (callhome/SNMP/TACACS destination groups, SNMP policy, fabric and
+  common monitoring policies with their sources); system and global policies
+  (communication services, geo-location hierarchy, proxy, datetime format,
+  connectivity preference, admin-down, deployment, out-of-service); firmware,
+  maintenance and config management (policies, groups, catalogs, export/import/
+  snapshot/rollback, scheduler, license); telemetry, analytics, TWAMP, core/
+  techsupport export, latency modes and fabric VSPAN.
+- **Controller policies.**  Cluster, audit-log retention, controller firmware
+  and maintenance, DRR, fabric first-time setup (+ per-pod), scheduler, cores
+  and CIMC-node policies, alongside the existing fabric membership.
+- **Singleton-aware makers.**  APIC creatability is baked into every generated
+  model (`_is_creatable`).  A maker whose target is a non-creatable, name-only
+  default singleton now defaults its name to `"default"` — `.qos_instance_
+  policy()`, `.communication_policy("default")`, `.coop_group_policy()` read as
+  the singletons they are, configuring the existing instance in place.  Spanning
+  Tree (MST) rejoins the access vocabulary on this basis.
+
+### Notes
+
+- Deprecated or feature-restricted classes are omitted where the 6.0 APIC
+  rejects them (telnet service, telemetry server groups, SD-WAN SLA).  Kafka
+  policy and multi-domain (NDO) stay out of scope.
+
 ## [0.11.0] — 2026-07-15
 
 The access-policy (`infra`) configuration surface is now substantially complete.

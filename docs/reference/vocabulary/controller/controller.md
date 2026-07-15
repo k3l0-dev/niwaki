@@ -32,3 +32,12 @@ Accepted as keyword arguments of `.controller()` and of `.set(**attrs)` on this 
 | maker | creates | position |
 | --- | --- | --- |
 | `.fabric_membership(**attrs)` | `fabricNodeIdentPol` | {ref}`controller.fabric_membership <vocab-controller-fabric_membership>` |
+| `.cluster_policy(**attrs)` | `infraClusterPol` | {ref}`controller.cluster_policy <vocab-controller-cluster_policy>` |
+| `.controller_audit_log_retention_policy(**attrs)` | `aaaCtrlrRetP` | {ref}`controller.controller_audit_log_retention_policy <vocab-controller-controller_audit_log_retention_policy>` |
+| `.controller_firmware_policy(**attrs)` | `firmwareCtrlrFwP` | {ref}`controller.controller_firmware_policy <vocab-controller-controller_firmware_policy>` |
+| `.controller_maintenance_policy(**attrs)` | `maintCtrlrMaintP` | {ref}`controller.controller_maintenance_policy <vocab-controller-controller_maintenance_policy>` |
+| `.fabric_firsttime_setup_policy(**attrs)` | `fabricSetupPol` | {ref}`controller.fabric_firsttime_setup_policy <vocab-controller-fabric_firsttime_setup_policy>` |
+| `.drr_policy(**attrs)` | `infraDRRPol` | {ref}`controller.drr_policy <vocab-controller-drr_policy>` |
+| `.scheduler(name, **attrs)` | `trigSchedP` | {ref}`controller.scheduler <vocab-controller-scheduler>` |
+| `.cimc_node(apic_id, **attrs)` | `ctrlrCimcNode` | {ref}`controller.cimc_node <vocab-controller-cimc_node>` |
+| `.controller_cores_policy(name, **attrs)` | `svccoreCtrlrPol` | {ref}`controller.controller_cores_policy <vocab-controller-controller_cores_policy>` |

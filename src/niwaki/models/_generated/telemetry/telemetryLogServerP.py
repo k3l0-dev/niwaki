@@ -32,6 +32,7 @@ class telemetryLogServerP(ManagedObject):
     # ── Semantic metadata (from APIC schema) ───────────────────────────────────
     _mo_category: ClassVar[str] = "Regular"
     _write_access: ClassVar[frozenset[str]] = frozenset(["admin"])
+    _is_creatable: ClassVar[bool] = True
     _is_observable: ClassVar[bool] = False
     _is_faultable: ClassVar[bool] = False
     _is_health_scorable: ClassVar[bool] = False

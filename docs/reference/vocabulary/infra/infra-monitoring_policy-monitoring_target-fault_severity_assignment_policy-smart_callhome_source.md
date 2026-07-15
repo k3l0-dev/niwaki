@@ -11,7 +11,7 @@ Re-generate: uv run python -m niwaki._codegen.generate_docs
 | --- | --- |
 | ACI class | `callhomeSmartSrc` |
 | RN | `smartchsrc` |
-| Cursor | `FaultSeverityAssignmentPolicySmartCallhomeSourceCursor` |
+| Cursor | `MonitoringPolicyMonitoringTargetFaultSeverityAssignmentPolicySmartCallhomeSourceCursor` |
 | Parent | {ref}`infra.monitoring_policy.monitoring_target.fault_severity_assignment_policy <vocab-infra-monitoring_policy-monitoring_target-fault_severity_assignment_policy>` |
 | Atomic | — |
 

@@ -31,6 +31,8 @@ deliberately kept out of the rendered class documentation):
 - ``_contains``        ACI class names valid as direct children.
 - ``_mo_category``     APIC object category (``"Regular"``, ``"RelationshipToLocal"``).
 - ``_write_access``    APIC privilege roles allowed to write the class.
+- ``_is_creatable``    The APIC accepts a POST that creates the class (``always``);
+  ``never`` (default singletons, non-creatable carriers) and ``derived`` are False.
 - ``_is_observable``   The class supports WebSocket subscription.
 - ``_is_faultable``    The APIC can raise faults on the class.
 - ``_is_health_scorable`` The APIC tracks a health score for instances.
@@ -112,6 +114,7 @@ class ManagedObject(BaseModel):
     _contains: ClassVar[frozenset[str]] = frozenset()
     _mo_category: ClassVar[str] = "Regular"
     _write_access: ClassVar[frozenset[str]] = frozenset()
+    _is_creatable: ClassVar[bool] = True
     _is_observable: ClassVar[bool] = False
     _is_faultable: ClassVar[bool] = False
     _is_health_scorable: ClassVar[bool] = False
