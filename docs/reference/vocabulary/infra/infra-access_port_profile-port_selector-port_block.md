@@ -13,7 +13,7 @@ The port block enables you to specify a range of interfaces.
 | --- | --- |
 | ACI class | `infraPortBlk` |
 | RN | `portblk-{name}` |
-| Cursor | `PortBlockCursor` |
+| Cursor | `AccessPortProfilePortSelectorPortBlockCursor` |
 | Parent | {ref}`infra.access_port_profile.port_selector <vocab-infra-access_port_profile-port_selector>` |
 | Atomic | — |
 

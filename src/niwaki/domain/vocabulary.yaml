@@ -26,6 +26,7 @@ jargon:
   physDomP: phys_dom
   l2extDomP: l2_dom
   l3extDomP: l3_dom
+  fcDomP: fc_dom
   vmmDomP: vmm_dom
   infraInfra: infra
   fabricInst: fabric
@@ -33,6 +34,8 @@ jargon:
   # ── infra children ──────────────────────────────────────────────────────────
   fvnsVlanInstP: vlan_pool
   fvnsVxlanInstP: vxlan_pool
+  fvnsVsanInstP: vsan_pool
+  fvnsMcastAddrInstP: mcast_addr_pool
   infraAttEntityP: aaep
   infraNodeP: leaf_profile
   infraSpineP: spine_profile
@@ -220,6 +223,7 @@ makers:
     phys_dom: physDomP
     l3_dom: l3extDomP
     l2_dom: l2extDomP     # the domain an L2Out attaches to
+    fc_dom: fcDomP        # Fibre Channel domain
 
   # ══ Tenant world ═══════════════════════════════════════════════════════════
   # Ordered like the APIC GUI tree under Tenants > <tenant>, so a new maker
@@ -847,17 +851,68 @@ makers:
     cdp_policy: cdpIfPol
     lldp_policy: lldpIfPol
     lacp_policy: lacpLagPol
+    lacp_member_policy: lacpIfPol
     link_level_policy: fabricHIfPol
+    link_flap_policy: fabricLinkFlapPol
     mcp_policy: mcpIfPol
     stp_policy: stpIfPol
     storm_control_policy: stormctrlIfPol
+    l2_interface_policy: l2IfPol
+    poe_interface_policy: poeIfPol
+    fc_interface_policy: fcIfPol
+    macsec_interface_policy: macsecIfPol
+    synce_interface_policy: synceEthIfPol
+    dot1x_node_authentication: l2NodeAuthPol
+    dot1x_port_authentication: l2PortAuthPol
+
+    # ── Policies › Switch / Instance ──────────────────────────────────────────
+    poe_policy: poeInstPol
+    fc_instance_policy: fcInstPol
+    fc_fabric_policy: fcFabricPol
+    vsan_attributes: fcVsanAttrP
+    synce_policy: synceInstPol
+    macsec: macsecPolCont
 
     # ── Policies › Protocol ───────────────────────────────────────────────────
     dhcp_relay_policy: dhcpRelayP
     dpp_policy: qosDppPol
 
+    # ── Policies › QoS / control plane ────────────────────────────────────────
+    qos_instance_policy: qosInstPol
+    llfc_interface_policy: qosLlfcIfPol
+    pfc_interface_policy: qosPfcIfPol
+    slow_drain_policy: qosSdIfPol
+    copp_leaf_policy: coppLeafProfile
+    copp_spine_policy: coppSpineProfile
+    copp_interface_policy: coppIfPol
+    copp_prefilter_leaf_policy: iaclLeafProfile
+    copp_prefilter_spine_policy: iaclSpineProfile
+
+    # ── Policies › Fabric-wide / System (wave 5) ──────────────────────────────
+    cp_mtu_policy: infraCPMtuPol
+    ctrlr_mtu_policy: infraCtrlrMtuPol
+    tcp_mss_policy: infraMssPol
+    fabric_wide_settings_policy: infraSetPol
+    port_tracking: infraPortTrackPol
+    port_status_policy: infraPortDirecPol
+    remote_leaf_pod_redundancy_policy: infraRlPodRedPol
+    system_gipo_policy: fmcastSystemGIPoPol
+    forwarding_scale_profile_policy: topoctrlFwdScaleProfilePol
+    usb_configuration_policy: topoctrlUsbConfigProfilePol
+    fast_link_failover_policy: topoctrlFastLinkFailoverInstPol
+    port_bundle_configuration: infraBundleConfig
+    flash_configuration_policy: equipmentFlashConfigPol
+    infrastructure_zoning_profile: infrazoneZoneP
+    dhcp_node_group: dhcpNodeGrp
+    dhcp_pod_group: dhcpPodGrp
+    node_management_address: mgmtNodeGrp
+    pod_management_address: mgmtPodGrp
+
     # ── Pools ─────────────────────────────────────────────────────────────────
     vlan_pool: fvnsVlanInstP
+    vxlan_pool: fvnsVxlanInstP
+    vsan_pool: fvnsVsanInstP
+    mcast_addr_pool: fvnsMcastAddrInstP
 
     # ── Policies › Global (AAEP) ──────────────────────────────────────────────
     aaep: infraAttEntityP
@@ -867,8 +922,12 @@ makers:
 
     # ── Interfaces / Switches › Profiles ──────────────────────────────────────
     access_port_profile: infraAccPortP
+    spine_interface_profile: infraSpAccPortP
     leaf_profile: infraNodeP
     spine_profile: infraSpineP
+    access_module_profile: infraAccCardP
+    fex_profile: infraFexP
+    pod_profile: infraPodP
 
     # ── Policies › Troubleshooting (access SPAN) ──────────────────────────────
     span_source_group: spanSrcGrp
@@ -879,15 +938,58 @@ makers:
     netflow_monitor: netflowMonitorPol
     netflow_exporter: netflowExporterPol
     netflow_record: netflowRecordPol
+    netflow_node_policy: netflowNodePol
+    netflow_vmm_exporter: netflowVmmExporterPol
+
+    # ── Policies › Monitoring / timing (wave 6) ───────────────────────────────
+    monitoring_policy: monInfraPol
+    vspan_session: spanVSrcGrp
+    vspan_destination_group: spanVDestGrp
+    ptp_node_policy: ptpInstPol
+    ptp_profile: ptpProfile
+    ptp_domain: ptpDomain
+    ptp_profile_template: ptpProfileTemplate
+    bfd_global_ipv4_policy: bfdIpv4InstPol
+    bfd_global_ipv6_policy: bfdIpv6InstPol
+    bfd_global_ipv4_mh_policy: bfdMhIpv4InstPol
+    bfd_global_ipv6_mh_policy: bfdMhIpv6InstPol
 
   fvnsVlanInstP:
     range: fvnsEncapBlk
+  fvnsVxlanInstP:
+    range: fvnsEncapBlk
+  fvnsVsanInstP:
+    range: fvnsVsanEncapBlk
+  fvnsMcastAddrInstP:
+    range: fvnsMcastAddrBlk
   infraFuncP:
+    # Leaf interface policy groups
     access_group: infraAccPortGrp
     port_channel: infraAccBndlGrp
+    port_channel_override: infraAccBndlPolGrp
+    breakout_group: infraBrkoutPortGrp
+    fc_port_group: infraFcAccPortGrp
+    fc_port_channel: infraFcAccBndlGrp
+    fc_port_channel_override: infraFcAccBndlPolGrp
+    # Spine interface policy group
+    spine_access_group: infraSpAccPortGrp
+    # Switch (node) policy groups
+    leaf_switch_group: infraAccNodePGrp
+    spine_switch_group: infraSpineAccNodePGrp
+    # Modular-chassis line-card policy group
+    access_card_group: infraAccCardPGrp
+    # Managed-node connectivity group (in-band / out-of-band zones)
+    managed_node_connectivity_group: mgmtGrp
+  infraAccBndlGrp:
+    override_policy_group: infraAccBndlSubgrp   # per-member vPC/PC override
   infraAccPortP:
     port_selector: infraHPortS
+  infraSpAccPortP:
+    port_selector: infraSHPortS
   infraHPortS:
+    port_block: infraPortBlk
+    sub_port_block: infraSubPortBlk
+  infraSHPortS:
     port_block: infraPortBlk
     sub_port_block: infraSubPortBlk
   infraNodeP:
@@ -898,6 +1000,107 @@ makers:
     node_block: infraNodeBlk
   infraSpineS:
     node_block: infraNodeBlk
+  infraAccCardP:
+    access_module_selector: infraCardS
+  infraFexP:
+    fex_bundle_group: infraFexBndlGrp
+    port_selector: infraHPortS
+  infraPodP:
+    pod_selector: infraPodS
+  infraPodS:
+    pod_block: infraPodBlk
+
+  # ── Interface policy sub-structure (wave 3) ──────────────────────────────────
+  lacpLagPol:
+    load_balance_policy: l2LoadBalancePol
+  fcVsanAttrP:
+    vsan_attribute_entry: fcVsanAttrPEntry
+  l2PortAuthPol:
+    dot1x_port_authentication_config: l2PortAuthCfgPol
+  macsecPolCont:
+    parameters_policy: macsecParamPol
+    keychain_policy: macsecKeyChainPol
+  macsecKeyChainPol:
+    key_policy: macsecKeyPol
+
+  # ── QoS / control-plane sub-structure (wave 4) ───────────────────────────────
+  qosInstPol:
+    qos_class_policy: qosClass
+  qosClass:
+    qos_buffer_policy: qosBuffer
+    qos_congestion_policy: qosCong
+    qos_priority_flow_control_policy: qosPfcPol
+    qos_queue_management_policy: qosQueue
+    schedule_policy: qosSched
+    microburst_policy: qosUburst
+  coppIfPol:
+    protocol_class: coppProtoClassP
+  coppLeafProfile:
+    gen1_settings: coppLeafGen1CustomValues
+  coppSpineProfile:
+    gen1_settings: coppSpineGen1CustomValues
+  iaclLeafProfile:
+    acl_entry: iaclEntry
+  iaclSpineProfile:
+    acl_entry: iaclEntry
+
+  # ── Fabric-wide / system sub-structure (wave 5) ──────────────────────────────
+  infrazoneZoneP:
+    infrastructure_zone: infrazoneZone
+  infrazoneZone:
+    node_group: infrazoneNodeGrp
+    pod_group: infrazonePodGrp
+  infrazoneNodeGrp:
+    node_block: infraNodeBlk
+  infrazonePodGrp:
+    pod_block: infraPodBlk
+  dhcpNodeGrp:
+    node_block: infraNodeBlk
+  dhcpPodGrp:
+    pod_block: infraPodBlk
+  mgmtNodeGrp:
+    node_block: infraNodeBlk
+  mgmtPodGrp:
+    pod_block: infraPodBlk
+  mgmtGrp:
+    inband_zone: mgmtInBZone
+    oob_zone: mgmtOoBZone
+
+  # ── Monitoring policy sources + VSPAN sub-structure (wave 6) ──────────────────
+  monInfraPol:
+    monitoring_target: monInfraTarget
+    syslog_source: syslogSrc
+    snmp_source: snmpSrc
+    callhome_source: callhomeSrc
+    smart_callhome_source: callhomeSmartSrc
+    tacacs_source: tacacsSrc
+  monInfraTarget:
+    syslog_source: syslogSrc
+    snmp_source: snmpSrc
+    callhome_source: callhomeSrc
+    smart_callhome_source: callhomeSmartSrc
+    tacacs_source: tacacsSrc
+    fault_severity_assignment_policy: faultSevAsnP
+    event_severity_assignment_policy: eventSevAsnP
+  faultSevAsnP:
+    syslog_source: syslogSrc
+    snmp_source: snmpSrc
+    callhome_source: callhomeSrc
+    smart_callhome_source: callhomeSmartSrc
+    tacacs_source: tacacsSrc
+  eventSevAsnP:
+    syslog_source: syslogSrc
+    snmp_source: snmpSrc
+    callhome_source: callhomeSrc
+    smart_callhome_source: callhomeSmartSrc
+    tacacs_source: tacacsSrc
+  spanVSrcGrp:
+    vspan_vsource: spanVSrc
+    span_label: spanSpanLbl
+  spanVDestGrp:
+    vspan_vdestination: spanVDest
+  spanVDest:
+    vspan_destination_epg_summary: spanVEpgSummary
 
   # ── Fabric policies (uni/fabric) ────────────────────────────────────────────
   fabricInst:
@@ -1157,6 +1360,11 @@ binds:
     vlan_pool: fvnsVlanInstP
   l2extDomP:
     vlan_pool: fvnsVlanInstP
+  fcDomP:
+    vlan_pool: fvnsVlanInstP
+    vsan_pool: fvnsVsanInstP
+    ip_address_pool: fvnsAddrInst
+    vsan_attributes: fcVsanAttrP
   infraAccPortGrp:
     aaep: infraAttEntityP
     cdp: cdpIfPol
@@ -1165,6 +1373,13 @@ binds:
     stp: stpIfPol
     mcp: mcpIfPol
     storm_control: stormctrlIfPol
+    l2_interface: l2IfPol
+    poe: poeIfPol
+    macsec: macsecIfPol
+    copp: coppIfPol
+    llfc: qosLlfcIfPol
+    pfc: qosPfcIfPol
+    monitoring: monInfraPol
   infraAccBndlGrp:
     aaep: infraAttEntityP
     cdp: cdpIfPol
@@ -1174,10 +1389,90 @@ binds:
     stp: stpIfPol
     mcp: mcpIfPol
     storm_control: stormctrlIfPol
+    l2_interface: l2IfPol
+    macsec: macsecIfPol
+    copp: coppIfPol
+    llfc: qosLlfcIfPol
+    pfc: qosPfcIfPol
+  # PC/vPC interface policy override group (interface policies only — the
+  # remaining protocol binds accrue as their policies are curated in later waves)
+  infraAccBndlPolGrp:
+    aaep: infraAttEntityP
+    cdp: cdpIfPol
+    lldp: lldpIfPol
+    lacp: lacpLagPol
+    link_level: fabricHIfPol
+    stp: stpIfPol
+    mcp: mcpIfPol
+    storm_control: stormctrlIfPol
+    port_security: l2PortSecurityPol
+    netflow_monitor: netflowMonitorPol
+    l2_interface: l2IfPol
+    macsec: macsecIfPol
+    link_flap: fabricLinkFlapPol
+    synce: synceEthIfPol
+    copp: coppIfPol
+    llfc: qosLlfcIfPol
+    pfc: qosPfcIfPol
+    slow_drain: qosSdIfPol
+    monitoring: monInfraPol
+  infraSpAccPortGrp:
+    aaep: infraAttEntityP
+    cdp: cdpIfPol
+    link_level: fabricHIfPol
+    macsec: macsecIfPol
+    link_flap: fabricLinkFlapPol
+    copp: coppIfPol
+  infraFcAccPortGrp:
+    aaep: infraAttEntityP
+    fc_interface: fcIfPol
+  infraFcAccBndlGrp:
+    aaep: infraAttEntityP
+    lacp: lacpLagPol
+    fc_interface: fcIfPol
+  infraFcAccBndlPolGrp:
+    aaep: infraAttEntityP
+    lacp: lacpLagPol
+    fc_interface: fcIfPol
+  infraAccNodePGrp:
+    cdp: cdpIfPol
+    lldp: lldpIfPol
+    poe_policy: poeInstPol
+    fc_instance: fcInstPol
+    fc_fabric: fcFabricPol
+    synce_policy: synceInstPol
+    dot1x: l2NodeAuthPol
+    copp: coppLeafProfile
+    copp_prefilter: iaclLeafProfile
+    fast_link_failover: topoctrlFastLinkFailoverInstPol
+    forwarding_scale: topoctrlFwdScaleProfilePol
+    flash_config: equipmentFlashConfigPol
+    usb_config: topoctrlUsbConfigProfilePol
+    monitoring: monInfraPol
+    ptp: ptpInstPol
+    netflow_node: netflowNodePol
+    bfd_ipv4: bfdIpv4InstPol
+    bfd_ipv6: bfdIpv6InstPol
+    bfd_ipv4_mh: bfdMhIpv4InstPol
+    bfd_ipv6_mh: bfdMhIpv6InstPol
+  infraSpineAccNodePGrp:
+    cdp: cdpIfPol
+    lldp: lldpIfPol
+    copp: coppSpineProfile
+    copp_prefilter: iaclSpineProfile
+    usb_config: topoctrlUsbConfigProfilePol
+    bfd_ipv4: bfdIpv4InstPol
+    bfd_ipv6: bfdIpv6InstPol
+  macsecIfPol:
+    keychain: macsecKeyChainPol
   infraHPortS:
     policy_group: infraAccBaseGrp  # abstract — access_group / port_channel
+  infraSHPortS:
+    policy_group: infraSpAccPortGrp
   infraNodeP:
     interface_profile: infraAccPortP
+  infraSpineP:
+    interface_profile: infraSpAccPortP
 
 verbs:
   fvAEPg:

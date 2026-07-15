@@ -4,6 +4,48 @@ All notable changes to this project are documented here.  The format follows
 [Keep a Changelog](https://keepachangelog.com/); versions follow semver
 (0.x — the API may still change between minor versions).
 
+## [0.11.0] — 2026-07-15
+
+The access-policy (`infra`) configuration surface is now substantially complete.
+The fabric's physical side — pools, domains, policy groups, interface and switch
+policies, QoS and control-plane protection, fabric-wide system settings, and
+observability — is first-class vocabulary, typed and live-verified against a
+6.0(9c) fabric.
+
+### Added
+
+- **Pools and the Fibre Channel domain.**  VXLAN, VSAN and multicast-address
+  pools with their ranges; the FC domain binding its VLAN/VSAN/address pools and
+  VSAN attributes.
+- **Policy groups and profiles.**  Leaf/spine switch groups, the spine access
+  group, PC/vPC override, the FC port/PC/PC-override groups, breakout group and
+  modular-card group; the spine interface profile with its port selector; FEX,
+  pod and access-module profiles with their selectors and blocks.
+- **Interface policies.**  L2 interface, LACP member, PoE, FC, MACsec (container
+  with parameters/keychain/key policies), SyncE, link-flap and 802.1x
+  port/node authentication; the PoE/FC/SyncE instance and fabric policies.
+- **QoS and control-plane protection.**  The QoS instance policy and its six
+  classes with per-class buffer, congestion, priority-flow-control, queue,
+  schedule and microburst policies; interface LLFC/PFC/slow-drain; CoPP
+  leaf/spine and per-interface policies; the CoPP prefilter with its ACL entries.
+- **Fabric-wide and system policies.**  CP/controller MTU, TCP MSS, fabric-wide
+  settings, port tracking and status, forwarding-scale profile, USB
+  configuration, fast link-failover, flash configuration, remote-leaf pod
+  redundancy, system GIPo, infrastructure zoning; DHCP relay node/pod groups,
+  node/pod management addresses and the managed-node connectivity group.
+- **Observability and timing.**  The monitoring policy with syslog/SNMP/callhome/
+  smart-callhome/TACACS sources and fault/event severity assignment; PTP node
+  policy, profile, domain and template; the four global BFD policies; the
+  NetFlow node policy; VSPAN sessions and destination groups.
+- **Policy-group wiring.**  The interface and switch policy groups now bind every
+  relevant policy above (CoPP, QoS, MACsec, BFD, PTP, monitoring, and the rest).
+
+### Notes
+
+- Non-creatable fabric singletons — the QoS instance/classes, CP MTU, TCP MSS,
+  fabric-wide settings, port tracking/status, system GIPo, and the zoning
+  profile — are configured in place through their makers rather than created.
+
 ## [0.10.0] — 2026-07-15
 
 The tenant's configuration surface is now substantially complete.  A large body

@@ -18,12 +18,17 @@ Every design is rooted at `polUni` (`design()`); the pages below cover one domai
 - `.phys_dom(name, **attrs)` → `physDomP`
 - `.l3_dom(name, **attrs)` → `l3extDomP`
 - `.l2_dom(name, **attrs)` → `l2extDomP`
+- `.fc_dom(name, **attrs)` → `fcDomP`
 
 **Domains under `uni`**
 
 - `phys_dom(name).bind(vlan_pool=...)` → `infraRsVlanNs` (DN flavor, target `fvnsVlanInstP`)
 - `l3_dom(name).bind(vlan_pool=...)` → `infraRsVlanNs` (DN flavor, target `fvnsVlanInstP`)
 - `l2_dom(name).bind(vlan_pool=...)` → `infraRsVlanNs` (DN flavor, target `fvnsVlanInstP`)
+- `fc_dom(name).bind(vlan_pool=...)` → `infraRsVlanNs` (DN flavor, target `fvnsVlanInstP`)
+- `fc_dom(name).bind(vsan_pool=...)` → `fcRsVsanNs` (DN flavor, target `fvnsVsanInstP`)
+- `fc_dom(name).bind(ip_address_pool=...)` → `infraRsVipAddrNs` (DN flavor, target `fvnsAddrInst`)
+- `fc_dom(name).bind(vsan_attributes=...)` → `fcRsVsanAttr` (DN flavor, target `fcVsanAttrP`)
 
 ```{toctree}
 :maxdepth: 2

@@ -13,29 +13,131 @@ Interface policies, VLAN pools, AAEPs, policy groups, interface and switch profi
   - {ref}`infra.cdp_policy <vocab-infra-cdp_policy>` — `cdpIfPol`, 5 attributes
   - {ref}`infra.lldp_policy <vocab-infra-lldp_policy>` — `lldpIfPol`, 7 attributes
   - {ref}`infra.lacp_policy <vocab-infra-lacp_policy>` — `lacpLagPol`, 8 attributes
+    - {ref}`infra.lacp_policy.load_balance_policy <vocab-infra-lacp_policy-load_balance_policy>` — `l2LoadBalancePol`, 5 attributes
+  - {ref}`infra.lacp_member_policy <vocab-infra-lacp_member_policy>` — `lacpIfPol`, 6 attributes
   - {ref}`infra.link_level_policy <vocab-infra-link_level_policy>` — `fabricHIfPol`, 11 attributes
+  - {ref}`infra.link_flap_policy <vocab-infra-link_flap_policy>` — `fabricLinkFlapPol`, 6 attributes
   - {ref}`infra.mcp_policy <vocab-infra-mcp_policy>` — `mcpIfPol`, 13 attributes
   - {ref}`infra.stp_policy <vocab-infra-stp_policy>` — `stpIfPol`, 5 attributes
   - {ref}`infra.storm_control_policy <vocab-infra-storm_control_policy>` — `stormctrlIfPol`, 24 attributes
+  - {ref}`infra.l2_interface_policy <vocab-infra-l2_interface_policy>` — `l2IfPol`, 7 attributes
+  - {ref}`infra.poe_interface_policy <vocab-infra-poe_interface_policy>` — `poeIfPol`, 11 attributes
+  - {ref}`infra.fc_interface_policy <vocab-infra-fc_interface_policy>` — `fcIfPol`, 10 attributes
+  - {ref}`infra.macsec_interface_policy <vocab-infra-macsec_interface_policy>` — `macsecIfPol`, 5 attributes
+  - {ref}`infra.synce_interface_policy <vocab-infra-synce_interface_policy>` — `synceEthIfPol`, 16 attributes
+  - {ref}`infra.dot1x_node_authentication <vocab-infra-dot1x_node_authentication>` — `l2NodeAuthPol`, 6 attributes
+  - {ref}`infra.dot1x_port_authentication <vocab-infra-dot1x_port_authentication>` — `l2PortAuthPol`, 6 attributes
+    - {ref}`infra.dot1x_port_authentication.dot1x_port_authentication_config <vocab-infra-dot1x_port_authentication-dot1x_port_authentication_config>` — `l2PortAuthCfgPol`, 8 attributes
+  - {ref}`infra.poe_policy <vocab-infra-poe_policy>` — `poeInstPol`, 6 attributes
+  - {ref}`infra.fc_instance_policy <vocab-infra-fc_instance_policy>` — `fcInstPol`, 6 attributes
+  - {ref}`infra.fc_fabric_policy <vocab-infra-fc_fabric_policy>` — `fcFabricPol`, 7 attributes
+  - {ref}`infra.vsan_attributes <vocab-infra-vsan_attributes>` — `fcVsanAttrP`, 4 attributes
+    - {ref}`infra.vsan_attributes.vsan_attribute_entry <vocab-infra-vsan_attributes-vsan_attribute_entry>` — `fcVsanAttrPEntry`, 3 attributes
+  - {ref}`infra.synce_policy <vocab-infra-synce_policy>` — `synceInstPol`, 7 attributes
+  - {ref}`infra.macsec <vocab-infra-macsec>` — `macsecPolCont`, 0 attributes
+    - {ref}`infra.macsec.parameters_policy <vocab-infra-macsec-parameters_policy>` — `macsecParamPol`, 10 attributes
+    - {ref}`infra.macsec.keychain_policy <vocab-infra-macsec-keychain_policy>` — `macsecKeyChainPol`, 4 attributes
+      - {ref}`infra.macsec.keychain_policy.key_policy <vocab-infra-macsec-keychain_policy-key_policy>` — `macsecKeyPol`, 8 attributes
   - {ref}`infra.dhcp_relay_policy <vocab-infra-dhcp_relay_policy>` — `dhcpRelayP`, 6 attributes
     - {ref}`infra.dhcp_relay_policy.provider <vocab-infra-dhcp_relay_policy-provider>` — `dhcpRsProv`, 3 attributes
   - {ref}`infra.dpp_policy <vocab-infra-dpp_policy>` — `qosDppPol`, 25 attributes
+  - {ref}`infra.qos_instance_policy <vocab-infra-qos_instance_policy>` — `qosInstPol`, 13 attributes
+    - {ref}`infra.qos_instance_policy.qos_class_policy <vocab-infra-qos_instance_policy-qos_class_policy>` — `qosClass`, 7 attributes
+      - {ref}`infra.qos_instance_policy.qos_class_policy.qos_buffer_policy <vocab-infra-qos_instance_policy-qos_class_policy-qos_buffer_policy>` — `qosBuffer`, 3 attributes
+      - {ref}`infra.qos_instance_policy.qos_class_policy.qos_congestion_policy <vocab-infra-qos_instance_policy-qos_class_policy-qos_congestion_policy>` — `qosCong`, 10 attributes
+      - {ref}`infra.qos_instance_policy.qos_class_policy.qos_priority_flow_control_policy <vocab-infra-qos_instance_policy-qos_class_policy-qos_priority_flow_control_policy>` — `qosPfcPol`, 7 attributes
+      - {ref}`infra.qos_instance_policy.qos_class_policy.qos_queue_management_policy <vocab-infra-qos_instance_policy-qos_class_policy-qos_queue_management_policy>` — `qosQueue`, 7 attributes
+      - {ref}`infra.qos_instance_policy.qos_class_policy.schedule_policy <vocab-infra-qos_instance_policy-qos_class_policy-schedule_policy>` — `qosSched`, 4 attributes
+      - {ref}`infra.qos_instance_policy.qos_class_policy.microburst_policy <vocab-infra-qos_instance_policy-qos_class_policy-microburst_policy>` — `qosUburst`, 8 attributes
+  - {ref}`infra.llfc_interface_policy <vocab-infra-llfc_interface_policy>` — `qosLlfcIfPol`, 6 attributes
+  - {ref}`infra.pfc_interface_policy <vocab-infra-pfc_interface_policy>` — `qosPfcIfPol`, 5 attributes
+  - {ref}`infra.slow_drain_policy <vocab-infra-slow_drain_policy>` — `qosSdIfPol`, 8 attributes
+  - {ref}`infra.copp_leaf_policy <vocab-infra-copp_leaf_policy>` — `coppLeafProfile`, 5 attributes
+    - {ref}`infra.copp_leaf_policy.gen1_settings <vocab-infra-copp_leaf_policy-gen1_settings>` — `coppLeafGen1CustomValues`, 51 attributes
+  - {ref}`infra.copp_spine_policy <vocab-infra-copp_spine_policy>` — `coppSpineProfile`, 5 attributes
+    - {ref}`infra.copp_spine_policy.gen1_settings <vocab-infra-copp_spine_policy-gen1_settings>` — `coppSpineGen1CustomValues`, 33 attributes
+  - {ref}`infra.copp_interface_policy <vocab-infra-copp_interface_policy>` — `coppIfPol`, 4 attributes
+    - {ref}`infra.copp_interface_policy.protocol_class <vocab-infra-copp_interface_policy-protocol_class>` — `coppProtoClassP`, 7 attributes
+  - {ref}`infra.copp_prefilter_leaf_policy <vocab-infra-copp_prefilter_leaf_policy>` — `iaclLeafProfile`, 4 attributes
+    - {ref}`infra.copp_prefilter_leaf_policy.acl_entry <vocab-infra-copp_prefilter_leaf_policy-acl_entry>` — `iaclEntry`, 8 attributes
+  - {ref}`infra.copp_prefilter_spine_policy <vocab-infra-copp_prefilter_spine_policy>` — `iaclSpineProfile`, 4 attributes
+    - {ref}`infra.copp_prefilter_spine_policy.acl_entry <vocab-infra-copp_prefilter_spine_policy-acl_entry>` — `iaclEntry`, 8 attributes
+  - {ref}`infra.cp_mtu_policy <vocab-infra-cp_mtu_policy>` — `infraCPMtuPol`, 6 attributes
+  - {ref}`infra.ctrlr_mtu_policy <vocab-infra-ctrlr_mtu_policy>` — `infraCtrlrMtuPol`, 4 attributes
+  - {ref}`infra.tcp_mss_policy <vocab-infra-tcp_mss_policy>` — `infraMssPol`, 7 attributes
+  - {ref}`infra.fabric_wide_settings_policy <vocab-infra-fabric_wide_settings_policy>` — `infraSetPol`, 20 attributes
+  - {ref}`infra.port_tracking <vocab-infra-port_tracking>` — `infraPortTrackPol`, 8 attributes
+  - {ref}`infra.port_status_policy <vocab-infra-port_status_policy>` — `infraPortDirecPol`, 0 attributes
+  - {ref}`infra.remote_leaf_pod_redundancy_policy <vocab-infra-remote_leaf_pod_redundancy_policy>` — `infraRlPodRedPol`, 6 attributes
+  - {ref}`infra.system_gipo_policy <vocab-infra-system_gipo_policy>` — `fmcastSystemGIPoPol`, 5 attributes
+  - {ref}`infra.forwarding_scale_profile_policy <vocab-infra-forwarding_scale_profile_policy>` — `topoctrlFwdScaleProfilePol`, 5 attributes
+  - {ref}`infra.usb_configuration_policy <vocab-infra-usb_configuration_policy>` — `topoctrlUsbConfigProfilePol`, 5 attributes
+  - {ref}`infra.fast_link_failover_policy <vocab-infra-fast_link_failover_policy>` — `topoctrlFastLinkFailoverInstPol`, 5 attributes
+  - {ref}`infra.port_bundle_configuration <vocab-infra-port_bundle_configuration>` — `infraBundleConfig`, 8 attributes
+  - {ref}`infra.flash_configuration_policy <vocab-infra-flash_configuration_policy>` — `equipmentFlashConfigPol`, 8 attributes
+  - {ref}`infra.infrastructure_zoning_profile <vocab-infra-infrastructure_zoning_profile>` — `infrazoneZoneP`, 4 attributes
+    - {ref}`infra.infrastructure_zoning_profile.infrastructure_zone <vocab-infra-infrastructure_zoning_profile-infrastructure_zone>` — `infrazoneZone`, 3 attributes
+      - {ref}`infra.infrastructure_zoning_profile.infrastructure_zone.node_group <vocab-infra-infrastructure_zoning_profile-infrastructure_zone-node_group>` — `infrazoneNodeGrp`, 5 attributes
+        - {ref}`infra.infrastructure_zoning_profile.infrastructure_zone.node_group.node_block <vocab-infra-infrastructure_zoning_profile-infrastructure_zone-node_group-node_block>` — `infraNodeBlk`, 4 attributes
+      - {ref}`infra.infrastructure_zoning_profile.infrastructure_zone.pod_group <vocab-infra-infrastructure_zoning_profile-infrastructure_zone-pod_group>` — `infrazonePodGrp`, 5 attributes
+        - {ref}`infra.infrastructure_zoning_profile.infrastructure_zone.pod_group.pod_block <vocab-infra-infrastructure_zoning_profile-infrastructure_zone-pod_group-pod_block>` — `infraPodBlk`, 4 attributes
+  - {ref}`infra.dhcp_node_group <vocab-infra-dhcp_node_group>` — `dhcpNodeGrp`, 5 attributes
+    - {ref}`infra.dhcp_node_group.node_block <vocab-infra-dhcp_node_group-node_block>` — `infraNodeBlk`, 4 attributes
+  - {ref}`infra.dhcp_pod_group <vocab-infra-dhcp_pod_group>` — `dhcpPodGrp`, 5 attributes
+    - {ref}`infra.dhcp_pod_group.pod_block <vocab-infra-dhcp_pod_group-pod_block>` — `infraPodBlk`, 4 attributes
+  - {ref}`infra.node_management_address <vocab-infra-node_management_address>` — `mgmtNodeGrp`, 5 attributes
+    - {ref}`infra.node_management_address.node_block <vocab-infra-node_management_address-node_block>` — `infraNodeBlk`, 4 attributes
+  - {ref}`infra.pod_management_address <vocab-infra-pod_management_address>` — `mgmtPodGrp`, 5 attributes
+    - {ref}`infra.pod_management_address.pod_block <vocab-infra-pod_management_address-pod_block>` — `infraPodBlk`, 4 attributes
   - {ref}`infra.vlan_pool <vocab-infra-vlan_pool>` — `fvnsVlanInstP`, 5 attributes
     - {ref}`infra.vlan_pool.range <vocab-infra-vlan_pool-range>` — `fvnsEncapBlk`, 6 attributes
+  - {ref}`infra.vxlan_pool <vocab-infra-vxlan_pool>` — `fvnsVxlanInstP`, 4 attributes
+    - {ref}`infra.vxlan_pool.range <vocab-infra-vxlan_pool-range>` — `fvnsEncapBlk`, 6 attributes
+  - {ref}`infra.vsan_pool <vocab-infra-vsan_pool>` — `fvnsVsanInstP`, 5 attributes
+    - {ref}`infra.vsan_pool.range <vocab-infra-vsan_pool-range>` — `fvnsVsanEncapBlk`, 6 attributes
+  - {ref}`infra.mcast_addr_pool <vocab-infra-mcast_addr_pool>` — `fvnsMcastAddrInstP`, 4 attributes
+    - {ref}`infra.mcast_addr_pool.range <vocab-infra-mcast_addr_pool-range>` — `fvnsMcastAddrBlk`, 4 attributes
   - {ref}`infra.aaep <vocab-infra-aaep>` — `infraAttEntityP`, 4 attributes
   - {ref}`infra.func_profile <vocab-infra-func_profile>` — `infraFuncP`, 4 attributes
     - {ref}`infra.func_profile.access_group <vocab-infra-func_profile-access_group>` — `infraAccPortGrp`, 4 attributes
     - {ref}`infra.func_profile.port_channel <vocab-infra-func_profile-port_channel>` — `infraAccBndlGrp`, 5 attributes
+      - {ref}`infra.func_profile.port_channel.override_policy_group <vocab-infra-func_profile-port_channel-override_policy_group>` — `infraAccBndlSubgrp`, 4 attributes
+    - {ref}`infra.func_profile.port_channel_override <vocab-infra-func_profile-port_channel_override>` — `infraAccBndlPolGrp`, 4 attributes
+    - {ref}`infra.func_profile.breakout_group <vocab-infra-func_profile-breakout_group>` — `infraBrkoutPortGrp`, 5 attributes
+    - {ref}`infra.func_profile.fc_port_group <vocab-infra-func_profile-fc_port_group>` — `infraFcAccPortGrp`, 4 attributes
+    - {ref}`infra.func_profile.fc_port_channel <vocab-infra-func_profile-fc_port_channel>` — `infraFcAccBndlGrp`, 4 attributes
+    - {ref}`infra.func_profile.fc_port_channel_override <vocab-infra-func_profile-fc_port_channel_override>` — `infraFcAccBndlPolGrp`, 4 attributes
+    - {ref}`infra.func_profile.spine_access_group <vocab-infra-func_profile-spine_access_group>` — `infraSpAccPortGrp`, 4 attributes
+    - {ref}`infra.func_profile.leaf_switch_group <vocab-infra-func_profile-leaf_switch_group>` — `infraAccNodePGrp`, 4 attributes
+    - {ref}`infra.func_profile.spine_switch_group <vocab-infra-func_profile-spine_switch_group>` — `infraSpineAccNodePGrp`, 4 attributes
+    - {ref}`infra.func_profile.access_card_group <vocab-infra-func_profile-access_card_group>` — `infraAccCardPGrp`, 4 attributes
+    - {ref}`infra.func_profile.managed_node_connectivity_group <vocab-infra-func_profile-managed_node_connectivity_group>` — `mgmtGrp`, 1 attributes
+      - {ref}`infra.func_profile.managed_node_connectivity_group.inband_zone <vocab-infra-func_profile-managed_node_connectivity_group-inband_zone>` — `mgmtInBZone`, 2 attributes
+      - {ref}`infra.func_profile.managed_node_connectivity_group.oob_zone <vocab-infra-func_profile-managed_node_connectivity_group-oob_zone>` — `mgmtOoBZone`, 2 attributes
   - {ref}`infra.access_port_profile <vocab-infra-access_port_profile>` — `infraAccPortP`, 4 attributes
     - {ref}`infra.access_port_profile.port_selector <vocab-infra-access_port_profile-port_selector>` — `infraHPortS`, 5 attributes
       - {ref}`infra.access_port_profile.port_selector.port_block <vocab-infra-access_port_profile-port_selector-port_block>` — `infraPortBlk`, 6 attributes
       - {ref}`infra.access_port_profile.port_selector.sub_port_block <vocab-infra-access_port_profile-port_selector-sub_port_block>` — `infraSubPortBlk`, 8 attributes
+  - {ref}`infra.spine_interface_profile <vocab-infra-spine_interface_profile>` — `infraSpAccPortP`, 4 attributes
+    - {ref}`infra.spine_interface_profile.port_selector <vocab-infra-spine_interface_profile-port_selector>` — `infraSHPortS`, 5 attributes
+      - {ref}`infra.spine_interface_profile.port_selector.port_block <vocab-infra-spine_interface_profile-port_selector-port_block>` — `infraPortBlk`, 6 attributes
+      - {ref}`infra.spine_interface_profile.port_selector.sub_port_block <vocab-infra-spine_interface_profile-port_selector-sub_port_block>` — `infraSubPortBlk`, 8 attributes
   - {ref}`infra.leaf_profile <vocab-infra-leaf_profile>` — `infraNodeP`, 4 attributes
     - {ref}`infra.leaf_profile.leaf_selector <vocab-infra-leaf_profile-leaf_selector>` — `infraLeafS`, 5 attributes
       - {ref}`infra.leaf_profile.leaf_selector.node_block <vocab-infra-leaf_profile-leaf_selector-node_block>` — `infraNodeBlk`, 4 attributes
   - {ref}`infra.spine_profile <vocab-infra-spine_profile>` — `infraSpineP`, 4 attributes
     - {ref}`infra.spine_profile.spine_selector <vocab-infra-spine_profile-spine_selector>` — `infraSpineS`, 5 attributes
       - {ref}`infra.spine_profile.spine_selector.node_block <vocab-infra-spine_profile-spine_selector-node_block>` — `infraNodeBlk`, 4 attributes
+  - {ref}`infra.access_module_profile <vocab-infra-access_module_profile>` — `infraAccCardP`, 4 attributes
+    - {ref}`infra.access_module_profile.access_module_selector <vocab-infra-access_module_profile-access_module_selector>` — `infraCardS`, 5 attributes
+  - {ref}`infra.fex_profile <vocab-infra-fex_profile>` — `infraFexP`, 4 attributes
+    - {ref}`infra.fex_profile.fex_bundle_group <vocab-infra-fex_profile-fex_bundle_group>` — `infraFexBndlGrp`, 4 attributes
+    - {ref}`infra.fex_profile.port_selector <vocab-infra-fex_profile-port_selector>` — `infraHPortS`, 5 attributes
+      - {ref}`infra.fex_profile.port_selector.port_block <vocab-infra-fex_profile-port_selector-port_block>` — `infraPortBlk`, 6 attributes
+      - {ref}`infra.fex_profile.port_selector.sub_port_block <vocab-infra-fex_profile-port_selector-sub_port_block>` — `infraSubPortBlk`, 8 attributes
+  - {ref}`infra.pod_profile <vocab-infra-pod_profile>` — `infraPodP`, 4 attributes
+    - {ref}`infra.pod_profile.pod_selector <vocab-infra-pod_profile-pod_selector>` — `infraPodS`, 5 attributes
+      - {ref}`infra.pod_profile.pod_selector.pod_block <vocab-infra-pod_profile-pod_selector-pod_block>` — `infraPodBlk`, 4 attributes
   - {ref}`infra.span_source_group <vocab-infra-span_source_group>` — `spanSrcGrp`, 5 attributes
     - {ref}`infra.span_source_group.span_source <vocab-infra-span_source_group-span_source>` — `spanSrc`, 6 attributes
     - {ref}`infra.span_source_group.span_label <vocab-infra-span_source_group-span_label>` — `spanSpanLbl`, 5 attributes
@@ -49,6 +151,46 @@ Interface policies, VLAN pools, AAEPs, policy groups, interface and switch profi
   - {ref}`infra.netflow_monitor <vocab-infra-netflow_monitor>` — `netflowMonitorPol`, 4 attributes
   - {ref}`infra.netflow_exporter <vocab-infra-netflow_exporter>` — `netflowExporterPol`, 10 attributes
   - {ref}`infra.netflow_record <vocab-infra-netflow_record>` — `netflowRecordPol`, 6 attributes
+  - {ref}`infra.netflow_node_policy <vocab-infra-netflow_node_policy>` — `netflowNodePol`, 7 attributes
+  - {ref}`infra.netflow_vmm_exporter <vocab-infra-netflow_vmm_exporter>` — `netflowVmmExporterPol`, 9 attributes
+  - {ref}`infra.monitoring_policy <vocab-infra-monitoring_policy>` — `monInfraPol`, 4 attributes
+    - {ref}`infra.monitoring_policy.monitoring_target <vocab-infra-monitoring_policy-monitoring_target>` — `monInfraTarget`, 3 attributes
+      - {ref}`infra.monitoring_policy.monitoring_target.syslog_source <vocab-infra-monitoring_policy-monitoring_target-syslog_source>` — `syslogSrc`, 4 attributes
+      - {ref}`infra.monitoring_policy.monitoring_target.snmp_source <vocab-infra-monitoring_policy-monitoring_target-snmp_source>` — `snmpSrc`, 4 attributes
+      - {ref}`infra.monitoring_policy.monitoring_target.callhome_source <vocab-infra-monitoring_policy-monitoring_target-callhome_source>` — `callhomeSrc`, 4 attributes
+      - {ref}`infra.monitoring_policy.monitoring_target.smart_callhome_source <vocab-infra-monitoring_policy-monitoring_target-smart_callhome_source>` — `callhomeSmartSrc`, 2 attributes
+      - {ref}`infra.monitoring_policy.monitoring_target.tacacs_source <vocab-infra-monitoring_policy-monitoring_target-tacacs_source>` — `tacacsSrc`, 5 attributes
+      - {ref}`infra.monitoring_policy.monitoring_target.fault_severity_assignment_policy <vocab-infra-monitoring_policy-monitoring_target-fault_severity_assignment_policy>` — `faultSevAsnP`, 6 attributes
+        - {ref}`infra.monitoring_policy.monitoring_target.fault_severity_assignment_policy.syslog_source <vocab-infra-monitoring_policy-monitoring_target-fault_severity_assignment_policy-syslog_source>` — `syslogSrc`, 4 attributes
+        - {ref}`infra.monitoring_policy.monitoring_target.fault_severity_assignment_policy.snmp_source <vocab-infra-monitoring_policy-monitoring_target-fault_severity_assignment_policy-snmp_source>` — `snmpSrc`, 4 attributes
+        - {ref}`infra.monitoring_policy.monitoring_target.fault_severity_assignment_policy.callhome_source <vocab-infra-monitoring_policy-monitoring_target-fault_severity_assignment_policy-callhome_source>` — `callhomeSrc`, 4 attributes
+        - {ref}`infra.monitoring_policy.monitoring_target.fault_severity_assignment_policy.smart_callhome_source <vocab-infra-monitoring_policy-monitoring_target-fault_severity_assignment_policy-smart_callhome_source>` — `callhomeSmartSrc`, 2 attributes
+        - {ref}`infra.monitoring_policy.monitoring_target.fault_severity_assignment_policy.tacacs_source <vocab-infra-monitoring_policy-monitoring_target-fault_severity_assignment_policy-tacacs_source>` — `tacacsSrc`, 5 attributes
+      - {ref}`infra.monitoring_policy.monitoring_target.event_severity_assignment_policy <vocab-infra-monitoring_policy-monitoring_target-event_severity_assignment_policy>` — `eventSevAsnP`, 4 attributes
+        - {ref}`infra.monitoring_policy.monitoring_target.event_severity_assignment_policy.syslog_source <vocab-infra-monitoring_policy-monitoring_target-event_severity_assignment_policy-syslog_source>` — `syslogSrc`, 4 attributes
+        - {ref}`infra.monitoring_policy.monitoring_target.event_severity_assignment_policy.snmp_source <vocab-infra-monitoring_policy-monitoring_target-event_severity_assignment_policy-snmp_source>` — `snmpSrc`, 4 attributes
+        - {ref}`infra.monitoring_policy.monitoring_target.event_severity_assignment_policy.callhome_source <vocab-infra-monitoring_policy-monitoring_target-event_severity_assignment_policy-callhome_source>` — `callhomeSrc`, 4 attributes
+        - {ref}`infra.monitoring_policy.monitoring_target.event_severity_assignment_policy.smart_callhome_source <vocab-infra-monitoring_policy-monitoring_target-event_severity_assignment_policy-smart_callhome_source>` — `callhomeSmartSrc`, 2 attributes
+        - {ref}`infra.monitoring_policy.monitoring_target.event_severity_assignment_policy.tacacs_source <vocab-infra-monitoring_policy-monitoring_target-event_severity_assignment_policy-tacacs_source>` — `tacacsSrc`, 5 attributes
+    - {ref}`infra.monitoring_policy.syslog_source <vocab-infra-monitoring_policy-syslog_source>` — `syslogSrc`, 4 attributes
+    - {ref}`infra.monitoring_policy.snmp_source <vocab-infra-monitoring_policy-snmp_source>` — `snmpSrc`, 4 attributes
+    - {ref}`infra.monitoring_policy.callhome_source <vocab-infra-monitoring_policy-callhome_source>` — `callhomeSrc`, 4 attributes
+    - {ref}`infra.monitoring_policy.smart_callhome_source <vocab-infra-monitoring_policy-smart_callhome_source>` — `callhomeSmartSrc`, 2 attributes
+    - {ref}`infra.monitoring_policy.tacacs_source <vocab-infra-monitoring_policy-tacacs_source>` — `tacacsSrc`, 5 attributes
+  - {ref}`infra.vspan_session <vocab-infra-vspan_session>` — `spanVSrcGrp`, 5 attributes
+    - {ref}`infra.vspan_session.vspan_vsource <vocab-infra-vspan_session-vspan_vsource>` — `spanVSrc`, 5 attributes
+    - {ref}`infra.vspan_session.span_label <vocab-infra-vspan_session-span_label>` — `spanSpanLbl`, 5 attributes
+  - {ref}`infra.vspan_destination_group <vocab-infra-vspan_destination_group>` — `spanVDestGrp`, 4 attributes
+    - {ref}`infra.vspan_destination_group.vspan_vdestination <vocab-infra-vspan_destination_group-vspan_vdestination>` — `spanVDest`, 4 attributes
+      - {ref}`infra.vspan_destination_group.vspan_vdestination.vspan_destination_epg_summary <vocab-infra-vspan_destination_group-vspan_vdestination-vspan_destination_epg_summary>` — `spanVEpgSummary`, 12 attributes
+  - {ref}`infra.ptp_node_policy <vocab-infra-ptp_node_policy>` — `ptpInstPol`, 9 attributes
+  - {ref}`infra.ptp_profile <vocab-infra-ptp_profile>` — `ptpProfile`, 10 attributes
+  - {ref}`infra.ptp_domain <vocab-infra-ptp_domain>` — `ptpDomain`, 2 attributes
+  - {ref}`infra.ptp_profile_template <vocab-infra-ptp_profile_template>` — `ptpProfileTemplate`, 13 attributes
+  - {ref}`infra.bfd_global_ipv4_policy <vocab-infra-bfd_global_ipv4_policy>` — `bfdIpv4InstPol`, 11 attributes
+  - {ref}`infra.bfd_global_ipv6_policy <vocab-infra-bfd_global_ipv6_policy>` — `bfdIpv6InstPol`, 11 attributes
+  - {ref}`infra.bfd_global_ipv4_mh_policy <vocab-infra-bfd_global_ipv4_mh_policy>` — `bfdMhIpv4InstPol`, 7 attributes
+  - {ref}`infra.bfd_global_ipv6_mh_policy <vocab-infra-bfd_global_ipv6_mh_policy>` — `bfdMhIpv6InstPol`, 7 attributes
 
 ```{toctree}
 :maxdepth: 1
@@ -58,29 +200,131 @@ infra/infra
 infra/infra-cdp_policy
 infra/infra-lldp_policy
 infra/infra-lacp_policy
+infra/infra-lacp_policy-load_balance_policy
+infra/infra-lacp_member_policy
 infra/infra-link_level_policy
+infra/infra-link_flap_policy
 infra/infra-mcp_policy
 infra/infra-stp_policy
 infra/infra-storm_control_policy
+infra/infra-l2_interface_policy
+infra/infra-poe_interface_policy
+infra/infra-fc_interface_policy
+infra/infra-macsec_interface_policy
+infra/infra-synce_interface_policy
+infra/infra-dot1x_node_authentication
+infra/infra-dot1x_port_authentication
+infra/infra-dot1x_port_authentication-dot1x_port_authentication_config
+infra/infra-poe_policy
+infra/infra-fc_instance_policy
+infra/infra-fc_fabric_policy
+infra/infra-vsan_attributes
+infra/infra-vsan_attributes-vsan_attribute_entry
+infra/infra-synce_policy
+infra/infra-macsec
+infra/infra-macsec-parameters_policy
+infra/infra-macsec-keychain_policy
+infra/infra-macsec-keychain_policy-key_policy
 infra/infra-dhcp_relay_policy
 infra/infra-dhcp_relay_policy-provider
 infra/infra-dpp_policy
+infra/infra-qos_instance_policy
+infra/infra-qos_instance_policy-qos_class_policy
+infra/infra-qos_instance_policy-qos_class_policy-qos_buffer_policy
+infra/infra-qos_instance_policy-qos_class_policy-qos_congestion_policy
+infra/infra-qos_instance_policy-qos_class_policy-qos_priority_flow_control_policy
+infra/infra-qos_instance_policy-qos_class_policy-qos_queue_management_policy
+infra/infra-qos_instance_policy-qos_class_policy-schedule_policy
+infra/infra-qos_instance_policy-qos_class_policy-microburst_policy
+infra/infra-llfc_interface_policy
+infra/infra-pfc_interface_policy
+infra/infra-slow_drain_policy
+infra/infra-copp_leaf_policy
+infra/infra-copp_leaf_policy-gen1_settings
+infra/infra-copp_spine_policy
+infra/infra-copp_spine_policy-gen1_settings
+infra/infra-copp_interface_policy
+infra/infra-copp_interface_policy-protocol_class
+infra/infra-copp_prefilter_leaf_policy
+infra/infra-copp_prefilter_leaf_policy-acl_entry
+infra/infra-copp_prefilter_spine_policy
+infra/infra-copp_prefilter_spine_policy-acl_entry
+infra/infra-cp_mtu_policy
+infra/infra-ctrlr_mtu_policy
+infra/infra-tcp_mss_policy
+infra/infra-fabric_wide_settings_policy
+infra/infra-port_tracking
+infra/infra-port_status_policy
+infra/infra-remote_leaf_pod_redundancy_policy
+infra/infra-system_gipo_policy
+infra/infra-forwarding_scale_profile_policy
+infra/infra-usb_configuration_policy
+infra/infra-fast_link_failover_policy
+infra/infra-port_bundle_configuration
+infra/infra-flash_configuration_policy
+infra/infra-infrastructure_zoning_profile
+infra/infra-infrastructure_zoning_profile-infrastructure_zone
+infra/infra-infrastructure_zoning_profile-infrastructure_zone-node_group
+infra/infra-infrastructure_zoning_profile-infrastructure_zone-node_group-node_block
+infra/infra-infrastructure_zoning_profile-infrastructure_zone-pod_group
+infra/infra-infrastructure_zoning_profile-infrastructure_zone-pod_group-pod_block
+infra/infra-dhcp_node_group
+infra/infra-dhcp_node_group-node_block
+infra/infra-dhcp_pod_group
+infra/infra-dhcp_pod_group-pod_block
+infra/infra-node_management_address
+infra/infra-node_management_address-node_block
+infra/infra-pod_management_address
+infra/infra-pod_management_address-pod_block
 infra/infra-vlan_pool
 infra/infra-vlan_pool-range
+infra/infra-vxlan_pool
+infra/infra-vxlan_pool-range
+infra/infra-vsan_pool
+infra/infra-vsan_pool-range
+infra/infra-mcast_addr_pool
+infra/infra-mcast_addr_pool-range
 infra/infra-aaep
 infra/infra-func_profile
 infra/infra-func_profile-access_group
 infra/infra-func_profile-port_channel
+infra/infra-func_profile-port_channel-override_policy_group
+infra/infra-func_profile-port_channel_override
+infra/infra-func_profile-breakout_group
+infra/infra-func_profile-fc_port_group
+infra/infra-func_profile-fc_port_channel
+infra/infra-func_profile-fc_port_channel_override
+infra/infra-func_profile-spine_access_group
+infra/infra-func_profile-leaf_switch_group
+infra/infra-func_profile-spine_switch_group
+infra/infra-func_profile-access_card_group
+infra/infra-func_profile-managed_node_connectivity_group
+infra/infra-func_profile-managed_node_connectivity_group-inband_zone
+infra/infra-func_profile-managed_node_connectivity_group-oob_zone
 infra/infra-access_port_profile
 infra/infra-access_port_profile-port_selector
 infra/infra-access_port_profile-port_selector-port_block
 infra/infra-access_port_profile-port_selector-sub_port_block
+infra/infra-spine_interface_profile
+infra/infra-spine_interface_profile-port_selector
+infra/infra-spine_interface_profile-port_selector-port_block
+infra/infra-spine_interface_profile-port_selector-sub_port_block
 infra/infra-leaf_profile
 infra/infra-leaf_profile-leaf_selector
 infra/infra-leaf_profile-leaf_selector-node_block
 infra/infra-spine_profile
 infra/infra-spine_profile-spine_selector
 infra/infra-spine_profile-spine_selector-node_block
+infra/infra-access_module_profile
+infra/infra-access_module_profile-access_module_selector
+infra/infra-fex_profile
+infra/infra-fex_profile-fex_bundle_group
+infra/infra-fex_profile-port_selector
+infra/infra-fex_profile-port_selector-port_block
+infra/infra-fex_profile-port_selector-sub_port_block
+infra/infra-pod_profile
+infra/infra-pod_profile-pod_selector
+infra/infra-pod_profile-pod_selector-pod_block
 infra/infra-span_source_group
 infra/infra-span_source_group-span_source
 infra/infra-span_source_group-span_label
@@ -94,4 +338,44 @@ infra/infra-filter_group-filter_entry
 infra/infra-netflow_monitor
 infra/infra-netflow_exporter
 infra/infra-netflow_record
+infra/infra-netflow_node_policy
+infra/infra-netflow_vmm_exporter
+infra/infra-monitoring_policy
+infra/infra-monitoring_policy-monitoring_target
+infra/infra-monitoring_policy-monitoring_target-syslog_source
+infra/infra-monitoring_policy-monitoring_target-snmp_source
+infra/infra-monitoring_policy-monitoring_target-callhome_source
+infra/infra-monitoring_policy-monitoring_target-smart_callhome_source
+infra/infra-monitoring_policy-monitoring_target-tacacs_source
+infra/infra-monitoring_policy-monitoring_target-fault_severity_assignment_policy
+infra/infra-monitoring_policy-monitoring_target-fault_severity_assignment_policy-syslog_source
+infra/infra-monitoring_policy-monitoring_target-fault_severity_assignment_policy-snmp_source
+infra/infra-monitoring_policy-monitoring_target-fault_severity_assignment_policy-callhome_source
+infra/infra-monitoring_policy-monitoring_target-fault_severity_assignment_policy-smart_callhome_source
+infra/infra-monitoring_policy-monitoring_target-fault_severity_assignment_policy-tacacs_source
+infra/infra-monitoring_policy-monitoring_target-event_severity_assignment_policy
+infra/infra-monitoring_policy-monitoring_target-event_severity_assignment_policy-syslog_source
+infra/infra-monitoring_policy-monitoring_target-event_severity_assignment_policy-snmp_source
+infra/infra-monitoring_policy-monitoring_target-event_severity_assignment_policy-callhome_source
+infra/infra-monitoring_policy-monitoring_target-event_severity_assignment_policy-smart_callhome_source
+infra/infra-monitoring_policy-monitoring_target-event_severity_assignment_policy-tacacs_source
+infra/infra-monitoring_policy-syslog_source
+infra/infra-monitoring_policy-snmp_source
+infra/infra-monitoring_policy-callhome_source
+infra/infra-monitoring_policy-smart_callhome_source
+infra/infra-monitoring_policy-tacacs_source
+infra/infra-vspan_session
+infra/infra-vspan_session-vspan_vsource
+infra/infra-vspan_session-span_label
+infra/infra-vspan_destination_group
+infra/infra-vspan_destination_group-vspan_vdestination
+infra/infra-vspan_destination_group-vspan_vdestination-vspan_destination_epg_summary
+infra/infra-ptp_node_policy
+infra/infra-ptp_profile
+infra/infra-ptp_domain
+infra/infra-ptp_profile_template
+infra/infra-bfd_global_ipv4_policy
+infra/infra-bfd_global_ipv6_policy
+infra/infra-bfd_global_ipv4_mh_policy
+infra/infra-bfd_global_ipv6_mh_policy
 ```

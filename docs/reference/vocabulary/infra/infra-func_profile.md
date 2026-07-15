@@ -34,3 +34,13 @@ Accepted as keyword arguments of `.func_profile()` and of `.set(**attrs)` on thi
 | --- | --- | --- |
 | `.access_group(name, **attrs)` | `infraAccPortGrp` | {ref}`infra.func_profile.access_group <vocab-infra-func_profile-access_group>` |
 | `.port_channel(name, **attrs)` | `infraAccBndlGrp` | {ref}`infra.func_profile.port_channel <vocab-infra-func_profile-port_channel>` |
+| `.port_channel_override(name, **attrs)` | `infraAccBndlPolGrp` | {ref}`infra.func_profile.port_channel_override <vocab-infra-func_profile-port_channel_override>` |
+| `.breakout_group(name, **attrs)` | `infraBrkoutPortGrp` | {ref}`infra.func_profile.breakout_group <vocab-infra-func_profile-breakout_group>` |
+| `.fc_port_group(name, **attrs)` | `infraFcAccPortGrp` | {ref}`infra.func_profile.fc_port_group <vocab-infra-func_profile-fc_port_group>` |
+| `.fc_port_channel(name, **attrs)` | `infraFcAccBndlGrp` | {ref}`infra.func_profile.fc_port_channel <vocab-infra-func_profile-fc_port_channel>` |
+| `.fc_port_channel_override(name, **attrs)` | `infraFcAccBndlPolGrp` | {ref}`infra.func_profile.fc_port_channel_override <vocab-infra-func_profile-fc_port_channel_override>` |
+| `.spine_access_group(name, **attrs)` | `infraSpAccPortGrp` | {ref}`infra.func_profile.spine_access_group <vocab-infra-func_profile-spine_access_group>` |
+| `.leaf_switch_group(name, **attrs)` | `infraAccNodePGrp` | {ref}`infra.func_profile.leaf_switch_group <vocab-infra-func_profile-leaf_switch_group>` |
+| `.spine_switch_group(name, **attrs)` | `infraSpineAccNodePGrp` | {ref}`infra.func_profile.spine_switch_group <vocab-infra-func_profile-spine_switch_group>` |
+| `.access_card_group(name, **attrs)` | `infraAccCardPGrp` | {ref}`infra.func_profile.access_card_group <vocab-infra-func_profile-access_card_group>` |
+| `.managed_node_connectivity_group(name, **attrs)` | `mgmtGrp` | {ref}`infra.func_profile.managed_node_connectivity_group <vocab-infra-func_profile-managed_node_connectivity_group>` |

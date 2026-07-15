@@ -3836,7 +3836,7 @@ class _TenantMakers(Cursor):
         owner_key: str | None = None,
         owner_tag: str | None = None,
         userdom: str | None = None,
-    ) -> MonitoringPolicyCursor:
+    ) -> TenantMonitoringPolicyCursor:
         """Declare a ``monEPGPol`` child under the tenant level.
 
         Creates a container for monitoring policies associated with the tenant. This allows you to
@@ -3862,7 +3862,7 @@ class _TenantMakers(Cursor):
             )
         }
         return cast(
-            "MonitoringPolicyCursor",
+            "TenantMonitoringPolicyCursor",
             self._invoke_maker("monitoring_policy", (name,), _prune(params)),
         )
 
@@ -8411,7 +8411,7 @@ class TenantMldSnoopPolicyCursor(_TenantMakers, _UniMakers):
         return self
 
 
-class _MonitoringPolicyMakers(Cursor):
+class _TenantMonitoringPolicyMakers(Cursor):
     """Makers declared at the monitoring_policy level (``monEPGPol``)."""
 
     __slots__ = ()
@@ -8453,7 +8453,7 @@ class _MonitoringPolicyMakers(Cursor):
         )
 
 
-class MonitoringPolicyCursor(_MonitoringPolicyMakers, _TenantMakers, _UniMakers):
+class TenantMonitoringPolicyCursor(_TenantMonitoringPolicyMakers, _TenantMakers, _UniMakers):
     """Typed cursor for ``monEPGPol`` (monitoring_policy level).
 
     Position: ``uni.tenant.monitoring_policy``
@@ -8473,7 +8473,7 @@ class MonitoringPolicyCursor(_MonitoringPolicyMakers, _TenantMakers, _UniMakers)
         owner_key: str | None = None,
         owner_tag: str | None = None,
         userdom: str | None = None,
-    ) -> MonitoringPolicyCursor:
+    ) -> TenantMonitoringPolicyCursor:
         """Set ``monEPGPol`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
@@ -10141,7 +10141,7 @@ class _TenantKeychainPolicyMakers(Cursor):
         pre_shared_key: str | None = None,
         start_time: str | None = None,
         userdom: str | None = None,
-    ) -> KeyPolicyCursor:
+    ) -> TenantKeychainPolicyKeyPolicyCursor:
         """Declare a ``fvKeyPol`` child under the tenant_keychain_policy level.
 
         Key Policy
@@ -10167,7 +10167,7 @@ class _TenantKeychainPolicyMakers(Cursor):
             )
         }
         return cast(
-            "KeyPolicyCursor",
+            "TenantKeychainPolicyKeyPolicyCursor",
             self._invoke_maker("key_policy", (key_id,), _prune(params)),
         )
 
@@ -16099,7 +16099,7 @@ class MatchPrefixCursor(_MatchRuleMakers, _TenantMakers, _UniMakers):
         return self
 
 
-class TargetCursor(_MonitoringPolicyMakers, _TenantMakers, _UniMakers):
+class TargetCursor(_TenantMonitoringPolicyMakers, _TenantMakers, _UniMakers):
     """Typed cursor for ``monEPGTarget`` (target level).
 
     Position: ``uni.tenant.monitoring_policy.target``
@@ -17358,7 +17358,7 @@ class TabooContractSubjectCursor(_TabooContractMakers, _TenantMakers, _UniMakers
         return self
 
 
-class KeyPolicyCursor(_TenantKeychainPolicyMakers, _TenantMakers, _UniMakers):
+class TenantKeychainPolicyKeyPolicyCursor(_TenantKeychainPolicyMakers, _TenantMakers, _UniMakers):
     """Typed cursor for ``fvKeyPol`` (key_policy level).
 
     Position: ``uni.tenant.tenant_keychain_policy.key_policy``
@@ -17382,7 +17382,7 @@ class KeyPolicyCursor(_TenantKeychainPolicyMakers, _TenantMakers, _UniMakers):
         pre_shared_key: str | None = None,
         start_time: str | None = None,
         userdom: str | None = None,
-    ) -> KeyPolicyCursor:
+    ) -> TenantKeychainPolicyKeyPolicyCursor:
         """Set ``fvKeyPol`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))

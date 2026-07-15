@@ -33,3 +33,11 @@ Accepted as keyword arguments of `.spine_profile(name)` and of `.set(**attrs)` o
 | maker | creates | position |
 | --- | --- | --- |
 | `.spine_selector(name, selector_type, **attrs)` | `infraSpineS` | {ref}`infra.spine_profile.spine_selector <vocab-infra-spine_profile-spine_selector>` |
+
+## Bind aliases
+
+Lazy references, resolved closed-world at push time.
+
+| alias | target | flavor | relation |
+| --- | --- | --- | --- |
+| `interface_profile=` | `infraSpAccPortP` | DN — `bind_dn()` allowed | `infraRsSpAccPortP` |

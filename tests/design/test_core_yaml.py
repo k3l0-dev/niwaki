@@ -22,6 +22,60 @@ _MAKER_RENAMES = {
     ("fvCtx", "pim"): "pim_ctx",
     ("infraInfra", "storm_control_policy"): "storm_control_interface_policy",
     ("fvnsVlanInstP", "range"): "ranges",
+    ("fvnsVxlanInstP", "range"): "ranges",
+    ("fvnsVsanInstP", "range"): "vsan_ranges",
+    ("fvnsMcastAddrInstP", "range"): "abstraction_of_ip_address_block",
+    # Wave 2 — policy groups, spine/FEX profiles, selectors
+    ("infraFuncP", "breakout_group"): "leaf_breakout_port_group",
+    ("infraFuncP", "fc_port_group"): "leaf_access_fc_port_policy_group",
+    ("infraFuncP", "fc_port_channel"): "leaf_access_fc_pc_policy_group",
+    ("infraFuncP", "fc_port_channel_override"): "leaf_access_fc_pc_policy_override_group",
+    ("infraFuncP", "spine_access_group"): "spine_access_port_policy_group",
+    ("infraFuncP", "leaf_switch_group"): "access_switch_policy_group",
+    ("infraFuncP", "spine_switch_group"): "spine_switch_policy_group",
+    ("infraFuncP", "access_card_group"): "access_card_policy_group",
+    ("infraSpAccPortP", "port_selector"): "sub_port_selector",
+    # Wave 3 — interface policies
+    ("infraInfra", "lacp_member_policy"): "port_channel_member_policy",
+    ("infraInfra", "fc_interface_policy"): "interface_fc_policy",
+    ("infraInfra", "fc_fabric_policy"): "fibre_channel_fabric_level_policy",
+    ("infraInfra", "macsec_interface_policy"): "macsec_access_interface_policy",
+    ("infraInfra", "macsec"): "macsec_access_policy_container",
+    ("infraInfra", "dot1x_node_authentication"): "802_1x_node_authentication_policy",
+    ("infraInfra", "dot1x_port_authentication"): "802_1x_port_authentication_policy",
+    ("l2PortAuthPol", "dot1x_port_authentication_config"): (
+        "802_1x_port_authentication_configuration_policy"
+    ),
+    ("macsecPolCont", "parameters_policy"): "macsec_access_parameters_policy",
+    ("macsecPolCont", "keychain_policy"): "macsec_keychain_policy",
+    ("macsecKeyChainPol", "key_policy"): "macsec_key_policy",
+    # Wave 4 — QoS + CoPP + prefilter
+    ("infraInfra", "llfc_interface_policy"): "interface_link_level_flow_control_policy",
+    ("infraInfra", "pfc_interface_policy"): "interface_priority_flow_control_policy",
+    ("infraInfra", "copp_leaf_policy"): "copp_leaf_level_policy",
+    ("infraInfra", "copp_spine_policy"): "copp_spine_level_policy",
+    ("infraInfra", "copp_interface_policy"): "per_interface_per_protocol_copp_policy",
+    ("infraInfra", "copp_prefilter_leaf_policy"): "copp_prefilter_leaf_level_policy",
+    ("infraInfra", "copp_prefilter_spine_policy"): "copp_prefilter_spine_level_policy",
+    ("coppIfPol", "protocol_class"): "per_interface_per_protocol_copp_policy",
+    ("coppLeafProfile", "gen1_settings"): (
+        "settings_of_burst_and_rate_for_all_protocols_on_leafs_of_first_generation"
+    ),
+    ("coppSpineProfile", "gen1_settings"): (
+        "settings_of_burst_and_rate_for_all_protocols_on_spines_of_first_generation"
+    ),
+    ("iaclLeafProfile", "acl_entry"): "acl_entry_of_the_copp_prefilter",
+    ("iaclSpineProfile", "acl_entry"): "acl_entry_of_the_copp_prefilter",
+    # Wave 5 — fabric-wide / system
+    ("infraInfra", "port_status_policy"): "port_status_infra_policy",
+    ("infrazoneZone", "node_group"): "infrastructure_zone_node_group",
+    ("infrazoneZone", "pod_group"): "zone_pod_group",
+    ("mgmtGrp", "inband_zone"): "inb_managed_nodes_zone",
+    ("mgmtGrp", "oob_zone"): "oob_managed_nodes_zone",
+    # Wave 6 — observability & timing
+    ("infraInfra", "netflow_vmm_exporter"): "vmm_external_collector_reachability",
+    ("infraInfra", "ptp_domain"): ("user_configured_ptp_domain_will_be_associated_with_interface"),
+    ("infraInfra", "ptp_profile_template"): "ptp_template_abstract",
     ("infraFuncP", "access_group"): "leaf_access_port_policy_group",
     ("infraSpineP", "spine_selector"): "switch_association",
     ("fabricInst", "datetime_policy"): "date_and_time_policy",

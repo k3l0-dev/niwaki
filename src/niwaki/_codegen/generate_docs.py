@@ -454,7 +454,11 @@ def _render_index() -> str:
 # that, and the list lied about them until this guard existed).
 _NOT_CURATED = [
     ("VMM domains", "`vmmDomP` and VMM controller integration", ("vmmDomP", "vmmCtrlrP")),
-    ("Port-channel overrides and FEX", "per-node overrides, FEX profiles", ("infraFexP",)),
+    (
+        "Simplified interface configuration",
+        "the post-5.2 per-port `infraPortConfig` model (parallel to profiles/selectors)",
+        ("infraPortConfig", "infraNodeConfig"),
+    ),
     (
         "Service graphs",
         "`vnsAbsGraph`, `vnsLDevVip` and the L4-L7 device chain",

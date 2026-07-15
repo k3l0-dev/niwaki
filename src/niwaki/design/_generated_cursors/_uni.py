@@ -258,6 +258,42 @@ class _UniMakers(Cursor):
             self._invoke_maker("l2_dom", (name,), _prune(params)),
         )
 
+    def fc_dom(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> FcDomCursor:
+        """Declare a ``fcDomP`` child under the uni level.
+
+        FC domain profile is a policy pertaining to single FC Management domain that also
+        corresponds to a single policy enforcement domain: representing the FC bindings.
+
+        Args:
+            name: Naming property — forms the object's RN.
+            annotation: User annotation. Suggested format orchestrator:value
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "FcDomCursor",
+            self._invoke_maker("fc_dom", (name,), _prune(params)),
+        )
+
 
 class UniCursor(_UniMakers):
     """Typed cursor for ``polUni`` (uni level).
@@ -280,6 +316,58 @@ class UniCursor(_UniMakers):
         """Set ``polUni`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
+        return self
+
+
+class FcDomCursor(_UniMakers):
+    """Typed cursor for ``fcDomP`` (fc_dom level).
+
+    Position: ``uni.fc_dom``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> FcDomCursor:
+        """Set ``fcDomP`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        vlan_pool: str | Ref | None = None,
+        vsan_pool: str | Ref | None = None,
+        ip_address_pool: str | Ref | None = None,
+        vsan_attributes: str | Ref | None = None,
+    ) -> FcDomCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        vlan_pool: str | Ref | None = None,
+        vsan_pool: str | Ref | None = None,
+        ip_address_pool: str | Ref | None = None,
+        vsan_attributes: str | Ref | None = None,
+    ) -> FcDomCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
         return self
 
 

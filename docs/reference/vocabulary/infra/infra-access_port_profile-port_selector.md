@@ -13,7 +13,7 @@ The Host Port Selector is used for grouping ports between the node and the host 
 | --- | --- |
 | ACI class | `infraHPortS` |
 | RN | `hports-{name}-typ-{selector_type}` |
-| Cursor | `PortSelectorCursor` |
+| Cursor | `AccessPortProfilePortSelectorCursor` |
 | Parent | {ref}`infra.access_port_profile <vocab-infra-access_port_profile>` |
 | Atomic | — |
 

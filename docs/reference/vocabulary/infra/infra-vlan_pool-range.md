@@ -13,7 +13,7 @@ The VLAN encapsulation block.
 | --- | --- |
 | ACI class | `fvnsEncapBlk` |
 | RN | `from-[{from_}]-to-[{to}]` |
-| Cursor | `RangeCursor` |
+| Cursor | `VlanPoolRangeCursor` |
 | Parent | {ref}`infra.vlan_pool <vocab-infra-vlan_pool>` |
 | Atomic | — |
 

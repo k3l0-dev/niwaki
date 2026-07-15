@@ -31,3 +31,9 @@ Accepted as keyword arguments of `.lacp_policy(name)` and of `.set(**attrs)` on 
 | `mode` | `mode` | {ref}`LacpMode <enum-lacpmode>` | `active`, `explicit-failover`, `mac-pin`, `mac-pin-nicload`, `off`, `passive` | `off` | mode |
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |
+
+## Children
+
+| maker | creates | position |
+| --- | --- | --- |
+| `.load_balance_policy(**attrs)` | `l2LoadBalancePol` | {ref}`infra.lacp_policy.load_balance_policy <vocab-infra-lacp_policy-load_balance_policy>` |

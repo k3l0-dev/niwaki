@@ -5,7 +5,7 @@ Re-generate: uv run python -m niwaki._codegen.generate_docs
 
 # Enums
 
-The 206 enum types reachable from the curated vocabulary — every constrained parameter of every maker.  A parameter typed as an enum also accepts the plain string; the value is validated at the call site either way.
+The 268 enum types reachable from the curated vocabulary — every constrained parameter of every maker.  A parameter typed as an enum also accepts the plain string; the value is validated at the call site either way.
 
 The remaining generated enums back the non-curated classes and live in `niwaki.models._generated.enums`.
 
@@ -19,7 +19,7 @@ The remaining generated enums back the non-curated classes and live in `niwaki.m
 | `v5` | Version 5 |
 | `v9` | Version 9 |
 
-Used by: {ref}`infra.netflow_exporter <vocab-infra-netflow_exporter>`, {ref}`tenant.netflow_exporter <vocab-tenant-netflow_exporter>`
+Used by: {ref}`infra.netflow_exporter <vocab-infra-netflow_exporter>`, {ref}`infra.netflow_vmm_exporter <vocab-infra-netflow_vmm_exporter>`, {ref}`tenant.netflow_exporter <vocab-tenant-netflow_exporter>`
 
 (enum-analyticscollectparams)=
 
@@ -361,6 +361,103 @@ Used by: {ref}`tenant.bgp_route_summarization_policy <vocab-tenant-bgp_route_sum
 
 Used by: {ref}`tenant.l3out.node_profile.infra_peer_connectivity_profile <vocab-tenant-l3out-node_profile-infra_peer_connectivity_profile>`, {ref}`tenant.l3out.node_profile.interface_profile.floating_svi.infra_peer_connectivity_profile <vocab-tenant-l3out-node_profile-interface_profile-floating_svi-infra_peer_connectivity_profile>`
 
+(enum-callhomeurgency)=
+
+## `CallhomeUrgency`
+
+| value | meaning |
+| --- | --- |
+| `alert` | — |
+| `critical` | — |
+| `debug` | — |
+| `emergency` | — |
+| `error` | — |
+| `info` | — |
+| `notice` | — |
+| `warning` | — |
+
+Used by: {ref}`infra.monitoring_policy.callhome_source <vocab-infra-monitoring_policy-callhome_source>`, {ref}`infra.monitoring_policy.monitoring_target.callhome_source <vocab-infra-monitoring_policy-monitoring_target-callhome_source>`, {ref}`infra.monitoring_policy.monitoring_target.event_severity_assignment_policy.callhome_source <vocab-infra-monitoring_policy-monitoring_target-event_severity_assignment_policy-callhome_source>`, {ref}`infra.monitoring_policy.monitoring_target.fault_severity_assignment_policy.callhome_source <vocab-infra-monitoring_policy-monitoring_target-fault_severity_assignment_policy-callhome_source>`
+
+(enum-conditioninitsevdir)=
+
+## `ConditionInitSevDir`
+
+| value | meaning |
+| --- | --- |
+| `cleared` | The Cleared severity level indicates the clearing of one or more previously reported alarms. This alarm clears all alarms for this managed object that have the same Alarm type, Probable cause and Specific problems (if given). |
+| `critical` | The Critical severity level indicates that a service affecting condition has occurred and an immediate corrective action is required. Such a severity can be reported, for example, when a managed object becomes totally out of service and its capability must be restored. |
+| `info` | — |
+| `inherit` | — |
+| `major` | The Major severity level indicates that a service affecting condition has developed and an urgent corrective action is required. Such a severity can be reported, for example, when there is a severe degradation in the capability of the managed object and its full capability must be restored. |
+| `minor` | The Minor severity level indicates the existence of a non-service affecting fault condition and that corrective action should be taken in order to prevent a more serious (for example, service affecting) fault. |
+| `squelched` | — |
+| `warning` | The Warning severity level indicates the detection of a potential or impending service affecting fault, before any significant effects have been felt. |
+
+Used by: {ref}`infra.monitoring_policy.monitoring_target.event_severity_assignment_policy <vocab-infra-monitoring_policy-monitoring_target-event_severity_assignment_policy>`, {ref}`infra.monitoring_policy.monitoring_target.fault_severity_assignment_policy <vocab-infra-monitoring_policy-monitoring_target-fault_severity_assignment_policy>`
+
+(enum-conditionsevdir)=
+
+## `ConditionSevDir`
+
+| value | meaning |
+| --- | --- |
+| `cleared` | The Cleared severity level indicates the clearing of one or more previously reported alarms. This alarm clears all alarms for this managed object that have the same Alarm type, Probable cause and Specific problems (if given). |
+| `critical` | The Critical severity level indicates that a service affecting condition has occurred and an immediate corrective action is required. Such a severity can be reported, for example, when a managed object becomes totally out of service and its capability must be restored. |
+| `info` | — |
+| `inherit` | — |
+| `major` | The Major severity level indicates that a service affecting condition has developed and an urgent corrective action is required. Such a severity can be reported, for example, when there is a severe degradation in the capability of the managed object and its full capability must be restored. |
+| `minor` | The Minor severity level indicates the existence of a non-service affecting fault condition and that corrective action should be taken in order to prevent a more serious (for example, service affecting) fault. |
+| `warning` | The Warning severity level indicates the detection of a potential or impending service affecting fault, before any significant effects have been felt. |
+
+Used by: {ref}`infra.monitoring_policy.monitoring_target.fault_severity_assignment_policy <vocab-infra-monitoring_policy-monitoring_target-fault_severity_assignment_policy>`
+
+(enum-conditionseverity)=
+
+## `ConditionSeverity`
+
+| value | meaning |
+| --- | --- |
+| `cleared` | The Cleared severity level indicates the clearing of one or more previously reported alarms. This alarm clears all alarms for this managed object that have the same Alarm type, Probable cause and Specific problems (if given). |
+| `critical` | The Critical severity level indicates that a service affecting condition has occurred and an immediate corrective action is required. Such a severity can be reported, for example, when a managed object becomes totally out of service and its capability must be restored. |
+| `info` | — |
+| `major` | The Major severity level indicates that a service affecting condition has developed and an urgent corrective action is required. Such a severity can be reported, for example, when there is a severe degradation in the capability of the managed object and its full capability must be restored. |
+| `minor` | The Minor severity level indicates the existence of a non-service affecting fault condition and that corrective action should be taken in order to prevent a more serious (for example, service affecting) fault. |
+| `warning` | The Warning severity level indicates the detection of a potential or impending service affecting fault, before any significant effects have been felt. |
+
+Used by: {ref}`infra.monitoring_policy.monitoring_target.event_severity_assignment_policy.snmp_source <vocab-infra-monitoring_policy-monitoring_target-event_severity_assignment_policy-snmp_source>`, {ref}`infra.monitoring_policy.monitoring_target.event_severity_assignment_policy.tacacs_source <vocab-infra-monitoring_policy-monitoring_target-event_severity_assignment_policy-tacacs_source>`, {ref}`infra.monitoring_policy.monitoring_target.fault_severity_assignment_policy.snmp_source <vocab-infra-monitoring_policy-monitoring_target-fault_severity_assignment_policy-snmp_source>`, {ref}`infra.monitoring_policy.monitoring_target.fault_severity_assignment_policy.tacacs_source <vocab-infra-monitoring_policy-monitoring_target-fault_severity_assignment_policy-tacacs_source>`, {ref}`infra.monitoring_policy.monitoring_target.snmp_source <vocab-infra-monitoring_policy-monitoring_target-snmp_source>`, {ref}`infra.monitoring_policy.monitoring_target.tacacs_source <vocab-infra-monitoring_policy-monitoring_target-tacacs_source>`, {ref}`infra.monitoring_policy.snmp_source <vocab-infra-monitoring_policy-snmp_source>`, {ref}`infra.monitoring_policy.tacacs_source <vocab-infra-monitoring_policy-tacacs_source>`
+
+(enum-coppprofiletype)=
+
+## `CoppProfileType`
+
+| value | meaning |
+| --- | --- |
+| `custom` | — |
+| `default` | — |
+| `lenient` | — |
+| `moderate` | — |
+| `strict` | — |
+
+Used by: {ref}`infra.copp_leaf_policy <vocab-infra-copp_leaf_policy>`, {ref}`infra.copp_spine_policy <vocab-infra-copp_spine_policy>`
+
+(enum-coppprotocol)=
+
+## `CoppProtocol`
+
+| value | meaning |
+| --- | --- |
+| `bgp` | — |
+| `ospf` | — |
+| `cdp` | — |
+| `lldp` | — |
+| `lacp` | — |
+| `arp` | — |
+| `icmp` | — |
+| `stp` | — |
+| `bfd` | — |
+
+Used by: {ref}`infra.copp_interface_policy.protocol_class <vocab-infra-copp_interface_policy-protocol_class>`
+
 (enum-datetimeadminstate)=
 
 ## `DatetimeAdminState`
@@ -437,6 +534,30 @@ Used by: {ref}`fabric.dns_profile <vocab-fabric-dns_profile>`
 | `tenant` | — |
 
 Used by: {ref}`tenant.dns_server_group <vocab-tenant-dns_server_group>`
+
+(enum-dot1xhostmode)=
+
+## `Dot1xHostMode`
+
+| value | meaning |
+| --- | --- |
+| `multi-auth` | Multi Auth |
+| `multi-domain` | Multi Domain |
+| `multi-host` | Multi Host |
+| `single-host` | Single Host |
+
+Used by: {ref}`infra.dot1x_port_authentication <vocab-infra-dot1x_port_authentication>`
+
+(enum-dot1xmacauth)=
+
+## `Dot1xMacAuth`
+
+| value | meaning |
+| --- | --- |
+| `bypass` | Bypass Enabled |
+| `eap` | Enabled with EAP |
+
+Used by: {ref}`infra.dot1x_port_authentication.dot1x_port_authentication_config <vocab-infra-dot1x_port_authentication-dot1x_port_authentication_config>`
 
 (enum-dppburstunit)=
 
@@ -570,6 +691,21 @@ Used by: {ref}`tenant.eigrp_interface_policy <vocab-tenant-eigrp_interface_polic
 
 Used by: {ref}`tenant.eigrp_address_family_context_policy <vocab-tenant-eigrp_address_family_context_policy>`
 
+(enum-eqptbrkoutmap)=
+
+## `EqptBrkoutMap`
+
+| value | meaning |
+| --- | --- |
+| `100g-2x` | 2*100g |
+| `100g-4x` | 4*100g |
+| `10g-4x` | 4*10g |
+| `25g-4x` | 4*25g |
+| `50g-8x` | 8*50g |
+| `none` | No breakout |
+
+Used by: {ref}`infra.func_profile.breakout_group <vocab-infra-func_profile-breakout_group>`
+
 (enum-extnwifinstt)=
 
 ## `ExtnwIfInstT`
@@ -582,6 +718,31 @@ Used by: {ref}`tenant.eigrp_address_family_context_policy <vocab-tenant-eigrp_ad
 | `unspecified` | — |
 
 Used by: {ref}`tenant.l3out.node_profile.interface_profile.floating_svi <vocab-tenant-l3out-node_profile-interface_profile-floating_svi>`, {ref}`tenant.l3out.node_profile.interface_profile.path_attachment <vocab-tenant-l3out-node_profile-interface_profile-path_attachment>`
+
+(enum-fabriccardtype)=
+
+## `FabricCardType`
+
+| value | meaning |
+| --- | --- |
+| `chExtender` | — |
+| `ethIO` | — |
+| `supervisor` | — |
+| `switchingFabric` | — |
+| `sysController` | — |
+
+Used by: {ref}`infra.access_module_profile.access_module_selector <vocab-infra-access_module_profile-access_module_selector>`
+
+(enum-fabricpcaction)=
+
+## `FabricPCAction`
+
+| value | meaning |
+| --- | --- |
+| `configure` | — |
+| `unconfigure` | — |
+
+Used by: {ref}`infra.port_bundle_configuration <vocab-infra-port_bundle_configuration>`
 
 (enum-fabricpairt)=
 
@@ -605,7 +766,7 @@ Used by: {ref}`fabric.vpc_protection <vocab-fabric-vpc_protection>`
 | `ALL_IN_POD` | — |
 | `range` | — |
 
-Used by: {ref}`infra.leaf_profile.leaf_selector <vocab-infra-leaf_profile-leaf_selector>`, {ref}`infra.spine_profile.spine_selector <vocab-infra-spine_profile-spine_selector>`
+Used by: {ref}`infra.dhcp_node_group <vocab-infra-dhcp_node_group>`, {ref}`infra.infrastructure_zoning_profile.infrastructure_zone.node_group <vocab-infra-infrastructure_zoning_profile-infrastructure_zone-node_group>`, {ref}`infra.leaf_profile.leaf_selector <vocab-infra-leaf_profile-leaf_selector>`, {ref}`infra.node_management_address <vocab-infra-node_management_address>`, {ref}`infra.spine_profile.spine_selector <vocab-infra-spine_profile-spine_selector>`
 
 (enum-fabricselector2)=
 
@@ -616,7 +777,31 @@ Used by: {ref}`infra.leaf_profile.leaf_selector <vocab-infra-leaf_profile-leaf_s
 | `ALL` | — |
 | `range` | — |
 
-Used by: {ref}`infra.access_port_profile.port_selector <vocab-infra-access_port_profile-port_selector>`
+Used by: {ref}`infra.access_port_profile.port_selector <vocab-infra-access_port_profile-port_selector>`, {ref}`infra.dhcp_pod_group <vocab-infra-dhcp_pod_group>`, {ref}`infra.fex_profile.port_selector <vocab-infra-fex_profile-port_selector>`, {ref}`infra.infrastructure_zoning_profile.infrastructure_zone.pod_group <vocab-infra-infrastructure_zoning_profile-infrastructure_zone-pod_group>`, {ref}`infra.pod_management_address <vocab-infra-pod_management_address>`, {ref}`infra.pod_profile.pod_selector <vocab-infra-pod_profile-pod_selector>`, {ref}`infra.spine_interface_profile.port_selector <vocab-infra-spine_interface_profile-port_selector>`
+
+(enum-fcifmode)=
+
+## `FcIfMode`
+
+| value | meaning |
+| --- | --- |
+| `f` | — |
+| `np` | — |
+
+Used by: {ref}`infra.fc_interface_policy <vocab-infra-fc_interface_policy>`
+
+(enum-fctrkingmode)=
+
+## `FcTrkingMode`
+
+| value | meaning |
+| --- | --- |
+| `auto` | — |
+| `trunk-off` | — |
+| `trunk-on` | — |
+| `un-init` | — |
+
+Used by: {ref}`infra.fc_interface_policy <vocab-infra-fc_interface_policy>`
 
 (enum-fcvsanmode)=
 
@@ -654,6 +839,17 @@ Used by: {ref}`tenant.fhs_bd_policy <vocab-tenant-fhs_bd_policy>`
 | `medium` | Allowed Max Router Preference Medium |
 
 Used by: {ref}`tenant.fhs_bd_policy.ra_guard_policy <vocab-tenant-fhs_bd_policy-ra_guard_policy>`
+
+(enum-fmcastuseconfiguredsystemgipot)=
+
+## `FmcastUseConfiguredSystemGIPoT`
+
+| value | meaning |
+| --- | --- |
+| `disabled` | Disabled |
+| `enabled` | Enabled |
+
+Used by: {ref}`infra.system_gipo_policy <vocab-infra-system_gipo_policy>`
 
 (enum-fvbdtype)=
 
@@ -923,7 +1119,7 @@ Used by: {ref}`tenant.ip_address_pool <vocab-tenant-ip_address_pool>`
 | `dynamic` | — |
 | `static` | — |
 
-Used by: {ref}`infra.vlan_pool <vocab-infra-vlan_pool>`
+Used by: {ref}`infra.vlan_pool <vocab-infra-vlan_pool>`, {ref}`infra.vsan_pool <vocab-infra-vsan_pool>`
 
 (enum-fvnsblkallocmode)=
 
@@ -935,7 +1131,7 @@ Used by: {ref}`infra.vlan_pool <vocab-infra-vlan_pool>`
 | `inherit` | — |
 | `static` | — |
 
-Used by: {ref}`infra.vlan_pool.range <vocab-infra-vlan_pool-range>`
+Used by: {ref}`infra.vlan_pool.range <vocab-infra-vlan_pool-range>`, {ref}`infra.vsan_pool.range <vocab-infra-vsan_pool-range>`, {ref}`infra.vxlan_pool.range <vocab-infra-vxlan_pool-range>`
 
 (enum-fvnsblkrole)=
 
@@ -946,7 +1142,7 @@ Used by: {ref}`infra.vlan_pool.range <vocab-infra-vlan_pool-range>`
 | `external` | — |
 | `internal` | — |
 
-Used by: {ref}`infra.vlan_pool.range <vocab-infra-vlan_pool-range>`
+Used by: {ref}`infra.vlan_pool.range <vocab-infra-vlan_pool-range>`, {ref}`infra.vsan_pool.range <vocab-infra-vsan_pool-range>`, {ref}`infra.vxlan_pool.range <vocab-infra-vxlan_pool-range>`
 
 (enum-fvslatype)=
 
@@ -1200,6 +1396,43 @@ Used by: {ref}`tenant.l3out.node_profile.interface_profile.hsrp_interface <vocab
 
 Used by: {ref}`infra.func_profile.port_channel <vocab-infra-func_profile-port_channel>`
 
+(enum-infrapcshutdown)=
+
+## `InfraPCShutdown`
+
+| value | meaning |
+| --- | --- |
+| `false` | — |
+| `true` | — |
+| `trueA` | — |
+| `trueB` | — |
+
+Used by: {ref}`infra.port_bundle_configuration <vocab-infra-port_bundle_configuration>`
+
+(enum-infrasslprotocoltypes)=
+
+## `InfraSslProtocolTypes`
+
+| value | meaning |
+| --- | --- |
+| `TLSv1` | — |
+| `TLSv1.1` | — |
+| `TLSv1.2` | — |
+
+Used by: {ref}`infra.fabric_wide_settings_policy <vocab-infra-fabric_wide_settings_policy>`
+
+(enum-infrazonedeplmode)=
+
+## `InfrazoneDeplMode`
+
+| value | meaning |
+| --- | --- |
+| `disabled` | — |
+| `enabled` | — |
+| `triggered` | — |
+
+Used by: {ref}`infra.infrastructure_zoning_profile.infrastructure_zone <vocab-infra-infrastructure_zoning_profile-infrastructure_zone>`
+
 (enum-ipnexthopt)=
 
 ## `IpNexthopT`
@@ -1281,6 +1514,18 @@ Used by: {ref}`fabric.igmp_snoop_policy <vocab-fabric-igmp_snoop_policy>`, {ref}
 
 Used by: {ref}`infra.link_level_policy <vocab-infra-link_level_policy>`
 
+(enum-l1congclearaction)=
+
+## `L1CongClearAction`
+
+| value | meaning |
+| --- | --- |
+| `err-disable` | — |
+| `log` | — |
+| `off` | — |
+
+Used by: {ref}`infra.slow_drain_policy <vocab-infra-slow_drain_policy>`
+
 (enum-l1emiretrain)=
 
 ## `L1EmiRetrain`
@@ -1309,6 +1554,57 @@ Used by: {ref}`infra.link_level_policy <vocab-infra-link_level_policy>`
 
 Used by: {ref}`infra.link_level_policy <vocab-infra-link_level_policy>`
 
+(enum-l1fcmaxspeed)=
+
+## `L1FcMaxSpeed`
+
+| value | meaning |
+| --- | --- |
+| `16G` | Speed is 16 Gbps |
+| `2G` | Speed is 2 Gbps |
+| `32G` | Speed is 32 Gbps |
+| `4G` | Speed is 4 Gbps |
+| `8G` | Speed is 8 Gbps |
+
+Used by: {ref}`infra.fc_interface_policy <vocab-infra-fc_interface_policy>`
+
+(enum-l1fcspeed)=
+
+## `L1FcSpeed`
+
+| value | meaning |
+| --- | --- |
+| `16G` | Speed is 16 Gbps |
+| `32G` | Speed is 32 Gbps |
+| `4G` | Speed is 4 Gbps |
+| `8G` | Speed is 8 Gbps |
+| `auto` | Speed is auto |
+| `unknown` | Speed is unknown |
+
+Used by: {ref}`infra.fc_interface_policy <vocab-infra-fc_interface_policy>`
+
+(enum-l1fillpattern)=
+
+## `L1FillPattern`
+
+| value | meaning |
+| --- | --- |
+| `ARBFF` | — |
+| `IDLE` | — |
+
+Used by: {ref}`infra.fc_interface_policy <vocab-infra-fc_interface_policy>`
+
+(enum-l1linklevelflowctrl)=
+
+## `L1LinkLevelFlowCtrl`
+
+| value | meaning |
+| --- | --- |
+| `off` | — |
+| `on` | — |
+
+Used by: {ref}`infra.llfc_interface_policy <vocab-infra-llfc_interface_policy>`
+
 (enum-l1pktt)=
 
 ## `L1PktT`
@@ -1322,6 +1618,17 @@ Used by: {ref}`infra.link_level_policy <vocab-infra-link_level_policy>`
 
 Used by: {ref}`infra.storm_control_policy <vocab-infra-storm_control_policy>`
 
+(enum-l1portflushadminst)=
+
+## `L1PortFlushAdminSt`
+
+| value | meaning |
+| --- | --- |
+| `disabled` | — |
+| `enabled` | — |
+
+Used by: {ref}`infra.slow_drain_policy <vocab-infra-slow_drain_policy>`
+
 (enum-l1portphymediatype)=
 
 ## `L1PortPhyMediaType`
@@ -1332,6 +1639,18 @@ Used by: {ref}`infra.storm_control_policy <vocab-infra-storm_control_policy>`
 | `sfp-10g-tx` | — |
 
 Used by: {ref}`infra.link_level_policy <vocab-infra-link_level_policy>`
+
+(enum-l1prioflowctrl)=
+
+## `L1PrioFlowCtrl`
+
+| value | meaning |
+| --- | --- |
+| `auto` | — |
+| `off` | — |
+| `on` | — |
+
+Used by: {ref}`infra.pfc_interface_policy <vocab-infra-pfc_interface_policy>`
 
 (enum-l1speed)=
 
@@ -1437,6 +1756,19 @@ Used by: {ref}`tenant.bd <vocab-tenant-bd>`
 
 Used by: {ref}`tenant.app.epg.static_path.port_security <vocab-tenant-app-epg-static_path-port_security>`
 
+(enum-l2qinqconfig)=
+
+## `L2QinQConfig`
+
+| value | meaning |
+| --- | --- |
+| `corePort` | — |
+| `disabled` | — |
+| `doubleQtagPort` | — |
+| `edgePort` | — |
+
+Used by: {ref}`infra.l2_interface_policy <vocab-infra-l2_interface_policy>`
+
 (enum-l2unkmacucastact)=
 
 ## `L2UnkMacUcastAct`
@@ -1458,6 +1790,28 @@ Used by: {ref}`tenant.bd <vocab-tenant-bd>`
 | `opt-flood` | Optimized flooding |
 
 Used by: {ref}`tenant.bd <vocab-tenant-bd>`
+
+(enum-l2vepaconfig)=
+
+## `L2VepaConfig`
+
+| value | meaning |
+| --- | --- |
+| `disabled` | — |
+| `enabled` | — |
+
+Used by: {ref}`infra.l2_interface_policy <vocab-infra-l2_interface_policy>`
+
+(enum-l2vlanscope)=
+
+## `L2VlanScope`
+
+| value | meaning |
+| --- | --- |
+| `global` | — |
+| `portlocal` | — |
+
+Used by: {ref}`infra.l2_interface_policy <vocab-infra-l2_interface_policy>`
 
 (enum-l2qiql2prottunmaskt)=
 
@@ -1656,6 +2010,17 @@ Used by: {ref}`tenant.filter.entry <vocab-tenant-filter-entry>`, {ref}`tenant.fi
 
 Used by: {ref}`infra.lacp_policy <vocab-infra-lacp_policy>`
 
+(enum-lacptxrate)=
+
+## `LacpTxRate`
+
+| value | meaning |
+| --- | --- |
+| `fast` | Fast |
+| `normal` | Normal |
+
+Used by: {ref}`infra.lacp_member_policy <vocab-infra-lacp_member_policy>`
+
 (enum-leakroutescp)=
 
 ## `LeakRouteScp`
@@ -1700,6 +2065,42 @@ Used by: {ref}`infra.lldp_policy <vocab-infra-lldp_policy>`
 | `IEEE` | — |
 
 Used by: {ref}`infra.lldp_policy <vocab-infra-lldp_policy>`
+
+(enum-macsecciphersuite)=
+
+## `MacsecCipherSuite`
+
+| value | meaning |
+| --- | --- |
+| `gcm-aes-128` | gcm-aes-128 |
+| `gcm-aes-256` | gcm-aes-256 |
+| `gcm-aes-xpn-128` | gcm-aes-xpn-128 |
+| `gcm-aes-xpn-256` | gcm-aes-xpn-256 |
+
+Used by: {ref}`infra.macsec.parameters_policy <vocab-infra-macsec-parameters_policy>`
+
+(enum-macsecconfoffset)=
+
+## `MacsecConfOffset`
+
+| value | meaning |
+| --- | --- |
+| `offset-0` | 0 |
+| `offset-30` | 30 |
+| `offset-50` | 50 |
+
+Used by: {ref}`infra.macsec.parameters_policy <vocab-infra-macsec-parameters_policy>`
+
+(enum-macsecsecpolicy)=
+
+## `MacsecSecPolicy`
+
+| value | meaning |
+| --- | --- |
+| `must-secure` | must-secure |
+| `should-secure` | should-secure |
+
+Used by: {ref}`infra.macsec.parameters_policy <vocab-infra-macsec-parameters_policy>`
 
 (enum-mcastver)=
 
@@ -1758,6 +2159,21 @@ Used by: {ref}`infra.mcp_policy <vocab-infra-mcp_policy>`
 | `enabled` | — |
 
 Used by: {ref}`fabric.syslog_group.remote_destination <vocab-fabric-syslog_group-remote_destination>`
+
+(enum-moninclaction)=
+
+## `MonInclAction`
+
+| value | meaning |
+| --- | --- |
+| `none` | — |
+| `faults` | — |
+| `events` | — |
+| `audit` | — |
+| `session` | — |
+| `all` | — |
+
+Used by: {ref}`infra.monitoring_policy.callhome_source <vocab-infra-monitoring_policy-callhome_source>`, {ref}`infra.monitoring_policy.monitoring_target.callhome_source <vocab-infra-monitoring_policy-monitoring_target-callhome_source>`, {ref}`infra.monitoring_policy.monitoring_target.event_severity_assignment_policy.callhome_source <vocab-infra-monitoring_policy-monitoring_target-event_severity_assignment_policy-callhome_source>`, {ref}`infra.monitoring_policy.monitoring_target.event_severity_assignment_policy.snmp_source <vocab-infra-monitoring_policy-monitoring_target-event_severity_assignment_policy-snmp_source>`, {ref}`infra.monitoring_policy.monitoring_target.event_severity_assignment_policy.syslog_source <vocab-infra-monitoring_policy-monitoring_target-event_severity_assignment_policy-syslog_source>`, {ref}`infra.monitoring_policy.monitoring_target.event_severity_assignment_policy.tacacs_source <vocab-infra-monitoring_policy-monitoring_target-event_severity_assignment_policy-tacacs_source>`, {ref}`infra.monitoring_policy.monitoring_target.fault_severity_assignment_policy.callhome_source <vocab-infra-monitoring_policy-monitoring_target-fault_severity_assignment_policy-callhome_source>`, {ref}`infra.monitoring_policy.monitoring_target.fault_severity_assignment_policy.snmp_source <vocab-infra-monitoring_policy-monitoring_target-fault_severity_assignment_policy-snmp_source>` *(+8 more)*
 
 (enum-montargetscope)=
 
@@ -2739,6 +3155,282 @@ Used by: {ref}`fabric.syslog_group.remote_destination <vocab-fabric-syslog_group
 
 Used by: {ref}`tenant.monitoring_policy.target <vocab-tenant-monitoring_policy-target>`
 
+(enum-montargetscope3)=
+
+## `MonTargetScope3`
+
+| value | meaning |
+| --- | --- |
+| `aaaDomainRef` | — |
+| `aaaIDomainRef` | — |
+| `adepgRsSvrCertChain` | — |
+| `adepgRsSvrKeyRing` | — |
+| `adepgSvr` | — |
+| `adepgUni` | — |
+| `callhomeRsDestGroup` | — |
+| `callhomeRsQueryGroupRel` | — |
+| `callhomeRsSmartdestGroup` | — |
+| `callhomeSmartSrc` | — |
+| `callhomeSrc` | — |
+| `cdpAdjEp` | — |
+| `cdpIf` | — |
+| `cdpInst` | — |
+| `cloudsecDom` | — |
+| `cloudsecEntity` | — |
+| `cloudsecIf` | — |
+| `cloudsecInst` | — |
+| `cloudsecSaPeer` | — |
+| `cloudsecSaRxKey` | — |
+| `cloudsecSaTxKey` | — |
+| `cloudsecSpRxKeySt` | — |
+| `cloudsecSpTxKeySt` | — |
+| `compAddrMgmtAddrBlk` | — |
+| `compAddrMgmtPolCont` | — |
+| `compAddrMgmtPool` | — |
+| `compClusterCtrlr` | — |
+| `compClusterCtrlrCont` | — |
+| `compCtrctCont` | — |
+| `compCtrlr` | — |
+| `compDataStore` | — |
+| `compDom` | — |
+| `compEDMgrProxy` | — |
+| `compEpCP` | — |
+| `compEpPConn` | — |
+| `compEpPD` | — |
+| `compHealthPolCont` | — |
+| `compHpNic` | — |
+| `compHv` | — |
+| `compHvAdjTaskCont` | — |
+| `compHvClusterCont` | — |
+| `compHvClusterDef` | — |
+| `compHvHealth` | — |
+| `compInst` | — |
+| `compInstPol` | — |
+| `compL3ExtAttachNode` | — |
+| `compL3ExtAttachPort` | — |
+| `compL3ExtTracker` | — |
+| `compMgmtNic` | — |
+| `compMigratingVmCont` | — |
+| `compPendDpVerify` | — |
+| `compPendEpCont` | — |
+| `compPhys` | — |
+| `compPolCont` | — |
+| `compPpNic` | — |
+| `compPrimaryEncapDef` | — |
+| `compProv` | — |
+| `compPvlanCont` | — |
+| `compRFltP` | — |
+| `compResourcePool` | — |
+| `compRsCtrlr` | — |
+| `compRsCtrlrP` | — |
+| `compRsFvAddrMgmtPool` | — |
+| `compRsUsegEpPD` | — |
+| `compStatsPol` | — |
+| `compSvcVMDef` | — |
+| `compSvmNicInfo` | — |
+| `compTagCont` | — |
+| `compTenantCont` | — |
+| `compToEPg` | — |
+| `compTrigRtdEpP` | — |
+| `compUni` | — |
+| `compVNicPDDef` | — |
+| `compVmInfoCont` | — |
+| `compWebhookInfo` | — |
+| `dot1xDAEp` | — |
+| `dot1xDUEp` | — |
+| `dot1xEntity` | — |
+| `dot1xIf` | — |
+| `dot1xInst` | — |
+| `dot1xVDAEp` | — |
+| `edmCompCtrlrProxy` | — |
+| `edmManagedNic` | — |
+| `edmMgr` | — |
+| `edmNicProf` | — |
+| `edmNicProfToDom` | — |
+| `edmRsCtrlrToDom` | — |
+| `edmRsEncapDef` | — |
+| `edmRsExtDevDomP` | — |
+| `edmRsToNicProfToDom` | — |
+| `edmRsToSvrNic` | — |
+| `edmSDWanPolCont` | — |
+| `edmSDWanPrefixListCont` | — |
+| `edmSDWanSlaUpdPol` | — |
+| `edmSDWanVpnCont` | — |
+| `edmSDWanVrfEntry` | — |
+| `edmSDWanVrfListCont` | — |
+| `edmUni` | — |
+| `edmUplinkProf` | — |
+| `eqptAsic` | — |
+| `eqptBrkoutP` | — |
+| `eqptExtChCard` | — |
+| `eqptExtChFP` | — |
+| `eqptExtChHP` | — |
+| `eqptFcP` | — |
+| `eqptFlash` | — |
+| `eqptFpga` | — |
+| `eqptLeafP` | — |
+| `ethpmAggrIf` | — |
+| `ethpmDOMRxPwrStats` | — |
+| `ethpmDOMStats` | — |
+| `ethpmDOMTxPwrStats` | — |
+| `ethpmFault` | — |
+| `ethpmFcot` | — |
+| `ethpmFcotDD` | — |
+| `ethpmFcotX2` | — |
+| `ethpmPhysIf` | — |
+| `eventSevAsnP` | — |
+| `faultSevAsnP` | — |
+| `fileRsARemoteHostToEpp` | — |
+| `firmwareCompRunning` | — |
+| `fvDomDef` | — |
+| `fvRsDomDefNsLocal` | — |
+| `fvnsEncapBlk` | — |
+| `fvnsMcastAddrInstDef` | — |
+| `fvnsVlanInstDef` | — |
+| `fvnsVxlanInstDef` | — |
+| `hvsAdj` | — |
+| `hvsEnhancedLagPol` | — |
+| `hvsExtPol` | — |
+| `hvsHealthProvider` | — |
+| `hvsIpSet` | — |
+| `hvsLNode` | — |
+| `hvsMacSet` | — |
+| `hvsMbrCont` | — |
+| `hvsMbrMac` | — |
+| `hvsResCont` | — |
+| `hvsRsCompHv` | — |
+| `hvsRtNicAdj` | — |
+| `hvsSecGrp` | — |
+| `hvsUsegCont` | — |
+| `infraEpPD` | — |
+| `infraEpPDDef` | — |
+| `infraRsVipAddrNs` | — |
+| `infraRsVlanNs` | — |
+| `infraRtDomDef` | — |
+| `l1LinkLevelFlowCtrlP` | — |
+| `l1PhysIf` | — |
+| `l1PrioFlowCtrlP` | — |
+| `l1RtEncPhysRtdConf` | — |
+| `l1StormCtrlP` | — |
+| `lacpEnhancedLagPol` | — |
+| `lacpEnhancedLagPolDef` | — |
+| `lacpLagPolDef` | — |
+| `macsecEntity` | — |
+| `macsecFabIf` | — |
+| `macsecIf` | — |
+| `macsecInst` | — |
+| `monInfraPol` | — |
+| `monInfraTarget` | — |
+| `pcAggrIf` | — |
+| `pcAggrMbrIf` | — |
+| `pcLbP` | — |
+| `pcRsMbrIfs` | — |
+| `poeEntity` | — |
+| `poeIf` | — |
+| `poeInst` | — |
+| `poeVDAEp` | — |
+| `resConsumer` | — |
+| `rmonIfStorm` | — |
+| `snmpRsDestGroup` | — |
+| `snmpSrc` | — |
+| `spanRsDestApic` | — |
+| `spanRsDestEpg` | — |
+| `spanRsDestPathEp` | — |
+| `spanRsDestToVPort` | — |
+| `spanRsDestToVPortDef` | — |
+| `spanRsProvDestGrp` | — |
+| `spanRsSrcToEpg` | — |
+| `spanRsSrcToPathEp` | — |
+| `spanRsSrcToVPort` | — |
+| `spanRsSrcToVPortDef` | — |
+| `spanRsVSrcGrpToFilterGrp` | — |
+| `spanSpanLblDef` | — |
+| `spanSpanProv` | — |
+| `spanTaskParam` | — |
+| `spanVDestDef` | — |
+| `spanVDestGrpDef` | — |
+| `spanVEpgSummaryDef` | — |
+| `spanVSrcDef` | — |
+| `spanVSrcGrpDef` | — |
+| `statsDestP` | — |
+| `statsExportP` | — |
+| `statsReportable` | — |
+| `stpEntity` | — |
+| `stpIf` | — |
+| `stpInst` | — |
+| `syslogRsDestGroup` | — |
+| `syslogSrc` | — |
+| `tacacsRsDestGroup` | — |
+| `tacacsSrc` | — |
+| `tagAliasDelInst` | — |
+| `tagAliasInst` | — |
+| `tagInst` | — |
+| `unspecified` | — |
+| `vmmAccGrpCont` | — |
+| `vmmAgtStatus` | — |
+| `vmmAttEntityPCont` | — |
+| `vmmClusterCtrlrP` | — |
+| `vmmClusterFaultInfo` | — |
+| `vmmCtrlrP` | — |
+| `vmmDomP` | — |
+| `vmmDomPDef` | — |
+| `vmmEpPD` | — |
+| `vmmEpValidatorPol` | — |
+| `vmmInjectedClusterDetails` | — |
+| `vmmInjectedClusterInfo` | — |
+| `vmmInjectedClusterSubnet` | — |
+| `vmmInjectedCont` | — |
+| `vmmInjectedContGrp` | — |
+| `vmmInjectedDepl` | — |
+| `vmmInjectedHost` | — |
+| `vmmInjectedLabel` | — |
+| `vmmInjectedNs` | — |
+| `vmmInjectedNwPol` | — |
+| `vmmInjectedOrg` | — |
+| `vmmInjectedOrgUnit` | — |
+| `vmmInjectedReplSet` | — |
+| `vmmInjectedSvc` | — |
+| `vmmInjectedSvcEp` | — |
+| `vmmInjectedSvcPort` | — |
+| `vmmInjectedVm` | — |
+| `vmmInjectedVnic` | — |
+| `vmmIntAggr` | — |
+| `vmmIntCustomAggr` | — |
+| `vmmPlInf` | — |
+| `vmmProvP` | — |
+| `vmmRsAEP` | — |
+| `vmmRsAcc` | — |
+| `vmmRsClusterAcc` | — |
+| `vmmRsCtrlrPMonPol` | — |
+| `vmmRsDefaultCdpIfPol` | — |
+| `vmmRsDefaultFwPol` | — |
+| `vmmRsDefaultL2InstPol` | — |
+| `vmmRsDefaultLacpLagPol` | — |
+| `vmmRsDefaultLldpIfPol` | — |
+| `vmmRsDefaultStpIfPol` | — |
+| `vmmRsDomMcastAddrNs` | — |
+| `vmmRsEncapAllctr` | — |
+| `vmmRsMcastAddrNs` | — |
+| `vmmRsPrefEnhancedLagPol` | — |
+| `vmmRsToExtDevMgr` | — |
+| `vmmRsUsrAggrLagPolAtt` | — |
+| `vmmRsUsrCustomAggrLagPolAtt` | — |
+| `vmmRsVmmCtrlrP` | — |
+| `vmmRsVswitchExporterPol` | — |
+| `vmmRsVswitchOverrideCdpIfPol` | — |
+| `vmmRsVswitchOverrideFwPol` | — |
+| `vmmRsVswitchOverrideLacpPol` | — |
+| `vmmRsVswitchOverrideLldpIfPol` | — |
+| `vmmRsVswitchOverrideMcpIfPol` | — |
+| `vmmRsVswitchOverrideMtuPol` | — |
+| `vmmRsVswitchOverrideStpPol` | — |
+| `vmmRsVxlanNs` | — |
+| `vmmUsrAggr` | — |
+| `vmmUsrCustomAggr` | — |
+| `vmmVSwitchPolicyCont` | — |
+
+Used by: {ref}`infra.monitoring_policy.monitoring_target <vocab-infra-monitoring_policy-monitoring_target>`
+
 (enum-ndifcontrol)=
 
 ## `NdIfControl`
@@ -2799,7 +3491,7 @@ Used by: {ref}`tenant.host_protection.subject.rule <vocab-tenant-host_protection
 | `disabled` | Disabled |
 | `enabled` | Enabled |
 
-Used by: {ref}`fabric.igmp_snoop_policy <vocab-fabric-igmp_snoop_policy>`, {ref}`fabric.mld_snoop_policy <vocab-fabric-mld_snoop_policy>`, {ref}`fabric.span_source_group <vocab-fabric-span_source_group>`, {ref}`infra.span_source_group <vocab-infra-span_source_group>`, {ref}`tenant.bfd_interface_policy <vocab-tenant-bfd_interface_policy>`, {ref}`tenant.bfd_mh_interface_policy <vocab-tenant-bfd_mh_interface_policy>`, {ref}`tenant.bfd_multihop_node_policy <vocab-tenant-bfd_multihop_node_policy>`, {ref}`tenant.dscp_translation_policy <vocab-tenant-dscp_translation_policy>` *(+8 more)*
+Used by: {ref}`fabric.igmp_snoop_policy <vocab-fabric-igmp_snoop_policy>`, {ref}`fabric.mld_snoop_policy <vocab-fabric-mld_snoop_policy>`, {ref}`fabric.span_source_group <vocab-fabric-span_source_group>`, {ref}`infra.dot1x_port_authentication <vocab-infra-dot1x_port_authentication>`, {ref}`infra.poe_interface_policy <vocab-infra-poe_interface_policy>`, {ref}`infra.qos_instance_policy.qos_class_policy <vocab-infra-qos_instance_policy-qos_class_policy>`, {ref}`infra.span_source_group <vocab-infra-span_source_group>`, {ref}`infra.synce_interface_policy <vocab-infra-synce_interface_policy>` *(+13 more)*
 
 (enum-nwifadminst)=
 
@@ -2810,7 +3502,18 @@ Used by: {ref}`fabric.igmp_snoop_policy <vocab-fabric-igmp_snoop_policy>`, {ref}
 | `disabled` | Disabled |
 | `enabled` | Enabled |
 
-Used by: {ref}`infra.cdp_policy <vocab-infra-cdp_policy>`, {ref}`infra.mcp_policy <vocab-infra-mcp_policy>`
+Used by: {ref}`infra.cdp_policy <vocab-infra-cdp_policy>`, {ref}`infra.macsec_interface_policy <vocab-infra-macsec_interface_policy>`, {ref}`infra.mcp_policy <vocab-infra-mcp_policy>`
+
+(enum-nwinstctrl)=
+
+## `NwInstCtrl`
+
+| value | meaning |
+| --- | --- |
+| `stateful-ha` | no statefull-ha |
+| `load-balance` | load balance enable |
+
+Used by: {ref}`infra.fc_instance_policy <vocab-infra-fc_instance_policy>`
 
 (enum-ospfareacontrol)=
 
@@ -2933,6 +3636,53 @@ Used by: {ref}`tenant.ospf_interface_policy <vocab-tenant-ospf_interface_policy>
 | `symmetric-hash` | Symmetric hashing property of PC |
 
 Used by: {ref}`infra.lacp_policy <vocab-infra-lacp_policy>`
+
+(enum-pclbl3l4)=
+
+## `PcLbL3L4`
+
+| value | meaning |
+| --- | --- |
+| `src-ip` | source ip |
+| `dst-ip` | destination ip |
+| `l4-src-port` | L4 src port |
+| `l4-dst-port` | L4 dst port |
+
+Used by: {ref}`infra.lacp_policy.load_balance_policy <vocab-infra-lacp_policy-load_balance_policy>`
+
+(enum-poepoliceact)=
+
+## `PoePoliceAct`
+
+| value | meaning |
+| --- | --- |
+| `err-dis` | Error Disable |
+| `log` | Log |
+| `none` | — |
+
+Used by: {ref}`infra.poe_interface_policy <vocab-infra-poe_interface_policy>`
+
+(enum-poepowermode)=
+
+## `PoePowerMode`
+
+| value | meaning |
+| --- | --- |
+| `auto` | Auto |
+| `never` | Never |
+| `static` | Static |
+
+Used by: {ref}`infra.poe_interface_policy <vocab-infra-poe_interface_policy>`
+
+(enum-poepwrctrl)=
+
+## `PoePwrCtrl`
+
+| value | meaning |
+| --- | --- |
+| `combined` | Bit 1: PS Mode - 0:Redundant 1:Combined |
+
+Used by: {ref}`infra.poe_policy <vocab-infra-poe_policy>`
 
 (enum-polcolor)=
 
@@ -3081,7 +3831,40 @@ Used by: {ref}`infra.lacp_policy <vocab-infra-lacp_policy>`
 | `yellow` | — |
 | `yellow-green` | — |
 
-Used by: {ref}`fabric.span_source_group.span_label <vocab-fabric-span_source_group-span_label>`, {ref}`infra.span_source_group.span_label <vocab-infra-span_source_group-span_label>`, {ref}`tenant.app.epg.consumer_contract_label <vocab-tenant-app-epg-consumer_contract_label>`, {ref}`tenant.app.epg.consumer_label <vocab-tenant-app-epg-consumer_label>`, {ref}`tenant.app.epg.consumer_subject_label <vocab-tenant-app-epg-consumer_subject_label>`, {ref}`tenant.app.epg.provider_contract_label <vocab-tenant-app-epg-provider_contract_label>`, {ref}`tenant.app.epg.provider_label <vocab-tenant-app-epg-provider_label>`, {ref}`tenant.app.epg.provider_subject_label <vocab-tenant-app-epg-provider_subject_label>` *(+37 more)*
+Used by: {ref}`fabric.span_source_group.span_label <vocab-fabric-span_source_group-span_label>`, {ref}`infra.span_source_group.span_label <vocab-infra-span_source_group-span_label>`, {ref}`infra.vspan_session.span_label <vocab-infra-vspan_session-span_label>`, {ref}`tenant.app.epg.consumer_contract_label <vocab-tenant-app-epg-consumer_contract_label>`, {ref}`tenant.app.epg.consumer_label <vocab-tenant-app-epg-consumer_label>`, {ref}`tenant.app.epg.consumer_subject_label <vocab-tenant-app-epg-consumer_subject_label>`, {ref}`tenant.app.epg.provider_contract_label <vocab-tenant-app-epg-provider_contract_label>`, {ref}`tenant.app.epg.provider_label <vocab-tenant-app-epg-provider_label>` *(+38 more)*
+
+(enum-ptpnodeproftemplate)=
+
+## `PtpNodeProfTemplate`
+
+| value | meaning |
+| --- | --- |
+| `telecom_full_path` | try to keep unique values for profiles |
+
+Used by: {ref}`infra.ptp_node_policy <vocab-infra-ptp_node_policy>`
+
+(enum-ptpprofiletemplate)=
+
+## `PtpProfileTemplate`
+
+| value | meaning |
+| --- | --- |
+| `aes67` | — |
+| `default` | — |
+| `smpte` | — |
+| `telecom_full_path` | — |
+
+Used by: {ref}`infra.ptp_profile <vocab-infra-ptp_profile>`, {ref}`infra.ptp_profile_template <vocab-infra-ptp_profile_template>`
+
+(enum-ptpptpoperatingmode)=
+
+## `PtpPtpOperatingMode`
+
+| value | meaning |
+| --- | --- |
+| `hybrid` | try to keep unique values for operating Mode across Models |
+
+Used by: {ref}`infra.ptp_node_policy <vocab-infra-ptp_node_policy>`
 
 (enum-ptpptptransportmode)=
 
@@ -3095,6 +3878,29 @@ Used by: {ref}`fabric.span_source_group.span_label <vocab-fabric-span_source_gro
 | `unicast-slave` | — |
 
 Used by: {ref}`tenant.app.epg.static_path.ptp <vocab-tenant-app-epg-static_path-ptp>`, {ref}`tenant.l3out.node_profile.interface_profile.path_attachment.ptp_l3out <vocab-tenant-l3out-node_profile-interface_profile-path_attachment-ptp_l3out>`
+
+(enum-ptpptpoedstmacrxnomatch)=
+
+## `PtpPtpoeDstMacRxNoMatch`
+
+| value | meaning |
+| --- | --- |
+| `drop` | — |
+| `replyWithCfgMac` | — |
+| `replyWithRxMac` | — |
+
+Used by: {ref}`infra.ptp_profile <vocab-infra-ptp_profile>`
+
+(enum-ptpptpoedstmactype)=
+
+## `PtpPtpoeDstMacType`
+
+| value | meaning |
+| --- | --- |
+| `forwardable` | — |
+| `non-forwardable` | — |
+
+Used by: {ref}`infra.ptp_profile <vocab-infra-ptp_profile>`
 
 (enum-qosdpppoladminstate)=
 
@@ -3121,7 +3927,113 @@ Used by: {ref}`infra.dpp_policy <vocab-infra-dpp_policy>`, {ref}`tenant.dpp_poli
 | `level6` | — |
 | `unspecified` | — |
 
-Used by: {ref}`tenant.access_client_profile.access_client_epg <vocab-tenant-access_client_profile-access_client_epg>`, {ref}`tenant.access_function_profile.access_function_provider <vocab-tenant-access_function_profile-access_function_provider>`, {ref}`tenant.app <vocab-tenant-app>`, {ref}`tenant.app.epg <vocab-tenant-app-epg>`, {ref}`tenant.app.esg <vocab-tenant-app-esg>`, {ref}`tenant.contract <vocab-tenant-contract>`, {ref}`tenant.contract.subject <vocab-tenant-contract-subject>`, {ref}`tenant.contract.subject.in_term <vocab-tenant-contract-subject-in_term>` *(+15 more)*
+Used by: {ref}`infra.qos_instance_policy.qos_class_policy <vocab-infra-qos_instance_policy-qos_class_policy>`, {ref}`tenant.access_client_profile.access_client_epg <vocab-tenant-access_client_profile-access_client_epg>`, {ref}`tenant.access_function_profile.access_function_provider <vocab-tenant-access_function_profile-access_function_provider>`, {ref}`tenant.app <vocab-tenant-app>`, {ref}`tenant.app.epg <vocab-tenant-app-epg>`, {ref}`tenant.app.esg <vocab-tenant-app-esg>`, {ref}`tenant.contract <vocab-tenant-contract>`, {ref}`tenant.contract.subject <vocab-tenant-contract-subject>` *(+16 more)*
+
+(enum-qosuburstadminstate)=
+
+## `QosUburstAdminState`
+
+| value | meaning |
+| --- | --- |
+| `disabled` | — |
+| `enabled` | — |
+
+Used by: {ref}`infra.qos_instance_policy.qos_class_policy.microburst_policy <vocab-infra-qos_instance_policy-qos_class_policy-microburst_policy>`, {ref}`infra.qos_instance_policy.qos_class_policy.qos_queue_management_policy <vocab-infra-qos_instance_policy-qos_class_policy-qos_queue_management_policy>`
+
+(enum-qosmctrl)=
+
+## `Qosmctrl`
+
+| value | meaning |
+| --- | --- |
+| `none` | Default value |
+| `dot1p-preserve` | Preserve dot1p within ACI |
+
+Used by: {ref}`infra.qos_instance_policy <vocab-infra-qos_instance_policy>`
+
+(enum-qospcongalgo)=
+
+## `QospCongAlgo`
+
+| value | meaning |
+| --- | --- |
+| `tail-drop` | Tail drop |
+| `wred` | WRED |
+
+Used by: {ref}`infra.qos_instance_policy.qos_class_policy.qos_congestion_policy <vocab-infra-qos_instance_policy-qos_class_policy-qos_congestion_policy>`
+
+(enum-qospcosbmap)=
+
+## `QospCosBmap`
+
+| value | meaning |
+| --- | --- |
+| `unspecified` | — |
+| `cos0` | — |
+| `cos1` | — |
+| `cos2` | — |
+| `cos3` | — |
+| `cos4` | — |
+| `cos5` | — |
+| `cos6` | — |
+| `cos7` | — |
+
+Used by: {ref}`infra.qos_instance_policy.qos_class_policy.qos_priority_flow_control_policy <vocab-infra-qos_instance_policy-qos_class_policy-qos_priority_flow_control_policy>`
+
+(enum-qospctrlmeth)=
+
+## `QospCtrlMeth`
+
+| value | meaning |
+| --- | --- |
+| `dynamic` | Dynamic |
+| `static` | Static |
+
+Used by: {ref}`infra.qos_instance_policy.qos_class_policy.qos_queue_management_policy <vocab-infra-qos_instance_policy-qos_class_policy-qos_queue_management_policy>`
+
+(enum-qospecn)=
+
+## `QospECN`
+
+| value | meaning |
+| --- | --- |
+| `disabled` | disabled |
+| `enabled` | enabled |
+
+Used by: {ref}`infra.qos_instance_policy.qos_class_policy.qos_congestion_policy <vocab-infra-qos_instance_policy-qos_class_policy-qos_congestion_policy>`
+
+(enum-qosppfcenablescope)=
+
+## `QospPfcEnableScope`
+
+| value | meaning |
+| --- | --- |
+| `fabric` | Fabric |
+| `tor` | ToR |
+
+Used by: {ref}`infra.qos_instance_policy.qos_class_policy.qos_priority_flow_control_policy <vocab-infra-qos_instance_policy-qos_class_policy-qos_priority_flow_control_policy>`
+
+(enum-qospschedalgo)=
+
+## `QospSchedAlgo`
+
+| value | meaning |
+| --- | --- |
+| `sp` | SP |
+| `wrr` | WRR |
+
+Used by: {ref}`infra.qos_instance_policy.qos_class_policy.schedule_policy <vocab-infra-qos_instance_policy-qos_class_policy-schedule_policy>`
+
+(enum-qospuburstunit)=
+
+## `QospUburstUnit`
+
+| value | meaning |
+| --- | --- |
+| `bytes` | Bytes |
+| `percentage` | Percentage |
+
+Used by: {ref}`infra.qos_instance_policy.qos_class_policy.microburst_policy <vocab-infra-qos_instance_policy-qos_class_policy-microburst_policy>`
 
 (enum-rtctrlcommunitytype)=
 
@@ -3312,6 +4224,18 @@ Used by: {ref}`tenant.action_rule_profile.set_as_path <vocab-tenant-action_rule_
 
 Used by: {ref}`tenant.action_rule_profile.add_community <vocab-tenant-action_rule_profile-add_community>`, {ref}`tenant.action_rule_profile.set_community <vocab-tenant-action_rule_profile-set_community>`
 
+(enum-spanadminst)=
+
+## `SpanAdminSt`
+
+| value | meaning |
+| --- | --- |
+| `start` | — |
+| `stop` | — |
+| `unknown` | — |
+
+Used by: {ref}`infra.vspan_session <vocab-infra-vspan_session>`
+
 (enum-spandirection)=
 
 ## `SpanDirection`
@@ -3322,7 +4246,7 @@ Used by: {ref}`tenant.action_rule_profile.add_community <vocab-tenant-action_rul
 | `in` | Incoming |
 | `out` | Outgoing |
 
-Used by: {ref}`fabric.span_source_group.span_source <vocab-fabric-span_source_group-span_source>`, {ref}`fabric.span_source_group.vspan_source <vocab-fabric-span_source_group-vspan_source>`, {ref}`fabric.span_source_group.vspan_source_def <vocab-fabric-span_source_group-vspan_source_def>`, {ref}`infra.span_source_group.span_source <vocab-infra-span_source_group-span_source>`, {ref}`infra.span_source_group.vspan_source <vocab-infra-span_source_group-vspan_source>`, {ref}`infra.span_source_group.vspan_source_def <vocab-infra-span_source_group-vspan_source_def>`, {ref}`tenant.span_source_group.span_source <vocab-tenant-span_source_group-span_source>`, {ref}`tenant.span_source_group.vspan_source <vocab-tenant-span_source_group-vspan_source>` *(+1 more)*
+Used by: {ref}`fabric.span_source_group.span_source <vocab-fabric-span_source_group-span_source>`, {ref}`fabric.span_source_group.vspan_source <vocab-fabric-span_source_group-vspan_source>`, {ref}`fabric.span_source_group.vspan_source_def <vocab-fabric-span_source_group-vspan_source_def>`, {ref}`infra.span_source_group.span_source <vocab-infra-span_source_group-span_source>`, {ref}`infra.span_source_group.vspan_source <vocab-infra-span_source_group-vspan_source>`, {ref}`infra.span_source_group.vspan_source_def <vocab-infra-span_source_group-vspan_source_def>`, {ref}`infra.vspan_session.vspan_vsource <vocab-infra-vspan_session-vspan_vsource>`, {ref}`tenant.span_source_group.span_source <vocab-tenant-span_source_group-span_source>` *(+2 more)*
 
 (enum-spanerspandestmode)=
 
@@ -3333,7 +4257,7 @@ Used by: {ref}`fabric.span_source_group.span_source <vocab-fabric-span_source_gr
 | `not-visible` | The ERSPAN dest. may or may not be in a diffenet private network but the ip address of the ERSPAN destination will not get leaked into the consumers private network |
 | `visible` | The ERSPAN dest. is in a diffenet private network. The ip address of the ERSPAN dest. will get leaked into the consumers private network. Hence the ERSPAN destination IP address must not overlap with esiting IP addresses in the Source EPGs whose traffic is being remote spanned. |
 
-Used by: {ref}`fabric.span_destination_group.span_destination.vspan_epg_summary <vocab-fabric-span_destination_group-span_destination-vspan_epg_summary>`, {ref}`infra.span_destination_group.span_destination.vspan_epg_summary <vocab-infra-span_destination_group-span_destination-vspan_epg_summary>`, {ref}`tenant.span_destination_group.span_destination.vspan_epg_summary <vocab-tenant-span_destination_group-span_destination-vspan_epg_summary>`
+Used by: {ref}`fabric.span_destination_group.span_destination.vspan_epg_summary <vocab-fabric-span_destination_group-span_destination-vspan_epg_summary>`, {ref}`infra.span_destination_group.span_destination.vspan_epg_summary <vocab-infra-span_destination_group-span_destination-vspan_epg_summary>`, {ref}`infra.vspan_destination_group.vspan_vdestination.vspan_destination_epg_summary <vocab-infra-vspan_destination_group-vspan_vdestination-vspan_destination_epg_summary>`, {ref}`tenant.span_destination_group.span_destination.vspan_epg_summary <vocab-tenant-span_destination_group-span_destination-vspan_epg_summary>`
 
 (enum-stpifcontrol)=
 
@@ -3357,6 +4281,76 @@ Used by: {ref}`infra.stp_policy <vocab-infra-stp_policy>`
 | `enabled` | — |
 
 Used by: {ref}`tenant.l3out.node_profile.interface_profile.floating_svi <vocab-tenant-l3out-node_profile-interface_profile-floating_svi>`, {ref}`tenant.l3out.node_profile.interface_profile.path_attachment <vocab-tenant-l3out-node_profile-interface_profile-path_attachment>`
+
+(enum-syncegqloptype)=
+
+## `SynceGqloptype`
+
+| value | meaning |
+| --- | --- |
+| `op1` | option 1 |
+| `op2g1` | option 2 generation 1 |
+| `op2g2` | option 2 generation 2 |
+
+Used by: {ref}`infra.synce_policy <vocab-infra-synce_policy>`
+
+(enum-synceqloptype)=
+
+## `SynceQloptype`
+
+| value | meaning |
+| --- | --- |
+| `none` | To represent QL is not configured |
+| `op1` | option 1 |
+| `op2g1` | option 2 generation 1 |
+| `op2g2` | option 2 generation 2 |
+
+Used by: {ref}`infra.synce_interface_policy <vocab-infra-synce_interface_policy>`
+
+(enum-synceqlvalue)=
+
+## `SynceQlvalue`
+
+| value | meaning |
+| --- | --- |
+| `fsync-ql-common-dnu` | — |
+| `fsync-ql-common-failed` | — |
+| `fsync-ql-common-invalid` | common values |
+| `fsync-ql-common-none` | — |
+| `fsync-ql-o1-eec1` | — |
+| `fsync-ql-o1-eeec` | — |
+| `fsync-ql-o1-eprtc` | Set of possible QL values from all different itu-t option |
+| `fsync-ql-o1-prc` | — |
+| `fsync-ql-o1-prtc` | — |
+| `fsync-ql-o1-sec` | — |
+| `fsync-ql-o1-ssu-a` | — |
+| `fsync-ql-o1-ssu-b` | — |
+| `fsync-ql-o2-g1-eec2` | — |
+| `fsync-ql-o2-g1-eeec` | — |
+| `fsync-ql-o2-g1-eprtc` | < const name="FSYNC_QL_O2_G1_DUS" value="" label="option-2 generation-1 DUS"/> |
+| `fsync-ql-o2-g1-prs` | — |
+| `fsync-ql-o2-g1-prtc` | — |
+| `fsync-ql-o2-g1-res` | — |
+| `fsync-ql-o2-g1-smc` | — |
+| `fsync-ql-o2-g1-st2` | — |
+| `fsync-ql-o2-g1-st3` | — |
+| `fsync-ql-o2-g1-st4` | — |
+| `fsync-ql-o2-g1-stu` | — |
+| `fsync-ql-o2-g2-eec2` | — |
+| `fsync-ql-o2-g2-eeec` | — |
+| `fsync-ql-o2-g2-eprtc` | — |
+| `fsync-ql-o2-g2-prov` | — |
+| `fsync-ql-o2-g2-prs` | — |
+| `fsync-ql-o2-g2-prtc` | — |
+| `fsync-ql-o2-g2-smc` | — |
+| `fsync-ql-o2-g2-st2` | — |
+| `fsync-ql-o2-g2-st3` | — |
+| `fsync-ql-o2-g2-st3e` | — |
+| `fsync-ql-o2-g2-st4` | — |
+| `fsync-ql-o2-g2-stu` | — |
+| `fsync-ql-o2-g2-tnc` | — |
+
+Used by: {ref}`infra.synce_interface_policy <vocab-infra-synce_interface_policy>`
 
 (enum-syslogformatsetting)=
 
@@ -3414,7 +4408,18 @@ Used by: {ref}`fabric.syslog_group.remote_destination <vocab-fabric-syslog_group
 | `notifications` | — |
 | `warnings` | — |
 
-Used by: {ref}`fabric.syslog_group.remote_destination <vocab-fabric-syslog_group-remote_destination>`
+Used by: {ref}`fabric.syslog_group.remote_destination <vocab-fabric-syslog_group-remote_destination>`, {ref}`infra.monitoring_policy.monitoring_target.event_severity_assignment_policy.syslog_source <vocab-infra-monitoring_policy-monitoring_target-event_severity_assignment_policy-syslog_source>`, {ref}`infra.monitoring_policy.monitoring_target.fault_severity_assignment_policy.syslog_source <vocab-infra-monitoring_policy-monitoring_target-fault_severity_assignment_policy-syslog_source>`, {ref}`infra.monitoring_policy.monitoring_target.syslog_source <vocab-infra-monitoring_policy-monitoring_target-syslog_source>`, {ref}`infra.monitoring_policy.syslog_source <vocab-infra-monitoring_policy-syslog_source>`
+
+(enum-tacacsswitchtacacsaudit)=
+
+## `TacacsSwitchTacacsAudit`
+
+| value | meaning |
+| --- | --- |
+| `disabled` | — |
+| `enabled` | — |
+
+Used by: {ref}`infra.monitoring_policy.monitoring_target.event_severity_assignment_policy.tacacs_source <vocab-infra-monitoring_policy-monitoring_target-event_severity_assignment_policy-tacacs_source>`, {ref}`infra.monitoring_policy.monitoring_target.fault_severity_assignment_policy.tacacs_source <vocab-infra-monitoring_policy-monitoring_target-fault_severity_assignment_policy-tacacs_source>`, {ref}`infra.monitoring_policy.monitoring_target.tacacs_source <vocab-infra-monitoring_policy-monitoring_target-tacacs_source>`, {ref}`infra.monitoring_policy.tacacs_source <vocab-infra-monitoring_policy-tacacs_source>`
 
 (enum-topnoderolep)=
 
@@ -3440,6 +4445,58 @@ Used by: {ref}`controller.fabric_membership.fabric_node_member <vocab-controller
 | `virtual` | virtual-controler |
 
 Used by: {ref}`controller.fabric_membership.fabric_node_member <vocab-controller-fabric_membership-fabric_node_member>`
+
+(enum-topoctrladminstate)=
+
+## `TopoctrlAdminState`
+
+| value | meaning |
+| --- | --- |
+| `off` | — |
+| `on` | — |
+
+Used by: {ref}`infra.port_tracking <vocab-infra-port_tracking>`
+
+(enum-topoctrlfastlinkfailovermodetype)=
+
+## `TopoctrlFastLinkFailoverModeType`
+
+| value | meaning |
+| --- | --- |
+| `off` | off |
+| `on` | on |
+
+Used by: {ref}`infra.fast_link_failover_policy <vocab-infra-fast_link_failover_policy>`
+
+(enum-topoctrlfwdscaleproftype)=
+
+## `TopoctrlFwdScaleProfType`
+
+| value | meaning |
+| --- | --- |
+| `dual-stack` | Dual Stack (IPv4/IPv6) Profile |
+| `high-dual-stack` | High Dual Stack (IPv4/IPv6) Profile |
+| `high-ipv4-ep` | High IPV4 Profile |
+| `high-lpm` | High LPM Profile |
+| `high-policy` | High Policy Profile |
+| `ipv4` | IPv4 Only Profile |
+| `max-lpm` | Max LPM Profile |
+| `mcast-heavy` | Mcast Heavy Profile |
+
+Used by: {ref}`infra.forwarding_scale_profile_policy <vocab-infra-forwarding_scale_profile_policy>`
+
+(enum-topoctrlmsstypes)=
+
+## `TopoctrlMssTypes`
+
+| value | meaning |
+| --- | --- |
+| `Global` | Global |
+| `MsiteRl` | Msite w RLs Only |
+| `RlOnly` | RL Only |
+| `disable` | Disable |
+
+Used by: {ref}`infra.tcp_mss_policy <vocab-infra-tcp_mss_policy>`
 
 (enum-tracklistobj)=
 
@@ -3510,6 +4567,17 @@ Used by: {ref}`tenant.service_container.service_redirect_policy <vocab-tenant-se
 | `sip-dip-prototype` | — |
 
 Used by: {ref}`tenant.service_container.service_redirect_policy <vocab-tenant-service_container-service_redirect_policy>`
+
+(enum-vsanlbtype)=
+
+## `VsanLbType`
+
+| value | meaning |
+| --- | --- |
+| `src-dst-id` | — |
+| `src-dst-ox-id` | — |
+
+Used by: {ref}`infra.vsan_attributes.vsan_attribute_entry <vocab-infra-vsan_attributes-vsan_attribute_entry>`
 
 (enum-vzbinaryaction)=
 

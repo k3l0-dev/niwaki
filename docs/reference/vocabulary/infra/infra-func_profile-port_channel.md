@@ -29,6 +29,12 @@ Accepted as keyword arguments of `.port_channel(name)` and of `.set(**attrs)` on
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |
 
+## Children
+
+| maker | creates | position |
+| --- | --- | --- |
+| `.override_policy_group(name, **attrs)` | `infraAccBndlSubgrp` | {ref}`infra.func_profile.port_channel.override_policy_group <vocab-infra-func_profile-port_channel-override_policy_group>` |
+
 ## Bind aliases
 
 Lazy references, resolved closed-world at push time.
@@ -43,3 +49,8 @@ Lazy references, resolved closed-world at push time.
 | `stp=` | `stpIfPol` | name | `infraRsStpIfPol` |
 | `mcp=` | `mcpIfPol` | name | `infraRsMcpIfPol` |
 | `storm_control=` | `stormctrlIfPol` | name | `infraRsStormctrlIfPol` |
+| `l2_interface=` | `l2IfPol` | name | `infraRsL2IfPol` |
+| `macsec=` | `macsecIfPol` | name | `infraRsMacsecIfPol` |
+| `copp=` | `coppIfPol` | name | `infraRsCoppIfPol` |
+| `llfc=` | `qosLlfcIfPol` | name | `infraRsQosLlfcIfPol` |
+| `pfc=` | `qosPfcIfPol` | name | `infraRsQosPfcIfPol` |

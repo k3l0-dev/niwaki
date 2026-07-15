@@ -13,7 +13,7 @@ Creates a container for monitoring policies associated with the tenant. This all
 | --- | --- |
 | ACI class | `monEPGPol` |
 | RN | `monepg-{name}` |
-| Cursor | `MonitoringPolicyCursor` |
+| Cursor | `TenantMonitoringPolicyCursor` |
 | Parent | {ref}`tenant <vocab-tenant>` |
 | Atomic | — |
 

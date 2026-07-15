@@ -41,3 +41,10 @@ Lazy references, resolved closed-world at push time.
 | `stp=` | `stpIfPol` | name | `infraRsStpIfPol` |
 | `mcp=` | `mcpIfPol` | name | `infraRsMcpIfPol` |
 | `storm_control=` | `stormctrlIfPol` | name | `infraRsStormctrlIfPol` |
+| `l2_interface=` | `l2IfPol` | name | `infraRsL2IfPol` |
+| `poe=` | `poeIfPol` | name | `infraRsPoeIfPol` |
+| `macsec=` | `macsecIfPol` | name | `infraRsMacsecIfPol` |
+| `copp=` | `coppIfPol` | name | `infraRsCoppIfPol` |
+| `llfc=` | `qosLlfcIfPol` | name | `infraRsQosLlfcIfPol` |
+| `pfc=` | `qosPfcIfPol` | name | `infraRsQosPfcIfPol` |
+| `monitoring=` | `monInfraPol` | name | `infraRsMonIfInfraPol` |

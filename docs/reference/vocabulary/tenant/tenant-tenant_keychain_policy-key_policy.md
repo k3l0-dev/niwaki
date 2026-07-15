@@ -13,7 +13,7 @@ Key Policy
 | --- | --- |
 | ACI class | `fvKeyPol` |
 | RN | `keyp-{key_id}` |
-| Cursor | `KeyPolicyCursor` |
+| Cursor | `TenantKeychainPolicyKeyPolicyCursor` |
 | Parent | {ref}`tenant.tenant_keychain_policy <vocab-tenant-tenant_keychain_policy>` |
 | Atomic | — |
 

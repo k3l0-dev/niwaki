@@ -5,7 +5,7 @@ Re-generate: uv run python -m niwaki._codegen.generate_docs
 
 # Coverage matrix
 
-**462 curated positions** across the four design domains plus the `uni`-level domains.  Everything else in the 2,222 generated classes stays reachable through `.mo(Class, ...)` and `bind_dn(alias=dn)` — see the design guide.
+**605 curated positions** across the four design domains plus the `uni`-level domains.  Everything else in the 2,222 generated classes stays reachable through `.mo(Class, ...)` and `bind_dn(alias=dn)` — see the design guide.
 
 ## fabric
 
@@ -41,33 +41,135 @@ Re-generate: uv run python -m niwaki._codegen.generate_docs
 
 | position | ACI class | makers | bind aliases | verbs | sugar | atomic |
 | --- | --- | --- | --- | --- | --- | --- |
-| {ref}`infra <vocab-infra>` | `infraInfra` | 21 | — | — | — | — |
+| {ref}`infra <vocab-infra>` | `infraInfra` | 83 | — | — | — | — |
 | {ref}`infra.cdp_policy <vocab-infra-cdp_policy>` | `cdpIfPol` | — | — | — | — | — |
 | {ref}`infra.lldp_policy <vocab-infra-lldp_policy>` | `lldpIfPol` | — | — | — | — | — |
-| {ref}`infra.lacp_policy <vocab-infra-lacp_policy>` | `lacpLagPol` | — | — | — | — | — |
+| {ref}`infra.lacp_policy <vocab-infra-lacp_policy>` | `lacpLagPol` | 1 | — | — | — | — |
+| {ref}`infra.lacp_policy.load_balance_policy <vocab-infra-lacp_policy-load_balance_policy>` | `l2LoadBalancePol` | — | — | — | — | — |
+| {ref}`infra.lacp_member_policy <vocab-infra-lacp_member_policy>` | `lacpIfPol` | — | — | — | — | — |
 | {ref}`infra.link_level_policy <vocab-infra-link_level_policy>` | `fabricHIfPol` | — | — | — | — | — |
+| {ref}`infra.link_flap_policy <vocab-infra-link_flap_policy>` | `fabricLinkFlapPol` | — | — | — | — | — |
 | {ref}`infra.mcp_policy <vocab-infra-mcp_policy>` | `mcpIfPol` | — | — | — | — | — |
 | {ref}`infra.stp_policy <vocab-infra-stp_policy>` | `stpIfPol` | — | — | — | — | — |
 | {ref}`infra.storm_control_policy <vocab-infra-storm_control_policy>` | `stormctrlIfPol` | — | — | — | — | — |
+| {ref}`infra.l2_interface_policy <vocab-infra-l2_interface_policy>` | `l2IfPol` | — | — | — | — | — |
+| {ref}`infra.poe_interface_policy <vocab-infra-poe_interface_policy>` | `poeIfPol` | — | — | — | — | — |
+| {ref}`infra.fc_interface_policy <vocab-infra-fc_interface_policy>` | `fcIfPol` | — | — | — | — | — |
+| {ref}`infra.macsec_interface_policy <vocab-infra-macsec_interface_policy>` | `macsecIfPol` | — | `keychain=` | — | — | — |
+| {ref}`infra.synce_interface_policy <vocab-infra-synce_interface_policy>` | `synceEthIfPol` | — | — | — | — | — |
+| {ref}`infra.dot1x_node_authentication <vocab-infra-dot1x_node_authentication>` | `l2NodeAuthPol` | — | — | — | — | — |
+| {ref}`infra.dot1x_port_authentication <vocab-infra-dot1x_port_authentication>` | `l2PortAuthPol` | 1 | — | — | — | — |
+| {ref}`infra.dot1x_port_authentication.dot1x_port_authentication_config <vocab-infra-dot1x_port_authentication-dot1x_port_authentication_config>` | `l2PortAuthCfgPol` | — | — | — | — | — |
+| {ref}`infra.poe_policy <vocab-infra-poe_policy>` | `poeInstPol` | — | — | — | — | — |
+| {ref}`infra.fc_instance_policy <vocab-infra-fc_instance_policy>` | `fcInstPol` | — | — | — | — | — |
+| {ref}`infra.fc_fabric_policy <vocab-infra-fc_fabric_policy>` | `fcFabricPol` | — | — | — | — | — |
+| {ref}`infra.vsan_attributes <vocab-infra-vsan_attributes>` | `fcVsanAttrP` | 1 | — | — | — | — |
+| {ref}`infra.vsan_attributes.vsan_attribute_entry <vocab-infra-vsan_attributes-vsan_attribute_entry>` | `fcVsanAttrPEntry` | — | — | — | — | — |
+| {ref}`infra.synce_policy <vocab-infra-synce_policy>` | `synceInstPol` | — | — | — | — | — |
+| {ref}`infra.macsec <vocab-infra-macsec>` | `macsecPolCont` | 2 | — | — | — | — |
+| {ref}`infra.macsec.parameters_policy <vocab-infra-macsec-parameters_policy>` | `macsecParamPol` | — | — | — | — | — |
+| {ref}`infra.macsec.keychain_policy <vocab-infra-macsec-keychain_policy>` | `macsecKeyChainPol` | 1 | — | — | — | — |
+| {ref}`infra.macsec.keychain_policy.key_policy <vocab-infra-macsec-keychain_policy-key_policy>` | `macsecKeyPol` | — | — | — | — | — |
 | {ref}`infra.dhcp_relay_policy <vocab-infra-dhcp_relay_policy>` | `dhcpRelayP` | 1 | — | — | — | — |
 | {ref}`infra.dhcp_relay_policy.provider <vocab-infra-dhcp_relay_policy-provider>` | `dhcpRsProv` | — | — | — | — | — |
 | {ref}`infra.dpp_policy <vocab-infra-dpp_policy>` | `qosDppPol` | — | — | — | — | — |
+| {ref}`infra.qos_instance_policy <vocab-infra-qos_instance_policy>` | `qosInstPol` | 1 | — | — | — | — |
+| {ref}`infra.qos_instance_policy.qos_class_policy <vocab-infra-qos_instance_policy-qos_class_policy>` | `qosClass` | 6 | — | — | — | — |
+| {ref}`infra.qos_instance_policy.qos_class_policy.qos_buffer_policy <vocab-infra-qos_instance_policy-qos_class_policy-qos_buffer_policy>` | `qosBuffer` | — | — | — | — | — |
+| {ref}`infra.qos_instance_policy.qos_class_policy.qos_congestion_policy <vocab-infra-qos_instance_policy-qos_class_policy-qos_congestion_policy>` | `qosCong` | — | — | — | — | — |
+| {ref}`infra.qos_instance_policy.qos_class_policy.qos_priority_flow_control_policy <vocab-infra-qos_instance_policy-qos_class_policy-qos_priority_flow_control_policy>` | `qosPfcPol` | — | — | — | — | — |
+| {ref}`infra.qos_instance_policy.qos_class_policy.qos_queue_management_policy <vocab-infra-qos_instance_policy-qos_class_policy-qos_queue_management_policy>` | `qosQueue` | — | — | — | — | — |
+| {ref}`infra.qos_instance_policy.qos_class_policy.schedule_policy <vocab-infra-qos_instance_policy-qos_class_policy-schedule_policy>` | `qosSched` | — | — | — | — | — |
+| {ref}`infra.qos_instance_policy.qos_class_policy.microburst_policy <vocab-infra-qos_instance_policy-qos_class_policy-microburst_policy>` | `qosUburst` | — | — | — | — | — |
+| {ref}`infra.llfc_interface_policy <vocab-infra-llfc_interface_policy>` | `qosLlfcIfPol` | — | — | — | — | — |
+| {ref}`infra.pfc_interface_policy <vocab-infra-pfc_interface_policy>` | `qosPfcIfPol` | — | — | — | — | — |
+| {ref}`infra.slow_drain_policy <vocab-infra-slow_drain_policy>` | `qosSdIfPol` | — | — | — | — | — |
+| {ref}`infra.copp_leaf_policy <vocab-infra-copp_leaf_policy>` | `coppLeafProfile` | 1 | — | — | — | — |
+| {ref}`infra.copp_leaf_policy.gen1_settings <vocab-infra-copp_leaf_policy-gen1_settings>` | `coppLeafGen1CustomValues` | — | — | — | — | — |
+| {ref}`infra.copp_spine_policy <vocab-infra-copp_spine_policy>` | `coppSpineProfile` | 1 | — | — | — | — |
+| {ref}`infra.copp_spine_policy.gen1_settings <vocab-infra-copp_spine_policy-gen1_settings>` | `coppSpineGen1CustomValues` | — | — | — | — | — |
+| {ref}`infra.copp_interface_policy <vocab-infra-copp_interface_policy>` | `coppIfPol` | 1 | — | — | — | — |
+| {ref}`infra.copp_interface_policy.protocol_class <vocab-infra-copp_interface_policy-protocol_class>` | `coppProtoClassP` | — | — | — | — | — |
+| {ref}`infra.copp_prefilter_leaf_policy <vocab-infra-copp_prefilter_leaf_policy>` | `iaclLeafProfile` | 1 | — | — | — | — |
+| {ref}`infra.copp_prefilter_leaf_policy.acl_entry <vocab-infra-copp_prefilter_leaf_policy-acl_entry>` | `iaclEntry` | — | — | — | — | — |
+| {ref}`infra.copp_prefilter_spine_policy <vocab-infra-copp_prefilter_spine_policy>` | `iaclSpineProfile` | 1 | — | — | — | — |
+| {ref}`infra.copp_prefilter_spine_policy.acl_entry <vocab-infra-copp_prefilter_spine_policy-acl_entry>` | `iaclEntry` | — | — | — | — | — |
+| {ref}`infra.cp_mtu_policy <vocab-infra-cp_mtu_policy>` | `infraCPMtuPol` | — | — | — | — | — |
+| {ref}`infra.ctrlr_mtu_policy <vocab-infra-ctrlr_mtu_policy>` | `infraCtrlrMtuPol` | — | — | — | — | — |
+| {ref}`infra.tcp_mss_policy <vocab-infra-tcp_mss_policy>` | `infraMssPol` | — | — | — | — | — |
+| {ref}`infra.fabric_wide_settings_policy <vocab-infra-fabric_wide_settings_policy>` | `infraSetPol` | — | — | — | — | — |
+| {ref}`infra.port_tracking <vocab-infra-port_tracking>` | `infraPortTrackPol` | — | — | — | — | — |
+| {ref}`infra.port_status_policy <vocab-infra-port_status_policy>` | `infraPortDirecPol` | — | — | — | — | — |
+| {ref}`infra.remote_leaf_pod_redundancy_policy <vocab-infra-remote_leaf_pod_redundancy_policy>` | `infraRlPodRedPol` | — | — | — | — | — |
+| {ref}`infra.system_gipo_policy <vocab-infra-system_gipo_policy>` | `fmcastSystemGIPoPol` | — | — | — | — | — |
+| {ref}`infra.forwarding_scale_profile_policy <vocab-infra-forwarding_scale_profile_policy>` | `topoctrlFwdScaleProfilePol` | — | — | — | — | — |
+| {ref}`infra.usb_configuration_policy <vocab-infra-usb_configuration_policy>` | `topoctrlUsbConfigProfilePol` | — | — | — | — | — |
+| {ref}`infra.fast_link_failover_policy <vocab-infra-fast_link_failover_policy>` | `topoctrlFastLinkFailoverInstPol` | — | — | — | — | — |
+| {ref}`infra.port_bundle_configuration <vocab-infra-port_bundle_configuration>` | `infraBundleConfig` | — | — | — | — | — |
+| {ref}`infra.flash_configuration_policy <vocab-infra-flash_configuration_policy>` | `equipmentFlashConfigPol` | — | — | — | — | — |
+| {ref}`infra.infrastructure_zoning_profile <vocab-infra-infrastructure_zoning_profile>` | `infrazoneZoneP` | 1 | — | — | — | — |
+| {ref}`infra.infrastructure_zoning_profile.infrastructure_zone <vocab-infra-infrastructure_zoning_profile-infrastructure_zone>` | `infrazoneZone` | 2 | — | — | — | — |
+| {ref}`infra.infrastructure_zoning_profile.infrastructure_zone.node_group <vocab-infra-infrastructure_zoning_profile-infrastructure_zone-node_group>` | `infrazoneNodeGrp` | 1 | — | — | — | — |
+| {ref}`infra.infrastructure_zoning_profile.infrastructure_zone.node_group.node_block <vocab-infra-infrastructure_zoning_profile-infrastructure_zone-node_group-node_block>` | `infraNodeBlk` | — | — | — | — | — |
+| {ref}`infra.infrastructure_zoning_profile.infrastructure_zone.pod_group <vocab-infra-infrastructure_zoning_profile-infrastructure_zone-pod_group>` | `infrazonePodGrp` | 1 | — | — | — | — |
+| {ref}`infra.infrastructure_zoning_profile.infrastructure_zone.pod_group.pod_block <vocab-infra-infrastructure_zoning_profile-infrastructure_zone-pod_group-pod_block>` | `infraPodBlk` | — | — | — | — | — |
+| {ref}`infra.dhcp_node_group <vocab-infra-dhcp_node_group>` | `dhcpNodeGrp` | 1 | — | — | — | — |
+| {ref}`infra.dhcp_node_group.node_block <vocab-infra-dhcp_node_group-node_block>` | `infraNodeBlk` | — | — | — | — | — |
+| {ref}`infra.dhcp_pod_group <vocab-infra-dhcp_pod_group>` | `dhcpPodGrp` | 1 | — | — | — | — |
+| {ref}`infra.dhcp_pod_group.pod_block <vocab-infra-dhcp_pod_group-pod_block>` | `infraPodBlk` | — | — | — | — | — |
+| {ref}`infra.node_management_address <vocab-infra-node_management_address>` | `mgmtNodeGrp` | 1 | — | — | — | — |
+| {ref}`infra.node_management_address.node_block <vocab-infra-node_management_address-node_block>` | `infraNodeBlk` | — | — | — | — | — |
+| {ref}`infra.pod_management_address <vocab-infra-pod_management_address>` | `mgmtPodGrp` | 1 | — | — | — | — |
+| {ref}`infra.pod_management_address.pod_block <vocab-infra-pod_management_address-pod_block>` | `infraPodBlk` | — | — | — | — | — |
 | {ref}`infra.vlan_pool <vocab-infra-vlan_pool>` | `fvnsVlanInstP` | 1 | — | — | — | — |
 | {ref}`infra.vlan_pool.range <vocab-infra-vlan_pool-range>` | `fvnsEncapBlk` | — | — | — | — | — |
+| {ref}`infra.vxlan_pool <vocab-infra-vxlan_pool>` | `fvnsVxlanInstP` | 1 | — | — | — | — |
+| {ref}`infra.vxlan_pool.range <vocab-infra-vxlan_pool-range>` | `fvnsEncapBlk` | — | — | — | — | — |
+| {ref}`infra.vsan_pool <vocab-infra-vsan_pool>` | `fvnsVsanInstP` | 1 | — | — | — | — |
+| {ref}`infra.vsan_pool.range <vocab-infra-vsan_pool-range>` | `fvnsVsanEncapBlk` | — | — | — | — | — |
+| {ref}`infra.mcast_addr_pool <vocab-infra-mcast_addr_pool>` | `fvnsMcastAddrInstP` | 1 | — | — | — | — |
+| {ref}`infra.mcast_addr_pool.range <vocab-infra-mcast_addr_pool-range>` | `fvnsMcastAddrBlk` | — | — | — | — | — |
 | {ref}`infra.aaep <vocab-infra-aaep>` | `infraAttEntityP` | — | `domain=` | — | — | — |
-| {ref}`infra.func_profile <vocab-infra-func_profile>` | `infraFuncP` | 2 | — | — | — | — |
-| {ref}`infra.func_profile.access_group <vocab-infra-func_profile-access_group>` | `infraAccPortGrp` | — | `aaep=`, `cdp=`, `lldp=`, `link_level=`, `stp=`, `mcp=`, `storm_control=` | — | — | — |
-| {ref}`infra.func_profile.port_channel <vocab-infra-func_profile-port_channel>` | `infraAccBndlGrp` | — | `aaep=`, `cdp=`, `lldp=`, `lacp=`, `link_level=`, `stp=`, `mcp=`, `storm_control=` | — | — | — |
+| {ref}`infra.func_profile <vocab-infra-func_profile>` | `infraFuncP` | 12 | — | — | — | — |
+| {ref}`infra.func_profile.access_group <vocab-infra-func_profile-access_group>` | `infraAccPortGrp` | — | `aaep=`, `cdp=`, `lldp=`, `link_level=`, `stp=`, `mcp=`, `storm_control=`, `l2_interface=`, `poe=`, `macsec=`, `copp=`, `llfc=`, `pfc=`, `monitoring=` | — | — | — |
+| {ref}`infra.func_profile.port_channel <vocab-infra-func_profile-port_channel>` | `infraAccBndlGrp` | 1 | `aaep=`, `cdp=`, `lldp=`, `lacp=`, `link_level=`, `stp=`, `mcp=`, `storm_control=`, `l2_interface=`, `macsec=`, `copp=`, `llfc=`, `pfc=` | — | — | — |
+| {ref}`infra.func_profile.port_channel.override_policy_group <vocab-infra-func_profile-port_channel-override_policy_group>` | `infraAccBndlSubgrp` | — | — | — | — | — |
+| {ref}`infra.func_profile.port_channel_override <vocab-infra-func_profile-port_channel_override>` | `infraAccBndlPolGrp` | — | `aaep=`, `cdp=`, `lldp=`, `lacp=`, `link_level=`, `stp=`, `mcp=`, `storm_control=`, `port_security=`, `netflow_monitor=`, `l2_interface=`, `macsec=`, `link_flap=`, `synce=`, `copp=`, `llfc=`, `pfc=`, `slow_drain=`, `monitoring=` | — | — | — |
+| {ref}`infra.func_profile.breakout_group <vocab-infra-func_profile-breakout_group>` | `infraBrkoutPortGrp` | — | — | — | — | — |
+| {ref}`infra.func_profile.fc_port_group <vocab-infra-func_profile-fc_port_group>` | `infraFcAccPortGrp` | — | `aaep=`, `fc_interface=` | — | — | — |
+| {ref}`infra.func_profile.fc_port_channel <vocab-infra-func_profile-fc_port_channel>` | `infraFcAccBndlGrp` | — | `aaep=`, `lacp=`, `fc_interface=` | — | — | — |
+| {ref}`infra.func_profile.fc_port_channel_override <vocab-infra-func_profile-fc_port_channel_override>` | `infraFcAccBndlPolGrp` | — | `aaep=`, `lacp=`, `fc_interface=` | — | — | — |
+| {ref}`infra.func_profile.spine_access_group <vocab-infra-func_profile-spine_access_group>` | `infraSpAccPortGrp` | — | `aaep=`, `cdp=`, `link_level=`, `macsec=`, `link_flap=`, `copp=` | — | — | — |
+| {ref}`infra.func_profile.leaf_switch_group <vocab-infra-func_profile-leaf_switch_group>` | `infraAccNodePGrp` | — | `cdp=`, `lldp=`, `poe_policy=`, `fc_instance=`, `fc_fabric=`, `synce_policy=`, `dot1x=`, `copp=`, `copp_prefilter=`, `fast_link_failover=`, `forwarding_scale=`, `flash_config=`, `usb_config=`, `monitoring=`, `ptp=`, `netflow_node=`, `bfd_ipv4=`, `bfd_ipv6=`, `bfd_ipv4_mh=`, `bfd_ipv6_mh=` | — | — | — |
+| {ref}`infra.func_profile.spine_switch_group <vocab-infra-func_profile-spine_switch_group>` | `infraSpineAccNodePGrp` | — | `cdp=`, `lldp=`, `copp=`, `copp_prefilter=`, `usb_config=`, `bfd_ipv4=`, `bfd_ipv6=` | — | — | — |
+| {ref}`infra.func_profile.access_card_group <vocab-infra-func_profile-access_card_group>` | `infraAccCardPGrp` | — | — | — | — | — |
+| {ref}`infra.func_profile.managed_node_connectivity_group <vocab-infra-func_profile-managed_node_connectivity_group>` | `mgmtGrp` | 2 | — | — | — | — |
+| {ref}`infra.func_profile.managed_node_connectivity_group.inband_zone <vocab-infra-func_profile-managed_node_connectivity_group-inband_zone>` | `mgmtInBZone` | — | — | — | — | — |
+| {ref}`infra.func_profile.managed_node_connectivity_group.oob_zone <vocab-infra-func_profile-managed_node_connectivity_group-oob_zone>` | `mgmtOoBZone` | — | — | — | — | — |
 | {ref}`infra.access_port_profile <vocab-infra-access_port_profile>` | `infraAccPortP` | 1 | — | — | — | — |
 | {ref}`infra.access_port_profile.port_selector <vocab-infra-access_port_profile-port_selector>` | `infraHPortS` | 2 | `policy_group=` | — | — | — |
 | {ref}`infra.access_port_profile.port_selector.port_block <vocab-infra-access_port_profile-port_selector-port_block>` | `infraPortBlk` | — | — | — | — | — |
 | {ref}`infra.access_port_profile.port_selector.sub_port_block <vocab-infra-access_port_profile-port_selector-sub_port_block>` | `infraSubPortBlk` | — | — | — | — | — |
+| {ref}`infra.spine_interface_profile <vocab-infra-spine_interface_profile>` | `infraSpAccPortP` | 1 | — | — | — | — |
+| {ref}`infra.spine_interface_profile.port_selector <vocab-infra-spine_interface_profile-port_selector>` | `infraSHPortS` | 2 | `policy_group=` | — | — | — |
+| {ref}`infra.spine_interface_profile.port_selector.port_block <vocab-infra-spine_interface_profile-port_selector-port_block>` | `infraPortBlk` | — | — | — | — | — |
+| {ref}`infra.spine_interface_profile.port_selector.sub_port_block <vocab-infra-spine_interface_profile-port_selector-sub_port_block>` | `infraSubPortBlk` | — | — | — | — | — |
 | {ref}`infra.leaf_profile <vocab-infra-leaf_profile>` | `infraNodeP` | 1 | `interface_profile=` | — | — | — |
 | {ref}`infra.leaf_profile.leaf_selector <vocab-infra-leaf_profile-leaf_selector>` | `infraLeafS` | 1 | — | — | — | — |
 | {ref}`infra.leaf_profile.leaf_selector.node_block <vocab-infra-leaf_profile-leaf_selector-node_block>` | `infraNodeBlk` | — | — | — | — | — |
-| {ref}`infra.spine_profile <vocab-infra-spine_profile>` | `infraSpineP` | 1 | — | — | — | — |
+| {ref}`infra.spine_profile <vocab-infra-spine_profile>` | `infraSpineP` | 1 | `interface_profile=` | — | — | — |
 | {ref}`infra.spine_profile.spine_selector <vocab-infra-spine_profile-spine_selector>` | `infraSpineS` | 1 | — | — | — | — |
 | {ref}`infra.spine_profile.spine_selector.node_block <vocab-infra-spine_profile-spine_selector-node_block>` | `infraNodeBlk` | — | — | — | — | — |
+| {ref}`infra.access_module_profile <vocab-infra-access_module_profile>` | `infraAccCardP` | 1 | — | — | — | — |
+| {ref}`infra.access_module_profile.access_module_selector <vocab-infra-access_module_profile-access_module_selector>` | `infraCardS` | — | — | — | — | — |
+| {ref}`infra.fex_profile <vocab-infra-fex_profile>` | `infraFexP` | 2 | — | — | — | — |
+| {ref}`infra.fex_profile.fex_bundle_group <vocab-infra-fex_profile-fex_bundle_group>` | `infraFexBndlGrp` | — | — | — | — | — |
+| {ref}`infra.fex_profile.port_selector <vocab-infra-fex_profile-port_selector>` | `infraHPortS` | 2 | `policy_group=` | — | — | — |
+| {ref}`infra.fex_profile.port_selector.port_block <vocab-infra-fex_profile-port_selector-port_block>` | `infraPortBlk` | — | — | — | — | — |
+| {ref}`infra.fex_profile.port_selector.sub_port_block <vocab-infra-fex_profile-port_selector-sub_port_block>` | `infraSubPortBlk` | — | — | — | — | — |
+| {ref}`infra.pod_profile <vocab-infra-pod_profile>` | `infraPodP` | 1 | — | — | — | — |
+| {ref}`infra.pod_profile.pod_selector <vocab-infra-pod_profile-pod_selector>` | `infraPodS` | 1 | — | — | — | — |
+| {ref}`infra.pod_profile.pod_selector.pod_block <vocab-infra-pod_profile-pod_selector-pod_block>` | `infraPodBlk` | — | — | — | — | — |
 | {ref}`infra.span_source_group <vocab-infra-span_source_group>` | `spanSrcGrp` | 4 | `filter_group=` | — | — | — |
 | {ref}`infra.span_source_group.span_source <vocab-infra-span_source_group-span_source>` | `spanSrc` | — | `epg=`, `bd=`, `vrf=`, `l3out=`, `filter_group=`, `path=`, `fabric_node=` | — | — | — |
 | {ref}`infra.span_source_group.span_label <vocab-infra-span_source_group-span_label>` | `spanSpanLbl` | — | — | — | — | — |
@@ -81,6 +183,46 @@ Re-generate: uv run python -m niwaki._codegen.generate_docs
 | {ref}`infra.netflow_monitor <vocab-infra-netflow_monitor>` | `netflowMonitorPol` | — | `netflow_exporter=`, `netflow_record=` | — | — | — |
 | {ref}`infra.netflow_exporter <vocab-infra-netflow_exporter>` | `netflowExporterPol` | — | `vrf=`, `epg=` | — | — | — |
 | {ref}`infra.netflow_record <vocab-infra-netflow_record>` | `netflowRecordPol` | — | — | — | — | — |
+| {ref}`infra.netflow_node_policy <vocab-infra-netflow_node_policy>` | `netflowNodePol` | — | — | — | — | — |
+| {ref}`infra.netflow_vmm_exporter <vocab-infra-netflow_vmm_exporter>` | `netflowVmmExporterPol` | — | — | — | — | — |
+| {ref}`infra.monitoring_policy <vocab-infra-monitoring_policy>` | `monInfraPol` | 6 | — | — | — | — |
+| {ref}`infra.monitoring_policy.monitoring_target <vocab-infra-monitoring_policy-monitoring_target>` | `monInfraTarget` | 7 | — | — | — | — |
+| {ref}`infra.monitoring_policy.monitoring_target.syslog_source <vocab-infra-monitoring_policy-monitoring_target-syslog_source>` | `syslogSrc` | — | — | — | — | — |
+| {ref}`infra.monitoring_policy.monitoring_target.snmp_source <vocab-infra-monitoring_policy-monitoring_target-snmp_source>` | `snmpSrc` | — | — | — | — | — |
+| {ref}`infra.monitoring_policy.monitoring_target.callhome_source <vocab-infra-monitoring_policy-monitoring_target-callhome_source>` | `callhomeSrc` | — | — | — | — | — |
+| {ref}`infra.monitoring_policy.monitoring_target.smart_callhome_source <vocab-infra-monitoring_policy-monitoring_target-smart_callhome_source>` | `callhomeSmartSrc` | — | — | — | — | — |
+| {ref}`infra.monitoring_policy.monitoring_target.tacacs_source <vocab-infra-monitoring_policy-monitoring_target-tacacs_source>` | `tacacsSrc` | — | — | — | — | — |
+| {ref}`infra.monitoring_policy.monitoring_target.fault_severity_assignment_policy <vocab-infra-monitoring_policy-monitoring_target-fault_severity_assignment_policy>` | `faultSevAsnP` | 5 | — | — | — | — |
+| {ref}`infra.monitoring_policy.monitoring_target.fault_severity_assignment_policy.syslog_source <vocab-infra-monitoring_policy-monitoring_target-fault_severity_assignment_policy-syslog_source>` | `syslogSrc` | — | — | — | — | — |
+| {ref}`infra.monitoring_policy.monitoring_target.fault_severity_assignment_policy.snmp_source <vocab-infra-monitoring_policy-monitoring_target-fault_severity_assignment_policy-snmp_source>` | `snmpSrc` | — | — | — | — | — |
+| {ref}`infra.monitoring_policy.monitoring_target.fault_severity_assignment_policy.callhome_source <vocab-infra-monitoring_policy-monitoring_target-fault_severity_assignment_policy-callhome_source>` | `callhomeSrc` | — | — | — | — | — |
+| {ref}`infra.monitoring_policy.monitoring_target.fault_severity_assignment_policy.smart_callhome_source <vocab-infra-monitoring_policy-monitoring_target-fault_severity_assignment_policy-smart_callhome_source>` | `callhomeSmartSrc` | — | — | — | — | — |
+| {ref}`infra.monitoring_policy.monitoring_target.fault_severity_assignment_policy.tacacs_source <vocab-infra-monitoring_policy-monitoring_target-fault_severity_assignment_policy-tacacs_source>` | `tacacsSrc` | — | — | — | — | — |
+| {ref}`infra.monitoring_policy.monitoring_target.event_severity_assignment_policy <vocab-infra-monitoring_policy-monitoring_target-event_severity_assignment_policy>` | `eventSevAsnP` | 5 | — | — | — | — |
+| {ref}`infra.monitoring_policy.monitoring_target.event_severity_assignment_policy.syslog_source <vocab-infra-monitoring_policy-monitoring_target-event_severity_assignment_policy-syslog_source>` | `syslogSrc` | — | — | — | — | — |
+| {ref}`infra.monitoring_policy.monitoring_target.event_severity_assignment_policy.snmp_source <vocab-infra-monitoring_policy-monitoring_target-event_severity_assignment_policy-snmp_source>` | `snmpSrc` | — | — | — | — | — |
+| {ref}`infra.monitoring_policy.monitoring_target.event_severity_assignment_policy.callhome_source <vocab-infra-monitoring_policy-monitoring_target-event_severity_assignment_policy-callhome_source>` | `callhomeSrc` | — | — | — | — | — |
+| {ref}`infra.monitoring_policy.monitoring_target.event_severity_assignment_policy.smart_callhome_source <vocab-infra-monitoring_policy-monitoring_target-event_severity_assignment_policy-smart_callhome_source>` | `callhomeSmartSrc` | — | — | — | — | — |
+| {ref}`infra.monitoring_policy.monitoring_target.event_severity_assignment_policy.tacacs_source <vocab-infra-monitoring_policy-monitoring_target-event_severity_assignment_policy-tacacs_source>` | `tacacsSrc` | — | — | — | — | — |
+| {ref}`infra.monitoring_policy.syslog_source <vocab-infra-monitoring_policy-syslog_source>` | `syslogSrc` | — | — | — | — | — |
+| {ref}`infra.monitoring_policy.snmp_source <vocab-infra-monitoring_policy-snmp_source>` | `snmpSrc` | — | — | — | — | — |
+| {ref}`infra.monitoring_policy.callhome_source <vocab-infra-monitoring_policy-callhome_source>` | `callhomeSrc` | — | — | — | — | — |
+| {ref}`infra.monitoring_policy.smart_callhome_source <vocab-infra-monitoring_policy-smart_callhome_source>` | `callhomeSmartSrc` | — | — | — | — | — |
+| {ref}`infra.monitoring_policy.tacacs_source <vocab-infra-monitoring_policy-tacacs_source>` | `tacacsSrc` | — | — | — | — | — |
+| {ref}`infra.vspan_session <vocab-infra-vspan_session>` | `spanVSrcGrp` | 2 | — | — | — | — |
+| {ref}`infra.vspan_session.vspan_vsource <vocab-infra-vspan_session-vspan_vsource>` | `spanVSrc` | — | — | — | — | — |
+| {ref}`infra.vspan_session.span_label <vocab-infra-vspan_session-span_label>` | `spanSpanLbl` | — | — | — | — | — |
+| {ref}`infra.vspan_destination_group <vocab-infra-vspan_destination_group>` | `spanVDestGrp` | 1 | — | — | — | — |
+| {ref}`infra.vspan_destination_group.vspan_vdestination <vocab-infra-vspan_destination_group-vspan_vdestination>` | `spanVDest` | 1 | — | — | — | — |
+| {ref}`infra.vspan_destination_group.vspan_vdestination.vspan_destination_epg_summary <vocab-infra-vspan_destination_group-vspan_vdestination-vspan_destination_epg_summary>` | `spanVEpgSummary` | — | — | — | — | — |
+| {ref}`infra.ptp_node_policy <vocab-infra-ptp_node_policy>` | `ptpInstPol` | — | — | — | — | — |
+| {ref}`infra.ptp_profile <vocab-infra-ptp_profile>` | `ptpProfile` | — | — | — | — | — |
+| {ref}`infra.ptp_domain <vocab-infra-ptp_domain>` | `ptpDomain` | — | — | — | — | — |
+| {ref}`infra.ptp_profile_template <vocab-infra-ptp_profile_template>` | `ptpProfileTemplate` | — | — | — | — | — |
+| {ref}`infra.bfd_global_ipv4_policy <vocab-infra-bfd_global_ipv4_policy>` | `bfdIpv4InstPol` | — | — | — | — | — |
+| {ref}`infra.bfd_global_ipv6_policy <vocab-infra-bfd_global_ipv6_policy>` | `bfdIpv6InstPol` | — | — | — | — | — |
+| {ref}`infra.bfd_global_ipv4_mh_policy <vocab-infra-bfd_global_ipv4_mh_policy>` | `bfdMhIpv4InstPol` | — | — | — | — | — |
+| {ref}`infra.bfd_global_ipv6_mh_policy <vocab-infra-bfd_global_ipv6_mh_policy>` | `bfdMhIpv6InstPol` | — | — | — | — | — |
 
 ## tenant
 
@@ -493,13 +635,14 @@ Re-generate: uv run python -m niwaki._codegen.generate_docs
 | {ref}`phys_dom <vocab-phys_dom>` | `physDomP` | — | `vlan_pool=` | — | — | — |
 | {ref}`l3_dom <vocab-l3_dom>` | `l3extDomP` | — | `vlan_pool=` | — | — | — |
 | {ref}`l2_dom <vocab-l2_dom>` | `l2extDomP` | — | `vlan_pool=` | — | — | — |
+| {ref}`fc_dom <vocab-fc_dom>` | `fcDomP` | — | `vlan_pool=`, `vsan_pool=`, `ip_address_pool=`, `vsan_attributes=` | — | — | — |
 
 ## Not curated yet
 
 Commonly requested areas that still speak raw ACI (`.mo()` / `bind_dn()`) today:
 
 - **VMM domains** — `vmmDomP` and VMM controller integration
-- **Port-channel overrides and FEX** — per-node overrides, FEX profiles
+- **Simplified interface configuration** — the post-5.2 per-port `infraPortConfig` model (parallel to profiles/selectors)
 - **Service graphs** — `vnsAbsGraph`, `vnsLDevVip` and the L4-L7 device chain
 
 Curation grows by demand: if one of these (or anything else) is your daily work, open a [vocabulary request](https://github.com/k3l0-dev/niwaki/issues/new/choose).

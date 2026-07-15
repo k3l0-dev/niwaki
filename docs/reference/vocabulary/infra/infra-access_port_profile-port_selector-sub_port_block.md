@@ -13,7 +13,7 @@ Access sub port (breakout) block
 | --- | --- |
 | ACI class | `infraSubPortBlk` |
 | RN | `subportblk-{name}` |
-| Cursor | `SubPortBlockCursor` |
+| Cursor | `AccessPortProfilePortSelectorSubPortBlockCursor` |
 | Parent | {ref}`infra.access_port_profile.port_selector <vocab-infra-access_port_profile-port_selector>` |
 | Atomic | — |
 

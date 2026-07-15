@@ -33,21 +33,83 @@ Accepted as keyword arguments of `.infra()` and of `.set(**attrs)` on this curso
 | `.cdp_policy(name, **attrs)` | `cdpIfPol` | {ref}`infra.cdp_policy <vocab-infra-cdp_policy>` |
 | `.lldp_policy(name, **attrs)` | `lldpIfPol` | {ref}`infra.lldp_policy <vocab-infra-lldp_policy>` |
 | `.lacp_policy(name, **attrs)` | `lacpLagPol` | {ref}`infra.lacp_policy <vocab-infra-lacp_policy>` |
+| `.lacp_member_policy(name, **attrs)` | `lacpIfPol` | {ref}`infra.lacp_member_policy <vocab-infra-lacp_member_policy>` |
 | `.link_level_policy(name, **attrs)` | `fabricHIfPol` | {ref}`infra.link_level_policy <vocab-infra-link_level_policy>` |
+| `.link_flap_policy(name, **attrs)` | `fabricLinkFlapPol` | {ref}`infra.link_flap_policy <vocab-infra-link_flap_policy>` |
 | `.mcp_policy(name, **attrs)` | `mcpIfPol` | {ref}`infra.mcp_policy <vocab-infra-mcp_policy>` |
 | `.stp_policy(name, **attrs)` | `stpIfPol` | {ref}`infra.stp_policy <vocab-infra-stp_policy>` |
 | `.storm_control_policy(name, **attrs)` | `stormctrlIfPol` | {ref}`infra.storm_control_policy <vocab-infra-storm_control_policy>` |
+| `.l2_interface_policy(name, **attrs)` | `l2IfPol` | {ref}`infra.l2_interface_policy <vocab-infra-l2_interface_policy>` |
+| `.poe_interface_policy(name, **attrs)` | `poeIfPol` | {ref}`infra.poe_interface_policy <vocab-infra-poe_interface_policy>` |
+| `.fc_interface_policy(name, **attrs)` | `fcIfPol` | {ref}`infra.fc_interface_policy <vocab-infra-fc_interface_policy>` |
+| `.macsec_interface_policy(name, **attrs)` | `macsecIfPol` | {ref}`infra.macsec_interface_policy <vocab-infra-macsec_interface_policy>` |
+| `.synce_interface_policy(name, **attrs)` | `synceEthIfPol` | {ref}`infra.synce_interface_policy <vocab-infra-synce_interface_policy>` |
+| `.dot1x_node_authentication(name, **attrs)` | `l2NodeAuthPol` | {ref}`infra.dot1x_node_authentication <vocab-infra-dot1x_node_authentication>` |
+| `.dot1x_port_authentication(name, **attrs)` | `l2PortAuthPol` | {ref}`infra.dot1x_port_authentication <vocab-infra-dot1x_port_authentication>` |
+| `.poe_policy(name, **attrs)` | `poeInstPol` | {ref}`infra.poe_policy <vocab-infra-poe_policy>` |
+| `.fc_instance_policy(name, **attrs)` | `fcInstPol` | {ref}`infra.fc_instance_policy <vocab-infra-fc_instance_policy>` |
+| `.fc_fabric_policy(name, **attrs)` | `fcFabricPol` | {ref}`infra.fc_fabric_policy <vocab-infra-fc_fabric_policy>` |
+| `.vsan_attributes(name, **attrs)` | `fcVsanAttrP` | {ref}`infra.vsan_attributes <vocab-infra-vsan_attributes>` |
+| `.synce_policy(name, **attrs)` | `synceInstPol` | {ref}`infra.synce_policy <vocab-infra-synce_policy>` |
+| `.macsec(**attrs)` | `macsecPolCont` | {ref}`infra.macsec <vocab-infra-macsec>` |
 | `.dhcp_relay_policy(name, **attrs)` | `dhcpRelayP` | {ref}`infra.dhcp_relay_policy <vocab-infra-dhcp_relay_policy>` |
 | `.dpp_policy(name, **attrs)` | `qosDppPol` | {ref}`infra.dpp_policy <vocab-infra-dpp_policy>` |
+| `.qos_instance_policy(name, **attrs)` | `qosInstPol` | {ref}`infra.qos_instance_policy <vocab-infra-qos_instance_policy>` |
+| `.llfc_interface_policy(name, **attrs)` | `qosLlfcIfPol` | {ref}`infra.llfc_interface_policy <vocab-infra-llfc_interface_policy>` |
+| `.pfc_interface_policy(name, **attrs)` | `qosPfcIfPol` | {ref}`infra.pfc_interface_policy <vocab-infra-pfc_interface_policy>` |
+| `.slow_drain_policy(name, **attrs)` | `qosSdIfPol` | {ref}`infra.slow_drain_policy <vocab-infra-slow_drain_policy>` |
+| `.copp_leaf_policy(name, **attrs)` | `coppLeafProfile` | {ref}`infra.copp_leaf_policy <vocab-infra-copp_leaf_policy>` |
+| `.copp_spine_policy(name, **attrs)` | `coppSpineProfile` | {ref}`infra.copp_spine_policy <vocab-infra-copp_spine_policy>` |
+| `.copp_interface_policy(name, **attrs)` | `coppIfPol` | {ref}`infra.copp_interface_policy <vocab-infra-copp_interface_policy>` |
+| `.copp_prefilter_leaf_policy(name, **attrs)` | `iaclLeafProfile` | {ref}`infra.copp_prefilter_leaf_policy <vocab-infra-copp_prefilter_leaf_policy>` |
+| `.copp_prefilter_spine_policy(name, **attrs)` | `iaclSpineProfile` | {ref}`infra.copp_prefilter_spine_policy <vocab-infra-copp_prefilter_spine_policy>` |
+| `.cp_mtu_policy(**attrs)` | `infraCPMtuPol` | {ref}`infra.cp_mtu_policy <vocab-infra-cp_mtu_policy>` |
+| `.ctrlr_mtu_policy(**attrs)` | `infraCtrlrMtuPol` | {ref}`infra.ctrlr_mtu_policy <vocab-infra-ctrlr_mtu_policy>` |
+| `.tcp_mss_policy(name, **attrs)` | `infraMssPol` | {ref}`infra.tcp_mss_policy <vocab-infra-tcp_mss_policy>` |
+| `.fabric_wide_settings_policy(**attrs)` | `infraSetPol` | {ref}`infra.fabric_wide_settings_policy <vocab-infra-fabric_wide_settings_policy>` |
+| `.port_tracking(name, **attrs)` | `infraPortTrackPol` | {ref}`infra.port_tracking <vocab-infra-port_tracking>` |
+| `.port_status_policy(**attrs)` | `infraPortDirecPol` | {ref}`infra.port_status_policy <vocab-infra-port_status_policy>` |
+| `.remote_leaf_pod_redundancy_policy(**attrs)` | `infraRlPodRedPol` | {ref}`infra.remote_leaf_pod_redundancy_policy <vocab-infra-remote_leaf_pod_redundancy_policy>` |
+| `.system_gipo_policy(**attrs)` | `fmcastSystemGIPoPol` | {ref}`infra.system_gipo_policy <vocab-infra-system_gipo_policy>` |
+| `.forwarding_scale_profile_policy(name, **attrs)` | `topoctrlFwdScaleProfilePol` | {ref}`infra.forwarding_scale_profile_policy <vocab-infra-forwarding_scale_profile_policy>` |
+| `.usb_configuration_policy(name, **attrs)` | `topoctrlUsbConfigProfilePol` | {ref}`infra.usb_configuration_policy <vocab-infra-usb_configuration_policy>` |
+| `.fast_link_failover_policy(name, **attrs)` | `topoctrlFastLinkFailoverInstPol` | {ref}`infra.fast_link_failover_policy <vocab-infra-fast_link_failover_policy>` |
+| `.port_bundle_configuration(node_a, node_b, fex_a, fex_b, associated_group_dn, **attrs)` | `infraBundleConfig` | {ref}`infra.port_bundle_configuration <vocab-infra-port_bundle_configuration>` |
+| `.flash_configuration_policy(name, **attrs)` | `equipmentFlashConfigPol` | {ref}`infra.flash_configuration_policy <vocab-infra-flash_configuration_policy>` |
+| `.infrastructure_zoning_profile(name, **attrs)` | `infrazoneZoneP` | {ref}`infra.infrastructure_zoning_profile <vocab-infra-infrastructure_zoning_profile>` |
+| `.dhcp_node_group(name, **attrs)` | `dhcpNodeGrp` | {ref}`infra.dhcp_node_group <vocab-infra-dhcp_node_group>` |
+| `.dhcp_pod_group(name, **attrs)` | `dhcpPodGrp` | {ref}`infra.dhcp_pod_group <vocab-infra-dhcp_pod_group>` |
+| `.node_management_address(name, **attrs)` | `mgmtNodeGrp` | {ref}`infra.node_management_address <vocab-infra-node_management_address>` |
+| `.pod_management_address(name, **attrs)` | `mgmtPodGrp` | {ref}`infra.pod_management_address <vocab-infra-pod_management_address>` |
 | `.vlan_pool(name, allocation_mode, **attrs)` | `fvnsVlanInstP` | {ref}`infra.vlan_pool <vocab-infra-vlan_pool>` |
+| `.vxlan_pool(name, **attrs)` | `fvnsVxlanInstP` | {ref}`infra.vxlan_pool <vocab-infra-vxlan_pool>` |
+| `.vsan_pool(name, allocation_mode, **attrs)` | `fvnsVsanInstP` | {ref}`infra.vsan_pool <vocab-infra-vsan_pool>` |
+| `.mcast_addr_pool(name, **attrs)` | `fvnsMcastAddrInstP` | {ref}`infra.mcast_addr_pool <vocab-infra-mcast_addr_pool>` |
 | `.aaep(name, **attrs)` | `infraAttEntityP` | {ref}`infra.aaep <vocab-infra-aaep>` |
 | `.func_profile(**attrs)` | `infraFuncP` | {ref}`infra.func_profile <vocab-infra-func_profile>` |
 | `.access_port_profile(name, **attrs)` | `infraAccPortP` | {ref}`infra.access_port_profile <vocab-infra-access_port_profile>` |
+| `.spine_interface_profile(name, **attrs)` | `infraSpAccPortP` | {ref}`infra.spine_interface_profile <vocab-infra-spine_interface_profile>` |
 | `.leaf_profile(name, **attrs)` | `infraNodeP` | {ref}`infra.leaf_profile <vocab-infra-leaf_profile>` |
 | `.spine_profile(name, **attrs)` | `infraSpineP` | {ref}`infra.spine_profile <vocab-infra-spine_profile>` |
+| `.access_module_profile(name, **attrs)` | `infraAccCardP` | {ref}`infra.access_module_profile <vocab-infra-access_module_profile>` |
+| `.fex_profile(name, **attrs)` | `infraFexP` | {ref}`infra.fex_profile <vocab-infra-fex_profile>` |
+| `.pod_profile(name, **attrs)` | `infraPodP` | {ref}`infra.pod_profile <vocab-infra-pod_profile>` |
 | `.span_source_group(name, **attrs)` | `spanSrcGrp` | {ref}`infra.span_source_group <vocab-infra-span_source_group>` |
 | `.span_destination_group(name, **attrs)` | `spanDestGrp` | {ref}`infra.span_destination_group <vocab-infra-span_destination_group>` |
 | `.filter_group(name, **attrs)` | `spanFilterGrp` | {ref}`infra.filter_group <vocab-infra-filter_group>` |
 | `.netflow_monitor(name, **attrs)` | `netflowMonitorPol` | {ref}`infra.netflow_monitor <vocab-infra-netflow_monitor>` |
 | `.netflow_exporter(name, **attrs)` | `netflowExporterPol` | {ref}`infra.netflow_exporter <vocab-infra-netflow_exporter>` |
 | `.netflow_record(name, **attrs)` | `netflowRecordPol` | {ref}`infra.netflow_record <vocab-infra-netflow_record>` |
+| `.netflow_node_policy(name, **attrs)` | `netflowNodePol` | {ref}`infra.netflow_node_policy <vocab-infra-netflow_node_policy>` |
+| `.netflow_vmm_exporter(name, **attrs)` | `netflowVmmExporterPol` | {ref}`infra.netflow_vmm_exporter <vocab-infra-netflow_vmm_exporter>` |
+| `.monitoring_policy(name, **attrs)` | `monInfraPol` | {ref}`infra.monitoring_policy <vocab-infra-monitoring_policy>` |
+| `.vspan_session(name, **attrs)` | `spanVSrcGrp` | {ref}`infra.vspan_session <vocab-infra-vspan_session>` |
+| `.vspan_destination_group(name, **attrs)` | `spanVDestGrp` | {ref}`infra.vspan_destination_group <vocab-infra-vspan_destination_group>` |
+| `.ptp_node_policy(name, **attrs)` | `ptpInstPol` | {ref}`infra.ptp_node_policy <vocab-infra-ptp_node_policy>` |
+| `.ptp_profile(ptp_user_profile_name, **attrs)` | `ptpProfile` | {ref}`infra.ptp_profile <vocab-infra-ptp_profile>` |
+| `.ptp_domain(ptp_domain_name, **attrs)` | `ptpDomain` | {ref}`infra.ptp_domain <vocab-infra-ptp_domain>` |
+| `.ptp_profile_template(ptp_profile_template_name, **attrs)` | `ptpProfileTemplate` | {ref}`infra.ptp_profile_template <vocab-infra-ptp_profile_template>` |
+| `.bfd_global_ipv4_policy(name, **attrs)` | `bfdIpv4InstPol` | {ref}`infra.bfd_global_ipv4_policy <vocab-infra-bfd_global_ipv4_policy>` |
+| `.bfd_global_ipv6_policy(name, **attrs)` | `bfdIpv6InstPol` | {ref}`infra.bfd_global_ipv6_policy <vocab-infra-bfd_global_ipv6_policy>` |
+| `.bfd_global_ipv4_mh_policy(name, **attrs)` | `bfdMhIpv4InstPol` | {ref}`infra.bfd_global_ipv4_mh_policy <vocab-infra-bfd_global_ipv4_mh_policy>` |
+| `.bfd_global_ipv6_mh_policy(name, **attrs)` | `bfdMhIpv6InstPol` | {ref}`infra.bfd_global_ipv6_mh_policy <vocab-infra-bfd_global_ipv6_mh_policy>` |
