@@ -33,8 +33,9 @@ network** — a typo fails in your editor, with a did-you-mean.
 1. {doc}`guide/installation` — `uv add niwaki`, air-gapped installs included
 2. {doc}`guide/quickstart` — describe, apply, observe in ten minutes
 3. {doc}`guide/design-dsl` — the full describe surface
-4. {doc}`guide/push-modes` — `strict`, `staged`, `plan`
-5. {doc}`guide/observing` — navigation, typed reads, queries
+4. {doc}`guide/cursors` — the cursor operations, and when to use each
+5. {doc}`guide/push-modes` — `strict`, `staged`, `plan`
+6. {doc}`guide/observing` — navigation, typed reads, queries
 
 ## Find your way
 
@@ -57,6 +58,7 @@ suite — the examples cannot go stale.
 guide/installation
 guide/quickstart
 guide/design-dsl
+guide/cursors
 guide/push-modes
 guide/observing
 guide/connection

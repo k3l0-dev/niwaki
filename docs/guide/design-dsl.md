@@ -175,6 +175,8 @@ only when the plan says something drifts.
 
 ## Next steps
 
+- {doc}`cursors` — every cursor operation (`set`, `bind`, verbs, `mo`…) and
+  when to reach for each
 - {doc}`push-modes` — `strict`, `staged`, `plan` in detail
 - {doc}`../reference/vocabulary/index` — every position, every keyword argument
 - {doc}`models` — the typed layer underneath the makers
