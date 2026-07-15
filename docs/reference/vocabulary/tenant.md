@@ -400,6 +400,54 @@ VRFs, bridge domains, application profiles, EPGs, contracts and filters — one 
       - {ref}`tenant.service_container.pbr_backup_policy.destination_of_redirected_traffic <vocab-tenant-service_container-pbr_backup_policy-destination_of_redirected_traffic>` — `vnsRedirectDest`, 8 attributes
     - {ref}`tenant.service_container.l4_l7_redirect_health_group <vocab-tenant-service_container-l4_l7_redirect_health_group>` — `vnsRedirectHealthGroup`, 4 attributes
     - {ref}`tenant.service_container.service_epg_policy <vocab-tenant-service_container-service_epg_policy>` — `vnsSvcEPgPol`, 5 attributes
+  - {ref}`tenant.service_graph <vocab-tenant-service_graph>` — `vnsAbsGraph`, 8 attributes
+    - {ref}`tenant.service_graph.function_node <vocab-tenant-service_graph-function_node>` — `vnsAbsNode`, 11 attributes
+      - {ref}`tenant.service_graph.function_node.function_connector <vocab-tenant-service_graph-function_node-function_connector>` — `vnsAbsFuncConn`, 7 attributes
+        - {ref}`tenant.service_graph.function_node.function_connector.folder <vocab-tenant-service_graph-function_node-function_connector-folder>` — `vnsAbsFolder`, 9 attributes
+          - {ref}`tenant.service_graph.function_node.function_connector.folder.param <vocab-tenant-service_graph-function_node-function_connector-folder-param>` — `vnsAbsParam`, 9 attributes
+          - {ref}`tenant.service_graph.function_node.function_connector.folder.relation <vocab-tenant-service_graph-function_node-function_connector-folder-relation>` — `vnsAbsCfgRel`, 6 attributes
+        - {ref}`tenant.service_graph.function_node.function_connector.param <vocab-tenant-service_graph-function_node-function_connector-param>` — `vnsAbsParam`, 9 attributes
+      - {ref}`tenant.service_graph.function_node.copy_connector <vocab-tenant-service_graph-function_node-copy_connector>` — `vnsCopyConnector`, 6 attributes
+    - {ref}`tenant.service_graph.connection <vocab-tenant-service_graph-connection>` — `vnsAbsConnection`, 9 attributes
+    - {ref}`tenant.service_graph.consumer_terminal_node <vocab-tenant-service_graph-consumer_terminal_node>` — `vnsAbsTermNodeCon`, 4 attributes
+      - {ref}`tenant.service_graph.consumer_terminal_node.terminal_connector <vocab-tenant-service_graph-consumer_terminal_node-terminal_connector>` — `vnsAbsTermConn`, 6 attributes
+      - {ref}`tenant.service_graph.consumer_terminal_node.in_terminal <vocab-tenant-service_graph-consumer_terminal_node-in_terminal>` — `vnsInTerm`, 2 attributes
+      - {ref}`tenant.service_graph.consumer_terminal_node.out_terminal <vocab-tenant-service_graph-consumer_terminal_node-out_terminal>` — `vnsOutTerm`, 2 attributes
+    - {ref}`tenant.service_graph.provider_terminal_node <vocab-tenant-service_graph-provider_terminal_node>` — `vnsAbsTermNodeProv`, 4 attributes
+      - {ref}`tenant.service_graph.provider_terminal_node.terminal_connector <vocab-tenant-service_graph-provider_terminal_node-terminal_connector>` — `vnsAbsTermConn`, 6 attributes
+      - {ref}`tenant.service_graph.provider_terminal_node.in_terminal <vocab-tenant-service_graph-provider_terminal_node-in_terminal>` — `vnsInTerm`, 2 attributes
+      - {ref}`tenant.service_graph.provider_terminal_node.out_terminal <vocab-tenant-service_graph-provider_terminal_node-out_terminal>` — `vnsOutTerm`, 2 attributes
+  - {ref}`tenant.logical_device <vocab-tenant-logical_device>` — `vnsLDevVip`, 12 attributes
+    - {ref}`tenant.logical_device.concrete_device <vocab-tenant-logical_device-concrete_device>` — `vnsCDev`, 8 attributes
+      - {ref}`tenant.logical_device.concrete_device.concrete_interface <vocab-tenant-logical_device-concrete_device-concrete_interface>` — `vnsCIf`, 3 attributes
+      - {ref}`tenant.logical_device.concrete_device.device_param <vocab-tenant-logical_device-concrete_device-device_param>` — `vnsDevParam`, 3 attributes
+    - {ref}`tenant.logical_device.logical_interface <vocab-tenant-logical_device-logical_interface>` — `vnsLIf`, 3 attributes
+    - {ref}`tenant.logical_device.credentials <vocab-tenant-logical_device-credentials>` — `vnsCCred`, 2 attributes
+    - {ref}`tenant.logical_device.management_interface <vocab-tenant-logical_device-management_interface>` — `vnsCMgmt`, 10 attributes
+  - {ref}`tenant.logical_device_context <vocab-tenant-logical_device_context>` — `vnsLDevCtx`, 6 attributes
+    - {ref}`tenant.logical_device_context.logical_interface_context <vocab-tenant-logical_device_context-logical_interface_context>` — `vnsLIfCtx`, 8 attributes
+      - {ref}`tenant.logical_device_context.logical_interface_context.virtual_ip <vocab-tenant-logical_device_context-logical_interface_context-virtual_ip>` — `vnsSvcVip`, 5 attributes
+  - {ref}`tenant.router_configuration <vocab-tenant-router_configuration>` — `vnsRtrCfg`, 5 attributes
+  - {ref}`tenant.function_profile_container <vocab-tenant-function_profile_container>` — `vnsAbsFuncProfContr`, 4 attributes
+    - {ref}`tenant.function_profile_container.function_profile_group <vocab-tenant-function_profile_container-function_profile_group>` — `vnsAbsFuncProfGrp`, 4 attributes
+      - {ref}`tenant.function_profile_container.function_profile_group.function_profile <vocab-tenant-function_profile_container-function_profile_group-function_profile>` — `vnsAbsFuncProf`, 5 attributes
+        - {ref}`tenant.function_profile_container.function_profile_group.function_profile.function_config <vocab-tenant-function_profile_container-function_profile_group-function_profile-function_config>` — `vnsAbsFuncCfg`, 4 attributes
+        - {ref}`tenant.function_profile_container.function_profile_group.function_profile.device_config <vocab-tenant-function_profile_container-function_profile_group-function_profile-device_config>` — `vnsAbsDevCfg`, 4 attributes
+        - {ref}`tenant.function_profile_container.function_profile_group.function_profile.group_config <vocab-tenant-function_profile_container-function_profile_group-function_profile-group_config>` — `vnsAbsGrpCfg`, 4 attributes
+  - {ref}`tenant.device_manager <vocab-tenant-device_manager>` — `vnsDevMgr`, 4 attributes
+    - {ref}`tenant.device_manager.credentials <vocab-tenant-device_manager-credentials>` — `vnsCCred`, 2 attributes
+    - {ref}`tenant.device_manager.management_interface <vocab-tenant-device_manager-management_interface>` — `vnsCMgmts`, 3 attributes
+  - {ref}`tenant.chassis <vocab-tenant-chassis>` — `vnsChassis`, 4 attributes
+    - {ref}`tenant.chassis.credentials <vocab-tenant-chassis-credentials>` — `vnsCCred`, 2 attributes
+    - {ref}`tenant.chassis.management_interface <vocab-tenant-chassis-management_interface>` — `vnsCMgmts`, 3 attributes
+  - {ref}`tenant.policy_container <vocab-tenant-policy_container>` — `vnsSvcPol`, 3 attributes
+    - {ref}`tenant.policy_container.folder_instance <vocab-tenant-policy_container-folder_instance>` — `vnsFolderInst`, 9 attributes
+      - {ref}`tenant.policy_container.folder_instance.param_instance <vocab-tenant-policy_container-folder_instance-param_instance>` — `vnsParamInst`, 7 attributes
+      - {ref}`tenant.policy_container.folder_instance.relation <vocab-tenant-policy_container-folder_instance-relation>` — `vnsCfgRelInst`, 6 attributes
+  - {ref}`tenant.folder_instance <vocab-tenant-folder_instance>` — `vnsFolderInst`, 9 attributes
+    - {ref}`tenant.folder_instance.param_instance <vocab-tenant-folder_instance-param_instance>` — `vnsParamInst`, 7 attributes
+    - {ref}`tenant.folder_instance.relation <vocab-tenant-folder_instance-relation>` — `vnsCfgRelInst`, 6 attributes
+  - {ref}`tenant.firewall_parameters <vocab-tenant-firewall_parameters>` — `vnsFWReq`, 17 attributes
 
 ```{toctree}
 :maxdepth: 1
@@ -796,4 +844,52 @@ tenant/tenant-service_container-pbr_backup_policy
 tenant/tenant-service_container-pbr_backup_policy-destination_of_redirected_traffic
 tenant/tenant-service_container-l4_l7_redirect_health_group
 tenant/tenant-service_container-service_epg_policy
+tenant/tenant-service_graph
+tenant/tenant-service_graph-function_node
+tenant/tenant-service_graph-function_node-function_connector
+tenant/tenant-service_graph-function_node-function_connector-folder
+tenant/tenant-service_graph-function_node-function_connector-folder-param
+tenant/tenant-service_graph-function_node-function_connector-folder-relation
+tenant/tenant-service_graph-function_node-function_connector-param
+tenant/tenant-service_graph-function_node-copy_connector
+tenant/tenant-service_graph-connection
+tenant/tenant-service_graph-consumer_terminal_node
+tenant/tenant-service_graph-consumer_terminal_node-terminal_connector
+tenant/tenant-service_graph-consumer_terminal_node-in_terminal
+tenant/tenant-service_graph-consumer_terminal_node-out_terminal
+tenant/tenant-service_graph-provider_terminal_node
+tenant/tenant-service_graph-provider_terminal_node-terminal_connector
+tenant/tenant-service_graph-provider_terminal_node-in_terminal
+tenant/tenant-service_graph-provider_terminal_node-out_terminal
+tenant/tenant-logical_device
+tenant/tenant-logical_device-concrete_device
+tenant/tenant-logical_device-concrete_device-concrete_interface
+tenant/tenant-logical_device-concrete_device-device_param
+tenant/tenant-logical_device-logical_interface
+tenant/tenant-logical_device-credentials
+tenant/tenant-logical_device-management_interface
+tenant/tenant-logical_device_context
+tenant/tenant-logical_device_context-logical_interface_context
+tenant/tenant-logical_device_context-logical_interface_context-virtual_ip
+tenant/tenant-router_configuration
+tenant/tenant-function_profile_container
+tenant/tenant-function_profile_container-function_profile_group
+tenant/tenant-function_profile_container-function_profile_group-function_profile
+tenant/tenant-function_profile_container-function_profile_group-function_profile-function_config
+tenant/tenant-function_profile_container-function_profile_group-function_profile-device_config
+tenant/tenant-function_profile_container-function_profile_group-function_profile-group_config
+tenant/tenant-device_manager
+tenant/tenant-device_manager-credentials
+tenant/tenant-device_manager-management_interface
+tenant/tenant-chassis
+tenant/tenant-chassis-credentials
+tenant/tenant-chassis-management_interface
+tenant/tenant-policy_container
+tenant/tenant-policy_container-folder_instance
+tenant/tenant-policy_container-folder_instance-param_instance
+tenant/tenant-policy_container-folder_instance-relation
+tenant/tenant-folder_instance
+tenant/tenant-folder_instance-param_instance
+tenant/tenant-folder_instance-relation
+tenant/tenant-firewall_parameters
 ```

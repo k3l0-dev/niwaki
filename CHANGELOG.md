@@ -4,6 +4,48 @@ All notable changes to this project are documented here.  The format follows
 [Keep a Changelog](https://keepachangelog.com/); versions follow semver
 (0.x — the API may still change between minor versions).
 
+## [0.14.0] — 2026-07-15
+
+L4-L7 service graphs join the vocabulary — the last large domain of the ACI
+configuration plane.
+
+### Added
+
+- **Service graph templates.**  `tenant(name).service_graph(...)` with function
+  nodes (+ function connectors carrying config folders and parameters, copy
+  connectors), connections, and consumer/provider terminal nodes.
+- **Logical devices.**  `logical_device` (the L4-L7 cluster) with concrete
+  devices (+ their interfaces and parameters), logical interfaces, credentials
+  and management interface; the graph's function node binds a logical device.
+- **Device context.**  `logical_device_context` (keyed by contract/graph/node)
+  selecting a device and router configuration, with per-connector interface
+  contexts mapped to bridge domains and their virtual IPs.
+- **Function profiles.**  Profile container → group → profile with function,
+  device and group shared configs, and the abstract folder/parameter model.
+- **Device manager, chassis and instance config.**  Device manager and chassis
+  (with credentials), the deployed L4-L7 policy container with folder/parameter
+  instances, and normalized firewall parameters.
+
+Service graphs define the ACI-side topology and configuration; rendering a graph
+needs a real L4-L7 appliance — see the "Hardware-dependent integrations" note.
+The device-package metamodel and normalized LB/NAT requests stay uncurated.
+
+### Coverage
+
+The declarable config plane across the five domains (operational, diagnostic and
+out-of-scope families — cloud, multi-site/NDO, device-package meta — excluded):
+
+| Domain            | Declarable | Curated |    % |
+| ----------------- | ---------: | ------: | ---: |
+| Tenant            |        368 |     318 | 86 % |
+| Access (`infra`)  |        164 |     141 | 85 % |
+| Fabric            |        179 |     145 | 81 % |
+| Controller        |         20 |       9 | 45 % |
+| VMM               |         22 |      15 | 68 % |
+| **Global (union)**|    **753** | **628** | **83 %** |
+
+790 curated positions across 652 distinct classes.
+
 ## [0.13.0] — 2026-07-15
 
 VMM domains join the vocabulary, and the push engine learns to fold the

@@ -362,6 +362,26 @@ makers:
     # ── Services (L4-L7 policies, no service graph) ────────────────────────────
     service_container: vnsSvcCont
 
+    # ── L4-L7 service graph template (SG1) ────────────────────────────────────
+    service_graph: vnsAbsGraph
+
+    # ── L4-L7 logical device (SG2) ────────────────────────────────────────────
+    logical_device: vnsLDevVip
+
+    # ── L4-L7 device context + router config (SG3) ────────────────────────────
+    logical_device_context: vnsLDevCtx
+    router_configuration: vnsRtrCfg
+
+    # ── L4-L7 function profiles (SG4) ─────────────────────────────────────────
+    function_profile_container: vnsAbsFuncProfContr
+
+    # ── L4-L7 device manager, chassis, instance config (SG5) ──────────────────
+    device_manager: vnsDevMgr
+    chassis: vnsChassis
+    policy_container: vnsSvcPol
+    folder_instance: vnsFolderInst
+    firewall_parameters: vnsFWReq
+
   # ══ Application profile ════════════════════════════════════════════════════
   fvAp:
     epg: fvAEPg
@@ -843,6 +863,72 @@ makers:
     destination_of_redirected_traffic: vnsRedirectDest
   vnsBackupPol:
     destination_of_redirected_traffic: vnsRedirectDest
+
+  # ── L4-L7 service graph template sub-structure (SG1) ─────────────────────────
+  vnsAbsGraph:
+    function_node: vnsAbsNode
+    connection: vnsAbsConnection
+    consumer_terminal_node: vnsAbsTermNodeCon
+    provider_terminal_node: vnsAbsTermNodeProv
+  vnsAbsNode:
+    function_connector: vnsAbsFuncConn
+    copy_connector: vnsCopyConnector
+  vnsAbsTermNodeCon:
+    terminal_connector: vnsAbsTermConn
+    in_terminal: vnsInTerm
+    out_terminal: vnsOutTerm
+  vnsAbsTermNodeProv:
+    terminal_connector: vnsAbsTermConn
+    in_terminal: vnsInTerm
+    out_terminal: vnsOutTerm
+
+  # ── L4-L7 logical device sub-structure (SG2) ─────────────────────────────────
+  vnsLDevVip:
+    concrete_device: vnsCDev
+    logical_interface: vnsLIf
+    credentials: vnsCCred
+    management_interface: vnsCMgmt
+  vnsCDev:
+    concrete_interface: vnsCIf
+    device_param: vnsDevParam
+
+  # ── L4-L7 device context sub-structure (SG3) ─────────────────────────────────
+  vnsLDevCtx:
+    logical_interface_context: vnsLIfCtx
+  vnsLIfCtx:
+    virtual_ip: vnsSvcVip
+
+  # ── L4-L7 function profiles + config folders (SG4) ───────────────────────────
+  vnsAbsFuncProfContr:
+    function_profile_group: vnsAbsFuncProfGrp
+  vnsAbsFuncProfGrp:
+    function_profile: vnsAbsFuncProf
+  vnsAbsFuncProf:
+    function_config: vnsAbsFuncCfg
+    device_config: vnsAbsDevCfg
+    group_config: vnsAbsGrpCfg
+  vnsAbsFuncConn:
+    folder: vnsAbsFolder
+    param: vnsAbsParam
+  # vnsAbsFolder nests recursively on the APIC; the typed DSL exposes one level
+  # (params + relations) and leaves deeper folder nesting to .mo().
+  vnsAbsFolder:
+    param: vnsAbsParam
+    relation: vnsAbsCfgRel
+
+  # ── L4-L7 device manager / chassis / instance config (SG5) ───────────────────
+  vnsDevMgr:
+    credentials: vnsCCred
+    management_interface: vnsCMgmts
+  vnsChassis:
+    credentials: vnsCCred
+    management_interface: vnsCMgmts
+  vnsSvcPol:
+    folder_instance: vnsFolderInst
+  # vnsFolderInst nests recursively like its abstract counterpart — one level.
+  vnsFolderInst:
+    param_instance: vnsParamInst
+    relation: vnsCfgRelInst
 
   # ── Access policies (uni/infra) ─────────────────────────────────────────────
   # ══ Access policies ════════════════════════════════════════════════════════
@@ -1614,6 +1700,18 @@ binds:
   vnsSvcRedirectPol:
     ip_sla_monitoring_policy: fvIPSLAMonitoringPol
     pbr_backup_policy: vnsBackupPol
+  # ── Service graph function connector references a filter (SG1) ───────────────
+  vnsAbsFuncConn:
+    filter: vzFilter
+  # ── The graph's function node selects a logical device (SG2) ─────────────────
+  vnsAbsNode:
+    logical_device: vnsLDevVip
+  # ── Device context selects a device / router config; interface ctx a BD (SG3) ─
+  vnsLDevCtx:
+    logical_device: vnsLDevVip
+    router_config: vnsRtrCfg
+  vnsLIfCtx:
+    bridge_domain: fvBD
 
   # ── Access policies ─────────────────────────────────────────────────────────
   infraAttEntityP:

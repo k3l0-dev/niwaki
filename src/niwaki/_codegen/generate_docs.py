@@ -467,9 +467,12 @@ _NOT_CURATED = [
         ("infraPortConfig", "infraNodeConfig"),
     ),
     (
-        "Service graphs",
-        "`vnsAbsGraph`, `vnsLDevVip` and the L4-L7 device chain",
-        ("vnsAbsGraph", "vnsLDevVip"),
+        "Service-graph device packages and normalized LB config",
+        "the L4-L7 device-package metamodel (`vnsMDev`) and the normalized "
+        "load-balancer/NAT requests (`vnsLBVSvrReq`) — the graph template, "
+        "logical device, device context, function profiles, device manager and "
+        "chassis are curated",
+        ("vnsMDev", "vnsLBVSvrReq"),
     ),
 ]
 

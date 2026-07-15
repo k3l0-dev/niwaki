@@ -5,7 +5,7 @@ Re-generate: uv run python -m niwaki._codegen.generate_docs
 
 # Coverage matrix
 
-**821 curated positions** across the four design domains plus the `uni`-level domains.  Everything else in the 2,222 generated classes stays reachable through `.mo(Class, ...)` and `bind_dn(alias=dn)` — see the design guide.
+**869 curated positions** across the four design domains plus the `uni`-level domains.  Everything else in the 2,222 generated classes stays reachable through `.mo(Class, ...)` and `bind_dn(alias=dn)` — see the design guide.
 
 ## fabric
 
@@ -415,7 +415,7 @@ Re-generate: uv run python -m niwaki._codegen.generate_docs
 
 | position | ACI class | makers | bind aliases | verbs | sugar | atomic |
 | --- | --- | --- | --- | --- | --- | --- |
-| {ref}`tenant <vocab-tenant>` | `fvTenant` | 82 | — | — | — | — |
+| {ref}`tenant <vocab-tenant>` | `fvTenant` | 92 | — | — | — | — |
 | {ref}`tenant.app <vocab-tenant-app>` | `fvAp` | 2 | `monitoring_policy=` | — | — | — |
 | {ref}`tenant.app.epg <vocab-tenant-app-epg>` | `fvAEPg` | 12 | `bd=`, `domain=`, `contract_master=`, `imported_contract=`, `taboo_contract=`, `custom_qos_policy=`, `dpp_policy=`, `monitoring_policy=`, `trust_control_policy=`, `qos_requirement=` | `.provide()`, `.consume()`, `.intra_epg()` | — | — |
 | {ref}`tenant.app.epg.static_path <vocab-tenant-app-epg-static_path>` | `fvRsPathAtt` | 7 | — | — | — | — |
@@ -806,6 +806,54 @@ Re-generate: uv run python -m niwaki._codegen.generate_docs
 | {ref}`tenant.service_container.pbr_backup_policy.destination_of_redirected_traffic <vocab-tenant-service_container-pbr_backup_policy-destination_of_redirected_traffic>` | `vnsRedirectDest` | — | `l4_l7_redirect_health_group=` | — | — | — |
 | {ref}`tenant.service_container.l4_l7_redirect_health_group <vocab-tenant-service_container-l4_l7_redirect_health_group>` | `vnsRedirectHealthGroup` | — | — | — | — | — |
 | {ref}`tenant.service_container.service_epg_policy <vocab-tenant-service_container-service_epg_policy>` | `vnsSvcEPgPol` | — | — | — | — | — |
+| {ref}`tenant.service_graph <vocab-tenant-service_graph>` | `vnsAbsGraph` | 4 | — | — | — | — |
+| {ref}`tenant.service_graph.function_node <vocab-tenant-service_graph-function_node>` | `vnsAbsNode` | 2 | `logical_device=` | — | — | — |
+| {ref}`tenant.service_graph.function_node.function_connector <vocab-tenant-service_graph-function_node-function_connector>` | `vnsAbsFuncConn` | 2 | `filter=` | — | — | — |
+| {ref}`tenant.service_graph.function_node.function_connector.folder <vocab-tenant-service_graph-function_node-function_connector-folder>` | `vnsAbsFolder` | 2 | — | — | — | — |
+| {ref}`tenant.service_graph.function_node.function_connector.folder.param <vocab-tenant-service_graph-function_node-function_connector-folder-param>` | `vnsAbsParam` | — | — | — | — | — |
+| {ref}`tenant.service_graph.function_node.function_connector.folder.relation <vocab-tenant-service_graph-function_node-function_connector-folder-relation>` | `vnsAbsCfgRel` | — | — | — | — | — |
+| {ref}`tenant.service_graph.function_node.function_connector.param <vocab-tenant-service_graph-function_node-function_connector-param>` | `vnsAbsParam` | — | — | — | — | — |
+| {ref}`tenant.service_graph.function_node.copy_connector <vocab-tenant-service_graph-function_node-copy_connector>` | `vnsCopyConnector` | — | — | — | — | — |
+| {ref}`tenant.service_graph.connection <vocab-tenant-service_graph-connection>` | `vnsAbsConnection` | — | — | — | — | — |
+| {ref}`tenant.service_graph.consumer_terminal_node <vocab-tenant-service_graph-consumer_terminal_node>` | `vnsAbsTermNodeCon` | 3 | — | — | — | — |
+| {ref}`tenant.service_graph.consumer_terminal_node.terminal_connector <vocab-tenant-service_graph-consumer_terminal_node-terminal_connector>` | `vnsAbsTermConn` | — | — | — | — | — |
+| {ref}`tenant.service_graph.consumer_terminal_node.in_terminal <vocab-tenant-service_graph-consumer_terminal_node-in_terminal>` | `vnsInTerm` | — | — | — | — | — |
+| {ref}`tenant.service_graph.consumer_terminal_node.out_terminal <vocab-tenant-service_graph-consumer_terminal_node-out_terminal>` | `vnsOutTerm` | — | — | — | — | — |
+| {ref}`tenant.service_graph.provider_terminal_node <vocab-tenant-service_graph-provider_terminal_node>` | `vnsAbsTermNodeProv` | 3 | — | — | — | — |
+| {ref}`tenant.service_graph.provider_terminal_node.terminal_connector <vocab-tenant-service_graph-provider_terminal_node-terminal_connector>` | `vnsAbsTermConn` | — | — | — | — | — |
+| {ref}`tenant.service_graph.provider_terminal_node.in_terminal <vocab-tenant-service_graph-provider_terminal_node-in_terminal>` | `vnsInTerm` | — | — | — | — | — |
+| {ref}`tenant.service_graph.provider_terminal_node.out_terminal <vocab-tenant-service_graph-provider_terminal_node-out_terminal>` | `vnsOutTerm` | — | — | — | — | — |
+| {ref}`tenant.logical_device <vocab-tenant-logical_device>` | `vnsLDevVip` | 4 | — | — | — | — |
+| {ref}`tenant.logical_device.concrete_device <vocab-tenant-logical_device-concrete_device>` | `vnsCDev` | 2 | — | — | — | — |
+| {ref}`tenant.logical_device.concrete_device.concrete_interface <vocab-tenant-logical_device-concrete_device-concrete_interface>` | `vnsCIf` | — | — | — | — | — |
+| {ref}`tenant.logical_device.concrete_device.device_param <vocab-tenant-logical_device-concrete_device-device_param>` | `vnsDevParam` | — | — | — | — | — |
+| {ref}`tenant.logical_device.logical_interface <vocab-tenant-logical_device-logical_interface>` | `vnsLIf` | — | — | — | — | — |
+| {ref}`tenant.logical_device.credentials <vocab-tenant-logical_device-credentials>` | `vnsCCred` | — | — | — | — | — |
+| {ref}`tenant.logical_device.management_interface <vocab-tenant-logical_device-management_interface>` | `vnsCMgmt` | — | — | — | — | — |
+| {ref}`tenant.logical_device_context <vocab-tenant-logical_device_context>` | `vnsLDevCtx` | 1 | `logical_device=`, `router_config=` | — | — | — |
+| {ref}`tenant.logical_device_context.logical_interface_context <vocab-tenant-logical_device_context-logical_interface_context>` | `vnsLIfCtx` | 1 | `bridge_domain=` | — | — | — |
+| {ref}`tenant.logical_device_context.logical_interface_context.virtual_ip <vocab-tenant-logical_device_context-logical_interface_context-virtual_ip>` | `vnsSvcVip` | — | — | — | — | — |
+| {ref}`tenant.router_configuration <vocab-tenant-router_configuration>` | `vnsRtrCfg` | — | — | — | — | — |
+| {ref}`tenant.function_profile_container <vocab-tenant-function_profile_container>` | `vnsAbsFuncProfContr` | 1 | — | — | — | — |
+| {ref}`tenant.function_profile_container.function_profile_group <vocab-tenant-function_profile_container-function_profile_group>` | `vnsAbsFuncProfGrp` | 1 | — | — | — | — |
+| {ref}`tenant.function_profile_container.function_profile_group.function_profile <vocab-tenant-function_profile_container-function_profile_group-function_profile>` | `vnsAbsFuncProf` | 3 | — | — | — | — |
+| {ref}`tenant.function_profile_container.function_profile_group.function_profile.function_config <vocab-tenant-function_profile_container-function_profile_group-function_profile-function_config>` | `vnsAbsFuncCfg` | — | — | — | — | — |
+| {ref}`tenant.function_profile_container.function_profile_group.function_profile.device_config <vocab-tenant-function_profile_container-function_profile_group-function_profile-device_config>` | `vnsAbsDevCfg` | — | — | — | — | — |
+| {ref}`tenant.function_profile_container.function_profile_group.function_profile.group_config <vocab-tenant-function_profile_container-function_profile_group-function_profile-group_config>` | `vnsAbsGrpCfg` | — | — | — | — | — |
+| {ref}`tenant.device_manager <vocab-tenant-device_manager>` | `vnsDevMgr` | 2 | — | — | — | — |
+| {ref}`tenant.device_manager.credentials <vocab-tenant-device_manager-credentials>` | `vnsCCred` | — | — | — | — | — |
+| {ref}`tenant.device_manager.management_interface <vocab-tenant-device_manager-management_interface>` | `vnsCMgmts` | — | — | — | — | — |
+| {ref}`tenant.chassis <vocab-tenant-chassis>` | `vnsChassis` | 2 | — | — | — | — |
+| {ref}`tenant.chassis.credentials <vocab-tenant-chassis-credentials>` | `vnsCCred` | — | — | — | — | — |
+| {ref}`tenant.chassis.management_interface <vocab-tenant-chassis-management_interface>` | `vnsCMgmts` | — | — | — | — | — |
+| {ref}`tenant.policy_container <vocab-tenant-policy_container>` | `vnsSvcPol` | 1 | — | — | — | — |
+| {ref}`tenant.policy_container.folder_instance <vocab-tenant-policy_container-folder_instance>` | `vnsFolderInst` | 2 | — | — | — | — |
+| {ref}`tenant.policy_container.folder_instance.param_instance <vocab-tenant-policy_container-folder_instance-param_instance>` | `vnsParamInst` | — | — | — | — | — |
+| {ref}`tenant.policy_container.folder_instance.relation <vocab-tenant-policy_container-folder_instance-relation>` | `vnsCfgRelInst` | — | — | — | — | — |
+| {ref}`tenant.folder_instance <vocab-tenant-folder_instance>` | `vnsFolderInst` | 2 | — | — | — | — |
+| {ref}`tenant.folder_instance.param_instance <vocab-tenant-folder_instance-param_instance>` | `vnsParamInst` | — | — | — | — | — |
+| {ref}`tenant.folder_instance.relation <vocab-tenant-folder_instance-relation>` | `vnsCfgRelInst` | — | — | — | — | — |
+| {ref}`tenant.firewall_parameters <vocab-tenant-firewall_parameters>` | `vnsFWReq` | — | — | — | — | — |
 
 ## controller
 
@@ -863,6 +911,6 @@ Re-generate: uv run python -m niwaki._codegen.generate_docs
 Commonly requested areas that still speak raw ACI (`.mo()` / `bind_dn()`) today:
 
 - **Simplified interface configuration** — the post-5.2 per-port `infraPortConfig` model (parallel to profiles/selectors)
-- **Service graphs** — `vnsAbsGraph`, `vnsLDevVip` and the L4-L7 device chain
+- **Service-graph device packages and normalized LB config** — the L4-L7 device-package metamodel (`vnsMDev`) and the normalized load-balancer/NAT requests (`vnsLBVSvrReq`) — the graph template, logical device, device context, function profiles, device manager and chassis are curated
 
 Curation grows by demand: if one of these (or anything else) is your daily work, open a [vocabulary request](https://github.com/k3l0-dev/niwaki/issues/new/choose).

@@ -5,7 +5,7 @@ Re-generate: uv run python -m niwaki._codegen.generate_docs
 
 # Enums
 
-The 376 enum types reachable from the curated vocabulary — every constrained parameter of every maker.  A parameter typed as an enum also accepts the plain string; the value is validated at the call site either way.
+The 394 enum types reachable from the curated vocabulary — every constrained parameter of every maker.  A parameter typed as an enum also accepts the plain string; the value is validated at the call site either way.
 
 The remaining generated enums back the non-curated classes and live in `niwaki.models._generated.enums`.
 
@@ -7871,6 +7871,51 @@ Used by: {ref}`vmm_provider.vmm_dom.vmm_controller <vocab-vmm_provider-vmm_dom-v
 
 Used by: {ref}`vmm_provider.vmm_dom.vmm_controller <vocab-vmm_provider-vmm_dom-vmm_controller>`
 
+(enum-vnsconnadjtype)=
+
+## `VnsConnAdjType`
+
+| value | meaning |
+| --- | --- |
+| `L2` | — |
+| `L3` | — |
+
+Used by: {ref}`tenant.service_graph.connection <vocab-tenant-service_graph-connection>`
+
+(enum-vnsconndir)=
+
+## `VnsConnDir`
+
+| value | meaning |
+| --- | --- |
+| `consumer` | — |
+| `provider` | — |
+| `unknown` | — |
+
+Used by: {ref}`tenant.service_graph.connection <vocab-tenant-service_graph-connection>`
+
+(enum-vnsconntype)=
+
+## `VnsConnType`
+
+| value | meaning |
+| --- | --- |
+| `external` | — |
+| `internal` | — |
+
+Used by: {ref}`tenant.service_graph.connection <vocab-tenant-service_graph-connection>`
+
+(enum-vnscontextaware)=
+
+## `VnsContextAware`
+
+| value | meaning |
+| --- | --- |
+| `multi-Context` | — |
+| `single-Context` | — |
+
+Used by: {ref}`tenant.logical_device <vocab-tenant-logical_device>`
+
 (enum-vnsdesttype)=
 
 ## `VnsDestType`
@@ -7883,6 +7928,125 @@ Used by: {ref}`vmm_provider.vmm_dom.vmm_controller <vocab-vmm_provider-vmm_dom-v
 
 Used by: {ref}`tenant.service_container.service_redirect_policy <vocab-tenant-service_container-service_redirect_policy>`
 
+(enum-vnsfilterbetweennodes)=
+
+## `VnsFilterBetweenNodes`
+
+| value | meaning |
+| --- | --- |
+| `allow-all` | Default filters will be installed in the trusted zone of a service chain |
+| `filters-from-contract` | Specific filters from contract will be installed through out the service chain |
+
+Used by: {ref}`tenant.service_graph <vocab-tenant-service_graph>`
+
+(enum-vnsfuncconntype)=
+
+## `VnsFuncConnType`
+
+| value | meaning |
+| --- | --- |
+| `dnat` | — |
+| `none` | — |
+| `redir` | — |
+| `snat` | — |
+| `snat_dnat` | — |
+
+Used by: {ref}`tenant.service_graph.function_node.function_connector <vocab-tenant-service_graph-function_node-function_connector>`
+
+(enum-vnsfunctemplatetype)=
+
+## `VnsFuncTemplateType`
+
+| value | meaning |
+| --- | --- |
+| `ADC_ONE_ARM` | — |
+| `ADC_TWO_ARM` | — |
+| `CLOUD_NATIVE_FW` | — |
+| `CLOUD_NATIVE_LB` | — |
+| `CLOUD_VENDOR_FW` | — |
+| `CLOUD_VENDOR_LB` | — |
+| `FW_ROUTED` | — |
+| `FW_TRANS` | — |
+| `OTHER` | — |
+
+Used by: {ref}`tenant.service_graph.function_node <vocab-tenant-service_graph-function_node>`
+
+(enum-vnsipallocationtype)=
+
+## `VnsIpAllocationType`
+
+| value | meaning |
+| --- | --- |
+| `default` | — |
+| `dhcp` | — |
+| `fixed` | — |
+
+Used by: {ref}`tenant.logical_device.management_interface <vocab-tenant-logical_device-management_interface>`
+
+(enum-vnsitemscope)=
+
+## `VnsItemScope`
+
+| value | meaning |
+| --- | --- |
+| `ap` | — |
+| `bd` | — |
+| `epg` | — |
+| `none` | — |
+| `tenant` | — |
+
+Used by: {ref}`tenant.folder_instance <vocab-tenant-folder_instance>`, {ref}`tenant.policy_container.folder_instance <vocab-tenant-policy_container-folder_instance>`, {ref}`tenant.service_graph.function_node.function_connector.folder <vocab-tenant-service_graph-function_node-function_connector-folder>`
+
+(enum-vnsl4l7svctype)=
+
+## `VnsL4L7SvcType`
+
+| value | meaning |
+| --- | --- |
+| `ADC` | — |
+| `COPY` | — |
+| `FW` | — |
+| `NATIVELB` | — |
+| `OTHERS` | — |
+
+Used by: {ref}`tenant.logical_device <vocab-tenant-logical_device>`
+
+(enum-vnsldevtype)=
+
+## `VnsLDevType`
+
+| value | meaning |
+| --- | --- |
+| `CLOUD` | — |
+| `PHYSICAL` | — |
+| `VIRTUAL` | — |
+
+Used by: {ref}`tenant.logical_device <vocab-tenant-logical_device>`
+
+(enum-vnsmode)=
+
+## `VnsMode`
+
+| value | meaning |
+| --- | --- |
+| `legacy-Mode` | — |
+
+Used by: {ref}`tenant.logical_device <vocab-tenant-logical_device>`
+
+(enum-vnsnodefunctype)=
+
+## `VnsNodeFuncType`
+
+| value | meaning |
+| --- | --- |
+| `GoThrough` | — |
+| `GoTo` | — |
+| `L1` | — |
+| `L2` | — |
+| `None` | — |
+
+Used by: {ref}`tenant.logical_device <vocab-tenant-logical_device>`, {ref}`tenant.service_graph.function_node <vocab-tenant-service_graph-function_node>`
+
 (enum-vnsprefgrmemb)=
 
 ## `VnsPrefGrMemb`
@@ -7893,6 +8057,29 @@ Used by: {ref}`tenant.service_container.service_redirect_policy <vocab-tenant-se
 | `include` | — |
 
 Used by: {ref}`tenant.service_container.service_epg_policy <vocab-tenant-service_container-service_epg_policy>`
+
+(enum-vnsroutingmode)=
+
+## `VnsRoutingMode`
+
+| value | meaning |
+| --- | --- |
+| `Redirect` | — |
+| `unspecified` | — |
+
+Used by: {ref}`tenant.service_graph.function_node <vocab-tenant-service_graph-function_node>`
+
+(enum-vnssvcruletype)=
+
+## `VnsSvcRuleType`
+
+| value | meaning |
+| --- | --- |
+| `epg` | — |
+| `subnet` | — |
+| `vrf` | — |
+
+Used by: {ref}`tenant.service_graph <vocab-tenant-service_graph>`
 
 (enum-vnsthresholddownaction)=
 
@@ -7905,6 +8092,51 @@ Used by: {ref}`tenant.service_container.service_epg_policy <vocab-tenant-service
 | `permit` | Action: Permit |
 
 Used by: {ref}`tenant.service_container.service_redirect_policy <vocab-tenant-service_container-service_redirect_policy>`
+
+(enum-vnstype)=
+
+## `VnsType`
+
+| value | meaning |
+| --- | --- |
+| `cloud` | — |
+| `legacy` | — |
+
+Used by: {ref}`tenant.service_graph <vocab-tenant-service_graph>`
+
+(enum-vnsuitemplatetype)=
+
+## `VnsUITemplateType`
+
+| value | meaning |
+| --- | --- |
+| `NDO_IMPLICIT_TEMPLATE` | — |
+| `ONE_NODE_ADC_ONE_ARM` | — |
+| `ONE_NODE_ADC_ONE_ARM_L3EXT` | — |
+| `ONE_NODE_ADC_TWO_ARM` | — |
+| `ONE_NODE_FW_ROUTED` | — |
+| `ONE_NODE_FW_TRANS` | — |
+| `TWO_NODE_FW_ROUTED_ADC_ONE_ARM` | — |
+| `TWO_NODE_FW_ROUTED_ADC_ONE_ARM_L3EXT` | — |
+| `TWO_NODE_FW_ROUTED_ADC_TWO_ARM` | — |
+| `TWO_NODE_FW_TRANS_ADC_ONE_ARM` | — |
+| `TWO_NODE_FW_TRANS_ADC_ONE_ARM_L3EXT` | — |
+| `TWO_NODE_FW_TRANS_ADC_TWO_ARM` | — |
+| `UNSPECIFIED` | — |
+
+Used by: {ref}`tenant.service_graph <vocab-tenant-service_graph>`
+
+(enum-vnsvnscardinalitytype)=
+
+## `VnsVnsCardinalityType`
+
+| value | meaning |
+| --- | --- |
+| `1` | — |
+| `n` | — |
+| `unspecified` | — |
+
+Used by: {ref}`tenant.folder_instance <vocab-tenant-folder_instance>`, {ref}`tenant.folder_instance.param_instance <vocab-tenant-folder_instance-param_instance>`, {ref}`tenant.folder_instance.relation <vocab-tenant-folder_instance-relation>`, {ref}`tenant.policy_container.folder_instance <vocab-tenant-policy_container-folder_instance>`, {ref}`tenant.policy_container.folder_instance.param_instance <vocab-tenant-policy_container-folder_instance-param_instance>`, {ref}`tenant.policy_container.folder_instance.relation <vocab-tenant-policy_container-folder_instance-relation>`, {ref}`tenant.service_graph.function_node.function_connector.folder <vocab-tenant-service_graph-function_node-function_connector-folder>`, {ref}`tenant.service_graph.function_node.function_connector.folder.param <vocab-tenant-service_graph-function_node-function_connector-folder-param>` *(+2 more)*
 
 (enum-vnshashingalgorithm)=
 

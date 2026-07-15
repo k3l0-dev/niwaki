@@ -187,9 +187,27 @@ if TYPE_CHECKING:
     from niwaki.models._generated.enums.SviAutostate import SviAutostate
     from niwaki.models._generated.enums.TrackListObj import TrackListObj
     from niwaki.models._generated.enums.VmmStatsMode import VmmStatsMode
+    from niwaki.models._generated.enums.VnsConnAdjType import VnsConnAdjType
+    from niwaki.models._generated.enums.VnsConnDir import VnsConnDir
+    from niwaki.models._generated.enums.VnsConnType import VnsConnType
+    from niwaki.models._generated.enums.VnsContextAware import VnsContextAware
     from niwaki.models._generated.enums.VnsDestType import VnsDestType
+    from niwaki.models._generated.enums.VnsFilterBetweenNodes import VnsFilterBetweenNodes
+    from niwaki.models._generated.enums.VnsFuncConnType import VnsFuncConnType
+    from niwaki.models._generated.enums.VnsFuncTemplateType import VnsFuncTemplateType
+    from niwaki.models._generated.enums.VnsIpAllocationType import VnsIpAllocationType
+    from niwaki.models._generated.enums.VnsItemScope import VnsItemScope
+    from niwaki.models._generated.enums.VnsL4L7SvcType import VnsL4L7SvcType
+    from niwaki.models._generated.enums.VnsLDevType import VnsLDevType
+    from niwaki.models._generated.enums.VnsMode import VnsMode
+    from niwaki.models._generated.enums.VnsNodeFuncType import VnsNodeFuncType
     from niwaki.models._generated.enums.VnsPrefGrMemb import VnsPrefGrMemb
+    from niwaki.models._generated.enums.VnsRoutingMode import VnsRoutingMode
+    from niwaki.models._generated.enums.VnsSvcRuleType import VnsSvcRuleType
     from niwaki.models._generated.enums.VnsThresholdDownAction import VnsThresholdDownAction
+    from niwaki.models._generated.enums.VnsType import VnsType
+    from niwaki.models._generated.enums.VnsUITemplateType import VnsUITemplateType
+    from niwaki.models._generated.enums.VnsVnsCardinalityType import VnsVnsCardinalityType
     from niwaki.models._generated.enums.VnshashingAlgorithm import VnshashingAlgorithm
     from niwaki.models._generated.enums.VzBinaryAction import VzBinaryAction
     from niwaki.models._generated.enums.VzIntent import VzIntent
@@ -4036,6 +4054,474 @@ class _TenantMakers(Cursor):
             self._invoke_maker("service_container", (), _prune(params)),
         )
 
+    def service_graph(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        filter_between_nodes: VnsFilterBetweenNodes | str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        svc_rule_type: VnsSvcRuleType | str | None = None,
+        type: VnsType | str | None = None,
+        ui_template_type: VnsUITemplateType | str | None = None,
+        userdom: str | None = None,
+    ) -> ServiceGraphCursor:
+        """Declare a ``vnsAbsGraph`` child under the tenant level.
+
+        The abstract graph is made up of abstract nodes and used to define the traffic flow through
+        a service function such as load balancing, SSL offload, and firewall.
+
+        Args:
+            name: The name of the abstract graph.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            filter_between_nodes: Values: ``allow-all``, ``filters-from-contract``. Default:
+                ``allow-all``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            svc_rule_type: Values: ``epg``, ``subnet``, ``vrf``. Default: ``vrf``.
+            type: The specific type of the object or component. Values: ``cloud``, ``legacy``.
+                Default: ``legacy``.
+            ui_template_type: Values: ``NDO_IMPLICIT_TEMPLATE``, ``ONE_NODE_ADC_ONE_ARM``,
+                ``ONE_NODE_ADC_ONE_ARM_L3EXT``, ``ONE_NODE_ADC_TWO_ARM``,
+                ``ONE_NODE_FW_ROUTED``, ``ONE_NODE_FW_TRANS``,
+                ``TWO_NODE_FW_ROUTED_ADC_ONE_ARM``, ``TWO_NODE_FW_ROUTED_ADC_ONE_ARM_L3EXT``, ….
+                Default: ``UNSPECIFIED``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "ServiceGraphCursor",
+            self._invoke_maker("service_graph", (name,), _prune(params)),
+        )
+
+    def logical_device(
+        self,
+        name: str,
+        *,
+        active_active_mode: bool | None = None,
+        annotation: str | None = None,
+        tenancy: VnsContextAware | str | None = None,
+        device_type: VnsLDevType | str | None = None,
+        function_type: VnsNodeFuncType | str | None = None,
+        is_copy: bool | None = None,
+        managed: bool | None = None,
+        mode: VnsMode | str | None = None,
+        display_name: str | None = None,
+        package_model: str | None = None,
+        promiscuous_mode: bool | None = None,
+        svc_type: VnsL4L7SvcType | str | None = None,
+        trunking: bool | None = None,
+        userdom: str | None = None,
+    ) -> LogicalDeviceCursor:
+        """Declare a ``vnsLDevVip`` child under the tenant level.
+
+        An L4-L7 device cluster is represented by a single virtual IP (VIP). The configuration is
+        pushed down to the VIP address.
+
+        Args:
+            name: The name of the L4-L7 device cluster VIP. This property uniquely identifies
+                the device cluster VIP.
+            active_active_mode: Default: ``False``.
+            annotation: User annotation. Suggested format orchestrator:value
+            tenancy: A value to determine if the L4-L7 device cluster supports multiple contexts
+                (VRFs). Values: ``multi-Context``, ``single-Context``. Default: ``single-
+                Context``.
+            device_type: Values: ``CLOUD``, ``PHYSICAL``, ``VIRTUAL``. Default: ``PHYSICAL``.
+            function_type: The function type of the L4-L7 device cluster. Values: ``GoThrough``,
+                ``GoTo``, ``L1``, ``L2``, ``None``. Default: ``GoTo``.
+            is_copy: if the device is a copy device Default: ``False``.
+            managed: Specified if the device is a managed device Default: ``True``.
+            mode: The value for specifying if the device is legacy (classical VLAN/VXLAN) or
+                supports service tag switching (STS). Values: ``legacy-Mode``. Default:
+                ``legacy-Mode``.
+            promiscuous_mode: Promiscuous Mode Default: ``False``.
+            svc_type: UI Template type Values: ``ADC``, ``COPY``, ``FW``, ``NATIVELB``,
+                ``OTHERS``. Default: ``OTHERS``.
+            trunking: For virtual devices, if a trunking port group is to be used Default:
+                ``False``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "LogicalDeviceCursor",
+            self._invoke_maker("logical_device", (name,), _prune(params)),
+        )
+
+    def logical_device_context(
+        self,
+        ctrct_name_or_lbl: str,
+        graph_name_or_lbl: str,
+        node_name_or_lbl: str,
+        *,
+        annotation: str | None = None,
+        context_name: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> LogicalDeviceContextCursor:
+        """Declare a ``vnsLDevCtx`` child under the tenant level.
+
+        A device cluster context points to the device cluster used to pick a specific device based
+        on contract, subject, and function label or names. To specify a wild card, set the name to
+        Any.
+
+        Args:
+            ctrct_name_or_lbl: The contract name or label for the device cluster context.
+            graph_name_or_lbl: The Service graph template name or label.
+            node_name_or_lbl: The node name or label for the device cluster context.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "ctrct_name_or_lbl",
+                "graph_name_or_lbl",
+                "node_name_or_lbl",
+            )
+        }
+        return cast(
+            "LogicalDeviceContextCursor",
+            self._invoke_maker(
+                "logical_device_context",
+                (
+                    ctrct_name_or_lbl,
+                    graph_name_or_lbl,
+                    node_name_or_lbl,
+                ),
+                _prune(params),
+            ),
+        )
+
+    def router_configuration(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        rtr_id: str | None = None,
+        userdom: str | None = None,
+    ) -> RouterConfigurationCursor:
+        """Declare a ``vnsRtrCfg`` child under the tenant level.
+
+        Args:
+            name: The name of the object.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            rtr_id: router id for ospf/bgp instance
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "RouterConfigurationCursor",
+            self._invoke_maker("router_configuration", (name,), _prune(params)),
+        )
+
+    def function_profile_container(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> FunctionProfileContainerCursor:
+        """Declare a ``vnsAbsFuncProfContr`` child under the tenant level.
+
+        A function profile group container.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "FunctionProfileContainerCursor",
+            self._invoke_maker("function_profile_container", (), _prune(params)),
+        )
+
+    def device_manager(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> DeviceManagerCursor:
+        """Declare a ``vnsDevMgr`` child under the tenant level.
+
+        Args:
+            name: The name of the object.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "DeviceManagerCursor",
+            self._invoke_maker("device_manager", (name,), _prune(params)),
+        )
+
+    def chassis(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> ChassisCursor:
+        """Declare a ``vnsChassis`` child under the tenant level.
+
+        Args:
+            name: The name of the object.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "ChassisCursor",
+            self._invoke_maker("chassis", (name,), _prune(params)),
+        )
+
+    def policy_container(
+        self,
+        ctrct: str,
+        graph: str,
+        node: str,
+        *,
+        annotation: str | None = None,
+        userdom: str | None = None,
+    ) -> PolicyContainerCursor:
+        """Declare a ``vnsSvcPol`` child under the tenant level.
+
+        Args:
+            ctrct: Naming property — forms the object's RN.
+            graph: Naming property — forms the object's RN.
+            node: Node Name or label
+            annotation: User annotation. Suggested format orchestrator:value
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "ctrct",
+                "graph",
+                "node",
+            )
+        }
+        return cast(
+            "PolicyContainerCursor",
+            self._invoke_maker(
+                "policy_container",
+                (
+                    ctrct,
+                    graph,
+                    node,
+                ),
+                _prune(params),
+            ),
+        )
+
+    def folder_instance(
+        self,
+        ctrct_name_or_lbl: str,
+        graph_name_or_lbl: str,
+        node_name_or_lbl: str,
+        name: str,
+        *,
+        annotation: str | None = None,
+        cardinality: VnsVnsCardinalityType | str | None = None,
+        dev_ctx_lbl: str | None = None,
+        meta_folder_key: str | None = None,
+        locked: bool | None = None,
+        display_name: str | None = None,
+        scoped_by: VnsItemScope | str | None = None,
+        userdom: str | None = None,
+    ) -> TenantFolderInstanceCursor:
+        """Declare a ``vnsFolderInst`` child under the tenant level.
+
+        A folder instance configured by the administrator.
+
+        Args:
+            ctrct_name_or_lbl: The folder instance contract name or label.
+            graph_name_or_lbl: The folder instance graph name or label.
+            node_name_or_lbl: The folder instance node name or label.
+            name: The folder instance name.
+            annotation: User annotation. Suggested format orchestrator:value
+            cardinality: A value to determine how many instances of this type can be present.
+                Values: ``1``, ``n``, ``unspecified``. Default: ``unspecified``.
+            meta_folder_key: The key uniquely identifying this configuration object.
+            locked: A property that specifies if a value entered at configuration time can be
+                modified at run time. Default: ``False``.
+            scoped_by: The scope used for resolving this parameter. Values: ``ap``, ``bd``,
+                ``epg``, ``none``, ``tenant``. Default: ``epg``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "ctrct_name_or_lbl",
+                "graph_name_or_lbl",
+                "node_name_or_lbl",
+                "name",
+            )
+        }
+        return cast(
+            "TenantFolderInstanceCursor",
+            self._invoke_maker(
+                "folder_instance",
+                (
+                    ctrct_name_or_lbl,
+                    graph_name_or_lbl,
+                    node_name_or_lbl,
+                    name,
+                ),
+                _prune(params),
+            ),
+        )
+
+    def firewall_parameters(
+        self,
+        ctrct: str,
+        graph: str,
+        node: str,
+        acl: str,
+        *,
+        ace: str | None = None,
+        annotation: str | None = None,
+        consumer: str | None = None,
+        destination_from_port: int | str | None = None,
+        destination_to_port: int | str | None = None,
+        acl_destination_type: int | str | None = None,
+        description: str | None = None,
+        host_network_ip_address: str | None = None,
+        external_interface_name: str | None = None,
+        internal_interface_name: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        nw_obj_name: str | None = None,
+        protocol: int | str | None = None,
+        provider: str | None = None,
+        userdom: str | None = None,
+    ) -> FirewallParametersCursor:
+        """Declare a ``vnsFWReq`` child under the tenant level.
+
+        Args:
+            ctrct: contract name, graphInst selector
+            graph: graph name, graphInst selector
+            node: node name, graphInst selector
+            acl: acl name
+            ace: ace name
+            annotation: User annotation. Suggested format orchestrator:value
+            consumer: consumer dn
+            destination_from_port: The end of the destination port range. The end of the port
+                range is determined by the server type. Default: ``unspecified``.
+            destination_to_port: Destination To Port Default: ``unspecified``.
+            acl_destination_type: type of acl destination Default: ``epg``.
+            description: Specifies the description of a policy component.
+            host_network_ip_address: The destination address.
+            external_interface_name: where to apply acl
+            protocol: The IP protocol. Default: ``unspecified``.
+            provider: provider Dn
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "ctrct",
+                "graph",
+                "node",
+                "acl",
+            )
+        }
+        return cast(
+            "FirewallParametersCursor",
+            self._invoke_maker(
+                "firewall_parameters",
+                (
+                    ctrct,
+                    graph,
+                    node,
+                    acl,
+                ),
+                _prune(params),
+            ),
+        )
+
 
 class TenantCursor(_TenantMakers, _UniMakers):
     """Typed cursor for ``fvTenant`` (tenant level).
@@ -5540,6 +6026,100 @@ class BgpTimersPolicyCursor(_TenantMakers, _UniMakers):
         return self
 
 
+class _ChassisMakers(Cursor):
+    """Makers declared at the chassis level (``vnsChassis``)."""
+
+    __slots__ = ()
+
+    def credentials(
+        self,
+        *,
+        annotation: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+        value: str | None = None,
+    ) -> ChassisCredentialsCursor:
+        """Declare a ``vnsCCred`` child under the chassis level.
+
+        The concrete device access credentials in the L4-L7 device cluster. The concrete device
+        access credentials normally include a password that is not displayed and is stored in
+        encrypted form.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            name: The name of the concrete device access credentials in the L4-L7 device
+                cluster. The concrete device access credentials name uniquely identifies the
+                credentials.
+            value: The value for the concrete device access credentials in the L4-L7 device
+                cluster.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "ChassisCredentialsCursor",
+            self._invoke_maker("credentials", (), _prune(params)),
+        )
+
+    def management_interface(
+        self,
+        ip_address: str,
+        *,
+        annotation: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        port: int | None = None,
+        userdom: str | None = None,
+    ) -> ChassisManagementInterfaceCursor:
+        """Declare a ``vnsCMgmts`` child under the chassis level.
+
+        Args:
+            ip_address: Host information
+            annotation: User annotation. Suggested format orchestrator:value
+            name: The name of the object.
+            port: Port information Default: ``0``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "ip_address",
+            )
+        }
+        return cast(
+            "ChassisManagementInterfaceCursor",
+            self._invoke_maker("management_interface", (ip_address,), _prune(params)),
+        )
+
+
+class ChassisCursor(_ChassisMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``vnsChassis`` (chassis level).
+
+    Position: ``uni.tenant.chassis``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> ChassisCursor:
+        """Set ``vnsChassis`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
 class _ContractMakers(Cursor):
     """Makers declared at the contract level (``vzBrCP``)."""
 
@@ -5792,6 +6372,100 @@ class CustomQosPolicyCursor(_CustomQosPolicyMakers, _TenantMakers, _UniMakers):
         userdom: str | None = None,
     ) -> CustomQosPolicyCursor:
         """Set ``qosCustomPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class _DeviceManagerMakers(Cursor):
+    """Makers declared at the device_manager level (``vnsDevMgr``)."""
+
+    __slots__ = ()
+
+    def credentials(
+        self,
+        *,
+        annotation: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+        value: str | None = None,
+    ) -> DeviceManagerCredentialsCursor:
+        """Declare a ``vnsCCred`` child under the device_manager level.
+
+        The concrete device access credentials in the L4-L7 device cluster. The concrete device
+        access credentials normally include a password that is not displayed and is stored in
+        encrypted form.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            name: The name of the concrete device access credentials in the L4-L7 device
+                cluster. The concrete device access credentials name uniquely identifies the
+                credentials.
+            value: The value for the concrete device access credentials in the L4-L7 device
+                cluster.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "DeviceManagerCredentialsCursor",
+            self._invoke_maker("credentials", (), _prune(params)),
+        )
+
+    def management_interface(
+        self,
+        ip_address: str,
+        *,
+        annotation: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        port: int | None = None,
+        userdom: str | None = None,
+    ) -> DeviceManagerManagementInterfaceCursor:
+        """Declare a ``vnsCMgmts`` child under the device_manager level.
+
+        Args:
+            ip_address: Host information
+            annotation: User annotation. Suggested format orchestrator:value
+            name: The name of the object.
+            port: Port information Default: ``0``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "ip_address",
+            )
+        }
+        return cast(
+            "DeviceManagerManagementInterfaceCursor",
+            self._invoke_maker("management_interface", (ip_address,), _prune(params)),
+        )
+
+
+class DeviceManagerCursor(_DeviceManagerMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``vnsDevMgr`` (device_manager level).
+
+    Position: ``uni.tenant.device_manager``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> DeviceManagerCursor:
+        """Set ``vnsDevMgr`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
         return self
@@ -6700,6 +7374,237 @@ class TenantFilterCursor(_TenantFilterMakers, _TenantMakers, _UniMakers):
         userdom: str | None = None,
     ) -> TenantFilterCursor:
         """Set ``vzFilter`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class FirewallParametersCursor(_TenantMakers, _UniMakers):
+    """Typed cursor for ``vnsFWReq`` (firewall_parameters level).
+
+    Position: ``uni.tenant.firewall_parameters``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        ace: str | None = None,
+        annotation: str | None = None,
+        consumer: str | None = None,
+        destination_from_port: int | str | None = None,
+        destination_to_port: int | str | None = None,
+        acl_destination_type: int | str | None = None,
+        description: str | None = None,
+        host_network_ip_address: str | None = None,
+        external_interface_name: str | None = None,
+        internal_interface_name: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        nw_obj_name: str | None = None,
+        protocol: int | str | None = None,
+        provider: str | None = None,
+        userdom: str | None = None,
+    ) -> FirewallParametersCursor:
+        """Set ``vnsFWReq`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class _TenantFolderInstanceMakers(Cursor):
+    """Makers declared at the folder_instance level (``vnsFolderInst``)."""
+
+    __slots__ = ()
+
+    def param_instance(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        cardinality: VnsVnsCardinalityType | str | None = None,
+        meta_param_key: str | None = None,
+        locked: bool | None = None,
+        mandatory: bool | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+        validation: str | None = None,
+        value: str | None = None,
+    ) -> TenantFolderInstanceParamInstanceCursor:
+        """Declare a ``vnsParamInst`` child under the folder_instance level.
+
+        A parameter instance configured by the administrator.
+
+        Args:
+            name: The name of the parameter instance.
+            annotation: User annotation. Suggested format orchestrator:value
+            cardinality: A value to determine how many instances of this type can be present.
+                Values: ``1``, ``n``, ``unspecified``. Default: ``unspecified``.
+            meta_param_key: The key uniquely identifying this configuration object.
+            locked: A property that specifies if a value entered at configuration time can be
+                modified at run time. Default: ``False``.
+            mandatory: The value that indicates if this parameter is mandatory. Default:
+                ``False``.
+            validation: The validation expression.
+            value: The value of the property.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "TenantFolderInstanceParamInstanceCursor",
+            self._invoke_maker("param_instance", (name,), _prune(params)),
+        )
+
+    def relation(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        cardinality: VnsVnsCardinalityType | str | None = None,
+        key: str | None = None,
+        locked: bool | None = None,
+        mandatory: bool | None = None,
+        display_name: str | None = None,
+        target_name: str | None = None,
+        userdom: str | None = None,
+    ) -> TenantFolderInstanceRelationCursor:
+        """Declare a ``vnsCfgRelInst`` child under the folder_instance level.
+
+        A folder instance configured by the administrator.
+
+        Args:
+            name: The name of the folder instance configured by the administrator.
+            annotation: User annotation. Suggested format orchestrator:value
+            cardinality: A value to determine how many instances of this type can be present.
+                Values: ``1``, ``n``, ``unspecified``. Default: ``unspecified``.
+            key: The key uniquely identifying this configuration object.
+            locked: A property that specifies if a value entered at configuration time can be
+                modified at run time. Default: ``False``.
+            mandatory: The value that indicates if this parameter is mandatory. Default:
+                ``False``.
+            target_name: The target to which this parameter applies.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "TenantFolderInstanceRelationCursor",
+            self._invoke_maker("relation", (name,), _prune(params)),
+        )
+
+
+class TenantFolderInstanceCursor(_TenantFolderInstanceMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``vnsFolderInst`` (folder_instance level).
+
+    Position: ``uni.tenant.folder_instance``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        cardinality: VnsVnsCardinalityType | str | None = None,
+        dev_ctx_lbl: str | None = None,
+        meta_folder_key: str | None = None,
+        locked: bool | None = None,
+        display_name: str | None = None,
+        scoped_by: VnsItemScope | str | None = None,
+        userdom: str | None = None,
+    ) -> TenantFolderInstanceCursor:
+        """Set ``vnsFolderInst`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class _FunctionProfileContainerMakers(Cursor):
+    """Makers declared at the function_profile_container level (``vnsAbsFuncProfContr``)."""
+
+    __slots__ = ()
+
+    def function_profile_group(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> FunctionProfileGroupCursor:
+        """Declare a ``vnsAbsFuncProfGrp`` child under the function_profile_container level.
+
+        A function profile group.
+
+        Args:
+            name: The name of the function profile group.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "FunctionProfileGroupCursor",
+            self._invoke_maker("function_profile_group", (name,), _prune(params)),
+        )
+
+
+class FunctionProfileContainerCursor(_FunctionProfileContainerMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``vnsAbsFuncProfContr`` (function_profile_container level).
+
+    Position: ``uni.tenant.function_profile_container``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> FunctionProfileContainerCursor:
+        """Set ``vnsAbsFuncProfContr`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
         return self
@@ -8081,6 +8986,300 @@ class L3outCursor(_L3outMakers, _TenantMakers, _UniMakers):
         return self
 
 
+class _LogicalDeviceMakers(Cursor):
+    """Makers declared at the logical_device level (``vnsLDevVip``)."""
+
+    __slots__ = ()
+
+    def concrete_device(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        clone_count: int | None = None,
+        context_label: str | None = None,
+        management_address: str | None = None,
+        is_clone_operation: bool | None = None,
+        is_template: bool | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+        vcenter_name: str | None = None,
+        vm_name: str | None = None,
+    ) -> ConcreteDeviceCursor:
+        """Declare a ``vnsCDev`` child under the logical_device level.
+
+        The individual service device is used to define a concrete l4-l7 service device.
+
+        Args:
+            name: The name of the service device in the L4-L7 device cluster. The service device
+                is uniquely identified by its name.
+            annotation: User annotation. Suggested format orchestrator:value
+            clone_count: Default: ``0``.
+            management_address: The hostname or IP for export destination. Call Home sends email
+                messages to either the IP address or hostname, and the associated port number.
+            is_clone_operation: Tell whether Template or not Default: ``False``.
+            is_template: Tell whether Template or not Default: ``False``.
+            vcenter_name: The virtual center name on which the device is hosted in the L4-L7
+                device cluster. The virtual center name uniquely identifies the center.
+            vm_name: The virtual center VM name on which the device is hosted in the L4-L7
+                device cluster. The virtual center VM name uniquely identifies the VM.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "ConcreteDeviceCursor",
+            self._invoke_maker("concrete_device", (name,), _prune(params)),
+        )
+
+    def logical_interface(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        encap: str | None = None,
+        enhanced_lag_policy_name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> LogicalInterfaceCursor:
+        """Declare a ``vnsLIf`` child under the logical_device level.
+
+        The logical interface is associated with a set of concrete interfaces from the L4-L7 device
+        cluster. This is used to define the connection between a service graph and device
+        interfaces.
+
+        Args:
+            name: The name of the logical interface in the L4-L7 device cluster.
+            annotation: User annotation. Suggested format orchestrator:value
+            encap: Static Encap
+            enhanced_lag_policy_name: LAG Policy Name
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "LogicalInterfaceCursor",
+            self._invoke_maker("logical_interface", (name,), _prune(params)),
+        )
+
+    def credentials(
+        self,
+        *,
+        annotation: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+        value: str | None = None,
+    ) -> LogicalDeviceCredentialsCursor:
+        """Declare a ``vnsCCred`` child under the logical_device level.
+
+        The concrete device access credentials in the L4-L7 device cluster. The concrete device
+        access credentials normally include a password that is not displayed and is stored in
+        encrypted form.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            name: The name of the concrete device access credentials in the L4-L7 device
+                cluster. The concrete device access credentials name uniquely identifies the
+                credentials.
+            value: The value for the concrete device access credentials in the L4-L7 device
+                cluster.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "LogicalDeviceCredentialsCursor",
+            self._invoke_maker("credentials", (), _prune(params)),
+        )
+
+    def management_interface(
+        self,
+        *,
+        annotation: str | None = None,
+        dns_domain: str | None = None,
+        gateway_ip_address: str | None = None,
+        ip_address: str | None = None,
+        ip_allocation_type: VnsIpAllocationType | str | None = None,
+        is_in_band: bool | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        port: int | None = None,
+        port_group_name: str | None = None,
+        subnet_mask: str | None = None,
+        userdom: str | None = None,
+        vnic_name: str | None = None,
+    ) -> LogicalDeviceManagementInterfaceCursor:
+        """Declare a ``vnsCMgmt`` child under the logical_device level.
+
+        The management interface is used to manage a concrete device in the L4-L7 device cluster.
+        The management interface is identified by a host address and port number.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            dns_domain: dns Domain information
+            gateway_ip_address: Gateway information
+            ip_address: The management interface host address for the concrete device in the
+                L4-L7 device cluster.
+            ip_allocation_type: Values: ``default``, ``dhcp``, ``fixed``. Default: ``fixed``.
+            is_in_band: dynamic only: Tell type of the network Default: ``False``.
+            name: The name of the object.
+            port: The management interface port number for the concrete device in the L4-L7
+                device cluster. Default: ``0``.
+            port_group_name: dynamic only: management nic port group for out-of-band network
+            subnet_mask: subnet mask information
+            vnic_name: The Vnic adapter name.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "LogicalDeviceManagementInterfaceCursor",
+            self._invoke_maker("management_interface", (), _prune(params)),
+        )
+
+
+class LogicalDeviceCursor(_LogicalDeviceMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``vnsLDevVip`` (logical_device level).
+
+    Position: ``uni.tenant.logical_device``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        active_active_mode: bool | None = None,
+        annotation: str | None = None,
+        tenancy: VnsContextAware | str | None = None,
+        device_type: VnsLDevType | str | None = None,
+        function_type: VnsNodeFuncType | str | None = None,
+        is_copy: bool | None = None,
+        managed: bool | None = None,
+        mode: VnsMode | str | None = None,
+        display_name: str | None = None,
+        package_model: str | None = None,
+        promiscuous_mode: bool | None = None,
+        svc_type: VnsL4L7SvcType | str | None = None,
+        trunking: bool | None = None,
+        userdom: str | None = None,
+    ) -> LogicalDeviceCursor:
+        """Set ``vnsLDevVip`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class _LogicalDeviceContextMakers(Cursor):
+    """Makers declared at the logical_device_context level (``vnsLDevCtx``)."""
+
+    __slots__ = ()
+
+    def logical_interface_context(
+        self,
+        conn_name_or_lbl: str,
+        *,
+        acl: bool | None = None,
+        annotation: str | None = None,
+        description: str | None = None,
+        l3_dest: bool | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        permit_handoff: bool | None = None,
+        permit_log: bool | None = None,
+        rule_type: bool | None = None,
+        userdom: str | None = None,
+    ) -> LogicalInterfaceContextCursor:
+        """Declare a ``vnsLIfCtx`` child under the logical_device_context level.
+
+        The logical interface context points to the logical interface used to pick a specific
+        logical interface based on the connector name. To specify a wild card, set the name to Any.
+
+        Args:
+            conn_name_or_lbl: The connector name or label for the logical interface context.
+            acl: ACL Default: ``False``.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            l3_dest: Is this LIF a L3 Destination (VIP) Default: ``True``.
+            permit_handoff: Permit Handoff Default: ``False``.
+            permit_log: Permit Logging Action Default: ``False``.
+            rule_type: Rule Type Default: ``False``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "conn_name_or_lbl",
+            )
+        }
+        return cast(
+            "LogicalInterfaceContextCursor",
+            self._invoke_maker("logical_interface_context", (conn_name_or_lbl,), _prune(params)),
+        )
+
+
+class LogicalDeviceContextCursor(_LogicalDeviceContextMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``vnsLDevCtx`` (logical_device_context level).
+
+    Position: ``uni.tenant.logical_device_context``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        context_name: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> LogicalDeviceContextCursor:
+        """Set ``vnsLDevCtx`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        logical_device: str | Ref | None = None,
+        router_config: str | Ref | None = None,
+    ) -> LogicalDeviceContextCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        logical_device: str | Ref | None = None,
+    ) -> LogicalDeviceContextCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
 class _ManagementProfileMakers(Cursor):
     """Makers declared at the management_profile level (``mgmtMgmtP``)."""
 
@@ -9335,6 +10534,95 @@ class PimRouteMapPolicyCursor(_PimRouteMapPolicyMakers, _TenantMakers, _UniMaker
         return self
 
 
+class _PolicyContainerMakers(Cursor):
+    """Makers declared at the policy_container level (``vnsSvcPol``)."""
+
+    __slots__ = ()
+
+    def folder_instance(
+        self,
+        ctrct_name_or_lbl: str,
+        graph_name_or_lbl: str,
+        node_name_or_lbl: str,
+        name: str,
+        *,
+        annotation: str | None = None,
+        cardinality: VnsVnsCardinalityType | str | None = None,
+        dev_ctx_lbl: str | None = None,
+        meta_folder_key: str | None = None,
+        locked: bool | None = None,
+        display_name: str | None = None,
+        scoped_by: VnsItemScope | str | None = None,
+        userdom: str | None = None,
+    ) -> PolicyContainerFolderInstanceCursor:
+        """Declare a ``vnsFolderInst`` child under the policy_container level.
+
+        A folder instance configured by the administrator.
+
+        Args:
+            ctrct_name_or_lbl: The folder instance contract name or label.
+            graph_name_or_lbl: The folder instance graph name or label.
+            node_name_or_lbl: The folder instance node name or label.
+            name: The folder instance name.
+            annotation: User annotation. Suggested format orchestrator:value
+            cardinality: A value to determine how many instances of this type can be present.
+                Values: ``1``, ``n``, ``unspecified``. Default: ``unspecified``.
+            meta_folder_key: The key uniquely identifying this configuration object.
+            locked: A property that specifies if a value entered at configuration time can be
+                modified at run time. Default: ``False``.
+            scoped_by: The scope used for resolving this parameter. Values: ``ap``, ``bd``,
+                ``epg``, ``none``, ``tenant``. Default: ``epg``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "ctrct_name_or_lbl",
+                "graph_name_or_lbl",
+                "node_name_or_lbl",
+                "name",
+            )
+        }
+        return cast(
+            "PolicyContainerFolderInstanceCursor",
+            self._invoke_maker(
+                "folder_instance",
+                (
+                    ctrct_name_or_lbl,
+                    graph_name_or_lbl,
+                    node_name_or_lbl,
+                    name,
+                ),
+                _prune(params),
+            ),
+        )
+
+
+class PolicyContainerCursor(_PolicyContainerMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``vnsSvcPol`` (policy_container level).
+
+    Position: ``uni.tenant.policy_container``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        userdom: str | None = None,
+    ) -> PolicyContainerCursor:
+        """Set ``vnsSvcPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
 class _QosRequirementMakers(Cursor):
     """Makers declared at the qos_requirement level (``qosRequirement``)."""
 
@@ -9571,6 +10859,34 @@ class RouteTagPolicyCursor(_TenantMakers, _UniMakers):
         return self
 
 
+class RouterConfigurationCursor(_TenantMakers, _UniMakers):
+    """Typed cursor for ``vnsRtrCfg`` (router_configuration level).
+
+    Position: ``uni.tenant.router_configuration``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        rtr_id: str | None = None,
+        userdom: str | None = None,
+    ) -> RouterConfigurationCursor:
+        """Set ``vnsRtrCfg`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
 class _ServiceContainerMakers(Cursor):
     """Makers declared at the service_container level (``vnsSvcCont``)."""
 
@@ -9759,6 +11075,224 @@ class ServiceContainerCursor(_ServiceContainerMakers, _TenantMakers, _UniMakers)
         userdom: str | None = None,
     ) -> ServiceContainerCursor:
         """Set ``vnsSvcCont`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class _ServiceGraphMakers(Cursor):
+    """Makers declared at the service_graph level (``vnsAbsGraph``)."""
+
+    __slots__ = ()
+
+    def function_node(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        func_template_type: VnsFuncTemplateType | str | None = None,
+        function_type: VnsNodeFuncType | str | None = None,
+        is_copy: bool | None = None,
+        managed: bool | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        routing_mode: VnsRoutingMode | str | None = None,
+        sequence_number: int | None = None,
+        share_encap: bool | None = None,
+        userdom: str | None = None,
+    ) -> FunctionNodeCursor:
+        """Declare a ``vnsAbsNode`` child under the service_graph level.
+
+        An abstract node represents a service node such as a server load balancer (SLB) or firewall
+        (FW). An abstract node is contained in an abstract graph.
+
+        Args:
+            name: The name of the abstract node.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            func_template_type: Func Template type Values: ``ADC_ONE_ARM``, ``ADC_TWO_ARM``,
+                ``CLOUD_NATIVE_FW``, ``CLOUD_NATIVE_LB``, ``CLOUD_VENDOR_FW``,
+                ``CLOUD_VENDOR_LB``, ``FW_ROUTED``, ``FW_TRANS``, …. Default: ``OTHER``.
+            function_type: A function type. A GoThrough node is a transparent device, where a
+                packet goes through without being addressed to the device, and the endpoints are
+                not aware of that device. A GoTo device has a specific destination. Values:
+                ``GoThrough``, ``GoTo``, ``L1``, ``L2``, ``None``. Default: ``GoTo``.
+            is_copy: if the device is a copy device Default: ``False``.
+            managed: Specified if the function is using a managed device Default: ``True``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            routing_mode: Values: ``Redirect``, ``unspecified``. Default: ``unspecified``.
+            sequence_number: Sequence number. For CLI purposes Default: ``0``.
+            share_encap: Default: ``False``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "FunctionNodeCursor",
+            self._invoke_maker("function_node", (name,), _prune(params)),
+        )
+
+    def connection(
+        self,
+        name: str,
+        *,
+        adj_type: VnsConnAdjType | str | None = None,
+        annotation: str | None = None,
+        conn_dir: VnsConnDir | str | None = None,
+        conn_type: VnsConnType | str | None = None,
+        description: str | None = None,
+        direct_connect: bool | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        unicast_routing: bool | None = None,
+        userdom: str | None = None,
+    ) -> ConnectionCursor:
+        """Declare a ``vnsAbsConnection`` child under the service_graph level.
+
+        An abstract connection connects two abstract connectors. These connections can either be
+        between two abstract nodes or between an abstract node and an abstract terminal node.
+
+        Args:
+            name: The name of the abstract connection.
+            adj_type: Values: ``L2``, ``L3``. Default: ``L2``.
+            annotation: User annotation. Suggested format orchestrator:value
+            conn_dir: Connector direction interal or external (CLI) Values: ``consumer``,
+                ``provider``, ``unknown``. Default: ``unknown``.
+            conn_type: Values: ``external``, ``internal``. Default: ``external``.
+            description: Specifies a description of the policy definition.
+            direct_connect: Default: ``False``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            unicast_routing: The parameter used by the node (Leaf) for forwarding data based on
+                predefined forwarding criteria (IP or Mac). Default: ``True``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "ConnectionCursor",
+            self._invoke_maker("connection", (name,), _prune(params)),
+        )
+
+    def consumer_terminal_node(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> ConsumerTerminalNodeCursor:
+        """Declare a ``vnsAbsTermNodeCon`` child under the service_graph level.
+
+        An abstract terminal node connected to a contract consumer.
+
+        Args:
+            name: The name of the object.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "ConsumerTerminalNodeCursor",
+            self._invoke_maker("consumer_terminal_node", (name,), _prune(params)),
+        )
+
+    def provider_terminal_node(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> ProviderTerminalNodeCursor:
+        """Declare a ``vnsAbsTermNodeProv`` child under the service_graph level.
+
+        An abstract terminal node connected to contract provider.
+
+        Args:
+            name: The name of the object.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "ProviderTerminalNodeCursor",
+            self._invoke_maker("provider_terminal_node", (name,), _prune(params)),
+        )
+
+
+class ServiceGraphCursor(_ServiceGraphMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``vnsAbsGraph`` (service_graph level).
+
+    Position: ``uni.tenant.service_graph``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        filter_between_nodes: VnsFilterBetweenNodes | str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        svc_rule_type: VnsSvcRuleType | str | None = None,
+        type: VnsType | str | None = None,
+        ui_template_type: VnsUITemplateType | str | None = None,
+        userdom: str | None = None,
+    ) -> ServiceGraphCursor:
+        """Set ``vnsAbsGraph`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
         return self
@@ -11752,7 +13286,7 @@ class _EpgMakers(Cursor):
         owner_key: str | None = None,
         owner_tag: str | None = None,
         userdom: str | None = None,
-    ) -> VirtualIpCursor:
+    ) -> EpgVirtualIpCursor:
         """Declare a ``fvVip`` child under the epg level.
 
         Virtual IP address
@@ -11775,7 +13309,7 @@ class _EpgMakers(Cursor):
             )
         }
         return cast(
-            "VirtualIpCursor",
+            "EpgVirtualIpCursor",
             self._invoke_maker("virtual_ip", (virtual_ip_address,), _prune(params)),
         )
 
@@ -12813,6 +14347,58 @@ class BgpAdditionalPathContextPolicyCursor(
         return self
 
 
+class ChassisCredentialsCursor(_ChassisMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``vnsCCred`` (credentials level).
+
+    Position: ``uni.tenant.chassis.credentials``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+        value: str | None = None,
+    ) -> ChassisCredentialsCursor:
+        """Set ``vnsCCred`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class ChassisManagementInterfaceCursor(_ChassisMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``vnsCMgmts`` (management_interface level).
+
+    Position: ``uni.tenant.chassis.management_interface``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        port: int | None = None,
+        userdom: str | None = None,
+    ) -> ChassisManagementInterfaceCursor:
+        """Set ``vnsCMgmts`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
 class ContractExceptionCursor(_ContractMakers, _TenantMakers, _UniMakers):
     """Typed cursor for ``vzException`` (exception level).
 
@@ -13122,6 +14708,58 @@ class DscpClassCursor(_CustomQosPolicyMakers, _TenantMakers, _UniMakers):
         userdom: str | None = None,
     ) -> DscpClassCursor:
         """Set ``qosDscpClass`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class DeviceManagerCredentialsCursor(_DeviceManagerMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``vnsCCred`` (credentials level).
+
+    Position: ``uni.tenant.device_manager.credentials``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+        value: str | None = None,
+    ) -> DeviceManagerCredentialsCursor:
+        """Set ``vnsCCred`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class DeviceManagerManagementInterfaceCursor(_DeviceManagerMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``vnsCMgmts`` (management_interface level).
+
+    Position: ``uni.tenant.device_manager.management_interface``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        port: int | None = None,
+        userdom: str | None = None,
+    ) -> DeviceManagerManagementInterfaceCursor:
+        """Set ``vnsCMgmts`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
         return self
@@ -13481,6 +15119,143 @@ class PortZeroEntryCursor(_TenantFilterMakers, _TenantMakers, _UniMakers):
         userdom: str | None = None,
     ) -> PortZeroEntryCursor:
         """Set ``vzEntryPortZero`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class TenantFolderInstanceParamInstanceCursor(
+    _TenantFolderInstanceMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``vnsParamInst`` (param_instance level).
+
+    Position: ``uni.tenant.folder_instance.param_instance``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        cardinality: VnsVnsCardinalityType | str | None = None,
+        meta_param_key: str | None = None,
+        locked: bool | None = None,
+        mandatory: bool | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+        validation: str | None = None,
+        value: str | None = None,
+    ) -> TenantFolderInstanceParamInstanceCursor:
+        """Set ``vnsParamInst`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class TenantFolderInstanceRelationCursor(_TenantFolderInstanceMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``vnsCfgRelInst`` (relation level).
+
+    Position: ``uni.tenant.folder_instance.relation``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        cardinality: VnsVnsCardinalityType | str | None = None,
+        key: str | None = None,
+        locked: bool | None = None,
+        mandatory: bool | None = None,
+        display_name: str | None = None,
+        target_name: str | None = None,
+        userdom: str | None = None,
+    ) -> TenantFolderInstanceRelationCursor:
+        """Set ``vnsCfgRelInst`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class _FunctionProfileGroupMakers(Cursor):
+    """Makers declared at the function_profile_group level (``vnsAbsFuncProfGrp``)."""
+
+    __slots__ = ()
+
+    def function_profile(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        src_mode: str | None = None,
+        userdom: str | None = None,
+    ) -> FunctionProfileGroupFunctionProfileCursor:
+        """Declare a ``vnsAbsFuncProf`` child under the function_profile_group level.
+
+        An abstract function profile includes the abstract device configuration, the abstract group
+        configuration, and the abstract function configuration. These are analogous to the function
+        configuration, group configuration, and device configuration within a device.
+
+        Args:
+            name: The name of the function profile.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            src_mode: Indicates whether this function profile has unresolved parameters
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "FunctionProfileGroupFunctionProfileCursor",
+            self._invoke_maker("function_profile", (name,), _prune(params)),
+        )
+
+
+class FunctionProfileGroupCursor(
+    _FunctionProfileGroupMakers, _FunctionProfileContainerMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``vnsAbsFuncProfGrp`` (function_profile_group level).
+
+    Position: ``uni.tenant.function_profile_container.function_profile_group``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> FunctionProfileGroupCursor:
+        """Set ``vnsAbsFuncProfGrp`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
         return self
@@ -15711,6 +17486,307 @@ class RouteTargetInstrumentationProfileCursor(_L3outMakers, _TenantMakers, _UniM
         return self
 
 
+class _ConcreteDeviceMakers(Cursor):
+    """Makers declared at the concrete_device level (``vnsCDev``)."""
+
+    __slots__ = ()
+
+    def concrete_interface(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        encap: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+        vnic: str | None = None,
+    ) -> ConcreteInterfaceCursor:
+        """Declare a ``vnsCIf`` child under the concrete_device level.
+
+        A concrete interface in the L4-L7 device cluster. Several concrete interfaces can be
+        associated with an interface label (MIfLbl).
+
+        Args:
+            name: The name of the concrete interface in the L4-L7 device cluster.
+            annotation: User annotation. Suggested format orchestrator:value
+            encap: encap value
+            vnic: The concrete interface vNIC name.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "ConcreteInterfaceCursor",
+            self._invoke_maker("concrete_interface", (name,), _prune(params)),
+        )
+
+    def device_param(
+        self,
+        name: str,
+        key: str,
+        *,
+        annotation: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+        value: str | None = None,
+    ) -> DeviceParamCursor:
+        """Declare a ``vnsDevParam`` child under the concrete_device level.
+
+        An object used to represent a configuration parameter for the service device. For example,
+        the type of load balancing algorithm to use when configuring a server load balancer or the
+        enable/disable option for the application inspection of ICMP packets in a firewall.
+
+        Args:
+            name: Naming property — forms the object's RN.
+            key: Naming property — forms the object's RN.
+            annotation: User annotation. Suggested format orchestrator:value
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+                "key",
+            )
+        }
+        return cast(
+            "DeviceParamCursor",
+            self._invoke_maker(
+                "device_param",
+                (
+                    name,
+                    key,
+                ),
+                _prune(params),
+            ),
+        )
+
+
+class ConcreteDeviceCursor(_ConcreteDeviceMakers, _LogicalDeviceMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``vnsCDev`` (concrete_device level).
+
+    Position: ``uni.tenant.logical_device.concrete_device``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        clone_count: int | None = None,
+        context_label: str | None = None,
+        management_address: str | None = None,
+        is_clone_operation: bool | None = None,
+        is_template: bool | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+        vcenter_name: str | None = None,
+        vm_name: str | None = None,
+    ) -> ConcreteDeviceCursor:
+        """Set ``vnsCDev`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class LogicalDeviceCredentialsCursor(_LogicalDeviceMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``vnsCCred`` (credentials level).
+
+    Position: ``uni.tenant.logical_device.credentials``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+        value: str | None = None,
+    ) -> LogicalDeviceCredentialsCursor:
+        """Set ``vnsCCred`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class LogicalInterfaceCursor(_LogicalDeviceMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``vnsLIf`` (logical_interface level).
+
+    Position: ``uni.tenant.logical_device.logical_interface``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        encap: str | None = None,
+        enhanced_lag_policy_name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> LogicalInterfaceCursor:
+        """Set ``vnsLIf`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class LogicalDeviceManagementInterfaceCursor(_LogicalDeviceMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``vnsCMgmt`` (management_interface level).
+
+    Position: ``uni.tenant.logical_device.management_interface``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        dns_domain: str | None = None,
+        gateway_ip_address: str | None = None,
+        ip_address: str | None = None,
+        ip_allocation_type: VnsIpAllocationType | str | None = None,
+        is_in_band: bool | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        port: int | None = None,
+        port_group_name: str | None = None,
+        subnet_mask: str | None = None,
+        userdom: str | None = None,
+        vnic_name: str | None = None,
+    ) -> LogicalDeviceManagementInterfaceCursor:
+        """Set ``vnsCMgmt`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class _LogicalInterfaceContextMakers(Cursor):
+    """Makers declared at the logical_interface_context level (``vnsLIfCtx``)."""
+
+    __slots__ = ()
+
+    def virtual_ip(
+        self,
+        virtual_ip_address: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> LogicalInterfaceContextVirtualIpCursor:
+        """Declare a ``vnsSvcVip`` child under the logical_interface_context level.
+
+        Virtual IP address
+
+        Args:
+            virtual_ip_address: Virtual IP address
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "virtual_ip_address",
+            )
+        }
+        return cast(
+            "LogicalInterfaceContextVirtualIpCursor",
+            self._invoke_maker("virtual_ip", (virtual_ip_address,), _prune(params)),
+        )
+
+
+class LogicalInterfaceContextCursor(
+    _LogicalInterfaceContextMakers, _LogicalDeviceContextMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``vnsLIfCtx`` (logical_interface_context level).
+
+    Position: ``uni.tenant.logical_device_context.logical_interface_context``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        acl: bool | None = None,
+        annotation: str | None = None,
+        description: str | None = None,
+        l3_dest: bool | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        permit_handoff: bool | None = None,
+        permit_log: bool | None = None,
+        rule_type: bool | None = None,
+        userdom: str | None = None,
+    ) -> LogicalInterfaceContextCursor:
+        """Set ``vnsLIfCtx`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        bridge_domain: str | Ref | None = None,
+        logical_device: str | Ref | None = None,
+        router_config: str | Ref | None = None,
+    ) -> LogicalInterfaceContextCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        bridge_domain: str | Ref | None = None,
+        logical_device: str | Ref | None = None,
+    ) -> LogicalInterfaceContextCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
 class _InBandEpgMakers(Cursor):
     """Makers declared at the in_band_epg level (``mgmtInB``)."""
 
@@ -16639,6 +18715,131 @@ class PimRouteMapEntryCursor(_PimRouteMapPolicyMakers, _TenantMakers, _UniMakers
         return self
 
 
+class _PolicyContainerFolderInstanceMakers(Cursor):
+    """Makers declared at the folder_instance level (``vnsFolderInst``)."""
+
+    __slots__ = ()
+
+    def param_instance(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        cardinality: VnsVnsCardinalityType | str | None = None,
+        meta_param_key: str | None = None,
+        locked: bool | None = None,
+        mandatory: bool | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+        validation: str | None = None,
+        value: str | None = None,
+    ) -> PolicyContainerFolderInstanceParamInstanceCursor:
+        """Declare a ``vnsParamInst`` child under the folder_instance level.
+
+        A parameter instance configured by the administrator.
+
+        Args:
+            name: The name of the parameter instance.
+            annotation: User annotation. Suggested format orchestrator:value
+            cardinality: A value to determine how many instances of this type can be present.
+                Values: ``1``, ``n``, ``unspecified``. Default: ``unspecified``.
+            meta_param_key: The key uniquely identifying this configuration object.
+            locked: A property that specifies if a value entered at configuration time can be
+                modified at run time. Default: ``False``.
+            mandatory: The value that indicates if this parameter is mandatory. Default:
+                ``False``.
+            validation: The validation expression.
+            value: The value of the property.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "PolicyContainerFolderInstanceParamInstanceCursor",
+            self._invoke_maker("param_instance", (name,), _prune(params)),
+        )
+
+    def relation(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        cardinality: VnsVnsCardinalityType | str | None = None,
+        key: str | None = None,
+        locked: bool | None = None,
+        mandatory: bool | None = None,
+        display_name: str | None = None,
+        target_name: str | None = None,
+        userdom: str | None = None,
+    ) -> PolicyContainerFolderInstanceRelationCursor:
+        """Declare a ``vnsCfgRelInst`` child under the folder_instance level.
+
+        A folder instance configured by the administrator.
+
+        Args:
+            name: The name of the folder instance configured by the administrator.
+            annotation: User annotation. Suggested format orchestrator:value
+            cardinality: A value to determine how many instances of this type can be present.
+                Values: ``1``, ``n``, ``unspecified``. Default: ``unspecified``.
+            key: The key uniquely identifying this configuration object.
+            locked: A property that specifies if a value entered at configuration time can be
+                modified at run time. Default: ``False``.
+            mandatory: The value that indicates if this parameter is mandatory. Default:
+                ``False``.
+            target_name: The target to which this parameter applies.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "PolicyContainerFolderInstanceRelationCursor",
+            self._invoke_maker("relation", (name,), _prune(params)),
+        )
+
+
+class PolicyContainerFolderInstanceCursor(
+    _PolicyContainerFolderInstanceMakers, _PolicyContainerMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``vnsFolderInst`` (folder_instance level).
+
+    Position: ``uni.tenant.policy_container.folder_instance``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        cardinality: VnsVnsCardinalityType | str | None = None,
+        dev_ctx_lbl: str | None = None,
+        meta_folder_key: str | None = None,
+        locked: bool | None = None,
+        display_name: str | None = None,
+        scoped_by: VnsItemScope | str | None = None,
+        userdom: str | None = None,
+    ) -> PolicyContainerFolderInstanceCursor:
+        """Set ``vnsFolderInst`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
 class DscpMarkingCursor(_QosRequirementMakers, _TenantMakers, _UniMakers):
     """Typed cursor for ``qosEpDscpMarking`` (dscp_marking level).
 
@@ -17007,6 +19208,405 @@ class ServiceRedirectPolicyCursor(
         """Reference objects outside the design by raw DN."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class ConnectionCursor(_ServiceGraphMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``vnsAbsConnection`` (connection level).
+
+    Position: ``uni.tenant.service_graph.connection``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        adj_type: VnsConnAdjType | str | None = None,
+        annotation: str | None = None,
+        conn_dir: VnsConnDir | str | None = None,
+        conn_type: VnsConnType | str | None = None,
+        description: str | None = None,
+        direct_connect: bool | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        unicast_routing: bool | None = None,
+        userdom: str | None = None,
+    ) -> ConnectionCursor:
+        """Set ``vnsAbsConnection`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class _ConsumerTerminalNodeMakers(Cursor):
+    """Makers declared at the consumer_terminal_node level (``vnsAbsTermNodeCon``)."""
+
+    __slots__ = ()
+
+    def terminal_connector(
+        self,
+        *,
+        annotation: str | None = None,
+        att_notify: bool | None = None,
+        description: str | None = None,
+        device_l_if_name: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> ConsumerTerminalNodeTerminalConnectorCursor:
+        """Declare a ``vnsAbsTermConn`` child under the consumer_terminal_node level.
+
+        An abstract terminal node connector.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            att_notify: Enables the attachment notification option. Default: ``False``.
+            description: Specifies a description of the policy definition.
+            device_l_if_name: Used for cloud APIC graph instantiation to figure out device LIF
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "ConsumerTerminalNodeTerminalConnectorCursor",
+            self._invoke_maker("terminal_connector", (), _prune(params)),
+        )
+
+    def in_terminal(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> ConsumerTerminalNodeInTerminalCursor:
+        """Declare a ``vnsInTerm`` child under the consumer_terminal_node level.
+
+        An input terminal node. For abstract graphs (AbsGraph), InTerm refers to the terminal node
+        at the input end.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "ConsumerTerminalNodeInTerminalCursor",
+            self._invoke_maker("in_terminal", (), _prune(params)),
+        )
+
+    def out_terminal(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> ConsumerTerminalNodeOutTerminalCursor:
+        """Declare a ``vnsOutTerm`` child under the consumer_terminal_node level.
+
+        An output terminal node. For abstract graphs (AbsGraph), OutTerm refers to the terminal node
+        at the output end.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "ConsumerTerminalNodeOutTerminalCursor",
+            self._invoke_maker("out_terminal", (), _prune(params)),
+        )
+
+
+class ConsumerTerminalNodeCursor(
+    _ConsumerTerminalNodeMakers, _ServiceGraphMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``vnsAbsTermNodeCon`` (consumer_terminal_node level).
+
+    Position: ``uni.tenant.service_graph.consumer_terminal_node``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> ConsumerTerminalNodeCursor:
+        """Set ``vnsAbsTermNodeCon`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class _FunctionNodeMakers(Cursor):
+    """Makers declared at the function_node level (``vnsAbsNode``)."""
+
+    __slots__ = ()
+
+    def function_connector(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        att_notify: bool | None = None,
+        conn_type: VnsFuncConnType | str | None = None,
+        description: str | None = None,
+        device_l_if_name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> FunctionConnectorCursor:
+        """Declare a ``vnsAbsFuncConn`` child under the function_node level.
+
+        An abstract function node connector is used to map a service graph interface with the device
+        interface.
+
+        Args:
+            name: The name of the function node connector.
+            annotation: User annotation. Suggested format orchestrator:value
+            att_notify: Enables the attachment notification option. Default: ``False``.
+            conn_type: Values: ``dnat``, ``none``, ``redir``, ``snat``, ``snat_dnat``. Default:
+                ``none``.
+            description: Specifies a description of the policy definition.
+            device_l_if_name: Used for cloud APIC graph instantiation to figure out device LIF
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "FunctionConnectorCursor",
+            self._invoke_maker("function_connector", (name,), _prune(params)),
+        )
+
+    def copy_connector(
+        self,
+        *,
+        annotation: str | None = None,
+        att_notify: bool | None = None,
+        description: str | None = None,
+        device_l_if_name: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> CopyConnectorCursor:
+        """Declare a ``vnsCopyConnector`` child under the function_node level.
+
+        CopyConnector is deprecated
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            att_notify: Enables the attachment notification option. Default: ``False``.
+            description: Specifies a description of the policy definition.
+            device_l_if_name: Used for cloud APIC graph instantiation to figure out device LIF
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "CopyConnectorCursor",
+            self._invoke_maker("copy_connector", (), _prune(params)),
+        )
+
+
+class FunctionNodeCursor(_FunctionNodeMakers, _ServiceGraphMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``vnsAbsNode`` (function_node level).
+
+    Position: ``uni.tenant.service_graph.function_node``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        func_template_type: VnsFuncTemplateType | str | None = None,
+        function_type: VnsNodeFuncType | str | None = None,
+        is_copy: bool | None = None,
+        managed: bool | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        routing_mode: VnsRoutingMode | str | None = None,
+        sequence_number: int | None = None,
+        share_encap: bool | None = None,
+        userdom: str | None = None,
+    ) -> FunctionNodeCursor:
+        """Set ``vnsAbsNode`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        logical_device: str | Ref | None = None,
+    ) -> FunctionNodeCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        logical_device: str | Ref | None = None,
+    ) -> FunctionNodeCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class _ProviderTerminalNodeMakers(Cursor):
+    """Makers declared at the provider_terminal_node level (``vnsAbsTermNodeProv``)."""
+
+    __slots__ = ()
+
+    def terminal_connector(
+        self,
+        *,
+        annotation: str | None = None,
+        att_notify: bool | None = None,
+        description: str | None = None,
+        device_l_if_name: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> ProviderTerminalNodeTerminalConnectorCursor:
+        """Declare a ``vnsAbsTermConn`` child under the provider_terminal_node level.
+
+        An abstract terminal node connector.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            att_notify: Enables the attachment notification option. Default: ``False``.
+            description: Specifies a description of the policy definition.
+            device_l_if_name: Used for cloud APIC graph instantiation to figure out device LIF
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "ProviderTerminalNodeTerminalConnectorCursor",
+            self._invoke_maker("terminal_connector", (), _prune(params)),
+        )
+
+    def in_terminal(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> ProviderTerminalNodeInTerminalCursor:
+        """Declare a ``vnsInTerm`` child under the provider_terminal_node level.
+
+        An input terminal node. For abstract graphs (AbsGraph), InTerm refers to the terminal node
+        at the input end.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "ProviderTerminalNodeInTerminalCursor",
+            self._invoke_maker("in_terminal", (), _prune(params)),
+        )
+
+    def out_terminal(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> ProviderTerminalNodeOutTerminalCursor:
+        """Declare a ``vnsOutTerm`` child under the provider_terminal_node level.
+
+        An output terminal node. For abstract graphs (AbsGraph), OutTerm refers to the terminal node
+        at the output end.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "ProviderTerminalNodeOutTerminalCursor",
+            self._invoke_maker("out_terminal", (), _prune(params)),
+        )
+
+
+class ProviderTerminalNodeCursor(
+    _ProviderTerminalNodeMakers, _ServiceGraphMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``vnsAbsTermNodeProv`` (provider_terminal_node level).
+
+    Position: ``uni.tenant.service_graph.provider_terminal_node``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> ProviderTerminalNodeCursor:
+        """Set ``vnsAbsTermNodeProv`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
         return self
 
 
@@ -20165,7 +22765,7 @@ class EpgSubnetCursor(_EpgSubnetMakers, _EpgMakers, _AppMakers, _TenantMakers, _
         return self
 
 
-class VirtualIpCursor(_EpgMakers, _AppMakers, _TenantMakers, _UniMakers):
+class EpgVirtualIpCursor(_EpgMakers, _AppMakers, _TenantMakers, _UniMakers):
     """Typed cursor for ``fvVip`` (virtual_ip level).
 
     Position: ``uni.tenant.app.epg.virtual_ip``
@@ -20186,7 +22786,7 @@ class VirtualIpCursor(_EpgMakers, _AppMakers, _TenantMakers, _UniMakers):
         owner_key: str | None = None,
         owner_tag: str | None = None,
         userdom: str | None = None,
-    ) -> VirtualIpCursor:
+    ) -> EpgVirtualIpCursor:
         """Set ``fvVip`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
@@ -20205,7 +22805,7 @@ class VirtualIpCursor(_EpgMakers, _AppMakers, _TenantMakers, _UniMakers):
         monitoring_policy: str | Ref | None = None,
         trust_control_policy: str | Ref | None = None,
         qos_requirement: str | Ref | None = None,
-    ) -> VirtualIpCursor:
+    ) -> EpgVirtualIpCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind(self, **_prune(params))
@@ -20216,7 +22816,7 @@ class VirtualIpCursor(_EpgMakers, _AppMakers, _TenantMakers, _UniMakers):
         *,
         domain: str | Ref | None = None,
         contract_master: str | Ref | None = None,
-    ) -> VirtualIpCursor:
+    ) -> EpgVirtualIpCursor:
         """Reference objects outside the design by raw DN."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind_dn(self, **_prune(params))
@@ -21242,6 +23842,133 @@ class ExternalSubnetCursor(
         userdom: str | None = None,
     ) -> ExternalSubnetCursor:
         """Set ``mgmtSubnet`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class _FunctionProfileGroupFunctionProfileMakers(Cursor):
+    """Makers declared at the function_profile level (``vnsAbsFuncProf``)."""
+
+    __slots__ = ()
+
+    def function_config(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> FunctionConfigCursor:
+        """Declare a ``vnsAbsFuncCfg`` child under the function_profile level.
+
+        The configuration for a function. This configuration can be shared across multiple
+        functions.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "FunctionConfigCursor",
+            self._invoke_maker("function_config", (), _prune(params)),
+        )
+
+    def device_config(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> DeviceConfigCursor:
+        """Declare a ``vnsAbsDevCfg`` child under the function_profile level.
+
+        A shared configuration for a logical device in the L4-L7 device cluster. This configuration
+        can be shared across multiple logical devices.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "DeviceConfigCursor",
+            self._invoke_maker("device_config", (), _prune(params)),
+        )
+
+    def group_config(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> GroupConfigCursor:
+        """Declare a ``vnsAbsGrpCfg`` child under the function_profile level.
+
+        The shared configuration for a function group. This configuration can be shared across
+        multiple logical groups.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "GroupConfigCursor",
+            self._invoke_maker("group_config", (), _prune(params)),
+        )
+
+
+class FunctionProfileGroupFunctionProfileCursor(
+    _FunctionProfileGroupFunctionProfileMakers,
+    _FunctionProfileGroupMakers,
+    _FunctionProfileContainerMakers,
+    _TenantMakers,
+    _UniMakers,
+):
+    """Typed cursor for ``vnsAbsFuncProf`` (function_profile level).
+
+    Position: ``uni.tenant.function_profile_container.function_profile_group.function_profile``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        src_mode: str | None = None,
+        userdom: str | None = None,
+    ) -> FunctionProfileGroupFunctionProfileCursor:
+        """Set ``vnsAbsFuncProf`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
         return self
@@ -23730,6 +26457,112 @@ class L3outRouteControlProfileRouteControlContextCursor(
         return self
 
 
+class ConcreteInterfaceCursor(
+    _ConcreteDeviceMakers, _LogicalDeviceMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``vnsCIf`` (concrete_interface level).
+
+    Position: ``uni.tenant.logical_device.concrete_device.concrete_interface``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        encap: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+        vnic: str | None = None,
+    ) -> ConcreteInterfaceCursor:
+        """Set ``vnsCIf`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class DeviceParamCursor(_ConcreteDeviceMakers, _LogicalDeviceMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``vnsDevParam`` (device_param level).
+
+    Position: ``uni.tenant.logical_device.concrete_device.device_param``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+        value: str | None = None,
+    ) -> DeviceParamCursor:
+        """Set ``vnsDevParam`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class LogicalInterfaceContextVirtualIpCursor(
+    _LogicalInterfaceContextMakers, _LogicalDeviceContextMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``vnsSvcVip`` (virtual_ip level).
+
+    Position: ``uni.tenant.logical_device_context.logical_interface_context.virtual_ip``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> LogicalInterfaceContextVirtualIpCursor:
+        """Set ``vnsSvcVip`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        bridge_domain: str | Ref | None = None,
+        logical_device: str | Ref | None = None,
+        router_config: str | Ref | None = None,
+    ) -> LogicalInterfaceContextVirtualIpCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        bridge_domain: str | Ref | None = None,
+        logical_device: str | Ref | None = None,
+    ) -> LogicalInterfaceContextVirtualIpCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
 class InBandEpgStaticRouteCursor(
     _InBandEpgMakers, _ManagementProfileMakers, _TenantMakers, _UniMakers
 ):
@@ -24225,6 +27058,69 @@ class OobContractSubjectProviderSubjectLabelCursor(
         return self
 
 
+class PolicyContainerFolderInstanceParamInstanceCursor(
+    _PolicyContainerFolderInstanceMakers, _PolicyContainerMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``vnsParamInst`` (param_instance level).
+
+    Position: ``uni.tenant.policy_container.folder_instance.param_instance``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        cardinality: VnsVnsCardinalityType | str | None = None,
+        meta_param_key: str | None = None,
+        locked: bool | None = None,
+        mandatory: bool | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+        validation: str | None = None,
+        value: str | None = None,
+    ) -> PolicyContainerFolderInstanceParamInstanceCursor:
+        """Set ``vnsParamInst`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class PolicyContainerFolderInstanceRelationCursor(
+    _PolicyContainerFolderInstanceMakers, _PolicyContainerMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``vnsCfgRelInst`` (relation level).
+
+    Position: ``uni.tenant.policy_container.folder_instance.relation``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        cardinality: VnsVnsCardinalityType | str | None = None,
+        key: str | None = None,
+        locked: bool | None = None,
+        mandatory: bool | None = None,
+        display_name: str | None = None,
+        target_name: str | None = None,
+        userdom: str | None = None,
+    ) -> PolicyContainerFolderInstanceRelationCursor:
+        """Set ``vnsCfgRelInst`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
 class TenantRouteControlProfileRouteControlContextRouteContextScopeCursor(
     _TenantRouteControlProfileRouteControlContextMakers,
     _TenantRouteControlProfileMakers,
@@ -24374,6 +27270,389 @@ class ServiceRedirectPolicyDestinationOfRedirectedTrafficCursor(
         """Reference objects outside the design by raw DN."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class ConsumerTerminalNodeInTerminalCursor(
+    _ConsumerTerminalNodeMakers, _ServiceGraphMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``vnsInTerm`` (in_terminal level).
+
+    Position: ``uni.tenant.service_graph.consumer_terminal_node.in_terminal``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> ConsumerTerminalNodeInTerminalCursor:
+        """Set ``vnsInTerm`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class ConsumerTerminalNodeOutTerminalCursor(
+    _ConsumerTerminalNodeMakers, _ServiceGraphMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``vnsOutTerm`` (out_terminal level).
+
+    Position: ``uni.tenant.service_graph.consumer_terminal_node.out_terminal``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> ConsumerTerminalNodeOutTerminalCursor:
+        """Set ``vnsOutTerm`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class ConsumerTerminalNodeTerminalConnectorCursor(
+    _ConsumerTerminalNodeMakers, _ServiceGraphMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``vnsAbsTermConn`` (terminal_connector level).
+
+    Position: ``uni.tenant.service_graph.consumer_terminal_node.terminal_connector``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        att_notify: bool | None = None,
+        description: str | None = None,
+        device_l_if_name: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> ConsumerTerminalNodeTerminalConnectorCursor:
+        """Set ``vnsAbsTermConn`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class CopyConnectorCursor(_FunctionNodeMakers, _ServiceGraphMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``vnsCopyConnector`` (copy_connector level).
+
+    Position: ``uni.tenant.service_graph.function_node.copy_connector``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        att_notify: bool | None = None,
+        description: str | None = None,
+        device_l_if_name: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> CopyConnectorCursor:
+        """Set ``vnsCopyConnector`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        logical_device: str | Ref | None = None,
+    ) -> CopyConnectorCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        logical_device: str | Ref | None = None,
+    ) -> CopyConnectorCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class _FunctionConnectorMakers(Cursor):
+    """Makers declared at the function_connector level (``vnsAbsFuncConn``)."""
+
+    __slots__ = ()
+
+    def folder(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        aux_info: str | None = None,
+        cardinality: VnsVnsCardinalityType | str | None = None,
+        dev_ctx_lbl: str | None = None,
+        key: str | None = None,
+        locked: bool | None = None,
+        display_name: str | None = None,
+        profile_behavior_shared: bool | None = None,
+        scoped_by: VnsItemScope | str | None = None,
+        src_ref: str | None = None,
+        userdom: str | None = None,
+    ) -> FolderCursor:
+        """Declare a ``vnsAbsFolder`` child under the function_connector level.
+
+        A folder added to an abstract graph. An abstract graph folder can contain an abstract graph
+        folder (AbsFolder) and abstract node parameters (AbsParam), which are analogous to an
+        MFolder and MParam.
+
+        Args:
+            name: The name of the abstract graph folder.
+            annotation: User annotation. Suggested format orchestrator:value
+            cardinality: A value to determine how many instances of this type can be present.
+                Values: ``1``, ``n``, ``unspecified``. Default: ``unspecified``.
+            key: The key uniquely identifying this configuration object.
+            locked: A property that specifies if a value entered at configuration time can be
+                modified at run time. Default: ``False``.
+            profile_behavior_shared: Enabling sharing of AbsFolder. Used for the folders in
+                AbsFuncProf. Default: ``False``.
+            scoped_by: The scope used for resolving this parameter. Values: ``ap``, ``bd``,
+                ``epg``, ``none``, ``tenant``. Default: ``epg``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "FolderCursor",
+            self._invoke_maker("folder", (name,), _prune(params)),
+        )
+
+    def param(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        aux_info: str | None = None,
+        cardinality: VnsVnsCardinalityType | str | None = None,
+        key: str | None = None,
+        locked: bool | None = None,
+        mandatory: bool | None = None,
+        display_name: str | None = None,
+        src_ref: str | None = None,
+        userdom: str | None = None,
+        validation: str | None = None,
+        value: str | None = None,
+    ) -> FunctionConnectorParamCursor:
+        """Declare a ``vnsAbsParam`` child under the function_connector level.
+
+        The abstract node parameters. This is contained by the folder added to the abstract graph
+        (AbsFolder).
+
+        Args:
+            name: The name of the abstract node parameters.
+            annotation: User annotation. Suggested format orchestrator:value
+            cardinality: A value to determine how many instances of this type can be present.
+                Values: ``1``, ``n``, ``unspecified``. Default: ``unspecified``.
+            key: The key uniquely identifying this configuration object.
+            locked: A property that specifies if a value entered at configuration time can be
+                modified at run time. Default: ``False``.
+            mandatory: The value that indicates if this parameter is mandatory. Default:
+                ``False``.
+            validation: The validation expression.
+            value: The value of the property.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "FunctionConnectorParamCursor",
+            self._invoke_maker("param", (name,), _prune(params)),
+        )
+
+
+class FunctionConnectorCursor(
+    _FunctionConnectorMakers, _FunctionNodeMakers, _ServiceGraphMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``vnsAbsFuncConn`` (function_connector level).
+
+    Position: ``uni.tenant.service_graph.function_node.function_connector``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        att_notify: bool | None = None,
+        conn_type: VnsFuncConnType | str | None = None,
+        description: str | None = None,
+        device_l_if_name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> FunctionConnectorCursor:
+        """Set ``vnsAbsFuncConn`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        filter: str | Ref | None = None,
+        logical_device: str | Ref | None = None,
+    ) -> FunctionConnectorCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        filter: str | Ref | None = None,
+        logical_device: str | Ref | None = None,
+    ) -> FunctionConnectorCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class ProviderTerminalNodeInTerminalCursor(
+    _ProviderTerminalNodeMakers, _ServiceGraphMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``vnsInTerm`` (in_terminal level).
+
+    Position: ``uni.tenant.service_graph.provider_terminal_node.in_terminal``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> ProviderTerminalNodeInTerminalCursor:
+        """Set ``vnsInTerm`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class ProviderTerminalNodeOutTerminalCursor(
+    _ProviderTerminalNodeMakers, _ServiceGraphMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``vnsOutTerm`` (out_terminal level).
+
+    Position: ``uni.tenant.service_graph.provider_terminal_node.out_terminal``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> ProviderTerminalNodeOutTerminalCursor:
+        """Set ``vnsOutTerm`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class ProviderTerminalNodeTerminalConnectorCursor(
+    _ProviderTerminalNodeMakers, _ServiceGraphMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``vnsAbsTermConn`` (terminal_connector level).
+
+    Position: ``uni.tenant.service_graph.provider_terminal_node.terminal_connector``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        att_notify: bool | None = None,
+        description: str | None = None,
+        device_l_if_name: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> ProviderTerminalNodeTerminalConnectorCursor:
+        """Set ``vnsAbsTermConn`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
         return self
 
 
@@ -27687,6 +30966,108 @@ class SourceFilterCursor(_PimFilterMakers, _BdPimMakers, _BdMakers, _TenantMaker
         return self
 
 
+class DeviceConfigCursor(
+    _FunctionProfileGroupFunctionProfileMakers,
+    _FunctionProfileGroupMakers,
+    _FunctionProfileContainerMakers,
+    _TenantMakers,
+    _UniMakers,
+):
+    """Typed cursor for ``vnsAbsDevCfg`` (device_config level).
+
+    Position: ``uni.tenant.function_profile_container.function_profile_group.function_profile.device_config``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> DeviceConfigCursor:
+        """Set ``vnsAbsDevCfg`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class FunctionConfigCursor(
+    _FunctionProfileGroupFunctionProfileMakers,
+    _FunctionProfileGroupMakers,
+    _FunctionProfileContainerMakers,
+    _TenantMakers,
+    _UniMakers,
+):
+    """Typed cursor for ``vnsAbsFuncCfg`` (function_config level).
+
+    Position: ``uni.tenant.function_profile_container.function_profile_group.function_profile.function_config``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> FunctionConfigCursor:
+        """Set ``vnsAbsFuncCfg`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class GroupConfigCursor(
+    _FunctionProfileGroupFunctionProfileMakers,
+    _FunctionProfileGroupMakers,
+    _FunctionProfileContainerMakers,
+    _TenantMakers,
+    _UniMakers,
+):
+    """Typed cursor for ``vnsAbsGrpCfg`` (group_config level).
+
+    Position: ``uni.tenant.function_profile_container.function_profile_group.function_profile.group_config``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> GroupConfigCursor:
+        """Set ``vnsAbsGrpCfg`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
 class RemoteIpsRemoteIpEpLabelCursor(
     _RemoteIpsRemoteIpMakers, _RemoteIpsMakers, _HostProtectionMakers, _TenantMakers, _UniMakers
 ):
@@ -30261,6 +33642,220 @@ class InBandEpgSubnetNlbEndpointCursor(
         return self
 
 
+class _FolderMakers(Cursor):
+    """Makers declared at the folder level (``vnsAbsFolder``)."""
+
+    __slots__ = ()
+
+    def param(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        aux_info: str | None = None,
+        cardinality: VnsVnsCardinalityType | str | None = None,
+        key: str | None = None,
+        locked: bool | None = None,
+        mandatory: bool | None = None,
+        display_name: str | None = None,
+        src_ref: str | None = None,
+        userdom: str | None = None,
+        validation: str | None = None,
+        value: str | None = None,
+    ) -> FolderParamCursor:
+        """Declare a ``vnsAbsParam`` child under the folder level.
+
+        The abstract node parameters. This is contained by the folder added to the abstract graph
+        (AbsFolder).
+
+        Args:
+            name: The name of the abstract node parameters.
+            annotation: User annotation. Suggested format orchestrator:value
+            cardinality: A value to determine how many instances of this type can be present.
+                Values: ``1``, ``n``, ``unspecified``. Default: ``unspecified``.
+            key: The key uniquely identifying this configuration object.
+            locked: A property that specifies if a value entered at configuration time can be
+                modified at run time. Default: ``False``.
+            mandatory: The value that indicates if this parameter is mandatory. Default:
+                ``False``.
+            validation: The validation expression.
+            value: The value of the property.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "FolderParamCursor",
+            self._invoke_maker("param", (name,), _prune(params)),
+        )
+
+    def relation(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        cardinality: VnsVnsCardinalityType | str | None = None,
+        key: str | None = None,
+        locked: bool | None = None,
+        mandatory: bool | None = None,
+        display_name: str | None = None,
+        target_name: str | None = None,
+        userdom: str | None = None,
+    ) -> FolderRelationCursor:
+        """Declare a ``vnsAbsCfgRel`` child under the folder level.
+
+        The folder/param relations added to an abstract graph.
+
+        Args:
+            name: The name of the folder/param relations.
+            annotation: User annotation. Suggested format orchestrator:value
+            cardinality: A value to determine how many instances of this type can be present.
+                Values: ``1``, ``n``, ``unspecified``. Default: ``unspecified``.
+            key: The key uniquely identifying this configuration object.
+            locked: A property that specifies if a value entered at configuration time can be
+                modified at run time. Default: ``False``.
+            mandatory: The value that indicates if this parameter is mandatory. Default:
+                ``False``.
+            target_name: The target to which this parameter applies.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "FolderRelationCursor",
+            self._invoke_maker("relation", (name,), _prune(params)),
+        )
+
+
+class FolderCursor(
+    _FolderMakers,
+    _FunctionConnectorMakers,
+    _FunctionNodeMakers,
+    _ServiceGraphMakers,
+    _TenantMakers,
+    _UniMakers,
+):
+    """Typed cursor for ``vnsAbsFolder`` (folder level).
+
+    Position: ``uni.tenant.service_graph.function_node.function_connector.folder``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        aux_info: str | None = None,
+        cardinality: VnsVnsCardinalityType | str | None = None,
+        dev_ctx_lbl: str | None = None,
+        key: str | None = None,
+        locked: bool | None = None,
+        display_name: str | None = None,
+        profile_behavior_shared: bool | None = None,
+        scoped_by: VnsItemScope | str | None = None,
+        src_ref: str | None = None,
+        userdom: str | None = None,
+    ) -> FolderCursor:
+        """Set ``vnsAbsFolder`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        filter: str | Ref | None = None,
+        logical_device: str | Ref | None = None,
+    ) -> FolderCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        filter: str | Ref | None = None,
+        logical_device: str | Ref | None = None,
+    ) -> FolderCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class FunctionConnectorParamCursor(
+    _FunctionConnectorMakers, _FunctionNodeMakers, _ServiceGraphMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``vnsAbsParam`` (param level).
+
+    Position: ``uni.tenant.service_graph.function_node.function_connector.param``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        aux_info: str | None = None,
+        cardinality: VnsVnsCardinalityType | str | None = None,
+        key: str | None = None,
+        locked: bool | None = None,
+        mandatory: bool | None = None,
+        display_name: str | None = None,
+        src_ref: str | None = None,
+        userdom: str | None = None,
+        validation: str | None = None,
+        value: str | None = None,
+    ) -> FunctionConnectorParamCursor:
+        """Set ``vnsAbsParam`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        filter: str | Ref | None = None,
+        logical_device: str | Ref | None = None,
+    ) -> FunctionConnectorParamCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        filter: str | Ref | None = None,
+        logical_device: str | Ref | None = None,
+    ) -> FunctionConnectorParamCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
 class ExternalPrefixLeakToCursor(
     _ExternalPrefixMakers, _LeakRoutesMakers, _VrfMakers, _TenantMakers, _UniMakers
 ):
@@ -32798,6 +36393,125 @@ class NextHopCursor(
         domain: str | Ref | None = None,
         fallback_route_group: str | Ref | None = None,
     ) -> NextHopCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class FolderParamCursor(
+    _FolderMakers,
+    _FunctionConnectorMakers,
+    _FunctionNodeMakers,
+    _ServiceGraphMakers,
+    _TenantMakers,
+    _UniMakers,
+):
+    """Typed cursor for ``vnsAbsParam`` (param level).
+
+    Position: ``uni.tenant.service_graph.function_node.function_connector.folder.param``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        aux_info: str | None = None,
+        cardinality: VnsVnsCardinalityType | str | None = None,
+        key: str | None = None,
+        locked: bool | None = None,
+        mandatory: bool | None = None,
+        display_name: str | None = None,
+        src_ref: str | None = None,
+        userdom: str | None = None,
+        validation: str | None = None,
+        value: str | None = None,
+    ) -> FolderParamCursor:
+        """Set ``vnsAbsParam`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        filter: str | Ref | None = None,
+        logical_device: str | Ref | None = None,
+    ) -> FolderParamCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        filter: str | Ref | None = None,
+        logical_device: str | Ref | None = None,
+    ) -> FolderParamCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class FolderRelationCursor(
+    _FolderMakers,
+    _FunctionConnectorMakers,
+    _FunctionNodeMakers,
+    _ServiceGraphMakers,
+    _TenantMakers,
+    _UniMakers,
+):
+    """Typed cursor for ``vnsAbsCfgRel`` (relation level).
+
+    Position: ``uni.tenant.service_graph.function_node.function_connector.folder.relation``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        cardinality: VnsVnsCardinalityType | str | None = None,
+        key: str | None = None,
+        locked: bool | None = None,
+        mandatory: bool | None = None,
+        display_name: str | None = None,
+        target_name: str | None = None,
+        userdom: str | None = None,
+    ) -> FolderRelationCursor:
+        """Set ``vnsAbsCfgRel`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        filter: str | Ref | None = None,
+        logical_device: str | Ref | None = None,
+    ) -> FolderRelationCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        filter: str | Ref | None = None,
+        logical_device: str | Ref | None = None,
+    ) -> FolderRelationCursor:
         """Reference objects outside the design by raw DN."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind_dn(self, **_prune(params))

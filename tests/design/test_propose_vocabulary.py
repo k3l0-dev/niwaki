@@ -105,8 +105,9 @@ class TestMakers:
     def test_allow_pierces_the_family_denylist(self) -> None:
         """--allow exempts specific classes from the excluded families.
 
-        vnsAbsGraph (service-graph machinery) is excluded for good by user
-        decision — a permanently stable probe.
+        vnsMscGraphXlateCont (multi-site service-graph translation) is out of
+        scope for good — a permanently stable probe.  (The service-graph model
+        itself is now curated, so it is no longer denylisted wholesale.)
         """
         from niwaki._codegen.propose_vocabulary import propose
 
@@ -114,13 +115,13 @@ class TestMakers:
         proposed_closed = {
             child for table in closed.makers.values() for child, _flags in table.values()
         }
-        assert "vnsAbsGraph" not in proposed_closed
+        assert "vnsMscGraphXlateCont" not in proposed_closed
 
-        opened = propose(["fvTenant"], max_depth=1, allow=frozenset({"vnsAbsGraph"}))
+        opened = propose(["fvTenant"], max_depth=1, allow=frozenset({"vnsMscGraphXlateCont"}))
         proposed_open = {
             child for table in opened.makers.values() for child, _flags in table.values()
         }
-        assert "vnsAbsGraph" in proposed_open
+        assert "vnsMscGraphXlateCont" in proposed_open
 
     def test_long_names_carry_the_review_flag(self, l3out_wave) -> None:  # type: ignore[no-untyped-def]
         flagged = [

@@ -13,7 +13,7 @@ The port functions.
 | --- | --- |
 | ACI class | `fabricFuncP` |
 | RN | `funcprof` |
-| Cursor | `FunctionProfileCursor` |
+| Cursor | `FabricFunctionProfileCursor` |
 | Parent | {ref}`fabric <vocab-fabric>` |
 | Atomic | — |
 

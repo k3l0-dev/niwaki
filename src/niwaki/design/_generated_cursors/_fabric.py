@@ -556,7 +556,7 @@ class _FabricMakers(Cursor):
         owner_key: str | None = None,
         owner_tag: str | None = None,
         userdom: str | None = None,
-    ) -> FunctionProfileCursor:
+    ) -> FabricFunctionProfileCursor:
         """Declare a ``fabricFuncP`` child under the fabric level.
 
         The port functions.
@@ -570,7 +570,7 @@ class _FabricMakers(Cursor):
         """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
-            "FunctionProfileCursor",
+            "FabricFunctionProfileCursor",
             self._invoke_maker("function_profile", (), _prune(params)),
         )
 
@@ -5635,7 +5635,7 @@ class FlowCollectorPolicyCursor(_FlowCollectorPolicyMakers, _FabricMakers, _UniM
         return self
 
 
-class _FunctionProfileMakers(Cursor):
+class _FabricFunctionProfileMakers(Cursor):
     """Makers declared at the function_profile level (``fabricFuncP``)."""
 
     __slots__ = ()
@@ -5946,7 +5946,7 @@ class _FunctionProfileMakers(Cursor):
         )
 
 
-class FunctionProfileCursor(_FunctionProfileMakers, _FabricMakers, _UniMakers):
+class FabricFunctionProfileCursor(_FabricFunctionProfileMakers, _FabricMakers, _UniMakers):
     """Typed cursor for ``fabricFuncP`` (function_profile level).
 
     Position: ``uni.fabric.function_profile``
@@ -5967,7 +5967,7 @@ class FunctionProfileCursor(_FunctionProfileMakers, _FabricMakers, _UniMakers):
         owner_key: str | None = None,
         owner_tag: str | None = None,
         userdom: str | None = None,
-    ) -> FunctionProfileCursor:
+    ) -> FabricFunctionProfileCursor:
         """Set ``fabricFuncP`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
@@ -10529,7 +10529,7 @@ class FteEventsCursor(_FlowCollectorPolicyMakers, _FabricMakers, _UniMakers):
         return self
 
 
-class ControllerPolicyGroupCursor(_FunctionProfileMakers, _FabricMakers, _UniMakers):
+class ControllerPolicyGroupCursor(_FabricFunctionProfileMakers, _FabricMakers, _UniMakers):
     """Typed cursor for ``fabricCtrlrPGrp`` (controller_policy_group level).
 
     Position: ``uni.fabric.function_profile.controller_policy_group``
@@ -10556,7 +10556,7 @@ class ControllerPolicyGroupCursor(_FunctionProfileMakers, _FabricMakers, _UniMak
         return self
 
 
-class LeafFabricPortPolicyGroupCursor(_FunctionProfileMakers, _FabricMakers, _UniMakers):
+class LeafFabricPortPolicyGroupCursor(_FabricFunctionProfileMakers, _FabricMakers, _UniMakers):
     """Typed cursor for ``fabricLePortPGrp`` (leaf_fabric_port_policy_group level).
 
     Position: ``uni.fabric.function_profile.leaf_fabric_port_policy_group``
@@ -10608,7 +10608,7 @@ class LeafFabricPortPolicyGroupCursor(_FunctionProfileMakers, _FabricMakers, _Un
         return self
 
 
-class LeafModulePolicyGroupCursor(_FunctionProfileMakers, _FabricMakers, _UniMakers):
+class LeafModulePolicyGroupCursor(_FabricFunctionProfileMakers, _FabricMakers, _UniMakers):
     """Typed cursor for ``fabricLeCardPGrp`` (leaf_module_policy_group level).
 
     Position: ``uni.fabric.function_profile.leaf_module_policy_group``
@@ -10635,7 +10635,7 @@ class LeafModulePolicyGroupCursor(_FunctionProfileMakers, _FabricMakers, _UniMak
         return self
 
 
-class LeafSwitchPolicyGroupCursor(_FunctionProfileMakers, _FabricMakers, _UniMakers):
+class LeafSwitchPolicyGroupCursor(_FabricFunctionProfileMakers, _FabricMakers, _UniMakers):
     """Typed cursor for ``fabricLeNodePGrp`` (leaf_switch_policy_group level).
 
     Position: ``uni.fabric.function_profile.leaf_switch_policy_group``
@@ -10673,7 +10673,7 @@ class LeafSwitchPolicyGroupCursor(_FunctionProfileMakers, _FabricMakers, _UniMak
         return self
 
 
-class PodPolicyGroupCursor(_FunctionProfileMakers, _FabricMakers, _UniMakers):
+class PodPolicyGroupCursor(_FabricFunctionProfileMakers, _FabricMakers, _UniMakers):
     """Typed cursor for ``fabricPodPGrp`` (pod_policy_group level).
 
     Position: ``uni.fabric.function_profile.pod_policy_group``
@@ -10700,7 +10700,7 @@ class PodPolicyGroupCursor(_FunctionProfileMakers, _FabricMakers, _UniMakers):
         return self
 
 
-class SpineFabricPortPolicyGroupCursor(_FunctionProfileMakers, _FabricMakers, _UniMakers):
+class SpineFabricPortPolicyGroupCursor(_FabricFunctionProfileMakers, _FabricMakers, _UniMakers):
     """Typed cursor for ``fabricSpPortPGrp`` (spine_fabric_port_policy_group level).
 
     Position: ``uni.fabric.function_profile.spine_fabric_port_policy_group``
@@ -10739,7 +10739,7 @@ class SpineFabricPortPolicyGroupCursor(_FunctionProfileMakers, _FabricMakers, _U
         return self
 
 
-class SpineModulePolicyGroupCursor(_FunctionProfileMakers, _FabricMakers, _UniMakers):
+class SpineModulePolicyGroupCursor(_FabricFunctionProfileMakers, _FabricMakers, _UniMakers):
     """Typed cursor for ``fabricSpCardPGrp`` (spine_module_policy_group level).
 
     Position: ``uni.fabric.function_profile.spine_module_policy_group``
@@ -10766,7 +10766,7 @@ class SpineModulePolicyGroupCursor(_FunctionProfileMakers, _FabricMakers, _UniMa
         return self
 
 
-class SpineSwitchPolicyGroupCursor(_FunctionProfileMakers, _FabricMakers, _UniMakers):
+class SpineSwitchPolicyGroupCursor(_FabricFunctionProfileMakers, _FabricMakers, _UniMakers):
     """Typed cursor for ``fabricSpNodePGrp`` (spine_switch_policy_group level).
 
     Position: ``uni.fabric.function_profile.spine_switch_policy_group``

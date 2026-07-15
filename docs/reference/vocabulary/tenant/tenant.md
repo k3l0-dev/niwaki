@@ -114,3 +114,13 @@ Accepted as keyword arguments of `.tenant(name)` and of `.set(**attrs)` on this 
 | `.access_client_profile(name, **attrs)` | `infraClP` | {ref}`tenant.access_client_profile <vocab-tenant-access_client_profile>` |
 | `.access_function_profile(name, **attrs)` | `infraProvP` | {ref}`tenant.access_function_profile <vocab-tenant-access_function_profile>` |
 | `.service_container(**attrs)` | `vnsSvcCont` | {ref}`tenant.service_container <vocab-tenant-service_container>` |
+| `.service_graph(name, **attrs)` | `vnsAbsGraph` | {ref}`tenant.service_graph <vocab-tenant-service_graph>` |
+| `.logical_device(name, **attrs)` | `vnsLDevVip` | {ref}`tenant.logical_device <vocab-tenant-logical_device>` |
+| `.logical_device_context(ctrct_name_or_lbl, graph_name_or_lbl, node_name_or_lbl, **attrs)` | `vnsLDevCtx` | {ref}`tenant.logical_device_context <vocab-tenant-logical_device_context>` |
+| `.router_configuration(name, **attrs)` | `vnsRtrCfg` | {ref}`tenant.router_configuration <vocab-tenant-router_configuration>` |
+| `.function_profile_container(**attrs)` | `vnsAbsFuncProfContr` | {ref}`tenant.function_profile_container <vocab-tenant-function_profile_container>` |
+| `.device_manager(name, **attrs)` | `vnsDevMgr` | {ref}`tenant.device_manager <vocab-tenant-device_manager>` |
+| `.chassis(name, **attrs)` | `vnsChassis` | {ref}`tenant.chassis <vocab-tenant-chassis>` |
+| `.policy_container(ctrct, graph, node, **attrs)` | `vnsSvcPol` | {ref}`tenant.policy_container <vocab-tenant-policy_container>` |
+| `.folder_instance(ctrct_name_or_lbl, graph_name_or_lbl, node_name_or_lbl, name, **attrs)` | `vnsFolderInst` | {ref}`tenant.folder_instance <vocab-tenant-folder_instance>` |
+| `.firewall_parameters(ctrct, graph, node, acl, **attrs)` | `vnsFWReq` | {ref}`tenant.firewall_parameters <vocab-tenant-firewall_parameters>` |
