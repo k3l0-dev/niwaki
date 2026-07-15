@@ -22,6 +22,7 @@ result types — reports and errors carry plain DN strings.
 
 from __future__ import annotations
 
+from collections.abc import Iterable, Iterator
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, Any
 
@@ -82,6 +83,26 @@ class PlanResult:
 def build_payload(root: DesignNode) -> dict[str, Any]:
     """Resolve the design and return the atomic ``polUni`` push payload."""
     return compile_poluni(root, resolve(root))
+
+
+def _plan_roots(
+    children: Iterable[DesignNode], prefix: str = "uni"
+) -> Iterator[tuple[DesignNode, str]]:
+    """Yield each diffable node with its full DN, descending through carriers.
+
+    A curated carrier (a VMM provider, ``uni/vmmp-VMware``) is not itself diffed —
+    the APIC rejects ``rsp-subtree`` on it — so the plan reads its children
+    instead, at their full DNs under the carrier's RN.
+    """
+    from niwaki.design._cursor import _tables
+
+    carrier = _tables().carrier
+    for child in children:
+        dn = f"{prefix}/{child.rn}"
+        if child.aci_class in carrier:
+            yield from _plan_roots(child.children, dn)
+        else:
+            yield child, dn
 
 
 def _walk_dns(root: DesignNode, extras: dict[DesignNode, list[ManagedObject]]) -> list[str]:
@@ -217,9 +238,8 @@ def push_sync(root: DesignNode, client: Niwaki, mode: PushMode) -> PushReport | 
     # plan: one read + diff per direct child of polUni (per declared domain),
     # scoped to the design's classes (R-3).
     parts: list[PlanResult] = []
-    for child in root.children:
+    for child, child_dn in _plan_roots(root.children):
         desired = build_desired_tree(child, extras)
-        child_dn = f"uni/{desired.rn}"
         raw = session.get(f"/api/mo/{child_dn}.json", **_plan_read_params(desired))
         current = ManagedObject.from_apic(raw[0]) if raw else None
         parts.append(_plan_result(desired, current, child_dn))
@@ -253,9 +273,8 @@ async def push_async(
     # plan: one read + diff per direct child of polUni (per declared domain),
     # scoped to the design's classes (R-3).
     parts: list[PlanResult] = []
-    for child in root.children:
+    for child, child_dn in _plan_roots(root.children):
         desired = build_desired_tree(child, extras)
-        child_dn = f"uni/{desired.rn}"
         raw = await session.get(f"/api/mo/{child_dn}.json", **_plan_read_params(desired))
         current = ManagedObject.from_apic(raw[0]) if raw else None
         parts.append(_plan_result(desired, current, child_dn))

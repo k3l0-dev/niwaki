@@ -5,7 +5,7 @@ Re-generate: uv run python -m niwaki._codegen.generate_docs
 
 # Enums
 
-The 352 enum types reachable from the curated vocabulary — every constrained parameter of every maker.  A parameter typed as an enum also accepts the plain string; the value is validated at the call site either way.
+The 376 enum types reachable from the curated vocabulary — every constrained parameter of every maker.  A parameter typed as an enum also accepts the plain string; the value is validated at the call site either way.
 
 The remaining generated enums back the non-curated classes and live in `niwaki.models._generated.enums`.
 
@@ -538,6 +538,64 @@ Used by: {ref}`fabric.communication_policy.http_ssl_configuration <vocab-fabric-
 | `enabled` | — |
 
 Used by: {ref}`fabric.communication_policy.http_service <vocab-fabric-communication_policy-http_service>`, {ref}`fabric.communication_policy.http_ssl_configuration <vocab-fabric-communication_policy-http_ssl_configuration>`
+
+(enum-compallocmode)=
+
+## `CompAllocMode`
+
+| value | meaning |
+| --- | --- |
+| `dynamic` | — |
+| `static` | — |
+
+Used by: {ref}`vmm_provider.vmm_dom.custom_epg_aggregator <vocab-vmm_provider-vmm_dom-custom_epg_aggregator>`, {ref}`vmm_provider.vmm_dom.epg_aggregator <vocab-vmm_provider-vmm_dom-epg_aggregator>`
+
+(enum-compconfigmode)=
+
+## `CompConfigMode`
+
+| value | meaning |
+| --- | --- |
+| `Disabled` | — |
+| `Enabled` | — |
+
+Used by: {ref}`vmm_provider.vmm_dom.custom_epg_aggregator <vocab-vmm_provider-vmm_dom-custom_epg_aggregator>`, {ref}`vmm_provider.vmm_dom.epg_aggregator <vocab-vmm_provider-vmm_dom-epg_aggregator>`
+
+(enum-compvendor)=
+
+## `CompVendor`
+
+| value | meaning |
+| --- | --- |
+| `CloudFoundry` | — |
+| `Kubernetes` | — |
+| `Microsoft` | — |
+| `Nutanix` | — |
+| `OpenShift` | — |
+| `OpenStack` | — |
+| `Redhat` | — |
+| `VMware` | — |
+
+Used by: {ref}`vmm_provider <vocab-vmm_provider>`
+
+(enum-compmsftconfigissues)=
+
+## `CompmsftConfigIssues`
+
+| value | meaning |
+| --- | --- |
+| `not-applicable` | — |
+| `invalid-rootContName` | — |
+| `duplicate-rootContName` | — |
+| `missing-hostGroup-in-cloud` | — |
+| `missing-rootContName` | — |
+| `aaacert-invalid` | — |
+| `inventory-failed` | — |
+| `invalid-object-in-inventory` | — |
+| `duplicate-mac-in-inventory` | — |
+| `zero-mac-in-inventory` | — |
+
+Used by: {ref}`vmm_provider.vmm_dom.vmm_controller <vocab-vmm_provider-vmm_dom-vmm_controller>`, {ref}`vmm_provider.vmm_dom.vmm_controller.cluster_controller <vocab-vmm_provider-vmm_dom-vmm_controller-cluster_controller>`
 
 (enum-conditioninitsevdir)=
 
@@ -1758,6 +1816,17 @@ Used by: {ref}`infra.system_gipo_policy <vocab-infra-system_gipo_policy>`
 
 Used by: {ref}`tenant.bd <vocab-tenant-bd>`
 
+(enum-fvclasspref)=
+
+## `FvClassPref`
+
+| value | meaning |
+| --- | --- |
+| `encap` | — |
+| `useg` | — |
+
+Used by: {ref}`vmm_provider.vmm_dom.custom_epg_aggregator <vocab-vmm_provider-vmm_dom-custom_epg_aggregator>`, {ref}`vmm_provider.vmm_dom.epg_aggregator <vocab-vmm_provider-vmm_dom-epg_aggregator>`
+
 (enum-fvcrtrnscopet)=
 
 ## `FvCrtrnScopeT`
@@ -1790,6 +1859,17 @@ Used by: {ref}`tenant.access_client_profile.access_client_epg <vocab-tenant-acce
 | `proxy-arp` | proxy-arp |
 
 Used by: {ref}`tenant.app.epg <vocab-tenant-app-epg>`
+
+(enum-fvimmediacy)=
+
+## `FvImmediacy`
+
+| value | meaning |
+| --- | --- |
+| `immediate` | — |
+| `lazy` | — |
+
+Used by: {ref}`vmm_provider.vmm_dom.custom_epg_aggregator <vocab-vmm_provider-vmm_dom-custom_epg_aggregator>`, {ref}`vmm_provider.vmm_dom.epg_aggregator <vocab-vmm_provider-vmm_dom-epg_aggregator>`
 
 (enum-fvinstrimedcy)=
 
@@ -2027,7 +2107,7 @@ Used by: {ref}`infra.vlan_pool <vocab-infra-vlan_pool>`, {ref}`infra.vsan_pool <
 | `inherit` | — |
 | `static` | — |
 
-Used by: {ref}`infra.mst_policy.mst_region.mst_domain.range <vocab-infra-mst_policy-mst_region-mst_domain-range>`, {ref}`infra.vlan_pool.range <vocab-infra-vlan_pool-range>`, {ref}`infra.vsan_pool.range <vocab-infra-vsan_pool-range>`, {ref}`infra.vxlan_pool.range <vocab-infra-vxlan_pool-range>`
+Used by: {ref}`infra.mst_policy.mst_region.mst_domain.range <vocab-infra-mst_policy-mst_region-mst_domain-range>`, {ref}`infra.vlan_pool.range <vocab-infra-vlan_pool-range>`, {ref}`infra.vsan_pool.range <vocab-infra-vsan_pool-range>`, {ref}`infra.vxlan_pool.range <vocab-infra-vxlan_pool-range>`, {ref}`vmm_provider.vmm_dom.custom_epg_aggregator.range <vocab-vmm_provider-vmm_dom-custom_epg_aggregator-range>`, {ref}`vmm_provider.vmm_dom.epg_aggregator.range <vocab-vmm_provider-vmm_dom-epg_aggregator-range>`
 
 (enum-fvnsblkrole)=
 
@@ -2038,7 +2118,7 @@ Used by: {ref}`infra.mst_policy.mst_region.mst_domain.range <vocab-infra-mst_pol
 | `external` | — |
 | `internal` | — |
 
-Used by: {ref}`infra.mst_policy.mst_region.mst_domain.range <vocab-infra-mst_policy-mst_region-mst_domain-range>`, {ref}`infra.vlan_pool.range <vocab-infra-vlan_pool-range>`, {ref}`infra.vsan_pool.range <vocab-infra-vsan_pool-range>`, {ref}`infra.vxlan_pool.range <vocab-infra-vxlan_pool-range>`
+Used by: {ref}`infra.mst_policy.mst_region.mst_domain.range <vocab-infra-mst_policy-mst_region-mst_domain-range>`, {ref}`infra.vlan_pool.range <vocab-infra-vlan_pool-range>`, {ref}`infra.vsan_pool.range <vocab-infra-vsan_pool-range>`, {ref}`infra.vxlan_pool.range <vocab-infra-vxlan_pool-range>`, {ref}`vmm_provider.vmm_dom.custom_epg_aggregator.range <vocab-vmm_provider-vmm_dom-custom_epg_aggregator-range>`, {ref}`vmm_provider.vmm_dom.epg_aggregator.range <vocab-vmm_provider-vmm_dom-epg_aggregator-range>`
 
 (enum-fvslatype)=
 
@@ -2278,6 +2358,19 @@ Used by: {ref}`tenant.hsrp_interface_policy <vocab-tenant-hsrp_interface_policy>
 | `v2` | — |
 
 Used by: {ref}`tenant.l3out.node_profile.interface_profile.hsrp_interface <vocab-tenant-l3out-node_profile-interface_profile-hsrp_interface>`
+
+(enum-hvsmanagedentitystatus)=
+
+## `HvsManagedEntityStatus`
+
+| value | meaning |
+| --- | --- |
+| `gray` | — |
+| `green` | — |
+| `red` | — |
+| `yellow` | — |
+
+Used by: {ref}`vmm_provider.vmm_dom.vmm_controller.host_availability_policy.host_desired_state <vocab-vmm_provider-vmm_dom-vmm_controller-host_availability_policy-host_desired_state>`
 
 (enum-infradrrmode)=
 
@@ -2743,6 +2836,18 @@ Used by: {ref}`fabric.zrp_policy <vocab-fabric-zrp_policy>`
 
 Used by: {ref}`tenant.ep_retention_policy <vocab-tenant-ep_retention_policy>`
 
+(enum-l2enfpref)=
+
+## `L2EnfPref`
+
+| value | meaning |
+| --- | --- |
+| `hw` | In hardware, which means the epg is in hair-pin mode, all packets come to iLeaf and there is no local switching in the hypervior (NS mode) |
+| `sw` | In software, which means that local switching can happen in the hypervisor (LS mode) |
+| `unknown` | Unknwown mode to support CLI operations Domain is put in unknown mode until set to sw/hw |
+
+Used by: {ref}`vmm_provider.vmm_dom <vocab-vmm_provider-vmm_dom>`
+
 (enum-l2epmovedetectmode)=
 
 ## `L2EpMoveDetectMode`
@@ -3042,6 +3147,46 @@ Used by: {ref}`tenant.l3out.node_profile.interface_profile.floating_svi.member_n
 | `est` | Established - combination of Ack and Reset |
 
 Used by: {ref}`tenant.filter.entry <vocab-tenant-filter-entry>`, {ref}`tenant.filter.port_zero_entry <vocab-tenant-filter-port_zero_entry>`
+
+(enum-lacpenlacpmode)=
+
+## `LacpEnLacpMode`
+
+| value | meaning |
+| --- | --- |
+| `active` | LACP active port channel |
+| `passive` | LACP passive port channel |
+
+Used by: {ref}`vmm_provider.vmm_dom.vswitch_policy_group.enhanced_lacp_policy <vocab-vmm_provider-vmm_dom-vswitch_policy_group-enhanced_lacp_policy>`
+
+(enum-lacplbmode)=
+
+## `LacpLBMode`
+
+| value | meaning |
+| --- | --- |
+| `dst-ip` | — |
+| `dst-ip-l4port` | — |
+| `dst-ip-l4port-vlan` | — |
+| `dst-ip-vlan` | — |
+| `dst-l4port` | — |
+| `dst-mac` | — |
+| `src-dst-ip` | — |
+| `src-dst-ip-l4port` | — |
+| `src-dst-ip-l4port-vlan` | — |
+| `src-dst-ip-vlan` | — |
+| `src-dst-l4port` | — |
+| `src-dst-mac` | — |
+| `src-ip` | — |
+| `src-ip-l4port` | — |
+| `src-ip-l4port-vlan` | — |
+| `src-ip-vlan` | — |
+| `src-l4port` | — |
+| `src-mac` | — |
+| `src-port-id` | — |
+| `vlan` | — |
+
+Used by: {ref}`vmm_provider.vmm_dom.vswitch_policy_group.enhanced_lacp_policy <vocab-vmm_provider-vmm_dom-vswitch_policy_group-enhanced_lacp_policy>`
 
 (enum-lacpmode)=
 
@@ -7525,6 +7670,172 @@ Used by: {ref}`controller.scheduler.recurring_window <vocab-controller-scheduler
 
 Used by: {ref}`controller.controller_maintenance_policy <vocab-controller-controller_maintenance_policy>`, {ref}`fabric.callhome_inventory_policy <vocab-fabric-callhome_inventory_policy>`, {ref}`fabric.catalog_maintenance_policy <vocab-fabric-catalog_maintenance_policy>`, {ref}`fabric.configuration_export_policy <vocab-fabric-configuration_export_policy>`, {ref}`fabric.configuration_import_policy <vocab-fabric-configuration_import_policy>`, {ref}`fabric.configuration_snapshot_manager_policy <vocab-fabric-configuration_snapshot_manager_policy>`, {ref}`fabric.configuration_snapshot_rollback_policy <vocab-fabric-configuration_snapshot_rollback_policy>`, {ref}`fabric.core_export_policy <vocab-fabric-core_export_policy>` *(+3 more)*
 
+(enum-vmmarplearning)=
+
+## `VmmARPLearning`
+
+| value | meaning |
+| --- | --- |
+| `disabled` | — |
+| `enabled` | — |
+
+Used by: {ref}`vmm_provider.vmm_dom <vocab-vmm_provider-vmm_dom>`
+
+(enum-vmmaccessmode)=
+
+## `VmmAccessMode`
+
+| value | meaning |
+| --- | --- |
+| `read-only` | — |
+| `read-write` | — |
+
+Used by: {ref}`vmm_provider.vmm_dom <vocab-vmm_provider-vmm_dom>`
+
+(enum-vmmaggrflags)=
+
+## `VmmAggrFlags`
+
+| value | meaning |
+| --- | --- |
+| `none` | — |
+| `skip-encap-validation` | — |
+| `skip-rel-to-eppd` | — |
+| `skip-vlan-pool-inheritance` | — |
+
+Used by: {ref}`vmm_provider.vmm_dom.custom_epg_aggregator <vocab-vmm_provider-vmm_dom-custom_epg_aggregator>`, {ref}`vmm_provider.vmm_dom.epg_aggregator <vocab-vmm_provider-vmm_dom-epg_aggregator>`
+
+(enum-vmmaosversion)=
+
+## `VmmAosVersion`
+
+| value | meaning |
+| --- | --- |
+| `6.5` | — |
+| `6.6` | — |
+| `unknown` | — |
+
+Used by: {ref}`vmm_provider.vmm_dom.vmm_controller <vocab-vmm_provider-vmm_dom-vmm_controller>`
+
+(enum-vmmctrlknob)=
+
+## `VmmCtrlKnob`
+
+| value | meaning |
+| --- | --- |
+| `none` | — |
+| `epDpVerify` | — |
+
+Used by: {ref}`vmm_provider.vmm_dom <vocab-vmm_provider-vmm_dom>`
+
+(enum-vmmdvsversion)=
+
+## `VmmDvsVersion`
+
+| value | meaning |
+| --- | --- |
+| `5.1` | — |
+| `5.5` | — |
+| `6.0` | — |
+| `6.5` | — |
+| `6.6` | — |
+| `7.0` | — |
+| `8.0` | — |
+| `not-applicable` | — |
+| `unmanaged` | — |
+
+Used by: {ref}`vmm_provider.vmm_dom.vmm_controller <vocab-vmm_provider-vmm_dom-vmm_controller>`
+
+(enum-vmmencapmode)=
+
+## `VmmEncapMode`
+
+| value | meaning |
+| --- | --- |
+| `ivxlan` | — |
+| `unknown` | — |
+| `vlan` | — |
+| `vxlan` | — |
+
+Used by: {ref}`vmm_provider.vmm_dom <vocab-vmm_provider-vmm_dom>`
+
+(enum-vmmencapmodepref)=
+
+## `VmmEncapModePref`
+
+| value | meaning |
+| --- | --- |
+| `unspecified` | — |
+| `vlan` | — |
+| `vxlan` | — |
+
+Used by: {ref}`vmm_provider.vmm_dom <vocab-vmm_provider-vmm_dom>`
+
+(enum-vmmepinventorytype)=
+
+## `VmmEpInventoryType`
+
+| value | meaning |
+| --- | --- |
+| `none` | No endpoints hsould be included in the inventory |
+| `on-link` | Inventory contains all endpoints that share a fabric uplink |
+
+Used by: {ref}`vmm_provider.vmm_dom <vocab-vmm_provider-vmm_dom>`
+
+(enum-vmmmode)=
+
+## `VmmMode`
+
+| value | meaning |
+| --- | --- |
+| `cf` | — |
+| `default` | — |
+| `k8s` | — |
+| `n1kv` | — |
+| `nsx` | — |
+| `nutanix_pc` | — |
+| `nutanix_pe` | — |
+| `openshift` | — |
+| `ovs` | — |
+| `rancher` | — |
+| `rhev` | — |
+| `unknown` | — |
+
+Used by: {ref}`vmm_provider.vmm_dom <vocab-vmm_provider-vmm_dom>`, {ref}`vmm_provider.vmm_dom.vmm_controller <vocab-vmm_provider-vmm_dom-vmm_controller>`
+
+(enum-vmmn1kvstatsmode)=
+
+## `VmmN1KVStatsMode`
+
+| value | meaning |
+| --- | --- |
+| `disabled` | — |
+| `enabled` | — |
+| `unknown` | — |
+
+Used by: {ref}`vmm_provider.vmm_dom.vmm_controller <vocab-vmm_provider-vmm_dom-vmm_controller>`
+
+(enum-vmmscope)=
+
+## `VmmScope`
+
+| value | meaning |
+| --- | --- |
+| `MicrosoftSCVMM` | — |
+| `cloudfoundry` | — |
+| `iaas` | — |
+| `kubernetes` | — |
+| `network` | — |
+| `nsx` | — |
+| `nutanix` | — |
+| `openshift` | — |
+| `openstack` | — |
+| `rhev` | — |
+| `unmanaged` | — |
+| `vm` | — |
+
+Used by: {ref}`vmm_provider.vmm_dom.vmm_controller <vocab-vmm_provider-vmm_dom-vmm_controller>`
+
 (enum-vmmstatsmode)=
 
 ## `VmmStatsMode`
@@ -7535,7 +7846,30 @@ Used by: {ref}`controller.controller_maintenance_policy <vocab-controller-contro
 | `enabled` | — |
 | `unknown` | — |
 
-Used by: {ref}`tenant.auth_server_group.server <vocab-tenant-auth_server_group-server>`
+Used by: {ref}`tenant.auth_server_group.server <vocab-tenant-auth_server_group-server>`, {ref}`vmm_provider.vmm_dom.vmm_controller <vocab-vmm_provider-vmm_dom-vmm_controller>`
+
+(enum-vmmtrigst)=
+
+## `VmmTrigSt`
+
+| value | meaning |
+| --- | --- |
+| `autoTriggered` | — |
+| `triggered` | — |
+| `untriggered` | — |
+
+Used by: {ref}`vmm_provider.vmm_dom.vmm_controller <vocab-vmm_provider-vmm_dom-vmm_controller>`, {ref}`vmm_provider.vmm_dom.vmm_controller.cluster_controller <vocab-vmm_provider-vmm_dom-vmm_controller-cluster_controller>`
+
+(enum-vmmvxlandeplpref)=
+
+## `VmmVxlanDeplPref`
+
+| value | meaning |
+| --- | --- |
+| `nsx` | — |
+| `vxlan` | — |
+
+Used by: {ref}`vmm_provider.vmm_dom.vmm_controller <vocab-vmm_provider-vmm_dom-vmm_controller>`
 
 (enum-vnsdesttype)=
 

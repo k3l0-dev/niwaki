@@ -118,6 +118,15 @@ _MAKER_RENAMES = {
     ("ctrlrInst", "fabric_membership"): "fabric_membership_policy",
     ("ctrlrInst", "controller_cores_policy"): "policy_for_cores_generated_at_ctrlrs",
     ("fabricSetupPol", "pod_setup"): "fabric_setup_policy_for_a_pod",
+    # VMM
+    ("polUni", "vmm_provider"): "provider_profile",
+    ("vmmDomP", "epg_aggregator"): "user_configurable_end_point_group_aggregator_definition",
+    ("vmmDomP", "custom_epg_aggregator"): "user_custom_end_point_group_aggregator_definition",
+    ("vmmUsrAggr", "range"): "ranges",
+    ("vmmUsrCustomAggr", "range"): "ranges",
+    ("vmmCtrlrP", "cluster_controller"): "vmm_cluster_controller",
+    ("vmmCtrlrP", "host_availability_policy"): "vmm_host_availibility_policy",
+    ("vmmCtrlrP", "ep_validator_policy"): "end_point_validator_policy",
     # On a dhcp_relay_policy cursor, .provider() reads naturally — the dhcp_
     # prefix is redundant at that position (same call as dnsProfile.provider).
     ("dhcpRelayP", "provider"): "dhcp_provider",

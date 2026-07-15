@@ -19,6 +19,7 @@ Every design is rooted at `polUni` (`design()`); the pages below cover one domai
 - `.l3_dom(name, **attrs)` → `l3extDomP`
 - `.l2_dom(name, **attrs)` → `l2extDomP`
 - `.fc_dom(name, **attrs)` → `fcDomP`
+- `.vmm_provider(vendor, **attrs)` → `vmmProvP`
 
 **Domains under `uni`**
 
@@ -37,6 +38,7 @@ fabric
 infra
 tenant
 controller
+vmm_provider
 uni
 enums
 navigation

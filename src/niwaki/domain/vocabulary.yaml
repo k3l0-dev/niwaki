@@ -224,6 +224,7 @@ makers:
     l3_dom: l3extDomP
     l2_dom: l2extDomP     # the domain an L2Out attaches to
     fc_dom: fcDomP        # Fibre Channel domain
+    vmm_provider: vmmProvP  # VMM vendor container (VMware / Microsoft / …)
 
   # ══ Tenant world ═══════════════════════════════════════════════════════════
   # Ordered like the APIC GUI tree under Tenants > <tenant>, so a new maker
@@ -1371,6 +1372,36 @@ makers:
   fabricSetupPol:
     pod_setup: fabricSetupP
 
+  # ── VMM domains (uni/vmmp-<vendor>) ─────────────────────────────────────────
+  # The provider (VMware / Microsoft / …) is a pre-existing per-vendor container;
+  # the domain, controller and vSwitch policies configure the integration.
+  # NOTE: pushing these lands the ACI-side config; a reachable vCenter / SCVMM is
+  # required for the controller to actually sync inventory.
+  vmmProvP:
+    vmm_dom: vmmDomP
+  vmmDomP:
+    vmm_controller: vmmCtrlrP
+    vmm_credential: vmmUsrAccP
+    vswitch_policy_group: vmmVSwitchPolicyCont
+    uplink_policy_container: vmmUplinkPCont
+    epg_aggregator: vmmUsrAggr
+    custom_epg_aggregator: vmmUsrCustomAggr
+  vmmCtrlrP:
+    cluster_controller: vmmClusterCtrlrP
+    host_availability_policy: vmmHvAvailPol
+    ep_validator_policy: vmmEpValidatorPol
+  vmmVSwitchPolicyCont:
+    enhanced_lacp_policy: lacpEnhancedLagPol
+  vmmUplinkPCont:
+    uplink_policy: vmmUplinkP
+  vmmHvAvailPol:
+    protect_vm_group: vmmProtectedVmGroup
+    host_desired_state: vmmHvDesiredSt
+  vmmUsrAggr:
+    range: fvnsEncapBlk
+  vmmUsrCustomAggr:
+    range: fvnsEncapBlk
+
 binds:
   # ── Multicast filters reference a PIM route-map (wave: 2026-07-15) ───────────
   # Each PIM/IGMP filter policy points at the pimRouteMapPol that defines what it
@@ -1727,6 +1758,26 @@ binds:
     policy_group: fabricSpCardPGrp
   fabricPodS:
     policy_group: fabricPodPGrp
+  # ── VMM domain default policies + vSwitch overrides ──────────────────────────
+  vmmDomP:
+    vlan_pool: fvnsVlanInstP
+    mcast_pool: fvnsMcastAddrInstP
+    address_pool: fvnsAddrInst
+    cdp: cdpIfPol
+    lldp: lldpIfPol
+    lacp: lacpLagPol
+    stp: stpIfPol
+    l2_mtu: l2InstPol
+    firewall: nwsFwPol
+  vmmVSwitchPolicyCont:
+    cdp: cdpIfPol
+    lldp: lldpIfPol
+    lacp: lacpLagPol
+    stp: stpIfPol
+    mcp: mcpIfPol
+    l2_mtu: l2InstPol
+    netflow: netflowVmmExporterPol
+    firewall: nwsFwPol
   # ── Fabric interface/protocol policies wired into the groups (F2) ────────────
   fabricLeNodePGrp:
     psu_redundancy: psuInstPol
@@ -1824,3 +1875,10 @@ sugar:
 
 atomic:
   - fabricExplicitGEp
+
+# Non-creatable path-only carriers: the APIC rejects a standalone POST or an
+# rsp-subtree read on them (a VMM provider is plugin-managed).  The push emits
+# no op for them; their declared children post at their full DNs and the plan
+# diffs those children instead.
+carrier:
+  - vmmProvP

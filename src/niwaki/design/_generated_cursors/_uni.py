@@ -22,6 +22,33 @@ from niwaki.design._cursor import Cursor, _prune
 from niwaki.design._node import Ref
 
 if TYPE_CHECKING:
+    from niwaki.models._generated.enums.CompAllocMode import CompAllocMode
+    from niwaki.models._generated.enums.CompConfigMode import CompConfigMode
+    from niwaki.models._generated.enums.CompVendor import CompVendor
+    from niwaki.models._generated.enums.CompmsftConfigIssues import CompmsftConfigIssues
+    from niwaki.models._generated.enums.FvClassPref import FvClassPref
+    from niwaki.models._generated.enums.FvImmediacy import FvImmediacy
+    from niwaki.models._generated.enums.FvnsBlkAllocMode import FvnsBlkAllocMode
+    from niwaki.models._generated.enums.FvnsBlkRole import FvnsBlkRole
+    from niwaki.models._generated.enums.HvsManagedEntityStatus import HvsManagedEntityStatus
+    from niwaki.models._generated.enums.L2EnfPref import L2EnfPref
+    from niwaki.models._generated.enums.LacpEnLacpMode import LacpEnLacpMode
+    from niwaki.models._generated.enums.LacpLBMode import LacpLBMode
+    from niwaki.models._generated.enums.VmmARPLearning import VmmARPLearning
+    from niwaki.models._generated.enums.VmmAccessMode import VmmAccessMode
+    from niwaki.models._generated.enums.VmmAggrFlags import VmmAggrFlags
+    from niwaki.models._generated.enums.VmmAosVersion import VmmAosVersion
+    from niwaki.models._generated.enums.VmmCtrlKnob import VmmCtrlKnob
+    from niwaki.models._generated.enums.VmmDvsVersion import VmmDvsVersion
+    from niwaki.models._generated.enums.VmmEncapMode import VmmEncapMode
+    from niwaki.models._generated.enums.VmmEncapModePref import VmmEncapModePref
+    from niwaki.models._generated.enums.VmmEpInventoryType import VmmEpInventoryType
+    from niwaki.models._generated.enums.VmmMode import VmmMode
+    from niwaki.models._generated.enums.VmmN1KVStatsMode import VmmN1KVStatsMode
+    from niwaki.models._generated.enums.VmmScope import VmmScope
+    from niwaki.models._generated.enums.VmmStatsMode import VmmStatsMode
+    from niwaki.models._generated.enums.VmmTrigSt import VmmTrigSt
+    from niwaki.models._generated.enums.VmmVxlanDeplPref import VmmVxlanDeplPref
     from niwaki.design._generated_cursors._controller import ControllerCursor
     from niwaki.design._generated_cursors._fabric import FabricCursor
     from niwaki.design._generated_cursors._infra import InfraCursor
@@ -294,6 +321,42 @@ class _UniMakers(Cursor):
             self._invoke_maker("fc_dom", (name,), _prune(params)),
         )
 
+    def vmm_provider(
+        self,
+        vendor: CompVendor | str,
+        *,
+        annotation: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> VmmProviderCursor:
+        """Declare a ``vmmProvP`` child under the uni level.
+
+        The VMM provider profile stores the policies of VMM systems from a particular vendor (VMware
+        or Microsoft). This container is automatically created by the system.
+
+        Args:
+            vendor: The provider profile vendor.
+            annotation: User annotation. Suggested format orchestrator:value
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "vendor",
+            )
+        }
+        return cast(
+            "VmmProviderCursor",
+            self._invoke_maker("vmm_provider", (vendor,), _prune(params)),
+        )
+
 
 class UniCursor(_UniMakers):
     """Typed cursor for ``polUni`` (uni level).
@@ -503,6 +566,1758 @@ class PhysDomCursor(_UniMakers):
         *,
         vlan_pool: str | Ref | None = None,
     ) -> PhysDomCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class _VmmProviderMakers(Cursor):
+    """Makers declared at the vmm_provider level (``vmmProvP``)."""
+
+    __slots__ = ()
+
+    def vmm_dom(
+        self,
+        name: str,
+        *,
+        delimiter: str | None = None,
+        access_mode: VmmAccessMode | str | None = None,
+        annotation: str | None = None,
+        arp_learning: frozenset[VmmARPLearning] | set[VmmARPLearning] | str | None = None,
+        ave_time_out_time_seconds: int | None = None,
+        configure_infra_port_group: bool | None = None,
+        ctrl_knob: frozenset[VmmCtrlKnob] | set[VmmCtrlKnob] | str | None = None,
+        custom_vswitch_name: str | None = None,
+        enable_ave_mode: bool | None = None,
+        enable_tag_data_retrieval: bool | None = None,
+        enable_vm_folder_data_retrieval: bool | None = None,
+        encap_mode: VmmEncapMode | str | None = None,
+        switching_preference: L2EnfPref | str | None = None,
+        ep_inventory_type: VmmEpInventoryType | str | None = None,
+        end_point_retention_time_seconds: int | None = None,
+        enable_host_availibility_monitoring: bool | None = None,
+        multicast_address: str | None = None,
+        virtual_switch: VmmMode | str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        default_encap_mode: VmmEncapModePref | str | None = None,
+        userdom: str | None = None,
+    ) -> VmmDomCursor:
+        """Declare a ``vmmDomP`` child under the vmm_provider level.
+
+        The VMM domain profile is a policy for grouping VM controllers with similar networking
+        policy requirements. For example, the VM controllers can share VLAN or VXLAN space and
+        application endpoint groups.
+
+        Args:
+            name: The domain profile name.
+            access_mode: Values: ``read-only``, ``read-write``. Default: ``read-write``.
+            annotation: User annotation. Suggested format orchestrator:value
+            arp_learning: Enable/Disable arp learning for AVS Domain Default:
+                ``PydanticUndefined``.
+            ave_time_out_time_seconds: Default: ``30``.
+            configure_infra_port_group: Default: ``False``.
+            ctrl_knob: Default: ``PydanticUndefined``.
+            enable_ave_mode: Default: ``False``.
+            enable_tag_data_retrieval: Default: ``False``.
+            enable_vm_folder_data_retrieval: Default: ``False``.
+            encap_mode: Values: ``ivxlan``, ``unknown``, ``vlan``, ``vxlan``. Default:
+                ``unknown``.
+            switching_preference: The switching enforcement preference. This determines whether
+                switches can be done within the virtual switch (Local Switching) or whether all
+                switched traffic must go through the fabric (No Local Switching). Values:
+                ``hw``, ``sw``, ``unknown``. Default: ``hw``.
+            ep_inventory_type: Values: ``none``, ``on-link``. Default: ``on-link``.
+            end_point_retention_time_seconds: Default: ``0``.
+            enable_host_availibility_monitoring: Default: ``False``.
+            multicast_address: The multicast address of the VMM domain profile.
+            virtual_switch: The switch to be used for the domain profile. Values: ``cf``,
+                ``default``, ``k8s``, ``n1kv``, ``nsx``, ``nutanix_pc``, ``nutanix_pe``,
+                ``openshift``, …. Default: ``default``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            default_encap_mode: Values: ``unspecified``, ``vlan``, ``vxlan``. Default:
+                ``unspecified``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "VmmDomCursor",
+            self._invoke_maker("vmm_dom", (name,), _prune(params)),
+        )
+
+
+class VmmProviderCursor(_VmmProviderMakers, _UniMakers):
+    """Typed cursor for ``vmmProvP`` (vmm_provider level).
+
+    Position: ``uni.vmm_provider``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> VmmProviderCursor:
+        """Set ``vmmProvP`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class _VmmDomMakers(Cursor):
+    """Makers declared at the vmm_dom level (``vmmDomP``)."""
+
+    __slots__ = ()
+
+    def vmm_controller(
+        self,
+        name: str,
+        *,
+        hostname_or_ip_address: str | None = None,
+        annotation: str | None = None,
+        aos_version: VmmAosVersion | str | None = None,
+        dvs_version: VmmDvsVersion | str | None = None,
+        triggered_inventory_sync_status: VmmTrigSt | str | None = None,
+        mode: VmmMode | str | None = None,
+        msft_config_err_msg: str | None = None,
+        configissues: frozenset[CompmsftConfigIssues]
+        | set[CompmsftConfigIssues]
+        | str
+        | None = None,
+        n1kv_stats_mode: VmmN1KVStatsMode | str | None = None,
+        display_name: str | None = None,
+        port: int | None = None,
+        datacenter: str | None = None,
+        type: VmmScope | str | None = None,
+        seq_num: int | None = None,
+        stats_collection: VmmStatsMode | str | None = None,
+        userdom: str | None = None,
+        vxlan_deployment_preference: VmmVxlanDeplPref | str | None = None,
+    ) -> VmmControllerCursor:
+        """Declare a ``vmmCtrlrP`` child under the vmm_dom level.
+
+        The VMM controller profile specifies how to connect to a single VM management controller
+        that is part of a policy enforcement domain. For example, the VMM controller profile could
+        be a policy to connect a VMware vCenter that is part of a VMM domain.
+
+        Args:
+            name: The name of the controller profile.
+            hostname_or_ip_address: Host or IP
+            annotation: User annotation. Suggested format orchestrator:value
+            aos_version: version of aos Values: ``6.5``, ``6.6``, ``unknown``. Default:
+                ``unknown``.
+            dvs_version: Values: ``5.1``, ``5.5``, ``6.0``, ``6.5``, ``6.6``, ``7.0``, ``8.0``,
+                ``not-applicable``, …. Default: ``unmanaged``.
+            triggered_inventory_sync_status: Values: ``autoTriggered``, ``triggered``,
+                ``untriggered``. Default: ``untriggered``.
+            mode: The mode of operation. Values: ``cf``, ``default``, ``k8s``, ``n1kv``,
+                ``nsx``, ``nutanix_pc``, ``nutanix_pe``, ``openshift``, …. Default: ``default``.
+            msft_config_err_msg: Deployment Error Message of Mirosoft Plugin SCVM Controller. It
+                captures error message encountered in SCVMM Controller plugin.This error message
+                represents specific details for bitmask based msftConfigIssues fault.
+            configissues: Default: ``PydanticUndefined``.
+            n1kv_stats_mode: n1kv statistics enable Values: ``disabled``, ``enabled``,
+                ``unknown``. Default: ``enabled``.
+            port: Port Default: ``0``.
+            datacenter: Top level container name.
+            type: The VMM control policy scope. Values: ``MicrosoftSCVMM``, ``cloudfoundry``,
+                ``iaas``, ``kubernetes``, ``network``, ``nsx``, ``nutanix``, ``openshift``, ….
+                Default: ``vm``.
+            seq_num: An ISIS link-state packet sequence number. Default: ``0``.
+            stats_collection: The statistics mode. Values: ``disabled``, ``enabled``,
+                ``unknown``. Default: ``disabled``.
+            vxlan_deployment_preference: Values: ``nsx``, ``vxlan``. Default: ``vxlan``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "VmmControllerCursor",
+            self._invoke_maker("vmm_controller", (name,), _prune(params)),
+        )
+
+    def vmm_credential(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        password: str | None = None,
+        userdom: str | None = None,
+        username: str | None = None,
+    ) -> VmmCredentialCursor:
+        """Declare a ``vmmUsrAccP`` child under the vmm_dom level.
+
+        The user account profile is used to access a VM provider account.
+
+        Args:
+            name: The user account profile name.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            password: Pwd
+            username: User
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "VmmCredentialCursor",
+            self._invoke_maker("vmm_credential", (name,), _prune(params)),
+        )
+
+    def vswitch_policy_group(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> VswitchPolicyGroupCursor:
+        """Declare a ``vmmVSwitchPolicyCont`` child under the vmm_dom level.
+
+        VSwitch Policy Group. Container for the vswitch policies
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Additional descriptive information about the object.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "VswitchPolicyGroupCursor",
+            self._invoke_maker("vswitch_policy_group", (), _prune(params)),
+        )
+
+    def uplink_policy_container(
+        self,
+        *,
+        annotation: str | None = None,
+        id: int | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        number_of_uplinks: str | None = None,
+        userdom: str | None = None,
+    ) -> UplinkPolicyContainerCursor:
+        """Declare a ``vmmUplinkPCont`` child under the vmm_dom level.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            id: An identifier . Default: ``0``.
+            name: The name of the object.
+            number_of_uplinks: Number of uplinks
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "UplinkPolicyContainerCursor",
+            self._invoke_maker("uplink_policy_container", (), _prune(params)),
+        )
+
+    def epg_aggregator(
+        self,
+        name: str,
+        *,
+        aggr_imedcy: FvImmediacy | str | None = None,
+        alloc_mode: CompAllocMode | str | None = None,
+        annotation: str | None = None,
+        classification_preference: FvClassPref | str | None = None,
+        description: str | None = None,
+        feature_flags: frozenset[VmmAggrFlags] | set[VmmAggrFlags] | str | None = None,
+        forged_transmit_setting: CompConfigMode | str | None = None,
+        ident_consumer_dn: str | None = None,
+        mac_address_changes_setting: CompConfigMode | str | None = None,
+        display_name: str | None = None,
+        promiscous_mode_setting: CompConfigMode | str | None = None,
+        untagged_access_port: bool | None = None,
+        userdom: str | None = None,
+    ) -> EpgAggregatorCursor:
+        """Declare a ``vmmUsrAggr`` child under the vmm_dom level.
+
+        User configurable EPG Aggregator Object @@@ This is managed by PolicyMgr
+
+        Args:
+            name: The name of the object.
+            aggr_imedcy: Values: ``immediate``, ``lazy``. Default: ``lazy``.
+            alloc_mode: Values: ``dynamic``, ``static``. Default: ``dynamic``.
+            annotation: User annotation. Suggested format orchestrator:value
+            classification_preference: Classification Preference Values: ``encap``, ``useg``.
+                Default: ``encap``.
+            description: Additional descriptive information about the object.
+            feature_flags: Default: ``PydanticUndefined``.
+            forged_transmit_setting: Forged Transmits setting Values: ``Disabled``, ``Enabled``.
+                Default: ``Enabled``.
+            ident_consumer_dn: Id Consumer DN used for encap allocation @@@ set to vmmEpPDDn by
+                default @@@ set to vmmEncapAllctr Dn when allocator is used for enacp allocation
+            mac_address_changes_setting: MAC address changes setting Values: ``Disabled``,
+                ``Enabled``. Default: ``Enabled``.
+            promiscous_mode_setting: Promiscous mode setting Values: ``Disabled``, ``Enabled``.
+                Default: ``Disabled``.
+            untagged_access_port: Untagged Access port Default: ``False``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "EpgAggregatorCursor",
+            self._invoke_maker("epg_aggregator", (name,), _prune(params)),
+        )
+
+    def custom_epg_aggregator(
+        self,
+        name: str,
+        *,
+        aggr_imedcy: FvImmediacy | str | None = None,
+        alloc_mode: CompAllocMode | str | None = None,
+        annotation: str | None = None,
+        classification_preference: FvClassPref | str | None = None,
+        description: str | None = None,
+        feature_flags: frozenset[VmmAggrFlags] | set[VmmAggrFlags] | str | None = None,
+        forged_transmit_setting: CompConfigMode | str | None = None,
+        ident_consumer_dn: str | None = None,
+        mac_address_changes_setting: CompConfigMode | str | None = None,
+        display_name: str | None = None,
+        promiscous_mode_setting: CompConfigMode | str | None = None,
+        untagged_access_port: bool | None = None,
+        userdom: str | None = None,
+    ) -> CustomEpgAggregatorCursor:
+        """Declare a ``vmmUsrCustomAggr`` child under the vmm_dom level.
+
+        Args:
+            name: The name of the object.
+            aggr_imedcy: Values: ``immediate``, ``lazy``. Default: ``lazy``.
+            alloc_mode: Values: ``dynamic``, ``static``. Default: ``dynamic``.
+            annotation: User annotation. Suggested format orchestrator:value
+            classification_preference: Classification Preference Values: ``encap``, ``useg``.
+                Default: ``encap``.
+            description: Additional descriptive information about the object.
+            feature_flags: Default: ``PydanticUndefined``.
+            forged_transmit_setting: Forged Transmits setting Values: ``Disabled``, ``Enabled``.
+                Default: ``Enabled``.
+            ident_consumer_dn: Id Consumer DN used for encap allocation @@@ set to vmmEpPDDn by
+                default @@@ set to vmmEncapAllctr Dn when allocator is used for enacp allocation
+            mac_address_changes_setting: MAC address changes setting Values: ``Disabled``,
+                ``Enabled``. Default: ``Enabled``.
+            promiscous_mode_setting: Promiscous mode setting Values: ``Disabled``, ``Enabled``.
+                Default: ``Disabled``.
+            untagged_access_port: Untagged Access port Default: ``False``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "CustomEpgAggregatorCursor",
+            self._invoke_maker("custom_epg_aggregator", (name,), _prune(params)),
+        )
+
+
+class VmmDomCursor(_VmmDomMakers, _VmmProviderMakers, _UniMakers):
+    """Typed cursor for ``vmmDomP`` (vmm_dom level).
+
+    Position: ``uni.vmm_provider.vmm_dom``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        delimiter: str | None = None,
+        access_mode: VmmAccessMode | str | None = None,
+        annotation: str | None = None,
+        arp_learning: frozenset[VmmARPLearning] | set[VmmARPLearning] | str | None = None,
+        ave_time_out_time_seconds: int | None = None,
+        configure_infra_port_group: bool | None = None,
+        ctrl_knob: frozenset[VmmCtrlKnob] | set[VmmCtrlKnob] | str | None = None,
+        custom_vswitch_name: str | None = None,
+        enable_ave_mode: bool | None = None,
+        enable_tag_data_retrieval: bool | None = None,
+        enable_vm_folder_data_retrieval: bool | None = None,
+        encap_mode: VmmEncapMode | str | None = None,
+        switching_preference: L2EnfPref | str | None = None,
+        ep_inventory_type: VmmEpInventoryType | str | None = None,
+        end_point_retention_time_seconds: int | None = None,
+        enable_host_availibility_monitoring: bool | None = None,
+        multicast_address: str | None = None,
+        virtual_switch: VmmMode | str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        default_encap_mode: VmmEncapModePref | str | None = None,
+        userdom: str | None = None,
+    ) -> VmmDomCursor:
+        """Set ``vmmDomP`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        vlan_pool: str | Ref | None = None,
+        mcast_pool: str | Ref | None = None,
+        address_pool: str | Ref | None = None,
+        cdp: str | Ref | None = None,
+        lldp: str | Ref | None = None,
+        lacp: str | Ref | None = None,
+        stp: str | Ref | None = None,
+        l2_mtu: str | Ref | None = None,
+        firewall: str | Ref | None = None,
+    ) -> VmmDomCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        vlan_pool: str | Ref | None = None,
+        mcast_pool: str | Ref | None = None,
+        address_pool: str | Ref | None = None,
+    ) -> VmmDomCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class _CustomEpgAggregatorMakers(Cursor):
+    """Makers declared at the custom_epg_aggregator level (``vmmUsrCustomAggr``)."""
+
+    __slots__ = ()
+
+    def range(
+        self,
+        from_: str,
+        to: str,
+        *,
+        allocation_mode: FvnsBlkAllocMode | str | None = None,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        role: FvnsBlkRole | str | None = None,
+        userdom: str | None = None,
+    ) -> CustomEpgAggregatorRangeCursor:
+        """Declare a ``fvnsEncapBlk`` child under the custom_epg_aggregator level.
+
+        The VLAN encapsulation block.
+
+        Args:
+            from_: Start of the encapsulation block.
+            to: End of the encapsulation block.
+            allocation_mode: Values: ``dynamic``, ``inherit``, ``static``. Default: ``inherit``.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            role: Role of the block. @@@ used only for domain in AVE mode @@@ external: On-the-
+                wire encap. PVLAN/Access determined by the domain @@@ Internal: Encaps used
+                internally Values: ``external``, ``internal``. Default: ``external``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "from_",
+                "to",
+            )
+        }
+        return cast(
+            "CustomEpgAggregatorRangeCursor",
+            self._invoke_maker(
+                "range",
+                (
+                    from_,
+                    to,
+                ),
+                _prune(params),
+            ),
+        )
+
+
+class CustomEpgAggregatorCursor(
+    _CustomEpgAggregatorMakers, _VmmDomMakers, _VmmProviderMakers, _UniMakers
+):
+    """Typed cursor for ``vmmUsrCustomAggr`` (custom_epg_aggregator level).
+
+    Position: ``uni.vmm_provider.vmm_dom.custom_epg_aggregator``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        aggr_imedcy: FvImmediacy | str | None = None,
+        alloc_mode: CompAllocMode | str | None = None,
+        annotation: str | None = None,
+        classification_preference: FvClassPref | str | None = None,
+        description: str | None = None,
+        feature_flags: frozenset[VmmAggrFlags] | set[VmmAggrFlags] | str | None = None,
+        forged_transmit_setting: CompConfigMode | str | None = None,
+        ident_consumer_dn: str | None = None,
+        mac_address_changes_setting: CompConfigMode | str | None = None,
+        display_name: str | None = None,
+        promiscous_mode_setting: CompConfigMode | str | None = None,
+        untagged_access_port: bool | None = None,
+        userdom: str | None = None,
+    ) -> CustomEpgAggregatorCursor:
+        """Set ``vmmUsrCustomAggr`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        vlan_pool: str | Ref | None = None,
+        mcast_pool: str | Ref | None = None,
+        address_pool: str | Ref | None = None,
+        cdp: str | Ref | None = None,
+        lldp: str | Ref | None = None,
+        lacp: str | Ref | None = None,
+        stp: str | Ref | None = None,
+        l2_mtu: str | Ref | None = None,
+        firewall: str | Ref | None = None,
+    ) -> CustomEpgAggregatorCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        vlan_pool: str | Ref | None = None,
+        mcast_pool: str | Ref | None = None,
+        address_pool: str | Ref | None = None,
+    ) -> CustomEpgAggregatorCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class _EpgAggregatorMakers(Cursor):
+    """Makers declared at the epg_aggregator level (``vmmUsrAggr``)."""
+
+    __slots__ = ()
+
+    def range(
+        self,
+        from_: str,
+        to: str,
+        *,
+        allocation_mode: FvnsBlkAllocMode | str | None = None,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        role: FvnsBlkRole | str | None = None,
+        userdom: str | None = None,
+    ) -> EpgAggregatorRangeCursor:
+        """Declare a ``fvnsEncapBlk`` child under the epg_aggregator level.
+
+        The VLAN encapsulation block.
+
+        Args:
+            from_: Start of the encapsulation block.
+            to: End of the encapsulation block.
+            allocation_mode: Values: ``dynamic``, ``inherit``, ``static``. Default: ``inherit``.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            role: Role of the block. @@@ used only for domain in AVE mode @@@ external: On-the-
+                wire encap. PVLAN/Access determined by the domain @@@ Internal: Encaps used
+                internally Values: ``external``, ``internal``. Default: ``external``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "from_",
+                "to",
+            )
+        }
+        return cast(
+            "EpgAggregatorRangeCursor",
+            self._invoke_maker(
+                "range",
+                (
+                    from_,
+                    to,
+                ),
+                _prune(params),
+            ),
+        )
+
+
+class EpgAggregatorCursor(_EpgAggregatorMakers, _VmmDomMakers, _VmmProviderMakers, _UniMakers):
+    """Typed cursor for ``vmmUsrAggr`` (epg_aggregator level).
+
+    Position: ``uni.vmm_provider.vmm_dom.epg_aggregator``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        aggr_imedcy: FvImmediacy | str | None = None,
+        alloc_mode: CompAllocMode | str | None = None,
+        annotation: str | None = None,
+        classification_preference: FvClassPref | str | None = None,
+        description: str | None = None,
+        feature_flags: frozenset[VmmAggrFlags] | set[VmmAggrFlags] | str | None = None,
+        forged_transmit_setting: CompConfigMode | str | None = None,
+        ident_consumer_dn: str | None = None,
+        mac_address_changes_setting: CompConfigMode | str | None = None,
+        display_name: str | None = None,
+        promiscous_mode_setting: CompConfigMode | str | None = None,
+        untagged_access_port: bool | None = None,
+        userdom: str | None = None,
+    ) -> EpgAggregatorCursor:
+        """Set ``vmmUsrAggr`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        vlan_pool: str | Ref | None = None,
+        mcast_pool: str | Ref | None = None,
+        address_pool: str | Ref | None = None,
+        cdp: str | Ref | None = None,
+        lldp: str | Ref | None = None,
+        lacp: str | Ref | None = None,
+        stp: str | Ref | None = None,
+        l2_mtu: str | Ref | None = None,
+        firewall: str | Ref | None = None,
+    ) -> EpgAggregatorCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        vlan_pool: str | Ref | None = None,
+        mcast_pool: str | Ref | None = None,
+        address_pool: str | Ref | None = None,
+    ) -> EpgAggregatorCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class _UplinkPolicyContainerMakers(Cursor):
+    """Makers declared at the uplink_policy_container level (``vmmUplinkPCont``)."""
+
+    __slots__ = ()
+
+    def uplink_policy(
+        self,
+        uplink_id: int,
+        *,
+        annotation: str | None = None,
+        id: int | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        uplink_name: str | None = None,
+        userdom: str | None = None,
+    ) -> UplinkPolicyCursor:
+        """Declare a ``vmmUplinkP`` child under the uplink_policy_container level.
+
+        Args:
+            uplink_id: Uplink ID
+            annotation: User annotation. Suggested format orchestrator:value
+            id: An identifier . Default: ``0``.
+            name: The name of the object.
+            uplink_name: Uplink Name
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "uplink_id",
+            )
+        }
+        return cast(
+            "UplinkPolicyCursor",
+            self._invoke_maker("uplink_policy", (uplink_id,), _prune(params)),
+        )
+
+
+class UplinkPolicyContainerCursor(
+    _UplinkPolicyContainerMakers, _VmmDomMakers, _VmmProviderMakers, _UniMakers
+):
+    """Typed cursor for ``vmmUplinkPCont`` (uplink_policy_container level).
+
+    Position: ``uni.vmm_provider.vmm_dom.uplink_policy_container``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        id: int | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        number_of_uplinks: str | None = None,
+        userdom: str | None = None,
+    ) -> UplinkPolicyContainerCursor:
+        """Set ``vmmUplinkPCont`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        vlan_pool: str | Ref | None = None,
+        mcast_pool: str | Ref | None = None,
+        address_pool: str | Ref | None = None,
+        cdp: str | Ref | None = None,
+        lldp: str | Ref | None = None,
+        lacp: str | Ref | None = None,
+        stp: str | Ref | None = None,
+        l2_mtu: str | Ref | None = None,
+        firewall: str | Ref | None = None,
+    ) -> UplinkPolicyContainerCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        vlan_pool: str | Ref | None = None,
+        mcast_pool: str | Ref | None = None,
+        address_pool: str | Ref | None = None,
+    ) -> UplinkPolicyContainerCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class _VmmControllerMakers(Cursor):
+    """Makers declared at the vmm_controller level (``vmmCtrlrP``)."""
+
+    __slots__ = ()
+
+    def cluster_controller(
+        self,
+        name: str,
+        *,
+        hostname_or_ip_address: str | None = None,
+        annotation: str | None = None,
+        triggered_inventory_sync_status: VmmTrigSt | str | None = None,
+        msft_config_err_msg: str | None = None,
+        msft_config_issues: frozenset[CompmsftConfigIssues]
+        | set[CompmsftConfigIssues]
+        | str
+        | None = None,
+        display_name: str | None = None,
+        port: int | None = None,
+        datacenter: str | None = None,
+        userdom: str | None = None,
+    ) -> ClusterControllerCursor:
+        """Declare a ``vmmClusterCtrlrP`` child under the vmm_controller level.
+
+        Args:
+            name: The name of the object.
+            hostname_or_ip_address: Host or IP
+            annotation: User annotation. Suggested format orchestrator:value
+            triggered_inventory_sync_status: Values: ``autoTriggered``, ``triggered``,
+                ``untriggered``. Default: ``untriggered``.
+            msft_config_err_msg: Deployment Error Message of Mirosoft Plugin SCVM Controller. It
+                captures error message encountered in SCVMM Controller plugin.This error message
+                represents specific details for bitmask based msftConfigIssues fault.
+            msft_config_issues: Default: ``PydanticUndefined``.
+            port: Port Default: ``0``.
+            datacenter: Top level container name.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "ClusterControllerCursor",
+            self._invoke_maker("cluster_controller", (name,), _prune(params)),
+        )
+
+    def host_availability_policy(
+        self,
+        *,
+        annotation: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> HostAvailabilityPolicyCursor:
+        """Declare a ``vmmHvAvailPol`` child under the vmm_controller level.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "HostAvailabilityPolicyCursor",
+            self._invoke_maker("host_availability_policy", (), _prune(params)),
+        )
+
+    def ep_validator_policy(
+        self,
+        *,
+        annotation: str | None = None,
+        current_key: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        previous_key: str | None = None,
+        userdom: str | None = None,
+    ) -> EpValidatorPolicyCursor:
+        """Declare a ``vmmEpValidatorPol`` child under the vmm_controller level.
+
+        Currently only used by OpenStack VMMs
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "EpValidatorPolicyCursor",
+            self._invoke_maker("ep_validator_policy", (), _prune(params)),
+        )
+
+
+class VmmControllerCursor(_VmmControllerMakers, _VmmDomMakers, _VmmProviderMakers, _UniMakers):
+    """Typed cursor for ``vmmCtrlrP`` (vmm_controller level).
+
+    Position: ``uni.vmm_provider.vmm_dom.vmm_controller``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        hostname_or_ip_address: str | None = None,
+        annotation: str | None = None,
+        aos_version: VmmAosVersion | str | None = None,
+        dvs_version: VmmDvsVersion | str | None = None,
+        triggered_inventory_sync_status: VmmTrigSt | str | None = None,
+        mode: VmmMode | str | None = None,
+        msft_config_err_msg: str | None = None,
+        configissues: frozenset[CompmsftConfigIssues]
+        | set[CompmsftConfigIssues]
+        | str
+        | None = None,
+        n1kv_stats_mode: VmmN1KVStatsMode | str | None = None,
+        display_name: str | None = None,
+        port: int | None = None,
+        datacenter: str | None = None,
+        type: VmmScope | str | None = None,
+        seq_num: int | None = None,
+        stats_collection: VmmStatsMode | str | None = None,
+        userdom: str | None = None,
+        vxlan_deployment_preference: VmmVxlanDeplPref | str | None = None,
+    ) -> VmmControllerCursor:
+        """Set ``vmmCtrlrP`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        vlan_pool: str | Ref | None = None,
+        mcast_pool: str | Ref | None = None,
+        address_pool: str | Ref | None = None,
+        cdp: str | Ref | None = None,
+        lldp: str | Ref | None = None,
+        lacp: str | Ref | None = None,
+        stp: str | Ref | None = None,
+        l2_mtu: str | Ref | None = None,
+        firewall: str | Ref | None = None,
+    ) -> VmmControllerCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        vlan_pool: str | Ref | None = None,
+        mcast_pool: str | Ref | None = None,
+        address_pool: str | Ref | None = None,
+    ) -> VmmControllerCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class VmmCredentialCursor(_VmmDomMakers, _VmmProviderMakers, _UniMakers):
+    """Typed cursor for ``vmmUsrAccP`` (vmm_credential level).
+
+    Position: ``uni.vmm_provider.vmm_dom.vmm_credential``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        password: str | None = None,
+        userdom: str | None = None,
+        username: str | None = None,
+    ) -> VmmCredentialCursor:
+        """Set ``vmmUsrAccP`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        vlan_pool: str | Ref | None = None,
+        mcast_pool: str | Ref | None = None,
+        address_pool: str | Ref | None = None,
+        cdp: str | Ref | None = None,
+        lldp: str | Ref | None = None,
+        lacp: str | Ref | None = None,
+        stp: str | Ref | None = None,
+        l2_mtu: str | Ref | None = None,
+        firewall: str | Ref | None = None,
+    ) -> VmmCredentialCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        vlan_pool: str | Ref | None = None,
+        mcast_pool: str | Ref | None = None,
+        address_pool: str | Ref | None = None,
+    ) -> VmmCredentialCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class _VswitchPolicyGroupMakers(Cursor):
+    """Makers declared at the vswitch_policy_group level (``vmmVSwitchPolicyCont``)."""
+
+    __slots__ = ()
+
+    def enhanced_lacp_policy(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        id: int | None = None,
+        loadbalancing_mode: LacpLBMode | str | None = None,
+        lacp_mode: LacpEnLacpMode | str | None = None,
+        display_name: str | None = None,
+        number_of_links: int | None = None,
+        userdom: str | None = None,
+    ) -> EnhancedLacpPolicyCursor:
+        """Declare a ``lacpEnhancedLagPol`` child under the vswitch_policy_group level.
+
+        Args:
+            name: The name of the object.
+            annotation: User annotation. Suggested format orchestrator:value
+            id: An identifier . Default: ``0``.
+            loadbalancing_mode: Load Balancing mode Values: ``dst-ip``, ``dst-ip-l4port``,
+                ``dst-ip-l4port-vlan``, ``dst-ip-vlan``, ``dst-l4port``, ``dst-mac``, ``src-dst-
+                ip``, ``src-dst-ip-l4port``, …. Default: ``src-dst-ip``.
+            lacp_mode: Enhanced LACP mode Values: ``active``, ``passive``. Default: ``active``.
+            number_of_links: Number of Links Default: ``2``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "EnhancedLacpPolicyCursor",
+            self._invoke_maker("enhanced_lacp_policy", (name,), _prune(params)),
+        )
+
+
+class VswitchPolicyGroupCursor(
+    _VswitchPolicyGroupMakers, _VmmDomMakers, _VmmProviderMakers, _UniMakers
+):
+    """Typed cursor for ``vmmVSwitchPolicyCont`` (vswitch_policy_group level).
+
+    Position: ``uni.vmm_provider.vmm_dom.vswitch_policy_group``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> VswitchPolicyGroupCursor:
+        """Set ``vmmVSwitchPolicyCont`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        cdp: str | Ref | None = None,
+        lldp: str | Ref | None = None,
+        lacp: str | Ref | None = None,
+        stp: str | Ref | None = None,
+        mcp: str | Ref | None = None,
+        l2_mtu: str | Ref | None = None,
+        netflow: str | Ref | None = None,
+        firewall: str | Ref | None = None,
+        vlan_pool: str | Ref | None = None,
+        mcast_pool: str | Ref | None = None,
+        address_pool: str | Ref | None = None,
+    ) -> VswitchPolicyGroupCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        cdp: str | Ref | None = None,
+        lldp: str | Ref | None = None,
+        lacp: str | Ref | None = None,
+        stp: str | Ref | None = None,
+        mcp: str | Ref | None = None,
+        l2_mtu: str | Ref | None = None,
+        netflow: str | Ref | None = None,
+        firewall: str | Ref | None = None,
+        vlan_pool: str | Ref | None = None,
+        mcast_pool: str | Ref | None = None,
+        address_pool: str | Ref | None = None,
+    ) -> VswitchPolicyGroupCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class CustomEpgAggregatorRangeCursor(
+    _CustomEpgAggregatorMakers, _VmmDomMakers, _VmmProviderMakers, _UniMakers
+):
+    """Typed cursor for ``fvnsEncapBlk`` (range level).
+
+    Position: ``uni.vmm_provider.vmm_dom.custom_epg_aggregator.range``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        allocation_mode: FvnsBlkAllocMode | str | None = None,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        role: FvnsBlkRole | str | None = None,
+        userdom: str | None = None,
+    ) -> CustomEpgAggregatorRangeCursor:
+        """Set ``fvnsEncapBlk`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        vlan_pool: str | Ref | None = None,
+        mcast_pool: str | Ref | None = None,
+        address_pool: str | Ref | None = None,
+        cdp: str | Ref | None = None,
+        lldp: str | Ref | None = None,
+        lacp: str | Ref | None = None,
+        stp: str | Ref | None = None,
+        l2_mtu: str | Ref | None = None,
+        firewall: str | Ref | None = None,
+    ) -> CustomEpgAggregatorRangeCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        vlan_pool: str | Ref | None = None,
+        mcast_pool: str | Ref | None = None,
+        address_pool: str | Ref | None = None,
+    ) -> CustomEpgAggregatorRangeCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class EpgAggregatorRangeCursor(_EpgAggregatorMakers, _VmmDomMakers, _VmmProviderMakers, _UniMakers):
+    """Typed cursor for ``fvnsEncapBlk`` (range level).
+
+    Position: ``uni.vmm_provider.vmm_dom.epg_aggregator.range``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        allocation_mode: FvnsBlkAllocMode | str | None = None,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        role: FvnsBlkRole | str | None = None,
+        userdom: str | None = None,
+    ) -> EpgAggregatorRangeCursor:
+        """Set ``fvnsEncapBlk`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        vlan_pool: str | Ref | None = None,
+        mcast_pool: str | Ref | None = None,
+        address_pool: str | Ref | None = None,
+        cdp: str | Ref | None = None,
+        lldp: str | Ref | None = None,
+        lacp: str | Ref | None = None,
+        stp: str | Ref | None = None,
+        l2_mtu: str | Ref | None = None,
+        firewall: str | Ref | None = None,
+    ) -> EpgAggregatorRangeCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        vlan_pool: str | Ref | None = None,
+        mcast_pool: str | Ref | None = None,
+        address_pool: str | Ref | None = None,
+    ) -> EpgAggregatorRangeCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class UplinkPolicyCursor(
+    _UplinkPolicyContainerMakers, _VmmDomMakers, _VmmProviderMakers, _UniMakers
+):
+    """Typed cursor for ``vmmUplinkP`` (uplink_policy level).
+
+    Position: ``uni.vmm_provider.vmm_dom.uplink_policy_container.uplink_policy``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        id: int | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        uplink_name: str | None = None,
+        userdom: str | None = None,
+    ) -> UplinkPolicyCursor:
+        """Set ``vmmUplinkP`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        vlan_pool: str | Ref | None = None,
+        mcast_pool: str | Ref | None = None,
+        address_pool: str | Ref | None = None,
+        cdp: str | Ref | None = None,
+        lldp: str | Ref | None = None,
+        lacp: str | Ref | None = None,
+        stp: str | Ref | None = None,
+        l2_mtu: str | Ref | None = None,
+        firewall: str | Ref | None = None,
+    ) -> UplinkPolicyCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        vlan_pool: str | Ref | None = None,
+        mcast_pool: str | Ref | None = None,
+        address_pool: str | Ref | None = None,
+    ) -> UplinkPolicyCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class ClusterControllerCursor(_VmmControllerMakers, _VmmDomMakers, _VmmProviderMakers, _UniMakers):
+    """Typed cursor for ``vmmClusterCtrlrP`` (cluster_controller level).
+
+    Position: ``uni.vmm_provider.vmm_dom.vmm_controller.cluster_controller``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        hostname_or_ip_address: str | None = None,
+        annotation: str | None = None,
+        triggered_inventory_sync_status: VmmTrigSt | str | None = None,
+        msft_config_err_msg: str | None = None,
+        msft_config_issues: frozenset[CompmsftConfigIssues]
+        | set[CompmsftConfigIssues]
+        | str
+        | None = None,
+        display_name: str | None = None,
+        port: int | None = None,
+        datacenter: str | None = None,
+        userdom: str | None = None,
+    ) -> ClusterControllerCursor:
+        """Set ``vmmClusterCtrlrP`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        vlan_pool: str | Ref | None = None,
+        mcast_pool: str | Ref | None = None,
+        address_pool: str | Ref | None = None,
+        cdp: str | Ref | None = None,
+        lldp: str | Ref | None = None,
+        lacp: str | Ref | None = None,
+        stp: str | Ref | None = None,
+        l2_mtu: str | Ref | None = None,
+        firewall: str | Ref | None = None,
+    ) -> ClusterControllerCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        vlan_pool: str | Ref | None = None,
+        mcast_pool: str | Ref | None = None,
+        address_pool: str | Ref | None = None,
+    ) -> ClusterControllerCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class EpValidatorPolicyCursor(_VmmControllerMakers, _VmmDomMakers, _VmmProviderMakers, _UniMakers):
+    """Typed cursor for ``vmmEpValidatorPol`` (ep_validator_policy level).
+
+    Position: ``uni.vmm_provider.vmm_dom.vmm_controller.ep_validator_policy``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        current_key: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        previous_key: str | None = None,
+        userdom: str | None = None,
+    ) -> EpValidatorPolicyCursor:
+        """Set ``vmmEpValidatorPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        vlan_pool: str | Ref | None = None,
+        mcast_pool: str | Ref | None = None,
+        address_pool: str | Ref | None = None,
+        cdp: str | Ref | None = None,
+        lldp: str | Ref | None = None,
+        lacp: str | Ref | None = None,
+        stp: str | Ref | None = None,
+        l2_mtu: str | Ref | None = None,
+        firewall: str | Ref | None = None,
+    ) -> EpValidatorPolicyCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        vlan_pool: str | Ref | None = None,
+        mcast_pool: str | Ref | None = None,
+        address_pool: str | Ref | None = None,
+    ) -> EpValidatorPolicyCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class _HostAvailabilityPolicyMakers(Cursor):
+    """Makers declared at the host_availability_policy level (``vmmHvAvailPol``)."""
+
+    __slots__ = ()
+
+    def protect_vm_group(
+        self,
+        vm_group_dn: str,
+        *,
+        annotation: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> ProtectVmGroupCursor:
+        """Declare a ``vmmProtectedVmGroup`` child under the host_availability_policy level.
+
+        Args:
+            vm_group_dn: The distinguished name of the target.
+            annotation: User annotation. Suggested format orchestrator:value
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "vm_group_dn",
+            )
+        }
+        return cast(
+            "ProtectVmGroupCursor",
+            self._invoke_maker("protect_vm_group", (vm_group_dn,), _prune(params)),
+        )
+
+    def host_desired_state(
+        self,
+        host_name: str,
+        *,
+        annotation: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        desired_state_for_the_host: HvsManagedEntityStatus | str | None = None,
+        userdom: str | None = None,
+    ) -> HostDesiredStateCursor:
+        """Declare a ``vmmHvDesiredSt`` child under the host_availability_policy level.
+
+        Args:
+            host_name: The hostname or IP for export destination. Call Home sends email messages
+                to either the IP address or hostname, and the associated port number.
+            annotation: User annotation. Suggested format orchestrator:value
+            desired_state_for_the_host: The state of the relationship. Values: ``gray``,
+                ``green``, ``red``, ``yellow``. Default: ``gray``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "host_name",
+            )
+        }
+        return cast(
+            "HostDesiredStateCursor",
+            self._invoke_maker("host_desired_state", (host_name,), _prune(params)),
+        )
+
+
+class HostAvailabilityPolicyCursor(
+    _HostAvailabilityPolicyMakers,
+    _VmmControllerMakers,
+    _VmmDomMakers,
+    _VmmProviderMakers,
+    _UniMakers,
+):
+    """Typed cursor for ``vmmHvAvailPol`` (host_availability_policy level).
+
+    Position: ``uni.vmm_provider.vmm_dom.vmm_controller.host_availability_policy``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> HostAvailabilityPolicyCursor:
+        """Set ``vmmHvAvailPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        vlan_pool: str | Ref | None = None,
+        mcast_pool: str | Ref | None = None,
+        address_pool: str | Ref | None = None,
+        cdp: str | Ref | None = None,
+        lldp: str | Ref | None = None,
+        lacp: str | Ref | None = None,
+        stp: str | Ref | None = None,
+        l2_mtu: str | Ref | None = None,
+        firewall: str | Ref | None = None,
+    ) -> HostAvailabilityPolicyCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        vlan_pool: str | Ref | None = None,
+        mcast_pool: str | Ref | None = None,
+        address_pool: str | Ref | None = None,
+    ) -> HostAvailabilityPolicyCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class EnhancedLacpPolicyCursor(
+    _VswitchPolicyGroupMakers, _VmmDomMakers, _VmmProviderMakers, _UniMakers
+):
+    """Typed cursor for ``lacpEnhancedLagPol`` (enhanced_lacp_policy level).
+
+    Position: ``uni.vmm_provider.vmm_dom.vswitch_policy_group.enhanced_lacp_policy``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        id: int | None = None,
+        loadbalancing_mode: LacpLBMode | str | None = None,
+        lacp_mode: LacpEnLacpMode | str | None = None,
+        display_name: str | None = None,
+        number_of_links: int | None = None,
+        userdom: str | None = None,
+    ) -> EnhancedLacpPolicyCursor:
+        """Set ``lacpEnhancedLagPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        cdp: str | Ref | None = None,
+        lldp: str | Ref | None = None,
+        lacp: str | Ref | None = None,
+        stp: str | Ref | None = None,
+        mcp: str | Ref | None = None,
+        l2_mtu: str | Ref | None = None,
+        netflow: str | Ref | None = None,
+        firewall: str | Ref | None = None,
+        vlan_pool: str | Ref | None = None,
+        mcast_pool: str | Ref | None = None,
+        address_pool: str | Ref | None = None,
+    ) -> EnhancedLacpPolicyCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        cdp: str | Ref | None = None,
+        lldp: str | Ref | None = None,
+        lacp: str | Ref | None = None,
+        stp: str | Ref | None = None,
+        mcp: str | Ref | None = None,
+        l2_mtu: str | Ref | None = None,
+        netflow: str | Ref | None = None,
+        firewall: str | Ref | None = None,
+        vlan_pool: str | Ref | None = None,
+        mcast_pool: str | Ref | None = None,
+        address_pool: str | Ref | None = None,
+    ) -> EnhancedLacpPolicyCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class HostDesiredStateCursor(
+    _HostAvailabilityPolicyMakers,
+    _VmmControllerMakers,
+    _VmmDomMakers,
+    _VmmProviderMakers,
+    _UniMakers,
+):
+    """Typed cursor for ``vmmHvDesiredSt`` (host_desired_state level).
+
+    Position: ``uni.vmm_provider.vmm_dom.vmm_controller.host_availability_policy.host_desired_state``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        desired_state_for_the_host: HvsManagedEntityStatus | str | None = None,
+        userdom: str | None = None,
+    ) -> HostDesiredStateCursor:
+        """Set ``vmmHvDesiredSt`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        vlan_pool: str | Ref | None = None,
+        mcast_pool: str | Ref | None = None,
+        address_pool: str | Ref | None = None,
+        cdp: str | Ref | None = None,
+        lldp: str | Ref | None = None,
+        lacp: str | Ref | None = None,
+        stp: str | Ref | None = None,
+        l2_mtu: str | Ref | None = None,
+        firewall: str | Ref | None = None,
+    ) -> HostDesiredStateCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        vlan_pool: str | Ref | None = None,
+        mcast_pool: str | Ref | None = None,
+        address_pool: str | Ref | None = None,
+    ) -> HostDesiredStateCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class ProtectVmGroupCursor(
+    _HostAvailabilityPolicyMakers,
+    _VmmControllerMakers,
+    _VmmDomMakers,
+    _VmmProviderMakers,
+    _UniMakers,
+):
+    """Typed cursor for ``vmmProtectedVmGroup`` (protect_vm_group level).
+
+    Position: ``uni.vmm_provider.vmm_dom.vmm_controller.host_availability_policy.protect_vm_group``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> ProtectVmGroupCursor:
+        """Set ``vmmProtectedVmGroup`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        vlan_pool: str | Ref | None = None,
+        mcast_pool: str | Ref | None = None,
+        address_pool: str | Ref | None = None,
+        cdp: str | Ref | None = None,
+        lldp: str | Ref | None = None,
+        lacp: str | Ref | None = None,
+        stp: str | Ref | None = None,
+        l2_mtu: str | Ref | None = None,
+        firewall: str | Ref | None = None,
+    ) -> ProtectVmGroupCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        vlan_pool: str | Ref | None = None,
+        mcast_pool: str | Ref | None = None,
+        address_pool: str | Ref | None = None,
+    ) -> ProtectVmGroupCursor:
         """Reference objects outside the design by raw DN."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind_dn(self, **_prune(params))

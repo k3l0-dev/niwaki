@@ -141,3 +141,15 @@ class TestStagedPush:
         depth = {op.dn: op.depth for op in ops}
         assert depth["uni/tn-prod/BD-web"] > depth["uni/tn-prod"]
         assert depth["uni/tn-prod/BD-web/subnet-[10.0.1.1/24]"] > depth["uni/tn-prod/BD-web"]
+
+    def test_carrier_emits_no_op_but_its_children_do(self) -> None:
+        """A curated carrier (a VMM provider) posts nothing on its own; the
+        declared domain under it posts at its full DN and materialises the path."""
+        from niwaki.design import design
+
+        cfg = design()
+        cfg.vmm_provider("VMware").vmm_dom("prod")
+        root = cfg.design_node.root()
+        dns = {op.dn for op in compile_ops(root, resolve(root))}
+        assert "uni/vmmp-VMware" not in dns  # the carrier itself
+        assert "uni/vmmp-VMware/dom-prod" in dns  # its child, at the full DN

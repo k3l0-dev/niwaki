@@ -87,6 +87,24 @@ validate eagerly at the call site, navigate cleanly, and serialise to the
 wire format; they never write.  Writing belongs to the design DSL, so the
 model layer stays small, predictable, and safe to hold anywhere.
 
+## Hardware-dependent integrations
+
+Some parts of the vocabulary configure the ACI side of an integration that only
+comes to life with real equipment behind it.  Pushing them lands the intended
+configuration on the APIC and re-plans cleanly, exactly like any other object —
+but the feature itself needs the hardware:
+
+- **VMM domains** (`vmm_provider(...).vmm_dom(...)`, controllers, credentials,
+  vSwitch policies) push their APIC-side config, but a reachable **vCenter /
+  SCVMM / Kubernetes** controller is required before inventory actually syncs.
+- **Service graphs** (L4-L7) define the abstract graph and logical device on the
+  APIC, but rendering a graph needs a real **L4-L7 appliance** to attach to.
+
+Niwaki treats these like everything else — typed makers, closed-world
+references, plan/push — and its live verification confirms the config lands and
+round-trips.  It does not, and on a bare fabric cannot, verify the downstream
+integration; that is the operator's device to provide.
+
 ## Reading further
 
 - {doc}`guide/design-dsl` — the DSL in practice

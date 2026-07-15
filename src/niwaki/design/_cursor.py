@@ -63,6 +63,9 @@ class _DesignVocabulary(NamedTuple):
             :mod:`niwaki.design._sugar`).
         atomic: Classes whose subtree must ship in a single POST in staged
             mode (e.g. ``fabricExplicitGEp``).
+        carrier: Non-creatable path-only classes the APIC won't POST or read on
+            their own (a VMM provider, ``vmmProvP``) — the push emits no op for
+            them and the plan diffs their children instead.
     """
 
     makers: dict[str, dict[str, str]]
@@ -70,6 +73,7 @@ class _DesignVocabulary(NamedTuple):
     verbs: dict[str, dict[str, dict[str, str]]]
     sugar: dict[str, dict[str, str]]
     atomic: frozenset[str]
+    carrier: frozenset[str]
 
 
 @cache
@@ -89,6 +93,7 @@ def _tables() -> _DesignVocabulary:
         verbs=data.get("verbs", {}),
         sugar=data.get("sugar", {}),
         atomic=frozenset(data.get("atomic", [])),
+        carrier=frozenset(data.get("carrier", [])),
     )
 
 

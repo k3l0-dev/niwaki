@@ -66,7 +66,8 @@ def compile_ops(root: DesignNode, extras: _Extras) -> list[_Op]:
     """
     from niwaki.design._cursor import _tables
 
-    atomic = _tables().atomic
+    tables = _tables()
+    atomic, carrier = tables.atomic, tables.carrier
     ops: list[_Op] = []
 
     def _walk(node: DesignNode, parent_dn: str) -> None:
@@ -74,7 +75,11 @@ def compile_ops(root: DesignNode, extras: _Extras) -> list[_Op]:
         if node.aci_class in atomic:
             ops.append(_Op(dn=dn, method="POST", payload=compile_envelope(node, extras)))
             return
-        ops.append(_Op(dn=dn, method="POST", payload=node.mo().to_apic()))
+        # A curated carrier is a plugin-managed path prefix the APIC rejects on a
+        # standalone POST (a VMM provider, ``uni/vmmp-VMware``).  Emit no op — its
+        # children and Rs post at their full DNs and the APIC materialises the path.
+        if node.aci_class not in carrier:
+            ops.append(_Op(dn=dn, method="POST", payload=node.mo().to_apic()))
         for rs in extras.get(node, []):
             ops.append(_Op(dn=f"{dn}/{rs.rn}", method="POST", payload=rs.to_apic()))
         for child in node.children:

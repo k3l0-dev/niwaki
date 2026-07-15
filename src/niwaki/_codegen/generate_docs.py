@@ -74,6 +74,14 @@ _DOMAINS = [
         "Fabric membership (node registration) under `uni/controller`.  "
         "Root factory: `controller()`.",
     ),
+    (
+        "vmm_provider",
+        "vmm_provider — VMM domains",
+        "Virtual Machine Manager domains under `uni/vmmp-<vendor>`: the domain, "
+        "its vCenter/SCVMM controller, credentials and vSwitch policies.  Reached "
+        "as `design().vmm_provider(vendor)`.  Pushing lands the APIC-side config; "
+        "a reachable controller is required before inventory actually syncs.",
+    ),
 ]
 
 
@@ -453,7 +461,6 @@ def _render_index() -> str:
 # vocabulary has since grown a maker for (ESGs and L3Out internals did exactly
 # that, and the list lied about them until this guard existed).
 _NOT_CURATED = [
-    ("VMM domains", "`vmmDomP` and VMM controller integration", ("vmmDomP", "vmmCtrlrP")),
     (
         "Simplified interface configuration",
         "the post-5.2 per-port `infraPortConfig` model (parallel to profiles/selectors)",

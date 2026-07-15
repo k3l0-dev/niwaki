@@ -5,7 +5,7 @@ Re-generate: uv run python -m niwaki._codegen.generate_docs
 
 # Coverage matrix
 
-**804 curated positions** across the four design domains plus the `uni`-level domains.  Everything else in the 2,222 generated classes stays reachable through `.mo(Class, ...)` and `bind_dn(alias=dn)` — see the design guide.
+**821 curated positions** across the four design domains plus the `uni`-level domains.  Everything else in the 2,222 generated classes stays reachable through `.mo(Class, ...)` and `bind_dn(alias=dn)` — see the design guide.
 
 ## fabric
 
@@ -827,6 +827,28 @@ Re-generate: uv run python -m niwaki._codegen.generate_docs
 | {ref}`controller.cimc_node <vocab-controller-cimc_node>` | `ctrlrCimcNode` | — | — | — | — | — |
 | {ref}`controller.controller_cores_policy <vocab-controller-controller_cores_policy>` | `svccoreCtrlrPol` | — | — | — | — | — |
 
+## vmm_provider
+
+| position | ACI class | makers | bind aliases | verbs | sugar | atomic |
+| --- | --- | --- | --- | --- | --- | --- |
+| {ref}`vmm_provider <vocab-vmm_provider>` | `vmmProvP` | 1 | — | — | — | — |
+| {ref}`vmm_provider.vmm_dom <vocab-vmm_provider-vmm_dom>` | `vmmDomP` | 6 | `vlan_pool=`, `mcast_pool=`, `address_pool=`, `cdp=`, `lldp=`, `lacp=`, `stp=`, `l2_mtu=`, `firewall=` | — | — | — |
+| {ref}`vmm_provider.vmm_dom.vmm_controller <vocab-vmm_provider-vmm_dom-vmm_controller>` | `vmmCtrlrP` | 3 | — | — | — | — |
+| {ref}`vmm_provider.vmm_dom.vmm_controller.cluster_controller <vocab-vmm_provider-vmm_dom-vmm_controller-cluster_controller>` | `vmmClusterCtrlrP` | — | — | — | — | — |
+| {ref}`vmm_provider.vmm_dom.vmm_controller.host_availability_policy <vocab-vmm_provider-vmm_dom-vmm_controller-host_availability_policy>` | `vmmHvAvailPol` | 2 | — | — | — | — |
+| {ref}`vmm_provider.vmm_dom.vmm_controller.host_availability_policy.protect_vm_group <vocab-vmm_provider-vmm_dom-vmm_controller-host_availability_policy-protect_vm_group>` | `vmmProtectedVmGroup` | — | — | — | — | — |
+| {ref}`vmm_provider.vmm_dom.vmm_controller.host_availability_policy.host_desired_state <vocab-vmm_provider-vmm_dom-vmm_controller-host_availability_policy-host_desired_state>` | `vmmHvDesiredSt` | — | — | — | — | — |
+| {ref}`vmm_provider.vmm_dom.vmm_controller.ep_validator_policy <vocab-vmm_provider-vmm_dom-vmm_controller-ep_validator_policy>` | `vmmEpValidatorPol` | — | — | — | — | — |
+| {ref}`vmm_provider.vmm_dom.vmm_credential <vocab-vmm_provider-vmm_dom-vmm_credential>` | `vmmUsrAccP` | — | — | — | — | — |
+| {ref}`vmm_provider.vmm_dom.vswitch_policy_group <vocab-vmm_provider-vmm_dom-vswitch_policy_group>` | `vmmVSwitchPolicyCont` | 1 | `cdp=`, `lldp=`, `lacp=`, `stp=`, `mcp=`, `l2_mtu=`, `netflow=`, `firewall=` | — | — | — |
+| {ref}`vmm_provider.vmm_dom.vswitch_policy_group.enhanced_lacp_policy <vocab-vmm_provider-vmm_dom-vswitch_policy_group-enhanced_lacp_policy>` | `lacpEnhancedLagPol` | — | — | — | — | — |
+| {ref}`vmm_provider.vmm_dom.uplink_policy_container <vocab-vmm_provider-vmm_dom-uplink_policy_container>` | `vmmUplinkPCont` | 1 | — | — | — | — |
+| {ref}`vmm_provider.vmm_dom.uplink_policy_container.uplink_policy <vocab-vmm_provider-vmm_dom-uplink_policy_container-uplink_policy>` | `vmmUplinkP` | — | — | — | — | — |
+| {ref}`vmm_provider.vmm_dom.epg_aggregator <vocab-vmm_provider-vmm_dom-epg_aggregator>` | `vmmUsrAggr` | 1 | — | — | — | — |
+| {ref}`vmm_provider.vmm_dom.epg_aggregator.range <vocab-vmm_provider-vmm_dom-epg_aggregator-range>` | `fvnsEncapBlk` | — | — | — | — | — |
+| {ref}`vmm_provider.vmm_dom.custom_epg_aggregator <vocab-vmm_provider-vmm_dom-custom_epg_aggregator>` | `vmmUsrCustomAggr` | 1 | — | — | — | — |
+| {ref}`vmm_provider.vmm_dom.custom_epg_aggregator.range <vocab-vmm_provider-vmm_dom-custom_epg_aggregator-range>` | `fvnsEncapBlk` | — | — | — | — | — |
+
 ## domains under `uni`
 
 | position | ACI class | makers | bind aliases | verbs | sugar | atomic |
@@ -840,7 +862,6 @@ Re-generate: uv run python -m niwaki._codegen.generate_docs
 
 Commonly requested areas that still speak raw ACI (`.mo()` / `bind_dn()`) today:
 
-- **VMM domains** — `vmmDomP` and VMM controller integration
 - **Simplified interface configuration** — the post-5.2 per-port `infraPortConfig` model (parallel to profiles/selectors)
 - **Service graphs** — `vnsAbsGraph`, `vnsLDevVip` and the L4-L7 device chain
 

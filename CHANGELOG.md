@@ -4,6 +4,33 @@ All notable changes to this project are documented here.  The format follows
 [Keep a Changelog](https://keepachangelog.com/); versions follow semver
 (0.x — the API may still change between minor versions).
 
+## [0.13.0] — 2026-07-15
+
+VMM domains join the vocabulary, and the push engine learns to fold the
+plugin-managed path prefixes they need.
+
+### Added
+
+- **VMM domains.**  `design().vmm_provider(vendor).vmm_dom(name)` with its
+  vCenter/SCVMM controller (cluster controller, host-availability with
+  protect-VM group and host-desired-state, EP-validator), credentials, vSwitch
+  policy group (enhanced LACP) and uplink container/policies, plus the domain's
+  EPG aggregators.  The domain and vSwitch container bind their default
+  interface policies and pools; the AAEP's abstract `domain` bind now resolves
+  to a declared VMM domain, closing the access-domain loop.
+- **Carrier classes.**  A curated `carrier` set names non-creatable, path-only
+  classes the APIC rejects on a standalone POST or `rsp-subtree` read (a VMM
+  provider, `uni/vmmp-VMware`).  The staged push emits no op for them — their
+  declared children post at their full DNs and the APIC materialises the path —
+  and the plan diffs those children instead.
+
+### Notes
+
+- Pushing a VMM domain lands the APIC-side config and re-plans cleanly, but a
+  reachable vCenter / SCVMM controller is required before inventory syncs — see
+  the new "Hardware-dependent integrations" note in the design-first guide.  The
+  VMM orchestrator provider (NDO) stays out of scope.
+
 ## [0.12.0] — 2026-07-15
 
 The fabric-policy (`fabric`) and controller (`controller`) domains join the
