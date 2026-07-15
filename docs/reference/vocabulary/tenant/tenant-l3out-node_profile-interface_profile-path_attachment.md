@@ -38,6 +38,15 @@ Accepted as keyword arguments of `.path_attachment(target_dn)` and of `.set(**at
 | `mtu` | `mtu` | `int` | — | `inherit` | The maximum transmit unit of the external network. |
 | `target_dscp` | `targetDscp` | `int` | — | `unspecified` | The target differentiated service code point (DSCP) of the path attached to the layer 3 outside profile. |
 
+## Children
+
+| maker | creates | position |
+| --- | --- | --- |
+| `.forwarder_address(ip_address, **attrs)` | `l3extForwarderAddr` | {ref}`tenant.l3out.node_profile.interface_profile.path_attachment.forwarder_address <vocab-tenant-l3out-node_profile-interface_profile-path_attachment-forwarder_address>` |
+| `.rogue_exception_mac(**attrs)` | `l3extRogueExceptMacP` | {ref}`tenant.l3out.node_profile.interface_profile.path_attachment.rogue_exception_mac <vocab-tenant-l3out-node_profile-interface_profile-path_attachment-rogue_exception_mac>` |
+| `.micro_bfd(**attrs)` | `bfdMicroBfdP` | {ref}`tenant.l3out.node_profile.interface_profile.path_attachment.micro_bfd <vocab-tenant-l3out-node_profile-interface_profile-path_attachment-micro_bfd>` |
+| `.ptp_l3out(**attrs)` | `ptpRtdEpgCfg` | {ref}`tenant.l3out.node_profile.interface_profile.path_attachment.ptp_l3out <vocab-tenant-l3out-node_profile-interface_profile-path_attachment-ptp_l3out>` |
+
 ## APIC diagnostics
 
 States the APIC can flag on this class — it accepts the configuration and reports the inconsistency afterwards.

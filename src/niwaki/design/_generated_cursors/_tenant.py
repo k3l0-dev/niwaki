@@ -28,6 +28,9 @@ if TYPE_CHECKING:
     from niwaki.models._generated.enums.AnalyticsMatchParams import AnalyticsMatchParams
     from niwaki.models._generated.enums.ArpIfControl import ArpIfControl
     from niwaki.models._generated.enums.ArpOpcode import ArpOpcode
+    from niwaki.models._generated.enums.AuthMode import AuthMode
+    from niwaki.models._generated.enums.AuthScope import AuthScope
+    from niwaki.models._generated.enums.AuthTrigSt import AuthTrigSt
     from niwaki.models._generated.enums.BfdAuthT import BfdAuthT
     from niwaki.models._generated.enums.BfdIfControl import BfdIfControl
     from niwaki.models._generated.enums.BgpAddlPathCapT import BgpAddlPathCapT
@@ -45,12 +48,14 @@ if TYPE_CHECKING:
     from niwaki.models._generated.enums.BgpPeerT import BgpPeerT
     from niwaki.models._generated.enums.BgpPrivateASControl import BgpPrivateASControl
     from niwaki.models._generated.enums.BgpRtTargetT import BgpRtTargetT
+    from niwaki.models._generated.enums.BgpSpineRoleType import BgpSpineRoleType
     from niwaki.models._generated.enums.BgpSrcIfT import BgpSrcIfT
     from niwaki.models._generated.enums.BgpSumControlPolType import BgpSumControlPolType
     from niwaki.models._generated.enums.BgpTrustCtrlT import BgpTrustCtrlT
     from niwaki.models._generated.enums.DhcpAddrPreferences import DhcpAddrPreferences
     from niwaki.models._generated.enums.DhcpOwner import DhcpOwner
     from niwaki.models._generated.enums.DhcpRelayVisibility import DhcpRelayVisibility
+    from niwaki.models._generated.enums.DnsepgNetworkType import DnsepgNetworkType
     from niwaki.models._generated.enums.DppBurstUnit import DppBurstUnit
     from niwaki.models._generated.enums.DppConformRateAction import DppConformRateAction
     from niwaki.models._generated.enums.DppExceedRateAction import DppExceedRateAction
@@ -77,6 +82,7 @@ if TYPE_CHECKING:
     from niwaki.models._generated.enums.FvPcEnfPref import FvPcEnfPref
     from niwaki.models._generated.enums.FvPrefGrMemb import FvPrefGrMemb
     from niwaki.models._generated.enums.FvRouteScp import FvRouteScp
+    from niwaki.models._generated.enums.FvSpineIntraVrfType import FvSpineIntraVrfType
     from niwaki.models._generated.enums.FvStCEpType import FvStCEpType
     from niwaki.models._generated.enums.FvSubnetControl import FvSubnetControl
     from niwaki.models._generated.enums.FvTnlFwdCtrl import FvTnlFwdCtrl
@@ -88,6 +94,17 @@ if TYPE_CHECKING:
     from niwaki.models._generated.enums.FvipDataPlaneLearning import FvipDataPlaneLearning
     from niwaki.models._generated.enums.FvnsAddrType import FvnsAddrType
     from niwaki.models._generated.enums.FvslaType import FvslaType
+    from niwaki.models._generated.enums.HcipsecEncapsulationMode import HcipsecEncapsulationMode
+    from niwaki.models._generated.enums.HcipsecEncapsulationType import HcipsecEncapsulationType
+    from niwaki.models._generated.enums.HcisakmpAuthMethod import HcisakmpAuthMethod
+    from niwaki.models._generated.enums.HcisakmpDhGroup import HcisakmpDhGroup
+    from niwaki.models._generated.enums.HcisakmpEncrAlgo import HcisakmpEncrAlgo
+    from niwaki.models._generated.enums.HcisakmpHash import HcisakmpHash
+    from niwaki.models._generated.enums.HcisakmpKeyType import HcisakmpKeyType
+    from niwaki.models._generated.enums.HostprotAction import HostprotAction
+    from niwaki.models._generated.enums.HostprotConnTrack import HostprotConnTrack
+    from niwaki.models._generated.enums.HostprotEtypeMatch import HostprotEtypeMatch
+    from niwaki.models._generated.enums.HostprotOperator import HostprotOperator
     from niwaki.models._generated.enums.HsrpAuthT import HsrpAuthT
     from niwaki.models._generated.enums.HsrpConfigIssues import HsrpConfigIssues
     from niwaki.models._generated.enums.HsrpGroupAf import HsrpGroupAf
@@ -95,13 +112,17 @@ if TYPE_CHECKING:
     from niwaki.models._generated.enums.HsrpGrpIpObtainMode import HsrpGrpIpObtainMode
     from niwaki.models._generated.enums.HsrpIfControl import HsrpIfControl
     from niwaki.models._generated.enums.Hsrpversion import Hsrpversion
+    from niwaki.models._generated.enums.IpNexthopT import IpNexthopT
+    from niwaki.models._generated.enums.IpRtCtrl import IpRtCtrl
     from niwaki.models._generated.enums.IpmcIfCtrl import IpmcIfCtrl
+    from niwaki.models._generated.enums.IpmcJoinType import IpmcJoinType
     from niwaki.models._generated.enums.IpmcifVer import IpmcifVer
     from niwaki.models._generated.enums.IpmcsnoopDomControl import IpmcsnoopDomControl
     from niwaki.models._generated.enums.L2BounceTrig import L2BounceTrig
     from niwaki.models._generated.enums.L2EpMoveDetectMode import L2EpMoveDetectMode
     from niwaki.models._generated.enums.L2EtherType import L2EtherType
     from niwaki.models._generated.enums.L2MultiDstPktAct import L2MultiDstPktAct
+    from niwaki.models._generated.enums.L2PortSecurityViolation import L2PortSecurityViolation
     from niwaki.models._generated.enums.L2UnkMacUcastAct import L2UnkMacUcastAct
     from niwaki.models._generated.enums.L2UnkMcastAct import L2UnkMcastAct
     from niwaki.models._generated.enums.L2qiqL2ProtTunMaskT import L2qiqL2ProtTunMaskT
@@ -116,16 +137,21 @@ if TYPE_CHECKING:
     )
     from niwaki.models._generated.enums.L3extEncapScope import L3extEncapScope
     from niwaki.models._generated.enums.L3extIpv6Dad import L3extIpv6Dad
+    from niwaki.models._generated.enums.L3extOwner import L3extOwner
     from niwaki.models._generated.enums.L3extPcEnfDir import L3extPcEnfDir
     from niwaki.models._generated.enums.L3extRouteAggType import L3extRouteAggType
     from niwaki.models._generated.enums.L3extRouteScp import L3extRouteScp
     from niwaki.models._generated.enums.L3extSide import L3extSide
     from niwaki.models._generated.enums.L4TcpFlags import L4TcpFlags
+    from niwaki.models._generated.enums.LeakRouteScp import LeakRouteScp
+    from niwaki.models._generated.enums.LeakToRouteScp import LeakToRouteScp
     from niwaki.models._generated.enums.McastVer import McastVer
     from niwaki.models._generated.enums.McastVer2 import McastVer2
+    from niwaki.models._generated.enums.MonTargetScope import MonTargetScope
     from niwaki.models._generated.enums.NdIfControl import NdIfControl
     from niwaki.models._generated.enums.NdPfxControl import NdPfxControl
     from niwaki.models._generated.enums.NetflowSrcIpType import NetflowSrcIpType
+    from niwaki.models._generated.enums.NetworkDirection import NetworkDirection
     from niwaki.models._generated.enums.NwAdminSt import NwAdminSt
     from niwaki.models._generated.enums.OspfAreaControl import OspfAreaControl
     from niwaki.models._generated.enums.OspfAreaT import OspfAreaT
@@ -137,18 +163,30 @@ if TYPE_CHECKING:
     from niwaki.models._generated.enums.OspfMaxLsaAct import OspfMaxLsaAct
     from niwaki.models._generated.enums.OspfNwT import OspfNwT
     from niwaki.models._generated.enums.PolColor import PolColor
+    from niwaki.models._generated.enums.PtpPtpTransportMode import PtpPtpTransportMode
     from niwaki.models._generated.enums.QosDppPolAdminState import QosDppPolAdminState
     from niwaki.models._generated.enums.QosTenantPrio import QosTenantPrio
+    from niwaki.models._generated.enums.RtctrlCommunityType import RtctrlCommunityType
+    from niwaki.models._generated.enums.RtctrlMetricType import RtctrlMetricType
     from niwaki.models._generated.enums.RtctrlPolicyType import RtctrlPolicyType
+    from niwaki.models._generated.enums.RtctrlSetType import RtctrlSetType
+    from niwaki.models._generated.enums.RtdmcASMCtrl import RtdmcASMCtrl
     from niwaki.models._generated.enums.RtdmcAfType import RtdmcAfType
     from niwaki.models._generated.enums.RtdmcAuthT import RtdmcAuthT
+    from niwaki.models._generated.enums.RtdmcAutoRPCtrl import RtdmcAutoRPCtrl
+    from niwaki.models._generated.enums.RtdmcBSRCtrl import RtdmcBSRCtrl
     from niwaki.models._generated.enums.RtdmcDomUserCtrl import RtdmcDomUserCtrl
     from niwaki.models._generated.enums.RtdmcIfUserCtrl import RtdmcIfUserCtrl
     from niwaki.models._generated.enums.RtdmcRtMapAction import RtdmcRtMapAction
+    from niwaki.models._generated.enums.RtextcomScope import RtextcomScope
     from niwaki.models._generated.enums.RtfltAction import RtfltAction
+    from niwaki.models._generated.enums.RtmapASCritT import RtmapASCritT
+    from niwaki.models._generated.enums.RtmapSetCriteria import RtmapSetCriteria
     from niwaki.models._generated.enums.SpanDirection import SpanDirection
+    from niwaki.models._generated.enums.SpanErspanDestMode import SpanErspanDestMode
     from niwaki.models._generated.enums.SviAutostate import SviAutostate
     from niwaki.models._generated.enums.TrackListObj import TrackListObj
+    from niwaki.models._generated.enums.VmmStatsMode import VmmStatsMode
     from niwaki.models._generated.enums.VnsDestType import VnsDestType
     from niwaki.models._generated.enums.VnsPrefGrMemb import VnsPrefGrMemb
     from niwaki.models._generated.enums.VnsThresholdDownAction import VnsThresholdDownAction
@@ -156,6 +194,9 @@ if TYPE_CHECKING:
     from niwaki.models._generated.enums.VzBinaryAction import VzBinaryAction
     from niwaki.models._generated.enums.VzIntent import VzIntent
     from niwaki.models._generated.enums.VzMatchT import VzMatchT
+    from niwaki.models._generated.enums.VzPZDirection import VzPZDirection
+    from niwaki.models._generated.enums.VzPZEtherType import VzPZEtherType
+    from niwaki.models._generated.enums.VzPZIpProt import VzPZIpProt
     from niwaki.models._generated.enums.VzPrefGrMemb import VzPrefGrMemb
     from niwaki.models._generated.enums.VzScope import VzScope
     from niwaki.models._generated.enums.VzregexField import VzregexField
@@ -595,7 +636,7 @@ class _TenantMakers(Cursor):
         owner_key: str | None = None,
         owner_tag: str | None = None,
         userdom: str | None = None,
-    ) -> FilterCursor:
+    ) -> TenantFilterCursor:
         """Declare a ``vzFilter`` child under the tenant level.
 
         A filter policy is a group of resolvable filter entries. Each filter entry is a combination
@@ -621,7 +662,7 @@ class _TenantMakers(Cursor):
             )
         }
         return cast(
-            "FilterCursor",
+            "TenantFilterCursor",
             self._invoke_maker("filter", (name,), _prune(params)),
         )
 
@@ -2421,6 +2462,545 @@ class _TenantMakers(Cursor):
             self._invoke_maker("route_tag_policy", (name,), _prune(params)),
         )
 
+    def rogue_exception_mac_group(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> RogueExceptionMacGroupCursor:
+        """Declare a ``l3extRogueExceptionMacGroup`` child under the tenant level.
+
+        Args:
+            name: The name of the object.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "RogueExceptionMacGroupCursor",
+            self._invoke_maker("rogue_exception_mac_group", (name,), _prune(params)),
+        )
+
+    def vrf_validation_policy(
+        self,
+        name: str,
+        *,
+        enable_bgpinfrapeer_policy_validation: bool | None = None,
+        annotation: str | None = None,
+        description: str | None = None,
+        enable_vrf_validation_infra_underlay: bool | None = None,
+        enable_vrf_validation_interface_inco: bool | None = None,
+        enable_vrf_validation_ip_address: bool | None = None,
+        enable_loopback_interface_validation: bool | None = None,
+        enable_vrf_validation_node_router_id_bgp_peer: bool | None = None,
+        enable_ospf_interface_and_area_validaton: bool | None = None,
+        enable_ospf_area_id_validation: bool | None = None,
+        enable_vrf_validation_ospf_if_pol: bool | None = None,
+        enable_redistribute_policy_validation: bool | None = None,
+        enable_node_routerid_validation: bool | None = None,
+        enable_subnet_non_duplication_validation: bool | None = None,
+        enable_svi_link_local_address_validation: bool | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> VrfValidationPolicyCursor:
+        """Declare a ``l3extVrfValidationPol`` child under the tenant level.
+
+        VRF Validation knobs
+
+        Args:
+            name: The name of the object.
+            enable_bgpinfrapeer_policy_validation: Implementation note: Corresponds to
+                kVrfValidationBgpInfraPeerP Default: ``True``.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            enable_vrf_validation_infra_underlay: Default: ``True``.
+            enable_vrf_validation_interface_inco: Implementation note: Corresponds to
+                kVrfValidationInterfaceInfo Default: ``True``.
+            enable_vrf_validation_ip_address: Implementation note: Corresponds to
+                kVrfValidationRsPathAddress Default: ``True``.
+            enable_loopback_interface_validation: Implementation note: Corresponds to
+                kVrfValidationNodeRouterLoopback Default: ``True``.
+            enable_vrf_validation_node_router_id_bgp_peer: Implementation note: Corresponds to
+                kVrfValidationNodeRouterIdBgpPeer Default: ``True``.
+            enable_ospf_interface_and_area_validaton: Implementation note: Corresponds to
+                kVrfValidationRsPathOspfArea Default: ``True``.
+            enable_ospf_area_id_validation: Implementation note: Corresponds to
+                kVrfValidationOspfAreaId Default: ``True``.
+            enable_vrf_validation_ospf_if_pol: Implementation note: Corresponds to
+                kVrfValidationRsPathOspfIfPol Default: ``True``.
+            enable_redistribute_policy_validation: Implementation note: Corresponds to
+                kVrfValidationRedistributePol Default: ``True``.
+            enable_node_routerid_validation: Implementation note: Corresponds to
+                kVrfValidationNodeRouterId Default: ``True``.
+            enable_subnet_non_duplication_validation: Implementation note: Corresponds to
+                kVrfValidationSubnet Default: ``True``.
+            enable_svi_link_local_address_validation: Implementation note: Corresponds to
+                kVrfValidationRsPathSviLinkLocalAddr Default: ``True``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "VrfValidationPolicyCursor",
+            self._invoke_maker("vrf_validation_policy", (name,), _prune(params)),
+        )
+
+    def host_protection(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> HostProtectionCursor:
+        """Declare a ``hostprotPol`` child under the tenant level.
+
+        Args:
+            name: The name of the object.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "HostProtectionCursor",
+            self._invoke_maker("host_protection", (name,), _prune(params)),
+        )
+
+    def isakmp_global(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        isakmp_keepalive_interval: int | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        number_of_seconds_between_keep_alives: int | None = None,
+        userdom: str | None = None,
+    ) -> IsakmpGlobalCursor:
+        """Declare a ``isakmpGlobalPol`` child under the tenant level.
+
+        Holds Isakmp Cloud Router-Level Common Policy
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            isakmp_keepalive_interval: IsaKmp Keepalive interval Default: ``10``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            number_of_seconds_between_keep_alives: IsaKmp Keepalive Retry Interval Default:
+                ``2``.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "IsakmpGlobalCursor",
+            self._invoke_maker("isakmp_global", (), _prune(params)),
+        )
+
+    def isakmp_keyring(
+        self,
+        name: str,
+        *,
+        ip_address_of_peer_that_shares_the_key: str | None = None,
+        annotation: str | None = None,
+        description: str | None = None,
+        key_type: HcisakmpKeyType | str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> IsakmpKeyringCursor:
+        """Declare a ``isakmpKeyring`` child under the tenant level.
+
+        Args:
+            name: The name of the object.
+            ip_address_of_peer_that_shares_the_key: IP Address of peer that shares the key
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            key_type: IsaKmp Key Type Values: ``pre-shared``. Default: ``pre-shared``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "IsakmpKeyringCursor",
+            self._invoke_maker("isakmp_keyring", (name,), _prune(params)),
+        )
+
+    def isakmp_policy(
+        self,
+        priority: int,
+        *,
+        annotation: str | None = None,
+        auth_method: HcisakmpAuthMethod | str | None = None,
+        description: str | None = None,
+        diffie_hellman_group: HcisakmpDhGroup | str | None = None,
+        encryption: HcisakmpEncrAlgo | str | None = None,
+        hash_algorithm: HcisakmpHash | str | None = None,
+        lifetime_for_isakmp_security_association: int | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> IsakmpPolicyCursor:
+        """Declare a ``isakmpPolicy`` child under the tenant level.
+
+        Holds Isakmp Policy information
+
+        Args:
+            priority: IsaKmp Policy Priority
+            annotation: User annotation. Suggested format orchestrator:value
+            auth_method: Auth Type Values: ``pre-share``, ``rsa-encr``, ``rsa-sig``. Default:
+                ``pre-share``.
+            description: Specifies a description of the policy definition.
+            diffie_hellman_group: Diffie Hellman Group Values: ``0``, ``1``, ``14``, ``15``,
+                ``16``, ``19``, ``2``, ``20``, …. Default: ``1``.
+            encryption: Encryption algorithm for protection suite Values: ``3des``, ``aes``,
+                ``des``. Default: ``des``.
+            hash_algorithm: Hash for ISAKMP security association Values: ``md5``, ``sha``,
+                ``sha256``, ``sha384``, ``sha512``. Default: ``md5``.
+            lifetime_for_isakmp_security_association: lifetime for ISAKMP security association
+                Default: ``28000``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "priority",
+            )
+        }
+        return cast(
+            "IsakmpPolicyCursor",
+            self._invoke_maker("isakmp_policy", (priority,), _prune(params)),
+        )
+
+    def isakmp_profile(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> IsakmpProfileCursor:
+        """Declare a ``isakmpProfile`` child under the tenant level.
+
+        Args:
+            name: The name of the object.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "IsakmpProfileCursor",
+            self._invoke_maker("isakmp_profile", (name,), _prune(params)),
+        )
+
+    def ipsec_phase1(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        authentication_method: HcisakmpAuthMethod | str | None = None,
+        description: str | None = None,
+        diffie_hellman_group: HcisakmpDhGroup | str | None = None,
+        encryption_algorithm: HcisakmpEncrAlgo | str | None = None,
+        hash_authentication_algorithm: HcisakmpHash | str | None = None,
+        lifetime: int | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> IpsecPhase1Cursor:
+        """Declare a ``ipsecIsakmpPhase1Pol`` child under the tenant level.
+
+        Args:
+            name: The name of the object.
+            annotation: User annotation. Suggested format orchestrator:value
+            authentication_method: Values: ``pre-share``, ``rsa-encr``, ``rsa-sig``. Default:
+                ``pre-share``.
+            description: Specifies a description of the policy definition.
+            diffie_hellman_group: Values: ``0``, ``1``, ``14``, ``15``, ``16``, ``19``, ``2``,
+                ``20``, …. Default: ``1``.
+            encryption_algorithm: Values: ``3des``, ``aes``, ``des``. Default: ``des``.
+            hash_authentication_algorithm: Values: ``md5``, ``sha``, ``sha256``, ``sha384``,
+                ``sha512``. Default: ``md5``.
+            lifetime: Default: ``28000``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "IpsecPhase1Cursor",
+            self._invoke_maker("ipsec_phase1", (name,), _prune(params)),
+        )
+
+    def ipsec_phase2(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        dh_group: HcisakmpDhGroup | str | None = None,
+        encapsulation_mode_eg_tunnel: HcipsecEncapsulationMode | str | None = None,
+        encapsulation_type_eg_esp: HcipsecEncapsulationType | str | None = None,
+        encryption_algorithm_eg_aes: HcisakmpEncrAlgo | str | None = None,
+        hash_authentication_algorithm: HcisakmpHash | str | None = None,
+        lifetime: int | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> IpsecPhase2Cursor:
+        """Declare a ``ipsecIsakmpPhase2Pol`` child under the tenant level.
+
+        Args:
+            name: The name of the object.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            dh_group: Values: ``0``, ``1``, ``14``, ``15``, ``16``, ``19``, ``2``, ``20``, ….
+                Default: ``1``.
+            encapsulation_mode_eg_tunnel: Values: ``transport``, ``tunnel``. Default:
+                ``tunnel``.
+            encapsulation_type_eg_esp: Values: ``esp``. Default: ``esp``.
+            encryption_algorithm_eg_aes: Values: ``3des``, ``aes``, ``des``. Default: ``des``.
+            hash_authentication_algorithm: Values: ``md5``, ``sha``, ``sha256``, ``sha384``,
+                ``sha512``. Default: ``md5``.
+            lifetime: Default: ``28000``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "IpsecPhase2Cursor",
+            self._invoke_maker("ipsec_phase2", (name,), _prune(params)),
+        )
+
+    def dns_server_group(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        display_name: str | None = None,
+        network_connection_type: DnsepgNetworkType | str | None = None,
+        userdom: str | None = None,
+    ) -> DnsServerGroupCursor:
+        """Declare a ``dnsepgSvrGrp`` child under the tenant level.
+
+        DNS Server group
+
+        Args:
+            name: The name of the object.
+            annotation: User annotation. Suggested format orchestrator:value
+            network_connection_type: Network Type inband, outBand Values: ``oob``, ``tenant``.
+                Default: ``oob``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "DnsServerGroupCursor",
+            self._invoke_maker("dns_server_group", (name,), _prune(params)),
+        )
+
+    def auth_server_group(
+        self,
+        name: str,
+        *,
+        delimiter: str | None = None,
+        annotation: str | None = None,
+        mode: AuthMode | str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> AuthServerGroupCursor:
+        """Declare a ``authSvrGroup`` child under the tenant level.
+
+        Args:
+            name: The name of the object.
+            annotation: User annotation. Suggested format orchestrator:value
+            mode: The BGP Domain mode. Values: ``AD``, ``unknown``. Default: ``AD``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "AuthServerGroupCursor",
+            self._invoke_maker("auth_server_group", (name,), _prune(params)),
+        )
+
+    def fc_pinning(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> FcPinningCursor:
+        """Declare a ``fcPinningP`` child under the tenant level.
+
+        Fiber Channel Pinning Profile. Its used for pinning host interfaces to uplink interfaces.
+
+        Args:
+            name: Naming property — forms the object's RN.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "FcPinningCursor",
+            self._invoke_maker("fc_pinning", (name,), _prune(params)),
+        )
+
+    def address_pool(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> AddressPoolCursor:
+        """Declare a ``fvAddrMgmtPool`` child under the tenant level.
+
+        Args:
+            name: The name of the object.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "AddressPoolCursor",
+            self._invoke_maker("address_pool", (name,), _prune(params)),
+        )
+
     def ip_sla_monitoring_policy(
         self,
         name: str,
@@ -3646,7 +4226,411 @@ class AccessFunctionProfileCursor(_AccessFunctionProfileMakers, _TenantMakers, _
         return self
 
 
-class ActionRuleProfileCursor(_TenantMakers, _UniMakers):
+class _ActionRuleProfileMakers(Cursor):
+    """Makers declared at the action_rule_profile level (``rtctrlAttrP``)."""
+
+    __slots__ = ()
+
+    def set_as_path(
+        self,
+        as_path_criteria: RtmapASCritT | str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        last_as_number: int | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        type: RtctrlSetType | str | None = None,
+        userdom: str | None = None,
+    ) -> SetAsPathCursor:
+        """Declare a ``rtctrlSetASPath`` child under the action_rule_profile level.
+
+        Set rule based on AS Path
+
+        Args:
+            as_path_criteria: Criteria value
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            last_as_number: Last AS Number Default: ``0``.
+            type: Set type Values: ``as-path``, ``community``, ``dampening-pol``, ``ip-nh``,
+                ``local-pref``, ``metric``, ``metric-type``, ``nh-unchanged``, …. Default: ``as-
+                path``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "as_path_criteria",
+            )
+        }
+        return cast(
+            "SetAsPathCursor",
+            self._invoke_maker("set_as_path", (as_path_criteria,), _prune(params)),
+        )
+
+    def add_community(
+        self,
+        community: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        set_criteria: RtmapSetCriteria | str | None = None,
+        type: RtctrlSetType | str | None = None,
+        userdom: str | None = None,
+    ) -> AddCommunityCursor:
+        """Declare a ``rtctrlSetAddComm`` child under the action_rule_profile level.
+
+        Args:
+            community: Community value
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            set_criteria: setCriteria value Values: ``append``, ``none``, ``replace``. Default:
+                ``append``.
+            type: Values: ``as-path``, ``community``, ``dampening-pol``, ``ip-nh``, ``local-
+                pref``, ``metric``, ``metric-type``, ``nh-unchanged``, …. Default:
+                ``community``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "community",
+            )
+        }
+        return cast(
+            "AddCommunityCursor",
+            self._invoke_maker("add_community", (community,), _prune(params)),
+        )
+
+    def set_community(
+        self,
+        *,
+        annotation: str | None = None,
+        community: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        set_criteria: RtmapSetCriteria | str | None = None,
+        type: RtctrlSetType | str | None = None,
+        userdom: str | None = None,
+    ) -> SetCommunityCursor:
+        """Declare a ``rtctrlSetComm`` child under the action_rule_profile level.
+
+        The set action rule based on communities.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            community: Community value
+            description: Specifies the description of a policy component.
+            set_criteria: setCriteria value Values: ``append``, ``none``, ``replace``. Default:
+                ``none``.
+            type: Values: ``as-path``, ``community``, ``dampening-pol``, ``ip-nh``, ``local-
+                pref``, ``metric``, ``metric-type``, ``nh-unchanged``, …. Default:
+                ``community``.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "SetCommunityCursor",
+            self._invoke_maker("set_community", (), _prune(params)),
+        )
+
+    def set_dampening(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        half_life: int | None = None,
+        max_suppress_time: int | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        reuse_limit: int | None = None,
+        suppress_limit: int | None = None,
+        type: RtctrlSetType | str | None = None,
+        userdom: str | None = None,
+    ) -> SetDampeningCursor:
+        """Declare a ``rtctrlSetDamp`` child under the action_rule_profile level.
+
+        Set rule based on dampening
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            half_life: Half Life Default: ``15``.
+            max_suppress_time: Max Suppress Time Default: ``60``.
+            reuse_limit: Reuse Limit Default: ``750``.
+            suppress_limit: Suppress Limit Default: ``2000``.
+            type: Set Action Type Values: ``as-path``, ``community``, ``dampening-pol``, ``ip-
+                nh``, ``local-pref``, ``metric``, ``metric-type``, ``nh-unchanged``, …. Default:
+                ``dampening-pol``.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "SetDampeningCursor",
+            self._invoke_maker("set_dampening", (), _prune(params)),
+        )
+
+    def set_next_hop(
+        self,
+        *,
+        addr: str | None = None,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        type: RtctrlSetType | str | None = None,
+        userdom: str | None = None,
+    ) -> SetNextHopCursor:
+        """Declare a ``rtctrlSetNh`` child under the action_rule_profile level.
+
+        Sets action rule based on the next hop address.
+
+        Args:
+            addr: The peer IP address.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            type: Values: ``as-path``, ``community``, ``dampening-pol``, ``ip-nh``, ``local-
+                pref``, ``metric``, ``metric-type``, ``nh-unchanged``, …. Default: ``ip-nh``.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "SetNextHopCursor",
+            self._invoke_maker("set_next_hop", (), _prune(params)),
+        )
+
+    def set_next_hop_unchanged(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        type: RtctrlSetType | str | None = None,
+        userdom: str | None = None,
+    ) -> SetNextHopUnchangedCursor:
+        """Declare a ``rtctrlSetNhUnchanged`` child under the action_rule_profile level.
+
+        Set Action Rule based on nexthop unchaged config
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            type: Set Action Type Values: ``as-path``, ``community``, ``dampening-pol``, ``ip-
+                nh``, ``local-pref``, ``metric``, ``metric-type``, ``nh-unchanged``, …. Default:
+                ``nh-unchanged``.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "SetNextHopUnchangedCursor",
+            self._invoke_maker("set_next_hop_unchanged", (), _prune(params)),
+        )
+
+    def set_policy_tag(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        type: RtctrlSetType | str | None = None,
+        userdom: str | None = None,
+    ) -> SetPolicyTagCursor:
+        """Declare a ``rtctrlSetPolicyTag`` child under the action_rule_profile level.
+
+        Set Action Rule based on policy tag
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            type: Set Action Type Values: ``as-path``, ``community``, ``dampening-pol``, ``ip-
+                nh``, ``local-pref``, ``metric``, ``metric-type``, ``nh-unchanged``, …. Default:
+                ``policy-tag``.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "SetPolicyTagCursor",
+            self._invoke_maker("set_policy_tag", (), _prune(params)),
+        )
+
+    def set_preference(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        local_pref: int | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        type: RtctrlSetType | str | None = None,
+        userdom: str | None = None,
+    ) -> SetPreferenceCursor:
+        """Declare a ``rtctrlSetPref`` child under the action_rule_profile level.
+
+        The set action rule based on preference.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            local_pref: The local preference value. Default: ``0``.
+            type: Values: ``as-path``, ``community``, ``dampening-pol``, ``ip-nh``, ``local-
+                pref``, ``metric``, ``metric-type``, ``nh-unchanged``, …. Default: ``local-
+                pref``.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "SetPreferenceCursor",
+            self._invoke_maker("set_preference", (), _prune(params)),
+        )
+
+    def set_redistribute_multipath(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        type: RtctrlSetType | str | None = None,
+        userdom: str | None = None,
+    ) -> SetRedistributeMultipathCursor:
+        """Declare a ``rtctrlSetRedistMultipath`` child under the action_rule_profile level.
+
+        Set Action Rule based on set redistribute multipath config
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            type: Set Action Type Values: ``as-path``, ``community``, ``dampening-pol``, ``ip-
+                nh``, ``local-pref``, ``metric``, ``metric-type``, ``nh-unchanged``, …. Default:
+                ``redist-multipath``.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "SetRedistributeMultipathCursor",
+            self._invoke_maker("set_redistribute_multipath", (), _prune(params)),
+        )
+
+    def set_metric(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        metric: int | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        type: RtctrlSetType | str | None = None,
+        userdom: str | None = None,
+    ) -> SetMetricCursor:
+        """Declare a ``rtctrlSetRtMetric`` child under the action_rule_profile level.
+
+        The set action rule based on metric.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            metric: The Metric value Default: ``0``.
+            type: Sets the action rule based on the metric type. Values: ``as-path``,
+                ``community``, ``dampening-pol``, ``ip-nh``, ``local-pref``, ``metric``,
+                ``metric-type``, ``nh-unchanged``, …. Default: ``metric``.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "SetMetricCursor",
+            self._invoke_maker("set_metric", (), _prune(params)),
+        )
+
+    def set_metric_type(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        metric_type: RtctrlMetricType | str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        type: RtctrlSetType | str | None = None,
+        userdom: str | None = None,
+    ) -> SetMetricTypeCursor:
+        """Declare a ``rtctrlSetRtMetricType`` child under the action_rule_profile level.
+
+        The set action rule based on a metric type.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            metric_type: The Metric Type. Values: ``ospf-type1``, ``ospf-type2``. Default:
+                ``ospf-type1``.
+            type: The specific type of the object or component. Values: ``as-path``,
+                ``community``, ``dampening-pol``, ``ip-nh``, ``local-pref``, ``metric``,
+                ``metric-type``, ``nh-unchanged``, …. Default: ``metric-type``.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "SetMetricTypeCursor",
+            self._invoke_maker("set_metric_type", (), _prune(params)),
+        )
+
+    def set_route_tag(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        route_tag: int | None = None,
+        type: RtctrlSetType | str | None = None,
+        userdom: str | None = None,
+    ) -> SetRouteTagCursor:
+        """Declare a ``rtctrlSetTag`` child under the action_rule_profile level.
+
+        The set action rule based on route tag.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            route_tag: Tag value Default: ``0``.
+            type: Values: ``as-path``, ``community``, ``dampening-pol``, ``ip-nh``, ``local-
+                pref``, ``metric``, ``metric-type``, ``nh-unchanged``, …. Default: ``rt-tag``.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "SetRouteTagCursor",
+            self._invoke_maker("set_route_tag", (), _prune(params)),
+        )
+
+    def set_weight(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        type: RtctrlSetType | str | None = None,
+        userdom: str | None = None,
+        weight: int | None = None,
+    ) -> SetWeightCursor:
+        """Declare a ``rtctrlSetWeight`` child under the action_rule_profile level.
+
+        Set rule based on dampening
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            type: Set Action Type Values: ``as-path``, ``community``, ``dampening-pol``, ``ip-
+                nh``, ``local-pref``, ``metric``, ``metric-type``, ``nh-unchanged``, …. Default:
+                ``rt-weight``.
+            weight: Half Life Default: ``0``.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "SetWeightCursor",
+            self._invoke_maker("set_weight", (), _prune(params)),
+        )
+
+
+class ActionRuleProfileCursor(_ActionRuleProfileMakers, _TenantMakers, _UniMakers):
     """Typed cursor for ``rtctrlAttrP`` (action_rule_profile level).
 
     Position: ``uni.tenant.action_rule_profile``
@@ -3666,6 +4650,80 @@ class ActionRuleProfileCursor(_TenantMakers, _UniMakers):
         userdom: str | None = None,
     ) -> ActionRuleProfileCursor:
         """Set ``rtctrlAttrP`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class _AddressPoolMakers(Cursor):
+    """Makers declared at the address_pool level (``fvAddrMgmtPool``)."""
+
+    __slots__ = ()
+
+    def block(
+        self,
+        from_: str,
+        ending_ip_address: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> BlockCursor:
+        """Declare a ``fvAddrMgmtAddrBlk`` child under the address_pool level.
+
+        Args:
+            from_: Starting IP Address
+            ending_ip_address: Ending IP Address
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "from_",
+                "ending_ip_address",
+            )
+        }
+        return cast(
+            "BlockCursor",
+            self._invoke_maker(
+                "block",
+                (
+                    from_,
+                    ending_ip_address,
+                ),
+                _prune(params),
+            ),
+        )
+
+
+class AddressPoolCursor(_AddressPoolMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``fvAddrMgmtPool`` (address_pool level).
+
+    Position: ``uni.tenant.address_pool``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> AddressPoolCursor:
+        """Set ``fvAddrMgmtPool`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
         return self
@@ -3856,6 +4914,89 @@ class ArpInterfacePolicyCursor(_TenantMakers, _UniMakers):
         return self
 
 
+class _AuthServerGroupMakers(Cursor):
+    """Makers declared at the auth_server_group level (``authSvrGroup``)."""
+
+    __slots__ = ()
+
+    def server(
+        self,
+        name: str,
+        *,
+        hostname_or_ip_address: str | None = None,
+        annotation: str | None = None,
+        event_sync_interval_seconds: int | None = None,
+        triggered_inventory_sync_status: AuthTrigSt | str | None = None,
+        mode: AuthMode | str | None = None,
+        display_name: str | None = None,
+        port: int | None = None,
+        datacenter: str | None = None,
+        scope: AuthScope | str | None = None,
+        sequence_number: int | None = None,
+        stats_option: VmmStatsMode | str | None = None,
+        userdom: str | None = None,
+    ) -> AuthServerGroupServerCursor:
+        """Declare a ``authSvr`` child under the auth_server_group level.
+
+        Args:
+            name: The name of the object.
+            hostname_or_ip_address: The host or IP address.
+            annotation: User annotation. Suggested format orchestrator:value
+            event_sync_interval_seconds: Event Timers Default: ``30``.
+            triggered_inventory_sync_status: Manual trigger state of inventory sync Values:
+                ``triggered``, ``untriggered``. Default: ``untriggered``.
+            mode: The BGP Domain mode. Values: ``AD``, ``unknown``. Default: ``AD``.
+            port: The service port number for the LDAP service. Default: ``0``.
+            datacenter: The name of the root level objects in the external VM management system
+                that contains the compute and networking entities. For example, the name of the
+                Datacenter in VMware vCenter.
+            scope: mode of operation Values: ``ISE``. Default: ``ISE``.
+            sequence_number: An ISIS link-state packet sequence number. Default: ``0``.
+            stats_option: Values: ``disabled``, ``enabled``, ``unknown``. Default: ``disabled``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "AuthServerGroupServerCursor",
+            self._invoke_maker("server", (name,), _prune(params)),
+        )
+
+
+class AuthServerGroupCursor(_AuthServerGroupMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``authSvrGroup`` (auth_server_group level).
+
+    Position: ``uni.tenant.auth_server_group``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        delimiter: str | None = None,
+        annotation: str | None = None,
+        mode: AuthMode | str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> AuthServerGroupCursor:
+        """Set ``authSvrGroup`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
 class _BdMakers(Cursor):
     """Makers declared at the bd level (``fvBD``)."""
 
@@ -3909,6 +5050,133 @@ class _BdMakers(Cursor):
         return cast(
             "BdSubnetCursor",
             self._invoke_maker("subnet", (subnet,), _prune(params)),
+        )
+
+    def pim(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> BdPimCursor:
+        """Declare a ``pimBDP`` child under the bd level.
+
+        BD-level PIM policy
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "BdPimCursor",
+            self._invoke_maker("pim", (), _prune(params)),
+        )
+
+    def nd_ra_subnet(
+        self,
+        subnet: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> NdRaSubnetCursor:
+        """Declare a ``ndRaSubnet`` child under the bd level.
+
+        Neighbor Discovery (ND) uses ICMPv6 messages known as Router advertisement (RA) messages,
+        which have a value of 134 in the Type field of the ICMP packet header, are periodically sent
+        out each configured interface of an IPv6 device.
+
+        Args:
+            subnet: The IP address.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "subnet",
+            )
+        }
+        return cast(
+            "NdRaSubnetCursor",
+            self._invoke_maker("nd_ra_subnet", (subnet,), _prune(params)),
+        )
+
+    def legacy_mode(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        bd_access_encap: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> LegacyModeCursor:
+        """Declare a ``fvAccP`` child under the bd level.
+
+        The bridge domain (BD) access profile. When created over a BD, contracts are not enforced
+        for the BD, and the encap will be applied to all endpoint groups on this BD.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            bd_access_encap: The selected VLAN for bridge domain access port encapsulation.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "LegacyModeCursor",
+            self._invoke_maker("legacy_mode", (), _prune(params)),
+        )
+
+    def rogue_exception_mac(
+        self,
+        exception_mac: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> BdRogueExceptionMacCursor:
+        """Declare a ``fvRogueExceptionMac`` child under the bd level.
+
+        Configuration of MAC address to be excepted from Rogue processing
+
+        Args:
+            exception_mac: MAC address to except from Rogue processing
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "exception_mac",
+            )
+        }
+        return cast(
+            "BdRogueExceptionMacCursor",
+            self._invoke_maker("rogue_exception_mac", (exception_mac,), _prune(params)),
         )
 
 
@@ -4392,7 +5660,117 @@ class ContractCursor(_ContractMakers, _TenantMakers, _UniMakers):
         return self
 
 
-class CustomQosPolicyCursor(_TenantMakers, _UniMakers):
+class _CustomQosPolicyMakers(Cursor):
+    """Makers declared at the custom_qos_policy level (``qosCustomPol``)."""
+
+    __slots__ = ()
+
+    def dot1p_class(
+        self,
+        from_: int | str,
+        to: int | str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        priority: QosTenantPrio | str | None = None,
+        dscp_target: int | str | None = None,
+        target_cos: int | str | None = None,
+        userdom: str | None = None,
+    ) -> Dot1pClassCursor:
+        """Declare a ``qosDot1PClass`` child under the custom_qos_policy level.
+
+        The class level for dot1P to prioritize the map.
+
+        Args:
+            from_: The Dot1p priority range starting value.
+            to: The Dot1p priority range ending value.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            priority: Class id Values: ``level1``, ``level2``, ``level3``, ``level4``,
+                ``level5``, ``level6``, ``unspecified``. Default: ``unspecified``.
+            dscp_target: Our Fabric only supports DSCP mutation. Dot1P mutation is not supported
+                Default: ``unspecified``.
+            target_cos: Target COS to be driven based on the range of input values of DSCP
+                coming into the fabric Default: ``unspecified``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "from_",
+                "to",
+            )
+        }
+        return cast(
+            "Dot1pClassCursor",
+            self._invoke_maker(
+                "dot1p_class",
+                (
+                    from_,
+                    to,
+                ),
+                _prune(params),
+            ),
+        )
+
+    def dscp_class(
+        self,
+        from_: int | str,
+        to: int | str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        priority: QosTenantPrio | str | None = None,
+        dscp_target: int | str | None = None,
+        target_cos: int | str | None = None,
+        userdom: str | None = None,
+    ) -> DscpClassCursor:
+        """Declare a ``qosDscpClass`` child under the custom_qos_policy level.
+
+        The class level for DSCP to prioritize the map.
+
+        Args:
+            from_: The DSCP range starting value.
+            to: The DSCP range ending value.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            priority: Class id Values: ``level1``, ``level2``, ``level3``, ``level4``,
+                ``level5``, ``level6``, ``unspecified``. Default: ``unspecified``.
+            dscp_target: Our Fabric only supports DSCP mutation. Dot1P mutation is not supported
+                Default: ``unspecified``.
+            target_cos: Target COS to be driven based on the range of input values of DSCP
+                coming into the fabric Default: ``unspecified``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "from_",
+                "to",
+            )
+        }
+        return cast(
+            "DscpClassCursor",
+            self._invoke_maker(
+                "dscp_class",
+                (
+                    from_,
+                    to,
+                ),
+                _prune(params),
+            ),
+        )
+
+
+class CustomQosPolicyCursor(_CustomQosPolicyMakers, _TenantMakers, _UniMakers):
     """Typed cursor for ``qosCustomPol`` (custom_qos_policy level).
 
     Position: ``uni.tenant.custom_qos_policy``
@@ -4553,6 +5931,69 @@ class TenantDhcpRelayPolicyCursor(_TenantDhcpRelayPolicyMakers, _TenantMakers, _
         userdom: str | None = None,
     ) -> TenantDhcpRelayPolicyCursor:
         """Set ``dhcpRelayP`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class _DnsServerGroupMakers(Cursor):
+    """Makers declared at the dns_server_group level (``dnsepgSvrGrp``)."""
+
+    __slots__ = ()
+
+    def server(
+        self,
+        ip_address: str,
+        *,
+        annotation: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> DnsServerGroupServerCursor:
+        """Declare a ``dnsepgSvr`` child under the dns_server_group level.
+
+        DNS Server
+
+        Args:
+            ip_address: ip
+            annotation: User annotation. Suggested format orchestrator:value
+            name: The name of the object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "ip_address",
+            )
+        }
+        return cast(
+            "DnsServerGroupServerCursor",
+            self._invoke_maker("server", (ip_address,), _prune(params)),
+        )
+
+
+class DnsServerGroupCursor(_DnsServerGroupMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``dnsepgSvrGrp`` (dns_server_group level).
+
+    Position: ``uni.tenant.dns_server_group``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        display_name: str | None = None,
+        network_connection_type: DnsepgNetworkType | str | None = None,
+        userdom: str | None = None,
+    ) -> DnsServerGroupCursor:
+        """Set ``dnsepgSvrGrp`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
         return self
@@ -5015,6 +6456,33 @@ class ExternalManagementEntityCursor(_ExternalManagementEntityMakers, _TenantMak
         return self
 
 
+class FcPinningCursor(_TenantMakers, _UniMakers):
+    """Typed cursor for ``fcPinningP`` (fc_pinning level).
+
+    Position: ``uni.tenant.fc_pinning``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> FcPinningCursor:
+        """Set ``fcPinningP`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
 class _FhsBdPolicyMakers(Cursor):
     """Makers declared at the fhs_bd_policy level (``fhsBDPol``)."""
 
@@ -5092,7 +6560,7 @@ class FhsBdPolicyCursor(_FhsBdPolicyMakers, _TenantMakers, _UniMakers):
         return self
 
 
-class _FilterMakers(Cursor):
+class _TenantFilterMakers(Cursor):
     """Makers declared at the filter level (``vzFilter``)."""
 
     __slots__ = ()
@@ -5120,7 +6588,7 @@ class _FilterMakers(Cursor):
         stateful: bool | None = None,
         tcp_rules: frozenset[L4TcpFlags] | set[L4TcpFlags] | str | None = None,
         userdom: str | None = None,
-    ) -> EntryCursor:
+    ) -> TenantFilterEntryCursor:
         """Declare a ``vzEntry`` child under the filter level.
 
         A filter entry is a combination of network traffic classification properties.
@@ -5158,12 +6626,59 @@ class _FilterMakers(Cursor):
             )
         }
         return cast(
-            "EntryCursor",
+            "TenantFilterEntryCursor",
             self._invoke_maker("entry", (name,), _prune(params)),
         )
 
+    def port_zero_entry(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        apply_rule_for_all_fragments: bool | None = None,
+        description: str | None = None,
+        port_zero_direction: VzPZDirection | str | None = None,
+        ethernet_type: VzPZEtherType | str | None = None,
+        dscp_match_for_filter_entry: int | str | None = None,
+        display_name: str | None = None,
+        protocol: VzPZIpProt | str | None = None,
+        stateful: bool | None = None,
+        tcp_rules: frozenset[L4TcpFlags] | set[L4TcpFlags] | str | None = None,
+        userdom: str | None = None,
+    ) -> PortZeroEntryCursor:
+        """Declare a ``vzEntryPortZero`` child under the filter level.
 
-class FilterCursor(_FilterMakers, _TenantMakers, _UniMakers):
+        Args:
+            name: The name of the object.
+            annotation: User annotation. Suggested format orchestrator:value
+            apply_rule_for_all_fragments: When flag is true, apply this entry rule for all
+                fragments. When false apply for initial fragment only Default: ``False``.
+            description: Specifies the description of a policy component.
+            port_zero_direction: L3 Ip Protocol peppemon should be new Values: ``both``,
+                ``destination``, ``source``. Default: ``both``.
+            ethernet_type: Ether type peppemon should new Values: ``ip``, ``ipv4``, ``ipv6``.
+                Default: ``ipv4``.
+            dscp_match_for_filter_entry: Default: ``unspecified``.
+            protocol: The IP protocol. Values: ``sctp``, ``tcp``, ``udp``. Default: ``tcp``.
+            stateful: Is this Entry stateful? Applies to prot tcp only Default: ``False``.
+            tcp_rules: TCP Session Rules Default: ``PydanticUndefined``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "PortZeroEntryCursor",
+            self._invoke_maker("port_zero_entry", (name,), _prune(params)),
+        )
+
+
+class TenantFilterCursor(_TenantFilterMakers, _TenantMakers, _UniMakers):
     """Typed cursor for ``vzFilter`` (filter level).
 
     Position: ``uni.tenant.filter``
@@ -5183,8 +6698,102 @@ class FilterCursor(_FilterMakers, _TenantMakers, _UniMakers):
         owner_key: str | None = None,
         owner_tag: str | None = None,
         userdom: str | None = None,
-    ) -> FilterCursor:
+    ) -> TenantFilterCursor:
         """Set ``vzFilter`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class _HostProtectionMakers(Cursor):
+    """Makers declared at the host_protection level (``hostprotPol``)."""
+
+    __slots__ = ()
+
+    def subject(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> HostProtectionSubjectCursor:
+        """Declare a ``hostprotSubj`` child under the host_protection level.
+
+        Args:
+            name: The name of the object.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "HostProtectionSubjectCursor",
+            self._invoke_maker("subject", (name,), _prune(params)),
+        )
+
+    def remote_ips(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> RemoteIpsCursor:
+        """Declare a ``hostprotRemoteIpContainer`` child under the host_protection level.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "RemoteIpsCursor",
+            self._invoke_maker("remote_ips", (), _prune(params)),
+        )
+
+
+class HostProtectionCursor(_HostProtectionMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``hostprotPol`` (host_protection level).
+
+    Position: ``uni.tenant.host_protection``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> HostProtectionCursor:
+        """Set ``hostprotPol`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
         return self
@@ -5258,7 +6867,90 @@ class HsrpInterfacePolicyCursor(_TenantMakers, _UniMakers):
         return self
 
 
-class IgmpInterfacePolicyCursor(_TenantMakers, _UniMakers):
+class _IgmpInterfacePolicyMakers(Cursor):
+    """Makers declared at the igmp_interface_policy level (``igmpIfPol``)."""
+
+    __slots__ = ()
+
+    def report(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> ReportCursor:
+        """Declare a ``igmpRepPol`` child under the igmp_interface_policy level.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "ReportCursor",
+            self._invoke_maker("report", (), _prune(params)),
+        )
+
+    def state_limit(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        maximum_multicast_entries: int | str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        reserved_multicast_entries: int | str | None = None,
+        userdom: str | None = None,
+    ) -> StateLimitCursor:
+        """Declare a ``igmpStateLPol`` child under the igmp_interface_policy level.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            maximum_multicast_entries: Default: ``unlimited``.
+            reserved_multicast_entries: Default: ``undefined``.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "StateLimitCursor",
+            self._invoke_maker("state_limit", (), _prune(params)),
+        )
+
+    def static_report(
+        self,
+        join_type_of_groups: IpmcJoinType | str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> StaticReportCursor:
+        """Declare a ``igmpStRepPol`` child under the igmp_interface_policy level.
+
+        Args:
+            join_type_of_groups: Naming property — forms the object's RN.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "join_type_of_groups",
+            )
+        }
+        return cast(
+            "StaticReportCursor",
+            self._invoke_maker("static_report", (join_type_of_groups,), _prune(params)),
+        )
+
+
+class IgmpInterfacePolicyCursor(_IgmpInterfacePolicyMakers, _TenantMakers, _UniMakers):
     """Typed cursor for ``igmpIfPol`` (igmp_interface_policy level).
 
     Position: ``uni.tenant.igmp_interface_policy``
@@ -5549,6 +7241,190 @@ class IpSlaMonitoringPolicyCursor(_IpSlaMonitoringPolicyMakers, _TenantMakers, _
         userdom: str | None = None,
     ) -> IpSlaMonitoringPolicyCursor:
         """Set ``fvIPSLAMonitoringPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class IpsecPhase1Cursor(_TenantMakers, _UniMakers):
+    """Typed cursor for ``ipsecIsakmpPhase1Pol`` (ipsec_phase1 level).
+
+    Position: ``uni.tenant.ipsec_phase1``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        authentication_method: HcisakmpAuthMethod | str | None = None,
+        description: str | None = None,
+        diffie_hellman_group: HcisakmpDhGroup | str | None = None,
+        encryption_algorithm: HcisakmpEncrAlgo | str | None = None,
+        hash_authentication_algorithm: HcisakmpHash | str | None = None,
+        lifetime: int | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> IpsecPhase1Cursor:
+        """Set ``ipsecIsakmpPhase1Pol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class IpsecPhase2Cursor(_TenantMakers, _UniMakers):
+    """Typed cursor for ``ipsecIsakmpPhase2Pol`` (ipsec_phase2 level).
+
+    Position: ``uni.tenant.ipsec_phase2``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        dh_group: HcisakmpDhGroup | str | None = None,
+        encapsulation_mode_eg_tunnel: HcipsecEncapsulationMode | str | None = None,
+        encapsulation_type_eg_esp: HcipsecEncapsulationType | str | None = None,
+        encryption_algorithm_eg_aes: HcisakmpEncrAlgo | str | None = None,
+        hash_authentication_algorithm: HcisakmpHash | str | None = None,
+        lifetime: int | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> IpsecPhase2Cursor:
+        """Set ``ipsecIsakmpPhase2Pol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class IsakmpGlobalCursor(_TenantMakers, _UniMakers):
+    """Typed cursor for ``isakmpGlobalPol`` (isakmp_global level).
+
+    Position: ``uni.tenant.isakmp_global``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        isakmp_keepalive_interval: int | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        number_of_seconds_between_keep_alives: int | None = None,
+        userdom: str | None = None,
+    ) -> IsakmpGlobalCursor:
+        """Set ``isakmpGlobalPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class IsakmpKeyringCursor(_TenantMakers, _UniMakers):
+    """Typed cursor for ``isakmpKeyring`` (isakmp_keyring level).
+
+    Position: ``uni.tenant.isakmp_keyring``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        ip_address_of_peer_that_shares_the_key: str | None = None,
+        annotation: str | None = None,
+        description: str | None = None,
+        key_type: HcisakmpKeyType | str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> IsakmpKeyringCursor:
+        """Set ``isakmpKeyring`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class IsakmpPolicyCursor(_TenantMakers, _UniMakers):
+    """Typed cursor for ``isakmpPolicy`` (isakmp_policy level).
+
+    Position: ``uni.tenant.isakmp_policy``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        auth_method: HcisakmpAuthMethod | str | None = None,
+        description: str | None = None,
+        diffie_hellman_group: HcisakmpDhGroup | str | None = None,
+        encryption: HcisakmpEncrAlgo | str | None = None,
+        hash_algorithm: HcisakmpHash | str | None = None,
+        lifetime_for_isakmp_security_association: int | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> IsakmpPolicyCursor:
+        """Set ``isakmpPolicy`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class IsakmpProfileCursor(_TenantMakers, _UniMakers):
+    """Typed cursor for ``isakmpProfile`` (isakmp_profile level).
+
+    Position: ``uni.tenant.isakmp_profile``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> IsakmpProfileCursor:
+        """Set ``isakmpProfile`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
         return self
@@ -6061,6 +7937,96 @@ class _L3outMakers(Cursor):
             self._invoke_maker("route_target_instrumentation_profile", (), _prune(params)),
         )
 
+    def consumer_label(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        represents_the_provider_label_ownership: L3extOwner | str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        tag: PolColor | str | None = None,
+        userdom: str | None = None,
+    ) -> L3outConsumerLabelCursor:
+        """Declare a ``l3extConsLbl`` child under the l3out level.
+
+        Represents Logical Outside Profile Consumer Label. Defines the characteristics that will be
+        applied to Layer3 Outside that matches with the label name
+
+        Args:
+            name: The name of the object.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            represents_the_provider_label_ownership: The owner of the target relay. The DHCP
+                relay is any host that forwards DHCP packets between clients and servers. The
+                relays are used to forward requests and replies between clients and servers when
+                they are not on the same physical subnet. Values: ``infra``, ``tenant``.
+                Default: ``infra``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            tag: Specifies the color of a policy label. Values: ``alice-blue``, ``antique-
+                white``, ``aqua``, ``aquamarine``, ``azure``, ``beige``, ``bisque``, ``black``,
+                …. Default: ``alice-blue``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "L3outConsumerLabelCursor",
+            self._invoke_maker("consumer_label", (name,), _prune(params)),
+        )
+
+    def provider_label(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        tag: PolColor | str | None = None,
+        userdom: str | None = None,
+    ) -> L3outProviderLabelCursor:
+        """Declare a ``l3extProvLbl`` child under the l3out level.
+
+        Represents Logical Outside Profile Provider Label. Defines the characteristics that will be
+        applied to Layer3 Outside that matches with the label name
+
+        Args:
+            name: The name of the object.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            tag: Specifies the color of a policy label. Values: ``alice-blue``, ``antique-
+                white``, ``aqua``, ``aquamarine``, ``azure``, ``beige``, ``bisque``, ``black``,
+                …. Default: ``alice-blue``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "L3outProviderLabelCursor",
+            self._invoke_maker("provider_label", (name,), _prune(params)),
+        )
+
 
 class L3outCursor(_L3outMakers, _TenantMakers, _UniMakers):
     """Typed cursor for ``l3extOut`` (l3out level).
@@ -6239,7 +8205,153 @@ class ManagementProfileCursor(_ManagementProfileMakers, _TenantMakers, _UniMaker
         return self
 
 
-class MatchRuleCursor(_TenantMakers, _UniMakers):
+class _MatchRuleMakers(Cursor):
+    """Makers declared at the match_rule level (``rtctrlSubjP``)."""
+
+    __slots__ = ()
+
+    def match_prefix(
+        self,
+        match_ip_address: str,
+        *,
+        aggregated_route: bool | None = None,
+        annotation: str | None = None,
+        description: str | None = None,
+        start_of_prefix_length: int | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        end_of_prefix_length: int | None = None,
+        userdom: str | None = None,
+    ) -> MatchPrefixCursor:
+        """Declare a ``rtctrlMatchRtDest`` child under the match_rule level.
+
+        The match action rule based on the route destination.
+
+        Args:
+            match_ip_address: Naming property — forms the object's RN.
+            aggregated_route: Aggregated Route Default: ``False``.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            start_of_prefix_length: Prefix list range Default: ``0``.
+            end_of_prefix_length: Default: ``0``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "match_ip_address",
+            )
+        }
+        return cast(
+            "MatchPrefixCursor",
+            self._invoke_maker("match_prefix", (match_ip_address,), _prune(params)),
+        )
+
+    def match_community(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> MatchCommunityCursor:
+        """Declare a ``rtctrlMatchCommTerm`` child under the match_rule level.
+
+        Match Community Term
+
+        Args:
+            name: The name of the object.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "MatchCommunityCursor",
+            self._invoke_maker("match_community", (name,), _prune(params)),
+        )
+
+    def match_community_regex(
+        self,
+        community_type: RtctrlCommunityType | str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        regular_expression: str | None = None,
+        userdom: str | None = None,
+    ) -> MatchCommunityRegexCursor:
+        """Declare a ``rtctrlMatchCommRegexTerm`` child under the match_rule level.
+
+        Match Rule Based Route Regular Expression Community
+
+        Args:
+            community_type: Community Type
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            regular_expression: Regular Expression
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "community_type",
+            )
+        }
+        return cast(
+            "MatchCommunityRegexCursor",
+            self._invoke_maker("match_community_regex", (community_type,), _prune(params)),
+        )
+
+    def match_as_path(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        regular_expression: str | None = None,
+        userdom: str | None = None,
+    ) -> MatchAsPathCursor:
+        """Declare a ``rtctrlMatchAsPathRegexTerm`` child under the match_rule level.
+
+        Match Rule Based Route Regular Expression AS-Path
+
+        Args:
+            name: The name of the object.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            regular_expression: Regular Expression
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "MatchAsPathCursor",
+            self._invoke_maker("match_as_path", (name,), _prune(params)),
+        )
+
+
+class MatchRuleCursor(_MatchRuleMakers, _TenantMakers, _UniMakers):
     """Typed cursor for ``rtctrlSubjP`` (match_rule level).
 
     Position: ``uni.tenant.match_rule``
@@ -6299,7 +8411,49 @@ class TenantMldSnoopPolicyCursor(_TenantMakers, _UniMakers):
         return self
 
 
-class MonitoringPolicyCursor(_TenantMakers, _UniMakers):
+class _MonitoringPolicyMakers(Cursor):
+    """Makers declared at the monitoring_policy level (``monEPGPol``)."""
+
+    __slots__ = ()
+
+    def target(
+        self,
+        target_scope: MonTargetScope | str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        mon_epgtarget_name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> TargetCursor:
+        """Declare a ``monEPGTarget`` child under the monitoring_policy level.
+
+        Creating a monitoring target will allow you to associate certain monitoring policies to the
+        target object for this tenant. These associated policies can be related to stats collection,
+        stats export, Callhome/SNMP/Syslog, event severities, fault severities, and fault lifecycle
+        policies.
+
+        Args:
+            target_scope: The target object to which you will apply monitoring policies.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "target_scope",
+            )
+        }
+        return cast(
+            "TargetCursor",
+            self._invoke_maker("target", (target_scope,), _prune(params)),
+        )
+
+
+class MonitoringPolicyCursor(_MonitoringPolicyMakers, _TenantMakers, _UniMakers):
     """Typed cursor for ``monEPGPol`` (monitoring_policy level).
 
     Position: ``uni.tenant.monitoring_policy``
@@ -6463,7 +8617,53 @@ class MplsCustomQosPolicyCursor(_MplsCustomQosPolicyMakers, _TenantMakers, _UniM
         return self
 
 
-class MplsGlobalConfigurationCursor(_TenantMakers, _UniMakers):
+class _MplsGlobalConfigurationMakers(Cursor):
+    """Makers declared at the mpls_global_configuration level (``mplsLabelPol``)."""
+
+    __slots__ = ()
+
+    def srgb(
+        self,
+        srgb_identifier: int,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        srgb_maximum_label: int | None = None,
+        srgb_minimum_label: int | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> SrgbCursor:
+        """Declare a ``mplsSrgbLabelPol`` child under the mpls_global_configuration level.
+
+        Args:
+            srgb_identifier: SRGB identifier
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            srgb_maximum_label: Default: ``23999``.
+            srgb_minimum_label: SRGB Label Range Default: ``16000``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "srgb_identifier",
+            )
+        }
+        return cast(
+            "SrgbCursor",
+            self._invoke_maker("srgb", (srgb_identifier,), _prune(params)),
+        )
+
+
+class MplsGlobalConfigurationCursor(_MplsGlobalConfigurationMakers, _TenantMakers, _UniMakers):
     """Typed cursor for ``mplsLabelPol`` (mpls_global_configuration level).
 
     Position: ``uni.tenant.mpls_global_configuration``
@@ -6952,7 +9152,82 @@ class OspfTimersPolicyCursor(_TenantMakers, _UniMakers):
         return self
 
 
-class PimInterfacePolicyCursor(_TenantMakers, _UniMakers):
+class _PimInterfacePolicyMakers(Cursor):
+    """Makers declared at the pim_interface_policy level (``pimIfPol``)."""
+
+    __slots__ = ()
+
+    def neighbor_filter(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> NeighborFilterCursor:
+        """Declare a ``pimNbrFilterPol`` child under the pim_interface_policy level.
+
+        Interface-level neighbor filter policy.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "NeighborFilterCursor",
+            self._invoke_maker("neighbor_filter", (), _prune(params)),
+        )
+
+    def inbound_jp_filter(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> InboundJpFilterCursor:
+        """Declare a ``pimJPInbFilterPol`` child under the pim_interface_policy level.
+
+        Interface-level inbound join/prune filter policy.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "InboundJpFilterCursor",
+            self._invoke_maker("inbound_jp_filter", (), _prune(params)),
+        )
+
+    def outbound_jp_filter(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> OutboundJpFilterCursor:
+        """Declare a ``pimJPOutbFilterPol`` child under the pim_interface_policy level.
+
+        Interface-level outbound join/prune filter policy.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "OutboundJpFilterCursor",
+            self._invoke_maker("outbound_jp_filter", (), _prune(params)),
+        )
+
+
+class PimInterfacePolicyCursor(_PimInterfacePolicyMakers, _TenantMakers, _UniMakers):
     """Typed cursor for ``pimIfPol`` (pim_interface_policy level).
 
     Position: ``uni.tenant.pim_interface_policy``
@@ -7128,6 +9403,70 @@ class QosRequirementCursor(_QosRequirementMakers, _TenantMakers, _UniMakers):
     def egress_dpp(self, dpp_policy: str | Ref) -> QosRequirementCursor:
         """Reference the qosDppPol *dpp_policy* through ``qosRsEgressDppPol`` (lazy)."""
         Cursor._verb(self, "egress_dpp", dpp_policy)
+        return self
+
+
+class _RogueExceptionMacGroupMakers(Cursor):
+    """Makers declared at the rogue_exception_mac_group level (``l3extRogueExceptionMacGroup``)."""
+
+    __slots__ = ()
+
+    def mac(
+        self,
+        rogoue_exception_mac_address: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> MacCursor:
+        """Declare a ``l3extRogueExceptionMac`` child under the rogue_exception_mac_group level.
+
+        MAC address to exclude from Rogue processing
+
+        Args:
+            rogoue_exception_mac_address: The MAC address.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "rogoue_exception_mac_address",
+            )
+        }
+        return cast(
+            "MacCursor",
+            self._invoke_maker("mac", (rogoue_exception_mac_address,), _prune(params)),
+        )
+
+
+class RogueExceptionMacGroupCursor(_RogueExceptionMacGroupMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``l3extRogueExceptionMacGroup`` (rogue_exception_mac_group level).
+
+    Position: ``uni.tenant.rogue_exception_mac_group``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> RogueExceptionMacGroupCursor:
+        """Set ``l3extRogueExceptionMacGroup`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
         return self
 
 
@@ -7588,6 +9927,86 @@ class _TenantSpanSourceGroupMakers(Cursor):
             self._invoke_maker("span_label", (name,), _prune(params)),
         )
 
+    def vspan_source(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        direction_ingress_egress_both: SpanDirection | str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> TenantSpanSourceGroupVspanSourceCursor:
+        """Declare a ``spanVSrc`` child under the span_source_group level.
+
+        The VSPAN source, which is where traffic is sampled. A VSPAN source can be an endpoint group
+        (EPG), one or more ports, or port traffic filtered by an EPG (Access VSPAN), a Layer 2
+        bridge domain, or a Layer 3 context (Fabric VSPAN).
+
+        Args:
+            name: The name of the source.
+            description: Specifies a description of the policy definition.
+            direction_ingress_egress_both: The direction of the packets to monitor Values:
+                ``both``, ``in``, ``out``. Default: ``both``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "TenantSpanSourceGroupVspanSourceCursor",
+            self._invoke_maker("vspan_source", (name,), _prune(params)),
+        )
+
+    def vspan_source_def(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        direction_ingress_egress_both: SpanDirection | str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> TenantSpanSourceGroupVspanSourceDefCursor:
+        """Declare a ``spanVSrcDef`` child under the span_source_group level.
+
+        The VSPAN VSrcDef is used for VSPAN source definitions.
+
+        Args:
+            name: The name of the object.
+            description: Specifies a description of the policy definition.
+            direction_ingress_egress_both: The direction of the packets to monitor Values:
+                ``both``, ``in``, ``out``. Default: ``both``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "TenantSpanSourceGroupVspanSourceDefCursor",
+            self._invoke_maker("vspan_source_def", (name,), _prune(params)),
+        )
+
 
 class TenantSpanSourceGroupCursor(_TenantSpanSourceGroupMakers, _TenantMakers, _UniMakers):
     """Typed cursor for ``spanSrcGrp`` (span_source_group level).
@@ -7931,7 +10350,7 @@ class _VrfMakers(Cursor):
         owner_key: str | None = None,
         owner_tag: str | None = None,
         userdom: str | None = None,
-    ) -> PimCursor:
+    ) -> VrfPimCursor:
         """Declare a ``pimCtxP`` child under the vrf level.
 
         Context-level PIM policy.
@@ -7947,8 +10366,246 @@ class _VrfMakers(Cursor):
         """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
-            "PimCursor",
+            "VrfPimCursor",
             self._invoke_maker("pim", (), _prune(params)),
+        )
+
+    def pim6(
+        self,
+        *,
+        annotation: str | None = None,
+        control_knobs: frozenset[RtdmcDomUserCtrl] | set[RtdmcDomUserCtrl] | str | None = None,
+        description: str | None = None,
+        mtu: int | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> Pim6Cursor:
+        """Declare a ``pimIPV6CtxP`` child under the vrf level.
+
+        Context-level PIM policy
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            control_knobs: DOM controls Default: ``PydanticUndefined``.
+            description: Specifies a description of the policy definition.
+            mtu: MTU Default: ``1500``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "Pim6Cursor",
+            self._invoke_maker("pim6", (), _prune(params)),
+        )
+
+    def igmp(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> IgmpCursor:
+        """Declare a ``igmpCtxP`` child under the vrf level.
+
+        Context-level IGMP policy
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "IgmpCursor",
+            self._invoke_maker("igmp", (), _prune(params)),
+        )
+
+    def leak_routes(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> LeakRoutesCursor:
+        """Declare a ``leakRoutes`` child under the vrf level.
+
+        Logical Route leak Model sectionThis MO contain a list of routes to be leaked when using
+        Shared Services and ESg. With the ESg construct, there is no automatic route leaking based
+        on contract. Explicit route leaking is needed.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "LeakRoutesCursor",
+            self._invoke_maker("leak_routes", (), _prune(params)),
+        )
+
+    def global_vrf_name(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> GlobalVrfNameCursor:
+        """Declare a ``l3extGlobalCtxName`` child under the vrf level.
+
+        Global VRF Name
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            name: The name of the object.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "GlobalVrfNameCursor",
+            self._invoke_maker("global_vrf_name", (), _prune(params)),
+        )
+
+    def snmp_context(
+        self,
+        *,
+        annotation: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> SnmpContextCursor:
+        """Declare a ``snmpCtxP`` child under the vrf level.
+
+        The SNMP context profile enables you to specify a context to monitor with a community
+        profile. SNMP is an application-layer protocol that provides a message format for
+        communication between SNMP managers and agents.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "SnmpContextCursor",
+            self._invoke_maker("snmp_context", (), _prune(params)),
+        )
+
+    def dns_label(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        tag: PolColor | str | None = None,
+        userdom: str | None = None,
+    ) -> DnsLabelCursor:
+        """Declare a ``dnsLbl`` child under the vrf level.
+
+        The network domain name label. Labels enable classifying which objects can and cannot
+        communicate with one another.
+
+        Args:
+            name: Naming property — forms the object's RN.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            tag: Specifies the color of a policy label. Values: ``alice-blue``, ``antique-
+                white``, ``aqua``, ``aquamarine``, ``azure``, ``beige``, ``bisque``, ``black``,
+                …. Default: ``alice-blue``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "DnsLabelCursor",
+            self._invoke_maker("dns_label", (name,), _prune(params)),
+        )
+
+    def route_summarization(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> RouteSummarizationCursor:
+        """Declare a ``fvCtxRtSummPol`` child under the vrf level.
+
+        Args:
+            name: The name of the object.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "RouteSummarizationCursor",
+            self._invoke_maker("route_summarization", (name,), _prune(params)),
+        )
+
+    def route_deployment(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        spine_intra_vrf_route_deployment_type: FvSpineIntraVrfType | str | None = None,
+        userdom: str | None = None,
+    ) -> RouteDeploymentCursor:
+        """Declare a ``fvRouteDeployP`` child under the vrf level.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            spine_intra_vrf_route_deployment_type: Values: ``automatic``, ``contract``. Default:
+                ``contract``.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "RouteDeploymentCursor",
+            self._invoke_maker("route_deployment", (), _prune(params)),
         )
 
     def vzany(
@@ -8057,6 +10714,46 @@ class VrfCursor(_VrfMakers, _TenantMakers, _UniMakers):
         return self
 
 
+class VrfValidationPolicyCursor(_TenantMakers, _UniMakers):
+    """Typed cursor for ``l3extVrfValidationPol`` (vrf_validation_policy level).
+
+    Position: ``uni.tenant.vrf_validation_policy``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        enable_bgpinfrapeer_policy_validation: bool | None = None,
+        annotation: str | None = None,
+        description: str | None = None,
+        enable_vrf_validation_infra_underlay: bool | None = None,
+        enable_vrf_validation_interface_inco: bool | None = None,
+        enable_vrf_validation_ip_address: bool | None = None,
+        enable_loopback_interface_validation: bool | None = None,
+        enable_vrf_validation_node_router_id_bgp_peer: bool | None = None,
+        enable_ospf_interface_and_area_validaton: bool | None = None,
+        enable_ospf_area_id_validation: bool | None = None,
+        enable_vrf_validation_ospf_if_pol: bool | None = None,
+        enable_redistribute_policy_validation: bool | None = None,
+        enable_node_routerid_validation: bool | None = None,
+        enable_subnet_non_duplication_validation: bool | None = None,
+        enable_svi_link_local_address_validation: bool | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> VrfValidationPolicyCursor:
+        """Set ``l3extVrfValidationPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
 class AccessClientEpgCursor(_AccessClientProfileMakers, _TenantMakers, _UniMakers):
     """Typed cursor for ``infraCEPg`` (access_client_epg level).
 
@@ -8112,6 +10809,438 @@ class AccessFunctionProviderCursor(_AccessFunctionProfileMakers, _TenantMakers, 
         userdom: str | None = None,
     ) -> AccessFunctionProviderCursor:
         """Set ``infraPEPg`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class AddCommunityCursor(_ActionRuleProfileMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``rtctrlSetAddComm`` (add_community level).
+
+    Position: ``uni.tenant.action_rule_profile.add_community``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        set_criteria: RtmapSetCriteria | str | None = None,
+        type: RtctrlSetType | str | None = None,
+        userdom: str | None = None,
+    ) -> AddCommunityCursor:
+        """Set ``rtctrlSetAddComm`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class _SetAsPathMakers(Cursor):
+    """Makers declared at the set_as_path level (``rtctrlSetASPath``)."""
+
+    __slots__ = ()
+
+    def asn(
+        self,
+        asn_order: int,
+        *,
+        annotation: str | None = None,
+        as_number: int | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> AsnCursor:
+        """Declare a ``rtctrlSetASPathASN`` child under the set_as_path level.
+
+        AS Path ASN
+
+        Args:
+            asn_order: ASN Order
+            annotation: User annotation. Suggested format orchestrator:value
+            as_number: AS Numbers Default: ``0``.
+            description: Specifies the description of a policy component.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "asn_order",
+            )
+        }
+        return cast(
+            "AsnCursor",
+            self._invoke_maker("asn", (asn_order,), _prune(params)),
+        )
+
+
+class SetAsPathCursor(_SetAsPathMakers, _ActionRuleProfileMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``rtctrlSetASPath`` (set_as_path level).
+
+    Position: ``uni.tenant.action_rule_profile.set_as_path``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        last_as_number: int | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        type: RtctrlSetType | str | None = None,
+        userdom: str | None = None,
+    ) -> SetAsPathCursor:
+        """Set ``rtctrlSetASPath`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class SetCommunityCursor(_ActionRuleProfileMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``rtctrlSetComm`` (set_community level).
+
+    Position: ``uni.tenant.action_rule_profile.set_community``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        community: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        set_criteria: RtmapSetCriteria | str | None = None,
+        type: RtctrlSetType | str | None = None,
+        userdom: str | None = None,
+    ) -> SetCommunityCursor:
+        """Set ``rtctrlSetComm`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class SetDampeningCursor(_ActionRuleProfileMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``rtctrlSetDamp`` (set_dampening level).
+
+    Position: ``uni.tenant.action_rule_profile.set_dampening``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        half_life: int | None = None,
+        max_suppress_time: int | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        reuse_limit: int | None = None,
+        suppress_limit: int | None = None,
+        type: RtctrlSetType | str | None = None,
+        userdom: str | None = None,
+    ) -> SetDampeningCursor:
+        """Set ``rtctrlSetDamp`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class SetMetricCursor(_ActionRuleProfileMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``rtctrlSetRtMetric`` (set_metric level).
+
+    Position: ``uni.tenant.action_rule_profile.set_metric``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        metric: int | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        type: RtctrlSetType | str | None = None,
+        userdom: str | None = None,
+    ) -> SetMetricCursor:
+        """Set ``rtctrlSetRtMetric`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class SetMetricTypeCursor(_ActionRuleProfileMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``rtctrlSetRtMetricType`` (set_metric_type level).
+
+    Position: ``uni.tenant.action_rule_profile.set_metric_type``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        metric_type: RtctrlMetricType | str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        type: RtctrlSetType | str | None = None,
+        userdom: str | None = None,
+    ) -> SetMetricTypeCursor:
+        """Set ``rtctrlSetRtMetricType`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class SetNextHopCursor(_ActionRuleProfileMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``rtctrlSetNh`` (set_next_hop level).
+
+    Position: ``uni.tenant.action_rule_profile.set_next_hop``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        addr: str | None = None,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        type: RtctrlSetType | str | None = None,
+        userdom: str | None = None,
+    ) -> SetNextHopCursor:
+        """Set ``rtctrlSetNh`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class SetNextHopUnchangedCursor(_ActionRuleProfileMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``rtctrlSetNhUnchanged`` (set_next_hop_unchanged level).
+
+    Position: ``uni.tenant.action_rule_profile.set_next_hop_unchanged``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        type: RtctrlSetType | str | None = None,
+        userdom: str | None = None,
+    ) -> SetNextHopUnchangedCursor:
+        """Set ``rtctrlSetNhUnchanged`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class SetPolicyTagCursor(_ActionRuleProfileMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``rtctrlSetPolicyTag`` (set_policy_tag level).
+
+    Position: ``uni.tenant.action_rule_profile.set_policy_tag``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        type: RtctrlSetType | str | None = None,
+        userdom: str | None = None,
+    ) -> SetPolicyTagCursor:
+        """Set ``rtctrlSetPolicyTag`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class SetPreferenceCursor(_ActionRuleProfileMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``rtctrlSetPref`` (set_preference level).
+
+    Position: ``uni.tenant.action_rule_profile.set_preference``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        local_pref: int | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        type: RtctrlSetType | str | None = None,
+        userdom: str | None = None,
+    ) -> SetPreferenceCursor:
+        """Set ``rtctrlSetPref`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class SetRedistributeMultipathCursor(_ActionRuleProfileMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``rtctrlSetRedistMultipath`` (set_redistribute_multipath level).
+
+    Position: ``uni.tenant.action_rule_profile.set_redistribute_multipath``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        type: RtctrlSetType | str | None = None,
+        userdom: str | None = None,
+    ) -> SetRedistributeMultipathCursor:
+        """Set ``rtctrlSetRedistMultipath`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class SetRouteTagCursor(_ActionRuleProfileMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``rtctrlSetTag`` (set_route_tag level).
+
+    Position: ``uni.tenant.action_rule_profile.set_route_tag``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        route_tag: int | None = None,
+        type: RtctrlSetType | str | None = None,
+        userdom: str | None = None,
+    ) -> SetRouteTagCursor:
+        """Set ``rtctrlSetTag`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class SetWeightCursor(_ActionRuleProfileMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``rtctrlSetWeight`` (set_weight level).
+
+    Position: ``uni.tenant.action_rule_profile.set_weight``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        type: RtctrlSetType | str | None = None,
+        userdom: str | None = None,
+        weight: int | None = None,
+    ) -> SetWeightCursor:
+        """Set ``rtctrlSetWeight`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class BlockCursor(_AddressPoolMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``fvAddrMgmtAddrBlk`` (block level).
+
+    Position: ``uni.tenant.address_pool.block``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> BlockCursor:
+        """Set ``fvAddrMgmtAddrBlk`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
         return self
@@ -8865,6 +11994,42 @@ class _EsgMakers(Cursor):
             ),
         )
 
+    def lif_ctx_selector(
+        self,
+        lifctx_dn_to_be_associated: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> LifCtxSelectorCursor:
+        """Declare a ``fvLIfCtxSelector`` child under the esg level.
+
+        Args:
+            lifctx_dn_to_be_associated: Naming property — forms the object's RN.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "lifctx_dn_to_be_associated",
+            )
+        }
+        return cast(
+            "LifCtxSelectorCursor",
+            self._invoke_maker("lif_ctx_selector", (lifctx_dn_to_be_associated,), _prune(params)),
+        )
+
     def provider_label(
         self,
         name: str,
@@ -9214,7 +12379,367 @@ class EsgCursor(_EsgMakers, _AppMakers, _TenantMakers, _UniMakers):
         return self
 
 
-class BdSubnetCursor(_BdMakers, _TenantMakers, _UniMakers):
+class _AuthServerGroupServerMakers(Cursor):
+    """Makers declared at the server level (``authSvr``)."""
+
+    __slots__ = ()
+
+    def credential(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        keyring_dn: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> CredentialCursor:
+        """Declare a ``authUsrAccP`` child under the server level.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            keyring_dn: Key ring DN
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "CredentialCursor",
+            self._invoke_maker("credential", (), _prune(params)),
+        )
+
+
+class AuthServerGroupServerCursor(
+    _AuthServerGroupServerMakers, _AuthServerGroupMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``authSvr`` (server level).
+
+    Position: ``uni.tenant.auth_server_group.server``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        hostname_or_ip_address: str | None = None,
+        annotation: str | None = None,
+        event_sync_interval_seconds: int | None = None,
+        triggered_inventory_sync_status: AuthTrigSt | str | None = None,
+        mode: AuthMode | str | None = None,
+        display_name: str | None = None,
+        port: int | None = None,
+        datacenter: str | None = None,
+        scope: AuthScope | str | None = None,
+        sequence_number: int | None = None,
+        stats_option: VmmStatsMode | str | None = None,
+        userdom: str | None = None,
+    ) -> AuthServerGroupServerCursor:
+        """Set ``authSvr`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class LegacyModeCursor(_BdMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``fvAccP`` (legacy_mode level).
+
+    Position: ``uni.tenant.bd.legacy_mode``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        bd_access_encap: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> LegacyModeCursor:
+        """Set ``fvAccP`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        vrf: str | Ref | None = None,
+        l3out: str | Ref | None = None,
+    ) -> LegacyModeCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+
+class NdRaSubnetCursor(_BdMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``ndRaSubnet`` (nd_ra_subnet level).
+
+    Position: ``uni.tenant.bd.nd_ra_subnet``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> NdRaSubnetCursor:
+        """Set ``ndRaSubnet`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        vrf: str | Ref | None = None,
+        l3out: str | Ref | None = None,
+    ) -> NdRaSubnetCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+
+class _BdPimMakers(Cursor):
+    """Makers declared at the pim level (``pimBDP``)."""
+
+    __slots__ = ()
+
+    def filter(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> PimFilterCursor:
+        """Declare a ``pimBDFilterPol`` child under the pim level.
+
+        PIM BD Filter policy container
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "PimFilterCursor",
+            self._invoke_maker("filter", (), _prune(params)),
+        )
+
+
+class BdPimCursor(_BdPimMakers, _BdMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``pimBDP`` (pim level).
+
+    Position: ``uni.tenant.bd.pim``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> BdPimCursor:
+        """Set ``pimBDP`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        vrf: str | Ref | None = None,
+        l3out: str | Ref | None = None,
+    ) -> BdPimCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+
+class BdRogueExceptionMacCursor(_BdMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``fvRogueExceptionMac`` (rogue_exception_mac level).
+
+    Position: ``uni.tenant.bd.rogue_exception_mac``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> BdRogueExceptionMacCursor:
+        """Set ``fvRogueExceptionMac`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        vrf: str | Ref | None = None,
+        l3out: str | Ref | None = None,
+    ) -> BdRogueExceptionMacCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+
+class _BdSubnetMakers(Cursor):
+    """Makers declared at the subnet level (``fvSubnet``)."""
+
+    __slots__ = ()
+
+    def anycast_endpoint(
+        self,
+        mac: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> BdSubnetAnycastEndpointCursor:
+        """Declare a ``fvEpAnycast`` child under the subnet level.
+
+        Args:
+            mac: The MAC address.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "mac",
+            )
+        }
+        return cast(
+            "BdSubnetAnycastEndpointCursor",
+            self._invoke_maker("anycast_endpoint", (mac,), _prune(params)),
+        )
+
+    def nlb_endpoint(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        multicast_group_ip_address: str | None = None,
+        mac: str | None = None,
+        nlb_mode: int | str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> BdSubnetNlbEndpointCursor:
+        """Declare a ``fvEpNlb`` child under the subnet level.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            multicast_group_ip_address: Multicast group address corresponding to the VIP
+            mac: The MAC address.
+            nlb_mode: Mode of operation Default: ``mode-uc``.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "BdSubnetNlbEndpointCursor",
+            self._invoke_maker("nlb_endpoint", (), _prune(params)),
+        )
+
+    def endpoint_network_config(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        dns_search_suffix_for_network_ip_pool: str | None = None,
+        dns_servers: str | None = None,
+        dns_suffix_for_network_ip_pool: str | None = None,
+        end_ip_address_for_network_ip_pool: str | None = None,
+        display_name: str | None = None,
+        start_ip_address_for_network_ip_pool: str | None = None,
+        userdom: str | None = None,
+        wins_servers: str | None = None,
+    ) -> BdSubnetEndpointNetworkConfigCursor:
+        """Declare a ``fvCepNetCfgPol`` child under the subnet level.
+
+        Represents Client End Point network configuration policy, Used this information for
+        Microsoft SCVMM/Azure application to create SCVMM static IP pool
+
+        Args:
+            name: The name of the object.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            dns_search_suffix_for_network_ip_pool: DNS Search Suffix
+            dns_servers: DNS Server name
+            dns_suffix_for_network_ip_pool: DNS Suffix name
+            end_ip_address_for_network_ip_pool: Ending ip address
+            start_ip_address_for_network_ip_pool: Starting ip address
+            wins_servers: DNS Search Suffix
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "BdSubnetEndpointNetworkConfigCursor",
+            self._invoke_maker("endpoint_network_config", (name,), _prune(params)),
+        )
+
+
+class BdSubnetCursor(_BdSubnetMakers, _BdMakers, _TenantMakers, _UniMakers):
     """Typed cursor for ``fvSubnet`` (subnet level).
 
     Position: ``uni.tenant.bd.subnet``
@@ -9544,6 +13069,64 @@ class ContractSubjectCursor(_ContractSubjectMakers, _ContractMakers, _TenantMake
         return self
 
 
+class Dot1pClassCursor(_CustomQosPolicyMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``qosDot1PClass`` (dot1p_class level).
+
+    Position: ``uni.tenant.custom_qos_policy.dot1p_class``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        priority: QosTenantPrio | str | None = None,
+        dscp_target: int | str | None = None,
+        target_cos: int | str | None = None,
+        userdom: str | None = None,
+    ) -> Dot1pClassCursor:
+        """Set ``qosDot1PClass`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class DscpClassCursor(_CustomQosPolicyMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``qosDscpClass`` (dscp_class level).
+
+    Position: ``uni.tenant.custom_qos_policy.dscp_class``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        priority: QosTenantPrio | str | None = None,
+        dscp_target: int | str | None = None,
+        target_cos: int | str | None = None,
+        userdom: str | None = None,
+    ) -> DscpClassCursor:
+        """Set ``qosDscpClass`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
 class DhcpOptionCursor(_DhcpOptionPolicyMakers, _TenantMakers, _UniMakers):
     """Typed cursor for ``dhcpOption`` (dhcp_option level).
 
@@ -9590,6 +13173,77 @@ class TenantDhcpRelayPolicyProviderCursor(_TenantDhcpRelayPolicyMakers, _TenantM
         userdom: str | None = None,
     ) -> TenantDhcpRelayPolicyProviderCursor:
         """Set ``dhcpRsProv`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class _DnsServerGroupServerMakers(Cursor):
+    """Makers declared at the server level (``dnsepgSvr``)."""
+
+    __slots__ = ()
+
+    def domain(
+        self,
+        domain_name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> ServerDomainCursor:
+        """Declare a ``dnsepgDomain`` child under the server level.
+
+        DNS Domain
+
+        Args:
+            domain_name: domain name
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "domain_name",
+            )
+        }
+        return cast(
+            "ServerDomainCursor",
+            self._invoke_maker("domain", (domain_name,), _prune(params)),
+        )
+
+
+class DnsServerGroupServerCursor(
+    _DnsServerGroupServerMakers, _DnsServerGroupMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``dnsepgSvr`` (server level).
+
+    Position: ``uni.tenant.dns_server_group.server``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> DnsServerGroupServerCursor:
+        """Set ``dnsepgSvr`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
         return self
@@ -9760,7 +13414,7 @@ class RaGuardPolicyCursor(_FhsBdPolicyMakers, _TenantMakers, _UniMakers):
         return self
 
 
-class EntryCursor(_FilterMakers, _TenantMakers, _UniMakers):
+class TenantFilterEntryCursor(_TenantFilterMakers, _TenantMakers, _UniMakers):
     """Typed cursor for ``vzEntry`` (entry level).
 
     Position: ``uni.tenant.filter.entry``
@@ -9793,10 +13447,351 @@ class EntryCursor(_FilterMakers, _TenantMakers, _UniMakers):
         stateful: bool | None = None,
         tcp_rules: frozenset[L4TcpFlags] | set[L4TcpFlags] | str | None = None,
         userdom: str | None = None,
-    ) -> EntryCursor:
+    ) -> TenantFilterEntryCursor:
         """Set ``vzEntry`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
+        return self
+
+
+class PortZeroEntryCursor(_TenantFilterMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``vzEntryPortZero`` (port_zero_entry level).
+
+    Position: ``uni.tenant.filter.port_zero_entry``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        apply_rule_for_all_fragments: bool | None = None,
+        description: str | None = None,
+        port_zero_direction: VzPZDirection | str | None = None,
+        ethernet_type: VzPZEtherType | str | None = None,
+        dscp_match_for_filter_entry: int | str | None = None,
+        display_name: str | None = None,
+        protocol: VzPZIpProt | str | None = None,
+        stateful: bool | None = None,
+        tcp_rules: frozenset[L4TcpFlags] | set[L4TcpFlags] | str | None = None,
+        userdom: str | None = None,
+    ) -> PortZeroEntryCursor:
+        """Set ``vzEntryPortZero`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class _RemoteIpsMakers(Cursor):
+    """Makers declared at the remote_ips level (``hostprotRemoteIpContainer``)."""
+
+    __slots__ = ()
+
+    def remote_ip(
+        self,
+        ip_address: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> RemoteIpsRemoteIpCursor:
+        """Declare a ``hostprotRemoteIp`` child under the remote_ips level.
+
+        Args:
+            ip_address: The peer IP address.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "ip_address",
+            )
+        }
+        return cast(
+            "RemoteIpsRemoteIpCursor",
+            self._invoke_maker("remote_ip", (ip_address,), _prune(params)),
+        )
+
+
+class RemoteIpsCursor(_RemoteIpsMakers, _HostProtectionMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``hostprotRemoteIpContainer`` (remote_ips level).
+
+    Position: ``uni.tenant.host_protection.remote_ips``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> RemoteIpsCursor:
+        """Set ``hostprotRemoteIpContainer`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class _HostProtectionSubjectMakers(Cursor):
+    """Makers declared at the subject level (``hostprotSubj``)."""
+
+    __slots__ = ()
+
+    def rule(
+        self,
+        name: str,
+        *,
+        host_protection_domain_action: frozenset[HostprotAction]
+        | set[HostprotAction]
+        | str
+        | None = None,
+        annotation: str | None = None,
+        connection_tracking: HostprotConnTrack | str | None = None,
+        description: str | None = None,
+        direction: NetworkDirection | str | None = None,
+        ethertype: HostprotEtypeMatch | str | None = None,
+        from_port: int | str | None = None,
+        icmp_code: int | str | None = None,
+        icmp_type: int | str | None = None,
+        display_name: str | None = None,
+        host_protection_rule_order: int | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        protocol: int | str | None = None,
+        domain_name: str | None = None,
+        to_port: int | str | None = None,
+        userdom: str | None = None,
+    ) -> RuleCursor:
+        """Declare a ``hostprotRule`` child under the subject level.
+
+        Args:
+            name: The name of the object.
+            host_protection_domain_action: The action required when the condition is met.
+                Default: ``PydanticUndefined``.
+            annotation: User annotation. Suggested format orchestrator:value
+            connection_tracking: Values: ``normal``, ``reflexive``. Default: ``reflexive``.
+            description: Specifies a description of the policy definition.
+            direction: The connector direction. Values: ``egress``, ``ingress``. Default:
+                ``ingress``.
+            ethertype: Values: ``arp``, ``fcoe``, ``ipv4``, ``ipv6``, ``mac_security``,
+                ``mpls_ucast``, ``trill``, ``undefined``. Default: ``undefined``.
+            from_port: The port block from port. Default: ``unspecified``.
+            icmp_code: ICMP code Default: ``unspecified``.
+            icmp_type: ICMP type Default: ``unspecified``.
+            host_protection_rule_order: The relative priority or sequence order of this object.
+                Default: ``1``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            protocol: The transfer protocol to be used for data export. Default:
+                ``unspecified``.
+            to_port: The fabric card's port. Default: ``unspecified``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "RuleCursor",
+            self._invoke_maker("rule", (name,), _prune(params)),
+        )
+
+
+class HostProtectionSubjectCursor(
+    _HostProtectionSubjectMakers, _HostProtectionMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``hostprotSubj`` (subject level).
+
+    Position: ``uni.tenant.host_protection.subject``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> HostProtectionSubjectCursor:
+        """Set ``hostprotSubj`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class ReportCursor(_IgmpInterfacePolicyMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``igmpRepPol`` (report level).
+
+    Position: ``uni.tenant.igmp_interface_policy.report``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> ReportCursor:
+        """Set ``igmpRepPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        pim_route_map_policy: str | Ref | None = None,
+    ) -> ReportCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        pim_route_map_policy: str | Ref | None = None,
+    ) -> ReportCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class StateLimitCursor(_IgmpInterfacePolicyMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``igmpStateLPol`` (state_limit level).
+
+    Position: ``uni.tenant.igmp_interface_policy.state_limit``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        maximum_multicast_entries: int | str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        reserved_multicast_entries: int | str | None = None,
+        userdom: str | None = None,
+    ) -> StateLimitCursor:
+        """Set ``igmpStateLPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        pim_route_map_policy: str | Ref | None = None,
+    ) -> StateLimitCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        pim_route_map_policy: str | Ref | None = None,
+    ) -> StateLimitCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class StaticReportCursor(_IgmpInterfacePolicyMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``igmpStRepPol`` (static_report level).
+
+    Position: ``uni.tenant.igmp_interface_policy.static_report``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> StaticReportCursor:
+        """Set ``igmpStRepPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        pim_route_map_policy: str | Ref | None = None,
+    ) -> StaticReportCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        pim_route_map_policy: str | Ref | None = None,
+    ) -> StaticReportCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -10428,6 +14423,58 @@ class BgpCursor(_L3outMakers, _TenantMakers, _UniMakers):
         domain: str | Ref | None = None,
         fallback_route_group: str | Ref | None = None,
     ) -> BgpCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class L3outConsumerLabelCursor(_L3outMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``l3extConsLbl`` (consumer_label level).
+
+    Position: ``uni.tenant.l3out.consumer_label``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        represents_the_provider_label_ownership: L3extOwner | str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        tag: PolColor | str | None = None,
+        userdom: str | None = None,
+    ) -> L3outConsumerLabelCursor:
+        """Set ``l3extConsLbl`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        vrf: str | Ref | None = None,
+        domain: str | Ref | None = None,
+        fallback_route_group: str | Ref | None = None,
+    ) -> L3outConsumerLabelCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        domain: str | Ref | None = None,
+        fallback_route_group: str | Ref | None = None,
+    ) -> L3outConsumerLabelCursor:
         """Reference objects outside the design by raw DN."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind_dn(self, **_prune(params))
@@ -11463,6 +15510,57 @@ class PimExternalCursor(_L3outMakers, _TenantMakers, _UniMakers):
         return self
 
 
+class L3outProviderLabelCursor(_L3outMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``l3extProvLbl`` (provider_label level).
+
+    Position: ``uni.tenant.l3out.provider_label``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        tag: PolColor | str | None = None,
+        userdom: str | None = None,
+    ) -> L3outProviderLabelCursor:
+        """Set ``l3extProvLbl`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        vrf: str | Ref | None = None,
+        domain: str | Ref | None = None,
+        fallback_route_group: str | Ref | None = None,
+    ) -> L3outProviderLabelCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        domain: str | Ref | None = None,
+        fallback_route_group: str | Ref | None = None,
+    ) -> L3outProviderLabelCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
 class _L3outRouteControlProfileMakers(Cursor):
     """Makers declared at the route_control_profile level (``rtctrlProfile``)."""
 
@@ -11852,6 +15950,181 @@ class OutOfBandEpgCursor(_OutOfBandEpgMakers, _ManagementProfileMakers, _TenantM
         return self
 
 
+class MatchAsPathCursor(_MatchRuleMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``rtctrlMatchAsPathRegexTerm`` (match_as_path level).
+
+    Position: ``uni.tenant.match_rule.match_as_path``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        regular_expression: str | None = None,
+        userdom: str | None = None,
+    ) -> MatchAsPathCursor:
+        """Set ``rtctrlMatchAsPathRegexTerm`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class _MatchCommunityMakers(Cursor):
+    """Makers declared at the match_community level (``rtctrlMatchCommTerm``)."""
+
+    __slots__ = ()
+
+    def factor(
+        self,
+        community: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        scope: RtextcomScope | str | None = None,
+        userdom: str | None = None,
+    ) -> FactorCursor:
+        """Declare a ``rtctrlMatchCommFactor`` child under the match_community level.
+
+        Match Community Factor
+
+        Args:
+            community: Match Community value
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            scope: Item Scope Values: ``non-transitive``, ``transitive``. Default:
+                ``transitive``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "community",
+            )
+        }
+        return cast(
+            "FactorCursor",
+            self._invoke_maker("factor", (community,), _prune(params)),
+        )
+
+
+class MatchCommunityCursor(_MatchCommunityMakers, _MatchRuleMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``rtctrlMatchCommTerm`` (match_community level).
+
+    Position: ``uni.tenant.match_rule.match_community``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> MatchCommunityCursor:
+        """Set ``rtctrlMatchCommTerm`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class MatchCommunityRegexCursor(_MatchRuleMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``rtctrlMatchCommRegexTerm`` (match_community_regex level).
+
+    Position: ``uni.tenant.match_rule.match_community_regex``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        regular_expression: str | None = None,
+        userdom: str | None = None,
+    ) -> MatchCommunityRegexCursor:
+        """Set ``rtctrlMatchCommRegexTerm`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class MatchPrefixCursor(_MatchRuleMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``rtctrlMatchRtDest`` (match_prefix level).
+
+    Position: ``uni.tenant.match_rule.match_prefix``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        aggregated_route: bool | None = None,
+        annotation: str | None = None,
+        description: str | None = None,
+        start_of_prefix_length: int | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        end_of_prefix_length: int | None = None,
+        userdom: str | None = None,
+    ) -> MatchPrefixCursor:
+        """Set ``rtctrlMatchRtDest`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class TargetCursor(_MonitoringPolicyMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``monEPGTarget`` (target level).
+
+    Position: ``uni.tenant.monitoring_policy.target``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        mon_epgtarget_name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> TargetCursor:
+        """Set ``monEPGTarget`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
 class MplsEgressRuleCursor(_MplsCustomQosPolicyMakers, _TenantMakers, _UniMakers):
     """Typed cursor for ``qosMplsEgressRule`` (mpls_egress_rule level).
 
@@ -11905,6 +16178,36 @@ class MplsIngressRuleCursor(_MplsCustomQosPolicyMakers, _TenantMakers, _UniMaker
         userdom: str | None = None,
     ) -> MplsIngressRuleCursor:
         """Set ``qosMplsIngressRule`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class SrgbCursor(_MplsGlobalConfigurationMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``mplsSrgbLabelPol`` (srgb level).
+
+    Position: ``uni.tenant.mpls_global_configuration.srgb``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        srgb_maximum_label: int | None = None,
+        srgb_minimum_label: int | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> SrgbCursor:
+        """Set ``mplsSrgbLabelPol`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
         return self
@@ -12168,6 +16471,144 @@ class OobContractSubjectCursor(
         return self
 
 
+class InboundJpFilterCursor(_PimInterfacePolicyMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``pimJPInbFilterPol`` (inbound_jp_filter level).
+
+    Position: ``uni.tenant.pim_interface_policy.inbound_jp_filter``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> InboundJpFilterCursor:
+        """Set ``pimJPInbFilterPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        pim_route_map_policy: str | Ref | None = None,
+    ) -> InboundJpFilterCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        pim_route_map_policy: str | Ref | None = None,
+    ) -> InboundJpFilterCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class NeighborFilterCursor(_PimInterfacePolicyMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``pimNbrFilterPol`` (neighbor_filter level).
+
+    Position: ``uni.tenant.pim_interface_policy.neighbor_filter``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> NeighborFilterCursor:
+        """Set ``pimNbrFilterPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        pim_route_map_policy: str | Ref | None = None,
+    ) -> NeighborFilterCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        pim_route_map_policy: str | Ref | None = None,
+    ) -> NeighborFilterCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class OutboundJpFilterCursor(_PimInterfacePolicyMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``pimJPOutbFilterPol`` (outbound_jp_filter level).
+
+    Position: ``uni.tenant.pim_interface_policy.outbound_jp_filter``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> OutboundJpFilterCursor:
+        """Set ``pimJPOutbFilterPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        pim_route_map_policy: str | Ref | None = None,
+    ) -> OutboundJpFilterCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        pim_route_map_policy: str | Ref | None = None,
+    ) -> OutboundJpFilterCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
 class PimRouteMapEntryCursor(_PimRouteMapPolicyMakers, _TenantMakers, _UniMakers):
     """Typed cursor for ``pimRouteMapEntry`` (pim_route_map_entry level).
 
@@ -12222,6 +16663,32 @@ class DscpMarkingCursor(_QosRequirementMakers, _TenantMakers, _UniMakers):
         userdom: str | None = None,
     ) -> DscpMarkingCursor:
         """Set ``qosEpDscpMarking`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class MacCursor(_RogueExceptionMacGroupMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``l3extRogueExceptionMac`` (mac level).
+
+    Position: ``uni.tenant.rogue_exception_mac_group.mac``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> MacCursor:
+        """Set ``l3extRogueExceptionMac`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
         return self
@@ -12543,8 +17010,57 @@ class ServiceRedirectPolicyCursor(
         return self
 
 
+class _TenantSpanDestinationGroupSpanDestinationMakers(Cursor):
+    """Makers declared at the span_destination level (``spanDest``)."""
+
+    __slots__ = ()
+
+    def vspan_epg_summary(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        dscp: int | str | None = None,
+        destination_ip: str | None = None,
+        flow_id: int | None = None,
+        mode: SpanErspanDestMode | str | None = None,
+        mtu: int | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        source_ip_of_erspan_packet: str | None = None,
+        time_to_live: int | str | None = None,
+        userdom: str | None = None,
+        vrf: str | None = None,
+    ) -> TenantSpanDestinationGroupSpanDestinationVspanEpgSummaryCursor:
+        """Declare a ``spanVEpgSummary`` child under the span_destination level.
+
+        The VEpg summary.
+
+        Args:
+            description: Specifies a description of the policy definition.
+            dscp: Default: ``unspecified``.
+            flow_id: Default: ``1``.
+            mode: Values: ``not-visible``, ``visible``. Default: ``not-visible``.
+            mtu: Default: ``1518``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            time_to_live: Default: ``64``.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "TenantSpanDestinationGroupSpanDestinationVspanEpgSummaryCursor",
+            self._invoke_maker("vspan_epg_summary", (), _prune(params)),
+        )
+
+
 class TenantSpanDestinationGroupSpanDestinationCursor(
-    _TenantSpanDestinationGroupMakers, _TenantMakers, _UniMakers
+    _TenantSpanDestinationGroupSpanDestinationMakers,
+    _TenantSpanDestinationGroupMakers,
+    _TenantMakers,
+    _UniMakers,
 ):
     """Typed cursor for ``spanDest`` (span_destination level).
 
@@ -12707,6 +17223,106 @@ class TenantSpanSourceGroupSpanSourceCursor(
         return self
 
 
+class TenantSpanSourceGroupVspanSourceCursor(
+    _TenantSpanSourceGroupMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``spanVSrc`` (vspan_source level).
+
+    Position: ``uni.tenant.span_source_group.vspan_source``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        direction_ingress_egress_both: SpanDirection | str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> TenantSpanSourceGroupVspanSourceCursor:
+        """Set ``spanVSrc`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        filter_group: str | Ref | None = None,
+    ) -> TenantSpanSourceGroupVspanSourceCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        filter_group: str | Ref | None = None,
+    ) -> TenantSpanSourceGroupVspanSourceCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class TenantSpanSourceGroupVspanSourceDefCursor(
+    _TenantSpanSourceGroupMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``spanVSrcDef`` (vspan_source_def level).
+
+    Position: ``uni.tenant.span_source_group.vspan_source_def``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        direction_ingress_egress_both: SpanDirection | str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> TenantSpanSourceGroupVspanSourceDefCursor:
+        """Set ``spanVSrcDef`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        filter_group: str | Ref | None = None,
+    ) -> TenantSpanSourceGroupVspanSourceDefCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        filter_group: str | Ref | None = None,
+    ) -> TenantSpanSourceGroupVspanSourceDefCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
 class TabooContractSubjectCursor(_TabooContractMakers, _TenantMakers, _UniMakers):
     """Typed cursor for ``vzTSubj`` (subject level).
 
@@ -12770,6 +17386,44 @@ class KeyPolicyCursor(_TenantKeychainPolicyMakers, _TenantMakers, _UniMakers):
         """Set ``fvKeyPol`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
+        return self
+
+
+class DnsLabelCursor(_VrfMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``dnsLbl`` (dns_label level).
+
+    Position: ``uni.tenant.vrf.dns_label``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        tag: PolColor | str | None = None,
+        userdom: str | None = None,
+    ) -> DnsLabelCursor:
+        """Set ``dnsLbl`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        l3out: str | Ref | None = None,
+    ) -> DnsLabelCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
         return self
 
 
@@ -12878,7 +17532,499 @@ class FallbackRouteGroupCursor(_FallbackRouteGroupMakers, _VrfMakers, _TenantMak
         return self
 
 
-class PimCursor(_VrfMakers, _TenantMakers, _UniMakers):
+class GlobalVrfNameCursor(_VrfMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``l3extGlobalCtxName`` (global_vrf_name level).
+
+    Position: ``uni.tenant.vrf.global_vrf_name``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> GlobalVrfNameCursor:
+        """Set ``l3extGlobalCtxName`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        l3out: str | Ref | None = None,
+    ) -> GlobalVrfNameCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+
+class _IgmpMakers(Cursor):
+    """Makers declared at the igmp level (``igmpCtxP``)."""
+
+    __slots__ = ()
+
+    def ssm_translate(
+        self,
+        address: str,
+        src_addr: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> SsmTranslateCursor:
+        """Declare a ``igmpSSMXlateP`` child under the igmp level.
+
+        Context-level SSM Translate Policy
+
+        Args:
+            address: Group IP Prefix address
+            src_addr: Source IP address, to xlate v1/v2 grp report to create (S,G) state
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "address",
+                "src_addr",
+            )
+        }
+        return cast(
+            "SsmTranslateCursor",
+            self._invoke_maker(
+                "ssm_translate",
+                (
+                    address,
+                    src_addr,
+                ),
+                _prune(params),
+            ),
+        )
+
+
+class IgmpCursor(_IgmpMakers, _VrfMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``igmpCtxP`` (igmp level).
+
+    Position: ``uni.tenant.vrf.igmp``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> IgmpCursor:
+        """Set ``igmpCtxP`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        l3out: str | Ref | None = None,
+    ) -> IgmpCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+
+class _LeakRoutesMakers(Cursor):
+    """Makers declared at the leak_routes level (``leakRoutes``)."""
+
+    __slots__ = ()
+
+    def external_prefix(
+        self,
+        subnet: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        greater_then: int | str | None = None,
+        less_than_or_equal: int | str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> ExternalPrefixCursor:
+        """Declare a ``leakExternalPrefix`` child under the leak_routes level.
+
+        Args:
+            subnet: Ip Address corresponding to the External Subnet
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            greater_then: Default: ``unspecified``.
+            less_than_or_equal: Default: ``unspecified``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "subnet",
+            )
+        }
+        return cast(
+            "ExternalPrefixCursor",
+            self._invoke_maker("external_prefix", (subnet,), _prune(params)),
+        )
+
+    def internal_prefix(
+        self,
+        subnet: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        greater_then: int | str | None = None,
+        less_than_or_equal: int | str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> InternalPrefixCursor:
+        """Declare a ``leakInternalPrefix`` child under the leak_routes level.
+
+        Args:
+            subnet: Ip Address corresponding to the External Subnet
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            greater_then: Default: ``unspecified``.
+            less_than_or_equal: Default: ``unspecified``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "subnet",
+            )
+        }
+        return cast(
+            "InternalPrefixCursor",
+            self._invoke_maker("internal_prefix", (subnet,), _prune(params)),
+        )
+
+    def internal_subnet(
+        self,
+        subnet: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        visibility_of_the_subnet: LeakRouteScp | str | None = None,
+        userdom: str | None = None,
+    ) -> InternalSubnetCursor:
+        """Declare a ``leakInternalSubnet`` child under the leak_routes level.
+
+        Args:
+            subnet: Ip Address corresponding to the External Subnet
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            visibility_of_the_subnet: The domain applicable to the capability. Values:
+                ``private``, ``public``. Default: ``private``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "subnet",
+            )
+        }
+        return cast(
+            "InternalSubnetCursor",
+            self._invoke_maker("internal_subnet", (subnet,), _prune(params)),
+        )
+
+
+class LeakRoutesCursor(_LeakRoutesMakers, _VrfMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``leakRoutes`` (leak_routes level).
+
+    Position: ``uni.tenant.vrf.leak_routes``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> LeakRoutesCursor:
+        """Set ``leakRoutes`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        l3out: str | Ref | None = None,
+    ) -> LeakRoutesCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+
+class _VrfPimMakers(Cursor):
+    """Makers declared at the pim level (``pimCtxP``)."""
+
+    __slots__ = ()
+
+    def asm_pattern(
+        self,
+        *,
+        annotation: str | None = None,
+        control_knobs: frozenset[RtdmcASMCtrl] | set[RtdmcASMCtrl] | str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> PimAsmPatternCursor:
+        """Declare a ``pimASMPatPol`` child under the pim level.
+
+        The any-source multicast pattern policy.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            control_knobs: ASMPatP controls Default: ``PydanticUndefined``.
+            description: Specifies the description of a policy component.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "PimAsmPatternCursor",
+            self._invoke_maker("asm_pattern", (), _prune(params)),
+        )
+
+    def ssm_pattern(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> PimSsmPatternCursor:
+        """Declare a ``pimSSMPatPol`` child under the pim level.
+
+        Source-specific multicast pattern policy
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "PimSsmPatternCursor",
+            self._invoke_maker("ssm_pattern", (), _prune(params)),
+        )
+
+    def auto_rp(
+        self,
+        *,
+        annotation: str | None = None,
+        control_knobs: frozenset[RtdmcAutoRPCtrl] | set[RtdmcAutoRPCtrl] | str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> PimAutoRpCursor:
+        """Declare a ``pimAutoRPPol`` child under the pim level.
+
+        The Auto-RP policy.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            control_knobs: AutoRP controls Default: ``PydanticUndefined``.
+            description: Specifies the description of a policy component.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "PimAutoRpCursor",
+            self._invoke_maker("auto_rp", (), _prune(params)),
+        )
+
+    def bootstrap_rp(
+        self,
+        *,
+        annotation: str | None = None,
+        control_knobs: frozenset[RtdmcBSRCtrl] | set[RtdmcBSRCtrl] | str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> PimBootstrapRpCursor:
+        """Declare a ``pimBSRPPol`` child under the pim level.
+
+        The Bootstrap Router (BSR) policy.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            control_knobs: Bootstrap RP controls Default: ``PydanticUndefined``.
+            description: Specifies the description of a policy component.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "PimBootstrapRpCursor",
+            self._invoke_maker("bootstrap_rp", (), _prune(params)),
+        )
+
+    def fabric_rp(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> PimFabricRpCursor:
+        """Declare a ``pimFabricRPPol`` child under the pim level.
+
+        FabricRP PIM policy
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "PimFabricRpCursor",
+            self._invoke_maker("fabric_rp", (), _prune(params)),
+        )
+
+    def static_rp(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> PimStaticRpCursor:
+        """Declare a ``pimStaticRPPol`` child under the pim level.
+
+        Static RP PIM policy
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "PimStaticRpCursor",
+            self._invoke_maker("static_rp", (), _prune(params)),
+        )
+
+    def stripe_winner(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> StripeWinnerCursor:
+        """Declare a ``pimCSWPol`` child under the pim level.
+
+        VRF-level PIM Configured Stripe Winner Policy
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "StripeWinnerCursor",
+            self._invoke_maker("stripe_winner", (), _prune(params)),
+        )
+
+    def inter_vrf(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> PimInterVrfCursor:
+        """Declare a ``pimInterVRFPol`` child under the pim level.
+
+        Inter VRF PIM policy
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "PimInterVrfCursor",
+            self._invoke_maker("inter_vrf", (), _prune(params)),
+        )
+
+    def resource(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        max_entries: int | str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        reserved_multicast_entries: int | str | None = None,
+        userdom: str | None = None,
+    ) -> PimResourceCursor:
+        """Declare a ``pimResPol`` child under the pim level.
+
+        PIM resource policy
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            max_entries: Max Multicast Entries Default: ``unlimited``.
+            reserved_multicast_entries: Reserved Multicast Entries Default: ``undefined``.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "PimResourceCursor",
+            self._invoke_maker("resource", (), _prune(params)),
+        )
+
+
+class VrfPimCursor(_VrfPimMakers, _VrfMakers, _TenantMakers, _UniMakers):
     """Typed cursor for ``pimCtxP`` (pim level).
 
     Position: ``uni.tenant.vrf.pim``
@@ -12901,7 +18047,7 @@ class PimCursor(_VrfMakers, _TenantMakers, _UniMakers):
         owner_key: str | None = None,
         owner_tag: str | None = None,
         userdom: str | None = None,
-    ) -> PimCursor:
+    ) -> VrfPimCursor:
         """Set ``pimCtxP`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
@@ -12911,7 +18057,399 @@ class PimCursor(_VrfMakers, _TenantMakers, _UniMakers):
         self,
         *,
         l3out: str | Ref | None = None,
-    ) -> PimCursor:
+    ) -> VrfPimCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+
+class _Pim6Makers(Cursor):
+    """Makers declared at the pim6 level (``pimIPV6CtxP``)."""
+
+    __slots__ = ()
+
+    def asm_pattern(
+        self,
+        *,
+        annotation: str | None = None,
+        control_knobs: frozenset[RtdmcASMCtrl] | set[RtdmcASMCtrl] | str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> Pim6AsmPatternCursor:
+        """Declare a ``pimASMPatPol`` child under the pim6 level.
+
+        The any-source multicast pattern policy.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            control_knobs: ASMPatP controls Default: ``PydanticUndefined``.
+            description: Specifies the description of a policy component.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "Pim6AsmPatternCursor",
+            self._invoke_maker("asm_pattern", (), _prune(params)),
+        )
+
+    def ssm_pattern(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> Pim6SsmPatternCursor:
+        """Declare a ``pimSSMPatPol`` child under the pim6 level.
+
+        Source-specific multicast pattern policy
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "Pim6SsmPatternCursor",
+            self._invoke_maker("ssm_pattern", (), _prune(params)),
+        )
+
+    def auto_rp(
+        self,
+        *,
+        annotation: str | None = None,
+        control_knobs: frozenset[RtdmcAutoRPCtrl] | set[RtdmcAutoRPCtrl] | str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> Pim6AutoRpCursor:
+        """Declare a ``pimAutoRPPol`` child under the pim6 level.
+
+        The Auto-RP policy.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            control_knobs: AutoRP controls Default: ``PydanticUndefined``.
+            description: Specifies the description of a policy component.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "Pim6AutoRpCursor",
+            self._invoke_maker("auto_rp", (), _prune(params)),
+        )
+
+    def bootstrap_rp(
+        self,
+        *,
+        annotation: str | None = None,
+        control_knobs: frozenset[RtdmcBSRCtrl] | set[RtdmcBSRCtrl] | str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> Pim6BootstrapRpCursor:
+        """Declare a ``pimBSRPPol`` child under the pim6 level.
+
+        The Bootstrap Router (BSR) policy.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            control_knobs: Bootstrap RP controls Default: ``PydanticUndefined``.
+            description: Specifies the description of a policy component.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "Pim6BootstrapRpCursor",
+            self._invoke_maker("bootstrap_rp", (), _prune(params)),
+        )
+
+    def fabric_rp(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> Pim6FabricRpCursor:
+        """Declare a ``pimFabricRPPol`` child under the pim6 level.
+
+        FabricRP PIM policy
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "Pim6FabricRpCursor",
+            self._invoke_maker("fabric_rp", (), _prune(params)),
+        )
+
+    def static_rp(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> Pim6StaticRpCursor:
+        """Declare a ``pimStaticRPPol`` child under the pim6 level.
+
+        Static RP PIM policy
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "Pim6StaticRpCursor",
+            self._invoke_maker("static_rp", (), _prune(params)),
+        )
+
+    def inter_vrf(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> Pim6InterVrfCursor:
+        """Declare a ``pimInterVRFPol`` child under the pim6 level.
+
+        Inter VRF PIM policy
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "Pim6InterVrfCursor",
+            self._invoke_maker("inter_vrf", (), _prune(params)),
+        )
+
+    def resource(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        max_entries: int | str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        reserved_multicast_entries: int | str | None = None,
+        userdom: str | None = None,
+    ) -> Pim6ResourceCursor:
+        """Declare a ``pimResPol`` child under the pim6 level.
+
+        PIM resource policy
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            max_entries: Max Multicast Entries Default: ``unlimited``.
+            reserved_multicast_entries: Reserved Multicast Entries Default: ``undefined``.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "Pim6ResourceCursor",
+            self._invoke_maker("resource", (), _prune(params)),
+        )
+
+
+class Pim6Cursor(_Pim6Makers, _VrfMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``pimIPV6CtxP`` (pim6 level).
+
+    Position: ``uni.tenant.vrf.pim6``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        control_knobs: frozenset[RtdmcDomUserCtrl] | set[RtdmcDomUserCtrl] | str | None = None,
+        description: str | None = None,
+        mtu: int | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> Pim6Cursor:
+        """Set ``pimIPV6CtxP`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        l3out: str | Ref | None = None,
+    ) -> Pim6Cursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+
+class RouteDeploymentCursor(_VrfMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``fvRouteDeployP`` (route_deployment level).
+
+    Position: ``uni.tenant.vrf.route_deployment``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        spine_intra_vrf_route_deployment_type: FvSpineIntraVrfType | str | None = None,
+        userdom: str | None = None,
+    ) -> RouteDeploymentCursor:
+        """Set ``fvRouteDeployP`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        l3out: str | Ref | None = None,
+    ) -> RouteDeploymentCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+
+class RouteSummarizationCursor(_VrfMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``fvCtxRtSummPol`` (route_summarization level).
+
+    Position: ``uni.tenant.vrf.route_summarization``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> RouteSummarizationCursor:
+        """Set ``fvCtxRtSummPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        l3out: str | Ref | None = None,
+    ) -> RouteSummarizationCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+
+class _SnmpContextMakers(Cursor):
+    """Makers declared at the snmp_context level (``snmpCtxP``)."""
+
+    __slots__ = ()
+
+    def community(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> CommunityCursor:
+        """Declare a ``snmpCommunityP`` child under the snmp_context level.
+
+        The SNMP community profile enables access to the router or switch statistics for monitoring.
+        SNMP is an application-layer protocol that provides a message format for communication
+        between SNMP managers and agents.
+
+        Args:
+            name: The name of the community profile. This name can be between 1 and 64
+                alphanumeric characters.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "CommunityCursor",
+            self._invoke_maker("community", (name,), _prune(params)),
+        )
+
+
+class SnmpContextCursor(_SnmpContextMakers, _VrfMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``snmpCtxP`` (snmp_context level).
+
+    Position: ``uni.tenant.vrf.snmp_context``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> SnmpContextCursor:
+        """Set ``snmpCtxP`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        l3out: str | Ref | None = None,
+    ) -> SnmpContextCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind(self, **_prune(params))
@@ -13247,6 +18785,33 @@ class VzanyCursor(_VzanyMakers, _VrfMakers, _TenantMakers, _UniMakers):
     def consume(self, contract: str | Ref) -> VzanyCursor:
         """Reference the vzBrCP *contract* through ``vzRsAnyToCons`` (lazy)."""
         Cursor._verb(self, "consume", contract)
+        return self
+
+
+class AsnCursor(_SetAsPathMakers, _ActionRuleProfileMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``rtctrlSetASPathASN`` (asn level).
+
+    Position: ``uni.tenant.action_rule_profile.set_as_path.asn``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        as_number: int | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> AsnCursor:
+        """Set ``rtctrlSetASPathASN`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
         return self
 
 
@@ -13636,6 +19201,62 @@ class _CriterionMakers(Cursor):
             self._invoke_maker("dns_attribute", (name,), _prune(params)),
         )
 
+    def identity_group(
+        self,
+        identity_group_selector: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> IdentityGroupCursor:
+        """Declare a ``fvIdGroupAttr`` child under the criterion level.
+
+        Args:
+            identity_group_selector: Represents the Dn or expression to select an identity group
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition root.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "identity_group_selector",
+            )
+        }
+        return cast(
+            "IdentityGroupCursor",
+            self._invoke_maker("identity_group", (identity_group_selector,), _prune(params)),
+        )
+
+    def useg_bd(
+        self,
+        *,
+        annotation: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> UsegBdCursor:
+        """Declare a ``fvUsegBDCont`` child under the criterion level.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            name: The name of the object.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "UsegBdCursor",
+            self._invoke_maker("useg_bd", (), _prune(params)),
+        )
+
 
 class CriterionCursor(_CriterionMakers, _EpgMakers, _AppMakers, _TenantMakers, _UniMakers):
     """Typed cursor for ``fvCrtrn`` (criterion level).
@@ -13698,7 +19319,48 @@ class CriterionCursor(_CriterionMakers, _EpgMakers, _AppMakers, _TenantMakers, _
         return self
 
 
-class FcPathCursor(_EpgMakers, _AppMakers, _TenantMakers, _UniMakers):
+class _FcPathMakers(Cursor):
+    """Makers declared at the fc_path level (``fvRsFcPathAtt``)."""
+
+    __slots__ = ()
+
+    def pinning_label(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> PinningLabelCursor:
+        """Declare a ``fcPinningLbl`` child under the fc_path level.
+
+        Args:
+            name: Naming property — forms the object's RN.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "PinningLabelCursor",
+            self._invoke_maker("pinning_label", (name,), _prune(params)),
+        )
+
+
+class FcPathCursor(_FcPathMakers, _EpgMakers, _AppMakers, _TenantMakers, _UniMakers):
     """Typed cursor for ``fvRsFcPathAtt`` (fc_path level).
 
     Position: ``uni.tenant.app.epg.fc_path``
@@ -14029,7 +19691,251 @@ class StaticEndpointCursor(
         return self
 
 
-class EpgStaticPathCursor(_EpgMakers, _AppMakers, _TenantMakers, _UniMakers):
+class _EpgStaticPathMakers(Cursor):
+    """Makers declared at the static_path level (``fvRsPathAtt``)."""
+
+    __slots__ = ()
+
+    def igmp_snoop_access_group(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> IgmpSnoopAccessGroupCursor:
+        """Declare a ``igmpSnoopAccessGroup`` child under the static_path level.
+
+        Representation of an IGMP snooping filter
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "IgmpSnoopAccessGroupCursor",
+            self._invoke_maker("igmp_snoop_access_group", (), _prune(params)),
+        )
+
+    def igmp_snoop_static_group(
+        self,
+        multicast_group_ip: str,
+        multicast_source_ip: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> IgmpSnoopStaticGroupCursor:
+        """Declare a ``igmpSnoopStaticGroup`` child under the static_path level.
+
+        Representation of an IGMP snooping static (*,G) or (S,G) membership
+
+        Args:
+            multicast_group_ip: Group Address of IGMP snooping Static Entry
+            multicast_source_ip: Source Address of IGMP snooping Static Entry, 0 in case of
+                (*,G) entry
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "multicast_group_ip",
+                "multicast_source_ip",
+            )
+        }
+        return cast(
+            "IgmpSnoopStaticGroupCursor",
+            self._invoke_maker(
+                "igmp_snoop_static_group",
+                (
+                    multicast_group_ip,
+                    multicast_source_ip,
+                ),
+                _prune(params),
+            ),
+        )
+
+    def mld_snoop_access_group(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> MldSnoopAccessGroupCursor:
+        """Declare a ``mldSnoopAccessGroup`` child under the static_path level.
+
+        Representation of an MLD snooping filter
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "MldSnoopAccessGroupCursor",
+            self._invoke_maker("mld_snoop_access_group", (), _prune(params)),
+        )
+
+    def mld_snoop_static_group(
+        self,
+        multicast_group_ip: str,
+        multicast_source_ip: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> MldSnoopStaticGroupCursor:
+        """Declare a ``mldSnoopStaticGroup`` child under the static_path level.
+
+        Representation of an MLD snooping static (*,G) or (S,G) membership
+
+        Args:
+            multicast_group_ip: Group Address of MLD snooping Static Entry
+            multicast_source_ip: Source Address of MLD snooping Static Entry, 0 in case of (*,G)
+                entry
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "multicast_group_ip",
+                "multicast_source_ip",
+            )
+        }
+        return cast(
+            "MldSnoopStaticGroupCursor",
+            self._invoke_maker(
+                "mld_snoop_static_group",
+                (
+                    multicast_group_ip,
+                    multicast_source_ip,
+                ),
+                _prune(params),
+            ),
+        )
+
+    def port_security(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        port_security_maximum_can_be_0_12000: int | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        port_security_timeout_can_be_60_3600: int | None = None,
+        userdom: str | None = None,
+        port_security_violation: L2PortSecurityViolation | str | None = None,
+    ) -> PortSecurityCursor:
+        """Declare a ``l2PortSecurityPol`` child under the static_path level.
+
+        Port Security Policy
+
+        Args:
+            name: The name of the object.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            port_security_maximum_can_be_0_12000: Port Security Maximum Default: ``0``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            port_security_timeout_can_be_60_3600: Port Security Timeout Default: ``60``.
+            port_security_violation: Port Security Violation Values: ``protect``. Default:
+                ``protect``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "PortSecurityCursor",
+            self._invoke_maker("port_security", (name,), _prune(params)),
+        )
+
+    def ptp(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        ptp_mode_for_interface: PtpPtpTransportMode | str | None = None,
+        ptp_source_address: str | None = None,
+        userdom: str | None = None,
+    ) -> PtpCursor:
+        """Declare a ``ptpEpgCfg`` child under the static_path level.
+
+        PTP configuration for EPG
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            ptp_mode_for_interface: PTP mode multicast, unicast master/slave Values:
+                ``multicast``, ``multicast-master``, ``unicast-master``, ``unicast-slave``.
+                Default: ``multicast``.
+            ptp_source_address: IP address
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "PtpCursor",
+            self._invoke_maker("ptp", (), _prune(params)),
+        )
+
+    def nlb_static_group(
+        self,
+        mac: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> NlbStaticGroupCursor:
+        """Declare a ``fvNlbStaticGroup`` child under the static_path level.
+
+        Args:
+            mac: The MAC address.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "mac",
+            )
+        }
+        return cast(
+            "NlbStaticGroupCursor",
+            self._invoke_maker("nlb_static_group", (mac,), _prune(params)),
+        )
+
+
+class EpgStaticPathCursor(_EpgStaticPathMakers, _EpgMakers, _AppMakers, _TenantMakers, _UniMakers):
     """Typed cursor for ``fvRsPathAtt`` (static_path level).
 
     Position: ``uni.tenant.app.epg.static_path``
@@ -14087,7 +19993,116 @@ class EpgStaticPathCursor(_EpgMakers, _AppMakers, _TenantMakers, _UniMakers):
         return self
 
 
-class EpgSubnetCursor(_EpgMakers, _AppMakers, _TenantMakers, _UniMakers):
+class _EpgSubnetMakers(Cursor):
+    """Makers declared at the subnet level (``fvSubnet``)."""
+
+    __slots__ = ()
+
+    def anycast_endpoint(
+        self,
+        mac: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> EpgSubnetAnycastEndpointCursor:
+        """Declare a ``fvEpAnycast`` child under the subnet level.
+
+        Args:
+            mac: The MAC address.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "mac",
+            )
+        }
+        return cast(
+            "EpgSubnetAnycastEndpointCursor",
+            self._invoke_maker("anycast_endpoint", (mac,), _prune(params)),
+        )
+
+    def nlb_endpoint(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        multicast_group_ip_address: str | None = None,
+        mac: str | None = None,
+        nlb_mode: int | str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> EpgSubnetNlbEndpointCursor:
+        """Declare a ``fvEpNlb`` child under the subnet level.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            multicast_group_ip_address: Multicast group address corresponding to the VIP
+            mac: The MAC address.
+            nlb_mode: Mode of operation Default: ``mode-uc``.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "EpgSubnetNlbEndpointCursor",
+            self._invoke_maker("nlb_endpoint", (), _prune(params)),
+        )
+
+    def endpoint_network_config(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        dns_search_suffix_for_network_ip_pool: str | None = None,
+        dns_servers: str | None = None,
+        dns_suffix_for_network_ip_pool: str | None = None,
+        end_ip_address_for_network_ip_pool: str | None = None,
+        display_name: str | None = None,
+        start_ip_address_for_network_ip_pool: str | None = None,
+        userdom: str | None = None,
+        wins_servers: str | None = None,
+    ) -> EpgSubnetEndpointNetworkConfigCursor:
+        """Declare a ``fvCepNetCfgPol`` child under the subnet level.
+
+        Represents Client End Point network configuration policy, Used this information for
+        Microsoft SCVMM/Azure application to create SCVMM static IP pool
+
+        Args:
+            name: The name of the object.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            dns_search_suffix_for_network_ip_pool: DNS Search Suffix
+            dns_servers: DNS Server name
+            dns_suffix_for_network_ip_pool: DNS Suffix name
+            end_ip_address_for_network_ip_pool: Ending ip address
+            start_ip_address_for_network_ip_pool: Starting ip address
+            wins_servers: DNS Search Suffix
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "EpgSubnetEndpointNetworkConfigCursor",
+            self._invoke_maker("endpoint_network_config", (name,), _prune(params)),
+        )
+
+
+class EpgSubnetCursor(_EpgSubnetMakers, _EpgMakers, _AppMakers, _TenantMakers, _UniMakers):
     """Typed cursor for ``fvSubnet`` (subnet level).
 
     Position: ``uni.tenant.app.epg.subnet``
@@ -14469,6 +20484,58 @@ class EpgSelectorCursor(_EsgMakers, _AppMakers, _TenantMakers, _UniMakers):
         return self
 
 
+class LifCtxSelectorCursor(_EsgMakers, _AppMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``fvLIfCtxSelector`` (lif_ctx_selector level).
+
+    Position: ``uni.tenant.app.esg.lif_ctx_selector``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> LifCtxSelectorCursor:
+        """Set ``fvLIfCtxSelector`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        vrf: str | Ref | None = None,
+        contract_master: str | Ref | None = None,
+        imported_contract: str | Ref | None = None,
+        custom_qos_policy: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
+    ) -> LifCtxSelectorCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        contract_master: str | Ref | None = None,
+    ) -> LifCtxSelectorCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
 class EsgProviderContractLabelCursor(_EsgMakers, _AppMakers, _TenantMakers, _UniMakers):
     """Typed cursor for ``vzProvCtrctLbl`` (provider_contract_label level).
 
@@ -14680,6 +20747,248 @@ class TagSelectorCursor(_EsgMakers, _AppMakers, _TenantMakers, _UniMakers):
         return self
 
 
+class CredentialCursor(
+    _AuthServerGroupServerMakers, _AuthServerGroupMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``authUsrAccP`` (credential level).
+
+    Position: ``uni.tenant.auth_server_group.server.credential``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        keyring_dn: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> CredentialCursor:
+        """Set ``authUsrAccP`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class _PimFilterMakers(Cursor):
+    """Makers declared at the filter level (``pimBDFilterPol``)."""
+
+    __slots__ = ()
+
+    def source_filter(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> SourceFilterCursor:
+        """Declare a ``pimBDSrcFilterPol`` child under the filter level.
+
+        BD Filter Policy to Src RouteMap
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "SourceFilterCursor",
+            self._invoke_maker("source_filter", (), _prune(params)),
+        )
+
+    def destination_filter(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> DestinationFilterCursor:
+        """Declare a ``pimBDDestFilterPol`` child under the filter level.
+
+        BD Filter Policy to Dest RouteMap
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "DestinationFilterCursor",
+            self._invoke_maker("destination_filter", (), _prune(params)),
+        )
+
+
+class PimFilterCursor(_PimFilterMakers, _BdPimMakers, _BdMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``pimBDFilterPol`` (filter level).
+
+    Position: ``uni.tenant.bd.pim.filter``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> PimFilterCursor:
+        """Set ``pimBDFilterPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        vrf: str | Ref | None = None,
+        l3out: str | Ref | None = None,
+    ) -> PimFilterCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+
+class BdSubnetAnycastEndpointCursor(_BdSubnetMakers, _BdMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``fvEpAnycast`` (anycast_endpoint level).
+
+    Position: ``uni.tenant.bd.subnet.anycast_endpoint``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> BdSubnetAnycastEndpointCursor:
+        """Set ``fvEpAnycast`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        l3out: str | Ref | None = None,
+        nd_ra_prefix_policy: str | Ref | None = None,
+        vrf: str | Ref | None = None,
+    ) -> BdSubnetAnycastEndpointCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+
+class BdSubnetEndpointNetworkConfigCursor(_BdSubnetMakers, _BdMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``fvCepNetCfgPol`` (endpoint_network_config level).
+
+    Position: ``uni.tenant.bd.subnet.endpoint_network_config``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        dns_search_suffix_for_network_ip_pool: str | None = None,
+        dns_servers: str | None = None,
+        dns_suffix_for_network_ip_pool: str | None = None,
+        end_ip_address_for_network_ip_pool: str | None = None,
+        display_name: str | None = None,
+        start_ip_address_for_network_ip_pool: str | None = None,
+        userdom: str | None = None,
+        wins_servers: str | None = None,
+    ) -> BdSubnetEndpointNetworkConfigCursor:
+        """Set ``fvCepNetCfgPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        l3out: str | Ref | None = None,
+        nd_ra_prefix_policy: str | Ref | None = None,
+        vrf: str | Ref | None = None,
+    ) -> BdSubnetEndpointNetworkConfigCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+
+class BdSubnetNlbEndpointCursor(_BdSubnetMakers, _BdMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``fvEpNlb`` (nlb_endpoint level).
+
+    Position: ``uni.tenant.bd.subnet.nlb_endpoint``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        multicast_group_ip_address: str | None = None,
+        mac: str | None = None,
+        nlb_mode: int | str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> BdSubnetNlbEndpointCursor:
+        """Set ``fvEpNlb`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        l3out: str | Ref | None = None,
+        nd_ra_prefix_policy: str | Ref | None = None,
+        vrf: str | Ref | None = None,
+    ) -> BdSubnetNlbEndpointCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+
 class ContractSubjectConsumerSubjectLabelCursor(
     _ContractSubjectMakers, _ContractMakers, _TenantMakers, _UniMakers
 ):
@@ -14880,6 +21189,36 @@ class ContractSubjectProviderSubjectLabelCursor(
         return self
 
 
+class ServerDomainCursor(
+    _DnsServerGroupServerMakers, _DnsServerGroupMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``dnsepgDomain`` (domain level).
+
+    Position: ``uni.tenant.dns_server_group.server.domain``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> ServerDomainCursor:
+        """Set ``dnsepgDomain`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
 class ExternalSubnetCursor(
     _ExternalManagementEpgMakers, _ExternalManagementEntityMakers, _TenantMakers, _UniMakers
 ):
@@ -14903,6 +21242,191 @@ class ExternalSubnetCursor(
         userdom: str | None = None,
     ) -> ExternalSubnetCursor:
         """Set ``mgmtSubnet`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class _RemoteIpsRemoteIpMakers(Cursor):
+    """Makers declared at the remote_ip level (``hostprotRemoteIp``)."""
+
+    __slots__ = ()
+
+    def ep_label(
+        self,
+        key: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+        value: str | None = None,
+    ) -> RemoteIpsRemoteIpEpLabelCursor:
+        """Declare a ``hostprotEpLabel`` child under the remote_ip level.
+
+        Args:
+            key: The key or password used to uniquely identify this configuration object.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            value: The value of the property.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "key",
+            )
+        }
+        return cast(
+            "RemoteIpsRemoteIpEpLabelCursor",
+            self._invoke_maker("ep_label", (key,), _prune(params)),
+        )
+
+
+class RemoteIpsRemoteIpCursor(
+    _RemoteIpsRemoteIpMakers, _RemoteIpsMakers, _HostProtectionMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``hostprotRemoteIp`` (remote_ip level).
+
+    Position: ``uni.tenant.host_protection.remote_ips.remote_ip``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> RemoteIpsRemoteIpCursor:
+        """Set ``hostprotRemoteIp`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class _RuleMakers(Cursor):
+    """Makers declared at the rule level (``hostprotRule``)."""
+
+    __slots__ = ()
+
+    def remote_ip(
+        self,
+        ip_address: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> RuleRemoteIpCursor:
+        """Declare a ``hostprotRemoteIp`` child under the rule level.
+
+        Args:
+            ip_address: The peer IP address.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "ip_address",
+            )
+        }
+        return cast(
+            "RuleRemoteIpCursor",
+            self._invoke_maker("remote_ip", (ip_address,), _prune(params)),
+        )
+
+    def filter(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> RuleFilterCursor:
+        """Declare a ``hostprotFilterContainer`` child under the rule level.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "RuleFilterCursor",
+            self._invoke_maker("filter", (), _prune(params)),
+        )
+
+
+class RuleCursor(
+    _RuleMakers, _HostProtectionSubjectMakers, _HostProtectionMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``hostprotRule`` (rule level).
+
+    Position: ``uni.tenant.host_protection.subject.rule``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        host_protection_domain_action: frozenset[HostprotAction]
+        | set[HostprotAction]
+        | str
+        | None = None,
+        annotation: str | None = None,
+        connection_tracking: HostprotConnTrack | str | None = None,
+        description: str | None = None,
+        direction: NetworkDirection | str | None = None,
+        ethertype: HostprotEtypeMatch | str | None = None,
+        from_port: int | str | None = None,
+        icmp_code: int | str | None = None,
+        icmp_type: int | str | None = None,
+        display_name: str | None = None,
+        host_protection_rule_order: int | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        protocol: int | str | None = None,
+        domain_name: str | None = None,
+        to_port: int | str | None = None,
+        userdom: str | None = None,
+    ) -> RuleCursor:
+        """Set ``hostprotRule`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
         return self
@@ -15247,8 +21771,117 @@ class L2outExternalEpgProviderSubjectLabelCursor(
         return self
 
 
+class _L2outExternalEpgSubnetMakers(Cursor):
+    """Makers declared at the subnet level (``fvSubnet``)."""
+
+    __slots__ = ()
+
+    def anycast_endpoint(
+        self,
+        mac: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> ExternalEpgSubnetAnycastEndpointCursor:
+        """Declare a ``fvEpAnycast`` child under the subnet level.
+
+        Args:
+            mac: The MAC address.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "mac",
+            )
+        }
+        return cast(
+            "ExternalEpgSubnetAnycastEndpointCursor",
+            self._invoke_maker("anycast_endpoint", (mac,), _prune(params)),
+        )
+
+    def nlb_endpoint(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        multicast_group_ip_address: str | None = None,
+        mac: str | None = None,
+        nlb_mode: int | str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> ExternalEpgSubnetNlbEndpointCursor:
+        """Declare a ``fvEpNlb`` child under the subnet level.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            multicast_group_ip_address: Multicast group address corresponding to the VIP
+            mac: The MAC address.
+            nlb_mode: Mode of operation Default: ``mode-uc``.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "ExternalEpgSubnetNlbEndpointCursor",
+            self._invoke_maker("nlb_endpoint", (), _prune(params)),
+        )
+
+    def endpoint_network_config(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        dns_search_suffix_for_network_ip_pool: str | None = None,
+        dns_servers: str | None = None,
+        dns_suffix_for_network_ip_pool: str | None = None,
+        end_ip_address_for_network_ip_pool: str | None = None,
+        display_name: str | None = None,
+        start_ip_address_for_network_ip_pool: str | None = None,
+        userdom: str | None = None,
+        wins_servers: str | None = None,
+    ) -> ExternalEpgSubnetEndpointNetworkConfigCursor:
+        """Declare a ``fvCepNetCfgPol`` child under the subnet level.
+
+        Represents Client End Point network configuration policy, Used this information for
+        Microsoft SCVMM/Azure application to create SCVMM static IP pool
+
+        Args:
+            name: The name of the object.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            dns_search_suffix_for_network_ip_pool: DNS Search Suffix
+            dns_servers: DNS Server name
+            dns_suffix_for_network_ip_pool: DNS Suffix name
+            end_ip_address_for_network_ip_pool: Ending ip address
+            start_ip_address_for_network_ip_pool: Starting ip address
+            wins_servers: DNS Search Suffix
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "ExternalEpgSubnetEndpointNetworkConfigCursor",
+            self._invoke_maker("endpoint_network_config", (name,), _prune(params)),
+        )
+
+
 class L2outExternalEpgSubnetCursor(
-    _L2outExternalEpgMakers, _L2outMakers, _TenantMakers, _UniMakers
+    _L2outExternalEpgSubnetMakers, _L2outExternalEpgMakers, _L2outMakers, _TenantMakers, _UniMakers
 ):
     """Typed cursor for ``fvSubnet`` (subnet level).
 
@@ -16197,6 +22830,31 @@ class _NodeProfileInfraPeerConnectivityProfileMakers(Cursor):
             self._invoke_maker("local_autonomous_system_profile", (), _prune(params)),
         )
 
+    def data_plane(
+        self,
+        *,
+        mdp_data_plane_address: str | None = None,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> NodeProfileInfraPeerConnectivityProfileDataPlaneCursor:
+        """Declare a ``bgpDataPlaneIfP`` child under the infra_peer_connectivity_profile level.
+
+        Data plane address
+
+        Args:
+            mdp_data_plane_address: Data plane address
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "NodeProfileInfraPeerConnectivityProfileDataPlaneCursor",
+            self._invoke_maker("data_plane", (), _prune(params)),
+        )
+
 
 class NodeProfileInfraPeerConnectivityProfileCursor(
     _NodeProfileInfraPeerConnectivityProfileMakers,
@@ -16763,7 +23421,123 @@ class L3outNodeProfileInterfaceProfileCursor(
         return self
 
 
-class NodeAttachmentCursor(_L3outNodeProfileMakers, _L3outMakers, _TenantMakers, _UniMakers):
+class _NodeAttachmentMakers(Cursor):
+    """Makers declared at the node_attachment level (``l3extRsNodeL3OutAtt``)."""
+
+    __slots__ = ()
+
+    def static_route(
+        self,
+        match_ip_address: str,
+        *,
+        aggregated_route: bool | None = None,
+        annotation: str | None = None,
+        description: str | None = None,
+        start_of_prefix_length: int | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        preference: int | None = None,
+        route_controls: frozenset[IpRtCtrl] | set[IpRtCtrl] | str | None = None,
+        end_of_prefix_length: int | None = None,
+        userdom: str | None = None,
+    ) -> NodeAttachmentStaticRouteCursor:
+        """Declare a ``ipRouteP`` child under the node_attachment level.
+
+        Configure the IP address and next hop IP address for the routed outside network.
+
+        Args:
+            match_ip_address: The static route IP address assigned to the outside network.
+            aggregated_route: Aggregated Route Default: ``False``.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            start_of_prefix_length: Prefix list range Default: ``0``.
+            preference: The administrative preference value for this route. This value is useful
+                for resolving routes advertised from different protocols. Default: ``1``.
+            route_controls: Default: ``PydanticUndefined``.
+            end_of_prefix_length: Default: ``0``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "match_ip_address",
+            )
+        }
+        return cast(
+            "NodeAttachmentStaticRouteCursor",
+            self._invoke_maker("static_route", (match_ip_address,), _prune(params)),
+        )
+
+    def infra_node(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        fabric_external_control_peering: bool | None = None,
+        fabric_ext_intersite_ctrl_peering: bool | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        spine_role: frozenset[BgpSpineRoleType] | set[BgpSpineRoleType] | str | None = None,
+        userdom: str | None = None,
+    ) -> InfraNodeCursor:
+        """Declare a ``l3extInfraNodeP`` child under the node_attachment level.
+
+        Infra Logical Node Profile
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            fabric_external_control_peering: Enable/Disable participation of this node in
+                peering for fabric external control traffic Default: ``True``.
+            fabric_ext_intersite_ctrl_peering: Enable/Disable participation of this node in
+                peering for intersite control traffic Default: ``False``.
+            spine_role: Spine role played by this node Default: ``PydanticUndefined``.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "InfraNodeCursor",
+            self._invoke_maker("infra_node", (), _prune(params)),
+        )
+
+    def loopback(
+        self,
+        loop_back_interface_address: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> LoopbackCursor:
+        """Declare a ``l3extLoopBackIfP`` child under the node_attachment level.
+
+        The loopback interface profile.
+
+        Args:
+            loop_back_interface_address: The peer IP address.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "loop_back_interface_address",
+            )
+        }
+        return cast(
+            "LoopbackCursor",
+            self._invoke_maker("loopback", (loop_back_interface_address,), _prune(params)),
+        )
+
+
+class NodeAttachmentCursor(
+    _NodeAttachmentMakers, _L3outNodeProfileMakers, _L3outMakers, _TenantMakers, _UniMakers
+):
     """Typed cursor for ``l3extRsNodeL3OutAtt`` (node_attachment level).
 
     Position: ``uni.tenant.l3out.node_profile.node_attachment``
@@ -17008,7 +23782,118 @@ class InBandEpgStaticRouteCursor(
         return self
 
 
-class InBandEpgSubnetCursor(_InBandEpgMakers, _ManagementProfileMakers, _TenantMakers, _UniMakers):
+class _InBandEpgSubnetMakers(Cursor):
+    """Makers declared at the subnet level (``fvSubnet``)."""
+
+    __slots__ = ()
+
+    def anycast_endpoint(
+        self,
+        mac: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> InBandEpgSubnetAnycastEndpointCursor:
+        """Declare a ``fvEpAnycast`` child under the subnet level.
+
+        Args:
+            mac: The MAC address.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "mac",
+            )
+        }
+        return cast(
+            "InBandEpgSubnetAnycastEndpointCursor",
+            self._invoke_maker("anycast_endpoint", (mac,), _prune(params)),
+        )
+
+    def nlb_endpoint(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        multicast_group_ip_address: str | None = None,
+        mac: str | None = None,
+        nlb_mode: int | str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> InBandEpgSubnetNlbEndpointCursor:
+        """Declare a ``fvEpNlb`` child under the subnet level.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            multicast_group_ip_address: Multicast group address corresponding to the VIP
+            mac: The MAC address.
+            nlb_mode: Mode of operation Default: ``mode-uc``.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "InBandEpgSubnetNlbEndpointCursor",
+            self._invoke_maker("nlb_endpoint", (), _prune(params)),
+        )
+
+    def endpoint_network_config(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        dns_search_suffix_for_network_ip_pool: str | None = None,
+        dns_servers: str | None = None,
+        dns_suffix_for_network_ip_pool: str | None = None,
+        end_ip_address_for_network_ip_pool: str | None = None,
+        display_name: str | None = None,
+        start_ip_address_for_network_ip_pool: str | None = None,
+        userdom: str | None = None,
+        wins_servers: str | None = None,
+    ) -> InBandEpgSubnetEndpointNetworkConfigCursor:
+        """Declare a ``fvCepNetCfgPol`` child under the subnet level.
+
+        Represents Client End Point network configuration policy, Used this information for
+        Microsoft SCVMM/Azure application to create SCVMM static IP pool
+
+        Args:
+            name: The name of the object.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            dns_search_suffix_for_network_ip_pool: DNS Search Suffix
+            dns_servers: DNS Server name
+            dns_suffix_for_network_ip_pool: DNS Suffix name
+            end_ip_address_for_network_ip_pool: Ending ip address
+            start_ip_address_for_network_ip_pool: Starting ip address
+            wins_servers: DNS Search Suffix
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "InBandEpgSubnetEndpointNetworkConfigCursor",
+            self._invoke_maker("endpoint_network_config", (name,), _prune(params)),
+        )
+
+
+class InBandEpgSubnetCursor(
+    _InBandEpgSubnetMakers, _InBandEpgMakers, _ManagementProfileMakers, _TenantMakers, _UniMakers
+):
     """Typed cursor for ``fvSubnet`` (subnet level).
 
     Position: ``uni.tenant.management_profile.in_band_epg.subnet``
@@ -17110,6 +23995,33 @@ class OutOfBandEpgStaticRouteCursor(
         """Reference objects outside the design by raw DN."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class FactorCursor(_MatchCommunityMakers, _MatchRuleMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``rtctrlMatchCommFactor`` (factor level).
+
+    Position: ``uni.tenant.match_rule.match_community.factor``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        scope: RtextcomScope | str | None = None,
+        userdom: str | None = None,
+    ) -> FactorCursor:
+        """Set ``rtctrlMatchCommFactor`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
         return self
 
 
@@ -17465,6 +24377,71 @@ class ServiceRedirectPolicyDestinationOfRedirectedTrafficCursor(
         return self
 
 
+class TenantSpanDestinationGroupSpanDestinationVspanEpgSummaryCursor(
+    _TenantSpanDestinationGroupSpanDestinationMakers,
+    _TenantSpanDestinationGroupMakers,
+    _TenantMakers,
+    _UniMakers,
+):
+    """Typed cursor for ``spanVEpgSummary`` (vspan_epg_summary level).
+
+    Position: ``uni.tenant.span_destination_group.span_destination.vspan_epg_summary``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        dscp: int | str | None = None,
+        destination_ip: str | None = None,
+        flow_id: int | None = None,
+        mode: SpanErspanDestMode | str | None = None,
+        mtu: int | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        source_ip_of_erspan_packet: str | None = None,
+        time_to_live: int | str | None = None,
+        userdom: str | None = None,
+        vrf: str | None = None,
+    ) -> TenantSpanDestinationGroupSpanDestinationVspanEpgSummaryCursor:
+        """Set ``spanVEpgSummary`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        epg: str | Ref | None = None,
+        path: str | Ref | None = None,
+        apic_node: str | Ref | None = None,
+    ) -> TenantSpanDestinationGroupSpanDestinationVspanEpgSummaryCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        epg: str | Ref | None = None,
+        path: str | Ref | None = None,
+        apic_node: str | Ref | None = None,
+    ) -> TenantSpanDestinationGroupSpanDestinationVspanEpgSummaryCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
 class FallbackMemberCursor(_FallbackRouteGroupMakers, _VrfMakers, _TenantMakers, _UniMakers):
     """Typed cursor for ``fvFBRMember`` (fallback_member level).
 
@@ -17531,6 +24508,1625 @@ class FallbackRouteCursor(_FallbackRouteGroupMakers, _VrfMakers, _TenantMakers, 
         *,
         l3out: str | Ref | None = None,
     ) -> FallbackRouteCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+
+class SsmTranslateCursor(_IgmpMakers, _VrfMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``igmpSSMXlateP`` (ssm_translate level).
+
+    Position: ``uni.tenant.vrf.igmp.ssm_translate``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> SsmTranslateCursor:
+        """Set ``igmpSSMXlateP`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        l3out: str | Ref | None = None,
+    ) -> SsmTranslateCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+
+class _ExternalPrefixMakers(Cursor):
+    """Makers declared at the external_prefix level (``leakExternalPrefix``)."""
+
+    __slots__ = ()
+
+    def leak_to(
+        self,
+        leak_to_tenant_name: str,
+        leak_to_vrf_name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        override_subnet_scope: LeakToRouteScp | str | None = None,
+        userdom: str | None = None,
+    ) -> ExternalPrefixLeakToCursor:
+        """Declare a ``leakTo`` child under the external_prefix level.
+
+        Args:
+            leak_to_tenant_name: The tenant name.
+            leak_to_vrf_name: The L3 context name.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            override_subnet_scope: The domain applicable to the capability. Values: ``inherit``,
+                ``private``, ``public``. Default: ``inherit``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "leak_to_tenant_name",
+                "leak_to_vrf_name",
+            )
+        }
+        return cast(
+            "ExternalPrefixLeakToCursor",
+            self._invoke_maker(
+                "leak_to",
+                (
+                    leak_to_tenant_name,
+                    leak_to_vrf_name,
+                ),
+                _prune(params),
+            ),
+        )
+
+
+class ExternalPrefixCursor(
+    _ExternalPrefixMakers, _LeakRoutesMakers, _VrfMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``leakExternalPrefix`` (external_prefix level).
+
+    Position: ``uni.tenant.vrf.leak_routes.external_prefix``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        greater_then: int | str | None = None,
+        less_than_or_equal: int | str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> ExternalPrefixCursor:
+        """Set ``leakExternalPrefix`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        l3out: str | Ref | None = None,
+    ) -> ExternalPrefixCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+
+class _InternalPrefixMakers(Cursor):
+    """Makers declared at the internal_prefix level (``leakInternalPrefix``)."""
+
+    __slots__ = ()
+
+    def leak_to(
+        self,
+        leak_to_tenant_name: str,
+        leak_to_vrf_name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        override_subnet_scope: LeakToRouteScp | str | None = None,
+        userdom: str | None = None,
+    ) -> InternalPrefixLeakToCursor:
+        """Declare a ``leakTo`` child under the internal_prefix level.
+
+        Args:
+            leak_to_tenant_name: The tenant name.
+            leak_to_vrf_name: The L3 context name.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            override_subnet_scope: The domain applicable to the capability. Values: ``inherit``,
+                ``private``, ``public``. Default: ``inherit``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "leak_to_tenant_name",
+                "leak_to_vrf_name",
+            )
+        }
+        return cast(
+            "InternalPrefixLeakToCursor",
+            self._invoke_maker(
+                "leak_to",
+                (
+                    leak_to_tenant_name,
+                    leak_to_vrf_name,
+                ),
+                _prune(params),
+            ),
+        )
+
+
+class InternalPrefixCursor(
+    _InternalPrefixMakers, _LeakRoutesMakers, _VrfMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``leakInternalPrefix`` (internal_prefix level).
+
+    Position: ``uni.tenant.vrf.leak_routes.internal_prefix``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        greater_then: int | str | None = None,
+        less_than_or_equal: int | str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> InternalPrefixCursor:
+        """Set ``leakInternalPrefix`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        l3out: str | Ref | None = None,
+    ) -> InternalPrefixCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+
+class _InternalSubnetMakers(Cursor):
+    """Makers declared at the internal_subnet level (``leakInternalSubnet``)."""
+
+    __slots__ = ()
+
+    def leak_to(
+        self,
+        leak_to_tenant_name: str,
+        leak_to_vrf_name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        override_subnet_scope: LeakToRouteScp | str | None = None,
+        userdom: str | None = None,
+    ) -> InternalSubnetLeakToCursor:
+        """Declare a ``leakTo`` child under the internal_subnet level.
+
+        Args:
+            leak_to_tenant_name: The tenant name.
+            leak_to_vrf_name: The L3 context name.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            override_subnet_scope: The domain applicable to the capability. Values: ``inherit``,
+                ``private``, ``public``. Default: ``inherit``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "leak_to_tenant_name",
+                "leak_to_vrf_name",
+            )
+        }
+        return cast(
+            "InternalSubnetLeakToCursor",
+            self._invoke_maker(
+                "leak_to",
+                (
+                    leak_to_tenant_name,
+                    leak_to_vrf_name,
+                ),
+                _prune(params),
+            ),
+        )
+
+
+class InternalSubnetCursor(
+    _InternalSubnetMakers, _LeakRoutesMakers, _VrfMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``leakInternalSubnet`` (internal_subnet level).
+
+    Position: ``uni.tenant.vrf.leak_routes.internal_subnet``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        visibility_of_the_subnet: LeakRouteScp | str | None = None,
+        userdom: str | None = None,
+    ) -> InternalSubnetCursor:
+        """Set ``leakInternalSubnet`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        l3out: str | Ref | None = None,
+    ) -> InternalSubnetCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+
+class _PimAsmPatternMakers(Cursor):
+    """Makers declared at the asm_pattern level (``pimASMPatPol``)."""
+
+    __slots__ = ()
+
+    def register_traffic(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        max_rate: int | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        source_ip_address: str | None = None,
+        userdom: str | None = None,
+    ) -> PimAsmPatternRegisterTrafficCursor:
+        """Declare a ``pimRegTrPol`` child under the asm_pattern level.
+
+        PIM register traffic policy
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            max_rate: Max Rate Default: ``65535``.
+            source_ip_address: Source Ip
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "PimAsmPatternRegisterTrafficCursor",
+            self._invoke_maker("register_traffic", (), _prune(params)),
+        )
+
+    def sg_expiry(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        expity_interval: int | str | None = None,
+        userdom: str | None = None,
+    ) -> PimAsmPatternSgExpiryCursor:
+        """Declare a ``pimSGRangeExpPol`` child under the asm_pattern level.
+
+        The (S,G) range expiry policy.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            expity_interval: sgExpItvl controls Default: ``default-timeout``.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "PimAsmPatternSgExpiryCursor",
+            self._invoke_maker("sg_expiry", (), _prune(params)),
+        )
+
+    def shared_range(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> PimAsmPatternSharedRangeCursor:
+        """Declare a ``pimSharedRangePol`` child under the asm_pattern level.
+
+        Shared tree group range policy
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "PimAsmPatternSharedRangeCursor",
+            self._invoke_maker("shared_range", (), _prune(params)),
+        )
+
+
+class PimAsmPatternCursor(
+    _PimAsmPatternMakers, _VrfPimMakers, _VrfMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``pimASMPatPol`` (asm_pattern level).
+
+    Position: ``uni.tenant.vrf.pim.asm_pattern``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        control_knobs: frozenset[RtdmcASMCtrl] | set[RtdmcASMCtrl] | str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> PimAsmPatternCursor:
+        """Set ``pimASMPatPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        l3out: str | Ref | None = None,
+    ) -> PimAsmPatternCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+
+class _PimAutoRpMakers(Cursor):
+    """Makers declared at the auto_rp level (``pimAutoRPPol``)."""
+
+    __slots__ = ()
+
+    def ma_filter(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> PimAutoRpMaFilterCursor:
+        """Declare a ``pimMAFilterPol`` child under the auto_rp level.
+
+        Mapping agent (MA) filter policy.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "PimAutoRpMaFilterCursor",
+            self._invoke_maker("ma_filter", (), _prune(params)),
+        )
+
+
+class PimAutoRpCursor(_PimAutoRpMakers, _VrfPimMakers, _VrfMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``pimAutoRPPol`` (auto_rp level).
+
+    Position: ``uni.tenant.vrf.pim.auto_rp``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        control_knobs: frozenset[RtdmcAutoRPCtrl] | set[RtdmcAutoRPCtrl] | str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> PimAutoRpCursor:
+        """Set ``pimAutoRPPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        l3out: str | Ref | None = None,
+    ) -> PimAutoRpCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+
+class _PimBootstrapRpMakers(Cursor):
+    """Makers declared at the bootstrap_rp level (``pimBSRPPol``)."""
+
+    __slots__ = ()
+
+    def bsr_filter(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> PimBootstrapRpBsrFilterCursor:
+        """Declare a ``pimBSRFilterPol`` child under the bootstrap_rp level.
+
+        The PIM Bootstrap Router (BSR) filter policy.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "PimBootstrapRpBsrFilterCursor",
+            self._invoke_maker("bsr_filter", (), _prune(params)),
+        )
+
+
+class PimBootstrapRpCursor(
+    _PimBootstrapRpMakers, _VrfPimMakers, _VrfMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``pimBSRPPol`` (bootstrap_rp level).
+
+    Position: ``uni.tenant.vrf.pim.bootstrap_rp``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        control_knobs: frozenset[RtdmcBSRCtrl] | set[RtdmcBSRCtrl] | str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> PimBootstrapRpCursor:
+        """Set ``pimBSRPPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        l3out: str | Ref | None = None,
+    ) -> PimBootstrapRpCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+
+class _PimFabricRpMakers(Cursor):
+    """Makers declared at the fabric_rp level (``pimFabricRPPol``)."""
+
+    __slots__ = ()
+
+    def rp_entry(
+        self,
+        static_rp_address: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> PimFabricRpRpEntryCursor:
+        """Declare a ``pimStaticRPEntryPol`` child under the fabric_rp level.
+
+        Static RP entry policy
+
+        Args:
+            static_rp_address: Naming property — forms the object's RN.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "static_rp_address",
+            )
+        }
+        return cast(
+            "PimFabricRpRpEntryCursor",
+            self._invoke_maker("rp_entry", (static_rp_address,), _prune(params)),
+        )
+
+
+class PimFabricRpCursor(_PimFabricRpMakers, _VrfPimMakers, _VrfMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``pimFabricRPPol`` (fabric_rp level).
+
+    Position: ``uni.tenant.vrf.pim.fabric_rp``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> PimFabricRpCursor:
+        """Set ``pimFabricRPPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        l3out: str | Ref | None = None,
+    ) -> PimFabricRpCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+
+class _PimInterVrfMakers(Cursor):
+    """Makers declared at the inter_vrf level (``pimInterVRFPol``)."""
+
+    __slots__ = ()
+
+    def entry(
+        self,
+        dn_of_the_src_vrf: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> PimInterVrfEntryCursor:
+        """Declare a ``pimInterVRFEntryPol`` child under the inter_vrf level.
+
+        Inter VRF Entry policy
+
+        Args:
+            dn_of_the_src_vrf: Src Vrf Dn
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "dn_of_the_src_vrf",
+            )
+        }
+        return cast(
+            "PimInterVrfEntryCursor",
+            self._invoke_maker("entry", (dn_of_the_src_vrf,), _prune(params)),
+        )
+
+
+class PimInterVrfCursor(_PimInterVrfMakers, _VrfPimMakers, _VrfMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``pimInterVRFPol`` (inter_vrf level).
+
+    Position: ``uni.tenant.vrf.pim.inter_vrf``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> PimInterVrfCursor:
+        """Set ``pimInterVRFPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        l3out: str | Ref | None = None,
+    ) -> PimInterVrfCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+
+class PimResourceCursor(_VrfPimMakers, _VrfMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``pimResPol`` (resource level).
+
+    Position: ``uni.tenant.vrf.pim.resource``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        max_entries: int | str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        reserved_multicast_entries: int | str | None = None,
+        userdom: str | None = None,
+    ) -> PimResourceCursor:
+        """Set ``pimResPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        pim_route_map_policy: str | Ref | None = None,
+        l3out: str | Ref | None = None,
+    ) -> PimResourceCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        pim_route_map_policy: str | Ref | None = None,
+    ) -> PimResourceCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class _PimSsmPatternMakers(Cursor):
+    """Makers declared at the ssm_pattern level (``pimSSMPatPol``)."""
+
+    __slots__ = ()
+
+    def ssm_range(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> PimSsmPatternSsmRangeCursor:
+        """Declare a ``pimSSMRangePol`` child under the ssm_pattern level.
+
+        Source-specific group range policy
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "PimSsmPatternSsmRangeCursor",
+            self._invoke_maker("ssm_range", (), _prune(params)),
+        )
+
+
+class PimSsmPatternCursor(
+    _PimSsmPatternMakers, _VrfPimMakers, _VrfMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``pimSSMPatPol`` (ssm_pattern level).
+
+    Position: ``uni.tenant.vrf.pim.ssm_pattern``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> PimSsmPatternCursor:
+        """Set ``pimSSMPatPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        l3out: str | Ref | None = None,
+    ) -> PimSsmPatternCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+
+class _PimStaticRpMakers(Cursor):
+    """Makers declared at the static_rp level (``pimStaticRPPol``)."""
+
+    __slots__ = ()
+
+    def rp_entry(
+        self,
+        static_rp_address: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> PimStaticRpRpEntryCursor:
+        """Declare a ``pimStaticRPEntryPol`` child under the static_rp level.
+
+        Static RP entry policy
+
+        Args:
+            static_rp_address: Naming property — forms the object's RN.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "static_rp_address",
+            )
+        }
+        return cast(
+            "PimStaticRpRpEntryCursor",
+            self._invoke_maker("rp_entry", (static_rp_address,), _prune(params)),
+        )
+
+
+class PimStaticRpCursor(_PimStaticRpMakers, _VrfPimMakers, _VrfMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``pimStaticRPPol`` (static_rp level).
+
+    Position: ``uni.tenant.vrf.pim.static_rp``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> PimStaticRpCursor:
+        """Set ``pimStaticRPPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        l3out: str | Ref | None = None,
+    ) -> PimStaticRpCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+
+class _StripeWinnerMakers(Cursor):
+    """Makers declared at the stripe_winner level (``pimCSWPol``)."""
+
+    __slots__ = ()
+
+    def entry(
+        self,
+        src: str,
+        interface_controls: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        exclude_remote_leafs: bool | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        pod_id: int | None = None,
+        userdom: str | None = None,
+    ) -> StripeWinnerEntryCursor:
+        """Declare a ``pimCSWEntry`` child under the stripe_winner level.
+
+        Configured Stripe Winner Source/Group Entry
+
+        Args:
+            src: Source IP
+            interface_controls: Group IP
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            exclude_remote_leafs: Exclude Remote Leafs Default: ``False``.
+            pod_id: Pod ID Default: ``1``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "src",
+                "interface_controls",
+            )
+        }
+        return cast(
+            "StripeWinnerEntryCursor",
+            self._invoke_maker(
+                "entry",
+                (
+                    src,
+                    interface_controls,
+                ),
+                _prune(params),
+            ),
+        )
+
+
+class StripeWinnerCursor(_StripeWinnerMakers, _VrfPimMakers, _VrfMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``pimCSWPol`` (stripe_winner level).
+
+    Position: ``uni.tenant.vrf.pim.stripe_winner``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> StripeWinnerCursor:
+        """Set ``pimCSWPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        l3out: str | Ref | None = None,
+    ) -> StripeWinnerCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+
+class _Pim6AsmPatternMakers(Cursor):
+    """Makers declared at the asm_pattern level (``pimASMPatPol``)."""
+
+    __slots__ = ()
+
+    def register_traffic(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        max_rate: int | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        source_ip_address: str | None = None,
+        userdom: str | None = None,
+    ) -> Pim6AsmPatternRegisterTrafficCursor:
+        """Declare a ``pimRegTrPol`` child under the asm_pattern level.
+
+        PIM register traffic policy
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            max_rate: Max Rate Default: ``65535``.
+            source_ip_address: Source Ip
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "Pim6AsmPatternRegisterTrafficCursor",
+            self._invoke_maker("register_traffic", (), _prune(params)),
+        )
+
+    def sg_expiry(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        expity_interval: int | str | None = None,
+        userdom: str | None = None,
+    ) -> Pim6AsmPatternSgExpiryCursor:
+        """Declare a ``pimSGRangeExpPol`` child under the asm_pattern level.
+
+        The (S,G) range expiry policy.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            expity_interval: sgExpItvl controls Default: ``default-timeout``.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "Pim6AsmPatternSgExpiryCursor",
+            self._invoke_maker("sg_expiry", (), _prune(params)),
+        )
+
+    def shared_range(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> Pim6AsmPatternSharedRangeCursor:
+        """Declare a ``pimSharedRangePol`` child under the asm_pattern level.
+
+        Shared tree group range policy
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "Pim6AsmPatternSharedRangeCursor",
+            self._invoke_maker("shared_range", (), _prune(params)),
+        )
+
+
+class Pim6AsmPatternCursor(
+    _Pim6AsmPatternMakers, _Pim6Makers, _VrfMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``pimASMPatPol`` (asm_pattern level).
+
+    Position: ``uni.tenant.vrf.pim6.asm_pattern``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        control_knobs: frozenset[RtdmcASMCtrl] | set[RtdmcASMCtrl] | str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> Pim6AsmPatternCursor:
+        """Set ``pimASMPatPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        l3out: str | Ref | None = None,
+    ) -> Pim6AsmPatternCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+
+class _Pim6AutoRpMakers(Cursor):
+    """Makers declared at the auto_rp level (``pimAutoRPPol``)."""
+
+    __slots__ = ()
+
+    def ma_filter(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> Pim6AutoRpMaFilterCursor:
+        """Declare a ``pimMAFilterPol`` child under the auto_rp level.
+
+        Mapping agent (MA) filter policy.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "Pim6AutoRpMaFilterCursor",
+            self._invoke_maker("ma_filter", (), _prune(params)),
+        )
+
+
+class Pim6AutoRpCursor(_Pim6AutoRpMakers, _Pim6Makers, _VrfMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``pimAutoRPPol`` (auto_rp level).
+
+    Position: ``uni.tenant.vrf.pim6.auto_rp``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        control_knobs: frozenset[RtdmcAutoRPCtrl] | set[RtdmcAutoRPCtrl] | str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> Pim6AutoRpCursor:
+        """Set ``pimAutoRPPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        l3out: str | Ref | None = None,
+    ) -> Pim6AutoRpCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+
+class _Pim6BootstrapRpMakers(Cursor):
+    """Makers declared at the bootstrap_rp level (``pimBSRPPol``)."""
+
+    __slots__ = ()
+
+    def bsr_filter(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> Pim6BootstrapRpBsrFilterCursor:
+        """Declare a ``pimBSRFilterPol`` child under the bootstrap_rp level.
+
+        The PIM Bootstrap Router (BSR) filter policy.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "Pim6BootstrapRpBsrFilterCursor",
+            self._invoke_maker("bsr_filter", (), _prune(params)),
+        )
+
+
+class Pim6BootstrapRpCursor(
+    _Pim6BootstrapRpMakers, _Pim6Makers, _VrfMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``pimBSRPPol`` (bootstrap_rp level).
+
+    Position: ``uni.tenant.vrf.pim6.bootstrap_rp``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        control_knobs: frozenset[RtdmcBSRCtrl] | set[RtdmcBSRCtrl] | str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> Pim6BootstrapRpCursor:
+        """Set ``pimBSRPPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        l3out: str | Ref | None = None,
+    ) -> Pim6BootstrapRpCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+
+class _Pim6FabricRpMakers(Cursor):
+    """Makers declared at the fabric_rp level (``pimFabricRPPol``)."""
+
+    __slots__ = ()
+
+    def rp_entry(
+        self,
+        static_rp_address: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> Pim6FabricRpRpEntryCursor:
+        """Declare a ``pimStaticRPEntryPol`` child under the fabric_rp level.
+
+        Static RP entry policy
+
+        Args:
+            static_rp_address: Naming property — forms the object's RN.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "static_rp_address",
+            )
+        }
+        return cast(
+            "Pim6FabricRpRpEntryCursor",
+            self._invoke_maker("rp_entry", (static_rp_address,), _prune(params)),
+        )
+
+
+class Pim6FabricRpCursor(_Pim6FabricRpMakers, _Pim6Makers, _VrfMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``pimFabricRPPol`` (fabric_rp level).
+
+    Position: ``uni.tenant.vrf.pim6.fabric_rp``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> Pim6FabricRpCursor:
+        """Set ``pimFabricRPPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        l3out: str | Ref | None = None,
+    ) -> Pim6FabricRpCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+
+class _Pim6InterVrfMakers(Cursor):
+    """Makers declared at the inter_vrf level (``pimInterVRFPol``)."""
+
+    __slots__ = ()
+
+    def entry(
+        self,
+        dn_of_the_src_vrf: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> Pim6InterVrfEntryCursor:
+        """Declare a ``pimInterVRFEntryPol`` child under the inter_vrf level.
+
+        Inter VRF Entry policy
+
+        Args:
+            dn_of_the_src_vrf: Src Vrf Dn
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "dn_of_the_src_vrf",
+            )
+        }
+        return cast(
+            "Pim6InterVrfEntryCursor",
+            self._invoke_maker("entry", (dn_of_the_src_vrf,), _prune(params)),
+        )
+
+
+class Pim6InterVrfCursor(_Pim6InterVrfMakers, _Pim6Makers, _VrfMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``pimInterVRFPol`` (inter_vrf level).
+
+    Position: ``uni.tenant.vrf.pim6.inter_vrf``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> Pim6InterVrfCursor:
+        """Set ``pimInterVRFPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        l3out: str | Ref | None = None,
+    ) -> Pim6InterVrfCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+
+class Pim6ResourceCursor(_Pim6Makers, _VrfMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``pimResPol`` (resource level).
+
+    Position: ``uni.tenant.vrf.pim6.resource``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        max_entries: int | str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        reserved_multicast_entries: int | str | None = None,
+        userdom: str | None = None,
+    ) -> Pim6ResourceCursor:
+        """Set ``pimResPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        pim_route_map_policy: str | Ref | None = None,
+        l3out: str | Ref | None = None,
+    ) -> Pim6ResourceCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        pim_route_map_policy: str | Ref | None = None,
+    ) -> Pim6ResourceCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class _Pim6SsmPatternMakers(Cursor):
+    """Makers declared at the ssm_pattern level (``pimSSMPatPol``)."""
+
+    __slots__ = ()
+
+    def ssm_range(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> Pim6SsmPatternSsmRangeCursor:
+        """Declare a ``pimSSMRangePol`` child under the ssm_pattern level.
+
+        Source-specific group range policy
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "Pim6SsmPatternSsmRangeCursor",
+            self._invoke_maker("ssm_range", (), _prune(params)),
+        )
+
+
+class Pim6SsmPatternCursor(
+    _Pim6SsmPatternMakers, _Pim6Makers, _VrfMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``pimSSMPatPol`` (ssm_pattern level).
+
+    Position: ``uni.tenant.vrf.pim6.ssm_pattern``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> Pim6SsmPatternCursor:
+        """Set ``pimSSMPatPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        l3out: str | Ref | None = None,
+    ) -> Pim6SsmPatternCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+
+class _Pim6StaticRpMakers(Cursor):
+    """Makers declared at the static_rp level (``pimStaticRPPol``)."""
+
+    __slots__ = ()
+
+    def rp_entry(
+        self,
+        static_rp_address: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> Pim6StaticRpRpEntryCursor:
+        """Declare a ``pimStaticRPEntryPol`` child under the static_rp level.
+
+        Static RP entry policy
+
+        Args:
+            static_rp_address: Naming property — forms the object's RN.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "static_rp_address",
+            )
+        }
+        return cast(
+            "Pim6StaticRpRpEntryCursor",
+            self._invoke_maker("rp_entry", (static_rp_address,), _prune(params)),
+        )
+
+
+class Pim6StaticRpCursor(_Pim6StaticRpMakers, _Pim6Makers, _VrfMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``pimStaticRPPol`` (static_rp level).
+
+    Position: ``uni.tenant.vrf.pim6.static_rp``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> Pim6StaticRpCursor:
+        """Set ``pimStaticRPPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        l3out: str | Ref | None = None,
+    ) -> Pim6StaticRpCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+
+class CommunityCursor(_SnmpContextMakers, _VrfMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``snmpCommunityP`` (community level).
+
+    Position: ``uni.tenant.vrf.snmp_context.community``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> CommunityCursor:
+        """Set ``snmpCommunityP`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        l3out: str | Ref | None = None,
+    ) -> CommunityCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind(self, **_prune(params))
@@ -17832,6 +26428,64 @@ class DnsAttributeCursor(_CriterionMakers, _EpgMakers, _AppMakers, _TenantMakers
         return self
 
 
+class IdentityGroupCursor(_CriterionMakers, _EpgMakers, _AppMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``fvIdGroupAttr`` (identity_group level).
+
+    Position: ``uni.tenant.app.epg.criterion.identity_group``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> IdentityGroupCursor:
+        """Set ``fvIdGroupAttr`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        bd: str | Ref | None = None,
+        domain: str | Ref | None = None,
+        contract_master: str | Ref | None = None,
+        imported_contract: str | Ref | None = None,
+        taboo_contract: str | Ref | None = None,
+        custom_qos_policy: str | Ref | None = None,
+        dpp_policy: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
+        trust_control_policy: str | Ref | None = None,
+        qos_requirement: str | Ref | None = None,
+    ) -> IdentityGroupCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        domain: str | Ref | None = None,
+        contract_master: str | Ref | None = None,
+    ) -> IdentityGroupCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
 class IpAttributeCursor(_CriterionMakers, _EpgMakers, _AppMakers, _TenantMakers, _UniMakers):
     """Typed cursor for ``fvIpAttr`` (ip_attribute level).
 
@@ -18066,6 +26720,105 @@ class SubCriterionCursor(
         return self
 
 
+class _UsegBdMakers(Cursor):
+    """Makers declared at the useg_bd level (``fvUsegBDCont``)."""
+
+    __slots__ = ()
+
+    def associated_bd(
+        self,
+        bd_name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> AssociatedBdCursor:
+        """Declare a ``fvUsegAssocBD`` child under the useg_bd level.
+
+        Args:
+            bd_name: Naming property — forms the object's RN.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition root.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "bd_name",
+            )
+        }
+        return cast(
+            "AssociatedBdCursor",
+            self._invoke_maker("associated_bd", (bd_name,), _prune(params)),
+        )
+
+
+class UsegBdCursor(
+    _UsegBdMakers, _CriterionMakers, _EpgMakers, _AppMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``fvUsegBDCont`` (useg_bd level).
+
+    Position: ``uni.tenant.app.epg.criterion.useg_bd``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> UsegBdCursor:
+        """Set ``fvUsegBDCont`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        bd: str | Ref | None = None,
+        domain: str | Ref | None = None,
+        contract_master: str | Ref | None = None,
+        imported_contract: str | Ref | None = None,
+        taboo_contract: str | Ref | None = None,
+        custom_qos_policy: str | Ref | None = None,
+        dpp_policy: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
+        trust_control_policy: str | Ref | None = None,
+        qos_requirement: str | Ref | None = None,
+    ) -> UsegBdCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        domain: str | Ref | None = None,
+        contract_master: str | Ref | None = None,
+    ) -> UsegBdCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
 class CriterionVmAttributeCursor(
     _CriterionMakers, _EpgMakers, _AppMakers, _TenantMakers, _UniMakers
 ):
@@ -18130,6 +26883,63 @@ class CriterionVmAttributeCursor(
         return self
 
 
+class PinningLabelCursor(_FcPathMakers, _EpgMakers, _AppMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``fcPinningLbl`` (pinning_label level).
+
+    Position: ``uni.tenant.app.epg.fc_path.pinning_label``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> PinningLabelCursor:
+        """Set ``fcPinningLbl`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        bd: str | Ref | None = None,
+        domain: str | Ref | None = None,
+        contract_master: str | Ref | None = None,
+        imported_contract: str | Ref | None = None,
+        taboo_contract: str | Ref | None = None,
+        custom_qos_policy: str | Ref | None = None,
+        dpp_policy: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
+        trust_control_policy: str | Ref | None = None,
+        qos_requirement: str | Ref | None = None,
+    ) -> PinningLabelCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        domain: str | Ref | None = None,
+        contract_master: str | Ref | None = None,
+    ) -> PinningLabelCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
 class StaticIpCursor(_StaticEndpointMakers, _EpgMakers, _AppMakers, _TenantMakers, _UniMakers):
     """Typed cursor for ``fvStIp`` (static_ip level).
 
@@ -18181,6 +26991,1064 @@ class StaticIpCursor(_StaticEndpointMakers, _EpgMakers, _AppMakers, _TenantMaker
         domain: str | Ref | None = None,
         contract_master: str | Ref | None = None,
     ) -> StaticIpCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class IgmpSnoopAccessGroupCursor(
+    _EpgStaticPathMakers, _EpgMakers, _AppMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``igmpSnoopAccessGroup`` (igmp_snoop_access_group level).
+
+    Position: ``uni.tenant.app.epg.static_path.igmp_snoop_access_group``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> IgmpSnoopAccessGroupCursor:
+        """Set ``igmpSnoopAccessGroup`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        bd: str | Ref | None = None,
+        domain: str | Ref | None = None,
+        contract_master: str | Ref | None = None,
+        imported_contract: str | Ref | None = None,
+        taboo_contract: str | Ref | None = None,
+        custom_qos_policy: str | Ref | None = None,
+        dpp_policy: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
+        trust_control_policy: str | Ref | None = None,
+        qos_requirement: str | Ref | None = None,
+    ) -> IgmpSnoopAccessGroupCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        domain: str | Ref | None = None,
+        contract_master: str | Ref | None = None,
+    ) -> IgmpSnoopAccessGroupCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class IgmpSnoopStaticGroupCursor(
+    _EpgStaticPathMakers, _EpgMakers, _AppMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``igmpSnoopStaticGroup`` (igmp_snoop_static_group level).
+
+    Position: ``uni.tenant.app.epg.static_path.igmp_snoop_static_group``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> IgmpSnoopStaticGroupCursor:
+        """Set ``igmpSnoopStaticGroup`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        bd: str | Ref | None = None,
+        domain: str | Ref | None = None,
+        contract_master: str | Ref | None = None,
+        imported_contract: str | Ref | None = None,
+        taboo_contract: str | Ref | None = None,
+        custom_qos_policy: str | Ref | None = None,
+        dpp_policy: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
+        trust_control_policy: str | Ref | None = None,
+        qos_requirement: str | Ref | None = None,
+    ) -> IgmpSnoopStaticGroupCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        domain: str | Ref | None = None,
+        contract_master: str | Ref | None = None,
+    ) -> IgmpSnoopStaticGroupCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class MldSnoopAccessGroupCursor(
+    _EpgStaticPathMakers, _EpgMakers, _AppMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``mldSnoopAccessGroup`` (mld_snoop_access_group level).
+
+    Position: ``uni.tenant.app.epg.static_path.mld_snoop_access_group``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> MldSnoopAccessGroupCursor:
+        """Set ``mldSnoopAccessGroup`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        bd: str | Ref | None = None,
+        domain: str | Ref | None = None,
+        contract_master: str | Ref | None = None,
+        imported_contract: str | Ref | None = None,
+        taboo_contract: str | Ref | None = None,
+        custom_qos_policy: str | Ref | None = None,
+        dpp_policy: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
+        trust_control_policy: str | Ref | None = None,
+        qos_requirement: str | Ref | None = None,
+    ) -> MldSnoopAccessGroupCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        domain: str | Ref | None = None,
+        contract_master: str | Ref | None = None,
+    ) -> MldSnoopAccessGroupCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class MldSnoopStaticGroupCursor(
+    _EpgStaticPathMakers, _EpgMakers, _AppMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``mldSnoopStaticGroup`` (mld_snoop_static_group level).
+
+    Position: ``uni.tenant.app.epg.static_path.mld_snoop_static_group``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> MldSnoopStaticGroupCursor:
+        """Set ``mldSnoopStaticGroup`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        bd: str | Ref | None = None,
+        domain: str | Ref | None = None,
+        contract_master: str | Ref | None = None,
+        imported_contract: str | Ref | None = None,
+        taboo_contract: str | Ref | None = None,
+        custom_qos_policy: str | Ref | None = None,
+        dpp_policy: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
+        trust_control_policy: str | Ref | None = None,
+        qos_requirement: str | Ref | None = None,
+    ) -> MldSnoopStaticGroupCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        domain: str | Ref | None = None,
+        contract_master: str | Ref | None = None,
+    ) -> MldSnoopStaticGroupCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class NlbStaticGroupCursor(_EpgStaticPathMakers, _EpgMakers, _AppMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``fvNlbStaticGroup`` (nlb_static_group level).
+
+    Position: ``uni.tenant.app.epg.static_path.nlb_static_group``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> NlbStaticGroupCursor:
+        """Set ``fvNlbStaticGroup`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        bd: str | Ref | None = None,
+        domain: str | Ref | None = None,
+        contract_master: str | Ref | None = None,
+        imported_contract: str | Ref | None = None,
+        taboo_contract: str | Ref | None = None,
+        custom_qos_policy: str | Ref | None = None,
+        dpp_policy: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
+        trust_control_policy: str | Ref | None = None,
+        qos_requirement: str | Ref | None = None,
+    ) -> NlbStaticGroupCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        domain: str | Ref | None = None,
+        contract_master: str | Ref | None = None,
+    ) -> NlbStaticGroupCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class PortSecurityCursor(_EpgStaticPathMakers, _EpgMakers, _AppMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``l2PortSecurityPol`` (port_security level).
+
+    Position: ``uni.tenant.app.epg.static_path.port_security``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        port_security_maximum_can_be_0_12000: int | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        port_security_timeout_can_be_60_3600: int | None = None,
+        userdom: str | None = None,
+        port_security_violation: L2PortSecurityViolation | str | None = None,
+    ) -> PortSecurityCursor:
+        """Set ``l2PortSecurityPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        bd: str | Ref | None = None,
+        domain: str | Ref | None = None,
+        contract_master: str | Ref | None = None,
+        imported_contract: str | Ref | None = None,
+        taboo_contract: str | Ref | None = None,
+        custom_qos_policy: str | Ref | None = None,
+        dpp_policy: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
+        trust_control_policy: str | Ref | None = None,
+        qos_requirement: str | Ref | None = None,
+    ) -> PortSecurityCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        domain: str | Ref | None = None,
+        contract_master: str | Ref | None = None,
+    ) -> PortSecurityCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class PtpCursor(_EpgStaticPathMakers, _EpgMakers, _AppMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``ptpEpgCfg`` (ptp level).
+
+    Position: ``uni.tenant.app.epg.static_path.ptp``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        ptp_mode_for_interface: PtpPtpTransportMode | str | None = None,
+        ptp_source_address: str | None = None,
+        userdom: str | None = None,
+    ) -> PtpCursor:
+        """Set ``ptpEpgCfg`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        bd: str | Ref | None = None,
+        domain: str | Ref | None = None,
+        contract_master: str | Ref | None = None,
+        imported_contract: str | Ref | None = None,
+        taboo_contract: str | Ref | None = None,
+        custom_qos_policy: str | Ref | None = None,
+        dpp_policy: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
+        trust_control_policy: str | Ref | None = None,
+        qos_requirement: str | Ref | None = None,
+    ) -> PtpCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        domain: str | Ref | None = None,
+        contract_master: str | Ref | None = None,
+    ) -> PtpCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class EpgSubnetAnycastEndpointCursor(
+    _EpgSubnetMakers, _EpgMakers, _AppMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``fvEpAnycast`` (anycast_endpoint level).
+
+    Position: ``uni.tenant.app.epg.subnet.anycast_endpoint``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> EpgSubnetAnycastEndpointCursor:
+        """Set ``fvEpAnycast`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        l3out: str | Ref | None = None,
+        nd_ra_prefix_policy: str | Ref | None = None,
+        bd: str | Ref | None = None,
+        domain: str | Ref | None = None,
+        contract_master: str | Ref | None = None,
+        imported_contract: str | Ref | None = None,
+        taboo_contract: str | Ref | None = None,
+        custom_qos_policy: str | Ref | None = None,
+        dpp_policy: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
+        trust_control_policy: str | Ref | None = None,
+        qos_requirement: str | Ref | None = None,
+    ) -> EpgSubnetAnycastEndpointCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        domain: str | Ref | None = None,
+        contract_master: str | Ref | None = None,
+    ) -> EpgSubnetAnycastEndpointCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class EpgSubnetEndpointNetworkConfigCursor(
+    _EpgSubnetMakers, _EpgMakers, _AppMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``fvCepNetCfgPol`` (endpoint_network_config level).
+
+    Position: ``uni.tenant.app.epg.subnet.endpoint_network_config``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        dns_search_suffix_for_network_ip_pool: str | None = None,
+        dns_servers: str | None = None,
+        dns_suffix_for_network_ip_pool: str | None = None,
+        end_ip_address_for_network_ip_pool: str | None = None,
+        display_name: str | None = None,
+        start_ip_address_for_network_ip_pool: str | None = None,
+        userdom: str | None = None,
+        wins_servers: str | None = None,
+    ) -> EpgSubnetEndpointNetworkConfigCursor:
+        """Set ``fvCepNetCfgPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        l3out: str | Ref | None = None,
+        nd_ra_prefix_policy: str | Ref | None = None,
+        bd: str | Ref | None = None,
+        domain: str | Ref | None = None,
+        contract_master: str | Ref | None = None,
+        imported_contract: str | Ref | None = None,
+        taboo_contract: str | Ref | None = None,
+        custom_qos_policy: str | Ref | None = None,
+        dpp_policy: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
+        trust_control_policy: str | Ref | None = None,
+        qos_requirement: str | Ref | None = None,
+    ) -> EpgSubnetEndpointNetworkConfigCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        domain: str | Ref | None = None,
+        contract_master: str | Ref | None = None,
+    ) -> EpgSubnetEndpointNetworkConfigCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class EpgSubnetNlbEndpointCursor(
+    _EpgSubnetMakers, _EpgMakers, _AppMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``fvEpNlb`` (nlb_endpoint level).
+
+    Position: ``uni.tenant.app.epg.subnet.nlb_endpoint``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        multicast_group_ip_address: str | None = None,
+        mac: str | None = None,
+        nlb_mode: int | str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> EpgSubnetNlbEndpointCursor:
+        """Set ``fvEpNlb`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        l3out: str | Ref | None = None,
+        nd_ra_prefix_policy: str | Ref | None = None,
+        bd: str | Ref | None = None,
+        domain: str | Ref | None = None,
+        contract_master: str | Ref | None = None,
+        imported_contract: str | Ref | None = None,
+        taboo_contract: str | Ref | None = None,
+        custom_qos_policy: str | Ref | None = None,
+        dpp_policy: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
+        trust_control_policy: str | Ref | None = None,
+        qos_requirement: str | Ref | None = None,
+    ) -> EpgSubnetNlbEndpointCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        domain: str | Ref | None = None,
+        contract_master: str | Ref | None = None,
+    ) -> EpgSubnetNlbEndpointCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class DestinationFilterCursor(_PimFilterMakers, _BdPimMakers, _BdMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``pimBDDestFilterPol`` (destination_filter level).
+
+    Position: ``uni.tenant.bd.pim.filter.destination_filter``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> DestinationFilterCursor:
+        """Set ``pimBDDestFilterPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        pim_route_map_policy: str | Ref | None = None,
+        vrf: str | Ref | None = None,
+        l3out: str | Ref | None = None,
+    ) -> DestinationFilterCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        pim_route_map_policy: str | Ref | None = None,
+    ) -> DestinationFilterCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class SourceFilterCursor(_PimFilterMakers, _BdPimMakers, _BdMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``pimBDSrcFilterPol`` (source_filter level).
+
+    Position: ``uni.tenant.bd.pim.filter.source_filter``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> SourceFilterCursor:
+        """Set ``pimBDSrcFilterPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        pim_route_map_policy: str | Ref | None = None,
+        vrf: str | Ref | None = None,
+        l3out: str | Ref | None = None,
+    ) -> SourceFilterCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        pim_route_map_policy: str | Ref | None = None,
+    ) -> SourceFilterCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class RemoteIpsRemoteIpEpLabelCursor(
+    _RemoteIpsRemoteIpMakers, _RemoteIpsMakers, _HostProtectionMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``hostprotEpLabel`` (ep_label level).
+
+    Position: ``uni.tenant.host_protection.remote_ips.remote_ip.ep_label``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+        value: str | None = None,
+    ) -> RemoteIpsRemoteIpEpLabelCursor:
+        """Set ``hostprotEpLabel`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class _RuleFilterMakers(Cursor):
+    """Makers declared at the filter level (``hostprotFilterContainer``)."""
+
+    __slots__ = ()
+
+    def pod_filter(
+        self,
+        key: str,
+        operator: HostprotOperator | str,
+        *,
+        annotation: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+        values: str | None = None,
+    ) -> PodFilterCursor:
+        """Declare a ``hostprotPodFilter`` child under the filter level.
+
+        Args:
+            key: The key or password used to uniquely identify this configuration object.
+            operator: Naming property — forms the object's RN.
+            annotation: User annotation. Suggested format orchestrator:value
+            name: The name of the object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "key",
+                "operator",
+            )
+        }
+        return cast(
+            "PodFilterCursor",
+            self._invoke_maker(
+                "pod_filter",
+                (
+                    key,
+                    operator,
+                ),
+                _prune(params),
+            ),
+        )
+
+
+class RuleFilterCursor(
+    _RuleFilterMakers,
+    _RuleMakers,
+    _HostProtectionSubjectMakers,
+    _HostProtectionMakers,
+    _TenantMakers,
+    _UniMakers,
+):
+    """Typed cursor for ``hostprotFilterContainer`` (filter level).
+
+    Position: ``uni.tenant.host_protection.subject.rule.filter``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> RuleFilterCursor:
+        """Set ``hostprotFilterContainer`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class _RuleRemoteIpMakers(Cursor):
+    """Makers declared at the remote_ip level (``hostprotRemoteIp``)."""
+
+    __slots__ = ()
+
+    def ep_label(
+        self,
+        key: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+        value: str | None = None,
+    ) -> RuleRemoteIpEpLabelCursor:
+        """Declare a ``hostprotEpLabel`` child under the remote_ip level.
+
+        Args:
+            key: The key or password used to uniquely identify this configuration object.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            value: The value of the property.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "key",
+            )
+        }
+        return cast(
+            "RuleRemoteIpEpLabelCursor",
+            self._invoke_maker("ep_label", (key,), _prune(params)),
+        )
+
+
+class RuleRemoteIpCursor(
+    _RuleRemoteIpMakers,
+    _RuleMakers,
+    _HostProtectionSubjectMakers,
+    _HostProtectionMakers,
+    _TenantMakers,
+    _UniMakers,
+):
+    """Typed cursor for ``hostprotRemoteIp`` (remote_ip level).
+
+    Position: ``uni.tenant.host_protection.subject.rule.remote_ip``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> RuleRemoteIpCursor:
+        """Set ``hostprotRemoteIp`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class ExternalEpgSubnetAnycastEndpointCursor(
+    _L2outExternalEpgSubnetMakers, _L2outExternalEpgMakers, _L2outMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``fvEpAnycast`` (anycast_endpoint level).
+
+    Position: ``uni.tenant.l2out.external_epg.subnet.anycast_endpoint``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> ExternalEpgSubnetAnycastEndpointCursor:
+        """Set ``fvEpAnycast`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        l3out: str | Ref | None = None,
+        nd_ra_prefix_policy: str | Ref | None = None,
+        contract_master: str | Ref | None = None,
+        imported_contract: str | Ref | None = None,
+        taboo_contract: str | Ref | None = None,
+        custom_qos_policy: str | Ref | None = None,
+        bd: str | Ref | None = None,
+        domain: str | Ref | None = None,
+    ) -> ExternalEpgSubnetAnycastEndpointCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        contract_master: str | Ref | None = None,
+        domain: str | Ref | None = None,
+    ) -> ExternalEpgSubnetAnycastEndpointCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class ExternalEpgSubnetEndpointNetworkConfigCursor(
+    _L2outExternalEpgSubnetMakers, _L2outExternalEpgMakers, _L2outMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``fvCepNetCfgPol`` (endpoint_network_config level).
+
+    Position: ``uni.tenant.l2out.external_epg.subnet.endpoint_network_config``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        dns_search_suffix_for_network_ip_pool: str | None = None,
+        dns_servers: str | None = None,
+        dns_suffix_for_network_ip_pool: str | None = None,
+        end_ip_address_for_network_ip_pool: str | None = None,
+        display_name: str | None = None,
+        start_ip_address_for_network_ip_pool: str | None = None,
+        userdom: str | None = None,
+        wins_servers: str | None = None,
+    ) -> ExternalEpgSubnetEndpointNetworkConfigCursor:
+        """Set ``fvCepNetCfgPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        l3out: str | Ref | None = None,
+        nd_ra_prefix_policy: str | Ref | None = None,
+        contract_master: str | Ref | None = None,
+        imported_contract: str | Ref | None = None,
+        taboo_contract: str | Ref | None = None,
+        custom_qos_policy: str | Ref | None = None,
+        bd: str | Ref | None = None,
+        domain: str | Ref | None = None,
+    ) -> ExternalEpgSubnetEndpointNetworkConfigCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        contract_master: str | Ref | None = None,
+        domain: str | Ref | None = None,
+    ) -> ExternalEpgSubnetEndpointNetworkConfigCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class ExternalEpgSubnetNlbEndpointCursor(
+    _L2outExternalEpgSubnetMakers, _L2outExternalEpgMakers, _L2outMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``fvEpNlb`` (nlb_endpoint level).
+
+    Position: ``uni.tenant.l2out.external_epg.subnet.nlb_endpoint``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        multicast_group_ip_address: str | None = None,
+        mac: str | None = None,
+        nlb_mode: int | str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> ExternalEpgSubnetNlbEndpointCursor:
+        """Set ``fvEpNlb`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        l3out: str | Ref | None = None,
+        nd_ra_prefix_policy: str | Ref | None = None,
+        contract_master: str | Ref | None = None,
+        imported_contract: str | Ref | None = None,
+        taboo_contract: str | Ref | None = None,
+        custom_qos_policy: str | Ref | None = None,
+        bd: str | Ref | None = None,
+        domain: str | Ref | None = None,
+    ) -> ExternalEpgSubnetNlbEndpointCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        contract_master: str | Ref | None = None,
+        domain: str | Ref | None = None,
+    ) -> ExternalEpgSubnetNlbEndpointCursor:
         """Reference objects outside the design by raw DN."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind_dn(self, **_prune(params))
@@ -18472,6 +28340,67 @@ class NodeProfileInfraPeerConnectivityProfileAutonomousSystemProfileCursor(
         domain: str | Ref | None = None,
         fallback_route_group: str | Ref | None = None,
     ) -> NodeProfileInfraPeerConnectivityProfileAutonomousSystemProfileCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class NodeProfileInfraPeerConnectivityProfileDataPlaneCursor(
+    _NodeProfileInfraPeerConnectivityProfileMakers,
+    _L3outNodeProfileMakers,
+    _L3outMakers,
+    _TenantMakers,
+    _UniMakers,
+):
+    """Typed cursor for ``bgpDataPlaneIfP`` (data_plane level).
+
+    Position: ``uni.tenant.l3out.node_profile.infra_peer_connectivity_profile.data_plane``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        mdp_data_plane_address: str | None = None,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> NodeProfileInfraPeerConnectivityProfileDataPlaneCursor:
+        """Set ``bgpDataPlaneIfP`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        bgp_peer_prefix_policy: str | Ref | None = None,
+        fabric_node: str | Ref | None = None,
+        mpls_custom_qos_policy: str | Ref | None = None,
+        vrf: str | Ref | None = None,
+        domain: str | Ref | None = None,
+        fallback_route_group: str | Ref | None = None,
+    ) -> NodeProfileInfraPeerConnectivityProfileDataPlaneCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        fabric_node: str | Ref | None = None,
+        mpls_custom_qos_policy: str | Ref | None = None,
+        domain: str | Ref | None = None,
+        fallback_route_group: str | Ref | None = None,
+    ) -> NodeProfileInfraPeerConnectivityProfileDataPlaneCursor:
         """Reference objects outside the design by raw DN."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind_dn(self, **_prune(params))
@@ -19504,7 +29433,133 @@ class OspfInterfaceCursor(
         return self
 
 
+class _PathAttachmentMakers(Cursor):
+    """Makers declared at the path_attachment level (``l3extRsPathL3OutAtt``)."""
+
+    __slots__ = ()
+
+    def forwarder_address(
+        self,
+        ip_address: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        ipv6_dad: L3extIpv6Dad | str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> ForwarderAddressCursor:
+        """Declare a ``l3extForwarderAddr`` child under the path_attachment level.
+
+        Forwarding IP Address Policy
+
+        Args:
+            ip_address: The peer IP address.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            ipv6_dad: IPv6 DAD feature When disabled it will IPv6 DAD will be diasabled Values:
+                ``disabled``, ``enabled``. Default: ``enabled``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "ip_address",
+            )
+        }
+        return cast(
+            "ForwarderAddressCursor",
+            self._invoke_maker("forwarder_address", (ip_address,), _prune(params)),
+        )
+
+    def rogue_exception_mac(
+        self,
+        *,
+        annotation: str | None = None,
+        indicate_whether_all_macs_are_excluded: bool | None = None,
+        userdom: str | None = None,
+    ) -> PathAttachmentRogueExceptionMacCursor:
+        """Declare a ``l3extRogueExceptMacP`` child under the path_attachment level.
+
+        Rogue Exception MAC Group Policy
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            indicate_whether_all_macs_are_excluded: Indicate whether all MACs are excluded or
+                not Default: ``False``.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "PathAttachmentRogueExceptionMacCursor",
+            self._invoke_maker("rogue_exception_mac", (), _prune(params)),
+        )
+
+    def micro_bfd(
+        self,
+        *,
+        microbfd: bool | None = None,
+        annotation: str | None = None,
+        description: str | None = None,
+        micro_bfd_destination_address: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        micro_bfd_start_timer: int | None = None,
+        userdom: str | None = None,
+    ) -> MicroBfdCursor:
+        """Declare a ``bfdMicroBfdP`` child under the path_attachment level.
+
+        Micro BFD Configuration
+
+        Args:
+            microbfd: The destination policy administrative state. If enabled, the system uses
+                the destination policy when an error matching the associated cause is
+                encountered. Otherwise, the system ignores the policy even if a matching error
+                occurs. By default, all policies are enabled. Default: ``False``.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            micro_bfd_destination_address: Destination address
+            micro_bfd_start_timer: Default: ``0``.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "MicroBfdCursor",
+            self._invoke_maker("micro_bfd", (), _prune(params)),
+        )
+
+    def ptp_l3out(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        ptp_mode_for_interface: PtpPtpTransportMode | str | None = None,
+        ptp_source_address: str | None = None,
+        userdom: str | None = None,
+    ) -> PtpL3outCursor:
+        """Declare a ``ptpRtdEpgCfg`` child under the path_attachment level.
+
+        PTP configuration for L3Out
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            ptp_mode_for_interface: PTP mode multicast, unicast master/slave Values:
+                ``multicast``, ``multicast-master``, ``unicast-master``, ``unicast-slave``.
+                Default: ``multicast``.
+            ptp_source_address: IP address
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "PtpL3outCursor",
+            self._invoke_maker("ptp_l3out", (), _prune(params)),
+        )
+
+
 class PathAttachmentCursor(
+    _PathAttachmentMakers,
     _L3outNodeProfileInterfaceProfileMakers,
     _L3outNodeProfileMakers,
     _L3outMakers,
@@ -19707,6 +29762,275 @@ class PimIpv6InterfaceCursor(
         return self
 
 
+class InfraNodeCursor(
+    _NodeAttachmentMakers, _L3outNodeProfileMakers, _L3outMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``l3extInfraNodeP`` (infra_node level).
+
+    Position: ``uni.tenant.l3out.node_profile.node_attachment.infra_node``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        fabric_external_control_peering: bool | None = None,
+        fabric_ext_intersite_ctrl_peering: bool | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        spine_role: frozenset[BgpSpineRoleType] | set[BgpSpineRoleType] | str | None = None,
+        userdom: str | None = None,
+    ) -> InfraNodeCursor:
+        """Set ``l3extInfraNodeP`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        fabric_node: str | Ref | None = None,
+        mpls_custom_qos_policy: str | Ref | None = None,
+        vrf: str | Ref | None = None,
+        domain: str | Ref | None = None,
+        fallback_route_group: str | Ref | None = None,
+    ) -> InfraNodeCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        fabric_node: str | Ref | None = None,
+        mpls_custom_qos_policy: str | Ref | None = None,
+        domain: str | Ref | None = None,
+        fallback_route_group: str | Ref | None = None,
+    ) -> InfraNodeCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class _LoopbackMakers(Cursor):
+    """Makers declared at the loopback level (``l3extLoopBackIfP``)."""
+
+    __slots__ = ()
+
+    def node_sid(
+        self,
+        srgb_index: int,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        loopback_address_for_mpls_data_plane: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> NodeSidCursor:
+        """Declare a ``mplsNodeSidP`` child under the loopback level.
+
+        MPLS-SR Sid Node Profile
+
+        Args:
+            srgb_index: Index
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            loopback_address_for_mpls_data_plane: Data plane TEP
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "srgb_index",
+            )
+        }
+        return cast(
+            "NodeSidCursor",
+            self._invoke_maker("node_sid", (srgb_index,), _prune(params)),
+        )
+
+
+class LoopbackCursor(
+    _LoopbackMakers,
+    _NodeAttachmentMakers,
+    _L3outNodeProfileMakers,
+    _L3outMakers,
+    _TenantMakers,
+    _UniMakers,
+):
+    """Typed cursor for ``l3extLoopBackIfP`` (loopback level).
+
+    Position: ``uni.tenant.l3out.node_profile.node_attachment.loopback``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> LoopbackCursor:
+        """Set ``l3extLoopBackIfP`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        fabric_node: str | Ref | None = None,
+        mpls_custom_qos_policy: str | Ref | None = None,
+        vrf: str | Ref | None = None,
+        domain: str | Ref | None = None,
+        fallback_route_group: str | Ref | None = None,
+    ) -> LoopbackCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        fabric_node: str | Ref | None = None,
+        mpls_custom_qos_policy: str | Ref | None = None,
+        domain: str | Ref | None = None,
+        fallback_route_group: str | Ref | None = None,
+    ) -> LoopbackCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class _NodeAttachmentStaticRouteMakers(Cursor):
+    """Makers declared at the static_route level (``ipRouteP``)."""
+
+    __slots__ = ()
+
+    def next_hop(
+        self,
+        next_hop_address: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        preference: int | str | None = None,
+        nexthop_type: IpNexthopT | str | None = None,
+        userdom: str | None = None,
+    ) -> NextHopCursor:
+        """Declare a ``ipNexthopP`` child under the static_route level.
+
+        The Nexthop policy for the static route.
+
+        Args:
+            next_hop_address: The nexthop IP address for the static route to the outside
+                network.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            preference: Route preference, the administrative distance assigned to this route
+                Default: ``unspecified``.
+            nexthop_type: Nexthop type Values: ``none``, ``prefix``. Default: ``prefix``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "next_hop_address",
+            )
+        }
+        return cast(
+            "NextHopCursor",
+            self._invoke_maker("next_hop", (next_hop_address,), _prune(params)),
+        )
+
+
+class NodeAttachmentStaticRouteCursor(
+    _NodeAttachmentStaticRouteMakers,
+    _NodeAttachmentMakers,
+    _L3outNodeProfileMakers,
+    _L3outMakers,
+    _TenantMakers,
+    _UniMakers,
+):
+    """Typed cursor for ``ipRouteP`` (static_route level).
+
+    Position: ``uni.tenant.l3out.node_profile.node_attachment.static_route``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        aggregated_route: bool | None = None,
+        annotation: str | None = None,
+        description: str | None = None,
+        start_of_prefix_length: int | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        preference: int | None = None,
+        route_controls: frozenset[IpRtCtrl] | set[IpRtCtrl] | str | None = None,
+        end_of_prefix_length: int | None = None,
+        userdom: str | None = None,
+    ) -> NodeAttachmentStaticRouteCursor:
+        """Set ``ipRouteP`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        fabric_node: str | Ref | None = None,
+        mpls_custom_qos_policy: str | Ref | None = None,
+        vrf: str | Ref | None = None,
+        domain: str | Ref | None = None,
+        fallback_route_group: str | Ref | None = None,
+    ) -> NodeAttachmentStaticRouteCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        fabric_node: str | Ref | None = None,
+        mpls_custom_qos_policy: str | Ref | None = None,
+        domain: str | Ref | None = None,
+        fallback_route_group: str | Ref | None = None,
+    ) -> NodeAttachmentStaticRouteCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
 class L3outRouteControlProfileRouteControlContextRouteContextScopeCursor(
     _L3outRouteControlProfileRouteControlContextMakers,
     _L3outRouteControlProfileMakers,
@@ -19761,6 +30085,1316 @@ class L3outRouteControlProfileRouteControlContextRouteContextScopeCursor(
         """Reference objects outside the design by raw DN."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class InBandEpgSubnetAnycastEndpointCursor(
+    _InBandEpgSubnetMakers, _InBandEpgMakers, _ManagementProfileMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``fvEpAnycast`` (anycast_endpoint level).
+
+    Position: ``uni.tenant.management_profile.in_band_epg.subnet.anycast_endpoint``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> InBandEpgSubnetAnycastEndpointCursor:
+        """Set ``fvEpAnycast`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        l3out: str | Ref | None = None,
+        nd_ra_prefix_policy: str | Ref | None = None,
+        bd: str | Ref | None = None,
+        contract_master: str | Ref | None = None,
+        imported_contract: str | Ref | None = None,
+        custom_qos_policy: str | Ref | None = None,
+        static_node: str | Ref | None = None,
+    ) -> InBandEpgSubnetAnycastEndpointCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        contract_master: str | Ref | None = None,
+        static_node: str | Ref | None = None,
+    ) -> InBandEpgSubnetAnycastEndpointCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class InBandEpgSubnetEndpointNetworkConfigCursor(
+    _InBandEpgSubnetMakers, _InBandEpgMakers, _ManagementProfileMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``fvCepNetCfgPol`` (endpoint_network_config level).
+
+    Position: ``uni.tenant.management_profile.in_band_epg.subnet.endpoint_network_config``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        dns_search_suffix_for_network_ip_pool: str | None = None,
+        dns_servers: str | None = None,
+        dns_suffix_for_network_ip_pool: str | None = None,
+        end_ip_address_for_network_ip_pool: str | None = None,
+        display_name: str | None = None,
+        start_ip_address_for_network_ip_pool: str | None = None,
+        userdom: str | None = None,
+        wins_servers: str | None = None,
+    ) -> InBandEpgSubnetEndpointNetworkConfigCursor:
+        """Set ``fvCepNetCfgPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        l3out: str | Ref | None = None,
+        nd_ra_prefix_policy: str | Ref | None = None,
+        bd: str | Ref | None = None,
+        contract_master: str | Ref | None = None,
+        imported_contract: str | Ref | None = None,
+        custom_qos_policy: str | Ref | None = None,
+        static_node: str | Ref | None = None,
+    ) -> InBandEpgSubnetEndpointNetworkConfigCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        contract_master: str | Ref | None = None,
+        static_node: str | Ref | None = None,
+    ) -> InBandEpgSubnetEndpointNetworkConfigCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class InBandEpgSubnetNlbEndpointCursor(
+    _InBandEpgSubnetMakers, _InBandEpgMakers, _ManagementProfileMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``fvEpNlb`` (nlb_endpoint level).
+
+    Position: ``uni.tenant.management_profile.in_band_epg.subnet.nlb_endpoint``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        multicast_group_ip_address: str | None = None,
+        mac: str | None = None,
+        nlb_mode: int | str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> InBandEpgSubnetNlbEndpointCursor:
+        """Set ``fvEpNlb`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        l3out: str | Ref | None = None,
+        nd_ra_prefix_policy: str | Ref | None = None,
+        bd: str | Ref | None = None,
+        contract_master: str | Ref | None = None,
+        imported_contract: str | Ref | None = None,
+        custom_qos_policy: str | Ref | None = None,
+        static_node: str | Ref | None = None,
+    ) -> InBandEpgSubnetNlbEndpointCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        contract_master: str | Ref | None = None,
+        static_node: str | Ref | None = None,
+    ) -> InBandEpgSubnetNlbEndpointCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class ExternalPrefixLeakToCursor(
+    _ExternalPrefixMakers, _LeakRoutesMakers, _VrfMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``leakTo`` (leak_to level).
+
+    Position: ``uni.tenant.vrf.leak_routes.external_prefix.leak_to``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        override_subnet_scope: LeakToRouteScp | str | None = None,
+        userdom: str | None = None,
+    ) -> ExternalPrefixLeakToCursor:
+        """Set ``leakTo`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        l3out: str | Ref | None = None,
+    ) -> ExternalPrefixLeakToCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+
+class InternalPrefixLeakToCursor(
+    _InternalPrefixMakers, _LeakRoutesMakers, _VrfMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``leakTo`` (leak_to level).
+
+    Position: ``uni.tenant.vrf.leak_routes.internal_prefix.leak_to``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        override_subnet_scope: LeakToRouteScp | str | None = None,
+        userdom: str | None = None,
+    ) -> InternalPrefixLeakToCursor:
+        """Set ``leakTo`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        l3out: str | Ref | None = None,
+    ) -> InternalPrefixLeakToCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+
+class InternalSubnetLeakToCursor(
+    _InternalSubnetMakers, _LeakRoutesMakers, _VrfMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``leakTo`` (leak_to level).
+
+    Position: ``uni.tenant.vrf.leak_routes.internal_subnet.leak_to``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        override_subnet_scope: LeakToRouteScp | str | None = None,
+        userdom: str | None = None,
+    ) -> InternalSubnetLeakToCursor:
+        """Set ``leakTo`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        l3out: str | Ref | None = None,
+    ) -> InternalSubnetLeakToCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+
+class PimAsmPatternRegisterTrafficCursor(
+    _PimAsmPatternMakers, _VrfPimMakers, _VrfMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``pimRegTrPol`` (register_traffic level).
+
+    Position: ``uni.tenant.vrf.pim.asm_pattern.register_traffic``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        max_rate: int | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        source_ip_address: str | None = None,
+        userdom: str | None = None,
+    ) -> PimAsmPatternRegisterTrafficCursor:
+        """Set ``pimRegTrPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        pim_route_map_policy: str | Ref | None = None,
+        l3out: str | Ref | None = None,
+    ) -> PimAsmPatternRegisterTrafficCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        pim_route_map_policy: str | Ref | None = None,
+    ) -> PimAsmPatternRegisterTrafficCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class PimAsmPatternSgExpiryCursor(
+    _PimAsmPatternMakers, _VrfPimMakers, _VrfMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``pimSGRangeExpPol`` (sg_expiry level).
+
+    Position: ``uni.tenant.vrf.pim.asm_pattern.sg_expiry``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        expity_interval: int | str | None = None,
+        userdom: str | None = None,
+    ) -> PimAsmPatternSgExpiryCursor:
+        """Set ``pimSGRangeExpPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        pim_route_map_policy: str | Ref | None = None,
+        l3out: str | Ref | None = None,
+    ) -> PimAsmPatternSgExpiryCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        pim_route_map_policy: str | Ref | None = None,
+    ) -> PimAsmPatternSgExpiryCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class PimAsmPatternSharedRangeCursor(
+    _PimAsmPatternMakers, _VrfPimMakers, _VrfMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``pimSharedRangePol`` (shared_range level).
+
+    Position: ``uni.tenant.vrf.pim.asm_pattern.shared_range``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> PimAsmPatternSharedRangeCursor:
+        """Set ``pimSharedRangePol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        pim_route_map_policy: str | Ref | None = None,
+        l3out: str | Ref | None = None,
+    ) -> PimAsmPatternSharedRangeCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        pim_route_map_policy: str | Ref | None = None,
+    ) -> PimAsmPatternSharedRangeCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class PimAutoRpMaFilterCursor(
+    _PimAutoRpMakers, _VrfPimMakers, _VrfMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``pimMAFilterPol`` (ma_filter level).
+
+    Position: ``uni.tenant.vrf.pim.auto_rp.ma_filter``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> PimAutoRpMaFilterCursor:
+        """Set ``pimMAFilterPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        pim_route_map_policy: str | Ref | None = None,
+        l3out: str | Ref | None = None,
+    ) -> PimAutoRpMaFilterCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        pim_route_map_policy: str | Ref | None = None,
+    ) -> PimAutoRpMaFilterCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class PimBootstrapRpBsrFilterCursor(
+    _PimBootstrapRpMakers, _VrfPimMakers, _VrfMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``pimBSRFilterPol`` (bsr_filter level).
+
+    Position: ``uni.tenant.vrf.pim.bootstrap_rp.bsr_filter``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> PimBootstrapRpBsrFilterCursor:
+        """Set ``pimBSRFilterPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        pim_route_map_policy: str | Ref | None = None,
+        l3out: str | Ref | None = None,
+    ) -> PimBootstrapRpBsrFilterCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        pim_route_map_policy: str | Ref | None = None,
+    ) -> PimBootstrapRpBsrFilterCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class _PimFabricRpRpEntryMakers(Cursor):
+    """Makers declared at the rp_entry level (``pimStaticRPEntryPol``)."""
+
+    __slots__ = ()
+
+    def group_range(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> PimFabricRpRpEntryGroupRangeCursor:
+        """Declare a ``pimRPGrpRangePol`` child under the rp_entry level.
+
+        Specifies if RP multicast group range policy.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "PimFabricRpRpEntryGroupRangeCursor",
+            self._invoke_maker("group_range", (), _prune(params)),
+        )
+
+
+class PimFabricRpRpEntryCursor(
+    _PimFabricRpRpEntryMakers,
+    _PimFabricRpMakers,
+    _VrfPimMakers,
+    _VrfMakers,
+    _TenantMakers,
+    _UniMakers,
+):
+    """Typed cursor for ``pimStaticRPEntryPol`` (rp_entry level).
+
+    Position: ``uni.tenant.vrf.pim.fabric_rp.rp_entry``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> PimFabricRpRpEntryCursor:
+        """Set ``pimStaticRPEntryPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        l3out: str | Ref | None = None,
+    ) -> PimFabricRpRpEntryCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+
+class PimInterVrfEntryCursor(
+    _PimInterVrfMakers, _VrfPimMakers, _VrfMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``pimInterVRFEntryPol`` (entry level).
+
+    Position: ``uni.tenant.vrf.pim.inter_vrf.entry``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> PimInterVrfEntryCursor:
+        """Set ``pimInterVRFEntryPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        pim_route_map_policy: str | Ref | None = None,
+        l3out: str | Ref | None = None,
+    ) -> PimInterVrfEntryCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        pim_route_map_policy: str | Ref | None = None,
+    ) -> PimInterVrfEntryCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class PimSsmPatternSsmRangeCursor(
+    _PimSsmPatternMakers, _VrfPimMakers, _VrfMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``pimSSMRangePol`` (ssm_range level).
+
+    Position: ``uni.tenant.vrf.pim.ssm_pattern.ssm_range``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> PimSsmPatternSsmRangeCursor:
+        """Set ``pimSSMRangePol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        pim_route_map_policy: str | Ref | None = None,
+        l3out: str | Ref | None = None,
+    ) -> PimSsmPatternSsmRangeCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        pim_route_map_policy: str | Ref | None = None,
+    ) -> PimSsmPatternSsmRangeCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class _PimStaticRpRpEntryMakers(Cursor):
+    """Makers declared at the rp_entry level (``pimStaticRPEntryPol``)."""
+
+    __slots__ = ()
+
+    def group_range(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> PimStaticRpRpEntryGroupRangeCursor:
+        """Declare a ``pimRPGrpRangePol`` child under the rp_entry level.
+
+        Specifies if RP multicast group range policy.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "PimStaticRpRpEntryGroupRangeCursor",
+            self._invoke_maker("group_range", (), _prune(params)),
+        )
+
+
+class PimStaticRpRpEntryCursor(
+    _PimStaticRpRpEntryMakers,
+    _PimStaticRpMakers,
+    _VrfPimMakers,
+    _VrfMakers,
+    _TenantMakers,
+    _UniMakers,
+):
+    """Typed cursor for ``pimStaticRPEntryPol`` (rp_entry level).
+
+    Position: ``uni.tenant.vrf.pim.static_rp.rp_entry``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> PimStaticRpRpEntryCursor:
+        """Set ``pimStaticRPEntryPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        l3out: str | Ref | None = None,
+    ) -> PimStaticRpRpEntryCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+
+class StripeWinnerEntryCursor(
+    _StripeWinnerMakers, _VrfPimMakers, _VrfMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``pimCSWEntry`` (entry level).
+
+    Position: ``uni.tenant.vrf.pim.stripe_winner.entry``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        exclude_remote_leafs: bool | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        pod_id: int | None = None,
+        userdom: str | None = None,
+    ) -> StripeWinnerEntryCursor:
+        """Set ``pimCSWEntry`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        l3out: str | Ref | None = None,
+    ) -> StripeWinnerEntryCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+
+class Pim6AsmPatternRegisterTrafficCursor(
+    _Pim6AsmPatternMakers, _Pim6Makers, _VrfMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``pimRegTrPol`` (register_traffic level).
+
+    Position: ``uni.tenant.vrf.pim6.asm_pattern.register_traffic``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        max_rate: int | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        source_ip_address: str | None = None,
+        userdom: str | None = None,
+    ) -> Pim6AsmPatternRegisterTrafficCursor:
+        """Set ``pimRegTrPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        pim_route_map_policy: str | Ref | None = None,
+        l3out: str | Ref | None = None,
+    ) -> Pim6AsmPatternRegisterTrafficCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        pim_route_map_policy: str | Ref | None = None,
+    ) -> Pim6AsmPatternRegisterTrafficCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class Pim6AsmPatternSgExpiryCursor(
+    _Pim6AsmPatternMakers, _Pim6Makers, _VrfMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``pimSGRangeExpPol`` (sg_expiry level).
+
+    Position: ``uni.tenant.vrf.pim6.asm_pattern.sg_expiry``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        expity_interval: int | str | None = None,
+        userdom: str | None = None,
+    ) -> Pim6AsmPatternSgExpiryCursor:
+        """Set ``pimSGRangeExpPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        pim_route_map_policy: str | Ref | None = None,
+        l3out: str | Ref | None = None,
+    ) -> Pim6AsmPatternSgExpiryCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        pim_route_map_policy: str | Ref | None = None,
+    ) -> Pim6AsmPatternSgExpiryCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class Pim6AsmPatternSharedRangeCursor(
+    _Pim6AsmPatternMakers, _Pim6Makers, _VrfMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``pimSharedRangePol`` (shared_range level).
+
+    Position: ``uni.tenant.vrf.pim6.asm_pattern.shared_range``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> Pim6AsmPatternSharedRangeCursor:
+        """Set ``pimSharedRangePol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        pim_route_map_policy: str | Ref | None = None,
+        l3out: str | Ref | None = None,
+    ) -> Pim6AsmPatternSharedRangeCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        pim_route_map_policy: str | Ref | None = None,
+    ) -> Pim6AsmPatternSharedRangeCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class Pim6AutoRpMaFilterCursor(
+    _Pim6AutoRpMakers, _Pim6Makers, _VrfMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``pimMAFilterPol`` (ma_filter level).
+
+    Position: ``uni.tenant.vrf.pim6.auto_rp.ma_filter``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> Pim6AutoRpMaFilterCursor:
+        """Set ``pimMAFilterPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        pim_route_map_policy: str | Ref | None = None,
+        l3out: str | Ref | None = None,
+    ) -> Pim6AutoRpMaFilterCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        pim_route_map_policy: str | Ref | None = None,
+    ) -> Pim6AutoRpMaFilterCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class Pim6BootstrapRpBsrFilterCursor(
+    _Pim6BootstrapRpMakers, _Pim6Makers, _VrfMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``pimBSRFilterPol`` (bsr_filter level).
+
+    Position: ``uni.tenant.vrf.pim6.bootstrap_rp.bsr_filter``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> Pim6BootstrapRpBsrFilterCursor:
+        """Set ``pimBSRFilterPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        pim_route_map_policy: str | Ref | None = None,
+        l3out: str | Ref | None = None,
+    ) -> Pim6BootstrapRpBsrFilterCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        pim_route_map_policy: str | Ref | None = None,
+    ) -> Pim6BootstrapRpBsrFilterCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class _Pim6FabricRpRpEntryMakers(Cursor):
+    """Makers declared at the rp_entry level (``pimStaticRPEntryPol``)."""
+
+    __slots__ = ()
+
+    def group_range(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> Pim6FabricRpRpEntryGroupRangeCursor:
+        """Declare a ``pimRPGrpRangePol`` child under the rp_entry level.
+
+        Specifies if RP multicast group range policy.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "Pim6FabricRpRpEntryGroupRangeCursor",
+            self._invoke_maker("group_range", (), _prune(params)),
+        )
+
+
+class Pim6FabricRpRpEntryCursor(
+    _Pim6FabricRpRpEntryMakers,
+    _Pim6FabricRpMakers,
+    _Pim6Makers,
+    _VrfMakers,
+    _TenantMakers,
+    _UniMakers,
+):
+    """Typed cursor for ``pimStaticRPEntryPol`` (rp_entry level).
+
+    Position: ``uni.tenant.vrf.pim6.fabric_rp.rp_entry``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> Pim6FabricRpRpEntryCursor:
+        """Set ``pimStaticRPEntryPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        l3out: str | Ref | None = None,
+    ) -> Pim6FabricRpRpEntryCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+
+class Pim6InterVrfEntryCursor(
+    _Pim6InterVrfMakers, _Pim6Makers, _VrfMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``pimInterVRFEntryPol`` (entry level).
+
+    Position: ``uni.tenant.vrf.pim6.inter_vrf.entry``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> Pim6InterVrfEntryCursor:
+        """Set ``pimInterVRFEntryPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        pim_route_map_policy: str | Ref | None = None,
+        l3out: str | Ref | None = None,
+    ) -> Pim6InterVrfEntryCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        pim_route_map_policy: str | Ref | None = None,
+    ) -> Pim6InterVrfEntryCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class Pim6SsmPatternSsmRangeCursor(
+    _Pim6SsmPatternMakers, _Pim6Makers, _VrfMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``pimSSMRangePol`` (ssm_range level).
+
+    Position: ``uni.tenant.vrf.pim6.ssm_pattern.ssm_range``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> Pim6SsmPatternSsmRangeCursor:
+        """Set ``pimSSMRangePol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        pim_route_map_policy: str | Ref | None = None,
+        l3out: str | Ref | None = None,
+    ) -> Pim6SsmPatternSsmRangeCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        pim_route_map_policy: str | Ref | None = None,
+    ) -> Pim6SsmPatternSsmRangeCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class _Pim6StaticRpRpEntryMakers(Cursor):
+    """Makers declared at the rp_entry level (``pimStaticRPEntryPol``)."""
+
+    __slots__ = ()
+
+    def group_range(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> Pim6StaticRpRpEntryGroupRangeCursor:
+        """Declare a ``pimRPGrpRangePol`` child under the rp_entry level.
+
+        Specifies if RP multicast group range policy.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "Pim6StaticRpRpEntryGroupRangeCursor",
+            self._invoke_maker("group_range", (), _prune(params)),
+        )
+
+
+class Pim6StaticRpRpEntryCursor(
+    _Pim6StaticRpRpEntryMakers,
+    _Pim6StaticRpMakers,
+    _Pim6Makers,
+    _VrfMakers,
+    _TenantMakers,
+    _UniMakers,
+):
+    """Typed cursor for ``pimStaticRPEntryPol`` (rp_entry level).
+
+    Position: ``uni.tenant.vrf.pim6.static_rp.rp_entry``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> Pim6StaticRpRpEntryCursor:
+        """Set ``pimStaticRPEntryPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        l3out: str | Ref | None = None,
+    ) -> Pim6StaticRpRpEntryCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
         return self
 
 
@@ -19825,6 +31459,135 @@ class SubCriterionVmAttributeCursor(
         """Reference objects outside the design by raw DN."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class AssociatedBdCursor(
+    _UsegBdMakers, _CriterionMakers, _EpgMakers, _AppMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``fvUsegAssocBD`` (associated_bd level).
+
+    Position: ``uni.tenant.app.epg.criterion.useg_bd.associated_bd``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> AssociatedBdCursor:
+        """Set ``fvUsegAssocBD`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        bd: str | Ref | None = None,
+        domain: str | Ref | None = None,
+        contract_master: str | Ref | None = None,
+        imported_contract: str | Ref | None = None,
+        taboo_contract: str | Ref | None = None,
+        custom_qos_policy: str | Ref | None = None,
+        dpp_policy: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
+        trust_control_policy: str | Ref | None = None,
+        qos_requirement: str | Ref | None = None,
+    ) -> AssociatedBdCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        domain: str | Ref | None = None,
+        contract_master: str | Ref | None = None,
+    ) -> AssociatedBdCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class PodFilterCursor(
+    _RuleFilterMakers,
+    _RuleMakers,
+    _HostProtectionSubjectMakers,
+    _HostProtectionMakers,
+    _TenantMakers,
+    _UniMakers,
+):
+    """Typed cursor for ``hostprotPodFilter`` (pod_filter level).
+
+    Position: ``uni.tenant.host_protection.subject.rule.filter.pod_filter``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+        values: str | None = None,
+    ) -> PodFilterCursor:
+        """Set ``hostprotPodFilter`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class RuleRemoteIpEpLabelCursor(
+    _RuleRemoteIpMakers,
+    _RuleMakers,
+    _HostProtectionSubjectMakers,
+    _HostProtectionMakers,
+    _TenantMakers,
+    _UniMakers,
+):
+    """Typed cursor for ``hostprotEpLabel`` (ep_label level).
+
+    Position: ``uni.tenant.host_protection.subject.rule.remote_ip.ep_label``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+        value: str | None = None,
+    ) -> RuleRemoteIpEpLabelCursor:
+        """Set ``hostprotEpLabel`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
         return self
 
 
@@ -20193,6 +31956,31 @@ class _FloatingSviInfraPeerConnectivityProfileMakers(Cursor):
             self._invoke_maker("local_autonomous_system_profile", (), _prune(params)),
         )
 
+    def data_plane(
+        self,
+        *,
+        mdp_data_plane_address: str | None = None,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> FloatingSviInfraPeerConnectivityProfileDataPlaneCursor:
+        """Declare a ``bgpDataPlaneIfP`` child under the infra_peer_connectivity_profile level.
+
+        Data plane address
+
+        Args:
+            mdp_data_plane_address: Data plane address
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "FloatingSviInfraPeerConnectivityProfileDataPlaneCursor",
+            self._invoke_maker("data_plane", (), _prune(params)),
+        )
+
 
 class FloatingSviInfraPeerConnectivityProfileCursor(
     _FloatingSviInfraPeerConnectivityProfileMakers,
@@ -20417,7 +32205,37 @@ class NdPrefixProfileCursor(
         return self
 
 
+class _SecondaryIpAddressMakers(Cursor):
+    """Makers declared at the secondary_ip_address level (``l3extIp``)."""
+
+    __slots__ = ()
+
+    def dhcp_relay_gw_ext_ip(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> DhcpRelayGwExtIpCursor:
+        """Declare a ``dhcpRelayGwExtIp`` child under the secondary_ip_address level.
+
+        Enable external secondary IPs for DHCP relay gateway
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "DhcpRelayGwExtIpCursor",
+            self._invoke_maker("dhcp_relay_gw_ext_ip", (), _prune(params)),
+        )
+
+
 class SecondaryIpAddressCursor(
+    _SecondaryIpAddressMakers,
     _FloatingSviMakers,
     _L3outNodeProfileInterfaceProfileMakers,
     _L3outNodeProfileMakers,
@@ -20482,7 +32300,53 @@ class SecondaryIpAddressCursor(
         return self
 
 
+class _HsrpGroupProfileMakers(Cursor):
+    """Makers declared at the hsrp_group_profile level (``hsrpGroupP``)."""
+
+    __slots__ = ()
+
+    def secondary_vip(
+        self,
+        secondary_ip_address: str,
+        *,
+        annotation: str | None = None,
+        sec_vip_misconfiguration: frozenset[HsrpConfigIssues]
+        | set[HsrpConfigIssues]
+        | str
+        | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> SecondaryVipCursor:
+        """Declare a ``hsrpSecVip`` child under the hsrp_group_profile level.
+
+        Secondary Address Policy
+
+        Args:
+            secondary_ip_address: HSRP primary Virtual IP address (VIP)
+            annotation: User annotation. Suggested format orchestrator:value
+            sec_vip_misconfiguration: Bitmask representation of the configuration issues found
+                during the endpoint group deployment. Default: ``PydanticUndefined``.
+            description: Specifies the description of a policy component.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "secondary_ip_address",
+            )
+        }
+        return cast(
+            "SecondaryVipCursor",
+            self._invoke_maker("secondary_vip", (secondary_ip_address,), _prune(params)),
+        )
+
+
 class HsrpGroupProfileCursor(
+    _HsrpGroupProfileMakers,
     _HsrpInterfaceMakers,
     _L3outNodeProfileInterfaceProfileMakers,
     _L3outNodeProfileMakers,
@@ -20551,6 +32415,605 @@ class HsrpGroupProfileCursor(
         domain: str | Ref | None = None,
         fallback_route_group: str | Ref | None = None,
     ) -> HsrpGroupProfileCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class ForwarderAddressCursor(
+    _PathAttachmentMakers,
+    _L3outNodeProfileInterfaceProfileMakers,
+    _L3outNodeProfileMakers,
+    _L3outMakers,
+    _TenantMakers,
+    _UniMakers,
+):
+    """Typed cursor for ``l3extForwarderAddr`` (forwarder_address level).
+
+    Position: ``uni.tenant.l3out.node_profile.interface_profile.path_attachment.forwarder_address``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        ipv6_dad: L3extIpv6Dad | str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> ForwarderAddressCursor:
+        """Set ``l3extForwarderAddr`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        arp_interface_policy: str | Ref | None = None,
+        nd_interface_policy: str | Ref | None = None,
+        custom_qos_policy: str | Ref | None = None,
+        netflow_monitor: str | Ref | None = None,
+        fabric_node: str | Ref | None = None,
+        mpls_custom_qos_policy: str | Ref | None = None,
+        vrf: str | Ref | None = None,
+        domain: str | Ref | None = None,
+        fallback_route_group: str | Ref | None = None,
+    ) -> ForwarderAddressCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        fabric_node: str | Ref | None = None,
+        mpls_custom_qos_policy: str | Ref | None = None,
+        domain: str | Ref | None = None,
+        fallback_route_group: str | Ref | None = None,
+    ) -> ForwarderAddressCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class MicroBfdCursor(
+    _PathAttachmentMakers,
+    _L3outNodeProfileInterfaceProfileMakers,
+    _L3outNodeProfileMakers,
+    _L3outMakers,
+    _TenantMakers,
+    _UniMakers,
+):
+    """Typed cursor for ``bfdMicroBfdP`` (micro_bfd level).
+
+    Position: ``uni.tenant.l3out.node_profile.interface_profile.path_attachment.micro_bfd``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        microbfd: bool | None = None,
+        annotation: str | None = None,
+        description: str | None = None,
+        micro_bfd_destination_address: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        micro_bfd_start_timer: int | None = None,
+        userdom: str | None = None,
+    ) -> MicroBfdCursor:
+        """Set ``bfdMicroBfdP`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        arp_interface_policy: str | Ref | None = None,
+        nd_interface_policy: str | Ref | None = None,
+        custom_qos_policy: str | Ref | None = None,
+        netflow_monitor: str | Ref | None = None,
+        fabric_node: str | Ref | None = None,
+        mpls_custom_qos_policy: str | Ref | None = None,
+        vrf: str | Ref | None = None,
+        domain: str | Ref | None = None,
+        fallback_route_group: str | Ref | None = None,
+    ) -> MicroBfdCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        fabric_node: str | Ref | None = None,
+        mpls_custom_qos_policy: str | Ref | None = None,
+        domain: str | Ref | None = None,
+        fallback_route_group: str | Ref | None = None,
+    ) -> MicroBfdCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class PtpL3outCursor(
+    _PathAttachmentMakers,
+    _L3outNodeProfileInterfaceProfileMakers,
+    _L3outNodeProfileMakers,
+    _L3outMakers,
+    _TenantMakers,
+    _UniMakers,
+):
+    """Typed cursor for ``ptpRtdEpgCfg`` (ptp_l3out level).
+
+    Position: ``uni.tenant.l3out.node_profile.interface_profile.path_attachment.ptp_l3out``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        ptp_mode_for_interface: PtpPtpTransportMode | str | None = None,
+        ptp_source_address: str | None = None,
+        userdom: str | None = None,
+    ) -> PtpL3outCursor:
+        """Set ``ptpRtdEpgCfg`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        arp_interface_policy: str | Ref | None = None,
+        nd_interface_policy: str | Ref | None = None,
+        custom_qos_policy: str | Ref | None = None,
+        netflow_monitor: str | Ref | None = None,
+        fabric_node: str | Ref | None = None,
+        mpls_custom_qos_policy: str | Ref | None = None,
+        vrf: str | Ref | None = None,
+        domain: str | Ref | None = None,
+        fallback_route_group: str | Ref | None = None,
+    ) -> PtpL3outCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        fabric_node: str | Ref | None = None,
+        mpls_custom_qos_policy: str | Ref | None = None,
+        domain: str | Ref | None = None,
+        fallback_route_group: str | Ref | None = None,
+    ) -> PtpL3outCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class PathAttachmentRogueExceptionMacCursor(
+    _PathAttachmentMakers,
+    _L3outNodeProfileInterfaceProfileMakers,
+    _L3outNodeProfileMakers,
+    _L3outMakers,
+    _TenantMakers,
+    _UniMakers,
+):
+    """Typed cursor for ``l3extRogueExceptMacP`` (rogue_exception_mac level).
+
+    Position: ``uni.tenant.l3out.node_profile.interface_profile.path_attachment.rogue_exception_mac``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        indicate_whether_all_macs_are_excluded: bool | None = None,
+        userdom: str | None = None,
+    ) -> PathAttachmentRogueExceptionMacCursor:
+        """Set ``l3extRogueExceptMacP`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        arp_interface_policy: str | Ref | None = None,
+        nd_interface_policy: str | Ref | None = None,
+        custom_qos_policy: str | Ref | None = None,
+        netflow_monitor: str | Ref | None = None,
+        fabric_node: str | Ref | None = None,
+        mpls_custom_qos_policy: str | Ref | None = None,
+        vrf: str | Ref | None = None,
+        domain: str | Ref | None = None,
+        fallback_route_group: str | Ref | None = None,
+    ) -> PathAttachmentRogueExceptionMacCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        fabric_node: str | Ref | None = None,
+        mpls_custom_qos_policy: str | Ref | None = None,
+        domain: str | Ref | None = None,
+        fallback_route_group: str | Ref | None = None,
+    ) -> PathAttachmentRogueExceptionMacCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class NodeSidCursor(
+    _LoopbackMakers,
+    _NodeAttachmentMakers,
+    _L3outNodeProfileMakers,
+    _L3outMakers,
+    _TenantMakers,
+    _UniMakers,
+):
+    """Typed cursor for ``mplsNodeSidP`` (node_sid level).
+
+    Position: ``uni.tenant.l3out.node_profile.node_attachment.loopback.node_sid``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        loopback_address_for_mpls_data_plane: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> NodeSidCursor:
+        """Set ``mplsNodeSidP`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        fabric_node: str | Ref | None = None,
+        mpls_custom_qos_policy: str | Ref | None = None,
+        vrf: str | Ref | None = None,
+        domain: str | Ref | None = None,
+        fallback_route_group: str | Ref | None = None,
+    ) -> NodeSidCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        fabric_node: str | Ref | None = None,
+        mpls_custom_qos_policy: str | Ref | None = None,
+        domain: str | Ref | None = None,
+        fallback_route_group: str | Ref | None = None,
+    ) -> NodeSidCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class NextHopCursor(
+    _NodeAttachmentStaticRouteMakers,
+    _NodeAttachmentMakers,
+    _L3outNodeProfileMakers,
+    _L3outMakers,
+    _TenantMakers,
+    _UniMakers,
+):
+    """Typed cursor for ``ipNexthopP`` (next_hop level).
+
+    Position: ``uni.tenant.l3out.node_profile.node_attachment.static_route.next_hop``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        preference: int | str | None = None,
+        nexthop_type: IpNexthopT | str | None = None,
+        userdom: str | None = None,
+    ) -> NextHopCursor:
+        """Set ``ipNexthopP`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        fabric_node: str | Ref | None = None,
+        mpls_custom_qos_policy: str | Ref | None = None,
+        vrf: str | Ref | None = None,
+        domain: str | Ref | None = None,
+        fallback_route_group: str | Ref | None = None,
+    ) -> NextHopCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        fabric_node: str | Ref | None = None,
+        mpls_custom_qos_policy: str | Ref | None = None,
+        domain: str | Ref | None = None,
+        fallback_route_group: str | Ref | None = None,
+    ) -> NextHopCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class PimFabricRpRpEntryGroupRangeCursor(
+    _PimFabricRpRpEntryMakers,
+    _PimFabricRpMakers,
+    _VrfPimMakers,
+    _VrfMakers,
+    _TenantMakers,
+    _UniMakers,
+):
+    """Typed cursor for ``pimRPGrpRangePol`` (group_range level).
+
+    Position: ``uni.tenant.vrf.pim.fabric_rp.rp_entry.group_range``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> PimFabricRpRpEntryGroupRangeCursor:
+        """Set ``pimRPGrpRangePol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        pim_route_map_policy: str | Ref | None = None,
+        l3out: str | Ref | None = None,
+    ) -> PimFabricRpRpEntryGroupRangeCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        pim_route_map_policy: str | Ref | None = None,
+    ) -> PimFabricRpRpEntryGroupRangeCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class PimStaticRpRpEntryGroupRangeCursor(
+    _PimStaticRpRpEntryMakers,
+    _PimStaticRpMakers,
+    _VrfPimMakers,
+    _VrfMakers,
+    _TenantMakers,
+    _UniMakers,
+):
+    """Typed cursor for ``pimRPGrpRangePol`` (group_range level).
+
+    Position: ``uni.tenant.vrf.pim.static_rp.rp_entry.group_range``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> PimStaticRpRpEntryGroupRangeCursor:
+        """Set ``pimRPGrpRangePol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        pim_route_map_policy: str | Ref | None = None,
+        l3out: str | Ref | None = None,
+    ) -> PimStaticRpRpEntryGroupRangeCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        pim_route_map_policy: str | Ref | None = None,
+    ) -> PimStaticRpRpEntryGroupRangeCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class Pim6FabricRpRpEntryGroupRangeCursor(
+    _Pim6FabricRpRpEntryMakers,
+    _Pim6FabricRpMakers,
+    _Pim6Makers,
+    _VrfMakers,
+    _TenantMakers,
+    _UniMakers,
+):
+    """Typed cursor for ``pimRPGrpRangePol`` (group_range level).
+
+    Position: ``uni.tenant.vrf.pim6.fabric_rp.rp_entry.group_range``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> Pim6FabricRpRpEntryGroupRangeCursor:
+        """Set ``pimRPGrpRangePol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        pim_route_map_policy: str | Ref | None = None,
+        l3out: str | Ref | None = None,
+    ) -> Pim6FabricRpRpEntryGroupRangeCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        pim_route_map_policy: str | Ref | None = None,
+    ) -> Pim6FabricRpRpEntryGroupRangeCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class Pim6StaticRpRpEntryGroupRangeCursor(
+    _Pim6StaticRpRpEntryMakers,
+    _Pim6StaticRpMakers,
+    _Pim6Makers,
+    _VrfMakers,
+    _TenantMakers,
+    _UniMakers,
+):
+    """Typed cursor for ``pimRPGrpRangePol`` (group_range level).
+
+    Position: ``uni.tenant.vrf.pim6.static_rp.rp_entry.group_range``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> Pim6StaticRpRpEntryGroupRangeCursor:
+        """Set ``pimRPGrpRangePol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        pim_route_map_policy: str | Ref | None = None,
+        l3out: str | Ref | None = None,
+    ) -> Pim6StaticRpRpEntryGroupRangeCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        pim_route_map_policy: str | Ref | None = None,
+    ) -> Pim6StaticRpRpEntryGroupRangeCursor:
         """Reference objects outside the design by raw DN."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind_dn(self, **_prune(params))
@@ -20832,6 +33295,73 @@ class FloatingSviInfraPeerConnectivityProfileAutonomousSystemProfileCursor(
         return self
 
 
+class FloatingSviInfraPeerConnectivityProfileDataPlaneCursor(
+    _FloatingSviInfraPeerConnectivityProfileMakers,
+    _FloatingSviMakers,
+    _L3outNodeProfileInterfaceProfileMakers,
+    _L3outNodeProfileMakers,
+    _L3outMakers,
+    _TenantMakers,
+    _UniMakers,
+):
+    """Typed cursor for ``bgpDataPlaneIfP`` (data_plane level).
+
+    Position: ``uni.tenant.l3out.node_profile.interface_profile.floating_svi.infra_peer_connectivity_profile.data_plane``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        mdp_data_plane_address: str | None = None,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> FloatingSviInfraPeerConnectivityProfileDataPlaneCursor:
+        """Set ``bgpDataPlaneIfP`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        bgp_peer_prefix_policy: str | Ref | None = None,
+        domain: str | Ref | None = None,
+        arp_interface_policy: str | Ref | None = None,
+        nd_interface_policy: str | Ref | None = None,
+        custom_qos_policy: str | Ref | None = None,
+        netflow_monitor: str | Ref | None = None,
+        fabric_node: str | Ref | None = None,
+        mpls_custom_qos_policy: str | Ref | None = None,
+        vrf: str | Ref | None = None,
+        fallback_route_group: str | Ref | None = None,
+    ) -> FloatingSviInfraPeerConnectivityProfileDataPlaneCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        domain: str | Ref | None = None,
+        fabric_node: str | Ref | None = None,
+        mpls_custom_qos_policy: str | Ref | None = None,
+        fallback_route_group: str | Ref | None = None,
+    ) -> FloatingSviInfraPeerConnectivityProfileDataPlaneCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
 class FloatingSviInfraPeerConnectivityProfileLocalAutonomousSystemProfileCursor(
     _FloatingSviInfraPeerConnectivityProfileMakers,
     _FloatingSviMakers,
@@ -20894,6 +33424,142 @@ class FloatingSviInfraPeerConnectivityProfileLocalAutonomousSystemProfileCursor(
         mpls_custom_qos_policy: str | Ref | None = None,
         fallback_route_group: str | Ref | None = None,
     ) -> FloatingSviInfraPeerConnectivityProfileLocalAutonomousSystemProfileCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class DhcpRelayGwExtIpCursor(
+    _SecondaryIpAddressMakers,
+    _FloatingSviMakers,
+    _L3outNodeProfileInterfaceProfileMakers,
+    _L3outNodeProfileMakers,
+    _L3outMakers,
+    _TenantMakers,
+    _UniMakers,
+):
+    """Typed cursor for ``dhcpRelayGwExtIp`` (dhcp_relay_gw_ext_ip level).
+
+    Position: ``uni.tenant.l3out.node_profile.interface_profile.floating_svi.secondary_ip_address.dhcp_relay_gw_ext_ip``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> DhcpRelayGwExtIpCursor:
+        """Set ``dhcpRelayGwExtIp`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        domain: str | Ref | None = None,
+        arp_interface_policy: str | Ref | None = None,
+        nd_interface_policy: str | Ref | None = None,
+        custom_qos_policy: str | Ref | None = None,
+        netflow_monitor: str | Ref | None = None,
+        fabric_node: str | Ref | None = None,
+        mpls_custom_qos_policy: str | Ref | None = None,
+        vrf: str | Ref | None = None,
+        fallback_route_group: str | Ref | None = None,
+    ) -> DhcpRelayGwExtIpCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        domain: str | Ref | None = None,
+        fabric_node: str | Ref | None = None,
+        mpls_custom_qos_policy: str | Ref | None = None,
+        fallback_route_group: str | Ref | None = None,
+    ) -> DhcpRelayGwExtIpCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class SecondaryVipCursor(
+    _HsrpGroupProfileMakers,
+    _HsrpInterfaceMakers,
+    _L3outNodeProfileInterfaceProfileMakers,
+    _L3outNodeProfileMakers,
+    _L3outMakers,
+    _TenantMakers,
+    _UniMakers,
+):
+    """Typed cursor for ``hsrpSecVip`` (secondary_vip level).
+
+    Position: ``uni.tenant.l3out.node_profile.interface_profile.hsrp_interface.hsrp_group_profile.secondary_vip``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        sec_vip_misconfiguration: frozenset[HsrpConfigIssues]
+        | set[HsrpConfigIssues]
+        | str
+        | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> SecondaryVipCursor:
+        """Set ``hsrpSecVip`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        hsrp_group_policy: str | Ref | None = None,
+        hsrp_interface_policy: str | Ref | None = None,
+        arp_interface_policy: str | Ref | None = None,
+        nd_interface_policy: str | Ref | None = None,
+        custom_qos_policy: str | Ref | None = None,
+        netflow_monitor: str | Ref | None = None,
+        fabric_node: str | Ref | None = None,
+        mpls_custom_qos_policy: str | Ref | None = None,
+        vrf: str | Ref | None = None,
+        domain: str | Ref | None = None,
+        fallback_route_group: str | Ref | None = None,
+    ) -> SecondaryVipCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        fabric_node: str | Ref | None = None,
+        mpls_custom_qos_policy: str | Ref | None = None,
+        domain: str | Ref | None = None,
+        fallback_route_group: str | Ref | None = None,
+    ) -> SecondaryVipCursor:
         """Reference objects outside the design by raw DN."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind_dn(self, **_prune(params))

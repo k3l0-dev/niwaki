@@ -35,6 +35,8 @@ Accepted as keyword arguments of `.span_source_group(name)` and of `.set(**attrs
 | --- | --- | --- |
 | `.span_source(name, **attrs)` | `spanSrc` | {ref}`fabric.span_source_group.span_source <vocab-fabric-span_source_group-span_source>` |
 | `.span_label(name, **attrs)` | `spanSpanLbl` | {ref}`fabric.span_source_group.span_label <vocab-fabric-span_source_group-span_label>` |
+| `.vspan_source(name, **attrs)` | `spanVSrc` | {ref}`fabric.span_source_group.vspan_source <vocab-fabric-span_source_group-vspan_source>` |
+| `.vspan_source_def(name, **attrs)` | `spanVSrcDef` | {ref}`fabric.span_source_group.vspan_source_def <vocab-fabric-span_source_group-vspan_source_def>` |
 
 ## Bind aliases
 

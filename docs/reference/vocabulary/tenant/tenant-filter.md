@@ -13,7 +13,7 @@ A filter policy is a group of resolvable filter entries. Each filter entry is a 
 | --- | --- |
 | ACI class | `vzFilter` |
 | RN | `flt-{name}` |
-| Cursor | `FilterCursor` |
+| Cursor | `TenantFilterCursor` |
 | Parent | {ref}`tenant <vocab-tenant>` |
 | Atomic | — |
 
@@ -33,3 +33,4 @@ Accepted as keyword arguments of `.filter(name)` and of `.set(**attrs)` on this 
 | maker | creates | position |
 | --- | --- | --- |
 | `.entry(name, tcp, udp, **attrs)` | `vzEntry` | {ref}`tenant.filter.entry <vocab-tenant-filter-entry>` |
+| `.port_zero_entry(name, **attrs)` | `vzEntryPortZero` | {ref}`tenant.filter.port_zero_entry <vocab-tenant-filter-port_zero_entry>` |

@@ -29,3 +29,9 @@ Accepted as keyword arguments of `.mpls_global_configuration(name)` and of `.set
 | `mpls_minimum_static_label` | `minStaticLabel` | `int` | — | `0` | MPLS Label Static Range |
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |
+
+## Children
+
+| maker | creates | position |
+| --- | --- | --- |
+| `.srgb(srgb_identifier, **attrs)` | `mplsSrgbLabelPol` | {ref}`tenant.mpls_global_configuration.srgb <vocab-tenant-mpls_global_configuration-srgb>` |

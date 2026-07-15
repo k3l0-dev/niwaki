@@ -25,3 +25,21 @@ Accepted as keyword arguments of `.action_rule_profile(name)` and of `.set(**att
 | --- | --- | --- | --- | --- | --- |
 | `name` *(positional)* | `name` | `str` | — | — | The action rule name. |
 | `description` | `descr` | `str` | — | — | Specifies the description of a policy component. |
+
+## Children
+
+| maker | creates | position |
+| --- | --- | --- |
+| `.set_as_path(as_path_criteria, **attrs)` | `rtctrlSetASPath` | {ref}`tenant.action_rule_profile.set_as_path <vocab-tenant-action_rule_profile-set_as_path>` |
+| `.add_community(community, **attrs)` | `rtctrlSetAddComm` | {ref}`tenant.action_rule_profile.add_community <vocab-tenant-action_rule_profile-add_community>` |
+| `.set_community(**attrs)` | `rtctrlSetComm` | {ref}`tenant.action_rule_profile.set_community <vocab-tenant-action_rule_profile-set_community>` |
+| `.set_dampening(**attrs)` | `rtctrlSetDamp` | {ref}`tenant.action_rule_profile.set_dampening <vocab-tenant-action_rule_profile-set_dampening>` |
+| `.set_next_hop(**attrs)` | `rtctrlSetNh` | {ref}`tenant.action_rule_profile.set_next_hop <vocab-tenant-action_rule_profile-set_next_hop>` |
+| `.set_next_hop_unchanged(**attrs)` | `rtctrlSetNhUnchanged` | {ref}`tenant.action_rule_profile.set_next_hop_unchanged <vocab-tenant-action_rule_profile-set_next_hop_unchanged>` |
+| `.set_policy_tag(**attrs)` | `rtctrlSetPolicyTag` | {ref}`tenant.action_rule_profile.set_policy_tag <vocab-tenant-action_rule_profile-set_policy_tag>` |
+| `.set_preference(**attrs)` | `rtctrlSetPref` | {ref}`tenant.action_rule_profile.set_preference <vocab-tenant-action_rule_profile-set_preference>` |
+| `.set_redistribute_multipath(**attrs)` | `rtctrlSetRedistMultipath` | {ref}`tenant.action_rule_profile.set_redistribute_multipath <vocab-tenant-action_rule_profile-set_redistribute_multipath>` |
+| `.set_metric(**attrs)` | `rtctrlSetRtMetric` | {ref}`tenant.action_rule_profile.set_metric <vocab-tenant-action_rule_profile-set_metric>` |
+| `.set_metric_type(**attrs)` | `rtctrlSetRtMetricType` | {ref}`tenant.action_rule_profile.set_metric_type <vocab-tenant-action_rule_profile-set_metric_type>` |
+| `.set_route_tag(**attrs)` | `rtctrlSetTag` | {ref}`tenant.action_rule_profile.set_route_tag <vocab-tenant-action_rule_profile-set_route_tag>` |
+| `.set_weight(**attrs)` | `rtctrlSetWeight` | {ref}`tenant.action_rule_profile.set_weight <vocab-tenant-action_rule_profile-set_weight>` |

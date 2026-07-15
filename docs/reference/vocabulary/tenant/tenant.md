@@ -77,6 +77,19 @@ Accepted as keyword arguments of `.tenant(name)` and of `.set(**attrs)` on this 
 | `.match_rule(name, **attrs)` | `rtctrlSubjP` | {ref}`tenant.match_rule <vocab-tenant-match_rule>` |
 | `.action_rule_profile(name, **attrs)` | `rtctrlAttrP` | {ref}`tenant.action_rule_profile <vocab-tenant-action_rule_profile>` |
 | `.route_tag_policy(name, **attrs)` | `l3extRouteTagPol` | {ref}`tenant.route_tag_policy <vocab-tenant-route_tag_policy>` |
+| `.rogue_exception_mac_group(name, **attrs)` | `l3extRogueExceptionMacGroup` | {ref}`tenant.rogue_exception_mac_group <vocab-tenant-rogue_exception_mac_group>` |
+| `.vrf_validation_policy(name, **attrs)` | `l3extVrfValidationPol` | {ref}`tenant.vrf_validation_policy <vocab-tenant-vrf_validation_policy>` |
+| `.host_protection(name, **attrs)` | `hostprotPol` | {ref}`tenant.host_protection <vocab-tenant-host_protection>` |
+| `.isakmp_global(**attrs)` | `isakmpGlobalPol` | {ref}`tenant.isakmp_global <vocab-tenant-isakmp_global>` |
+| `.isakmp_keyring(name, **attrs)` | `isakmpKeyring` | {ref}`tenant.isakmp_keyring <vocab-tenant-isakmp_keyring>` |
+| `.isakmp_policy(priority, **attrs)` | `isakmpPolicy` | {ref}`tenant.isakmp_policy <vocab-tenant-isakmp_policy>` |
+| `.isakmp_profile(name, **attrs)` | `isakmpProfile` | {ref}`tenant.isakmp_profile <vocab-tenant-isakmp_profile>` |
+| `.ipsec_phase1(name, **attrs)` | `ipsecIsakmpPhase1Pol` | {ref}`tenant.ipsec_phase1 <vocab-tenant-ipsec_phase1>` |
+| `.ipsec_phase2(name, **attrs)` | `ipsecIsakmpPhase2Pol` | {ref}`tenant.ipsec_phase2 <vocab-tenant-ipsec_phase2>` |
+| `.dns_server_group(name, **attrs)` | `dnsepgSvrGrp` | {ref}`tenant.dns_server_group <vocab-tenant-dns_server_group>` |
+| `.auth_server_group(name, **attrs)` | `authSvrGroup` | {ref}`tenant.auth_server_group <vocab-tenant-auth_server_group>` |
+| `.fc_pinning(name, **attrs)` | `fcPinningP` | {ref}`tenant.fc_pinning <vocab-tenant-fc_pinning>` |
+| `.address_pool(name, **attrs)` | `fvAddrMgmtPool` | {ref}`tenant.address_pool <vocab-tenant-address_pool>` |
 | `.ip_sla_monitoring_policy(name, **attrs)` | `fvIPSLAMonitoringPol` | {ref}`tenant.ip_sla_monitoring_policy <vocab-tenant-ip_sla_monitoring_policy>` |
 | `.track_list(name, **attrs)` | `fvTrackList` | {ref}`tenant.track_list <vocab-tenant-track_list>` |
 | `.track_member(name, **attrs)` | `fvTrackMember` | {ref}`tenant.track_member <vocab-tenant-track_member>` |

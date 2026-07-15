@@ -295,6 +295,23 @@ makers:
     match_rule: rtctrlSubjP
     action_rule_profile: rtctrlAttrP
     route_tag_policy: l3extRouteTagPol
+    rogue_exception_mac_group: l3extRogueExceptionMacGroup   # wave 2026-07-15
+    vrf_validation_policy: l3extVrfValidationPol
+
+    # ── Policies › Security & VPN (wave: 2026-07-15) ──────────────────────────
+    host_protection: hostprotPol       # host protection (microseg) domain
+    isakmp_global: isakmpGlobalPol
+    isakmp_keyring: isakmpKeyring
+    isakmp_policy: isakmpPolicy
+    isakmp_profile: isakmpProfile
+    ipsec_phase1: ipsecIsakmpPhase1Pol
+    ipsec_phase2: ipsecIsakmpPhase2Pol
+
+    # ── Policies › Protocol (wave: 2026-07-15) ────────────────────────────────
+    dns_server_group: dnsepgSvrGrp
+    auth_server_group: authSvrGroup
+    fc_pinning: fcPinningP              # Fibre Channel uplink pinning
+    address_pool: fvAddrMgmtPool        # IP address management pool
 
     # ── Policies › Protocol › IP SLA & tracking ───────────────────────────────
     ip_sla_monitoring_policy: fvIPSLAMonitoringPol
@@ -382,6 +399,8 @@ makers:
     mac_attribute: fvMacAttr
     vm_attribute: fvVmAttr
     dns_attribute: fvDnsAttr
+    identity_group: fvIdGroupAttr   # wave 2026-07-15
+    useg_bd: fvUsegBDCont
 
   fvSCrtrn:
     # The MIT hangs IP and MAC attributes here as well; the APIC rejects both
@@ -394,6 +413,7 @@ makers:
     ep_selector: fvEPSelector      # tag / IP match expression
     epg_selector: fvEPgSelector    # whole EPG
     tag_selector: fvTagSelector    # policy tag (key/value)
+    lif_ctx_selector: fvLIfCtxSelector   # LIfCtx selector (wave 2026-07-15)
 
     # ── Contracts › labels ────────────────────────────────────────────────────
     provider_label: vzProvLbl
@@ -405,10 +425,22 @@ makers:
 
   fvBD:
     subnet: fvSubnet
+    pim: pimBDP                    # BD-level PIM (multicast)
+    nd_ra_subnet: ndRaSubnet       # ND proxy / RA subnet
+    legacy_mode: fvAccP            # BD access profile / legacy mode (wave 2026-07-15)
+    rogue_exception_mac: fvRogueExceptionMac
 
   # ══ VRF ════════════════════════════════════════════════════════════════════
   fvCtx:
-    pim: pimCtxP
+    pim: pimCtxP                   # VRF-level PIM (IPv4)
+    pim6: pimIPV6CtxP              # VRF-level PIM (IPv6) — Cisco jargon 'pim6'
+    igmp: igmpCtxP                 # VRF-level IGMP
+    leak_routes: leakRoutes        # inter-VRF route leaking
+    global_vrf_name: l3extGlobalCtxName
+    snmp_context: snmpCtxP         # VRF SNMP context
+    dns_label: dnsLbl
+    route_summarization: fvCtxRtSummPol   # VRF route summarization (wave 2026-07-15)
+    route_deployment: fvRouteDeployP
     vzany: vzAny                   # the VRF-wide EPG collection
     fallback_route_group: fvFBRGroup
 
@@ -416,12 +448,193 @@ makers:
     fallback_route: fvFBRoute
     fallback_member: fvFBRMember
 
+  # ══ Multicast — PIM / IGMP / MLD (wave: 2026-07-15) ════════════════════════
+  # VRF PIM hub (.pim / .pim6 on the VRF): the RP, pattern and filter policies.
+  pimCtxP:
+    asm_pattern: pimASMPatPol
+    ssm_pattern: pimSSMPatPol
+    auto_rp: pimAutoRPPol
+    bootstrap_rp: pimBSRPPol
+    fabric_rp: pimFabricRPPol
+    static_rp: pimStaticRPPol
+    stripe_winner: pimCSWPol
+    inter_vrf: pimInterVRFPol
+    resource: pimResPol
+  pimIPV6CtxP:                     # IPv6 VRF PIM — same policies minus stripe_winner
+    asm_pattern: pimASMPatPol
+    ssm_pattern: pimSSMPatPol
+    auto_rp: pimAutoRPPol
+    bootstrap_rp: pimBSRPPol
+    fabric_rp: pimFabricRPPol
+    static_rp: pimStaticRPPol
+    inter_vrf: pimInterVRFPol
+    resource: pimResPol
+  pimASMPatPol:
+    register_traffic: pimRegTrPol
+    sg_expiry: pimSGRangeExpPol
+    shared_range: pimSharedRangePol
+  pimSSMPatPol:
+    ssm_range: pimSSMRangePol
+  pimAutoRPPol:
+    ma_filter: pimMAFilterPol      # mapping-agent filter
+  pimBSRPPol:
+    bsr_filter: pimBSRFilterPol
+  pimFabricRPPol:
+    rp_entry: pimStaticRPEntryPol
+  pimStaticRPPol:
+    rp_entry: pimStaticRPEntryPol
+  pimStaticRPEntryPol:
+    group_range: pimRPGrpRangePol
+  pimCSWPol:
+    entry: pimCSWEntry
+  pimInterVRFPol:
+    entry: pimInterVRFEntryPol
+  # BD PIM hub (.pim on the BD)
+  pimBDP:
+    filter: pimBDFilterPol
+  pimBDFilterPol:
+    source_filter: pimBDSrcFilterPol
+    destination_filter: pimBDDestFilterPol
+  # PIM interface policy (tenant-level .pim_interface_policy)
+  pimIfPol:
+    neighbor_filter: pimNbrFilterPol
+    inbound_jp_filter: pimJPInbFilterPol       # inbound join/prune filter
+    outbound_jp_filter: pimJPOutbFilterPol     # outbound join/prune filter
+  # VRF IGMP hub (.igmp on the VRF)
+  igmpCtxP:
+    ssm_translate: igmpSSMXlateP
+  # IGMP interface policy (tenant-level .igmp_interface_policy)
+  igmpIfPol:
+    report: igmpRepPol
+    state_limit: igmpStateLPol
+    static_report: igmpStRepPol
+  # IGMP/MLD snooping groups + port security on a static path (.static_path)
+  fvRsPathAtt:
+    igmp_snoop_access_group: igmpSnoopAccessGroup
+    igmp_snoop_static_group: igmpSnoopStaticGroup
+    mld_snoop_access_group: mldSnoopAccessGroup
+    mld_snoop_static_group: mldSnoopStaticGroup
+    port_security: l2PortSecurityPol       # wave 2026-07-15
+    ptp: ptpEpgCfg                         # PTP on the path (wave 2026-07-15)
+    nlb_static_group: fvNlbStaticGroup     # NLB static group
+
+  # ══ Route-control & leaking (wave: 2026-07-15) ════════════════════════════
+  # Route-map match terms (on a match_rule, rtctrlSubjP) — Cisco 'match' clauses.
+  rtctrlSubjP:
+    match_prefix: rtctrlMatchRtDest
+    match_community: rtctrlMatchCommTerm
+    match_community_regex: rtctrlMatchCommRegexTerm
+    match_as_path: rtctrlMatchAsPathRegexTerm
+  rtctrlMatchCommTerm:
+    factor: rtctrlMatchCommFactor
+  # Route-map set rules (on an action_rule_profile, rtctrlAttrP) — Cisco 'set'.
+  rtctrlAttrP:
+    set_as_path: rtctrlSetASPath
+    add_community: rtctrlSetAddComm
+    set_community: rtctrlSetComm
+    set_dampening: rtctrlSetDamp
+    set_next_hop: rtctrlSetNh
+    set_next_hop_unchanged: rtctrlSetNhUnchanged
+    set_policy_tag: rtctrlSetPolicyTag
+    set_preference: rtctrlSetPref
+    set_redistribute_multipath: rtctrlSetRedistMultipath
+    set_metric: rtctrlSetRtMetric
+    set_metric_type: rtctrlSetRtMetricType
+    set_route_tag: rtctrlSetTag
+    set_weight: rtctrlSetWeight
+  rtctrlSetASPath:
+    asn: rtctrlSetASPathASN
+  # Inter-VRF route leaking (leak_routes on the VRF)
+  leakRoutes:
+    external_prefix: leakExternalPrefix
+    internal_prefix: leakInternalPrefix
+    internal_subnet: leakInternalSubnet
+  leakExternalPrefix:
+    leak_to: leakTo                # destination tenant + VRF
+  leakInternalPrefix:
+    leak_to: leakTo
+  leakInternalSubnet:
+    leak_to: leakTo
+  # Static routes (on an L3Out node attachment)
+  l3extRsNodeL3OutAtt:
+    static_route: ipRouteP
+    infra_node: l3extInfraNodeP      # infra logical node profile (GOLF)
+    loopback: l3extLoopBackIfP       # node loopback (OSPF/BGP router-id)
+  ipRouteP:
+    next_hop: ipNexthopP
+
+  # ══ Host protection — microseg security domain (wave: 2026-07-15) ══════════
+  hostprotPol:
+    subject: hostprotSubj
+    remote_ips: hostprotRemoteIpContainer
+  hostprotSubj:
+    rule: hostprotRule
+  hostprotRule:
+    remote_ip: hostprotRemoteIp
+    filter: hostprotFilterContainer
+  hostprotRemoteIpContainer:
+    remote_ip: hostprotRemoteIp
+  hostprotRemoteIp:
+    ep_label: hostprotEpLabel
+  hostprotFilterContainer:
+    pod_filter: hostprotPodFilter
+
+  # ══ L3Out remainder (wave: 2026-07-15) ════════════════════════════════════
+  l3extRsPathL3OutAtt:
+    forwarder_address: l3extForwarderAddr    # anycast forwarding IP on the path
+    rogue_exception_mac: l3extRogueExceptMacP
+    micro_bfd: bfdMicroBfdP                   # wave 2026-07-15
+    ptp_l3out: ptpRtdEpgCfg
+  l3extRogueExceptionMacGroup:
+    mac: l3extRogueExceptionMac
+
+  # ══ Protocol policies (wave: 2026-07-15) ══════════════════════════════════
+  qosCustomPol:
+    dot1p_class: qosDot1PClass
+    dscp_class: qosDscpClass
+  fvRsFcPathAtt:
+    pinning_label: fcPinningLbl
+  l3extLoopBackIfP:
+    node_sid: mplsNodeSidP           # SR-MPLS node SID
+  mplsLabelPol:
+    srgb: mplsSrgbLabelPol
+  hsrpGroupP:
+    secondary_vip: hsrpSecVip
+  l3extIp:
+    dhcp_relay_gw_ext_ip: dhcpRelayGwExtIp
+  monEPGPol:
+    target: monEPGTarget
+  spanDest:
+    vspan_epg_summary: spanVEpgSummary
+  dnsepgSvrGrp:
+    server: dnsepgSvr
+  dnsepgSvr:
+    domain: dnsepgDomain
+  authSvrGroup:
+    server: authSvr
+  authSvr:
+    credential: authUsrAccP
+  snmpCtxP:
+    community: snmpCommunityP
+
+  # ══ fv remainder — endpoints, pools, uSeg (wave: 2026-07-15) ═══════════════
+  fvSubnet:
+    anycast_endpoint: fvEpAnycast
+    nlb_endpoint: fvEpNlb
+    endpoint_network_config: fvCepNetCfgPol   # MS network config
+  fvAddrMgmtPool:
+    block: fvAddrMgmtAddrBlk
+  fvUsegBDCont:
+    associated_bd: fvUsegAssocBD
+
   # ══ Observability (wave 2, 2026-07-14) ═════════════════════════════════════
   # SPAN, NetFlow and QoS requirements hang under the tenant, under infra
   # (access) and under fabric alike — the same makers, three positions.
   spanSrcGrp:
     span_source: spanSrc
     span_label: spanSpanLbl        # matches a destination group by name
+    vspan_source: spanVSrc         # virtual SPAN (wave 2026-07-15)
+    vspan_source_def: spanVSrcDef
 
   spanDestGrp:
     span_destination: spanDest
@@ -493,6 +706,7 @@ makers:
   # Ordered like Tenants > <tenant> > Contracts in the GUI.
   vzFilter:
     entry: vzEntry
+    port_zero_entry: vzEntryPortZero   # wave 2026-07-15
 
   vzBrCP:
     subject: vzSubj
@@ -543,6 +757,10 @@ makers:
     default_route_leak_policy: l3extDefaultRouteLeakP
     route_control_profile: rtctrlProfile
     route_target_instrumentation_profile: bgpRtTargetInstrP
+
+    # ── External connectivity labels (wave: 2026-07-15) ───────────────────────
+    consumer_label: l3extConsLbl
+    provider_label: l3extProvLbl
   l3extLNodeP:
     interface_profile: l3extLIfP
     node_attachment: l3extRsNodeL3OutAtt   # literal-DN maker (topology node), like static_path
@@ -585,6 +803,7 @@ makers:
   bgpInfraPeerP:
     autonomous_system_profile: bgpAsP
     local_autonomous_system_profile: bgpLocalAsnP
+    data_plane: bgpDataPlaneIfP        # wave 2026-07-15
   hsrpIfP:
     hsrp_group_profile: hsrpGroupP
   eigrpIfP:
@@ -717,6 +936,45 @@ makers:
     fabric_node_member: fabricNodeIdentP
 
 binds:
+  # ── Multicast filters reference a PIM route-map (wave: 2026-07-15) ───────────
+  # Each PIM/IGMP filter policy points at the pimRouteMapPol that defines what it
+  # permits/denies.  The abstract rtdmcARtMapPol edge is the same relation and is
+  # omitted in favour of the concrete class.
+  igmpRepPol:
+    pim_route_map_policy: pimRouteMapPol
+  igmpStRepPol:
+    pim_route_map_policy: pimRouteMapPol
+  igmpStateLPol:
+    pim_route_map_policy: pimRouteMapPol
+  pimRegTrPol:
+    pim_route_map_policy: pimRouteMapPol
+  pimSGRangeExpPol:
+    pim_route_map_policy: pimRouteMapPol
+  pimSharedRangePol:
+    pim_route_map_policy: pimRouteMapPol
+  pimSSMRangePol:
+    pim_route_map_policy: pimRouteMapPol
+  pimResPol:
+    pim_route_map_policy: pimRouteMapPol
+  pimMAFilterPol:
+    pim_route_map_policy: pimRouteMapPol
+  pimBSRFilterPol:
+    pim_route_map_policy: pimRouteMapPol
+  pimNbrFilterPol:
+    pim_route_map_policy: pimRouteMapPol
+  pimJPInbFilterPol:
+    pim_route_map_policy: pimRouteMapPol
+  pimJPOutbFilterPol:
+    pim_route_map_policy: pimRouteMapPol
+  pimInterVRFEntryPol:
+    pim_route_map_policy: pimRouteMapPol
+  pimRPGrpRangePol:
+    pim_route_map_policy: pimRouteMapPol
+  pimBDSrcFilterPol:
+    pim_route_map_policy: pimRouteMapPol
+  pimBDDestFilterPol:
+    pim_route_map_policy: pimRouteMapPol
+
   # ── Tenant world ────────────────────────────────────────────────────────────
   fvAEPg:
     bd: fvBD

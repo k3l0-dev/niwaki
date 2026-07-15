@@ -13,7 +13,7 @@ Context-level PIM policy.
 | --- | --- |
 | ACI class | `pimCtxP` |
 | RN | `pimctxp` |
-| Cursor | `PimCursor` |
+| Cursor | `VrfPimCursor` |
 | Parent | {ref}`tenant.vrf <vocab-tenant-vrf>` |
 | Atomic | — |
 
@@ -29,3 +29,17 @@ Accepted as keyword arguments of `.pim()` and of `.set(**attrs)` on this cursor.
 | `name` | `name` | `str` | — | — | — |
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |
+
+## Children
+
+| maker | creates | position |
+| --- | --- | --- |
+| `.asm_pattern(**attrs)` | `pimASMPatPol` | {ref}`tenant.vrf.pim.asm_pattern <vocab-tenant-vrf-pim-asm_pattern>` |
+| `.ssm_pattern(**attrs)` | `pimSSMPatPol` | {ref}`tenant.vrf.pim.ssm_pattern <vocab-tenant-vrf-pim-ssm_pattern>` |
+| `.auto_rp(**attrs)` | `pimAutoRPPol` | {ref}`tenant.vrf.pim.auto_rp <vocab-tenant-vrf-pim-auto_rp>` |
+| `.bootstrap_rp(**attrs)` | `pimBSRPPol` | {ref}`tenant.vrf.pim.bootstrap_rp <vocab-tenant-vrf-pim-bootstrap_rp>` |
+| `.fabric_rp(**attrs)` | `pimFabricRPPol` | {ref}`tenant.vrf.pim.fabric_rp <vocab-tenant-vrf-pim-fabric_rp>` |
+| `.static_rp(**attrs)` | `pimStaticRPPol` | {ref}`tenant.vrf.pim.static_rp <vocab-tenant-vrf-pim-static_rp>` |
+| `.stripe_winner(**attrs)` | `pimCSWPol` | {ref}`tenant.vrf.pim.stripe_winner <vocab-tenant-vrf-pim-stripe_winner>` |
+| `.inter_vrf(**attrs)` | `pimInterVRFPol` | {ref}`tenant.vrf.pim.inter_vrf <vocab-tenant-vrf-pim-inter_vrf>` |
+| `.resource(**attrs)` | `pimResPol` | {ref}`tenant.vrf.pim.resource <vocab-tenant-vrf-pim-resource>` |

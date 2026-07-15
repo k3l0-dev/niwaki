@@ -56,6 +56,10 @@ Accepted as keyword arguments of `.bd(name)` and of `.set(**attrs)` on this curs
 | maker | creates | position |
 | --- | --- | --- |
 | `.subnet(subnet, **attrs)` | `fvSubnet` | {ref}`tenant.bd.subnet <vocab-tenant-bd-subnet>` |
+| `.pim(**attrs)` | `pimBDP` | {ref}`tenant.bd.pim <vocab-tenant-bd-pim>` |
+| `.nd_ra_subnet(subnet, **attrs)` | `ndRaSubnet` | {ref}`tenant.bd.nd_ra_subnet <vocab-tenant-bd-nd_ra_subnet>` |
+| `.legacy_mode(**attrs)` | `fvAccP` | {ref}`tenant.bd.legacy_mode <vocab-tenant-bd-legacy_mode>` |
+| `.rogue_exception_mac(exception_mac, **attrs)` | `fvRogueExceptionMac` | {ref}`tenant.bd.rogue_exception_mac <vocab-tenant-bd-rogue_exception_mac>` |
 
 ## Bind aliases
 

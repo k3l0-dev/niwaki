@@ -39,8 +39,11 @@ Interface policies, VLAN pools, AAEPs, policy groups, interface and switch profi
   - {ref}`infra.span_source_group <vocab-infra-span_source_group>` — `spanSrcGrp`, 5 attributes
     - {ref}`infra.span_source_group.span_source <vocab-infra-span_source_group-span_source>` — `spanSrc`, 6 attributes
     - {ref}`infra.span_source_group.span_label <vocab-infra-span_source_group-span_label>` — `spanSpanLbl`, 5 attributes
+    - {ref}`infra.span_source_group.vspan_source <vocab-infra-span_source_group-vspan_source>` — `spanVSrc`, 5 attributes
+    - {ref}`infra.span_source_group.vspan_source_def <vocab-infra-span_source_group-vspan_source_def>` — `spanVSrcDef`, 5 attributes
   - {ref}`infra.span_destination_group <vocab-infra-span_destination_group>` — `spanDestGrp`, 4 attributes
     - {ref}`infra.span_destination_group.span_destination <vocab-infra-span_destination_group-span_destination>` — `spanDest`, 4 attributes
+      - {ref}`infra.span_destination_group.span_destination.vspan_epg_summary <vocab-infra-span_destination_group-span_destination-vspan_epg_summary>` — `spanVEpgSummary`, 12 attributes
   - {ref}`infra.filter_group <vocab-infra-filter_group>` — `spanFilterGrp`, 2 attributes
     - {ref}`infra.filter_group.filter_entry <vocab-infra-filter_group-filter_entry>` — `spanFilterEntry`, 9 attributes
   - {ref}`infra.netflow_monitor <vocab-infra-netflow_monitor>` — `netflowMonitorPol`, 4 attributes
@@ -81,8 +84,11 @@ infra/infra-spine_profile-spine_selector-node_block
 infra/infra-span_source_group
 infra/infra-span_source_group-span_source
 infra/infra-span_source_group-span_label
+infra/infra-span_source_group-vspan_source
+infra/infra-span_source_group-vspan_source_def
 infra/infra-span_destination_group
 infra/infra-span_destination_group-span_destination
+infra/infra-span_destination_group-span_destination-vspan_epg_summary
 infra/infra-filter_group
 infra/infra-filter_group-filter_entry
 infra/infra-netflow_monitor

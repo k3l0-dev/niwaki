@@ -17,8 +17,8 @@ from niwaki.design._generated_cursors import (
     BdCursor,
     BdSubnetCursor,
     EpgCursor,
-    FilterCursor,
     TenantCursor,
+    TenantFilterCursor,
     UniCursor,
     VrfCursor,
 )
@@ -93,7 +93,7 @@ class TestSignatures:
         assert "vrf" in params
 
     def test_entry_maker_exposes_sugar_params(self) -> None:
-        params = inspect.signature(FilterCursor.entry).parameters
+        params = inspect.signature(TenantFilterCursor.entry).parameters
         assert "tcp" in params
         assert "udp" in params
         assert "destination_from_port" in params
@@ -184,7 +184,5 @@ class TestMakerDocumentation:
         assert "unique layer 2 forwarding domain" in doc
 
     def test_sugar_params_are_documented(self) -> None:
-        from niwaki.design._generated_cursors._tenant import FilterCursor
-
-        doc = FilterCursor.entry.__doc__ or ""
+        doc = TenantFilterCursor.entry.__doc__ or ""
         assert "tcp: Curated shorthand" in doc

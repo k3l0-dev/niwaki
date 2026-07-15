@@ -4,6 +4,48 @@ All notable changes to this project are documented here.  The format follows
 [Keep a Changelog](https://keepachangelog.com/); versions follow semver
 (0.x — the API may still change between minor versions).
 
+## [0.10.0] — 2026-07-15
+
+The tenant's configuration surface is now substantially complete.  A large body
+of tenant protocol and policy configuration that previously needed the `.mo()`
+escape hatch is first-class vocabulary — typed makers, per-position reference
+pages, live-verified against a 6.0(9c) fabric.
+
+### Added
+
+- **Multicast.**  VRF-level PIM (`.pim`), IPv6 PIM (`.pim6`) and IGMP (`.igmp`)
+  with the full RP, pattern and filter policies; BD-level PIM with its route-map
+  filters; the PIM/IGMP interface-policy filters; IGMP/MLD snooping groups.
+- **Route-control and leaking.**  Route-map `match_*` and `set_*` clauses on the
+  match rule and action profile, inter-VRF route leaking (`leak_routes`), and
+  static routes with their next hops.
+- **L3Out.**  External connectivity labels, node loopbacks and infra nodes,
+  path-level forwarding and rogue-exception MAC, VRF validation and a global VRF
+  name.
+- **Security and VPN.**  Host protection (microsegmentation) with its subject →
+  rule tree, and site-to-site IKE/IPsec (`isakmp_*`, `ipsec_phase1/2`); port
+  security on a static path.
+- **Protocol policies.**  DNS server groups, tenant AAA server groups, SNMP
+  contexts and communities, QoS class mappings, Fibre-Channel uplink pinning,
+  SR-MPLS node SIDs and SRGB, ND RA subnets, HSRP secondary VIPs, micro-BFD,
+  PTP, BGP data-plane, DHCP relay gateway IP, and virtual SPAN.
+- **Endpoints and pools.**  Anycast and NLB endpoints, IP address-management
+  pools, VRF route summarization and deployment, uSeg BD associations, ESG
+  LIfCtx selectors.
+
+Curation coverage of the tenant's declarable configuration rose from roughly 40%
+to 85%, and the reference now documents 462 curated positions (up from 293).
+
+### Notes
+
+- Multi-site / intersite objects (managed by Nexus Dashboard Orchestrator),
+  Cloud APIC classes, orchestrator-injected config, learned endpoints and L4-L7
+  service graphs remain out of the tenant vocabulary by design; the `.mo()` and
+  `bind_dn()` escapes keep the rest of the 2,222 generated classes one call away.
+- A handful of tenant classes the APIC auto-manages and refuses to create
+  (`extdevSDWanPolCont`, `fvConnInstrPol`) are deferred until the push engine
+  can upsert such carriers.
+
 ## [0.9.0] — 2026-07-15
 
 The models now carry the **right Python type** for every field, and the

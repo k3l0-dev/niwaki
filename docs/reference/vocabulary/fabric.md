@@ -29,8 +29,11 @@ NTP, DNS, syslog, BGP route reflectors, vPC protection — everything under `uni
   - {ref}`fabric.span_source_group <vocab-fabric-span_source_group>` — `spanSrcGrp`, 5 attributes
     - {ref}`fabric.span_source_group.span_source <vocab-fabric-span_source_group-span_source>` — `spanSrc`, 6 attributes
     - {ref}`fabric.span_source_group.span_label <vocab-fabric-span_source_group-span_label>` — `spanSpanLbl`, 5 attributes
+    - {ref}`fabric.span_source_group.vspan_source <vocab-fabric-span_source_group-vspan_source>` — `spanVSrc`, 5 attributes
+    - {ref}`fabric.span_source_group.vspan_source_def <vocab-fabric-span_source_group-vspan_source_def>` — `spanVSrcDef`, 5 attributes
   - {ref}`fabric.span_destination_group <vocab-fabric-span_destination_group>` — `spanDestGrp`, 4 attributes
     - {ref}`fabric.span_destination_group.span_destination <vocab-fabric-span_destination_group-span_destination>` — `spanDest`, 4 attributes
+      - {ref}`fabric.span_destination_group.span_destination.vspan_epg_summary <vocab-fabric-span_destination_group-span_destination-vspan_epg_summary>` — `spanVEpgSummary`, 12 attributes
 
 ```{toctree}
 :maxdepth: 1
@@ -56,6 +59,9 @@ fabric/fabric-vpc_protection-vpc_pair-node
 fabric/fabric-span_source_group
 fabric/fabric-span_source_group-span_source
 fabric/fabric-span_source_group-span_label
+fabric/fabric-span_source_group-vspan_source
+fabric/fabric-span_source_group-vspan_source_def
 fabric/fabric-span_destination_group
 fabric/fabric-span_destination_group-span_destination
+fabric/fabric-span_destination_group-span_destination-vspan_epg_summary
 ```

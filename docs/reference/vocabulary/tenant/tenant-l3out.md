@@ -45,6 +45,8 @@ Accepted as keyword arguments of `.l3out(name)` and of `.set(**attrs)` on this c
 | `.default_route_leak_policy(**attrs)` | `l3extDefaultRouteLeakP` | {ref}`tenant.l3out.default_route_leak_policy <vocab-tenant-l3out-default_route_leak_policy>` |
 | `.route_control_profile(name, **attrs)` | `rtctrlProfile` | {ref}`tenant.l3out.route_control_profile <vocab-tenant-l3out-route_control_profile>` |
 | `.route_target_instrumentation_profile(**attrs)` | `bgpRtTargetInstrP` | {ref}`tenant.l3out.route_target_instrumentation_profile <vocab-tenant-l3out-route_target_instrumentation_profile>` |
+| `.consumer_label(name, **attrs)` | `l3extConsLbl` | {ref}`tenant.l3out.consumer_label <vocab-tenant-l3out-consumer_label>` |
+| `.provider_label(name, **attrs)` | `l3extProvLbl` | {ref}`tenant.l3out.provider_label <vocab-tenant-l3out-provider_label>` |
 
 ## Bind aliases
 

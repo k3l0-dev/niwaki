@@ -13,7 +13,7 @@ The DNS domain uses a hierarchical scheme for establishing host names for networ
 | --- | --- |
 | ACI class | `dnsDomain` |
 | RN | `dom-{name}` |
-| Cursor | `DomainCursor` |
+| Cursor | `DnsProfileDomainCursor` |
 | Parent | {ref}`fabric.dns_profile <vocab-fabric-dns_profile>` |
 | Atomic | — |
 

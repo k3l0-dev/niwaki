@@ -34,3 +34,11 @@ Accepted as keyword arguments of `.pim_interface_policy(name)` and of `.set(**at
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |
 | `secure_authentication_key` | `secureAuthKey` | `str` | — | — | Secure Authentication key |
+
+## Children
+
+| maker | creates | position |
+| --- | --- | --- |
+| `.neighbor_filter(**attrs)` | `pimNbrFilterPol` | {ref}`tenant.pim_interface_policy.neighbor_filter <vocab-tenant-pim_interface_policy-neighbor_filter>` |
+| `.inbound_jp_filter(**attrs)` | `pimJPInbFilterPol` | {ref}`tenant.pim_interface_policy.inbound_jp_filter <vocab-tenant-pim_interface_policy-inbound_jp_filter>` |
+| `.outbound_jp_filter(**attrs)` | `pimJPOutbFilterPol` | {ref}`tenant.pim_interface_policy.outbound_jp_filter <vocab-tenant-pim_interface_policy-outbound_jp_filter>` |

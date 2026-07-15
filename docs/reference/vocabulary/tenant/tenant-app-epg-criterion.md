@@ -40,3 +40,5 @@ Accepted as keyword arguments of `.criterion()` and of `.set(**attrs)` on this c
 | `.mac_attribute(name, **attrs)` | `fvMacAttr` | {ref}`tenant.app.epg.criterion.mac_attribute <vocab-tenant-app-epg-criterion-mac_attribute>` |
 | `.vm_attribute(name, **attrs)` | `fvVmAttr` | {ref}`tenant.app.epg.criterion.vm_attribute <vocab-tenant-app-epg-criterion-vm_attribute>` |
 | `.dns_attribute(name, **attrs)` | `fvDnsAttr` | {ref}`tenant.app.epg.criterion.dns_attribute <vocab-tenant-app-epg-criterion-dns_attribute>` |
+| `.identity_group(identity_group_selector, **attrs)` | `fvIdGroupAttr` | {ref}`tenant.app.epg.criterion.identity_group <vocab-tenant-app-epg-criterion-identity_group>` |
+| `.useg_bd(**attrs)` | `fvUsegBDCont` | {ref}`tenant.app.epg.criterion.useg_bd <vocab-tenant-app-epg-criterion-useg_bd>` |

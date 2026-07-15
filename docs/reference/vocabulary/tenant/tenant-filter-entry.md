@@ -13,7 +13,7 @@ A filter entry is a combination of network traffic classification properties.
 | --- | --- |
 | ACI class | `vzEntry` |
 | RN | `e-{name}` |
-| Cursor | `EntryCursor` |
+| Cursor | `TenantFilterEntryCursor` |
 | Parent | {ref}`tenant.filter <vocab-tenant-filter>` |
 | Atomic | — |
 

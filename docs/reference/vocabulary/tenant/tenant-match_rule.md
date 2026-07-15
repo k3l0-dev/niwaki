@@ -25,3 +25,12 @@ Accepted as keyword arguments of `.match_rule(name)` and of `.set(**attrs)` on t
 | --- | --- | --- | --- | --- | --- |
 | `name` *(positional)* | `name` | `str` | — | — | — |
 | `description` | `descr` | `str` | — | — | Specifies the description of a policy component. |
+
+## Children
+
+| maker | creates | position |
+| --- | --- | --- |
+| `.match_prefix(match_ip_address, **attrs)` | `rtctrlMatchRtDest` | {ref}`tenant.match_rule.match_prefix <vocab-tenant-match_rule-match_prefix>` |
+| `.match_community(name, **attrs)` | `rtctrlMatchCommTerm` | {ref}`tenant.match_rule.match_community <vocab-tenant-match_rule-match_community>` |
+| `.match_community_regex(community_type, **attrs)` | `rtctrlMatchCommRegexTerm` | {ref}`tenant.match_rule.match_community_regex <vocab-tenant-match_rule-match_community_regex>` |
+| `.match_as_path(name, **attrs)` | `rtctrlMatchAsPathRegexTerm` | {ref}`tenant.match_rule.match_as_path <vocab-tenant-match_rule-match_as_path>` |

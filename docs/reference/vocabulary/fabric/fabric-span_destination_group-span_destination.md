@@ -28,6 +28,12 @@ Accepted as keyword arguments of `.span_destination(name)` and of `.set(**attrs)
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |
 
+## Children
+
+| maker | creates | position |
+| --- | --- | --- |
+| `.vspan_epg_summary(**attrs)` | `spanVEpgSummary` | {ref}`fabric.span_destination_group.span_destination.vspan_epg_summary <vocab-fabric-span_destination_group-span_destination-vspan_epg_summary>` |
+
 ## Bind aliases
 
 Lazy references, resolved closed-world at push time.

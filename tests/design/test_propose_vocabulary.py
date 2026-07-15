@@ -65,8 +65,14 @@ class TestMakers:
     def test_max_depth_bounds_the_walk(self) -> None:
         from niwaki._codegen.propose_vocabulary import propose
 
-        shallow = propose(["l3extOut"], max_depth=1)
-        assert set(shallow.makers) == {"l3extOut"}
+        # vmmDomP has a deep, uncurated subtree (VMM is a deferred wave), so it
+        # stays a stable probe as the tenant fills in: a shallow walk reaches
+        # strictly fewer parents than a deep one, and every parent it reaches a
+        # deep walk reaches too.
+        shallow = propose(["vmmDomP"], max_depth=1)
+        deep = propose(["vmmDomP"], max_depth=6)
+        assert set(shallow.makers) <= set(deep.makers)
+        assert len(deep.makers) > len(shallow.makers)
 
     def test_already_curated_positions_are_skipped(self) -> None:
         from niwaki._codegen.propose_vocabulary import propose

@@ -38,3 +38,11 @@ Accepted as keyword arguments of `.igmp_interface_policy(name)` and of `.set(**a
 | `startup_query_count` | `startQueryCnt` | `int` | — | `2` | Startup Query Count |
 | `startup_query_interval` | `startQueryIntvl` | `int` | — | `31` | Startup query interval |
 | `version` | `ver` | {ref}`IpmcifVer <enum-ipmcifver>` | `v2`, `v3` | `v2` | Interface version |
+
+## Children
+
+| maker | creates | position |
+| --- | --- | --- |
+| `.report(**attrs)` | `igmpRepPol` | {ref}`tenant.igmp_interface_policy.report <vocab-tenant-igmp_interface_policy-report>` |
+| `.state_limit(**attrs)` | `igmpStateLPol` | {ref}`tenant.igmp_interface_policy.state_limit <vocab-tenant-igmp_interface_policy-state_limit>` |
+| `.static_report(join_type_of_groups, **attrs)` | `igmpStRepPol` | {ref}`tenant.igmp_interface_policy.static_report <vocab-tenant-igmp_interface_policy-static_report>` |

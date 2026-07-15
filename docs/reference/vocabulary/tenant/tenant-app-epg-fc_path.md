@@ -27,3 +27,9 @@ Accepted as keyword arguments of `.fc_path(target_dn)` and of `.set(**attrs)` on
 | `descr` | `descr` | `str` | — | — | Description |
 | `vsan` | `vsan` | `str` | — | — | port vsan |
 | `vsan_mode` | `vsanMode` | {ref}`FcVsanMode <enum-fcvsanmode>` | `native`, `regular` | `regular` | — |
+
+## Children
+
+| maker | creates | position |
+| --- | --- | --- |
+| `.pinning_label(name, **attrs)` | `fcPinningLbl` | {ref}`tenant.app.epg.fc_path.pinning_label <vocab-tenant-app-epg-fc_path-pinning_label>` |

@@ -49,6 +49,7 @@ Accepted as keyword arguments of `.infra_peer_connectivity_profile(peer_address)
 | --- | --- | --- |
 | `.autonomous_system_profile(**attrs)` | `bgpAsP` | {ref}`tenant.l3out.node_profile.infra_peer_connectivity_profile.autonomous_system_profile <vocab-tenant-l3out-node_profile-infra_peer_connectivity_profile-autonomous_system_profile>` |
 | `.local_autonomous_system_profile(**attrs)` | `bgpLocalAsnP` | {ref}`tenant.l3out.node_profile.infra_peer_connectivity_profile.local_autonomous_system_profile <vocab-tenant-l3out-node_profile-infra_peer_connectivity_profile-local_autonomous_system_profile>` |
+| `.data_plane(**attrs)` | `bgpDataPlaneIfP` | {ref}`tenant.l3out.node_profile.infra_peer_connectivity_profile.data_plane <vocab-tenant-l3out-node_profile-infra_peer_connectivity_profile-data_plane>` |
 
 ## Bind aliases
 

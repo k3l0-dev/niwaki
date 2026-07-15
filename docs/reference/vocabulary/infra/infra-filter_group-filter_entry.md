@@ -11,7 +11,7 @@ Re-generate: uv run python -m niwaki._codegen.generate_docs
 | --- | --- |
 | ACI class | `spanFilterEntry` |
 | RN | `proto-{ip_protocol}-src-[{source_ip_prefix}]-dst-[{destination_ip_prefix}]-srcPortFrom-{first_source_port}-srcPortTo-{last_source_port}-dstPortFrom-{first_destination_port}-dstPortTo-{dst_port_to}` |
-| Cursor | `FilterEntryCursor` |
+| Cursor | `FilterGroupFilterEntryCursor` |
 | Parent | {ref}`infra.filter_group <vocab-infra-filter_group>` |
 | Atomic | — |
 

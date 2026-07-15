@@ -27,3 +27,9 @@ Accepted as keyword arguments of `.secondary_ip_address(ip_address)` and of `.se
 | `description` | `descr` | `str` | — | — | Specifies the description of a policy component. |
 | `ipv6_dad` | `ipv6Dad` | {ref}`L3extIpv6Dad <enum-l3extipv6dad>` | `disabled`, `enabled` | `enabled` | IPv6 DAD feature When disabled it will IPv6 DAD will be diasabled |
 | `name` | `name` | `str` | — | — | — |
+
+## Children
+
+| maker | creates | position |
+| --- | --- | --- |
+| `.dhcp_relay_gw_ext_ip(**attrs)` | `dhcpRelayGwExtIp` | {ref}`tenant.l3out.node_profile.interface_profile.floating_svi.secondary_ip_address.dhcp_relay_gw_ext_ip <vocab-tenant-l3out-node_profile-interface_profile-floating_svi-secondary_ip_address-dhcp_relay_gw_ext_ip>` |

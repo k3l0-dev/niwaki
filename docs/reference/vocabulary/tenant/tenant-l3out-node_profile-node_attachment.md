@@ -28,6 +28,14 @@ Accepted as keyword arguments of `.node_attachment(target_dn)` and of `.set(**at
 | `rtr_id` | `rtrId` | `str` | — | — | The router identifier used as the OSPF/BGP router ID. |
 | `rtr_id_loop_back` | `rtrIdLoopBack` | `bool` | — | `True` | — |
 
+## Children
+
+| maker | creates | position |
+| --- | --- | --- |
+| `.static_route(match_ip_address, **attrs)` | `ipRouteP` | {ref}`tenant.l3out.node_profile.node_attachment.static_route <vocab-tenant-l3out-node_profile-node_attachment-static_route>` |
+| `.infra_node(**attrs)` | `l3extInfraNodeP` | {ref}`tenant.l3out.node_profile.node_attachment.infra_node <vocab-tenant-l3out-node_profile-node_attachment-infra_node>` |
+| `.loopback(loop_back_interface_address, **attrs)` | `l3extLoopBackIfP` | {ref}`tenant.l3out.node_profile.node_attachment.loopback <vocab-tenant-l3out-node_profile-node_attachment-loopback>` |
+
 ## APIC diagnostics
 
 States the APIC can flag on this class — it accepts the configuration and reports the inconsistency afterwards.

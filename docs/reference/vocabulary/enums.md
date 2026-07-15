@@ -5,7 +5,7 @@ Re-generate: uv run python -m niwaki._codegen.generate_docs
 
 # Enums
 
-The 165 enum types reachable from the curated vocabulary — every constrained parameter of every maker.  A parameter typed as an enum also accepts the plain string; the value is validated at the call site either way.
+The 206 enum types reachable from the curated vocabulary — every constrained parameter of every maker.  A parameter typed as an enum also accepts the plain string; the value is validated at the call site either way.
 
 The remaining generated enums back the non-curated classes and live in `niwaki.models._generated.enums`.
 
@@ -84,6 +84,38 @@ Used by: {ref}`tenant.arp_interface_policy <vocab-tenant-arp_interface_policy>`
 | `unspecified` | Unspecified |
 
 Used by: {ref}`tenant.filter.entry <vocab-tenant-filter-entry>`
+
+(enum-authmode)=
+
+## `AuthMode`
+
+| value | meaning |
+| --- | --- |
+| `AD` | — |
+| `unknown` | — |
+
+Used by: {ref}`tenant.auth_server_group <vocab-tenant-auth_server_group>`, {ref}`tenant.auth_server_group.server <vocab-tenant-auth_server_group-server>`
+
+(enum-authscope)=
+
+## `AuthScope`
+
+| value | meaning |
+| --- | --- |
+| `ISE` | — |
+
+Used by: {ref}`tenant.auth_server_group.server <vocab-tenant-auth_server_group-server>`
+
+(enum-authtrigst)=
+
+## `AuthTrigSt`
+
+| value | meaning |
+| --- | --- |
+| `triggered` | — |
+| `untriggered` | — |
+
+Used by: {ref}`tenant.auth_server_group.server <vocab-tenant-auth_server_group-server>`
 
 (enum-bfdautht)=
 
@@ -282,6 +314,20 @@ Used by: {ref}`tenant.l3out.node_profile.bgp_peer <vocab-tenant-l3out-node_profi
 
 Used by: {ref}`tenant.l3out.route_target_instrumentation_profile <vocab-tenant-l3out-route_target_instrumentation_profile>`
 
+(enum-bgpspineroletype)=
+
+## `BgpSpineRoleType`
+
+| value | meaning |
+| --- | --- |
+| `unspecified` | Unspecified |
+| `wan` | WAN (GOLF) Spine |
+| `inter-pod` | Inter-Pod (MPOD) Spine |
+| `msite-speaker` | Multi-Site Speaker |
+| `msite-forwarder` | Multi-Site Forwarder |
+
+Used by: {ref}`tenant.l3out.node_profile.node_attachment.infra_node <vocab-tenant-l3out-node_profile-node_attachment-infra_node>`
+
 (enum-bgpsrcift)=
 
 ## `BgpSrcIfT`
@@ -380,6 +426,17 @@ Used by: {ref}`infra.dhcp_relay_policy <vocab-infra-dhcp_relay_policy>`, {ref}`t
 | `IPv6` | — |
 
 Used by: {ref}`fabric.dns_profile <vocab-fabric-dns_profile>`
+
+(enum-dnsepgnetworktype)=
+
+## `DnsepgNetworkType`
+
+| value | meaning |
+| --- | --- |
+| `oob` | — |
+| `tenant` | — |
+
+Used by: {ref}`tenant.dns_server_group <vocab-tenant-dns_server_group>`
 
 (enum-dppburstunit)=
 
@@ -724,6 +781,17 @@ Used by: {ref}`tenant.access_client_profile.access_client_epg <vocab-tenant-acce
 
 Used by: {ref}`tenant.app.epg.subnet <vocab-tenant-app-epg-subnet>`, {ref}`tenant.bd.subnet <vocab-tenant-bd-subnet>`, {ref}`tenant.l2out.external_epg.subnet <vocab-tenant-l2out-external_epg-subnet>`, {ref}`tenant.management_profile.in_band_epg.subnet <vocab-tenant-management_profile-in_band_epg-subnet>`
 
+(enum-fvspineintravrftype)=
+
+## `FvSpineIntraVrfType`
+
+| value | meaning |
+| --- | --- |
+| `automatic` | automatic - deploy routes by default |
+| `contract` | contract - deploy routes based on contract |
+
+Used by: {ref}`tenant.vrf.route_deployment <vocab-tenant-vrf-route_deployment>`
+
 (enum-fvstceptype)=
 
 ## `FvStCEpType`
@@ -893,6 +961,148 @@ Used by: {ref}`infra.vlan_pool.range <vocab-infra-vlan_pool-range>`
 
 Used by: {ref}`tenant.ip_sla_monitoring_policy <vocab-tenant-ip_sla_monitoring_policy>`
 
+(enum-hcipsecencapsulationmode)=
+
+## `HcipsecEncapsulationMode`
+
+| value | meaning |
+| --- | --- |
+| `transport` | — |
+| `tunnel` | — |
+
+Used by: {ref}`tenant.ipsec_phase2 <vocab-tenant-ipsec_phase2>`
+
+(enum-hcipsecencapsulationtype)=
+
+## `HcipsecEncapsulationType`
+
+| value | meaning |
+| --- | --- |
+| `esp` | — |
+
+Used by: {ref}`tenant.ipsec_phase2 <vocab-tenant-ipsec_phase2>`
+
+(enum-hcisakmpauthmethod)=
+
+## `HcisakmpAuthMethod`
+
+| value | meaning |
+| --- | --- |
+| `pre-share` | Pre-Shared Key |
+| `rsa-encr` | Rivest-Shamir-Adleman Encryption |
+| `rsa-sig` | Rivest-Shamir-Adleman Signature |
+
+Used by: {ref}`tenant.ipsec_phase1 <vocab-tenant-ipsec_phase1>`, {ref}`tenant.isakmp_policy <vocab-tenant-isakmp_policy>`
+
+(enum-hcisakmpdhgroup)=
+
+## `HcisakmpDhGroup`
+
+| value | meaning |
+| --- | --- |
+| `0` | Diffie-Hellman group None |
+| `1` | Diffie-Hellman group 1 |
+| `14` | Diffie-Hellman group 14 |
+| `15` | Diffie-Hellman group 15 |
+| `16` | Diffie-Hellman group 16 |
+| `19` | Diffie-Hellman group 19 |
+| `2` | Diffie-Hellman group 2 |
+| `20` | Diffie-Hellman group 20 |
+| `21` | Diffie-Hellman group 21 |
+| `24` | Diffie-Hellman group 24 |
+| `5` | Diffie-Hellman group 5 |
+
+Used by: {ref}`tenant.ipsec_phase1 <vocab-tenant-ipsec_phase1>`, {ref}`tenant.ipsec_phase2 <vocab-tenant-ipsec_phase2>`, {ref}`tenant.isakmp_policy <vocab-tenant-isakmp_policy>`
+
+(enum-hcisakmpencralgo)=
+
+## `HcisakmpEncrAlgo`
+
+| value | meaning |
+| --- | --- |
+| `3des` | — |
+| `aes` | — |
+| `des` | — |
+
+Used by: {ref}`tenant.ipsec_phase1 <vocab-tenant-ipsec_phase1>`, {ref}`tenant.ipsec_phase2 <vocab-tenant-ipsec_phase2>`, {ref}`tenant.isakmp_policy <vocab-tenant-isakmp_policy>`
+
+(enum-hcisakmphash)=
+
+## `HcisakmpHash`
+
+| value | meaning |
+| --- | --- |
+| `md5` | Message Digest 5 |
+| `sha` | Secure Hash Standard |
+| `sha256` | Secure Hash Standard 2 (256 bit) |
+| `sha384` | Secure Hash Standard 2 (384 bit) |
+| `sha512` | Secure Hash Standard 2 (512 bit) |
+
+Used by: {ref}`tenant.ipsec_phase1 <vocab-tenant-ipsec_phase1>`, {ref}`tenant.ipsec_phase2 <vocab-tenant-ipsec_phase2>`, {ref}`tenant.isakmp_policy <vocab-tenant-isakmp_policy>`
+
+(enum-hcisakmpkeytype)=
+
+## `HcisakmpKeyType`
+
+| value | meaning |
+| --- | --- |
+| `pre-shared` | — |
+
+Used by: {ref}`tenant.isakmp_keyring <vocab-tenant-isakmp_keyring>`
+
+(enum-hostprotaction)=
+
+## `HostprotAction`
+
+| value | meaning |
+| --- | --- |
+| `log` | — |
+| `permit` | — |
+| `deny` | — |
+
+Used by: {ref}`tenant.host_protection.subject.rule <vocab-tenant-host_protection-subject-rule>`
+
+(enum-hostprotconntrack)=
+
+## `HostprotConnTrack`
+
+| value | meaning |
+| --- | --- |
+| `normal` | — |
+| `reflexive` | — |
+
+Used by: {ref}`tenant.host_protection.subject.rule <vocab-tenant-host_protection-subject-rule>`
+
+(enum-hostprotetypematch)=
+
+## `HostprotEtypeMatch`
+
+| value | meaning |
+| --- | --- |
+| `arp` | — |
+| `fcoe` | — |
+| `ipv4` | — |
+| `ipv6` | — |
+| `mac_security` | — |
+| `mpls_ucast` | — |
+| `trill` | — |
+| `undefined` | — |
+
+Used by: {ref}`tenant.host_protection.subject.rule <vocab-tenant-host_protection-subject-rule>`
+
+(enum-hostprotoperator)=
+
+## `HostprotOperator`
+
+| value | meaning |
+| --- | --- |
+| `doesnotexists` | — |
+| `exists` | — |
+| `in` | — |
+| `notin` | — |
+
+Used by: {ref}`tenant.host_protection.subject.rule.filter.pod_filter <vocab-tenant-host_protection-subject-rule-filter-pod_filter>`
+
 (enum-hsrpautht)=
 
 ## `HsrpAuthT`
@@ -920,7 +1130,7 @@ Used by: {ref}`tenant.hsrp_group_policy <vocab-tenant-hsrp_group_policy>`
 | `Secondary-vip-conflicts-if-ip` | — |
 | `Multiple-Version-On-Interface` | — |
 
-Used by: {ref}`tenant.l3out.node_profile.interface_profile.hsrp_interface.hsrp_group_profile <vocab-tenant-l3out-node_profile-interface_profile-hsrp_interface-hsrp_group_profile>`
+Used by: {ref}`tenant.l3out.node_profile.interface_profile.hsrp_interface.hsrp_group_profile <vocab-tenant-l3out-node_profile-interface_profile-hsrp_interface-hsrp_group_profile>`, {ref}`tenant.l3out.node_profile.interface_profile.hsrp_interface.hsrp_group_profile.secondary_vip <vocab-tenant-l3out-node_profile-interface_profile-hsrp_interface-hsrp_group_profile-secondary_vip>`
 
 (enum-hsrpgroupaf)=
 
@@ -990,6 +1200,28 @@ Used by: {ref}`tenant.l3out.node_profile.interface_profile.hsrp_interface <vocab
 
 Used by: {ref}`infra.func_profile.port_channel <vocab-infra-func_profile-port_channel>`
 
+(enum-ipnexthopt)=
+
+## `IpNexthopT`
+
+| value | meaning |
+| --- | --- |
+| `none` | None - It acts like "null0" interface |
+| `prefix` | Prefix |
+
+Used by: {ref}`tenant.l3out.node_profile.node_attachment.static_route.next_hop <vocab-tenant-l3out-node_profile-node_attachment-static_route-next_hop>`
+
+(enum-iprtctrl)=
+
+## `IpRtCtrl`
+
+| value | meaning |
+| --- | --- |
+| `unspecified` | Unspecified |
+| `bfd` | Bidirectional Forwarding Detection |
+
+Used by: {ref}`tenant.l3out.node_profile.node_attachment.static_route <vocab-tenant-l3out-node_profile-node_attachment-static_route>`
+
 (enum-ipmcifctrl)=
 
 ## `IpmcIfCtrl`
@@ -1001,6 +1233,17 @@ Used by: {ref}`infra.func_profile.port_channel <vocab-infra-func_profile-port_ch
 | `allow-v3-asm` | Allow v3 ASM |
 
 Used by: {ref}`tenant.igmp_interface_policy <vocab-tenant-igmp_interface_policy>`
+
+(enum-ipmcjointype)=
+
+## `IpmcJoinType`
+
+| value | meaning |
+| --- | --- |
+| `join-group` | Join Group : will add route unconditionally to MRIB |
+| `static-group` | Static Group |
+
+Used by: {ref}`tenant.igmp_interface_policy.static_report <vocab-tenant-igmp_interface_policy-static_report>`
 
 (enum-ipmcifver)=
 
@@ -1184,6 +1427,16 @@ Used by: {ref}`tenant.filter.entry <vocab-tenant-filter-entry>`
 
 Used by: {ref}`tenant.bd <vocab-tenant-bd>`
 
+(enum-l2portsecurityviolation)=
+
+## `L2PortSecurityViolation`
+
+| value | meaning |
+| --- | --- |
+| `protect` | — |
+
+Used by: {ref}`tenant.app.epg.static_path.port_security <vocab-tenant-app-epg-static_path-port_security>`
+
 (enum-l2unkmacucastact)=
 
 ## `L2UnkMacUcastAct`
@@ -1311,7 +1564,18 @@ Used by: {ref}`tenant.l3out.node_profile.interface_profile.floating_svi <vocab-t
 | `disabled` | — |
 | `enabled` | — |
 
-Used by: {ref}`tenant.l3out.node_profile.interface_profile.floating_svi <vocab-tenant-l3out-node_profile-interface_profile-floating_svi>`, {ref}`tenant.l3out.node_profile.interface_profile.floating_svi.member_node_configuration <vocab-tenant-l3out-node_profile-interface_profile-floating_svi-member_node_configuration>`, {ref}`tenant.l3out.node_profile.interface_profile.floating_svi.secondary_ip_address <vocab-tenant-l3out-node_profile-interface_profile-floating_svi-secondary_ip_address>`, {ref}`tenant.l3out.node_profile.interface_profile.path_attachment <vocab-tenant-l3out-node_profile-interface_profile-path_attachment>`
+Used by: {ref}`tenant.l3out.node_profile.interface_profile.floating_svi <vocab-tenant-l3out-node_profile-interface_profile-floating_svi>`, {ref}`tenant.l3out.node_profile.interface_profile.floating_svi.member_node_configuration <vocab-tenant-l3out-node_profile-interface_profile-floating_svi-member_node_configuration>`, {ref}`tenant.l3out.node_profile.interface_profile.floating_svi.secondary_ip_address <vocab-tenant-l3out-node_profile-interface_profile-floating_svi-secondary_ip_address>`, {ref}`tenant.l3out.node_profile.interface_profile.path_attachment <vocab-tenant-l3out-node_profile-interface_profile-path_attachment>`, {ref}`tenant.l3out.node_profile.interface_profile.path_attachment.forwarder_address <vocab-tenant-l3out-node_profile-interface_profile-path_attachment-forwarder_address>`
+
+(enum-l3extowner)=
+
+## `L3extOwner`
+
+| value | meaning |
+| --- | --- |
+| `infra` | The Logical Outside Profile should be chosen from the ones configured under the infrastructure |
+| `tenant` | The Logical Outside Profile should be chosen from the ones configured under the tenant |
+
+Used by: {ref}`tenant.l3out.consumer_label <vocab-tenant-l3out-consumer_label>`
 
 (enum-l3extpcenfdir)=
 
@@ -1375,7 +1639,7 @@ Used by: {ref}`tenant.l3out.node_profile.interface_profile.floating_svi.member_n
 | `rst` | Reset flag |
 | `est` | Established - combination of Ack and Reset |
 
-Used by: {ref}`tenant.filter.entry <vocab-tenant-filter-entry>`
+Used by: {ref}`tenant.filter.entry <vocab-tenant-filter-entry>`, {ref}`tenant.filter.port_zero_entry <vocab-tenant-filter-port_zero_entry>`
 
 (enum-lacpmode)=
 
@@ -1391,6 +1655,29 @@ Used by: {ref}`tenant.filter.entry <vocab-tenant-filter-entry>`
 | `passive` | LACP passive port channel |
 
 Used by: {ref}`infra.lacp_policy <vocab-infra-lacp_policy>`
+
+(enum-leakroutescp)=
+
+## `LeakRouteScp`
+
+| value | meaning |
+| --- | --- |
+| `private` | — |
+| `public` | — |
+
+Used by: {ref}`tenant.vrf.leak_routes.internal_subnet <vocab-tenant-vrf-leak_routes-internal_subnet>`
+
+(enum-leaktoroutescp)=
+
+## `LeakToRouteScp`
+
+| value | meaning |
+| --- | --- |
+| `inherit` | — |
+| `private` | — |
+| `public` | — |
+
+Used by: {ref}`tenant.vrf.leak_routes.external_prefix.leak_to <vocab-tenant-vrf-leak_routes-external_prefix-leak_to>`, {ref}`tenant.vrf.leak_routes.internal_prefix.leak_to <vocab-tenant-vrf-leak_routes-internal_prefix-leak_to>`, {ref}`tenant.vrf.leak_routes.internal_subnet.leak_to <vocab-tenant-vrf-leak_routes-internal_subnet-leak_to>`
 
 (enum-lldpadminst)=
 
@@ -1472,6 +1759,986 @@ Used by: {ref}`infra.mcp_policy <vocab-infra-mcp_policy>`
 
 Used by: {ref}`fabric.syslog_group.remote_destination <vocab-fabric-syslog_group-remote_destination>`
 
+(enum-montargetscope)=
+
+## `MonTargetScope`
+
+| value | meaning |
+| --- | --- |
+| `aaaDomainRef` | — |
+| `aaaIDomainRef` | — |
+| `aaaPartialRbacRule` | — |
+| `actrlMgmtRule` | — |
+| `actrlRule` | — |
+| `authRsSvrToMonPol` | — |
+| `authSvr` | — |
+| `authSvrGroup` | — |
+| `bfdIfP` | — |
+| `bfdMhIfP` | — |
+| `bfdMhNodeP` | — |
+| `bfdMicroBfdP` | — |
+| `bfdRsIfPol` | — |
+| `bfdRsMhIfPol` | — |
+| `bfdRsMhNodePol` | — |
+| `bgpAsP` | — |
+| `bgpCtxPol` | — |
+| `bgpDataPlaneIfP` | — |
+| `bgpExtP` | — |
+| `bgpInfraPeerDef` | — |
+| `bgpInfraPeerP` | — |
+| `bgpLocalAsnP` | — |
+| `bgpPeerDef` | — |
+| `bgpPeerP` | — |
+| `bgpProtP` | — |
+| `bgpRsBestPathCtrlPol` | — |
+| `bgpRsBgpNodeCtxPol` | — |
+| `bgpRsPeerPfxPol` | — |
+| `bgpRsPeerToProfile` | — |
+| `bgpSiteOfOriginDef` | — |
+| `bgpSiteOfOriginP` | — |
+| `callhomeRsDestGroup` | — |
+| `callhomeRsQueryGroupRel` | — |
+| `callhomeRsSmartdestGroup` | — |
+| `callhomeSmartSrc` | — |
+| `callhomeSrc` | — |
+| `cloudAccount` | — |
+| `cloudApp` | — |
+| `cloudAwsFlowLogPol` | — |
+| `cloudAwsProvider` | — |
+| `cloudCDevDef` | — |
+| `cloudCertStore` | — |
+| `cloudCidr` | — |
+| `cloudCredentials` | — |
+| `cloudCtxProfile` | — |
+| `cloudCtxUnderlayP` | — |
+| `cloudEPg` | — |
+| `cloudEpInfoHolder` | — |
+| `cloudEpP` | — |
+| `cloudExtCtxProfile` | — |
+| `cloudExtEPg` | — |
+| `cloudExtNetworkP` | — |
+| `cloudGatewayCidr` | — |
+| `cloudGatewayRouterLabel` | — |
+| `cloudGatewayRouterP` | — |
+| `cloudGcpFlowLogPol` | — |
+| `cloudHostIfP` | — |
+| `cloudHostRouterInfoHolder` | — |
+| `cloudHostRouterRgInfoHolder` | — |
+| `cloudHostRouterToInfoHolder` | — |
+| `cloudHostRouterTunnelInfoHolder` | — |
+| `cloudHostRouterUserRgInfoHolder` | — |
+| `cloudISvcEPg` | — |
+| `cloudIntNetworkP` | — |
+| `cloudIpInfoHolder` | — |
+| `cloudIpSecTunnelIfP` | — |
+| `cloudL3TunnelIfP` | — |
+| `cloudLB` | — |
+| `cloudLDev` | — |
+| `cloudLDevDef` | — |
+| `cloudLIf` | — |
+| `cloudLIfDef` | — |
+| `cloudListener` | — |
+| `cloudListenerDef` | — |
+| `cloudListenerRuleDef` | — |
+| `cloudPeZnInfoHolder` | — |
+| `cloudRgInfoHolder` | — |
+| `cloudRouterP` | — |
+| `cloudRsAD` | — |
+| `cloudRsAccountToAccessPolicy` | — |
+| `cloudRsActionDefToPoolDef` | — |
+| `cloudRsCloudEPgCtx` | — |
+| `cloudRsCredentials` | — |
+| `cloudRsCtxProfileToAccessPolicy` | — |
+| `cloudRsCtxProfileToGatewayRouterP` | — |
+| `cloudRsCtxProfileToRegion` | — |
+| `cloudRsCtxProfileToStatsPol` | — |
+| `cloudRsCtxToFlowLog` | — |
+| `cloudRsCtxToGcpFlowLog` | — |
+| `cloudRsExtCtxProfileToCtx` | — |
+| `cloudRsExtCtxProfileToRegion` | — |
+| `cloudRsExtNetworkPToCtx` | — |
+| `cloudRsExtNetworkPToRegion` | — |
+| `cloudRsGatewayRouterPToRegion` | — |
+| `cloudRsIsakmpPhase1Pol` | — |
+| `cloudRsIsakmpPhase2Pol` | — |
+| `cloudRsLDevToCloudSubnet` | — |
+| `cloudRsLDevToComputePol` | — |
+| `cloudRsLDevToCtx` | — |
+| `cloudRsLDevToMgmtPol` | — |
+| `cloudRsLIfToCloudSubnet` | — |
+| `cloudRsListenerToCert` | — |
+| `cloudRsListenerToVip` | — |
+| `cloudRsProviderToAccessPolicy` | — |
+| `cloudRsSubnetToAccessPolicy` | — |
+| `cloudRsSubnetToCtx` | — |
+| `cloudRsSvcEPgCtx` | — |
+| `cloudRsToCtx` | — |
+| `cloudRsToHostRouterPol` | — |
+| `cloudRsToLogGrp` | — |
+| `cloudRsToStatsFilter` | — |
+| `cloudRsToTransitHubGwPol` | — |
+| `cloudRsToUnderlayCtxProfile` | — |
+| `cloudRsToVpnGwPol` | — |
+| `cloudRsZoneAttach` | — |
+| `cloudRtCloudAccount` | — |
+| `cloudRtrInfoHolder` | — |
+| `cloudRuleActionDef` | — |
+| `cloudSfInfoHolder` | — |
+| `cloudSubnet` | — |
+| `cloudSubnetInfoHolder` | — |
+| `cloudSvcEPg` | — |
+| `cloudSvcPolicy` | — |
+| `cloudSvcPolicyDef` | — |
+| `cloudVpcInfoHolder` | — |
+| `cloudVpnIfP` | — |
+| `cloudVpnNetworkP` | — |
+| `cloudZnInfoHolder` | — |
+| `cloudZoneInfoHolder` | — |
+| `cloudsecCapabilityLocal` | — |
+| `cloudsecControl` | — |
+| `cloudsecIfPol` | — |
+| `cloudsecPreSharedKey` | — |
+| `compDNic` | — |
+| `compEpPConn` | — |
+| `compPrimaryEncapDef` | — |
+| `compRsUsegEpPD` | — |
+| `compVNic` | — |
+| `compVm` | — |
+| `dbgacAnyToEp` | — |
+| `dbgacEpToAny` | — |
+| `dbgacEpToEp` | — |
+| `dbgacEpToEpg` | — |
+| `dbgacEpToExt` | — |
+| `dbgacEpgToEp` | — |
+| `dbgacEpgToEpg` | — |
+| `dbgacEpgToIp` | — |
+| `dbgacExtToEp` | — |
+| `dbgacFromEpgSummary` | — |
+| `dbgacIpToEpg` | — |
+| `dbgacIpToIp` | — |
+| `dbgacL3OutCont` | — |
+| `dbgacRsAcExtPolToContext` | — |
+| `dbgacRsContext` | — |
+| `dbgacRsFromAbsEpg` | — |
+| `dbgacRsFromEp` | — |
+| `dbgacRsFromEpForEpToEpg` | — |
+| `dbgacRsFromEpIp` | — |
+| `dbgacRsFromEpIpForEpToEpg` | — |
+| `dbgacRsFromEpg` | — |
+| `dbgacRsFromEsg` | — |
+| `dbgacRsFromLDevForExtToEp` | — |
+| `dbgacRsFromLDevForIpToEpg` | — |
+| `dbgacRsToAbsEpg` | — |
+| `dbgacRsToAbsEpgForEpgToEpg` | — |
+| `dbgacRsToEp` | — |
+| `dbgacRsToEpForEpToEp` | — |
+| `dbgacRsToEpForEpgToEp` | — |
+| `dbgacRsToEpIp` | — |
+| `dbgacRsToEpIpForEpToEp` | — |
+| `dbgacRsToEpIpForEpgToEp` | — |
+| `dbgacRsToEpg` | — |
+| `dbgacRsToEpgForEpgToEpg` | — |
+| `dbgacRsToEsgForEpgToEpg` | — |
+| `dbgacRsToLDevForEpToExt` | — |
+| `dbgacRsToLDevForEpgToIp` | — |
+| `dbgacTenantSpaceCmnDef` | — |
+| `dbgacToEpgSummary` | — |
+| `dhcpCRelPg` | — |
+| `dhcpDiscNode` | — |
+| `dhcpLbl` | — |
+| `dhcpLblDef` | — |
+| `dhcpOptionDef` | — |
+| `dhcpPRelPg` | — |
+| `dhcpProvDhcp` | — |
+| `dhcpRelayP` | — |
+| `dhcpRsDhcpOptionPol` | — |
+| `dhcpRsLblDefToRelayP` | — |
+| `dhcpRsProv` | — |
+| `dnsLblDef` | — |
+| `dnsRsDnsProfile` | — |
+| `dnsepgDomain` | — |
+| `dnsepgNwIssues` | — |
+| `dnsepgRsSvrEpg` | — |
+| `dnsepgSvr` | — |
+| `dnsepgSvrGrp` | — |
+| `eigrpAuthIfP` | — |
+| `eigrpIfP` | — |
+| `eigrpRsIfPol` | — |
+| `eigrpRsKeyChainPol` | — |
+| `epmAnycastIpEp` | — |
+| `epmDb` | — |
+| `epmRogueIpEp` | — |
+| `epmRogueMacEp` | — |
+| `epmSviIpEp` | — |
+| `eventSevAsnP` | — |
+| `faultSevAsnP` | — |
+| `fileRsARemoteHostToEpp` | — |
+| `fmcastTree` | — |
+| `fvAEPg` | — |
+| `fvAEPgAddrMgmtPoolAtt` | — |
+| `fvAEPgCont` | — |
+| `fvAEPgLagPolAtt` | — |
+| `fvAp` | — |
+| `fvAssocNodeDef` | — |
+| `fvAssocPolicyDef` | — |
+| `fvAttEntPDepl` | — |
+| `fvAttEntityPathAtt` | — |
+| `fvBD` | — |
+| `fvBDConfigIssues` | — |
+| `fvBDDef` | — |
+| `fvBDHolder` | — |
+| `fvBDPublicSubnetHolder` | — |
+| `fvBrEpP` | — |
+| `fvCEp` | — |
+| `fvCollectionCont` | — |
+| `fvConnDef` | — |
+| `fvCtrctCtxDefCont` | — |
+| `fvCtx` | — |
+| `fvCtxConfigIssues` | — |
+| `fvCtxDef` | — |
+| `fvCtxRtSummPol` | — |
+| `fvCtxSharedServiceUpdate` | — |
+| `fvDisableDPLearning` | — |
+| `fvDomCont` | — |
+| `fvDomDef` | — |
+| `fvDyNodeAtt` | — |
+| `fvDyPathAtt` | — |
+| `fvEPgSummaryDef` | — |
+| `fvESg` | — |
+| `fvESgEpP` | — |
+| `fvEpAnycast` | — |
+| `fvEpCont` | — |
+| `fvEpDef` | — |
+| `fvEpDefRef` | — |
+| `fvEpIpTag` | — |
+| `fvEpMacTag` | — |
+| `fvEpNlb` | — |
+| `fvEpP` | — |
+| `fvEpPCont` | — |
+| `fvEpReachability` | — |
+| `fvEpStMacTagDef` | — |
+| `fvEpSubnetTagDef` | — |
+| `fvEpTagDefCont` | — |
+| `fvEpTags` | — |
+| `fvEpVmmMacTagDef` | — |
+| `fvExtRoutableRemoteSitePodSubnet` | — |
+| `fvExtRoutableUcastConnP` | — |
+| `fvExtStPathAtt` | — |
+| `fvFBRGroupDef` | — |
+| `fvFabricExpRtctrlP` | — |
+| `fvFabricExtConnP` | — |
+| `fvIPSLAMonitoringPol` | — |
+| `fvIfConfigIssues` | — |
+| `fvIfConn` | — |
+| `fvImplEpAnycast` | — |
+| `fvImplSubnet` | — |
+| `fvInBEpP` | — |
+| `fvInstPEpP` | — |
+| `fvIntersiteConnP` | — |
+| `fvIntersiteMcastConnP` | — |
+| `fvIntersitePeeringP` | — |
+| `fvIntraVrfFabricImpRtctrlP` | — |
+| `fvIp` | — |
+| `fvKeyChainPol` | — |
+| `fvKeyPol` | — |
+| `fvL3EpCont` | — |
+| `fvL3EpDef` | — |
+| `fvLabelInfoHolder` | — |
+| `fvLocale` | — |
+| `fvMgmtDepl` | — |
+| `fvNlbStaticGroup` | — |
+| `fvNwIssues` | — |
+| `fvNwIssuesExtended` | — |
+| `fvOoBEpP` | — |
+| `fvOrchsInfo` | — |
+| `fvOutCont` | — |
+| `fvPhyNodeAtt` | — |
+| `fvPodConnP` | — |
+| `fvPolDeliveryStatus` | — |
+| `fvProtEPg` | — |
+| `fvRInfoHolder` | — |
+| `fvRemoteId` | — |
+| `fvRouteDeployP` | — |
+| `fvRouteInfoHolder` | — |
+| `fvRsABDPolMonPol` | — |
+| `fvRsAEPgMonPol` | — |
+| `fvRsAddrMgmtPool` | — |
+| `fvRsApMonPol` | — |
+| `fvRsBDSubnetToOut` | — |
+| `fvRsBDSubnetToProfile` | — |
+| `fvRsBDToFhs` | — |
+| `fvRsBDToNdP` | — |
+| `fvRsBDToNetflowMonitorPol` | — |
+| `fvRsBDToOut` | — |
+| `fvRsBDToProfile` | — |
+| `fvRsBDToProfileDef` | — |
+| `fvRsBDToRelayP` | — |
+| `fvRsBd` | — |
+| `fvRsBdFloodTo` | — |
+| `fvRsBdToEpRet` | — |
+| `fvRsBgpCtxPol` | — |
+| `fvRsCloudAccount` | — |
+| `fvRsCons` | — |
+| `fvRsConsIf` | — |
+| `fvRsCtx` | — |
+| `fvRsCtxMonPol` | — |
+| `fvRsCtxToBgpCtxAfPol` | — |
+| `fvRsCtxToCloudVrfRouteLeakPol` | — |
+| `fvRsCtxToEigrpCtxAfPol` | — |
+| `fvRsCtxToEpRet` | — |
+| `fvRsCtxToExtRouteTagPol` | — |
+| `fvRsCtxToOspfCtxPol` | — |
+| `fvRsCtxToRtctrlProfile` | — |
+| `fvRsCtxToSDWanVpn` | — |
+| `fvRsCustQosPol` | — |
+| `fvRsDomAtt` | — |
+| `fvRsDomDefNsLocal` | — |
+| `fvRsDppPol` | — |
+| `fvRsEpTagBd` | — |
+| `fvRsEpTagCtx` | — |
+| `fvRsEppBgpCtxPol` | — |
+| `fvRsExportToFabricProfile` | — |
+| `fvRsIgmpsn` | — |
+| `fvRsImportFromFabricProfile` | — |
+| `fvRsIntraEpg` | — |
+| `fvRsIpslaMonPol` | — |
+| `fvRsMldsn` | — |
+| `fvRsNdPfxPol` | — |
+| `fvRsNodeAtt` | — |
+| `fvRsNodePortAtt` | — |
+| `fvRsOspfCtxPol` | — |
+| `fvRsOtmListMember` | — |
+| `fvRsPathAtt` | — |
+| `fvRsProtBy` | — |
+| `fvRsProv` | — |
+| `fvRsQosRequirement` | — |
+| `fvRsScope` | — |
+| `fvRsSecInherited` | — |
+| `fvRsStGrpAtt` | — |
+| `fvRsStPathAtt` | — |
+| `fvRsSubnetToRtSummPol` | — |
+| `fvRsTenantMonPol` | — |
+| `fvRsTnDenyRule` | — |
+| `fvRsTnlCtx` | — |
+| `fvRsTrustCtrl` | — |
+| `fvRsVmmVSwitchEnhancedLagPol` | — |
+| `fvRsVrfValidationPol` | — |
+| `fvRtAcExtPolToContext` | — |
+| `fvRtDestEpg` | — |
+| `fvRtProv` | — |
+| `fvRtSummSubnet` | — |
+| `fvRtToEp` | — |
+| `fvRtToEpForEpToEp` | — |
+| `fvRtToEpForEpgToEp` | — |
+| `fvRtToEpIp` | — |
+| `fvRtToEpIpForEpToEp` | — |
+| `fvRtToEpIpForEpgToEp` | — |
+| `fvRtToEpg` | — |
+| `fvRtToEpgForEpgToEpg` | — |
+| `fvRtdEpP` | — |
+| `fvSharedService` | — |
+| `fvSiteAssociated` | — |
+| `fvSiteConnP` | — |
+| `fvSlaDef` | — |
+| `fvStCEp` | — |
+| `fvStNodeAtt` | — |
+| `fvStPathAtt` | — |
+| `fvStorageIssues` | — |
+| `fvSubnet` | — |
+| `fvSubnetBDDefCont` | — |
+| `fvSvcBD` | — |
+| `fvSvcEpP` | — |
+| `fvTabooCtxDefCont` | — |
+| `fvTenant` | — |
+| `fvTnlCtx` | — |
+| `fvTnlEPg` | — |
+| `fvTnlEpP` | — |
+| `fvTrackList` | — |
+| `fvTrackMember` | — |
+| `fvTunDef` | — |
+| `fvTunDefRef` | — |
+| `fvVDEp` | — |
+| `fvVNodeAtt` | — |
+| `fvVipUpdate` | — |
+| `hostprotFilterContainer` | — |
+| `hostprotPodFilter` | — |
+| `hostprotPol` | — |
+| `hostprotRemoteIp` | — |
+| `hostprotRemoteIpContainer` | — |
+| `hostprotRule` | — |
+| `hostprotSubj` | — |
+| `hsrpGroupDef` | — |
+| `hsrpGroupP` | — |
+| `hsrpIfDef` | — |
+| `hsrpIfP` | — |
+| `hsrpRsGroupPol` | — |
+| `hsrpRsIfPol` | — |
+| `hsrpSecVip` | — |
+| `igmpIfDef` | — |
+| `igmpIfP` | — |
+| `igmpIfPol` | — |
+| `igmpRepDef` | — |
+| `igmpRepPol` | — |
+| `igmpRsIfPol` | — |
+| `igmpRsSnoopAccessGroupFilterRMap` | — |
+| `igmpSnoopAccessGroup` | — |
+| `igmpStRepDef` | — |
+| `igmpStRepPol` | — |
+| `igmpStateLDef` | — |
+| `igmpStateLPol` | — |
+| `infraCEPg` | — |
+| `infraClP` | — |
+| `infraPEPg` | — |
+| `infraProvP` | — |
+| `infraRsInfraBD` | — |
+| `infraRsVipAddrNs` | — |
+| `infraRsVlanNs` | — |
+| `infraRtDomDef` | — |
+| `ipNexthopEpP` | — |
+| `ipNexthopP` | — |
+| `ipRouteP` | — |
+| `ipRsNHTrackMember` | — |
+| `ipRsNexthopRouteTrack` | — |
+| `ipRsRouteTrack` | — |
+| `isakmpProfile` | — |
+| `isakmpRsProfileToKeyring` | — |
+| `l2BD` | — |
+| `l2CfgMacEp` | — |
+| `l2L2AnycastEP` | — |
+| `l2MacCktEp` | — |
+| `l2PortSecurityPolDef` | — |
+| `l2RsDot1pRuleAtt` | — |
+| `l2RsDscpRuleAtt` | — |
+| `l2RsPathDomAtt` | — |
+| `l2extDomDef` | — |
+| `l2extInstP` | — |
+| `l2extLIfP` | — |
+| `l2extLNodeP` | — |
+| `l2extOut` | — |
+| `l2extRsEBd` | — |
+| `l2extRsL2DomAtt` | — |
+| `l3Ctx` | — |
+| `l3CtxSubstitute` | — |
+| `l3EncRtdIf` | — |
+| `l3FwdCtx` | — |
+| `l3Inst` | — |
+| `l3IpCktEp` | — |
+| `l3LbRtdIf` | — |
+| `l3RsL3dot1pRuleAtt` | — |
+| `l3RsL3dscpRuleAtt` | — |
+| `l3RtdIf` | — |
+| `l3extAttEntPCont` | — |
+| `l3extAttNodeCont` | — |
+| `l3extBdProfile` | — |
+| `l3extBdProfileCont` | — |
+| `l3extConsLbl` | — |
+| `l3extConsLblDef` | — |
+| `l3extCtxUpdater` | — |
+| `l3extDomDef` | — |
+| `l3extEncapLocale` | — |
+| `l3extExtEncapDef` | — |
+| `l3extFabricExtRoutingP` | — |
+| `l3extFloatingNode` | — |
+| `l3extFloatingNodeCont` | — |
+| `l3extForwarderAddr` | — |
+| `l3extInfraNodeP` | — |
+| `l3extInstP` | — |
+| `l3extInstPDef` | — |
+| `l3extIntersiteLoopBackIfP` | — |
+| `l3extIp` | — |
+| `l3extLIfP` | — |
+| `l3extLIfPDef` | — |
+| `l3extLNodeP` | — |
+| `l3extLNodePDef` | — |
+| `l3extLoopBackIfP` | — |
+| `l3extMember` | — |
+| `l3extOut` | — |
+| `l3extOutDef` | — |
+| `l3extRogueExceptMacP` | — |
+| `l3extRsArpIfPol` | — |
+| `l3extRsBdProfile` | — |
+| `l3extRsDampeningPol` | — |
+| `l3extRsDynPathAtt` | — |
+| `l3extRsEctx` | — |
+| `l3extRsEgressQosDppPol` | — |
+| `l3extRsIngressQosDppPol` | — |
+| `l3extRsInstPToNatMappingEPg` | — |
+| `l3extRsInstPToProfile` | — |
+| `l3extRsInterleakPol` | — |
+| `l3extRsL3DomAtt` | — |
+| `l3extRsLIfPCustQosPol` | — |
+| `l3extRsLIfPToNetflowMonitorPol` | — |
+| `l3extRsLNodePMplsCustQosPol` | — |
+| `l3extRsLblToInstP` | — |
+| `l3extRsLblToProfile` | — |
+| `l3extRsNdIfPol` | — |
+| `l3extRsNodeL3OutAtt` | — |
+| `l3extRsOutToFBRGroup` | — |
+| `l3extRsOutToMdpProvP` | — |
+| `l3extRsPathDefL3OutAtt` | — |
+| `l3extRsPathL3OutAtt` | — |
+| `l3extRsPathToRogueExceptMacGroup` | — |
+| `l3extRsRedistributePol` | — |
+| `l3extRsSubnetToProfile` | — |
+| `l3extRsSubnetToRtSumm` | — |
+| `l3extRsVSwitchEnhancedLagPol` | — |
+| `l3extRtLIfCtxToOut` | — |
+| `l3extRtOutDefContToOut` | — |
+| `l3extRtdCtxCont` | — |
+| `l3extRtdCtxDef` | — |
+| `l3extRtdNodeDef` | — |
+| `l3extRtdOutCont` | — |
+| `l3extRtdOutDef` | — |
+| `l3extSharedSecondaryIpCont` | — |
+| `l3extSubnet` | — |
+| `l3extSubnetDef` | — |
+| `l3extSummSubnetConfigIssues` | — |
+| `l3extVirtualLIfP` | — |
+| `l3extVirtualLIfPDef` | — |
+| `l3extVirtualLIfPLagPolAtt` | — |
+| `l3extVrfValidationPol` | — |
+| `leakInternalSubnet` | — |
+| `leakRouteCont` | — |
+| `leakRouteIntPfx` | — |
+| `leakRoutes` | — |
+| `mgmtAddrCont` | — |
+| `mgmtCollectionCont` | — |
+| `mgmtConfigAddr` | — |
+| `mgmtConfigNode` | — |
+| `mgmtExtMgmtEntity` | — |
+| `mgmtInB` | — |
+| `mgmtInstP` | — |
+| `mgmtInstPDef` | — |
+| `mgmtMgmtP` | — |
+| `mgmtNodeDef` | — |
+| `mgmtOoB` | — |
+| `mgmtRsInstPCtx` | — |
+| `mgmtRsMgmtBD` | — |
+| `mgmtRsOoBCons` | — |
+| `mgmtRsOoBCtx` | — |
+| `mgmtRsOoBProv` | — |
+| `mgmtRtdMgmtIf` | — |
+| `mgmtZoneDef` | — |
+| `mldRsMldsnoopAccessGroupFilterRMap` | — |
+| `mldSnoopAccessGroup` | — |
+| `monEPGPol` | — |
+| `monEPGTarget` | — |
+| `mplsExtP` | — |
+| `mplsIfP` | — |
+| `mplsRsIfPol` | — |
+| `mplsRsLabelPol` | — |
+| `ndPfxP` | — |
+| `ndRaSubnet` | — |
+| `ndRsPfxPToNdPfxPol` | — |
+| `ndRsRaSubnetToNdPfxPol` | — |
+| `netflowExporterPol` | — |
+| `netflowMonitorPol` | — |
+| `netflowRsExporterToCtx` | — |
+| `netflowRsExporterToEPg` | — |
+| `netflowRsMonitorToExporter` | — |
+| `netflowRsMonitorToRecord` | — |
+| `opflexEncapCont` | — |
+| `opflexIDEp` | — |
+| `opflexIDEpFaultInfo` | — |
+| `opflexPathAtt` | — |
+| `opflexpAgentIDEpFaultInfo` | — |
+| `opflexpVmmIDEpFaultInfo` | — |
+| `orchsConfig` | — |
+| `orchsFuncProfileCont` | — |
+| `orchsLdevCont` | — |
+| `orchsRsAbsGraphRef` | — |
+| `orchsRsAllocLDev` | — |
+| `orchsRsFromRPToL3Dom` | — |
+| `orchsRsFromRPToL3OutInstP` | — |
+| `orchsRsIpPoolRef` | — |
+| `orchsRsIpPoolRefv2` | — |
+| `orchsRsLDevItem` | — |
+| `orchsRsSvcsEncapToSvcAlloc` | — |
+| `orchsRsSvcsIpToIpPoolRef` | — |
+| `orchsRsSvcsIpToSvcAlloc` | — |
+| `orchsRsToFuncProfile` | — |
+| `orchsRsToMdev` | — |
+| `orchsSvcAlloc` | — |
+| `orchsSvcRsrcPool` | — |
+| `orchsSvcsEncap` | — |
+| `orchsSvcsIp` | — |
+| `orchsTnSvcsSubnet` | — |
+| `ospfExtP` | — |
+| `ospfIfP` | — |
+| `ospfIfPol` | — |
+| `ospfRsIfPol` | — |
+| `pimASMPatDef` | — |
+| `pimASMPatPol` | — |
+| `pimAutoRPDef` | — |
+| `pimAutoRPPol` | — |
+| `pimBDDef` | — |
+| `pimBDDestFilterDef` | — |
+| `pimBDDestFilterPol` | — |
+| `pimBDFilterDef` | — |
+| `pimBDFilterPol` | — |
+| `pimBDP` | — |
+| `pimBDSrcFilterDef` | — |
+| `pimBDSrcFilterPol` | — |
+| `pimBSRFilterDef` | — |
+| `pimBSRFilterPol` | — |
+| `pimBSRPDef` | — |
+| `pimBSRPPol` | — |
+| `pimCSWEntry` | — |
+| `pimCSWPol` | — |
+| `pimCtxDef` | — |
+| `pimCtxP` | — |
+| `pimExtP` | — |
+| `pimFabricRPDef` | — |
+| `pimFabricRPPol` | — |
+| `pimIPV6CtxDef` | — |
+| `pimIPV6CtxP` | — |
+| `pimIPV6IfP` | — |
+| `pimIfDef` | — |
+| `pimIfP` | — |
+| `pimIfPol` | — |
+| `pimInterVRFDef` | — |
+| `pimInterVRFEntryDef` | — |
+| `pimInterVRFEntryPol` | — |
+| `pimInterVRFPol` | — |
+| `pimJPInbFilterDef` | — |
+| `pimJPInbFilterPol` | — |
+| `pimJPOutbFilterDef` | — |
+| `pimJPOutbFilterPol` | — |
+| `pimMAFilterDef` | — |
+| `pimMAFilterPol` | — |
+| `pimNbrFilterDef` | — |
+| `pimNbrFilterPol` | — |
+| `pimRPGrpRangeDef` | — |
+| `pimRPGrpRangePol` | — |
+| `pimRegTrDef` | — |
+| `pimRegTrPol` | — |
+| `pimResDef` | — |
+| `pimResPol` | — |
+| `pimRsIfPol` | — |
+| `pimRsV6IfPol` | — |
+| `pimSGRangeExpDef` | — |
+| `pimSGRangeExpPol` | — |
+| `pimSSMPatDef` | — |
+| `pimSSMPatPol` | — |
+| `pimSSMRangeDef` | — |
+| `pimSSMRangePol` | — |
+| `pimSharedRangeDef` | — |
+| `pimSharedRangePol` | — |
+| `pimStaticRPDef` | — |
+| `pimStaticRPEntryDef` | — |
+| `pimStaticRPEntryPol` | — |
+| `pimStaticRPPol` | — |
+| `pkiKeyRing` | — |
+| `pkiTP` | — |
+| `ptpEpgCfg` | — |
+| `ptpRsLatencyPtpMode` | — |
+| `ptpRsProfile` | — |
+| `ptpRtdEpgCfg` | — |
+| `qinqCktEp` | — |
+| `qosDppPol` | — |
+| `qosEpDscpMarking` | — |
+| `qosRequirement` | — |
+| `qosRsEgressDppPol` | — |
+| `qosRsIngressDppPol` | — |
+| `resConsumer` | — |
+| `rmonIfStorm` | — |
+| `rtctrlAttrP` | — |
+| `rtctrlCtxP` | — |
+| `rtctrlProfile` | — |
+| `rtctrlRsCtxPToSubjP` | — |
+| `rtctrlRsScopeToAttrP` | — |
+| `rtctrlRsSetPolicyTagToInstP` | — |
+| `rtctrlScope` | — |
+| `rtctrlSetPolicyTag` | — |
+| `rtdmcIPV6McastIfDefCont` | — |
+| `rtdmcMcastIfDefCont` | — |
+| `rtdmcRsFilterToRtMapPol` | — |
+| `snmpRsDestGroup` | — |
+| `snmpSrc` | — |
+| `spanDest` | — |
+| `spanDestGrp` | — |
+| `spanEpgSummary` | — |
+| `spanRsDestApic` | — |
+| `spanRsDestEpg` | — |
+| `spanRsDestPathEp` | — |
+| `spanRsDestToVPort` | — |
+| `spanRsDestToVPortDef` | — |
+| `spanRsProvDestGrp` | — |
+| `spanRsProvToVDestGrp` | — |
+| `spanRsSrcToBDDef` | — |
+| `spanRsSrcToCtxDef` | — |
+| `spanRsSrcToEpP` | — |
+| `spanRsSrcToEpg` | — |
+| `spanRsSrcToPathEp` | — |
+| `spanRsSrcToVPort` | — |
+| `spanRsSrcToVPortDef` | — |
+| `spanRsVSrcGrpToFilterGrp` | — |
+| `spanSpanLbl` | — |
+| `spanSpanLblDef` | — |
+| `spanSpanProv` | — |
+| `spanSrc` | — |
+| `spanSrcDef` | — |
+| `spanSrcGrp` | — |
+| `spanSrcGrpDef` | — |
+| `spanTaskParam` | — |
+| `spanVDest` | — |
+| `spanVDestGrp` | — |
+| `spanVEpgSummary` | — |
+| `spanVEpgSummaryDef` | — |
+| `spanVSpanProv` | — |
+| `spanVSrc` | — |
+| `spanVSrcDef` | — |
+| `spanVSrcGrp` | — |
+| `spanVSrcGrpDef` | — |
+| `statsDestP` | — |
+| `statsExportP` | — |
+| `statsReportable` | — |
+| `sviIf` | — |
+| `syslogRsDestGroup` | — |
+| `syslogSrc` | — |
+| `tacacsRsDestGroup` | — |
+| `tacacsSrc` | — |
+| `tagAliasDelInst` | — |
+| `tagAliasInst` | — |
+| `tagInst` | — |
+| `traceroutepRsTrEpDst` | — |
+| `traceroutepRsTrEpExtIpSrc` | — |
+| `traceroutepRsTrEpIpDst` | — |
+| `traceroutepRsTrEpIpSrc` | — |
+| `traceroutepRsTrEpSrc` | — |
+| `traceroutepRsTrExtEpIpDst` | — |
+| `traceroutepTrEp` | — |
+| `traceroutepTrEpExt` | — |
+| `traceroutepTrExtEp` | — |
+| `unspecified` | — |
+| `vlanCktEp` | — |
+| `vnsAbsCfgRel` | — |
+| `vnsAbsConnection` | — |
+| `vnsAbsDevCfg` | — |
+| `vnsAbsFolder` | — |
+| `vnsAbsFuncCfg` | — |
+| `vnsAbsFuncConn` | — |
+| `vnsAbsFuncProf` | — |
+| `vnsAbsFuncProfContr` | — |
+| `vnsAbsFuncProfGrp` | — |
+| `vnsAbsFuncProfNormalized` | — |
+| `vnsAbsGraph` | — |
+| `vnsAbsGrpCfg` | — |
+| `vnsAbsNode` | — |
+| `vnsAbsParam` | — |
+| `vnsAbsTermConn` | — |
+| `vnsAbsTermNodeCon` | — |
+| `vnsAbsTermNodeProv` | — |
+| `vnsAdjacencyDefCont` | — |
+| `vnsBackupPol` | — |
+| `vnsByPassChain` | — |
+| `vnsCDev` | — |
+| `vnsCFolder` | — |
+| `vnsCIf` | — |
+| `vnsCIfDef` | — |
+| `vnsCMgmt` | — |
+| `vnsCParam` | — |
+| `vnsCRel` | — |
+| `vnsCfgRelInst` | — |
+| `vnsCfgRoot` | — |
+| `vnsChassis` | — |
+| `vnsCloudSvcEPgDef` | — |
+| `vnsConfIssue` | — |
+| `vnsConnectionInst` | — |
+| `vnsCopyAdjacencyDef` | — |
+| `vnsCopyConnector` | — |
+| `vnsCtrlrEp` | — |
+| `vnsCtrlrMgmtPol` | — |
+| `vnsDevCfgInst` | — |
+| `vnsDevFolder` | — |
+| `vnsDevMgr` | — |
+| `vnsDevParam` | — |
+| `vnsEPgDef` | — |
+| `vnsEPgDefCons` | — |
+| `vnsEPpContr` | — |
+| `vnsEPpInfo` | — |
+| `vnsEpgDefXlate` | — |
+| `vnsFolderInst` | — |
+| `vnsFuncCfgInst` | — |
+| `vnsFuncConnInst` | — |
+| `vnsGFolder` | — |
+| `vnsGParam` | — |
+| `vnsGRel` | — |
+| `vnsGraphInst` | — |
+| `vnsGrpCfgInst` | — |
+| `vnsHealthDest` | — |
+| `vnsImplL1L2Dest` | — |
+| `vnsInTerm` | — |
+| `vnsInstPol` | — |
+| `vnsL1L2RedirectDest` | — |
+| `vnsLDevCtx` | — |
+| `vnsLDevIf` | — |
+| `vnsLDevIfLIf` | — |
+| `vnsLDevInst` | — |
+| `vnsLDevVip` | — |
+| `vnsLIf` | — |
+| `vnsLIfCtx` | — |
+| `vnsLIfHint` | — |
+| `vnsLIfHintInst` | — |
+| `vnsLegVNode` | — |
+| `vnsMgmtLIf` | — |
+| `vnsMscGraphXlateCont` | — |
+| `vnsNextHopInfo` | — |
+| `vnsNodeInst` | — |
+| `vnsNodeInstDef` | — |
+| `vnsOutTerm` | — |
+| `vnsParamInst` | — |
+| `vnsPbrByPassCont` | — |
+| `vnsREPpInfo` | — |
+| `vnsRedirectDest` | — |
+| `vnsRedirectHealthGroup` | — |
+| `vnsRndrInfo` | — |
+| `vnsRsALDevToDevMgr` | — |
+| `vnsRsALDevToDomP` | — |
+| `vnsRsALDevToPhysDomP` | — |
+| `vnsRsALDevToVxlanInstP` | — |
+| `vnsRsAbsConnectionConns` | — |
+| `vnsRsAbsCopyConnection` | — |
+| `vnsRsBackupPol` | — |
+| `vnsRsCDevTemplateToAddrInst` | — |
+| `vnsRsCDevToChassis` | — |
+| `vnsRsCDevToCtrlrP` | — |
+| `vnsRsCIfAtt` | — |
+| `vnsRsCIfAttN` | — |
+| `vnsRsCIfPathAtt` | — |
+| `vnsRsCfgToConn` | — |
+| `vnsRsCfgToVConn` | — |
+| `vnsRsChassisEpg` | — |
+| `vnsRsChassisToMChassis` | — |
+| `vnsRsClusterPol` | — |
+| `vnsRsConnToAConn` | — |
+| `vnsRsConnToAConnInst` | — |
+| `vnsRsConnToCtxTerm` | — |
+| `vnsRsConnToCtxTermInst` | — |
+| `vnsRsConnToFlt` | — |
+| `vnsRsConnToFltInst` | — |
+| `vnsRsConnToLIfInst` | — |
+| `vnsRsDefaultScopeToTerm` | — |
+| `vnsRsDevEpg` | — |
+| `vnsRsDevFolderToMFolder` | — |
+| `vnsRsDevMgrEpg` | — |
+| `vnsRsDevMgrToMDevMgr` | — |
+| `vnsRsFolderInstToMFolder` | — |
+| `vnsRsIPSLAMonitoringPol` | — |
+| `vnsRsInstPolToVmmConfigFile` | — |
+| `vnsRsL1L2RedirectHealthGroup` | — |
+| `vnsRsLDevCtxToLDev` | — |
+| `vnsRsLDevCtxToRtrCfg` | — |
+| `vnsRsLDevInst` | — |
+| `vnsRsLDevVipToInstPol` | — |
+| `vnsRsLIfCtxToBD` | — |
+| `vnsRsLIfCtxToCustQosPol` | — |
+| `vnsRsLIfCtxToInstP` | — |
+| `vnsRsLIfCtxToLIf` | — |
+| `vnsRsLIfCtxToOut` | — |
+| `vnsRsLIfCtxToOutDef` | — |
+| `vnsRsLIfCtxToRemoteSvcRedirectPol` | — |
+| `vnsRsLIfCtxToSvcEPgPol` | — |
+| `vnsRsLIfCtxToSvcL3OutDef` | — |
+| `vnsRsLIfCtxToSvcRedirectPol` | — |
+| `vnsRsLIfDomP` | — |
+| `vnsRsLdevIfToLDev` | — |
+| `vnsRsMConnAtt` | — |
+| `vnsRsMConnAttInst` | — |
+| `vnsRsMDevAtt` | — |
+| `vnsRsMetaIf` | — |
+| `vnsRsMgmtAddr` | — |
+| `vnsRsNodeInstToCloudLDev` | — |
+| `vnsRsNodeInstToLDevCtx` | — |
+| `vnsRsNodeToAbsFuncProf` | — |
+| `vnsRsNodeToCloudLDev` | — |
+| `vnsRsNodeToLDev` | — |
+| `vnsRsNodeToMFunc` | — |
+| `vnsRsProfToCloudModeMDev` | — |
+| `vnsRsProfToMFunc` | — |
+| `vnsRsRedirectHealthGroup` | — |
+| `vnsRsScopeToTerm` | — |
+| `vnsRsTermToAny` | — |
+| `vnsRsTermToEPg` | — |
+| `vnsRsToCIf` | — |
+| `vnsRsVDevDomainRefContToDomainRef` | — |
+| `vnsRsVDevToDomainRef` | — |
+| `vnsRsVLIfP` | — |
+| `vnsRtrIdInfo` | — |
+| `vnsSHEPpInfo` | — |
+| `vnsSLDevInstCons` | — |
+| `vnsSvcCont` | — |
+| `vnsSvcEPgPol` | — |
+| `vnsSvcL3Cont` | — |
+| `vnsSvcL3OutDef` | — |
+| `vnsSvcPol` | — |
+| `vnsSvcRedirectPol` | — |
+| `vnsSvcVipUpdate` | — |
+| `vnsTermConnInst` | — |
+| `vnsTermNodeInst` | — |
+| `vnsTermVrf` | — |
+| `vnsVBgpDevCfg` | — |
+| `vnsVBgpVEncapAsc` | — |
+| `vnsVConn` | — |
+| `vnsVDev` | — |
+| `vnsVDevDomainRefCont` | — |
+| `vnsVDevOperInfo` | — |
+| `vnsVEncap` | — |
+| `vnsVEncapAsc` | — |
+| `vnsVFunc` | — |
+| `vnsVGrp` | — |
+| `vnsVGrpP` | — |
+| `vnsVIf` | — |
+| `vnsVOspfDevCfg` | — |
+| `vnsVOspfVEncapAsc` | — |
+| `vsanCktEp` | — |
+| `vxlanCktEp` | — |
+| `vzAny` | — |
+| `vzBrCP` | — |
+| `vzCPIf` | — |
+| `vzCollectionCont` | — |
+| `vzCollectionDef` | — |
+| `vzConsDef` | — |
+| `vzCtrctEPgCont` | — |
+| `vzCtrctEntityDef` | — |
+| `vzDirAssDef` | — |
+| `vzERFltP` | — |
+| `vzEntry` | — |
+| `vzEntryPortZero` | — |
+| `vzEpgAnyDef` | — |
+| `vzFilter` | — |
+| `vzFromEPg` | — |
+| `vzInTerm` | — |
+| `vzInheritedDef` | — |
+| `vzIntDef` | — |
+| `vzIntraEPgDef` | — |
+| `vzIntraSecurityDef` | — |
+| `vzOOBBrCP` | — |
+| `vzOutTerm` | — |
+| `vzProvDef` | — |
+| `vzRFltP` | — |
+| `vzRsAnyToCons` | — |
+| `vzRsAnyToConsIf` | — |
+| `vzRsAnyToProv` | — |
+| `vzRsDenyRule` | — |
+| `vzRsFiltAtt` | — |
+| `vzRsFiltGraphAtt` | — |
+| `vzRsGraphAtt` | — |
+| `vzRsIf` | — |
+| `vzRsInTermGraphAtt` | — |
+| `vzRsOutTermGraphAtt` | — |
+| `vzRsRFltAtt` | — |
+| `vzRsSdwanPol` | — |
+| `vzRsSubjFiltAtt` | — |
+| `vzRsSubjGraphAtt` | — |
+| `vzSubj` | — |
+| `vzSubjDef` | — |
+| `vzTSubj` | — |
+| `vzTaboo` | — |
+| `vzToEPg` | — |
+
+Used by: {ref}`tenant.monitoring_policy.target <vocab-tenant-monitoring_policy-target>`
+
 (enum-ndifcontrol)=
 
 ## `NdIfControl`
@@ -1511,6 +2778,17 @@ Used by: {ref}`tenant.nd_ra_prefix_policy <vocab-tenant-nd_ra_prefix_policy>`
 | `ptep` | — |
 
 Used by: {ref}`infra.netflow_exporter <vocab-infra-netflow_exporter>`, {ref}`tenant.netflow_exporter <vocab-tenant-netflow_exporter>`
+
+(enum-networkdirection)=
+
+## `NetworkDirection`
+
+| value | meaning |
+| --- | --- |
+| `egress` | — |
+| `ingress` | — |
+
+Used by: {ref}`tenant.host_protection.subject.rule <vocab-tenant-host_protection-subject-rule>`
 
 (enum-nwadminst)=
 
@@ -1803,7 +3081,20 @@ Used by: {ref}`infra.lacp_policy <vocab-infra-lacp_policy>`
 | `yellow` | — |
 | `yellow-green` | — |
 
-Used by: {ref}`fabric.span_source_group.span_label <vocab-fabric-span_source_group-span_label>`, {ref}`infra.span_source_group.span_label <vocab-infra-span_source_group-span_label>`, {ref}`tenant.app.epg.consumer_contract_label <vocab-tenant-app-epg-consumer_contract_label>`, {ref}`tenant.app.epg.consumer_label <vocab-tenant-app-epg-consumer_label>`, {ref}`tenant.app.epg.consumer_subject_label <vocab-tenant-app-epg-consumer_subject_label>`, {ref}`tenant.app.epg.provider_contract_label <vocab-tenant-app-epg-provider_contract_label>`, {ref}`tenant.app.epg.provider_label <vocab-tenant-app-epg-provider_label>`, {ref}`tenant.app.epg.provider_subject_label <vocab-tenant-app-epg-provider_subject_label>` *(+34 more)*
+Used by: {ref}`fabric.span_source_group.span_label <vocab-fabric-span_source_group-span_label>`, {ref}`infra.span_source_group.span_label <vocab-infra-span_source_group-span_label>`, {ref}`tenant.app.epg.consumer_contract_label <vocab-tenant-app-epg-consumer_contract_label>`, {ref}`tenant.app.epg.consumer_label <vocab-tenant-app-epg-consumer_label>`, {ref}`tenant.app.epg.consumer_subject_label <vocab-tenant-app-epg-consumer_subject_label>`, {ref}`tenant.app.epg.provider_contract_label <vocab-tenant-app-epg-provider_contract_label>`, {ref}`tenant.app.epg.provider_label <vocab-tenant-app-epg-provider_label>`, {ref}`tenant.app.epg.provider_subject_label <vocab-tenant-app-epg-provider_subject_label>` *(+37 more)*
+
+(enum-ptpptptransportmode)=
+
+## `PtpPtpTransportMode`
+
+| value | meaning |
+| --- | --- |
+| `multicast` | — |
+| `multicast-master` | Applicable for telecom profile |
+| `unicast-master` | — |
+| `unicast-slave` | — |
+
+Used by: {ref}`tenant.app.epg.static_path.ptp <vocab-tenant-app-epg-static_path-ptp>`, {ref}`tenant.l3out.node_profile.interface_profile.path_attachment.ptp_l3out <vocab-tenant-l3out-node_profile-interface_profile-path_attachment-ptp_l3out>`
 
 (enum-qosdpppoladminstate)=
 
@@ -1830,7 +3121,29 @@ Used by: {ref}`infra.dpp_policy <vocab-infra-dpp_policy>`, {ref}`tenant.dpp_poli
 | `level6` | — |
 | `unspecified` | — |
 
-Used by: {ref}`tenant.access_client_profile.access_client_epg <vocab-tenant-access_client_profile-access_client_epg>`, {ref}`tenant.access_function_profile.access_function_provider <vocab-tenant-access_function_profile-access_function_provider>`, {ref}`tenant.app <vocab-tenant-app>`, {ref}`tenant.app.epg <vocab-tenant-app-epg>`, {ref}`tenant.app.esg <vocab-tenant-app-esg>`, {ref}`tenant.contract <vocab-tenant-contract>`, {ref}`tenant.contract.subject <vocab-tenant-contract-subject>`, {ref}`tenant.contract.subject.in_term <vocab-tenant-contract-subject-in_term>` *(+13 more)*
+Used by: {ref}`tenant.access_client_profile.access_client_epg <vocab-tenant-access_client_profile-access_client_epg>`, {ref}`tenant.access_function_profile.access_function_provider <vocab-tenant-access_function_profile-access_function_provider>`, {ref}`tenant.app <vocab-tenant-app>`, {ref}`tenant.app.epg <vocab-tenant-app-epg>`, {ref}`tenant.app.esg <vocab-tenant-app-esg>`, {ref}`tenant.contract <vocab-tenant-contract>`, {ref}`tenant.contract.subject <vocab-tenant-contract-subject>`, {ref}`tenant.contract.subject.in_term <vocab-tenant-contract-subject-in_term>` *(+15 more)*
+
+(enum-rtctrlcommunitytype)=
+
+## `RtctrlCommunityType`
+
+| value | meaning |
+| --- | --- |
+| `extended` | — |
+| `regular` | — |
+
+Used by: {ref}`tenant.match_rule.match_community_regex <vocab-tenant-match_rule-match_community_regex>`
+
+(enum-rtctrlmetrictype)=
+
+## `RtctrlMetricType`
+
+| value | meaning |
+| --- | --- |
+| `ospf-type1` | OSPF external type1 metric |
+| `ospf-type2` | OSPF external type2 metric |
+
+Used by: {ref}`tenant.action_rule_profile.set_metric_type <vocab-tenant-action_rule_profile-set_metric_type>`
 
 (enum-rtctrlpolicytype)=
 
@@ -1842,6 +3155,39 @@ Used by: {ref}`tenant.access_client_profile.access_client_epg <vocab-tenant-acce
 | `global` | — |
 
 Used by: {ref}`tenant.l3out.route_control_profile <vocab-tenant-l3out-route_control_profile>`, {ref}`tenant.route_control_profile <vocab-tenant-route_control_profile>`
+
+(enum-rtctrlsettype)=
+
+## `RtctrlSetType`
+
+| value | meaning |
+| --- | --- |
+| `as-path` | AS Path |
+| `community` | Community |
+| `dampening-pol` | Dampening Type |
+| `ip-nh` | IP Nexthop |
+| `local-pref` | Local preference (implicitly used in BGP only) |
+| `metric` | Metric |
+| `metric-type` | Metric Type |
+| `nh-unchanged` | Nexthop Unchanged |
+| `ospf-fwd-addr` | OSPF forwarding address |
+| `ospf-nssa` | OSPF NSSA |
+| `policy-tag` | Policy tag |
+| `redist-multipath` | Pick multiple path for redistribution into MP-BGP |
+| `rt-tag` | Route tag |
+| `rt-weight` | Route weight (implicitly used in BGP only) |
+
+Used by: {ref}`tenant.action_rule_profile.add_community <vocab-tenant-action_rule_profile-add_community>`, {ref}`tenant.action_rule_profile.set_as_path <vocab-tenant-action_rule_profile-set_as_path>`, {ref}`tenant.action_rule_profile.set_community <vocab-tenant-action_rule_profile-set_community>`, {ref}`tenant.action_rule_profile.set_dampening <vocab-tenant-action_rule_profile-set_dampening>`, {ref}`tenant.action_rule_profile.set_metric <vocab-tenant-action_rule_profile-set_metric>`, {ref}`tenant.action_rule_profile.set_metric_type <vocab-tenant-action_rule_profile-set_metric_type>`, {ref}`tenant.action_rule_profile.set_next_hop <vocab-tenant-action_rule_profile-set_next_hop>`, {ref}`tenant.action_rule_profile.set_next_hop_unchanged <vocab-tenant-action_rule_profile-set_next_hop_unchanged>` *(+5 more)*
+
+(enum-rtdmcasmctrl)=
+
+## `RtdmcASMCtrl`
+
+| value | meaning |
+| --- | --- |
+| `pre-build-spt` | Pre-build Shortest Path trees for known sources |
+
+Used by: {ref}`tenant.vrf.pim.asm_pattern <vocab-tenant-vrf-pim-asm_pattern>`, {ref}`tenant.vrf.pim6.asm_pattern <vocab-tenant-vrf-pim6-asm_pattern>`
 
 (enum-rtdmcaftype)=
 
@@ -1865,6 +3211,28 @@ Used by: {ref}`tenant.l3out.pim_external <vocab-tenant-l3out-pim_external>`
 
 Used by: {ref}`tenant.pim_interface_policy <vocab-tenant-pim_interface_policy>`
 
+(enum-rtdmcautorpctrl)=
+
+## `RtdmcAutoRPCtrl`
+
+| value | meaning |
+| --- | --- |
+| `listen` | Listen to Auto-RP updates |
+| `forward` | Forward Auto-RP updates |
+
+Used by: {ref}`tenant.vrf.pim.auto_rp <vocab-tenant-vrf-pim-auto_rp>`, {ref}`tenant.vrf.pim6.auto_rp <vocab-tenant-vrf-pim6-auto_rp>`
+
+(enum-rtdmcbsrctrl)=
+
+## `RtdmcBSRCtrl`
+
+| value | meaning |
+| --- | --- |
+| `listen` | Listen to BSR updates |
+| `forward` | Forward BSR updates |
+
+Used by: {ref}`tenant.vrf.pim.bootstrap_rp <vocab-tenant-vrf-pim-bootstrap_rp>`, {ref}`tenant.vrf.pim6.bootstrap_rp <vocab-tenant-vrf-pim6-bootstrap_rp>`
+
 (enum-rtdmcdomuserctrl)=
 
 ## `RtdmcDomUserCtrl`
@@ -1874,7 +3242,7 @@ Used by: {ref}`tenant.pim_interface_policy <vocab-tenant-pim_interface_policy>`
 | `fast-conv` | Flush all routes on process restartconst name="flush-on-restart" value="1" label="Flush Routes on Restart"/Fast Convergence Attract external traffic to border leaf, but do not forward to the fabric. |
 | `strict-rfc-compliant` | Enable bidirectional forwarding detection (BFD) on all interfaces in this domain (NOT supported in this release)const name="bfd-enable" value="4" label="Enable BFD"/Enable strict RFC compliance on this domain |
 
-Used by: {ref}`tenant.vrf.pim <vocab-tenant-vrf-pim>`
+Used by: {ref}`tenant.vrf.pim <vocab-tenant-vrf-pim>`, {ref}`tenant.vrf.pim6 <vocab-tenant-vrf-pim6>`
 
 (enum-rtdmcifuserctrl)=
 
@@ -1899,6 +3267,17 @@ Used by: {ref}`tenant.pim_interface_policy <vocab-tenant-pim_interface_policy>`
 
 Used by: {ref}`tenant.pim_route_map_policy.pim_route_map_entry <vocab-tenant-pim_route_map_policy-pim_route_map_entry>`
 
+(enum-rtextcomscope)=
+
+## `RtextcomScope`
+
+| value | meaning |
+| --- | --- |
+| `non-transitive` | Non transitive, this community should be carried only within the local AS |
+| `transitive` | Transitive, this community may be passed between ASs |
+
+Used by: {ref}`tenant.match_rule.match_community.factor <vocab-tenant-match_rule-match_community-factor>`
+
 (enum-rtfltaction)=
 
 ## `RtfltAction`
@@ -1910,6 +3289,29 @@ Used by: {ref}`tenant.pim_route_map_policy.pim_route_map_entry <vocab-tenant-pim
 
 Used by: {ref}`tenant.l3out.route_control_profile.route_control_context <vocab-tenant-l3out-route_control_profile-route_control_context>`, {ref}`tenant.route_control_profile.route_control_context <vocab-tenant-route_control_profile-route_control_context>`
 
+(enum-rtmapascritt)=
+
+## `RtmapASCritT`
+
+| value | meaning |
+| --- | --- |
+| `prepend` | Append the specified AS number to the system path of the route |
+| `prepend-last-as` | Prepend the last AS numbers to the AS Path |
+
+Used by: {ref}`tenant.action_rule_profile.set_as_path <vocab-tenant-action_rule_profile-set_as_path>`
+
+(enum-rtmapsetcriteria)=
+
+## `RtmapSetCriteria`
+
+| value | meaning |
+| --- | --- |
+| `append` | Append |
+| `none` | — |
+| `replace` | Replace |
+
+Used by: {ref}`tenant.action_rule_profile.add_community <vocab-tenant-action_rule_profile-add_community>`, {ref}`tenant.action_rule_profile.set_community <vocab-tenant-action_rule_profile-set_community>`
+
 (enum-spandirection)=
 
 ## `SpanDirection`
@@ -1920,7 +3322,18 @@ Used by: {ref}`tenant.l3out.route_control_profile.route_control_context <vocab-t
 | `in` | Incoming |
 | `out` | Outgoing |
 
-Used by: {ref}`fabric.span_source_group.span_source <vocab-fabric-span_source_group-span_source>`, {ref}`infra.span_source_group.span_source <vocab-infra-span_source_group-span_source>`, {ref}`tenant.span_source_group.span_source <vocab-tenant-span_source_group-span_source>`
+Used by: {ref}`fabric.span_source_group.span_source <vocab-fabric-span_source_group-span_source>`, {ref}`fabric.span_source_group.vspan_source <vocab-fabric-span_source_group-vspan_source>`, {ref}`fabric.span_source_group.vspan_source_def <vocab-fabric-span_source_group-vspan_source_def>`, {ref}`infra.span_source_group.span_source <vocab-infra-span_source_group-span_source>`, {ref}`infra.span_source_group.vspan_source <vocab-infra-span_source_group-vspan_source>`, {ref}`infra.span_source_group.vspan_source_def <vocab-infra-span_source_group-vspan_source_def>`, {ref}`tenant.span_source_group.span_source <vocab-tenant-span_source_group-span_source>`, {ref}`tenant.span_source_group.vspan_source <vocab-tenant-span_source_group-vspan_source>` *(+1 more)*
+
+(enum-spanerspandestmode)=
+
+## `SpanErspanDestMode`
+
+| value | meaning |
+| --- | --- |
+| `not-visible` | The ERSPAN dest. may or may not be in a diffenet private network but the ip address of the ERSPAN destination will not get leaked into the consumers private network |
+| `visible` | The ERSPAN dest. is in a diffenet private network. The ip address of the ERSPAN dest. will get leaked into the consumers private network. Hence the ERSPAN destination IP address must not overlap with esiting IP addresses in the Source EPGs whose traffic is being remote spanned. |
+
+Used by: {ref}`fabric.span_destination_group.span_destination.vspan_epg_summary <vocab-fabric-span_destination_group-span_destination-vspan_epg_summary>`, {ref}`infra.span_destination_group.span_destination.vspan_epg_summary <vocab-infra-span_destination_group-span_destination-vspan_epg_summary>`, {ref}`tenant.span_destination_group.span_destination.vspan_epg_summary <vocab-tenant-span_destination_group-span_destination-vspan_epg_summary>`
 
 (enum-stpifcontrol)=
 
@@ -2039,6 +3452,18 @@ Used by: {ref}`controller.fabric_membership.fabric_node_member <vocab-controller
 
 Used by: {ref}`tenant.track_list <vocab-tenant-track_list>`
 
+(enum-vmmstatsmode)=
+
+## `VmmStatsMode`
+
+| value | meaning |
+| --- | --- |
+| `disabled` | — |
+| `enabled` | — |
+| `unknown` | — |
+
+Used by: {ref}`tenant.auth_server_group.server <vocab-tenant-auth_server_group-server>`
+
 (enum-vnsdesttype)=
 
 ## `VnsDestType`
@@ -2121,6 +3546,42 @@ Used by: {ref}`tenant.contract <vocab-tenant-contract>`, {ref}`tenant.oob_contra
 | `None` | Logical NOT i.e. ! |
 
 Used by: {ref}`tenant.access_client_profile.access_client_epg <vocab-tenant-access_client_profile-access_client_epg>`, {ref}`tenant.access_function_profile.access_function_provider <vocab-tenant-access_function_profile-access_function_provider>`, {ref}`tenant.app.epg <vocab-tenant-app-epg>`, {ref}`tenant.app.esg <vocab-tenant-app-esg>`, {ref}`tenant.contract.subject <vocab-tenant-contract-subject>`, {ref}`tenant.dot1q_tunnel <vocab-tenant-dot1q_tunnel>`, {ref}`tenant.l2out.external_epg <vocab-tenant-l2out-external_epg>`, {ref}`tenant.l3out.external_epg <vocab-tenant-l3out-external_epg>` *(+3 more)*
+
+(enum-vzpzdirection)=
+
+## `VzPZDirection`
+
+| value | meaning |
+| --- | --- |
+| `both` | — |
+| `destination` | — |
+| `source` | — |
+
+Used by: {ref}`tenant.filter.port_zero_entry <vocab-tenant-filter-port_zero_entry>`
+
+(enum-vzpzethertype)=
+
+## `VzPZEtherType`
+
+| value | meaning |
+| --- | --- |
+| `ip` | IP proto covers both IPv4 and IPv6 value for IP (internal use only) is unused in standard. http://standards.ieee.org/develop/regauth/ethertype/eth.txt |
+| `ipv4` | — |
+| `ipv6` | — |
+
+Used by: {ref}`tenant.filter.port_zero_entry <vocab-tenant-filter-port_zero_entry>`
+
+(enum-vzpzipprot)=
+
+## `VzPZIpProt`
+
+| value | meaning |
+| --- | --- |
+| `sctp` | — |
+| `tcp` | — |
+| `udp` | — |
+
+Used by: {ref}`tenant.filter.port_zero_entry <vocab-tenant-filter-port_zero_entry>`
 
 (enum-vzprefgrmemb)=
 

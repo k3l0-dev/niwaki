@@ -35,6 +35,8 @@ Accepted as keyword arguments of `.span_source_group(name)` and of `.set(**attrs
 | --- | --- | --- |
 | `.span_source(name, **attrs)` | `spanSrc` | {ref}`tenant.span_source_group.span_source <vocab-tenant-span_source_group-span_source>` |
 | `.span_label(name, **attrs)` | `spanSpanLbl` | {ref}`tenant.span_source_group.span_label <vocab-tenant-span_source_group-span_label>` |
+| `.vspan_source(name, **attrs)` | `spanVSrc` | {ref}`tenant.span_source_group.vspan_source <vocab-tenant-span_source_group-vspan_source>` |
+| `.vspan_source_def(name, **attrs)` | `spanVSrcDef` | {ref}`tenant.span_source_group.vspan_source_def <vocab-tenant-span_source_group-vspan_source_def>` |
 
 ## Bind aliases
 

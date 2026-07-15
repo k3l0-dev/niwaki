@@ -63,6 +63,7 @@ if TYPE_CHECKING:
     from niwaki.models._generated.enums.PolColor import PolColor
     from niwaki.models._generated.enums.QosDppPolAdminState import QosDppPolAdminState
     from niwaki.models._generated.enums.SpanDirection import SpanDirection
+    from niwaki.models._generated.enums.SpanErspanDestMode import SpanErspanDestMode
     from niwaki.models._generated.enums.StpIfControl import StpIfControl
 
 
@@ -1401,7 +1402,7 @@ class _FilterGroupMakers(Cursor):
         name: str | None = None,
         display_name: str | None = None,
         userdom: str | None = None,
-    ) -> FilterEntryCursor:
+    ) -> FilterGroupFilterEntryCursor:
         """Declare a ``spanFilterEntry`` child under the filter_group level.
 
         Args:
@@ -1430,7 +1431,7 @@ class _FilterGroupMakers(Cursor):
             )
         }
         return cast(
-            "FilterEntryCursor",
+            "FilterGroupFilterEntryCursor",
             self._invoke_maker(
                 "filter_entry",
                 (
@@ -2107,6 +2108,86 @@ class _InfraSpanSourceGroupMakers(Cursor):
             self._invoke_maker("span_label", (name,), _prune(params)),
         )
 
+    def vspan_source(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        direction_ingress_egress_both: SpanDirection | str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> InfraSpanSourceGroupVspanSourceCursor:
+        """Declare a ``spanVSrc`` child under the span_source_group level.
+
+        The VSPAN source, which is where traffic is sampled. A VSPAN source can be an endpoint group
+        (EPG), one or more ports, or port traffic filtered by an EPG (Access VSPAN), a Layer 2
+        bridge domain, or a Layer 3 context (Fabric VSPAN).
+
+        Args:
+            name: The name of the source.
+            description: Specifies a description of the policy definition.
+            direction_ingress_egress_both: The direction of the packets to monitor Values:
+                ``both``, ``in``, ``out``. Default: ``both``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "InfraSpanSourceGroupVspanSourceCursor",
+            self._invoke_maker("vspan_source", (name,), _prune(params)),
+        )
+
+    def vspan_source_def(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        direction_ingress_egress_both: SpanDirection | str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> InfraSpanSourceGroupVspanSourceDefCursor:
+        """Declare a ``spanVSrcDef`` child under the span_source_group level.
+
+        The VSPAN VSrcDef is used for VSPAN source definitions.
+
+        Args:
+            name: The name of the object.
+            description: Specifies a description of the policy definition.
+            direction_ingress_egress_both: The direction of the packets to monitor Values:
+                ``both``, ``in``, ``out``. Default: ``both``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "InfraSpanSourceGroupVspanSourceDefCursor",
+            self._invoke_maker("vspan_source_def", (name,), _prune(params)),
+        )
+
 
 class InfraSpanSourceGroupCursor(_InfraSpanSourceGroupMakers, _InfraMakers, _UniMakers):
     """Typed cursor for ``spanSrcGrp`` (span_source_group level).
@@ -2555,7 +2636,7 @@ class InfraDhcpRelayPolicyProviderCursor(_InfraDhcpRelayPolicyMakers, _InfraMake
         return self
 
 
-class FilterEntryCursor(_FilterGroupMakers, _InfraMakers, _UniMakers):
+class FilterGroupFilterEntryCursor(_FilterGroupMakers, _InfraMakers, _UniMakers):
     """Typed cursor for ``spanFilterEntry`` (filter_entry level).
 
     Position: ``uni.infra.filter_group.filter_entry``
@@ -2574,7 +2655,7 @@ class FilterEntryCursor(_FilterGroupMakers, _InfraMakers, _UniMakers):
         name: str | None = None,
         display_name: str | None = None,
         userdom: str | None = None,
-    ) -> FilterEntryCursor:
+    ) -> FilterGroupFilterEntryCursor:
         """Set ``spanFilterEntry`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
@@ -2779,8 +2860,57 @@ class LeafSelectorCursor(_LeafSelectorMakers, _LeafProfileMakers, _InfraMakers, 
         return self
 
 
+class _InfraSpanDestinationGroupSpanDestinationMakers(Cursor):
+    """Makers declared at the span_destination level (``spanDest``)."""
+
+    __slots__ = ()
+
+    def vspan_epg_summary(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        dscp: int | str | None = None,
+        destination_ip: str | None = None,
+        flow_id: int | None = None,
+        mode: SpanErspanDestMode | str | None = None,
+        mtu: int | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        source_ip_of_erspan_packet: str | None = None,
+        time_to_live: int | str | None = None,
+        userdom: str | None = None,
+        vrf: str | None = None,
+    ) -> InfraSpanDestinationGroupSpanDestinationVspanEpgSummaryCursor:
+        """Declare a ``spanVEpgSummary`` child under the span_destination level.
+
+        The VEpg summary.
+
+        Args:
+            description: Specifies a description of the policy definition.
+            dscp: Default: ``unspecified``.
+            flow_id: Default: ``1``.
+            mode: Values: ``not-visible``, ``visible``. Default: ``not-visible``.
+            mtu: Default: ``1518``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            time_to_live: Default: ``64``.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "InfraSpanDestinationGroupSpanDestinationVspanEpgSummaryCursor",
+            self._invoke_maker("vspan_epg_summary", (), _prune(params)),
+        )
+
+
 class InfraSpanDestinationGroupSpanDestinationCursor(
-    _InfraSpanDestinationGroupMakers, _InfraMakers, _UniMakers
+    _InfraSpanDestinationGroupSpanDestinationMakers,
+    _InfraSpanDestinationGroupMakers,
+    _InfraMakers,
+    _UniMakers,
 ):
     """Typed cursor for ``spanDest`` (span_destination level).
 
@@ -2935,6 +3065,104 @@ class InfraSpanSourceGroupSpanSourceCursor(_InfraSpanSourceGroupMakers, _InfraMa
         path: str | Ref | None = None,
         fabric_node: str | Ref | None = None,
     ) -> InfraSpanSourceGroupSpanSourceCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class InfraSpanSourceGroupVspanSourceCursor(_InfraSpanSourceGroupMakers, _InfraMakers, _UniMakers):
+    """Typed cursor for ``spanVSrc`` (vspan_source level).
+
+    Position: ``uni.infra.span_source_group.vspan_source``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        direction_ingress_egress_both: SpanDirection | str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> InfraSpanSourceGroupVspanSourceCursor:
+        """Set ``spanVSrc`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        filter_group: str | Ref | None = None,
+    ) -> InfraSpanSourceGroupVspanSourceCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        filter_group: str | Ref | None = None,
+    ) -> InfraSpanSourceGroupVspanSourceCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class InfraSpanSourceGroupVspanSourceDefCursor(
+    _InfraSpanSourceGroupMakers, _InfraMakers, _UniMakers
+):
+    """Typed cursor for ``spanVSrcDef`` (vspan_source_def level).
+
+    Position: ``uni.infra.span_source_group.vspan_source_def``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        direction_ingress_egress_both: SpanDirection | str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> InfraSpanSourceGroupVspanSourceDefCursor:
+        """Set ``spanVSrcDef`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        filter_group: str | Ref | None = None,
+    ) -> InfraSpanSourceGroupVspanSourceDefCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        filter_group: str | Ref | None = None,
+    ) -> InfraSpanSourceGroupVspanSourceDefCursor:
         """Reference objects outside the design by raw DN."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind_dn(self, **_prune(params))
@@ -3182,6 +3410,71 @@ class LeafSelectorNodeBlockCursor(
         *,
         interface_profile: str | Ref | None = None,
     ) -> LeafSelectorNodeBlockCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class InfraSpanDestinationGroupSpanDestinationVspanEpgSummaryCursor(
+    _InfraSpanDestinationGroupSpanDestinationMakers,
+    _InfraSpanDestinationGroupMakers,
+    _InfraMakers,
+    _UniMakers,
+):
+    """Typed cursor for ``spanVEpgSummary`` (vspan_epg_summary level).
+
+    Position: ``uni.infra.span_destination_group.span_destination.vspan_epg_summary``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        dscp: int | str | None = None,
+        destination_ip: str | None = None,
+        flow_id: int | None = None,
+        mode: SpanErspanDestMode | str | None = None,
+        mtu: int | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        source_ip_of_erspan_packet: str | None = None,
+        time_to_live: int | str | None = None,
+        userdom: str | None = None,
+        vrf: str | None = None,
+    ) -> InfraSpanDestinationGroupSpanDestinationVspanEpgSummaryCursor:
+        """Set ``spanVEpgSummary`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        epg: str | Ref | None = None,
+        path: str | Ref | None = None,
+        apic_node: str | Ref | None = None,
+    ) -> InfraSpanDestinationGroupSpanDestinationVspanEpgSummaryCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        epg: str | Ref | None = None,
+        path: str | Ref | None = None,
+        apic_node: str | Ref | None = None,
+    ) -> InfraSpanDestinationGroupSpanDestinationVspanEpgSummaryCursor:
         """Reference objects outside the design by raw DN."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind_dn(self, **_prune(params))

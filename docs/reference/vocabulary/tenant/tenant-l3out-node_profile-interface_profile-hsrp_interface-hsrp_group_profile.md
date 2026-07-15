@@ -33,6 +33,12 @@ Accepted as keyword arguments of `.hsrp_group_profile(name)` and of `.set(**attr
 | `vip_obtain_mode` | `ipObtainMode` | {ref}`HsrpGrpIpObtainMode <enum-hsrpgrpipobtainmode>` | `admin`, `auto`, `learn` | `admin` | HSRP primary Virtual IP Obtain Mode |
 | `configured_mac_address_for_the_group` | `mac` | `str` | — | — | HSRP VMAC for the group |
 
+## Children
+
+| maker | creates | position |
+| --- | --- | --- |
+| `.secondary_vip(secondary_ip_address, **attrs)` | `hsrpSecVip` | {ref}`tenant.l3out.node_profile.interface_profile.hsrp_interface.hsrp_group_profile.secondary_vip <vocab-tenant-l3out-node_profile-interface_profile-hsrp_interface-hsrp_group_profile-secondary_vip>` |
+
 ## Bind aliases
 
 Lazy references, resolved closed-world at push time.

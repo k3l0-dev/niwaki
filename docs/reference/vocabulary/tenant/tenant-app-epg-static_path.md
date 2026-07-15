@@ -29,3 +29,15 @@ Accepted as keyword arguments of `.static_path(target_dn)` and of `.set(**attrs)
 | `deployment_immediacy` | `instrImedcy` | {ref}`FvInstrImedcy <enum-fvinstrimedcy>` | `immediate`, `lazy` | `lazy` | The deployment immediacy preference of this path association. |
 | `mode` | `mode` | {ref}`FvMode <enum-fvmode>` | `native`, `regular`, `untagged` | `regular` | The mode of the static association with the path. |
 | `primary_encap` | `primaryEncap` | `str` | — | — | Represents the primary encap when the EPG is isolated |
+
+## Children
+
+| maker | creates | position |
+| --- | --- | --- |
+| `.igmp_snoop_access_group(**attrs)` | `igmpSnoopAccessGroup` | {ref}`tenant.app.epg.static_path.igmp_snoop_access_group <vocab-tenant-app-epg-static_path-igmp_snoop_access_group>` |
+| `.igmp_snoop_static_group(multicast_group_ip, multicast_source_ip, **attrs)` | `igmpSnoopStaticGroup` | {ref}`tenant.app.epg.static_path.igmp_snoop_static_group <vocab-tenant-app-epg-static_path-igmp_snoop_static_group>` |
+| `.mld_snoop_access_group(**attrs)` | `mldSnoopAccessGroup` | {ref}`tenant.app.epg.static_path.mld_snoop_access_group <vocab-tenant-app-epg-static_path-mld_snoop_access_group>` |
+| `.mld_snoop_static_group(multicast_group_ip, multicast_source_ip, **attrs)` | `mldSnoopStaticGroup` | {ref}`tenant.app.epg.static_path.mld_snoop_static_group <vocab-tenant-app-epg-static_path-mld_snoop_static_group>` |
+| `.port_security(name, **attrs)` | `l2PortSecurityPol` | {ref}`tenant.app.epg.static_path.port_security <vocab-tenant-app-epg-static_path-port_security>` |
+| `.ptp(**attrs)` | `ptpEpgCfg` | {ref}`tenant.app.epg.static_path.ptp <vocab-tenant-app-epg-static_path-ptp>` |
+| `.nlb_static_group(mac, **attrs)` | `fvNlbStaticGroup` | {ref}`tenant.app.epg.static_path.nlb_static_group <vocab-tenant-app-epg-static_path-nlb_static_group>` |

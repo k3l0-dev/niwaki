@@ -27,3 +27,10 @@ Accepted as keyword arguments of `.custom_qos_policy(name)` and of `.set(**attrs
 | `description` | `descr` | `str` | — | — | Specifies a description of the policy definition. |
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |
+
+## Children
+
+| maker | creates | position |
+| --- | --- | --- |
+| `.dot1p_class(from_, to, **attrs)` | `qosDot1PClass` | {ref}`tenant.custom_qos_policy.dot1p_class <vocab-tenant-custom_qos_policy-dot1p_class>` |
+| `.dscp_class(from_, to, **attrs)` | `qosDscpClass` | {ref}`tenant.custom_qos_policy.dscp_class <vocab-tenant-custom_qos_policy-dscp_class>` |
