@@ -16,7 +16,13 @@ import pytest
 
 from niwaki._codegen._field_docs import enum_anchor, field_docs, position_anchor
 from niwaki._codegen.generate_design import _positions
-from niwaki._codegen.generate_docs import OUTPUT_DIR, _resolve_edge, _uni_keys, render_all
+from niwaki._codegen.generate_docs import (
+    _NOT_CURATED,
+    OUTPUT_DIR,
+    _resolve_edge,
+    _uni_keys,
+    render_all,
+)
 from niwaki.design._cursor import _load_class, _tables
 
 _PAGES = sorted(render_all())
@@ -93,6 +99,26 @@ class TestCoverageOfTheDSL:
         page = render_all()[_page_path(key)]
         for doc in field_docs(cls, _tables().sugar.get(pos.aci_class, {})):
             assert f"| `{doc.name}`" in page, f"{key}: {doc.name} missing from the table"
+
+    def test_not_curated_list_names_only_uncurated_classes(self) -> None:
+        """The "Not curated yet" list must never claim a curated area as raw ACI.
+
+        It is hand-written, so it drifts as the vocabulary grows: ESGs, vzAny and
+        L3Out internals were listed as "still speak raw ACI" long after they got
+        makers.  Every class the list names is checked against the real curated
+        positions — a maker for any of them fails this test.
+        """
+        curated = {pos.aci_class for key, pos in _positions().items() if key}
+        wrongly_listed = [
+            f"{title} ({cls})"
+            for title, _, classes in _NOT_CURATED
+            for cls in classes
+            if cls in curated
+        ]
+        assert not wrongly_listed, (
+            f"'Not curated yet' names classes that ARE curated: {wrongly_listed} — "
+            "remove them from _NOT_CURATED in generate_docs."
+        )
 
     def test_every_curated_maker_is_documented(self) -> None:
         book = "".join(render_all().values())

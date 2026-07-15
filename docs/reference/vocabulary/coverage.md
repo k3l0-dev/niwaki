@@ -329,9 +329,8 @@ Re-generate: uv run python -m niwaki._codegen.generate_docs
 
 Commonly requested areas that still speak raw ACI (`.mo()` / `bind_dn()`) today:
 
-- **ESGs and vzAny** — `fvESg`, `vzAny` and their contract wiring
-- **L3Out internals** — node/interface profiles, external EPGs, BGP peers
 - **VMM domains** — `vmmDomP` and VMM controller integration
 - **Port-channel overrides and FEX** — per-node overrides, FEX profiles
+- **Service graphs** — `vnsAbsGraph`, `vnsLDevVip` and the L4-L7 device chain
 
 Curation grows by demand: if one of these (or anything else) is your daily work, open a [vocabulary request](https://github.com/k3l0-dev/niwaki/issues/new/choose).

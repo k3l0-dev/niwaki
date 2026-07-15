@@ -446,13 +446,20 @@ def _render_index() -> str:
     return "\n".join(lines).rstrip() + "\n"
 
 
-# Frequently requested areas that are not curated yet — shown on the
-# coverage page next to the escape hatches, so the boundary is explicit.
+# Frequently requested areas that are not curated yet — shown on the coverage
+# page next to the escape hatches, so the boundary is explicit.  Each entry
+# names representative ACI classes; the docs-generator test asserts none of them
+# is a curated position, so this list can never claim as "raw ACI" something the
+# vocabulary has since grown a maker for (ESGs and L3Out internals did exactly
+# that, and the list lied about them until this guard existed).
 _NOT_CURATED = [
-    ("ESGs and vzAny", "`fvESg`, `vzAny` and their contract wiring"),
-    ("L3Out internals", "node/interface profiles, external EPGs, BGP peers"),
-    ("VMM domains", "`vmmDomP` and VMM controller integration"),
-    ("Port-channel overrides and FEX", "per-node overrides, FEX profiles"),
+    ("VMM domains", "`vmmDomP` and VMM controller integration", ("vmmDomP", "vmmCtrlrP")),
+    ("Port-channel overrides and FEX", "per-node overrides, FEX profiles", ("infraFexP",)),
+    (
+        "Service graphs",
+        "`vnsAbsGraph`, `vnsLDevVip` and the L4-L7 device chain",
+        ("vnsAbsGraph", "vnsLDevVip"),
+    ),
 ]
 
 
@@ -523,7 +530,7 @@ def _render_coverage() -> str:
         "",
         "Commonly requested areas that still speak raw ACI (`.mo()` / `bind_dn()`) today:",
         "",
-        *(f"- **{title}** — {detail}" for title, detail in _NOT_CURATED),
+        *(f"- **{title}** — {detail}" for title, detail, _ in _NOT_CURATED),
         "",
         "Curation grows by demand: if one of these (or anything else) is your "
         "daily work, open a "
