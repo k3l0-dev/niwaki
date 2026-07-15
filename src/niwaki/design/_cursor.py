@@ -387,7 +387,7 @@ class Cursor:
             f"Available aliases on this path: {', '.join(available) or 'none'}."
         )
 
-    def bind_dn(self, **targets: str) -> Cursor:
+    def bind_dn(self, **targets: str | Ref) -> Cursor:
         """Reference objects **outside the design** by raw DN (escape hatch).
 
         Same aliases as :meth:`bind`, but the value is a full DN and no
@@ -398,7 +398,9 @@ class Cursor:
 
         Args:
             **targets: One or more ``alias=dn`` pairs
-                (e.g. ``vlan_pool="uni/infra/vlanns-[shared]-static"``).
+                (e.g. ``vlan_pool="uni/infra/vlanns-[shared]-static"``), or a
+                :func:`~niwaki.design.ref` when the relation itself carries
+                configuration (``ref(dn, immediacy="immediate")``).
 
         Returns:
             This cursor, for chaining.
@@ -459,36 +461,42 @@ class Cursor:
             )
         return self
 
-    def provide(self, contract: str) -> Cursor:
+    def provide(self, contract: str | Ref) -> Cursor:
         """Declare that this EPG provides *contract* (creates ``fvRsProv``).
 
         Args:
-            contract: Name of a contract declared in this design.
+            contract: Name of a contract declared in this design, or a
+                :func:`~niwaki.design.ref` when the relation itself carries
+                configuration (``ref("web", prio="level1")``).
 
         Returns:
             This cursor, for chaining.
         """
         return self._verb("provide", contract)
 
-    def consume(self, contract: str) -> Cursor:
+    def consume(self, contract: str | Ref) -> Cursor:
         """Declare that this EPG consumes *contract* (creates ``fvRsCons``).
 
         Args:
-            contract: Name of a contract declared in this design.
+            contract: Name of a contract declared in this design, or a
+                :func:`~niwaki.design.ref` when the relation itself carries
+                configuration (``ref("web", prio="level1")``).
 
         Returns:
             This cursor, for chaining.
         """
         return self._verb("consume", contract)
 
-    def intra_epg(self, contract: str) -> Cursor:
+    def intra_epg(self, contract: str | Ref) -> Cursor:
         """Declare *contract* between the endpoints of this EPG (``fvRsIntraEpg``).
 
         The APIC applies it to traffic that stays inside the group — the EPG
         must be intra-EPG isolated for it to bite.
 
         Args:
-            contract: Name of a contract declared in this design.
+            contract: Name of a contract declared in this design, or a
+                :func:`~niwaki.design.ref` when the relation itself carries
+                configuration (``ref("web", prio="level1")``).
 
         Returns:
             This cursor, for chaining.

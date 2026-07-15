@@ -51,11 +51,17 @@ class opflexOPNic(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    id: Annotated[str, Field(description="An identifier .")] = ""
+    id: Annotated[int, Field(description="An identifier .")] = 0
     ip: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", description="The IP address.")] = ""
     name: Annotated[str, Field(max_length=128, description="The name of the object.")] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     state: CompNicState = Field(
         default=CompNicState.DOWN, description="The state of the relationship."

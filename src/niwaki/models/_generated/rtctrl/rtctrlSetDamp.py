@@ -51,19 +51,60 @@ class rtctrlSetDamp(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies the description of a policy component.",
         ),
     ] = ""
-    half_life: str = Field(default="", alias="halfLife", description="Half Life")
-    max_suppress_time: str = Field(
-        default="", alias="maxSuppressTime", description="Max Suppress Time"
-    )
+    half_life: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=60,
+            validation_alias="halfLife",
+            serialization_alias="halfLife",
+            description="Half Life",
+        ),
+    ] = 15
+    max_suppress_time: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=255,
+            validation_alias="maxSuppressTime",
+            serialization_alias="maxSuppressTime",
+            description="Max Suppress Time",
+        ),
+    ] = 60
     name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
-    reuse_limit: str = Field(default="", alias="reuse", description="Reuse Limit")
-    suppress_limit: str = Field(default="", alias="suppress", description="Suppress Limit")
+    reuse_limit: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=20000,
+            validation_alias="reuse",
+            serialization_alias="reuse",
+            description="Reuse Limit",
+        ),
+    ] = 750
+    suppress_limit: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=20000,
+            validation_alias="suppress",
+            serialization_alias="suppress",
+            description="Suppress Limit",
+        ),
+    ] = 2000
     type: RtctrlSetType = Field(default=RtctrlSetType.DAMPENING_POL, description="Set Action Type")
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

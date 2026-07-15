@@ -71,35 +71,64 @@ class aaaSamlProvider(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
-    idp_entity_id: Annotated[str, Field(max_length=512, alias="entityId")] = ""
-    gui_redirect_banner_message: str = Field(default="", alias="guiBannerMessage")
-    identity_provider: AaaIdP = Field(default=AaaIdP.ADFS, alias="idP")
+    idp_entity_id: Annotated[
+        str, Field(max_length=512, validation_alias="entityId", serialization_alias="entityId")
+    ] = ""
+    gui_redirect_banner_message: str = Field(
+        default="", validation_alias="guiBannerMessage", serialization_alias="guiBannerMessage"
+    )
+    identity_provider: AaaIdP = Field(
+        default=AaaIdP.ADFS, validation_alias="idP", serialization_alias="idP"
+    )
     key: Annotated[
         str, Field(repr=False, description="A password for the AAA provider database.")
     ] = ""
     metadata_url_provided_by_idp: Annotated[
-        str, Field(min_length=1, max_length=2000, alias="metadataUrl")
+        str,
+        Field(
+            min_length=1,
+            max_length=2000,
+            validation_alias="metadataUrl",
+            serialization_alias="metadataUrl",
+        ),
     ] = ""
     periodic_server_monitoring: AaaMonitorServerType = Field(
-        default=AaaMonitorServerType.DISABLED, alias="monitorServer"
+        default=AaaMonitorServerType.DISABLED,
+        validation_alias="monitorServer",
+        serialization_alias="monitorServer",
     )
     periodic_server_monitoring_password: Annotated[
-        str, Field(alias="monitoringPassword", repr=False)
+        str,
+        Field(
+            validation_alias="monitoringPassword",
+            serialization_alias="monitoringPassword",
+            repr=False,
+        ),
     ] = ""
-    periodic_server_monitoring_username: str = Field(default="", alias="monitoringUser")
+    periodic_server_monitoring_username: str = Field(
+        default="", validation_alias="monitoringUser", serialization_alias="monitoringUser"
+    )
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     owner_key: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerKey",
+            validation_alias="ownerKey",
+            serialization_alias="ownerKey",
             description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
@@ -108,29 +137,61 @@ class aaaSamlProvider(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerTag",
+            validation_alias="ownerTag",
+            serialization_alias="ownerTag",
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
     retries: Annotated[int, Field(ge=0, le=5)] = 1
-    signature_algorithm: AaaSigAlg = Field(default=AaaSigAlg.SIG_RSA_SHA256, alias="sigAlg")
-    apicsp_entity_id: Annotated[str, Field(min_length=1, max_length=500, alias="spEntityId")] = ""
+    signature_algorithm: AaaSigAlg = Field(
+        default=AaaSigAlg.SIG_RSA_SHA256, validation_alias="sigAlg", serialization_alias="sigAlg"
+    )
+    apicsp_entity_id: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=500,
+            validation_alias="spEntityId",
+            serialization_alias="spEntityId",
+        ),
+    ] = ""
     timeout_in_seconds: Annotated[
         int,
         Field(
             ge=5,
             le=60,
-            alias="timeout",
+            validation_alias="timeout",
+            serialization_alias="timeout",
             description="The following two properties are also defined in Ep MO. Here they reperesent per server configuration which would take precedence over global configuration defined in Ep MO",
         ),
     ] = 5
     certificate_authority: Annotated[
-        str, Field(max_length=16, pattern="^[a-zA-Z0-9_.:-]+$", alias="tp")
+        str,
+        Field(
+            max_length=16,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            validation_alias="tp",
+            serialization_alias="tp",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    want_encrypted_saml_assertions: bool = Field(default=True, alias="wantAssertionsEncrypted")
-    want_assertions_in_saml_response_signed: bool = Field(
-        default=True, alias="wantAssertionsSigned"
+    want_encrypted_saml_assertions: bool = Field(
+        default=True,
+        validation_alias="wantAssertionsEncrypted",
+        serialization_alias="wantAssertionsEncrypted",
     )
-    want_saml_auth_requests_signed: bool = Field(default=True, alias="wantRequestsSigned")
-    want_saml_response_message_signed: bool = Field(default=True, alias="wantResponseSigned")
+    want_assertions_in_saml_response_signed: bool = Field(
+        default=True,
+        validation_alias="wantAssertionsSigned",
+        serialization_alias="wantAssertionsSigned",
+    )
+    want_saml_auth_requests_signed: bool = Field(
+        default=True,
+        validation_alias="wantRequestsSigned",
+        serialization_alias="wantRequestsSigned",
+    )
+    want_saml_response_message_signed: bool = Field(
+        default=True,
+        validation_alias="wantResponseSigned",
+        serialization_alias="wantResponseSigned",
+    )

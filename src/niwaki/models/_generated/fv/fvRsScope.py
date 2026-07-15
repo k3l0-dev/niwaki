@@ -55,7 +55,13 @@ class fvRsScope(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.-]+$", alias="tnFvCtxName")] = (
-        ""
-    )
+    name: Annotated[
+        str,
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="tnFvCtxName",
+            serialization_alias="tnFvCtxName",
+        ),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

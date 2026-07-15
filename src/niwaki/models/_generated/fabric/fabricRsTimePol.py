@@ -60,7 +60,8 @@ class fabricRsTimePol(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9_.:-]+$",
-            alias="tnDatetimePolName",
+            validation_alias="tnDatetimePolName",
+            serialization_alias="tnDatetimePolName",
             description="The date time policy name. This name can be up to 64 characters. Note that you cannot change this name after the object has been saved.",
         ),
     ] = ""

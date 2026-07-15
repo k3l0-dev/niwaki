@@ -46,12 +46,22 @@ class analyticsFwdInstTarget(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    identifier: Annotated[int, Field(ge=0, le=16777215, alias="id", description="Identifier")] = 0
+    identifier: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=16777215,
+            validation_alias="id",
+            serialization_alias="id",
+            description="Identifier",
+        ),
+    ] = 0
 
     # ── Configurable ───────────────────────────────────────────────────────────
     default_filtering_policy: AnalyticsDefPolicyT = Field(
         default=AnalyticsDefPolicyT.PERMIT,
-        alias="DefPolicy",
+        validation_alias="DefPolicy",
+        serialization_alias="DefPolicy",
         description="Default filtering policy",
     )
     annotation: Annotated[
@@ -67,14 +77,21 @@ class analyticsFwdInstTarget(ManagedObject):
         Field(
             ge=0,
             le=16777215,
-            alias="collectorId",
+            validation_alias="collectorId",
+            serialization_alias="collectorId",
             description="Collector identifier provided by the analytics controller",
         ),
     ] = 0
     direction: AnalyticsDirectionT = Field(
-        default=AnalyticsDirectionT.IN, alias="dir", description="Direction"
+        default=AnalyticsDirectionT.IN,
+        validation_alias="dir",
+        serialization_alias="dir",
+        description="Direction",
     )
     netflow_target_type: AnalyticsFltType = Field(
-        default=AnalyticsFltType.IPV4, alias="fltType", description="IP filter type"
+        default=AnalyticsFltType.IPV4,
+        validation_alias="fltType",
+        serialization_alias="fltType",
+        description="IP filter type",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

@@ -50,6 +50,9 @@ class vmmRsMgmtEPg(ManagedObject):
         ),
     ] = ""
     target_dn: str = Field(
-        default="", alias="tDn", description="The management EPG in the VMM controller profile."
+        default="",
+        validation_alias="tDn",
+        serialization_alias="tDn",
+        description="The management EPG in the VMM controller profile.",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

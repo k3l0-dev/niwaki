@@ -38,7 +38,9 @@ class ctrlrCimcNode(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    apic_id: Annotated[str, Field(alias="apicId")]
+    apic_id: Annotated[
+        int, Field(ge=1, le=16000, validation_alias="apicId", serialization_alias="apicId")
+    ] = 1
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[
@@ -51,23 +53,51 @@ class ctrlrCimcNode(ManagedObject):
     ] = ""
     cimc_ipv4_address_address_mask: Annotated[
         str,
-        Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="ipv4Address", description="IPv4 address prefix"),
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            validation_alias="ipv4Address",
+            serialization_alias="ipv4Address",
+            description="IPv4 address prefix",
+        ),
     ] = ""
-    cimc_ipv4_gateway_address_address: str = Field(
-        default="", alias="ipv4Gw", description="IPv4 Gateway address"
-    )
+    cimc_ipv4_gateway_address_address: Annotated[
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            validation_alias="ipv4Gw",
+            serialization_alias="ipv4Gw",
+            description="IPv4 Gateway address",
+        ),
+    ] = ""
     cimc_ipv6_address_address_mask: Annotated[
         str,
-        Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="ipv6Address", description="IPv6 address prefix"),
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            validation_alias="ipv6Address",
+            serialization_alias="ipv6Address",
+            description="IPv6 address prefix",
+        ),
     ] = ""
-    cimc_ipv6_gateway_address_address: str = Field(
-        default="", alias="ipv6Gw", description="IPv6 Gateway address"
-    )
+    cimc_ipv6_gateway_address_address: Annotated[
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            validation_alias="ipv6Gw",
+            serialization_alias="ipv6Gw",
+            description="IPv6 Gateway address",
+        ),
+    ] = ""
     name: Annotated[
         str,
         Field(max_length=16, pattern="^[a-zA-Z0-9_.:-]+$", description="The name of the object."),
     ] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

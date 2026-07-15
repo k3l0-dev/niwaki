@@ -25,22 +25,22 @@ Accepted as keyword arguments of `.ospf_timers_policy(name)` and of `.set(**attr
 | --- | --- | --- | --- | --- | --- |
 | `name` *(positional)* | `name` | `str` | — | — | The context-level OSPF policy name. This name can be between 1 and 64 alphanumeric characters. Note that you cannot change this name after the object has been saved. |
 | `bandwidth_preference` | `bwRef` | `int` | — | `40000` | The OSPF policy bandwidth reference. This is used to calculate the default metrics for an interface. |
-| `control_knobs` | `ctrl` | `str` | — | — | DOM controls |
+| `control_knobs` | `ctrl` | {ref}`OspfDomControl <enum-ospfdomcontrol>` | `pfx-suppress`, `name-lookup` | — | DOM controls |
 | `description` | `descr` | `str` | — | — | Specifies a description of the policy definition. |
-| `distance_preference` | `dist` | `str` | — | — | The preferred administrative distance. |
-| `graceful_restart_controls` | `grCtrl` | `str` | — | — | The graceful restart controls. |
+| `distance_preference` | `dist` | `int` | — | `110` | The preferred administrative distance. |
+| `graceful_restart_controls` | `grCtrl` | {ref}`OspfGRControls <enum-ospfgrcontrols>` | `helper` | `helper` | The graceful restart controls. |
 | `min_arrival_interval` | `lsaArrivalIntvl` | `int` | — | `1000` | The minimum interval between the arrival of each link-state advertisement (LSA). |
-| `pacing_interval` | `lsaGpPacingIntvl` | `str` | — | — | The interval in which LSAs are grouped and refreshed, checksummed, or aged. The duration of the LSA group pacing is inversely proportional to the number of LSAs that the router is handling. For example, if you have about 10,000 LSAs, you should decrease the pacing interval. |
+| `pacing_interval` | `lsaGpPacingIntvl` | `int` | — | `10` | The interval in which LSAs are grouped and refreshed, checksummed, or aged. The duration of the LSA group pacing is inversely proportional to the number of LSAs that the router is handling. For example, if you have about 10,000 LSAs, you should decrease the pacing interval. |
 | `throttle_hold_interval` | `lsaHoldIntvl` | `int` | — | `5000` | The incremental time (in milliseconds) used to calculate the subsequent rate limiting times for LSA generation. |
 | `throttle_max_interval` | `lsaMaxIntvl` | `int` | — | `5000` | The generation throttle maximum interval between LSAs. |
 | `throttle_start_wait_interval` | `lsaStartIntvl` | `int` | — | `0` | The generation throttle start-wait interval between LSAs. |
-| `max_ecmp` | `maxEcmp` | `str` | — | — | The maximum ECMP for the OSPF protocol. |
+| `max_ecmp` | `maxEcmp` | `int` | — | `8` | The maximum ECMP for the OSPF protocol. |
 | `action` | `maxLsaAction` | {ref}`OspfMaxLsaAct <enum-ospfmaxlsaact>` | `log`, `reject`, `restart` | `reject` | The action to take when the maximum LSA limit is reached. |
 | `maximum_of_non_self_generated_lsas` | `maxLsaNum` | `int` | — | `20000` | The maximum number of LSAs that are not self-generated. |
 | `reset_interval` | `maxLsaResetIntvl` | `int` | — | `10` | The time (in minutes) before the sleep count is reset to zero. |
 | `sleep_count` | `maxLsaSleepCnt` | `int` | — | `5` | The number of times the OSPF process can consecutively be placed into the sleep state. |
-| `sleep_interval` | `maxLsaSleepIntvl` | `str` | — | — | The time (in minutes) to ignore all neighbors after the maximum limit of LSAs has been exceeded. |
-| `threshold` | `maxLsaThresh` | `str` | — | — | The maximum link-state advertisement (LSA) threshold value (%) at which to generate a warning message. |
+| `sleep_interval` | `maxLsaSleepIntvl` | `int` | — | `5` | The time (in minutes) to ignore all neighbors after the maximum limit of LSAs has been exceeded. |
+| `threshold` | `maxLsaThresh` | `int` | — | `75` | The maximum link-state advertisement (LSA) threshold value (%) at which to generate a warning message. |
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |
 | `max_hold_interval` | `spfHoldIntvl` | `int` | — | `1000` | The minimum hold time between SPF calculations. |

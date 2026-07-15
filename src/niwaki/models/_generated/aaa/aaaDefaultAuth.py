@@ -63,24 +63,33 @@ class aaaDefaultAuth(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
     fallback_check: AaaFallbackType = Field(
         default=AaaFallbackType.FALSE,
-        alias="fallbackCheck",
+        validation_alias="fallbackCheck",
+        serialization_alias="fallbackCheck",
         description="The Property can disable fallback in case there are active servers in default auth type",
     )
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     owner_key: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerKey",
+            validation_alias="ownerKey",
+            serialization_alias="ownerKey",
             description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
@@ -89,7 +98,8 @@ class aaaDefaultAuth(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerTag",
+            validation_alias="ownerTag",
+            serialization_alias="ownerTag",
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
@@ -97,7 +107,8 @@ class aaaDefaultAuth(ManagedObject):
         str,
         Field(
             max_length=63,
-            alias="providerGroup",
+            validation_alias="providerGroup",
+            serialization_alias="providerGroup",
             description="An AAA configuration provider group is a group of remote servers supporting the same AAA protocol that will be used for authentication and authorization. When a provider group is specified, only the servers within that group will be used for authentication and authorization.",
         ),
     ] = ""
@@ -107,7 +118,8 @@ class aaaDefaultAuth(ManagedObject):
     )
     realm_subtype_that_can_be_default_or_duo: AaaRealmSubType = Field(
         default=AaaRealmSubType.DEFAULT,
-        alias="realmSubType",
+        validation_alias="realmSubType",
+        serialization_alias="realmSubType",
         description="Realm subtype that can be default or Duo",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

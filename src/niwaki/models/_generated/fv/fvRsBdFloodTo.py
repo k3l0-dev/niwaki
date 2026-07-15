@@ -47,7 +47,7 @@ class fvRsBdFloodTo(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    target_dn: Annotated[str, Field(alias="tDn")]
+    target_dn: Annotated[str, Field(validation_alias="tDn", serialization_alias="tDn")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     action: VzBinaryAction = Field(

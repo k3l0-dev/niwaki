@@ -43,7 +43,8 @@ class qosQueue(ManagedObject):
     # ── Configurable ───────────────────────────────────────────────────────────
     admin_st: QosUburstAdminState = Field(
         default=QosUburstAdminState.DISABLED,
-        alias="adminSt",
+        validation_alias="adminSt",
+        serialization_alias="adminSt",
         description="The Administrative state of micro burst",
     )
     annotation: Annotated[
@@ -59,24 +60,48 @@ class qosQueue(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies the description of a policy component.",
         ),
     ] = ""
     limit: Annotated[
-        str, Field(description="queue limit, only applicable with static control method")
-    ] = ""
+        int,
+        Field(
+            ge=1500, le=9216, description="queue limit, only applicable with static control method"
+        ),
+    ] = 1522
     meth: QospCtrlMeth = Field(
         default=QospCtrlMeth.DYNAMIC, description="Queue control method (static/dynamic)"
     )
     name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
-    uburst_down_threshold: str = Field(
-        default="", alias="uburstDownThreshold", description="micro burst down Threshold"
-    )
-    uburst_up_threshold: str = Field(
-        default="", alias="uburstUpThreshold", description="micro burst up Threshold"
-    )
+    uburst_down_threshold: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=100,
+            validation_alias="uburstDownThreshold",
+            serialization_alias="uburstDownThreshold",
+            description="micro burst down Threshold",
+        ),
+    ] = 100
+    uburst_up_threshold: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=100,
+            validation_alias="uburstUpThreshold",
+            serialization_alias="uburstUpThreshold",
+            description="micro burst up Threshold",
+        ),
+    ] = 100
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

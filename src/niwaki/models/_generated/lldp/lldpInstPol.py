@@ -3,7 +3,10 @@
 from __future__ import annotations
 
 from typing import ClassVar, Annotated
-from pydantic import Field
+from pydantic import BeforeValidator, Field
+
+from niwaki.models._wire import Flags, parse_flags
+from niwaki.models._generated.enums.LldpOptTlvSel import LldpOptTlvSel
 
 from niwaki.models.base import ManagedObject
 
@@ -60,30 +63,62 @@ class lldpInstPol(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
-    hold_time: str = Field(
-        default="",
-        alias="holdTime",
-        description="The amount of time (in seconds) that a policy holds information before discarding it.",
-    )
-    initial_delay: str = Field(
-        default="", alias="initDelayTime", description="The delay time (in seconds) for a policy."
-    )
+    hold_time: Annotated[
+        int,
+        Field(
+            ge=10,
+            le=255,
+            validation_alias="holdTime",
+            serialization_alias="holdTime",
+            description="The amount of time (in seconds) that a policy holds information before discarding it.",
+        ),
+    ] = 120
+    initial_delay: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=10,
+            validation_alias="initDelayTime",
+            serialization_alias="initDelayTime",
+            description="The delay time (in seconds) for a policy.",
+        ),
+    ] = 2
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
-    optional_tlv_selector: str = Field(
-        default="", alias="optTlvSel", description="Holds selectors for optional TLVS."
+    optional_tlv_selector: Annotated[Flags[LldpOptTlvSel], BeforeValidator(parse_flags)] = Field(
+        default_factory=lambda: frozenset(
+            {
+                LldpOptTlvSel.PORT_DESC,
+                LldpOptTlvSel.SYS_NAME,
+                LldpOptTlvSel.SYS_DESC,
+                LldpOptTlvSel.SYS_CAP,
+                LldpOptTlvSel.MGMT_ADDR,
+                LldpOptTlvSel.PORT_VLAN,
+            }
+        ),
+        validation_alias="optTlvSel",
+        serialization_alias="optTlvSel",
+        description="Holds selectors for optional TLVS.",
     )
     owner_key: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerKey",
+            validation_alias="ownerKey",
+            serialization_alias="ownerKey",
             description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
@@ -92,11 +127,19 @@ class lldpInstPol(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerTag",
+            validation_alias="ownerTag",
+            serialization_alias="ownerTag",
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
-    transmit_frequency: str = Field(
-        default="", alias="txFreq", description="The transmission frequency."
-    )
+    transmit_frequency: Annotated[
+        int,
+        Field(
+            ge=5,
+            le=254,
+            validation_alias="txFreq",
+            serialization_alias="txFreq",
+            description="The transmission frequency.",
+        ),
+    ] = 30
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

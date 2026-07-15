@@ -54,7 +54,8 @@ class fvRsCtxToBgpCtxAfPol(ManagedObject):
             min_length=1,
             max_length=64,
             pattern="^[a-zA-Z0-9_.:-]+$",
-            alias="tnBgpCtxAfPolName",
+            validation_alias="tnBgpCtxAfPolName",
+            serialization_alias="tnBgpCtxAfPolName",
             description="The name of the per-address family BGP context policy.",
         ),
     ]

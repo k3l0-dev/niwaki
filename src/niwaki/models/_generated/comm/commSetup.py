@@ -44,5 +44,7 @@ class commSetup(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    maximum_mos_in_query: Annotated[int, Field(ge=100, le=500000, alias="maxMos")] = 100000
+    maximum_mos_in_query: Annotated[
+        int, Field(ge=100, le=500000, validation_alias="maxMos", serialization_alias="maxMos")
+    ] = 100000
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

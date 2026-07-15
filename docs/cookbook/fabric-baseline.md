@@ -57,7 +57,7 @@ providers = aci.query("datetimeNtpProv").fetch()
 assert {p.name for p in providers} == {"10.0.0.1", "10.0.0.2"}
 
 reflector_nodes = aci.query("bgpRRNodePEp").fetch()
-assert sorted(n.node_id for n in reflector_nodes) == ["101", "102"]
+assert sorted(n.node_id for n in reflector_nodes) == [101, 102]
 
 assert config.push(aci, mode="plan").has_changes is False
 ```

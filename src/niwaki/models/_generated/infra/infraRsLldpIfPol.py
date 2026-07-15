@@ -60,7 +60,8 @@ class infraRsLldpIfPol(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9_.:-]+$",
-            alias="tnLldpIfPolName",
+            validation_alias="tnLldpIfPolName",
+            serialization_alias="tnLldpIfPolName",
             description="The LLDP policy name. This name can be up to 64 alphanumeric characters. Note that you cannot change this name after the object has been saved.",
         ),
     ] = ""

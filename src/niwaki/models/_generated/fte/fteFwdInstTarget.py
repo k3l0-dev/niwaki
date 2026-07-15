@@ -41,11 +41,23 @@ class fteFwdInstTarget(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    identifier: Annotated[int, Field(ge=0, le=16777215, alias="id", description="Identifier")] = 0
+    identifier: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=16777215,
+            validation_alias="id",
+            serialization_alias="id",
+            description="Identifier",
+        ),
+    ] = 0
 
     # ── Configurable ───────────────────────────────────────────────────────────
     default_filtering_policy: FteDefPolicyT = Field(
-        default=FteDefPolicyT.PERMIT, alias="DefPolicy", description="Default filtering policy"
+        default=FteDefPolicyT.PERMIT,
+        validation_alias="DefPolicy",
+        serialization_alias="DefPolicy",
+        description="Default filtering policy",
     )
     annotation: Annotated[
         str,
@@ -55,35 +67,66 @@ class fteFwdInstTarget(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    timestamp_shift_value_for_burst_interval: str = Field(
-        default="", alias="burstIntvlShift", description="Burst interval shift"
-    )
+    timestamp_shift_value_for_burst_interval: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=255,
+            validation_alias="burstIntvlShift",
+            serialization_alias="burstIntvlShift",
+            description="Burst interval shift",
+        ),
+    ] = 0
     collect_interval_in_milliseconds: Annotated[
-        int, Field(ge=100, le=64000, alias="collectIntvl", description="Collect interval")
+        int,
+        Field(
+            ge=100,
+            le=64000,
+            validation_alias="collectIntvl",
+            serialization_alias="collectIntvl",
+            description="Collect interval",
+        ),
     ] = 100
     collector_id: Annotated[
         int,
         Field(
             ge=0,
             le=65535,
-            alias="collectorId",
+            validation_alias="collectorId",
+            serialization_alias="collectorId",
             description="Collector identifier provided by the analytics controller",
         ),
     ] = 0
-    direction: FteDirectionT = Field(default=FteDirectionT.IN, alias="dir", description="Direction")
+    direction: FteDirectionT = Field(
+        default=FteDirectionT.IN,
+        validation_alias="dir",
+        serialization_alias="dir",
+        description="Direction",
+    )
     netflow_fte_type: FteFltType = Field(
-        default=FteFltType.IPV4, alias="fltType", description="IP filter type"
+        default=FteFltType.IPV4,
+        validation_alias="fltType",
+        serialization_alias="fltType",
+        description="IP filter type",
     )
-    ip_packet_id_shift: str = Field(
-        default="", alias="ipPktIdShift", description="IP packet id shift"
-    )
-    mtu: Annotated[str, Field(description="Collector export packet MTU")] = ""
+    ip_packet_id_shift: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=255,
+            validation_alias="ipPktIdShift",
+            serialization_alias="ipPktIdShift",
+            description="IP packet id shift",
+        ),
+    ] = 0
+    mtu: Annotated[int, Field(ge=576, le=9216, description="Collector export packet MTU")] = 1500
     sequence_number_guess_threshold_high: Annotated[
         int,
         Field(
             ge=0,
             le=4294967295,
-            alias="seqNumGuessThreshHi",
+            validation_alias="seqNumGuessThreshHi",
+            serialization_alias="seqNumGuessThreshHi",
             description="Sequence number guess threshold high",
         ),
     ] = 0
@@ -92,11 +135,19 @@ class fteFwdInstTarget(ManagedObject):
         Field(
             ge=0,
             le=4294967295,
-            alias="seqNumGuessThreshLo",
+            validation_alias="seqNumGuessThreshLo",
+            serialization_alias="seqNumGuessThreshLo",
             description="Sequence number guess threshold low",
         ),
     ] = 0
     source_l4_port: Annotated[
-        int, Field(ge=1, le=65535, alias="srcPort", description="Source port")
+        int,
+        Field(
+            ge=1,
+            le=65535,
+            validation_alias="srcPort",
+            serialization_alias="srcPort",
+            description="Source port",
+        ),
     ] = 0
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

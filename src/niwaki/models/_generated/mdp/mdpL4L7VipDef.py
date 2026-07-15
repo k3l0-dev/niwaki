@@ -39,10 +39,21 @@ class mdpL4L7VipDef(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     dn_of_associated_vrf: Annotated[
-        str, Field(alias="ctxDn", description="The distinguished name of the private network.")
+        str,
+        Field(
+            validation_alias="ctxDn",
+            serialization_alias="ctxDn",
+            description="The distinguished name of the private network.",
+        ),
     ]
     virtual_ip_address: Annotated[
-        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="ip", description="The IP address.")
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            validation_alias="ip",
+            serialization_alias="ip",
+            description="The IP address.",
+        ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────

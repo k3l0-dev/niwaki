@@ -3,8 +3,9 @@
 from __future__ import annotations
 
 from typing import ClassVar, Annotated
-from pydantic import Field
+from pydantic import BeforeValidator, Field
 
+from niwaki.models._wire import Flags, parse_flags
 from niwaki.models._generated.enums.Qosmctrl import Qosmctrl
 
 from niwaki.models.base import ManagedObject
@@ -44,15 +45,35 @@ class qosInstPol(ManagedObject):
     name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    e_trap_flow_age_out_timer: str = Field(default="", alias="EtrapAgeTimer")
-    track_activeness_of_elephant_flow: str = Field(default="", alias="EtrapBwThresh")
-    e_trap_elephant_flow_identifier: str = Field(default="", alias="EtrapByteCt")
+    e_trap_flow_age_out_timer: Annotated[
+        int, Field(validation_alias="EtrapAgeTimer", serialization_alias="EtrapAgeTimer")
+    ] = 0
+    track_activeness_of_elephant_flow: Annotated[
+        int, Field(validation_alias="EtrapBwThresh", serialization_alias="EtrapBwThresh")
+    ] = 0
+    e_trap_elephant_flow_identifier: Annotated[
+        int, Field(validation_alias="EtrapByteCt", serialization_alias="EtrapByteCt")
+    ] = 0
     e_trap_enable_knob: bool = Field(
-        default=False, alias="EtrapSt", description="E-trap parameters"
+        default=False,
+        validation_alias="EtrapSt",
+        serialization_alias="EtrapSt",
+        description="E-trap parameters",
     )
-    fabric_flush_interval_in_ms: str = Field(default="", alias="FabricFlushInterval")
+    fabric_flush_interval_in_ms: Annotated[
+        int,
+        Field(
+            ge=100,
+            le=1000,
+            validation_alias="FabricFlushInterval",
+            serialization_alias="FabricFlushInterval",
+        ),
+    ] = 500
     fabric_pfc_flush_enable_knob: bool = Field(
-        default=False, alias="FabricFlushSt", description="Fabric Flush parameters"
+        default=False,
+        validation_alias="FabricFlushSt",
+        serialization_alias="FabricFlushSt",
+        description="Fabric Flush parameters",
     )
     annotation: Annotated[
         str,
@@ -62,27 +83,38 @@ class qosInstPol(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    global_control_settings: Qosmctrl = Field(
-        default=Qosmctrl.NONE, alias="ctrl", description="Global control knob within QoS"
+    global_control_settings: Annotated[Flags[Qosmctrl], BeforeValidator(parse_flags)] = Field(
+        default_factory=lambda: frozenset({Qosmctrl.NONE}),
+        validation_alias="ctrl",
+        serialization_alias="ctrl",
+        description="Global control knob within QoS",
     )
     description: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     owner_key: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerKey",
+            validation_alias="ownerKey",
+            serialization_alias="ownerKey",
             description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
@@ -91,14 +123,29 @@ class qosInstPol(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerTag",
+            validation_alias="ownerTag",
+            serialization_alias="ownerTag",
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
-    micro_burst_spine_queues_percent: str = Field(
-        default="", alias="uburstSpineQueues", description="Global microburst spine % queues"
-    )
-    micro_burst_tor_queues_percent: str = Field(
-        default="", alias="uburstTorQueues", description="Global microburst tor % queues"
-    )
+    micro_burst_spine_queues_percent: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=100,
+            validation_alias="uburstSpineQueues",
+            serialization_alias="uburstSpineQueues",
+            description="Global microburst spine % queues",
+        ),
+    ] = 10
+    micro_burst_tor_queues_percent: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=100,
+            validation_alias="uburstTorQueues",
+            serialization_alias="uburstTorQueues",
+            description="Global microburst tor % queues",
+        ),
+    ] = 10
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

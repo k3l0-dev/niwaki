@@ -42,7 +42,8 @@ class ptpDomain(ManagedObject):
             min_length=1,
             max_length=16,
             pattern="^[a-zA-Z0-9_.:-]+$",
-            alias="name",
+            validation_alias="name",
+            serialization_alias="name",
             description="PTP Domain name",
         ),
     ]
@@ -57,4 +58,13 @@ class ptpDomain(ManagedObject):
         ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    ptp_domain_value: str = Field(default="", alias="value", description="PTP Domain value")
+    ptp_domain_value: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=128,
+            validation_alias="value",
+            serialization_alias="value",
+            description="PTP Domain value",
+        ),
+    ] = 0

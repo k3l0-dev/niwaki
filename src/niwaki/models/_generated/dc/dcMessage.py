@@ -43,8 +43,12 @@ class dcMessage(ManagedObject):
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    addi_prop1: Annotated[str, Field(max_length=512, alias="addiProp1")] = ""
-    addi_prop2: Annotated[str, Field(max_length=512, alias="addiProp2")] = ""
+    addi_prop1: Annotated[
+        str, Field(max_length=512, validation_alias="addiProp1", serialization_alias="addiProp1")
+    ] = ""
+    addi_prop2: Annotated[
+        str, Field(max_length=512, validation_alias="addiProp2", serialization_alias="addiProp2")
+    ] = ""
     annotation: Annotated[
         str,
         Field(
@@ -55,15 +59,31 @@ class dcMessage(ManagedObject):
     ] = ""
     has_secure_data: bool = Field(
         default=False,
-        alias="hasSecureData",
+        validation_alias="hasSecureData",
+        serialization_alias="hasSecureData",
         description="when the client queries the object, it will not get securePayload. the client needs to check hasSecureData, hasSecureData is true, the client needs to call upate mo with refresh set to true",
     )
     node_id: Annotated[
-        int, Field(alias="nodeId", description="The ID of the APIC, leaf, or spine.")
+        int,
+        Field(
+            validation_alias="nodeId",
+            serialization_alias="nodeId",
+            description="The ID of the APIC, leaf, or spine.",
+        ),
     ] = 0
     payload: str = ""
-    refresh_date: Annotated[str, Field(max_length=512, alias="refreshDate")] = ""
-    refresh_node_id: Annotated[int, Field(alias="refreshNodeId")] = 0
-    secure_payload: Annotated[str, Field(alias="securePayload", repr=False)] = ""
-    update_date: Annotated[str, Field(max_length=512, alias="updateDate")] = ""
+    refresh_date: Annotated[
+        str,
+        Field(max_length=512, validation_alias="refreshDate", serialization_alias="refreshDate"),
+    ] = ""
+    refresh_node_id: Annotated[
+        int, Field(validation_alias="refreshNodeId", serialization_alias="refreshNodeId")
+    ] = 0
+    secure_payload: Annotated[
+        str,
+        Field(validation_alias="securePayload", serialization_alias="securePayload", repr=False),
+    ] = ""
+    update_date: Annotated[
+        str, Field(max_length=512, validation_alias="updateDate", serialization_alias="updateDate")
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

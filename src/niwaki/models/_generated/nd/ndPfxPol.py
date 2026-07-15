@@ -3,7 +3,10 @@
 from __future__ import annotations
 
 from typing import ClassVar, Annotated
-from pydantic import Field
+from pydantic import BeforeValidator, Field
+
+from niwaki.models._wire import Flags, parse_flags
+from niwaki.models._generated.enums.NdPfxControl import NdPfxControl
 
 from niwaki.models.base import ManagedObject
 
@@ -55,31 +58,47 @@ class ndPfxPol(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    prefix_controls: str = Field(default="", alias="ctrl", description="The RA prefix controls.")
+    prefix_controls: Annotated[Flags[NdPfxControl], BeforeValidator(parse_flags)] = Field(
+        default_factory=lambda: frozenset({NdPfxControl.AUTO_CFG, NdPfxControl.ON_LINK}),
+        validation_alias="ctrl",
+        serialization_alias="ctrl",
+        description="The RA prefix controls.",
+    )
     description: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
     valid_lifetime: Annotated[
         int,
         Field(
-            ge=0, alias="lifetime", description="The length of time for the prefix to remain valid."
+            ge=0,
+            validation_alias="lifetime",
+            serialization_alias="lifetime",
+            description="The length of time for the prefix to remain valid.",
         ),
     ] = 2592000
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     owner_key: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerKey",
+            validation_alias="ownerKey",
+            serialization_alias="ownerKey",
             description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
@@ -88,11 +107,18 @@ class ndPfxPol(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerTag",
+            validation_alias="ownerTag",
+            serialization_alias="ownerTag",
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
     preferred_lifetime: Annotated[
-        int, Field(ge=0, alias="prefLifetime", description="The preferred lifetime of the prefix.")
+        int,
+        Field(
+            ge=0,
+            validation_alias="prefLifetime",
+            serialization_alias="prefLifetime",
+            description="The preferred lifetime of the prefix.",
+        ),
     ] = 604800
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

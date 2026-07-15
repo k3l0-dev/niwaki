@@ -56,6 +56,12 @@ class bfdRsMhIfPol(ManagedObject):
         ),
     ] = ""
     name: Annotated[
-        str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="tnBfdMhIfPolName")
+        str,
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            validation_alias="tnBfdMhIfPolName",
+            serialization_alias="tnBfdMhIfPolName",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

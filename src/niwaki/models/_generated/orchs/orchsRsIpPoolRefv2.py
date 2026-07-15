@@ -49,14 +49,27 @@ class orchsRsIpPoolRefv2(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     target_dn: Annotated[
-        str, Field(alias="tDn", description="The distinguished name of the target.")
+        str,
+        Field(
+            validation_alias="tDn",
+            serialization_alias="tDn",
+            description="The distinguished name of the target.",
+        ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    alloc_dvc_ips: bool = Field(default=True, alias="allocDvcIps")
-    alloc_gw_ips: bool = Field(default=True, alias="allocGwIps")
-    alloc_nat_ips: bool = Field(default=True, alias="allocNatIps")
-    alloc_vips: bool = Field(default=True, alias="allocVips")
+    alloc_dvc_ips: bool = Field(
+        default=True, validation_alias="allocDvcIps", serialization_alias="allocDvcIps"
+    )
+    alloc_gw_ips: bool = Field(
+        default=True, validation_alias="allocGwIps", serialization_alias="allocGwIps"
+    )
+    alloc_nat_ips: bool = Field(
+        default=True, validation_alias="allocNatIps", serialization_alias="allocNatIps"
+    )
+    alloc_vips: bool = Field(
+        default=True, validation_alias="allocVips", serialization_alias="allocVips"
+    )
     annotation: Annotated[
         str,
         Field(
@@ -66,7 +79,9 @@ class orchsRsIpPoolRefv2(ManagedObject):
         ),
     ] = ""
     graph_conn_type: OrchsgraphConn = Field(
-        default=OrchsgraphConn.L3_EXTERNAL, alias="graphConnType"
+        default=OrchsgraphConn.L3_EXTERNAL,
+        validation_alias="graphConnType",
+        serialization_alias="graphConnType",
     )
     type: FvIpLoc = Field(
         default=FvIpLoc.EXTERNAL, description="The specific type of the object or component."

@@ -27,7 +27,7 @@ Accepted as keyword arguments of `.epg(name)` and of `.set(**attrs)` on this cur
 | `description` | `descr` | `str` | — | — | Specifies the description of a policy component. |
 | `contract_exception_tag` | `exceptionTag` | `str` | — | — | — |
 | `flood_on_encap` | `floodOnEncap` | {ref}`FvFloodOnEncap <enum-fvfloodonencap>` | `disabled`, `enabled` | `disabled` | Control at EPG level if the traffic L2 Multicast/Broadcast and Link Local Layer should be flooded only on ENCAP or based on bridg-domain settings |
-| `forwarding_control_bits` | `fwdCtrl` | `str` | — | — | Forwarding Control |
+| `forwarding_control_bits` | `fwdCtrl` | {ref}`FvFwdCtrl <enum-fvfwdctrl>` | `none`, `proxy-arp` | `none` | Forwarding Control |
 | `epg_with_multisite_mcast_source` | `hasMcastSource` | `bool` | — | `False` | — |
 | `attribute_based_epg` | `isAttrBasedEPg` | `bool` | — | `False` | — |
 | `provider_label_match_criteria` | `matchT` | {ref}`VzMatchT <enum-vzmatcht>` | `All`, `AtleastOne`, `AtmostOne`, `None` | `AtleastOne` | The provider label match criteria. |

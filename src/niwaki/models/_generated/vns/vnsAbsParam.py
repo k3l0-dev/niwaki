@@ -197,7 +197,9 @@ class vnsAbsParam(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    aux_info: Annotated[str, Field(max_length=512, alias="auxInfo")] = ""
+    aux_info: Annotated[
+        str, Field(max_length=512, validation_alias="auxInfo", serialization_alias="auxInfo")
+    ] = ""
     cardinality: VnsVnsCardinalityType = Field(
         default=VnsVnsCardinalityType.UNSPECIFIED,
         description="A value to determine how many instances of this type can be present.",
@@ -216,9 +218,17 @@ class vnsAbsParam(ManagedObject):
         default=False, description="The value that indicates if this parameter is mandatory."
     )
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
-    src_ref: Annotated[str, Field(max_length=512, alias="srcRef")] = ""
+    src_ref: Annotated[
+        str, Field(max_length=512, validation_alias="srcRef", serialization_alias="srcRef")
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     validation: Annotated[str, Field(max_length=512, description="The validation expression.")] = ""
     value: Annotated[str, Field(max_length=512, description="The value of the property.")] = ""

@@ -62,9 +62,18 @@ class dnsepgSvrGrp(ManagedObject):
         ),
     ] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     network_connection_type: DnsepgNetworkType = Field(
-        default=DnsepgNetworkType.OOB, alias="nw", description="Network Type inband, outBand"
+        default=DnsepgNetworkType.OOB,
+        validation_alias="nw",
+        serialization_alias="nw",
+        description="Network Type inband, outBand",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

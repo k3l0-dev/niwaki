@@ -24,7 +24,7 @@ Accepted as keyword arguments of `.lacp_policy(name)` and of `.set(**attrs)` on 
 | parameter | wire | type | values | default | description |
 | --- | --- | --- | --- | --- | --- |
 | `name` *(positional)* | `name` | `str` | — | — | Specifies the policy name. |
-| `control` | `ctrl` | {ref}`PcIfControl <enum-pcifcontrol>` | `fast-sel-hot-stdby`, `graceful-conv`, `load-defer`, `susp-individual`, `symmetric-hash` | `fast-sel-hot-stdby` | LAG control properties |
+| `control` | `ctrl` | {ref}`PcIfControl <enum-pcifcontrol>` | `susp-individual`, `graceful-conv`, `load-defer`, `fast-sel-hot-stdby`, `symmetric-hash` | `fast-sel-hot-stdby, graceful-conv, susp-individual` | LAG control properties |
 | `description` | `descr` | `str` | — | — | Specifies a description of the policy definition. |
 | `maximum_number_of_links` | `maxLinks` | `int` | — | `16` | maximum links |
 | `minimum_number_of_links` | `minLinks` | `int` | — | `1` | minimum links @@@ MinLinks in the port channel |

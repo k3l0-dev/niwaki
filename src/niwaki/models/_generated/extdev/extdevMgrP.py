@@ -77,34 +77,69 @@ class extdevMgrP(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    scope: Annotated[str, Field(max_length=512, alias="connURI")] = ""
+    scope: Annotated[
+        str, Field(max_length=512, validation_alias="connURI", serialization_alias="connURI")
+    ] = ""
     device_ip_fqdn: Annotated[
         str,
-        Field(max_length=512, alias="deviceAddress", description="External Device IP/FQDN Address"),
+        Field(
+            max_length=512,
+            validation_alias="deviceAddress",
+            serialization_alias="deviceAddress",
+            description="External Device IP/FQDN Address",
+        ),
     ] = ""
     triggered_inventory_sync_status: ExtdevTrigSt = Field(
         default=ExtdevTrigSt.UNTRIGGERED,
-        alias="inventoryTrigSt",
+        validation_alias="inventoryTrigSt",
+        serialization_alias="inventoryTrigSt",
         description="Manual Trigger state of Inventory Sync",
     )
     appcenter_managed_translation: bool = Field(
-        default=True, alias="isAppManaged", description="AppCenter Managed Translator"
+        default=True,
+        validation_alias="isAppManaged",
+        serialization_alias="isAppManaged",
+        description="AppCenter Managed Translator",
     )
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     password: Annotated[
-        str, Field(alias="pwd", repr=False, description="The system user password.")
+        str,
+        Field(
+            validation_alias="pwd",
+            serialization_alias="pwd",
+            repr=False,
+            description="The system user password.",
+        ),
     ] = ""
     seq_num: Annotated[
-        int, Field(alias="seqNum", description="An ISIS link-state packet sequence number.")
+        int,
+        Field(
+            validation_alias="seqNum",
+            serialization_alias="seqNum",
+            description="An ISIS link-state packet sequence number.",
+        ),
     ] = 0
     device_type_dn: str = Field(
         default="",
-        alias="srcDevType",
+        validation_alias="srcDevType",
+        serialization_alias="srcDevType",
         description="DN of extdevDevType for PD to auto-populate rel-def",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     username: Annotated[
-        str, Field(max_length=512, alias="usr", description="Controller User-Access Info")
+        str,
+        Field(
+            max_length=512,
+            validation_alias="usr",
+            serialization_alias="usr",
+            description="Controller User-Access Info",
+        ),
     ] = ""

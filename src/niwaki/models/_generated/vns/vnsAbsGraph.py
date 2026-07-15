@@ -210,22 +210,32 @@ class vnsAbsGraph(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
     filter_between_nodes: VnsFilterBetweenNodes = Field(
-        default=VnsFilterBetweenNodes.ALLOW_ALL, alias="filterBetweenNodes"
+        default=VnsFilterBetweenNodes.ALLOW_ALL,
+        validation_alias="filterBetweenNodes",
+        serialization_alias="filterBetweenNodes",
     )
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     owner_key: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerKey",
+            validation_alias="ownerKey",
+            serialization_alias="ownerKey",
             description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
@@ -234,15 +244,22 @@ class vnsAbsGraph(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerTag",
+            validation_alias="ownerTag",
+            serialization_alias="ownerTag",
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
-    svc_rule_type: VnsSvcRuleType = Field(default=VnsSvcRuleType.VRF, alias="svcRuleType")
+    svc_rule_type: VnsSvcRuleType = Field(
+        default=VnsSvcRuleType.VRF,
+        validation_alias="svcRuleType",
+        serialization_alias="svcRuleType",
+    )
     type: VnsType = Field(
         default=VnsType.LEGACY, description="The specific type of the object or component."
     )
     ui_template_type: VnsUITemplateType = Field(
-        default=VnsUITemplateType.UNSPECIFIED, alias="uiTemplateType"
+        default=VnsUITemplateType.UNSPECIFIED,
+        validation_alias="uiTemplateType",
+        serialization_alias="uiTemplateType",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

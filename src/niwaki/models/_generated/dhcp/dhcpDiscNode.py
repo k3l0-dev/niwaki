@@ -45,16 +45,20 @@ class dhcpDiscNode(ManagedObject):
         str,
         Field(
             pattern="^[0-9a-fA-F.:/ ]+$",
-            alias="ciAddr",
+            validation_alias="ciAddr",
+            serialization_alias="ciAddr",
             description="The IP address that is assigned to this client by the DHCP server",
         ),
     ]
-    fd_encap: Annotated[str, Field(alias="encap", description="EPG Encap")]
+    fd_encap: Annotated[
+        str, Field(validation_alias="encap", serialization_alias="encap", description="EPG Encap")
+    ]
     client_hardware_address: Annotated[
         str,
         Field(
             pattern="^([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}$",
-            alias="mac",
+            validation_alias="mac",
+            serialization_alias="mac",
             description="Client hardware address",
         ),
     ]

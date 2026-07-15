@@ -50,32 +50,72 @@ class analyticsProfile(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    timestamp_shift_value_for_burst_interval: str = Field(
-        default="", alias="burstIntvlShift", description="Burst interval shift"
-    )
+    timestamp_shift_value_for_burst_interval: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=255,
+            validation_alias="burstIntvlShift",
+            serialization_alias="burstIntvlShift",
+            description="Burst interval shift",
+        ),
+    ] = 0
     collect_interval_in_milliseconds: Annotated[
-        int, Field(ge=100, le=64000, alias="collectIntvl", description="Collect interval")
+        int,
+        Field(
+            ge=100,
+            le=64000,
+            validation_alias="collectIntvl",
+            serialization_alias="collectIntvl",
+            description="Collect interval",
+        ),
     ] = 100
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            validation_alias="descr",
+            serialization_alias="descr",
+        ),
     ] = ""
-    ip_packet_id_shift: str = Field(
-        default="", alias="ipPktIdShift", description="IP packet id shift"
-    )
-    mtu: Annotated[str, Field(description="Collector export packet MTU")] = ""
+    ip_packet_id_shift: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=255,
+            validation_alias="ipPktIdShift",
+            serialization_alias="ipPktIdShift",
+            description="IP packet id shift",
+        ),
+    ] = 0
+    mtu: Annotated[int, Field(ge=576, le=9000, description="Collector export packet MTU")] = 1500
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     collection_interval_in_seconds: Annotated[
-        int, Field(ge=60, le=36000, alias="netflowCollectorIntvl", description="Collector interval")
+        int,
+        Field(
+            ge=60,
+            le=36000,
+            validation_alias="netflowCollectorIntvl",
+            serialization_alias="netflowCollectorIntvl",
+            description="Collector interval",
+        ),
     ] = 60
     sequence_number_guess_threshold_high: Annotated[
         int,
         Field(
             ge=0,
             le=4294967295,
-            alias="seqNumGuessThreshHi",
+            validation_alias="seqNumGuessThreshHi",
+            serialization_alias="seqNumGuessThreshHi",
             description="Sequence number guess threshold high",
         ),
     ] = 0
@@ -84,14 +124,29 @@ class analyticsProfile(ManagedObject):
         Field(
             ge=0,
             le=4294967295,
-            alias="seqNumGuessThreshLo",
+            validation_alias="seqNumGuessThreshLo",
+            serialization_alias="seqNumGuessThreshLo",
             description="Sequence number guess threshold low",
         ),
     ] = 0
     source_l4_port: Annotated[
-        int, Field(ge=1, le=65535, alias="srcPort", description="Source port")
+        int,
+        Field(
+            ge=1,
+            le=65535,
+            validation_alias="srcPort",
+            serialization_alias="srcPort",
+            description="Source port",
+        ),
     ] = 0
     template_interval_in_seconds: Annotated[
-        int, Field(ge=60, le=64000, alias="templateIntvl", description="Template interval")
+        int,
+        Field(
+            ge=60,
+            le=64000,
+            validation_alias="templateIntvl",
+            serialization_alias="templateIntvl",
+            description="Template interval",
+        ),
     ] = 300
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

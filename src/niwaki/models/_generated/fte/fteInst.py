@@ -46,7 +46,10 @@ class fteInst(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     configure_the_type_of_fte_instance: FteModeT = Field(
-        default=FteModeT.FLOW_EVENTS, alias="mode", description="FTE mode"
+        default=FteModeT.FLOW_EVENTS,
+        validation_alias="mode",
+        serialization_alias="mode",
+        description="FTE mode",
     )
 
     # ── Configurable ───────────────────────────────────────────────────────────

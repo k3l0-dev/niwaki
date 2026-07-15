@@ -56,6 +56,12 @@ class fvRsVrfValidationPol(ManagedObject):
         ),
     ] = ""
     name: Annotated[
-        str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="tnL3extVrfValidationPolName")
+        str,
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            validation_alias="tnL3extVrfValidationPolName",
+            serialization_alias="tnL3extVrfValidationPolName",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

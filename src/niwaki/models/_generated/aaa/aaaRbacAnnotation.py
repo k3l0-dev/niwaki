@@ -33,5 +33,13 @@ class aaaRbacAnnotation(ManagedObject):
     domain: Annotated[str, Field(description="The domain of the counts object.")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    childregx: Annotated[str, Field(max_length=256, pattern="^.*$", alias="childRegex")] = ""
+    childregx: Annotated[
+        str,
+        Field(
+            max_length=256,
+            pattern="^.*$",
+            validation_alias="childRegex",
+            serialization_alias="childRegex",
+        ),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

@@ -55,7 +55,8 @@ class callhomeRsDestGroupRel(ManagedObject):
     ] = ""
     target_dn: str = Field(
         default="",
-        alias="tDn",
+        validation_alias="tDn",
+        serialization_alias="tDn",
         description="The name of the group that is used to match SPAN sources with SPAN destination(s).",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

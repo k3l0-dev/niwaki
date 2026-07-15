@@ -61,31 +61,50 @@ class qosSdIfPol(ManagedObject):
         ),
     ] = ""
     congestion_clear_action: L1CongClearAction = Field(
-        default=L1CongClearAction.OFF, alias="congClearAction"
+        default=L1CongClearAction.OFF,
+        validation_alias="congClearAction",
+        serialization_alias="congClearAction",
     )
-    congestion_detect_multiplier: str = Field(default="", alias="congDetectMult")
+    congestion_detect_multiplier: Annotated[
+        int,
+        Field(
+            ge=1, le=10000, validation_alias="congDetectMult", serialization_alias="congDetectMult"
+        ),
+    ] = 10
     description: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
     slowdrain_flush_mode_admin_state: L1PortFlushAdminSt = Field(
-        default=L1PortFlushAdminSt.DISABLED, alias="flushAdminSt"
+        default=L1PortFlushAdminSt.DISABLED,
+        validation_alias="flushAdminSt",
+        serialization_alias="flushAdminSt",
     )
-    flush_timeout_in_milliseconds: str = Field(default="", alias="flushIntvl")
+    flush_timeout_in_milliseconds: Annotated[
+        int, Field(ge=100, le=1000, validation_alias="flushIntvl", serialization_alias="flushIntvl")
+    ] = 500
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     owner_key: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerKey",
+            validation_alias="ownerKey",
+            serialization_alias="ownerKey",
             description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
@@ -94,7 +113,8 @@ class qosSdIfPol(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerTag",
+            validation_alias="ownerTag",
+            serialization_alias="ownerTag",
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""

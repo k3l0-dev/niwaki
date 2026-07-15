@@ -40,7 +40,12 @@ class statstoreObsHolder(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     observable_object: Annotated[
-        str, Field(alias="obsDn", description="Distinguished name of this observable object")
+        str,
+        Field(
+            validation_alias="obsDn",
+            serialization_alias="obsDn",
+            description="Distinguished name of this observable object",
+        ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────

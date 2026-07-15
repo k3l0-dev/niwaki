@@ -106,7 +106,12 @@ class actionLSubj(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     subject_dn: Annotated[
-        str, Field(alias="oDn", description="Distinguished name of the target object")
+        str,
+        Field(
+            validation_alias="oDn",
+            serialization_alias="oDn",
+            description="Distinguished name of the target object",
+        ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────

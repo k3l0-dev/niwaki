@@ -60,7 +60,8 @@ class l3extRsNdIfPol(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9_.:-]+$",
-            alias="tnNdIfPolName",
+            validation_alias="tnNdIfPolName",
+            serialization_alias="tnNdIfPolName",
             description="An IPv6 neighbor discovery policy name.",
         ),
     ] = ""

@@ -42,7 +42,7 @@ class testinfralabBudget(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    sk_high: Annotated[int, Field(alias="skHigh")] = 0
-    sk_low: Annotated[int, Field(alias="skLow")] = 0
-    tot_amt: Annotated[int, Field(alias="totAmt")] = 0
+    sk_high: Annotated[int, Field(validation_alias="skHigh", serialization_alias="skHigh")] = 0
+    sk_low: Annotated[int, Field(validation_alias="skLow", serialization_alias="skLow")] = 0
+    tot_amt: Annotated[int, Field(validation_alias="totAmt", serialization_alias="totAmt")] = 0
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

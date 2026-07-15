@@ -64,7 +64,8 @@ class fvVmAttr(ManagedObject):
         str,
         Field(
             max_length=512,
-            alias="category",
+            validation_alias="category",
+            serialization_alias="category",
             description="The category name. This is the name of the grouping used when calculating the healthscore. If unspecified, the child's class name is used.",
         ),
     ] = ""
@@ -73,15 +74,28 @@ class fvVmAttr(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies a description of the policy definition root.",
         ),
     ] = ""
     custom_attribute_name: Annotated[
-        str, Field(max_length=512, alias="labelName", description="The attribute label name.")
+        str,
+        Field(
+            max_length=512,
+            validation_alias="labelName",
+            serialization_alias="labelName",
+            description="The attribute label name.",
+        ),
     ] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     operator: FvOperT = Field(
         default=FvOperT.EQUALS, description="The operator type for the attribute."
@@ -91,7 +105,8 @@ class fvVmAttr(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerKey",
+            validation_alias="ownerKey",
+            serialization_alias="ownerKey",
             description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
@@ -100,17 +115,24 @@ class fvVmAttr(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerTag",
+            validation_alias="ownerTag",
+            serialization_alias="ownerTag",
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
     attribute_type: FvVmAttrT = Field(
-        default=FvVmAttrT.VM_NAME, alias="type", description="The attribute type."
+        default=FvVmAttrT.VM_NAME,
+        validation_alias="type",
+        serialization_alias="type",
+        description="The attribute type.",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     custom_attribute_value_or_tag_name: Annotated[
         str,
         Field(
-            max_length=512, alias="value", description="The assigned number value of the attribute."
+            max_length=512,
+            validation_alias="value",
+            serialization_alias="value",
+            description="The assigned number value of the attribute.",
         ),
     ] = ""

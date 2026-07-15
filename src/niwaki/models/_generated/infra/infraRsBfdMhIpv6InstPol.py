@@ -56,6 +56,12 @@ class infraRsBfdMhIpv6InstPol(ManagedObject):
         ),
     ] = ""
     name: Annotated[
-        str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="tnBfdMhIpv6InstPolName")
+        str,
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            validation_alias="tnBfdMhIpv6InstPolName",
+            serialization_alias="tnBfdMhIpv6InstPolName",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

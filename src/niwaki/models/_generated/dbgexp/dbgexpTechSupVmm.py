@@ -3,8 +3,10 @@
 from __future__ import annotations
 
 from typing import ClassVar, Annotated
-from pydantic import Field
+from pydantic import BeforeValidator, Field
 
+from niwaki.models._wire import Flags, parse_flags
+from niwaki.models._generated.enums.DbgexpCategory import DbgexpCategory
 from niwaki.models._generated.enums.MonCompression import MonCompression
 from niwaki.models._generated.enums.ScalarEnum8 import ScalarEnum8
 from niwaki.models._generated.enums.TrigExecState import TrigExecState
@@ -61,7 +63,8 @@ class dbgexpTechSupVmm(ManagedObject):
     # ── Configurable ───────────────────────────────────────────────────────────
     administrative_state: TrigExecState = Field(
         default=TrigExecState.UNTRIGGERED,
-        alias="adminSt",
+        validation_alias="adminSt",
+        serialization_alias="adminSt",
         description="The administrative state of the executable policies.",
     )
     annotation: Annotated[
@@ -72,43 +75,80 @@ class dbgexpTechSupVmm(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    apic_path: Annotated[str, Field(max_length=512, alias="apicPath")] = ""
-    app_name: Annotated[str, Field(max_length=512, alias="appName")] = ""
-    category_of_feature_to_be_collected: str = Field(
-        default="",
-        alias="category",
+    apic_path: Annotated[
+        str, Field(max_length=512, validation_alias="apicPath", serialization_alias="apicPath")
+    ] = ""
+    app_name: Annotated[
+        str, Field(max_length=512, validation_alias="appName", serialization_alias="appName")
+    ] = ""
+    category_of_feature_to_be_collected: Annotated[
+        Flags[DbgexpCategory], BeforeValidator(parse_flags)
+    ] = Field(
+        default_factory=lambda: frozenset({DbgexpCategory.ALL}),
+        validation_alias="category",
+        serialization_alias="category",
         description="The category name. This is the name of the grouping used when calculating the healthscore. If unspecified, the child's class name is used.",
     )
     compression: MonCompression = Field(
         default=MonCompression.GZIP,
         description="Compression format for techsupport, default is gzip",
     )
-    export_location: ScalarEnum8 = Field(default=ScalarEnum8.APIC, alias="controllerLocation")
-    include_db_metadata_file: bool = Field(default=True, alias="dbMetadata")
+    export_location: ScalarEnum8 = Field(
+        default=ScalarEnum8.APIC,
+        validation_alias="controllerLocation",
+        serialization_alias="controllerLocation",
+    )
+    include_db_metadata_file: bool = Field(
+        default=True, validation_alias="dbMetadata", serialization_alias="dbMetadata"
+    )
     description: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies the description of a policy component.",
         ),
     ] = ""
-    end_time_for_techsupport_collection: str = Field(default="", alias="endTime")
-    export_to_controller: bool = Field(default=False, alias="exportToController")
-    export_to_intersight: bool = Field(default=False, alias="exportToIntersight")
-    extensive_logs: bool = Field(default=False, alias="extensiveLogs")
+    end_time_for_techsupport_collection: str = Field(
+        default="", validation_alias="endTime", serialization_alias="endTime"
+    )
+    export_to_controller: bool = Field(
+        default=False,
+        validation_alias="exportToController",
+        serialization_alias="exportToController",
+    )
+    export_to_intersight: bool = Field(
+        default=False,
+        validation_alias="exportToIntersight",
+        serialization_alias="exportToIntersight",
+    )
+    extensive_logs: bool = Field(
+        default=False, validation_alias="extensiveLogs", serialization_alias="extensiveLogs"
+    )
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
-    start_time_for_techsupport_collection: str = Field(default="", alias="startTime")
-    include_pre_upgrade_logs: bool = Field(default=False, alias="upgradeLogs")
+    start_time_for_techsupport_collection: str = Field(
+        default="", validation_alias="startTime", serialization_alias="startTime"
+    )
+    include_pre_upgrade_logs: bool = Field(
+        default=False, validation_alias="upgradeLogs", serialization_alias="upgradeLogs"
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     vendor_name: Annotated[
         str,
         Field(
             max_length=512,
-            alias="vendorName",
+            validation_alias="vendorName",
+            serialization_alias="vendorName",
             description="The SFP transceiver vendor name (ASCII).",
         ),
     ] = ""

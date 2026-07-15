@@ -39,7 +39,15 @@ class troubleshootReportStatus(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    report_identifier: Annotated[str, Field(min_length=1, max_length=512, alias="reportName")]
+    report_identifier: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=512,
+            validation_alias="reportName",
+            serialization_alias="reportName",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[
@@ -51,14 +59,27 @@ class troubleshootReportStatus(ManagedObject):
         ),
     ] = ""
     format_of_the_report_data: TroubleshootFormat = Field(
-        default=TroubleshootFormat.PDF, alias="format"
+        default=TroubleshootFormat.PDF, validation_alias="format", serialization_alias="format"
     )
-    request_mode: Annotated[str, Field(max_length=512, alias="mode")] = ""
-    apic_id: Annotated[int, Field(alias="nodeId")] = 0
-    location_of_report_file: Annotated[str, Field(max_length=512, alias="reportDir")] = ""
-    name_of_the_report_file: Annotated[str, Field(max_length=512, alias="reportFile")] = ""
+    request_mode: Annotated[
+        str, Field(max_length=512, validation_alias="mode", serialization_alias="mode")
+    ] = ""
+    apic_id: Annotated[int, Field(validation_alias="nodeId", serialization_alias="nodeId")] = 0
+    location_of_report_file: Annotated[
+        str, Field(max_length=512, validation_alias="reportDir", serialization_alias="reportDir")
+    ] = ""
+    name_of_the_report_file: Annotated[
+        str, Field(max_length=512, validation_alias="reportFile", serialization_alias="reportFile")
+    ] = ""
     report_generation_status_code: TroubleshootStatus = Field(
-        default=TroubleshootStatus.PENDING, alias="reportStatus"
+        default=TroubleshootStatus.PENDING,
+        validation_alias="reportStatus",
+        serialization_alias="reportStatus",
     )
-    string_description_of_status: Annotated[str, Field(max_length=512, alias="statusDetails")] = ""
+    string_description_of_status: Annotated[
+        str,
+        Field(
+            max_length=512, validation_alias="statusDetails", serialization_alias="statusDetails"
+        ),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

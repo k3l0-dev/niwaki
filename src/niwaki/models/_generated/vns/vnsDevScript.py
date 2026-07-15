@@ -51,15 +51,19 @@ class vnsDevScript(ManagedObject):
         Field(
             ge=900,
             le=10800,
-            alias="auditTimeout",
+            validation_alias="auditTimeout",
+            serialization_alias="auditTimeout",
             description="device script timeout for audit operations",
         ),
     ] = 900
-    dbg_port: str = Field(default="", alias="dbgPort")
-    dbg_srv: Annotated[str, Field(max_length=512, alias="dbgSrv")] = ""
+    dbg_port: Annotated[int, Field(validation_alias="dbgPort", serialization_alias="dbgPort")] = 0
+    dbg_srv: Annotated[
+        str, Field(max_length=512, validation_alias="dbgSrv", serialization_alias="dbgSrv")
+    ] = ""
     log_level: VnsLogLevel = Field(
         default=VnsLogLevel.DEBUG,
-        alias="logLevel",
+        validation_alias="logLevel",
+        serialization_alias="logLevel",
         description="The current severity logged level of the fault.",
     )
     modify_timeout: Annotated[
@@ -67,7 +71,8 @@ class vnsDevScript(ManagedObject):
         Field(
             ge=300,
             le=10800,
-            alias="modifyTimeout",
+            validation_alias="modifyTimeout",
+            serialization_alias="modifyTimeout",
             description="device script timeout for modify operations",
         ),
     ] = 300
@@ -81,7 +86,13 @@ class vnsDevScript(ManagedObject):
         ),
     ] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     validate_timeout: Annotated[
@@ -89,7 +100,8 @@ class vnsDevScript(ManagedObject):
         Field(
             ge=300,
             le=10800,
-            alias="validateTimeout",
+            validation_alias="validateTimeout",
+            serialization_alias="validateTimeout",
             description="device script timeout for validate operations",
         ),
     ] = 300
@@ -98,7 +110,8 @@ class vnsDevScript(ManagedObject):
         Field(
             ge=900,
             le=10800,
-            alias="watchdogTimeout",
+            validation_alias="watchdogTimeout",
+            serialization_alias="watchdogTimeout",
             description="watchdog timeout for device script",
         ),
     ] = 900

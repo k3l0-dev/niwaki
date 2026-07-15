@@ -41,14 +41,16 @@ class apphostingNameSvrEntry(ManagedObject):
     # ── Naming (required) ──────────────────────────────────────────────────────
     name_server_entry_tag_eg_v4addr0_1: ApphostingNameSrvEntryTag = Field(
         default=ApphostingNameSrvEntryTag.V4ADDR0,
-        alias="tagName",
+        validation_alias="tagName",
+        serialization_alias="tagName",
         description="Name server entry tag. eg: 'v4addr<0-1> or v6addr<0-1>'",
     )
 
     # ── Configurable ───────────────────────────────────────────────────────────
     admin_st: ApphostingAdminState = Field(
         default=ApphostingAdminState.ENABLED,
-        alias="adminSt",
+        validation_alias="adminSt",
+        serialization_alias="adminSt",
         description='Admin state to configure mo "',
     )
     annotation: Annotated[
@@ -63,7 +65,8 @@ class apphostingNameSvrEntry(ManagedObject):
         str,
         Field(
             pattern="^[0-9a-fA-F.:/ ]+$",
-            alias="ipV4Addr",
+            validation_alias="ipV4Addr",
+            serialization_alias="ipV4Addr",
             description="v4 ip address in name server entry",
         ),
     ] = ""
@@ -71,7 +74,8 @@ class apphostingNameSvrEntry(ManagedObject):
         str,
         Field(
             pattern="^[0-9a-fA-F.:/ ]+$",
-            alias="ipV6Addr",
+            validation_alias="ipV6Addr",
+            serialization_alias="ipV6Addr",
             description="v6 ip address in name server entry",
         ),
     ] = ""

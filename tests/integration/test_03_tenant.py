@@ -244,16 +244,16 @@ def protocol_policies_design() -> Cursor:
         "ospf-p2p",
         network_type="p2p",
         cost_of_interface="100",
-        hello_interval="5",
-        dead_interval="20",
+        hello_interval=5,
+        dead_interval=20,
         prefix_suppression="enable",
     )
     cfg.ospf_interface_policy(
         "ospf-bcast",
         network_type="bcast",
-        prioriity="42",
-        retransmit_interval="10",
-        transmit_delay="3",
+        prioriity=42,
+        retransmit_interval=10,
+        transmit_delay=3,
         prefix_suppression="disable",
     )
     cfg.ospf_timers_policy(
@@ -261,7 +261,7 @@ def protocol_policies_design() -> Cursor:
         action="log",
         maximum_of_non_self_generated_lsas=10000,
         bandwidth_preference=80000,
-        max_ecmp="6",
+        max_ecmp=6,
     )
     cfg.ospf_timers_policy("ospf-timers-reject", action="reject", reset_interval=8)
 
@@ -276,46 +276,46 @@ def protocol_policies_design() -> Cursor:
     cfg.eigrp_interface_policy(
         "eigrp-micro",
         units_for_eigrp_interface_delay="tens-of-micro",
-        hello_interval="10",
-        hold_interval="30",
+        hello_interval=10,
+        hold_interval=30,
     )
     cfg.eigrp_address_family_context_policy(
         "eigrp-af-narrow",
         metric_style="narrow",
-        maximum_ecmp_paths="4",
+        maximum_ecmp_paths=4,
     )
     cfg.eigrp_address_family_context_policy(
         "eigrp-af-wide",
         metric_style="wide",
-        internal_distance="90",
-        external_distance="170",
+        internal_distance=90,
+        external_distance=170,
     )
 
     # ── BGP ───────────────────────────────────────────────────────────────────
     cfg.bgp_timers_policy(
         "bgp-timers",
-        hold_interval="90",
-        keepalive_interval="30",
+        hold_interval=90,
+        keepalive_interval=30,
         # 300 is the default and reads back as the literal "default" —
         # a non-default value keeps the round-trip honest.
-        max_as_limit="50",
+        max_as_limit=50,
         stale_interval="600",
     )
     cfg.bgp_address_family_context_policy(
         "bgp-af",
-        ebgp_distance="20",
-        ibgp_distance="200",
-        local_distance="220",
-        max_ecmp_for_ebgp_routes="8",
-        max_ecmp_for_ibgp_routes="8",
-        max_local_ecmp_for_redistribute_rotes="8",
+        ebgp_distance=20,
+        ibgp_distance=200,
+        local_distance=220,
+        max_ecmp_for_ebgp_routes=8,
+        max_ecmp_for_ibgp_routes=8,
+        max_local_ecmp_for_redistribute_rotes=8,
     )
     for action in ("log", "reject", "restart", "shut"):
         peer_prefix = cfg.bgp_peer_prefix_policy(
             f"bgp-pfx-{action}",
             max_prefix_action=action,
             max_number_of_prefixes=20000,
-            warning_threshold="75",
+            warning_threshold=75,
         )
         if action == "restart":
             peer_prefix.set(prefix_limit_restart_time="5")
@@ -335,39 +335,39 @@ def protocol_policies_design() -> Cursor:
     # ── HSRP ──────────────────────────────────────────────────────────────────
     cfg.hsrp_interface_policy(
         "hsrp-if",
-        hsrp_interface_delay="30",
-        hsrp_reload_delay="60",
+        hsrp_interface_delay=30,
+        hsrp_reload_delay=60,
     )
     cfg.hsrp_group_policy(
         "hsrp-grp-preempt",
         group_control_bits="preempt",
-        group_priority="120",
+        group_priority=120,
         hello_interval=1000,
         hold_interval=3000,
-        miminum_delay_before_preempt="30",
+        miminum_delay_before_preempt=30,
     )
-    cfg.hsrp_group_policy("hsrp-grp-plain", group_priority="90")
+    cfg.hsrp_group_policy("hsrp-grp-plain", group_priority=90)
 
     # ── IGMP / PIM interface ──────────────────────────────────────────────────
     cfg.igmp_interface_policy(
         "igmp-v2",
         version="v2",
-        query_interval="125",
-        response_interval="10",
+        query_interval=125,
+        response_interval=10,
     )
     cfg.igmp_interface_policy(
         "igmp-v3",
         version="v3",
-        last_member_query_count="3",
-        robustness_factor="3",
-        startup_query_count="3",
+        last_member_query_count=3,
+        robustness_factor=3,
+        startup_query_count=3,
     )
     cfg.pim_interface_policy(
         "pim-dr",
         authentication_type="none",
         designated_router_priority=10,
         hello_interval=30000,
-        join_prune_interval_seconds="60",
+        join_prune_interval_seconds=60,
     )
 
     # ── BFD ───────────────────────────────────────────────────────────────────
@@ -375,41 +375,41 @@ def protocol_policies_design() -> Cursor:
         "bfd-echo",
         enable_disable_sessions="enabled",
         enable_disable_echo_mode="enabled",
-        echo_rx_interval="50",
-        detection_multiplier="3",
+        echo_rx_interval=50,
+        detection_multiplier=3,
     )
     cfg.bfd_interface_policy(
         "bfd-noecho",
         enable_disable_sessions="disabled",
         enable_disable_echo_mode="disabled",
-        required_minimum_rx_interval="250",
-        desired_minimum_tx_interval="250",
+        required_minimum_rx_interval=250,
+        desired_minimum_tx_interval=250,
     )
     cfg.bfd_mh_interface_policy(
         "bfdmh-on",
         enable_disable_sessions="enabled",
-        detection_multiplier="5",
+        detection_multiplier=5,
     )
     cfg.bfd_mh_interface_policy("bfdmh-off", enable_disable_sessions="disabled")
     cfg.bfd_multihop_node_policy(
         "bfdmh-node",
-        detection_multiplier="4",
-        required_minimum_rx_interval="300",
-        desired_minimum_tx_interval="300",
+        detection_multiplier=4,
+        required_minimum_rx_interval=300,
+        desired_minimum_tx_interval=300,
     )
 
     # ── ND / ARP ──────────────────────────────────────────────────────────────
     cfg.nd_interface_policy(
         "nd-fast",
-        hop_limit="64",
-        mtu="1500",
+        hop_limit=64,
+        mtu=1500,
         neighbor_solicit_interval=1000,
-        router_advertisement_interval="600",
+        router_advertisement_interval=600,
     )
     cfg.nd_interface_policy(
         "nd-jumbo",
-        hop_limit="255",
-        mtu="9000",
+        hop_limit=255,
+        mtu=9000,
         reachable_time=30000,
     )
     cfg.nd_ra_prefix_policy(
@@ -430,7 +430,7 @@ def protocol_policies_design() -> Cursor:
         bit_or_packet="bit",
         burst="1000",
         burst_unit="kilo",
-        peak_rate="500",
+        peak_rate=500,
         peak_rate_unit="mega",
         confirm_action="mark",
         conform_mark_cos="2",
@@ -459,14 +459,14 @@ def protocol_policies_design() -> Cursor:
         "igsn-on",
         admin_state="enabled",
         version="v3",
-        query_interval="100",
+        query_interval=100,
     )
     cfg.igmp_snoop_policy("igsn-off", admin_state="disabled", version="v2")
     cfg.mld_snoop_policy(
         "mldsn-on",
         admin_state="enabled",
         version="v2",
-        response_interval="8",
+        response_interval=8,
     )
     cfg.mld_snoop_policy("mldsn-off", admin_state="disabled", version="v1")
 
@@ -502,19 +502,19 @@ def protocol_policies_design() -> Cursor:
     cfg.ip_sla_monitoring_policy(
         "sla-icmp",
         sla_type="icmp",
-        frequency="30",
-        detect_multiplier="3",
+        frequency=30,
+        detect_multiplier=3,
     ).icmp_echo_probe()
     cfg.ip_sla_monitoring_policy(
         "sla-tcp",
         sla_type="tcp",
-        port="8443",
+        port=8443,
         operation_timeout=900,
     ).tcp_probe()
     cfg.ip_sla_monitoring_policy(
         "sla-http",
         sla_type="http",
-        port="80",
+        port=80,
         http_method_used_for_probing="get",
         uri_for_http_probing="/health",
         http_version_used_for_probing="HTTP11",
@@ -522,14 +522,14 @@ def protocol_policies_design() -> Cursor:
     cfg.track_list(
         "trk-pct",
         type_of_tracklist="percentage",
-        percentage_up="60",
-        percentage_down="40",
+        percentage_up=60,
+        percentage_down=40,
     )
     cfg.track_list(
         "trk-weight",
         type_of_tracklist="weight",
-        weight_up_value="10",
-        weight_down_value="5",
+        weight_up_value=10,
+        weight_down_value=5,
     )
     cfg.track_member(
         "trk-gw",
@@ -540,19 +540,19 @@ def protocol_policies_design() -> Cursor:
     # ── Multicast route maps / route tag / ext bridge group ─────────────────
     mcast = cfg.pim_route_map_policy("mcast-rmap")
     mcast.pim_route_map_entry(
-        "10",
+        10,
         action="permit",
         source_filter="10.99.0.0/24",
         destination_filter="225.1.0.0/16",
     )
-    mcast.pim_route_map_entry("20", action="deny", rp_ip_address="10.99.9.9")
+    mcast.pim_route_map_entry(20, action="deny", rp_ip_address="10.99.9.9")
     cfg.route_tag_policy("rtag-a", route_tag=4001)
     cfg.route_tag_policy("rtag-b", route_tag=4002)
     cfg.external_bridge_group_profile("ext-bd-grp")
 
     # ── Route control (tenant-level), match & set rules, keychain, MPLS ──────
     cfg.route_control_profile("tenant-rmap").route_control_context(
-        "permit-all", action="permit", local_order="0"
+        "permit-all", action="permit", local_order=0
     )
     cfg.match_rule("match-basic")
     cfg.action_rule_profile("set-basic")
@@ -560,14 +560,14 @@ def protocol_policies_design() -> Cursor:
     # key is write-only (never echoed), so the differ skips it by design.
     keychain = cfg.tenant_keychain_policy("keychain")
     keychain.key_policy(
-        "1",
+        1,
         name="rollover-a",
         pre_shared_key="niwaki-key-a",
         start_time="2026-07-01T00:00:00.000+00:00",
         end_time="2027-01-01T00:00:00.000+00:00",
     )
     keychain.key_policy(
-        "2",
+        2,
         name="rollover-b",
         pre_shared_key="niwaki-key-b",
         start_time="2027-01-01T00:00:00.000+00:00",
@@ -583,8 +583,8 @@ def protocol_policies_design() -> Cursor:
     # not-visible is not supported") — visible is the only accepted value.
     cfg.dhcp_relay_policy("dhcp-plain")
     options = cfg.dhcp_option_policy("dhcp-opts")
-    options.dhcp_option("dns-server", id="6", model_regex="10.10.2.53")
-    options.dhcp_option("domain-name", id="15", model_regex="shop.example")
+    options.dhcp_option("dns-server", id=6, model_regex="10.10.2.53")
+    options.dhcp_option("domain-name", id=15, model_regex="shop.example")
 
     # ── L4-L7 standalone (PBR chain) ─────────────────────────────────────────
     svc = cfg.service_container()
@@ -594,8 +594,8 @@ def protocol_policies_design() -> Cursor:
         hashing_algorithm="sip-dip-prototype",
         resilient_hashing_enabled_or_not=True,
         threshold_enable=True,
-        minimum_threshold_percentage="20",
-        maximum_threshold_percentage="80",
+        minimum_threshold_percentage=20,
+        maximum_threshold_percentage=80,
         threshold_down_action="deny",
     )
     pbr.destination_of_redirected_traffic("10.20.99.1", mac_address="00:00:0A:14:63:01")
@@ -661,13 +661,13 @@ class Test3ProtocolPolicies:
         assert len(destinations) == 3
 
         keys = {k.key_id: k for k in tn.query("fvKeyPol").fetch()}
-        assert set(keys) == {"1", "2"}
-        assert keys["1"].name == "rollover-a"
-        assert keys["1"].pre_shared_key == ""  # write-only: never echoed
+        assert set(keys) == {1, 2}  # a key id is a number, and reads back as one
+        assert keys[1].name == "rollover-a"
+        assert keys[1].pre_shared_key == ""  # write-only: never echoed
 
         options = {o.name: o for o in tn.query("dhcpOption").fetch()}
         assert options["dns-server"].model_regex == "10.10.2.53"
-        assert options["domain-name"].id == "15"
+        assert options["domain-name"].id == 15  # a DHCP option id is a number
 
 
 # ── The EPG/ESG world (wave 2) ────────────────────────────────────────────────
@@ -714,7 +714,7 @@ def epg_world_design() -> Cursor:
         .imported_contract("secure-imported").bind(contract="secure-exported")
         .monitoring_policy("secure-mon")
         .custom_qos_policy("secure-qos")
-        .dpp_policy("secure-dpp", rate="100", rate_unit="mega", burst="200", burst_unit="mega")
+        .dpp_policy("secure-dpp", rate=100, rate_unit="mega", burst="200", burst_unit="mega")
         .trust_control_policy("secure-trust", trust_arp=True, trust_nd=True)
 
         .app(APP)
@@ -730,10 +730,10 @@ def epg_world_design() -> Cursor:
                 # Two EPG subnets: a shared-services gateway, and a host route.
                 # The APIC narrows fvSubnet by parent: a /32 must carry
                 # no-default-gateway, and "preferred" is a BD-only flag.
-                # "public,shared", not "shared,public": scope is a bitmask and
-                # the APIC echoes it in its own order — declare it canonically
-                # or every replan reports a phantom drift.
-                .subnet("10.30.5.1/24", scope="public,shared", ip_dp_learning="enabled")
+                # scope is declared in the "wrong" order on purpose: the APIC
+                # stores a bitmask in its own (bit-weight) order, and a set does
+                # not care.  The replan in test_02 is the proof.
+                .subnet("10.30.5.1/24", scope="shared,public", ip_dp_learning="enabled")
                 .subnet("10.30.1.202/32", scope="private",
                         subnet_control="no-default-gateway", ip_dp_learning="disabled")
                 # Static endpoints — one per naming type, on the act-2 vPC path.
@@ -846,9 +846,12 @@ class Test3EpgWorld:
         epg = live_aci.tenant(TENANT).app(APP).epg("shop-web")
 
         subnets = {s.subnet: s for s in epg.query("fvSubnet").fetch()}
-        assert subnets["10.30.5.1/24"].scope == "public,shared"
+        # A bitmask is a set: declared "shared,public", stored "public,shared",
+        # and equal either way.  The order the APIC chooses is simply not a fact
+        # the SDK can be wrong about any more.
+        assert subnets["10.30.5.1/24"].scope == {"public", "shared"}
         assert subnets["10.30.1.202/32"].ip_dp_learning == "disabled"
-        assert subnets["10.30.1.202/32"].subnet_control == "no-default-gateway"
+        assert subnets["10.30.1.202/32"].subnet_control == {"no-default-gateway"}
 
         endpoints = {e.macaddress: e for e in epg.query("fvStCEp").fetch()}
         assert {e.type for e in endpoints.values()} == {"silent-host", "tep"}
@@ -915,6 +918,10 @@ def contract_world_design() -> Cursor:
     cfg.bd("secure-bd")  # upsert: the EPG-world BD, no attribute touched
     cfg.filter("ctr-http").entry("http-alt", tcp=8081)
     cfg.filter("ctr-any").entry("all", ethernet_type="unspecified")
+    # A bitmask, declared in the order nobody would guess.  Before the SDK
+    # modelled bitmasks as sets, this very line was rejected by its own model:
+    # tcp_rules was a single-choice enum, and "syn,ack" is not one of its values.
+    cfg.filter("ctr-tcp-flags").entry("established", tcp=8082, tcp_rules="ack,syn")
 
     # A contract applied both ways, with a contract-level exception.
     web = cfg.contract("ctr-web", scope="context", qos_class_id="level2")
@@ -1005,13 +1012,24 @@ class Test3ContractWorld:
         filters = {f.name for f in subj.query("vzRsFiltAtt").fetch()}
         assert filters == {"ctr-http", "ctr-any"}
 
-    def test_04_exceptions_hang_where_they_were_declared(self, live_aci: Niwaki) -> None:
+    def test_04_a_bitmask_survives_the_apics_reordering(self, live_aci: Niwaki) -> None:
+        """The bug the whole typing overhaul started from.
+
+        ``tcp_rules="ack,syn"`` is an everyday ACI filter (match established
+        connections) and the SDK's own model used to refuse it.  It is a set now:
+        the APIC stores it in bit-weight order ("syn,ack"), the SDK reads it back
+        as a set, and the two are equal — which is why ``test_02`` replans clean.
+        """
+        entry = live_aci.tenant(TENANT).filter("ctr-tcp-flags").entry("established").read()
+        assert entry.tcp_rules == {"syn", "ack"}
+
+    def test_05_exceptions_hang_where_they_were_declared(self, live_aci: Niwaki) -> None:
         contract = live_aci.tenant(TENANT).contract("ctr-web")
         exceptions = {e.name: e for e in contract.query("vzException").fetch()}
         assert exceptions["skip-dev-tenant"].field == "Tenant"
         assert exceptions["skip-dev-tenant"].cons_regex == "dev-.*"
 
-    def test_05_vzany_carries_the_vrf_wide_contracts(self, live_aci: Niwaki) -> None:
+    def test_06_vzany_carries_the_vrf_wide_contracts(self, live_aci: Niwaki) -> None:
         """vzAny reaches contracts through vzRsAnyTo* — not the EPG classes."""
         vrf = live_aci.tenant(TENANT).vrf("prod")
         assert vrf.vzany().read().match_type == "AtleastOne"
@@ -1023,7 +1041,7 @@ class Test3ContractWorld:
         labels = {label.name for label in vrf.query("vzProvLbl").fetch()}
         assert labels == {"vrf-gold"}
 
-    def test_06_labels_read_back_on_every_carrier(self, live_aci: Niwaki) -> None:
+    def test_07_labels_read_back_on_every_carrier(self, live_aci: Niwaki) -> None:
         app = live_aci.tenant(TENANT).app(CONTRACT_APP)
 
         epg_labels = {label.name: label for label in app.epg("ctr-epg").query("vzProvLbl").fetch()}
@@ -1036,7 +1054,7 @@ class Test3ContractWorld:
         esg_labels = {label.name for label in app.esg("ctr-esg").query("vzConsLbl").fetch()}
         assert esg_labels == {"esg-silver"}
 
-    def test_07_the_oob_contract_lives_in_the_management_tenant(self, live_aci: Niwaki) -> None:
+    def test_08_the_oob_contract_lives_in_the_management_tenant(self, live_aci: Niwaki) -> None:
         design = oob_contract_design()
         design.push(live_aci)
         assert design.push(live_aci, mode="plan").has_changes is False

@@ -36,7 +36,13 @@ class plannerMatchTenant(ManagedObject):
     # ── Naming (required) ──────────────────────────────────────────────────────
     tenant_name: Annotated[
         str,
-        Field(min_length=1, max_length=512, alias="name", description="The name of the object."),
+        Field(
+            min_length=1,
+            max_length=512,
+            validation_alias="name",
+            serialization_alias="name",
+            description="The name of the object.",
+        ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────

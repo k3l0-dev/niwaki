@@ -3,7 +3,10 @@
 from __future__ import annotations
 
 from typing import ClassVar, Annotated
-from pydantic import Field
+from pydantic import BeforeValidator, Field
+
+from niwaki.models._wire import Flags, parse_flags
+from niwaki.models._generated.enums.AnalyticsCollectParamsSsx import AnalyticsCollectParamsSsx
 
 from niwaki.models.base import ManagedObject
 
@@ -55,15 +58,21 @@ class analyticsRecordSsx(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    collect_params_set0: str = Field(
-        default="", alias="collectssx", description="Export parameters for the ssx record"
+    collect_params_set0: Annotated[
+        Flags[AnalyticsCollectParamsSsx], BeforeValidator(parse_flags)
+    ] = Field(
+        default_factory=lambda: frozenset({AnalyticsCollectParamsSsx.EGRESS_Q_DROPS}),
+        validation_alias="collectssx",
+        serialization_alias="collectssx",
+        description="Export parameters for the ssx record",
     )
     description: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="The description of this configuration item.",
         ),
     ] = ""
@@ -72,11 +81,18 @@ class analyticsRecordSsx(ManagedObject):
         Field(
             ge=100,
             le=64000,
-            alias="interval",
+            validation_alias="interval",
+            serialization_alias="interval",
             description="Interval in uS of collection for this record",
         ),
     ] = 100
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

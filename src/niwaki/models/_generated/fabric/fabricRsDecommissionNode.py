@@ -42,7 +42,12 @@ class fabricRsDecommissionNode(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    target_dn: Annotated[str, Field(alias="tDn", description="The node identifier.")]
+    target_dn: Annotated[
+        str,
+        Field(
+            validation_alias="tDn", serialization_alias="tDn", description="The node identifier."
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[
@@ -56,12 +61,14 @@ class fabricRsDecommissionNode(ManagedObject):
     debug: bool = False
     remove_from_controller: bool = Field(
         default=False,
-        alias="removeFromController",
+        validation_alias="removeFromController",
+        serialization_alias="removeFromController",
         description="Removes the node-level configuration as part of the decommission.",
     )
     secure_erase: bool = Field(
         default=False,
-        alias="secureErase",
+        validation_alias="secureErase",
+        serialization_alias="secureErase",
         description="L-Rel - US17196 Secure erase of Data on Controllers and Switches",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

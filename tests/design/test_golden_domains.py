@@ -30,20 +30,20 @@ class TestFabricAndControllerGolden:
         cfg = design()
         fb = cfg.fabric()
         fb.datetime_policy("prod-time", admin_state="enabled").ntp_provider(
-            "10.10.10.1", preferred_state=True, min_poll="4", max_poll="6"
+            "10.10.10.1", preferred_state=True, min_poll=4, max_poll=6
         )
         dns = fb.dns_profile("default")
         dns.provider("8.8.8.8", prefered_dns_provider=True)
         dns.domain("acme.corp", default=True)
         fb.syslog_group("prod-syslog").remote_destination(
-            "10.20.0.5", port="514", severity="warnings"
+            "10.20.0.5", port=514, severity="warnings"
         )
         bgp = fb.bgp_instance("default")
-        bgp.autonomous_system(autonomous_system_number="65001")
-        bgp.route_reflector().node("101", pod_id="1")
-        fb.vpc_protection().vpc_pair("vpc-101-102", logical_pair_id="101").node("101").node("102")
+        bgp.autonomous_system(autonomous_system_number=65001)
+        bgp.route_reflector().node(101, pod_id=1)
+        fb.vpc_protection().vpc_pair("vpc-101-102", logical_pair_id=101).node(101).node(102)
         cfg.controller().fabric_membership().fabric_node_member(
-            "SN101", id="101", name="leaf-01", role="leaf"
+            "SN101", id=101, name="leaf-01", role="leaf"
         )
 
         assert cfg.to_payload() == _mo(
@@ -125,7 +125,7 @@ class TestThreeActsOneDesign:
         # Act 1 — fabric
         fb = cfg.fabric()
         fb.datetime_policy("niwaki-datetime").ntp_provider("10.10.10.1", preferred_state=True)
-        fb.vpc_protection().vpc_pair("vpc-101-102", logical_pair_id="101").node("101").node("102")
+        fb.vpc_protection().vpc_pair("vpc-101-102", logical_pair_id=101).node(101).node(102)
 
         # Act 2 — access policies
         inf = cfg.infra()
@@ -189,12 +189,10 @@ class TestAccessPoliciesGolden:
         grp = inf.func_profile().access_group("server-pg")
         grp.bind(aaep="prod-aaep", cdp="cdp-on", link_level="10g")
         lp = inf.leaf_profile("leaf-01")
-        lp.leaf_selector("leaf-01", "range").node_block(
-            "blk1", from_node_id="101", to_node_id="101"
-        )
+        lp.leaf_selector("leaf-01", "range").node_block("blk1", from_node_id=101, to_node_id=101)
         lp.bind(interface_profile="leaf-01-ports")
         sel = inf.access_port_profile("leaf-01-ports").port_selector("1.01", "range")
-        sel.port_block("blk1", from_port_id="1", to_port_id="1")
+        sel.port_block("blk1", from_port_id=1, to_port_id=1)
         sel.bind(policy_group="server-pg")
         t = cfg.tenant("prod")
         t.vrf("main")

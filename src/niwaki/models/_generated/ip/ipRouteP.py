@@ -3,7 +3,10 @@
 from __future__ import annotations
 
 from typing import ClassVar, Annotated
-from pydantic import Field
+from pydantic import BeforeValidator, Field
+
+from niwaki.models._wire import Flags, parse_flags
+from niwaki.models._generated.enums.IpRtCtrl import IpRtCtrl
 
 from niwaki.models.base import ManagedObject
 
@@ -44,13 +47,19 @@ class ipRouteP(ManagedObject):
         str,
         Field(
             pattern="^[0-9a-fA-F.:/ ]+$",
-            alias="ip",
+            validation_alias="ip",
+            serialization_alias="ip",
             description="The static route IP address assigned to the outside network.",
         ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    aggregated_route: bool = Field(default=False, alias="aggregate", description="Aggregated Route")
+    aggregated_route: bool = Field(
+        default=False,
+        validation_alias="aggregate",
+        serialization_alias="aggregate",
+        description="Aggregated Route",
+    )
     annotation: Annotated[
         str,
         Field(
@@ -64,22 +73,47 @@ class ipRouteP(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies the description of a policy component.",
         ),
     ] = ""
-    start_of_prefix_length: str = Field(
-        default="", alias="fromPfxLen", description="Prefix list range"
-    )
+    start_of_prefix_length: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=128,
+            validation_alias="fromPfxLen",
+            serialization_alias="fromPfxLen",
+            description="Prefix list range",
+        ),
+    ] = 0
     name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
-    preference: str = Field(
-        default="",
-        alias="pref",
-        description="The administrative preference value for this route. This value is useful for resolving routes advertised from different protocols.",
+    preference: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=255,
+            validation_alias="pref",
+            serialization_alias="pref",
+            description="The administrative preference value for this route. This value is useful for resolving routes advertised from different protocols.",
+        ),
+    ] = 1
+    route_controls: Annotated[Flags[IpRtCtrl], BeforeValidator(parse_flags)] = Field(
+        default_factory=lambda: frozenset({IpRtCtrl.UNSPECIFIED}),
+        validation_alias="rtCtrl",
+        serialization_alias="rtCtrl",
     )
-    route_controls: str = Field(default="", alias="rtCtrl")
-    end_of_prefix_length: str = Field(default="", alias="toPfxLen")
+    end_of_prefix_length: Annotated[
+        int, Field(ge=0, le=128, validation_alias="toPfxLen", serialization_alias="toPfxLen")
+    ] = 0
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

@@ -25,7 +25,7 @@ def _current_bd(**attrs: str) -> fvBD:
 
 class TestMoDiffNominal:
     def test_single_bool_changed(self) -> None:
-        desired = fvBD(name="web", unicastRoute=False)
+        desired = fvBD(name="web", unicast_routing=False)
         current = _current_bd(name="web", unicastRoute="yes")
         delta = mo_diff(desired, current)
         assert delta is not None
@@ -34,7 +34,7 @@ class TestMoDiffNominal:
         assert attrs["name"] == "web"
 
     def test_single_enum_changed(self) -> None:
-        desired = fvBD(name="web", multiDstPktAct="drop")  # type: ignore[reportArgumentType]
+        desired = fvBD(name="web", multi_destination_packet_action="drop")  # type: ignore[reportArgumentType]
         current = _current_bd(name="web", multiDstPktAct="bd-flood")
         delta = mo_diff(desired, current)
         assert delta is not None
@@ -42,7 +42,7 @@ class TestMoDiffNominal:
         assert attrs["multiDstPktAct"] == "drop"
 
     def test_multiple_fields_changed(self) -> None:
-        desired = fvBD(name="web", unicastRoute=False, arpFlood=True)
+        desired = fvBD(name="web", unicast_routing=False, arp_flooding=True)
         current = _current_bd(name="web", unicastRoute="yes", arpFlood="no")
         delta = mo_diff(desired, current)
         assert delta is not None
@@ -51,14 +51,14 @@ class TestMoDiffNominal:
         assert attrs["arpFlood"] == "true"
 
     def test_unchanged_fields_excluded_from_delta(self) -> None:
-        desired = fvBD(name="web", unicastRoute=True)  # same as default
+        desired = fvBD(name="web", unicast_routing=True)  # same as default
         current = _current_bd(name="web", unicastRoute="yes")
         delta = mo_diff(desired, current)
         # unicastRoute is the same → no diff
         assert delta is None
 
     def test_naming_prop_always_in_delta(self) -> None:
-        desired = fvBD(name="web", arpFlood=True)
+        desired = fvBD(name="web", arp_flooding=True)
         current = _current_bd(name="web", arpFlood="no")
         delta = mo_diff(desired, current)
         assert delta is not None
@@ -66,7 +66,7 @@ class TestMoDiffNominal:
         assert "name" in attrs
 
     def test_delta_to_apic_only_sends_naming_plus_changed(self) -> None:
-        desired = fvBD(name="web", unicastRoute=False)
+        desired = fvBD(name="web", unicast_routing=False)
         current = _current_bd(name="web", unicastRoute="yes", arpFlood="no")
         delta = mo_diff(desired, current)
         assert delta is not None
@@ -80,7 +80,7 @@ class TestMoDiffNominal:
 
 class TestMoDiffNoChange:
     def test_identical_objects_return_none(self) -> None:
-        desired = fvBD(name="web", unicastRoute=True)
+        desired = fvBD(name="web", unicast_routing=True)
         current = _current_bd(name="web", unicastRoute="yes")
         assert mo_diff(desired, current) is None
 
@@ -124,7 +124,7 @@ class TestMoDiffErrors:
 
 class TestMoDiffIgnoresExtra:
     def test_apic_readonly_fields_not_compared(self) -> None:
-        desired = fvBD(name="web", unicastRoute=True)
+        desired = fvBD(name="web", unicast_routing=True)
         # current has read-only APIC fields — these go into model_extra
         current = fvBD.model_validate(
             {
@@ -141,7 +141,7 @@ class TestMoDiffIgnoresExtra:
         from niwaki.models._generated.fv.fvSubnet import fvSubnet
 
         desired = fvBD(name="web")
-        desired.children = [fvSubnet(ip="10.0.0.1/24", scope="public")]
+        desired.children.append(fvSubnet(subnet="10.0.0.1/24", scope="public"))
         current = fvBD.model_validate({"name": "web"})
         # recurse_children=False → children ignored, no scalar change → None
         assert mo_diff(desired, current, recurse_children=False) is None
@@ -170,9 +170,9 @@ class TestMoDiffChildren:
 
     def test_changed_child_appears_in_delta(self) -> None:
         desired = fvBD(name="web")
-        desired.children = [fvSubnet(ip="10.0.0.1/24", scope="public")]
+        desired.children.append(fvSubnet(subnet="10.0.0.1/24", scope="public"))
         current = fvBD.model_validate({"name": "web"})
-        current.children = [fvSubnet.model_validate({"ip": "10.0.0.1/24", "scope": "private"})]
+        current.children.append(fvSubnet.model_validate({"ip": "10.0.0.1/24", "scope": "private"}))
 
         delta = mo_diff(desired, current)
         assert delta is not None
@@ -182,7 +182,7 @@ class TestMoDiffChildren:
 
     def test_new_child_in_desired_is_included_in_full(self) -> None:
         desired = fvBD(name="web")
-        desired.children = [fvSubnet(ip="10.0.0.1/24", scope="public")]
+        desired.children.append(fvSubnet(subnet="10.0.0.1/24", scope="public"))
         current = fvBD.model_validate({"name": "web"})
         # current has no children
 
@@ -192,9 +192,9 @@ class TestMoDiffChildren:
 
     def test_unchanged_child_not_in_delta(self) -> None:
         desired = fvBD(name="web")
-        desired.children = [fvSubnet(ip="10.0.0.1/24", scope="public")]
+        desired.children.append(fvSubnet(subnet="10.0.0.1/24", scope="public"))
         current = fvBD.model_validate({"name": "web"})
-        current.children = [fvSubnet.model_validate({"ip": "10.0.0.1/24", "scope": "public"})]
+        current.children.append(fvSubnet.model_validate({"ip": "10.0.0.1/24", "scope": "public"}))
 
         delta = mo_diff(desired, current)
         # No scalar diff, no child diff → None
@@ -204,7 +204,7 @@ class TestMoDiffChildren:
         desired = fvBD(name="web")
         # desired has no children
         current = fvBD.model_validate({"name": "web"})
-        current.children = [fvSubnet.model_validate({"ip": "10.0.0.1/24", "scope": "public"})]
+        current.children.append(fvSubnet.model_validate({"ip": "10.0.0.1/24", "scope": "public"}))
 
         # mo_diff does not produce DELETEs — current-only children are ignored
         delta = mo_diff(desired, current)
@@ -216,10 +216,10 @@ class TestMoDiffChildren:
         assert mo_diff(desired, current) is None
 
     def test_scalar_diff_with_unchanged_children(self) -> None:
-        desired = fvBD(name="web", arpFlood=True)
-        desired.children = [fvSubnet(ip="10.0.0.1/24", scope="public")]
+        desired = fvBD(name="web", arp_flooding=True)
+        desired.children.append(fvSubnet(subnet="10.0.0.1/24", scope="public"))
         current = fvBD.model_validate({"name": "web", "arpFlood": "no"})
-        current.children = [fvSubnet.model_validate({"ip": "10.0.0.1/24", "scope": "public"})]
+        current.children.append(fvSubnet.model_validate({"ip": "10.0.0.1/24", "scope": "public"}))
 
         delta = mo_diff(desired, current)
         assert delta is not None
@@ -229,9 +229,9 @@ class TestMoDiffChildren:
 
     def test_recurse_children_false_ignores_all_child_changes(self) -> None:
         desired = fvBD(name="web")
-        desired.children = [fvSubnet(ip="10.0.0.1/24", scope="public")]
+        desired.children.append(fvSubnet(subnet="10.0.0.1/24", scope="public"))
         current = fvBD.model_validate({"name": "web"})
-        current.children = [fvSubnet.model_validate({"ip": "10.0.0.1/24", "scope": "private"})]
+        current.children.append(fvSubnet.model_validate({"ip": "10.0.0.1/24", "scope": "private"}))
 
         delta = mo_diff(desired, current, recurse_children=False)
         assert delta is None  # scalar unchanged, children ignored
@@ -243,21 +243,21 @@ class TestSecureProps:
     def test_secure_prop_is_skipped(self) -> None:
         from niwaki.models._generated.fv.fvKeyPol import fvKeyPol
 
-        desired = fvKeyPol(key_id="1", name="rollover", pre_shared_key="s3cr3t")
+        desired = fvKeyPol(key_id=1, name="rollover", pre_shared_key="s3cr3t")
         current = fvKeyPol.model_validate({"id": "1", "name": "rollover"})
         assert mo_diff(desired, current) is None
 
     def test_secure_prop_is_skipped_in_fields_set_mode(self) -> None:
         from niwaki.models._generated.fv.fvKeyPol import fvKeyPol
 
-        desired = fvKeyPol(key_id="1", pre_shared_key="s3cr3t")
+        desired = fvKeyPol(key_id=1, pre_shared_key="s3cr3t")
         current = fvKeyPol.model_validate({"id": "1"})
         assert mo_diff(desired, current, respect_fields_set=True) is None
 
     def test_non_secure_changes_still_diff(self) -> None:
         from niwaki.models._generated.fv.fvKeyPol import fvKeyPol
 
-        desired = fvKeyPol(key_id="1", name="rotated", pre_shared_key="s3cr3t")
+        desired = fvKeyPol(key_id=1, name="rotated", pre_shared_key="s3cr3t")
         current = fvKeyPol.model_validate({"id": "1", "name": "rollover"})
         delta = mo_diff(desired, current)
         assert delta is not None and delta.name == "rotated"

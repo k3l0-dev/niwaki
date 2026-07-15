@@ -22,7 +22,7 @@ Accepted as keyword arguments of `.arp_interface_policy(name)` and of `.set(**at
 | parameter | wire | type | values | default | description |
 | --- | --- | --- | --- | --- | --- |
 | `name` *(positional)* | `name` | `str` | — | — | The name of the object. |
-| `interface_controls_for_arp` | `ctrl` | {ref}`ArpIfControl <enum-arpifcontrol>` | `garp-adj-enable`, `unspecified` | `unspecified` | Interface controls |
+| `interface_controls_for_arp` | `ctrl` | {ref}`ArpIfControl <enum-arpifcontrol>` | `unspecified`, `garp-adj-enable` | `unspecified` | Interface controls |
 | `description` | `descr` | `str` | — | — | Specifies a description of the policy definition. |
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |

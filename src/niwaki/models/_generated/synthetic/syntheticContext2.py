@@ -50,14 +50,17 @@ class syntheticContext2(ManagedObject):
     ]
 
     # ── Create-only (ignored by APIC on modification) ─────────────────────────
-    num_eps: Annotated[int, Field(alias="numEps")] = 0
-    num_groups: Annotated[int, Field(alias="numGroups")] = 0
-    sec_key: Annotated[int, Field(alias="secKey")] = 0
+    num_eps: Annotated[int, Field(validation_alias="numEps", serialization_alias="numEps")] = 0
+    num_groups: Annotated[
+        int, Field(validation_alias="numGroups", serialization_alias="numGroups")
+    ] = 0
+    sec_key: Annotated[int, Field(validation_alias="secKey", serialization_alias="secKey")] = 0
 
     # ── Configurable ───────────────────────────────────────────────────────────
     admin_state: ScalarEnum82 = Field(
         default=ScalarEnum82.ENABLED,
-        alias="adminState",
+        validation_alias="adminState",
+        serialization_alias="adminState",
         description="The destination policy administrative state. If enabled, the system uses the destination policy when an error matching the associated cause is encountered. Otherwise, the system ignores the policy even if a matching error occurs. By default, all policies are enabled.",
     )
     annotation: Annotated[
@@ -71,9 +74,15 @@ class syntheticContext2(ManagedObject):
     descr: Annotated[
         str, Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$")
     ] = ""
-    id: Annotated[str, Field(description="An identifier .")] = ""
+    id: Annotated[int, Field(description="An identifier .")] = 0
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     state: ScalarEnum82 = Field(
         default=ScalarEnum82.ENABLED, description="Represents the state of the relationship."

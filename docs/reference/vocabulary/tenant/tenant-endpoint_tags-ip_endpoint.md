@@ -23,7 +23,7 @@ Accepted as keyword arguments of `.ip_endpoint(endpoint_ip_address, vrf_name)` a
 | --- | --- | --- | --- | --- | --- |
 | `endpoint_ip_address` *(positional)* | `ip` | `str` | — | — | The IP address. |
 | `vrf_name` *(positional)* | `ctxName` | `str` | — | — | The L3 context name. |
-| `id` | `id` | `str` | — | — | An identifier . |
+| `id` | `id` | `int` | — | `0` | An identifier . |
 | `name` | `name` | `str` | — | — | The name of the object. |
 
 ## APIC diagnostics

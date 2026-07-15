@@ -54,16 +54,24 @@ class dnsDom(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies the description of a policy component.",
         ),
     ] = ""
     is_default: bool = Field(
         default=False,
-        alias="isDefault",
+        validation_alias="isDefault",
+        serialization_alias="isDefault",
         description="Indicate whether this domain is the default domain. Only one domain in the group can be the default.",
     )
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

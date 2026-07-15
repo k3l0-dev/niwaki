@@ -58,7 +58,8 @@ class dbgexpRsTSScheduler(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9_.:-]+$",
-            alias="tnTrigSchedPName",
+            validation_alias="tnTrigSchedPName",
+            serialization_alias="tnTrigSchedPName",
             description="The name of the scheduler associated with the technical support policy.",
         ),
     ] = ""

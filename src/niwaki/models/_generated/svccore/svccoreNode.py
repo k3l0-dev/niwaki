@@ -44,12 +44,35 @@ class svccoreNode(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    card_id: Annotated[str, Field(alias="cardId", description="Card ID where the core was created")]
-    create_time: Annotated[str, Field(alias="createTime")]
-    node_id_where_the_core_file_was_created: Annotated[
-        str, Field(alias="nodeId", description="Node ID where the core was created")
+    card_id: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=255,
+            validation_alias="cardId",
+            serialization_alias="cardId",
+            description="Card ID where the core was created",
+        ),
+    ] = 1
+    create_time: Annotated[
+        str, Field(validation_alias="createTime", serialization_alias="createTime")
     ]
-    name_of_service_that_cored: Annotated[str, Field(min_length=1, max_length=512, alias="svcName")]
+    node_id_where_the_core_file_was_created: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=16000,
+            validation_alias="nodeId",
+            serialization_alias="nodeId",
+            description="Node ID where the core was created",
+        ),
+    ] = 1
+    name_of_service_that_cored: Annotated[
+        str,
+        Field(
+            min_length=1, max_length=512, validation_alias="svcName", serialization_alias="svcName"
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     ack: bool = False

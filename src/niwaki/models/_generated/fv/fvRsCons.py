@@ -60,7 +60,8 @@ class fvRsCons(ManagedObject):
             min_length=1,
             max_length=64,
             pattern="^[a-zA-Z0-9_.:-]+$",
-            alias="tnVzBrCPName",
+            validation_alias="tnVzBrCPName",
+            serialization_alias="tnVzBrCPName",
             description="The consumer contract name.",
         ),
     ]
@@ -77,7 +78,8 @@ class fvRsCons(ManagedObject):
     intent: VzIntent = VzIntent.INSTALL
     priority: QosTenantPrio = Field(
         default=QosTenantPrio.UNSPECIFIED,
-        alias="prio",
+        validation_alias="prio",
+        serialization_alias="prio",
         description="The system class determines the quality of service and priority for the consumer traffic.",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

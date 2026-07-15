@@ -37,7 +37,13 @@ class ptpUcastIp(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     ptp_unicast_dst_address: Annotated[
-        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="dstIp", description="IP address")
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            validation_alias="dstIp",
+            serialization_alias="dstIp",
+            description="IP address",
+        ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────

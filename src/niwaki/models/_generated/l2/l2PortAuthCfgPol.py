@@ -47,19 +47,75 @@ class l2PortAuthCfgPol(ManagedObject):
         ),
     ] = ""
     mac_auth: Dot1xMacAuth = Field(
-        default=Dot1xMacAuth.EAP, alias="macAuth", description="MAC Auth"
+        default=Dot1xMacAuth.EAP,
+        validation_alias="macAuth",
+        serialization_alias="macAuth",
+        description="MAC Auth",
     )
-    max_reauth_request: str = Field(
-        default="", alias="maxReauthReq", description="Max Reauth Request"
+    max_reauth_request: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=10,
+            validation_alias="maxReauthReq",
+            serialization_alias="maxReauthReq",
+            description="Max Reauth Request",
+        ),
+    ] = 2
+    max_request: Annotated[
+        int,
+        Field(
+            ge=2,
+            le=10,
+            validation_alias="maxReq",
+            serialization_alias="maxReq",
+            description="Max Request",
+        ),
+    ] = 2
+    re_authentication: bool = Field(
+        default=False,
+        validation_alias="reAuth",
+        serialization_alias="reAuth",
+        description="Re-authentication",
     )
-    max_request: str = Field(default="", alias="maxReq", description="Max Request")
-    re_authentication: bool = Field(default=False, alias="reAuth", description="Re-authentication")
     re_auth_period: Annotated[
-        int, Field(ge=1, le=2147483, alias="reAuthPeriod", description="Re-auth Period")
+        int,
+        Field(
+            ge=1,
+            le=2147483,
+            validation_alias="reAuthPeriod",
+            serialization_alias="reAuthPeriod",
+            description="Re-auth Period",
+        ),
     ] = 3600
-    server_timeout: str = Field(default="", alias="serverTimeout", description="Server Timeout")
-    supplicant_timeout: str = Field(
-        default="", alias="suppTimeout", description="Supplicant Timeout"
-    )
-    tx_period: str = Field(default="", alias="txPeriod", description="Tx Period")
+    server_timeout: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=65535,
+            validation_alias="serverTimeout",
+            serialization_alias="serverTimeout",
+            description="Server Timeout",
+        ),
+    ] = 30
+    supplicant_timeout: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=65535,
+            validation_alias="suppTimeout",
+            serialization_alias="suppTimeout",
+            description="Supplicant Timeout",
+        ),
+    ] = 30
+    tx_period: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=65535,
+            validation_alias="txPeriod",
+            serialization_alias="txPeriod",
+            description="Tx Period",
+        ),
+    ] = 30
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

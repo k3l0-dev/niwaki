@@ -37,7 +37,14 @@ class apBasePackage(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     app_ctx_root: Annotated[
-        str, Field(min_length=1, max_length=512, alias="appCtxRoot", description="app Context Root")
+        str,
+        Field(
+            min_length=1,
+            max_length=512,
+            validation_alias="appCtxRoot",
+            serialization_alias="appCtxRoot",
+            description="app Context Root",
+        ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
@@ -52,7 +59,13 @@ class apBasePackage(ManagedObject):
     apps: Annotated[str, Field(max_length=512, description="Apps in Package")] = ""
     name: Annotated[str, Field(min_length=1, max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
-    num_apps: Annotated[int, Field(alias="numApps")] = 0
+    num_apps: Annotated[int, Field(validation_alias="numApps", serialization_alias="numApps")] = 0
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

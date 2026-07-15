@@ -51,7 +51,8 @@ class infraRsSpanVSrcGrp(ManagedObject):
             min_length=1,
             max_length=64,
             pattern="^[a-zA-Z0-9_.:-]+$",
-            alias="tnSpanVSrcGrpName",
+            validation_alias="tnSpanVSrcGrpName",
+            serialization_alias="tnSpanVSrcGrpName",
             description="The virtual source end point group policy name.",
         ),
     ]

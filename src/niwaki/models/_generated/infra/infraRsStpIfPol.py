@@ -60,7 +60,8 @@ class infraRsStpIfPol(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9_.:-]+$",
-            alias="tnStpIfPolName",
+            validation_alias="tnStpIfPolName",
+            serialization_alias="tnStpIfPolName",
             description="The STP policy name. This name can be up to 64 alphanumeric characters. Note that you cannot change this name after the object has been saved. STP policy ensures that loops are not created if there are redundant paths in the network.",
         ),
     ] = ""

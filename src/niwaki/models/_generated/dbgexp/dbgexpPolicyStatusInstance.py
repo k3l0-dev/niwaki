@@ -41,7 +41,8 @@ class dbgexpPolicyStatusInstance(ManagedObject):
     collection_time: Annotated[
         str,
         Field(
-            alias="collectionTime",
+            validation_alias="collectionTime",
+            serialization_alias="collectionTime",
             description="The time at which the export data was uploaded from IFC or the leaf to the specified destination.",
         ),
     ]

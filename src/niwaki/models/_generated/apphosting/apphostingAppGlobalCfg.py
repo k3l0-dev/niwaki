@@ -41,7 +41,8 @@ class apphostingAppGlobalCfg(ManagedObject):
     # ── Configurable ───────────────────────────────────────────────────────────
     admin_st: ApphostingAdminState = Field(
         default=ApphostingAdminState.ENABLED,
-        alias="adminSt",
+        validation_alias="adminSt",
+        serialization_alias="adminSt",
         description='Admin state to configure mo "',
     )
     annotation: Annotated[
@@ -54,7 +55,8 @@ class apphostingAppGlobalCfg(ManagedObject):
     ] = ""
     enable_or_disable_signed_verification: ApphostingSignOption = Field(
         default=ApphostingSignOption.ENABLE,
-        alias="signVerify",
+        validation_alias="signVerify",
+        serialization_alias="signVerify",
         description="properties to enable or disable signed verification",
     )
     storage_limit: Annotated[
@@ -62,7 +64,8 @@ class apphostingAppGlobalCfg(ManagedObject):
         Field(
             ge=0,
             le=2147483647,
-            alias="storageLimit",
+            validation_alias="storageLimit",
+            serialization_alias="storageLimit",
             description="properties to set bootflash backend storage limit.",
         ),
     ] = 0

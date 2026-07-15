@@ -53,7 +53,8 @@ class vnsRsCIfPathAtt(ManagedObject):
     ] = ""
     target_dn: str = Field(
         default="",
-        alias="tDn",
+        validation_alias="tDn",
+        serialization_alias="tDn",
         description="The path for the association to the physical port on the iLeaf to which this concrete interface is attached.",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

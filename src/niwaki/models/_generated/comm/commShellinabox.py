@@ -38,7 +38,8 @@ class commShellinabox(ManagedObject):
     # ── Configurable ───────────────────────────────────────────────────────────
     admin_state: CommAdminState = Field(
         default=CommAdminState.DISABLED,
-        alias="adminSt",
+        validation_alias="adminSt",
+        serialization_alias="adminSt",
         description="The administrative state of the object or policy.",
     )
     annotation: Annotated[
@@ -54,7 +55,8 @@ class commShellinabox(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="The description of this configuration item.",
         ),
     ] = ""
@@ -63,6 +65,12 @@ class commShellinabox(ManagedObject):
         Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="The name of the object."),
     ] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

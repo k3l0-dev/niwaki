@@ -45,6 +45,6 @@ class commReconfig(ManagedObject):
         ),
     ] = ""
     toggle_state_for_nginx_process_restart: CommRedirect = Field(
-        default=CommRedirect.DISABLED, alias="toggle"
+        default=CommRedirect.DISABLED, validation_alias="toggle", serialization_alias="toggle"
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

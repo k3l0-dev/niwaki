@@ -45,7 +45,14 @@ class dbgacRsFromEp(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    target_dn: Annotated[str, Field(alias="tDn", description="The source end point IP address.")]
+    target_dn: Annotated[
+        str,
+        Field(
+            validation_alias="tDn",
+            serialization_alias="tDn",
+            description="The source end point IP address.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[

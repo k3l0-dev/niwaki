@@ -22,7 +22,7 @@ Accepted as keyword arguments of `.dscp_marking()` and of `.set(**attrs)` on thi
 | parameter | wire | type | values | default | description |
 | --- | --- | --- | --- | --- | --- |
 | `description` | `descr` | `str` | — | — | Specifies a description of the policy definition. |
-| `mark` | `mark` | `str` | — | — | Range from |
+| `mark` | `mark` | `int` | — | `0` | Range from |
 | `name` | `name` | `str` | — | — | — |
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |

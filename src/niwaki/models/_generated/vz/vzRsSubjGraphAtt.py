@@ -3,7 +3,10 @@
 from __future__ import annotations
 
 from typing import ClassVar, Annotated
-from pydantic import Field
+from pydantic import BeforeValidator, Field
+
+from niwaki.models._wire import Flags, parse_flags
+from niwaki.models._generated.enums.VzRAction import VzRAction
 
 from niwaki.models.base import ManagedObject
 
@@ -55,9 +58,17 @@ class vzRsSubjGraphAtt(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    directives: str = ""
+    directives: Annotated[Flags[VzRAction], BeforeValidator(parse_flags)] = Field(
+        default_factory=lambda: frozenset({VzRAction.NONE})
+    )
     name: Annotated[
         str,
-        Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="tnVnsAbsGraphName"),
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            validation_alias="tnVnsAbsGraphName",
+            serialization_alias="tnVnsAbsGraphName",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

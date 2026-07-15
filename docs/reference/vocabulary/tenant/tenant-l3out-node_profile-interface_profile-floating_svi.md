@@ -32,9 +32,9 @@ Accepted as keyword arguments of `.floating_svi(path_of_the_anchor_node, externa
 | `ipv6_link_local_address` | `llAddr` | `str` | — | — | Override of system generated Ipv6 Link Local Addr |
 | `external_l3_interface_mac_address` | `mac` | `str` | — | — | Mac of the external l3 interface. The mac address is by default hard coded to "00:22:BD:F8:19:FF". This is a reserved MAC address and all the l3 interfaces by default use this mac as the router mac. |
 | `encap_mode` | `mode` | {ref}`FvMode <enum-fvmode>` | `native`, `regular`, `untagged` | `regular` | The BGP Domain mode. |
-| `mtu_size` | `mtu` | `int` | — | `0` | The administrative MTU port on the aggregated interface. |
+| `mtu_size` | `mtu` | `int` | — | `inherit` | The administrative MTU port on the aggregated interface. |
 | `name_of_virtuallifp` | `name` | `str` | — | — | The name of the object. |
-| `dscp_value` | `targetDscp` | `str` | — | — | Interface level Dscp value. |
+| `dscp_value` | `targetDscp` | `int` | — | `unspecified` | Interface level Dscp value. |
 
 ## Children
 

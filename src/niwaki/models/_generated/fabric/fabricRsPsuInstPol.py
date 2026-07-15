@@ -58,7 +58,8 @@ class fabricRsPsuInstPol(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9_.:-]+$",
-            alias="tnPsuInstPolName",
+            validation_alias="tnPsuInstPolName",
+            serialization_alias="tnPsuInstPolName",
             description="The power redundancy policy name. This name can be up to 64 alphanumeric characters. Note that you cannot change this name after the object has been saved.",
         ),
     ] = ""

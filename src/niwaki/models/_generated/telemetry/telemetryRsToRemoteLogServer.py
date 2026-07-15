@@ -49,7 +49,8 @@ class telemetryRsToRemoteLogServer(ManagedObject):
             min_length=1,
             max_length=64,
             pattern="^[a-zA-Z0-9_.:-]+$",
-            alias="tnTelemetryLogServerPName",
+            validation_alias="tnTelemetryLogServerPName",
+            serialization_alias="tnTelemetryLogServerPName",
         ),
     ]
 

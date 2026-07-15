@@ -19,7 +19,10 @@ from dataclasses import dataclass
 from enum import StrEnum
 from functools import cache
 from pathlib import Path
-from typing import Annotated, Any, Literal, get_args, get_origin
+from types import UnionType
+from typing import Annotated, Any, Literal, Union, get_args, get_origin
+
+from pydantic.fields import FieldInfo
 
 from niwaki.models.base import ManagedObject
 
@@ -63,6 +66,99 @@ def _unwrap(annotation: Any) -> Any:
     return annotation
 
 
+def _scalar_type(annotation: Any) -> str:
+    """Render a non-enum, non-flags field's type: int, float, or str.
+
+    A number the APIC may *name* arrives as ``int | Literal["unspecified", …]``
+    (the engineer writes ``80``, the APIC stores ``"http"``); it is still a
+    number, and documenting it as ``str`` would hide that.  A plain ``int`` or
+    ``float`` renders as itself; everything else is a validated string.
+    """
+    if annotation is int:
+        return "int"
+    if annotation is float:
+        return "float"
+    if get_origin(annotation) in (Union, UnionType):
+        members = {
+            get_args(arg)[0] if get_origin(arg) is Annotated else arg
+            for arg in get_args(annotation)
+        }
+        if int in members:
+            return "int"
+        if float in members:
+            return "float"
+    return "str"
+
+
+def _render_type(annotation: Any) -> tuple[str, str | None, tuple[str, ...]]:
+    """Resolve a field annotation to ``(type_str, enum_name, values)``.
+
+    The single place the reference decides how a type reads, so a naming prop
+    and a plain attribute of the same shape document identically — a naming
+    port (``first_source_port``) is a number, not a string, and must say so.
+    """
+    unwrapped = _unwrap(annotation)
+    if isinstance(unwrapped, type) and issubclass(unwrapped, StrEnum):
+        return unwrapped.__name__, unwrapped.__name__, tuple(m.value for m in unwrapped)
+    member = _flags_member(unwrapped)
+    if member is not None:
+        return f"set of {member.__name__}", member.__name__, tuple(m.value for m in member)
+    if unwrapped is bool:
+        return "bool", None, ()
+    return _scalar_type(unwrapped), None, ()
+
+
+def _flags_member(annotation: Any) -> type[StrEnum] | None:
+    """The member enum of a ``Flags[E]`` bitmask, or ``None`` when it is not one.
+
+    A bitmask field is ``Flags[E]`` (a PEP 695 alias resolving to
+    ``frozenset[E] | set[E] | str``).  ``get_origin`` on it returns the alias,
+    so its member enum is read from the args — this is what lets the reference
+    document a set of flags with the same allowed-values table as an enum.
+    """
+    from niwaki.models._wire import Flags
+
+    if get_origin(annotation) is Flags:
+        (member,) = get_args(annotation)
+        if isinstance(member, type) and issubclass(member, StrEnum):
+            return member
+    return None
+
+
+def _render_default(info: FieldInfo) -> str | None:
+    """Render a field's default for the table, or ``None`` when there is none.
+
+    A bitmask carries its default through ``default_factory`` (a frozenset), so
+    ``info.default`` is ``PydanticUndefined`` — printing that verbatim is what
+    put the string "PydanticUndefined" in the reference.  The factory is called
+    to recover the real default, and a set of flags renders as its members.
+    """
+    from pydantic_core import PydanticUndefined
+
+    default = info.default
+    if default is PydanticUndefined:
+        if info.default_factory is None:
+            return None
+        default = info.default_factory()  # type: ignore[call-arg]
+    if isinstance(default, frozenset | set):
+        members = sorted(m.value if isinstance(m, StrEnum) else str(m) for m in default)
+        return ", ".join(members) or None
+    if isinstance(default, StrEnum):
+        default = default.value
+    return None if default in ("", None) else str(default)
+
+
+def _wire_name(info: FieldInfo) -> str | None:
+    """The APIC attribute name of a field, or ``None`` when it is its own name.
+
+    The wire name lives in ``serialization_alias``, not ``alias`` — see
+    :meth:`~niwaki.models.base.ManagedObject._get_alias_map` for why the plain
+    ``alias`` is unusable (a type checker reads it and then rejects the readable
+    Python name it was renamed to).
+    """
+    return info.serialization_alias
+
+
 def field_docs(cls: type[ManagedObject], sugar: dict[str, str]) -> list[FieldDoc]:
     """Describe every keyword a maker for *cls* accepts, naming props first.
 
@@ -79,14 +175,17 @@ def field_docs(cls: type[ManagedObject], sugar: dict[str, str]) -> list[FieldDoc
 
     for name in naming:
         info = cls.model_fields.get(name)
+        type_str, enum_name, values = (
+            _render_type(info.annotation) if info is not None else ("str", None, ())
+        )
         docs.append(
             FieldDoc(
                 name=name,
-                wire=(info.alias if info and info.alias else name),
+                wire=(_wire_name(info) if info else name) or name,
                 kind="naming",
-                type_str="str",
-                enum=None,
-                values=(),
+                type_str=type_str,
+                enum=enum_name,
+                values=values,
                 default=None,
                 description=(info.description if info and info.description else ""),
             )
@@ -109,29 +208,15 @@ def field_docs(cls: type[ManagedObject], sugar: dict[str, str]) -> list[FieldDoc
     for name, info in cls.model_fields.items():
         if name in naming or name in _HOUSEKEEPING:
             continue
-        annotation = _unwrap(info.annotation)
-        enum_name: str | None = None
-        values: tuple[str, ...] = ()
-        if isinstance(annotation, type) and issubclass(annotation, StrEnum):
-            enum_name = annotation.__name__
-            values = tuple(member.value for member in annotation)
-            type_str = enum_name
-        elif annotation is bool:
-            type_str = "bool"
-        elif annotation is int:
-            type_str = "int"
-        else:
-            type_str = "str"
-
-        default = info.default
-        if isinstance(default, StrEnum):
-            default = default.value
-        default_str = None if default in ("", None) else str(default)
+        # A bitmask (Flags[E]) documents its members like an enum; a named number
+        # (int | Literal[...]) reads as a number, not str — see _render_type.
+        type_str, enum_name, values = _render_type(info.annotation)
+        default_str = _render_default(info)
 
         docs.append(
             FieldDoc(
                 name=name,
-                wire=(info.alias or name),
+                wire=_wire_name(info) or name,
                 kind="attr",
                 type_str=type_str,
                 enum=enum_name,

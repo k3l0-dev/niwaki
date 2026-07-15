@@ -43,7 +43,8 @@ class opflexpClientCert(ManagedObject):
         Field(
             min_length=1,
             max_length=512,
-            alias="clientName",
+            validation_alias="clientName",
+            serialization_alias="clientName",
             description="The hostname used by the client when it acquired the lease.",
         ),
     ]
@@ -58,7 +59,9 @@ class opflexpClientCert(ManagedObject):
         ),
     ] = ""
     certificate_signing_request_state: OpflexpCsrState = Field(
-        default=OpflexpCsrState.SIGNINGREQUEST, alias="csrState"
+        default=OpflexpCsrState.SIGNINGREQUEST,
+        validation_alias="csrState",
+        serialization_alias="csrState",
     )
     data: Annotated[
         str, Field(description="Information returned by or provided to the application or task.")
@@ -68,6 +71,12 @@ class opflexpClientCert(ManagedObject):
         Field(max_length=16, pattern="^[a-zA-Z0-9_.:-]+$", description="The name of the object."),
     ] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

@@ -46,7 +46,12 @@ class dbgacRsFromEpg(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     target_dn: Annotated[
-        str, Field(alias="tDn", description="The source end point group information.")
+        str,
+        Field(
+            validation_alias="tDn",
+            serialization_alias="tDn",
+            description="The source end point group information.",
+        ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────

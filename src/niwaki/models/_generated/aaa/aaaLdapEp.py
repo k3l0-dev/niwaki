@@ -62,7 +62,8 @@ class aaaLdapEp(ManagedObject):
         str,
         Field(
             max_length=63,
-            alias="attribute",
+            validation_alias="attribute",
+            serialization_alias="attribute",
             description="An LDAP endpoint attribute to be used as the CiscoAVPair.",
         ),
     ] = ""
@@ -70,7 +71,8 @@ class aaaLdapEp(ManagedObject):
         str,
         Field(
             max_length=512,
-            alias="basedn",
+            validation_alias="basedn",
+            serialization_alias="basedn",
             description="The LDAP base DN for user lookup in the LDAP directory tree.",
         ),
     ] = ""
@@ -79,7 +81,8 @@ class aaaLdapEp(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
@@ -87,19 +90,27 @@ class aaaLdapEp(ManagedObject):
         str,
         Field(
             max_length=63,
-            alias="filter",
+            validation_alias="filter",
+            serialization_alias="filter",
             description="An LDAP search filter for the LDAP endpoint.",
         ),
     ] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     owner_key: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerKey",
+            validation_alias="ownerKey",
+            serialization_alias="ownerKey",
             description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
@@ -108,7 +119,8 @@ class aaaLdapEp(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerTag",
+            validation_alias="ownerTag",
+            serialization_alias="ownerTag",
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
@@ -125,7 +137,8 @@ class aaaLdapEp(ManagedObject):
         Field(
             ge=1,
             le=60,
-            alias="timeout",
+            validation_alias="timeout",
+            serialization_alias="timeout",
             description="The endpoint timeout when contacting an LDAP endpoint.",
         ),
     ] = 30

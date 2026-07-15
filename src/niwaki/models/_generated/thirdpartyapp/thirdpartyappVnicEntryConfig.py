@@ -39,7 +39,8 @@ class thirdpartyappVnicEntryConfig(ManagedObject):
         Field(
             ge=0,
             le=3,
-            alias="guestIntfId",
+            validation_alias="guestIntfId",
+            serialization_alias="guestIntfId",
             description="guest interface identifier in the range of 0 to 3 value '0' will appear as eth0 inside the container",
         ),
     ] = 0
@@ -57,19 +58,27 @@ class thirdpartyappVnicEntryConfig(ManagedObject):
         str,
         Field(
             pattern="^[0-9a-fA-F.:/ ]+$",
-            alias="appIpV4",
+            validation_alias="appIpV4",
+            serialization_alias="appIpV4",
             description="v4 ip address for vnic entry",
         ),
     ] = ""
-    ipv6_address: str = Field(
-        default="", alias="appIpV6", description="v6 ip address for vnic entry"
-    )
+    ipv6_address: Annotated[
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            validation_alias="appIpV6",
+            serialization_alias="appIpV6",
+            description="v6 ip address for vnic entry",
+        ),
+    ] = ""
     connectivity_vrf: Annotated[
         str,
         Field(
             min_length=1,
             max_length=32,
-            alias="p2pBridgeVrf",
+            validation_alias="p2pBridgeVrf",
+            serialization_alias="p2pBridgeVrf",
             description="point to point bridge vrf name",
         ),
     ] = ""

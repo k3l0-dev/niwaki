@@ -34,7 +34,9 @@ class mdpConsumerVnInfoRef(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    consumer_vrf_dn: Annotated[str, Field(alias="consumerVnDn")]
+    consumer_vrf_dn: Annotated[
+        str, Field(validation_alias="consumerVnDn", serialization_alias="consumerVnDn")
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[

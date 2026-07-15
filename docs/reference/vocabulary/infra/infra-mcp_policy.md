@@ -24,13 +24,13 @@ Accepted as keyword arguments of `.mcp_policy(name)` and of `.set(**attrs)` on t
 | `name` *(positional)* | `name` | `str` | — | — | The name of the object. |
 | `admin_state` | `adminSt` | {ref}`NwIfAdminSt <enum-nwifadminst>` | `disabled`, `enabled` | `enabled` | The administrative state of the object or policy. |
 | `description` | `descr` | `str` | — | — | Specifies a description of the policy definition. |
-| `grace_period` | `gracePeriod` | `str` | — | — | For strict mode, grace period timeout in sec during which early loop detection takes place |
-| `grace_period_msec` | `gracePeriodMsec` | `str` | — | — | For strict mode, grace period timeout in millisec during which early loop detection takes place |
-| `maximum_number_of_vlans` | `maxPduPerVlanLimit` | `str` | — | — | — |
+| `grace_period` | `gracePeriod` | `int` | — | `3` | For strict mode, grace period timeout in sec during which early loop detection takes place |
+| `grace_period_msec` | `gracePeriodMsec` | `int` | — | `0` | For strict mode, grace period timeout in millisec during which early loop detection takes place |
+| `maximum_number_of_vlans` | `maxPduPerVlanLimit` | `int` | — | `256` | — |
 | `mode` | `mcpMode` | {ref}`McpMcpMode <enum-mcpmcpmode>` | `off`, `on` | `off` | Instance MCP mode |
 | `mcp_pdu_per_vlan` | `mcpPduPerVlan` | {ref}`McpMcpPduPerVlan <enum-mcpmcppdupervlan>` | `off`, `on` | `on` | — |
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |
-| `init_delay_time` | `strictInitDelayTime` | `str` | — | — | For strict mode, delay time in seconds for mcp to wait before sending BPDUs. This gives time for STP on the external network to converge |
-| `transmission_frequency` | `strictTxFreq` | `str` | — | — | For strict mode, transmission frequency of MCP packets until grace period on each L2 interface in seconds |
-| `strict_tx_freq_msec` | `strictTxFreqMsec` | `str` | — | — | For strict mode, transmission frequency of MCP packets until grace period on each L2 interface in milliseconds |
+| `init_delay_time` | `strictInitDelayTime` | `int` | — | `0` | For strict mode, delay time in seconds for mcp to wait before sending BPDUs. This gives time for STP on the external network to converge |
+| `transmission_frequency` | `strictTxFreq` | `int` | — | `0` | For strict mode, transmission frequency of MCP packets until grace period on each L2 interface in seconds |
+| `strict_tx_freq_msec` | `strictTxFreqMsec` | `int` | — | `500` | For strict mode, transmission frequency of MCP packets until grace period on each L2 interface in milliseconds |

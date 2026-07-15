@@ -58,7 +58,8 @@ class fvRsIgmpsn(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9_.:-]+$",
-            alias="tnIgmpSnoopPolName",
+            validation_alias="tnIgmpSnoopPolName",
+            serialization_alias="tnIgmpSnoopPolName",
             description="The IGMP Snooping policy name. By examining (snooping) IGMP membership report messages from interested hosts, multicast traffic is limited to the subset of VLAN interfaces on which the hosts reside.",
         ),
     ] = ""

@@ -44,5 +44,7 @@ class genericsCondition(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    logical_expression: Annotated[str, Field(max_length=512, alias="expression")] = ""
+    logical_expression: Annotated[
+        str, Field(max_length=512, validation_alias="expression", serialization_alias="expression")
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

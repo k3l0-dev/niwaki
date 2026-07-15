@@ -55,5 +55,5 @@ class pimRsIfPol(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    target_dn: str = Field(default="", alias="tDn")
+    target_dn: str = Field(default="", validation_alias="tDn", serialization_alias="tDn")
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

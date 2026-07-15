@@ -49,13 +49,15 @@ class commApiRespTime(ManagedObject):
         Field(
             ge=30,
             le=900,
-            alias="calcWindow",
+            validation_alias="calcWindow",
+            serialization_alias="calcWindow",
             description="Window in which averageTime, and number of requests that go beyond the threshold is calculated",
         ),
     ] = 300
     admin_state: CommAdminState = Field(
         default=CommAdminState.DISABLED,
-        alias="enableCalculation",
+        validation_alias="enableCalculation",
+        serialization_alias="enableCalculation",
         description="Property is set to enable or disable the calculation",
     )
     resp_time_threshold: Annotated[
@@ -63,7 +65,8 @@ class commApiRespTime(ManagedObject):
         Field(
             ge=40,
             le=85000,
-            alias="respTimeThreshold",
+            validation_alias="respTimeThreshold",
+            serialization_alias="respTimeThreshold",
             description="An event will be created if the response time of any request in the window is beyond this threshold",
         ),
     ] = 85000
@@ -72,7 +75,8 @@ class commApiRespTime(ManagedObject):
         Field(
             ge=1,
             le=10,
-            alias="topNRequests",
+            validation_alias="topNRequests",
+            serialization_alias="topNRequests",
             description="Property to set the number of slowest requests to be seen",
         ),
     ] = 5

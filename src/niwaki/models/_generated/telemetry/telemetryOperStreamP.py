@@ -38,7 +38,8 @@ class telemetryOperStreamP(ManagedObject):
     # ── Configurable ───────────────────────────────────────────────────────────
     administrative_state: TelemetryAdminState = Field(
         default=TelemetryAdminState.DISABLED,
-        alias="adminSt",
+        validation_alias="adminSt",
+        serialization_alias="adminSt",
         description="The administrative state of the object or policy.",
     )
     annotation: Annotated[
@@ -49,5 +50,7 @@ class telemetryOperStreamP(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    topic_associated_with_server: Annotated[str, Field(max_length=512, alias="topic")] = ""
+    topic_associated_with_server: Annotated[
+        str, Field(max_length=512, validation_alias="topic", serialization_alias="topic")
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

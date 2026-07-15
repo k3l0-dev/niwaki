@@ -3,8 +3,10 @@
 from __future__ import annotations
 
 from typing import ClassVar, Annotated
-from pydantic import Field
+from pydantic import BeforeValidator, Field
 
+from niwaki.models._wire import Flags, parse_flags
+from niwaki.models._generated.enums.CompmsftConfigIssues import CompmsftConfigIssues
 from niwaki.models._generated.enums.VmmTrigSt import VmmTrigSt
 
 from niwaki.models.base import ManagedObject
@@ -103,7 +105,12 @@ class vmmClusterCtrlrP(ManagedObject):
     ]
 
     # ── Create-only (ignored by APIC on modification) ─────────────────────────
-    hostname_or_ip_address: str = Field(default="", alias="hostOrIp", description="Host or IP")
+    hostname_or_ip_address: str = Field(
+        default="",
+        validation_alias="hostOrIp",
+        serialization_alias="hostOrIp",
+        description="Host or IP",
+    )
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[
@@ -115,22 +122,43 @@ class vmmClusterCtrlrP(ManagedObject):
         ),
     ] = ""
     triggered_inventory_sync_status: VmmTrigSt = Field(
-        default=VmmTrigSt.UNTRIGGERED, alias="inventoryTrigSt"
+        default=VmmTrigSt.UNTRIGGERED,
+        validation_alias="inventoryTrigSt",
+        serialization_alias="inventoryTrigSt",
     )
     msft_config_err_msg: Annotated[
         str,
         Field(
             max_length=256,
-            alias="msftConfigErrMsg",
+            validation_alias="msftConfigErrMsg",
+            serialization_alias="msftConfigErrMsg",
             description="Deployment Error Message of Mirosoft Plugin SCVM Controller. It captures error message encountered in SCVMM Controller plugin.This error message represents specific details for bitmask based msftConfigIssues fault.",
         ),
     ] = ""
-    msft_config_issues: str = Field(default="", alias="msftConfigIssues")
+    msft_config_issues: Annotated[Flags[CompmsftConfigIssues], BeforeValidator(parse_flags)] = (
+        Field(
+            default_factory=lambda: frozenset({CompmsftConfigIssues.NOT_APPLICABLE}),
+            validation_alias="msftConfigIssues",
+            serialization_alias="msftConfigIssues",
+        )
+    )
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
-    port: Annotated[str, Field(description="Port")] = ""
+    port: Annotated[int, Field(ge=0, le=65535, description="Port")] = 0
     datacenter: Annotated[
-        str, Field(max_length=512, alias="rootContName", description="Top level container name.")
+        str,
+        Field(
+            max_length=512,
+            validation_alias="rootContName",
+            serialization_alias="rootContName",
+            description="Top level container name.",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

@@ -36,7 +36,7 @@ class cloudsecRelnHolder(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    id: Annotated[str, Field(description="An object identifier.")]
+    id: Annotated[int, Field(description="An object identifier.")] = 0
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[
@@ -49,6 +49,12 @@ class cloudsecRelnHolder(ManagedObject):
     ] = ""
     name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

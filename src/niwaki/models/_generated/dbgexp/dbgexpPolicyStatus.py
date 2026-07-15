@@ -48,7 +48,8 @@ class dbgexpPolicyStatus(ManagedObject):
             min_length=1,
             max_length=64,
             pattern="^[a-zA-Z0-9_.:-]+$",
-            alias="polName",
+            validation_alias="polName",
+            serialization_alias="polName",
             description="Policy name associated with this status container",
         ),
     ]

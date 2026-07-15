@@ -25,11 +25,11 @@ Accepted as keyword arguments of `.eigrp_interface_policy(name)` and of `.set(**
 | --- | --- | --- | --- | --- | --- |
 | `name` *(positional)* | `name` | `str` | — | — | The name of the object. |
 | `eigrp_interface_bandwidth` | `bw` | `int` | — | `0` | EIGRP bandwidth in kbps, overrides the bandwidth configured on an interface. Used to influence path selection |
-| `interface_controls` | `ctrl` | {ref}`EigrpIfAfControl <enum-eigrpifafcontrol>` | `bfd`, `nh-self`, `passive`, `split-horizon` | `bfd` | The control state. |
+| `interface_controls` | `ctrl` | {ref}`EigrpIfAfControl <enum-eigrpifafcontrol>` | `split-horizon`, `passive`, `nh-self`, `bfd` | `nh-self, split-horizon` | The control state. |
 | `eigrp_interface_delay` | `delay` | `int` | — | `0` | EIGRP throughput delay, overrides the delay configured on an interface. Used to influence path selection |
 | `units_for_eigrp_interface_delay` | `delayUnit` | {ref}`EigrpDelayUnit <enum-eigrpdelayunit>` | `pico`, `tens-of-micro` | `tens-of-micro` | EIGRP delay units, Wide metrics can use picosecond accuracy for delay |
 | `description` | `descr` | `str` | — | — | Specifies a description of the policy definition. |
-| `hello_interval` | `helloIntvl` | `str` | — | — | The hello interval. |
-| `hold_interval` | `holdIntvl` | `str` | — | — | The period of time before declaring that the neighbor is down. |
+| `hello_interval` | `helloIntvl` | `int` | — | `5` | The hello interval. |
+| `hold_interval` | `holdIntvl` | `int` | — | `15` | The period of time before declaring that the neighbor is down. |
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |

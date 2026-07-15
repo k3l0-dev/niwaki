@@ -36,9 +36,16 @@ class consRoot(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     consumer_root: Annotated[
-        str, Field(alias="consDn", description="The distinguished name of the consumer.")
+        str,
+        Field(
+            validation_alias="consDn",
+            serialization_alias="consDn",
+            description="The distinguished name of the consumer.",
+        ),
     ]
-    consumer_sub_root: Annotated[str, Field(alias="subConsDn")]
+    consumer_sub_root: Annotated[
+        str, Field(validation_alias="subConsDn", serialization_alias="subConsDn")
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[
@@ -54,12 +61,19 @@ class consRoot(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies the description of a policy component.",
         ),
     ] = ""
     name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

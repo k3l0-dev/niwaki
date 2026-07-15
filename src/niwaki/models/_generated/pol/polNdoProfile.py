@@ -40,8 +40,25 @@ class polNdoProfile(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    ndo_ip: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="ip", description="IP")]
-    ndo_name: Annotated[str, Field(min_length=1, max_length=512, alias="name", description="Name")]
+    ndo_ip: Annotated[
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            validation_alias="ip",
+            serialization_alias="ip",
+            description="IP",
+        ),
+    ]
+    ndo_name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=512,
+            validation_alias="name",
+            serialization_alias="name",
+            description="Name",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[

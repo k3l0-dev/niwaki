@@ -46,7 +46,10 @@ class dcUserKeyCert(ManagedObject):
         ),
     ] = ""
     cert: Annotated[str, Field(repr=False)] = ""
-    cert_file_name: Annotated[str, Field(max_length=512, alias="certFileName")] = ""
+    cert_file_name: Annotated[
+        str,
+        Field(max_length=512, validation_alias="certFileName", serialization_alias="certFileName"),
+    ] = ""
     key: Annotated[
         str,
         Field(
@@ -54,6 +57,9 @@ class dcUserKeyCert(ManagedObject):
             description="The key or password used to uniquely identify this configuration object.",
         ),
     ] = ""
-    key_file_name: Annotated[str, Field(max_length=512, alias="keyFileName")] = ""
+    key_file_name: Annotated[
+        str,
+        Field(max_length=512, validation_alias="keyFileName", serialization_alias="keyFileName"),
+    ] = ""
     path: Annotated[str, Field(max_length=512, description="Ignore, removed")] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

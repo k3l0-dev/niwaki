@@ -4,6 +4,69 @@ All notable changes to this project are documented here.  The format follows
 [Keep a Changelog](https://keepachangelog.com/); versions follow semver
 (0.x — the API may still change between minor versions).
 
+## [0.9.0] — 2026-07-15
+
+The models now carry the **right Python type** for every field, and the
+type checker sees it.  Before this release the code generator knew only a
+handful of schema types and quietly rendered everything else as `str`; that
+made numbers into text, made bitmasks unusable, and hid the readable field
+names from your IDE.
+
+### Changed
+
+- **Numbers are numbers.**  A field the schema declares numeric is now `int`
+  or `float`, with the schema's own bounds — not a string.  A field the APIC
+  stores under a *name* (a filter port, a BGP stale interval) accepts the
+  number and canonicalises the way the APIC does: `vzEntry(destination_from_port=80)`
+  round-trips as `"http"`, so `push(mode="plan")` finally converges on it.
+- **A bitmask is a set.**  A field that is a subset of a closed set (a subnet
+  `scope`, `vzEntry` `tcp_rules`, a LACP `ctrl`) is now `frozenset[SomeEnum]`.
+  It accepts everything reasonable — the wire string, a set of names, a set of
+  members, a single flag — and order never matters, so the phantom drift the
+  APIC's own re-ordering used to cause is gone:
+
+  ```python
+  fvSubnet(ip="10.1.1.1/24", scope="public,shared")        # the wire form
+  fvSubnet(ip="10.1.1.1/24", scope={"public", "shared"})   # a set of names
+  vzEntry(name="ssh", tcp_rules="syn,ack")                 # was rejected before
+  ```
+
+- **Addresses are validated.**  IPv4 and IPv6 fields carry an address pattern
+  instead of accepting any string.
+- **Readable names reach your IDE.**  A renamed field (`arp_flooding` for
+  `arpFlood`) is now accepted *by that name* by type checkers — Pylance and
+  pyright no longer flag `fvBD(name="web", arp_flooding=True)` while accepting
+  the wire spelling.  The wire name still works on reads and in query filters.
+
+### Added
+
+- `niwaki.query(cls)` is overloaded: a model class in gives typed instances
+  out; a class *name* string in gives base `ManagedObject`s (their attributes
+  in `model_extra`).
+- `ref()` is accepted by `bind_dn()` and by the contract verbs, not only by
+  `bind()`.
+- The generated reference now documents every field's real type and, for an
+  enum or a set of flags, its allowed values and default.
+
+### Migration
+
+- A field you *read back* may now be a number or a `frozenset` where it used
+  to be a string — compare against `80`, not `"80"`, and against
+  `{"public", "shared"}`, not `"public,shared"`.  Construction is unchanged:
+  the wire string is still accepted everywhere.
+- A bitmask default is a `frozenset`; a numeric field's default is a number.
+- One long-standing default was corrected: `bgpBestPathCtrlPol.ctrl` defaulted
+  to `as-path-multipath-relax` **enabled** and now defaults to no flags, as the
+  schema declares.  `ospfExtP` regained its `area_ctrl` field, previously
+  dropped by a name collision.
+
+### Internal
+
+- pyright now type-checks the whole repository (the generated tree excepted) in
+  the commit gate and CI, alongside mypy — it reads the constructor signature
+  Pydantic synthesises, which mypy does not.  A cold-start budget and a
+  documentation type-column guard were added.
+
 ## [0.8.0] — 2026-07-14
 
 ### Added

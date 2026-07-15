@@ -57,13 +57,29 @@ class analyticsCollector(ManagedObject):
     ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            validation_alias="descr",
+            serialization_alias="descr",
+        ),
     ] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
-    sw_export: bool = Field(default=False, alias="swExport")
+    sw_export: bool = Field(
+        default=False, validation_alias="swExport", serialization_alias="swExport"
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     collector_version_format: AnalyticsCollVersion = Field(
-        default=AnalyticsCollVersion.CISCO_V1, alias="ver", description="Collector version"
+        default=AnalyticsCollVersion.CISCO_V1,
+        validation_alias="ver",
+        serialization_alias="ver",
+        description="Collector version",
     )

@@ -59,26 +59,51 @@ class aaaUserProfile(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
-    email_address: str = Field(default="", alias="email", description="The user's e-mail address")
+    email_address: str = Field(
+        default="",
+        validation_alias="email",
+        serialization_alias="email",
+        description="The user's e-mail address",
+    )
     first_name: Annotated[
-        str, Field(max_length=32, alias="firstName", description="The user's first name")
+        str,
+        Field(
+            max_length=32,
+            validation_alias="firstName",
+            serialization_alias="firstName",
+            description="The user's first name",
+        ),
     ] = ""
     last_name: Annotated[
-        str, Field(max_length=32, alias="lastName", description="The user's last name")
+        str,
+        Field(
+            max_length=32,
+            validation_alias="lastName",
+            serialization_alias="lastName",
+            description="The user's last name",
+        ),
     ] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     owner_key: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerKey",
+            validation_alias="ownerKey",
+            serialization_alias="ownerKey",
             description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
@@ -87,11 +112,18 @@ class aaaUserProfile(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerTag",
+            validation_alias="ownerTag",
+            serialization_alias="ownerTag",
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
     phone_number: Annotated[
-        str, Field(max_length=16, alias="phone", description="The user's phone number")
+        str,
+        Field(
+            max_length=16,
+            validation_alias="phone",
+            serialization_alias="phone",
+            description="The user's phone number",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

@@ -36,7 +36,7 @@ class syntheticHierarchyObj(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    id: Annotated[str, Field(description="An identifier .")]
+    id: Annotated[int, Field(description="An identifier .")] = 0
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[
@@ -55,6 +55,12 @@ class syntheticHierarchyObj(ManagedObject):
         Field(max_length=16, pattern="^[a-zA-Z0-9_.:-]+$", description="The name of the object."),
     ] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

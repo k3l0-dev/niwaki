@@ -35,8 +35,8 @@ Accepted as keyword arguments of `.path_attachment(target_dn)` and of `.set(**at
 | `ll_addr` | `llAddr` | `str` | — | — | The override of the system generated IPv6 link-local address. |
 | `mac` | `mac` | `str` | — | — | The MAC address of the path attached to the layer 3 outside profile. |
 | `mode` | `mode` | {ref}`FvMode <enum-fvmode>` | `native`, `regular`, `untagged` | `regular` | Represents the mode (native etc.) of the encap. This property only takes affect ifInstT (Interface Instantiation Type) is external-svi and is ignored for sub-interface and l3-port |
-| `mtu` | `mtu` | `int` | — | `0` | The maximum transmit unit of the external network. |
-| `target_dscp` | `targetDscp` | `str` | — | — | The target differentiated service code point (DSCP) of the path attached to the layer 3 outside profile. |
+| `mtu` | `mtu` | `int` | — | `inherit` | The maximum transmit unit of the external network. |
+| `target_dscp` | `targetDscp` | `int` | — | `unspecified` | The target differentiated service code point (DSCP) of the path attached to the layer 3 outside profile. |
 
 ## APIC diagnostics
 

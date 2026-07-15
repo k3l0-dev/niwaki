@@ -34,7 +34,7 @@ class plannerMatchNode(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    id: Annotated[str, Field(description="An object identifier.")]
+    id: Annotated[int, Field(ge=1, le=16000, description="An object identifier.")] = 1
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[

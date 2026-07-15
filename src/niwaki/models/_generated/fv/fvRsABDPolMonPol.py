@@ -60,7 +60,8 @@ class fvRsABDPolMonPol(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9_.:-]+$",
-            alias="tnMonEPGPolName",
+            validation_alias="tnMonEPGPolName",
+            serialization_alias="tnMonEPGPolName",
             description="The monitoring policy name for the EPG semantic scope.",
         ),
     ] = ""

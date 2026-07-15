@@ -51,7 +51,8 @@ class firmwareRepoP(ManagedObject):
         str,
         Field(
             max_length=512,
-            alias="defaultSwitchVersion",
+            validation_alias="defaultSwitchVersion",
+            serialization_alias="defaultSwitchVersion",
             description="The firmware version used by the new switches joining the cluster. Any new node that is attached to the fabric that is not running this exact version will not be discovered.",
         ),
     ] = ""
@@ -60,25 +61,34 @@ class firmwareRepoP(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
     enforce_bootscript_version_validation: bool = Field(
         default=False,
-        alias="enforceBootscriptVersionValidation",
+        validation_alias="enforceBootscriptVersionValidation",
+        serialization_alias="enforceBootscriptVersionValidation",
         description="Ensures that any switch discovered in the fabric is upgraded or downgraded automatically to match the specified version.",
     )
     name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     owner_key: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerKey",
+            validation_alias="ownerKey",
+            serialization_alias="ownerKey",
             description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
@@ -87,7 +97,8 @@ class firmwareRepoP(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerTag",
+            validation_alias="ownerTag",
+            serialization_alias="ownerTag",
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""

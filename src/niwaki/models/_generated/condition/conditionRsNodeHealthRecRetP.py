@@ -58,7 +58,8 @@ class conditionRsNodeHealthRecRetP(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9_.:-]+$",
-            alias="tnHealthSwRetPName",
+            validation_alias="tnHealthSwRetPName",
+            serialization_alias="tnHealthSwRetPName",
             description="A name for the health record retention policy used by the node policy group. The health record retention policy is referred by the node policy group. The node policy group also includes references to the Audit, Event, and Fault record retention policies.",
         ),
     ] = ""

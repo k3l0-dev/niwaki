@@ -60,45 +60,114 @@ class fteRecord(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="The description of this configuration item.",
         ),
     ] = ""
     dst_ipv4: bool = Field(
-        default=False, alias="dstIpv4", description="Match ipv4 destination address"
+        default=False,
+        validation_alias="dstIpv4",
+        serialization_alias="dstIpv4",
+        description="Match ipv4 destination address",
     )
     dst_ipv6: bool = Field(
-        default=False, alias="dstIpv6", description="Match ipv6 destination address"
+        default=False,
+        validation_alias="dstIpv6",
+        serialization_alias="dstIpv6",
+        description="Match ipv6 destination address",
     )
     dst_mac: bool = Field(
-        default=False, alias="dstMac", description="Match datalink mac destination address"
+        default=False,
+        validation_alias="dstMac",
+        serialization_alias="dstMac",
+        description="Match datalink mac destination address",
     )
     dst_port_ipv4: bool = Field(
-        default=False, alias="dstPortIpv4", description="Match ipv4 transport destination-port"
+        default=False,
+        validation_alias="dstPortIpv4",
+        serialization_alias="dstPortIpv4",
+        description="Match ipv4 transport destination-port",
     )
     dst_port_ipv6: bool = Field(
-        default=False, alias="dstPortIpv6", description="Match ipv6 transport destination-port"
+        default=False,
+        validation_alias="dstPortIpv6",
+        serialization_alias="dstPortIpv6",
+        description="Match ipv6 transport destination-port",
     )
     ether_type: bool = Field(
-        default=False, alias="etherType", description="Match datalink ethertype"
+        default=False,
+        validation_alias="etherType",
+        serialization_alias="etherType",
+        description="Match datalink ethertype",
     )
-    flow_label: bool = Field(default=False, alias="flowLabel", description="Match ipv6 flow-label")
+    flow_label: bool = Field(
+        default=False,
+        validation_alias="flowLabel",
+        serialization_alias="flowLabel",
+        description="Match ipv6 flow-label",
+    )
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
-    proto_ipv4: bool = Field(default=False, alias="protoIpv4", description="Match ipv4protocol")
-    proto_ipv6: bool = Field(default=False, alias="protoIpv6", description="Match ipv6protocol")
-    src_ipv4: bool = Field(default=False, alias="srcIpv4", description="Match ipv4 source address")
-    src_ipv6: bool = Field(default=False, alias="srcIpv6", description="Match ipv6 source address")
+    proto_ipv4: bool = Field(
+        default=False,
+        validation_alias="protoIpv4",
+        serialization_alias="protoIpv4",
+        description="Match ipv4protocol",
+    )
+    proto_ipv6: bool = Field(
+        default=False,
+        validation_alias="protoIpv6",
+        serialization_alias="protoIpv6",
+        description="Match ipv6protocol",
+    )
+    src_ipv4: bool = Field(
+        default=False,
+        validation_alias="srcIpv4",
+        serialization_alias="srcIpv4",
+        description="Match ipv4 source address",
+    )
+    src_ipv6: bool = Field(
+        default=False,
+        validation_alias="srcIpv6",
+        serialization_alias="srcIpv6",
+        description="Match ipv6 source address",
+    )
     src_mac: bool = Field(
-        default=False, alias="srcMac", description="Match datalink mac source address"
+        default=False,
+        validation_alias="srcMac",
+        serialization_alias="srcMac",
+        description="Match datalink mac source address",
     )
     src_port_ipv4: bool = Field(
-        default=False, alias="srcPortIpv4", description="Match ipv4 transport source-port"
+        default=False,
+        validation_alias="srcPortIpv4",
+        serialization_alias="srcPortIpv4",
+        description="Match ipv4 transport source-port",
     )
     src_port_ipv6: bool = Field(
-        default=False, alias="srcPortIpv6", description="Match ipv6 transport source-port"
+        default=False,
+        validation_alias="srcPortIpv6",
+        serialization_alias="srcPortIpv6",
+        description="Match ipv6 transport source-port",
     )
-    tos_ipv4: bool = Field(default=False, alias="tosIpv4", description="Match ipv4 tos")
-    tos_ipv6: bool = Field(default=False, alias="tosIpv6", description="Match ipv6 tos")
+    tos_ipv4: bool = Field(
+        default=False,
+        validation_alias="tosIpv4",
+        serialization_alias="tosIpv4",
+        description="Match ipv4 tos",
+    )
+    tos_ipv6: bool = Field(
+        default=False,
+        validation_alias="tosIpv6",
+        serialization_alias="tosIpv6",
+        description="Match ipv6 tos",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

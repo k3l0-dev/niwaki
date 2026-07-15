@@ -3,8 +3,16 @@
 from __future__ import annotations
 
 from typing import ClassVar, Annotated
-from pydantic import Field
+from pydantic import BeforeValidator, Field
 
+from niwaki.models._wire import Flags, parse_flags
+from niwaki.models._generated.enums.BgpAddrTControl import BgpAddrTControl
+from niwaki.models._generated.enums.BgpPeerAfCap import BgpPeerAfCap
+from niwaki.models._generated.enums.BgpPeerControlPol import BgpPeerControlPol
+from niwaki.models._generated.enums.BgpPeerControlPolExt import BgpPeerControlPolExt
+from niwaki.models._generated.enums.BgpPeerPControlType import BgpPeerPControlType
+from niwaki.models._generated.enums.BgpPeerT import BgpPeerT
+from niwaki.models._generated.enums.BgpPrivateASControl import BgpPrivateASControl
 from niwaki.models._generated.enums.BgpSrcIfT import BgpSrcIfT
 from niwaki.models._generated.enums.BgpTrustCtrlT import BgpTrustCtrlT
 from niwaki.models._generated.enums.NwAdminSt import NwAdminSt
@@ -63,21 +71,40 @@ class bgpInfraPeerP(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     peer_address: Annotated[
-        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="addr", description="Peer address")
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            validation_alias="addr",
+            serialization_alias="addr",
+            description="Peer address",
+        ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    address_type_af_controls: str = Field(
-        default="", alias="addrTCtrl", description="Ucast/Mcast Addr Type AF Control"
+    address_type_af_controls: Annotated[Flags[BgpAddrTControl], BeforeValidator(parse_flags)] = (
+        Field(
+            default_factory=lambda: frozenset({BgpAddrTControl.AF_UCAST}),
+            validation_alias="addrTCtrl",
+            serialization_alias="addrTCtrl",
+            description="Ucast/Mcast Addr Type AF Control",
+        )
     )
     administrative_state: NwAdminSt = Field(
-        default=NwAdminSt.ENABLED, alias="adminSt", description="Administrative State"
+        default=NwAdminSt.ENABLED,
+        validation_alias="adminSt",
+        serialization_alias="adminSt",
+        description="Administrative State",
     )
-    allowed_self_as_count: str = Field(
-        default="",
-        alias="allowedSelfAsCnt",
-        description="The number of occurrences of a local Autonomous System Number (ASN).",
-    )
+    allowed_self_as_count: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=10,
+            validation_alias="allowedSelfAsCnt",
+            serialization_alias="allowedSelfAsCnt",
+            description="The number of occurrences of a local Autonomous System Number (ASN).",
+        ),
+    ] = 3
     annotation: Annotated[
         str,
         Field(
@@ -86,15 +113,32 @@ class bgpInfraPeerP(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    capability: Annotated[str, Field(description="Peer AF Capability")] = ""
-    peer_af_controls: str = Field(default="", alias="ctrl", description="Peer Controls")
-    peer_af_controls_ext: str = Field(
-        default="", alias="ctrlExt", description="Peer AF controls Ext"
+    capability: Annotated[Flags[BgpPeerAfCap], BeforeValidator(parse_flags)] = Field(
+        default_factory=lambda: frozenset({BgpPeerAfCap.NONE}), description="Peer AF Capability"
+    )
+    peer_af_controls: Annotated[Flags[BgpPeerControlPol], BeforeValidator(parse_flags)] = Field(
+        default_factory=lambda: frozenset(
+            {BgpPeerControlPol.SEND_COM, BgpPeerControlPol.SEND_EXT_COM}
+        ),
+        validation_alias="ctrl",
+        serialization_alias="ctrl",
+        description="Peer Controls",
+    )
+    peer_af_controls_ext: Annotated[Flags[BgpPeerControlPolExt], BeforeValidator(parse_flags)] = (
+        Field(
+            default_factory=lambda: frozenset(),
+            validation_alias="ctrlExt",
+            serialization_alias="ctrlExt",
+            description="Peer AF controls Ext",
+        )
     )
     data_plane_address: Annotated[
         str,
         Field(
-            pattern="^[0-9a-fA-F.:/ ]+$", alias="dataPlaneAddr", description="Data plane address"
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            validation_alias="dataPlaneAddr",
+            serialization_alias="dataPlaneAddr",
+            description="Data plane address",
         ),
     ] = ""
     description: Annotated[
@@ -102,33 +146,73 @@ class bgpInfraPeerP(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies the description of a policy component.",
         ),
     ] = ""
     name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     password: Annotated[str, Field(repr=False, description="Administrative state")] = ""
-    peer_controls: str = Field(default="", alias="peerCtrl", description="The peer controls.")
-    peer_type: str = Field(default="", alias="peerT", description="Peer Type")
-    private_as_control: str = Field(
-        default="", alias="privateASctrl", description="Remove private AS"
+    peer_controls: Annotated[Flags[BgpPeerPControlType], BeforeValidator(parse_flags)] = Field(
+        default_factory=lambda: frozenset(),
+        validation_alias="peerCtrl",
+        serialization_alias="peerCtrl",
+        description="The peer controls.",
+    )
+    peer_type: Annotated[Flags[BgpPeerT], BeforeValidator(parse_flags)] = Field(
+        default_factory=lambda: frozenset({BgpPeerT.WAN}),
+        validation_alias="peerT",
+        serialization_alias="peerT",
+        description="Peer Type",
+    )
+    private_as_control: Annotated[Flags[BgpPrivateASControl], BeforeValidator(parse_flags)] = Field(
+        default_factory=lambda: frozenset(),
+        validation_alias="privateASctrl",
+        serialization_alias="privateASctrl",
+        description="Remove private AS",
     )
     intersite_route_reflector: bool = Field(
         default=False,
-        alias="remoteIntersiteRR",
+        validation_alias="remoteIntersiteRR",
+        serialization_alias="remoteIntersiteRR",
         description="Is the peer an intersite route reflector",
     )
     source_interface_type: BgpSrcIfT = Field(
-        default=BgpSrcIfT.L3OUT_LOOPBACK, alias="srcIfT", description="Source Interface Type"
+        default=BgpSrcIfT.L3OUT_LOOPBACK,
+        validation_alias="srcIfT",
+        serialization_alias="srcIfT",
+        description="Source Interface Type",
     )
-    control_type: BgpTrustCtrlT = Field(default=BgpTrustCtrlT.UNTRUSTED, alias="trustCtrl")
-    ebgp_multihop_ttl_value: str = Field(
-        default="", alias="ttl", description="Specifies time to live (TTL)."
+    control_type: BgpTrustCtrlT = Field(
+        default=BgpTrustCtrlT.UNTRUSTED,
+        validation_alias="trustCtrl",
+        serialization_alias="trustCtrl",
     )
+    ebgp_multihop_ttl_value: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=255,
+            validation_alias="ttl",
+            serialization_alias="ttl",
+            description="Specifies time to live (TTL).",
+        ),
+    ] = 1
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    weight_for_routes_from_this_neighbor: str = Field(
-        default="", alias="weight", description="Default weight for routes from this neighbor"
-    )
+    weight_for_routes_from_this_neighbor: Annotated[
+        int,
+        Field(
+            validation_alias="weight",
+            serialization_alias="weight",
+            description="Default weight for routes from this neighbor",
+        ),
+    ] = 0

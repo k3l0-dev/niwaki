@@ -87,25 +87,19 @@ def _diff_children(
 
 
 def _values_equal(desired: Any, current: Any) -> bool:
-    """Field equality, tolerant to the APIC's numeric normalisation.
+    """Field equality.
 
-    The APIC canonicalises numeric strings on write: pushing ``"80.0"``
-    reads back as ``"80.000000"``.  Comparing such pairs as strings would
-    make every float-carrying design non-idempotent under ``plan``.  When
-    both sides are strings that parse as finite floats, compare the numbers;
-    everything else compares strictly.  (Naming props never reach this
-    helper — they are matched upstream — so a numeric-looking *name* cannot
-    be silently coalesced.)
+    This used to carry a workaround: the APIC canonicalises numbers on write
+    (``"80.0"`` reads back ``"80.000000"``), and while the SDK typed those fields
+    as *strings* the two spelled the same value differently — every float-carrying
+    design was non-idempotent under ``plan``, so the comparison had to reparse
+    both sides as floats and hope.
+
+    Numbers are numbers now, and sets are sets: ``80.0 == 80.0`` and
+    ``{public, shared} == {shared, public}`` without anyone's help.  The
+    workaround is gone, and equality means equality again.
     """
-    if desired == current:
-        return True
-    if isinstance(desired, str) and isinstance(current, str):
-        try:
-            # NaN compares unequal to itself — no special-casing needed.
-            return float(desired) == float(current)
-        except ValueError:
-            return False
-    return False
+    return bool(desired == current)
 
 
 def mo_diff[T: ManagedObject](

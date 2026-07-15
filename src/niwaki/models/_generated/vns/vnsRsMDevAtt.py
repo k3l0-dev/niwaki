@@ -55,7 +55,8 @@ class vnsRsMDevAtt(ManagedObject):
     ] = ""
     target_dn: str = Field(
         default="",
-        alias="tDn",
+        validation_alias="tDn",
+        serialization_alias="tDn",
         description="The relation that identifies the package to which a specific logical device belongs.",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

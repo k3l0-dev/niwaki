@@ -54,6 +54,12 @@ class fabricRsDwdmFabIfPol(ManagedObject):
         ),
     ] = ""
     name: Annotated[
-        str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="tnDwdmFabIfPolName")
+        str,
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            validation_alias="tnDwdmFabIfPolName",
+            serialization_alias="tnDwdmFabIfPolName",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

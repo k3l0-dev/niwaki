@@ -38,7 +38,12 @@ class dbgFtriage(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    ftriage_instance_id: Annotated[str, Field(alias="id", description="Instance id of Ftriage")]
+    ftriage_instance_id: Annotated[
+        int,
+        Field(
+            validation_alias="id", serialization_alias="id", description="Instance id of Ftriage"
+        ),
+    ] = 0
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[
@@ -49,31 +54,47 @@ class dbgFtriage(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    apic_id_that_launched_ftriage: str = Field(
-        default="", alias="apicId", description="APIC Id that launched Ftriage"
-    )
+    apic_id_that_launched_ftriage: Annotated[
+        int,
+        Field(
+            validation_alias="apicId",
+            serialization_alias="apicId",
+            description="APIC Id that launched Ftriage",
+        ),
+    ] = 0
     description: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
     name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     operational_state_of_ftriage: DbgFtriageStatus = Field(
-        default=DbgFtriageStatus.IDLE, alias="operState", description="operState of the Ftriage"
+        default=DbgFtriageStatus.IDLE,
+        validation_alias="operState",
+        serialization_alias="operState",
+        description="operState of the Ftriage",
     )
     owner_key: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerKey",
+            validation_alias="ownerKey",
+            serialization_alias="ownerKey",
             description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
@@ -82,11 +103,17 @@ class dbgFtriage(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerTag",
+            validation_alias="ownerTag",
+            serialization_alias="ownerTag",
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
     pid_of_ftriage_session: Annotated[
-        int, Field(alias="pid", description="PID of active Ftriage session")
+        int,
+        Field(
+            validation_alias="pid",
+            serialization_alias="pid",
+            description="PID of active Ftriage session",
+        ),
     ] = 0
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

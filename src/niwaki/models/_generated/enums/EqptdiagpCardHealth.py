@@ -6,10 +6,10 @@ from enum import StrEnum
 
 
 class EqptdiagpCardHealth(StrEnum):
-    CPU = "cpu"
-    FORWARDING = "forwarding"
     MEMORY = "memory"
     """TODO: add more"""
+    CPU = "cpu"
+    FORWARDING = "forwarding"
     PORT = "port"
 
     @classmethod

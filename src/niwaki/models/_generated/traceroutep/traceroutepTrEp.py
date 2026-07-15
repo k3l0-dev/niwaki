@@ -58,7 +58,8 @@ class traceroutepTrEp(ManagedObject):
     # ── Configurable ───────────────────────────────────────────────────────────
     administrative_state: ActionAdminSt = Field(
         default=ActionAdminSt.STOP,
-        alias="adminSt",
+        validation_alias="adminSt",
+        serialization_alias="adminSt",
         description="Administrative state of the monitoring policy",
     )
     annotation: Annotated[
@@ -74,33 +75,56 @@ class traceroutepTrEp(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
-    destination_port_end: str = Field(
-        default="", alias="dstPortEnd", description="Destination Port range end value"
-    )
-    destination_port_start: str = Field(
-        default="", alias="dstPortStart", description="Destination Port range start value"
-    )
+    destination_port_end: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=65535,
+            validation_alias="dstPortEnd",
+            serialization_alias="dstPortEnd",
+            description="Destination Port range end value",
+        ),
+    ] = 65535
+    destination_port_start: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=65535,
+            validation_alias="dstPortStart",
+            serialization_alias="dstPortStart",
+            description="Destination Port range start value",
+        ),
+    ] = 0
     macaddress: Annotated[
         str,
         Field(
             pattern="^([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}$",
-            alias="gwMac",
+            validation_alias="gwMac",
+            serialization_alias="gwMac",
             description="Gateway MAC If specified, this value will be used as the destination MAC for all the traceroute policies (for all sources/destinations).",
         ),
     ] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     owner_key: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerKey",
+            validation_alias="ownerKey",
+            serialization_alias="ownerKey",
             description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
@@ -109,20 +133,45 @@ class traceroutepTrEp(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerTag",
+            validation_alias="ownerTag",
+            serialization_alias="ownerTag",
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
-    payload_size_in_bytes: str = Field(
-        default="", alias="payloadSz", description="Probe packet size"
-    )
+    payload_size_in_bytes: Annotated[
+        int,
+        Field(
+            ge=20,
+            le=9144,
+            validation_alias="payloadSz",
+            serialization_alias="payloadSz",
+            description="Probe packet size",
+        ),
+    ] = 56
     protocol: TracerouteProtT = Field(
-        default=TracerouteProtT.UDP, alias="prot", description="The IP protocol."
+        default=TracerouteProtT.UDP,
+        validation_alias="prot",
+        serialization_alias="prot",
+        description="The IP protocol.",
     )
-    source_port_end: str = Field(
-        default="", alias="srcPortEnd", description="Source Port range end value"
-    )
-    source_port_start: str = Field(
-        default="", alias="srcPortStart", description="Source Port range start value"
-    )
+    source_port_end: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=65535,
+            validation_alias="srcPortEnd",
+            serialization_alias="srcPortEnd",
+            description="Source Port range end value",
+        ),
+    ] = 65535
+    source_port_start: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=65535,
+            validation_alias="srcPortStart",
+            serialization_alias="srcPortStart",
+            description="Source Port range start value",
+        ),
+    ] = 0
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

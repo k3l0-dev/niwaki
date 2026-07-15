@@ -49,7 +49,8 @@ class thirdpartyappRsToNodeGlobalConfig(ManagedObject):
             min_length=1,
             max_length=64,
             pattern="^[a-zA-Z0-9_.:-]+$",
-            alias="tnThirdpartyappNodeGlobalConfigName",
+            validation_alias="tnThirdpartyappNodeGlobalConfigName",
+            serialization_alias="tnThirdpartyappNodeGlobalConfigName",
         ),
     ]
 

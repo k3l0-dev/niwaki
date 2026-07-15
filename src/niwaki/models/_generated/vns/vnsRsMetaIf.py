@@ -53,10 +53,13 @@ class vnsRsMetaIf(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    is_con_and_prov: bool = Field(default=False, alias="isConAndProv")
+    is_con_and_prov: bool = Field(
+        default=False, validation_alias="isConAndProv", serialization_alias="isConAndProv"
+    )
     target_dn: str = Field(
         default="",
-        alias="tDn",
+        validation_alias="tDn",
+        serialization_alias="tDn",
         description="The DN of the interface to which this logical interface is associated.",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

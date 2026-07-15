@@ -211,35 +211,48 @@ class vnsAbsNode(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
     func_template_type: VnsFuncTemplateType = Field(
         default=VnsFuncTemplateType.OTHER,
-        alias="funcTemplateType",
+        validation_alias="funcTemplateType",
+        serialization_alias="funcTemplateType",
         description="Func Template type",
     )
     function_type: VnsNodeFuncType = Field(
         default=VnsNodeFuncType.GOTO,
-        alias="funcType",
+        validation_alias="funcType",
+        serialization_alias="funcType",
         description="A function type. A GoThrough node is a transparent device, where a packet goes through without being addressed to the device, and the endpoints are not aware of that device. A GoTo device has a specific destination.",
     )
     is_copy: bool = Field(
-        default=False, alias="isCopy", description="if the device is a copy device"
+        default=False,
+        validation_alias="isCopy",
+        serialization_alias="isCopy",
+        description="if the device is a copy device",
     )
     managed: bool = Field(
         default=True, description="Specified if the function is using a managed device"
     )
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     owner_key: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerKey",
+            validation_alias="ownerKey",
+            serialization_alias="ownerKey",
             description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
@@ -248,13 +261,25 @@ class vnsAbsNode(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerTag",
+            validation_alias="ownerTag",
+            serialization_alias="ownerTag",
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
-    routing_mode: VnsRoutingMode = Field(default=VnsRoutingMode.UNSPECIFIED, alias="routingMode")
+    routing_mode: VnsRoutingMode = Field(
+        default=VnsRoutingMode.UNSPECIFIED,
+        validation_alias="routingMode",
+        serialization_alias="routingMode",
+    )
     sequence_number: Annotated[
-        int, Field(alias="sequenceNumber", description="Sequence number. For CLI purposes")
+        int,
+        Field(
+            validation_alias="sequenceNumber",
+            serialization_alias="sequenceNumber",
+            description="Sequence number. For CLI purposes",
+        ),
     ] = 0
-    share_encap: bool = Field(default=False, alias="shareEncap")
+    share_encap: bool = Field(
+        default=False, validation_alias="shareEncap", serialization_alias="shareEncap"
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

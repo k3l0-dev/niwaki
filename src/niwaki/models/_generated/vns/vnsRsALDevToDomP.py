@@ -57,10 +57,15 @@ class vnsRsALDevToDomP(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    switching_mode: FvSwitchingModeT = Field(default=FvSwitchingModeT.NATIVE, alias="switchingMode")
+    switching_mode: FvSwitchingModeT = Field(
+        default=FvSwitchingModeT.NATIVE,
+        validation_alias="switchingMode",
+        serialization_alias="switchingMode",
+    )
     target_dn: str = Field(
         default="",
-        alias="tDn",
+        validation_alias="tDn",
+        serialization_alias="tDn",
         description="The distinguished name for the relation from the virtual device to the VLAN namespace (VMM domain). The virtual device should point to the VLAN namespace (VMM domain) pointed to by this relation.",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

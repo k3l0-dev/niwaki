@@ -25,8 +25,8 @@ Accepted as keyword arguments of `.ntp_provider(name)` and of `.set(**attrs)` on
 | --- | --- | --- | --- | --- | --- |
 | `name` *(positional)* | `name` | `str` | — | — | The user-configured NTP provider name. This name can be between 1 and 64 alphanumeric characters. Note that you cannot change this name after the object has been saved. |
 | `description` | `descr` | `str` | — | — | Specifies the description of a policy component. |
-| `key_id` | `keyId` | `str` | — | — | The NTP provider key ID. The range is from 1 to 65535. |
-| `max_poll` | `maxPoll` | `str` | — | — | The NTP maximum interval default in seconds. |
-| `min_poll` | `minPoll` | `str` | — | — | The NTP minimum interval default in seconds. |
+| `key_id` | `keyId` | `int` | — | `0` | The NTP provider key ID. The range is from 1 to 65535. |
+| `max_poll` | `maxPoll` | `int` | — | `6` | The NTP maximum interval default in seconds. |
+| `min_poll` | `minPoll` | `int` | — | `4` | The NTP minimum interval default in seconds. |
 | `preferred_state` | `preferred` | `bool` | — | `False` | A property that indicates if the NTP server is preferred. Only one preferred server is allowed. |
 | `truechimer_status` | `trueChimer` | {ref}`DatetimeTrueChimerStatus <enum-datetimetruechimerstatus>` | `disabled`, `enabled` | `disabled` | — |

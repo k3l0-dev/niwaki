@@ -25,26 +25,26 @@ Accepted as keyword arguments of `.dpp_policy(name)` and of `.set(**attrs)` on t
 | --- | --- | --- | --- | --- | --- |
 | `name` *(positional)* | `name` | `str` | — | — | The name of the object. |
 | `admin_st` | `adminSt` | {ref}`QosDppPolAdminState <enum-qosdpppoladminstate>` | `disabled`, `enabled` | `disabled` | The Administrative state of the policy |
-| `excessive_burst` | `be` | `str` | — | — | Excessive burst size (2R3C policer only) |
+| `excessive_burst` | `be` | `int` | — | `unspecified` | Excessive burst size (2R3C policer only) |
 | `excessive_burst_unit` | `beUnit` | {ref}`DppBurstUnit <enum-dppburstunit>` | `giga`, `kilo`, `mega`, `msec`, `unspecified`, `usec` | `unspecified` | Excessive Burst unit - none, Kilo, Mega, Giga, ms, us |
-| `burst` | `burst` | `str` | — | — | Committed burst size, number of packets to absorb during a burst |
+| `burst` | `burst` | `int` | — | `unspecified` | Committed burst size, number of packets to absorb during a burst |
 | `burst_unit` | `burstUnit` | {ref}`DppBurstUnit <enum-dppburstunit>` | `giga`, `kilo`, `mega`, `msec`, `unspecified`, `usec` | `unspecified` | Burst unit - byte, kbyte, mbyte etc. |
 | `confirm_action` | `conformAction` | {ref}`DppConformRateAction <enum-dppconformrateaction>` | `drop`, `mark`, `transmit` | `transmit` | Confirm action |
-| `conform_mark_cos` | `conformMarkCos` | `str` | — | — | Conform Mark cos |
-| `conform_mark_dscp` | `conformMarkDscp` | `str` | — | — | Conform Mark Dscp |
+| `conform_mark_cos` | `conformMarkCos` | `int` | — | `unspecified` | Conform Mark cos |
+| `conform_mark_dscp` | `conformMarkDscp` | `int` | — | `unspecified` | Conform Mark Dscp |
 | `description` | `descr` | `str` | — | — | Specifies a description of the policy definition. |
 | `exceed_action` | `exceedAction` | {ref}`DppExceedRateAction <enum-dppexceedrateaction>` | `drop`, `mark`, `transmit` | `drop` | Exceed action |
-| `exceed_mark_cos` | `exceedMarkCos` | `str` | — | — | Exceed Mark cos |
-| `exceed_mark_dscp` | `exceedMarkDscp` | `str` | — | — | Exceed Mark Dscp |
+| `exceed_mark_cos` | `exceedMarkCos` | `int` | — | `unspecified` | Exceed Mark cos |
+| `exceed_mark_dscp` | `exceedMarkDscp` | `int` | — | `unspecified` | Exceed Mark Dscp |
 | `bit_or_packet` | `mode` | {ref}`DppMode <enum-dppmode>` | `bit`, `packet` | `bit` | Policer mode - bytes or packet policer |
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |
-| `peak_rate` | `pir` | `str` | — | — | Peak rate (pir) (2R3C policer only) |
+| `peak_rate` | `pir` | `int` | — | `0` | Peak rate (pir) (2R3C policer only) |
 | `peak_rate_unit` | `pirUnit` | {ref}`DppRateUnit <enum-dpprateunit>` | `giga`, `kilo`, `mega`, `unspecified` | `unspecified` | Peak Rate unit - none, Kilo, Mega, Giga |
-| `rate` | `rate` | `str` | — | — | Allowed rate, committed rate at which the packets are allowed into the system |
+| `rate` | `rate` | `int` | — | `0` | Allowed rate, committed rate at which the packets are allowed into the system |
 | `rate_unit` | `rateUnit` | {ref}`DppRateUnit <enum-dpprateunit>` | `giga`, `kilo`, `mega`, `unspecified` | `unspecified` | Rate unit - bps, kbps, mbps, packets etc. |
 | `policer_sharing_mode` | `sharingMode` | {ref}`DppSharingMode <enum-dppsharingmode>` | `dedicated`, `shared` | `dedicated` | Policer sharing mode |
 | `type` | `type` | {ref}`DppType <enum-dpptype>` | `1R2C`, `2R3C` | `1R2C` | Policer type |
 | `violate_action` | `violateAction` | {ref}`DppViolateRateAction <enum-dppviolaterateaction>` | `drop`, `mark`, `transmit` | `drop` | Violate action |
-| `violate_mark_cos` | `violateMarkCos` | `str` | — | — | Violate Mark cos |
-| `violate_mark_dscp` | `violateMarkDscp` | `str` | — | — | Violate Mark Dscp |
+| `violate_mark_cos` | `violateMarkCos` | `int` | — | `unspecified` | Violate Mark cos |
+| `violate_mark_dscp` | `violateMarkDscp` | `int` | — | `unspecified` | Violate Mark Dscp |

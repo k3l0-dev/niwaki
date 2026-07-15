@@ -45,7 +45,15 @@ class datetimeRsNtpProvToNtpIFFClientKey(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    iff_key_id: Annotated[str, Field(alias="tnDatetimeNtpIFFClientKeyIffKeyId")]
+    iff_key_id: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=65535,
+            validation_alias="tnDatetimeNtpIFFClientKeyIffKeyId",
+            serialization_alias="tnDatetimeNtpIFFClientKeyIffKeyId",
+        ),
+    ] = 1
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[

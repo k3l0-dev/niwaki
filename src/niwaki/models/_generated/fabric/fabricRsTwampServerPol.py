@@ -54,6 +54,12 @@ class fabricRsTwampServerPol(ManagedObject):
         ),
     ] = ""
     name: Annotated[
-        str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="tnTwampServerPolName")
+        str,
+        Field(
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            validation_alias="tnTwampServerPolName",
+            serialization_alias="tnTwampServerPolName",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

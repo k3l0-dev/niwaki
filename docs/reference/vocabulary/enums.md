@@ -5,7 +5,7 @@ Re-generate: uv run python -m niwaki._codegen.generate_docs
 
 # Enums
 
-The 119 enum types reachable from the curated vocabulary — every constrained parameter of every maker.  A parameter typed as an enum also accepts the plain string; the value is validated at the call site either way.
+The 165 enum types reachable from the curated vocabulary — every constrained parameter of every maker.  A parameter typed as an enum also accepts the plain string; the value is validated at the call site either way.
 
 The remaining generated enums back the non-curated classes and live in `niwaki.models._generated.enums`.
 
@@ -21,14 +21,55 @@ The remaining generated enums back the non-curated classes and live in `niwaki.m
 
 Used by: {ref}`infra.netflow_exporter <vocab-infra-netflow_exporter>`, {ref}`tenant.netflow_exporter <vocab-tenant-netflow_exporter>`
 
+(enum-analyticscollectparams)=
+
+## `AnalyticsCollectParams`
+
+| value | meaning |
+| --- | --- |
+| `count-bytes` | Bytes counter |
+| `count-pkts` | Packets counter |
+| `sampler-id` | Sampler Id |
+| `pkt-disp` | Packet disposition |
+| `ts-first` | First packet timestamp |
+| `ts-recent` | Recent packet timestamp |
+| `tcp-flags` | TCP flags |
+| `src-intf` | Source interface |
+
+Used by: {ref}`infra.netflow_record <vocab-infra-netflow_record>`, {ref}`tenant.netflow_record <vocab-tenant-netflow_record>`
+
+(enum-analyticsmatchparams)=
+
+## `AnalyticsMatchParams`
+
+| value | meaning |
+| --- | --- |
+| `unspecified` | Unspecified |
+| `ethertype` | Ethertype |
+| `dst-mac` | Destination MAC |
+| `src-mac` | Source MAC |
+| `vlan` | VLAN |
+| `proto` | IP protocol |
+| `tos` | IP type of service |
+| `src-ipv4` | Source IPv4 |
+| `dst-ipv4` | Destination IPv4 |
+| `src-ipv6` | Source IPv6 |
+| `dst-ipv6` | Destination IPv6 |
+| `src-port` | Source port |
+| `dst-port` | Destination port |
+| `src-ip` | Source IPv4/v6 |
+| `dst-ip` | Destination IPv4/v6 |
+
+Used by: {ref}`infra.netflow_record <vocab-infra-netflow_record>`, {ref}`tenant.netflow_record <vocab-tenant-netflow_record>`
+
 (enum-arpifcontrol)=
 
 ## `ArpIfControl`
 
 | value | meaning |
 | --- | --- |
-| `garp-adj-enable` | Enable learning adjacency from GARP |
 | `unspecified` | Unspecified |
+| `garp-adj-enable` | Enable learning adjacency from GARP |
 
 Used by: {ref}`tenant.arp_interface_policy <vocab-tenant-arp_interface_policy>`
 
@@ -55,6 +96,40 @@ Used by: {ref}`tenant.filter.entry <vocab-tenant-filter-entry>`
 
 Used by: {ref}`tenant.l3out.node_profile.bfd_multihop_node_profile <vocab-tenant-l3out-node_profile-bfd_multihop_node_profile>`, {ref}`tenant.l3out.node_profile.interface_profile.bfd_interface <vocab-tenant-l3out-node_profile-interface_profile-bfd_interface>`, {ref}`tenant.l3out.node_profile.interface_profile.bfd_mh_interface <vocab-tenant-l3out-node_profile-interface_profile-bfd_mh_interface>`
 
+(enum-bfdifcontrol)=
+
+## `BfdIfControl`
+
+| value | meaning |
+| --- | --- |
+| `opt-subif` | Enable sub-interface optimization. This mode will select 1 session for all sub-interface sessions as the master. Rest of the sessions run at slow timer rate. |
+
+Used by: {ref}`tenant.bfd_interface_policy <vocab-tenant-bfd_interface_policy>`
+
+(enum-bgpaddlpathcapt)=
+
+## `BgpAddlPathCapT`
+
+| value | meaning |
+| --- | --- |
+| `send` | Send |
+| `receive` | Receive |
+| `install-bkup` | Install backup |
+
+Used by: {ref}`tenant.bgp_address_family_context_policy.bgp_additional_path_context_policy <vocab-tenant-bgp_address_family_context_policy-bgp_additional_path_context_policy>`
+
+(enum-bgpaddrtcontrol)=
+
+## `BgpAddrTControl`
+
+| value | meaning |
+| --- | --- |
+| `af-ucast` | AF Ucast |
+| `af-mcast` | Af Mcast |
+| `af-label-ucast` | Af Labeled Unicast |
+
+Used by: {ref}`tenant.bgp_route_summarization_policy <vocab-tenant-bgp_route_summarization_policy>`, {ref}`tenant.l3out.node_profile.bgp_peer <vocab-tenant-l3out-node_profile-bgp_peer>`, {ref}`tenant.l3out.node_profile.infra_peer_connectivity_profile <vocab-tenant-l3out-node_profile-infra_peer_connectivity_profile>`, {ref}`tenant.l3out.node_profile.interface_profile.floating_svi.bgp_peer <vocab-tenant-l3out-node_profile-interface_profile-floating_svi-bgp_peer>`, {ref}`tenant.l3out.node_profile.interface_profile.floating_svi.infra_peer_connectivity_profile <vocab-tenant-l3out-node_profile-interface_profile-floating_svi-infra_peer_connectivity_profile>`
+
 (enum-bgpasnpropagation)=
 
 ## `BgpAsnPropagation`
@@ -67,6 +142,38 @@ Used by: {ref}`tenant.l3out.node_profile.bfd_multihop_node_profile <vocab-tenant
 | `replace-as` | Replace AS: Replace real AS with local AS in the EBGP updates |
 
 Used by: {ref}`tenant.l3out.node_profile.bgp_peer.local_autonomous_system_profile <vocab-tenant-l3out-node_profile-bgp_peer-local_autonomous_system_profile>`, {ref}`tenant.l3out.node_profile.infra_peer_connectivity_profile.local_autonomous_system_profile <vocab-tenant-l3out-node_profile-infra_peer_connectivity_profile-local_autonomous_system_profile>`, {ref}`tenant.l3out.node_profile.interface_profile.floating_svi.bgp_peer.local_autonomous_system_profile <vocab-tenant-l3out-node_profile-interface_profile-floating_svi-bgp_peer-local_autonomous_system_profile>`, {ref}`tenant.l3out.node_profile.interface_profile.floating_svi.infra_peer_connectivity_profile.local_autonomous_system_profile <vocab-tenant-l3out-node_profile-interface_profile-floating_svi-infra_peer_connectivity_profile-local_autonomous_system_profile>`
+
+(enum-bgpconnectivitytype)=
+
+## `BgpConnectivityType`
+
+| value | meaning |
+| --- | --- |
+| `tenant` | Connectivity to the tenant network |
+| `multipod` | Connectivity to the MPOD fabric |
+| `multisite` | Connectivity to the MSITE fabric |
+
+Used by: {ref}`tenant.l3out.node_profile.bgp_peer <vocab-tenant-l3out-node_profile-bgp_peer>`, {ref}`tenant.l3out.node_profile.interface_profile.floating_svi.bgp_peer <vocab-tenant-l3out-node_profile-interface_profile-floating_svi-bgp_peer>`
+
+(enum-bgpdomafctrl)=
+
+## `BgpDomAfCtrl`
+
+| value | meaning |
+| --- | --- |
+| `host-rt-leak` | — |
+
+Used by: {ref}`tenant.bgp_address_family_context_policy <vocab-tenant-bgp_address_family_context_policy>`
+
+(enum-bgpgrcontrols)=
+
+## `BgpGRControls`
+
+| value | meaning |
+| --- | --- |
+| `helper` | Helper mode enabled |
+
+Used by: {ref}`tenant.bgp_timers_policy <vocab-tenant-bgp_timers_policy>`
 
 (enum-bgpmaxpfxact)=
 
@@ -91,6 +198,79 @@ Used by: {ref}`tenant.bgp_peer_prefix_policy <vocab-tenant-bgp_peer_prefix_polic
 
 Used by: {ref}`tenant.bgp_best_path_control_policy <vocab-tenant-bgp_best_path_control_policy>`
 
+(enum-bgppeerafcap)=
+
+## `BgpPeerAfCap`
+
+| value | meaning |
+| --- | --- |
+| `none` | Receive add-path capability |
+| `receive-add-path` | — |
+
+Used by: {ref}`tenant.l3out.node_profile.bgp_peer <vocab-tenant-l3out-node_profile-bgp_peer>`, {ref}`tenant.l3out.node_profile.infra_peer_connectivity_profile <vocab-tenant-l3out-node_profile-infra_peer_connectivity_profile>`, {ref}`tenant.l3out.node_profile.interface_profile.floating_svi.bgp_peer <vocab-tenant-l3out-node_profile-interface_profile-floating_svi-bgp_peer>`, {ref}`tenant.l3out.node_profile.interface_profile.floating_svi.infra_peer_connectivity_profile <vocab-tenant-l3out-node_profile-interface_profile-floating_svi-infra_peer_connectivity_profile>`
+
+(enum-bgppeercontrolpol)=
+
+## `BgpPeerControlPol`
+
+| value | meaning |
+| --- | --- |
+| `send-com` | Send community |
+| `send-ext-com` | Send extended community |
+| `nh-self` | Nexthop self |
+| `dis-peer-as-check` | Disable checking of peer AS number while advertising |
+| `allow-self-as` | Allows local AS number in the AS path |
+| `as-override` | Overrides AS number of the original route |
+| `segment-routing-disable` | Overrides AS number of the original route |
+
+Used by: {ref}`tenant.l3out.node_profile.bgp_peer <vocab-tenant-l3out-node_profile-bgp_peer>`, {ref}`tenant.l3out.node_profile.infra_peer_connectivity_profile <vocab-tenant-l3out-node_profile-infra_peer_connectivity_profile>`, {ref}`tenant.l3out.node_profile.interface_profile.floating_svi.bgp_peer <vocab-tenant-l3out-node_profile-interface_profile-floating_svi-bgp_peer>`, {ref}`tenant.l3out.node_profile.interface_profile.floating_svi.infra_peer_connectivity_profile <vocab-tenant-l3out-node_profile-interface_profile-floating_svi-infra_peer_connectivity_profile>`
+
+(enum-bgppeercontrolpolext)=
+
+## `BgpPeerControlPolExt`
+
+| value | meaning |
+| --- | --- |
+| `send-domain-path` | Send Domain Path |
+
+Used by: {ref}`tenant.l3out.node_profile.bgp_peer <vocab-tenant-l3out-node_profile-bgp_peer>`, {ref}`tenant.l3out.node_profile.infra_peer_connectivity_profile <vocab-tenant-l3out-node_profile-infra_peer_connectivity_profile>`, {ref}`tenant.l3out.node_profile.interface_profile.floating_svi.bgp_peer <vocab-tenant-l3out-node_profile-interface_profile-floating_svi-bgp_peer>`, {ref}`tenant.l3out.node_profile.interface_profile.floating_svi.infra_peer_connectivity_profile <vocab-tenant-l3out-node_profile-interface_profile-floating_svi-infra_peer_connectivity_profile>`
+
+(enum-bgppeerpcontroltype)=
+
+## `BgpPeerPControlType`
+
+| value | meaning |
+| --- | --- |
+| `bfd` | Bidirectional Forwarding Detection |
+| `dis-conn-check` | Disable checking whether single-hop eBGP peer is directly connected |
+
+Used by: {ref}`tenant.l3out.node_profile.bgp_peer <vocab-tenant-l3out-node_profile-bgp_peer>`, {ref}`tenant.l3out.node_profile.infra_peer_connectivity_profile <vocab-tenant-l3out-node_profile-infra_peer_connectivity_profile>`, {ref}`tenant.l3out.node_profile.interface_profile.floating_svi.bgp_peer <vocab-tenant-l3out-node_profile-interface_profile-floating_svi-bgp_peer>`, {ref}`tenant.l3out.node_profile.interface_profile.floating_svi.infra_peer_connectivity_profile <vocab-tenant-l3out-node_profile-interface_profile-floating_svi-infra_peer_connectivity_profile>`
+
+(enum-bgppeert)=
+
+## `BgpPeerT`
+
+| value | meaning |
+| --- | --- |
+| `wan` | — |
+| `intersite` | — |
+| `mdp-wan` | — |
+| `sr-mpls` | — |
+
+Used by: {ref}`tenant.l3out.node_profile.infra_peer_connectivity_profile <vocab-tenant-l3out-node_profile-infra_peer_connectivity_profile>`, {ref}`tenant.l3out.node_profile.interface_profile.floating_svi.infra_peer_connectivity_profile <vocab-tenant-l3out-node_profile-interface_profile-floating_svi-infra_peer_connectivity_profile>`
+
+(enum-bgpprivateascontrol)=
+
+## `BgpPrivateASControl`
+
+| value | meaning |
+| --- | --- |
+| `remove-exclusive` | Enable removal of private AS exclusively if no public AS exist |
+| `remove-all` | Remove private AS even if public AS's exist |
+| `replace-as` | Replace private AS with local AS |
+
+Used by: {ref}`tenant.l3out.node_profile.bgp_peer <vocab-tenant-l3out-node_profile-bgp_peer>`, {ref}`tenant.l3out.node_profile.infra_peer_connectivity_profile <vocab-tenant-l3out-node_profile-infra_peer_connectivity_profile>`, {ref}`tenant.l3out.node_profile.interface_profile.floating_svi.bgp_peer <vocab-tenant-l3out-node_profile-interface_profile-floating_svi-bgp_peer>`, {ref}`tenant.l3out.node_profile.interface_profile.floating_svi.infra_peer_connectivity_profile <vocab-tenant-l3out-node_profile-interface_profile-floating_svi-infra_peer_connectivity_profile>`
+
 (enum-bgprttargett)=
 
 ## `BgpRtTargetT`
@@ -112,6 +292,17 @@ Used by: {ref}`tenant.l3out.route_target_instrumentation_profile <vocab-tenant-l
 | `routable-loopback` | Automatically allocated Routable CP-TEP as Source |
 
 Used by: {ref}`tenant.l3out.node_profile.infra_peer_connectivity_profile <vocab-tenant-l3out-node_profile-infra_peer_connectivity_profile>`, {ref}`tenant.l3out.node_profile.interface_profile.floating_svi.infra_peer_connectivity_profile <vocab-tenant-l3out-node_profile-interface_profile-floating_svi-infra_peer_connectivity_profile>`
+
+(enum-bgpsumcontrolpoltype)=
+
+## `BgpSumControlPolType`
+
+| value | meaning |
+| --- | --- |
+| `as-set` | as-set |
+| `summary-only` | summary-only |
+
+Used by: {ref}`tenant.bgp_route_summarization_policy <vocab-tenant-bgp_route_summarization_policy>`
 
 (enum-bgptrustctrlt)=
 
@@ -145,6 +336,17 @@ Used by: {ref}`fabric.datetime_policy <vocab-fabric-datetime_policy>`
 | `enabled` | — |
 
 Used by: {ref}`fabric.datetime_policy.ntp_provider <vocab-fabric-datetime_policy-ntp_provider>`
+
+(enum-dhcpaddrpreferences)=
+
+## `DhcpAddrPreferences`
+
+| value | meaning |
+| --- | --- |
+| `none` | No preferences enabled |
+| `use-server-vrf` | Use server-vrf to transmit inter-vrf dhcp |
+
+Used by: {ref}`infra.dhcp_relay_policy.provider <vocab-infra-dhcp_relay_policy-provider>`, {ref}`tenant.dhcp_relay_policy.provider <vocab-tenant-dhcp_relay_policy-provider>`
 
 (enum-dhcpowner)=
 
@@ -293,10 +495,10 @@ Used by: {ref}`tenant.eigrp_interface_policy <vocab-tenant-eigrp_interface_polic
 
 | value | meaning |
 | --- | --- |
-| `bfd` | Enable BFD |
-| `nh-self` | Nexthop self |
-| `passive` | Passive |
 | `split-horizon` | Split horizon |
+| `passive` | Passive |
+| `nh-self` | Nexthop self |
+| `bfd` | Enable BFD |
 
 Used by: {ref}`tenant.eigrp_interface_policy <vocab-tenant-eigrp_interface_policy>`
 
@@ -335,6 +537,29 @@ Used by: {ref}`tenant.l3out.node_profile.interface_profile.floating_svi <vocab-t
 | `reciprocal` | — |
 
 Used by: {ref}`fabric.vpc_protection <vocab-fabric-vpc_protection>`
+
+(enum-fabricselector)=
+
+## `FabricSelector`
+
+| value | meaning |
+| --- | --- |
+| `ALL` | — |
+| `ALL_IN_POD` | — |
+| `range` | — |
+
+Used by: {ref}`infra.leaf_profile.leaf_selector <vocab-infra-leaf_profile-leaf_selector>`, {ref}`infra.spine_profile.spine_selector <vocab-infra-spine_profile-spine_selector>`
+
+(enum-fabricselector2)=
+
+## `FabricSelector2`
+
+| value | meaning |
+| --- | --- |
+| `ALL` | — |
+| `range` | — |
+
+Used by: {ref}`infra.access_port_profile.port_selector <vocab-infra-access_port_profile-port_selector>`
 
 (enum-fcvsanmode)=
 
@@ -406,6 +631,17 @@ Used by: {ref}`tenant.app.epg.criterion <vocab-tenant-app-epg-criterion>`
 
 Used by: {ref}`tenant.access_client_profile.access_client_epg <vocab-tenant-access_client_profile-access_client_epg>`, {ref}`tenant.access_function_profile.access_function_provider <vocab-tenant-access_function_profile-access_function_provider>`, {ref}`tenant.app.epg <vocab-tenant-app-epg>`, {ref}`tenant.app.esg <vocab-tenant-app-esg>`, {ref}`tenant.dot1q_tunnel <vocab-tenant-dot1q_tunnel>`, {ref}`tenant.l2out.external_epg <vocab-tenant-l2out-external_epg>`, {ref}`tenant.l3out.external_epg <vocab-tenant-l3out-external_epg>`, {ref}`tenant.management_profile.in_band_epg <vocab-tenant-management_profile-in_band_epg>`
 
+(enum-fvfwdctrl)=
+
+## `FvFwdCtrl`
+
+| value | meaning |
+| --- | --- |
+| `none` | — |
+| `proxy-arp` | proxy-arp |
+
+Used by: {ref}`tenant.app.epg <vocab-tenant-app-epg>`
+
 (enum-fvinstrimedcy)=
 
 ## `FvInstrImedcy`
@@ -476,14 +712,51 @@ Used by: {ref}`tenant.app.epg <vocab-tenant-app-epg>`, {ref}`tenant.app.esg <voc
 
 Used by: {ref}`tenant.access_client_profile.access_client_epg <vocab-tenant-access_client_profile-access_client_epg>`, {ref}`tenant.access_function_profile.access_function_provider <vocab-tenant-access_function_profile-access_function_provider>`, {ref}`tenant.app.epg <vocab-tenant-app-epg>`, {ref}`tenant.app.esg <vocab-tenant-app-esg>`, {ref}`tenant.dot1q_tunnel <vocab-tenant-dot1q_tunnel>`, {ref}`tenant.l2out.external_epg <vocab-tenant-l2out-external_epg>`, {ref}`tenant.l3out.external_epg <vocab-tenant-l3out-external_epg>`, {ref}`tenant.management_profile.in_band_epg <vocab-tenant-management_profile-in_band_epg>`
 
+(enum-fvroutescp)=
+
+## `FvRouteScp`
+
+| value | meaning |
+| --- | --- |
+| `public` | Visible outside the fabric |
+| `private` | Visiblity limited to the local Vrf |
+| `shared` | Visibility limited to the shared VRF |
+
+Used by: {ref}`tenant.app.epg.subnet <vocab-tenant-app-epg-subnet>`, {ref}`tenant.bd.subnet <vocab-tenant-bd-subnet>`, {ref}`tenant.l2out.external_epg.subnet <vocab-tenant-l2out-external_epg-subnet>`, {ref}`tenant.management_profile.in_band_epg.subnet <vocab-tenant-management_profile-in_band_epg-subnet>`
+
+(enum-fvstceptype)=
+
+## `FvStCEpType`
+
+| value | meaning |
+| --- | --- |
+| `silent-host` | — |
+| `tep` | — |
+| `vep` | — |
+
+Used by: {ref}`tenant.app.epg.static_endpoint <vocab-tenant-app-epg-static_endpoint>`
+
+(enum-fvsubnetcontrol)=
+
+## `FvSubnetControl`
+
+| value | meaning |
+| --- | --- |
+| `unspecified` | Unspecified |
+| `querier` | Address will be used as a IGMP querier source IP |
+| `nd` | Address will be used as a ND RA Prefix |
+| `no-default-gateway` | Address will be have default gateway |
+
+Used by: {ref}`tenant.app.epg.subnet <vocab-tenant-app-epg-subnet>`, {ref}`tenant.bd.subnet <vocab-tenant-bd-subnet>`, {ref}`tenant.l2out.external_epg.subnet <vocab-tenant-l2out-external_epg-subnet>`, {ref}`tenant.management_profile.in_band_epg.subnet <vocab-tenant-management_profile-in_band_epg-subnet>`
+
 (enum-fvtnlfwdctrl)=
 
 ## `FvTnlFwdCtrl`
 
 | value | meaning |
 | --- | --- |
-| `mac-learn-disable` | — |
 | `mac-learn-enable` | — |
+| `mac-learn-disable` | — |
 
 Used by: {ref}`tenant.dot1q_tunnel <vocab-tenant-dot1q_tunnel>`
 
@@ -573,6 +846,17 @@ Used by: {ref}`tenant.vrf <vocab-tenant-vrf>`
 
 Used by: {ref}`tenant.ip_address_pool <vocab-tenant-ip_address_pool>`
 
+(enum-fvnsallocmode)=
+
+## `FvnsAllocMode`
+
+| value | meaning |
+| --- | --- |
+| `dynamic` | — |
+| `static` | — |
+
+Used by: {ref}`infra.vlan_pool <vocab-infra-vlan_pool>`
+
 (enum-fvnsblkallocmode)=
 
 ## `FvnsBlkAllocMode`
@@ -620,6 +904,24 @@ Used by: {ref}`tenant.ip_sla_monitoring_policy <vocab-tenant-ip_sla_monitoring_p
 
 Used by: {ref}`tenant.hsrp_group_policy <vocab-tenant-hsrp_group_policy>`
 
+(enum-hsrpconfigissues)=
+
+## `HsrpConfigIssues`
+
+| value | meaning |
+| --- | --- |
+| `none` | — |
+| `group-vip-subnet-mismatch` | — |
+| `Secondary-vip-subnet-mismatch` | — |
+| `GroupVIP-Conflicts-Other-Group` | — |
+| `GroupName-Conflicts-Other-Group` | — |
+| `GroupMac-Conflicts-Other-Group` | — |
+| `group-vip-conflicts-if-ip` | — |
+| `Secondary-vip-conflicts-if-ip` | — |
+| `Multiple-Version-On-Interface` | — |
+
+Used by: {ref}`tenant.l3out.node_profile.interface_profile.hsrp_interface.hsrp_group_profile <vocab-tenant-l3out-node_profile-interface_profile-hsrp_interface-hsrp_group_profile>`
+
 (enum-hsrpgroupaf)=
 
 ## `HsrpGroupAf`
@@ -630,6 +932,16 @@ Used by: {ref}`tenant.hsrp_group_policy <vocab-tenant-hsrp_group_policy>`
 | `ipv6` | ipv6 |
 
 Used by: {ref}`tenant.l3out.node_profile.interface_profile.hsrp_interface.hsrp_group_profile <vocab-tenant-l3out-node_profile-interface_profile-hsrp_interface-hsrp_group_profile>`
+
+(enum-hsrpgrpcontrol)=
+
+## `HsrpGrpControl`
+
+| value | meaning |
+| --- | --- |
+| `preempt` | Enable preemtion for the Group |
+
+Used by: {ref}`tenant.hsrp_group_policy <vocab-tenant-hsrp_group_policy>`
 
 (enum-hsrpgrpipobtainmode)=
 
@@ -642,6 +954,17 @@ Used by: {ref}`tenant.l3out.node_profile.interface_profile.hsrp_interface.hsrp_g
 | `learn` | — |
 
 Used by: {ref}`tenant.l3out.node_profile.interface_profile.hsrp_interface.hsrp_group_profile <vocab-tenant-l3out-node_profile-interface_profile-hsrp_interface-hsrp_group_profile>`
+
+(enum-hsrpifcontrol)=
+
+## `HsrpIfControl`
+
+| value | meaning |
+| --- | --- |
+| `bia` | Use Burnt in MAC address |
+| `bfd` | — |
+
+Used by: {ref}`tenant.hsrp_interface_policy <vocab-tenant-hsrp_interface_policy>`
 
 (enum-hsrpversion)=
 
@@ -667,6 +990,18 @@ Used by: {ref}`tenant.l3out.node_profile.interface_profile.hsrp_interface <vocab
 
 Used by: {ref}`infra.func_profile.port_channel <vocab-infra-func_profile-port_channel>`
 
+(enum-ipmcifctrl)=
+
+## `IpmcIfCtrl`
+
+| value | meaning |
+| --- | --- |
+| `rep-ll` | Report Link Local Groups |
+| `fast-leave` | Fast (immediate) Leave |
+| `allow-v3-asm` | Allow v3 ASM |
+
+Used by: {ref}`tenant.igmp_interface_policy <vocab-tenant-igmp_interface_policy>`
+
 (enum-ipmcifver)=
 
 ## `IpmcifVer`
@@ -677,6 +1012,19 @@ Used by: {ref}`infra.func_profile.port_channel <vocab-infra-func_profile-port_ch
 | `v3` | Version 3 |
 
 Used by: {ref}`tenant.igmp_interface_policy <vocab-tenant-igmp_interface_policy>`
+
+(enum-ipmcsnoopdomcontrol)=
+
+## `IpmcsnoopDomControl`
+
+| value | meaning |
+| --- | --- |
+| `querier` | Enable querier |
+| `fast-leave` | Fast leave - If this knob is turned on, when the switch receives a igmp/mld leave, it removes the interface from the multicast outgoing flood list for this group |
+| `opt-flood` | @deprecated: THIS FLAG IS A NO-OP |
+| `routing` | Enable routing on the Dom |
+
+Used by: {ref}`fabric.igmp_snoop_policy <vocab-fabric-igmp_snoop_policy>`, {ref}`fabric.mld_snoop_policy <vocab-fabric-mld_snoop_policy>`, {ref}`tenant.igmp_snoop_policy <vocab-tenant-igmp_snoop_policy>`, {ref}`tenant.mld_snoop_policy <vocab-tenant-mld_snoop_policy>`
 
 (enum-l1autoneg)=
 
@@ -785,6 +1133,17 @@ Used by: {ref}`infra.storm_control_policy <vocab-infra-storm_control_policy>`
 
 Used by: {ref}`infra.storm_control_policy <vocab-infra-storm_control_policy>`
 
+(enum-l2bouncetrig)=
+
+## `L2BounceTrig`
+
+| value | meaning |
+| --- | --- |
+| `rarp-flood` | RARP Flooding |
+| `protocol` | through protocol magic |
+
+Used by: {ref}`tenant.ep_retention_policy <vocab-tenant-ep_retention_policy>`
+
 (enum-l2epmovedetectmode)=
 
 ## `L2EpMoveDetectMode`
@@ -847,6 +1206,21 @@ Used by: {ref}`tenant.bd <vocab-tenant-bd>`
 
 Used by: {ref}`tenant.bd <vocab-tenant-bd>`
 
+(enum-l2qiql2prottunmaskt)=
+
+## `L2qiqL2ProtTunMaskT`
+
+| value | meaning |
+| --- | --- |
+| `none` | — |
+| `stp` | — |
+| `lldp` | — |
+| `cdp` | — |
+| `lacp` | — |
+| `vtp` | — |
+
+Used by: {ref}`tenant.dot1q_tunnel <vocab-tenant-dot1q_tunnel>`
+
 (enum-l3extalways)=
 
 ## `L3extAlways`
@@ -858,6 +1232,41 @@ Used by: {ref}`tenant.bd <vocab-tenant-bd>`
 
 Used by: {ref}`tenant.l3out.default_route_leak_policy <vocab-tenant-l3out-default_route_leak_policy>`
 
+(enum-l3extconfigissues)=
+
+## `L3extConfigIssues`
+
+| value | meaning |
+| --- | --- |
+| `none` | — |
+| `node-path-misconfig` | LNodeP node/path configuration validations |
+| `routerid-not-changable-with-mcast` | LNodeP router id multicast configuration validations |
+| `loopback-ip-missing` | CP-TEP configuration validations |
+| `subnet-mismatch` | — |
+| `node-vlif-misconfig` | LNodeP node/vlif configuration validations |
+| `anchor-node-mismatch` | — |
+| `missing-rs-export-route-profile` | MPLS ConsLbl configuration validations |
+| `missing-mpls-infra-l3out` | MPLS infra l3out validation for the consumer Lbl |
+| `bd-profile-mismatch` | — |
+| `mtu-mac-mismatch` | Fault added via CSCvv00759 for identical l3extRsPathL3OutAtt |
+| `anchor-encap-mismatch` | — |
+| `access-encap-node-overlap` | — |
+| `access-encap-bd-map-conflict` | — |
+| `rtsumsubnet-l3extsubnet-conflict` | — |
+
+Used by: {ref}`tenant.l3out.node_profile <vocab-tenant-l3out-node_profile>`, {ref}`tenant.l3out.node_profile.node_attachment <vocab-tenant-l3out-node_profile-node_attachment>`
+
+(enum-l3extctrldirection)=
+
+## `L3extCtrlDirection`
+
+| value | meaning |
+| --- | --- |
+| `import` | Import Control |
+| `export` | Export Control |
+
+Used by: {ref}`tenant.l3out <vocab-tenant-l3out>`
+
 (enum-l3extdefaultrtleakcriteriatype)=
 
 ## `L3extDefaultRtLeakCriteriaType`
@@ -867,6 +1276,18 @@ Used by: {ref}`tenant.l3out.default_route_leak_policy <vocab-tenant-l3out-defaul
 | `in-addition` | Leak Default Route in Addition |
 | `none` | — |
 | `only` | Leak Default Route Only |
+
+Used by: {ref}`tenant.l3out.default_route_leak_policy <vocab-tenant-l3out-default_route_leak_policy>`
+
+(enum-l3extdefaultrtleakscopetype)=
+
+## `L3extDefaultRtLeakScopeType`
+
+| value | meaning |
+| --- | --- |
+| `none` | — |
+| `ctx` | Context |
+| `l3-out` | L3 Outside |
 
 Used by: {ref}`tenant.l3out.default_route_leak_policy <vocab-tenant-l3out-default_route_leak_policy>`
 
@@ -904,18 +1325,55 @@ Used by: {ref}`tenant.l3out.node_profile.interface_profile.floating_svi <vocab-t
 
 Used by: {ref}`tenant.vrf <vocab-tenant-vrf>`
 
+(enum-l3extrouteaggtype)=
+
+## `L3extRouteAggType`
+
+| value | meaning |
+| --- | --- |
+| `import-rtctrl` | Aggregate Import Routes |
+| `export-rtctrl` | Aggregate Export Routes |
+| `shared-rtctrl` | Aggregate Shared Routes |
+
+Used by: {ref}`tenant.l3out.external_epg.subnet <vocab-tenant-l3out-external_epg-subnet>`
+
+(enum-l3extroutescp)=
+
+## `L3extRouteScp`
+
+| value | meaning |
+| --- | --- |
+| `import-rtctrl` | Route is for Import Route Control Policy |
+| `export-rtctrl` | Route is for Export Route Control Policy |
+| `import-security` | Route is for Import Security Policy |
+| `shared-security` | Route is for applying security on it in the Ctx/VRF into which it is shared |
+| `shared-rtctrl` | Route is for leaking into consumers Ctx/VRF in case of Shared Service |
+
+Used by: {ref}`tenant.l3out.external_epg.subnet <vocab-tenant-l3out-external_epg-subnet>`
+
+(enum-l3extside)=
+
+## `L3extSide`
+
+| value | meaning |
+| --- | --- |
+| `A` | Left represents the node with small Id in the group |
+| `B` | Right represents the node with big Id in the group |
+
+Used by: {ref}`tenant.l3out.node_profile.interface_profile.floating_svi.member_node_configuration <vocab-tenant-l3out-node_profile-interface_profile-floating_svi-member_node_configuration>`
+
 (enum-l4tcpflags)=
 
 ## `L4TcpFlags`
 
 | value | meaning |
 | --- | --- |
+| `unspecified` | Unspecified |
+| `syn` | Syn flag |
 | `ack` | Ack flag |
-| `est` | Established - combination of Ack and Reset |
 | `fin` | Fin flag |
 | `rst` | Reset flag |
-| `syn` | Syn flag |
-| `unspecified` | Unspecified |
+| `est` | Established - combination of Ack and Reset |
 
 Used by: {ref}`tenant.filter.entry <vocab-tenant-filter-entry>`
 
@@ -1014,6 +1472,33 @@ Used by: {ref}`infra.mcp_policy <vocab-infra-mcp_policy>`
 
 Used by: {ref}`fabric.syslog_group.remote_destination <vocab-fabric-syslog_group-remote_destination>`
 
+(enum-ndifcontrol)=
+
+## `NdIfControl`
+
+| value | meaning |
+| --- | --- |
+| `unspecified` | Unspecified |
+| `managed-cfg` | redirectsNot Supported Managed config, this flag is advertised in ICMPv6 RA messages to use stateful address auto-configuration to obtain address information |
+| `other-cfg` | Other config, this flag is advertised in ICMPv6 RA messages that hosts use stateful auto configuration to obtain non address related information |
+| `suppress-ra` | suppress-ra |
+| `suppress-ra-mtu` | suppress-ra mtu |
+| `unsolicit-na-glean` | unsolicit-na-glean, enable neighbor gleaning on receipt of unsolicit NA |
+
+Used by: {ref}`tenant.nd_interface_policy <vocab-tenant-nd_interface_policy>`
+
+(enum-ndpfxcontrol)=
+
+## `NdPfxControl`
+
+| value | meaning |
+| --- | --- |
+| `auto-cfg` | Auto config |
+| `on-link` | On link |
+| `router-address` | Router address |
+
+Used by: {ref}`tenant.nd_ra_prefix_policy <vocab-tenant-nd_ra_prefix_policy>`
+
 (enum-netflowsrciptype)=
 
 ## `NetflowSrcIpType`
@@ -1049,6 +1534,19 @@ Used by: {ref}`fabric.igmp_snoop_policy <vocab-fabric-igmp_snoop_policy>`, {ref}
 
 Used by: {ref}`infra.cdp_policy <vocab-infra-cdp_policy>`, {ref}`infra.mcp_policy <vocab-infra-mcp_policy>`
 
+(enum-ospfareacontrol)=
+
+## `OspfAreaControl`
+
+| value | meaning |
+| --- | --- |
+| `unspecified` | Unspecified |
+| `summary` | ABRs Originate summary LSAs into other areas. Typically it is off in stubby areas (stub/nssa area). This knob is isued to turn on generating summary lsas into stub/ nssa areas |
+| `redistribute` | Redistribution enabled, used with nssa areas only. Send redistributed LSAs into nssa area |
+| `suppress-fa` | LSA translation policy, suppress forwarding address in type7-type5 translated LSAs |
+
+Used by: {ref}`tenant.l3out.ospf <vocab-tenant-l3out-ospf>`
+
 (enum-ospfareat)=
 
 ## `OspfAreaT`
@@ -1072,6 +1570,41 @@ Used by: {ref}`tenant.l3out.ospf <vocab-tenant-l3out-ospf>`
 | `simple` | Simple |
 
 Used by: {ref}`tenant.l3out.node_profile.interface_profile.ospf_interface <vocab-tenant-l3out-node_profile-interface_profile-ospf_interface>`
+
+(enum-ospfdomcontrol)=
+
+## `OspfDomControl`
+
+| value | meaning |
+| --- | --- |
+| `pfx-suppress` | Prefix suppression |
+| `name-lookup` | name loopup |
+
+Used by: {ref}`tenant.ospf_timers_policy <vocab-tenant-ospf_timers_policy>`
+
+(enum-ospfgrcontrols)=
+
+## `OspfGRControls`
+
+| value | meaning |
+| --- | --- |
+| `helper` | Helper mode enabled |
+
+Used by: {ref}`tenant.ospf_timers_policy <vocab-tenant-ospf_timers_policy>`
+
+(enum-ospfifcontrol)=
+
+## `OspfIfControl`
+
+| value | meaning |
+| --- | --- |
+| `unspecified` | Unspecified |
+| `passive` | Passive, the interface doesn't participate in OSPF protocol and will not establish adjacencies or send routing updates. However the interface is announced as part of the routing network |
+| `mtu-ignore` | MTU ignore, disables MTU mismatch detection on an interface. |
+| `advert-subnet` | Advertise ip subnet instead of a host mask in the router LSA |
+| `bfd` | Bidirectional Forwarding Detection |
+
+Used by: {ref}`tenant.ospf_interface_policy <vocab-tenant-ospf_interface_policy>`
 
 (enum-ospfifpfxsuppress)=
 
@@ -1115,10 +1648,10 @@ Used by: {ref}`tenant.ospf_interface_policy <vocab-tenant-ospf_interface_policy>
 
 | value | meaning |
 | --- | --- |
-| `fast-sel-hot-stdby` | LACP fast select for hot standby ports |
+| `susp-individual` | LACP suspend individual port |
 | `graceful-conv` | LACP graceful convergence |
 | `load-defer` | Load defer |
-| `susp-individual` | LACP suspend individual port |
+| `fast-sel-hot-stdby` | LACP fast select for hot standby ports |
 | `symmetric-hash` | Symmetric hashing property of PC |
 
 Used by: {ref}`infra.lacp_policy <vocab-infra-lacp_policy>`
@@ -1310,6 +1843,17 @@ Used by: {ref}`tenant.access_client_profile.access_client_epg <vocab-tenant-acce
 
 Used by: {ref}`tenant.l3out.route_control_profile <vocab-tenant-l3out-route_control_profile>`, {ref}`tenant.route_control_profile <vocab-tenant-route_control_profile>`
 
+(enum-rtdmcaftype)=
+
+## `RtdmcAfType`
+
+| value | meaning |
+| --- | --- |
+| `ipv4-mcast` | ipv4 multicast |
+| `ipv6-mcast` | ipv6 multicast |
+
+Used by: {ref}`tenant.l3out.pim_external <vocab-tenant-l3out-pim_external>`
+
 (enum-rtdmcautht)=
 
 ## `RtdmcAuthT`
@@ -1318,6 +1862,29 @@ Used by: {ref}`tenant.l3out.route_control_profile <vocab-tenant-l3out-route_cont
 | --- | --- |
 | `ah-md5` | MD5 HMAC |
 | `none` | — |
+
+Used by: {ref}`tenant.pim_interface_policy <vocab-tenant-pim_interface_policy>`
+
+(enum-rtdmcdomuserctrl)=
+
+## `RtdmcDomUserCtrl`
+
+| value | meaning |
+| --- | --- |
+| `fast-conv` | Flush all routes on process restartconst name="flush-on-restart" value="1" label="Flush Routes on Restart"/Fast Convergence Attract external traffic to border leaf, but do not forward to the fabric. |
+| `strict-rfc-compliant` | Enable bidirectional forwarding detection (BFD) on all interfaces in this domain (NOT supported in this release)const name="bfd-enable" value="4" label="Enable BFD"/Enable strict RFC compliance on this domain |
+
+Used by: {ref}`tenant.vrf.pim <vocab-tenant-vrf-pim>`
+
+(enum-rtdmcifuserctrl)=
+
+## `RtdmcIfUserCtrl`
+
+| value | meaning |
+| --- | --- |
+| `border` | Boundary of Multicast domain |
+| `passive` | Passive - Do not send/receive PIM protocol packets |
+| `strict-rfc-compliant` | Quiet - Only listen to PIM protocol packets Do not transmitconst name="quiet" value="4" label="Quiet"/Enable bidirectional forwarding detection (BFD) on the interface<const name="bfd-enable" value="8" label="Enable BFD"/Enable strict RFC compliance on this interface |
 
 Used by: {ref}`tenant.pim_interface_policy <vocab-tenant-pim_interface_policy>`
 
@@ -1354,6 +1921,18 @@ Used by: {ref}`tenant.l3out.route_control_profile.route_control_context <vocab-t
 | `out` | Outgoing |
 
 Used by: {ref}`fabric.span_source_group.span_source <vocab-fabric-span_source_group-span_source>`, {ref}`infra.span_source_group.span_source <vocab-infra-span_source_group-span_source>`, {ref}`tenant.span_source_group.span_source <vocab-tenant-span_source_group-span_source>`
+
+(enum-stpifcontrol)=
+
+## `StpIfControl`
+
+| value | meaning |
+| --- | --- |
+| `unspecified` | Unspecified |
+| `bpdu-guard` | BPDU guard enabled |
+| `bpdu-filter` | BPDU filter enabled |
+
+Used by: {ref}`infra.stp_policy <vocab-infra-stp_policy>`
 
 (enum-sviautostate)=
 

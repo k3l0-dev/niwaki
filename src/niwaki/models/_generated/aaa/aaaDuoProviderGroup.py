@@ -3,9 +3,11 @@
 from __future__ import annotations
 
 from typing import ClassVar, Annotated
-from pydantic import Field
+from pydantic import BeforeValidator, Field
 
+from niwaki.models._wire import Flags, parse_flags
 from niwaki.models._generated.enums.AaaAuthProviderType import AaaAuthProviderType
+from niwaki.models._generated.enums.AaaSecFacAuthTypes import AaaSecFacAuthTypes
 from niwaki.models._generated.enums.AaaauthChoiceType import AaaauthChoiceType
 
 from niwaki.models.base import ManagedObject
@@ -61,7 +63,8 @@ class aaaDuoProviderGroup(ManagedObject):
     ] = ""
     ldap_authentication_choice: AaaauthChoiceType = Field(
         default=AaaauthChoiceType.CISCOAVPAIR,
-        alias="authChoice",
+        validation_alias="authChoice",
+        serialization_alias="authChoice",
         description="authChoice if providerType is LDAP",
     )
     description: Annotated[
@@ -69,7 +72,8 @@ class aaaDuoProviderGroup(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
@@ -77,19 +81,27 @@ class aaaDuoProviderGroup(ManagedObject):
         str,
         Field(
             max_length=512,
-            alias="ldapGroupMapRef",
+            validation_alias="ldapGroupMapRef",
+            serialization_alias="ldapGroupMapRef",
             description="Ref to LdapGroupMap if providerType is LDAP",
         ),
     ] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     owner_key: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerKey",
+            validation_alias="ownerKey",
+            serialization_alias="ownerKey",
             description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
@@ -98,12 +110,21 @@ class aaaDuoProviderGroup(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerTag",
+            validation_alias="ownerTag",
+            serialization_alias="ownerTag",
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
     provider_type: AaaAuthProviderType = Field(
-        default=AaaAuthProviderType.LDAP, alias="providerType"
+        default=AaaAuthProviderType.LDAP,
+        validation_alias="providerType",
+        serialization_alias="providerType",
     )
-    second_factor_authentication_methods: str = Field(default="", alias="secFacAuthMethods")
+    second_factor_authentication_methods: Annotated[
+        Flags[AaaSecFacAuthTypes], BeforeValidator(parse_flags)
+    ] = Field(
+        default_factory=lambda: frozenset({AaaSecFacAuthTypes.AUTO}),
+        validation_alias="secFacAuthMethods",
+        serialization_alias="secFacAuthMethods",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

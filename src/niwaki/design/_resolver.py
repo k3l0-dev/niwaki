@@ -37,11 +37,19 @@ from niwaki.exceptions._design import (
 )
 from niwaki.models.base import ManagedObject
 
-# Sentinel for index entries where two nodes share (class, name) — binding to
-# such a name is ambiguous and must fail loudly.
-_AMBIGUOUS = None
 
-_Index = dict[str, dict[str, DesignNode | None]]
+# Sentinel for index entries where two nodes share (class, name) — binding to
+# such a name is ambiguous and must fail loudly.  A distinct object, not None:
+# "no node here" and "several nodes here" are different answers, and a type
+# checker narrows ``node is _AMBIGUOUS`` to the node only when the sentinel has
+# a type of its own.
+class _Ambiguous:
+    """The marker stored when a (class, name) pair is declared more than once."""
+
+
+_AMBIGUOUS = _Ambiguous()
+
+_Index = dict[str, dict[str, DesignNode | _Ambiguous]]
 
 
 def build_index(root: DesignNode) -> _Index:
@@ -51,7 +59,7 @@ def build_index(root: DesignNode) -> _Index:
         root: Design root node.
 
     Returns:
-        ``{aci_class: {primary_name: node}}``; a value of ``None`` marks a
+        ``{aci_class: {primary_name: node}}``; a value of ``_AMBIGUOUS`` marks a
         name declared more than once for that class (ambiguous target).
     """
     index: _Index = {}
@@ -133,7 +141,7 @@ def _lookup_target(index: _Index, owner: DesignNode, bind: PendingBind) -> Desig
         )
     if matches:
         _, node = matches[0]
-        if node is _AMBIGUOUS:
+        if isinstance(node, _Ambiguous):
             raise AmbiguousBindError(
                 f"{owner.path()}: {bind.alias}={bind.target_name!r} matches more "
                 f"than one {matches[0][0]} declared in this design."

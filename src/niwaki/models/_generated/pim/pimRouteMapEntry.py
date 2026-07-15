@@ -38,7 +38,7 @@ class pimRouteMapEntry(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    order: Annotated[str, Field(description="PIM route map entry order")]
+    order: Annotated[int, Field(description="PIM route map entry order")] = 0
 
     # ── Configurable ───────────────────────────────────────────────────────────
     action: RtdmcRtMapAction = Field(default=RtdmcRtMapAction.PERMIT, description="route action")
@@ -55,22 +55,46 @@ class pimRouteMapEntry(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies the description of a policy component.",
         ),
     ] = ""
     destination_filter: Annotated[
         str,
-        Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="grp", description="Multicast group ip/prefix"),
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            validation_alias="grp",
+            serialization_alias="grp",
+            description="Multicast group ip/prefix",
+        ),
     ] = ""
     name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     rp_ip_address: Annotated[
-        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="rp", description="Multicast RP Ip")
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            validation_alias="rp",
+            serialization_alias="rp",
+            description="Multicast RP Ip",
+        ),
     ] = ""
     source_filter: Annotated[
-        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="src", description="Multicast Source Ip")
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            validation_alias="src",
+            serialization_alias="src",
+            description="Multicast Source Ip",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

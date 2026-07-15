@@ -48,30 +48,56 @@ class mplsLabelPolDef(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
-    mpls_maximum_dynamic_label: Annotated[int, Field(ge=16, le=525286, alias="maxDynamicLabel")] = (
-        525286
-    )
-    mpls_maximum_static_label: Annotated[int, Field(alias="maxStaticLabel")] = 0
+    mpls_maximum_dynamic_label: Annotated[
+        int,
+        Field(
+            ge=16,
+            le=525286,
+            validation_alias="maxDynamicLabel",
+            serialization_alias="maxDynamicLabel",
+        ),
+    ] = 525286
+    mpls_maximum_static_label: Annotated[
+        int, Field(validation_alias="maxStaticLabel", serialization_alias="maxStaticLabel")
+    ] = 0
     mpls_minimum_dynamic_label: Annotated[
-        int, Field(alias="minDynamicLabel", description="MPLS Label Dynamic Range")
+        int,
+        Field(
+            validation_alias="minDynamicLabel",
+            serialization_alias="minDynamicLabel",
+            description="MPLS Label Dynamic Range",
+        ),
     ] = 16
     mpls_minimum_static_label: Annotated[
-        int, Field(alias="minStaticLabel", description="MPLS Label Static Range")
+        int,
+        Field(
+            validation_alias="minStaticLabel",
+            serialization_alias="minStaticLabel",
+            description="MPLS Label Static Range",
+        ),
     ] = 0
     name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     owner_key: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerKey",
+            validation_alias="ownerKey",
+            serialization_alias="ownerKey",
             description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
@@ -80,7 +106,8 @@ class mplsLabelPolDef(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerTag",
+            validation_alias="ownerTag",
+            serialization_alias="ownerTag",
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""

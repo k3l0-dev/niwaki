@@ -99,32 +99,47 @@ class fvCtx(ManagedObject):
         ),
     ] = ""
     bd_enforcement_status: bool = Field(
-        default=False, alias="bdEnforcedEnable", description="BD Enforced Flag"
+        default=False,
+        validation_alias="bdEnforcedEnable",
+        serialization_alias="bdEnforcedEnable",
+        description="BD Enforced Flag",
     )
     description: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies a description of the policy definition root.",
         ),
     ] = ""
     data_plane_learning: FvipDataPlaneLearning = Field(
-        default=FvipDataPlaneLearning.ENABLED, alias="ipDataPlaneLearning"
+        default=FvipDataPlaneLearning.ENABLED,
+        validation_alias="ipDataPlaneLearning",
+        serialization_alias="ipDataPlaneLearning",
     )
     known_multicast_action: VzBinaryAction = Field(
-        default=VzBinaryAction.PERMIT, alias="knwMcastAct"
+        default=VzBinaryAction.PERMIT,
+        validation_alias="knwMcastAct",
+        serialization_alias="knwMcastAct",
     )
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     owner_key: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerKey",
+            validation_alias="ownerKey",
+            serialization_alias="ownerKey",
             description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
@@ -133,15 +148,21 @@ class fvCtx(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerTag",
+            validation_alias="ownerTag",
+            serialization_alias="ownerTag",
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
     policy_enforcement_direction: L3extPcEnfDir = Field(
         default=L3extPcEnfDir.INGRESS,
-        alias="pcEnfDir",
+        validation_alias="pcEnfDir",
+        serialization_alias="pcEnfDir",
         description="Policy Control Enforcement Direction. It is used for defining policy enforcemnt direction for the traffic coming to or from an L3Out. Egress and Ingress directions are wrt L3Out. Default will be Ingress.",
     )
-    policy_control_enforcement: FvPcEnfPref = Field(default=FvPcEnfPref.ENFORCED, alias="pcEnfPref")
+    policy_control_enforcement: FvPcEnfPref = Field(
+        default=FvPcEnfPref.ENFORCED, validation_alias="pcEnfPref", serialization_alias="pcEnfPref"
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    vrf_index: Annotated[int, Field(ge=1, alias="vrfIndex")] = 0
+    vrf_index: Annotated[
+        int, Field(ge=1, validation_alias="vrfIndex", serialization_alias="vrfIndex")
+    ] = 0

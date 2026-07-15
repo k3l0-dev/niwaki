@@ -55,7 +55,8 @@ class syslogRsDestGroup(ManagedObject):
     ] = ""
     target_dn: str = Field(
         default="",
-        alias="tDn",
+        validation_alias="tDn",
+        serialization_alias="tDn",
         description="One or more syslog destinations can be placed here. The included syslog messages are sent to all the destinations in the destination group.",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

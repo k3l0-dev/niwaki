@@ -23,7 +23,9 @@ def observability() -> Cursor:
     cfg = design()
 
     infra = cfg.infra()
-    infra.filter_group("fg").filter_entry("tcp", "10.0.0.0/24", "10.0.1.0/24", "0", "0", "0", "0")
+    # Ports written as 0 — the APIC stores that as "unspecified", and so do we:
+    # the RN, hence the DN, is built from the value the fabric will hold.
+    infra.filter_group("fg").filter_entry("tcp", "10.0.0.0/24", "10.0.1.0/24", 0, 0, 0, 0)
     infra.netflow_record("rec")
     infra.netflow_exporter("exp", remote_entity_ip="10.9.9.9", remote_entity_l4_port="2055")
     infra.netflow_monitor("mon").bind(netflow_record="rec", netflow_exporter="exp")
@@ -31,7 +33,7 @@ def observability() -> Cursor:
     tenant = cfg.tenant("T")
     tenant.vrf("v")
     tenant.bd("b").bind(vrf="v")
-    tenant.dpp_policy("dpp", rate="100")
+    tenant.dpp_policy("dpp", rate=100)
 
     qos = tenant.qos_requirement("qr")
     qos.dscp_marking(mark="AF11")
@@ -76,20 +78,26 @@ class TestObservabilityGolden:
         }
 
     def test_span_filter_group_lives_under_infra(self) -> None:
-        """Seven naming props — the entry's RN carries the whole 5-tuple."""
+        """Seven naming props — and four of them are numbers the APIC renames.
+
+        A port of 0 is stored as ``"unspecified"``, and the RN is built from the
+        naming values: a model that kept the number would compute a DN the fabric
+        does not have, and ``push`` would create a second entry beside the first.
+        """
         flat = _flatten(observability())
         entry = (
             "uni/infra/filtergrp-fg/proto-tcp-src-[10.0.0.0/24]-dst-[10.0.1.0/24]"
-            "-srcPortFrom-0-srcPortTo-0-dstPortFrom-0-dstPortTo-0"
+            "-srcPortFrom-unspecified-srcPortTo-unspecified"
+            "-dstPortFrom-unspecified-dstPortTo-unspecified"
         )
         assert flat[entry] == {
             "ipProto": "tcp",
             "srcAddr": "10.0.0.0/24",
             "dstAddr": "10.0.1.0/24",
-            "srcPortFrom": "0",
-            "srcPortTo": "0",
-            "dstPortFrom": "0",
-            "dstPortTo": "0",
+            "srcPortFrom": "unspecified",
+            "srcPortTo": "unspecified",
+            "dstPortFrom": "unspecified",
+            "dstPortTo": "unspecified",
         }
 
     def test_netflow_monitor_binds_exporter_and_record(self) -> None:

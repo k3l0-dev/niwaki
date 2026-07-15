@@ -45,7 +45,14 @@ class dbgacRsToEpIpForEpToEp(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    target_dn: Annotated[str, Field(alias="tDn", description="The destination EPG information.")]
+    target_dn: Annotated[
+        str,
+        Field(
+            validation_alias="tDn",
+            serialization_alias="tDn",
+            description="The destination EPG information.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[

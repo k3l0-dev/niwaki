@@ -3,11 +3,13 @@
 from __future__ import annotations
 
 from typing import ClassVar, Annotated
-from pydantic import Field
+from pydantic import BeforeValidator, Field
 
+from niwaki.models._wire import Flags, parse_flags
 from niwaki.models._generated.enums.L2EnfPref import L2EnfPref
 from niwaki.models._generated.enums.VmmARPLearning import VmmARPLearning
 from niwaki.models._generated.enums.VmmAccessMode import VmmAccessMode
+from niwaki.models._generated.enums.VmmCtrlKnob import VmmCtrlKnob
 from niwaki.models._generated.enums.VmmEncapMode import VmmEncapMode
 from niwaki.models._generated.enums.VmmEncapModePref import VmmEncapModePref
 from niwaki.models._generated.enums.VmmEpInventoryType import VmmEpInventoryType
@@ -123,7 +125,11 @@ class vmmDomP(ManagedObject):
     ] = ""
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    access_mode: VmmAccessMode = Field(default=VmmAccessMode.READ_WRITE, alias="accessMode")
+    access_mode: VmmAccessMode = Field(
+        default=VmmAccessMode.READ_WRITE,
+        validation_alias="accessMode",
+        serialization_alias="accessMode",
+    )
     annotation: Annotated[
         str,
         Field(
@@ -132,51 +138,91 @@ class vmmDomP(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    arp_learning: VmmARPLearning = Field(
-        default=VmmARPLearning.DISABLED,
-        alias="arpLearning",
+    arp_learning: Annotated[Flags[VmmARPLearning], BeforeValidator(parse_flags)] = Field(
+        default_factory=lambda: frozenset({VmmARPLearning.DISABLED}),
+        validation_alias="arpLearning",
+        serialization_alias="arpLearning",
         description="Enable/Disable arp learning for AVS Domain",
     )
-    ave_time_out_time_seconds: Annotated[int, Field(ge=10, le=300, alias="aveTimeOut")] = 30
-    configure_infra_port_group: bool = Field(default=False, alias="configInfraPg")
-    ctrl_knob: str = Field(default="", alias="ctrlKnob")
-    custom_vswitch_name: Annotated[str, Field(max_length=512, alias="customSwitchName")] = ""
-    enable_ave_mode: bool = Field(default=False, alias="enableAVE")
-    enable_tag_data_retrieval: bool = Field(default=False, alias="enableTag")
-    enable_vm_folder_data_retrieval: bool = Field(default=False, alias="enableVmFolder")
-    encap_mode: VmmEncapMode = Field(default=VmmEncapMode.UNKNOWN, alias="encapMode")
+    ave_time_out_time_seconds: Annotated[
+        int, Field(ge=10, le=300, validation_alias="aveTimeOut", serialization_alias="aveTimeOut")
+    ] = 30
+    configure_infra_port_group: bool = Field(
+        default=False, validation_alias="configInfraPg", serialization_alias="configInfraPg"
+    )
+    ctrl_knob: Annotated[Flags[VmmCtrlKnob], BeforeValidator(parse_flags)] = Field(
+        default_factory=lambda: frozenset({VmmCtrlKnob.EPDPVERIFY}),
+        validation_alias="ctrlKnob",
+        serialization_alias="ctrlKnob",
+    )
+    custom_vswitch_name: Annotated[
+        str,
+        Field(
+            max_length=512,
+            validation_alias="customSwitchName",
+            serialization_alias="customSwitchName",
+        ),
+    ] = ""
+    enable_ave_mode: bool = Field(
+        default=False, validation_alias="enableAVE", serialization_alias="enableAVE"
+    )
+    enable_tag_data_retrieval: bool = Field(
+        default=False, validation_alias="enableTag", serialization_alias="enableTag"
+    )
+    enable_vm_folder_data_retrieval: bool = Field(
+        default=False, validation_alias="enableVmFolder", serialization_alias="enableVmFolder"
+    )
+    encap_mode: VmmEncapMode = Field(
+        default=VmmEncapMode.UNKNOWN, validation_alias="encapMode", serialization_alias="encapMode"
+    )
     switching_preference: L2EnfPref = Field(
         default=L2EnfPref.HW,
-        alias="enfPref",
+        validation_alias="enfPref",
+        serialization_alias="enfPref",
         description="The switching enforcement preference. This determines whether switches can be done within the virtual switch (Local Switching) or whether all switched traffic must go through the fabric (No Local Switching).",
     )
     ep_inventory_type: VmmEpInventoryType = Field(
-        default=VmmEpInventoryType.ON_LINK, alias="epInventoryType"
+        default=VmmEpInventoryType.ON_LINK,
+        validation_alias="epInventoryType",
+        serialization_alias="epInventoryType",
     )
-    end_point_retention_time_seconds: Annotated[int, Field(ge=0, le=600, alias="epRetTime")] = 0
-    enable_host_availibility_monitoring: bool = Field(default=False, alias="hvAvailMonitor")
+    end_point_retention_time_seconds: Annotated[
+        int, Field(ge=0, le=600, validation_alias="epRetTime", serialization_alias="epRetTime")
+    ] = 0
+    enable_host_availibility_monitoring: bool = Field(
+        default=False, validation_alias="hvAvailMonitor", serialization_alias="hvAvailMonitor"
+    )
     multicast_address: Annotated[
         str,
         Field(
             pattern="^[0-9a-fA-F.:/ ]+$",
-            alias="mcastAddr",
+            validation_alias="mcastAddr",
+            serialization_alias="mcastAddr",
             description="The multicast address of the VMM domain profile.",
         ),
     ] = ""
     virtual_switch: VmmMode = Field(
         default=VmmMode.DEFAULT,
-        alias="mode",
+        validation_alias="mode",
+        serialization_alias="mode",
         description="The switch to be used for the domain profile.",
     )
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     owner_key: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerKey",
+            validation_alias="ownerKey",
+            serialization_alias="ownerKey",
             description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
@@ -185,11 +231,14 @@ class vmmDomP(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerTag",
+            validation_alias="ownerTag",
+            serialization_alias="ownerTag",
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
     default_encap_mode: VmmEncapModePref = Field(
-        default=VmmEncapModePref.UNSPECIFIED, alias="prefEncapMode"
+        default=VmmEncapModePref.UNSPECIFIED,
+        validation_alias="prefEncapMode",
+        serialization_alias="prefEncapMode",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

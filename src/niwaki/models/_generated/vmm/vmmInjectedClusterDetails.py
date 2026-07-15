@@ -36,7 +36,9 @@ class vmmInjectedClusterDetails(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    acc_provision_input: str = Field(default="", alias="accProvisionInput")
+    acc_provision_input: str = Field(
+        default="", validation_alias="accProvisionInput", serialization_alias="accProvisionInput"
+    )
     annotation: Annotated[
         str,
         Field(
@@ -45,9 +47,13 @@ class vmmInjectedClusterDetails(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    cni_deployment: str = Field(default="", alias="cniDeployment")
+    cni_deployment: str = Field(
+        default="", validation_alias="cniDeployment", serialization_alias="cniDeployment"
+    )
     name: Annotated[str, Field(max_length=128, description="The name of the object.")] = ""
-    display_name: Annotated[str, Field(max_length=128, alias="nameAlias")] = ""
-    user_cert: str = Field(default="", alias="userCert")
-    user_key: str = Field(default="", alias="userKey")
+    display_name: Annotated[
+        str, Field(max_length=128, validation_alias="nameAlias", serialization_alias="nameAlias")
+    ] = ""
+    user_cert: str = Field(default="", validation_alias="userCert", serialization_alias="userCert")
+    user_key: str = Field(default="", validation_alias="userKey", serialization_alias="userKey")
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

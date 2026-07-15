@@ -52,17 +52,20 @@ class extdevSwMgrFlags(ManagedObject):
     ] = ""
     dyn_loose_node_discovery: bool = Field(
         default=True,
-        alias="dynLooseNodeDiscovery",
+        validation_alias="dynLooseNodeDiscovery",
+        serialization_alias="dynLooseNodeDiscovery",
         description="Used to determine how Encaps are deployed to the target EDMGR",
     )
     encap_deploy_mode: EdmEncapDeployMode = Field(
         default=EdmEncapDeployMode.PREPROVISION,
-        alias="encapDeployMode",
+        validation_alias="encapDeployMode",
+        serialization_alias="encapDeployMode",
         description="Encap Deploy Mode",
     )
     nic_prof_cfg_preserve_mode: EdmCfgPreserveMode = Field(
         default=EdmCfgPreserveMode.PRESERVE,
-        alias="nicProfCfgPreserveMode",
+        validation_alias="nicProfCfgPreserveMode",
+        serialization_alias="nicProfCfgPreserveMode",
         description="NIC Profile Config Preservation Mode",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

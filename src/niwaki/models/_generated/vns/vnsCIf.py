@@ -197,7 +197,13 @@ class vnsCIf(ManagedObject):
     ] = ""
     encap: Annotated[str, Field(description="encap value")] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     vnic: Annotated[
@@ -205,7 +211,8 @@ class vnsCIf(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="vnicName",
+            validation_alias="vnicName",
+            serialization_alias="vnicName",
             description="The concrete interface vNIC name.",
         ),
     ] = ""

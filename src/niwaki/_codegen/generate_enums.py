@@ -136,12 +136,30 @@ def _collect(subset: dict[str, Any]) -> dict[str, Any]:
     # signature (a value may be documented in one class's schema and not another)
     comments_by_sig: dict[str, dict[str, str]] = defaultdict(dict)
 
+    # model_type → the kind that uses it, to prove the invariant below.
+    kind_by_model: dict[str, str] = {}
+
     for cls_data in subset.values():
         for prop in cls_data.get("properties", {}).values():
-            if prop.get("python_type") != "enum":
+            kind = prop.get("python_type")
+            if kind not in ("enum", "flags"):
                 continue
             mt: str = prop.get("model_type", "") or "scalar:Enum8"
+
+            # The extractor already emits a bitmask's members in ascending bit
+            # weight — the order the APIC serialises them in.  Preserve it.
             values: list[str] = prop["values"]
+
+            # One model_type, one kind.  Were a type shared between an enum and
+            # a bitmask, the two member orders would fork it into two classes
+            # and silently renumber every existing enum that follows.
+            previous = kind_by_model.setdefault(mt, kind)
+            if previous != kind:
+                sys.exit(
+                    f"generate_enums: modelType {mt!r} is used as both {previous} "
+                    f"and {kind} — the member order cannot be both."
+                )
+
             aliases: dict[str, str] = prop.get("aliases", {})
             key = _sig_key(mt, values)
             for val, comment in (prop.get("value_comments") or {}).items():

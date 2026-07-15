@@ -44,8 +44,8 @@ class TestAtomicGroups:
     def test_vpc_pair_ships_as_one_nested_op(self) -> None:
         """fabricExplicitGEp + its fabricNodePEp children = exactly one op."""
         cfg = fabric()
-        pair = cfg.vpc_protection().vpc_pair("vpc-101-102", logical_pair_id="101")
-        pair.node("101").node("102")
+        pair = cfg.vpc_protection().vpc_pair("vpc-101-102", logical_pair_id=101)
+        pair.node(101).node(102)
         root = cfg.design_node.root()
         ops = compile_ops(root, resolve(root))
 

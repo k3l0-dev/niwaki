@@ -40,7 +40,8 @@ class dbgexpCoreStatus(ManagedObject):
     node_id: Annotated[
         int,
         Field(
-            alias="nodeId",
+            validation_alias="nodeId",
+            serialization_alias="nodeId",
             description="The ID of the IFC, leaf, or spine from which the core file was uploaded.",
         ),
     ] = 0
@@ -58,7 +59,8 @@ class dbgexpCoreStatus(ManagedObject):
         str,
         Field(
             max_length=512,
-            alias="hostName",
+            validation_alias="hostName",
+            serialization_alias="hostName",
             description="The hostname of the router advertising the link-state packet.",
         ),
     ] = ""

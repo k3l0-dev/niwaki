@@ -56,24 +56,33 @@ class datetimeFormat(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
     display_format: DatetimeDisplayFormat = Field(
         default=DatetimeDisplayFormat.LOCAL,
-        alias="displayFormat",
+        validation_alias="displayFormat",
+        serialization_alias="displayFormat",
         description="The date/time display format selector. The display format can be UTC or local.",
     )
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     owner_key: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerKey",
+            validation_alias="ownerKey",
+            serialization_alias="ownerKey",
             description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
@@ -82,18 +91,21 @@ class datetimeFormat(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerTag",
+            validation_alias="ownerTag",
+            serialization_alias="ownerTag",
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
     offset: DatetimeOffsetState = Field(
         default=DatetimeOffsetState.ENABLED,
-        alias="showOffset",
+        validation_alias="showOffset",
+        serialization_alias="showOffset",
         description="The display of the offset can be enabled or disabled. This enables you to view the difference between the local time and the reference time.",
     )
     time_zone: DatetimeTimeZoneUTC = Field(
         default=DatetimeTimeZoneUTC.P0_UTC,
-        alias="tz",
+        validation_alias="tz",
+        serialization_alias="tz",
         description="The time zone selection. This enables you to select a time zone for your domain.",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

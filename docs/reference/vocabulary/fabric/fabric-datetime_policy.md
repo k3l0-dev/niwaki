@@ -24,7 +24,7 @@ Accepted as keyword arguments of `.datetime_policy(name)` and of `.set(**attrs)`
 | parameter | wire | type | values | default | description |
 | --- | --- | --- | --- | --- | --- |
 | `name` *(positional)* | `name` | `str` | — | — | The user-configured date/time policy name. This value can be between 1 and 64 alphanumeric characters. Note that you cannot change this name after the object has been saved. |
-| `ntp_stratum_value_see_ntp_rfc_5905` | `StratumValue` | `str` | — | — | NTP Stratum value, see RFC 5905 |
+| `ntp_stratum_value_see_ntp_rfc_5905` | `StratumValue` | `int` | — | `8` | NTP Stratum value, see RFC 5905 |
 | `admin_state` | `adminSt` | {ref}`DatetimeAdminState <enum-datetimeadminstate>` | `disabled`, `enabled` | `enabled` | A property that indicates if the NTP protocol is enabled or disabled. |
 | `authentication_state` | `authSt` | {ref}`DatetimeAdminState <enum-datetimeadminstate>` | `disabled`, `enabled` | `disabled` | A property that indicates if the Datetime policy authentication is enabled or disabled. |
 | `description` | `descr` | `str` | — | — | Specifies a description of the policy definition. |

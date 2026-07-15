@@ -24,8 +24,8 @@ Accepted as keyword arguments of `.netflow_record(name)` and of `.set(**attrs)` 
 | parameter | wire | type | values | default | description |
 | --- | --- | --- | --- | --- | --- |
 | `name` *(positional)* | `name` | `str` | — | — | The name of the object. |
-| `collect_params` | `collect` | `str` | — | — | Collect parameters for the flow record |
+| `collect_params` | `collect` | {ref}`AnalyticsCollectParams <enum-analyticscollectparams>` | `count-bytes`, `count-pkts`, `sampler-id`, `pkt-disp`, `ts-first`, `ts-recent`, `tcp-flags`, `src-intf` | `src-intf` | Collect parameters for the flow record |
 | `description` | `descr` | `str` | — | — | Specifies a description of the policy definition. |
-| `match_params` | `match` | `str` | — | — | Match parameters for the flow record |
+| `match_params` | `match` | {ref}`AnalyticsMatchParams <enum-analyticsmatchparams>` | `unspecified`, `ethertype`, `dst-mac`, `src-mac`, `vlan`, `proto`, `tos`, `src-ipv4`, `dst-ipv4`, `src-ipv6`, `dst-ipv6`, `src-port`, `dst-port`, `src-ip`, `dst-ip` | `unspecified` | Match parameters for the flow record |
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |

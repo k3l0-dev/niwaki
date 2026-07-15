@@ -63,30 +63,57 @@ class datetimeNtpProv(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies the description of a policy component.",
         ),
     ] = ""
-    key_id: str = Field(
-        default="",
-        alias="keyId",
-        description="The NTP provider key ID. The range is from 1 to 65535.",
-    )
-    max_poll: str = Field(
-        default="", alias="maxPoll", description="The NTP maximum interval default in seconds."
-    )
-    min_poll: str = Field(
-        default="", alias="minPoll", description="The NTP minimum interval default in seconds."
-    )
+    key_id: Annotated[
+        int,
+        Field(
+            validation_alias="keyId",
+            serialization_alias="keyId",
+            description="The NTP provider key ID. The range is from 1 to 65535.",
+        ),
+    ] = 0
+    max_poll: Annotated[
+        int,
+        Field(
+            ge=4,
+            le=16,
+            validation_alias="maxPoll",
+            serialization_alias="maxPoll",
+            description="The NTP maximum interval default in seconds.",
+        ),
+    ] = 6
+    min_poll: Annotated[
+        int,
+        Field(
+            ge=4,
+            le=16,
+            validation_alias="minPoll",
+            serialization_alias="minPoll",
+            description="The NTP minimum interval default in seconds.",
+        ),
+    ] = 4
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     preferred_state: bool = Field(
         default=False,
-        alias="preferred",
+        validation_alias="preferred",
+        serialization_alias="preferred",
         description="A property that indicates if the NTP server is preferred. Only one preferred server is allowed.",
     )
     truechimer_status: DatetimeTrueChimerStatus = Field(
-        default=DatetimeTrueChimerStatus.DISABLED, alias="trueChimer"
+        default=DatetimeTrueChimerStatus.DISABLED,
+        validation_alias="trueChimer",
+        serialization_alias="trueChimer",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

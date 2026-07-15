@@ -45,7 +45,8 @@ class apAnomaly(ManagedObject):
         Field(
             min_length=1,
             max_length=512,
-            alias="nodeName",
+            validation_alias="nodeName",
+            serialization_alias="nodeName",
             description="Node on which anomaly was detected",
         ),
     ]
@@ -56,7 +57,13 @@ class apAnomaly(ManagedObject):
     severity: ApSeverity = Field(default=ApSeverity.INFO, description="Severity of the anomaly")
     start_ts: Annotated[
         str,
-        Field(min_length=1, max_length=512, alias="startTs", description="Start time of Anomaly"),
+        Field(
+            min_length=1,
+            max_length=512,
+            validation_alias="startTs",
+            serialization_alias="startTs",
+            description="Start time of Anomaly",
+        ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
@@ -69,7 +76,13 @@ class apAnomaly(ManagedObject):
         ),
     ] = ""
     end_ts: Annotated[
-        str, Field(max_length=512, alias="endTs", description="End time of Anomaly")
+        str,
+        Field(
+            max_length=512,
+            validation_alias="endTs",
+            serialization_alias="endTs",
+            description="End time of Anomaly",
+        ),
     ] = ""
     reason: Annotated[str, Field(max_length=512, description="Anomaly description")] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

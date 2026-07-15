@@ -41,9 +41,16 @@ class qosCong(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    afd_queue_length: str = Field(
-        default="", alias="afdQueueLength", description="AFD Desired Queue Length"
-    )
+    afd_queue_length: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=100,
+            validation_alias="afdQueueLength",
+            serialization_alias="afdQueueLength",
+            description="AFD Desired Queue Length",
+        ),
+    ] = 0
     algo: QospCongAlgo = Field(
         default=QospCongAlgo.TAIL_DROP, description="What algorithm to use when congestion happens"
     )
@@ -60,7 +67,8 @@ class qosCong(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies the description of a policy component.",
         ),
     ] = ""
@@ -69,21 +77,58 @@ class qosCong(ManagedObject):
     )
     forward_non_ecn: QospECN = Field(
         default=QospECN.DISABLED,
-        alias="forwardNonEcn",
+        validation_alias="forwardNonEcn",
+        serialization_alias="forwardNonEcn",
         description="Forward non ecn capable traffic",
     )
     name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    wred_max_threshold: str = Field(
-        default="", alias="wredMaxThreshold", description="WRED Maximum Threshold"
-    )
-    wred_min_threshold: str = Field(
-        default="", alias="wredMinThreshold", description="WRED Minimum Threshold"
-    )
-    wred_probability: str = Field(
-        default="", alias="wredProbability", description="WRED Drop/Mark Probability"
-    )
-    wred_weight: str = Field(default="", alias="wredWeight", description="WRED Weight")
+    wred_max_threshold: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=100,
+            validation_alias="wredMaxThreshold",
+            serialization_alias="wredMaxThreshold",
+            description="WRED Maximum Threshold",
+        ),
+    ] = 100
+    wred_min_threshold: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=100,
+            validation_alias="wredMinThreshold",
+            serialization_alias="wredMinThreshold",
+            description="WRED Minimum Threshold",
+        ),
+    ] = 0
+    wred_probability: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=100,
+            validation_alias="wredProbability",
+            serialization_alias="wredProbability",
+            description="WRED Drop/Mark Probability",
+        ),
+    ] = 0
+    wred_weight: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=7,
+            validation_alias="wredWeight",
+            serialization_alias="wredWeight",
+            description="WRED Weight",
+        ),
+    ] = 0

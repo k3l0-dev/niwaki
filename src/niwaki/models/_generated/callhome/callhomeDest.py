@@ -53,7 +53,8 @@ class callhomeDest(ManagedObject):
     # ── Configurable ───────────────────────────────────────────────────────────
     admin_state: MonAdminState = Field(
         default=MonAdminState.ENABLED,
-        alias="adminState",
+        validation_alias="adminState",
+        serialization_alias="adminState",
         description="The destination policy administrative state. If enabled, the system uses the destination policy when an error matching the associated cause is encountered. Otherwise, the system ignores the policy even if a matching error occurs. By default, all policies are enabled.",
     )
     annotation: Annotated[
@@ -69,18 +70,21 @@ class callhomeDest(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies the description of a policy component.",
         ),
     ] = ""
     destination_email_address: str = Field(
         default="",
-        alias="email",
+        validation_alias="email",
+        serialization_alias="email",
         description="This is the actual email address to which the message is sent.",
     )
     message_format: CallhomeMsgFormat = Field(
         default=CallhomeMsgFormat.XML,
-        alias="format",
+        validation_alias="format",
+        serialization_alias="format",
         description="The Call Home destination message format.",
     )
     maximum_size: Annotated[
@@ -88,17 +92,27 @@ class callhomeDest(ManagedObject):
         Field(
             ge=0,
             le=5000000,
-            alias="maxSize",
+            validation_alias="maxSize",
+            serialization_alias="maxSize",
             description="The maximum size (in bytes) for a Call Home message to a specific destination.",
         ),
     ] = 1000000
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
-    message_format_rfc_compliant: bool = Field(default=False, alias="rfcCompliant")
+    message_format_rfc_compliant: bool = Field(
+        default=False, validation_alias="rfcCompliant", serialization_alias="rfcCompliant"
+    )
     severity_level: CallhomeUrgency = Field(
         default=CallhomeUrgency.ALERT,
-        alias="urgency",
+        validation_alias="urgency",
+        serialization_alias="urgency",
         description="The severity level for Call Home destinations. The Call Home destination is an object that also contains the recipient's email address and a format selection (.xml, .aml, or short-test).",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

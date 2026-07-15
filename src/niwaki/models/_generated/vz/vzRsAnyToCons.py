@@ -51,7 +51,14 @@ class vzRsAnyToCons(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     name: Annotated[
-        str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="tnVzBrCPName")
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            validation_alias="tnVzBrCPName",
+            serialization_alias="tnVzBrCPName",
+        ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
@@ -66,7 +73,8 @@ class vzRsAnyToCons(ManagedObject):
     intent: VzIntent = VzIntent.INSTALL
     priority: QosTenantPrio = Field(
         default=QosTenantPrio.UNSPECIFIED,
-        alias="prio",
+        validation_alias="prio",
+        serialization_alias="prio",
         description="The Quality of service (QoS) priority class ID. QoS refers to the capability of a network to provide better service to selected network traffic over various technologies.",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

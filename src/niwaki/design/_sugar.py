@@ -20,23 +20,28 @@ from niwaki.exceptions._design import DesignError
 _PORT_RANGE_KEYS = ("tcp", "udp")
 
 
-def _port_range(value: Any) -> tuple[str, str]:
-    """Normalise a port spec into ``(from_port, to_port)`` strings.
+def _port_range(value: Any) -> tuple[int | str, int | str]:
+    """Normalise a port spec into ``(from_port, to_port)``.
 
     Accepts an int (``80``), a 2-tuple/list (``(8000, 8090)``), a dashed
-    string (``"8000-8090"``), or a named/simple string (``"http"``).
+    string (``"8000-8090"``), or a named string (``"http"``).
+
+    The value is passed through as it was written — the model owns the rest.  A
+    port with a name is stored under it (``80`` becomes ``"http"``, which is what
+    the APIC stores), and a port without one stays a number.
     """
     match value:
         case int():
-            return str(value), str(value)
+            return value, value
         case (int() | str() as lo, int() | str() as hi):
-            return str(lo), str(hi)
+            return lo, hi
         case str() if "-" in value:
             lo, _, hi = value.partition("-")
             return lo.strip(), hi.strip()
         case str():
             return value, value
-    raise DesignError(f"Unsupported port specification: {value!r}")
+        case _:
+            raise DesignError(f"Unsupported port specification: {value!r}")
 
 
 def apply_sugar(aci_class: str, attrs: dict[str, Any]) -> dict[str, Any]:

@@ -45,7 +45,8 @@ class dbgexpTechSupCollect(ManagedObject):
             min_length=1,
             max_length=64,
             pattern="^[a-zA-Z0-9_.:-]+$",
-            alias="ident",
+            validation_alias="ident",
+            serialization_alias="ident",
             description="The summary report name.",
         ),
     ]
@@ -61,17 +62,27 @@ class dbgexpTechSupCollect(ManagedObject):
     ] = ""
     file_or_cli_based_collection: DbgexpCollectionType = Field(
         default=DbgexpCollectionType.FILE,
-        alias="collectionType",
+        validation_alias="collectionType",
+        serialization_alias="collectionType",
         description="The collection type for the core file.",
     )
     device_on_which_to_collect_data: DbgexpLocaleType = Field(
         default=DbgexpLocaleType.ALL,
-        alias="localeType",
+        validation_alias="localeType",
+        serialization_alias="localeType",
         description="The location type where the backup file that you want to export is located.",
     )
     name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    filename_or_cli_command: Annotated[str, Field(max_length=1024, alias="value")] = ""
+    filename_or_cli_command: Annotated[
+        str, Field(max_length=1024, validation_alias="value", serialization_alias="value")
+    ] = ""

@@ -51,22 +51,31 @@ class snmpUserP(ManagedObject):
     authentication_key: Annotated[
         str,
         Field(
-            alias="authKey",
+            validation_alias="authKey",
+            serialization_alias="authKey",
             repr=False,
             description="The authentication key for the user profile. The key can be any case-sensitive alphanumeric string up to 64 chars.",
         ),
     ] = ""
     authentication_type: SnmpAuthType = Field(
         default=SnmpAuthType.HMAC_SHA1_96,
-        alias="authType",
+        validation_alias="authType",
+        serialization_alias="authType",
         description="The authentication type for the user profile. The authentication type is a message authentication code (MAC) that is used between two parties sharing a secret key to validate information transmitted between them. HMAC (Hash MAC) is based on cryptographic hash functions.",
     )
     privacy_key: Annotated[
-        str, Field(alias="privKey", repr=False, description="The privacy key for the user profile.")
+        str,
+        Field(
+            validation_alias="privKey",
+            serialization_alias="privKey",
+            repr=False,
+            description="The privacy key for the user profile.",
+        ),
     ] = ""
     privacy: SnmpPrivType = Field(
         default=SnmpPrivType.NONE,
-        alias="privType",
+        validation_alias="privType",
+        serialization_alias="privType",
         description="The encryption type for the user profile.",
     )
 
@@ -84,11 +93,18 @@ class snmpUserP(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies the description of a policy component.",
         ),
     ] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

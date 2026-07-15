@@ -53,13 +53,32 @@ class vmmOrchsProvPlanLB(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    dev_cluster: str = Field(default="", alias="devCluster")
-    dev_mfctr: Annotated[str, Field(max_length=512, alias="devMfctr")] = ""
-    dev_mgmt_ip: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="devMgmtIp")] = ""
-    dip_epg: str = Field(default="", alias="dipEpg")
+    dev_cluster: str = Field(
+        default="", validation_alias="devCluster", serialization_alias="devCluster"
+    )
+    dev_mfctr: Annotated[
+        str, Field(max_length=512, validation_alias="devMfctr", serialization_alias="devMfctr")
+    ] = ""
+    dev_mgmt_ip: Annotated[
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            validation_alias="devMgmtIp",
+            serialization_alias="devMgmtIp",
+        ),
+    ] = ""
+    dip_epg: str = Field(default="", validation_alias="dipEpg", serialization_alias="dipEpg")
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    vip_epg: str = Field(default="", alias="vipEpg")
-    vip_range: Annotated[str, Field(max_length=512, alias="vipRange")] = ""
+    vip_epg: str = Field(default="", validation_alias="vipEpg", serialization_alias="vipEpg")
+    vip_range: Annotated[
+        str, Field(max_length=512, validation_alias="vipRange", serialization_alias="vipRange")
+    ] = ""

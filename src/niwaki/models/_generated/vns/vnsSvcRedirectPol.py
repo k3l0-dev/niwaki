@@ -55,7 +55,9 @@ class vnsSvcRedirectPol(ManagedObject):
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    anycast_enabled_or_not: bool = Field(default=False, alias="AnycastEnabled")
+    anycast_enabled_or_not: bool = Field(
+        default=False, validation_alias="AnycastEnabled", serialization_alias="AnycastEnabled"
+    )
     annotation: Annotated[
         str,
         Field(
@@ -69,25 +71,53 @@ class vnsSvcRedirectPol(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
-    dest_type: VnsDestType = Field(default=VnsDestType.L3, alias="destType")
-    hashing_algorithm: VnshashingAlgorithm = Field(
-        default=VnshashingAlgorithm.SIP_DIP_PROTOTYPE, alias="hashingAlgorithm"
+    dest_type: VnsDestType = Field(
+        default=VnsDestType.L3, validation_alias="destType", serialization_alias="destType"
     )
-    maximum_threshold_percentage: str = Field(default="", alias="maxThresholdPercent")
-    minimum_threshold_percentage: str = Field(default="", alias="minThresholdPercent")
+    hashing_algorithm: VnshashingAlgorithm = Field(
+        default=VnshashingAlgorithm.SIP_DIP_PROTOTYPE,
+        validation_alias="hashingAlgorithm",
+        serialization_alias="hashingAlgorithm",
+    )
+    maximum_threshold_percentage: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=100,
+            validation_alias="maxThresholdPercent",
+            serialization_alias="maxThresholdPercent",
+        ),
+    ] = 0
+    minimum_threshold_percentage: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=100,
+            validation_alias="minThresholdPercent",
+            serialization_alias="minThresholdPercent",
+        ),
+    ] = 0
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     owner_key: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerKey",
+            validation_alias="ownerKey",
+            serialization_alias="ownerKey",
             description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
@@ -96,17 +126,33 @@ class vnsSvcRedirectPol(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerTag",
+            validation_alias="ownerTag",
+            serialization_alias="ownerTag",
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
-    program_local_pod_only: bool = Field(default=False, alias="programLocalPodOnly")
-    resilient_hashing_enabled_or_not: bool = Field(default=False, alias="resilientHashEnabled")
-    source_mac_rewrite_enabled_or_not: bool = Field(default=False, alias="srcMacRewriteEnabled")
+    program_local_pod_only: bool = Field(
+        default=False,
+        validation_alias="programLocalPodOnly",
+        serialization_alias="programLocalPodOnly",
+    )
+    resilient_hashing_enabled_or_not: bool = Field(
+        default=False,
+        validation_alias="resilientHashEnabled",
+        serialization_alias="resilientHashEnabled",
+    )
+    source_mac_rewrite_enabled_or_not: bool = Field(
+        default=False,
+        validation_alias="srcMacRewriteEnabled",
+        serialization_alias="srcMacRewriteEnabled",
+    )
     threshold_down_action: VnsThresholdDownAction = Field(
         default=VnsThresholdDownAction.PERMIT,
-        alias="thresholdDownAction",
+        validation_alias="thresholdDownAction",
+        serialization_alias="thresholdDownAction",
         description="Down action",
     )
-    threshold_enable: bool = Field(default=False, alias="thresholdEnable")
+    threshold_enable: bool = Field(
+        default=False, validation_alias="thresholdEnable", serialization_alias="thresholdEnable"
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

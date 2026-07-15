@@ -55,22 +55,43 @@ class cloudBfdPolDef(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    required_minimum_rx_interval: str = Field(
-        default="",
-        alias="minRxIntervalMs",
-        description="Required minimum rx interval. This is the minimum interval, in ms, between received BFD control packets that this system is capable of supporting.",
-    )
-    desired_minimum_tx_interval: str = Field(
-        default="",
-        alias="minTxIntervalMs",
-        description="Desired minimum tx interval. This is the minimum interval, in ms, that the system would like to use when transmitting BFD control packets.",
-    )
-    detection_multiplier: str = Field(
-        default="",
-        alias="multiplier",
-        description="Detection multiplier. This is the desired detection time multiplier for BFD packets on the local system.",
-    )
+    required_minimum_rx_interval: Annotated[
+        int,
+        Field(
+            ge=50,
+            le=9999,
+            validation_alias="minRxIntervalMs",
+            serialization_alias="minRxIntervalMs",
+            description="Required minimum rx interval. This is the minimum interval, in ms, between received BFD control packets that this system is capable of supporting.",
+        ),
+    ] = 50
+    desired_minimum_tx_interval: Annotated[
+        int,
+        Field(
+            ge=50,
+            le=9999,
+            validation_alias="minTxIntervalMs",
+            serialization_alias="minTxIntervalMs",
+            description="Desired minimum tx interval. This is the minimum interval, in ms, that the system would like to use when transmitting BFD control packets.",
+        ),
+    ] = 50
+    detection_multiplier: Annotated[
+        int,
+        Field(
+            ge=3,
+            le=50,
+            validation_alias="multiplier",
+            serialization_alias="multiplier",
+            description="Detection multiplier. This is the desired detection time multiplier for BFD packets on the local system.",
+        ),
+    ] = 3
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

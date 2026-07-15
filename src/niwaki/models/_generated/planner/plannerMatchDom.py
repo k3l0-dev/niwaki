@@ -38,11 +38,18 @@ class plannerMatchDom(ManagedObject):
     # ── Naming (required) ──────────────────────────────────────────────────────
     domain_name: Annotated[
         str,
-        Field(min_length=1, max_length=512, alias="name", description="The name of the object."),
+        Field(
+            min_length=1,
+            max_length=512,
+            validation_alias="name",
+            serialization_alias="name",
+            description="The name of the object.",
+        ),
     ]
     domain_type: PlannerDomType = Field(
         default=PlannerDomType.L2EXT,
-        alias="type",
+        validation_alias="type",
+        serialization_alias="type",
         description="The specific type of the object or component.",
     )
 

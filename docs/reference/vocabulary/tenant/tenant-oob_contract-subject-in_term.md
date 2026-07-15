@@ -26,7 +26,7 @@ Accepted as keyword arguments of `.in_term()` and of `.set(**attrs)` on this cur
 | `description` | `descr` | `str` | — | — | Specifies the description of a policy component. |
 | `name` | `name` | `str` | — | — | — |
 | `qos_class_id` | `prio` | {ref}`QosTenantPrio <enum-qostenantprio>` | `level1`, `level2`, `level3`, `level4`, `level5`, `level6`, `unspecified` | `unspecified` | — |
-| `terminal_level_dscp` | `targetDscp` | `str` | — | — | Terminal level dscp value |
+| `terminal_level_dscp` | `targetDscp` | `int` | — | `unspecified` | Terminal level dscp value |
 
 ## Bind aliases
 

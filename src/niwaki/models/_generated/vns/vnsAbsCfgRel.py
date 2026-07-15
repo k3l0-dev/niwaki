@@ -212,14 +212,21 @@ class vnsAbsCfgRel(ManagedObject):
         default=False, description="The value that indicates if this parameter is mandatory."
     )
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     target_name: Annotated[
         str,
         Field(
             min_length=1,
             max_length=128,
-            alias="targetName",
+            validation_alias="targetName",
+            serialization_alias="targetName",
             description="The target to which this parameter applies.",
         ),
     ] = ""

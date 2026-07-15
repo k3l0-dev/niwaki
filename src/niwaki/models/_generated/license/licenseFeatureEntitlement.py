@@ -41,7 +41,8 @@ class licenseFeatureEntitlement(ManagedObject):
         Field(
             min_length=1,
             max_length=512,
-            alias="entitlementTagName",
+            validation_alias="entitlementTagName",
+            serialization_alias="entitlementTagName",
             description="entitlementTagName denotes a name of entitlement tag. entitlementTagName is provided by marketing team.",
         ),
     ]
@@ -59,7 +60,8 @@ class licenseFeatureEntitlement(ManagedObject):
         str,
         Field(
             max_length=512,
-            alias="entitlementTag",
+            validation_alias="entitlementTag",
+            serialization_alias="entitlementTag",
             description="entitlementTag denotes a license entitlement tag to uniquely identify a license entitlement. entitlementTag is provided by marketing team.",
         ),
     ] = ""
@@ -67,7 +69,8 @@ class licenseFeatureEntitlement(ManagedObject):
         str,
         Field(
             max_length=512,
-            alias="entitlementTagDescr",
+            validation_alias="entitlementTagDescr",
+            serialization_alias="entitlementTagDescr",
             description="entitlementTagDescr denotes the description of entitlement tag. entitlementTagDescr is provided by marketing team.",
         ),
     ] = ""

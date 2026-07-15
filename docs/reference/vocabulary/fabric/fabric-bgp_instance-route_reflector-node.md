@@ -23,6 +23,6 @@ Accepted as keyword arguments of `.node(node_id)` and of `.set(**attrs)` on this
 
 | parameter | wire | type | values | default | description |
 | --- | --- | --- | --- | --- | --- |
-| `node_id` *(positional)* | `id` | `str` | — | — | The spine node ID. |
+| `node_id` *(positional)* | `id` | `int` | — | — | The spine node ID. |
 | `description` | `descr` | `str` | — | — | Specifies the description of a policy component. |
-| `pod_id` | `podId` | `str` | — | — | Pod id |
+| `pod_id` | `podId` | `int` | — | `1` | Pod id |

@@ -61,22 +61,37 @@ class isisDomPol(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
-    maximum_transmission_unit: str = Field(
-        default="", alias="mtu", description="The IS-IS Domain policy LSP MTU."
-    )
+    maximum_transmission_unit: Annotated[
+        int,
+        Field(
+            ge=256,
+            le=4352,
+            validation_alias="mtu",
+            serialization_alias="mtu",
+            description="The IS-IS Domain policy LSP MTU.",
+        ),
+    ] = 1492
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     owner_key: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerKey",
+            validation_alias="ownerKey",
+            serialization_alias="ownerKey",
             description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
@@ -85,14 +100,19 @@ class isisDomPol(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerTag",
+            validation_alias="ownerTag",
+            serialization_alias="ownerTag",
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
     metric: Annotated[
         int,
         Field(
-            ge=1, le=63, alias="redistribMetric", description="Metric used for redistributed routes"
+            ge=1,
+            le=63,
+            validation_alias="redistribMetric",
+            serialization_alias="redistribMetric",
+            description="Metric used for redistributed routes",
         ),
     ] = 63
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

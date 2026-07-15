@@ -44,9 +44,14 @@ class analyticsBDTarget(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     netflow_target_type: AnalyticsFltType = Field(
-        default=AnalyticsFltType.IPV4, alias="fltType", description="IP filter type"
+        default=AnalyticsFltType.IPV4,
+        validation_alias="fltType",
+        serialization_alias="fltType",
+        description="IP filter type",
     )
-    bd_id: Annotated[str, Field(alias="id", description="Identifier")]
+    bd_id: Annotated[
+        str, Field(validation_alias="id", serialization_alias="id", description="Identifier")
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[
@@ -58,6 +63,9 @@ class analyticsBDTarget(ManagedObject):
         ),
     ] = ""
     direction: AnalyticsDirectionT = Field(
-        default=AnalyticsDirectionT.IN, alias="dir", description="Direction"
+        default=AnalyticsDirectionT.IN,
+        validation_alias="dir",
+        serialization_alias="dir",
+        description="Direction",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

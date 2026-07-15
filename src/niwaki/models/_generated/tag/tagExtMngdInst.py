@@ -44,12 +44,20 @@ class tagExtMngdInst(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    is_msc: bool = Field(default=False, alias="isMsc")
-    is_shadow: bool = Field(default=False, alias="isShadow")
+    is_msc: bool = Field(default=False, validation_alias="isMsc", serialization_alias="isMsc")
+    is_shadow: bool = Field(
+        default=False, validation_alias="isShadow", serialization_alias="isShadow"
+    )
     name: Annotated[
         str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9=!#$%()*,-.:;@ _{|}~?&+]+$")
     ] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

@@ -45,9 +45,19 @@ class plannerLpmRoutes(ManagedObject):
         ),
     ] = ""
     count_of_ipv4_addresses: Annotated[
-        int, Field(alias="ipv4", description="Count of IPv4 addresses")
+        int,
+        Field(
+            validation_alias="ipv4",
+            serialization_alias="ipv4",
+            description="Count of IPv4 addresses",
+        ),
     ] = 0
     count_of_ipv6_addresses: Annotated[
-        int, Field(alias="ipv6", description="Count of IPv6 addresses")
+        int,
+        Field(
+            validation_alias="ipv6",
+            serialization_alias="ipv6",
+            description="Count of IPv6 addresses",
+        ),
     ] = 0
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

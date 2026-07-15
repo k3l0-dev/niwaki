@@ -6,18 +6,18 @@ from enum import StrEnum
 
 
 class L4TcpFlags(StrEnum):
+    UNSPECIFIED = "unspecified"
+    """Unspecified"""
+    SYN = "syn"
+    """Syn flag"""
     ACK = "ack"
     """Ack flag"""
-    EST = "est"
-    """Established - combination of Ack and Reset"""
     FIN = "fin"
     """Fin flag"""
     RST = "rst"
     """Reset flag"""
-    SYN = "syn"
-    """Syn flag"""
-    UNSPECIFIED = "unspecified"
-    """Unspecified"""
+    EST = "est"
+    """Established - combination of Ack and Reset"""
 
     @classmethod
     def _missing_(cls, value: object) -> L4TcpFlags | None:

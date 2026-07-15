@@ -60,7 +60,8 @@ class infraRsMonFexInfraPol(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9_.:-]+$",
-            alias="tnMonInfraPolName",
+            validation_alias="tnMonInfraPolName",
+            serialization_alias="tnMonInfraPolName",
             description="The monitoring policy name.",
         ),
     ] = ""

@@ -60,7 +60,8 @@ class fabricRsPodPGrpBGPRRP(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9_.:-]+$",
-            alias="tnBgpInstPolName",
+            validation_alias="tnBgpInstPolName",
+            serialization_alias="tnBgpInstPolName",
             description="The Border Gateway Protocol policy name. This name can be up to 64 characters. Note that you cannot change this name after the object has been saved.",
         ),
     ] = ""

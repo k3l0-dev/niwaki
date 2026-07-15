@@ -34,7 +34,9 @@ class mdpL4L7VipDefRef(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    mdpl4l7vipdef_dn: Annotated[str, Field(alias="l4l7VipDefDn")]
+    mdpl4l7vipdef_dn: Annotated[
+        str, Field(validation_alias="l4l7VipDefDn", serialization_alias="l4l7VipDefDn")
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[

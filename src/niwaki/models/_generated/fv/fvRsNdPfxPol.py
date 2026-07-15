@@ -58,7 +58,8 @@ class fvRsNdPfxPol(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9_.:-]+$",
-            alias="tnNdPfxPolName",
+            validation_alias="tnNdPfxPolName",
+            serialization_alias="tnNdPfxPolName",
             description="The Neighbor Discovery Prefix policy name.",
         ),
     ] = ""

@@ -56,20 +56,28 @@ class plannerAzureDomain(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies the description of a policy component.",
         ),
     ] = ""
     encap: PlannerEncap = Field(default=PlannerEncap.VLAN, description="Encapsulation")
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     epg_span: Annotated[
         int,
         Field(
             ge=1,
             le=4000000000,
-            alias="span",
+            validation_alias="span",
+            serialization_alias="span",
             description="No of leafs this EPG deployed on for this domain",
         ),
     ] = 1

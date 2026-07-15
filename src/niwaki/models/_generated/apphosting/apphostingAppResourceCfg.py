@@ -40,7 +40,8 @@ class apphostingAppResourceCfg(ManagedObject):
     # ── Configurable ───────────────────────────────────────────────────────────
     admin_st: ApphostingAdminState = Field(
         default=ApphostingAdminState.ENABLED,
-        alias="adminSt",
+        validation_alias="adminSt",
+        serialization_alias="adminSt",
         description="The administrative state of the object or policy.",
     )
     annotation: Annotated[
@@ -54,14 +55,25 @@ class apphostingAppResourceCfg(ManagedObject):
     cpu_unit_allocation_for_this_profile: Annotated[
         int,
         Field(
-            alias="cpu",
+            validation_alias="cpu",
+            serialization_alias="cpu",
             description="unique index to identify the package run optionscustom cpu unit allocation in profile",
         ),
     ] = 0
-    disk_usg: str = Field(
-        default="", alias="diskUsg", description="custom persistent disk utilization in profile"
-    )
-    memory_allocation_for_this_profile: str = Field(
-        default="", alias="memory", description="custom memory in profile"
-    )
+    disk_usg: Annotated[
+        int,
+        Field(
+            validation_alias="diskUsg",
+            serialization_alias="diskUsg",
+            description="custom persistent disk utilization in profile",
+        ),
+    ] = 0
+    memory_allocation_for_this_profile: Annotated[
+        int,
+        Field(
+            validation_alias="memory",
+            serialization_alias="memory",
+            description="custom memory in profile",
+        ),
+    ] = 0
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

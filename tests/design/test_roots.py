@@ -123,13 +123,13 @@ class TestPositionDispatch:
             infra()
             .leaf_profile("lp")
             .leaf_selector("ls", "range")
-            .node_block("b1", from_node_id="101", to_node_id="101")
+            .node_block("b1", from_node_id=101, to_node_id=101)
         )
         spine_blk = (
             infra()
             .spine_profile("sp")
             .spine_selector("ss", "range")
-            .node_block("b1", from_node_id="201", to_node_id="201")
+            .node_block("b1", from_node_id=201, to_node_id=201)
         )
         assert type(leaf_blk).__name__ == "LeafSelectorNodeBlockCursor"
         assert type(spine_blk).__name__ == "SpineSelectorNodeBlockCursor"

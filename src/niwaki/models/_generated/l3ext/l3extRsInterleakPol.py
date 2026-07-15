@@ -58,7 +58,8 @@ class l3extRsInterleakPol(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9_.:-]+$",
-            alias="tnRtctrlProfileName",
+            validation_alias="tnRtctrlProfileName",
+            serialization_alias="tnRtctrlProfileName",
             description="The name of the route profile associated with this object.",
         ),
     ] = ""

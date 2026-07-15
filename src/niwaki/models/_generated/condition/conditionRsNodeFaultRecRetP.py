@@ -58,7 +58,8 @@ class conditionRsNodeFaultRecRetP(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9_.:-]+$",
-            alias="tnFaultSwRetPName",
+            validation_alias="tnFaultSwRetPName",
+            serialization_alias="tnFaultSwRetPName",
             description="A name for the fault record retention policy used by the node policy group. The fault record retention policy is referred by the node policy group. The node policy group also includes references to Health, Event, and Audit record retention policies.",
         ),
     ] = ""

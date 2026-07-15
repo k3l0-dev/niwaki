@@ -48,7 +48,10 @@ class fvRsBDToNetflowMonitorPol(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     flt_type: AnalyticsFltType = Field(
-        default=AnalyticsFltType.IPV4, alias="fltType", description="Address Family filter type"
+        default=AnalyticsFltType.IPV4,
+        validation_alias="fltType",
+        serialization_alias="fltType",
+        description="Address Family filter type",
     )
     name: Annotated[
         str,
@@ -56,7 +59,8 @@ class fvRsBDToNetflowMonitorPol(ManagedObject):
             min_length=1,
             max_length=64,
             pattern="^[a-zA-Z0-9_.:-]+$",
-            alias="tnNetflowMonitorPolName",
+            validation_alias="tnNetflowMonitorPolName",
+            serialization_alias="tnNetflowMonitorPolName",
         ),
     ]
 

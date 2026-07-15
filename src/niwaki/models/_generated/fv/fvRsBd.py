@@ -62,7 +62,8 @@ class fvRsBd(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9_.-]+$",
-            alias="tnFvBDName",
+            validation_alias="tnFvBDName",
+            serialization_alias="tnFvBDName",
             description="The name of the bridge domain associated with this EPG.",
         ),
     ] = ""

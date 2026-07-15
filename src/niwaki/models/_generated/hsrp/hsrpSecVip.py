@@ -3,7 +3,10 @@
 from __future__ import annotations
 
 from typing import ClassVar, Annotated
-from pydantic import Field
+from pydantic import BeforeValidator, Field
+
+from niwaki.models._wire import Flags, parse_flags
+from niwaki.models._generated.enums.HsrpConfigIssues import HsrpConfigIssues
 
 from niwaki.models.base import ManagedObject
 
@@ -69,7 +72,8 @@ class hsrpSecVip(ManagedObject):
         str,
         Field(
             pattern="^[0-9a-fA-F.:/ ]+$",
-            alias="ip",
+            validation_alias="ip",
+            serialization_alias="ip",
             description="HSRP primary Virtual IP address (VIP)",
         ),
     ]
@@ -83,22 +87,32 @@ class hsrpSecVip(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    sec_vip_misconfiguration: str = Field(
-        default="",
-        alias="configIssues",
-        description="Bitmask representation of the configuration issues found during the endpoint group deployment.",
+    sec_vip_misconfiguration: Annotated[Flags[HsrpConfigIssues], BeforeValidator(parse_flags)] = (
+        Field(
+            default_factory=lambda: frozenset({HsrpConfigIssues.NONE}),
+            validation_alias="configIssues",
+            serialization_alias="configIssues",
+            description="Bitmask representation of the configuration issues found during the endpoint group deployment.",
+        )
     )
     description: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies the description of a policy component.",
         ),
     ] = ""
     name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

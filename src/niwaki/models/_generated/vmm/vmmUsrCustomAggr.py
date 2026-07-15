@@ -3,8 +3,9 @@
 from __future__ import annotations
 
 from typing import ClassVar, Annotated
-from pydantic import Field
+from pydantic import BeforeValidator, Field
 
+from niwaki.models._wire import Flags, parse_flags
 from niwaki.models._generated.enums.CompAllocMode import CompAllocMode
 from niwaki.models._generated.enums.CompConfigMode import CompConfigMode
 from niwaki.models._generated.enums.FvClassPref import FvClassPref
@@ -46,8 +47,12 @@ class vmmUsrCustomAggr(ManagedObject):
     name: Annotated[str, Field(min_length=1, max_length=128, description="The name of the object.")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    aggr_imedcy: FvImmediacy = Field(default=FvImmediacy.LAZY, alias="aggrImedcy")
-    alloc_mode: CompAllocMode = Field(default=CompAllocMode.DYNAMIC, alias="allocMode")
+    aggr_imedcy: FvImmediacy = Field(
+        default=FvImmediacy.LAZY, validation_alias="aggrImedcy", serialization_alias="aggrImedcy"
+    )
+    alloc_mode: CompAllocMode = Field(
+        default=CompAllocMode.DYNAMIC, validation_alias="allocMode", serialization_alias="allocMode"
+    )
     annotation: Annotated[
         str,
         Field(
@@ -57,38 +62,69 @@ class vmmUsrCustomAggr(ManagedObject):
         ),
     ] = ""
     classification_preference: FvClassPref = Field(
-        default=FvClassPref.ENCAP, alias="classPref", description="Classification Preference"
+        default=FvClassPref.ENCAP,
+        validation_alias="classPref",
+        serialization_alias="classPref",
+        description="Classification Preference",
     )
     description: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Additional descriptive information about the object.",
         ),
     ] = ""
-    feature_flags: VmmAggrFlags = Field(default=VmmAggrFlags.NONE, alias="featureFlags")
+    feature_flags: Annotated[Flags[VmmAggrFlags], BeforeValidator(parse_flags)] = Field(
+        default_factory=lambda: frozenset(
+            {
+                VmmAggrFlags.SKIP_ENCAP_VALIDATION,
+                VmmAggrFlags.SKIP_REL_TO_EPPD,
+                VmmAggrFlags.SKIP_VLAN_POOL_INHERITANCE,
+            }
+        ),
+        validation_alias="featureFlags",
+        serialization_alias="featureFlags",
+    )
     forged_transmit_setting: CompConfigMode = Field(
         default=CompConfigMode.ENABLED,
-        alias="forgedTransmit",
+        validation_alias="forgedTransmit",
+        serialization_alias="forgedTransmit",
         description="Forged Transmits setting",
     )
     ident_consumer_dn: str = Field(
         default="",
-        alias="idConsumerDn",
+        validation_alias="idConsumerDn",
+        serialization_alias="idConsumerDn",
         description="Id Consumer DN used for encap allocation @@@ set to vmmEpPDDn by default @@@ set to vmmEncapAllctr Dn when allocator is used for enacp allocation",
     )
     mac_address_changes_setting: CompConfigMode = Field(
-        default=CompConfigMode.ENABLED, alias="macChange", description="MAC address changes setting"
+        default=CompConfigMode.ENABLED,
+        validation_alias="macChange",
+        serialization_alias="macChange",
+        description="MAC address changes setting",
     )
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     promiscous_mode_setting: CompConfigMode = Field(
-        default=CompConfigMode.DISABLED, alias="promMode", description="Promiscous mode setting"
+        default=CompConfigMode.DISABLED,
+        validation_alias="promMode",
+        serialization_alias="promMode",
+        description="Promiscous mode setting",
     )
     untagged_access_port: bool = Field(
-        default=False, alias="untagged", description="Untagged Access port"
+        default=False,
+        validation_alias="untagged",
+        serialization_alias="untagged",
+        description="Untagged Access port",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

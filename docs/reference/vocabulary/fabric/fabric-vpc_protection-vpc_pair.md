@@ -24,7 +24,7 @@ Accepted as keyword arguments of `.vpc_pair(name)` and of `.set(**attrs)` on thi
 | parameter | wire | type | values | default | description |
 | --- | --- | --- | --- | --- | --- |
 | `name` *(positional)* | `name` | `str` | — | — | The name of the VPC explicit protection group. This name can be up to 64 characters. Note that you cannot change this name after the object has been saved. |
-| `logical_pair_id` | `id` | `str` | — | — | Logical Pair Id |
+| `logical_pair_id` | `id` | `int` | — | `0` | Logical Pair Id |
 
 ## Children
 

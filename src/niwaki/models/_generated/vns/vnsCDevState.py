@@ -44,7 +44,7 @@ class vnsCDevState(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    pri_key: Annotated[str, Field(alias="priKey")]
+    pri_key: Annotated[str, Field(validation_alias="priKey", serialization_alias="priKey")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[
@@ -60,9 +60,21 @@ class vnsCDevState(ManagedObject):
         Field(max_length=16, pattern="^[a-zA-Z0-9_.:-]+$", description="The name of the object."),
     ] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
-    trig_dev_cnt: VnsTrigState = Field(default=VnsTrigState.OFF, alias="trigDevCnt")
-    trig_dev_hlth: VnsTrigState = Field(default=VnsTrigState.OFF, alias="trigDevHlth")
-    trig_re_sync: VnsTrigState = Field(default=VnsTrigState.OFF, alias="trigReSync")
+    trig_dev_cnt: VnsTrigState = Field(
+        default=VnsTrigState.OFF, validation_alias="trigDevCnt", serialization_alias="trigDevCnt"
+    )
+    trig_dev_hlth: VnsTrigState = Field(
+        default=VnsTrigState.OFF, validation_alias="trigDevHlth", serialization_alias="trigDevHlth"
+    )
+    trig_re_sync: VnsTrigState = Field(
+        default=VnsTrigState.OFF, validation_alias="trigReSync", serialization_alias="trigReSync"
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

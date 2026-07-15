@@ -66,26 +66,45 @@ class fvIPSLAMonitoringPol(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
-    http_method_used_for_probing: FvhttpMethod = Field(default=FvhttpMethod.GET, alias="httpMethod")
-    uri_for_http_probing: Annotated[str, Field(max_length=512, alias="httpUri")] = ""
-    http_version_used_for_probing: FvhttpVersion = Field(
-        default=FvhttpVersion.HTTP10, alias="httpVersion"
+    http_method_used_for_probing: FvhttpMethod = Field(
+        default=FvhttpMethod.GET, validation_alias="httpMethod", serialization_alias="httpMethod"
     )
-    type_of_service_value: str = Field(default="", alias="ipv4Tos")
-    traffic_class_value: str = Field(default="", alias="ipv6TrfClass")
+    uri_for_http_probing: Annotated[
+        str, Field(max_length=512, validation_alias="httpUri", serialization_alias="httpUri")
+    ] = ""
+    http_version_used_for_probing: FvhttpVersion = Field(
+        default=FvhttpVersion.HTTP10,
+        validation_alias="httpVersion",
+        serialization_alias="httpVersion",
+    )
+    type_of_service_value: Annotated[
+        int, Field(ge=0, le=255, validation_alias="ipv4Tos", serialization_alias="ipv4Tos")
+    ] = 0
+    traffic_class_value: Annotated[
+        int,
+        Field(ge=0, le=255, validation_alias="ipv6TrfClass", serialization_alias="ipv6TrfClass"),
+    ] = 0
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     owner_key: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerKey",
+            validation_alias="ownerKey",
+            serialization_alias="ownerKey",
             description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
@@ -94,22 +113,40 @@ class fvIPSLAMonitoringPol(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerTag",
+            validation_alias="ownerTag",
+            serialization_alias="ownerTag",
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
-    request_data_size: Annotated[int, Field(ge=0, le=17512, alias="reqDataSize")] = 28
-    detect_multiplier: str = Field(default="", alias="slaDetectMultiplier")
-    frequency: str = Field(default="", alias="slaFrequency")
-    port: str = Field(default="", alias="slaPort")
-    sla_type: FvslaType = Field(default=FvslaType.ICMP, alias="slaType")
+    request_data_size: Annotated[
+        int,
+        Field(ge=0, le=17512, validation_alias="reqDataSize", serialization_alias="reqDataSize"),
+    ] = 28
+    detect_multiplier: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=100,
+            validation_alias="slaDetectMultiplier",
+            serialization_alias="slaDetectMultiplier",
+        ),
+    ] = 3
+    frequency: Annotated[
+        int,
+        Field(ge=1, le=300, validation_alias="slaFrequency", serialization_alias="slaFrequency"),
+    ] = 60
+    port: Annotated[int, Field(validation_alias="slaPort", serialization_alias="slaPort")] = 0
+    sla_type: FvslaType = Field(
+        default=FvslaType.ICMP, validation_alias="slaType", serialization_alias="slaType"
+    )
     threshold: Annotated[int, Field(ge=0, le=604800000)] = 900
     operation_timeout: Annotated[
         int,
         Field(
             ge=0,
             le=604800000,
-            alias="timeout",
+            validation_alias="timeout",
+            serialization_alias="timeout",
             description="The amount of time between authentication attempts.",
         ),
     ] = 900

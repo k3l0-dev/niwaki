@@ -3,8 +3,10 @@
 from __future__ import annotations
 
 from typing import ClassVar, Annotated
-from pydantic import Field
+from pydantic import BeforeValidator, Field
 
+from niwaki.models._wire import Flags, parse_flags
+from niwaki.models._generated.enums.QospCosBmap import QospCosBmap
 from niwaki.models._generated.enums.QospPfcEnableScope import QospPfcEnableScope
 
 from niwaki.models.base import ManagedObject
@@ -51,7 +53,8 @@ class qosPfcPol(ManagedObject):
     # ── Configurable ───────────────────────────────────────────────────────────
     priority_flow_control_admin_state: bool = Field(
         default=False,
-        alias="adminSt",
+        validation_alias="adminSt",
+        serialization_alias="adminSt",
         description="enable is for no drop policy, disable is for drop policy",
     )
     annotation: Annotated[
@@ -67,23 +70,37 @@ class qosPfcPol(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
     priority_flow_control_enable_scope: QospPfcEnableScope = Field(
-        default=QospPfcEnableScope.TOR, alias="enableScope"
+        default=QospPfcEnableScope.TOR,
+        validation_alias="enableScope",
+        serialization_alias="enableScope",
     )
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
-    bitmap_of_nodrop_cos: str = Field(default="", alias="noDropCos")
+    bitmap_of_nodrop_cos: Annotated[Flags[QospCosBmap], BeforeValidator(parse_flags)] = Field(
+        default_factory=lambda: frozenset({QospCosBmap.UNSPECIFIED}),
+        validation_alias="noDropCos",
+        serialization_alias="noDropCos",
+    )
     owner_key: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerKey",
+            validation_alias="ownerKey",
+            serialization_alias="ownerKey",
             description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
@@ -92,7 +109,8 @@ class qosPfcPol(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerTag",
+            validation_alias="ownerTag",
+            serialization_alias="ownerTag",
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""

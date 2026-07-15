@@ -55,7 +55,13 @@ class fvOrchsLBCfg(ManagedObject):
     ] = ""
     mntr: Annotated[str, Field(max_length=512)] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     port: Annotated[
         str, Field(max_length=512, description="The service port number for the LDAP service.")

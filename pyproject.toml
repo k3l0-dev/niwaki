@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "niwaki"
-version = "0.8.0"
+version = "0.9.0"
 description = "Modern, typed, design-first Python SDK for Cisco ACI (APIC)"
 readme = "README.md"
 license = "Apache-2.0"
@@ -63,6 +63,7 @@ dev = [
     "pytest-cov>=5.0",
     "ruff>=0.4",
     "mypy>=1.10",
+    "pyright>=1.1.390",
     "python-dotenv>=1.0",
     "sybil>=9",
 ]
@@ -132,6 +133,7 @@ asyncio_mode = "auto"
 asyncio_default_fixture_loop_scope = "function"
 markers = [
     "integration: tests requiring network access to a live APIC",
+    "perf: cold-start / latency budgets (subprocess timing; runs in the normal suite)",
 ]
 
 [dependency-groups]

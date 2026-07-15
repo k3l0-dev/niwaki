@@ -36,10 +36,16 @@ class fabricExtRoutablePodSubnet(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    secondary_subnet_pool: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="pool")]
+    secondary_subnet_pool: Annotated[
+        str,
+        Field(pattern="^[0-9a-fA-F.:/ ]+$", validation_alias="pool", serialization_alias="pool"),
+    ]
 
     # ── Create-only (ignored by APIC on modification) ─────────────────────────
-    reserve_address_count: Annotated[int, Field(alias="reserveAddressCount")] = 0
+    reserve_address_count: Annotated[
+        int,
+        Field(validation_alias="reserveAddressCount", serialization_alias="reserveAddressCount"),
+    ] = 0
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[
@@ -55,17 +61,25 @@ class fabricExtRoutablePodSubnet(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies the description of a policy component.",
         ),
     ] = ""
     name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     state_of_the_pool_active_inactive: FabricExtSubnetSt = Field(
         default=FabricExtSubnetSt.ACTIVE,
-        alias="state",
+        validation_alias="state",
+        serialization_alias="state",
         description="The state of the relationship.",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

@@ -56,7 +56,10 @@ class orchsRsIpPoolRef(ManagedObject):
         ),
     ] = ""
     target_dn: str = Field(
-        default="", alias="tDn", description="The distinguished name of the target."
+        default="",
+        validation_alias="tDn",
+        serialization_alias="tDn",
+        description="The distinguished name of the target.",
     )
     type: FvIpLoc = Field(
         default=FvIpLoc.EXTERNAL,

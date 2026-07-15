@@ -63,22 +63,33 @@ class cloudsecIfPol(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
     force_clean: CloudsecForceCleanType = Field(
-        default=CloudsecForceCleanType.DISABLED, alias="forceClean", description="Force Cleanup"
+        default=CloudsecForceCleanType.DISABLED,
+        validation_alias="forceClean",
+        serialization_alias="forceClean",
+        description="Force Cleanup",
     )
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     owner_key: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerKey",
+            validation_alias="ownerKey",
+            serialization_alias="ownerKey",
             description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
@@ -87,14 +98,25 @@ class cloudsecIfPol(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerTag",
+            validation_alias="ownerTag",
+            serialization_alias="ownerTag",
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
     sak_expiry_time: Annotated[
-        int, Field(ge=5, le=1440, alias="sakExpiryTime", description="SA Key expiry time")
+        int,
+        Field(
+            ge=5,
+            le=1440,
+            validation_alias="sakExpiryTime",
+            serialization_alias="sakExpiryTime",
+            description="SA Key expiry time",
+        ),
     ] = 15
     rekey_control_to_turn_on_off_rekeying: bool = Field(
-        default=False, alias="stopRekey", description="Rekey control"
+        default=False,
+        validation_alias="stopRekey",
+        serialization_alias="stopRekey",
+        description="Rekey control",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

@@ -41,7 +41,8 @@ class vmmHvDesiredSt(ManagedObject):
         Field(
             min_length=1,
             max_length=512,
-            alias="host",
+            validation_alias="host",
+            serialization_alias="host",
             description="The hostname or IP for export destination. Call Home sends email messages to either the IP address or hostname, and the associated port number.",
         ),
     ]
@@ -57,11 +58,18 @@ class vmmHvDesiredSt(ManagedObject):
     ] = ""
     name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     desired_state_for_the_host: HvsManagedEntityStatus = Field(
         default=HvsManagedEntityStatus.GRAY,
-        alias="state",
+        validation_alias="state",
+        serialization_alias="state",
         description="The state of the relationship.",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

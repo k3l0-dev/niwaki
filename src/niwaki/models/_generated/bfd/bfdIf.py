@@ -3,8 +3,10 @@
 from __future__ import annotations
 
 from typing import ClassVar, Annotated
-from pydantic import Field
+from pydantic import BeforeValidator, Field
 
+from niwaki.models._wire import Flags, parse_flags
+from niwaki.models._generated.enums.BfdIfControl import BfdIfControl
 from niwaki.models._generated.enums.BfdTrkMbrLnk import BfdTrkMbrLnk
 from niwaki.models._generated.enums.NwAdminSt import NwAdminSt
 
@@ -48,7 +50,7 @@ class bfdIf(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    interface_id: Annotated[str, Field(alias="id")]
+    interface_id: Annotated[str, Field(validation_alias="id", serialization_alias="id")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[
@@ -59,25 +61,56 @@ class bfdIf(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    interface_controls: str = Field(default="", alias="ctrl", description="Interface controls")
+    interface_controls: Annotated[Flags[BfdIfControl], BeforeValidator(parse_flags)] = Field(
+        default_factory=lambda: frozenset(),
+        validation_alias="ctrl",
+        serialization_alias="ctrl",
+        description="Interface controls",
+    )
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            validation_alias="descr",
+            serialization_alias="descr",
+        ),
     ] = ""
-    destination_ip_address: str = Field(default="", alias="dst", description="BFD Dest IP")
+    destination_ip_address: Annotated[
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            validation_alias="dst",
+            serialization_alias="dst",
+            description="BFD Dest IP",
+        ),
+    ] = ""
     echo_mode_admin_state_of_bfd_interface: NwAdminSt = Field(
         default=NwAdminSt.ENABLED,
-        alias="echoAdminSt",
+        validation_alias="echoAdminSt",
+        serialization_alias="echoAdminSt",
         description="Enable/disable echo mode for interface",
     )
     name: Annotated[
         str, Field(min_length=1, max_length=128, description="The name of the object.")
     ] = ""
     src_ip: Annotated[
-        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="srcIp", description="BFD Src IP")
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            validation_alias="srcIp",
+            serialization_alias="srcIp",
+            description="BFD Src IP",
+        ),
     ] = ""
-    bfd_start_timeout: Annotated[int, Field(alias="stTm", description="BFD Start Time")] = 0
+    bfd_start_timeout: Annotated[
+        int,
+        Field(validation_alias="stTm", serialization_alias="stTm", description="BFD Start Time"),
+    ] = 0
     trk_mbr_lnk: BfdTrkMbrLnk = Field(
-        default=BfdTrkMbrLnk.DISABLE, alias="trkMbrLnk", description="BFD track-member-link"
+        default=BfdTrkMbrLnk.DISABLE,
+        validation_alias="trkMbrLnk",
+        serialization_alias="trkMbrLnk",
+        description="BFD track-member-link",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

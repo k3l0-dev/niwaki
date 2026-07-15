@@ -48,7 +48,14 @@ class dot1xIf(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    interface_id: Annotated[str, Field(alias="id", description="Interface ID of this endpoint")]
+    interface_id: Annotated[
+        str,
+        Field(
+            validation_alias="id",
+            serialization_alias="id",
+            description="Interface ID of this endpoint",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[
@@ -61,48 +68,132 @@ class dot1xIf(ManagedObject):
     ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            validation_alias="descr",
+            serialization_alias="descr",
+        ),
     ] = ""
     dot1x_authentication_order: Dot1xDot1xAuthOrder = Field(
         default=Dot1xDot1xAuthOrder.DEFAULT,
-        alias="dot1xAuthOrder",
+        validation_alias="dot1xAuthOrder",
+        serialization_alias="dot1xAuthOrder",
         description="Dot1x Authentication order",
     )
-    apic_dot1x_guest_vlan: str = Field(default="", alias="guestVlan", description="Guest VLAN")
+    apic_dot1x_guest_vlan: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=4095,
+            validation_alias="guestVlan",
+            serialization_alias="guestVlan",
+            description="Guest VLAN",
+        ),
+    ] = 0
     dot1x_host_mode_type: Dot1xHostMode = Field(
-        default=Dot1xHostMode.SINGLE_HOST, alias="hostMode", description="Host Mode"
+        default=Dot1xHostMode.SINGLE_HOST,
+        validation_alias="hostMode",
+        serialization_alias="hostMode",
+        description="Host Mode",
     )
     dot1x_timeout_inactivity_period: Annotated[
         int,
         Field(
             ge=0,
             le=2147483,
-            alias="inactivityPeriod",
+            validation_alias="inactivityPeriod",
+            serialization_alias="inactivityPeriod",
             description="Dot1x Timeout: Inactivity Period",
         ),
     ] = 0
-    max_reauth_req: str = Field(default="", alias="maxReauthReq", description="Max Reauth Request")
-    max_req: str = Field(default="", alias="maxReq", description="Max Request")
+    max_reauth_req: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=10,
+            validation_alias="maxReauthReq",
+            serialization_alias="maxReauthReq",
+            description="Max Reauth Request",
+        ),
+    ] = 2
+    max_req: Annotated[
+        int,
+        Field(
+            ge=2,
+            le=10,
+            validation_alias="maxReq",
+            serialization_alias="maxReq",
+            description="Max Request",
+        ),
+    ] = 2
     name: Annotated[
         str, Field(min_length=1, max_length=128, description="The name of the object.")
     ] = ""
     role_of_dot1x_authenticating_entity: Dot1xPaeType = Field(
-        default=Dot1xPaeType.AUTHENTICATOR, alias="paeType", description="Dot1x Pae Type"
+        default=Dot1xPaeType.AUTHENTICATOR,
+        validation_alias="paeType",
+        serialization_alias="paeType",
+        description="Dot1x Pae Type",
     )
-    dot1x_timeout_quiet_period: str = Field(
-        default="", alias="quietPeriod", description="Quiet Period"
-    )
-    dot1x_timeout_rate_limit_period: str = Field(
-        default="", alias="rateLimitPeriod", description="Rate limit period"
-    )
+    dot1x_timeout_quiet_period: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=65535,
+            validation_alias="quietPeriod",
+            serialization_alias="quietPeriod",
+            description="Quiet Period",
+        ),
+    ] = 60
+    dot1x_timeout_rate_limit_period: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=65535,
+            validation_alias="rateLimitPeriod",
+            serialization_alias="rateLimitPeriod",
+            description="Rate limit period",
+        ),
+    ] = 0
     dot1x_timeout_re_auth_period: Annotated[
-        int, Field(ge=1, le=2147483, alias="reAuthPeriod", description="Re-auth Period")
+        int,
+        Field(
+            ge=1,
+            le=2147483,
+            validation_alias="reAuthPeriod",
+            serialization_alias="reAuthPeriod",
+            description="Re-auth Period",
+        ),
     ] = 3600
-    dot1x_timeout_server_timeout: str = Field(
-        default="", alias="serverTimeout", description="Server Timeout"
-    )
-    dot1x_timeout_supplicant_timeout: str = Field(
-        default="", alias="suppTimeout", description="Supplicant Timeout"
-    )
-    dot1x_timeout_tx_period: str = Field(default="", alias="txPeriod", description="Tx Period")
+    dot1x_timeout_server_timeout: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=65535,
+            validation_alias="serverTimeout",
+            serialization_alias="serverTimeout",
+            description="Server Timeout",
+        ),
+    ] = 30
+    dot1x_timeout_supplicant_timeout: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=65535,
+            validation_alias="suppTimeout",
+            serialization_alias="suppTimeout",
+            description="Supplicant Timeout",
+        ),
+    ] = 30
+    dot1x_timeout_tx_period: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=65535,
+            validation_alias="txPeriod",
+            serialization_alias="txPeriod",
+            description="Tx Period",
+        ),
+    ] = 30
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

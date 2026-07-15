@@ -59,7 +59,8 @@ class dbgexpCoreP(ManagedObject):
     # ── Configurable ───────────────────────────────────────────────────────────
     administrative_state: TrigExecState = Field(
         default=TrigExecState.UNTRIGGERED,
-        alias="adminSt",
+        validation_alias="adminSt",
+        serialization_alias="adminSt",
         description="The administrative state of the executable policies.",
     )
     annotation: Annotated[
@@ -70,41 +71,72 @@ class dbgexpCoreP(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    apic_path: Annotated[str, Field(max_length=512, alias="apicPath")] = ""
-    app_name: Annotated[str, Field(max_length=512, alias="appName")] = ""
+    apic_path: Annotated[
+        str, Field(max_length=512, validation_alias="apicPath", serialization_alias="apicPath")
+    ] = ""
+    app_name: Annotated[
+        str, Field(max_length=512, validation_alias="appName", serialization_alias="appName")
+    ] = ""
     files_to_collect_and_export: DbgexpCollectType = Field(
         default=DbgexpCollectType.COREONLY,
-        alias="collectType",
+        validation_alias="collectType",
+        serialization_alias="collectType",
         description="The collection type for the core file.",
     )
     compression: MonCompression = Field(
         default=MonCompression.NONE,
         description="The compression format for core files. The format can either be gzip or no compression.",
     )
-    export_location: ScalarEnum8 = Field(default=ScalarEnum8.APIC, alias="controllerLocation")
-    include_db_metadata_file: bool = Field(default=True, alias="dbMetadata")
+    export_location: ScalarEnum8 = Field(
+        default=ScalarEnum8.APIC,
+        validation_alias="controllerLocation",
+        serialization_alias="controllerLocation",
+    )
+    include_db_metadata_file: bool = Field(
+        default=True, validation_alias="dbMetadata", serialization_alias="dbMetadata"
+    )
     description: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies the description of a policy component.",
         ),
     ] = ""
-    export_to_controller: bool = Field(default=False, alias="exportToController")
-    export_to_intersight: bool = Field(default=False, alias="exportToIntersight")
-    extensive_logs: bool = Field(default=False, alias="extensiveLogs")
+    export_to_controller: bool = Field(
+        default=False,
+        validation_alias="exportToController",
+        serialization_alias="exportToController",
+    )
+    export_to_intersight: bool = Field(
+        default=False,
+        validation_alias="exportToIntersight",
+        serialization_alias="exportToIntersight",
+    )
+    extensive_logs: bool = Field(
+        default=False, validation_alias="extensiveLogs", serialization_alias="extensiveLogs"
+    )
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
-    include_pre_upgrade_logs: bool = Field(default=False, alias="upgradeLogs")
+    include_pre_upgrade_logs: bool = Field(
+        default=False, validation_alias="upgradeLogs", serialization_alias="upgradeLogs"
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     vendor_name: Annotated[
         str,
         Field(
             max_length=512,
-            alias="vendorName",
+            validation_alias="vendorName",
+            serialization_alias="vendorName",
             description="The SFP transceiver vendor name (ASCII).",
         ),
     ] = ""

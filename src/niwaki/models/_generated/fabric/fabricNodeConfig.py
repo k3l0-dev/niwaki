@@ -34,7 +34,7 @@ class fabricNodeConfig(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    node: Annotated[str, Field(description="explicit properties")]
+    node: Annotated[int, Field(ge=101, le=16000, description="explicit properties")] = 0
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[
@@ -45,5 +45,7 @@ class fabricNodeConfig(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    associated_group_dn: str = Field(default="", alias="assocGrp")
+    associated_group_dn: str = Field(
+        default="", validation_alias="assocGrp", serialization_alias="assocGrp"
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

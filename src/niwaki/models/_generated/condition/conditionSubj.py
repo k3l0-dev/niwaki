@@ -36,7 +36,10 @@ class conditionSubj(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    subject_dn: Annotated[str, Field(alias="oDn", description="Target Object's DN")]
+    subject_dn: Annotated[
+        str,
+        Field(validation_alias="oDn", serialization_alias="oDn", description="Target Object's DN"),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[

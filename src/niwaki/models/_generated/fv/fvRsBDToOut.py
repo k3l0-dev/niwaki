@@ -53,7 +53,8 @@ class fvRsBDToOut(ManagedObject):
             min_length=1,
             max_length=64,
             pattern="^[a-zA-Z0-9_.:-]+$",
-            alias="tnL3extOutName",
+            validation_alias="tnL3extOutName",
+            serialization_alias="tnL3extOutName",
             description="The name of the Layer 3 outside interface associated with this bridge domain.",
         ),
     ]

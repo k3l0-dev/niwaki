@@ -39,7 +39,10 @@ class rtctrlMatchCommRegexTerm(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     community_type: RtctrlCommunityType = Field(
-        default=RtctrlCommunityType.REGULAR, alias="commType", description="Community Type"
+        default=RtctrlCommunityType.REGULAR,
+        validation_alias="commType",
+        serialization_alias="commType",
+        description="Community Type",
     )
 
     # ── Configurable ───────────────────────────────────────────────────────────
@@ -56,20 +59,28 @@ class rtctrlMatchCommRegexTerm(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies the description of a policy component.",
         ),
     ] = ""
     name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     regular_expression: Annotated[
         str,
         Field(
             max_length=64,
             pattern="^[0-9\\(\\)\\[\\]\\^\\$\\:\\|\\.\\-\\_\\*\\+\\?]*$",
-            alias="regex",
+            validation_alias="regex",
+            serialization_alias="regex",
             description="Regular Expression",
         ),
     ] = ""

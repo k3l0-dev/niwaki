@@ -40,7 +40,8 @@ class ptpNodeProfileTemplate(ManagedObject):
     # ── Naming (required) ──────────────────────────────────────────────────────
     ptp_profile_template_name: PtpNodeProfTemplate = Field(
         default=PtpNodeProfTemplate.TELECOM_FULL_PATH,
-        alias="nodeProfile",
+        validation_alias="nodeProfile",
+        serialization_alias="nodeProfile",
         description="TemplateName (Telecom)",
     )
 
@@ -53,31 +54,76 @@ class ptpNodeProfileTemplate(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    node_domain_default_value: str = Field(
-        default="", alias="nodeDomainDefault", description="Node Domain default value"
-    )
-    node_domain_range_end: str = Field(
-        default="", alias="nodeDomainEnd", description="Node Domain range end"
-    )
-    node_domain_range_start: str = Field(
-        default="", alias="nodeDomainStart", description="Node Domain range start"
-    )
-    node_priority_1_default_value: str = Field(
-        default="", alias="nodePrio1Default", description="Node priority 1 default value"
-    )
-    node_priority_1_range_end: str = Field(
-        default="", alias="nodePrio1End", description="Node priority 1 range end"
-    )
-    node_priority_1_range_start: str = Field(
-        default="", alias="nodePrio1Start", description="Node priority 1 range start"
-    )
-    node_priority_2_default_value: str = Field(
-        default="", alias="nodePrio2Default", description="Node priority 2 default value"
-    )
-    node_priority_2_range_end: str = Field(
-        default="", alias="nodePrio2End", description="Node priority 2 range end"
-    )
-    node_priority_2_range_start: str = Field(
-        default="", alias="nodePrio2Start", description="Node priority 2 range start"
-    )
+    node_domain_default_value: Annotated[
+        int,
+        Field(
+            validation_alias="nodeDomainDefault",
+            serialization_alias="nodeDomainDefault",
+            description="Node Domain default value",
+        ),
+    ] = 0
+    node_domain_range_end: Annotated[
+        int,
+        Field(
+            validation_alias="nodeDomainEnd",
+            serialization_alias="nodeDomainEnd",
+            description="Node Domain range end",
+        ),
+    ] = 0
+    node_domain_range_start: Annotated[
+        int,
+        Field(
+            validation_alias="nodeDomainStart",
+            serialization_alias="nodeDomainStart",
+            description="Node Domain range start",
+        ),
+    ] = 0
+    node_priority_1_default_value: Annotated[
+        int,
+        Field(
+            validation_alias="nodePrio1Default",
+            serialization_alias="nodePrio1Default",
+            description="Node priority 1 default value",
+        ),
+    ] = 0
+    node_priority_1_range_end: Annotated[
+        int,
+        Field(
+            validation_alias="nodePrio1End",
+            serialization_alias="nodePrio1End",
+            description="Node priority 1 range end",
+        ),
+    ] = 0
+    node_priority_1_range_start: Annotated[
+        int,
+        Field(
+            validation_alias="nodePrio1Start",
+            serialization_alias="nodePrio1Start",
+            description="Node priority 1 range start",
+        ),
+    ] = 0
+    node_priority_2_default_value: Annotated[
+        int,
+        Field(
+            validation_alias="nodePrio2Default",
+            serialization_alias="nodePrio2Default",
+            description="Node priority 2 default value",
+        ),
+    ] = 0
+    node_priority_2_range_end: Annotated[
+        int,
+        Field(
+            validation_alias="nodePrio2End",
+            serialization_alias="nodePrio2End",
+            description="Node priority 2 range end",
+        ),
+    ] = 0
+    node_priority_2_range_start: Annotated[
+        int,
+        Field(
+            validation_alias="nodePrio2Start",
+            serialization_alias="nodePrio2Start",
+            description="Node priority 2 range start",
+        ),
+    ] = 0
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

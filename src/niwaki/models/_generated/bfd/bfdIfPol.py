@@ -3,8 +3,10 @@
 from __future__ import annotations
 
 from typing import ClassVar, Annotated
-from pydantic import Field
+from pydantic import BeforeValidator, Field
 
+from niwaki.models._wire import Flags, parse_flags
+from niwaki.models._generated.enums.BfdIfControl import BfdIfControl
 from niwaki.models._generated.enums.NwAdminSt import NwAdminSt
 
 from niwaki.models.base import ManagedObject
@@ -42,7 +44,10 @@ class bfdIfPol(ManagedObject):
 
     # ── Configurable ───────────────────────────────────────────────────────────
     enable_disable_sessions: NwAdminSt = Field(
-        default=NwAdminSt.ENABLED, alias="adminSt", description="Enable/Disable sessions"
+        default=NwAdminSt.ENABLED,
+        validation_alias="adminSt",
+        serialization_alias="adminSt",
+        description="Enable/Disable sessions",
     )
     annotation: Annotated[
         str,
@@ -52,38 +57,84 @@ class bfdIfPol(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    interface_controls: str = Field(default="", alias="ctrl", description="Interface controls")
+    interface_controls: Annotated[Flags[BfdIfControl], BeforeValidator(parse_flags)] = Field(
+        default_factory=lambda: frozenset(),
+        validation_alias="ctrl",
+        serialization_alias="ctrl",
+        description="Interface controls",
+    )
     description: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
-    detection_multiplier: str = Field(
-        default="", alias="detectMult", description="Detection multiplier."
-    )
+    detection_multiplier: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=50,
+            validation_alias="detectMult",
+            serialization_alias="detectMult",
+            description="Detection multiplier.",
+        ),
+    ] = 3
     enable_disable_echo_mode: NwAdminSt = Field(
-        default=NwAdminSt.ENABLED, alias="echoAdminSt", description="Enable/Disable Echo mode."
+        default=NwAdminSt.ENABLED,
+        validation_alias="echoAdminSt",
+        serialization_alias="echoAdminSt",
+        description="Enable/Disable Echo mode.",
     )
-    echo_rx_interval: str = Field(default="", alias="echoRxIntvl", description="Echo rx interval.")
-    required_minimum_rx_interval: str = Field(
-        default="", alias="minRxIntvl", description="Required minimum rx interval."
-    )
-    desired_minimum_tx_interval: str = Field(
-        default="", alias="minTxIntvl", description="Desired minimum tx interval."
-    )
+    echo_rx_interval: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=999,
+            validation_alias="echoRxIntvl",
+            serialization_alias="echoRxIntvl",
+            description="Echo rx interval.",
+        ),
+    ] = 50
+    required_minimum_rx_interval: Annotated[
+        int,
+        Field(
+            ge=50,
+            le=999,
+            validation_alias="minRxIntvl",
+            serialization_alias="minRxIntvl",
+            description="Required minimum rx interval.",
+        ),
+    ] = 50
+    desired_minimum_tx_interval: Annotated[
+        int,
+        Field(
+            ge=50,
+            le=999,
+            validation_alias="minTxIntvl",
+            serialization_alias="minTxIntvl",
+            description="Desired minimum tx interval.",
+        ),
+    ] = 50
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     owner_key: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerKey",
+            validation_alias="ownerKey",
+            serialization_alias="ownerKey",
             description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
@@ -92,7 +143,8 @@ class bfdIfPol(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerTag",
+            validation_alias="ownerTag",
+            serialization_alias="ownerTag",
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""

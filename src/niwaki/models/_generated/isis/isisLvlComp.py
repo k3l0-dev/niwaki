@@ -55,13 +55,15 @@ class isisLvlComp(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies the description of a policy component.",
         ),
     ] = ""
     lsp_fast_flood: IsisLspFastFloodMode = Field(
         default=IsisLspFastFloodMode.ENABLED,
-        alias="lspFastFlood",
+        validation_alias="lspFastFlood",
+        serialization_alias="lspFastFlood",
         description="The IS-IS Fast-Flooding of LSPs improves Intermediate System-to-Intermediate System (IS-IS) convergence time when new link-state packets (LSPs) are generated in the network and shortest path first (SPF) is triggered by the new LSPs.",
     )
     lsp_generation_initial_wait_inerval: Annotated[
@@ -69,7 +71,8 @@ class isisLvlComp(ManagedObject):
         Field(
             ge=50,
             le=120000,
-            alias="lspGenInitIntvl",
+            validation_alias="lspGenInitIntvl",
+            serialization_alias="lspGenInitIntvl",
             description="The LSP generation initial wait interval. This is used in the LSP generation interval for the LSP MTU.",
         ),
     ] = 50
@@ -78,7 +81,8 @@ class isisLvlComp(ManagedObject):
         Field(
             ge=50,
             le=120000,
-            alias="lspGenMaxIntvl",
+            validation_alias="lspGenMaxIntvl",
+            serialization_alias="lspGenMaxIntvl",
             description="The LSP generation maximum wait interval. This is used in the LSP generation interval for the LSP MTU.",
         ),
     ] = 8000
@@ -87,20 +91,28 @@ class isisLvlComp(ManagedObject):
         Field(
             ge=50,
             le=120000,
-            alias="lspGenSecIntvl",
+            validation_alias="lspGenSecIntvl",
+            serialization_alias="lspGenSecIntvl",
             description="The LSP generation second wait interval. This is used in the LSP generation interval for the LSP MTU.",
         ),
     ] = 50
     name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     spf_comp_init_intvl: Annotated[
         int,
         Field(
             ge=50,
             le=120000,
-            alias="spfCompInitIntvl",
+            validation_alias="spfCompInitIntvl",
+            serialization_alias="spfCompInitIntvl",
             description="The SPF computation frequency initial wait interval. This is used in the SPF computations for the LSP MTU.",
         ),
     ] = 50
@@ -109,7 +121,8 @@ class isisLvlComp(ManagedObject):
         Field(
             ge=50,
             le=120000,
-            alias="spfCompMaxIntvl",
+            validation_alias="spfCompMaxIntvl",
+            serialization_alias="spfCompMaxIntvl",
             description="The SPF computation frequency maximum wait interval. This is used in the SPF computations for the LSP MTU.",
         ),
     ] = 8000
@@ -118,7 +131,8 @@ class isisLvlComp(ManagedObject):
         Field(
             ge=50,
             le=120000,
-            alias="spfCompSecIntvl",
+            validation_alias="spfCompSecIntvl",
+            serialization_alias="spfCompSecIntvl",
             description="The SPF computation frequency second wait interval. This is used in the SPF computations for the LSP MTU.",
         ),
     ] = 50

@@ -58,7 +58,8 @@ class fabricRsNodeCoreP(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9_.:-]+$",
-            alias="tnDbgexpCorePName",
+            validation_alias="tnDbgexpCorePName",
+            serialization_alias="tnDbgexpCorePName",
             description="The core export policy name. This name can be up to 64 characters. Note that you cannot change this name after the object has been saved.",
         ),
     ] = ""

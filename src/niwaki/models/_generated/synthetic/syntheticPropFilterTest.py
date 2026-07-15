@@ -47,20 +47,26 @@ class syntheticPropFilterTest(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    bin_ref: str = Field(default="", alias="binRef")
+    bin_ref: str = Field(default="", validation_alias="binRef", serialization_alias="binRef")
     descr: Annotated[
         str, Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$")
     ] = ""
-    id: Annotated[str, Field(description="An identifier .")] = ""
+    id: Annotated[int, Field(description="An identifier .")] = 0
     name: Annotated[
         str,
         Field(max_length=16, pattern="^[a-zA-Z0-9_.:-]+$", description="The name of the object."),
     ] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     p2: int = 0
-    p3: str = ""
+    p3: int = 0
     p4: str = ""
     p5: SyntheticAdminState = SyntheticAdminState.ENABLED
     p6: Annotated[str, Field(max_length=512)] = ""

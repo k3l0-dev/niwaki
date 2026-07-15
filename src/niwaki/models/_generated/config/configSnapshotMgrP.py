@@ -52,7 +52,8 @@ class configSnapshotMgrP(ManagedObject):
     # ── Configurable ───────────────────────────────────────────────────────────
     administrative_state: TrigExecState = Field(
         default=TrigExecState.UNTRIGGERED,
-        alias="adminSt",
+        validation_alias="adminSt",
+        serialization_alias="adminSt",
         description="The administrative state of the executable policies.",
     )
     annotation: Annotated[
@@ -68,16 +69,28 @@ class configSnapshotMgrP(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies the description of a policy component.",
         ),
     ] = ""
-    file_name: Annotated[str, Field(max_length=512, alias="fileName")] = ""
+    file_name: Annotated[
+        str, Field(max_length=512, validation_alias="fileName", serialization_alias="fileName")
+    ] = ""
     snapshot_manager_action: ConfigSnapshotAction = Field(
-        default=ConfigSnapshotAction.UPLOAD, alias="mode", description="The BGP Domain mode."
+        default=ConfigSnapshotAction.UPLOAD,
+        validation_alias="mode",
+        serialization_alias="mode",
+        description="The BGP Domain mode.",
     )
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     snapshot: bool = False
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

@@ -95,7 +95,14 @@ class apPlugin(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     app_ctx_root: Annotated[
-        str, Field(min_length=1, max_length=512, alias="appCtxRoot", description="app Context Root")
+        str,
+        Field(
+            min_length=1,
+            max_length=512,
+            validation_alias="appCtxRoot",
+            serialization_alias="appCtxRoot",
+            description="app Context Root",
+        ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
@@ -107,22 +114,50 @@ class apPlugin(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    app_type: ApAppType = Field(default=ApAppType.REGULAR, alias="appType", description="App Type")
+    app_type: ApAppType = Field(
+        default=ApAppType.REGULAR,
+        validation_alias="appType",
+        serialization_alias="appType",
+        description="App Type",
+    )
     cluster_manager_type: ApClusterManagerType = Field(
         default=ApClusterManagerType.NONE,
-        alias="clusterManagerType",
+        validation_alias="clusterManagerType",
+        serialization_alias="clusterManagerType",
         description="Cluster Manager Type",
     )
     config_st: ApConfSt = Field(
-        default=ApConfSt.NONE, alias="configSt", description="Configuration State"
+        default=ApConfSt.NONE,
+        validation_alias="configSt",
+        serialization_alias="configSt",
+        description="Configuration State",
     )
     name: Annotated[str, Field(min_length=1, max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
-    plugin_st: ApPluginState = Field(default=ApPluginState.INACTIVE, alias="pluginSt")
-    plugin_type: ApPluginType = Field(default=ApPluginType.STATELESS, alias="pluginType")
+    plugin_st: ApPluginState = Field(
+        default=ApPluginState.INACTIVE, validation_alias="pluginSt", serialization_alias="pluginSt"
+    )
+    plugin_type: ApPluginType = Field(
+        default=ApPluginType.STATELESS,
+        validation_alias="pluginType",
+        serialization_alias="pluginType",
+    )
     role: Annotated[str, Field(max_length=512, description="Name of plugin role")] = ""
-    security_domains: Annotated[str, Field(max_length=512, alias="securityDomains")] = ""
+    security_domains: Annotated[
+        str,
+        Field(
+            max_length=512,
+            validation_alias="securityDomains",
+            serialization_alias="securityDomains",
+        ),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     username: Annotated[str, Field(max_length=512, description="Name of plugin user")] = ""

@@ -142,6 +142,117 @@ def test_enum_default(
     assert getattr(_cls(cls_name)(**naming), prop) == default
 
 
+# ── Flags (bitmasks) ──────────────────────────────────────────────────────────
+#
+# A bitmask is a *subset* of a closed set.  The APIC stores it comma-joined and
+# reorders it as it pleases, which is why the SDK models it as a frozenset: two
+# sets are equal whatever order they were written in, so the reordering cannot
+# produce a false drift.  These fixtures cover all 222 of them.
+
+
+@pytest.mark.parametrize("cls_name,naming,prop,values,default", _D["flags"])
+def test_flags_default_is_the_schemas_own(
+    cls_name: str,
+    naming: dict[str, Any],
+    prop: str,
+    values: list[str],
+    default: list[str],
+) -> None:
+    """The default is the *set* the schema declares — possibly the empty one.
+
+    ``bgpBestPathCtrlPol.ctrl`` defaults to ``"0"``: no flags at all.  The SDK
+    used to ship it with ``asPathMultipathRelax`` enabled — a BGP behaviour
+    nobody had asked for — because the rule for single-choice enums ("the first
+    member, if the default is not one of them") cannot see a comma-joined set.
+    """
+    assert getattr(_cls(cls_name)(**naming), prop) == frozenset(default)
+
+
+@pytest.mark.parametrize("cls_name,naming,prop,values,default", _D["flags"])
+def test_flags_accept_the_wire_form(
+    cls_name: str,
+    naming: dict[str, Any],
+    prop: str,
+    values: list[str],
+    default: list[str],
+) -> None:
+    """A comma-joined string — the form the APIC itself uses — is accepted."""
+    joined = ",".join(values)
+    mo = _cls(cls_name)(**naming, **{prop: joined})
+    assert getattr(mo, prop) == frozenset(values)
+
+
+@pytest.mark.parametrize("cls_name,naming,prop,values,default", _D["flags"])
+def test_flags_ignore_the_order_they_were_written_in(
+    cls_name: str,
+    naming: dict[str, Any],
+    prop: str,
+    values: list[str],
+    default: list[str],
+) -> None:
+    """The whole point: the APIC reorders, and a set does not care."""
+    forward = _cls(cls_name)(**naming, **{prop: ",".join(values)})
+    backward = _cls(cls_name)(**naming, **{prop: ",".join(reversed(values))})
+    assert getattr(forward, prop) == getattr(backward, prop)
+
+
+@pytest.mark.parametrize("cls_name,naming,prop,values,default", _D["flags"])
+def test_flags_reach_the_wire_in_bit_order(
+    cls_name: str,
+    naming: dict[str, Any],
+    prop: str,
+    values: list[str],
+    default: list[str],
+) -> None:
+    """Whatever order they were written in, they leave in ascending bit weight —
+    the order the APIC itself uses (``lacpLagPol.ctrl`` defaults to
+    ``"susp-individual,graceful-conv,fast-sel-hot-stdby"``: weights 1, 2, 8)."""
+    cls = _cls(cls_name)
+    mo = cls(**naming, **{prop: ",".join(reversed(values))})
+    field = cls.model_fields[prop]
+    wire_key = field.serialization_alias or prop
+    assert mo.to_apic()[cls_name]["attributes"][wire_key] == ",".join(values)
+
+
+@pytest.mark.parametrize("cls_name,naming,prop,values,default", _D["flags"])
+def test_flags_accept_the_empty_set(
+    cls_name: str,
+    naming: dict[str, Any],
+    prop: str,
+    values: list[str],
+    default: list[str],
+) -> None:
+    """No flags at all is an ordinary value, and the APIC writes it as ``""``."""
+    mo = _cls(cls_name)(**naming, **{prop: ""})
+    assert getattr(mo, prop) == frozenset()
+
+
+@pytest.mark.parametrize("cls_name,naming,prop,values,default", _D["flags"])
+def test_flags_reject_an_unknown_member(
+    cls_name: str,
+    naming: dict[str, Any],
+    prop: str,
+    values: list[str],
+    default: list[str],
+) -> None:
+    """Before this, a bitmask was a bare string and a typo sailed through."""
+    with pytest.raises(ValidationError):
+        _cls(cls_name)(**naming, **{prop: "__invalid__"})
+
+
+@pytest.mark.parametrize("cls_name,naming,prop,values,default", _D["flags"])
+def test_flags_reject_a_typo_among_valid_members(
+    cls_name: str,
+    naming: dict[str, Any],
+    prop: str,
+    values: list[str],
+    default: list[str],
+) -> None:
+    """One bad member poisons the set — it is not silently dropped."""
+    with pytest.raises(ValidationError):
+        _cls(cls_name)(**naming, **{prop: f"{values[0]},__invalid__"})
+
+
 @pytest.mark.parametrize("cls_name,naming,prop,values,default", _D["enums"])
 def test_enum_invalid_rejected(
     cls_name: str,

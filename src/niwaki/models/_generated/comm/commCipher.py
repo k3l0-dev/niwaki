@@ -36,7 +36,10 @@ class commCipher(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    cipher_name: Annotated[str, Field(alias="id", description="An object identifier.")]
+    cipher_name: Annotated[
+        str,
+        Field(validation_alias="id", serialization_alias="id", description="An object identifier."),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[
@@ -48,6 +51,9 @@ class commCipher(ManagedObject):
         ),
     ] = ""
     cipher_state: CommCipherState = Field(
-        default=CommCipherState.ENABLED, alias="state", description="The state of the relationship."
+        default=CommCipherState.ENABLED,
+        validation_alias="state",
+        serialization_alias="state",
+        description="The state of the relationship.",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

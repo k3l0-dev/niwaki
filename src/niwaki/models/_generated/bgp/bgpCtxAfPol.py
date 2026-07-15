@@ -3,7 +3,10 @@
 from __future__ import annotations
 
 from typing import ClassVar, Annotated
-from pydantic import Field
+from pydantic import BeforeValidator, Field
+
+from niwaki.models._wire import Flags, parse_flags
+from niwaki.models._generated.enums.BgpDomAfCtrl import BgpDomAfCtrl
 
 from niwaki.models.base import ManagedObject
 
@@ -54,43 +57,98 @@ class bgpCtxAfPol(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    controls: str = Field(default="", alias="ctrl", description="The control state.")
+    controls: Annotated[Flags[BgpDomAfCtrl], BeforeValidator(parse_flags)] = Field(
+        default_factory=lambda: frozenset(),
+        validation_alias="ctrl",
+        serialization_alias="ctrl",
+        description="The control state.",
+    )
     description: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
-    ebgp_distance: str = Field(
-        default="", alias="eDist", description="The administrative distance of eBGP routes."
-    )
-    ibgp_distance: str = Field(
-        default="", alias="iDist", description="The administrative distance of iBGP routes."
-    )
-    local_distance: str = Field(
-        default="", alias="localDist", description="The administrative distance of local routes."
-    )
-    max_ecmp_for_ebgp_routes: str = Field(default="", alias="maxEcmp", description="eBGP max-path")
-    max_ecmp_for_ibgp_routes: str = Field(
-        default="", alias="maxEcmpIbgp", description="iBGP max-path"
-    )
-    max_local_ecmp_for_redistribute_rotes: str = Field(
-        default="",
-        alias="maxLocalEcmp",
-        description="Maximum number of equal-cost local paths for redist",
-    )
+    ebgp_distance: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=255,
+            validation_alias="eDist",
+            serialization_alias="eDist",
+            description="The administrative distance of eBGP routes.",
+        ),
+    ] = 20
+    ibgp_distance: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=255,
+            validation_alias="iDist",
+            serialization_alias="iDist",
+            description="The administrative distance of iBGP routes.",
+        ),
+    ] = 200
+    local_distance: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=255,
+            validation_alias="localDist",
+            serialization_alias="localDist",
+            description="The administrative distance of local routes.",
+        ),
+    ] = 220
+    max_ecmp_for_ebgp_routes: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=64,
+            validation_alias="maxEcmp",
+            serialization_alias="maxEcmp",
+            description="eBGP max-path",
+        ),
+    ] = 16
+    max_ecmp_for_ibgp_routes: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=64,
+            validation_alias="maxEcmpIbgp",
+            serialization_alias="maxEcmpIbgp",
+            description="iBGP max-path",
+        ),
+    ] = 16
+    max_local_ecmp_for_redistribute_rotes: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=16,
+            validation_alias="maxLocalEcmp",
+            serialization_alias="maxLocalEcmp",
+            description="Maximum number of equal-cost local paths for redist",
+        ),
+    ] = 0
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     owner_key: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerKey",
+            validation_alias="ownerKey",
+            serialization_alias="ownerKey",
             description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
@@ -99,7 +157,8 @@ class bgpCtxAfPol(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerTag",
+            validation_alias="ownerTag",
+            serialization_alias="ownerTag",
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""

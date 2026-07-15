@@ -47,7 +47,8 @@ class l3extRogueExceptMacP(ManagedObject):
     ] = ""
     indicate_whether_all_macs_are_excluded: bool = Field(
         default=False,
-        alias="enableAllMacs",
+        validation_alias="enableAllMacs",
+        serialization_alias="enableAllMacs",
         description="Indicate whether all MACs are excluded or not",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

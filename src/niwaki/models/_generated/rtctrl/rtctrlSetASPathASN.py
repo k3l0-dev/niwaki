@@ -36,7 +36,16 @@ class rtctrlSetASPathASN(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    asn_order: Annotated[str, Field(alias="order", description="ASN Order")]
+    asn_order: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=31,
+            validation_alias="order",
+            serialization_alias="order",
+            description="ASN Order",
+        ),
+    ] = 0
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[
@@ -47,18 +56,27 @@ class rtctrlSetASPathASN(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    as_number: Annotated[int, Field(alias="asn", description="AS Numbers")] = 0
+    as_number: Annotated[
+        int, Field(validation_alias="asn", serialization_alias="asn", description="AS Numbers")
+    ] = 0
     description: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies the description of a policy component.",
         ),
     ] = ""
     name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

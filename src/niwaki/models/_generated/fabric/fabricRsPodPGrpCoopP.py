@@ -60,7 +60,8 @@ class fabricRsPodPGrpCoopP(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9_.:-]+$",
-            alias="tnCoopPolName",
+            validation_alias="tnCoopPolName",
+            serialization_alias="tnCoopPolName",
             description="The COOP group policy name. This name can be up to 64 characters. Note that you cannot change this name after the object has been saved.",
         ),
     ] = ""

@@ -9,6 +9,8 @@ position, every maker, every **keyword argument**, every enum.
 from __future__ import annotations
 
 from pathlib import Path
+from types import UnionType
+from typing import Annotated, Any, Union, get_args, get_origin
 
 import pytest
 
@@ -18,6 +20,29 @@ from niwaki._codegen.generate_docs import OUTPUT_DIR, _resolve_edge, _uni_keys, 
 from niwaki.design._cursor import _load_class, _tables
 
 _PAGES = sorted(render_all())
+
+
+def _is_numeric(annotation: Any) -> bool:
+    """True when a model field's annotation is a number — read independently.
+
+    Deliberately *not* routed through the doc extractor's own type logic: the
+    guard's job is to catch the extractor rendering a number as ``str``, so it
+    must decide numericity on its own.  Covers a plain ``int``/``float`` and a
+    named number (``int | Literal[...]`` — a port stored under a name), each
+    possibly wrapped in ``Annotated``.
+    """
+    while get_origin(annotation) is Annotated:
+        annotation = get_args(annotation)[0]
+    if annotation in (int, float):
+        return True
+    if get_origin(annotation) in (Union, UnionType):
+        for arg in get_args(annotation):
+            while get_origin(arg) is Annotated:
+                arg = get_args(arg)[0]
+            if arg in (int, float):
+                return True
+    return False
+
 
 # The uni-level domains (phys_dom, l3_dom, l2_dom) live under uni/, everything
 # else under its root domain — mirrors the generator's layout.
@@ -83,6 +108,50 @@ class TestCoverageOfTheDSL:
                 edge = _resolve_edge(owner, target)
                 assert edge is not None, f"({owner}, {alias}) unresolvable"
                 assert f"`{alias}=`" in book or f"bind({alias}=...)" in book
+
+    def test_no_enum_or_flags_field_documents_empty_values(self) -> None:
+        """A field the reader must choose a value for must show the choices.
+
+        The regression this locks out: a bitmask rendered as ``Flags[E]`` looked
+        like a bare ``str`` to the doc extractor, so ``scope`` and ``tcp_rules``
+        documented no allowed values at all — the one thing a reader opens the
+        page for.  An enum or a set of flags must always carry its members.
+        """
+        offenders: list[str] = []
+        for key, pos in _positions().items():
+            if not key:
+                continue
+            cls = _load_class(pos.aci_class)
+            for doc in field_docs(cls, _tables().sugar.get(pos.aci_class, {})):
+                if doc.enum and not doc.values:
+                    offenders.append(f"{key}.{doc.name} (enum {doc.enum})")
+        assert not offenders, (
+            "enum/flags fields documented with no allowed values: "
+            f"{offenders[:10]} — the doc extractor stopped recognising the type."
+        )
+
+    def test_no_numeric_field_is_documented_as_a_string(self) -> None:
+        """A number must read as a number in the table, never as ``str``.
+
+        The whole overhaul turned schema numbers into ``int``/``float``; the
+        reference must say so.  A field whose model annotation is numeric — a
+        plain ``int``/``float`` or a named number (``int | Literal[...]``, a port
+        the APIC stores under a name) — but which documents as ``str`` means the
+        extractor lost the number type.
+        """
+        offenders: list[str] = []
+        for key, pos in _positions().items():
+            if not key:
+                continue
+            cls = _load_class(pos.aci_class)
+            for doc in field_docs(cls, _tables().sugar.get(pos.aci_class, {})):
+                real = cls.model_fields.get(doc.name)
+                if real is not None and _is_numeric(real.annotation) and doc.type_str == "str":
+                    offenders.append(f"{key}.{doc.name}")
+        assert not offenders, (
+            f"numeric fields documented as `str`: {offenders[:10]} — the doc "
+            "extractor lost the number type."
+        )
 
     def test_every_enum_used_is_documented(self) -> None:
         """Every enum cited in an attribute table has its section on the page."""

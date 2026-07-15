@@ -64,7 +64,8 @@ class vnsLBRNatReq(ManagedObject):
             min_length=1,
             max_length=64,
             pattern="^[a-zA-Z0-9_.:-]+$",
-            alias="lbName",
+            validation_alias="lbName",
+            serialization_alias="lbName",
             description="LB name",
         ),
     ]
@@ -83,7 +84,8 @@ class vnsLBRNatReq(ManagedObject):
             min_length=1,
             max_length=64,
             pattern="^[a-zA-Z0-9_.:-]+$",
-            alias="rnatName",
+            validation_alias="rnatName",
+            serialization_alias="rnatName",
             description="RNAT name",
         ),
     ]
@@ -102,23 +104,50 @@ class vnsLBRNatReq(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies the description of a policy component.",
         ),
     ] = ""
     name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     nat_ip: Annotated[
-        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="natIp", description="NAT IP")
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            validation_alias="natIp",
+            serialization_alias="natIp",
+            description="NAT IP",
+        ),
     ] = ""
     nat_netmask: Annotated[
-        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="netmask", description="route netmask")
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            validation_alias="netmask",
+            serialization_alias="netmask",
+            description="route netmask",
+        ),
     ] = ""
     nat_network: Annotated[
-        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="network", description="route network")
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            validation_alias="network",
+            serialization_alias="network",
+            description="route network",
+        ),
     ] = ""
-    provider: str = Field(default="", alias="prov", description="provider Dn")
+    provider: str = Field(
+        default="", validation_alias="prov", serialization_alias="prov", description="provider Dn"
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     version: VnsrequestVersion = Field(default=VnsrequestVersion.CLASSIC, description="Version")

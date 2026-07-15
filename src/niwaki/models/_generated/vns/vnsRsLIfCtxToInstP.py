@@ -3,7 +3,10 @@
 from __future__ import annotations
 
 from typing import ClassVar, Annotated
-from pydantic import Field
+from pydantic import BeforeValidator, Field
+
+from niwaki.models._wire import Flags, parse_flags
+from niwaki.models._generated.enums.VnsRedistribute import VnsRedistribute
 
 from niwaki.models.base import ManagedObject
 
@@ -53,8 +56,13 @@ class vnsRsLIfCtxToInstP(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    redistribute: str = ""
+    redistribute: Annotated[Flags[VnsRedistribute], BeforeValidator(parse_flags)] = Field(
+        default_factory=lambda: frozenset({VnsRedistribute.OSPF, VnsRedistribute.BGP})
+    )
     target_dn: str = Field(
-        default="", alias="tDn", description="The distinguished name of the target."
+        default="",
+        validation_alias="tDn",
+        serialization_alias="tDn",
+        description="The distinguished name of the target.",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

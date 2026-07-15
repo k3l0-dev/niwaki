@@ -53,7 +53,8 @@ class fvTrackList(ManagedObject):
     # ── Create-only (ignored by APIC on modification) ─────────────────────────
     type_of_tracklist: TrackListObj = Field(
         default=TrackListObj.PERCENTAGE,
-        alias="type",
+        validation_alias="type",
+        serialization_alias="type",
         description="The specific type of the object or component.",
     )
 
@@ -71,19 +72,27 @@ class fvTrackList(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     owner_key: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerKey",
+            validation_alias="ownerKey",
+            serialization_alias="ownerKey",
             description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
@@ -92,28 +101,49 @@ class fvTrackList(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerTag",
+            validation_alias="ownerTag",
+            serialization_alias="ownerTag",
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
-    percentage_down: str = Field(
-        default="",
-        alias="percentageDown",
-        description="Down Threshold percentage. This specifies the threshold percentage down. This applies when track:List.type is 'percentageDown'.",
-    )
-    percentage_up: str = Field(
-        default="",
-        alias="percentageUp",
-        description="Up Threshold percentage. This specifies the threshold percentage up. This applies when track:List.type is 'percentage'.",
-    )
+    percentage_down: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=100,
+            validation_alias="percentageDown",
+            serialization_alias="percentageDown",
+            description="Down Threshold percentage. This specifies the threshold percentage down. This applies when track:List.type is 'percentageDown'.",
+        ),
+    ] = 0
+    percentage_up: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=100,
+            validation_alias="percentageUp",
+            serialization_alias="percentageUp",
+            description="Up Threshold percentage. This specifies the threshold percentage up. This applies when track:List.type is 'percentage'.",
+        ),
+    ] = 1
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    weight_down_value: str = Field(
-        default="",
-        alias="weightDown",
-        description="Down Threshold weight. This specifies the threshold weight down. This applies when track:List.type is 'weight'.",
-    )
-    weight_up_value: str = Field(
-        default="",
-        alias="weightUp",
-        description="Up Threshold weight. This specifies the threshold weight up. This applies when track:List.type is 'weight'.",
-    )
+    weight_down_value: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=255,
+            validation_alias="weightDown",
+            serialization_alias="weightDown",
+            description="Down Threshold weight. This specifies the threshold weight down. This applies when track:List.type is 'weight'.",
+        ),
+    ] = 0
+    weight_up_value: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=255,
+            validation_alias="weightUp",
+            serialization_alias="weightUp",
+            description="Up Threshold weight. This specifies the threshold weight up. This applies when track:List.type is 'weight'.",
+        ),
+    ] = 1

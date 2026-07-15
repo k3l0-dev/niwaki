@@ -56,12 +56,14 @@ class arpInst(ManagedObject):
     # ── Configurable ───────────────────────────────────────────────────────────
     adjacency_events_logging_level: ArpLoggingLevel = Field(
         default=ArpLoggingLevel.ERROR,
-        alias="adjLoggingLevel",
+        validation_alias="adjLoggingLevel",
+        serialization_alias="adjLoggingLevel",
         description="Adjacency Manager Logging Level",
     )
     allow_static_arp_outside_subnet: NwAdminSt = Field(
         default=NwAdminSt.DISABLED,
-        alias="allowStaticArpOutsideSubnet",
+        validation_alias="allowStaticArpOutsideSubnet",
+        serialization_alias="allowStaticArpOutsideSubnet",
         description="Enable / Disable allow-static-arp-outside-subnet",
     )
     annotation: Annotated[
@@ -74,41 +76,107 @@ class arpInst(ManagedObject):
     ] = ""
     arp_unnum_svi_sw_replication: NwAdminSt = Field(
         default=NwAdminSt.DISABLED,
-        alias="arpUnnumSviSwReplication",
+        validation_alias="arpUnnumSviSwReplication",
+        serialization_alias="arpUnnumSviSwReplication",
         description="Enable / Disable arp sw-replication",
     )
     cache_limit: Annotated[
-        int, Field(ge=1, le=614400, alias="cacheLimit", description="ARP Cache Limit")
+        int,
+        Field(
+            ge=1,
+            le=614400,
+            validation_alias="cacheLimit",
+            serialization_alias="cacheLimit",
+            description="ARP Cache Limit",
+        ),
     ] = 196608
     cache_syslog_rate: Annotated[
-        int, Field(ge=1, le=1000, alias="cacheSyslogRate", description="ARP Cache SysLog Rate")
+        int,
+        Field(
+            ge=1,
+            le=1000,
+            validation_alias="cacheSyslogRate",
+            serialization_alias="cacheSyslogRate",
+            description="ARP Cache SysLog Rate",
+        ),
     ] = 1
-    refresh_in_evpn_on_host_moves: str = Field(
-        default="", alias="evpn_timeout", description="Evpn-Timeout"
-    )
-    ip_adjacency_route_distance: Annotated[int, Field(ge=2, le=250, alias="ipAdjRouteDistance")] = (
-        250
-    )
+    refresh_in_evpn_on_host_moves: Annotated[
+        int,
+        Field(
+            ge=600,
+            le=30000,
+            validation_alias="evpn_timeout",
+            serialization_alias="evpn_timeout",
+            description="Evpn-Timeout",
+        ),
+    ] = 600
+    ip_adjacency_route_distance: Annotated[
+        int,
+        Field(
+            ge=2,
+            le=250,
+            validation_alias="ipAdjRouteDistance",
+            serialization_alias="ipAdjRouteDistance",
+        ),
+    ] = 250
     cos_for_arp_packet: Annotated[
-        int, Field(ge=0, le=7, alias="ipArpCos", description="COS for ARP packet")
+        int,
+        Field(
+            ge=0,
+            le=7,
+            validation_alias="ipArpCos",
+            serialization_alias="ipArpCos",
+            description="COS for ARP packet",
+        ),
     ] = 6
     logging_level: ArpLoggingLevel = Field(
-        default=ArpLoggingLevel.ERROR, alias="loggingLevel", description="ARP Logging Level"
+        default=ArpLoggingLevel.ERROR,
+        validation_alias="loggingLevel",
+        serialization_alias="loggingLevel",
+        description="ARP Logging Level",
     )
-    off_list_timeout: str = Field(
-        default="", alias="offListTimeout", description="Off list Timeout"
-    )
-    rarp_fabric_forwarding: NwAdminSt = Field(
-        default=NwAdminSt.DISABLED, alias="rarpFabricFwding", description="RARP fabric forwarding"
-    )
-    rarp_fabric_forwarding_rate: str = Field(
-        default="", alias="rarpFabricFwdingRate", description="RARP Fabric Fwding Rate"
-    )
-    suppression_timeout: Annotated[
-        str,
+    off_list_timeout: Annotated[
+        int,
         Field(
-            description="Suppression Timeout - After enbaling the timer, If host doesn't speak in ARP/GARP within specified timeout L2 mode entries will be expired/deleted"
+            ge=180,
+            le=1800,
+            validation_alias="offListTimeout",
+            serialization_alias="offListTimeout",
+            description="Off list Timeout",
         ),
-    ] = ""
-    arp_global_timeout: str = Field(default="", alias="timeout", description="Timeout")
+    ] = 180
+    rarp_fabric_forwarding: NwAdminSt = Field(
+        default=NwAdminSt.DISABLED,
+        validation_alias="rarpFabricFwding",
+        serialization_alias="rarpFabricFwding",
+        description="RARP fabric forwarding",
+    )
+    rarp_fabric_forwarding_rate: Annotated[
+        int,
+        Field(
+            ge=200,
+            le=400,
+            validation_alias="rarpFabricFwdingRate",
+            serialization_alias="rarpFabricFwdingRate",
+            description="RARP Fabric Fwding Rate",
+        ),
+    ] = 200
+    suppression_timeout: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=28800,
+            description="Suppression Timeout - After enbaling the timer, If host doesn't speak in ARP/GARP within specified timeout L2 mode entries will be expired/deleted",
+        ),
+    ] = 0
+    arp_global_timeout: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=28800,
+            validation_alias="timeout",
+            serialization_alias="timeout",
+            description="Timeout",
+        ),
+    ] = 1500
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

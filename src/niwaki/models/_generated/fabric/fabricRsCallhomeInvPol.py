@@ -58,7 +58,8 @@ class fabricRsCallhomeInvPol(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9_.:-]+$",
-            alias="tnCallhomeInvPName",
+            validation_alias="tnCallhomeInvPName",
+            serialization_alias="tnCallhomeInvPName",
             description="The call home inventory policy name. This name can be up to 64 characters. Note that you cannot change this name after the object has been saved.",
         ),
     ] = ""

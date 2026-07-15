@@ -43,12 +43,25 @@ class svccoreCtrlr(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    create_time: Annotated[str, Field(alias="createTime")]
+    create_time: Annotated[
+        str, Field(validation_alias="createTime", serialization_alias="createTime")
+    ]
     ctrlr_id_where_the_core_file_was_created: Annotated[
         int,
-        Field(ge=1, le=7, alias="ctrlrId", description="The created core's controller identifier."),
+        Field(
+            ge=1,
+            le=7,
+            validation_alias="ctrlrId",
+            serialization_alias="ctrlrId",
+            description="The created core's controller identifier.",
+        ),
     ] = 0
-    name_of_service_that_cored: Annotated[str, Field(min_length=1, max_length=512, alias="svcName")]
+    name_of_service_that_cored: Annotated[
+        str,
+        Field(
+            min_length=1, max_length=512, validation_alias="svcName", serialization_alias="svcName"
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     ack: bool = False

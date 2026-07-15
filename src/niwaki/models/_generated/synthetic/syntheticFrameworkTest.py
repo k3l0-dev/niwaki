@@ -45,20 +45,32 @@ class syntheticFrameworkTest(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    id: Annotated[str, Field(description="An identifier .")] = ""
+    id: Annotated[int, Field(description="An identifier .")] = 0
     name: Annotated[
         str,
         Field(max_length=16, pattern="^[a-zA-Z0-9_.:-]+$", description="The name of the object."),
     ] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     p1: int = 0
-    string_delim: Annotated[str, Field(max_length=512, alias="stringDelim")] = ""
+    string_delim: Annotated[
+        str,
+        Field(max_length=512, validation_alias="stringDelim", serialization_alias="stringDelim"),
+    ] = ""
     test_name: Annotated[
         str,
         Field(
-            max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="testName"
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            validation_alias="testName",
+            serialization_alias="testName",
         ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

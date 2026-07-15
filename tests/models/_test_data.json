@@ -1127,13 +1127,6 @@
       false
     ],
     [
-      "aaaRbacNodeRule",
-      "node_id",
-      0,
-      null,
-      false
-    ],
-    [
       "aaaRbacPortRule",
       "name",
       1,
@@ -1337,13 +1330,6 @@
       true
     ],
     [
-      "analyticsCollectorBucket",
-      "flow_collector_bucket_id",
-      0,
-      null,
-      false
-    ],
-    [
       "analyticsCons",
       "consumer_dn",
       0,
@@ -1372,13 +1358,6 @@
       true
     ],
     [
-      "analyticsPayloadLenBin",
-      "payload_length_bin_id",
-      0,
-      null,
-      false
-    ],
-    [
       "analyticsPhysIfTarget",
       "interface_id",
       0,
@@ -1402,13 +1381,6 @@
     [
       "analyticsProv",
       "provider_dn",
-      0,
-      null,
-      false
-    ],
-    [
-      "analyticsRcvWindowSzBin",
-      "receive_window_size_bin_id",
       0,
       null,
       false
@@ -1454,13 +1426,6 @@
       1,
       64,
       true
-    ],
-    [
-      "analyticsTCPOptHdrLenBin",
-      "tcp_option_header_length_bin_id",
-      0,
-      null,
-      false
     ],
     [
       "apAnomaly",
@@ -1645,13 +1610,6 @@
       true
     ],
     [
-      "bgpRRNodePEp",
-      "node_id",
-      0,
-      null,
-      false
-    ],
-    [
       "bgpRsPeerToProfile",
       "target_dn",
       0,
@@ -1783,27 +1741,6 @@
       1,
       64,
       true
-    ],
-    [
-      "cloudsecRelnHolder",
-      "id",
-      0,
-      null,
-      false
-    ],
-    [
-      "cloudsecSpRxKeySt",
-      "site_id",
-      0,
-      null,
-      false
-    ],
-    [
-      "cloudsecSpTxKeySt",
-      "site_id",
-      0,
-      null,
-      false
     ],
     [
       "cnwPhysIf",
@@ -1939,13 +1876,6 @@
       false
     ],
     [
-      "coopNodePEp",
-      "node_id",
-      0,
-      null,
-      false
-    ],
-    [
       "coopPol",
       "name",
       1,
@@ -1988,13 +1918,6 @@
       false
     ],
     [
-      "coppRule",
-      "rule_type",
-      0,
-      null,
-      false
-    ],
-    [
       "coppSpineProfile",
       "name",
       1,
@@ -2002,32 +1925,11 @@
       true
     ],
     [
-      "ctrlrCimcNode",
-      "apic_id",
-      0,
-      null,
-      false
-    ],
-    [
       "datetimeFormat",
       "name",
       1,
       64,
       true
-    ],
-    [
-      "datetimeNtpAuthKey",
-      "auth_key_id",
-      0,
-      null,
-      false
-    ],
-    [
-      "datetimeNtpIFFClientKey",
-      "iff_key_id",
-      0,
-      null,
-      false
     ],
     [
       "datetimeNtpProv",
@@ -2042,41 +1944,6 @@
       1,
       64,
       true
-    ],
-    [
-      "datetimeRsNtpProvToNtpAuthKey",
-      "auth_key_id",
-      0,
-      null,
-      false
-    ],
-    [
-      "datetimeRsNtpProvToNtpAuthKey2",
-      "auth_key_id",
-      0,
-      null,
-      false
-    ],
-    [
-      "datetimeRsNtpProvToNtpIFFClientKey",
-      "iff_key_id",
-      0,
-      null,
-      false
-    ],
-    [
-      "dbgFtriage",
-      "ftriage_instance_id",
-      0,
-      null,
-      false
-    ],
-    [
-      "dbgNodeInst",
-      "apic_id",
-      0,
-      null,
-      false
     ],
     [
       "dbgacAnyToEp",
@@ -2343,13 +2210,6 @@
       1,
       64,
       true
-    ],
-    [
-      "dbgexpTechSupData",
-      "policy_name",
-      0,
-      null,
-      false
     ],
     [
       "dbgexpTechSupODev",
@@ -2933,13 +2793,6 @@
       false
     ],
     [
-      "eventSubscriptionId",
-      "hold_the_subscription_id",
-      0,
-      null,
-      false
-    ],
-    [
       "eventSwRetP",
       "name",
       1,
@@ -3066,13 +2919,6 @@
       true
     ],
     [
-      "fabricExtSetupP",
-      "external_pool_identifier",
-      0,
-      null,
-      false
-    ],
-    [
       "fabricFIfPol",
       "name",
       1,
@@ -3178,13 +3024,6 @@
       true
     ],
     [
-      "fabricNodeConfig",
-      "node",
-      0,
-      null,
-      false
-    ],
-    [
       "fabricNodeControl",
       "name",
       1,
@@ -3197,13 +3036,6 @@
       1,
       16,
       true
-    ],
-    [
-      "fabricNodePEp",
-      "node_id",
-      0,
-      null,
-      false
     ],
     [
       "fabricOLeafS",
@@ -3253,41 +3085,6 @@
       1,
       64,
       true
-    ],
-    [
-      "fabricPortConfig",
-      "node",
-      0,
-      null,
-      false
-    ],
-    [
-      "fabricPortConfig",
-      "card",
-      0,
-      null,
-      false
-    ],
-    [
-      "fabricPortConfig",
-      "port",
-      0,
-      null,
-      false
-    ],
-    [
-      "fabricPortConfig",
-      "sub_port",
-      0,
-      null,
-      false
-    ],
-    [
-      "fabricPortConvertNode",
-      "node",
-      0,
-      null,
-      false
     ],
     [
       "fabricRsApplTechSupOnDemand",
@@ -3388,13 +3185,6 @@
       true
     ],
     [
-      "fabricSetupP",
-      "pod_identifier",
-      0,
-      null,
-      false
-    ],
-    [
       "fabricSpCardP",
       "name",
       1,
@@ -3449,13 +3239,6 @@
       1,
       64,
       true
-    ],
-    [
-      "faultRelnHolder",
-      "id",
-      0,
-      null,
-      false
     ],
     [
       "faultSwRetP",
@@ -3703,13 +3486,6 @@
       true
     ],
     [
-      "fteCollectorBucket",
-      "flow_collector_bucket_id",
-      0,
-      null,
-      false
-    ],
-    [
       "fteEventTcpFlags",
       "name",
       1,
@@ -3906,13 +3682,6 @@
       true
     ],
     [
-      "fvKeyPol",
-      "key_id",
-      0,
-      null,
-      false
-    ],
-    [
       "fvLIfCtxSelector",
       "lifctx_dn_to_be_associated",
       0,
@@ -3950,20 +3719,6 @@
     [
       "fvPeerContextDn",
       "ctx_dn",
-      0,
-      null,
-      false
-    ],
-    [
-      "fvPodConnP",
-      "pod_id",
-      0,
-      null,
-      false
-    ],
-    [
-      "fvRemoteId",
-      "site_id",
       0,
       null,
       false
@@ -4375,13 +4130,6 @@
       false
     ],
     [
-      "healthLevelP",
-      "high",
-      0,
-      null,
-      false
-    ],
-    [
       "healthPol",
       "r_cl",
       0,
@@ -4600,34 +4348,6 @@
     ],
     [
       "infraBundleConfig",
-      "node_a",
-      0,
-      null,
-      false
-    ],
-    [
-      "infraBundleConfig",
-      "node_b",
-      0,
-      null,
-      false
-    ],
-    [
-      "infraBundleConfig",
-      "fex_a",
-      0,
-      null,
-      false
-    ],
-    [
-      "infraBundleConfig",
-      "fex_b",
-      0,
-      null,
-      false
-    ],
-    [
-      "infraBundleConfig",
       "associated_group_dn",
       0,
       null,
@@ -4681,13 +4401,6 @@
       1,
       64,
       true
-    ],
-    [
-      "infraDhcpPoolReconcile",
-      "id",
-      0,
-      null,
-      false
     ],
     [
       "infraEncap",
@@ -4774,25 +4487,11 @@
       true
     ],
     [
-      "infraNode",
-      "id",
-      0,
-      null,
-      false
-    ],
-    [
       "infraNodeBlk",
       "name",
       1,
       64,
       true
-    ],
-    [
-      "infraNodeConfig",
-      "node",
-      0,
-      null,
-      false
     ],
     [
       "infraNodeP",
@@ -4849,55 +4548,6 @@
       1,
       64,
       true
-    ],
-    [
-      "infraPortConfig",
-      "node",
-      0,
-      null,
-      false
-    ],
-    [
-      "infraPortConfig",
-      "card",
-      0,
-      null,
-      false
-    ],
-    [
-      "infraPortConfig",
-      "port",
-      0,
-      null,
-      false
-    ],
-    [
-      "infraPortConfig",
-      "sub_port",
-      0,
-      null,
-      false
-    ],
-    [
-      "infraPortConvertFex",
-      "node",
-      0,
-      null,
-      false
-    ],
-    [
-      "infraPortConvertFex",
-      "fex_id",
-      0,
-      null,
-      false
-    ],
-    [
-      "infraPortConvertNode",
-      "node",
-      0,
-      null,
-      false
     ],
     [
       "infraPortTrackPol",
@@ -5040,13 +4690,6 @@
       true
     ],
     [
-      "infraSnNode",
-      "cluster_unique_controller_id",
-      0,
-      null,
-      false
-    ],
-    [
       "infraSpAccPortGrp",
       "name",
       1,
@@ -5087,13 +4730,6 @@
       1,
       64,
       true
-    ],
-    [
-      "infraWiNode",
-      "cluster_unique_controller_id",
-      0,
-      null,
-      false
     ],
     [
       "infrazoneNodeGrp",
@@ -5684,22 +5320,8 @@
       false
     ],
     [
-      "mdpDomain",
-      "domain_id",
-      0,
-      null,
-      false
-    ],
-    [
       "mdpL4L7VipDefRef",
       "mdpl4l7vipdef_dn",
-      0,
-      null,
-      false
-    ],
-    [
-      "mdpLeafP",
-      "node_id",
       0,
       null,
       false
@@ -5735,13 +5357,6 @@
     [
       "mdpServiceDef",
       "contract_dn",
-      0,
-      null,
-      false
-    ],
-    [
-      "mdpSpineP",
-      "node_id",
       0,
       null,
       false
@@ -6160,13 +5775,6 @@
       false
     ],
     [
-      "opflexODevCliCmdSession",
-      "session_id",
-      0,
-      null,
-      false
-    ],
-    [
       "opflexOVm",
       "name",
       1,
@@ -6363,13 +5971,6 @@
       false
     ],
     [
-      "pimRouteMapEntry",
-      "order",
-      0,
-      null,
-      false
-    ],
-    [
       "pimRouteMapPol",
       "name",
       1,
@@ -6382,20 +5983,6 @@
       1,
       16,
       true
-    ],
-    [
-      "pingExecFab",
-      "source_node_id",
-      0,
-      null,
-      false
-    ],
-    [
-      "pingExecFab",
-      "destination_node_id",
-      0,
-      null,
-      false
     ],
     [
       "pkiCsyncElement",
@@ -6431,13 +6018,6 @@
       1,
       64,
       true
-    ],
-    [
-      "plannerAffinityGroup",
-      "pref",
-      0,
-      null,
-      false
     ],
     [
       "plannerAzureDomain",
@@ -6563,13 +6143,6 @@
       "domain_name",
       1,
       512,
-      false
-    ],
-    [
-      "plannerMatchNode",
-      "id",
-      0,
-      null,
       false
     ],
     [
@@ -6734,39 +6307,11 @@
       true
     ],
     [
-      "qosDot1PClass",
-      "from_",
-      0,
-      null,
-      false
-    ],
-    [
-      "qosDot1PClass",
-      "to",
-      0,
-      null,
-      false
-    ],
-    [
       "qosDppPol",
       "name",
       1,
       64,
       true
-    ],
-    [
-      "qosDscpClass",
-      "from_",
-      0,
-      null,
-      false
-    ],
-    [
-      "qosDscpClass",
-      "to",
-      0,
-      null,
-      false
     ],
     [
       "qosDscpTransPol",
@@ -6795,34 +6340,6 @@
       1,
       64,
       true
-    ],
-    [
-      "qosMplsEgressRule",
-      "from_",
-      0,
-      null,
-      false
-    ],
-    [
-      "qosMplsEgressRule",
-      "to",
-      0,
-      null,
-      false
-    ],
-    [
-      "qosMplsIngressRule",
-      "from_",
-      0,
-      null,
-      false
-    ],
-    [
-      "qosMplsIngressRule",
-      "to",
-      0,
-      null,
-      false
     ],
     [
       "qosPfcIfPol",
@@ -6923,13 +6440,6 @@
       true
     ],
     [
-      "rtctrlSetASPathASN",
-      "asn_order",
-      0,
-      null,
-      false
-    ],
-    [
       "rtctrlSetAddComm",
       "community",
       0,
@@ -6991,13 +6501,6 @@
       1,
       32,
       true
-    ],
-    [
-      "snmpCtrlrInst",
-      "apic_id",
-      0,
-      null,
-      false
     ],
     [
       "snmpCtx",
@@ -7449,20 +6952,6 @@
     ],
     [
       "svccoreNode",
-      "node_id_where_the_core_file_was_created",
-      0,
-      null,
-      false
-    ],
-    [
-      "svccoreNode",
-      "card_id",
-      0,
-      null,
-      false
-    ],
-    [
-      "svccoreNode",
       "name_of_service_that_cored",
       1,
       512,
@@ -7546,24 +7035,10 @@
       false
     ],
     [
-      "syntheticAnotherTestObj",
-      "id",
-      0,
-      null,
-      false
-    ],
-    [
       "syntheticClusterTestShardInstance",
       "service_name",
       1,
       512,
-      false
-    ],
-    [
-      "syntheticClusterTestShardInstance",
-      "shard_id",
-      0,
-      null,
       false
     ],
     [
@@ -7579,34 +7054,6 @@
       1,
       16,
       true
-    ],
-    [
-      "syntheticCtWiNode",
-      "cluster_unique_controller_id",
-      0,
-      null,
-      false
-    ],
-    [
-      "syntheticEp",
-      "id",
-      0,
-      null,
-      false
-    ],
-    [
-      "syntheticEpGroup",
-      "id",
-      0,
-      null,
-      false
-    ],
-    [
-      "syntheticHierarchyObj",
-      "id",
-      0,
-      null,
-      false
     ],
     [
       "syntheticIfcCTestObj",
@@ -7680,13 +7127,6 @@
     ],
     [
       "syntheticTestObj",
-      "id",
-      0,
-      null,
-      false
-    ],
-    [
-      "syntheticTestObj",
       "dn_bin",
       0,
       null,
@@ -7695,13 +7135,6 @@
     [
       "syntheticTestObj",
       "dn_str",
-      0,
-      null,
-      false
-    ],
-    [
-      "syslogFacilityFilter",
-      "facility",
       0,
       null,
       false
@@ -7980,13 +7413,6 @@
       true
     ],
     [
-      "thirdpartyappNodeConfig",
-      "node_id",
-      0,
-      null,
-      false
-    ],
-    [
       "thirdpartyappNodeGlobalConfig",
       "name",
       1,
@@ -8076,20 +7502,6 @@
       1,
       16,
       true
-    ],
-    [
-      "tracerouteExecFab",
-      "source_node_id",
-      0,
-      null,
-      false
-    ],
-    [
-      "tracerouteExecFab",
-      "destination_node_id",
-      0,
-      null,
-      false
     ],
     [
       "traceroutepRsTrDst",
@@ -8436,20 +7848,6 @@
     ],
     [
       "vmmInjectedSvcPort",
-      "port",
-      0,
-      null,
-      false
-    ],
-    [
-      "vmmInjectedSvcPort",
-      "protocol",
-      0,
-      null,
-      false
-    ],
-    [
-      "vmmInjectedSvcPort",
       "target_port",
       1,
       512,
@@ -8542,13 +7940,6 @@
     [
       "vmmRsVswitchExporterPol",
       "target_dn",
-      0,
-      null,
-      false
-    ],
-    [
-      "vmmUplinkP",
-      "uplink_id",
       0,
       null,
       false
@@ -9757,10 +9148,8 @@
     ],
     [
       "aaaRbacNodeRule",
-      {
-        "node_id": "ab"
-      },
-      "rbacnoderule-ab"
+      {},
+      "rbacnoderule-1"
     ],
     [
       "aaaRbacPortRule",
@@ -10045,10 +9434,8 @@
     ],
     [
       "analyticsCollectorBucket",
-      {
-        "flow_collector_bucket_id": "ab"
-      },
-      "collectorbucket-ab"
+      {},
+      "collectorbucket-0"
     ],
     [
       "analyticsCons",
@@ -10100,10 +9487,8 @@
     ],
     [
       "analyticsPayloadLenBin",
-      {
-        "payload_length_bin_id": "ab"
-      },
-      "payloadlenbin-ab"
+      {},
+      "payloadlenbin-0"
     ],
     [
       "analyticsPhysIfTarget",
@@ -10135,10 +9520,8 @@
     ],
     [
       "analyticsRcvWindowSzBin",
-      {
-        "receive_window_size_bin_id": "ab"
-      },
-      "rcvwindowszbin-ab"
+      {},
+      "rcvwindowszbin-0"
     ],
     [
       "analyticsRecordP",
@@ -10214,10 +9597,8 @@
     ],
     [
       "analyticsTCPOptHdrLenBin",
-      {
-        "tcp_option_header_length_bin_id": "ab"
-      },
-      "tcpopthdrlenbin-ab"
+      {},
+      "tcpopthdrlenbin-0"
     ],
     [
       "apAnomaly",
@@ -10626,10 +10007,8 @@
     ],
     [
       "bgpRRNodePEp",
-      {
-        "node_id": "ab"
-      },
-      "node-ab"
+      {},
+      "node-1"
     ],
     [
       "bgpRRP",
@@ -10755,7 +10134,7 @@
     [
       "callhomeSmartCallhomeFault",
       {},
-      "code-0"
+      "code-generic"
     ],
     [
       "callhomeSmartDest",
@@ -10891,10 +10270,8 @@
     ],
     [
       "cloudsecRelnHolder",
-      {
-        "id": "ab"
-      },
-      "cid-ab"
+      {},
+      "cid-0"
     ],
     [
       "cloudsecSaKeyPRemote",
@@ -10918,17 +10295,13 @@
     ],
     [
       "cloudsecSpRxKeySt",
-      {
-        "site_id": "ab"
-      },
-      "spinerxkeystatus-ab"
+      {},
+      "spinerxkeystatus-0"
     ],
     [
       "cloudsecSpTxKeySt",
-      {
-        "site_id": "ab"
-      },
-      "spinetxkeystatus-ab"
+      {},
+      "spinetxkeystatus-0"
     ],
     [
       "cloudsecTepRxCounter",
@@ -11169,10 +10542,8 @@
     ],
     [
       "coopNodePEp",
-      {
-        "node_id": "ab"
-      },
-      "node-ab"
+      {},
+      "node-1"
     ],
     [
       "coopOracleAdjClearLTask",
@@ -11222,10 +10593,9 @@
     [
       "coppRule",
       {
-        "rule_name": "ab",
-        "rule_type": "ab"
+        "rule_name": "ab"
       },
-      "rulep-[ab]-ab"
+      "rulep-[ab]-v4"
     ],
     [
       "coppSpineGen1CustomValues",
@@ -11241,10 +10611,8 @@
     ],
     [
       "ctrlrCimcNode",
-      {
-        "apic_id": "ab"
-      },
-      "cimcnode-ab"
+      {},
+      "cimcnode-1"
     ],
     [
       "ctrlrInst",
@@ -11260,17 +10628,13 @@
     ],
     [
       "datetimeNtpAuthKey",
-      {
-        "auth_key_id": "ab"
-      },
-      "ntpauth-ab"
+      {},
+      "ntpauth-1"
     ],
     [
       "datetimeNtpIFFClientKey",
-      {
-        "iff_key_id": "ab"
-      },
-      "ntpiff-ab"
+      {},
+      "ntpiff-1"
     ],
     [
       "datetimeNtpProv",
@@ -11293,24 +10657,18 @@
     ],
     [
       "datetimeRsNtpProvToNtpAuthKey",
-      {
-        "auth_key_id": "ab"
-      },
-      "rsntpProvToNtpAuthKey-ab"
+      {},
+      "rsntpProvToNtpAuthKey-1"
     ],
     [
       "datetimeRsNtpProvToNtpAuthKey2",
-      {
-        "auth_key_id": "ab"
-      },
-      "rsntpProvToNtpAuthKey2-ab"
+      {},
+      "rsntpProvToNtpAuthKey2-1"
     ],
     [
       "datetimeRsNtpProvToNtpIFFClientKey",
-      {
-        "iff_key_id": "ab"
-      },
-      "rsntpProvToNtpIFFClientKey-ab"
+      {},
+      "rsntpProvToNtpIFFClientKey-1"
     ],
     [
       "dbgDebugP",
@@ -11319,17 +10677,13 @@
     ],
     [
       "dbgFtriage",
-      {
-        "ftriage_instance_id": "ab"
-      },
-      "ftriage-ab"
+      {},
+      "ftriage-0"
     ],
     [
       "dbgNodeInst",
-      {
-        "apic_id": "ab"
-      },
-      "nodeinst-ab"
+      {},
+      "nodeinst-1"
     ],
     [
       "dbgOngoingAcMode",
@@ -11644,10 +10998,8 @@
     ],
     [
       "dbgexpTechSupData",
-      {
-        "policy_name": "ab"
-      },
-      "tsd-ab"
+      {},
+      "tsd-system"
     ],
     [
       "dbgexpTechSupDataCont",
@@ -12520,7 +11872,7 @@
     [
       "eventSevAsnP",
       {},
-      "esevp-0"
+      "esevp-generic"
     ],
     [
       "eventSubscribedClassId",
@@ -12531,10 +11883,8 @@
     ],
     [
       "eventSubscriptionId",
-      {
-        "hold_the_subscription_id": "ab"
-      },
-      "subholder-ab"
+      {},
+      "subholder-0"
     ],
     [
       "eventSubscriptionMsgCont",
@@ -12703,10 +12053,8 @@
     ],
     [
       "fabricExtSetupP",
-      {
-        "external_pool_identifier": "ab"
-      },
-      "extsetupp-ab"
+      {},
+      "extsetupp-0"
     ],
     [
       "fabricFIfPol",
@@ -12835,10 +12183,8 @@
     ],
     [
       "fabricNodeConfig",
-      {
-        "node": "ab"
-      },
-      "nodeconfnode-ab"
+      {},
+      "nodeconfnode-0"
     ],
     [
       "fabricNodeControl",
@@ -12866,10 +12212,8 @@
     ],
     [
       "fabricNodePEp",
-      {
-        "node_id": "ab"
-      },
-      "nodepep-ab"
+      {},
+      "nodepep-1"
     ],
     [
       "fabricNodePublicKey",
@@ -12932,20 +12276,13 @@
     ],
     [
       "fabricPortConfig",
-      {
-        "node": "ab",
-        "card": "ab",
-        "port": "ab",
-        "sub_port": "ab"
-      },
-      "portconfnode-ab-card-ab-port-ab-sub-ab"
+      {},
+      "portconfnode-0-card-1-port-1-sub-0"
     ],
     [
       "fabricPortConvertNode",
-      {
-        "node": "ab"
-      },
-      "portconvnode-ab"
+      {},
+      "portconvnode-0"
     ],
     [
       "fabricProtPol",
@@ -13272,10 +12609,8 @@
     ],
     [
       "fabricSetupP",
-      {
-        "pod_identifier": "ab"
-      },
-      "setupp-ab"
+      {},
+      "setupp-1"
     ],
     [
       "fabricSetupPol",
@@ -13356,24 +12691,22 @@
     [
       "faultInst",
       {},
-      "fault-0"
+      "fault-generic"
     ],
     [
       "faultLcP",
       {},
-      "flcp-0"
+      "flcp-generic"
     ],
     [
       "faultRelnHolder",
-      {
-        "id": "ab"
-      },
-      "id-ab"
+      {},
+      "id-0"
     ],
     [
       "faultSevAsnP",
       {},
-      "fsevp-0"
+      "fsevp-generic"
     ],
     [
       "faultSwRetP",
@@ -13702,10 +13035,8 @@
     ],
     [
       "fteCollectorBucket",
-      {
-        "flow_collector_bucket_id": "ab"
-      },
-      "collectorbucket-ab"
+      {},
+      "collectorbucket-0"
     ],
     [
       "fteEventTcpFlags",
@@ -14000,10 +13331,8 @@
     ],
     [
       "fvKeyPol",
-      {
-        "key_id": "ab"
-      },
-      "keyp-ab"
+      {},
+      "keyp-0"
     ],
     [
       "fvLIfCtxSelector",
@@ -14064,17 +13393,13 @@
     ],
     [
       "fvPodConnP",
-      {
-        "pod_id": "ab"
-      },
-      "podConnP-ab"
+      {},
+      "podConnP-1"
     ],
     [
       "fvRemoteId",
-      {
-        "site_id": "ab"
-      },
-      "site-ab"
+      {},
+      "site-0"
     ],
     [
       "fvRouteDeployP",
@@ -14714,10 +14039,8 @@
     ],
     [
       "healthLevelP",
-      {
-        "high": "ab"
-      },
-      "lvl-ab"
+      {},
+      "lvl-0"
     ],
     [
       "healthLevelsP",
@@ -15024,13 +14347,9 @@
     [
       "infraBundleConfig",
       {
-        "node_a": "ab",
-        "node_b": "ab",
-        "fex_a": "ab",
-        "fex_b": "ab",
         "associated_group_dn": "ab"
       },
-      "bndlconfnodeA-ab-nodeB-ab-fexA-ab-fexB-ab-[ab]"
+      "bndlconfnodeA-na-nodeB-na-fexA-na-fexB-na-[ab]"
     ],
     [
       "infraCEPg",
@@ -15113,10 +14432,8 @@
     ],
     [
       "infraDhcpPoolReconcile",
-      {
-        "id": "ab"
-      },
-      "poolrecconfig-ab"
+      {},
+      "poolrecconfig-1"
     ],
     [
       "infraEncap",
@@ -15234,10 +14551,8 @@
     ],
     [
       "infraNode",
-      {
-        "id": "ab"
-      },
-      "node-ab"
+      {},
+      "node-1"
     ],
     [
       "infraNodeBlk",
@@ -15248,10 +14563,8 @@
     ],
     [
       "infraNodeConfig",
-      {
-        "node": "ab"
-      },
-      "nodeconfnode-ab"
+      {},
+      "nodeconfnode-0"
     ],
     [
       "infraNodeP",
@@ -15311,28 +14624,18 @@
     ],
     [
       "infraPortConfig",
-      {
-        "node": "ab",
-        "card": "ab",
-        "port": "ab",
-        "sub_port": "ab"
-      },
-      "portconfnode-ab-card-ab-port-ab-sub-ab"
+      {},
+      "portconfnode-0-card-1-port-1-sub-0"
     ],
     [
       "infraPortConvertFex",
-      {
-        "node": "ab",
-        "fex_id": "ab"
-      },
-      "portconvfexnode-ab-fex-ab"
+      {},
+      "portconvfexnode-0-fex-unspecified"
     ],
     [
       "infraPortConvertNode",
-      {
-        "node": "ab"
-      },
-      "portconvnode-ab"
+      {},
+      "portconvnode-0"
     ],
     [
       "infraPortDirecPol",
@@ -15901,10 +15204,8 @@
     ],
     [
       "infraSnNode",
-      {
-        "cluster_unique_controller_id": "ab"
-      },
-      "serial-ab"
+      {},
+      "serial-undefined"
     ],
     [
       "infraSpAccPortGrp",
@@ -15950,10 +15251,8 @@
     ],
     [
       "infraWiNode",
-      {
-        "cluster_unique_controller_id": "ab"
-      },
-      "node-ab"
+      {},
+      "node-undefined"
     ],
     [
       "infrazoneNodeGrp",
@@ -16952,10 +16251,8 @@
     ],
     [
       "mdpDomain",
-      {
-        "domain_id": "ab"
-      },
-      "domain-ab"
+      {},
+      "domain-1"
     ],
     [
       "mdpDomainCont",
@@ -16976,10 +16273,8 @@
     ],
     [
       "mdpLeafP",
-      {
-        "node_id": "ab"
-      },
-      "leaf-ab"
+      {},
+      "leaf-1"
     ],
     [
       "mdpLocalDomP",
@@ -17058,10 +16353,8 @@
     ],
     [
       "mdpSpineP",
-      {
-        "node_id": "ab"
-      },
-      "spine-ab"
+      {},
+      "spine-1"
     ],
     [
       "mgmtConnectivityPrefs",
@@ -17707,10 +17000,8 @@
     ],
     [
       "opflexODevCliCmdSession",
-      {
-        "session_id": "ab"
-      },
-      "session-ab"
+      {},
+      "session-0"
     ],
     [
       "opflexOVm",
@@ -18090,10 +17381,8 @@
     ],
     [
       "pimRouteMapEntry",
-      {
-        "order": "ab"
-      },
-      "rtmapentry-ab"
+      {},
+      "rtmapentry-0"
     ],
     [
       "pimRouteMapPol",
@@ -18140,11 +17429,9 @@
     [
       "pingExecFab",
       {
-        "name": "ab",
-        "source_node_id": "ab",
-        "destination_node_id": "ab"
+        "name": "ab"
       },
-      "pingexecfab-[ab]-ab-to-ab"
+      "pingexecfab-[ab]-1-to-1"
     ],
     [
       "pkiCertReq",
@@ -18233,10 +17520,8 @@
     ],
     [
       "plannerAffinityGroup",
-      {
-        "pref": "ab"
-      },
-      "affinity-ab"
+      {},
+      "affinity-0"
     ],
     [
       "plannerAzureDomain",
@@ -18391,10 +17676,8 @@
     ],
     [
       "plannerMatchNode",
-      {
-        "id": "ab"
-      },
-      "node-ab"
+      {},
+      "node-1"
     ],
     [
       "plannerMatchTenant",
@@ -18784,11 +18067,8 @@
     ],
     [
       "qosDot1PClass",
-      {
-        "from_": "ab",
-        "to": "ab"
-      },
-      "dot1P-ab-ab"
+      {},
+      "dot1P-unspecified-unspecified"
     ],
     [
       "qosDppPol",
@@ -18799,11 +18079,8 @@
     ],
     [
       "qosDscpClass",
-      {
-        "from_": "ab",
-        "to": "ab"
-      },
-      "dcsp-ab-ab"
+      {},
+      "dcsp-0-0"
     ],
     [
       "qosDscpTransPol",
@@ -18840,19 +18117,13 @@
     ],
     [
       "qosMplsEgressRule",
-      {
-        "from_": "ab",
-        "to": "ab"
-      },
-      "dscpToExp-ab-ab"
+      {},
+      "dscpToExp-unspecified-unspecified"
     ],
     [
       "qosMplsIngressRule",
-      {
-        "from_": "ab",
-        "to": "ab"
-      },
-      "exp-ab-ab"
+      {},
+      "exp-unspecified-unspecified"
     ],
     [
       "qosPfcIfPol",
@@ -19018,10 +18289,8 @@
     ],
     [
       "rtctrlSetASPathASN",
-      {
-        "asn_order": "ab"
-      },
-      "asn-ab"
+      {},
+      "asn-0"
     ],
     [
       "rtctrlSetAddComm",
@@ -19178,10 +18447,8 @@
     ],
     [
       "snmpCtrlrInst",
-      {
-        "apic_id": "ab"
-      },
-      "ctrlrinstp-ab"
+      {},
+      "ctrlrinstp-1"
     ],
     [
       "snmpCtx",
@@ -19753,12 +19020,10 @@
     [
       "svccoreNode",
       {
-        "node_id_where_the_core_file_was_created": "ab",
-        "card_id": "ab",
         "name_of_service_that_cored": "ab",
         "create_time": "ab"
       },
-      "node-ab-card-ab-svc-ab-ts-ab"
+      "node-1-card-1-svc-ab-ts-ab"
     ],
     [
       "svccoreNodePol",
@@ -19801,10 +19066,8 @@
     ],
     [
       "syntheticAnotherTestObj",
-      {
-        "id": "ab"
-      },
-      "anothertestobj-ab"
+      {},
+      "anothertestobj-0"
     ],
     [
       "syntheticClusterTest",
@@ -19814,10 +19077,9 @@
     [
       "syntheticClusterTestShardInstance",
       {
-        "service_name": "ab",
-        "shard_id": "ab"
+        "service_name": "ab"
       },
-      "cltsi-ab-ab-0"
+      "cltsi-ab-undefined-0"
     ],
     [
       "syntheticContext",
@@ -19845,10 +19107,8 @@
     ],
     [
       "syntheticCtWiNode",
-      {
-        "cluster_unique_controller_id": "ab"
-      },
-      "ctwinode-ab"
+      {},
+      "ctwinode-undefined"
     ],
     [
       "syntheticCtrlrPatchValidate",
@@ -19857,17 +19117,13 @@
     ],
     [
       "syntheticEp",
-      {
-        "id": "ab"
-      },
-      "ep-ab"
+      {},
+      "ep-0"
     ],
     [
       "syntheticEpGroup",
-      {
-        "id": "ab"
-      },
-      "epgroup-ab"
+      {},
+      "epgroup-0"
     ],
     [
       "syntheticFrameworkTest",
@@ -19876,10 +19132,8 @@
     ],
     [
       "syntheticHierarchyObj",
-      {
-        "id": "ab"
-      },
-      "hier-ab"
+      {},
+      "hier-0"
     ],
     [
       "syntheticIfcCTestObj",
@@ -20014,11 +19268,10 @@
     [
       "syntheticTestObj",
       {
-        "id": "ab",
         "dn_bin": "ab",
         "dn_str": "ab"
       },
-      "testobj-ab-bdn-[ab]-sdn-[ab]"
+      "testobj-0-bdn-[ab]-sdn-[ab]"
     ],
     [
       "syntheticUniverse",
@@ -20032,10 +19285,8 @@
     ],
     [
       "syslogFacilityFilter",
-      {
-        "facility": "ab"
-      },
-      "ff-ab"
+      {},
+      "ff-default"
     ],
     [
       "syslogFile",
@@ -20492,10 +19743,8 @@
     ],
     [
       "thirdpartyappNodeConfig",
-      {
-        "node_id": "ab"
-      },
-      "node-ab"
+      {},
+      "node-1"
     ],
     [
       "thirdpartyappNodeGlobalConfig",
@@ -20628,11 +19877,9 @@
     [
       "tracerouteExecFab",
       {
-        "name": "ab",
-        "source_node_id": "ab",
-        "destination_node_id": "ab"
+        "name": "ab"
       },
-      "trexecfab-[ab]-ab-to-ab"
+      "trexecfab-[ab]-1-to-1"
     ],
     [
       "traceroutepRsTrDst",
@@ -21054,11 +20301,9 @@
     [
       "vmmInjectedSvcPort",
       {
-        "port": "ab",
-        "protocol": "ab",
         "target_port": "ab"
       },
-      "p-ab-prot-ab-t-ab"
+      "p-unspecified-prot-unspecified-t-ab"
     ],
     [
       "vmmInjectedVm",
@@ -21283,10 +20528,8 @@
     ],
     [
       "vmmUplinkP",
-      {
-        "uplink_id": "ab"
-      },
-      "uplinkp-ab"
+      {},
+      "uplinkp-0"
     ],
     [
       "vmmUplinkPCont",
@@ -23383,18 +22626,6 @@
       {
         "interface_id": "ab"
       },
-      "interface_controls_for_arp",
-      [
-        "garp-adj-enable",
-        "unspecified"
-      ],
-      "unspecified"
-    ],
-    [
-      "arpIf",
-      {
-        "interface_id": "ab"
-      },
       "delete_adj_on_mac_delete",
       [
         "disabled",
@@ -23485,18 +22716,6 @@
         "enabled"
       ],
       "disabled"
-    ],
-    [
-      "arpIfPol",
-      {
-        "name": "ab"
-      },
-      "interface_controls_for_arp",
-      [
-        "garp-adj-enable",
-        "unspecified"
-      ],
-      "unspecified"
     ],
     [
       "arpInst",
@@ -23793,17 +23012,6 @@
       "enabled"
     ],
     [
-      "bgpBestPathCtrlPol",
-      {
-        "name": "ab"
-      },
-      "best_path_control",
-      [
-        "asPathMultipathRelax"
-      ],
-      "asPathMultipathRelax"
-    ],
-    [
       "bgpDomClearDomLTask",
       {},
       "admin_state",
@@ -23910,19 +23118,6 @@
       "reject"
     ],
     [
-      "bgpRsPeerToProfile",
-      {
-        "target_dn": "ab"
-      },
-      "config_issues",
-      [
-        "conflicting-soo-value",
-        "no-loopback-configured",
-        "none"
-      ],
-      "none"
-    ],
-    [
       "bgpRtTargetInstrP",
       {},
       "route_target_instrumentation_type",
@@ -24021,44 +23216,6 @@
         "no"
       ],
       "no"
-    ],
-    [
-      "callhomeQuery",
-      {
-        "name": "ab"
-      },
-      "response_data",
-      [
-        "add-mo-list",
-        "audit-logs",
-        "config-only",
-        "count",
-        "custom-path-hop",
-        "deployment",
-        "deployment-records",
-        "ep-records",
-        "event-logs",
-        "fault-count",
-        "fault-records",
-        "faults",
-        "full-deployment",
-        "health",
-        "health-records",
-        "local-prefix",
-        "no-scoped",
-        "none",
-        "pending-deployment",
-        "port-deployment",
-        "record-subtree",
-        "relations",
-        "relations-with-parent",
-        "required",
-        "state",
-        "stats",
-        "tags",
-        "tasks"
-      ],
-      "none"
     ],
     [
       "callhomeQuery",
@@ -24169,16 +23326,6 @@
         "enabled"
       ],
       "enabled"
-    ],
-    [
-      "cloudsecCapabilityRemote",
-      {},
-      "cap_bm",
-      [
-        "cloudsec-is-supported",
-        "none"
-      ],
-      "none"
     ],
     [
       "cloudsecCapabilityRemote",
@@ -25289,9 +24436,7 @@
     ],
     [
       "datetimeNtpAuthKey",
-      {
-        "auth_key_id": "ab"
-      },
+      {},
       "type_of_authentication_key",
       [
         "md5",
@@ -25361,9 +24506,7 @@
     ],
     [
       "dbgFtriage",
-      {
-        "ftriage_instance_id": "ab"
-      },
+      {},
       "operational_state_of_ftriage",
       [
         "Idle",
@@ -25416,18 +24559,6 @@
       "avg"
     ],
     [
-      "dbgacAnyToEp",
-      {
-        "name": "ab"
-      },
-      "usage",
-      [
-        "atomic-counter",
-        "latency-stats"
-      ],
-      "atomic-counter"
-    ],
-    [
       "dbgacEpToAny",
       {
         "name": "ab"
@@ -25450,18 +24581,6 @@
         "histogram"
       ],
       "avg"
-    ],
-    [
-      "dbgacEpToAny",
-      {
-        "name": "ab"
-      },
-      "usage",
-      [
-        "atomic-counter",
-        "latency-stats"
-      ],
-      "atomic-counter"
     ],
     [
       "dbgacEpToEp",
@@ -25488,18 +24607,6 @@
       "avg"
     ],
     [
-      "dbgacEpToEp",
-      {
-        "name": "ab"
-      },
-      "usage",
-      [
-        "atomic-counter",
-        "latency-stats"
-      ],
-      "atomic-counter"
-    ],
-    [
       "dbgacEpToEpg",
       {
         "name": "ab"
@@ -25522,18 +24629,6 @@
         "histogram"
       ],
       "avg"
-    ],
-    [
-      "dbgacEpToEpg",
-      {
-        "name": "ab"
-      },
-      "usage",
-      [
-        "atomic-counter",
-        "latency-stats"
-      ],
-      "atomic-counter"
     ],
     [
       "dbgacEpToExt",
@@ -25560,18 +24655,6 @@
       "avg"
     ],
     [
-      "dbgacEpToExt",
-      {
-        "name": "ab"
-      },
-      "usage",
-      [
-        "atomic-counter",
-        "latency-stats"
-      ],
-      "atomic-counter"
-    ],
-    [
       "dbgacEpgToEp",
       {
         "name": "ab"
@@ -25594,18 +24677,6 @@
         "histogram"
       ],
       "avg"
-    ],
-    [
-      "dbgacEpgToEp",
-      {
-        "name": "ab"
-      },
-      "usage",
-      [
-        "atomic-counter",
-        "latency-stats"
-      ],
-      "atomic-counter"
     ],
     [
       "dbgacEpgToEpg",
@@ -25632,18 +24703,6 @@
       "avg"
     ],
     [
-      "dbgacEpgToEpg",
-      {
-        "name": "ab"
-      },
-      "usage",
-      [
-        "atomic-counter",
-        "latency-stats"
-      ],
-      "atomic-counter"
-    ],
-    [
       "dbgacEpgToIp",
       {
         "name": "ab"
@@ -25666,18 +24725,6 @@
         "histogram"
       ],
       "avg"
-    ],
-    [
-      "dbgacEpgToIp",
-      {
-        "name": "ab"
-      },
-      "usage",
-      [
-        "atomic-counter",
-        "latency-stats"
-      ],
-      "atomic-counter"
     ],
     [
       "dbgacExtToEp",
@@ -25704,18 +24751,6 @@
       "avg"
     ],
     [
-      "dbgacExtToEp",
-      {
-        "name": "ab"
-      },
-      "usage",
-      [
-        "atomic-counter",
-        "latency-stats"
-      ],
-      "atomic-counter"
-    ],
-    [
       "dbgacIpToEpg",
       {
         "name": "ab"
@@ -25740,18 +24775,6 @@
       "avg"
     ],
     [
-      "dbgacIpToEpg",
-      {
-        "name": "ab"
-      },
-      "usage",
-      [
-        "atomic-counter",
-        "latency-stats"
-      ],
-      "atomic-counter"
-    ],
-    [
       "dbgacIpToIp",
       {
         "name": "ab"
@@ -25774,18 +24797,6 @@
         "histogram"
       ],
       "avg"
-    ],
-    [
-      "dbgacIpToIp",
-      {
-        "name": "ab"
-      },
-      "usage",
-      [
-        "atomic-counter",
-        "latency-stats"
-      ],
-      "atomic-counter"
     ],
     [
       "dbgexpCoreP",
@@ -26493,20 +25504,6 @@
       {
         "name": "ab"
       },
-      "interface_controls",
-      [
-        "bfd",
-        "nh-self",
-        "passive",
-        "split-horizon"
-      ],
-      "bfd"
-    ],
-    [
-      "eigrpIfPol",
-      {
-        "name": "ab"
-      },
       "units_for_eigrp_interface_delay",
       [
         "pico",
@@ -27149,18 +26146,6 @@
       "start"
     ],
     [
-      "eqptdiagpCardHealthPol",
-      {},
-      "health_tests",
-      [
-        "cpu",
-        "forwarding",
-        "memory",
-        "port"
-      ],
-      "cpu"
-    ],
-    [
       "eqptdiagpLeTsBtEcc",
       {
         "name": "ab"
@@ -27289,18 +26274,6 @@
       "start"
     ],
     [
-      "eqptdiagpNodeHealthPol",
-      {},
-      "health_tests",
-      [
-        "cpu",
-        "forwarding",
-        "memory",
-        "port"
-      ],
-      "cpu"
-    ],
-    [
       "eqptdiagpPortHealthPol",
       {},
       "administrative_state",
@@ -27310,18 +26283,6 @@
         "suspend"
       ],
       "start"
-    ],
-    [
-      "eqptdiagpPortHealthPol",
-      {},
-      "health_tests",
-      [
-        "cpu",
-        "forwarding",
-        "memory",
-        "port"
-      ],
-      "cpu"
     ],
     [
       "eqptdiagpSpTsBtFc",
@@ -27807,12 +26768,7 @@
     ],
     [
       "fabricPortConfig",
-      {
-        "node": "ab",
-        "card": "ab",
-        "port": "ab",
-        "sub_port": "ab"
-      },
+      {},
       "configuration_action",
       [
         "configure",
@@ -27822,12 +26778,7 @@
     ],
     [
       "fabricPortConfig",
-      {
-        "node": "ab",
-        "card": "ab",
-        "port": "ab",
-        "sub_port": "ab"
-      },
+      {},
       "port_role",
       [
         "leaf",
@@ -27876,9 +26827,7 @@
     ],
     [
       "fabricSetupP",
-      {
-        "pod_identifier": "ab"
-      },
+      {},
       "pod_type",
       [
         "physical",
@@ -28607,17 +27556,6 @@
       {
         "name": "ab"
       },
-      "ep_move_detection_mode",
-      [
-        "garp"
-      ],
-      "garp"
-    ],
-    [
-      "fvBD",
-      {
-        "name": "ab"
-      },
       "multi_destination_packet_action",
       [
         "bd-flood",
@@ -29286,18 +28224,6 @@
       {
         "name": "ab"
       },
-      "forwarding_controls",
-      [
-        "mac-learn-disable",
-        "mac-learn-enable"
-      ],
-      "mac-learn-enable"
-    ],
-    [
-      "fvTnlEPg",
-      {
-        "name": "ab"
-      },
       "provider_label_match_criteria",
       [
         "All",
@@ -29469,9 +28395,7 @@
     ],
     [
       "healthLevelP",
-      {
-        "high": "ab"
-      },
+      {},
       "color",
       [
         "alice-blue",
@@ -29651,19 +28575,6 @@
       {
         "name": "ab"
       },
-      "host_protection_domain_action",
-      [
-        "deny",
-        "log",
-        "permit"
-      ],
-      "permit"
-    ],
-    [
-      "hostprotRule",
-      {
-        "name": "ab"
-      },
       "connection_tracking",
       [
         "normal",
@@ -29700,19 +28611,6 @@
         "undefined"
       ],
       "undefined"
-    ],
-    [
-      "hostprotRuleDef",
-      {
-        "name": "ab"
-      },
-      "host_protection_domain_action",
-      [
-        "deny",
-        "log",
-        "permit"
-      ],
-      "permit"
     ],
     [
       "hostprotRuleDef",
@@ -29874,10 +28772,6 @@
     [
       "infraBundleConfig",
       {
-        "node_a": "ab",
-        "node_b": "ab",
-        "fex_a": "ab",
-        "fex_b": "ab",
         "associated_group_dn": "ab"
       },
       "configuration_action",
@@ -29890,10 +28784,6 @@
     [
       "infraBundleConfig",
       {
-        "node_a": "ab",
-        "node_b": "ab",
-        "fex_a": "ab",
-        "fex_b": "ab",
         "associated_group_dn": "ab"
       },
       "pc_shutdown",
@@ -30088,12 +28978,7 @@
     ],
     [
       "infraPortConfig",
-      {
-        "node": "ab",
-        "card": "ab",
-        "port": "ab",
-        "sub_port": "ab"
-      },
+      {},
       "configuration_action",
       [
         "configure",
@@ -30103,12 +28988,7 @@
     ],
     [
       "infraPortConfig",
-      {
-        "node": "ab",
-        "card": "ab",
-        "port": "ab",
-        "sub_port": "ab"
-      },
+      {},
       "breakout_map",
       [
         "100g-2x",
@@ -30122,12 +29002,7 @@
     ],
     [
       "infraPortConfig",
-      {
-        "node": "ab",
-        "card": "ab",
-        "port": "ab",
-        "sub_port": "ab"
-      },
+      {},
       "port_role",
       [
         "leaf",
@@ -30186,9 +29061,7 @@
     ],
     [
       "infraSnNode",
-      {
-        "cluster_unique_controller_id": "ab"
-      },
+      {},
       "administrative_state",
       [
         "in-service",
@@ -30198,9 +29071,7 @@
     ],
     [
       "infraWiNode",
-      {
-        "cluster_unique_controller_id": "ab"
-      },
+      {},
       "administrative_state",
       [
         "in-service",
@@ -30210,9 +29081,7 @@
     ],
     [
       "infraWiNode",
-      {
-        "cluster_unique_controller_id": "ab"
-      },
+      {},
       "appliance_failover_status",
       [
         "completed",
@@ -30818,18 +29687,6 @@
         "portlocal"
       ],
       "global"
-    ],
-    [
-      "l2LoadBalancePol",
-      {},
-      "load_balance_criteria",
-      [
-        "dst-ip",
-        "l4-dst-port",
-        "l4-src-port",
-        "src-ip"
-      ],
-      "dst-ip"
     ],
     [
       "l2PortAuthCfgPol",
@@ -32428,21 +31285,6 @@
       {
         "name": "ab"
       },
-      "control",
-      [
-        "fast-sel-hot-stdby",
-        "graceful-conv",
-        "load-defer",
-        "susp-individual",
-        "symmetric-hash"
-      ],
-      "fast-sel-hot-stdby"
-    ],
-    [
-      "lacpLagPol",
-      {
-        "name": "ab"
-      },
       "mode",
       [
         "active",
@@ -33987,9 +32829,7 @@
     ],
     [
       "pimRouteMapEntry",
-      {
-        "order": "ab"
-      },
+      {},
       "action",
       [
         "deny",
@@ -34000,9 +32840,7 @@
     [
       "pingExecFab",
       {
-        "name": "ab",
-        "source_node_id": "ab",
-        "destination_node_id": "ab"
+        "name": "ab"
       },
       "admin_state",
       [
@@ -34017,9 +32855,7 @@
     [
       "pingExecFab",
       {
-        "name": "ab",
-        "source_node_id": "ab",
-        "destination_node_id": "ab"
+        "name": "ab"
       },
       "type",
       [
@@ -34593,10 +33429,7 @@
     ],
     [
       "qosDot1PClass",
-      {
-        "from_": "ab",
-        "to": "ab"
-      },
+      {},
       "priority",
       [
         "level1",
@@ -34758,10 +33591,7 @@
     ],
     [
       "qosDscpClass",
-      {
-        "from_": "ab",
-        "to": "ab"
-      },
+      {},
       "priority",
       [
         "level1",
@@ -34785,18 +33615,6 @@
         "enabled"
       ],
       "disabled"
-    ],
-    [
-      "qosInstPol",
-      {
-        "name": "ab"
-      },
-      "global_control_settings",
-      [
-        "dot1p-preserve",
-        "none"
-      ],
-      "none"
     ],
     [
       "qosLlfcIfPol",
@@ -34824,10 +33642,7 @@
     ],
     [
       "qosMplsIngressRule",
-      {
-        "from_": "ab",
-        "to": "ab"
-      },
+      {},
       "prio",
       [
         "level1",
@@ -35701,33 +34516,6 @@
         "switched"
       ],
       "both"
-    ],
-    [
-      "spanExtendedFltEntry",
-      {
-        "name": "ab"
-      },
-      "tcp_flags",
-      [
-        "ack-flag-off",
-        "ack-flag-on",
-        "cwr-flag-off",
-        "cwr-flag-on",
-        "ece-flag-off",
-        "ece-flag-on",
-        "fin-flag-off",
-        "fin-flag-on",
-        "psh-flag-off",
-        "psh-flag-on",
-        "rst-flag-off",
-        "rst-flag-on",
-        "syn-flag-off",
-        "syn-flag-on",
-        "tcp-flags-default",
-        "urg-flag-off",
-        "urg-flag-on"
-      ],
-      "tcp-flags-default"
     ],
     [
       "spanRsDestApic",
@@ -37019,9 +35807,7 @@
     ],
     [
       "syntheticCtWiNode",
-      {
-        "cluster_unique_controller_id": "ab"
-      },
+      {},
       "what_to_do_with_appliance",
       [
         "bringup",
@@ -37034,9 +35820,7 @@
     ],
     [
       "syntheticEpGroup",
-      {
-        "id": "ab"
-      },
+      {},
       "admin_state",
       [
         "disabled",
@@ -37141,7 +35925,6 @@
     [
       "syntheticTestObj",
       {
-        "id": "ab",
         "dn_bin": "ab",
         "dn_str": "ab"
       },
@@ -37186,9 +35969,7 @@
     ],
     [
       "syslogFacilityFilter",
-      {
-        "facility": "ab"
-      },
+      {},
       "min_severity",
       [
         "alerts",
@@ -37612,9 +36393,7 @@
     ],
     [
       "thirdpartyappNodeConfig",
-      {
-        "node_id": "ab"
-      },
+      {},
       "app_state",
       [
         "init",
@@ -37627,9 +36406,7 @@
     ],
     [
       "thirdpartyappNodeConfig",
-      {
-        "node_id": "ab"
-      },
+      {},
       "append_or_replace_runtime_options",
       [
         "append",
@@ -37865,9 +36642,7 @@
     [
       "tracerouteExecFab",
       {
-        "name": "ab",
-        "source_node_id": "ab",
-        "destination_node_id": "ab"
+        "name": "ab"
       },
       "admin_state",
       [
@@ -37882,9 +36657,7 @@
     [
       "tracerouteExecFab",
       {
-        "name": "ab",
-        "source_node_id": "ab",
-        "destination_node_id": "ab"
+        "name": "ab"
       },
       "do_ext_traceroute",
       [
@@ -37896,9 +36669,7 @@
     [
       "tracerouteExecFab",
       {
-        "name": "ab",
-        "source_node_id": "ab",
-        "destination_node_id": "ab"
+        "name": "ab"
       },
       "protocol_type",
       [
@@ -37912,9 +36683,7 @@
     [
       "tracerouteExecFab",
       {
-        "name": "ab",
-        "source_node_id": "ab",
-        "destination_node_id": "ab"
+        "name": "ab"
       },
       "type",
       [
@@ -38525,18 +37294,6 @@
       {
         "name": "ab"
       },
-      "arp_learning",
-      [
-        "disabled",
-        "enabled"
-      ],
-      "disabled"
-    ],
-    [
-      "vmmDomP",
-      {
-        "name": "ab"
-      },
       "encap_mode",
       [
         "ivxlan",
@@ -38709,20 +37466,6 @@
       {
         "name": "ab"
       },
-      "feature_flags",
-      [
-        "none",
-        "skip-encap-validation",
-        "skip-rel-to-eppd",
-        "skip-vlan-pool-inheritance"
-      ],
-      "none"
-    ],
-    [
-      "vmmIntAggr",
-      {
-        "name": "ab"
-      },
       "forged_transmit_setting",
       [
         "Disabled",
@@ -38848,20 +37591,6 @@
       {
         "name": "ab"
       },
-      "feature_flags",
-      [
-        "none",
-        "skip-encap-validation",
-        "skip-rel-to-eppd",
-        "skip-vlan-pool-inheritance"
-      ],
-      "none"
-    ],
-    [
-      "vmmUsrAggr",
-      {
-        "name": "ab"
-      },
       "forged_transmit_setting",
       [
         "Disabled",
@@ -38928,20 +37657,6 @@
         "useg"
       ],
       "encap"
-    ],
-    [
-      "vmmUsrCustomAggr",
-      {
-        "name": "ab"
-      },
-      "feature_flags",
-      [
-        "none",
-        "skip-encap-validation",
-        "skip-rel-to-eppd",
-        "skip-vlan-pool-inheritance"
-      ],
-      "none"
     ],
     [
       "vmmUsrCustomAggr",
@@ -40185,22 +38900,6 @@
       "unspecified"
     ],
     [
-      "vzEntry",
-      {
-        "name": "ab"
-      },
-      "tcp_rules",
-      [
-        "ack",
-        "est",
-        "fin",
-        "rst",
-        "syn",
-        "unspecified"
-      ],
-      "unspecified"
-    ],
-    [
       "vzEntryPortZero",
       {
         "name": "ab"
@@ -40238,22 +38937,6 @@
         "udp"
       ],
       "tcp"
-    ],
-    [
-      "vzEntryPortZero",
-      {
-        "name": "ab"
-      },
-      "tcp_rules",
-      [
-        "ack",
-        "est",
-        "fin",
-        "rst",
-        "syn",
-        "unspecified"
-      ],
-      "unspecified"
     ],
     [
       "vzException",
@@ -41293,6 +39976,3750 @@
       "1x400"
     ]
   ],
+  "flags": [
+    [
+      "aaaDuoProviderGroup",
+      {
+        "name": "ab"
+      },
+      "second_factor_authentication_methods",
+      [
+        "auto",
+        "push",
+        "phone",
+        "passcode"
+      ],
+      [
+        "auto"
+      ]
+    ],
+    [
+      "aaaPwdStrengthProfile",
+      {},
+      "password_class_flags",
+      [
+        "lowercase",
+        "uppercase",
+        "digits",
+        "specialchars"
+      ],
+      []
+    ],
+    [
+      "aaaRbacClassPriv",
+      {
+        "class_name": "ab"
+      },
+      "privilege",
+      [
+        "none",
+        "admin",
+        "aaa",
+        "tenant-connectivity",
+        "tenant-protocol",
+        "vmm-policy",
+        "tenant-ext-connectivity",
+        "tenant-ext-protocol",
+        "tenant-qos",
+        "tenant-security",
+        "tenant-network-profile",
+        "tenant-epg",
+        "fabric-connectivity",
+        "fabric-protocol",
+        "fabric-equipment",
+        "access-connectivity",
+        "access-protocol",
+        "access-equipment",
+        "access-qos",
+        "nw-svc-params",
+        "ops",
+        "nw-svc-policy",
+        "site-admin",
+        "site-policy",
+        "config-manager",
+        "custom-privilege-1",
+        "custom-privilege-2",
+        "custom-privilege-3",
+        "custom-privilege-4",
+        "custom-privilege-5",
+        "custom-privilege-6",
+        "custom-privilege-7",
+        "custom-privilege-8",
+        "custom-privilege-9",
+        "custom-privilege-10",
+        "custom-privilege-11",
+        "custom-privilege-12",
+        "custom-privilege-13",
+        "custom-privilege-14",
+        "custom-privilege-15",
+        "custom-privilege-16",
+        "custom-privilege-17",
+        "custom-privilege-18",
+        "custom-privilege-19",
+        "custom-privilege-20",
+        "custom-privilege-21",
+        "custom-privilege-22",
+        "custom-port-privilege"
+      ],
+      []
+    ],
+    [
+      "aaaRbacClassPriv",
+      {
+        "class_name": "ab"
+      },
+      "w_priv",
+      [
+        "none",
+        "admin",
+        "aaa",
+        "tenant-connectivity",
+        "tenant-protocol",
+        "vmm-policy",
+        "tenant-ext-connectivity",
+        "tenant-ext-protocol",
+        "tenant-qos",
+        "tenant-security",
+        "tenant-network-profile",
+        "tenant-epg",
+        "fabric-connectivity",
+        "fabric-protocol",
+        "fabric-equipment",
+        "access-connectivity",
+        "access-protocol",
+        "access-equipment",
+        "access-qos",
+        "nw-svc-params",
+        "ops",
+        "nw-svc-policy",
+        "site-admin",
+        "site-policy",
+        "config-manager",
+        "custom-privilege-1",
+        "custom-privilege-2",
+        "custom-privilege-3",
+        "custom-privilege-4",
+        "custom-privilege-5",
+        "custom-privilege-6",
+        "custom-privilege-7",
+        "custom-privilege-8",
+        "custom-privilege-9",
+        "custom-privilege-10",
+        "custom-privilege-11",
+        "custom-privilege-12",
+        "custom-privilege-13",
+        "custom-privilege-14",
+        "custom-privilege-15",
+        "custom-privilege-16",
+        "custom-privilege-17",
+        "custom-privilege-18",
+        "custom-privilege-19",
+        "custom-privilege-20",
+        "custom-privilege-21",
+        "custom-privilege-22",
+        "custom-port-privilege"
+      ],
+      []
+    ],
+    [
+      "aaaRole",
+      {
+        "name": "ab"
+      },
+      "privilege",
+      [
+        "none",
+        "admin",
+        "aaa",
+        "tenant-connectivity",
+        "tenant-protocol",
+        "vmm-policy",
+        "tenant-ext-connectivity",
+        "tenant-ext-protocol",
+        "tenant-qos",
+        "tenant-security",
+        "tenant-network-profile",
+        "tenant-epg",
+        "fabric-connectivity",
+        "fabric-protocol",
+        "fabric-equipment",
+        "access-connectivity",
+        "access-protocol",
+        "access-equipment",
+        "access-qos",
+        "nw-svc-params",
+        "ops",
+        "nw-svc-policy",
+        "site-admin",
+        "site-policy",
+        "config-manager",
+        "custom-privilege-1",
+        "custom-privilege-2",
+        "custom-privilege-3",
+        "custom-privilege-4",
+        "custom-privilege-5",
+        "custom-privilege-6",
+        "custom-privilege-7",
+        "custom-privilege-8",
+        "custom-privilege-9",
+        "custom-privilege-10",
+        "custom-privilege-11",
+        "custom-privilege-12",
+        "custom-privilege-13",
+        "custom-privilege-14",
+        "custom-privilege-15",
+        "custom-privilege-16",
+        "custom-privilege-17",
+        "custom-privilege-18",
+        "custom-privilege-19",
+        "custom-privilege-20",
+        "custom-privilege-21",
+        "custom-privilege-22",
+        "custom-port-privilege"
+      ],
+      []
+    ],
+    [
+      "analyticsRecordP",
+      {
+        "name": "ab"
+      },
+      "collect_params",
+      [
+        "count-bytes",
+        "count-pkts",
+        "sampler-id",
+        "pkt-disp",
+        "ts-first",
+        "ts-recent",
+        "tcp-flags",
+        "src-intf"
+      ],
+      [
+        "src-intf"
+      ]
+    ],
+    [
+      "analyticsRecordP",
+      {
+        "name": "ab"
+      },
+      "match_params",
+      [
+        "unspecified",
+        "ethertype",
+        "dst-mac",
+        "src-mac",
+        "vlan",
+        "proto",
+        "tos",
+        "src-ipv4",
+        "dst-ipv4",
+        "src-ipv6",
+        "dst-ipv6",
+        "src-port",
+        "dst-port",
+        "src-ip",
+        "dst-ip"
+      ],
+      [
+        "unspecified"
+      ]
+    ],
+    [
+      "analyticsRecordSsx",
+      {
+        "name": "ab"
+      },
+      "collect_params_set0",
+      [
+        "egress-q-drops",
+        "egress-q-peak",
+        "egress-q-depth",
+        "ingress-q-depth",
+        "ingress-q-peak"
+      ],
+      [
+        "egress-q-drops"
+      ]
+    ],
+    [
+      "arpIf",
+      {
+        "interface_id": "ab"
+      },
+      "interface_controls_for_arp",
+      [
+        "unspecified",
+        "garp-adj-enable"
+      ],
+      [
+        "unspecified"
+      ]
+    ],
+    [
+      "arpIfPol",
+      {
+        "name": "ab"
+      },
+      "interface_controls_for_arp",
+      [
+        "unspecified",
+        "garp-adj-enable"
+      ],
+      [
+        "unspecified"
+      ]
+    ],
+    [
+      "bfdIf",
+      {
+        "interface_id": "ab"
+      },
+      "interface_controls",
+      [
+        "opt-subif"
+      ],
+      []
+    ],
+    [
+      "bfdIfAf",
+      {},
+      "interface_controls",
+      [
+        "opt-subif"
+      ],
+      []
+    ],
+    [
+      "bfdIfPol",
+      {
+        "name": "ab"
+      },
+      "interface_controls",
+      [
+        "opt-subif"
+      ],
+      []
+    ],
+    [
+      "bfdMhIfAf",
+      {},
+      "interface_controls_for_multi_hop",
+      [
+        "opt-subif"
+      ],
+      []
+    ],
+    [
+      "bgpBestPathCtrlPol",
+      {
+        "name": "ab"
+      },
+      "best_path_control",
+      [
+        "asPathMultipathRelax"
+      ],
+      []
+    ],
+    [
+      "bgpCtxAddlPathPol",
+      {},
+      "capability",
+      [
+        "send",
+        "receive",
+        "install-bkup"
+      ],
+      []
+    ],
+    [
+      "bgpCtxAfPol",
+      {
+        "name": "ab"
+      },
+      "controls",
+      [
+        "host-rt-leak"
+      ],
+      []
+    ],
+    [
+      "bgpCtxPol",
+      {
+        "name": "ab"
+      },
+      "graceful_restart_controls",
+      [
+        "helper"
+      ],
+      [
+        "helper"
+      ]
+    ],
+    [
+      "bgpDomClearDomLTask",
+      {},
+      "dir",
+      [
+        "in",
+        "out"
+      ],
+      []
+    ],
+    [
+      "bgpPeerEntryClearPeerLTask",
+      {},
+      "dir",
+      [
+        "in",
+        "out"
+      ],
+      []
+    ],
+    [
+      "bgpRsPeerToProfile",
+      {
+        "target_dn": "ab"
+      },
+      "config_issues",
+      [
+        "none",
+        "no-loopback-configured",
+        "conflicting-soo-value"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "bgpRtSummPol",
+      {
+        "name": "ab"
+      },
+      "address_type_af_controls",
+      [
+        "af-ucast",
+        "af-mcast",
+        "af-label-ucast"
+      ],
+      [
+        "af-ucast"
+      ]
+    ],
+    [
+      "bgpRtSummPol",
+      {
+        "name": "ab"
+      },
+      "summary_control",
+      [
+        "as-set",
+        "summary-only"
+      ],
+      []
+    ],
+    [
+      "callhomeQuery",
+      {
+        "name": "ab"
+      },
+      "response_data",
+      [
+        "none",
+        "tasks",
+        "faults",
+        "stats",
+        "config-only",
+        "relations",
+        "no-scoped",
+        "state",
+        "health",
+        "fault-records",
+        "audit-logs",
+        "event-logs",
+        "required",
+        "count",
+        "health-records",
+        "port-deployment",
+        "deployment",
+        "local-prefix",
+        "fault-count",
+        "relations-with-parent",
+        "record-subtree",
+        "add-mo-list",
+        "deployment-records",
+        "ep-records",
+        "full-deployment",
+        "custom-path-hop",
+        "pending-deployment",
+        "tags"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "callhomeSrc",
+      {
+        "name": "ab"
+      },
+      "include_action",
+      [
+        "none",
+        "faults",
+        "events",
+        "audit",
+        "session",
+        "all"
+      ],
+      [
+        "faults"
+      ]
+    ],
+    [
+      "cloudsecCapabilityRemote",
+      {},
+      "cap_bm",
+      [
+        "none",
+        "cloudsec-is-supported"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "commHttps",
+      {},
+      "ssl_protocols",
+      [
+        "TLSv1",
+        "TLSv1.1",
+        "TLSv1.2",
+        "TLSv1.3"
+      ],
+      [
+        "TLSv1.1",
+        "TLSv1.2"
+      ]
+    ],
+    [
+      "commSsh",
+      {},
+      "kex_algorithms",
+      [
+        "diffie-hellman-group1-sha1",
+        "diffie-hellman-group14-sha1",
+        "diffie-hellman-group14-sha256",
+        "curve25519-sha256@libssh.org",
+        "ecdh-sha2-nistp384",
+        "ecdh-sha2-nistp521",
+        "ecdh-sha2-nistp256",
+        "curve25519-sha256",
+        "diffie-hellman-group16-sha512"
+      ],
+      [
+        "diffie-hellman-group14-sha256",
+        "diffie-hellman-group16-sha512",
+        "curve25519-sha256@libssh.org",
+        "ecdh-sha2-nistp521",
+        "ecdh-sha2-nistp384",
+        "ecdh-sha2-nistp256",
+        "curve25519-sha256"
+      ]
+    ],
+    [
+      "commSsh",
+      {},
+      "ssh_ciphers",
+      [
+        "aes128-ctr",
+        "aes192-ctr",
+        "aes256-ctr",
+        "aes128-gcm@openssh.com",
+        "chacha20-poly1305@openssh.com",
+        "aes256-gcm@openssh.com"
+      ],
+      [
+        "aes128-ctr",
+        "aes192-ctr",
+        "aes256-ctr",
+        "aes128-gcm@openssh.com",
+        "aes256-gcm@openssh.com",
+        "chacha20-poly1305@openssh.com"
+      ]
+    ],
+    [
+      "commSsh",
+      {},
+      "ssh_macs",
+      [
+        "hmac-sha1",
+        "hmac-sha2-256",
+        "hmac-sha2-512",
+        "hmac-sha2-256-etm@openssh.com",
+        "hmac-sha2-512-etm@openssh.com"
+      ],
+      [
+        "hmac-sha2-256",
+        "hmac-sha2-512",
+        "hmac-sha2-256-etm@openssh.com",
+        "hmac-sha2-512-etm@openssh.com"
+      ]
+    ],
+    [
+      "coppProtoClassP",
+      {
+        "name": "ab"
+      },
+      "match_proto",
+      [
+        "bgp",
+        "ospf",
+        "cdp",
+        "lldp",
+        "lacp",
+        "arp",
+        "icmp",
+        "stp",
+        "bfd"
+      ],
+      []
+    ],
+    [
+      "dbgacAnyToEp",
+      {
+        "name": "ab"
+      },
+      "usage",
+      [
+        "atomic-counter",
+        "latency-stats"
+      ],
+      [
+        "atomic-counter"
+      ]
+    ],
+    [
+      "dbgacEpToAny",
+      {
+        "name": "ab"
+      },
+      "usage",
+      [
+        "atomic-counter",
+        "latency-stats"
+      ],
+      [
+        "atomic-counter"
+      ]
+    ],
+    [
+      "dbgacEpToEp",
+      {
+        "name": "ab"
+      },
+      "usage",
+      [
+        "atomic-counter",
+        "latency-stats"
+      ],
+      [
+        "atomic-counter"
+      ]
+    ],
+    [
+      "dbgacEpToEpg",
+      {
+        "name": "ab"
+      },
+      "usage",
+      [
+        "atomic-counter",
+        "latency-stats"
+      ],
+      [
+        "atomic-counter"
+      ]
+    ],
+    [
+      "dbgacEpToExt",
+      {
+        "name": "ab"
+      },
+      "usage",
+      [
+        "atomic-counter",
+        "latency-stats"
+      ],
+      [
+        "atomic-counter"
+      ]
+    ],
+    [
+      "dbgacEpgToEp",
+      {
+        "name": "ab"
+      },
+      "usage",
+      [
+        "atomic-counter",
+        "latency-stats"
+      ],
+      [
+        "atomic-counter"
+      ]
+    ],
+    [
+      "dbgacEpgToEpg",
+      {
+        "name": "ab"
+      },
+      "ip_conn_type",
+      [
+        "ipv4",
+        "ipv6"
+      ],
+      [
+        "ipv4"
+      ]
+    ],
+    [
+      "dbgacEpgToEpg",
+      {
+        "name": "ab"
+      },
+      "usage",
+      [
+        "atomic-counter",
+        "latency-stats"
+      ],
+      [
+        "atomic-counter"
+      ]
+    ],
+    [
+      "dbgacEpgToIp",
+      {
+        "name": "ab"
+      },
+      "usage",
+      [
+        "atomic-counter",
+        "latency-stats"
+      ],
+      [
+        "atomic-counter"
+      ]
+    ],
+    [
+      "dbgacExtToEp",
+      {
+        "name": "ab"
+      },
+      "usage",
+      [
+        "atomic-counter",
+        "latency-stats"
+      ],
+      [
+        "atomic-counter"
+      ]
+    ],
+    [
+      "dbgacIpToEpg",
+      {
+        "name": "ab"
+      },
+      "usage",
+      [
+        "atomic-counter",
+        "latency-stats"
+      ],
+      [
+        "atomic-counter"
+      ]
+    ],
+    [
+      "dbgacIpToIp",
+      {
+        "name": "ab"
+      },
+      "usage",
+      [
+        "atomic-counter",
+        "latency-stats"
+      ],
+      [
+        "atomic-counter"
+      ]
+    ],
+    [
+      "dbgexpTechSupODev",
+      {
+        "name": "ab"
+      },
+      "category_of_feature_to_be_collected",
+      [
+        "all",
+        "policy",
+        "L4L7",
+        "virtualization",
+        "monitoring",
+        "infra",
+        "stats",
+        "forwarding",
+        "nx-os",
+        "dme"
+      ],
+      [
+        "all"
+      ]
+    ],
+    [
+      "dbgexpTechSupOnD",
+      {
+        "name": "ab"
+      },
+      "category_of_feature_to_be_collected",
+      [
+        "all",
+        "policy",
+        "L4L7",
+        "virtualization",
+        "monitoring",
+        "infra",
+        "stats",
+        "forwarding",
+        "nx-os",
+        "dme"
+      ],
+      [
+        "all"
+      ]
+    ],
+    [
+      "dbgexpTechSupP",
+      {
+        "name": "ab"
+      },
+      "category_of_feature_to_be_collected",
+      [
+        "all",
+        "policy",
+        "L4L7",
+        "virtualization",
+        "monitoring",
+        "infra",
+        "stats",
+        "forwarding",
+        "nx-os",
+        "dme"
+      ],
+      [
+        "all"
+      ]
+    ],
+    [
+      "dbgexpTechSupVmm",
+      {
+        "name": "ab"
+      },
+      "category_of_feature_to_be_collected",
+      [
+        "all",
+        "policy",
+        "L4L7",
+        "virtualization",
+        "monitoring",
+        "infra",
+        "stats",
+        "forwarding",
+        "nx-os",
+        "dme"
+      ],
+      [
+        "all"
+      ]
+    ],
+    [
+      "dhcpRsProv",
+      {
+        "target_dn": "ab"
+      },
+      "pref",
+      [
+        "none",
+        "use-server-vrf"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "eigrpIfPol",
+      {
+        "name": "ab"
+      },
+      "interface_controls",
+      [
+        "split-horizon",
+        "passive",
+        "nh-self",
+        "bfd"
+      ],
+      [
+        "split-horizon",
+        "nh-self"
+      ]
+    ],
+    [
+      "eigrpStubDef",
+      {},
+      "stub_route_advertisement_controls",
+      [
+        "connected",
+        "static",
+        "summary",
+        "external"
+      ],
+      [
+        "connected",
+        "summary"
+      ]
+    ],
+    [
+      "epLoopProtectP",
+      {
+        "name": "ab"
+      },
+      "action",
+      [
+        "port-disable",
+        "bd-learn-disable"
+      ],
+      [
+        "port-disable"
+      ]
+    ],
+    [
+      "eqptdiagpCardHealthPol",
+      {},
+      "health_tests",
+      [
+        "memory",
+        "cpu",
+        "forwarding",
+        "port"
+      ],
+      []
+    ],
+    [
+      "eqptdiagpLeTsBtEcc",
+      {
+        "name": "ab"
+      },
+      "bitmask_of_diagnostics_tests_to_be_run",
+      [
+        "none",
+        "peripherals"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "eqptdiagpLeTsBtEcc",
+      {
+        "name": "ab"
+      },
+      "full_bm",
+      [
+        "none",
+        "peripherals"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "eqptdiagpLeTsBtLc",
+      {
+        "name": "ab"
+      },
+      "bitmask_of_diagnostics_tests_to_be_run",
+      [
+        "none",
+        "peripherals",
+        "asic"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "eqptdiagpLeTsBtLc",
+      {
+        "name": "ab"
+      },
+      "full_bm",
+      [
+        "none",
+        "peripherals",
+        "asic"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "eqptdiagpLeTsBtSc",
+      {
+        "name": "ab"
+      },
+      "diags_bm",
+      [
+        "none",
+        "sys-mem",
+        "cpu",
+        "peripherals",
+        "internal-conn"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "eqptdiagpLeTsBtSc",
+      {
+        "name": "ab"
+      },
+      "full_bm",
+      [
+        "none",
+        "sys-mem",
+        "cpu",
+        "peripherals",
+        "internal-conn"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "eqptdiagpLeTsHlEcc",
+      {
+        "name": "ab"
+      },
+      "bitmask_of_diagnostics_tests_to_be_run",
+      [
+        "none",
+        "peripherals"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "eqptdiagpLeTsHlEcc",
+      {
+        "name": "ab"
+      },
+      "full_bm",
+      [
+        "none",
+        "peripherals"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "eqptdiagpLeTsHlLc",
+      {
+        "name": "ab"
+      },
+      "bitmask_of_diagnostics_tests_to_be_run",
+      [
+        "none",
+        "peripherals",
+        "asic"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "eqptdiagpLeTsHlLc",
+      {
+        "name": "ab"
+      },
+      "full_bm",
+      [
+        "none",
+        "peripherals",
+        "asic"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "eqptdiagpLeTsHlSc",
+      {
+        "name": "ab"
+      },
+      "bitmask_of_diagnostics_tests_to_be_run",
+      [
+        "none",
+        "sys-mem",
+        "cpu",
+        "peripherals",
+        "internal-conn"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "eqptdiagpLeTsHlSc",
+      {
+        "name": "ab"
+      },
+      "full_bm",
+      [
+        "none",
+        "sys-mem",
+        "cpu",
+        "peripherals",
+        "internal-conn"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "eqptdiagpLeTsOdEcc",
+      {
+        "name": "ab"
+      },
+      "bitmask_of_diagnostics_tests_to_be_run",
+      [
+        "none",
+        "peripherals"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "eqptdiagpLeTsOdEcc",
+      {
+        "name": "ab"
+      },
+      "full_bm",
+      [
+        "none",
+        "peripherals"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "eqptdiagpLeTsOdLc",
+      {
+        "name": "ab"
+      },
+      "bitmask_of_diagnostics_tests_to_be_run",
+      [
+        "none",
+        "peripherals",
+        "asic"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "eqptdiagpLeTsOdLc",
+      {
+        "name": "ab"
+      },
+      "full_diagnostics",
+      [
+        "none",
+        "peripherals",
+        "asic"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "eqptdiagpLeTsOdSc",
+      {
+        "name": "ab"
+      },
+      "bitmask_of_diagnostics_tests_to_be_run",
+      [
+        "none",
+        "sys-mem",
+        "cpu",
+        "peripherals",
+        "internal-conn"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "eqptdiagpLeTsOdSc",
+      {
+        "name": "ab"
+      },
+      "full_diagnostics",
+      [
+        "none",
+        "sys-mem",
+        "cpu",
+        "peripherals",
+        "internal-conn"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "eqptdiagpNodeHealthPol",
+      {},
+      "health_tests",
+      [
+        "memory",
+        "cpu",
+        "forwarding",
+        "port"
+      ],
+      []
+    ],
+    [
+      "eqptdiagpPortHealthPol",
+      {},
+      "health_tests",
+      [
+        "memory",
+        "cpu",
+        "forwarding",
+        "port"
+      ],
+      []
+    ],
+    [
+      "eqptdiagpSpTsBtFc",
+      {
+        "name": "ab"
+      },
+      "bitmask_of_diagnostics_tests_to_be_run",
+      [
+        "none",
+        "sys-mem",
+        "cpu",
+        "peripherals",
+        "internal-conn",
+        "asic"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "eqptdiagpSpTsBtFc",
+      {
+        "name": "ab"
+      },
+      "full_bm",
+      [
+        "none",
+        "sys-mem",
+        "cpu",
+        "peripherals",
+        "internal-conn",
+        "asic"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "eqptdiagpSpTsBtLc",
+      {
+        "name": "ab"
+      },
+      "bitmask_of_diagnostics_tests_to_be_run",
+      [
+        "none",
+        "sys-mem",
+        "cpu",
+        "peripherals",
+        "internal-conn",
+        "asic"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "eqptdiagpSpTsBtLc",
+      {
+        "name": "ab"
+      },
+      "full_bm",
+      [
+        "none",
+        "sys-mem",
+        "cpu",
+        "peripherals",
+        "internal-conn",
+        "asic"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "eqptdiagpSpTsBtSc",
+      {
+        "name": "ab"
+      },
+      "bitmask_of_diagnostics_tests_to_be_run",
+      [
+        "none",
+        "sys-mem",
+        "cpu",
+        "peripherals",
+        "internal-conn"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "eqptdiagpSpTsBtSc",
+      {
+        "name": "ab"
+      },
+      "full_bm",
+      [
+        "none",
+        "sys-mem",
+        "cpu",
+        "peripherals",
+        "internal-conn"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "eqptdiagpSpTsBtScc",
+      {
+        "name": "ab"
+      },
+      "bitmask_of_diagnostics_tests_to_be_run",
+      [
+        "none",
+        "sys-mem",
+        "cpu",
+        "peripherals",
+        "internal-conn"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "eqptdiagpSpTsBtScc",
+      {
+        "name": "ab"
+      },
+      "full_bm",
+      [
+        "none",
+        "sys-mem",
+        "cpu",
+        "peripherals",
+        "internal-conn"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "eqptdiagpSpTsHlFc",
+      {
+        "name": "ab"
+      },
+      "bitmask_of_diagnostics_tests_to_be_run",
+      [
+        "none",
+        "sys-mem",
+        "cpu",
+        "peripherals",
+        "internal-conn",
+        "asic"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "eqptdiagpSpTsHlFc",
+      {
+        "name": "ab"
+      },
+      "full_bm",
+      [
+        "none",
+        "sys-mem",
+        "cpu",
+        "peripherals",
+        "internal-conn",
+        "asic"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "eqptdiagpSpTsHlLc",
+      {
+        "name": "ab"
+      },
+      "bitmask_of_diagnostics_tests_to_be_run",
+      [
+        "none",
+        "sys-mem",
+        "cpu",
+        "peripherals",
+        "internal-conn",
+        "asic"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "eqptdiagpSpTsHlLc",
+      {
+        "name": "ab"
+      },
+      "full_bm",
+      [
+        "none",
+        "sys-mem",
+        "cpu",
+        "peripherals",
+        "internal-conn",
+        "asic"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "eqptdiagpSpTsHlSc",
+      {
+        "name": "ab"
+      },
+      "bitmask_of_diagnostics_tests_to_be_run",
+      [
+        "none",
+        "sys-mem",
+        "cpu",
+        "peripherals",
+        "internal-conn"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "eqptdiagpSpTsHlSc",
+      {
+        "name": "ab"
+      },
+      "full_bm",
+      [
+        "none",
+        "sys-mem",
+        "cpu",
+        "peripherals",
+        "internal-conn"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "eqptdiagpSpTsHlScc",
+      {
+        "name": "ab"
+      },
+      "bitmask_of_diagnostics_tests_to_be_run",
+      [
+        "none",
+        "sys-mem",
+        "cpu",
+        "peripherals",
+        "internal-conn"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "eqptdiagpSpTsHlScc",
+      {
+        "name": "ab"
+      },
+      "full_bm",
+      [
+        "none",
+        "sys-mem",
+        "cpu",
+        "peripherals",
+        "internal-conn"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "eqptdiagpSpTsOdFc",
+      {
+        "name": "ab"
+      },
+      "bitmask_of_diagnostics_tests_to_be_run",
+      [
+        "none",
+        "sys-mem",
+        "cpu",
+        "peripherals",
+        "internal-conn",
+        "asic"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "eqptdiagpSpTsOdFc",
+      {
+        "name": "ab"
+      },
+      "full_diagnostics",
+      [
+        "none",
+        "sys-mem",
+        "cpu",
+        "peripherals",
+        "internal-conn",
+        "asic"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "eqptdiagpSpTsOdLc",
+      {
+        "name": "ab"
+      },
+      "bitmask_of_diagnostics_tests_to_be_run",
+      [
+        "none",
+        "sys-mem",
+        "cpu",
+        "peripherals",
+        "internal-conn",
+        "asic"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "eqptdiagpSpTsOdLc",
+      {
+        "name": "ab"
+      },
+      "full_diagnostics",
+      [
+        "none",
+        "sys-mem",
+        "cpu",
+        "peripherals",
+        "internal-conn",
+        "asic"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "eqptdiagpSpTsOdSc",
+      {
+        "name": "ab"
+      },
+      "bitmask_of_diagnostics_tests_to_be_run",
+      [
+        "none",
+        "sys-mem",
+        "cpu",
+        "peripherals",
+        "internal-conn"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "eqptdiagpSpTsOdSc",
+      {
+        "name": "ab"
+      },
+      "full_diagnostics",
+      [
+        "none",
+        "sys-mem",
+        "cpu",
+        "peripherals",
+        "internal-conn"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "eqptdiagpSpTsOdScc",
+      {
+        "name": "ab"
+      },
+      "bitmask_of_diagnostics_tests_to_be_run",
+      [
+        "none",
+        "sys-mem",
+        "cpu",
+        "peripherals",
+        "internal-conn"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "eqptdiagpSpTsOdScc",
+      {
+        "name": "ab"
+      },
+      "full_diagnostics",
+      [
+        "none",
+        "sys-mem",
+        "cpu",
+        "peripherals",
+        "internal-conn"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "eqptdiagpTsBtExtChFP",
+      {
+        "name": "ab"
+      },
+      "bitmask_of_diagnostics_tests_to_be_run",
+      [
+        "none",
+        "internal-conn"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "eqptdiagpTsBtExtChFP",
+      {
+        "name": "ab"
+      },
+      "full_bm",
+      [
+        "none",
+        "internal-conn"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "eqptdiagpTsBtExtChHP",
+      {
+        "name": "ab"
+      },
+      "bitmask_of_diagnostics_tests_to_be_run",
+      [
+        "none",
+        "port"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "eqptdiagpTsBtExtChHP",
+      {
+        "name": "ab"
+      },
+      "full_bm",
+      [
+        "none",
+        "port"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "eqptdiagpTsBtFabP",
+      {
+        "name": "ab"
+      },
+      "bitmask_of_diagnostics_tests_to_be_run",
+      [
+        "none",
+        "port"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "eqptdiagpTsBtFabP",
+      {
+        "name": "ab"
+      },
+      "full_bm",
+      [
+        "none",
+        "port"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "eqptdiagpTsBtLeafP",
+      {
+        "name": "ab"
+      },
+      "bitmask_of_diagnostics_tests_to_be_run",
+      [
+        "none",
+        "port"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "eqptdiagpTsBtLeafP",
+      {
+        "name": "ab"
+      },
+      "full_bm",
+      [
+        "none",
+        "port"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "eqptdiagpTsHlExtChFP",
+      {
+        "name": "ab"
+      },
+      "bitmask_of_diagnostics_tests_to_be_run",
+      [
+        "none",
+        "internal-conn"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "eqptdiagpTsHlExtChFP",
+      {
+        "name": "ab"
+      },
+      "full_bm",
+      [
+        "none",
+        "internal-conn"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "eqptdiagpTsHlExtChHP",
+      {
+        "name": "ab"
+      },
+      "bitmask_of_diagnostics_tests_to_be_run",
+      [
+        "none",
+        "port"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "eqptdiagpTsHlExtChHP",
+      {
+        "name": "ab"
+      },
+      "full_bm",
+      [
+        "none",
+        "port"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "eqptdiagpTsHlFabP",
+      {
+        "name": "ab"
+      },
+      "bitmask_of_diagnostics_tests_to_be_run",
+      [
+        "none",
+        "port"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "eqptdiagpTsHlFabP",
+      {
+        "name": "ab"
+      },
+      "full_bm",
+      [
+        "none",
+        "port"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "eqptdiagpTsHlLeafP",
+      {
+        "name": "ab"
+      },
+      "bitmask_of_diagnostics_tests_to_be_run",
+      [
+        "none",
+        "port"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "eqptdiagpTsHlLeafP",
+      {
+        "name": "ab"
+      },
+      "full_bm",
+      [
+        "none",
+        "port"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "eqptdiagpTsOdFabP",
+      {
+        "name": "ab"
+      },
+      "bitmask_of_diagnostics_tests_to_be_run",
+      [
+        "none",
+        "port"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "eqptdiagpTsOdFabP",
+      {
+        "name": "ab"
+      },
+      "full_diagnostics",
+      [
+        "none",
+        "port"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "eqptdiagpTsOdLeafP",
+      {
+        "name": "ab"
+      },
+      "bitmask_of_diagnostics_tests_to_be_run",
+      [
+        "none",
+        "port"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "eqptdiagpTsOdLeafP",
+      {
+        "name": "ab"
+      },
+      "full_diagnostics",
+      [
+        "none",
+        "port"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "fabricNodeControl",
+      {
+        "name": "ab"
+      },
+      "fabric_node_control_bitmask",
+      [
+        "None",
+        "Dom"
+      ],
+      [
+        "None"
+      ]
+    ],
+    [
+      "fcInstPol",
+      {
+        "name": "ab"
+      },
+      "controls",
+      [
+        "stateful-ha",
+        "load-balance"
+      ],
+      []
+    ],
+    [
+      "fvAEPg",
+      {
+        "name": "ab"
+      },
+      "forwarding_control_bits",
+      [
+        "none",
+        "proxy-arp"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "fvBD",
+      {
+        "name": "ab"
+      },
+      "ep_move_detection_mode",
+      [
+        "garp"
+      ],
+      []
+    ],
+    [
+      "fvEpRetPol",
+      {
+        "name": "ab"
+      },
+      "ep_bounce_trigger",
+      [
+        "rarp-flood",
+        "protocol"
+      ],
+      [
+        "protocol"
+      ]
+    ],
+    [
+      "fvTnlEPg",
+      {
+        "name": "ab"
+      },
+      "forwarding_controls",
+      [
+        "mac-learn-enable",
+        "mac-learn-disable"
+      ],
+      [
+        "mac-learn-enable"
+      ]
+    ],
+    [
+      "fvTnlEPg",
+      {
+        "name": "ab"
+      },
+      "dot1q_tunnel_l2_protocol_tunneling_mask",
+      [
+        "none",
+        "stp",
+        "lldp",
+        "cdp",
+        "lacp",
+        "vtp"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "hostprotRule",
+      {
+        "name": "ab"
+      },
+      "host_protection_domain_action",
+      [
+        "log",
+        "permit",
+        "deny"
+      ],
+      [
+        "permit"
+      ]
+    ],
+    [
+      "hostprotRuleDef",
+      {
+        "name": "ab"
+      },
+      "host_protection_domain_action",
+      [
+        "log",
+        "permit",
+        "deny"
+      ],
+      [
+        "permit"
+      ]
+    ],
+    [
+      "hsrpGroupP",
+      {
+        "name": "ab"
+      },
+      "group_vip_misconfiguration",
+      [
+        "none",
+        "group-vip-subnet-mismatch",
+        "Secondary-vip-subnet-mismatch",
+        "GroupVIP-Conflicts-Other-Group",
+        "GroupName-Conflicts-Other-Group",
+        "GroupMac-Conflicts-Other-Group",
+        "group-vip-conflicts-if-ip",
+        "Secondary-vip-conflicts-if-ip",
+        "Multiple-Version-On-Interface"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "hsrpGroupPol",
+      {
+        "name": "ab"
+      },
+      "group_control_bits",
+      [
+        "preempt"
+      ],
+      []
+    ],
+    [
+      "hsrpIfPol",
+      {
+        "name": "ab"
+      },
+      "controls",
+      [
+        "bia",
+        "bfd"
+      ],
+      []
+    ],
+    [
+      "igmpIfPol",
+      {
+        "name": "ab"
+      },
+      "controls",
+      [
+        "rep-ll",
+        "fast-leave",
+        "allow-v3-asm"
+      ],
+      []
+    ],
+    [
+      "igmpSnoopPol",
+      {
+        "name": "ab"
+      },
+      "controls",
+      [
+        "querier",
+        "fast-leave",
+        "opt-flood",
+        "routing"
+      ],
+      []
+    ],
+    [
+      "infraSetPol",
+      {},
+      "opflexp_ssl_protocols",
+      [
+        "TLSv1",
+        "TLSv1.1",
+        "TLSv1.2"
+      ],
+      [
+        "TLSv1.1",
+        "TLSv1.2"
+      ]
+    ],
+    [
+      "l2LoadBalancePol",
+      {},
+      "load_balance_criteria",
+      [
+        "src-ip",
+        "dst-ip",
+        "l4-src-port",
+        "l4-dst-port"
+      ],
+      []
+    ],
+    [
+      "l3extDefaultRouteLeakP",
+      {},
+      "scope_of_default_route_leak_policy",
+      [
+        "none",
+        "ctx",
+        "l3-out"
+      ],
+      [
+        "l3-out"
+      ]
+    ],
+    [
+      "l3extInfraNodeP",
+      {},
+      "spine_role",
+      [
+        "unspecified",
+        "wan",
+        "inter-pod",
+        "msite-speaker",
+        "msite-forwarder"
+      ],
+      [
+        "unspecified"
+      ]
+    ],
+    [
+      "l3extLNodeP",
+      {
+        "name": "ab"
+      },
+      "node_path_misconfiguration",
+      [
+        "none",
+        "node-path-misconfig",
+        "routerid-not-changable-with-mcast",
+        "loopback-ip-missing",
+        "subnet-mismatch",
+        "node-vlif-misconfig",
+        "anchor-node-mismatch",
+        "missing-rs-export-route-profile",
+        "missing-mpls-infra-l3out",
+        "bd-profile-mismatch",
+        "mtu-mac-mismatch",
+        "anchor-encap-mismatch",
+        "access-encap-node-overlap",
+        "access-encap-bd-map-conflict",
+        "rtsumsubnet-l3extsubnet-conflict"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "l3extOut",
+      {
+        "name": "ab"
+      },
+      "enforce_rtctrl",
+      [
+        "import",
+        "export"
+      ],
+      [
+        "export"
+      ]
+    ],
+    [
+      "l3extRsNodeL3OutAtt",
+      {
+        "target_dn": "ab"
+      },
+      "config_issues",
+      [
+        "none",
+        "node-path-misconfig",
+        "routerid-not-changable-with-mcast",
+        "loopback-ip-missing",
+        "subnet-mismatch",
+        "node-vlif-misconfig",
+        "anchor-node-mismatch",
+        "missing-rs-export-route-profile",
+        "missing-mpls-infra-l3out",
+        "bd-profile-mismatch",
+        "mtu-mac-mismatch",
+        "anchor-encap-mismatch",
+        "access-encap-node-overlap",
+        "access-encap-bd-map-conflict",
+        "rtsumsubnet-l3extsubnet-conflict"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "lacpLagPol",
+      {
+        "name": "ab"
+      },
+      "control",
+      [
+        "susp-individual",
+        "graceful-conv",
+        "load-defer",
+        "fast-sel-hot-stdby",
+        "symmetric-hash"
+      ],
+      [
+        "susp-individual",
+        "graceful-conv",
+        "fast-sel-hot-stdby"
+      ]
+    ],
+    [
+      "lldpInstPol",
+      {
+        "name": "ab"
+      },
+      "optional_tlv_selector",
+      [
+        "unknown",
+        "port-desc",
+        "sys-name",
+        "sys-desc",
+        "sys-cap",
+        "mgmt-addr",
+        "port-vlan",
+        "dcbx",
+        "model-number",
+        "software-version",
+        "max-framesize",
+        "vlan-name",
+        "link-aggregation"
+      ],
+      [
+        "port-desc",
+        "sys-name",
+        "sys-desc",
+        "sys-cap",
+        "mgmt-addr",
+        "port-vlan"
+      ]
+    ],
+    [
+      "mcpInstPol",
+      {
+        "name": "ab"
+      },
+      "controls",
+      [
+        "stateful-ha",
+        "pdu-per-vlan"
+      ],
+      []
+    ],
+    [
+      "mcpInstPol",
+      {
+        "name": "ab"
+      },
+      "loop_protection_action",
+      [
+        "port-disable"
+      ],
+      [
+        "port-disable"
+      ]
+    ],
+    [
+      "mdpRemoteService",
+      {},
+      "consumer_scope",
+      [
+        "epg",
+        "context"
+      ],
+      [
+        "epg",
+        "context"
+      ]
+    ],
+    [
+      "mdpService",
+      {},
+      "consumer_scope",
+      [
+        "epg",
+        "context"
+      ],
+      [
+        "epg",
+        "context"
+      ]
+    ],
+    [
+      "mldSnoopPol",
+      {
+        "name": "ab"
+      },
+      "controls",
+      [
+        "querier",
+        "fast-leave",
+        "opt-flood",
+        "routing"
+      ],
+      []
+    ],
+    [
+      "ndIfPol",
+      {
+        "name": "ab"
+      },
+      "controls",
+      [
+        "unspecified",
+        "managed-cfg",
+        "other-cfg",
+        "suppress-ra",
+        "suppress-ra-mtu",
+        "unsolicit-na-glean"
+      ],
+      [
+        "unspecified"
+      ]
+    ],
+    [
+      "ndPfxPol",
+      {
+        "name": "ab"
+      },
+      "prefix_controls",
+      [
+        "auto-cfg",
+        "on-link",
+        "router-address"
+      ],
+      [
+        "auto-cfg",
+        "on-link"
+      ]
+    ],
+    [
+      "netflowRecordPol",
+      {
+        "name": "ab"
+      },
+      "collect_params",
+      [
+        "count-bytes",
+        "count-pkts",
+        "sampler-id",
+        "pkt-disp",
+        "ts-first",
+        "ts-recent",
+        "tcp-flags",
+        "src-intf"
+      ],
+      [
+        "src-intf"
+      ]
+    ],
+    [
+      "netflowRecordPol",
+      {
+        "name": "ab"
+      },
+      "match_params",
+      [
+        "unspecified",
+        "ethertype",
+        "dst-mac",
+        "src-mac",
+        "vlan",
+        "proto",
+        "tos",
+        "src-ipv4",
+        "dst-ipv4",
+        "src-ipv6",
+        "dst-ipv6",
+        "src-port",
+        "dst-port",
+        "src-ip",
+        "dst-ip"
+      ],
+      [
+        "unspecified"
+      ]
+    ],
+    [
+      "notifOperClass",
+      {
+        "classname_that_is_being_subscribed": "ab"
+      },
+      "refresh_type",
+      [
+        "on-change",
+        "periodic"
+      ],
+      [
+        "on-change"
+      ]
+    ],
+    [
+      "nwsSyslogSrc",
+      {
+        "name": "ab"
+      },
+      "log_action",
+      [
+        "deny",
+        "permit"
+      ],
+      [
+        "deny"
+      ]
+    ],
+    [
+      "ospfCtxPol",
+      {
+        "name": "ab"
+      },
+      "control_knobs",
+      [
+        "pfx-suppress",
+        "name-lookup"
+      ],
+      []
+    ],
+    [
+      "ospfCtxPol",
+      {
+        "name": "ab"
+      },
+      "graceful_restart_controls",
+      [
+        "helper"
+      ],
+      [
+        "helper"
+      ]
+    ],
+    [
+      "ospfExtP",
+      {},
+      "area_ctrl",
+      [
+        "unspecified",
+        "summary",
+        "redistribute",
+        "suppress-fa"
+      ],
+      [
+        "redistribute",
+        "summary"
+      ]
+    ],
+    [
+      "ospfIfPol",
+      {
+        "name": "ab"
+      },
+      "interface_controls",
+      [
+        "unspecified",
+        "passive",
+        "mtu-ignore",
+        "advert-subnet",
+        "bfd"
+      ],
+      [
+        "unspecified"
+      ]
+    ],
+    [
+      "pimASMPatPol",
+      {},
+      "control_knobs",
+      [
+        "pre-build-spt"
+      ],
+      []
+    ],
+    [
+      "pimAutoRPPol",
+      {},
+      "control_knobs",
+      [
+        "listen",
+        "forward"
+      ],
+      []
+    ],
+    [
+      "pimBSRPPol",
+      {},
+      "control_knobs",
+      [
+        "listen",
+        "forward"
+      ],
+      []
+    ],
+    [
+      "pimCtxP",
+      {},
+      "control_knobs",
+      [
+        "fast-conv",
+        "strict-rfc-compliant"
+      ],
+      []
+    ],
+    [
+      "pimExtP",
+      {},
+      "enabled_pim_address_families",
+      [
+        "ipv4-mcast",
+        "ipv6-mcast"
+      ],
+      [
+        "ipv4-mcast"
+      ]
+    ],
+    [
+      "pimIPV6CtxP",
+      {},
+      "control_knobs",
+      [
+        "fast-conv",
+        "strict-rfc-compliant"
+      ],
+      []
+    ],
+    [
+      "pimIfPol",
+      {
+        "name": "ab"
+      },
+      "interface_controls",
+      [
+        "border",
+        "passive",
+        "strict-rfc-compliant"
+      ],
+      []
+    ],
+    [
+      "pkiWebTokenData",
+      {},
+      "session_recording_options",
+      [
+        "login",
+        "logout",
+        "refresh"
+      ],
+      []
+    ],
+    [
+      "poeInstPol",
+      {
+        "name": "ab"
+      },
+      "power_control",
+      [
+        "combined"
+      ],
+      []
+    ],
+    [
+      "qosInstPol",
+      {
+        "name": "ab"
+      },
+      "global_control_settings",
+      [
+        "none",
+        "dot1p-preserve"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "qosPfcPol",
+      {
+        "name": "ab"
+      },
+      "bitmap_of_nodrop_cos",
+      [
+        "unspecified",
+        "cos0",
+        "cos1",
+        "cos2",
+        "cos3",
+        "cos4",
+        "cos5",
+        "cos6",
+        "cos7"
+      ],
+      [
+        "unspecified"
+      ]
+    ],
+    [
+      "snmpSrc",
+      {
+        "name": "ab"
+      },
+      "include_action",
+      [
+        "none",
+        "faults",
+        "events",
+        "audit",
+        "session",
+        "all"
+      ],
+      [
+        "all"
+      ]
+    ],
+    [
+      "spanExtendedFltEntry",
+      {
+        "name": "ab"
+      },
+      "tcp_flags",
+      [
+        "tcp-flags-default",
+        "fin-flag-off",
+        "fin-flag-on",
+        "syn-flag-off",
+        "syn-flag-on",
+        "rst-flag-off",
+        "rst-flag-on",
+        "psh-flag-off",
+        "psh-flag-on",
+        "ack-flag-off",
+        "ack-flag-on",
+        "urg-flag-off",
+        "urg-flag-on",
+        "ece-flag-off",
+        "ece-flag-on",
+        "cwr-flag-off",
+        "cwr-flag-on"
+      ],
+      [
+        "tcp-flags-default"
+      ]
+    ],
+    [
+      "statsThrDoubleP",
+      {
+        "property": "ab"
+      },
+      "raising_threshold_state",
+      [
+        "none",
+        "Warn",
+        "Minor",
+        "Major",
+        "Crit"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "statsThrDoubleP",
+      {
+        "property": "ab"
+      },
+      "falling_threshold_state",
+      [
+        "none",
+        "Warn",
+        "Minor",
+        "Major",
+        "Crit"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "statsThrFloatP",
+      {
+        "property": "ab"
+      },
+      "raising_threshold_state",
+      [
+        "none",
+        "Warn",
+        "Minor",
+        "Major",
+        "Crit"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "statsThrFloatP",
+      {
+        "property": "ab"
+      },
+      "falling_threshold_state",
+      [
+        "none",
+        "Warn",
+        "Minor",
+        "Major",
+        "Crit"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "statsThrSByteP",
+      {
+        "property": "ab"
+      },
+      "raising_threshold_state",
+      [
+        "none",
+        "Warn",
+        "Minor",
+        "Major",
+        "Crit"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "statsThrSByteP",
+      {
+        "property": "ab"
+      },
+      "falling_threshold_state",
+      [
+        "none",
+        "Warn",
+        "Minor",
+        "Major",
+        "Crit"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "statsThrSint16P",
+      {
+        "property": "ab"
+      },
+      "raising_threshold_state",
+      [
+        "none",
+        "Warn",
+        "Minor",
+        "Major",
+        "Crit"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "statsThrSint16P",
+      {
+        "property": "ab"
+      },
+      "falling_threshold_state",
+      [
+        "none",
+        "Warn",
+        "Minor",
+        "Major",
+        "Crit"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "statsThrSint32P",
+      {
+        "property": "ab"
+      },
+      "raising_threshold_state",
+      [
+        "none",
+        "Warn",
+        "Minor",
+        "Major",
+        "Crit"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "statsThrSint32P",
+      {
+        "property": "ab"
+      },
+      "falling_threshold_state",
+      [
+        "none",
+        "Warn",
+        "Minor",
+        "Major",
+        "Crit"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "statsThrSint64P",
+      {
+        "property": "ab"
+      },
+      "raising_threshold_state",
+      [
+        "none",
+        "Warn",
+        "Minor",
+        "Major",
+        "Crit"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "statsThrSint64P",
+      {
+        "property": "ab"
+      },
+      "falling_threshold_state",
+      [
+        "none",
+        "Warn",
+        "Minor",
+        "Major",
+        "Crit"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "statsThrTriggerP",
+      {
+        "property": "ab"
+      },
+      "raising_threshold_state",
+      [
+        "none",
+        "Warn",
+        "Minor",
+        "Major",
+        "Crit"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "statsThrTriggerP",
+      {
+        "property": "ab"
+      },
+      "falling_threshold_state",
+      [
+        "none",
+        "Warn",
+        "Minor",
+        "Major",
+        "Crit"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "statsThrUByteP",
+      {
+        "property": "ab"
+      },
+      "raising_threshold_state",
+      [
+        "none",
+        "Warn",
+        "Minor",
+        "Major",
+        "Crit"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "statsThrUByteP",
+      {
+        "property": "ab"
+      },
+      "falling_threshold_state",
+      [
+        "none",
+        "Warn",
+        "Minor",
+        "Major",
+        "Crit"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "statsThrUint16P",
+      {
+        "property": "ab"
+      },
+      "raising_threshold_state",
+      [
+        "none",
+        "Warn",
+        "Minor",
+        "Major",
+        "Crit"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "statsThrUint16P",
+      {
+        "property": "ab"
+      },
+      "falling_threshold_state",
+      [
+        "none",
+        "Warn",
+        "Minor",
+        "Major",
+        "Crit"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "statsThrUint32P",
+      {
+        "property": "ab"
+      },
+      "raising_threshold_state",
+      [
+        "none",
+        "Warn",
+        "Minor",
+        "Major",
+        "Crit"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "statsThrUint32P",
+      {
+        "property": "ab"
+      },
+      "falling_threshold_state",
+      [
+        "none",
+        "Warn",
+        "Minor",
+        "Major",
+        "Crit"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "statsThrUint64P",
+      {
+        "property": "ab"
+      },
+      "raising_threshold_state",
+      [
+        "none",
+        "Warn",
+        "Minor",
+        "Major",
+        "Crit"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "statsThrUint64P",
+      {
+        "property": "ab"
+      },
+      "falling_threshold_state",
+      [
+        "none",
+        "Warn",
+        "Minor",
+        "Major",
+        "Crit"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "statslimitInstLimitPol",
+      {},
+      "include_action",
+      [
+        "none",
+        "faults",
+        "events",
+        "audit",
+        "session",
+        "all"
+      ],
+      [
+        "faults"
+      ]
+    ],
+    [
+      "stpIfPol",
+      {
+        "name": "ab"
+      },
+      "controls",
+      [
+        "unspecified",
+        "bpdu-guard",
+        "bpdu-filter"
+      ],
+      [
+        "unspecified"
+      ]
+    ],
+    [
+      "stpInstPol",
+      {
+        "name": "ab"
+      },
+      "controls",
+      [
+        "extchp-bpdu-filter"
+      ],
+      []
+    ],
+    [
+      "syntheticContext",
+      {
+        "name": "ab"
+      },
+      "bits",
+      [
+        "bit1",
+        "bit2",
+        "bit3"
+      ],
+      []
+    ],
+    [
+      "syntheticIfcCTestObj",
+      {
+        "name": "ab"
+      },
+      "prop_bmp64",
+      [
+        "nobit",
+        "bit0",
+        "bit1",
+        "bit2",
+        "bit3",
+        "bit4",
+        "bit5",
+        "bit15",
+        "bit16",
+        "bit31",
+        "bit32",
+        "bit63",
+        "bit64"
+      ],
+      []
+    ],
+    [
+      "syntheticIfcCTestObj",
+      {
+        "name": "ab"
+      },
+      "prop_bmp8",
+      [
+        "nobit",
+        "bit0",
+        "bit1",
+        "bit2",
+        "bit3",
+        "bit4",
+        "bit5",
+        "bit6",
+        "bit7"
+      ],
+      []
+    ],
+    [
+      "syntheticIfcTLTestObj",
+      {
+        "name": "ab"
+      },
+      "prop_bmp64",
+      [
+        "nobit",
+        "bit0",
+        "bit1",
+        "bit2",
+        "bit3",
+        "bit4",
+        "bit5",
+        "bit15",
+        "bit16",
+        "bit31",
+        "bit32",
+        "bit63",
+        "bit64"
+      ],
+      []
+    ],
+    [
+      "syntheticIfcTLTestObj",
+      {
+        "name": "ab"
+      },
+      "prop_bmp8",
+      [
+        "nobit",
+        "bit0",
+        "bit1",
+        "bit2",
+        "bit3",
+        "bit4",
+        "bit5",
+        "bit6",
+        "bit7"
+      ],
+      []
+    ],
+    [
+      "syntheticSwCTestObj",
+      {
+        "name": "ab"
+      },
+      "prop_bmp64",
+      [
+        "nobit",
+        "bit0",
+        "bit1",
+        "bit2",
+        "bit3",
+        "bit4",
+        "bit5",
+        "bit15",
+        "bit16",
+        "bit31",
+        "bit32",
+        "bit63",
+        "bit64"
+      ],
+      []
+    ],
+    [
+      "syntheticSwCTestObj",
+      {
+        "name": "ab"
+      },
+      "prop_bmp8",
+      [
+        "nobit",
+        "bit0",
+        "bit1",
+        "bit2",
+        "bit3",
+        "bit4",
+        "bit5",
+        "bit6",
+        "bit7"
+      ],
+      []
+    ],
+    [
+      "syntheticSwTLTestObj",
+      {
+        "name": "ab"
+      },
+      "prop_bmp64",
+      [
+        "nobit",
+        "bit0",
+        "bit1",
+        "bit2",
+        "bit3",
+        "bit4",
+        "bit5",
+        "bit15",
+        "bit16",
+        "bit31",
+        "bit32",
+        "bit63",
+        "bit64"
+      ],
+      []
+    ],
+    [
+      "syntheticSwTLTestObj",
+      {
+        "name": "ab"
+      },
+      "prop_bmp8",
+      [
+        "nobit",
+        "bit0",
+        "bit1",
+        "bit2",
+        "bit3",
+        "bit4",
+        "bit5",
+        "bit6",
+        "bit7"
+      ],
+      []
+    ],
+    [
+      "syslogSrc",
+      {
+        "name": "ab"
+      },
+      "include_action",
+      [
+        "none",
+        "faults",
+        "events",
+        "audit",
+        "session",
+        "all"
+      ],
+      [
+        "faults"
+      ]
+    ],
+    [
+      "tacacsSrc",
+      {
+        "name": "ab"
+      },
+      "include_action",
+      [
+        "none",
+        "faults",
+        "events",
+        "audit",
+        "session",
+        "all"
+      ],
+      [
+        "audit",
+        "session"
+      ]
+    ],
+    [
+      "topSystemPingLTask",
+      {},
+      "ctrl",
+      [
+        "df"
+      ],
+      []
+    ],
+    [
+      "uiSettings",
+      {},
+      "endpoint_paths_to_display",
+      [
+        "vmm",
+        "learned",
+        "static",
+        "dynamic",
+        "802-dot-1x",
+        "poe"
+      ],
+      [
+        "vmm",
+        "learned",
+        "static",
+        "dynamic"
+      ]
+    ],
+    [
+      "vmmAgtStatus",
+      {
+        "name": "ab"
+      },
+      "remote_oper_issues",
+      [
+        "none",
+        "lnode-deleted",
+        "portgroup-encap-changed",
+        "portgroup-deleted",
+        "invalid-portgroup-exist",
+        "event-channel-down",
+        "connection-down",
+        "mtu-mismatch",
+        "discovery-protocol-mismatch",
+        "lnode-name-mismatch",
+        "vsmgmt-error",
+        "ps-error",
+        "invalid-backing",
+        "invalid-portgroup-name",
+        "partial-inv",
+        "portgroup-promiscuous-changed",
+        "portgroup-macchange-changed",
+        "portgroup-forgedtx-changed",
+        "portgroup-pvlan-changed",
+        "inv-completed-ex",
+        "opflex-channels-down",
+        "portgroup-netflowpref-changed",
+        "netflow-dstaddr-mismatch",
+        "netflow-dstport-mismatch",
+        "netflow-srcaddr-mismatch",
+        "netflow-afto-mismatch",
+        "netflow-ifto-mismatch",
+        "netflow-sr-mismatch",
+        "insufficient-mtu",
+        "invalid-permission",
+        "opflex-cert-expire",
+        "portgroup-bindingtype-mismatch",
+        "portgroup-numports-mismatch",
+        "portgroup-portallocation-mismatch",
+        "mtu-exceeded",
+        "numofuplinks-mismatch",
+        "uplinkname-mismatch",
+        "encapMode-mismatch",
+        "invalid-uplink-config",
+        "basic-lacp-not-supported",
+        "dup-transport-zones",
+        "empty-transport-zone-oid",
+        "dup-logical-switches",
+        "datacenter-renamed",
+        "policy-api-unsupported-in-nsxt",
+        "incomplete-logical-switch-promotion"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "vmmClusterCtrlrP",
+      {
+        "name": "ab"
+      },
+      "msft_config_issues",
+      [
+        "not-applicable",
+        "invalid-rootContName",
+        "duplicate-rootContName",
+        "missing-hostGroup-in-cloud",
+        "missing-rootContName",
+        "aaacert-invalid",
+        "inventory-failed",
+        "invalid-object-in-inventory",
+        "duplicate-mac-in-inventory",
+        "zero-mac-in-inventory"
+      ],
+      [
+        "not-applicable"
+      ]
+    ],
+    [
+      "vmmCtrlrP",
+      {
+        "name": "ab"
+      },
+      "configissues",
+      [
+        "not-applicable",
+        "invalid-rootContName",
+        "duplicate-rootContName",
+        "missing-hostGroup-in-cloud",
+        "missing-rootContName",
+        "aaacert-invalid",
+        "inventory-failed",
+        "invalid-object-in-inventory",
+        "duplicate-mac-in-inventory",
+        "zero-mac-in-inventory"
+      ],
+      [
+        "not-applicable"
+      ]
+    ],
+    [
+      "vmmDomP",
+      {
+        "name": "ab"
+      },
+      "arp_learning",
+      [
+        "disabled",
+        "enabled"
+      ],
+      [
+        "disabled"
+      ]
+    ],
+    [
+      "vmmDomP",
+      {
+        "name": "ab"
+      },
+      "ctrl_knob",
+      [
+        "none",
+        "epDpVerify"
+      ],
+      [
+        "epDpVerify"
+      ]
+    ],
+    [
+      "vmmIntAggr",
+      {
+        "name": "ab"
+      },
+      "feature_flags",
+      [
+        "none",
+        "skip-encap-validation",
+        "skip-rel-to-eppd",
+        "skip-vlan-pool-inheritance"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "vmmPlInf",
+      {
+        "epg_p_key": "ab"
+      },
+      "remote_oper_issues",
+      [
+        "none",
+        "lnode-deleted",
+        "portgroup-encap-changed",
+        "portgroup-deleted",
+        "invalid-portgroup-exist",
+        "event-channel-down",
+        "connection-down",
+        "mtu-mismatch",
+        "discovery-protocol-mismatch",
+        "lnode-name-mismatch",
+        "vsmgmt-error",
+        "ps-error",
+        "invalid-backing",
+        "invalid-portgroup-name",
+        "partial-inv",
+        "portgroup-promiscuous-changed",
+        "portgroup-macchange-changed",
+        "portgroup-forgedtx-changed",
+        "portgroup-pvlan-changed",
+        "inv-completed-ex",
+        "opflex-channels-down",
+        "portgroup-netflowpref-changed",
+        "netflow-dstaddr-mismatch",
+        "netflow-dstport-mismatch",
+        "netflow-srcaddr-mismatch",
+        "netflow-afto-mismatch",
+        "netflow-ifto-mismatch",
+        "netflow-sr-mismatch",
+        "insufficient-mtu",
+        "invalid-permission",
+        "opflex-cert-expire",
+        "portgroup-bindingtype-mismatch",
+        "portgroup-numports-mismatch",
+        "portgroup-portallocation-mismatch",
+        "mtu-exceeded",
+        "numofuplinks-mismatch",
+        "uplinkname-mismatch",
+        "encapMode-mismatch",
+        "invalid-uplink-config",
+        "basic-lacp-not-supported",
+        "dup-transport-zones",
+        "empty-transport-zone-oid",
+        "dup-logical-switches",
+        "datacenter-renamed",
+        "policy-api-unsupported-in-nsxt",
+        "incomplete-logical-switch-promotion"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "vmmPlInf",
+      {
+        "epg_p_key": "ab"
+      },
+      "status",
+      [
+        "unknown",
+        "pendingApply",
+        "pendingDelete",
+        "applied"
+      ],
+      [
+        "unknown"
+      ]
+    ],
+    [
+      "vmmUsrAggr",
+      {
+        "name": "ab"
+      },
+      "feature_flags",
+      [
+        "none",
+        "skip-encap-validation",
+        "skip-rel-to-eppd",
+        "skip-vlan-pool-inheritance"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "vmmUsrCustomAggr",
+      {
+        "name": "ab"
+      },
+      "feature_flags",
+      [
+        "none",
+        "skip-encap-validation",
+        "skip-rel-to-eppd",
+        "skip-vlan-pool-inheritance"
+      ],
+      [
+        "skip-encap-validation",
+        "skip-rel-to-eppd",
+        "skip-vlan-pool-inheritance"
+      ]
+    ],
+    [
+      "vnsRsLIfCtxToInstP",
+      {},
+      "redistribute",
+      [
+        "unspecified",
+        "connected",
+        "static",
+        "ospf",
+        "bgp"
+      ],
+      [
+        "ospf",
+        "bgp"
+      ]
+    ],
+    [
+      "vzEntry",
+      {
+        "name": "ab"
+      },
+      "tcp_rules",
+      [
+        "unspecified",
+        "syn",
+        "ack",
+        "fin",
+        "rst",
+        "est"
+      ],
+      [
+        "unspecified"
+      ]
+    ],
+    [
+      "vzEntryPortZero",
+      {
+        "name": "ab"
+      },
+      "tcp_rules",
+      [
+        "unspecified",
+        "syn",
+        "ack",
+        "fin",
+        "rst",
+        "est"
+      ],
+      [
+        "unspecified"
+      ]
+    ],
+    [
+      "vzRsDenyRule",
+      {
+        "name": "ab"
+      },
+      "directives",
+      [
+        "none",
+        "log",
+        "no_stats"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "vzRsFiltAtt",
+      {
+        "name": "ab"
+      },
+      "directives",
+      [
+        "none",
+        "log",
+        "no_stats"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "vzRsSubjFiltAtt",
+      {
+        "name": "ab"
+      },
+      "directives",
+      [
+        "none",
+        "log",
+        "no_stats"
+      ],
+      [
+        "none"
+      ]
+    ],
+    [
+      "vzRsSubjGraphAtt",
+      {},
+      "directives",
+      [
+        "none",
+        "log",
+        "no_stats"
+      ],
+      [
+        "none"
+      ]
+    ]
+  ],
   "bools": [
     [
       "aaaLdapProvider",
@@ -41544,9 +43971,7 @@
     ],
     [
       "datetimeNtpAuthKey",
-      {
-        "auth_key_id": "ab"
-      },
+      {},
       "trusted_state",
       false
     ],
@@ -41940,28 +44365,19 @@
     ],
     [
       "fabricPortConfig",
-      {
-        "node": "ab",
-        "card": "ab",
-        "port": "ab",
-        "sub_port": "ab"
-      },
+      {},
       "port_shutdown",
       false
     ],
     [
       "fabricPortConvertNode",
-      {
-        "node": "ab"
-      },
+      {},
       "convert_node_policies",
       false
     ],
     [
       "fabricPortConvertNode",
-      {
-        "node": "ab"
-      },
+      {},
       "convert_port_policies",
       false
     ],
@@ -43029,9 +45445,7 @@
     ],
     [
       "infraDhcpPoolReconcile",
-      {
-        "id": "ab"
-      },
+      {},
       "trigger",
       false
     ],
@@ -43049,28 +45463,19 @@
     ],
     [
       "infraPortConfig",
-      {
-        "node": "ab",
-        "card": "ab",
-        "port": "ab",
-        "sub_port": "ab"
-      },
+      {},
       "port_shutdown",
       false
     ],
     [
       "infraPortConvertNode",
-      {
-        "node": "ab"
-      },
+      {},
       "convert_node_policies",
       false
     ],
     [
       "infraPortConvertNode",
-      {
-        "node": "ab"
-      },
+      {},
       "convert_port_policies",
       false
     ],
@@ -43180,9 +45585,7 @@
     ],
     [
       "infraWiNode",
-      {
-        "cluster_unique_controller_id": "ab"
-      },
+      {},
       "force_administrative_state_change",
       false
     ],
@@ -43748,8 +46151,6 @@
     [
       "svccoreNode",
       {
-        "node_id_where_the_core_file_was_created": "ab",
-        "card_id": "ab",
         "name_of_service_that_cored": "ab",
         "create_time": "ab"
       },
@@ -43782,17 +46183,13 @@
     ],
     [
       "syntheticCtWiNode",
-      {
-        "cluster_unique_controller_id": "ab"
-      },
+      {},
       "all_shards_on_this_appliance_are_leaders",
       false
     ],
     [
       "syntheticCtWiNode",
-      {
-        "cluster_unique_controller_id": "ab"
-      },
+      {},
       "start_appliance_clean_or_as_it_is",
       false
     ],
@@ -45540,11 +47937,9 @@
     ],
     [
       "aaaRbacNodeRule",
+      {},
       {
-        "node_id": "ab"
-      },
-      {
-        "nodeId": "ab"
+        "nodeId": "1"
       }
     ],
     [
@@ -45887,11 +48282,9 @@
     ],
     [
       "analyticsCollectorBucket",
+      {},
       {
-        "flow_collector_bucket_id": "ab"
-      },
-      {
-        "id": "ab"
+        "id": "0"
       }
     ],
     [
@@ -45954,11 +48347,9 @@
     ],
     [
       "analyticsPayloadLenBin",
+      {},
       {
-        "payload_length_bin_id": "ab"
-      },
-      {
-        "id": "ab"
+        "id": "0"
       }
     ],
     [
@@ -46001,11 +48392,9 @@
     ],
     [
       "analyticsRcvWindowSzBin",
+      {},
       {
-        "receive_window_size_bin_id": "ab"
-      },
-      {
-        "id": "ab"
+        "id": "0"
       }
     ],
     [
@@ -46094,11 +48483,9 @@
     ],
     [
       "analyticsTCPOptHdrLenBin",
+      {},
       {
-        "tcp_option_header_length_bin_id": "ab"
-      },
-      {
-        "id": "ab"
+        "id": "0"
       }
     ],
     [
@@ -46573,11 +48960,9 @@
     ],
     [
       "bgpRRNodePEp",
+      {},
       {
-        "node_id": "ab"
-      },
-      {
-        "id": "ab"
+        "id": "1"
       }
     ],
     [
@@ -46725,7 +49110,7 @@
       "callhomeSmartCallhomeFault",
       {},
       {
-        "code": "0"
+        "code": "generic"
       }
     ],
     [
@@ -46886,11 +49271,9 @@
     ],
     [
       "cloudsecRelnHolder",
+      {},
       {
-        "id": "ab"
-      },
-      {
-        "id": "ab"
+        "id": "0"
       }
     ],
     [
@@ -46915,20 +49298,16 @@
     ],
     [
       "cloudsecSpRxKeySt",
+      {},
       {
-        "site_id": "ab"
-      },
-      {
-        "siteId": "ab"
+        "siteId": "0"
       }
     ],
     [
       "cloudsecSpTxKeySt",
+      {},
       {
-        "site_id": "ab"
-      },
-      {
-        "siteId": "ab"
+        "siteId": "0"
       }
     ],
     [
@@ -47209,11 +49588,9 @@
     ],
     [
       "coopNodePEp",
+      {},
       {
-        "node_id": "ab"
-      },
-      {
-        "id": "ab"
+        "id": "1"
       }
     ],
     [
@@ -47274,12 +49651,11 @@
     [
       "coppRule",
       {
-        "rule_name": "ab",
-        "rule_type": "ab"
+        "rule_name": "ab"
       },
       {
         "name": "ab",
-        "type": "ab"
+        "type": "v4"
       }
     ],
     [
@@ -47298,11 +49674,9 @@
     ],
     [
       "ctrlrCimcNode",
+      {},
       {
-        "apic_id": "ab"
-      },
-      {
-        "apicId": "ab"
+        "apicId": "1"
       }
     ],
     [
@@ -47321,20 +49695,16 @@
     ],
     [
       "datetimeNtpAuthKey",
+      {},
       {
-        "auth_key_id": "ab"
-      },
-      {
-        "id": "ab"
+        "id": "1"
       }
     ],
     [
       "datetimeNtpIFFClientKey",
+      {},
       {
-        "iff_key_id": "ab"
-      },
-      {
-        "iffKeyId": "ab"
+        "iffKeyId": "1"
       }
     ],
     [
@@ -47362,29 +49732,23 @@
     ],
     [
       "datetimeRsNtpProvToNtpAuthKey",
+      {},
       {
-        "auth_key_id": "ab"
-      },
-      {
-        "tnDatetimeNtpAuthKeyId": "ab"
+        "tnDatetimeNtpAuthKeyId": "1"
       }
     ],
     [
       "datetimeRsNtpProvToNtpAuthKey2",
+      {},
       {
-        "auth_key_id": "ab"
-      },
-      {
-        "tnDatetimeNtpAuthKeyId": "ab"
+        "tnDatetimeNtpAuthKeyId": "1"
       }
     ],
     [
       "datetimeRsNtpProvToNtpIFFClientKey",
+      {},
       {
-        "iff_key_id": "ab"
-      },
-      {
-        "tnDatetimeNtpIFFClientKeyIffKeyId": "ab"
+        "tnDatetimeNtpIFFClientKeyIffKeyId": "1"
       }
     ],
     [
@@ -47394,20 +49758,16 @@
     ],
     [
       "dbgFtriage",
+      {},
       {
-        "ftriage_instance_id": "ab"
-      },
-      {
-        "id": "ab"
+        "id": "0"
       }
     ],
     [
       "dbgNodeInst",
+      {},
       {
-        "apic_id": "ab"
-      },
-      {
-        "nodeId": "ab"
+        "nodeId": "1"
       }
     ],
     [
@@ -47801,11 +50161,9 @@
     ],
     [
       "dbgexpTechSupData",
+      {},
       {
-        "policy_name": "ab"
-      },
-      {
-        "feature": "ab"
+        "feature": "system"
       }
     ],
     [
@@ -48858,7 +51216,7 @@
       "eventSevAsnP",
       {},
       {
-        "code": "0"
+        "code": "generic"
       }
     ],
     [
@@ -48872,11 +51230,9 @@
     ],
     [
       "eventSubscriptionId",
+      {},
       {
-        "hold_the_subscription_id": "ab"
-      },
-      {
-        "subId": "ab"
+        "subId": "0"
       }
     ],
     [
@@ -49082,11 +51438,9 @@
     ],
     [
       "fabricExtSetupP",
+      {},
       {
-        "external_pool_identifier": "ab"
-      },
-      {
-        "extPoolId": "ab"
+        "extPoolId": "0"
       }
     ],
     [
@@ -49252,11 +51606,9 @@
     ],
     [
       "fabricNodeConfig",
+      {},
       {
-        "node": "ab"
-      },
-      {
-        "node": "ab"
+        "node": "0"
       }
     ],
     [
@@ -49289,11 +51641,9 @@
     ],
     [
       "fabricNodePEp",
+      {},
       {
-        "node_id": "ab"
-      },
-      {
-        "id": "ab"
+        "id": "1"
       }
     ],
     [
@@ -49372,26 +51722,19 @@
     ],
     [
       "fabricPortConfig",
+      {},
       {
-        "node": "ab",
-        "card": "ab",
-        "port": "ab",
-        "sub_port": "ab"
-      },
-      {
-        "node": "ab",
-        "card": "ab",
-        "port": "ab",
-        "subPort": "ab"
+        "node": "0",
+        "card": "1",
+        "port": "1",
+        "subPort": "0"
       }
     ],
     [
       "fabricPortConvertNode",
+      {},
       {
-        "node": "ab"
-      },
-      {
-        "node": "ab"
+        "node": "0"
       }
     ],
     [
@@ -49748,11 +52091,9 @@
     ],
     [
       "fabricSetupP",
+      {},
       {
-        "pod_identifier": "ab"
-      },
-      {
-        "podId": "ab"
+        "podId": "1"
       }
     ],
     [
@@ -49854,30 +52195,28 @@
       "faultInst",
       {},
       {
-        "code": "0"
+        "code": "generic"
       }
     ],
     [
       "faultLcP",
       {},
       {
-        "code": "0"
+        "code": "generic"
       }
     ],
     [
       "faultRelnHolder",
+      {},
       {
-        "id": "ab"
-      },
-      {
-        "id": "ab"
+        "id": "0"
       }
     ],
     [
       "faultSevAsnP",
       {},
       {
-        "code": "0"
+        "code": "generic"
       }
     ],
     [
@@ -50277,11 +52616,9 @@
     ],
     [
       "fteCollectorBucket",
+      {},
       {
-        "flow_collector_bucket_id": "ab"
-      },
-      {
-        "id": "ab"
+        "id": "0"
       }
     ],
     [
@@ -50639,11 +52976,9 @@
     ],
     [
       "fvKeyPol",
+      {},
       {
-        "key_id": "ab"
-      },
-      {
-        "id": "ab"
+        "id": "0"
       }
     ],
     [
@@ -50717,20 +53052,16 @@
     ],
     [
       "fvPodConnP",
+      {},
       {
-        "pod_id": "ab"
-      },
-      {
-        "id": "ab"
+        "id": "1"
       }
     ],
     [
       "fvRemoteId",
+      {},
       {
-        "site_id": "ab"
-      },
-      {
-        "siteId": "ab"
+        "siteId": "0"
       }
     ],
     [
@@ -51497,11 +53828,9 @@
     ],
     [
       "healthLevelP",
+      {},
       {
-        "high": "ab"
-      },
-      {
-        "high": "ab"
+        "high": "0"
       }
     ],
     [
@@ -51874,17 +54203,13 @@
     [
       "infraBundleConfig",
       {
-        "node_a": "ab",
-        "node_b": "ab",
-        "fex_a": "ab",
-        "fex_b": "ab",
         "associated_group_dn": "ab"
       },
       {
-        "nodeA": "ab",
-        "nodeB": "ab",
-        "fexA": "ab",
-        "fexB": "ab",
+        "nodeA": "na",
+        "nodeB": "na",
+        "fexA": "na",
+        "fexB": "na",
         "assocGrp": "ab"
       }
     ],
@@ -51985,11 +54310,9 @@
     ],
     [
       "infraDhcpPoolReconcile",
+      {},
       {
-        "id": "ab"
-      },
-      {
-        "id": "ab"
+        "id": "1"
       }
     ],
     [
@@ -52135,11 +54458,9 @@
     ],
     [
       "infraNode",
+      {},
       {
-        "id": "ab"
-      },
-      {
-        "id": "ab"
+        "id": "1"
       }
     ],
     [
@@ -52153,11 +54474,9 @@
     ],
     [
       "infraNodeConfig",
+      {},
       {
-        "node": "ab"
-      },
-      {
-        "node": "ab"
+        "node": "0"
       }
     ],
     [
@@ -52235,37 +54554,27 @@
     ],
     [
       "infraPortConfig",
+      {},
       {
-        "node": "ab",
-        "card": "ab",
-        "port": "ab",
-        "sub_port": "ab"
-      },
-      {
-        "node": "ab",
-        "card": "ab",
-        "port": "ab",
-        "subPort": "ab"
+        "node": "0",
+        "card": "1",
+        "port": "1",
+        "subPort": "0"
       }
     ],
     [
       "infraPortConvertFex",
+      {},
       {
-        "node": "ab",
-        "fex_id": "ab"
-      },
-      {
-        "node": "ab",
-        "fex": "ab"
+        "node": "0",
+        "fex": "unspecified"
       }
     ],
     [
       "infraPortConvertNode",
+      {},
       {
-        "node": "ab"
-      },
-      {
-        "node": "ab"
+        "node": "0"
       }
     ],
     [
@@ -52877,11 +55186,9 @@
     ],
     [
       "infraSnNode",
+      {},
       {
-        "cluster_unique_controller_id": "ab"
-      },
-      {
-        "id": "ab"
+        "id": "undefined"
       }
     ],
     [
@@ -52941,11 +55248,9 @@
     ],
     [
       "infraWiNode",
+      {},
       {
-        "cluster_unique_controller_id": "ab"
-      },
-      {
-        "id": "ab"
+        "id": "undefined"
       }
     ],
     [
@@ -54132,11 +56437,9 @@
     ],
     [
       "mdpDomain",
+      {},
       {
-        "domain_id": "ab"
-      },
-      {
-        "id": "ab"
+        "id": "1"
       }
     ],
     [
@@ -54160,11 +56463,9 @@
     ],
     [
       "mdpLeafP",
+      {},
       {
-        "node_id": "ab"
-      },
-      {
-        "id": "ab"
+        "id": "1"
       }
     ],
     [
@@ -54254,11 +56555,9 @@
     ],
     [
       "mdpSpineP",
+      {},
       {
-        "node_id": "ab"
-      },
-      {
-        "id": "ab"
+        "id": "1"
       }
     ],
     [
@@ -55038,11 +57337,9 @@
     ],
     [
       "opflexODevCliCmdSession",
+      {},
       {
-        "session_id": "ab"
-      },
-      {
-        "sessionId": "ab"
+        "sessionId": "0"
       }
     ],
     [
@@ -55483,11 +57780,9 @@
     ],
     [
       "pimRouteMapEntry",
+      {},
       {
-        "order": "ab"
-      },
-      {
-        "order": "ab"
+        "order": "0"
       }
     ],
     [
@@ -55537,14 +57832,12 @@
     [
       "pingExecFab",
       {
-        "name": "ab",
-        "source_node_id": "ab",
-        "destination_node_id": "ab"
+        "name": "ab"
       },
       {
         "name": "ab",
-        "srcNodeId": "ab",
-        "dstNodeId": "ab"
+        "srcNodeId": "1",
+        "dstNodeId": "1"
       }
     ],
     [
@@ -55644,11 +57937,9 @@
     ],
     [
       "plannerAffinityGroup",
+      {},
       {
-        "pref": "ab"
-      },
-      {
-        "pref": "ab"
+        "pref": "0"
       }
     ],
     [
@@ -55841,11 +58132,9 @@
     ],
     [
       "plannerMatchNode",
+      {},
       {
-        "id": "ab"
-      },
-      {
-        "id": "ab"
+        "id": "1"
       }
     ],
     [
@@ -56288,13 +58577,10 @@
     ],
     [
       "qosDot1PClass",
+      {},
       {
-        "from_": "ab",
-        "to": "ab"
-      },
-      {
-        "from": "ab",
-        "to": "ab"
+        "from": "unspecified",
+        "to": "unspecified"
       }
     ],
     [
@@ -56308,13 +58594,10 @@
     ],
     [
       "qosDscpClass",
+      {},
       {
-        "from_": "ab",
-        "to": "ab"
-      },
-      {
-        "from": "ab",
-        "to": "ab"
+        "from": "0",
+        "to": "0"
       }
     ],
     [
@@ -56360,24 +58643,18 @@
     ],
     [
       "qosMplsEgressRule",
+      {},
       {
-        "from_": "ab",
-        "to": "ab"
-      },
-      {
-        "from": "ab",
-        "to": "ab"
+        "from": "unspecified",
+        "to": "unspecified"
       }
     ],
     [
       "qosMplsIngressRule",
+      {},
       {
-        "from_": "ab",
-        "to": "ab"
-      },
-      {
-        "from": "ab",
-        "to": "ab"
+        "from": "unspecified",
+        "to": "unspecified"
       }
     ],
     [
@@ -56579,11 +58856,9 @@
     ],
     [
       "rtctrlSetASPathASN",
+      {},
       {
-        "asn_order": "ab"
-      },
-      {
-        "order": "ab"
+        "order": "0"
       }
     ],
     [
@@ -56763,11 +59038,9 @@
     ],
     [
       "snmpCtrlrInst",
+      {},
       {
-        "apic_id": "ab"
-      },
-      {
-        "apicId": "ab"
+        "apicId": "1"
       }
     ],
     [
@@ -57475,14 +59748,12 @@
     [
       "svccoreNode",
       {
-        "node_id_where_the_core_file_was_created": "ab",
-        "card_id": "ab",
         "name_of_service_that_cored": "ab",
         "create_time": "ab"
       },
       {
-        "nodeId": "ab",
-        "cardId": "ab",
+        "nodeId": "1",
+        "cardId": "1",
         "svcName": "ab",
         "createTime": "ab"
       }
@@ -57542,11 +59813,9 @@
     ],
     [
       "syntheticAnotherTestObj",
+      {},
       {
-        "id": "ab"
-      },
-      {
-        "id": "ab"
+        "id": "0"
       }
     ],
     [
@@ -57557,12 +59826,11 @@
     [
       "syntheticClusterTestShardInstance",
       {
-        "service_name": "ab",
-        "shard_id": "ab"
+        "service_name": "ab"
       },
       {
         "svc": "ab",
-        "shard": "ab",
+        "shard": "undefined",
         "systemId": "0"
       }
     ],
@@ -57596,11 +59864,9 @@
     ],
     [
       "syntheticCtWiNode",
+      {},
       {
-        "cluster_unique_controller_id": "ab"
-      },
-      {
-        "id": "ab"
+        "id": "undefined"
       }
     ],
     [
@@ -57610,20 +59876,16 @@
     ],
     [
       "syntheticEp",
+      {},
       {
-        "id": "ab"
-      },
-      {
-        "id": "ab"
+        "id": "0"
       }
     ],
     [
       "syntheticEpGroup",
+      {},
       {
-        "id": "ab"
-      },
-      {
-        "id": "ab"
+        "id": "0"
       }
     ],
     [
@@ -57633,11 +59895,9 @@
     ],
     [
       "syntheticHierarchyObj",
+      {},
       {
-        "id": "ab"
-      },
-      {
-        "id": "ab"
+        "id": "0"
       }
     ],
     [
@@ -57795,12 +60055,11 @@
     [
       "syntheticTestObj",
       {
-        "id": "ab",
         "dn_bin": "ab",
         "dn_str": "ab"
       },
       {
-        "id": "ab",
+        "id": "0",
         "dnBin": "ab",
         "dnStr": "ab"
       }
@@ -57817,11 +60076,9 @@
     ],
     [
       "syslogFacilityFilter",
+      {},
       {
-        "facility": "ab"
-      },
-      {
-        "facility": "ab"
+        "facility": "default"
       }
     ],
     [
@@ -58358,11 +60615,9 @@
     ],
     [
       "thirdpartyappNodeConfig",
+      {},
       {
-        "node_id": "ab"
-      },
-      {
-        "nodeId": "ab"
+        "nodeId": "1"
       }
     ],
     [
@@ -58521,14 +60776,12 @@
     [
       "tracerouteExecFab",
       {
-        "name": "ab",
-        "source_node_id": "ab",
-        "destination_node_id": "ab"
+        "name": "ab"
       },
       {
         "name": "ab",
-        "srcNodeId": "ab",
-        "dstNodeId": "ab"
+        "srcNodeId": "1",
+        "dstNodeId": "1"
       }
     ],
     [
@@ -59050,13 +61303,11 @@
     [
       "vmmInjectedSvcPort",
       {
-        "port": "ab",
-        "protocol": "ab",
         "target_port": "ab"
       },
       {
-        "port": "ab",
-        "protocol": "ab",
+        "port": "unspecified",
+        "protocol": "unspecified",
         "targetPort": "ab"
       }
     ],
@@ -59311,11 +61562,9 @@
     ],
     [
       "vmmUplinkP",
+      {},
       {
-        "uplink_id": "ab"
-      },
-      {
-        "uplinkId": "ab"
+        "uplinkId": "0"
       }
     ],
     [

@@ -1,0 +1,40 @@
+{
+  "include": ["src", "tests", "docs", "scripts", "data/scripts"],
+  "exclude": [
+    "**/node_modules",
+    "**/__pycache__",
+    "**/.*",
+    "docs/_build",
+    "src/niwaki/models/_generated"
+  ],
+  "venvPath": ".",
+  "venv": ".venv",
+  "pythonVersion": "3.12",
+  "typeCheckingMode": "strict",
+  "reportMissingModuleSource": "none",
+  "reportPrivateImportUsage": "none",
+  "reportPrivateUsage": "none",
+  "reportUnusedImport": "none",
+  "reportUnsupportedDunderAll": "none",
+  "reportUnusedClass": "none",
+  "reportUnusedFunction": "none",
+
+  // The reportUnknown* family flags Any-propagation completeness, not a type
+  // error: a schema dict, a pydantic annotation, a lambda over Any. mypy strict
+  // (the reference for src/) does not flag these, and the tests execution
+  // environment already silences them. Aligning the two keeps the correctness
+  // rules (reportArgumentType, reportCallIssue, reportAttributeAccessIssue — the
+  // ones that caught the alias and number bugs) as the real guard.
+  "reportUnknownVariableType": "none",
+  "reportUnknownMemberType": "none",
+  "reportUnknownArgumentType": "none",
+  "reportUnknownParameterType": "none",
+  "reportUnknownLambdaType": "none",
+  "reportMissingTypeArgument": "none",
+  "executionEnvironments": [
+    {
+      "root": "tests",
+      "reportMissingImports": "none"
+    }
+  ]
+}

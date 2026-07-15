@@ -41,7 +41,10 @@ class vmmInjectedClusterInfo(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    account_name: Annotated[str, Field(max_length=512, alias="accountName")] = ""
+    account_name: Annotated[
+        str,
+        Field(max_length=512, validation_alias="accountName", serialization_alias="accountName"),
+    ] = ""
     annotation: Annotated[
         str,
         Field(
@@ -51,13 +54,18 @@ class vmmInjectedClusterInfo(ManagedObject):
         ),
     ] = ""
     name: Annotated[str, Field(max_length=128, description="The name of the object.")] = ""
-    display_name: Annotated[str, Field(max_length=128, alias="nameAlias")] = ""
+    display_name: Annotated[
+        str, Field(max_length=128, validation_alias="nameAlias", serialization_alias="nameAlias")
+    ] = ""
     oper_state: CompCtrlrOperState = Field(
         default=CompCtrlrOperState.UNKNOWN,
-        alias="operState",
+        validation_alias="operState",
+        serialization_alias="operState",
         description="The operational state of a process.",
     )
-    overlay_dn: str = Field(default="", alias="overlayDn")
+    overlay_dn: str = Field(
+        default="", validation_alias="overlayDn", serialization_alias="overlayDn"
+    )
     provider: Annotated[str, Field(max_length=512)] = ""
     type: Annotated[
         str, Field(max_length=512, description="The specific type of the object or component.")

@@ -60,7 +60,8 @@ class infraRsMstInstPol(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9_.:-]+$",
-            alias="tnStpInstPolName",
+            validation_alias="tnStpInstPolName",
+            serialization_alias="tnStpInstPolName",
             description="The spanning tree policy name.",
         ),
     ] = ""

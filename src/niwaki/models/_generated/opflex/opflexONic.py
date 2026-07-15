@@ -50,13 +50,25 @@ class opflexONic(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    device_name: Annotated[str, Field(max_length=512, alias="deviceName")] = ""
-    driver_info: Annotated[str, Field(max_length=512, alias="driverInfo")] = ""
-    id: Annotated[str, Field(description="An identifier .")] = ""
-    link_speed: Annotated[str, Field(max_length=512, alias="linkSpeed")] = ""
+    device_name: Annotated[
+        str, Field(max_length=512, validation_alias="deviceName", serialization_alias="deviceName")
+    ] = ""
+    driver_info: Annotated[
+        str, Field(max_length=512, validation_alias="driverInfo", serialization_alias="driverInfo")
+    ] = ""
+    id: Annotated[int, Field(description="An identifier .")] = 0
+    link_speed: Annotated[
+        str, Field(max_length=512, validation_alias="linkSpeed", serialization_alias="linkSpeed")
+    ] = ""
     name: Annotated[str, Field(max_length=128, description="The name of the object.")] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     state: CompNicState = Field(
         default=CompNicState.DOWN, description="The state of the relationship."

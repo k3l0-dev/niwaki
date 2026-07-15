@@ -41,7 +41,10 @@ class rtctrlSetASPath(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     as_path_criteria: RtmapASCritT = Field(
-        default=RtmapASCritT.PREPEND, alias="criteria", description="Criteria value"
+        default=RtmapASCritT.PREPEND,
+        validation_alias="criteria",
+        serialization_alias="criteria",
+        description="Criteria value",
     )
 
     # ── Configurable ───────────────────────────────────────────────────────────
@@ -58,14 +61,30 @@ class rtctrlSetASPath(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies the description of a policy component.",
         ),
     ] = ""
-    last_as_number: str = Field(default="", alias="lastnum", description="Last AS Number")
+    last_as_number: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=10,
+            validation_alias="lastnum",
+            serialization_alias="lastnum",
+            description="Last AS Number",
+        ),
+    ] = 0
     name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     type: RtctrlSetType = Field(default=RtctrlSetType.AS_PATH, description="Set type")
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

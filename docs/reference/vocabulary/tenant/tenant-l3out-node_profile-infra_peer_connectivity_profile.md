@@ -24,24 +24,24 @@ Accepted as keyword arguments of `.infra_peer_connectivity_profile(peer_address)
 | parameter | wire | type | values | default | description |
 | --- | --- | --- | --- | --- | --- |
 | `peer_address` *(positional)* | `addr` | `str` | — | — | Peer address |
-| `address_type_af_controls` | `addrTCtrl` | `str` | — | — | Ucast/Mcast Addr Type AF Control |
+| `address_type_af_controls` | `addrTCtrl` | {ref}`BgpAddrTControl <enum-bgpaddrtcontrol>` | `af-ucast`, `af-mcast`, `af-label-ucast` | `af-ucast` | Ucast/Mcast Addr Type AF Control |
 | `administrative_state` | `adminSt` | {ref}`NwAdminSt <enum-nwadminst>` | `disabled`, `enabled` | `enabled` | Administrative State |
-| `allowed_self_as_count` | `allowedSelfAsCnt` | `str` | — | — | The number of occurrences of a local Autonomous System Number (ASN). |
-| `capability` | `capability` | `str` | — | — | Peer AF Capability |
-| `peer_af_controls` | `ctrl` | `str` | — | — | Peer Controls |
-| `peer_af_controls_ext` | `ctrlExt` | `str` | — | — | Peer AF controls Ext |
+| `allowed_self_as_count` | `allowedSelfAsCnt` | `int` | — | `3` | The number of occurrences of a local Autonomous System Number (ASN). |
+| `capability` | `capability` | {ref}`BgpPeerAfCap <enum-bgppeerafcap>` | `none`, `receive-add-path` | `none` | Peer AF Capability |
+| `peer_af_controls` | `ctrl` | {ref}`BgpPeerControlPol <enum-bgppeercontrolpol>` | `send-com`, `send-ext-com`, `nh-self`, `dis-peer-as-check`, `allow-self-as`, `as-override`, `segment-routing-disable` | `send-com, send-ext-com` | Peer Controls |
+| `peer_af_controls_ext` | `ctrlExt` | {ref}`BgpPeerControlPolExt <enum-bgppeercontrolpolext>` | `send-domain-path` | — | Peer AF controls Ext |
 | `data_plane_address` | `dataPlaneAddr` | `str` | — | — | Data plane address |
 | `description` | `descr` | `str` | — | — | Specifies the description of a policy component. |
 | `name` | `name` | `str` | — | — | — |
 | `password` | `password` | `str` | — | — | Administrative state |
-| `peer_controls` | `peerCtrl` | `str` | — | — | The peer controls. |
-| `peer_type` | `peerT` | `str` | — | — | Peer Type |
-| `private_as_control` | `privateASctrl` | `str` | — | — | Remove private AS |
+| `peer_controls` | `peerCtrl` | {ref}`BgpPeerPControlType <enum-bgppeerpcontroltype>` | `bfd`, `dis-conn-check` | — | The peer controls. |
+| `peer_type` | `peerT` | {ref}`BgpPeerT <enum-bgppeert>` | `wan`, `intersite`, `mdp-wan`, `sr-mpls` | `wan` | Peer Type |
+| `private_as_control` | `privateASctrl` | {ref}`BgpPrivateASControl <enum-bgpprivateascontrol>` | `remove-exclusive`, `remove-all`, `replace-as` | — | Remove private AS |
 | `intersite_route_reflector` | `remoteIntersiteRR` | `bool` | — | `False` | Is the peer an intersite route reflector |
 | `source_interface_type` | `srcIfT` | {ref}`BgpSrcIfT <enum-bgpsrcift>` | `l3out-loopback`, `routable-loopback` | `l3out-loopback` | Source Interface Type |
 | `control_type` | `trustCtrl` | {ref}`BgpTrustCtrlT <enum-bgptrustctrlt>` | `trusted`, `untrusted` | `untrusted` | — |
-| `ebgp_multihop_ttl_value` | `ttl` | `str` | — | — | Specifies time to live (TTL). |
-| `weight_for_routes_from_this_neighbor` | `weight` | `str` | — | — | Default weight for routes from this neighbor |
+| `ebgp_multihop_ttl_value` | `ttl` | `int` | — | `1` | Specifies time to live (TTL). |
+| `weight_for_routes_from_this_neighbor` | `weight` | `int` | — | `0` | Default weight for routes from this neighbor |
 
 ## Children
 

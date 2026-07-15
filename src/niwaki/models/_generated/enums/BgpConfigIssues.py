@@ -6,9 +6,9 @@ from enum import StrEnum
 
 
 class BgpConfigIssues(StrEnum):
-    CONFLICTING_SOO_VALUE = "conflicting-soo-value"
-    NO_LOOPBACK_CONFIGURED = "no-loopback-configured"
     NONE = "none"
+    NO_LOOPBACK_CONFIGURED = "no-loopback-configured"
+    CONFLICTING_SOO_VALUE = "conflicting-soo-value"
 
     @classmethod
     def _missing_(cls, value: object) -> BgpConfigIssues | None:

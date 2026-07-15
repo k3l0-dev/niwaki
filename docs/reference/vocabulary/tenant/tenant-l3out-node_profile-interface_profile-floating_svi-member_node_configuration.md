@@ -23,7 +23,7 @@ Accepted as keyword arguments of `.member_node_configuration(side)` and of `.set
 
 | parameter | wire | type | values | default | description |
 | --- | --- | --- | --- | --- | --- |
-| `side` *(positional)* | `side` | `str` | — | — | — |
+| `side` *(positional)* | `side` | {ref}`L3extSide <enum-l3extside>` | `A`, `B` | — | — |
 | `addr` | `addr` | `str` | — | — | — |
 | `description` | `descr` | `str` | — | — | Specifies the description of a policy component. |
 | `ipv6_dad` | `ipv6Dad` | {ref}`L3extIpv6Dad <enum-l3extipv6dad>` | `disabled`, `enabled` | `enabled` | IPv6 DAD feature When disabled it will IPv6 DAD will be diasabled |

@@ -55,7 +55,8 @@ class maintRsPolScheduler(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9_.:-]+$",
-            alias="tnTrigSchedPName",
+            validation_alias="tnTrigSchedPName",
+            serialization_alias="tnTrigSchedPName",
             description="The maintenance policy scheduler allows you to define one-time or reoccurring time periods where one or more of the affected nodes may be rebooted without administrator intervention.",
         ),
     ] = ""

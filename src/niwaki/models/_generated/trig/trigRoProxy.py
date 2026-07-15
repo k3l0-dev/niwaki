@@ -40,7 +40,8 @@ class trigRoProxy(ManagedObject):
     dn_of_the_triggerable_policy: Annotated[
         str,
         Field(
-            alias="policyDn",
+            validation_alias="policyDn",
+            serialization_alias="policyDn",
             description="A property that indicates if the heartbeat has been delayed on this node.",
         ),
     ]
@@ -48,7 +49,8 @@ class trigRoProxy(ManagedObject):
     # ── Configurable ───────────────────────────────────────────────────────────
     administrative_state: TrigExecState = Field(
         default=TrigExecState.UNTRIGGERED,
-        alias="adminSt",
+        validation_alias="adminSt",
+        serialization_alias="adminSt",
         description="The administrative state of the executable policies.",
     )
     annotation: Annotated[
@@ -64,12 +66,19 @@ class trigRoProxy(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies the description of a policy component.",
         ),
     ] = ""
     name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

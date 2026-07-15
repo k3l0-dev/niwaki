@@ -46,7 +46,12 @@ class extdevRsFromDevMgrToApp(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     target_dn: Annotated[
-        str, Field(alias="tDn", description="The distinguished name of the target.")
+        str,
+        Field(
+            validation_alias="tDn",
+            serialization_alias="tDn",
+            description="The distinguished name of the target.",
+        ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
@@ -58,5 +63,7 @@ class extdevRsFromDevMgrToApp(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    is_default_conn: bool = Field(default=False, alias="isDefaultConn")
+    is_default_conn: bool = Field(
+        default=False, validation_alias="isDefaultConn", serialization_alias="isDefaultConn"
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

@@ -46,7 +46,12 @@ class orchsRsToFuncProfile(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     target_dn: Annotated[
-        str, Field(alias="tDn", description="The distinguished name of the target.")
+        str,
+        Field(
+            validation_alias="tDn",
+            serialization_alias="tDn",
+            description="The distinguished name of the target.",
+        ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
@@ -63,7 +68,8 @@ class orchsRsToFuncProfile(ManagedObject):
     ] = ""
     is_default: bool = Field(
         default=False,
-        alias="isDefault",
+        validation_alias="isDefault",
+        serialization_alias="isDefault",
         description="Specifies if this is the default domain. Only one domain in the group should be default.",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

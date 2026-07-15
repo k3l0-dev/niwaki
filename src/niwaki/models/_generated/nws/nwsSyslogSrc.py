@@ -3,9 +3,11 @@
 from __future__ import annotations
 
 from typing import ClassVar, Annotated
-from pydantic import Field
+from pydantic import BeforeValidator, Field
 
+from niwaki.models._wire import Flags, parse_flags
 from niwaki.models._generated.enums.MonAdminState import MonAdminState
+from niwaki.models._generated.enums.NwsLogTopic import NwsLogTopic
 from niwaki.models._generated.enums.SyslogSeverity import SyslogSeverity
 
 from niwaki.models.base import ManagedObject
@@ -45,7 +47,11 @@ class nwsSyslogSrc(ManagedObject):
     name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    admin_state: MonAdminState = Field(default=MonAdminState.ENABLED, alias="adminState")
+    admin_state: MonAdminState = Field(
+        default=MonAdminState.ENABLED,
+        validation_alias="adminState",
+        serialization_alias="adminState",
+    )
     annotation: Annotated[
         str,
         Field(
@@ -59,14 +65,37 @@ class nwsSyslogSrc(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies the description of a policy component.",
         ),
     ] = ""
-    log_action: str = Field(default="", alias="inclAction")
-    min_severity: SyslogSeverity = Field(default=SyslogSeverity.INFORMATION, alias="logLevel")
+    log_action: Annotated[Flags[NwsLogTopic], BeforeValidator(parse_flags)] = Field(
+        default_factory=lambda: frozenset({NwsLogTopic.DENY}),
+        validation_alias="inclAction",
+        serialization_alias="inclAction",
+    )
+    min_severity: SyslogSeverity = Field(
+        default=SyslogSeverity.INFORMATION,
+        validation_alias="logLevel",
+        serialization_alias="logLevel",
+    )
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
-    polling_interval: Annotated[int, Field(ge=60, le=86400, alias="pollingInterval")] = 60
+    polling_interval: Annotated[
+        int,
+        Field(
+            ge=60,
+            le=86400,
+            validation_alias="pollingInterval",
+            serialization_alias="pollingInterval",
+        ),
+    ] = 60
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

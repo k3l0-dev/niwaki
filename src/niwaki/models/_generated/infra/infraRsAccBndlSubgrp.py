@@ -55,7 +55,8 @@ class infraRsAccBndlSubgrp(ManagedObject):
     ] = ""
     target_dn: str = Field(
         default="",
-        alias="tDn",
+        validation_alias="tDn",
+        serialization_alias="tDn",
         description="The name of the relationship from the port block to the access bundle subgroup.",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

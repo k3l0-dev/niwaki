@@ -24,9 +24,9 @@ Accepted as keyword arguments of `.hsrp_interface_policy(name)` and of `.set(**a
 | parameter | wire | type | values | default | description |
 | --- | --- | --- | --- | --- | --- |
 | `name` *(positional)* | `name` | `str` | — | — | The name of the object. |
-| `controls` | `ctrl` | `str` | — | — | Interface controls |
-| `hsrp_interface_delay` | `delay` | `str` | — | — | Interface delay |
+| `controls` | `ctrl` | {ref}`HsrpIfControl <enum-hsrpifcontrol>` | `bia`, `bfd` | — | Interface controls |
+| `hsrp_interface_delay` | `delay` | `int` | — | `0` | Interface delay |
 | `description` | `descr` | `str` | — | — | Specifies a description of the policy definition. |
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |
-| `hsrp_reload_delay` | `reloadDelay` | `str` | — | — | Reload delay |
+| `hsrp_reload_delay` | `reloadDelay` | `int` | — | `0` | Reload delay |

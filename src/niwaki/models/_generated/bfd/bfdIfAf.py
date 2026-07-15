@@ -3,9 +3,11 @@
 from __future__ import annotations
 
 from typing import ClassVar, Annotated
-from pydantic import Field
+from pydantic import BeforeValidator, Field
 
+from niwaki.models._wire import Flags, parse_flags
 from niwaki.models._generated.enums.BfdAfT import BfdAfT
+from niwaki.models._generated.enums.BfdIfControl import BfdIfControl
 from niwaki.models._generated.enums.NwAdminSt import NwAdminSt
 
 from niwaki.models.base import ManagedObject
@@ -47,12 +49,15 @@ class bfdIfAf(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    type_of_the_address_family: BfdAfT = Field(default=BfdAfT.IPV4, alias="type")
+    type_of_the_address_family: BfdAfT = Field(
+        default=BfdAfT.IPV4, validation_alias="type", serialization_alias="type"
+    )
 
     # ── Configurable ───────────────────────────────────────────────────────────
     admin_state_for_interface_address_family: NwAdminSt = Field(
         default=NwAdminSt.ENABLED,
-        alias="adminSt",
+        validation_alias="adminSt",
+        serialization_alias="adminSt",
         description="Enable/disable sessions for interface address family",
     )
     annotation: Annotated[
@@ -63,10 +68,16 @@ class bfdIfAf(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    interface_controls: str = Field(default="", alias="ctrl", description="Interface controls")
+    interface_controls: Annotated[Flags[BfdIfControl], BeforeValidator(parse_flags)] = Field(
+        default_factory=lambda: frozenset(),
+        validation_alias="ctrl",
+        serialization_alias="ctrl",
+        description="Interface controls",
+    )
     echo_admin_st: NwAdminSt = Field(
         default=NwAdminSt.ENABLED,
-        alias="echoAdminSt",
+        validation_alias="echoAdminSt",
+        serialization_alias="echoAdminSt",
         description="Enable/disable echo mode for interface address family",
     )
     name: Annotated[

@@ -55,7 +55,8 @@ class configImportP(ManagedObject):
     # ── Configurable ───────────────────────────────────────────────────────────
     administrative_state: TrigExecState = Field(
         default=TrigExecState.UNTRIGGERED,
-        alias="adminSt",
+        validation_alias="adminSt",
+        serialization_alias="adminSt",
         description="The administrative state of the executable policies.",
     )
     annotation: Annotated[
@@ -71,28 +72,42 @@ class configImportP(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies the description of a policy component.",
         ),
     ] = ""
-    fail_on_decrypt_errors: bool = Field(default=True, alias="failOnDecryptErrors")
+    fail_on_decrypt_errors: bool = Field(
+        default=True,
+        validation_alias="failOnDecryptErrors",
+        serialization_alias="failOnDecryptErrors",
+    )
     file_to_import: str = Field(
         default="",
-        alias="fileName",
+        validation_alias="fileName",
+        serialization_alias="fileName",
         description="The name of the file to be imported from the remote location listed below.",
     )
     import_mode: ConfigImportMode = Field(
         default=ConfigImportMode.ATOMIC,
-        alias="importMode",
+        validation_alias="importMode",
+        serialization_alias="importMode",
         description="The import mode. The configuration data is imported per shard with each shard holding certain part of the system configuration objects.",
     )
     import_action_type: ConfigImportAction = Field(
         default=ConfigImportAction.MERGE,
-        alias="importType",
+        validation_alias="importType",
+        serialization_alias="importType",
         description="The import type specifies whether the existing fabric configuration will be merged or replaced with the backup configuration being imported.",
     )
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     snapshot: bool = False
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

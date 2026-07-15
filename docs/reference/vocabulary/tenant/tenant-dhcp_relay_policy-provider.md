@@ -25,7 +25,7 @@ Accepted as keyword arguments of `.provider(target_dn)` and of `.set(**attrs)` o
 | --- | --- | --- | --- | --- | --- |
 | `target_dn` *(positional)* | `tDn` | `str` | — | — | The distinguished name of the target endpoint group. |
 | `dhcp_server_address` | `addr` | `str` | — | — | The DHCP server address. This address is configured onto the relationship between a relay profile and an endpoint group. |
-| `pref` | `pref` | `str` | — | — | DHCP server preferences |
+| `pref` | `pref` | {ref}`DhcpAddrPreferences <enum-dhcpaddrpreferences>` | `none`, `use-server-vrf` | `none` | DHCP server preferences |
 
 ## APIC diagnostics
 

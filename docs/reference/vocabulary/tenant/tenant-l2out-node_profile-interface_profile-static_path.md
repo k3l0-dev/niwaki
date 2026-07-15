@@ -25,4 +25,4 @@ Accepted as keyword arguments of `.static_path(target_dn)` and of `.set(**attrs)
 | --- | --- | --- | --- | --- | --- |
 | `target_dn` *(positional)* | `tDn` | `str` | — | — | The name of the path attached to the layer 2 outside profile. The maximum supported string length is 255 ASCII characters. |
 | `descr` | `descr` | `str` | — | — | The description of this configuration item. |
-| `target_dscp` | `targetDscp` | `str` | — | — | This property is for future use and is not supported in the current release. |
+| `target_dscp` | `targetDscp` | `int` | — | `unspecified` | This property is for future use and is not supported in the current release. |

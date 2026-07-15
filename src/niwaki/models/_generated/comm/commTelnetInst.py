@@ -40,7 +40,8 @@ class commTelnetInst(ManagedObject):
     # ── Configurable ───────────────────────────────────────────────────────────
     admin_state: CommAdminState = Field(
         default=CommAdminState.DISABLED,
-        alias="adminSt",
+        validation_alias="adminSt",
+        serialization_alias="adminSt",
         description="The administrative state of the object or policy.",
     )
     annotation: Annotated[
@@ -56,7 +57,8 @@ class commTelnetInst(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies the description of a policy component.",
         ),
     ] = ""
@@ -65,7 +67,13 @@ class commTelnetInst(ManagedObject):
         Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="The name of the object."),
     ] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     port: Annotated[
         int, Field(ge=0, le=65535, description="The service port number for the LDAP service.")

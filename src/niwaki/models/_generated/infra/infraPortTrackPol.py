@@ -51,7 +51,8 @@ class infraPortTrackPol(ManagedObject):
     # ── Configurable ───────────────────────────────────────────────────────────
     port_tracking_state: TopoctrlAdminState = Field(
         default=TopoctrlAdminState.OFF,
-        alias="adminSt",
+        validation_alias="adminSt",
+        serialization_alias="adminSt",
         description="The administrative state of the object or policy.",
     )
     annotation: Annotated[
@@ -62,29 +63,48 @@ class infraPortTrackPol(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    delay_timeout: str = Field(
-        default="", alias="delay", description="The administrative port delay."
-    )
+    delay_timeout: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=300,
+            validation_alias="delay",
+            serialization_alias="delay",
+            description="The administrative port delay.",
+        ),
+    ] = 120
     description: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
-    include_apic_ports: bool = Field(default=False, alias="includeApicPorts")
-    minimum_links_left_up_before_trigger: Annotated[int, Field(ge=0, le=48, alias="minlinks")] = 0
+    include_apic_ports: bool = Field(
+        default=False, validation_alias="includeApicPorts", serialization_alias="includeApicPorts"
+    )
+    minimum_links_left_up_before_trigger: Annotated[
+        int, Field(ge=0, le=48, validation_alias="minlinks", serialization_alias="minlinks")
+    ] = 0
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     owner_key: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerKey",
+            validation_alias="ownerKey",
+            serialization_alias="ownerKey",
             description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
@@ -93,7 +113,8 @@ class infraPortTrackPol(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerTag",
+            validation_alias="ownerTag",
+            serialization_alias="ownerTag",
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""

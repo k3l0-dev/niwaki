@@ -53,13 +53,17 @@ class snmpCommSecP(ManagedObject):
         ),
     ] = ""
     snmp_community_group: SnmpCommAcessT = Field(
-        default=SnmpCommAcessT.UNSPECIFIED, alias="commAcess", description="Community Access"
+        default=SnmpCommAcessT.UNSPECIFIED,
+        validation_alias="commAcess",
+        serialization_alias="commAcess",
+        description="Community Access",
     )
     name_of_the_snmp_context: Annotated[
         str,
         Field(
             max_length=512,
-            alias="contextName",
+            validation_alias="contextName",
+            serialization_alias="contextName",
             description="Context to which community is associated",
         ),
     ] = ""
@@ -68,15 +72,27 @@ class snmpCommSecP(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies the description of a policy component.",
         ),
     ] = ""
     grp_name: Annotated[
         str,
-        Field(max_length=512, alias="grpName", description="Group to which community belongs to"),
+        Field(
+            max_length=512,
+            validation_alias="grpName",
+            serialization_alias="grpName",
+            description="Group to which community belongs to",
+        ),
     ] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

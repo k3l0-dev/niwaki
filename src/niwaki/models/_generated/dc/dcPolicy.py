@@ -40,7 +40,8 @@ class dcPolicy(ManagedObject):
     # ── Configurable ───────────────────────────────────────────────────────────
     admin_state: ScalarEnum82 = Field(
         default=ScalarEnum82.ENABLED,
-        alias="adminState",
+        validation_alias="adminState",
+        serialization_alias="adminState",
         description="adminState: enabled, start device connector for APIC/Switch, how about rack server device connector disabled: stop the device connector",
     )
     annotation: Annotated[
@@ -53,13 +54,20 @@ class dcPolicy(ManagedObject):
     ] = ""
     name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     upgrade_state: Annotated[
         str,
         Field(
             max_length=512,
-            alias="upgradeAdminState",
+            validation_alias="upgradeAdminState",
+            serialization_alias="upgradeAdminState",
             description="upgradeAdminState: place holder to capture the upgrade status.",
         ),
     ] = ""

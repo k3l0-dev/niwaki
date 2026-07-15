@@ -3,9 +3,11 @@
 from __future__ import annotations
 
 from typing import ClassVar, Annotated
-from pydantic import Field
+from pydantic import BeforeValidator, Field
 
+from niwaki.models._wire import Flags, parse_flags
 from niwaki.models._generated.enums.NwAdminSt import NwAdminSt
+from niwaki.models._generated.enums.TopoctrlLoopProtectAct import TopoctrlLoopProtectAct
 
 from niwaki.models.base import ManagedObject
 
@@ -51,12 +53,14 @@ class epLoopProtectP(ManagedObject):
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    action: Annotated[
-        str, Field(description="Sets the action to take when a loop is detected.")
-    ] = ""
+    action: Annotated[Flags[TopoctrlLoopProtectAct], BeforeValidator(parse_flags)] = Field(
+        default_factory=lambda: frozenset({TopoctrlLoopProtectAct.PORT_DISABLE}),
+        description="Sets the action to take when a loop is detected.",
+    )
     admin_state: NwAdminSt = Field(
         default=NwAdminSt.DISABLED,
-        alias="adminSt",
+        validation_alias="adminSt",
+        serialization_alias="adminSt",
         description="Sets the Admin State of End Point Loop Protection Policy",
     )
     annotation: Annotated[
@@ -72,29 +76,47 @@ class epLoopProtectP(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
-    loop_detection_interval: str = Field(
-        default="",
-        alias="loopDetectIntvl",
-        description="Sets the loop detection interval, which specifies the time to detect a loop.",
-    )
-    loop_detection_multiplier: str = Field(
-        default="",
-        alias="loopDetectMult",
-        description="Sets the loop detection multiplication factor, which is the number of times a single EP moves between ports within the Detection interval.",
-    )
+    loop_detection_interval: Annotated[
+        int,
+        Field(
+            ge=30,
+            le=300,
+            validation_alias="loopDetectIntvl",
+            serialization_alias="loopDetectIntvl",
+            description="Sets the loop detection interval, which specifies the time to detect a loop.",
+        ),
+    ] = 60
+    loop_detection_multiplier: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=255,
+            validation_alias="loopDetectMult",
+            serialization_alias="loopDetectMult",
+            description="Sets the loop detection multiplication factor, which is the number of times a single EP moves between ports within the Detection interval.",
+        ),
+    ] = 4
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     owner_key: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerKey",
+            validation_alias="ownerKey",
+            serialization_alias="ownerKey",
             description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
@@ -103,7 +125,8 @@ class epLoopProtectP(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerTag",
+            validation_alias="ownerTag",
+            serialization_alias="ownerTag",
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""

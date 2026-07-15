@@ -47,7 +47,11 @@ class vzException(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    cons_regex: str = Field(default="", alias="consRegex")
+    cons_regex: str = Field(
+        default="", validation_alias="consRegex", serialization_alias="consRegex"
+    )
     field: VzregexField = VzregexField.DN
-    prov_regex: str = Field(default="", alias="provRegex")
+    prov_regex: str = Field(
+        default="", validation_alias="provRegex", serialization_alias="provRegex"
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

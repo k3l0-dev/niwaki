@@ -63,11 +63,25 @@ class vnsLDevOperInfo(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    dev_state: VnsDevStateType = Field(default=VnsDevStateType.INIT, alias="devState")
+    dev_state: VnsDevStateType = Field(
+        default=VnsDevStateType.INIT, validation_alias="devState", serialization_alias="devState"
+    )
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
-    trig_re_sync: VnsTrigState = Field(default=VnsTrigState.OFF, alias="trigReSync")
-    trig_svc_cnt: VnsTrigState = Field(default=VnsTrigState.OFF, alias="trigSvcCnt")
-    trig_svc_hlth: VnsTrigState = Field(default=VnsTrigState.OFF, alias="trigSvcHlth")
+    trig_re_sync: VnsTrigState = Field(
+        default=VnsTrigState.OFF, validation_alias="trigReSync", serialization_alias="trigReSync"
+    )
+    trig_svc_cnt: VnsTrigState = Field(
+        default=VnsTrigState.OFF, validation_alias="trigSvcCnt", serialization_alias="trigSvcCnt"
+    )
+    trig_svc_hlth: VnsTrigState = Field(
+        default=VnsTrigState.OFF, validation_alias="trigSvcHlth", serialization_alias="trigSvcHlth"
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

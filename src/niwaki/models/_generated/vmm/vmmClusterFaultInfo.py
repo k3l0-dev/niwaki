@@ -45,7 +45,8 @@ class vmmClusterFaultInfo(ManagedObject):
     fault_code: Annotated[
         int,
         Field(
-            alias="faultCode",
+            validation_alias="faultCode",
+            serialization_alias="faultCode",
             description="The code corresponding to a service fault. The code characterizes information about the fault. The fault may be reported while updating a configuration or polling for health or counter values.",
         ),
     ] = 0
@@ -59,10 +60,13 @@ class vmmClusterFaultInfo(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    fault_desc: Annotated[str, Field(max_length=512, alias="faultDesc")] = ""
+    fault_desc: Annotated[
+        str, Field(max_length=512, validation_alias="faultDesc", serialization_alias="faultDesc")
+    ] = ""
     fault_severity: VmmFaultSeverity = Field(
         default=VmmFaultSeverity.CLEARED,
-        alias="faultSeverity",
+        validation_alias="faultSeverity",
+        serialization_alias="faultSeverity",
         description="The severity of a service fault. The fault may be reported while updating a configuration or polling for health or counter values.",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

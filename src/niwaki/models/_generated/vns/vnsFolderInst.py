@@ -197,7 +197,8 @@ class vnsFolderInst(ManagedObject):
             min_length=1,
             max_length=64,
             pattern="^[a-zA-Z0-9_.:-]+$",
-            alias="ctrctNameOrLbl",
+            validation_alias="ctrctNameOrLbl",
+            serialization_alias="ctrctNameOrLbl",
             description="The folder instance contract name or label.",
         ),
     ]
@@ -207,7 +208,8 @@ class vnsFolderInst(ManagedObject):
             min_length=1,
             max_length=64,
             pattern="^[a-zA-Z0-9_.:-]+$",
-            alias="graphNameOrLbl",
+            validation_alias="graphNameOrLbl",
+            serialization_alias="graphNameOrLbl",
             description="The folder instance graph name or label.",
         ),
     ]
@@ -220,7 +222,8 @@ class vnsFolderInst(ManagedObject):
             min_length=1,
             max_length=64,
             pattern="^[a-zA-Z0-9_.:-]+$",
-            alias="nodeNameOrLbl",
+            validation_alias="nodeNameOrLbl",
+            serialization_alias="nodeNameOrLbl",
             description="The folder instance node name or label.",
         ),
     ]
@@ -238,12 +241,15 @@ class vnsFolderInst(ManagedObject):
         default=VnsVnsCardinalityType.UNSPECIFIED,
         description="A value to determine how many instances of this type can be present.",
     )
-    dev_ctx_lbl: Annotated[str, Field(max_length=512, alias="devCtxLbl")] = ""
+    dev_ctx_lbl: Annotated[
+        str, Field(max_length=512, validation_alias="devCtxLbl", serialization_alias="devCtxLbl")
+    ] = ""
     meta_folder_key: Annotated[
         str,
         Field(
             max_length=512,
-            alias="key",
+            validation_alias="key",
+            serialization_alias="key",
             description="The key uniquely identifying this configuration object.",
         ),
     ] = ""
@@ -252,11 +258,18 @@ class vnsFolderInst(ManagedObject):
         description="A property that specifies if a value entered at configuration time can be modified at run time.",
     )
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     scoped_by: VnsItemScope = Field(
         default=VnsItemScope.EPG,
-        alias="scopedBy",
+        validation_alias="scopedBy",
+        serialization_alias="scopedBy",
         description="The scope used for resolving this parameter.",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

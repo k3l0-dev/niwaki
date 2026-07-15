@@ -49,11 +49,16 @@ class eigrpCtxAfPol(ManagedObject):
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    active_timer: str = Field(
-        default="",
-        alias="actIntvl",
-        description="The active timer interval, which specifies the length of time an EIGRP route can stay in the Active state without a best path. When the time ends, the route is moved to the Stuck-In-Active state.",
-    )
+    active_timer: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=65535,
+            validation_alias="actIntvl",
+            serialization_alias="actIntvl",
+            description="The active timer interval, which specifies the length of time an EIGRP route can stay in the Active state without a best path. When the time ends, the route is moved to the Stuck-In-Active state.",
+        ),
+    ] = 3
     annotation: Annotated[
         str,
         Field(
@@ -67,39 +72,63 @@ class eigrpCtxAfPol(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
-    external_distance: str = Field(
-        default="",
-        alias="extDist",
-        description="The administrative distance preference for external routes.",
-    )
-    internal_distance: str = Field(
-        default="",
-        alias="intDist",
-        description="The administrative distance preference for internal routes.",
-    )
-    maximum_ecmp_paths: str = Field(
-        default="",
-        alias="maxPaths",
-        description="The maximum number of equal cost different paths.",
-    )
+    external_distance: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=255,
+            validation_alias="extDist",
+            serialization_alias="extDist",
+            description="The administrative distance preference for external routes.",
+        ),
+    ] = 170
+    internal_distance: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=255,
+            validation_alias="intDist",
+            serialization_alias="intDist",
+            description="The administrative distance preference for internal routes.",
+        ),
+    ] = 90
+    maximum_ecmp_paths: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=16,
+            validation_alias="maxPaths",
+            serialization_alias="maxPaths",
+            description="The maximum number of equal cost different paths.",
+        ),
+    ] = 8
     metric_style: EigrpMetricStyle = Field(
         default=EigrpMetricStyle.NARROW,
-        alias="metricStyle",
+        validation_alias="metricStyle",
+        serialization_alias="metricStyle",
         description="The metric version used for metric calculations. EIRGP supports 32 and 64 bit metrics.",
     )
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     owner_key: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerKey",
+            validation_alias="ownerKey",
+            serialization_alias="ownerKey",
             description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
@@ -108,7 +137,8 @@ class eigrpCtxAfPol(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerTag",
+            validation_alias="ownerTag",
+            serialization_alias="ownerTag",
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""

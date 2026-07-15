@@ -58,7 +58,8 @@ class xcvrZRFabIfPol(ManagedObject):
     # ── Configurable ───────────────────────────────────────────────────────────
     admin_st: XcvrOpticsAdminSt = Field(
         default=XcvrOpticsAdminSt.DISABLED,
-        alias="adminSt",
+        validation_alias="adminSt",
+        serialization_alias="adminSt",
         description="The administrative state of the object or policy.",
     )
     annotation: Annotated[
@@ -69,48 +70,107 @@ class xcvrZRFabIfPol(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    chromatic_dispersion_maximum: str = Field(
-        default="", alias="cdMax", description="Chromatic Dispersion max"
+    chromatic_dispersion_maximum: Annotated[
+        int,
+        Field(
+            ge=2400,
+            le=2400,
+            validation_alias="cdMax",
+            serialization_alias="cdMax",
+            description="Chromatic Dispersion max",
+        ),
+    ] = 2400
+    chromatic_dispersion_minimum: Annotated[
+        int,
+        Field(
+            ge=2400,
+            le=2400,
+            validation_alias="cdMin",
+            serialization_alias="cdMin",
+            description="Chromatic Dispersion min",
+        ),
+    ] = -2400
+    dac_rate: L1DACRateZR = Field(
+        default=L1DACRateZR._1X1,
+        validation_alias="dacRate",
+        serialization_alias="dacRate",
+        description="DAC rate",
     )
-    chromatic_dispersion_minimum: str = Field(
-        default="", alias="cdMin", description="Chromatic Dispersion min"
-    )
-    dac_rate: L1DACRateZR = Field(default=L1DACRateZR._1X1, alias="dacRate", description="DAC rate")
     description: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
     dwdm_carrier_grid_selector: L1dwdmCarrierZR = Field(
-        default=L1dwdmCarrierZR._100MHZFREQUENCY, alias="dwdmCarrier", description="DWDM Carrier"
+        default=L1dwdmCarrierZR._100MHZFREQUENCY,
+        validation_alias="dwdmCarrier",
+        serialization_alias="dwdmCarrier",
+        description="DWDM Carrier",
     )
-    fec_mode: L1FECModeZR = Field(default=L1FECModeZR.CFEC, alias="fecMode", description="FEC mode")
+    fec_mode: L1FECModeZR = Field(
+        default=L1FECModeZR.CFEC,
+        validation_alias="fecMode",
+        serialization_alias="fecMode",
+        description="FEC mode",
+    )
     frequency100_m_hz: Annotated[
-        int, Field(ge=1911500, le=1961000, alias="frequency100MHz", description="Frequency 100MHz")
+        int,
+        Field(
+            ge=1911500,
+            le=1961000,
+            validation_alias="frequency100MHz",
+            serialization_alias="frequency100MHz",
+            description="Frequency 100MHz",
+        ),
     ] = 1931000
     frequency50_g_hz: Annotated[
-        int, Field(ge=19115, le=19610, alias="frequency50GHz", description="Frequency 50GHz")
+        int,
+        Field(
+            ge=19115,
+            le=19610,
+            validation_alias="frequency50GHz",
+            serialization_alias="frequency50GHz",
+            description="Frequency 50GHz",
+        ),
     ] = 19310
     itu_channel50_g_hz: Annotated[
-        int, Field(ge=1, le=100, alias="ituChannel50GHz", description="ITU Channel")
+        int,
+        Field(
+            ge=1,
+            le=100,
+            validation_alias="ituChannel50GHz",
+            serialization_alias="ituChannel50GHz",
+            description="ITU Channel",
+        ),
     ] = 61
     modulation: L1ModulationZR = Field(default=L1ModulationZR._16QAM, description="Modulation")
     muxponder_mode: L1MuxponderZR = Field(
-        default=L1MuxponderZR._1X400, alias="muxponder", description="Muxponder"
+        default=L1MuxponderZR._1X400,
+        validation_alias="muxponder",
+        serialization_alias="muxponder",
+        description="Muxponder",
     )
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     owner_key: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerKey",
+            validation_alias="ownerKey",
+            serialization_alias="ownerKey",
             description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
@@ -119,12 +179,29 @@ class xcvrZRFabIfPol(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerTag",
+            validation_alias="ownerTag",
+            serialization_alias="ownerTag",
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
-    transmitted_power: str = Field(default="", alias="transmitPower", description="Transmit Power")
+    transmitted_power: Annotated[
+        int,
+        Field(
+            ge=190,
+            le=50,
+            validation_alias="transmitPower",
+            serialization_alias="transmitPower",
+            description="Transmit Power",
+        ),
+    ] = -190
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     wavelength50_g_hz: Annotated[
-        int, Field(ge=1528773, le=1568362, alias="wavelength50GHz", description="Wavelength")
+        int,
+        Field(
+            ge=1528773,
+            le=1568362,
+            validation_alias="wavelength50GHz",
+            serialization_alias="wavelength50GHz",
+            description="Wavelength",
+        ),
     ] = 1552524

@@ -62,12 +62,19 @@ class dhcpOption(ManagedObject):
         Field(
             max_length=256,
             pattern="^[a-zA-Z0-9!#$%()*,-.?/:;@ _{|}~+]+$",
-            alias="data",
+            validation_alias="data",
+            serialization_alias="data",
             description="The ID of the DHCP option.",
         ),
     ] = ""
-    id: Annotated[str, Field(description="DHCP OPTION ID")] = ""
+    id: Annotated[int, Field(description="DHCP OPTION ID")] = 0
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

@@ -215,7 +215,7 @@ async with AsyncNiwaki("https://apic.example.com", "admin", "secret") as aci:
   position, unified reference resolver (`REFERENCE_MAP`, name + DN flavors,
   abstract targets).
 - **2,222 generated Pydantic models** (APIC v6.0 schemas) with human-readable
-  field names, constraints, and 558 enums — models carry data and validation,
+  field names, constraints, and 676 enums — models carry data and validation,
   never write logic.
 - **Facade** (observation): vocabulary navigation (`aci.tenant("x").bd("y")`),
   typed reads, queries, delete.

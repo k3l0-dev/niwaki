@@ -34,7 +34,16 @@ class vmmUplinkP(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    uplink_id: Annotated[str, Field(alias="uplinkId", description="Uplink ID")]
+    uplink_id: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=32,
+            validation_alias="uplinkId",
+            serialization_alias="uplinkId",
+            description="Uplink ID",
+        ),
+    ] = 0
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[
@@ -45,15 +54,27 @@ class vmmUplinkP(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    id: Annotated[str, Field(description="An identifier .")] = ""
+    id: Annotated[int, Field(description="An identifier .")] = 0
     name: Annotated[
         str,
         Field(max_length=16, pattern="^[a-zA-Z0-9_.:-]+$", description="The name of the object."),
     ] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     uplink_name: Annotated[
-        str, Field(max_length=512, alias="uplinkName", description="Uplink Name")
+        str,
+        Field(
+            max_length=512,
+            validation_alias="uplinkName",
+            serialization_alias="uplinkName",
+            description="Uplink Name",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

@@ -45,13 +45,35 @@ class proxyServer(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    http_url: Annotated[str, Field(max_length=512, alias="httpUrl", description="Http URL")] = ""
-    https_url: Annotated[str, Field(max_length=512, alias="httpsUrl", description="Https URL")] = ""
+    http_url: Annotated[
+        str,
+        Field(
+            max_length=512,
+            validation_alias="httpUrl",
+            serialization_alias="httpUrl",
+            description="Http URL",
+        ),
+    ] = ""
+    https_url: Annotated[
+        str,
+        Field(
+            max_length=512,
+            validation_alias="httpsUrl",
+            serialization_alias="httpsUrl",
+            description="Https URL",
+        ),
+    ] = ""
     name: Annotated[
         str,
         Field(max_length=16, pattern="^[a-zA-Z0-9_.:-]+$", description="The name of the object."),
     ] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

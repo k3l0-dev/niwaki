@@ -53,13 +53,32 @@ class vmmOrchsProvPlanFW(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    dev_cluster: str = Field(default="", alias="devCluster")
-    dev_mfctr: Annotated[str, Field(max_length=512, alias="devMfctr")] = ""
-    dev_mgmt_ip: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="devMgmtIp")] = ""
-    ext_epg: str = Field(default="", alias="extEpg")
-    int_epg: str = Field(default="", alias="intEpg")
-    ip_range: Annotated[str, Field(max_length=512, alias="ipRange")] = ""
+    dev_cluster: str = Field(
+        default="", validation_alias="devCluster", serialization_alias="devCluster"
+    )
+    dev_mfctr: Annotated[
+        str, Field(max_length=512, validation_alias="devMfctr", serialization_alias="devMfctr")
+    ] = ""
+    dev_mgmt_ip: Annotated[
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            validation_alias="devMgmtIp",
+            serialization_alias="devMgmtIp",
+        ),
+    ] = ""
+    ext_epg: str = Field(default="", validation_alias="extEpg", serialization_alias="extEpg")
+    int_epg: str = Field(default="", validation_alias="intEpg", serialization_alias="intEpg")
+    ip_range: Annotated[
+        str, Field(max_length=512, validation_alias="ipRange", serialization_alias="ipRange")
+    ] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

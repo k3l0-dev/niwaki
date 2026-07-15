@@ -24,7 +24,7 @@ Accepted as keyword arguments of `.pim_external()` and of `.set(**attrs)` on thi
 | parameter | wire | type | values | default | description |
 | --- | --- | --- | --- | --- | --- |
 | `description` | `descr` | `str` | — | — | Specifies the description of a policy component. |
-| `enabled_pim_address_families` | `enabledAf` | `str` | — | — | Enabled Multicast Address Families |
+| `enabled_pim_address_families` | `enabledAf` | {ref}`RtdmcAfType <enum-rtdmcaftype>` | `ipv4-mcast`, `ipv6-mcast` | `ipv4-mcast` | Enabled Multicast Address Families |
 | `name` | `name` | `str` | — | — | — |
 
 ## APIC diagnostics

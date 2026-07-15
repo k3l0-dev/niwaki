@@ -100,8 +100,9 @@ class TestConflicts:
     def test_ambiguous_index_entry_raises(self) -> None:
         """Two design nodes sharing (class, name) make that name unbindable."""
         from niwaki.design._node import PendingBind
+        from niwaki.design._resolver import _AMBIGUOUS, _Ambiguous
 
-        index: dict[str, dict[str, DesignNode | None]] = {"fvCtx": {"prod": None}}
+        index: dict[str, dict[str, DesignNode | _Ambiguous]] = {"fvCtx": {"prod": _AMBIGUOUS}}
         owner = tenant("t").design_node
         bind = PendingBind(kind="bind", alias="vrf", target_aci_class="fvCtx", target_name="prod")
         with pytest.raises(AmbiguousBindError, match="more than one"):

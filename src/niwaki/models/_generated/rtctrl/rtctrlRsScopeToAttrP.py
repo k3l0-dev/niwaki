@@ -58,7 +58,8 @@ class rtctrlRsScopeToAttrP(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9_.:-]+$",
-            alias="tnRtctrlAttrPName",
+            validation_alias="tnRtctrlAttrPName",
+            serialization_alias="tnRtctrlAttrPName",
             description="The name of the associated set action rule profile.",
         ),
     ] = ""

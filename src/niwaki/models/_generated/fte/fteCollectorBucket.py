@@ -38,8 +38,15 @@ class fteCollectorBucket(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     flow_collector_bucket_id: Annotated[
-        str, Field(alias="id", description="Collector bucket identifier")
-    ]
+        int,
+        Field(
+            ge=1,
+            le=255,
+            validation_alias="id",
+            serialization_alias="id",
+            description="Collector bucket identifier",
+        ),
+    ] = 0
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[
@@ -55,7 +62,8 @@ class fteCollectorBucket(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="The description of this configuration item.",
         ),
     ] = ""
@@ -64,7 +72,8 @@ class fteCollectorBucket(ManagedObject):
         Field(
             ge=0,
             le=4294967295,
-            alias="hashHi",
+            validation_alias="hashHi",
+            serialization_alias="hashHi",
             description="HashHi value for this collector bucket",
         ),
     ] = 0
@@ -73,7 +82,8 @@ class fteCollectorBucket(ManagedObject):
         Field(
             ge=0,
             le=4294967295,
-            alias="hashLo",
+            validation_alias="hashLo",
+            serialization_alias="hashLo",
             description="HashLo value for this collector bucket",
         ),
     ] = 0

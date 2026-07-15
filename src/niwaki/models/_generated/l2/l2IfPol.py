@@ -64,19 +64,27 @@ class l2IfPol(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     owner_key: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerKey",
+            validation_alias="ownerKey",
+            serialization_alias="ownerKey",
             description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
@@ -85,19 +93,27 @@ class l2IfPol(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerTag",
+            validation_alias="ownerTag",
+            serialization_alias="ownerTag",
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
     dot1q_tunnel_policy_configuration: L2QinQConfig = Field(
-        default=L2QinQConfig.DISABLED, alias="qinq", description="QinQ Configuration"
+        default=L2QinQConfig.DISABLED,
+        validation_alias="qinq",
+        serialization_alias="qinq",
+        description="QinQ Configuration",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     vepa_policy_configuration: L2VepaConfig = Field(
-        default=L2VepaConfig.DISABLED, alias="vepa", description="Vepa Configuration"
+        default=L2VepaConfig.DISABLED,
+        validation_alias="vepa",
+        serialization_alias="vepa",
+        description="Vepa Configuration",
     )
     vlan_scope_can_be_global_or_port_local: L2VlanScope = Field(
         default=L2VlanScope.GLOBAL,
-        alias="vlanScope",
+        validation_alias="vlanScope",
+        serialization_alias="vlanScope",
         description="The Layer 2 interface VLAN scope",
     )

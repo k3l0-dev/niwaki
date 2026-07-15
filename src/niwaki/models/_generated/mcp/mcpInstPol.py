@@ -3,9 +3,12 @@
 from __future__ import annotations
 
 from typing import ClassVar, Annotated
-from pydantic import Field
+from pydantic import BeforeValidator, Field
 
+from niwaki.models._wire import Flags, parse_flags
+from niwaki.models._generated.enums.McpLoopProtectAct import McpLoopProtectAct
 from niwaki.models._generated.enums.NwAdminSt import NwAdminSt
+from niwaki.models._generated.enums.NwInstCtrl2 import NwInstCtrl2
 
 from niwaki.models.base import ManagedObject
 
@@ -52,7 +55,8 @@ class mcpInstPol(ManagedObject):
     # ── Configurable ───────────────────────────────────────────────────────────
     admin_state: NwAdminSt = Field(
         default=NwAdminSt.DISABLED,
-        alias="adminSt",
+        validation_alias="adminSt",
+        serialization_alias="adminSt",
         description="The administrative state of the object or policy.",
     )
     annotation: Annotated[
@@ -63,36 +67,64 @@ class mcpInstPol(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    controls: str = Field(default="", alias="ctrl", description="Instance Controls")
+    controls: Annotated[Flags[NwInstCtrl2], BeforeValidator(parse_flags)] = Field(
+        default_factory=lambda: frozenset(),
+        validation_alias="ctrl",
+        serialization_alias="ctrl",
+        description="Instance Controls",
+    )
     description: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
-    init_delay_time: str = Field(default="", alias="initDelayTime")
+    init_delay_time: Annotated[
+        int,
+        Field(ge=0, le=1800, validation_alias="initDelayTime", serialization_alias="initDelayTime"),
+    ] = 180
     secret_key: Annotated[
         str,
         Field(
-            alias="key",
+            validation_alias="key",
+            serialization_alias="key",
             repr=False,
             description="The key or password used to uniquely identify this configuration object.",
         ),
     ] = ""
-    loop_detection_multiplier: str = Field(default="", alias="loopDetectMult")
-    loop_protection_action: str = Field(default="", alias="loopProtectAct")
+    loop_detection_multiplier: Annotated[
+        int,
+        Field(
+            ge=1, le=255, validation_alias="loopDetectMult", serialization_alias="loopDetectMult"
+        ),
+    ] = 3
+    loop_protection_action: Annotated[Flags[McpLoopProtectAct], BeforeValidator(parse_flags)] = (
+        Field(
+            default_factory=lambda: frozenset({McpLoopProtectAct.PORT_DISABLE}),
+            validation_alias="loopProtectAct",
+            serialization_alias="loopProtectAct",
+        )
+    )
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     owner_key: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerKey",
+            validation_alias="ownerKey",
+            serialization_alias="ownerKey",
             description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
@@ -101,18 +133,29 @@ class mcpInstPol(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerTag",
+            validation_alias="ownerTag",
+            serialization_alias="ownerTag",
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
-    transmission_frequency: str = Field(
-        default="",
-        alias="txFreq",
-        description="Sets the transmission frequency of the instance advertisements.",
-    )
-    tx_freq_msec: str = Field(
-        default="",
-        alias="txFreqMsec",
-        description="Sets the transmission frequency of mcp advertisements in milliseconds",
-    )
+    transmission_frequency: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=300,
+            validation_alias="txFreq",
+            serialization_alias="txFreq",
+            description="Sets the transmission frequency of the instance advertisements.",
+        ),
+    ] = 2
+    tx_freq_msec: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=999,
+            validation_alias="txFreqMsec",
+            serialization_alias="txFreqMsec",
+            description="Sets the transmission frequency of mcp advertisements in milliseconds",
+        ),
+    ] = 0
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

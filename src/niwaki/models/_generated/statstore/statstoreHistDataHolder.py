@@ -36,7 +36,9 @@ class statstoreHistDataHolder(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    stats_class: Annotated[str, Field(alias="statClass")]
+    stats_class: Annotated[
+        str, Field(validation_alias="statClass", serialization_alias="statClass")
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[

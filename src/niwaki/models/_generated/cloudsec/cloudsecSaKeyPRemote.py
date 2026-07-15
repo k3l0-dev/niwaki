@@ -48,33 +48,52 @@ class cloudsecSaKeyPRemote(ManagedObject):
         ),
     ] = ""
     assoc_num: CloudsecAssocNum = Field(
-        default=CloudsecAssocNum._0, alias="assocNum", description="Assoc Number"
+        default=CloudsecAssocNum._0,
+        validation_alias="assocNum",
+        serialization_alias="assocNum",
+        description="Assoc Number",
     )
     sa_key_cipher_suite: CloudsecCipherSuite = Field(
-        default=CloudsecCipherSuite.GCM_AES_XPN_256, alias="cipher"
+        default=CloudsecCipherSuite.GCM_AES_XPN_256,
+        validation_alias="cipher",
+        serialization_alias="cipher",
     )
     description: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
     encrypted_sa_key: Annotated[
-        str, Field(max_length=512, alias="encryptedSaKey", description="Encrypted SaKey")
+        str,
+        Field(
+            max_length=512,
+            validation_alias="encryptedSaKey",
+            serialization_alias="encryptedSaKey",
+            description="Encrypted SaKey",
+        ),
     ] = ""
     name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     owner_key: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerKey",
+            validation_alias="ownerKey",
+            serialization_alias="ownerKey",
             description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
@@ -83,15 +102,19 @@ class cloudsecSaKeyPRemote(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerTag",
+            validation_alias="ownerTag",
+            serialization_alias="ownerTag",
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
-    secure_channel_identifier: str = Field(default="", alias="sci")
+    secure_channel_identifier: Annotated[
+        int, Field(validation_alias="sci", serialization_alias="sci")
+    ] = 0
     sequence_number: Annotated[
         int,
         Field(
-            alias="sequenceNumber",
+            validation_alias="sequenceNumber",
+            serialization_alias="sequenceNumber",
             description="An internally used property that is incremented every time the AAA user logs in.",
         ),
     ] = 0

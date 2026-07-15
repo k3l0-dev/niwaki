@@ -54,26 +54,50 @@ class plannerBdTmpl(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies the description of a policy component.",
         ),
     ] = ""
-    enable_routing: bool = Field(default=False, alias="enableRouting", description="Enable Routing")
+    enable_routing: bool = Field(
+        default=False,
+        validation_alias="enableRouting",
+        serialization_alias="enableRouting",
+        description="Enable Routing",
+    )
     legacy_mode_one_vlan_per_bridge_domain: bool = Field(
-        default=False, alias="legacyMode", description="Legacy Mode (One VLAN per bridge domain)"
+        default=False,
+        validation_alias="legacyMode",
+        serialization_alias="legacyMode",
+        description="Legacy Mode (One VLAN per bridge domain)",
     )
     multicast_groups: Annotated[
-        int, Field(alias="multicastGroups", description="Count of Multicast Groups")
+        int,
+        Field(
+            validation_alias="multicastGroups",
+            serialization_alias="multicastGroups",
+            description="Count of Multicast Groups",
+        ),
     ] = 0
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     omf_disabled: bool = Field(
-        default=False, alias="omfDisabled", description="Disable Optimized multicast flooding"
+        default=False,
+        validation_alias="omfDisabled",
+        serialization_alias="omfDisabled",
+        description="Disable Optimized multicast flooding",
     )
     shared_bd: bool = Field(
         default=True,
-        alias="shared",
+        validation_alias="shared",
+        serialization_alias="shared",
         description="Shared BD (EPGs refer this BdTmpl share a single BD)",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

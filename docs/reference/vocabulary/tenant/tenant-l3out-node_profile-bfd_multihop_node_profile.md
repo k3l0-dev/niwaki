@@ -23,7 +23,7 @@ Accepted as keyword arguments of `.bfd_multihop_node_profile()` and of `.set(**a
 | --- | --- | --- | --- | --- | --- |
 | `description` | `descr` | `str` | — | — | Specifies the description of a policy component. |
 | `authentication_key` | `key` | `str` | — | — | Authentication key |
-| `authentication_key_id` | `keyId` | `str` | — | — | Authentication key id |
+| `authentication_key_id` | `keyId` | `int` | — | `1` | Authentication key id |
 | `name` | `name` | `str` | — | — | — |
 | `authentication_type` | `type` | {ref}`BfdAuthT <enum-bfdautht>` | `none`, `sha1` | `none` | Authentication type |
 

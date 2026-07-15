@@ -3,9 +3,11 @@
 from __future__ import annotations
 
 from typing import ClassVar, Annotated
-from pydantic import Field
+from pydantic import BeforeValidator, Field
 
+from niwaki.models._wire import Flags, parse_flags
 from niwaki.models._generated.enums.BfdAfT import BfdAfT
+from niwaki.models._generated.enums.BfdIfControl import BfdIfControl
 from niwaki.models._generated.enums.NwAdminSt import NwAdminSt
 
 from niwaki.models.base import ManagedObject
@@ -48,13 +50,14 @@ class bfdMhIfAf(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     type_of_the_address_family: BfdAfT = Field(
-        default=BfdAfT.IPV4, alias="type", description="Type"
+        default=BfdAfT.IPV4, validation_alias="type", serialization_alias="type", description="Type"
     )
 
     # ── Configurable ───────────────────────────────────────────────────────────
     admin_st: NwAdminSt = Field(
         default=NwAdminSt.ENABLED,
-        alias="adminSt",
+        validation_alias="adminSt",
+        serialization_alias="adminSt",
         description="Enable/disable sessions for interface address family",
     )
     annotation: Annotated[
@@ -65,8 +68,13 @@ class bfdMhIfAf(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    interface_controls_for_multi_hop: str = Field(
-        default="", alias="ctrl", description="Interface controls"
+    interface_controls_for_multi_hop: Annotated[
+        Flags[BfdIfControl], BeforeValidator(parse_flags)
+    ] = Field(
+        default_factory=lambda: frozenset(),
+        validation_alias="ctrl",
+        serialization_alias="ctrl",
+        description="Interface controls",
     )
     name: Annotated[
         str, Field(min_length=1, max_length=128, description="The name of the object.")

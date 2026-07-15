@@ -52,7 +52,8 @@ class configRollbackP(ManagedObject):
     # ── Configurable ───────────────────────────────────────────────────────────
     administrative_state: TrigExecState = Field(
         default=TrigExecState.UNTRIGGERED,
-        alias="adminSt",
+        validation_alias="adminSt",
+        serialization_alias="adminSt",
         description="The administrative state of the executable policies.",
     )
     annotation: Annotated[
@@ -68,18 +69,34 @@ class configRollbackP(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies the description of a policy component.",
         ),
     ] = ""
     import_mode: ConfigImportMode = Field(
-        default=ConfigImportMode.ATOMIC, alias="mode", description="The BGP Domain mode."
+        default=ConfigImportMode.ATOMIC,
+        validation_alias="mode",
+        serialization_alias="mode",
+        description="The BGP Domain mode.",
     )
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
-    preview_mode_nothing_is_applied: bool = Field(default=False, alias="preview")
+    preview_mode_nothing_is_applied: bool = Field(
+        default=False, validation_alias="preview", serialization_alias="preview"
+    )
     snapshot: bool = False
-    snapshot_one: str = Field(default="", alias="snapshotOneDn")
-    snapshot_two: str = Field(default="", alias="snapshotTwoDn")
+    snapshot_one: str = Field(
+        default="", validation_alias="snapshotOneDn", serialization_alias="snapshotOneDn"
+    )
+    snapshot_two: str = Field(
+        default="", validation_alias="snapshotTwoDn", serialization_alias="snapshotTwoDn"
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

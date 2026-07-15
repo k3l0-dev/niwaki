@@ -44,11 +44,18 @@ class cnwPhysIf(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     interface_id: Annotated[
-        str, Field(alias="id", description="The physical interface identifier.")
+        str,
+        Field(
+            validation_alias="id",
+            serialization_alias="id",
+            description="The physical interface identifier.",
+        ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    administrative_state: L1AdminSt = Field(default=L1AdminSt.UP, alias="adminSt")
+    administrative_state: L1AdminSt = Field(
+        default=L1AdminSt.UP, validation_alias="adminSt", serialization_alias="adminSt"
+    )
     annotation: Annotated[
         str,
         Field(
@@ -59,7 +66,12 @@ class cnwPhysIf(ManagedObject):
     ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            validation_alias="descr",
+            serialization_alias="descr",
+        ),
     ] = ""
     name: Annotated[
         str, Field(min_length=1, max_length=128, description="The name of the object.")

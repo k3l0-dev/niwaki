@@ -6,6 +6,8 @@ schema (and therefore CHILD_MAP / REFERENCE_MAP / _contains) is regenerated.
 
 from __future__ import annotations
 
+from typing import Any
+
 import pytest
 
 from niwaki.design._cursor import _load_class, _tables
@@ -127,7 +129,8 @@ class TestVerbs:
         assert verbs, "verbs table is empty"
         for table in verbs.values():
             for spec in table.values():
-                rs_mo = _load_class(spec["rs"])(name="x")
+                naming: dict[str, Any] = {"name": "x"}
+                rs_mo = _load_class(spec["rs"])(**naming)
                 assert rs_mo.rn
                 assert spec["target"] in CLASS_PKG
 

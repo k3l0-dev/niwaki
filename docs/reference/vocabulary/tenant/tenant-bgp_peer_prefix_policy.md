@@ -29,5 +29,5 @@ Accepted as keyword arguments of `.bgp_peer_prefix_policy(name)` and of `.set(**
 | `max_number_of_prefixes` | `maxPfx` | `int` | — | `20000` | Maximum number of prefixes allowed from the peer. |
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |
-| `prefix_limit_restart_time` | `restartTime` | `str` | — | — | The period of time in minutes before restarting the peer when the prefix limit is reached. |
-| `warning_threshold` | `thresh` | `str` | — | — | The threshold percentage of the maximum number of prefixes before a warning is issued. For example, if the maximum number of prefixes is 10 and the threshold is 70%, a warning is issued when the number of prefixes exceeds 7 (70%). |
+| `prefix_limit_restart_time` | `restartTime` | `int` | — | `infinite` | The period of time in minutes before restarting the peer when the prefix limit is reached. |
+| `warning_threshold` | `thresh` | `int` | — | `75` | The threshold percentage of the maximum number of prefixes before a warning is issued. For example, if the maximum number of prefixes is 10 and the threshold is 70%, a warning is issued when the number of prefixes exceeds 7 (70%). |

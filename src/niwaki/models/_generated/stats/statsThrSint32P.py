@@ -3,9 +3,11 @@
 from __future__ import annotations
 
 from typing import ClassVar, Annotated
-from pydantic import Field
+from pydantic import BeforeValidator, Field
 
+from niwaki.models._wire import Flags, parse_flags
 from niwaki.models._generated.enums.StatsThrDir import StatsThrDir
+from niwaki.models._generated.enums.StatsThrSeverityState import StatsThrSeverityState
 
 from niwaki.models.base import ManagedObject
 
@@ -38,7 +40,7 @@ class statsThrSint32P(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    property: Annotated[str, Field(alias="propId")]
+    property: Annotated[str, Field(validation_alias="propId", serialization_alias="propId")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[
@@ -49,41 +51,104 @@ class statsThrSint32P(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    crit_high_reset: str = Field(default="", alias="critHighReset")
-    crit_high_set: str = Field(default="", alias="critHighSet")
-    crit_low_reset: str = Field(default="", alias="critLowReset")
-    crit_low_set: str = Field(default="", alias="critLowSet")
+    crit_high_reset: Annotated[
+        int, Field(validation_alias="critHighReset", serialization_alias="critHighReset")
+    ] = 0
+    crit_high_set: Annotated[
+        int, Field(validation_alias="critHighSet", serialization_alias="critHighSet")
+    ] = 0
+    crit_low_reset: Annotated[
+        int, Field(validation_alias="critLowReset", serialization_alias="critLowReset")
+    ] = 0
+    crit_low_set: Annotated[
+        int, Field(validation_alias="critLowSet", serialization_alias="critLowSet")
+    ] = 0
     description: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies the description of a policy component.",
         ),
     ] = ""
-    threshold_direction: StatsThrDir = Field(default=StatsThrDir.BOTH, alias="direction")
-    high_range_end: str = Field(default="", alias="highRangeEnd")
-    high_range_start: str = Field(default="", alias="highRangeStart")
-    raising_threshold_state: str = Field(default="", alias="highSevState")
-    low_range_end: str = Field(default="", alias="lowRangeEnd")
-    low_range_start: str = Field(default="", alias="lowRangeStart")
-    falling_threshold_state: str = Field(default="", alias="lowSevState")
-    major_high_reset: str = Field(default="", alias="majorHighReset")
-    major_high_set: str = Field(default="", alias="majorHighSet")
-    major_low_reset: str = Field(default="", alias="majorLowReset")
-    major_low_set: str = Field(default="", alias="majorLowSet")
-    minor_high_reset: str = Field(default="", alias="minorHighReset")
-    minor_high_set: str = Field(default="", alias="minorHighSet")
-    minor_low_reset: str = Field(default="", alias="minorLowReset")
-    minor_low_set: str = Field(default="", alias="minorLowSet")
+    threshold_direction: StatsThrDir = Field(
+        default=StatsThrDir.BOTH, validation_alias="direction", serialization_alias="direction"
+    )
+    high_range_end: Annotated[
+        int, Field(validation_alias="highRangeEnd", serialization_alias="highRangeEnd")
+    ] = 0
+    high_range_start: Annotated[
+        int, Field(validation_alias="highRangeStart", serialization_alias="highRangeStart")
+    ] = 0
+    raising_threshold_state: Annotated[
+        Flags[StatsThrSeverityState], BeforeValidator(parse_flags)
+    ] = Field(
+        default_factory=lambda: frozenset({StatsThrSeverityState.NONE}),
+        validation_alias="highSevState",
+        serialization_alias="highSevState",
+    )
+    low_range_end: Annotated[
+        int, Field(validation_alias="lowRangeEnd", serialization_alias="lowRangeEnd")
+    ] = 0
+    low_range_start: Annotated[
+        int, Field(validation_alias="lowRangeStart", serialization_alias="lowRangeStart")
+    ] = 0
+    falling_threshold_state: Annotated[
+        Flags[StatsThrSeverityState], BeforeValidator(parse_flags)
+    ] = Field(
+        default_factory=lambda: frozenset({StatsThrSeverityState.NONE}),
+        validation_alias="lowSevState",
+        serialization_alias="lowSevState",
+    )
+    major_high_reset: Annotated[
+        int, Field(validation_alias="majorHighReset", serialization_alias="majorHighReset")
+    ] = 0
+    major_high_set: Annotated[
+        int, Field(validation_alias="majorHighSet", serialization_alias="majorHighSet")
+    ] = 0
+    major_low_reset: Annotated[
+        int, Field(validation_alias="majorLowReset", serialization_alias="majorLowReset")
+    ] = 0
+    major_low_set: Annotated[
+        int, Field(validation_alias="majorLowSet", serialization_alias="majorLowSet")
+    ] = 0
+    minor_high_reset: Annotated[
+        int, Field(validation_alias="minorHighReset", serialization_alias="minorHighReset")
+    ] = 0
+    minor_high_set: Annotated[
+        int, Field(validation_alias="minorHighSet", serialization_alias="minorHighSet")
+    ] = 0
+    minor_low_reset: Annotated[
+        int, Field(validation_alias="minorLowReset", serialization_alias="minorLowReset")
+    ] = 0
+    minor_low_set: Annotated[
+        int, Field(validation_alias="minorLowSet", serialization_alias="minorLowSet")
+    ] = 0
     name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
-    threshold_normal_value: str = Field(default="", alias="normal")
+    threshold_normal_value: Annotated[
+        int, Field(validation_alias="normal", serialization_alias="normal")
+    ] = 0
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    warn_high_reset: str = Field(default="", alias="warnHighReset")
-    warn_high_set: str = Field(default="", alias="warnHighSet")
-    warn_low_reset: str = Field(default="", alias="warnLowReset")
-    warn_low_set: str = Field(default="", alias="warnLowSet")
+    warn_high_reset: Annotated[
+        int, Field(validation_alias="warnHighReset", serialization_alias="warnHighReset")
+    ] = 0
+    warn_high_set: Annotated[
+        int, Field(validation_alias="warnHighSet", serialization_alias="warnHighSet")
+    ] = 0
+    warn_low_reset: Annotated[
+        int, Field(validation_alias="warnLowReset", serialization_alias="warnLowReset")
+    ] = 0
+    warn_low_set: Annotated[
+        int, Field(validation_alias="warnLowSet", serialization_alias="warnLowSet")
+    ] = 0

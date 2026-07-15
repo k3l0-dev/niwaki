@@ -6,14 +6,14 @@ from enum import StrEnum
 
 
 class PcIfControl(StrEnum):
-    FAST_SEL_HOT_STDBY = "fast-sel-hot-stdby"
-    """LACP fast select for hot standby ports"""
+    SUSP_INDIVIDUAL = "susp-individual"
+    """LACP suspend individual port"""
     GRACEFUL_CONV = "graceful-conv"
     """LACP graceful convergence"""
     LOAD_DEFER = "load-defer"
     """Load defer"""
-    SUSP_INDIVIDUAL = "susp-individual"
-    """LACP suspend individual port"""
+    FAST_SEL_HOT_STDBY = "fast-sel-hot-stdby"
+    """LACP fast select for hot standby ports"""
     SYMMETRIC_HASH = "symmetric-hash"
     """Symmetric hashing property of PC"""
 

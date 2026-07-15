@@ -51,7 +51,12 @@ class arpStAdjEp(ManagedObject):
     # ── Naming (required) ──────────────────────────────────────────────────────
     address: Annotated[
         str,
-        Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="ip", description="Specifies the IP address."),
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            validation_alias="ip",
+            serialization_alias="ip",
+            description="Specifies the IP address.",
+        ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────

@@ -3,9 +3,13 @@
 from __future__ import annotations
 
 from typing import ClassVar, Annotated
-from pydantic import Field
+from pydantic import BeforeValidator, Field
 
+from niwaki.models._wire import Flags, parse_flags
 from niwaki.models._generated.enums.CommAdminState import CommAdminState
+from niwaki.models._generated.enums.CommKexAlgorithmTypes import CommKexAlgorithmTypes
+from niwaki.models._generated.enums.CommSshCipherTypes import CommSshCipherTypes
+from niwaki.models._generated.enums.CommSshMacTypes import CommSshMacTypes
 
 from niwaki.models.base import ManagedObject
 
@@ -40,7 +44,8 @@ class commSsh(ManagedObject):
     # ── Configurable ───────────────────────────────────────────────────────────
     admin_state: CommAdminState = Field(
         default=CommAdminState.ENABLED,
-        alias="adminSt",
+        validation_alias="adminSt",
+        serialization_alias="adminSt",
         description="The state of SSH communication service. This can be enabled or disabled.",
     )
     annotation: Annotated[
@@ -56,19 +61,66 @@ class commSsh(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies the description of a policy component.",
         ),
     ] = ""
-    kex_algorithms: str = Field(default="", alias="kexAlgos")
+    kex_algorithms: Annotated[Flags[CommKexAlgorithmTypes], BeforeValidator(parse_flags)] = Field(
+        default_factory=lambda: frozenset(
+            {
+                CommKexAlgorithmTypes.DIFFIE_HELLMAN_GROUP14_SHA256,
+                CommKexAlgorithmTypes.DIFFIE_HELLMAN_GROUP16_SHA512,
+                CommKexAlgorithmTypes.CURVE25519_SHA256_LIBSSH_ORG,
+                CommKexAlgorithmTypes.ECDH_SHA2_NISTP521,
+                CommKexAlgorithmTypes.ECDH_SHA2_NISTP384,
+                CommKexAlgorithmTypes.ECDH_SHA2_NISTP256,
+                CommKexAlgorithmTypes.CURVE25519_SHA256,
+            }
+        ),
+        validation_alias="kexAlgos",
+        serialization_alias="kexAlgos",
+    )
     name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     password_auth_state: CommAdminState = Field(
-        default=CommAdminState.ENABLED, alias="passwordAuth"
+        default=CommAdminState.ENABLED,
+        validation_alias="passwordAuth",
+        serialization_alias="passwordAuth",
     )
     port: Annotated[int, Field(ge=0, le=65535, description="The SSH port.")] = 22
-    ssh_ciphers: str = Field(default="", alias="sshCiphers")
-    ssh_macs: str = Field(default="", alias="sshMacs")
+    ssh_ciphers: Annotated[Flags[CommSshCipherTypes], BeforeValidator(parse_flags)] = Field(
+        default_factory=lambda: frozenset(
+            {
+                CommSshCipherTypes.AES128_CTR,
+                CommSshCipherTypes.AES192_CTR,
+                CommSshCipherTypes.AES256_CTR,
+                CommSshCipherTypes.AES128_GCM_OPENSSH_COM,
+                CommSshCipherTypes.AES256_GCM_OPENSSH_COM,
+                CommSshCipherTypes.CHACHA20_POLY1305_OPENSSH_COM,
+            }
+        ),
+        validation_alias="sshCiphers",
+        serialization_alias="sshCiphers",
+    )
+    ssh_macs: Annotated[Flags[CommSshMacTypes], BeforeValidator(parse_flags)] = Field(
+        default_factory=lambda: frozenset(
+            {
+                CommSshMacTypes.HMAC_SHA2_256,
+                CommSshMacTypes.HMAC_SHA2_512,
+                CommSshMacTypes.HMAC_SHA2_256_ETM_OPENSSH_COM,
+                CommSshMacTypes.HMAC_SHA2_512_ETM_OPENSSH_COM,
+            }
+        ),
+        validation_alias="sshMacs",
+        serialization_alias="sshMacs",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

@@ -58,7 +58,8 @@ class fvRsCtxToEpRet(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9_.:-]+$",
-            alias="tnFvEpRetPolName",
+            validation_alias="tnFvEpRetPolName",
+            serialization_alias="tnFvEpRetPolName",
             description="The end point retention policy name.",
         ),
     ] = ""

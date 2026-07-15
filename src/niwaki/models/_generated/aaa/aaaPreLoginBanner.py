@@ -56,40 +56,58 @@ class aaaPreLoginBanner(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    application_banner_message: str = Field(default="", alias="bannerMessage")
+    application_banner_message: str = Field(
+        default="", validation_alias="bannerMessage", serialization_alias="bannerMessage"
+    )
     application_banner_severity: ConditionSeverity = Field(
-        default=ConditionSeverity.INFO, alias="bannerMessageSeverity"
+        default=ConditionSeverity.INFO,
+        validation_alias="bannerMessageSeverity",
+        serialization_alias="bannerMessageSeverity",
     )
     description: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
     login_gui_message: str = Field(
         default="",
-        alias="guiMessage",
+        validation_alias="guiMessage",
+        serialization_alias="guiMessage",
         description="The contents of the GUI informational banner to be displayed before user login authentication. The GUI banner is a URL. Note that the URL site owner must allow the site to be placed in an iFrame to display the informational banner.",
     )
-    login_gui_string_message: str = Field(default="", alias="guiTextMessage")
-    use_text_base_pre_login_banner_message: bool = Field(default=False, alias="isGuiMessageText")
+    login_gui_string_message: str = Field(
+        default="", validation_alias="guiTextMessage", serialization_alias="guiTextMessage"
+    )
+    use_text_base_pre_login_banner_message: bool = Field(
+        default=False, validation_alias="isGuiMessageText", serialization_alias="isGuiMessageText"
+    )
     login_banner_message: str = Field(
         default="",
-        alias="message",
+        validation_alias="message",
+        serialization_alias="message",
         description="The contents of the CLI informational banner to be displayed before user login authentication. The CLI banner is a text based string printed as-is to the console.",
     )
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     owner_key: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerKey",
+            validation_alias="ownerKey",
+            serialization_alias="ownerKey",
             description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
@@ -98,10 +116,15 @@ class aaaPreLoginBanner(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerTag",
+            validation_alias="ownerTag",
+            serialization_alias="ownerTag",
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
-    show_application_banner: bool = Field(default=False, alias="showBannerMessage")
-    switch_login_banner_message: str = Field(default="", alias="switchMessage")
+    show_application_banner: bool = Field(
+        default=False, validation_alias="showBannerMessage", serialization_alias="showBannerMessage"
+    )
+    switch_login_banner_message: str = Field(
+        default="", validation_alias="switchMessage", serialization_alias="switchMessage"
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

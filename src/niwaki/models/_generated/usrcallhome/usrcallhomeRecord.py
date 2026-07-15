@@ -44,5 +44,7 @@ class usrcallhomeRecord(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    urgency_of_log: CallhomeUrgency = Field(default=CallhomeUrgency.ALERT, alias="urgency")
+    urgency_of_log: CallhomeUrgency = Field(
+        default=CallhomeUrgency.ALERT, validation_alias="urgency", serialization_alias="urgency"
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

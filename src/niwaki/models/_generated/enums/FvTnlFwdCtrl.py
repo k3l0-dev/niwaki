@@ -6,8 +6,8 @@ from enum import StrEnum
 
 
 class FvTnlFwdCtrl(StrEnum):
-    MAC_LEARN_DISABLE = "mac-learn-disable"
     MAC_LEARN_ENABLE = "mac-learn-enable"
+    MAC_LEARN_DISABLE = "mac-learn-disable"
 
     @classmethod
     def _missing_(cls, value: object) -> FvTnlFwdCtrl | None:

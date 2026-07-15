@@ -39,7 +39,15 @@ class extdevDevType(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    model: Annotated[str, Field(min_length=1, max_length=512, alias="productName")]
+    model: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=512,
+            validation_alias="productName",
+            serialization_alias="productName",
+        ),
+    ]
     vendor: Annotated[
         str, Field(min_length=1, max_length=512, description="The vendor of the controller.")
     ]
@@ -55,7 +63,8 @@ class extdevDevType(ManagedObject):
     ] = ""
     device_type: EdmDeviceType = Field(
         default=EdmDeviceType.APP_BASED,
-        alias="deviceType",
+        validation_alias="deviceType",
+        serialization_alias="deviceType",
         description="Used to fault a Dev Manager in case intended type doesn't match polled type",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

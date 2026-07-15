@@ -42,7 +42,8 @@ class leakTo(ManagedObject):
             min_length=1,
             max_length=64,
             pattern="^[a-zA-Z0-9_.:-]+$",
-            alias="ctxName",
+            validation_alias="ctxName",
+            serialization_alias="ctxName",
             description="The L3 context name.",
         ),
     ]
@@ -52,7 +53,8 @@ class leakTo(ManagedObject):
             min_length=1,
             max_length=64,
             pattern="^[a-zA-Z0-9_.:-]+$",
-            alias="tenantName",
+            validation_alias="tenantName",
+            serialization_alias="tenantName",
             description="The tenant name.",
         ),
     ]
@@ -71,17 +73,25 @@ class leakTo(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies the description of a policy component.",
         ),
     ] = ""
     name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     override_subnet_scope: LeakToRouteScp = Field(
         default=LeakToRouteScp.INHERIT,
-        alias="scope",
+        validation_alias="scope",
+        serialization_alias="scope",
         description="The domain applicable to the capability.",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

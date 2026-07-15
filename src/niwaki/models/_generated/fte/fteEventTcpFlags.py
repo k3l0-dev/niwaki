@@ -60,43 +60,78 @@ class fteEventTcpFlags(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="The description of this configuration item.",
         ),
     ] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     sub_event_configuration_for_tcp_ack_flag: bool = Field(
-        default=False, alias="tcpAckFlag", description="06. TCP ACK flag set"
+        default=False,
+        validation_alias="tcpAckFlag",
+        serialization_alias="tcpAckFlag",
+        description="06. TCP ACK flag set",
     )
     sub_event_configuration_for_tcp_cwr_flag: bool = Field(
-        default=False, alias="tcpCwrFlag", description="09. TCP CWR flag set"
+        default=False,
+        validation_alias="tcpCwrFlag",
+        serialization_alias="tcpCwrFlag",
+        description="09. TCP CWR flag set",
     )
     sub_event_configuration_for_tcp_ece_flag: bool = Field(
-        default=False, alias="tcpEceFlag", description="08. TCP ECE flag set"
+        default=False,
+        validation_alias="tcpEceFlag",
+        serialization_alias="tcpEceFlag",
+        description="08. TCP ECE flag set",
     )
     sub_event_configuration_for_tcp_fin_flag: bool = Field(
-        default=False, alias="tcpFinFlag", description="02. TCP FIN flag configuration"
+        default=False,
+        validation_alias="tcpFinFlag",
+        serialization_alias="tcpFinFlag",
+        description="02. TCP FIN flag configuration",
     )
     sub_event_configuration_for_tcp_flag_set: bool = Field(
         default=False,
-        alias="tcpFlagSet",
+        validation_alias="tcpFlagSet",
+        serialization_alias="tcpFlagSet",
         description="01. TCP flag set configuration. Enables all TCP flags",
     )
     sub_event_configuration_for_tcp_ns_flag: bool = Field(
-        default=False, alias="tcpNsFlag", description="10. TCP NS flag set"
+        default=False,
+        validation_alias="tcpNsFlag",
+        serialization_alias="tcpNsFlag",
+        description="10. TCP NS flag set",
     )
     sub_event_configuration_for_tcp_psh_flag: bool = Field(
-        default=False, alias="tcpPshFlag", description="05. TCP PSH flag set"
+        default=False,
+        validation_alias="tcpPshFlag",
+        serialization_alias="tcpPshFlag",
+        description="05. TCP PSH flag set",
     )
     sub_event_configuration_for_tcp_rst_flag: bool = Field(
-        default=False, alias="tcpRstFlag", description="04. TCP RST flag set"
+        default=False,
+        validation_alias="tcpRstFlag",
+        serialization_alias="tcpRstFlag",
+        description="04. TCP RST flag set",
     )
     sub_event_configuration_for_tcp_syn_flag: bool = Field(
-        default=False, alias="tcpSynFlag", description="03. TCP SYN flag set"
+        default=False,
+        validation_alias="tcpSynFlag",
+        serialization_alias="tcpSynFlag",
+        description="03. TCP SYN flag set",
     )
     sub_event_configuration_for_tcp_urg_flag: bool = Field(
-        default=False, alias="tcpUrgFlag", description="07. TCP URG flag set"
+        default=False,
+        validation_alias="tcpUrgFlag",
+        serialization_alias="tcpUrgFlag",
+        description="07. TCP URG flag set",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

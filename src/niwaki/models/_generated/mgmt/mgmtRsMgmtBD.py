@@ -60,7 +60,8 @@ class mgmtRsMgmtBD(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9_.-]+$",
-            alias="tnFvBDName",
+            validation_alias="tnFvBDName",
+            serialization_alias="tnFvBDName",
             description="The bridge domain name. This name can be up to 64 alphanumeric characters.",
         ),
     ] = ""

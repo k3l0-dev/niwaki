@@ -39,7 +39,10 @@ class relnTargetClass(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     subject_class: RelnClassId = Field(
-        default=RelnClassId.UNSPECIFIED, alias="id", description="An identifier ."
+        default=RelnClassId.UNSPECIFIED,
+        validation_alias="id",
+        serialization_alias="id",
+        description="An identifier .",
     )
 
     # ── Configurable ───────────────────────────────────────────────────────────

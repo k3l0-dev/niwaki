@@ -76,24 +76,40 @@ class snmpTrapDest(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies the description of a policy component.",
         ),
     ] = ""
     name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
-    notif_t: SnmpNotificationType = Field(default=SnmpNotificationType.TRAPS, alias="notifT")
+    notif_t: SnmpNotificationType = Field(
+        default=SnmpNotificationType.TRAPS, validation_alias="notifT", serialization_alias="notifT"
+    )
     security_name: str = Field(
-        default="", alias="secName", description="The SNMP destination security name."
+        default="",
+        validation_alias="secName",
+        serialization_alias="secName",
+        description="The SNMP destination security name.",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     v3_security_level: SnmpV3SecLvl = Field(
         default=SnmpV3SecLvl.NOAUTH,
-        alias="v3SecLvl",
+        validation_alias="v3SecLvl",
+        serialization_alias="v3SecLvl",
         description="The SNMP V3 security level for the destination path.",
     )
     version: SnmpVersion = Field(
-        default=SnmpVersion.V2C, alias="ver", description="The CDP version supported by the device."
+        default=SnmpVersion.V2C,
+        validation_alias="ver",
+        serialization_alias="ver",
+        description="The CDP version supported by the device.",
     )

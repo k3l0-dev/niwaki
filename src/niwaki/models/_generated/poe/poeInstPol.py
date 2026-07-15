@@ -3,7 +3,10 @@
 from __future__ import annotations
 
 from typing import ClassVar, Annotated
-from pydantic import Field
+from pydantic import BeforeValidator, Field
+
+from niwaki.models._wire import Flags, parse_flags
+from niwaki.models._generated.enums.PoePwrCtrl import PoePwrCtrl
 
 from niwaki.models.base import ManagedObject
 
@@ -42,27 +45,42 @@ class poeInstPol(ManagedObject):
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    consumption_default: str = Field(
-        default="", alias="consumption", description="Consumption Default.."
-    )
+    consumption_default: Annotated[
+        int,
+        Field(
+            ge=4000,
+            le=60000,
+            validation_alias="consumption",
+            serialization_alias="consumption",
+            description="Consumption Default..",
+        ),
+    ] = 4000
     description: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     owner_key: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerKey",
+            validation_alias="ownerKey",
+            serialization_alias="ownerKey",
             description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
@@ -71,9 +89,15 @@ class poeInstPol(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerTag",
+            validation_alias="ownerTag",
+            serialization_alias="ownerTag",
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
-    power_control: str = Field(default="", alias="pwrCtrl", description="Power Control")
+    power_control: Annotated[Flags[PoePwrCtrl], BeforeValidator(parse_flags)] = Field(
+        default_factory=lambda: frozenset(),
+        validation_alias="pwrCtrl",
+        serialization_alias="pwrCtrl",
+        description="Power Control",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

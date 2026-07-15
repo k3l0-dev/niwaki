@@ -36,7 +36,14 @@ class drawInst(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    o_dn: Annotated[str, Field(alias="oDn", description="Distinguished name of the target object")]
+    o_dn: Annotated[
+        str,
+        Field(
+            validation_alias="oDn",
+            serialization_alias="oDn",
+            description="Distinguished name of the target object",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[

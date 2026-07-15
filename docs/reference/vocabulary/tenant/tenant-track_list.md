@@ -26,10 +26,10 @@ Accepted as keyword arguments of `.track_list(name)` and of `.set(**attrs)` on t
 | `description` | `descr` | `str` | — | — | Specifies a description of the policy definition. |
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |
-| `percentage_down` | `percentageDown` | `str` | — | — | Down Threshold percentage. This specifies the threshold percentage down. This applies when track:List.type is 'percentageDown'. |
-| `percentage_up` | `percentageUp` | `str` | — | — | Up Threshold percentage. This specifies the threshold percentage up. This applies when track:List.type is 'percentage'. |
-| `weight_down_value` | `weightDown` | `str` | — | — | Down Threshold weight. This specifies the threshold weight down. This applies when track:List.type is 'weight'. |
-| `weight_up_value` | `weightUp` | `str` | — | — | Up Threshold weight. This specifies the threshold weight up. This applies when track:List.type is 'weight'. |
+| `percentage_down` | `percentageDown` | `int` | — | `0` | Down Threshold percentage. This specifies the threshold percentage down. This applies when track:List.type is 'percentageDown'. |
+| `percentage_up` | `percentageUp` | `int` | — | `1` | Up Threshold percentage. This specifies the threshold percentage up. This applies when track:List.type is 'percentage'. |
+| `weight_down_value` | `weightDown` | `int` | — | `0` | Down Threshold weight. This specifies the threshold weight down. This applies when track:List.type is 'weight'. |
+| `weight_up_value` | `weightUp` | `int` | — | `1` | Up Threshold weight. This specifies the threshold weight up. This applies when track:List.type is 'weight'. |
 
 ## Bind aliases
 

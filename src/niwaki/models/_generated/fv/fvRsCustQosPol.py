@@ -60,7 +60,8 @@ class fvRsCustQosPol(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9_.:-]+$",
-            alias="tnQosCustomPolName",
+            validation_alias="tnQosCustomPolName",
+            serialization_alias="tnQosCustomPolName",
             description="The Custom QoS traffic policy name.",
         ),
     ] = ""

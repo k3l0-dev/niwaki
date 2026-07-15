@@ -41,7 +41,13 @@ class wwnOui(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     organizationally_unique_identifier: Annotated[
-        int, Field(ge=1, alias="id", description="An object identifier.")
+        int,
+        Field(
+            ge=1,
+            validation_alias="id",
+            serialization_alias="id",
+            description="An object identifier.",
+        ),
     ] = 0
 
     # ── Configurable ───────────────────────────────────────────────────────────

@@ -26,7 +26,7 @@ Accepted as keyword arguments of `.route_control_context(name)` and of `.set(**a
 | `name` *(positional)* | `name` | `str` | — | — | The name of the policy context. |
 | `action` | `action` | {ref}`RtfltAction <enum-rtfltaction>` | `deny`, `permit` | `permit` | The action required when the condition is met. |
 | `description` | `descr` | `str` | — | — | Specifies the description of a policy component. |
-| `local_order` | `order` | `str` | — | — | The order of the policy context. |
+| `local_order` | `order` | `int` | — | `0` | The order of the policy context. |
 
 ## Children
 

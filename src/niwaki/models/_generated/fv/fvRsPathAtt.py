@@ -55,7 +55,7 @@ class fvRsPathAtt(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    target_dn: Annotated[str, Field(alias="tDn")]
+    target_dn: Annotated[str, Field(validation_alias="tDn", serialization_alias="tDn")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[
@@ -77,7 +77,8 @@ class fvRsPathAtt(ManagedObject):
     encap: Annotated[str, Field(description="The encapsulation method (VLAN) of the path.")] = ""
     deployment_immediacy: FvInstrImedcy = Field(
         default=FvInstrImedcy.LAZY,
-        alias="instrImedcy",
+        validation_alias="instrImedcy",
+        serialization_alias="instrImedcy",
         description="The deployment immediacy preference of this path association.",
     )
     mode: FvMode = Field(
@@ -85,7 +86,8 @@ class fvRsPathAtt(ManagedObject):
     )
     primary_encap: str = Field(
         default="",
-        alias="primaryEncap",
+        validation_alias="primaryEncap",
+        serialization_alias="primaryEncap",
         description="Represents the primary encap when the EPG is isolated",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

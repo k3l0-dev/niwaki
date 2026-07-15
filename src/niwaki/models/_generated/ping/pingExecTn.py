@@ -48,7 +48,10 @@ class pingExecTn(ManagedObject):
     destination_ip: Annotated[
         str,
         Field(
-            pattern="^[0-9a-fA-F.:/ ]+$", alias="dstIp", description="The destination IP address."
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            validation_alias="dstIp",
+            serialization_alias="dstIp",
+            description="The destination IP address.",
         ),
     ]
     name: Annotated[
@@ -64,18 +67,27 @@ class pingExecTn(ManagedObject):
         str,
         Field(
             pattern="^[0-9a-fA-F.:/ ]+$",
-            alias="srcIp",
+            validation_alias="srcIp",
+            serialization_alias="srcIp",
             description="The source IP address. Traffic from this IP address to the EP is counted",
         ),
     ]
     tenant_name: Annotated[
-        str, Field(min_length=1, max_length=16, pattern="^[a-zA-Z0-9_.:-]+$", alias="tenant")
+        str,
+        Field(
+            min_length=1,
+            max_length=16,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            validation_alias="tenant",
+            serialization_alias="tenant",
+        ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     admin_state: ActionAdminSt = Field(
         default=ActionAdminSt.UNKNOWN,
-        alias="adminSt",
+        validation_alias="adminSt",
+        serialization_alias="adminSt",
         description="The administrative state of the object or policy.",
     )
     annotation: Annotated[
@@ -88,31 +100,50 @@ class pingExecTn(ManagedObject):
     ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            validation_alias="descr",
+            serialization_alias="descr",
+        ),
     ] = ""
     destination_mac: Annotated[
         str,
         Field(
             pattern="^([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}$",
-            alias="dstMac",
+            validation_alias="dstMac",
+            serialization_alias="dstMac",
             description="Specifies the destination MAC address for the rule.",
         ),
     ] = ""
     task_frequency: str = Field(
-        default="", alias="freq", description="Frequency at which tasks are executed"
+        default="",
+        validation_alias="freq",
+        serialization_alias="freq",
+        description="Frequency at which tasks are executed",
     )
-    payload_size: str = Field(
-        default="", alias="payloadSz", description="Indicates the payload size."
-    )
+    payload_size: Annotated[
+        int,
+        Field(
+            ge=20,
+            le=9144,
+            validation_alias="payloadSz",
+            serialization_alias="payloadSz",
+            description="Indicates the payload size.",
+        ),
+    ] = 56
     source_mac: Annotated[
         str,
         Field(
             pattern="^([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}$",
-            alias="srcMac",
+            validation_alias="srcMac",
+            serialization_alias="srcMac",
             description="Specifies the source MAC address for the rule.",
         ),
     ] = ""
-    source_node_id: str = Field(default="", alias="srcNodeId")
+    source_node_id: Annotated[
+        int, Field(ge=1, le=16000, validation_alias="srcNodeId", serialization_alias="srcNodeId")
+    ] = 1
     type: ActionType = Field(
         default=ActionType.CLEAR, description="The specific type of the object or component."
     )
@@ -120,5 +151,10 @@ class pingExecTn(ManagedObject):
     vrf: Annotated[
         str, Field(max_length=512, description="Identifies the VRF for the NTP providers")
     ] = ""
-    vtep_ip: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="vtep")] = ""
-    vtep_encapsulation: str = Field(default="", alias="vtepEncap")
+    vtep_ip: Annotated[
+        str,
+        Field(pattern="^[0-9a-fA-F.:/ ]+$", validation_alias="vtep", serialization_alias="vtep"),
+    ] = ""
+    vtep_encapsulation: str = Field(
+        default="", validation_alias="vtepEncap", serialization_alias="vtepEncap"
+    )

@@ -20,7 +20,11 @@ import niwaki
 from niwaki import AsyncNiwaki, Niwaki, RetryConfig  # noqa: F401 — import surface
 from niwaki.design import design
 from niwaki.exceptions import NiwakiError, StagedPushError  # noqa: F401
-from niwaki.models.fv.fvBD import fvBD  # noqa: F401 — alias import path
+
+# The ergonomic alias path is resolved at runtime by a MetaPathFinder, which no
+# static analyser can see — checking it *works* in the built wheel is this
+# script's job, so the unresolved import is the thing under test.
+from niwaki.models.fv.fvBD import fvBD  # noqa: F401  # pyright: ignore
 
 
 def main() -> None:

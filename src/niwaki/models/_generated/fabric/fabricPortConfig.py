@@ -37,15 +37,20 @@ class fabricPortConfig(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    card: str
-    node: Annotated[str, Field(description="explicit properties")]
-    port: Annotated[str, Field(description="The service port number for the LDAP service.")]
-    sub_port: Annotated[str, Field(alias="subPort")]
+    card: Annotated[int, Field(ge=1, le=255)] = 1
+    node: Annotated[int, Field(ge=101, le=16000, description="explicit properties")] = 0
+    port: Annotated[
+        int, Field(ge=1, le=127, description="The service port number for the LDAP service.")
+    ] = 1
+    sub_port: Annotated[
+        int, Field(ge=0, le=64, validation_alias="subPort", serialization_alias="subPort")
+    ] = 0
 
     # ── Configurable ───────────────────────────────────────────────────────────
     configuration_action: FabricPCAction = Field(
         default=FabricPCAction.CONFIGURE,
-        alias="action",
+        validation_alias="action",
+        serialization_alias="action",
         description="The action required when the condition is met.",
     )
     annotation: Annotated[
@@ -56,12 +61,19 @@ class fabricPortConfig(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    associated_group_dn: str = Field(default="", alias="assocGrp")
+    associated_group_dn: str = Field(
+        default="", validation_alias="assocGrp", serialization_alias="assocGrp"
+    )
     description: Annotated[
         str, Field(max_length=512, description="The description of this configuration item.")
     ] = ""
     port_role: FabricportRole = Field(
-        default=FabricportRole.LEAF, alias="role", description="The system role type."
+        default=FabricportRole.LEAF,
+        validation_alias="role",
+        serialization_alias="role",
+        description="The system role type.",
     )
-    port_shutdown: bool = Field(default=False, alias="shutdown")
+    port_shutdown: bool = Field(
+        default=False, validation_alias="shutdown", serialization_alias="shutdown"
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

@@ -55,5 +55,10 @@ class l3extRsL3DomAtt(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    target_dn: str = Field(default="", alias="tDn", description="The external routed domain name.")
+    target_dn: str = Field(
+        default="",
+        validation_alias="tDn",
+        serialization_alias="tDn",
+        description="The external routed domain name.",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

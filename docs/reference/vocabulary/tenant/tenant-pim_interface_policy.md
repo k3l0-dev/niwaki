@@ -25,12 +25,12 @@ Accepted as keyword arguments of `.pim_interface_policy(name)` and of `.set(**at
 | --- | --- | --- | --- | --- | --- |
 | `name` *(positional)* | `name` | `str` | — | — | Interface-level PIM-SM (sparse mode) policy name. |
 | `authentication_type` | `authT` | {ref}`RtdmcAuthT <enum-rtdmcautht>` | `ah-md5`, `none` | `none` | Authentication Type |
-| `interface_controls` | `ctrl` | `str` | — | — | Interface controls |
+| `interface_controls` | `ctrl` | {ref}`RtdmcIfUserCtrl <enum-rtdmcifuserctrl>` | `border`, `passive`, `strict-rfc-compliant` | — | Interface controls |
 | `description` | `descr` | `str` | — | — | Specifies a description of the policy definition. |
-| `designated_router_delay` | `drDelay` | `str` | — | — | Designated Router Delay |
+| `designated_router_delay` | `drDelay` | `int` | — | `3` | Designated Router Delay |
 | `designated_router_priority` | `drPrio` | `int` | — | `1` | Designated Router Priority |
 | `hello_interval` | `helloItvl` | `int` | — | `30000` | Hello Traffic Policy |
-| `join_prune_interval_seconds` | `jpInterval` | `str` | — | — | JP Traffic Policy |
+| `join_prune_interval_seconds` | `jpInterval` | `int` | — | `60` | JP Traffic Policy |
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |
 | `secure_authentication_key` | `secureAuthKey` | `str` | — | — | Secure Authentication key |

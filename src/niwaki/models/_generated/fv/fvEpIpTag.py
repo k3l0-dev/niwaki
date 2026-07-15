@@ -60,12 +60,19 @@ class fvEpIpTag(ManagedObject):
             min_length=1,
             max_length=64,
             pattern="^[a-zA-Z0-9_.-]+$",
-            alias="ctxName",
+            validation_alias="ctxName",
+            serialization_alias="ctxName",
             description="The L3 context name.",
         ),
     ]
     endpoint_ip_address: Annotated[
-        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="ip", description="The IP address.")
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            validation_alias="ip",
+            serialization_alias="ip",
+            description="The IP address.",
+        ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
@@ -77,12 +84,18 @@ class fvEpIpTag(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    id: Annotated[str, Field(description="An identifier .")] = ""
+    id: Annotated[int, Field(description="An identifier .")] = 0
     name: Annotated[
         str,
         Field(max_length=16, pattern="^[a-zA-Z0-9_.:-]+$", description="The name of the object."),
     ] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

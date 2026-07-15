@@ -51,7 +51,8 @@ class fabricRsRemoteStatsServer(ManagedObject):
             min_length=1,
             max_length=64,
             pattern="^[a-zA-Z0-9_.:-]+$",
-            alias="tnTelemetryStatsServerPName",
+            validation_alias="tnTelemetryStatsServerPName",
+            serialization_alias="tnTelemetryStatsServerPName",
         ),
     ]
 

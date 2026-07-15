@@ -53,5 +53,10 @@ class vmmRsAcc(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    target_dn: str = Field(default="", alias="tDn", description="The associated user.")
+    target_dn: str = Field(
+        default="",
+        validation_alias="tDn",
+        serialization_alias="tDn",
+        description="The associated user.",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

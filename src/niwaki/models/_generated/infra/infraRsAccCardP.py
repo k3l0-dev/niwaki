@@ -48,7 +48,12 @@ class infraRsAccCardP(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     target_dn: Annotated[
-        str, Field(alias="tDn", description="The module selector profile target relative name.")
+        str,
+        Field(
+            validation_alias="tDn",
+            serialization_alias="tDn",
+            description="The module selector profile target relative name.",
+        ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────

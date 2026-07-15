@@ -38,11 +38,13 @@ class plannerAffinityGroup(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     pref: Annotated[
-        str,
+        int,
         Field(
-            description="The administrative preference value for this route. This value is useful for resolving routes advertised from different protocols."
+            ge=0,
+            le=255,
+            description="The administrative preference value for this route. This value is useful for resolving routes advertised from different protocols.",
         ),
-    ]
+    ] = 0
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[

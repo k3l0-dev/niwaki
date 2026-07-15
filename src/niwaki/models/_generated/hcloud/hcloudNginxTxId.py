@@ -43,6 +43,12 @@ class hcloudNginxTxId(ManagedObject):
         ),
     ] = ""
     tx_id: Annotated[
-        str, Field(max_length=512, alias="id", description="An object identifier.")
+        str,
+        Field(
+            max_length=512,
+            validation_alias="id",
+            serialization_alias="id",
+            description="An object identifier.",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

@@ -36,7 +36,10 @@ class mplsNodeSidP(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    srgb_index: Annotated[int, Field(alias="sidoffset", description="Index")] = 0
+    srgb_index: Annotated[
+        int,
+        Field(validation_alias="sidoffset", serialization_alias="sidoffset", description="Index"),
+    ] = 0
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[
@@ -52,15 +55,28 @@ class mplsNodeSidP(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies the description of a policy component.",
         ),
     ] = ""
     loopback_address_for_mpls_data_plane: Annotated[
-        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="loopbackAddr", description="Data plane TEP")
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            validation_alias="loopbackAddr",
+            serialization_alias="loopbackAddr",
+            description="Data plane TEP",
+        ),
     ] = ""
     name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

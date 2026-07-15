@@ -50,60 +50,113 @@ class ptpCfgDef(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    announce_interval_for_ptp_profile: str = Field(
-        default="", alias="announceIntvl", description="Announce Interval"
-    )
-    announce_timeout_for_ptp_profile: str = Field(
-        default="", alias="announceTimeout", description="Announce timeout"
-    )
-    delay_request_interval_for_ptp_profile: str = Field(
-        default="", alias="delayIntvl", description="Minimum Delay Request Interval"
-    )
+    announce_interval_for_ptp_profile: Annotated[
+        int,
+        Field(
+            ge=3,
+            le=4,
+            validation_alias="announceIntvl",
+            serialization_alias="announceIntvl",
+            description="Announce Interval",
+        ),
+    ] = 1
+    announce_timeout_for_ptp_profile: Annotated[
+        int,
+        Field(
+            ge=2,
+            le=10,
+            validation_alias="announceTimeout",
+            serialization_alias="announceTimeout",
+            description="Announce timeout",
+        ),
+    ] = 3
+    delay_request_interval_for_ptp_profile: Annotated[
+        int,
+        Field(
+            ge=4,
+            le=6,
+            validation_alias="delayIntvl",
+            serialization_alias="delayIntvl",
+            description="Minimum Delay Request Interval",
+        ),
+    ] = -2
     description: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies the description of a policy component.",
         ),
     ] = ""
-    local_priority: str = Field(
-        default="",
-        alias="localPriority",
-        description="Telecom profile related propertiesLocal Priority or PTP Cost",
-    )
+    local_priority: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=255,
+            validation_alias="localPriority",
+            serialization_alias="localPriority",
+            description="Telecom profile related propertiesLocal Priority or PTP Cost",
+        ),
+    ] = 128
     ptp_mode_for_interface: PtpPtpTransportMode = Field(
         default=PtpPtpTransportMode.MULTICAST,
-        alias="mode",
+        validation_alias="mode",
+        serialization_alias="mode",
         description="PTP mode multicast, unicast master/slave",
     )
     name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     flag_to_over_ride_node_level_config: bool = Field(
         default=False,
-        alias="nodeProfileOverride",
+        validation_alias="nodeProfileOverride",
+        serialization_alias="nodeProfileOverride",
         description="Override Node-level configurationProfile Applicable when Node Telecom Profile is configured",
     )
     ptp_profile_template: PtpProfileTemplate = Field(
-        default=PtpProfileTemplate.AES67, alias="profile", description="PTP template"
+        default=PtpProfileTemplate.AES67,
+        validation_alias="profile",
+        serialization_alias="profile",
+        description="PTP template",
     )
     ptpoe_dst_mac_rx_no_match: PtpPtpoeDstMacRxNoMatch = Field(
         default=PtpPtpoeDstMacRxNoMatch.REPLYWITHCFGMAC,
-        alias="ptpoeDstMacRxNoMatch",
+        validation_alias="ptpoeDstMacRxNoMatch",
+        serialization_alias="ptpoeDstMacRxNoMatch",
         description="PTPoE - Handling of RX packets with non-matching Mac type",
     )
     ptpoe_dst_mac_type: PtpPtpoeDstMacType = Field(
         default=PtpPtpoeDstMacType.FORWARDABLE,
-        alias="ptpoeDstMacType",
+        validation_alias="ptpoeDstMacType",
+        serialization_alias="ptpoeDstMacType",
         description="PTPoE destination mac type",
     )
     ptp_unicast_source_address: Annotated[
-        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="srcIp", description="IP address")
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            validation_alias="srcIp",
+            serialization_alias="srcIp",
+            description="IP address",
+        ),
     ] = ""
-    sync_interval_for_ptp_profile: str = Field(
-        default="", alias="syncIntvl", description="Sync Interval"
-    )
+    sync_interval_for_ptp_profile: Annotated[
+        int,
+        Field(
+            ge=4,
+            le=1,
+            validation_alias="syncIntvl",
+            serialization_alias="syncIntvl",
+            description="Sync Interval",
+        ),
+    ] = -3
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

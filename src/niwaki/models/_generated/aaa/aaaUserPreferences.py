@@ -60,46 +60,84 @@ class aaaUserPreferences(ManagedObject):
         ),
     ] = ""
     dashboard: str = ""
-    default_page_size: AaaPageSize = Field(default=AaaPageSize._15, alias="defaultPageSize")
-    default_tabs: str = Field(default="", alias="defaultTabs")
+    default_page_size: AaaPageSize = Field(
+        default=AaaPageSize._15,
+        validation_alias="defaultPageSize",
+        serialization_alias="defaultPageSize",
+    )
+    default_tabs: str = Field(
+        default="", validation_alias="defaultTabs", serialization_alias="defaultTabs"
+    )
     description: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
     disable_confirmation_on_success: bool = Field(
-        default=True, alias="disableConfirmationOnSuccess"
+        default=True,
+        validation_alias="disableConfirmationOnSuccess",
+        serialization_alias="disableConfirmationOnSuccess",
     )
     disable_creation_splash: str = Field(
         default="",
-        alias="disableCreationSplash",
+        validation_alias="disableCreationSplash",
+        serialization_alias="disableCreationSplash",
         description="List of which object creation splash screens to disable",
     )
     disable_deployment_notifications: AaaDeplNotifications = Field(
-        default=AaaDeplNotifications.FALSE, alias="disableDeploymentNotifications"
+        default=AaaDeplNotifications.FALSE,
+        validation_alias="disableDeploymentNotifications",
+        serialization_alias="disableDeploymentNotifications",
     )
     disable_login_deployment_notifications: bool = Field(
-        default=False, alias="disableLoginDeploymentNotifications"
+        default=False,
+        validation_alias="disableLoginDeploymentNotifications",
+        serialization_alias="disableLoginDeploymentNotifications",
     )
-    disable_uirbac: bool = Field(default=False, alias="disableUIRBAC")
-    disable_whats_new: Annotated[str, Field(max_length=512, alias="disableWhatsNew")] = ""
-    enable_sbs: Annotated[str, Field(max_length=512, alias="enableSBS")] = ""
+    disable_uirbac: bool = Field(
+        default=False, validation_alias="disableUIRBAC", serialization_alias="disableUIRBAC"
+    )
+    disable_whats_new: Annotated[
+        str,
+        Field(
+            max_length=512,
+            validation_alias="disableWhatsNew",
+            serialization_alias="disableWhatsNew",
+        ),
+    ] = ""
+    enable_sbs: Annotated[
+        str, Field(max_length=512, validation_alias="enableSBS", serialization_alias="enableSBS")
+    ] = ""
     favorites: str = ""
-    license_evaluation_start_date: str = Field(default="", alias="licenseEvalStartDate")
-    mos_stats_intervals: str = Field(default="", alias="mosStatsIntervals")
+    license_evaluation_start_date: str = Field(
+        default="",
+        validation_alias="licenseEvalStartDate",
+        serialization_alias="licenseEvalStartDate",
+    )
+    mos_stats_intervals: str = Field(
+        default="", validation_alias="mosStatsIntervals", serialization_alias="mosStatsIntervals"
+    )
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     owner_key: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerKey",
+            validation_alias="ownerKey",
+            serialization_alias="ownerKey",
             description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
@@ -108,23 +146,48 @@ class aaaUserPreferences(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerTag",
+            validation_alias="ownerTag",
+            serialization_alias="ownerTag",
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
-    preserve_tree_divider_position: bool = Field(default=False, alias="preserveTreeDividerPosition")
-    preserve_tree_position: bool = Field(default=False, alias="preserveTreePosition")
-    remove_license_evaluation: AaaBoolean = Field(default=AaaBoolean.NO, alias="removeLicenseEval")
-    session_timeout: str = Field(
-        default="",
-        alias="sessionTimeout",
-        description="session timeout preferences (default 10mins ?)",
+    preserve_tree_divider_position: bool = Field(
+        default=False,
+        validation_alias="preserveTreeDividerPosition",
+        serialization_alias="preserveTreeDividerPosition",
     )
-    show_hidden_policies: bool = Field(default=False, alias="showHiddenPolicies")
+    preserve_tree_position: bool = Field(
+        default=False,
+        validation_alias="preserveTreePosition",
+        serialization_alias="preserveTreePosition",
+    )
+    remove_license_evaluation: AaaBoolean = Field(
+        default=AaaBoolean.NO,
+        validation_alias="removeLicenseEval",
+        serialization_alias="removeLicenseEval",
+    )
+    session_timeout: Annotated[
+        int,
+        Field(
+            ge=5,
+            le=120,
+            validation_alias="sessionTimeout",
+            serialization_alias="sessionTimeout",
+            description="session timeout preferences (default 10mins ?)",
+        ),
+    ] = 0
+    show_hidden_policies: bool = Field(
+        default=False,
+        validation_alias="showHiddenPolicies",
+        serialization_alias="showHiddenPolicies",
+    )
     time_format: DatetimeDisplayFormat = Field(
         default=DatetimeDisplayFormat.LOCAL,
-        alias="tzDisplayFormat",
+        validation_alias="tzDisplayFormat",
+        serialization_alias="tzDisplayFormat",
         description="UI Date/Time Display Format (Local vs UTC)",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    visore_favorites: str = Field(default="", alias="visoreFavorites")
+    visore_favorites: str = Field(
+        default="", validation_alias="visoreFavorites", serialization_alias="visoreFavorites"
+    )

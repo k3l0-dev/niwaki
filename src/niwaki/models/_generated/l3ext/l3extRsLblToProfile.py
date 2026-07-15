@@ -51,7 +51,12 @@ class l3extRsLblToProfile(ManagedObject):
         default=RtctrlDirection.IMPORT, description="The connector direction."
     )
     target_dn: Annotated[
-        str, Field(alias="tDn", description="The distinguished name of the target.")
+        str,
+        Field(
+            validation_alias="tDn",
+            serialization_alias="tDn",
+            description="The distinguished name of the target.",
+        ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────

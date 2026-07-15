@@ -47,10 +47,32 @@ class vmmEpValidatorPol(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    current_key: Annotated[str, Field(max_length=512, alias="currentKey", repr=False)] = ""
+    current_key: Annotated[
+        str,
+        Field(
+            max_length=512,
+            validation_alias="currentKey",
+            serialization_alias="currentKey",
+            repr=False,
+        ),
+    ] = ""
     name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
-    previous_key: Annotated[str, Field(max_length=512, alias="previousKey", repr=False)] = ""
+    previous_key: Annotated[
+        str,
+        Field(
+            max_length=512,
+            validation_alias="previousKey",
+            serialization_alias="previousKey",
+            repr=False,
+        ),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

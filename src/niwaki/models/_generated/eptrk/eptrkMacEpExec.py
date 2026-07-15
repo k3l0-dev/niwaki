@@ -43,7 +43,12 @@ class eptrkMacEpExec(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     mac_address: Annotated[
-        str, Field(pattern="^([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}$", alias="addr")
+        str,
+        Field(
+            pattern="^([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}$",
+            validation_alias="addr",
+            serialization_alias="addr",
+        ),
     ]
     name: Annotated[
         str,
@@ -58,7 +63,8 @@ class eptrkMacEpExec(ManagedObject):
     # ── Configurable ───────────────────────────────────────────────────────────
     admin_state: ActionAdminSt = Field(
         default=ActionAdminSt.UNKNOWN,
-        alias="adminSt",
+        validation_alias="adminSt",
+        serialization_alias="adminSt",
         description="The administrative state of the object or policy.",
     )
     annotation: Annotated[
@@ -71,34 +77,59 @@ class eptrkMacEpExec(ManagedObject):
     ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            validation_alias="descr",
+            serialization_alias="descr",
+        ),
     ] = ""
     destination_ip: Annotated[
         str,
         Field(
-            pattern="^[0-9a-fA-F.:/ ]+$", alias="dstIp", description="The destination IP address."
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            validation_alias="dstIp",
+            serialization_alias="dstIp",
+            description="The destination IP address.",
         ),
     ] = ""
     destination_mac: Annotated[
         str,
         Field(
             pattern="^([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}$",
-            alias="dstMac",
+            validation_alias="dstMac",
+            serialization_alias="dstMac",
             description="Specifies the destination MAC address for the rule.",
         ),
     ] = ""
-    mac_encapsulation: str = Field(default="", alias="encap", description="The port encapsulation.")
+    mac_encapsulation: str = Field(
+        default="",
+        validation_alias="encap",
+        serialization_alias="encap",
+        description="The port encapsulation.",
+    )
     task_frequency: str = Field(
-        default="", alias="freq", description="Frequency at which tasks are executed"
+        default="",
+        validation_alias="freq",
+        serialization_alias="freq",
+        description="Frequency at which tasks are executed",
     )
-    payload_size: str = Field(
-        default="", alias="payloadSz", description="Indicates the payload size."
-    )
+    payload_size: Annotated[
+        int,
+        Field(
+            ge=20,
+            le=9144,
+            validation_alias="payloadSz",
+            serialization_alias="payloadSz",
+            description="Indicates the payload size.",
+        ),
+    ] = 56
     source_ip: Annotated[
         str,
         Field(
             pattern="^[0-9a-fA-F.:/ ]+$",
-            alias="srcIp",
+            validation_alias="srcIp",
+            serialization_alias="srcIp",
             description="The source IP address. Traffic from this IP address to the EP is counted",
         ),
     ] = ""
@@ -106,18 +137,29 @@ class eptrkMacEpExec(ManagedObject):
         str,
         Field(
             pattern="^([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}$",
-            alias="srcMac",
+            validation_alias="srcMac",
+            serialization_alias="srcMac",
             description="Specifies the source MAC address for the rule.",
         ),
     ] = ""
-    source_node_id: str = Field(default="", alias="srcNodeId")
+    source_node_id: Annotated[
+        int, Field(ge=1, le=16000, validation_alias="srcNodeId", serialization_alias="srcNodeId")
+    ] = 1
     tenant_name: Annotated[
-        str, Field(max_length=16, pattern="^[a-zA-Z0-9_.:-]+$", alias="tenant")
+        str,
+        Field(
+            max_length=16,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            validation_alias="tenant",
+            serialization_alias="tenant",
+        ),
     ] = ""
     type: ActionType = Field(
         default=ActionType.CLEAR, description="The specific type of the object or component."
     )
-    flag_to_use_encap_or_bd_vnid: bool = Field(default=True, alias="useEncap")
+    flag_to_use_encap_or_bd_vnid: bool = Field(
+        default=True, validation_alias="useEncap", serialization_alias="useEncap"
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     vnid: Annotated[
         int,
@@ -129,5 +171,10 @@ class eptrkMacEpExec(ManagedObject):
     vrf: Annotated[
         str, Field(max_length=512, description="Identifies the VRF for the NTP providers")
     ] = ""
-    vtep_ip: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="vtep")] = ""
-    vtep_encapsulation: str = Field(default="", alias="vtepEncap")
+    vtep_ip: Annotated[
+        str,
+        Field(pattern="^[0-9a-fA-F.:/ ]+$", validation_alias="vtep", serialization_alias="vtep"),
+    ] = ""
+    vtep_encapsulation: str = Field(
+        default="", validation_alias="vtepEncap", serialization_alias="vtepEncap"
+    )

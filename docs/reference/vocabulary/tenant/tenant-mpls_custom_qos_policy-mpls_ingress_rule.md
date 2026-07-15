@@ -23,10 +23,10 @@ Accepted as keyword arguments of `.mpls_ingress_rule(from_, to)` and of `.set(**
 
 | parameter | wire | type | values | default | description |
 | --- | --- | --- | --- | --- | --- |
-| `from_` *(positional)* | `from` | `str` | — | — | Range from |
-| `to` *(positional)* | `to` | `str` | — | — | Range to |
+| `from_` *(positional)* | `from` | `int` | — | — | Range from |
+| `to` *(positional)* | `to` | `int` | — | — | Range to |
 | `description` | `descr` | `str` | — | — | Specifies the description of a policy component. |
 | `name` | `name` | `str` | — | — | — |
 | `prio` | `prio` | {ref}`QosTenantPrio <enum-qostenantprio>` | `level1`, `level2`, `level3`, `level4`, `level5`, `level6`, `unspecified` | `unspecified` | Class id |
-| `target` | `target` | `str` | — | — | Our Fabric only supports DSCP mutation. Dot1P mutation is not supported |
-| `target_cos` | `targetCos` | `str` | — | — | Target COS to be driven based on the range of input values of DSCP coming into the fabric |
+| `target` | `target` | `int` | — | `unspecified` | Our Fabric only supports DSCP mutation. Dot1P mutation is not supported |
+| `target_cos` | `targetCos` | `int` | — | `unspecified` | Target COS to be driven based on the range of input values of DSCP coming into the fabric |

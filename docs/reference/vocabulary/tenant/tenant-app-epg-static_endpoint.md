@@ -24,9 +24,9 @@ Accepted as keyword arguments of `.static_endpoint(macaddress, type)` and of `.s
 | parameter | wire | type | values | default | description |
 | --- | --- | --- | --- | --- | --- |
 | `macaddress` *(positional)* | `mac` | `str` | — | — | The MAC address of the endpoint. |
-| `type` *(positional)* | `type` | `str` | — | — | The specific type of endpoint. |
+| `type` *(positional)* | `type` | {ref}`FvStCEpType <enum-fvstceptype>` | `silent-host`, `tep`, `vep` | — | The specific type of endpoint. |
 | `encap` | `encap` | `str` | — | — | The encapsulation (VXLAN or VLAN) to be used for this endpoint. |
-| `id` | `id` | `str` | — | — | An identifier . |
+| `id` | `id` | `int` | — | `0` | An identifier . |
 | `ip_address` | `ip` | `str` | — | — | The IP address of the endpoint. |
 | `name` | `name` | `str` | — | — | The name of the object. |
 

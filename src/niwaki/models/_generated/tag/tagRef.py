@@ -37,7 +37,7 @@ class tagRef(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    subject_dn: Annotated[str, Field(alias="oDn")]
+    subject_dn: Annotated[str, Field(validation_alias="oDn", serialization_alias="oDn")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[

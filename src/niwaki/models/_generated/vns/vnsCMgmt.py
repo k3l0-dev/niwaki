@@ -48,50 +48,78 @@ class vnsCMgmt(ManagedObject):
         ),
     ] = ""
     dns_domain: Annotated[
-        str, Field(max_length=512, alias="dnsDomain", description="dns Domain information")
+        str,
+        Field(
+            max_length=512,
+            validation_alias="dnsDomain",
+            serialization_alias="dnsDomain",
+            description="dns Domain information",
+        ),
     ] = ""
     gateway_ip_address: Annotated[
-        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="gateway", description="Gateway information")
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            validation_alias="gateway",
+            serialization_alias="gateway",
+            description="Gateway information",
+        ),
     ] = ""
     ip_address: Annotated[
         str,
         Field(
             pattern="^[0-9a-fA-F.:/ ]+$",
-            alias="host",
+            validation_alias="host",
+            serialization_alias="host",
             description="The management interface host address for the concrete device in the L4-L7 device cluster.",
         ),
     ] = ""
     ip_allocation_type: VnsIpAllocationType = Field(
-        default=VnsIpAllocationType.FIXED, alias="ipAllocationType"
+        default=VnsIpAllocationType.FIXED,
+        validation_alias="ipAllocationType",
+        serialization_alias="ipAllocationType",
     )
     is_in_band: bool = Field(
-        default=False, alias="isInBand", description="dynamic only: Tell type of the network"
+        default=False,
+        validation_alias="isInBand",
+        serialization_alias="isInBand",
+        description="dynamic only: Tell type of the network",
     )
     name: Annotated[
         str,
         Field(max_length=16, pattern="^[a-zA-Z0-9_.:-]+$", description="The name of the object."),
     ] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     port: Annotated[
-        str,
+        int,
         Field(
             description="The management interface port number for the concrete device in the L4-L7 device cluster."
         ),
-    ] = ""
+    ] = 0
     port_group_name: Annotated[
         str,
         Field(
             max_length=512,
-            alias="portGroupName",
+            validation_alias="portGroupName",
+            serialization_alias="portGroupName",
             description="dynamic only: management nic port group for out-of-band network",
         ),
     ] = ""
     subnet_mask: Annotated[
         str,
         Field(
-            pattern="^[0-9a-fA-F.:/ ]+$", alias="subnetmask", description="subnet mask information"
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            validation_alias="subnetmask",
+            serialization_alias="subnetmask",
+            description="subnet mask information",
         ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
@@ -100,7 +128,8 @@ class vnsCMgmt(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="vnicName",
+            validation_alias="vnicName",
+            serialization_alias="vnicName",
             description="The Vnic adapter name.",
         ),
     ] = ""

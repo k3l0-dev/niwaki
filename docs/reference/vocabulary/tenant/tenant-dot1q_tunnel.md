@@ -28,11 +28,11 @@ Accepted as keyword arguments of `.dot1q_tunnel(name)` and of `.set(**attrs)` on
 | `description` | `descr` | `str` | — | — | Specifies the description of a policy component. |
 | `contract_exception_tag` | `exceptionTag` | `str` | — | — | — |
 | `flood_on_encap` | `floodOnEncap` | {ref}`FvFloodOnEncap <enum-fvfloodonencap>` | `disabled`, `enabled` | `disabled` | Control at EPG level if the traffic L2 Multicast/Broadcast and Link Local Layer should be flooded only on ENCAP or based on bridg-domain settings |
-| `forwarding_controls` | `fwdCtrl` | {ref}`FvTnlFwdCtrl <enum-fvtnlfwdctrl>` | `mac-learn-disable`, `mac-learn-enable` | `mac-learn-enable` | Forwarding controls |
+| `forwarding_controls` | `fwdCtrl` | {ref}`FvTnlFwdCtrl <enum-fvtnlfwdctrl>` | `mac-learn-enable`, `mac-learn-disable` | `mac-learn-enable` | Forwarding controls |
 | `provider_label_match_criteria` | `matchT` | {ref}`VzMatchT <enum-vzmatcht>` | `All`, `AtleastOne`, `AtmostOne`, `None` | `AtleastOne` | The provider label match criteria. |
 | `preferred_group_member` | `prefGrMemb` | {ref}`FvPrefGrMemb <enum-fvprefgrmemb>` | `exclude`, `include` | `exclude` | Represents parameter used to determine if EPg is part of a group that does not a contract for communication |
 | `qos_class` | `prio` | {ref}`QosTenantPrio <enum-qostenantprio>` | `level1`, `level2`, `level3`, `level4`, `level5`, `level6`, `unspecified` | `unspecified` | The QoS priority class identifier. |
-| `dot1q_tunnel_l2_protocol_tunneling_mask` | `qiqL2ProtTunMask` | `str` | — | — | — |
+| `dot1q_tunnel_l2_protocol_tunneling_mask` | `qiqL2ProtTunMask` | {ref}`L2qiqL2ProtTunMaskT <enum-l2qiql2prottunmaskt>` | `none`, `stp`, `lldp`, `cdp`, `lacp`, `vtp` | `none` | — |
 
 ## APIC diagnostics
 

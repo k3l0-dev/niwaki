@@ -42,8 +42,18 @@ class syntheticSwitchPatchValidate(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    hardware_compatibility: Annotated[str, Field(max_length=512, alias="hwCompatPass")] = ""
-    hw_list: Annotated[str, Field(max_length=512, alias="hwList")] = ""
-    software_compatibility: Annotated[str, Field(max_length=512, alias="swCompatPass")] = ""
-    sw_list: Annotated[str, Field(max_length=512, alias="swList")] = ""
+    hardware_compatibility: Annotated[
+        str,
+        Field(max_length=512, validation_alias="hwCompatPass", serialization_alias="hwCompatPass"),
+    ] = ""
+    hw_list: Annotated[
+        str, Field(max_length=512, validation_alias="hwList", serialization_alias="hwList")
+    ] = ""
+    software_compatibility: Annotated[
+        str,
+        Field(max_length=512, validation_alias="swCompatPass", serialization_alias="swCompatPass"),
+    ] = ""
+    sw_list: Annotated[
+        str, Field(max_length=512, validation_alias="swList", serialization_alias="swList")
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

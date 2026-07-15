@@ -60,25 +60,36 @@ class aaaServiceNodeCluster(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    service_node_api_key: Annotated[str, Field(max_length=512, alias="apikey", repr=False)] = ""
+    service_node_api_key: Annotated[
+        str,
+        Field(max_length=512, validation_alias="apikey", serialization_alias="apikey", repr=False),
+    ] = ""
     description: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     owner_key: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerKey",
+            validation_alias="ownerKey",
+            serialization_alias="ownerKey",
             description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
@@ -87,14 +98,28 @@ class aaaServiceNodeCluster(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerTag",
+            validation_alias="ownerTag",
+            serialization_alias="ownerTag",
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
     service_node_admin_password: Annotated[
-        str, Field(max_length=512, alias="pwd", repr=False, description="The system user password.")
+        str,
+        Field(
+            max_length=512,
+            validation_alias="pwd",
+            serialization_alias="pwd",
+            repr=False,
+            description="The system user password.",
+        ),
     ] = ""
-    service_node_kms_private_key: Annotated[str, Field(alias="snKmsPrivKey", repr=False)] = ""
-    service_node_kms_public_key: str = Field(default="", alias="snKmsPubKey")
-    service_node_mode: AaaSNModeType = Field(default=AaaSNModeType.ACI, alias="snMode")
+    service_node_kms_private_key: Annotated[
+        str, Field(validation_alias="snKmsPrivKey", serialization_alias="snKmsPrivKey", repr=False)
+    ] = ""
+    service_node_kms_public_key: str = Field(
+        default="", validation_alias="snKmsPubKey", serialization_alias="snKmsPubKey"
+    )
+    service_node_mode: AaaSNModeType = Field(
+        default=AaaSNModeType.ACI, validation_alias="snMode", serialization_alias="snMode"
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

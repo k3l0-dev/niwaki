@@ -40,7 +40,8 @@ class notifSubtreeObserverClass(ManagedObject):
         Field(
             min_length=1,
             max_length=512,
-            alias="className",
+            validation_alias="className",
+            serialization_alias="className",
             description="The class name of the object used for a comparison filter. This property is used internally to validate compatibility between two firmware images.",
         ),
     ]
@@ -54,6 +55,15 @@ class notifSubtreeObserverClass(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    observe_interval_min: Annotated[int, Field(alias="observeIntervalMin")] = 1
+    observe_interval_min: Annotated[
+        int, Field(validation_alias="observeIntervalMin", serialization_alias="observeIntervalMin")
+    ] = 1
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    version_property: Annotated[str, Field(max_length=512, alias="versionProperty")] = ""
+    version_property: Annotated[
+        str,
+        Field(
+            max_length=512,
+            validation_alias="versionProperty",
+            serialization_alias="versionProperty",
+        ),
+    ] = ""

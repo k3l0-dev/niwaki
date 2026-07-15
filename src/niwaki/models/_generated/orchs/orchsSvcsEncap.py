@@ -51,29 +51,44 @@ class orchsSvcsEncap(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="The description of this configuration item.",
         ),
     ] = ""
     encap_ns_name: Annotated[
-        str, Field(max_length=512, alias="encapNsName", description="Encap Address Pool")
+        str,
+        Field(
+            max_length=512,
+            validation_alias="encapNsName",
+            serialization_alias="encapNsName",
+            description="Encap Address Pool",
+        ),
     ] = ""
     leg_loc: Annotated[
         str,
         Field(
             max_length=512,
-            alias="legLoc",
+            validation_alias="legLoc",
+            serialization_alias="legLoc",
             description="Services Internal/External L3Out LegSwitch to enum once finalized",
         ),
     ] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     rtr_id: Annotated[
         str,
         Field(
             pattern="^[0-9a-fA-F.:/ ]+$",
-            alias="rtrId",
+            validation_alias="rtrId",
+            serialization_alias="rtrId",
             description="router id of this ospf/bgp instance",
         ),
     ] = ""

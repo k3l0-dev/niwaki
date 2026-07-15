@@ -3,7 +3,11 @@
 from __future__ import annotations
 
 from typing import ClassVar, Annotated
-from pydantic import Field
+from pydantic import BeforeValidator, Field
+
+from niwaki.models._wire import Flags, parse_flags
+from niwaki.models._generated.enums.AnalyticsCollectParams import AnalyticsCollectParams
+from niwaki.models._generated.enums.AnalyticsMatchParams import AnalyticsMatchParams
 
 from niwaki.models.base import ManagedObject
 
@@ -55,30 +59,44 @@ class netflowRecordPol(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    collect_params: str = Field(
-        default="", alias="collect", description="Collect parameters for the flow record"
+    collect_params: Annotated[Flags[AnalyticsCollectParams], BeforeValidator(parse_flags)] = Field(
+        default_factory=lambda: frozenset({AnalyticsCollectParams.SRC_INTF}),
+        validation_alias="collect",
+        serialization_alias="collect",
+        description="Collect parameters for the flow record",
     )
     description: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
-    match_params: str = Field(
-        default="", alias="match", description="Match parameters for the flow record"
+    match_params: Annotated[Flags[AnalyticsMatchParams], BeforeValidator(parse_flags)] = Field(
+        default_factory=lambda: frozenset({AnalyticsMatchParams.UNSPECIFIED}),
+        validation_alias="match",
+        serialization_alias="match",
+        description="Match parameters for the flow record",
     )
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     owner_key: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerKey",
+            validation_alias="ownerKey",
+            serialization_alias="ownerKey",
             description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
@@ -87,7 +105,8 @@ class netflowRecordPol(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerTag",
+            validation_alias="ownerTag",
+            serialization_alias="ownerTag",
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""

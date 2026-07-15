@@ -49,7 +49,8 @@ class firmwareFwGlobal(ManagedObject):
     ] = ""
     sync_status: FirmwareSyncStatus = Field(
         default=FirmwareSyncStatus.QUEUED,
-        alias="syncSt",
+        validation_alias="syncSt",
+        serialization_alias="syncSt",
         description="Synchronization status of the firmware",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

@@ -37,7 +37,14 @@ class dppCkt(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    dn_of_l2rspathdomatt: Annotated[str, Field(alias="l2CktEpDn", description="DN of l2CktEp")]
+    dn_of_l2rspathdomatt: Annotated[
+        str,
+        Field(
+            validation_alias="l2CktEpDn",
+            serialization_alias="l2CktEpDn",
+            description="DN of l2CktEp",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[

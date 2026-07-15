@@ -46,11 +46,24 @@ class vmmRsVswitchExporterPol(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     target_dn: Annotated[
-        str, Field(alias="tDn", description="The distinguished name of the target.")
+        str,
+        Field(
+            validation_alias="tDn",
+            serialization_alias="tDn",
+            description="The distinguished name of the target.",
+        ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    active_flow_time_out: Annotated[int, Field(ge=0, le=3600, alias="activeFlowTimeOut")] = 60
+    active_flow_time_out: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=3600,
+            validation_alias="activeFlowTimeOut",
+            serialization_alias="activeFlowTimeOut",
+        ),
+    ] = 60
     annotation: Annotated[
         str,
         Field(
@@ -59,6 +72,14 @@ class vmmRsVswitchExporterPol(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    idle_flow_time_out: Annotated[int, Field(ge=0, le=600, alias="idleFlowTimeOut")] = 15
-    sampling_rate: Annotated[int, Field(ge=0, le=1000, alias="samplingRate")] = 0
+    idle_flow_time_out: Annotated[
+        int,
+        Field(
+            ge=0, le=600, validation_alias="idleFlowTimeOut", serialization_alias="idleFlowTimeOut"
+        ),
+    ] = 15
+    sampling_rate: Annotated[
+        int,
+        Field(ge=0, le=1000, validation_alias="samplingRate", serialization_alias="samplingRate"),
+    ] = 0
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

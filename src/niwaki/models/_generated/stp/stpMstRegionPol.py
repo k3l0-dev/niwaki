@@ -63,17 +63,37 @@ class stpMstRegionPol(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies the description of a policy component.",
         ),
     ] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     region_name: Annotated[
-        str, Field(max_length=32, alias="regName", description="The MST region policy region name.")
+        str,
+        Field(
+            max_length=32,
+            validation_alias="regName",
+            serialization_alias="regName",
+            description="The MST region policy region name.",
+        ),
     ] = ""
-    region_revision: str = Field(
-        default="", alias="rev", description="The MST region policy revision number."
-    )
+    region_revision: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=65535,
+            validation_alias="rev",
+            serialization_alias="rev",
+            description="The MST region policy revision number.",
+        ),
+    ] = 0
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

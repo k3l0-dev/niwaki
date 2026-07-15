@@ -3,8 +3,10 @@
 from __future__ import annotations
 
 from typing import ClassVar, Annotated
-from pydantic import Field
+from pydantic import BeforeValidator, Field
 
+from niwaki.models._wire import Flags, parse_flags
+from niwaki.models._generated.enums.OspfAreaControl import OspfAreaControl
 from niwaki.models._generated.enums.OspfAreaT import OspfAreaT
 
 from niwaki.models.base import ManagedObject
@@ -50,35 +52,53 @@ class ospfExtP(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    area_cost: Annotated[int, Field(ge=0, le=16777215, alias="areaCost")] = 1
-    area_type: str = Field(
-        default="",
-        alias="areaCtrl",
+    area_cost: Annotated[
+        int, Field(ge=0, le=16777215, validation_alias="areaCost", serialization_alias="areaCost")
+    ] = 1
+    area_ctrl: Annotated[Flags[OspfAreaControl], BeforeValidator(parse_flags)] = Field(
+        default_factory=lambda: frozenset({OspfAreaControl.REDISTRIBUTE, OspfAreaControl.SUMMARY}),
+        validation_alias="areaCtrl",
+        serialization_alias="areaCtrl",
         description="The controls of redistribution and summary LSA generation into NSSA and Stub areas.",
     )
-    area_id: str = Field(
-        default="",
-        alias="areaId",
-        description="The OSPF Area ID. An area is a logical collection of OSPF networks, routers, and links that have the same area identification. A router within an area must maintain a topological database for the area to which it belongs.",
-    )
+    area_id: Annotated[
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            validation_alias="areaId",
+            serialization_alias="areaId",
+            description="The OSPF Area ID. An area is a logical collection of OSPF networks, routers, and links that have the same area identification. A router within an area must maintain a topological database for the area to which it belongs.",
+        ),
+    ] = ""
     area_type: OspfAreaT = Field(
-        default=OspfAreaT.NSSA, alias="areaType", description="The area type."
+        default=OspfAreaT.NSSA,
+        validation_alias="areaType",
+        serialization_alias="areaType",
+        description="The area type.",
     )
     description: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies the description of a policy component.",
         ),
     ] = ""
     create_multipod_internal_ospf_instance: bool = Field(
         default=False,
-        alias="multipodInternal",
+        validation_alias="multipodInternal",
+        serialization_alias="multipodInternal",
         description="Start OSPF in WAN instance instead of default",
     )
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

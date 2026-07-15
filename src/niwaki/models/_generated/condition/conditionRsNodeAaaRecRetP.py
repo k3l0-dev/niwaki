@@ -58,7 +58,8 @@ class conditionRsNodeAaaRecRetP(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9_.:-]+$",
-            alias="tnAaaSwRetPName",
+            validation_alias="tnAaaSwRetPName",
+            serialization_alias="tnAaaSwRetPName",
             description="The name for the audit record retention policy used by the node policy group. The audit record retention policy is referred by the node policy group. The node policy group also includes references to the Health, Event, and Fault record retention policies.",
         ),
     ] = ""

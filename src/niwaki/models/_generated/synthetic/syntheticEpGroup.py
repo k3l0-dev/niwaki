@@ -37,13 +37,14 @@ class syntheticEpGroup(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    id: Annotated[str, Field(description="An identifier .")]
+    id: Annotated[int, Field(description="An identifier .")] = 0
 
     # ── Configurable ───────────────────────────────────────────────────────────
     acommunity: str = ""
     admin_state: SyntheticAdminState = Field(
         default=SyntheticAdminState.ENABLED,
-        alias="adminState",
+        validation_alias="adminState",
+        serialization_alias="adminState",
         description="The destination policy administrative state. If enabled, the system uses the destination policy when an error matching the associated cause is encountered. Otherwise, the system ignores the policy even if a matching error occurs. By default, all policies are enabled.",
     )
     aencap: str = ""
@@ -63,6 +64,12 @@ class syntheticEpGroup(ManagedObject):
         Field(max_length=16, pattern="^[a-zA-Z0-9_.:-]+$", description="The name of the object."),
     ] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

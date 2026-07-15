@@ -3,7 +3,10 @@
 from __future__ import annotations
 
 from typing import ClassVar, Annotated
-from pydantic import Field
+from pydantic import BeforeValidator, Field
+
+from niwaki.models._wire import Flags, parse_flags
+from niwaki.models._generated.enums.VzRAction import VzRAction
 
 from niwaki.models.base import ManagedObject
 
@@ -51,7 +54,8 @@ class vzRsDenyRule(ManagedObject):
             min_length=1,
             max_length=64,
             pattern="^[a-zA-Z0-9_.:-]+$",
-            alias="tnVzFilterName",
+            validation_alias="tnVzFilterName",
+            serialization_alias="tnVzFilterName",
             description="The filter name.",
         ),
     ]
@@ -65,7 +69,8 @@ class vzRsDenyRule(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    directives: Annotated[
-        str, Field(description="The filter directives assigned to the taboo contract.")
-    ] = ""
+    directives: Annotated[Flags[VzRAction], BeforeValidator(parse_flags)] = Field(
+        default_factory=lambda: frozenset({VzRAction.NONE}),
+        description="The filter directives assigned to the taboo contract.",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

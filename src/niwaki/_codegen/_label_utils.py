@@ -263,10 +263,36 @@ def resolve_py_names(
         if len(aci_list) == 1:
             result[aci_list[0]] = pyn
         else:
-            # Winner: naming prop first; ties broken alphabetically.
-            sorted_aci = sorted(aci_list, key=lambda a: (not bool(props[a].get("is_naming")), a))
+            # Winner: a naming prop first; then the prop that *owns* the name —
+            # the one whose own camelCase→snake spelling already is it.  Cisco
+            # gives ospfExtP.areaType and ospfExtP.areaCtrl the same label ("Area
+            # Type"), and handing the name to areaCtrl leaves areaType with a
+            # fallback that is the very same name: the two collide again and one
+            # property vanishes from the SDK entirely.  Letting the natural owner
+            # keep it means every loser falls back to a spelling of its own.
+            sorted_aci = sorted(
+                aci_list,
+                key=lambda a: (
+                    not bool(props[a].get("is_naming")),
+                    best_field_name(a, "", "") != pyn,
+                    a,
+                ),
+            )
             result[sorted_aci[0]] = pyn
             for aci_name in sorted_aci[1:]:
                 # Force priority-3 (keyword-safe camelCase→snake) for losers.
                 result[aci_name] = best_field_name(aci_name, "", "")
+
+    # A property that shares its Python name with another is a property the SDK
+    # silently drops — the model keeps whichever the template wrote last.  It has
+    # happened; it must never happen quietly again.
+    if len(set(result.values())) != len(result):
+        duplicates = sorted(
+            name for name in set(result.values()) if list(result.values()).count(name) > 1
+        )
+        raise ValueError(
+            f"{aci_class or '<class>'}: Python name collision on {duplicates} — "
+            "two ACI properties would map to the same field and one would be "
+            "dropped. Add a FIELD_NAME_OVERRIDES entry."
+        )
     return result

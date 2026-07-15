@@ -27,7 +27,7 @@ Accepted as keyword arguments of `.destination_of_redirected_traffic(ip_address)
 | `second_ip_address` | `ip2` | `str` | — | — | — |
 | `mac_address` | `mac` | `str` | — | — | The MAC address. |
 | `name` | `name` | `str` | — | — | — |
-| `pod_id` | `podId` | `str` | — | — | The POD identifier. |
+| `pod_id` | `podId` | `int` | — | `1` | The POD identifier. |
 | `weight` | `weight` | `int` | — | `1` | The weight of the fault in calculating the health score of an object. A higher weight causes a higher degradation of the health score of the affected object. |
 
 ## Bind aliases

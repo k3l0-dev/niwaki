@@ -24,12 +24,12 @@ Accepted as keyword arguments of `.subnet(subnet)` and of `.set(**attrs)` on thi
 | parameter | wire | type | values | default | description |
 | --- | --- | --- | --- | --- | --- |
 | `subnet` *(positional)* | `ip` | `str` | — | — | The IP address and mask of the default gateway. |
-| `subnet_control` | `ctrl` | `str` | — | — | The subnet control state. The control can be specific protocols applied to the subnet such as IGMP Snooping. |
+| `subnet_control` | `ctrl` | {ref}`FvSubnetControl <enum-fvsubnetcontrol>` | `unspecified`, `querier`, `nd`, `no-default-gateway` | `nd` | The subnet control state. The control can be specific protocols applied to the subnet such as IGMP Snooping. |
 | `description` | `descr` | `str` | — | — | Specifies the description of a policy component. |
 | `ip_dp_learning` | `ipDPLearning` | {ref}`FvipDPLearning <enum-fvipdplearning>` | `disabled`, `enabled` | `enabled` | Knob to disable IP Dataplane Learning for Host(/32, /128) and for BD Subnet |
 | `name` | `name` | `str` | — | — | — |
 | `preferred_as_primary_subnet` | `preferred` | `bool` | — | `False` | Indicates if the subnet is preferred (primary) over the available alternatives. Only one preferred subnet is allowed. |
-| `scope` | `scope` | `str` | — | — | The network visibility of the subnet. |
+| `scope` | `scope` | {ref}`FvRouteScp <enum-fvroutescp>` | `public`, `private`, `shared` | `private` | The network visibility of the subnet. |
 | `treated_as_virtual_ip_address` | `virtual` | `bool` | — | `False` | Treated as virtual IP address. Used in case of BD extended to multiple sites. |
 
 ## Bind aliases

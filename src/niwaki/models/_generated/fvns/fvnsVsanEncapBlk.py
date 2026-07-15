@@ -39,11 +39,22 @@ class fvnsVsanEncapBlk(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    from_: Annotated[str, Field(alias="from", description="The email address of the sender.")]
+    from_: Annotated[
+        str,
+        Field(
+            validation_alias="from",
+            serialization_alias="from",
+            description="The email address of the sender.",
+        ),
+    ]
     to: Annotated[str, Field(description="End of the encapsulation block.")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    allocation_mode: FvnsBlkAllocMode = Field(default=FvnsBlkAllocMode.INHERIT, alias="allocMode")
+    allocation_mode: FvnsBlkAllocMode = Field(
+        default=FvnsBlkAllocMode.INHERIT,
+        validation_alias="allocMode",
+        serialization_alias="allocMode",
+    )
     annotation: Annotated[
         str,
         Field(
@@ -57,13 +68,20 @@ class fvnsVsanEncapBlk(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies the description of a policy component.",
         ),
     ] = ""
     name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     role: FvnsBlkRole = Field(
         default=FvnsBlkRole.EXTERNAL,

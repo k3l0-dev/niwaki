@@ -23,7 +23,7 @@ Accepted as keyword arguments of `.bgp_additional_path_context_policy()` and of 
 
 | parameter | wire | type | values | default | description |
 | --- | --- | --- | --- | --- | --- |
-| `capability` | `capability` | `str` | — | — | The neighbor system capability. |
+| `capability` | `capability` | {ref}`BgpAddlPathCapT <enum-bgpaddlpathcapt>` | `send`, `receive`, `install-bkup` | — | The neighbor system capability. |
 | `description` | `descr` | `str` | — | — | Specifies a description of the policy definition. |
 | `name` | `name` | `str` | — | — | — |
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |

@@ -47,7 +47,12 @@ class fvRsFcPathAtt(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     target_dn: Annotated[
-        str, Field(alias="tDn", description="The distinguished name of the target.")
+        str,
+        Field(
+            validation_alias="tDn",
+            serialization_alias="tDn",
+            description="The distinguished name of the target.",
+        ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
@@ -69,4 +74,6 @@ class fvRsFcPathAtt(ManagedObject):
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     vsan: Annotated[str, Field(description="port vsan")] = ""
-    vsan_mode: FcVsanMode = Field(default=FcVsanMode.REGULAR, alias="vsanMode")
+    vsan_mode: FcVsanMode = Field(
+        default=FcVsanMode.REGULAR, validation_alias="vsanMode", serialization_alias="vsanMode"
+    )

@@ -35,7 +35,13 @@ class notifSubscriberRef(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     classname_that_is_being_subscribed: Annotated[
-        str, Field(min_length=1, max_length=512, alias="subscriber")
+        str,
+        Field(
+            min_length=1,
+            max_length=512,
+            validation_alias="subscriber",
+            serialization_alias="subscriber",
+        ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────

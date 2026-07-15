@@ -34,7 +34,14 @@ class vnsCDevInfo(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    t_dn: Annotated[str, Field(alias="tDn", description="The distinguished name of the target.")]
+    t_dn: Annotated[
+        str,
+        Field(
+            validation_alias="tDn",
+            serialization_alias="tDn",
+            description="The distinguished name of the target.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[

@@ -3,9 +3,11 @@
 from __future__ import annotations
 
 from typing import ClassVar, Annotated
-from pydantic import Field
+from pydantic import BeforeValidator, Field
 
+from niwaki.models._wire import Flags, parse_flags
 from niwaki.models._generated.enums.HsrpAuthT import HsrpAuthT
+from niwaki.models._generated.enums.HsrpGrpControl import HsrpGrpControl
 
 from niwaki.models.base import ManagedObject
 
@@ -58,32 +60,64 @@ class hsrpGroupPol(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    group_control_bits: str = Field(default="", alias="ctrl", description="HSRP Group Control Bits")
+    group_control_bits: Annotated[Flags[HsrpGrpControl], BeforeValidator(parse_flags)] = Field(
+        default_factory=lambda: frozenset(),
+        validation_alias="ctrl",
+        serialization_alias="ctrl",
+        description="HSRP Group Control Bits",
+    )
     description: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
     hello_interval: Annotated[
-        int, Field(ge=250, le=254000, alias="helloIntvl", description="HSRP Hello packet interval")
+        int,
+        Field(
+            ge=250,
+            le=254000,
+            validation_alias="helloIntvl",
+            serialization_alias="helloIntvl",
+            description="HSRP Hello packet interval",
+        ),
     ] = 3000
     hold_interval: Annotated[
-        int, Field(ge=750, le=255000, alias="holdIntvl", description="HSRP Hold interval")
+        int,
+        Field(
+            ge=750,
+            le=255000,
+            validation_alias="holdIntvl",
+            serialization_alias="holdIntvl",
+            description="HSRP Hold interval",
+        ),
     ] = 10000
-    authentication_key: str = Field(default="", alias="key", description="Authentication key")
+    authentication_key: str = Field(
+        default="",
+        validation_alias="key",
+        serialization_alias="key",
+        description="Authentication key",
+    )
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     owner_key: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerKey",
+            validation_alias="ownerKey",
+            serialization_alias="ownerKey",
             description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
@@ -92,29 +126,74 @@ class hsrpGroupPol(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerTag",
+            validation_alias="ownerTag",
+            serialization_alias="ownerTag",
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
-    miminum_delay_before_preempt: str = Field(
-        default="", alias="preemptDelayMin", description="HSRP Group's Minimum Preemption delay"
-    )
-    preempt_delay_after_a_switch_reload: str = Field(
-        default="", alias="preemptDelayReload", description="Preemption delay after switch reboot"
-    )
-    wait_for_ip_redundancy_clients: str = Field(
-        default="",
-        alias="preemptDelaySync",
-        description="Maximum number of seconds to allow IPredundancy clients to prevent preemption",
-    )
-    group_priority: str = Field(default="", alias="prio", description="Grouph Priority")
+    miminum_delay_before_preempt: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=3600,
+            validation_alias="preemptDelayMin",
+            serialization_alias="preemptDelayMin",
+            description="HSRP Group's Minimum Preemption delay",
+        ),
+    ] = 0
+    preempt_delay_after_a_switch_reload: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=3600,
+            validation_alias="preemptDelayReload",
+            serialization_alias="preemptDelayReload",
+            description="Preemption delay after switch reboot",
+        ),
+    ] = 0
+    wait_for_ip_redundancy_clients: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=3600,
+            validation_alias="preemptDelaySync",
+            serialization_alias="preemptDelaySync",
+            description="Maximum number of seconds to allow IPredundancy clients to prevent preemption",
+        ),
+    ] = 0
+    group_priority: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=255,
+            validation_alias="prio",
+            serialization_alias="prio",
+            description="Grouph Priority",
+        ),
+    ] = 100
     secure_authentication_key: Annotated[
-        str, Field(alias="secureAuthKey", repr=False, description="Secure Authentication key")
+        str,
+        Field(
+            validation_alias="secureAuthKey",
+            serialization_alias="secureAuthKey",
+            repr=False,
+            description="Secure Authentication key",
+        ),
     ] = ""
-    authentication_key_timeout: str = Field(
-        default="", alias="timeout", description="Authentication timeout"
-    )
+    authentication_key_timeout: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=32767,
+            validation_alias="timeout",
+            serialization_alias="timeout",
+            description="Authentication timeout",
+        ),
+    ] = 0
     authentication_type: HsrpAuthT = Field(
-        default=HsrpAuthT.SIMPLE, alias="type", description="Authentication type"
+        default=HsrpAuthT.SIMPLE,
+        validation_alias="type",
+        serialization_alias="type",
+        description="Authentication type",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

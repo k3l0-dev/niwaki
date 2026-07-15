@@ -60,22 +60,36 @@ class infraMssPol(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
-    mss_ipv4: Annotated[int, Field(ge=688, le=9104, alias="mssIPv4")] = 8888
-    mss_ipv6: Annotated[int, Field(ge=668, le=9084, alias="mssIPv6")] = 8868
-    mss_type: TopoctrlMssTypes = Field(default=TopoctrlMssTypes.DISABLE, alias="mssP")
+    mss_ipv4: Annotated[
+        int, Field(ge=688, le=9104, validation_alias="mssIPv4", serialization_alias="mssIPv4")
+    ] = 8888
+    mss_ipv6: Annotated[
+        int, Field(ge=668, le=9084, validation_alias="mssIPv6", serialization_alias="mssIPv6")
+    ] = 8868
+    mss_type: TopoctrlMssTypes = Field(
+        default=TopoctrlMssTypes.DISABLE, validation_alias="mssP", serialization_alias="mssP"
+    )
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     owner_key: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerKey",
+            validation_alias="ownerKey",
+            serialization_alias="ownerKey",
             description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
@@ -84,7 +98,8 @@ class infraMssPol(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerTag",
+            validation_alias="ownerTag",
+            serialization_alias="ownerTag",
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""

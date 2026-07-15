@@ -44,7 +44,8 @@ class mldSnoopStaticGroup(ManagedObject):
         str,
         Field(
             pattern="^[0-9a-fA-F.:/ ]+$",
-            alias="group",
+            validation_alias="group",
+            serialization_alias="group",
             description="Group Address of MLD snooping Static Entry",
         ),
     ]
@@ -52,7 +53,8 @@ class mldSnoopStaticGroup(ManagedObject):
         str,
         Field(
             pattern="^[0-9a-fA-F.:/ ]+$",
-            alias="source",
+            validation_alias="source",
+            serialization_alias="source",
             description="Source Address of MLD snooping Static Entry, 0 in case of (*,G) entry",
         ),
     ]
@@ -71,12 +73,19 @@ class mldSnoopStaticGroup(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies the description of a policy component.",
         ),
     ] = ""
     name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

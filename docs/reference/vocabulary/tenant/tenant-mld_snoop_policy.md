@@ -25,13 +25,13 @@ Accepted as keyword arguments of `.mld_snoop_policy(name)` and of `.set(**attrs)
 | --- | --- | --- | --- | --- | --- |
 | `name` *(positional)* | `name` | `str` | — | — | The name of the MLD Snoop policy |
 | `admin_state` | `adminSt` | {ref}`NwAdminSt <enum-nwadminst>` | `disabled`, `enabled` | `disabled` | — |
-| `controls` | `ctrl` | `str` | — | — | Controls for MLD Snoop Policy |
+| `controls` | `ctrl` | {ref}`IpmcsnoopDomControl <enum-ipmcsnoopdomcontrol>` | `querier`, `fast-leave`, `opt-flood`, `routing` | — | Controls for MLD Snoop Policy |
 | `description` | `descr` | `str` | — | — | Specifies a description of the policy definition. |
-| `last_member_query_interval` | `lastMbrIntvl` | `str` | — | — | When the last member query interval parameter is configured, the software removes the group state if no host responds before the timeout. |
+| `last_member_query_interval` | `lastMbrIntvl` | `int` | — | `1` | When the last member query interval parameter is configured, the software removes the group state if no host responds before the timeout. |
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |
-| `query_interval` | `queryIntvl` | `str` | — | — | Query interval |
-| `response_interval` | `rspIntvl` | `str` | — | — | The snooping query response interval. |
-| `startup_query_count` | `startQueryCnt` | `str` | — | — | The interval before the query begins. |
-| `startup_query_interval` | `startQueryIntvl` | `str` | — | — | The startup query interval. This configures the snooping query interval at startup. |
+| `query_interval` | `queryIntvl` | `int` | — | `125` | Query interval |
+| `response_interval` | `rspIntvl` | `int` | — | `10` | The snooping query response interval. |
+| `startup_query_count` | `startQueryCnt` | `int` | — | `2` | The interval before the query begins. |
+| `startup_query_interval` | `startQueryIntvl` | `int` | — | `31` | The startup query interval. This configures the snooping query interval at startup. |
 | `version` | `ver` | {ref}`McastVer2 <enum-mcastver2>` | `unspecified`, `v1`, `v2` | `v2` | Version |

@@ -42,7 +42,10 @@ class segrtDomAf(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     address_family_type: SegrtAfType = Field(
-        default=SegrtAfType.IPV4, alias="afType", description="Address Family Type"
+        default=SegrtAfType.IPV4,
+        validation_alias="afType",
+        serialization_alias="afType",
+        description="Address Family Type",
     )
 
     # ── Configurable ───────────────────────────────────────────────────────────

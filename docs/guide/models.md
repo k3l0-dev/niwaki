@@ -1,7 +1,7 @@
 # Working with the models
 
 niwaki ships 2,222 typed Pydantic models generated from the APIC schemas,
-plus 558 enums.  Models carry **data and validation only** — writing is the
+plus 676 enums.  Models carry **data and validation only** — writing is the
 design DSL's job ({doc}`design-dsl`), reading returns them fully typed
 ({doc}`observing`).  This page is about handling them directly.
 

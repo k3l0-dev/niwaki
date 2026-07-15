@@ -140,8 +140,8 @@ class _Finding:
     aci_class: str
     child_count: int
     missing: bool = False
-    drift: dict[str, tuple[object, object]] = field(default_factory=dict)
-    faults: list[str] = field(default_factory=list)
+    drift: dict[str, tuple[object, object]] = field(default_factory=lambda: {})
+    faults: list[str] = field(default_factory=lambda: [])
 
     @property
     def ok(self) -> bool:

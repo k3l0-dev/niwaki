@@ -57,13 +57,27 @@ class fabricSetupP(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    pod_identifier: Annotated[str, Field(alias="podId", description="The POD identifier.")]
+    pod_identifier: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=254,
+            validation_alias="podId",
+            serialization_alias="podId",
+            description="The POD identifier.",
+        ),
+    ] = 1
 
     # ── Create-only (ignored by APIC on modification) ─────────────────────────
-    pod_type: TopPodType = Field(default=TopPodType.PHYSICAL, alias="podType")
-    infra_tep_address_pool: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="tepPool")] = (
-        ""
+    pod_type: TopPodType = Field(
+        default=TopPodType.PHYSICAL, validation_alias="podType", serialization_alias="podType"
     )
+    infra_tep_address_pool: Annotated[
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$", validation_alias="tepPool", serialization_alias="tepPool"
+        ),
+    ] = ""
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[
@@ -79,12 +93,19 @@ class fabricSetupP(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies the description of a policy component.",
         ),
     ] = ""
     name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

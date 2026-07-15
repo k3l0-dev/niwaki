@@ -38,11 +38,18 @@ class genericsNode(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    class_: Annotated[str, Field(min_length=1, max_length=512, alias="class")]
+    class_: Annotated[
+        str,
+        Field(min_length=1, max_length=512, validation_alias="class", serialization_alias="class"),
+    ]
     node_tag: Annotated[
         str,
         Field(
-            min_length=1, max_length=512, alias="tag", description="The color of a policy label."
+            min_length=1,
+            max_length=512,
+            validation_alias="tag",
+            serialization_alias="tag",
+            description="The color of a policy label.",
         ),
     ]
 
@@ -55,8 +62,12 @@ class genericsNode(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    fetch_from_node_tag: Annotated[str, Field(max_length=512, alias="fetchFrom")] = ""
+    fetch_from_node_tag: Annotated[
+        str, Field(max_length=512, validation_alias="fetchFrom", serialization_alias="fetchFrom")
+    ] = ""
     fetching_operation: GenericsFetchingOperation = Field(
-        default=GenericsFetchingOperation.ANCESTOR, alias="fetchUsing"
+        default=GenericsFetchingOperation.ANCESTOR,
+        validation_alias="fetchUsing",
+        serialization_alias="fetchUsing",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

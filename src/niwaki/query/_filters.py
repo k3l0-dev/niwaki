@@ -48,6 +48,8 @@ from __future__ import annotations
 
 from typing import Any
 
+from niwaki.models._wire import to_filter
+
 
 class FilterExpr:
     """An APIC filter expression.
@@ -103,16 +105,19 @@ class FilterExpr:
 def _coerce_value(value: Any) -> str:
     """Convert a Python value to its APIC filter string representation.
 
+    Delegates to the wire boundary (:mod:`niwaki.models._wire`), so a filter
+    speaks exactly what the APIC stores — a filter that renders a value
+    differently from the way it was written can never match.
+
     Args:
-        value: Python value — ``bool``, ``int``, or ``str``.
+        value: Python value — ``bool``, ``int``, ``str``, an enum member, or a
+            set of flags.
 
     Returns:
-        APIC string: ``True`` → ``"yes"``, ``False`` → ``"no"``, others via
-        ``str()``.
+        APIC string: ``True`` → ``"yes"``, ``False`` → ``"no"``, a set of flags
+        → its canonical comma-joined form, everything else as it is stored.
     """
-    if isinstance(value, bool):
-        return "yes" if value else "no"
-    return str(value)
+    return to_filter(value)
 
 
 def _qualify(prop: str, cls_name: str) -> str:

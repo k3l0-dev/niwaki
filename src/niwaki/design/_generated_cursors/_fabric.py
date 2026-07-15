@@ -27,6 +27,7 @@ if TYPE_CHECKING:
     from niwaki.models._generated.enums.DatetimeTrueChimerStatus import DatetimeTrueChimerStatus
     from niwaki.models._generated.enums.DnsProtoPreference import DnsProtoPreference
     from niwaki.models._generated.enums.FabricPairT import FabricPairT
+    from niwaki.models._generated.enums.IpmcsnoopDomControl import IpmcsnoopDomControl
     from niwaki.models._generated.enums.McastVer import McastVer
     from niwaki.models._generated.enums.McastVer2 import McastVer2
     from niwaki.models._generated.enums.MonAdminState import MonAdminState
@@ -50,16 +51,16 @@ class _FabricMakers(Cursor):
         *,
         admin_state: NwAdminSt | str | None = None,
         annotation: str | None = None,
-        controls: str | None = None,
+        controls: frozenset[IpmcsnoopDomControl] | set[IpmcsnoopDomControl] | str | None = None,
         description: str | None = None,
-        last_member_query_interval: str | None = None,
+        last_member_query_interval: int | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
-        query_interval: str | None = None,
-        response_interval: str | None = None,
-        startup_query_count: str | None = None,
-        startup_query_interval: str | None = None,
+        query_interval: int | None = None,
+        response_interval: int | None = None,
+        startup_query_count: int | None = None,
+        startup_query_interval: int | None = None,
         userdom: str | None = None,
         version: McastVer | str | None = None,
     ) -> FabricIgmpSnoopPolicyCursor:
@@ -74,17 +75,19 @@ class _FabricMakers(Cursor):
             admin_state: Administrative State Values: ``disabled``, ``enabled``. Default:
                 ``enabled``.
             annotation: User annotation. Suggested format orchestrator:value
+            controls: Default: ``PydanticUndefined``.
             description: Specifies a description of the policy definition.
             last_member_query_interval: When the last member query interval parameter is
                 configured, the software removes the group state if no host responds before the
-                timeout.
+                timeout. Default: ``1``.
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
-            response_interval: The IGMP snooping query response interval.
-            startup_query_count: The interval before the IGMP query begins.
+            query_interval: Default: ``125``.
+            response_interval: The IGMP snooping query response interval. Default: ``10``.
+            startup_query_count: The interval before the IGMP query begins. Default: ``2``.
             startup_query_interval: The startup query interval. This configures the IGMP
-                snooping query interval at startup.
+                snooping query interval at startup. Default: ``31``.
             version: Version Values: ``unspecified``, ``v1``, ``v2``, ``v3``. Default: ``v3``.
         """
         params = {
@@ -107,16 +110,16 @@ class _FabricMakers(Cursor):
         *,
         admin_state: NwAdminSt | str | None = None,
         annotation: str | None = None,
-        controls: str | None = None,
+        controls: frozenset[IpmcsnoopDomControl] | set[IpmcsnoopDomControl] | str | None = None,
         description: str | None = None,
-        last_member_query_interval: str | None = None,
+        last_member_query_interval: int | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
-        query_interval: str | None = None,
-        response_interval: str | None = None,
-        startup_query_count: str | None = None,
-        startup_query_interval: str | None = None,
+        query_interval: int | None = None,
+        response_interval: int | None = None,
+        startup_query_count: int | None = None,
+        startup_query_interval: int | None = None,
         userdom: str | None = None,
         version: McastVer2 | str | None = None,
     ) -> FabricMldSnoopPolicyCursor:
@@ -129,19 +132,19 @@ class _FabricMakers(Cursor):
         Args:
             name: The name of the MLD Snoop policy
             admin_state: Values: ``disabled``, ``enabled``. Default: ``disabled``.
-            controls: Controls for MLD Snoop Policy
+            controls: Controls for MLD Snoop Policy Default: ``PydanticUndefined``.
             description: Specifies a description of the policy definition.
             last_member_query_interval: When the last member query interval parameter is
                 configured, the software removes the group state if no host responds before the
-                timeout.
+                timeout. Default: ``1``.
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
-            query_interval: Query interval
-            response_interval: The snooping query response interval.
-            startup_query_count: The interval before the query begins.
+            query_interval: Query interval Default: ``125``.
+            response_interval: The snooping query response interval. Default: ``10``.
+            startup_query_count: The interval before the query begins. Default: ``2``.
             startup_query_interval: The startup query interval. This configures the snooping
-                query interval at startup.
+                query interval at startup. Default: ``31``.
             version: Version Values: ``unspecified``, ``v1``, ``v2``. Default: ``v2``.
         """
         params = {
@@ -162,7 +165,7 @@ class _FabricMakers(Cursor):
         self,
         name: str,
         *,
-        ntp_stratum_value_see_ntp_rfc_5905: str | None = None,
+        ntp_stratum_value_see_ntp_rfc_5905: int | str | None = None,
         admin_state: DatetimeAdminState | str | None = None,
         annotation: str | None = None,
         authentication_state: DatetimeAdminState | str | None = None,
@@ -185,7 +188,7 @@ class _FabricMakers(Cursor):
             name: The user-configured date/time policy name. This value can be between 1 and 64
                 alphanumeric characters. Note that you cannot change this name after the object
                 has been saved.
-            ntp_stratum_value_see_ntp_rfc_5905: NTP Stratum value, see RFC 5905
+            ntp_stratum_value_see_ntp_rfc_5905: NTP Stratum value, see RFC 5905 Default: ``8``.
             admin_state: A property that indicates if the NTP protocol is enabled or disabled.
                 Values: ``disabled``, ``enabled``. Default: ``enabled``.
             annotation: User annotation. Suggested format orchestrator:value
@@ -566,9 +569,9 @@ class _DatetimePolicyMakers(Cursor):
         *,
         annotation: str | None = None,
         description: str | None = None,
-        key_id: str | None = None,
-        max_poll: str | None = None,
-        min_poll: str | None = None,
+        key_id: int | None = None,
+        max_poll: int | None = None,
+        min_poll: int | None = None,
         display_name: str | None = None,
         preferred_state: bool | None = None,
         truechimer_status: DatetimeTrueChimerStatus | str | None = None,
@@ -584,9 +587,9 @@ class _DatetimePolicyMakers(Cursor):
                 has been saved.
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies the description of a policy component.
-            key_id: The NTP provider key ID. The range is from 1 to 65535.
-            max_poll: The NTP maximum interval default in seconds.
-            min_poll: The NTP minimum interval default in seconds.
+            key_id: The NTP provider key ID. The range is from 1 to 65535. Default: ``0``.
+            max_poll: The NTP maximum interval default in seconds. Default: ``6``.
+            min_poll: The NTP minimum interval default in seconds. Default: ``4``.
             preferred_state: A property that indicates if the NTP server is preferred. Only one
                 preferred server is allowed. Default: ``False``.
             truechimer_status: Values: ``disabled``, ``enabled``. Default: ``disabled``.
@@ -620,7 +623,7 @@ class DatetimePolicyCursor(_DatetimePolicyMakers, _FabricMakers, _UniMakers):
     def set(
         self,
         *,
-        ntp_stratum_value_see_ntp_rfc_5905: str | None = None,
+        ntp_stratum_value_see_ntp_rfc_5905: int | str | None = None,
         admin_state: DatetimeAdminState | str | None = None,
         annotation: str | None = None,
         authentication_state: DatetimeAdminState | str | None = None,
@@ -762,16 +765,16 @@ class FabricIgmpSnoopPolicyCursor(_FabricMakers, _UniMakers):
         *,
         admin_state: NwAdminSt | str | None = None,
         annotation: str | None = None,
-        controls: str | None = None,
+        controls: frozenset[IpmcsnoopDomControl] | set[IpmcsnoopDomControl] | str | None = None,
         description: str | None = None,
-        last_member_query_interval: str | None = None,
+        last_member_query_interval: int | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
-        query_interval: str | None = None,
-        response_interval: str | None = None,
-        startup_query_count: str | None = None,
-        startup_query_interval: str | None = None,
+        query_interval: int | None = None,
+        response_interval: int | None = None,
+        startup_query_count: int | None = None,
+        startup_query_interval: int | None = None,
         userdom: str | None = None,
         version: McastVer | str | None = None,
     ) -> FabricIgmpSnoopPolicyCursor:
@@ -797,16 +800,16 @@ class FabricMldSnoopPolicyCursor(_FabricMakers, _UniMakers):
         *,
         admin_state: NwAdminSt | str | None = None,
         annotation: str | None = None,
-        controls: str | None = None,
+        controls: frozenset[IpmcsnoopDomControl] | set[IpmcsnoopDomControl] | str | None = None,
         description: str | None = None,
-        last_member_query_interval: str | None = None,
+        last_member_query_interval: int | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
-        query_interval: str | None = None,
-        response_interval: str | None = None,
-        startup_query_count: str | None = None,
-        startup_query_interval: str | None = None,
+        query_interval: int | None = None,
+        response_interval: int | None = None,
+        startup_query_count: int | None = None,
+        startup_query_interval: int | None = None,
         userdom: str | None = None,
         version: McastVer2 | str | None = None,
     ) -> FabricMldSnoopPolicyCursor:
@@ -1126,7 +1129,7 @@ class _VpcProtectionMakers(Cursor):
         name: str,
         *,
         annotation: str | None = None,
-        logical_pair_id: str | None = None,
+        logical_pair_id: int | None = None,
         userdom: str | None = None,
     ) -> VpcPairCursor:
         """Declare a ``fabricExplicitGEp`` child under the vpc_protection level.
@@ -1139,7 +1142,7 @@ class _VpcProtectionMakers(Cursor):
                 characters. Note that you cannot change this name after the object has been
                 saved.
             annotation: User annotation. Suggested format orchestrator:value
-            logical_pair_id: Logical Pair Id
+            logical_pair_id: Logical Pair Id Default: ``0``.
         """
         params = {
             k: v
@@ -1219,12 +1222,12 @@ class _RouteReflectorMakers(Cursor):
 
     def node(
         self,
-        node_id: str,
+        node_id: int,
         *,
         annotation: str | None = None,
         description: str | None = None,
         display_name: str | None = None,
-        pod_id: str | None = None,
+        pod_id: int | None = None,
         userdom: str | None = None,
     ) -> RouteReflectorNodeCursor:
         """Declare a ``bgpRRNodePEp`` child under the route_reflector level.
@@ -1236,7 +1239,7 @@ class _RouteReflectorMakers(Cursor):
             node_id: The spine node ID.
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies the description of a policy component.
-            pod_id: Pod id
+            pod_id: Pod id Default: ``1``.
         """
         params = {
             k: v
@@ -1295,9 +1298,9 @@ class NtpProviderCursor(_DatetimePolicyMakers, _FabricMakers, _UniMakers):
         *,
         annotation: str | None = None,
         description: str | None = None,
-        key_id: str | None = None,
-        max_poll: str | None = None,
-        min_poll: str | None = None,
+        key_id: int | None = None,
+        max_poll: int | None = None,
+        min_poll: int | None = None,
         display_name: str | None = None,
         preferred_state: bool | None = None,
         truechimer_status: DatetimeTrueChimerStatus | str | None = None,
@@ -1564,13 +1567,13 @@ class _VpcPairMakers(Cursor):
 
     def node(
         self,
-        node_id: str,
+        node_id: int,
         *,
         annotation: str | None = None,
         description: str | None = None,
         name: str | None = None,
         display_name: str | None = None,
-        pod_id: str | None = None,
+        pod_id: int | None = None,
         userdom: str | None = None,
     ) -> VpcPairNodeCursor:
         """Declare a ``fabricNodePEp`` child under the vpc_pair level.
@@ -1582,7 +1585,7 @@ class _VpcPairMakers(Cursor):
                 group.
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies the description of a policy component.
-            pod_id: Pod id
+            pod_id: Pod id Default: ``1``.
         """
         params = {
             k: v
@@ -1614,7 +1617,7 @@ class VpcPairCursor(_VpcPairMakers, _VpcProtectionMakers, _FabricMakers, _UniMak
         self,
         *,
         annotation: str | None = None,
-        logical_pair_id: str | None = None,
+        logical_pair_id: int | None = None,
         userdom: str | None = None,
     ) -> VpcPairCursor:
         """Set ``fabricExplicitGEp`` attributes (merged; validated eagerly)."""
@@ -1642,7 +1645,7 @@ class RouteReflectorNodeCursor(
         annotation: str | None = None,
         description: str | None = None,
         display_name: str | None = None,
-        pod_id: str | None = None,
+        pod_id: int | None = None,
         userdom: str | None = None,
     ) -> RouteReflectorNodeCursor:
         """Set ``bgpRRNodePEp`` attributes (merged; validated eagerly)."""
@@ -1669,7 +1672,7 @@ class VpcPairNodeCursor(_VpcPairMakers, _VpcProtectionMakers, _FabricMakers, _Un
         description: str | None = None,
         name: str | None = None,
         display_name: str | None = None,
-        pod_id: str | None = None,
+        pod_id: int | None = None,
         userdom: str | None = None,
     ) -> VpcPairNodeCursor:
         """Set ``fabricNodePEp`` attributes (merged; validated eagerly)."""

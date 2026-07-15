@@ -52,37 +52,76 @@ class bfdIpv6InstPol(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
-    detection_multiplier: str = Field(
-        default="", alias="detectMult", description="Detection multiplier."
-    )
-    echo_rx_interval: str = Field(default="", alias="echoRxIntvl", description="Echo rx interval.")
+    detection_multiplier: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=50,
+            validation_alias="detectMult",
+            serialization_alias="detectMult",
+            description="Detection multiplier.",
+        ),
+    ] = 3
+    echo_rx_interval: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=999,
+            validation_alias="echoRxIntvl",
+            serialization_alias="echoRxIntvl",
+            description="Echo rx interval.",
+        ),
+    ] = 50
     bfd_ipv4_source_address_for_echo_frames: Annotated[
         str,
         Field(
             pattern="^[0-9a-fA-F.:/ ]+$",
-            alias="echoSrcAddr",
+            validation_alias="echoSrcAddr",
+            serialization_alias="echoSrcAddr",
             description="BFD Source Address for Echo frames.",
         ),
     ] = ""
-    required_minimum_rx_interval: str = Field(
-        default="", alias="minRxIntvl", description="Required minimum rx interval."
-    )
-    desired_minimum_tx_interval: str = Field(
-        default="", alias="minTxIntvl", description="Desired minimum tx interval."
-    )
+    required_minimum_rx_interval: Annotated[
+        int,
+        Field(
+            ge=50,
+            le=999,
+            validation_alias="minRxIntvl",
+            serialization_alias="minRxIntvl",
+            description="Required minimum rx interval.",
+        ),
+    ] = 50
+    desired_minimum_tx_interval: Annotated[
+        int,
+        Field(
+            ge=50,
+            le=999,
+            validation_alias="minTxIntvl",
+            serialization_alias="minTxIntvl",
+            description="Desired minimum tx interval.",
+        ),
+    ] = 50
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     owner_key: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerKey",
+            validation_alias="ownerKey",
+            serialization_alias="ownerKey",
             description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
@@ -91,16 +130,29 @@ class bfdIpv6InstPol(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerTag",
+            validation_alias="ownerTag",
+            serialization_alias="ownerTag",
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
-    slow_timer_interval: str = Field(
-        default="", alias="slowIntvl", description="Slow timer interval."
-    )
-    startup_timer_interval: str = Field(
-        default="",
-        alias="startupIntvl",
-        description="Startup timer interval. This is the delay after which BFD sessions will be installed to LC.",
-    )
+    slow_timer_interval: Annotated[
+        int,
+        Field(
+            ge=1000,
+            le=30000,
+            validation_alias="slowIntvl",
+            serialization_alias="slowIntvl",
+            description="Slow timer interval.",
+        ),
+    ] = 2000
+    startup_timer_interval: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=60,
+            validation_alias="startupIntvl",
+            serialization_alias="startupIntvl",
+            description="Startup timer interval. This is the delay after which BFD sessions will be installed to LC.",
+        ),
+    ] = 10
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

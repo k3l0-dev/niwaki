@@ -52,9 +52,25 @@ class vmmInjectedSvc(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    cluster_ip: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="clusterIp")] = ""
-    load_balancer_dns_name: Annotated[str, Field(max_length=512, alias="dnsName")] = ""
-    external_reference: Annotated[str, Field(max_length=512, alias="externalReference")] = ""
+    cluster_ip: Annotated[
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            validation_alias="clusterIp",
+            serialization_alias="clusterIp",
+        ),
+    ] = ""
+    load_balancer_dns_name: Annotated[
+        str, Field(max_length=512, validation_alias="dnsName", serialization_alias="dnsName")
+    ] = ""
+    external_reference: Annotated[
+        str,
+        Field(
+            max_length=512,
+            validation_alias="externalReference",
+            serialization_alias="externalReference",
+        ),
+    ] = ""
     guid: Annotated[
         str,
         Field(
@@ -65,10 +81,15 @@ class vmmInjectedSvc(ManagedObject):
     load_balancer_ip: Annotated[
         str,
         Field(
-            pattern="^[0-9a-fA-F.:/ ]+$", alias="lbIp", description="Applicable only if type is LB"
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            validation_alias="lbIp",
+            serialization_alias="lbIp",
+            description="Applicable only if type is LB",
         ),
     ] = ""
-    display_name: Annotated[str, Field(max_length=128, alias="nameAlias")] = ""
+    display_name: Annotated[
+        str, Field(max_length=128, validation_alias="nameAlias", serialization_alias="nameAlias")
+    ] = ""
     type: CompServiceType = Field(
         default=CompServiceType.CLUSTERIP,
         description="The specific type of the object or component.",

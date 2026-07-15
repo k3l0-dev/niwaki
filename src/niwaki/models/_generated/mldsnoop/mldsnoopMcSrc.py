@@ -40,7 +40,13 @@ class mldsnoopMcSrc(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     multicast_source_ip: Annotated[
-        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="id", description="Multicast traffic source")
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            validation_alias="id",
+            serialization_alias="id",
+            description="Multicast traffic source",
+        ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────

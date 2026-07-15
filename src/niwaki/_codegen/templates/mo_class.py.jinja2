@@ -4,8 +4,12 @@ from __future__ import annotations
 
 from typing import ClassVar{% if needs_literal %}, Literal{% endif %}{% if needs_annotated %}, Annotated{% endif %}
 
-{% if needs_field %}
-from pydantic import Field
+{% if needs_field or needs_flags or needs_named_number %}
+from pydantic import {% if needs_named_number %}AfterValidator, {% endif %}{% if needs_flags %}BeforeValidator, {% endif %}Field
+
+{% endif %}
+{% if needs_flags or needs_named_number %}
+from niwaki.models._wire import {% if needs_flags %}Flags, parse_flags{% endif %}{% if needs_flags and needs_named_number %}, {% endif %}{% if needs_named_number %}named_number{% endif %}
 
 {% endif %}
 {% for enum_name in enum_imports %}

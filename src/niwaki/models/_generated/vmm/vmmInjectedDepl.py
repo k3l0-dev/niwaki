@@ -55,6 +55,8 @@ class vmmInjectedDepl(ManagedObject):
             description="The globally unique identifier of an object in the external VM management system. For example, the GUID of the virtual machine in the VMware vCenter.",
         ),
     ] = ""
-    display_name: Annotated[str, Field(max_length=128, alias="nameAlias")] = ""
+    display_name: Annotated[
+        str, Field(max_length=128, validation_alias="nameAlias", serialization_alias="nameAlias")
+    ] = ""
     replicas: int = 0
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

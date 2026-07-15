@@ -34,7 +34,14 @@ class configSort(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    order_index: Annotated[int, Field(alias="index", description="The index of the object.")] = 0
+    order_index: Annotated[
+        int,
+        Field(
+            validation_alias="index",
+            serialization_alias="index",
+            description="The index of the object.",
+        ),
+    ] = 0
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[

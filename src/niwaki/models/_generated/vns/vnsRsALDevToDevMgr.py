@@ -53,6 +53,12 @@ class vnsRsALDevToDevMgr(ManagedObject):
     ] = ""
     name: Annotated[
         str,
-        Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="tnVnsDevMgrName"),
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            validation_alias="tnVnsDevMgrName",
+            serialization_alias="tnVnsDevMgrName",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

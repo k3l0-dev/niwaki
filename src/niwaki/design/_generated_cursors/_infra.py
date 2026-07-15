@@ -24,6 +24,9 @@ from niwaki.design._generated_cursors._uni import _UniMakers
 
 if TYPE_CHECKING:
     from niwaki.models._generated.enums.AnalyticsCollVersion import AnalyticsCollVersion
+    from niwaki.models._generated.enums.AnalyticsCollectParams import AnalyticsCollectParams
+    from niwaki.models._generated.enums.AnalyticsMatchParams import AnalyticsMatchParams
+    from niwaki.models._generated.enums.DhcpAddrPreferences import DhcpAddrPreferences
     from niwaki.models._generated.enums.DhcpOwner import DhcpOwner
     from niwaki.models._generated.enums.DhcpRelayVisibility import DhcpRelayVisibility
     from niwaki.models._generated.enums.DppBurstUnit import DppBurstUnit
@@ -34,6 +37,9 @@ if TYPE_CHECKING:
     from niwaki.models._generated.enums.DppSharingMode import DppSharingMode
     from niwaki.models._generated.enums.DppType import DppType
     from niwaki.models._generated.enums.DppViolateRateAction import DppViolateRateAction
+    from niwaki.models._generated.enums.FabricSelector import FabricSelector
+    from niwaki.models._generated.enums.FabricSelector2 import FabricSelector2
+    from niwaki.models._generated.enums.FvnsAllocMode import FvnsAllocMode
     from niwaki.models._generated.enums.FvnsBlkAllocMode import FvnsBlkAllocMode
     from niwaki.models._generated.enums.FvnsBlkRole import FvnsBlkRole
     from niwaki.models._generated.enums.InfraLagT import InfraLagT
@@ -57,6 +63,7 @@ if TYPE_CHECKING:
     from niwaki.models._generated.enums.PolColor import PolColor
     from niwaki.models._generated.enums.QosDppPolAdminState import QosDppPolAdminState
     from niwaki.models._generated.enums.SpanDirection import SpanDirection
+    from niwaki.models._generated.enums.StpIfControl import StpIfControl
 
 
 class _InfraMakers(Cursor):
@@ -157,7 +164,7 @@ class _InfraMakers(Cursor):
         name: str,
         *,
         annotation: str | None = None,
-        control: PcIfControl | str | None = None,
+        control: frozenset[PcIfControl] | set[PcIfControl] | str | None = None,
         description: str | None = None,
         maximum_number_of_links: int | None = None,
         minimum_number_of_links: int | None = None,
@@ -176,9 +183,7 @@ class _InfraMakers(Cursor):
         Args:
             name: Specifies the policy name.
             annotation: User annotation. Suggested format orchestrator:value
-            control: LAG control properties Values: ``fast-sel-hot-stdby``, ``graceful-conv``,
-                ``load-defer``, ``susp-individual``, ``symmetric-hash``. Default: ``fast-sel-
-                hot-stdby``.
+            control: LAG control properties Default: ``PydanticUndefined``.
             description: Specifies a description of the policy definition.
             maximum_number_of_links: maximum links Default: ``16``.
             minimum_number_of_links: minimum links @@@ MinLinks in the port channel Default:
@@ -210,10 +215,10 @@ class _InfraMakers(Cursor):
         annotation: str | None = None,
         auto_negotiation_on_off: L1AutoNeg | str | None = None,
         description: str | None = None,
-        dfe_delay_ms: str | None = None,
+        dfe_delay_ms: int | None = None,
         enable_disable_emi_retrain: L1EmiRetrain | str | None = None,
         fec_mode: L1FECMode | str | None = None,
-        link_debounce_interval_msec: str | None = None,
+        link_debounce_interval_msec: int | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
@@ -234,6 +239,7 @@ class _InfraMakers(Cursor):
                 to automatically exchange information over a link about speed and duplex
                 abilities. Values: ``off``, ``on``, ``on-enforce``. Default: ``on``.
             description: Specifies a description of the policy definition.
+            dfe_delay_ms: Default: ``0``.
             enable_disable_emi_retrain: Values: ``disable``, ``enable``. Default: ``disable``.
             fec_mode: Forwarding error correction (FEC) mode. By incorporating error correction
                 information into data packets, FEC improves the reliability of data transmission
@@ -243,7 +249,7 @@ class _InfraMakers(Cursor):
             link_debounce_interval_msec: The interface policy administrative port link debounce
                 interval. Enables the debounce timer for physical interface ports and sets it
                 for a specified amount of time in milliseconds. The debounce timer is disabled
-                if you specify the time to 0 ms.
+                if you specify the time to 0 ms. Default: ``100``.
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
@@ -275,17 +281,17 @@ class _InfraMakers(Cursor):
         admin_state: NwIfAdminSt | str | None = None,
         annotation: str | None = None,
         description: str | None = None,
-        grace_period: str | None = None,
-        grace_period_msec: str | None = None,
-        maximum_number_of_vlans: str | None = None,
+        grace_period: int | None = None,
+        grace_period_msec: int | None = None,
+        maximum_number_of_vlans: int | None = None,
         mode: McpMcpMode | str | None = None,
         mcp_pdu_per_vlan: McpMcpPduPerVlan | str | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
-        init_delay_time: str | None = None,
-        transmission_frequency: str | None = None,
-        strict_tx_freq_msec: str | None = None,
+        init_delay_time: int | None = None,
+        transmission_frequency: int | None = None,
+        strict_tx_freq_msec: int | None = None,
         userdom: str | None = None,
     ) -> McpPolicyCursor:
         """Declare a ``mcpIfPol`` child under the infra level.
@@ -297,9 +303,10 @@ class _InfraMakers(Cursor):
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies a description of the policy definition.
             grace_period: For strict mode, grace period timeout in sec during which early loop
-                detection takes place
+                detection takes place Default: ``3``.
             grace_period_msec: For strict mode, grace period timeout in millisec during which
-                early loop detection takes place
+                early loop detection takes place Default: ``0``.
+            maximum_number_of_vlans: Default: ``256``.
             mode: Instance MCP mode Values: ``off``, ``on``. Default: ``off``.
             mcp_pdu_per_vlan: Values: ``off``, ``on``. Default: ``on``.
             owner_key: The key for enabling clients to own their data for entity correlation.
@@ -307,10 +314,11 @@ class _InfraMakers(Cursor):
                 indicate who created this object.
             init_delay_time: For strict mode, delay time in seconds for mcp to wait before
                 sending BPDUs. This gives time for STP on the external network to converge
+                Default: ``0``.
             transmission_frequency: For strict mode, transmission frequency of MCP packets until
-                grace period on each L2 interface in seconds
+                grace period on each L2 interface in seconds Default: ``0``.
             strict_tx_freq_msec: For strict mode, transmission frequency of MCP packets until
-                grace period on each L2 interface in milliseconds
+                grace period on each L2 interface in milliseconds Default: ``500``.
         """
         params = {
             k: v
@@ -331,7 +339,7 @@ class _InfraMakers(Cursor):
         name: str,
         *,
         annotation: str | None = None,
-        controls: str | None = None,
+        controls: frozenset[StpIfControl] | set[StpIfControl] | str | None = None,
         description: str | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
@@ -347,7 +355,7 @@ class _InfraMakers(Cursor):
         Args:
             name: The STP interface policy name.
             annotation: User annotation. Suggested format orchestrator:value
-            controls: Interface controls
+            controls: Interface controls Default: ``PydanticUndefined``.
             description: Specifies a description of the policy definition.
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
@@ -372,31 +380,31 @@ class _InfraMakers(Cursor):
         name: str,
         *,
         annotation: str | None = None,
-        broadcast_max_burst_size: int | None = None,
-        bc_burst_rate: str | None = None,
-        broadcast_traffic_rate: str | None = None,
-        bc_rate_pps: int | None = None,
-        max_burst_size: int | None = None,
-        burst_rate: str | None = None,
+        broadcast_max_burst_size: int | str | None = None,
+        bc_burst_rate: float | None = None,
+        broadcast_traffic_rate: float | None = None,
+        bc_rate_pps: int | str | None = None,
+        max_burst_size: int | str | None = None,
+        burst_rate: float | None = None,
         description: str | None = None,
         packet_type_uc_bc_mc_config_valid_yes_no: L1StormCtrlCfgValid | str | None = None,
-        multicast_max_burst_size: int | None = None,
-        mc_burst_rate: str | None = None,
-        multicast_traffic_rate: str | None = None,
-        mc_rate_pps: int | None = None,
+        multicast_max_burst_size: int | str | None = None,
+        mc_burst_rate: float | None = None,
+        multicast_traffic_rate: float | None = None,
+        mc_rate_pps: int | str | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
-        traffic_rate: str | None = None,
-        tarffic_rate: int | None = None,
+        traffic_rate: float | None = None,
+        tarffic_rate: int | str | None = None,
         storm_ctrl_action: L1StormCtrlActionT | str | None = None,
-        storm_ctrl_soak_inst_count: str | None = None,
+        storm_ctrl_soak_inst_count: int | None = None,
         packet_type: L1PktT | str | None = None,
         userdom: str | None = None,
-        unknown_unicast_max_burst_size: int | None = None,
-        uuc_burst_rate: str | None = None,
-        unknown_unicast_traffic_rate: str | None = None,
-        uuc_rate_pps: int | None = None,
+        unknown_unicast_max_burst_size: int | str | None = None,
+        uuc_burst_rate: float | None = None,
+        unknown_unicast_traffic_rate: float | None = None,
+        uuc_rate_pps: int | str | None = None,
     ) -> StormControlPolicyCursor:
         """Declare a ``stormctrlIfPol`` child under the infra level.
 
@@ -406,42 +414,43 @@ class _InfraMakers(Cursor):
         Args:
             name: The storm control policy name.
             annotation: User annotation. Suggested format orchestrator:value
-            broadcast_max_burst_size: burst rate in pps Default: ``0``.
-            bc_burst_rate: burst rate in % (upto 1 decimal)
-            broadcast_traffic_rate: rate in % (upto 1 decimal)
-            bc_rate_pps: rate in pps Default: ``0``.
+            broadcast_max_burst_size: burst rate in pps Default: ``unspecified``.
+            bc_burst_rate: burst rate in % (upto 1 decimal) Default: ``100.0``.
+            broadcast_traffic_rate: rate in % (upto 1 decimal) Default: ``100.0``.
+            bc_rate_pps: rate in pps Default: ``unspecified``.
             max_burst_size: The packets per second (PPS) burst interval rate for the storm
                 control policy. During this interval, the traffic level which is expressed as
                 packets flowing per second through the port, is then compared with the traffic
-                storm control level that you configured. Default: ``0``.
-            burst_rate: The traffic burst rate percentage.
+                storm control level that you configured. Default: ``unspecified``.
+            burst_rate: The traffic burst rate percentage. Default: ``100.0``.
             description: Specifies a description of the policy definition.
             packet_type_uc_bc_mc_config_valid_yes_no: Values: ``Invalid``, ``Valid``. Default:
                 ``Invalid``.
-            multicast_max_burst_size: burst rate in pps Default: ``0``.
-            mc_burst_rate: burst rate in % (upto 1 decimal)
-            multicast_traffic_rate: rate in % (upto 1 decimal)
-            mc_rate_pps: rate in pps Default: ``0``.
+            multicast_max_burst_size: burst rate in pps Default: ``unspecified``.
+            mc_burst_rate: burst rate in % (upto 1 decimal) Default: ``100.0``.
+            multicast_traffic_rate: rate in % (upto 1 decimal) Default: ``100.0``.
+            mc_rate_pps: rate in pps Default: ``unspecified``.
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
-            traffic_rate: The traffic rate percentage.
+            traffic_rate: The traffic rate percentage. Default: ``100.0``.
             tarffic_rate: The packets per second (PPS) interval rate for the storm control
                 policy. During this interval, the traffic level which is expressed as packets
                 flowing per second through the port, is then compared with the traffic storm
-                control level that you configured. Default: ``0``.
+                control level that you configured. Default: ``unspecified``.
             storm_ctrl_action: action drop/shutdown Values: ``drop``, ``shutdown``. Default:
                 ``drop``.
-            storm_ctrl_soak_inst_count: Instances required to declare port shutdown
+            storm_ctrl_soak_inst_count: Instances required to declare port shutdown Default:
+                ``3``.
             packet_type: The storm control interface policy type. The policy type prevents
                 disruptions on ports by a broadcast, multicast, or unknown unicast traffic storm
                 on physical interfaces. The policy type is set to ALL types of traffic by
                 default and can not be changed. Values: ``all``, ``bcast``, ``mcast``, ``unk-
                 ucast``. Default: ``all``.
-            unknown_unicast_max_burst_size: burst rate in pps Default: ``0``.
-            uuc_burst_rate: burst rate in % (upto 1 decimal)
-            unknown_unicast_traffic_rate: rate in % (upto 1 decimal)
-            uuc_rate_pps: rate in pps Default: ``0``.
+            unknown_unicast_max_burst_size: burst rate in pps Default: ``unspecified``.
+            uuc_burst_rate: burst rate in % (upto 1 decimal) Default: ``100.0``.
+            unknown_unicast_traffic_rate: rate in % (upto 1 decimal) Default: ``100.0``.
+            uuc_rate_pps: rate in pps Default: ``unspecified``.
         """
         params = {
             k: v
@@ -507,31 +516,31 @@ class _InfraMakers(Cursor):
         *,
         admin_st: QosDppPolAdminState | str | None = None,
         annotation: str | None = None,
-        excessive_burst: str | None = None,
+        excessive_burst: int | str | None = None,
         excessive_burst_unit: DppBurstUnit | str | None = None,
-        burst: str | None = None,
+        burst: int | str | None = None,
         burst_unit: DppBurstUnit | str | None = None,
         confirm_action: DppConformRateAction | str | None = None,
-        conform_mark_cos: str | None = None,
-        conform_mark_dscp: str | None = None,
+        conform_mark_cos: int | str | None = None,
+        conform_mark_dscp: int | str | None = None,
         description: str | None = None,
         exceed_action: DppExceedRateAction | str | None = None,
-        exceed_mark_cos: str | None = None,
-        exceed_mark_dscp: str | None = None,
+        exceed_mark_cos: int | str | None = None,
+        exceed_mark_dscp: int | str | None = None,
         bit_or_packet: DppMode | str | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
-        peak_rate: str | None = None,
+        peak_rate: int | None = None,
         peak_rate_unit: DppRateUnit | str | None = None,
-        rate: str | None = None,
+        rate: int | None = None,
         rate_unit: DppRateUnit | str | None = None,
         policer_sharing_mode: DppSharingMode | str | None = None,
         type: DppType | str | None = None,
         userdom: str | None = None,
         violate_action: DppViolateRateAction | str | None = None,
-        violate_mark_cos: str | None = None,
-        violate_mark_dscp: str | None = None,
+        violate_mark_cos: int | str | None = None,
+        violate_mark_dscp: int | str | None = None,
     ) -> InfraDppPolicyCursor:
         """Declare a ``qosDppPol`` child under the infra level.
 
@@ -543,31 +552,33 @@ class _InfraMakers(Cursor):
             admin_st: The Administrative state of the policy Values: ``disabled``, ``enabled``.
                 Default: ``disabled``.
             annotation: User annotation. Suggested format orchestrator:value
-            excessive_burst: Excessive burst size (2R3C policer only)
+            excessive_burst: Excessive burst size (2R3C policer only) Default: ``unspecified``.
             excessive_burst_unit: Excessive Burst unit - none, Kilo, Mega, Giga, ms, us Values:
                 ``giga``, ``kilo``, ``mega``, ``msec``, ``unspecified``, ``usec``. Default:
                 ``unspecified``.
-            burst: Committed burst size, number of packets to absorb during a burst
+            burst: Committed burst size, number of packets to absorb during a burst Default:
+                ``unspecified``.
             burst_unit: Burst unit - byte, kbyte, mbyte etc. Values: ``giga``, ``kilo``,
                 ``mega``, ``msec``, ``unspecified``, ``usec``. Default: ``unspecified``.
             confirm_action: Confirm action Values: ``drop``, ``mark``, ``transmit``. Default:
                 ``transmit``.
-            conform_mark_cos: Conform Mark cos
-            conform_mark_dscp: Conform Mark Dscp
+            conform_mark_cos: Conform Mark cos Default: ``unspecified``.
+            conform_mark_dscp: Conform Mark Dscp Default: ``unspecified``.
             description: Specifies a description of the policy definition.
             exceed_action: Exceed action Values: ``drop``, ``mark``, ``transmit``. Default:
                 ``drop``.
-            exceed_mark_cos: Exceed Mark cos
-            exceed_mark_dscp: Exceed Mark Dscp
+            exceed_mark_cos: Exceed Mark cos Default: ``unspecified``.
+            exceed_mark_dscp: Exceed Mark Dscp Default: ``unspecified``.
             bit_or_packet: Policer mode - bytes or packet policer Values: ``bit``, ``packet``.
                 Default: ``bit``.
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
-            peak_rate: Peak rate (pir) (2R3C policer only)
+            peak_rate: Peak rate (pir) (2R3C policer only) Default: ``0``.
             peak_rate_unit: Peak Rate unit - none, Kilo, Mega, Giga Values: ``giga``, ``kilo``,
                 ``mega``, ``unspecified``. Default: ``unspecified``.
             rate: Allowed rate, committed rate at which the packets are allowed into the system
+                Default: ``0``.
             rate_unit: Rate unit - bps, kbps, mbps, packets etc. Values: ``giga``, ``kilo``,
                 ``mega``, ``unspecified``. Default: ``unspecified``.
             policer_sharing_mode: Policer sharing mode Values: ``dedicated``, ``shared``.
@@ -575,8 +586,8 @@ class _InfraMakers(Cursor):
             type: Policer type Values: ``1R2C``, ``2R3C``. Default: ``1R2C``.
             violate_action: Violate action Values: ``drop``, ``mark``, ``transmit``. Default:
                 ``drop``.
-            violate_mark_cos: Violate Mark cos
-            violate_mark_dscp: Violate Mark Dscp
+            violate_mark_cos: Violate Mark cos Default: ``unspecified``.
+            violate_mark_dscp: Violate Mark Dscp Default: ``unspecified``.
         """
         params = {
             k: v
@@ -595,7 +606,7 @@ class _InfraMakers(Cursor):
     def vlan_pool(
         self,
         name: str,
-        allocation_mode: str,
+        allocation_mode: FvnsAllocMode | str,
         *,
         annotation: str | None = None,
         description: str | None = None,
@@ -974,9 +985,9 @@ class _InfraMakers(Cursor):
         *,
         annotation: str | None = None,
         description: str | None = None,
-        qos_dscp_value: str | None = None,
+        qos_dscp_value: int | str | None = None,
         remote_entity_ip: str | None = None,
-        remote_entity_l4_port: str | None = None,
+        remote_entity_l4_port: int | str | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
@@ -993,9 +1004,9 @@ class _InfraMakers(Cursor):
             name: The name of the object.
             annotation: User annotation. Suggested format orchestrator:value
             description: The description of this configuration item.
-            qos_dscp_value: IP dscp value
+            qos_dscp_value: IP dscp value Default: ``CS2``.
             remote_entity_ip: Remote node destination IP address
-            remote_entity_l4_port: Remote node destination port
+            remote_entity_l4_port: Remote node destination port Default: ``unspecified``.
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
@@ -1024,9 +1035,15 @@ class _InfraMakers(Cursor):
         name: str,
         *,
         annotation: str | None = None,
-        collect_params: str | None = None,
+        collect_params: frozenset[AnalyticsCollectParams]
+        | set[AnalyticsCollectParams]
+        | str
+        | None = None,
         description: str | None = None,
-        match_params: str | None = None,
+        match_params: frozenset[AnalyticsMatchParams]
+        | set[AnalyticsMatchParams]
+        | str
+        | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
@@ -1039,9 +1056,10 @@ class _InfraMakers(Cursor):
         Args:
             name: The name of the object.
             annotation: User annotation. Suggested format orchestrator:value
-            collect_params: Collect parameters for the flow record
+            collect_params: Collect parameters for the flow record Default:
+                ``PydanticUndefined``.
             description: Specifies a description of the policy definition.
-            match_params: Match parameters for the flow record
+            match_params: Match parameters for the flow record Default: ``PydanticUndefined``.
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
@@ -1142,7 +1160,7 @@ class _AccessPortProfileMakers(Cursor):
     def port_selector(
         self,
         name: str,
-        selector_type: str,
+        selector_type: FabricSelector2 | str,
         *,
         annotation: str | None = None,
         description: str | None = None,
@@ -1256,7 +1274,7 @@ class _InfraDhcpRelayPolicyMakers(Cursor):
         *,
         dhcp_server_address: str | None = None,
         annotation: str | None = None,
-        pref: str | None = None,
+        pref: frozenset[DhcpAddrPreferences] | set[DhcpAddrPreferences] | str | None = None,
         userdom: str | None = None,
     ) -> InfraDhcpRelayPolicyProviderCursor:
         """Declare a ``dhcpRsProv`` child under the dhcp_relay_policy level.
@@ -1269,7 +1287,7 @@ class _InfraDhcpRelayPolicyMakers(Cursor):
             dhcp_server_address: The DHCP server address. This address is configured onto the
                 relationship between a relay profile and an endpoint group.
             annotation: User annotation. Suggested format orchestrator:value
-            pref: DHCP server preferences
+            pref: DHCP server preferences Default: ``PydanticUndefined``.
         """
         params = {
             k: v
@@ -1331,31 +1349,31 @@ class InfraDppPolicyCursor(_InfraMakers, _UniMakers):
         *,
         admin_st: QosDppPolAdminState | str | None = None,
         annotation: str | None = None,
-        excessive_burst: str | None = None,
+        excessive_burst: int | str | None = None,
         excessive_burst_unit: DppBurstUnit | str | None = None,
-        burst: str | None = None,
+        burst: int | str | None = None,
         burst_unit: DppBurstUnit | str | None = None,
         confirm_action: DppConformRateAction | str | None = None,
-        conform_mark_cos: str | None = None,
-        conform_mark_dscp: str | None = None,
+        conform_mark_cos: int | str | None = None,
+        conform_mark_dscp: int | str | None = None,
         description: str | None = None,
         exceed_action: DppExceedRateAction | str | None = None,
-        exceed_mark_cos: str | None = None,
-        exceed_mark_dscp: str | None = None,
+        exceed_mark_cos: int | str | None = None,
+        exceed_mark_dscp: int | str | None = None,
         bit_or_packet: DppMode | str | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
-        peak_rate: str | None = None,
+        peak_rate: int | None = None,
         peak_rate_unit: DppRateUnit | str | None = None,
-        rate: str | None = None,
+        rate: int | None = None,
         rate_unit: DppRateUnit | str | None = None,
         policer_sharing_mode: DppSharingMode | str | None = None,
         type: DppType | str | None = None,
         userdom: str | None = None,
         violate_action: DppViolateRateAction | str | None = None,
-        violate_mark_cos: str | None = None,
-        violate_mark_dscp: str | None = None,
+        violate_mark_cos: int | str | None = None,
+        violate_mark_dscp: int | str | None = None,
     ) -> InfraDppPolicyCursor:
         """Set ``qosDppPol`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -1370,13 +1388,13 @@ class _FilterGroupMakers(Cursor):
 
     def filter_entry(
         self,
-        ip_protocol: str,
+        ip_protocol: int | str,
         source_ip_prefix: str,
         destination_ip_prefix: str,
-        first_source_port: str,
-        last_source_port: str,
-        first_destination_port: str,
-        dst_port_to: str,
+        first_source_port: int | str,
+        last_source_port: int | str,
+        first_destination_port: int | str,
+        dst_port_to: int | str,
         *,
         annotation: str | None = None,
         description: str | None = None,
@@ -1584,7 +1602,7 @@ class LacpPolicyCursor(_InfraMakers, _UniMakers):
         self,
         *,
         annotation: str | None = None,
-        control: PcIfControl | str | None = None,
+        control: frozenset[PcIfControl] | set[PcIfControl] | str | None = None,
         description: str | None = None,
         maximum_number_of_links: int | None = None,
         minimum_number_of_links: int | None = None,
@@ -1608,7 +1626,7 @@ class _LeafProfileMakers(Cursor):
     def leaf_selector(
         self,
         name: str,
-        selector_type: str,
+        selector_type: FabricSelector | str,
         *,
         annotation: str | None = None,
         description: str | None = None,
@@ -1717,10 +1735,10 @@ class LinkLevelPolicyCursor(_InfraMakers, _UniMakers):
         annotation: str | None = None,
         auto_negotiation_on_off: L1AutoNeg | str | None = None,
         description: str | None = None,
-        dfe_delay_ms: str | None = None,
+        dfe_delay_ms: int | None = None,
         enable_disable_emi_retrain: L1EmiRetrain | str | None = None,
         fec_mode: L1FECMode | str | None = None,
-        link_debounce_interval_msec: str | None = None,
+        link_debounce_interval_msec: int | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
@@ -1781,17 +1799,17 @@ class McpPolicyCursor(_InfraMakers, _UniMakers):
         admin_state: NwIfAdminSt | str | None = None,
         annotation: str | None = None,
         description: str | None = None,
-        grace_period: str | None = None,
-        grace_period_msec: str | None = None,
-        maximum_number_of_vlans: str | None = None,
+        grace_period: int | None = None,
+        grace_period_msec: int | None = None,
+        maximum_number_of_vlans: int | None = None,
         mode: McpMcpMode | str | None = None,
         mcp_pdu_per_vlan: McpMcpPduPerVlan | str | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
-        init_delay_time: str | None = None,
-        transmission_frequency: str | None = None,
-        strict_tx_freq_msec: str | None = None,
+        init_delay_time: int | None = None,
+        transmission_frequency: int | None = None,
+        strict_tx_freq_msec: int | None = None,
         userdom: str | None = None,
     ) -> McpPolicyCursor:
         """Set ``mcpIfPol`` attributes (merged; validated eagerly)."""
@@ -1816,9 +1834,9 @@ class InfraNetflowExporterCursor(_InfraMakers, _UniMakers):
         *,
         annotation: str | None = None,
         description: str | None = None,
-        qos_dscp_value: str | None = None,
+        qos_dscp_value: int | str | None = None,
         remote_entity_ip: str | None = None,
-        remote_entity_l4_port: str | None = None,
+        remote_entity_l4_port: int | str | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
@@ -1908,9 +1926,15 @@ class InfraNetflowRecordCursor(_InfraMakers, _UniMakers):
         self,
         *,
         annotation: str | None = None,
-        collect_params: str | None = None,
+        collect_params: frozenset[AnalyticsCollectParams]
+        | set[AnalyticsCollectParams]
+        | str
+        | None = None,
         description: str | None = None,
-        match_params: str | None = None,
+        match_params: frozenset[AnalyticsMatchParams]
+        | set[AnalyticsMatchParams]
+        | str
+        | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
@@ -2140,7 +2164,7 @@ class _SpineProfileMakers(Cursor):
     def spine_selector(
         self,
         name: str,
-        selector_type: str,
+        selector_type: FabricSelector | str,
         *,
         annotation: str | None = None,
         description: str | None = None,
@@ -2227,31 +2251,31 @@ class StormControlPolicyCursor(_InfraMakers, _UniMakers):
         self,
         *,
         annotation: str | None = None,
-        broadcast_max_burst_size: int | None = None,
-        bc_burst_rate: str | None = None,
-        broadcast_traffic_rate: str | None = None,
-        bc_rate_pps: int | None = None,
-        max_burst_size: int | None = None,
-        burst_rate: str | None = None,
+        broadcast_max_burst_size: int | str | None = None,
+        bc_burst_rate: float | None = None,
+        broadcast_traffic_rate: float | None = None,
+        bc_rate_pps: int | str | None = None,
+        max_burst_size: int | str | None = None,
+        burst_rate: float | None = None,
         description: str | None = None,
         packet_type_uc_bc_mc_config_valid_yes_no: L1StormCtrlCfgValid | str | None = None,
-        multicast_max_burst_size: int | None = None,
-        mc_burst_rate: str | None = None,
-        multicast_traffic_rate: str | None = None,
-        mc_rate_pps: int | None = None,
+        multicast_max_burst_size: int | str | None = None,
+        mc_burst_rate: float | None = None,
+        multicast_traffic_rate: float | None = None,
+        mc_rate_pps: int | str | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
-        traffic_rate: str | None = None,
-        tarffic_rate: int | None = None,
+        traffic_rate: float | None = None,
+        tarffic_rate: int | str | None = None,
         storm_ctrl_action: L1StormCtrlActionT | str | None = None,
-        storm_ctrl_soak_inst_count: str | None = None,
+        storm_ctrl_soak_inst_count: int | None = None,
         packet_type: L1PktT | str | None = None,
         userdom: str | None = None,
-        unknown_unicast_max_burst_size: int | None = None,
-        uuc_burst_rate: str | None = None,
-        unknown_unicast_traffic_rate: str | None = None,
-        uuc_rate_pps: int | None = None,
+        unknown_unicast_max_burst_size: int | str | None = None,
+        uuc_burst_rate: float | None = None,
+        unknown_unicast_traffic_rate: float | None = None,
+        uuc_rate_pps: int | str | None = None,
     ) -> StormControlPolicyCursor:
         """Set ``stormctrlIfPol`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -2274,7 +2298,7 @@ class StpPolicyCursor(_InfraMakers, _UniMakers):
         self,
         *,
         annotation: str | None = None,
-        controls: str | None = None,
+        controls: frozenset[StpIfControl] | set[StpIfControl] | str | None = None,
         description: str | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
@@ -2380,11 +2404,11 @@ class _PortSelectorMakers(Cursor):
         *,
         annotation: str | None = None,
         description: str | None = None,
-        from_module_id: str | None = None,
-        from_port_id: str | None = None,
+        from_module_id: int | None = None,
+        from_port_id: int | None = None,
         display_name: str | None = None,
-        to_module_id: str | None = None,
-        to_port_id: str | None = None,
+        to_module_id: int | None = None,
+        to_port_id: int | None = None,
         userdom: str | None = None,
     ) -> PortBlockCursor:
         """Declare a ``infraPortBlk`` child under the port_selector level.
@@ -2395,6 +2419,10 @@ class _PortSelectorMakers(Cursor):
             name: The port block name
             annotation: User annotation. Suggested format orchestrator:value
             description: The description of this configuration item.
+            from_module_id: Default: ``1``.
+            from_port_id: Default: ``1``.
+            to_module_id: Default: ``1``.
+            to_port_id: Default: ``1``.
         """
         params = {
             k: v
@@ -2416,13 +2444,13 @@ class _PortSelectorMakers(Cursor):
         *,
         annotation: str | None = None,
         description: str | None = None,
-        from_module_id: str | None = None,
-        from_port_id: str | None = None,
-        from_sub_port_id: str | None = None,
+        from_module_id: int | None = None,
+        from_port_id: int | None = None,
+        from_sub_port_id: int | None = None,
         display_name: str | None = None,
-        to_module_id: str | None = None,
-        to_port_id: str | None = None,
-        to_sub_port_id: str | None = None,
+        to_module_id: int | None = None,
+        to_port_id: int | None = None,
+        to_sub_port_id: int | None = None,
         userdom: str | None = None,
     ) -> SubPortBlockCursor:
         """Declare a ``infraSubPortBlk`` child under the port_selector level.
@@ -2433,6 +2461,12 @@ class _PortSelectorMakers(Cursor):
             name: The name of the object.
             annotation: User annotation. Suggested format orchestrator:value
             description: The description of this configuration item.
+            from_module_id: Default: ``1``.
+            from_port_id: Default: ``1``.
+            from_sub_port_id: Default: ``1``.
+            to_module_id: Default: ``1``.
+            to_port_id: Default: ``1``.
+            to_sub_port_id: Default: ``1``.
         """
         params = {
             k: v
@@ -2512,7 +2546,7 @@ class InfraDhcpRelayPolicyProviderCursor(_InfraDhcpRelayPolicyMakers, _InfraMake
         *,
         dhcp_server_address: str | None = None,
         annotation: str | None = None,
-        pref: str | None = None,
+        pref: frozenset[DhcpAddrPreferences] | set[DhcpAddrPreferences] | str | None = None,
         userdom: str | None = None,
     ) -> InfraDhcpRelayPolicyProviderCursor:
         """Set ``dhcpRsProv`` attributes (merged; validated eagerly)."""
@@ -2666,9 +2700,9 @@ class _LeafSelectorMakers(Cursor):
         *,
         annotation: str | None = None,
         description: str | None = None,
-        from_node_id: str | None = None,
+        from_node_id: int | None = None,
         display_name: str | None = None,
-        to_node_id: str | None = None,
+        to_node_id: int | None = None,
         userdom: str | None = None,
     ) -> LeafSelectorNodeBlockCursor:
         """Declare a ``infraNodeBlk`` child under the leaf_selector level.
@@ -2680,6 +2714,8 @@ class _LeafSelectorMakers(Cursor):
             name: Naming property — forms the object's RN.
             annotation: User annotation. Suggested format orchestrator:value
             description: The description of this configuration item.
+            from_node_id: Default: ``1``.
+            to_node_id: Default: ``1``.
         """
         params = {
             k: v
@@ -2916,9 +2952,9 @@ class _SpineSelectorMakers(Cursor):
         *,
         annotation: str | None = None,
         description: str | None = None,
-        from_node_id: str | None = None,
+        from_node_id: int | None = None,
         display_name: str | None = None,
-        to_node_id: str | None = None,
+        to_node_id: int | None = None,
         userdom: str | None = None,
     ) -> SpineSelectorNodeBlockCursor:
         """Declare a ``infraNodeBlk`` child under the spine_selector level.
@@ -2930,6 +2966,8 @@ class _SpineSelectorMakers(Cursor):
             name: Naming property — forms the object's RN.
             annotation: User annotation. Suggested format orchestrator:value
             description: The description of this configuration item.
+            from_node_id: Default: ``1``.
+            to_node_id: Default: ``1``.
         """
         params = {
             k: v
@@ -3017,11 +3055,11 @@ class PortBlockCursor(_PortSelectorMakers, _AccessPortProfileMakers, _InfraMaker
         *,
         annotation: str | None = None,
         description: str | None = None,
-        from_module_id: str | None = None,
-        from_port_id: str | None = None,
+        from_module_id: int | None = None,
+        from_port_id: int | None = None,
         display_name: str | None = None,
-        to_module_id: str | None = None,
-        to_port_id: str | None = None,
+        to_module_id: int | None = None,
+        to_port_id: int | None = None,
         userdom: str | None = None,
     ) -> PortBlockCursor:
         """Set ``infraPortBlk`` attributes (merged; validated eagerly)."""
@@ -3066,13 +3104,13 @@ class SubPortBlockCursor(_PortSelectorMakers, _AccessPortProfileMakers, _InfraMa
         *,
         annotation: str | None = None,
         description: str | None = None,
-        from_module_id: str | None = None,
-        from_port_id: str | None = None,
-        from_sub_port_id: str | None = None,
+        from_module_id: int | None = None,
+        from_port_id: int | None = None,
+        from_sub_port_id: int | None = None,
         display_name: str | None = None,
-        to_module_id: str | None = None,
-        to_port_id: str | None = None,
-        to_sub_port_id: str | None = None,
+        to_module_id: int | None = None,
+        to_port_id: int | None = None,
+        to_sub_port_id: int | None = None,
         userdom: str | None = None,
     ) -> SubPortBlockCursor:
         """Set ``infraSubPortBlk`` attributes (merged; validated eagerly)."""
@@ -3119,9 +3157,9 @@ class LeafSelectorNodeBlockCursor(
         *,
         annotation: str | None = None,
         description: str | None = None,
-        from_node_id: str | None = None,
+        from_node_id: int | None = None,
         display_name: str | None = None,
-        to_node_id: str | None = None,
+        to_node_id: int | None = None,
         userdom: str | None = None,
     ) -> LeafSelectorNodeBlockCursor:
         """Set ``infraNodeBlk`` attributes (merged; validated eagerly)."""
@@ -3168,9 +3206,9 @@ class SpineSelectorNodeBlockCursor(
         *,
         annotation: str | None = None,
         description: str | None = None,
-        from_node_id: str | None = None,
+        from_node_id: int | None = None,
         display_name: str | None = None,
-        to_node_id: str | None = None,
+        to_node_id: int | None = None,
         userdom: str | None = None,
     ) -> SpineSelectorNodeBlockCursor:
         """Set ``infraNodeBlk`` attributes (merged; validated eagerly)."""

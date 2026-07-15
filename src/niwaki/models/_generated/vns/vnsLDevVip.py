@@ -206,7 +206,9 @@ class vnsLDevVip(ManagedObject):
     ]
 
     # ── Create-only (ignored by APIC on modification) ─────────────────────────
-    active_active_mode: bool = Field(default=False, alias="activeActive")
+    active_active_mode: bool = Field(
+        default=False, validation_alias="activeActive", serialization_alias="activeActive"
+    )
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[
@@ -219,17 +221,24 @@ class vnsLDevVip(ManagedObject):
     ] = ""
     tenancy: VnsContextAware = Field(
         default=VnsContextAware.SINGLE_CONTEXT,
-        alias="contextAware",
+        validation_alias="contextAware",
+        serialization_alias="contextAware",
         description="A value to determine if the L4-L7 device cluster supports multiple contexts (VRFs).",
     )
-    device_type: VnsLDevType = Field(default=VnsLDevType.PHYSICAL, alias="devtype")
+    device_type: VnsLDevType = Field(
+        default=VnsLDevType.PHYSICAL, validation_alias="devtype", serialization_alias="devtype"
+    )
     function_type: VnsNodeFuncType = Field(
         default=VnsNodeFuncType.GOTO,
-        alias="funcType",
+        validation_alias="funcType",
+        serialization_alias="funcType",
         description="The function type of the L4-L7 device cluster.",
     )
     is_copy: bool = Field(
-        default=False, alias="isCopy", description="if the device is a copy device"
+        default=False,
+        validation_alias="isCopy",
+        serialization_alias="isCopy",
+        description="if the device is a copy device",
     )
     managed: bool = Field(default=True, description="Specified if the device is a managed device")
     mode: VnsMode = Field(
@@ -237,12 +246,29 @@ class vnsLDevVip(ManagedObject):
         description="The value for specifying if the device is legacy (classical VLAN/VXLAN) or supports service tag switching (STS).",
     )
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
-    package_model: Annotated[str, Field(max_length=512, alias="packageModel")] = ""
-    promiscuous_mode: bool = Field(default=False, alias="promMode", description="Promiscuous Mode")
+    package_model: Annotated[
+        str,
+        Field(max_length=512, validation_alias="packageModel", serialization_alias="packageModel"),
+    ] = ""
+    promiscuous_mode: bool = Field(
+        default=False,
+        validation_alias="promMode",
+        serialization_alias="promMode",
+        description="Promiscuous Mode",
+    )
     svc_type: VnsL4L7SvcType = Field(
-        default=VnsL4L7SvcType.OTHERS, alias="svcType", description="UI Template type"
+        default=VnsL4L7SvcType.OTHERS,
+        validation_alias="svcType",
+        serialization_alias="svcType",
+        description="UI Template type",
     )
     trunking: bool = Field(
         default=False, description="For virtual devices, if a trunking port group is to be used"

@@ -3,8 +3,11 @@
 from __future__ import annotations
 
 from typing import ClassVar, Annotated
-from pydantic import Field
+from pydantic import BeforeValidator, Field
 
+from niwaki.models._wire import Flags, parse_flags
+from niwaki.models._generated.enums.OspfDomControl import OspfDomControl
+from niwaki.models._generated.enums.OspfGRControls import OspfGRControls
 from niwaki.models._generated.enums.OspfMaxLsaAct import OspfMaxLsaAct
 
 from niwaki.models.base import ManagedObject
@@ -62,46 +65,72 @@ class ospfCtxPol(ManagedObject):
         Field(
             ge=1,
             le=4000000,
-            alias="bwRef",
+            validation_alias="bwRef",
+            serialization_alias="bwRef",
             description="The OSPF policy bandwidth reference. This is used to calculate the default metrics for an interface.",
         ),
     ] = 40000
-    control_knobs: str = Field(default="", alias="ctrl", description="DOM controls")
+    control_knobs: Annotated[Flags[OspfDomControl], BeforeValidator(parse_flags)] = Field(
+        default_factory=lambda: frozenset(),
+        validation_alias="ctrl",
+        serialization_alias="ctrl",
+        description="DOM controls",
+    )
     description: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
-    distance_preference: str = Field(
-        default="", alias="dist", description="The preferred administrative distance."
-    )
-    graceful_restart_controls: str = Field(
-        default="", alias="grCtrl", description="The graceful restart controls."
+    distance_preference: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=255,
+            validation_alias="dist",
+            serialization_alias="dist",
+            description="The preferred administrative distance.",
+        ),
+    ] = 110
+    graceful_restart_controls: Annotated[Flags[OspfGRControls], BeforeValidator(parse_flags)] = (
+        Field(
+            default_factory=lambda: frozenset({OspfGRControls.HELPER}),
+            validation_alias="grCtrl",
+            serialization_alias="grCtrl",
+            description="The graceful restart controls.",
+        )
     )
     min_arrival_interval: Annotated[
         int,
         Field(
             ge=10,
             le=600000,
-            alias="lsaArrivalIntvl",
+            validation_alias="lsaArrivalIntvl",
+            serialization_alias="lsaArrivalIntvl",
             description="The minimum interval between the arrival of each link-state advertisement (LSA).",
         ),
     ] = 1000
-    pacing_interval: str = Field(
-        default="",
-        alias="lsaGpPacingIntvl",
-        description="The interval in which LSAs are grouped and refreshed, checksummed, or aged. The duration of the LSA group pacing is inversely proportional to the number of LSAs that the router is handling. For example, if you have about 10,000 LSAs, you should decrease the pacing interval.",
-    )
+    pacing_interval: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=1800,
+            validation_alias="lsaGpPacingIntvl",
+            serialization_alias="lsaGpPacingIntvl",
+            description="The interval in which LSAs are grouped and refreshed, checksummed, or aged. The duration of the LSA group pacing is inversely proportional to the number of LSAs that the router is handling. For example, if you have about 10,000 LSAs, you should decrease the pacing interval.",
+        ),
+    ] = 10
     throttle_hold_interval: Annotated[
         int,
         Field(
             ge=50,
             le=30000,
-            alias="lsaHoldIntvl",
+            validation_alias="lsaHoldIntvl",
+            serialization_alias="lsaHoldIntvl",
             description="The incremental time (in milliseconds) used to calculate the subsequent rate limiting times for LSA generation.",
         ),
     ] = 5000
@@ -110,7 +139,8 @@ class ospfCtxPol(ManagedObject):
         Field(
             ge=50,
             le=30000,
-            alias="lsaMaxIntvl",
+            validation_alias="lsaMaxIntvl",
+            serialization_alias="lsaMaxIntvl",
             description="The generation throttle maximum interval between LSAs.",
         ),
     ] = 5000
@@ -119,16 +149,25 @@ class ospfCtxPol(ManagedObject):
         Field(
             ge=0,
             le=5000,
-            alias="lsaStartIntvl",
+            validation_alias="lsaStartIntvl",
+            serialization_alias="lsaStartIntvl",
             description="The generation throttle start-wait interval between LSAs.",
         ),
     ] = 0
-    max_ecmp: str = Field(
-        default="", alias="maxEcmp", description="The maximum ECMP for the OSPF protocol."
-    )
+    max_ecmp: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=64,
+            validation_alias="maxEcmp",
+            serialization_alias="maxEcmp",
+            description="The maximum ECMP for the OSPF protocol.",
+        ),
+    ] = 8
     action: OspfMaxLsaAct = Field(
         default=OspfMaxLsaAct.REJECT,
-        alias="maxLsaAction",
+        validation_alias="maxLsaAction",
+        serialization_alias="maxLsaAction",
         description="The action to take when the maximum LSA limit is reached.",
     )
     maximum_of_non_self_generated_lsas: Annotated[
@@ -136,7 +175,8 @@ class ospfCtxPol(ManagedObject):
         Field(
             ge=1,
             le=4294967295,
-            alias="maxLsaNum",
+            validation_alias="maxLsaNum",
+            serialization_alias="maxLsaNum",
             description="The maximum number of LSAs that are not self-generated.",
         ),
     ] = 20000
@@ -145,7 +185,8 @@ class ospfCtxPol(ManagedObject):
         Field(
             ge=1,
             le=1440,
-            alias="maxLsaResetIntvl",
+            validation_alias="maxLsaResetIntvl",
+            serialization_alias="maxLsaResetIntvl",
             description="The time (in minutes) before the sleep count is reset to zero.",
         ),
     ] = 10
@@ -154,29 +195,47 @@ class ospfCtxPol(ManagedObject):
         Field(
             ge=1,
             le=4294967295,
-            alias="maxLsaSleepCnt",
+            validation_alias="maxLsaSleepCnt",
+            serialization_alias="maxLsaSleepCnt",
             description="The number of times the OSPF process can consecutively be placed into the sleep state.",
         ),
     ] = 5
-    sleep_interval: str = Field(
-        default="",
-        alias="maxLsaSleepIntvl",
-        description="The time (in minutes) to ignore all neighbors after the maximum limit of LSAs has been exceeded.",
-    )
-    threshold: str = Field(
-        default="",
-        alias="maxLsaThresh",
-        description="The maximum link-state advertisement (LSA) threshold value (%) at which to generate a warning message.",
-    )
+    sleep_interval: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=1440,
+            validation_alias="maxLsaSleepIntvl",
+            serialization_alias="maxLsaSleepIntvl",
+            description="The time (in minutes) to ignore all neighbors after the maximum limit of LSAs has been exceeded.",
+        ),
+    ] = 5
+    threshold: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=100,
+            validation_alias="maxLsaThresh",
+            serialization_alias="maxLsaThresh",
+            description="The maximum link-state advertisement (LSA) threshold value (%) at which to generate a warning message.",
+        ),
+    ] = 75
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     owner_key: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerKey",
+            validation_alias="ownerKey",
+            serialization_alias="ownerKey",
             description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
@@ -185,7 +244,8 @@ class ospfCtxPol(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerTag",
+            validation_alias="ownerTag",
+            serialization_alias="ownerTag",
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
@@ -194,7 +254,8 @@ class ospfCtxPol(ManagedObject):
         Field(
             ge=1,
             le=600000,
-            alias="spfHoldIntvl",
+            validation_alias="spfHoldIntvl",
+            serialization_alias="spfHoldIntvl",
             description="The minimum hold time between SPF calculations.",
         ),
     ] = 1000
@@ -203,7 +264,8 @@ class ospfCtxPol(ManagedObject):
         Field(
             ge=1,
             le=600000,
-            alias="spfInitIntvl",
+            validation_alias="spfInitIntvl",
+            serialization_alias="spfInitIntvl",
             description="The initial delay interval for the SPF schedule.",
         ),
     ] = 200
@@ -212,7 +274,8 @@ class ospfCtxPol(ManagedObject):
         Field(
             ge=1,
             le=600000,
-            alias="spfMaxIntvl",
+            validation_alias="spfMaxIntvl",
+            serialization_alias="spfMaxIntvl",
             description="The maximum interval between SPF calculations. Each interval after the initial calculation is twice as long as the previous one until the wait interval reaches the maximum wait time specified.",
         ),
     ] = 5000

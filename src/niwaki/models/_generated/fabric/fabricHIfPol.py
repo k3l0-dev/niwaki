@@ -67,7 +67,8 @@ class fabricHIfPol(ManagedObject):
     ] = ""
     auto_negotiation_on_off: L1AutoNeg = Field(
         default=L1AutoNeg.ON,
-        alias="autoNeg",
+        validation_alias="autoNeg",
+        serialization_alias="autoNeg",
         description="The policy auto-negotiation. Auto-negotiation is an optional function of the IEEE 802.3u Fast Ethernet standard that enables devices to automatically exchange information over a link about speed and duplex abilities.",
     )
     description: Annotated[
@@ -75,33 +76,51 @@ class fabricHIfPol(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
-    dfe_delay_ms: str = Field(default="", alias="dfeDelayMs")
+    dfe_delay_ms: Annotated[
+        int, Field(ge=0, le=10000, validation_alias="dfeDelayMs", serialization_alias="dfeDelayMs")
+    ] = 0
     enable_disable_emi_retrain: L1EmiRetrain = Field(
-        default=L1EmiRetrain.DISABLE, alias="emiRetrain"
+        default=L1EmiRetrain.DISABLE,
+        validation_alias="emiRetrain",
+        serialization_alias="emiRetrain",
     )
     fec_mode: L1FECMode = Field(
         default=L1FECMode.INHERIT,
-        alias="fecMode",
+        validation_alias="fecMode",
+        serialization_alias="fecMode",
         description="Forwarding error correction (FEC) mode. By incorporating error correction information into data packets, FEC improves the reliability of data transmission over networks that lack guaranteed delivery mechanisms.",
     )
-    link_debounce_interval_msec: str = Field(
-        default="",
-        alias="linkDebounce",
-        description="The interface policy administrative port link debounce interval. Enables the debounce timer for physical interface ports and sets it for a specified amount of time in milliseconds. The debounce timer is disabled if you specify the time to 0 ms.",
-    )
+    link_debounce_interval_msec: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=5000,
+            validation_alias="linkDebounce",
+            serialization_alias="linkDebounce",
+            description="The interface policy administrative port link debounce interval. Enables the debounce timer for physical interface ports and sets it for a specified amount of time in milliseconds. The debounce timer is disabled if you specify the time to 0 ms.",
+        ),
+    ] = 100
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     owner_key: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerKey",
+            validation_alias="ownerKey",
+            serialization_alias="ownerKey",
             description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
@@ -110,12 +129,15 @@ class fabricHIfPol(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerTag",
+            validation_alias="ownerTag",
+            serialization_alias="ownerTag",
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
     physical_media_type: L1PortPhyMediaType = Field(
-        default=L1PortPhyMediaType.AUTO, alias="portPhyMediaType"
+        default=L1PortPhyMediaType.AUTO,
+        validation_alias="portPhyMediaType",
+        serialization_alias="portPhyMediaType",
     )
     speed: L1Speed = Field(
         default=L1Speed.INHERIT,

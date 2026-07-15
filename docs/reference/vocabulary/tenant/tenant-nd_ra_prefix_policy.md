@@ -24,7 +24,7 @@ Accepted as keyword arguments of `.nd_ra_prefix_policy(name)` and of `.set(**att
 | parameter | wire | type | values | default | description |
 | --- | --- | --- | --- | --- | --- |
 | `name` *(positional)* | `name` | `str` | — | — | The name of the object. |
-| `prefix_controls` | `ctrl` | `str` | — | — | The RA prefix controls. |
+| `prefix_controls` | `ctrl` | {ref}`NdPfxControl <enum-ndpfxcontrol>` | `auto-cfg`, `on-link`, `router-address` | `auto-cfg, on-link` | The RA prefix controls. |
 | `description` | `descr` | `str` | — | — | Specifies a description of the policy definition. |
 | `valid_lifetime` | `lifetime` | `int` | — | `2592000` | The length of time for the prefix to remain valid. |
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |

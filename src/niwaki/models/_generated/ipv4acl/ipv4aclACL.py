@@ -62,19 +62,27 @@ class ipv4aclACL(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="The description of this configuration item.",
         ),
     ] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     sequence_number: Annotated[
         int,
         Field(
             ge=0,
             le=4294967295,
-            alias="seqNum",
+            validation_alias="seqNum",
+            serialization_alias="seqNum",
             description="An ISIS link-state packet sequence number.",
         ),
     ] = 0

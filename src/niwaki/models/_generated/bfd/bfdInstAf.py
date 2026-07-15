@@ -42,7 +42,9 @@ class bfdInstAf(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    type_of_the_address_family: BfdAfT = Field(default=BfdAfT.IPV4, alias="type")
+    type_of_the_address_family: BfdAfT = Field(
+        default=BfdAfT.IPV4, validation_alias="type", serialization_alias="type"
+    )
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[
@@ -57,21 +59,32 @@ class bfdInstAf(ManagedObject):
         str,
         Field(
             pattern="^[0-9a-fA-F.:/ ]+$",
-            alias="echoSrcAddr",
+            validation_alias="echoSrcAddr",
+            serialization_alias="echoSrcAddr",
             description="BFD Source Address for Echo frames",
         ),
     ] = ""
     name: Annotated[
         str, Field(min_length=1, max_length=128, description="The name of the object.")
     ] = ""
-    slow_timer_interval: str = Field(
-        default="",
-        alias="slowIntvl",
-        description="Slow mode timer interval. This is the interval at which BFD control packets are sent.",
-    )
-    startup_timer_interval: str = Field(
-        default="",
-        alias="startupIntvl",
-        description="Startup timer interval. This is the delay after which BFD sessions will be installed to LC.",
-    )
+    slow_timer_interval: Annotated[
+        int,
+        Field(
+            ge=1000,
+            le=30000,
+            validation_alias="slowIntvl",
+            serialization_alias="slowIntvl",
+            description="Slow mode timer interval. This is the interval at which BFD control packets are sent.",
+        ),
+    ] = 2000
+    startup_timer_interval: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=60,
+            validation_alias="startupIntvl",
+            serialization_alias="startupIntvl",
+            description="Startup timer interval. This is the delay after which BFD sessions will be installed to LC.",
+        ),
+    ] = 10
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

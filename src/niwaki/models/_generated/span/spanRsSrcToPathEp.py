@@ -45,7 +45,14 @@ class spanRsSrcToPathEp(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    target_dn: Annotated[str, Field(alias="tDn", description="The source end point path.")]
+    target_dn: Annotated[
+        str,
+        Field(
+            validation_alias="tDn",
+            serialization_alias="tDn",
+            description="The source end point path.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

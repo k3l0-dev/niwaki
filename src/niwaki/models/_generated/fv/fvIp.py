@@ -43,7 +43,13 @@ class fvIp(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     ip_address: Annotated[
-        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="addr", description="The peer IP address.")
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            validation_alias="addr",
+            serialization_alias="addr",
+            description="The peer IP address.",
+        ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────

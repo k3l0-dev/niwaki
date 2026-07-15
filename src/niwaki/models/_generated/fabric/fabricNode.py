@@ -51,7 +51,10 @@ class fabricNode(ManagedObject):
 
     # ── Configurable ───────────────────────────────────────────────────────────
     admin_state: FabricAdSt = Field(
-        default=FabricAdSt.ON, alias="adSt", description="The administrative state of the node."
+        default=FabricAdSt.ON,
+        validation_alias="adSt",
+        serialization_alias="adSt",
+        description="The administrative state of the node.",
     )
     annotation: Annotated[
         str,
@@ -62,6 +65,12 @@ class fabricNode(ManagedObject):
         ),
     ] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

@@ -24,7 +24,7 @@ Accepted as keyword arguments of `.vlan_pool(name, allocation_mode)` and of `.se
 | parameter | wire | type | values | default | description |
 | --- | --- | --- | --- | --- | --- |
 | `name` *(positional)* | `name` | `str` | — | — | The VLAN range namespace policy name. |
-| `allocation_mode` *(positional)* | `allocMode` | `str` | — | — | The allocation mode of the VLAN pool. |
+| `allocation_mode` *(positional)* | `allocMode` | {ref}`FvnsAllocMode <enum-fvnsallocmode>` | `dynamic`, `static` | — | The allocation mode of the VLAN pool. |
 | `description` | `descr` | `str` | — | — | Specifies a description of the policy definition. |
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |

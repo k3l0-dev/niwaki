@@ -58,7 +58,8 @@ class fvRsOspfCtxPol(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9_.:-]+$",
-            alias="tnOspfCtxPolName",
+            validation_alias="tnOspfCtxPolName",
+            serialization_alias="tnOspfCtxPolName",
             description="The name of the OSPF timers policy associated with this context.",
         ),
     ] = ""

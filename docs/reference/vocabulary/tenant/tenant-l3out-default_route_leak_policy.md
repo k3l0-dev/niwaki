@@ -25,4 +25,4 @@ Accepted as keyword arguments of `.default_route_leak_policy()` and of `.set(**a
 | --- | --- | --- | --- | --- | --- |
 | `always_advertise_default_leak` | `always` | {ref}`L3extAlways <enum-l3extalways>` | `no`, `yes` | `no` | A property to indicate whether or not to always advertise the default route leak (OSPF specific). |
 | `default_leak_advertise_criteria` | `criteria` | {ref}`L3extDefaultRtLeakCriteriaType <enum-l3extdefaultrtleakcriteriatype>` | `in-addition`, `none`, `only` | `only` | A property that specifies an exact or subset matching of communities. |
-| `scope_of_default_route_leak_policy` | `scope` | `str` | — | — | The domain applicable to the capability. |
+| `scope_of_default_route_leak_policy` | `scope` | {ref}`L3extDefaultRtLeakScopeType <enum-l3extdefaultrtleakscopetype>` | `none`, `ctx`, `l3-out` | `l3-out` | The domain applicable to the capability. |

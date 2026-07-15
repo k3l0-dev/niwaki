@@ -25,12 +25,12 @@ Accepted as keyword arguments of `.bfd_interface_policy(name)` and of `.set(**at
 | --- | --- | --- | --- | --- | --- |
 | `name` *(positional)* | `name` | `str` | — | — | — |
 | `enable_disable_sessions` | `adminSt` | {ref}`NwAdminSt <enum-nwadminst>` | `disabled`, `enabled` | `enabled` | Enable/Disable sessions |
-| `interface_controls` | `ctrl` | `str` | — | — | Interface controls |
+| `interface_controls` | `ctrl` | {ref}`BfdIfControl <enum-bfdifcontrol>` | `opt-subif` | — | Interface controls |
 | `description` | `descr` | `str` | — | — | Specifies a description of the policy definition. |
-| `detection_multiplier` | `detectMult` | `str` | — | — | Detection multiplier. |
+| `detection_multiplier` | `detectMult` | `int` | — | `3` | Detection multiplier. |
 | `enable_disable_echo_mode` | `echoAdminSt` | {ref}`NwAdminSt <enum-nwadminst>` | `disabled`, `enabled` | `enabled` | Enable/Disable Echo mode. |
-| `echo_rx_interval` | `echoRxIntvl` | `str` | — | — | Echo rx interval. |
-| `required_minimum_rx_interval` | `minRxIntvl` | `str` | — | — | Required minimum rx interval. |
-| `desired_minimum_tx_interval` | `minTxIntvl` | `str` | — | — | Desired minimum tx interval. |
+| `echo_rx_interval` | `echoRxIntvl` | `int` | — | `50` | Echo rx interval. |
+| `required_minimum_rx_interval` | `minRxIntvl` | `int` | — | `50` | Required minimum rx interval. |
+| `desired_minimum_tx_interval` | `minTxIntvl` | `int` | — | `50` | Desired minimum tx interval. |
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |

@@ -21,12 +21,12 @@ Accepted as keyword arguments of `.filter_entry(ip_protocol, source_ip_prefix, d
 
 | parameter | wire | type | values | default | description |
 | --- | --- | --- | --- | --- | --- |
-| `ip_protocol` *(positional)* | `ipProto` | `str` | — | — | The IP protocol. |
+| `ip_protocol` *(positional)* | `ipProto` | `int` | — | — | The IP protocol. |
 | `source_ip_prefix` *(positional)* | `srcAddr` | `str` | — | — | Source IP Prefix |
 | `destination_ip_prefix` *(positional)* | `dstAddr` | `str` | — | — | Destination IP Prefix |
-| `first_source_port` *(positional)* | `srcPortFrom` | `str` | — | — | The First (Starting) Source Port |
-| `last_source_port` *(positional)* | `srcPortTo` | `str` | — | — | The Last Source Port |
-| `first_destination_port` *(positional)* | `dstPortFrom` | `str` | — | — | — |
-| `dst_port_to` *(positional)* | `dstPortTo` | `str` | — | — | — |
+| `first_source_port` *(positional)* | `srcPortFrom` | `int` | — | — | The First (Starting) Source Port |
+| `last_source_port` *(positional)* | `srcPortTo` | `int` | — | — | The Last Source Port |
+| `first_destination_port` *(positional)* | `dstPortFrom` | `int` | — | — | — |
+| `dst_port_to` *(positional)* | `dstPortTo` | `int` | — | — | — |
 | `description` | `descr` | `str` | — | — | Specifies the description of a policy component. |
 | `name` | `name` | `str` | — | — | — |

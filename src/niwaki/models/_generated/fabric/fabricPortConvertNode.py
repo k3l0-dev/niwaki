@@ -34,7 +34,7 @@ class fabricPortConvertNode(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    node: Annotated[str, Field(description="explicit properties")]
+    node: Annotated[int, Field(ge=101, le=16000, description="explicit properties")] = 0
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[
@@ -45,6 +45,10 @@ class fabricPortConvertNode(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    convert_node_policies: bool = Field(default=False, alias="convertNode")
-    convert_port_policies: bool = Field(default=False, alias="convertPort")
+    convert_node_policies: bool = Field(
+        default=False, validation_alias="convertNode", serialization_alias="convertNode"
+    )
+    convert_port_policies: bool = Field(
+        default=False, validation_alias="convertPort", serialization_alias="convertPort"
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

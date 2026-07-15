@@ -40,7 +40,8 @@ class dnsProv(ManagedObject):
         str,
         Field(
             pattern="^[0-9a-fA-F.:/ ]+$",
-            alias="addr",
+            validation_alias="addr",
+            serialization_alias="addr",
             description="The address of the DNS provider.",
         ),
     ]
@@ -56,11 +57,18 @@ class dnsProv(ManagedObject):
     ] = ""
     name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     prefered_dns_provider: bool = Field(
         default=False,
-        alias="preferred",
+        validation_alias="preferred",
+        serialization_alias="preferred",
         description="Specifies if this the preferred provider. Only one provider in the group should be preferred",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

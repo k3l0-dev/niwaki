@@ -62,7 +62,8 @@ class aaaLdapProvider(ManagedObject):
     # ── Configurable ───────────────────────────────────────────────────────────
     ssl_certificate_validation_level: AaaLdapSSLStrictnessLevel = Field(
         default=AaaLdapSSLStrictnessLevel.STRICT,
-        alias="SSLValidationLevel",
+        validation_alias="SSLValidationLevel",
+        serialization_alias="SSLValidationLevel",
         description="The LDAP Server SSL Certificate validation level.",
     )
     annotation: Annotated[
@@ -77,20 +78,23 @@ class aaaLdapProvider(ManagedObject):
         str,
         Field(
             max_length=63,
-            alias="attribute",
+            validation_alias="attribute",
+            serialization_alias="attribute",
             description="The attribute to be downloaded that contains user role and domain information. If specified, this property takes precedence over the value of the LDAP attribute specified in the default LDAP parameters pane (Admin -> AAA -> Ldap Management).",
         ),
     ] = ""
     authentication_method: AaaLdapAuthMethod = Field(
         default=AaaLdapAuthMethod.LDAPBIND,
-        alias="authMethod",
+        validation_alias="authMethod",
+        serialization_alias="authMethod",
         description="Method used for authenticating the user - LDAP Bind or Password Compare",
     )
     ldap_base_dn: Annotated[
         str,
         Field(
             max_length=127,
-            alias="basedn",
+            validation_alias="basedn",
+            serialization_alias="basedn",
             description="The LDAP base DN to be used in a user search. If specified, this property takes precedence over the value of the LDAP base DN specified in the Default LDAP Authentication Settings pane (Admin > AAA > LDAP Management).",
         ),
     ] = ""
@@ -99,42 +103,67 @@ class aaaLdapProvider(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
     enable_ssl: bool = Field(
         default=False,
-        alias="enableSSL",
+        validation_alias="enableSSL",
+        serialization_alias="enableSSL",
         description="A property for enabling an SSL connection with the LDAP provider.",
     )
     ldap_filter: Annotated[
         str,
         Field(
             max_length=63,
-            alias="filter",
+            validation_alias="filter",
+            serialization_alias="filter",
             description="The LDAP filter to be used in a user search.",
         ),
     ] = ""
     password: Annotated[
-        str, Field(alias="key", repr=False, description="A password for the AAA provider database.")
+        str,
+        Field(
+            validation_alias="key",
+            serialization_alias="key",
+            repr=False,
+            description="A password for the AAA provider database.",
+        ),
     ] = ""
     periodic_server_monitoring: AaaMonitorServerType = Field(
-        default=AaaMonitorServerType.DISABLED, alias="monitorServer"
+        default=AaaMonitorServerType.DISABLED,
+        validation_alias="monitorServer",
+        serialization_alias="monitorServer",
     )
     periodic_server_monitoring_password: Annotated[
-        str, Field(alias="monitoringPassword", repr=False)
+        str,
+        Field(
+            validation_alias="monitoringPassword",
+            serialization_alias="monitoringPassword",
+            repr=False,
+        ),
     ] = ""
-    periodic_server_monitoring_username: str = Field(default="", alias="monitoringUser")
+    periodic_server_monitoring_username: str = Field(
+        default="", validation_alias="monitoringUser", serialization_alias="monitoringUser"
+    )
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     owner_key: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerKey",
+            validation_alias="ownerKey",
+            serialization_alias="ownerKey",
             description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
@@ -143,7 +172,8 @@ class aaaLdapProvider(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerTag",
+            validation_alias="ownerTag",
+            serialization_alias="ownerTag",
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
@@ -155,7 +185,8 @@ class aaaLdapProvider(ManagedObject):
         str,
         Field(
             max_length=127,
-            alias="rootdn",
+            validation_alias="rootdn",
+            serialization_alias="rootdn",
             description="The root DN or bind DN of the LDAP provider.",
         ),
     ] = ""
@@ -164,7 +195,8 @@ class aaaLdapProvider(ManagedObject):
         Field(
             ge=5,
             le=60,
-            alias="timeout",
+            validation_alias="timeout",
+            serialization_alias="timeout",
             description="The timeout for communication with an LDAP provider server.",
         ),
     ] = 30

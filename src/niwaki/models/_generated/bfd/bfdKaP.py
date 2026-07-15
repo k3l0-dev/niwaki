@@ -48,24 +48,44 @@ class bfdKaP(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    detect_mult: str = Field(
-        default="",
-        alias="detectMult",
-        description="Detection multiplier. This is the desired detection time multiplier for BFD packets on the local system.",
-    )
-    echo_rx_intvl: str = Field(
-        default="",
-        alias="echoRxIntvl",
-        description="Echo rx interval. This is the minimum interval, in ms, between received BFD echo packets that this system is capable of supporting.",
-    )
-    min_rx_intvl: str = Field(
-        default="",
-        alias="minRxIntvl",
-        description="Required minimum rx interval. This is the minimum interval, in ms, between received BFD control packets that this system is capable of supporting.",
-    )
-    min_tx_intvl: str = Field(
-        default="",
-        alias="minTxIntvl",
-        description="Desired minimum tx interval. This is the minimum interval, in ms, that the system would like to use when transmitting BFD control packets.",
-    )
+    detect_mult: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=50,
+            validation_alias="detectMult",
+            serialization_alias="detectMult",
+            description="Detection multiplier. This is the desired detection time multiplier for BFD packets on the local system.",
+        ),
+    ] = 3
+    echo_rx_intvl: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=999,
+            validation_alias="echoRxIntvl",
+            serialization_alias="echoRxIntvl",
+            description="Echo rx interval. This is the minimum interval, in ms, between received BFD echo packets that this system is capable of supporting.",
+        ),
+    ] = 50
+    min_rx_intvl: Annotated[
+        int,
+        Field(
+            ge=50,
+            le=999,
+            validation_alias="minRxIntvl",
+            serialization_alias="minRxIntvl",
+            description="Required minimum rx interval. This is the minimum interval, in ms, between received BFD control packets that this system is capable of supporting.",
+        ),
+    ] = 50
+    min_tx_intvl: Annotated[
+        int,
+        Field(
+            ge=50,
+            le=999,
+            validation_alias="minTxIntvl",
+            serialization_alias="minTxIntvl",
+            description="Desired minimum tx interval. This is the minimum interval, in ms, that the system would like to use when transmitting BFD control packets.",
+        ),
+    ] = 50
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

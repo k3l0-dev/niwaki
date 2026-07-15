@@ -38,7 +38,10 @@ class nlbNlbTgtIf(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    multicast_source_ip: Annotated[str, Field(alias="id", description="Target interface Id")]
+    multicast_source_ip: Annotated[
+        str,
+        Field(validation_alias="id", serialization_alias="id", description="Target interface Id"),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[

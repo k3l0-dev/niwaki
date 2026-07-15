@@ -3,8 +3,9 @@
 from __future__ import annotations
 
 from typing import ClassVar, Annotated
-from pydantic import Field
+from pydantic import BeforeValidator, Field
 
+from niwaki.models._wire import Flags, parse_flags
 from niwaki.models._generated.enums.BgpConfigIssues import BgpConfigIssues
 from niwaki.models._generated.enums.RtctrlDirection import RtctrlDirection
 
@@ -65,7 +66,12 @@ class bgpRsPeerToProfile(ManagedObject):
         default=RtctrlDirection.IMPORT, description="The connector direction."
     )
     target_dn: Annotated[
-        str, Field(alias="tDn", description="The distinguished name of the target.")
+        str,
+        Field(
+            validation_alias="tDn",
+            serialization_alias="tDn",
+            description="The distinguished name of the target.",
+        ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
@@ -77,9 +83,10 @@ class bgpRsPeerToProfile(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    config_issues: BgpConfigIssues = Field(
-        default=BgpConfigIssues.NONE,
-        alias="configIssues",
+    config_issues: Annotated[Flags[BgpConfigIssues], BeforeValidator(parse_flags)] = Field(
+        default_factory=lambda: frozenset({BgpConfigIssues.NONE}),
+        validation_alias="configIssues",
+        serialization_alias="configIssues",
         description="Bitmask representation of the configuration issues found during the endpoint group deployment.",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

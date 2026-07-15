@@ -48,7 +48,12 @@ class fvRsOtmListMember(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     target_dn: Annotated[
-        str, Field(alias="tDn", description="The distinguished name of the target.")
+        str,
+        Field(
+            validation_alias="tDn",
+            serialization_alias="tDn",
+            description="The distinguished name of the target.",
+        ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
@@ -62,8 +67,10 @@ class fvRsOtmListMember(ManagedObject):
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     weight: Annotated[
-        str,
+        int,
         Field(
-            description="The weight of the fault in calculating the health score of an object. A higher weight causes a higher degradation of the health score of the affected object."
+            ge=1,
+            le=255,
+            description="The weight of the fault in calculating the health score of an object. A higher weight causes a higher degradation of the health score of the affected object.",
         ),
-    ] = ""
+    ] = 10

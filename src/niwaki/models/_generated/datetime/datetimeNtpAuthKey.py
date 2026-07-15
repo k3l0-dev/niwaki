@@ -39,7 +39,16 @@ class datetimeNtpAuthKey(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    auth_key_id: Annotated[str, Field(alias="id", description="Specifies the NTP key ID.")]
+    auth_key_id: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=65535,
+            validation_alias="id",
+            serialization_alias="id",
+            description="Specifies the NTP key ID.",
+        ),
+    ] = 1
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[
@@ -55,7 +64,8 @@ class datetimeNtpAuthKey(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies the description of a policy component.",
         ),
     ] = ""
@@ -63,15 +73,25 @@ class datetimeNtpAuthKey(ManagedObject):
         str, Field(max_length=40, repr=False, description="The NTP authentication key.")
     ] = ""
     type_of_authentication_key: DatetimeKeyType = Field(
-        default=DatetimeKeyType.MD5, alias="keyType", description="NTP authentication key type"
+        default=DatetimeKeyType.MD5,
+        validation_alias="keyType",
+        serialization_alias="keyType",
+        description="NTP authentication key type",
     )
     name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     trusted_state: bool = Field(
         default=False,
-        alias="trusted",
+        validation_alias="trusted",
+        serialization_alias="trusted",
         description="A property that indicates if the NTP authentication is trusted.",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

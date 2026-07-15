@@ -3,7 +3,10 @@
 from __future__ import annotations
 
 from typing import ClassVar, Annotated
-from pydantic import Field
+from pydantic import BeforeValidator, Field
+
+from niwaki.models._wire import Flags, parse_flags
+from niwaki.models._generated.enums.NotifRefreshType import NotifRefreshType
 
 from niwaki.models.base import ManagedObject
 
@@ -39,7 +42,8 @@ class notifOperClass(ManagedObject):
         Field(
             min_length=1,
             max_length=512,
-            alias="className",
+            validation_alias="className",
+            serialization_alias="className",
             description="The class name of the object used for a comparison filter. This property is used internally to validate compatibility between two firmware images.",
         ),
     ]
@@ -53,6 +57,12 @@ class notifOperClass(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    is_chatty: bool = Field(default=False, alias="isChatty")
-    refresh_type: str = Field(default="", alias="refreshType")
+    is_chatty: bool = Field(
+        default=False, validation_alias="isChatty", serialization_alias="isChatty"
+    )
+    refresh_type: Annotated[Flags[NotifRefreshType], BeforeValidator(parse_flags)] = Field(
+        default_factory=lambda: frozenset({NotifRefreshType.ON_CHANGE}),
+        validation_alias="refreshType",
+        serialization_alias="refreshType",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

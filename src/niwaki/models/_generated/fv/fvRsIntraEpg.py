@@ -57,7 +57,8 @@ class fvRsIntraEpg(ManagedObject):
             min_length=1,
             max_length=64,
             pattern="^[a-zA-Z0-9_.:-]+$",
-            alias="tnVzBrCPName",
+            validation_alias="tnVzBrCPName",
+            serialization_alias="tnVzBrCPName",
             description="The binary contract name.",
         ),
     ]

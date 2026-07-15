@@ -49,23 +49,34 @@ class healthEvalP(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
     ignore_acked_faults: bool = Field(
-        default=False, alias="ignoreAckedFaults", description="Fault : No penalty for acked faults"
+        default=False,
+        validation_alias="ignoreAckedFaults",
+        serialization_alias="ignoreAckedFaults",
+        description="Fault : No penalty for acked faults",
     )
     name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     owner_key: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerKey",
+            validation_alias="ownerKey",
+            serialization_alias="ownerKey",
             description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
@@ -74,20 +85,49 @@ class healthEvalP(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerTag",
+            validation_alias="ownerTag",
+            serialization_alias="ownerTag",
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
-    penalty_of_fault_severity_critical_in: str = Field(
-        default="", alias="pnltCrit", description="The fault penalty: Critical"
-    )
-    penalty_of_fault_severity_major_in: str = Field(
-        default="", alias="pnltMajor", description="The fault penalty: Major"
-    )
-    penalty_of_fault_severity_minor_in: str = Field(
-        default="", alias="pnltMinor", description="The fault penalty: Minor"
-    )
-    penalty_of_fault_severity_warning_in: str = Field(
-        default="", alias="pnltWarn", description="The fault penalty: Warning"
-    )
+    penalty_of_fault_severity_critical_in: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=100,
+            validation_alias="pnltCrit",
+            serialization_alias="pnltCrit",
+            description="The fault penalty: Critical",
+        ),
+    ] = 100
+    penalty_of_fault_severity_major_in: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=100,
+            validation_alias="pnltMajor",
+            serialization_alias="pnltMajor",
+            description="The fault penalty: Major",
+        ),
+    ] = 10
+    penalty_of_fault_severity_minor_in: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=100,
+            validation_alias="pnltMinor",
+            serialization_alias="pnltMinor",
+            description="The fault penalty: Minor",
+        ),
+    ] = 2
+    penalty_of_fault_severity_warning_in: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=100,
+            validation_alias="pnltWarn",
+            serialization_alias="pnltWarn",
+            description="The fault penalty: Warning",
+        ),
+    ] = 1
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

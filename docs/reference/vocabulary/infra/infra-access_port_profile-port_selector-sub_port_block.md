@@ -25,9 +25,9 @@ Accepted as keyword arguments of `.sub_port_block(name)` and of `.set(**attrs)` 
 | --- | --- | --- | --- | --- | --- |
 | `name` *(positional)* | `name` | `str` | — | — | The name of the object. |
 | `description` | `descr` | `str` | — | — | The description of this configuration item. |
-| `from_module_id` | `fromCard` | `str` | — | — | — |
-| `from_port_id` | `fromPort` | `str` | — | — | — |
-| `from_sub_port_id` | `fromSubPort` | `str` | — | — | — |
-| `to_module_id` | `toCard` | `str` | — | — | — |
-| `to_port_id` | `toPort` | `str` | — | — | — |
-| `to_sub_port_id` | `toSubPort` | `str` | — | — | — |
+| `from_module_id` | `fromCard` | `int` | — | `1` | — |
+| `from_port_id` | `fromPort` | `int` | — | `1` | — |
+| `from_sub_port_id` | `fromSubPort` | `int` | — | `1` | — |
+| `to_module_id` | `toCard` | `int` | — | `1` | — |
+| `to_port_id` | `toPort` | `int` | — | `1` | — |
+| `to_sub_port_id` | `toSubPort` | `int` | — | `1` | — |

@@ -42,7 +42,8 @@ class bfdMicroBfdP(ManagedObject):
     # ── Configurable ───────────────────────────────────────────────────────────
     microbfd: bool = Field(
         default=False,
-        alias="adminState",
+        validation_alias="adminState",
+        serialization_alias="adminState",
         description="The destination policy administrative state. If enabled, the system uses the destination policy when an error matching the associated cause is encountered. Otherwise, the system ignores the policy even if a matching error occurs. By default, all policies are enabled.",
     )
     annotation: Annotated[
@@ -58,16 +59,31 @@ class bfdMicroBfdP(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies the description of a policy component.",
         ),
     ] = ""
     micro_bfd_destination_address: Annotated[
-        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="dst", description="Destination address")
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            validation_alias="dst",
+            serialization_alias="dst",
+            description="Destination address",
+        ),
     ] = ""
     name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
-    micro_bfd_start_timer: Annotated[int, Field(ge=0, alias="stTm")] = 0
+    micro_bfd_start_timer: Annotated[
+        int, Field(ge=0, le=3600, validation_alias="stTm", serialization_alias="stTm")
+    ] = 0
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

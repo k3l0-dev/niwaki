@@ -3,10 +3,12 @@
 from __future__ import annotations
 
 from typing import ClassVar, Annotated
-from pydantic import Field
+from pydantic import BeforeValidator, Field
 
+from niwaki.models._wire import Flags, parse_flags
 from niwaki.models._generated.enums.ActionAdminSt import ActionAdminSt
 from niwaki.models._generated.enums.ActionType import ActionType
+from niwaki.models._generated.enums.BgpPeerRefDir import BgpPeerRefDir
 from niwaki.models._generated.enums.BgpPeerRefMode import BgpPeerRefMode
 
 from niwaki.models.base import ManagedObject
@@ -42,7 +44,8 @@ class bgpPeerEntryClearPeerLTask(ManagedObject):
     # ── Configurable ───────────────────────────────────────────────────────────
     admin_state: ActionAdminSt = Field(
         default=ActionAdminSt.UNKNOWN,
-        alias="adminSt",
+        validation_alias="adminSt",
+        serialization_alias="adminSt",
         description="The administrative state of the object or policy.",
     )
     annotation: Annotated[
@@ -55,11 +58,21 @@ class bgpPeerEntryClearPeerLTask(ManagedObject):
     ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            validation_alias="descr",
+            serialization_alias="descr",
+        ),
     ] = ""
-    dir: Annotated[str, Field(description="Direction of the task.")] = ""
+    dir: Annotated[Flags[BgpPeerRefDir], BeforeValidator(parse_flags)] = Field(
+        default_factory=lambda: frozenset(), description="Direction of the task."
+    )
     task_frequency: str = Field(
-        default="", alias="freq", description="Frequency at which tasks are executed"
+        default="",
+        validation_alias="freq",
+        serialization_alias="freq",
+        description="Frequency at which tasks are executed",
     )
     mode: BgpPeerRefMode = Field(
         default=BgpPeerRefMode.HARD, description="Mode of the clearing task."

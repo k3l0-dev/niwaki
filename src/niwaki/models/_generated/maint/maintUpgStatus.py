@@ -50,7 +50,8 @@ class maintUpgStatus(ManagedObject):
             min_length=1,
             max_length=64,
             pattern="^[a-zA-Z0-9_.:-]+$",
-            alias="polName",
+            validation_alias="polName",
+            serialization_alias="polName",
             description="TBD: status is mostly implicit. Only time its set externally is to let a paused job continue.",
         ),
     ]
@@ -66,7 +67,8 @@ class maintUpgStatus(ManagedObject):
     ] = ""
     run_status: MaintSchedulerStatus = Field(
         default=MaintSchedulerStatus.RUNNING,
-        alias="runStatus",
+        validation_alias="runStatus",
+        serialization_alias="runStatus",
         description="The run status of the maintenance policy scheduler.",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

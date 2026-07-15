@@ -60,7 +60,8 @@ class l3extRsEctx(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9_.-]+$",
-            alias="tnFvCtxName",
+            validation_alias="tnFvCtxName",
+            serialization_alias="tnFvCtxName",
             description="The target name of the relation that defines which private network (layer 3 context or VRF) is associated with the external endpoint group networks (layer 3 instance profile).",
         ),
     ] = ""

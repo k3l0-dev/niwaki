@@ -44,14 +44,22 @@ class opflexODevCliCmdReq(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    cmd_str: Annotated[str, Field(max_length=512, alias="cmdStr")] = ""
-    id: Annotated[str, Field(description="An identifier .")] = ""
+    cmd_str: Annotated[
+        str, Field(max_length=512, validation_alias="cmdStr", serialization_alias="cmdStr")
+    ] = ""
+    id: Annotated[int, Field(description="An identifier .")] = 0
     name: Annotated[
         str,
         Field(max_length=16, pattern="^[a-zA-Z0-9_.:-]+$", description="The name of the object."),
     ] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    version: Annotated[str, Field(description="The version of the compatibility catalog.")] = ""
+    version: Annotated[int, Field(description="The version of the compatibility catalog.")] = 0

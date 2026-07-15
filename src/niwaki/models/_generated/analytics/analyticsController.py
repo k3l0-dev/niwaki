@@ -53,18 +53,47 @@ class analyticsController(ManagedObject):
     ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            validation_alias="descr",
+            serialization_alias="descr",
+        ),
     ] = ""
     image_uri: Annotated[
-        str, Field(max_length=512, alias="imageUri", description="RPM image uri")
+        str,
+        Field(
+            max_length=512,
+            validation_alias="imageUri",
+            serialization_alias="imageUri",
+            description="RPM image uri",
+        ),
     ] = ""
     image_uri2: Annotated[
-        str, Field(max_length=512, alias="imageUri2", description="RPM image uri2")
+        str,
+        Field(
+            max_length=512,
+            validation_alias="imageUri2",
+            serialization_alias="imageUri2",
+            description="RPM image uri2",
+        ),
     ] = ""
     image_version: Annotated[
-        str, Field(max_length=512, alias="imageVer", description="RPM image version")
+        str,
+        Field(
+            max_length=512,
+            validation_alias="imageVer",
+            serialization_alias="imageVer",
+            description="RPM image version",
+        ),
     ] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

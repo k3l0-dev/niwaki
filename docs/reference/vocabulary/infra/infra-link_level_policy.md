@@ -26,10 +26,10 @@ Accepted as keyword arguments of `.link_level_policy(name)` and of `.set(**attrs
 | `name` *(positional)* | `name` | `str` | — | — | The name of the interface policy. This name can be up to 64 characters. Note that you cannot change this name after the object has been saved. |
 | `auto_negotiation_on_off` | `autoNeg` | {ref}`L1AutoNeg <enum-l1autoneg>` | `off`, `on`, `on-enforce` | `on` | The policy auto-negotiation. Auto-negotiation is an optional function of the IEEE 802.3u Fast Ethernet standard that enables devices to automatically exchange information over a link about speed and duplex abilities. |
 | `description` | `descr` | `str` | — | — | Specifies a description of the policy definition. |
-| `dfe_delay_ms` | `dfeDelayMs` | `str` | — | — | — |
+| `dfe_delay_ms` | `dfeDelayMs` | `int` | — | `0` | — |
 | `enable_disable_emi_retrain` | `emiRetrain` | {ref}`L1EmiRetrain <enum-l1emiretrain>` | `disable`, `enable` | `disable` | — |
 | `fec_mode` | `fecMode` | {ref}`L1FECMode <enum-l1fecmode>` | `auto-fec`, `cl74-fc-fec`, `cl91-rs-fec`, `cons16-rs-fec`, `disable-fec`, `ieee-rs-fec`, `inherit`, `kp-fec` | `inherit` | Forwarding error correction (FEC) mode. By incorporating error correction information into data packets, FEC improves the reliability of data transmission over networks that lack guaranteed delivery mechanisms. |
-| `link_debounce_interval_msec` | `linkDebounce` | `str` | — | — | The interface policy administrative port link debounce interval. Enables the debounce timer for physical interface ports and sets it for a specified amount of time in milliseconds. The debounce timer is disabled if you specify the time to 0 ms. |
+| `link_debounce_interval_msec` | `linkDebounce` | `int` | — | `100` | The interface policy administrative port link debounce interval. Enables the debounce timer for physical interface ports and sets it for a specified amount of time in milliseconds. The debounce timer is disabled if you specify the time to 0 ms. |
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |
 | `physical_media_type` | `portPhyMediaType` | {ref}`L1PortPhyMediaType <enum-l1portphymediatype>` | `auto`, `sfp-10g-tx` | `auto` | — |

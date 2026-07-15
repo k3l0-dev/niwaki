@@ -48,8 +48,16 @@ class infraLoNode(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    is_out_of_band_management_plane_engaged: bool = Field(default=False, alias="isOobNotInfra")
+    is_out_of_band_management_plane_engaged: bool = Field(
+        default=False, validation_alias="isOobNotInfra", serialization_alias="isOobNotInfra"
+    )
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

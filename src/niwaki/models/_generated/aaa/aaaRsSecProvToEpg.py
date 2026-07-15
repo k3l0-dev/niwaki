@@ -51,7 +51,8 @@ class aaaRsSecProvToEpg(ManagedObject):
     ] = ""
     target_dn: str = Field(
         default="",
-        alias="tDn",
+        validation_alias="tDn",
+        serialization_alias="tDn",
         description="The distinguished name for the In-band or Out-of-band endpoint group. In-band and Out-of-band management endpoint groups consist of switches (leaves/spines) and APICs that are part of the associated out-of-band or in-band management zone.",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

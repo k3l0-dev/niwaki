@@ -24,26 +24,26 @@ Accepted as keyword arguments of `.storm_control_policy(name)` and of `.set(**at
 | parameter | wire | type | values | default | description |
 | --- | --- | --- | --- | --- | --- |
 | `name` *(positional)* | `name` | `str` | — | — | The storm control policy name. |
-| `broadcast_max_burst_size` | `bcBurstPps` | `int` | — | `0` | burst rate in pps |
-| `bc_burst_rate` | `bcBurstRate` | `str` | — | — | burst rate in % (upto 1 decimal) |
-| `broadcast_traffic_rate` | `bcRate` | `str` | — | — | rate in % (upto 1 decimal) |
-| `bc_rate_pps` | `bcRatePps` | `int` | — | `0` | rate in pps |
-| `max_burst_size` | `burstPps` | `int` | — | `0` | The packets per second (PPS) burst interval rate for the storm control policy. During this interval, the traffic level which is expressed as packets flowing per second through the port, is then compared with the traffic storm control level that you configured. |
-| `burst_rate` | `burstRate` | `str` | — | — | The traffic burst rate percentage. |
+| `broadcast_max_burst_size` | `bcBurstPps` | `int` | — | `unspecified` | burst rate in pps |
+| `bc_burst_rate` | `bcBurstRate` | `float` | — | `100.0` | burst rate in % (upto 1 decimal) |
+| `broadcast_traffic_rate` | `bcRate` | `float` | — | `100.0` | rate in % (upto 1 decimal) |
+| `bc_rate_pps` | `bcRatePps` | `int` | — | `unspecified` | rate in pps |
+| `max_burst_size` | `burstPps` | `int` | — | `unspecified` | The packets per second (PPS) burst interval rate for the storm control policy. During this interval, the traffic level which is expressed as packets flowing per second through the port, is then compared with the traffic storm control level that you configured. |
+| `burst_rate` | `burstRate` | `float` | — | `100.0` | The traffic burst rate percentage. |
 | `description` | `descr` | `str` | — | — | Specifies a description of the policy definition. |
 | `packet_type_uc_bc_mc_config_valid_yes_no` | `isUcMcBcStormPktCfgValid` | {ref}`L1StormCtrlCfgValid <enum-l1stormctrlcfgvalid>` | `Invalid`, `Valid` | `Invalid` | — |
-| `multicast_max_burst_size` | `mcBurstPps` | `int` | — | `0` | burst rate in pps |
-| `mc_burst_rate` | `mcBurstRate` | `str` | — | — | burst rate in % (upto 1 decimal) |
-| `multicast_traffic_rate` | `mcRate` | `str` | — | — | rate in % (upto 1 decimal) |
-| `mc_rate_pps` | `mcRatePps` | `int` | — | `0` | rate in pps |
+| `multicast_max_burst_size` | `mcBurstPps` | `int` | — | `unspecified` | burst rate in pps |
+| `mc_burst_rate` | `mcBurstRate` | `float` | — | `100.0` | burst rate in % (upto 1 decimal) |
+| `multicast_traffic_rate` | `mcRate` | `float` | — | `100.0` | rate in % (upto 1 decimal) |
+| `mc_rate_pps` | `mcRatePps` | `int` | — | `unspecified` | rate in pps |
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |
-| `traffic_rate` | `rate` | `str` | — | — | The traffic rate percentage. |
-| `tarffic_rate` | `ratePps` | `int` | — | `0` | The packets per second (PPS) interval rate for the storm control policy. During this interval, the traffic level which is expressed as packets flowing per second through the port, is then compared with the traffic storm control level that you configured. |
+| `traffic_rate` | `rate` | `float` | — | `100.0` | The traffic rate percentage. |
+| `tarffic_rate` | `ratePps` | `int` | — | `unspecified` | The packets per second (PPS) interval rate for the storm control policy. During this interval, the traffic level which is expressed as packets flowing per second through the port, is then compared with the traffic storm control level that you configured. |
 | `storm_ctrl_action` | `stormCtrlAction` | {ref}`L1StormCtrlActionT <enum-l1stormctrlactiont>` | `drop`, `shutdown` | `drop` | action drop/shutdown |
-| `storm_ctrl_soak_inst_count` | `stormCtrlSoakInstCount` | `str` | — | — | Instances required to declare port shutdown |
+| `storm_ctrl_soak_inst_count` | `stormCtrlSoakInstCount` | `int` | — | `3` | Instances required to declare port shutdown |
 | `packet_type` | `type` | {ref}`L1PktT <enum-l1pktt>` | `all`, `bcast`, `mcast`, `unk-ucast` | `all` | The storm control interface policy type. The policy type prevents disruptions on ports by a broadcast, multicast, or unknown unicast traffic storm on physical interfaces. The policy type is set to ALL types of traffic by default and can not be changed. |
-| `unknown_unicast_max_burst_size` | `uucBurstPps` | `int` | — | `0` | burst rate in pps |
-| `uuc_burst_rate` | `uucBurstRate` | `str` | — | — | burst rate in % (upto 1 decimal) |
-| `unknown_unicast_traffic_rate` | `uucRate` | `str` | — | — | rate in % (upto 1 decimal) |
-| `uuc_rate_pps` | `uucRatePps` | `int` | — | `0` | rate in pps |
+| `unknown_unicast_max_burst_size` | `uucBurstPps` | `int` | — | `unspecified` | burst rate in pps |
+| `uuc_burst_rate` | `uucBurstRate` | `float` | — | `100.0` | burst rate in % (upto 1 decimal) |
+| `unknown_unicast_traffic_rate` | `uucRate` | `float` | — | `100.0` | rate in % (upto 1 decimal) |
+| `uuc_rate_pps` | `uucRatePps` | `int` | — | `unspecified` | rate in pps |

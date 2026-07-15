@@ -24,7 +24,8 @@ Accepted as keyword arguments of `.ospf()` and of `.set(**attrs)` on this cursor
 | parameter | wire | type | values | default | description |
 | --- | --- | --- | --- | --- | --- |
 | `area_cost` | `areaCost` | `int` | — | `1` | — |
-| `area_type` | `areaType` | {ref}`OspfAreaT <enum-ospfareat>` | `nssa`, `regular`, `stub` | `nssa` | The area type. |
+| `area_ctrl` | `areaCtrl` | {ref}`OspfAreaControl <enum-ospfareacontrol>` | `unspecified`, `summary`, `redistribute`, `suppress-fa` | `redistribute, summary` | The controls of redistribution and summary LSA generation into NSSA and Stub areas. |
 | `area_id` | `areaId` | `str` | — | — | The OSPF Area ID. An area is a logical collection of OSPF networks, routers, and links that have the same area identification. A router within an area must maintain a topological database for the area to which it belongs. |
+| `area_type` | `areaType` | {ref}`OspfAreaT <enum-ospfareat>` | `nssa`, `regular`, `stub` | `nssa` | The area type. |
 | `description` | `descr` | `str` | — | — | Specifies the description of a policy component. |
 | `create_multipod_internal_ospf_instance` | `multipodInternal` | `bool` | — | `False` | Start OSPF in WAN instance instead of default |

@@ -50,6 +50,9 @@ class acLatencyPtpModeDef(ManagedObject):
         default=NetflowAdminSt.DISABLED, description="State of the PTP protocol"
     )
     ttag_ether_type0x8905_status: bool = Field(
-        default=False, alias="ttagEtherType0x8905Status", description="State of the ttag ether type"
+        default=False,
+        validation_alias="ttagEtherType0x8905Status",
+        serialization_alias="ttagEtherType0x8905Status",
+        description="State of the ttag ether type",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

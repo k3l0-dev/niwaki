@@ -28,15 +28,15 @@ Accepted as keyword arguments of `.entry(name)` and of `.set(**attrs)` on this c
 | `udp` | — | `int | str | tuple[int, int]` | — | — | Curated shorthand — expanded to the real schema fields. |
 | `apply_rule_for_all_fragments` | `applyToFrag` | `bool` | — | `False` | — |
 | `arp_opcodes` | `arpOpc` | {ref}`ArpOpcode <enum-arpopcode>` | `reply`, `req`, `unspecified` | `unspecified` | ARP opcodes |
-| `destination_from_port` | `dFromPort` | `str` | — | — | Destination From Port |
-| `destination_to_port` | `dToPort` | `str` | — | — | Destination To Port |
+| `destination_from_port` | `dFromPort` | `int` | — | `unspecified` | Destination From Port |
+| `destination_to_port` | `dToPort` | `int` | — | `unspecified` | Destination To Port |
 | `description` | `descr` | `str` | — | — | Specifies the description of a policy component. |
 | `ethernet_type` | `etherT` | {ref}`L2EtherType <enum-l2ethertype>` | `arp`, `fcoe`, `ip`, `ipv4`, `ipv6`, `mac_security`, `mpls_ucast`, `trill`, `unspecified` | `unspecified` | Ether type |
-| `icmpv4_type` | `icmpv4T` | `str` | — | — | — |
-| `icmpv6_type` | `icmpv6T` | `str` | — | — | — |
-| `dscp_match_for_filter_entry` | `matchDscp` | `str` | — | — | — |
-| `protocol` | `prot` | `str` | — | — | L3 Ip Protocol |
-| `source_from_port` | `sFromPort` | `str` | — | — | Source From Port |
-| `source_to_port` | `sToPort` | `str` | — | — | Source To Port |
+| `icmpv4_type` | `icmpv4T` | `int` | — | `unspecified` | — |
+| `icmpv6_type` | `icmpv6T` | `int` | — | `unspecified` | — |
+| `dscp_match_for_filter_entry` | `matchDscp` | `int` | — | `unspecified` | — |
+| `protocol` | `prot` | `int` | — | `unspecified` | L3 Ip Protocol |
+| `source_from_port` | `sFromPort` | `int` | — | `unspecified` | Source From Port |
+| `source_to_port` | `sToPort` | `int` | — | `unspecified` | Source To Port |
 | `stateful` | `stateful` | `bool` | — | `False` | — |
-| `tcp_rules` | `tcpRules` | {ref}`L4TcpFlags <enum-l4tcpflags>` | `ack`, `est`, `fin`, `rst`, `syn`, `unspecified` | `unspecified` | TCP Session Rules |
+| `tcp_rules` | `tcpRules` | {ref}`L4TcpFlags <enum-l4tcpflags>` | `unspecified`, `syn`, `ack`, `fin`, `rst`, `est` | `unspecified` | TCP Session Rules |

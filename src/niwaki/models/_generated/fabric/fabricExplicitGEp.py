@@ -60,5 +60,14 @@ class fabricExplicitGEp(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    logical_pair_id: str = Field(default="", alias="id", description="Logical Pair Id")
+    logical_pair_id: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=1000,
+            validation_alias="id",
+            serialization_alias="id",
+            description="Logical Pair Id",
+        ),
+    ] = 0
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

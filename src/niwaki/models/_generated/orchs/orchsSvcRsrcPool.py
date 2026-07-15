@@ -63,13 +63,24 @@ class orchsSvcRsrcPool(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="The description of this configuration item.",
         ),
     ] = ""
-    enable_shared_graphs: bool = Field(default=False, alias="enableSharedGraphs")
+    enable_shared_graphs: bool = Field(
+        default=False,
+        validation_alias="enableSharedGraphs",
+        serialization_alias="enableSharedGraphs",
+    )
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     version: OrchsresourcePoolVersion = Field(

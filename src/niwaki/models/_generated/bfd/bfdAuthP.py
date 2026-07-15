@@ -53,30 +53,66 @@ class bfdAuthP(ManagedObject):
         ),
     ] = ""
     auth_interop: BfdAuthInterop = Field(
-        default=BfdAuthInterop.DISABLE, alias="authInterop", description="Interop Attribute"
+        default=BfdAuthInterop.DISABLE,
+        validation_alias="authInterop",
+        serialization_alias="authInterop",
+        description="Interop Attribute",
     )
     description: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies a control instrumentation description.",
         ),
     ] = ""
     hex_key: Annotated[
-        str, Field(alias="hexKey", repr=False, description="Authentication hex key")
+        str,
+        Field(
+            validation_alias="hexKey",
+            serialization_alias="hexKey",
+            repr=False,
+            description="Authentication hex key",
+        ),
     ] = ""
     hex_key_size: Annotated[
-        str, Field(alias="hexKeySize", repr=False, description="Authentication Hex key Size")
-    ] = ""
+        int,
+        Field(
+            ge=0,
+            le=40,
+            validation_alias="hexKeySize",
+            serialization_alias="hexKeySize",
+            repr=False,
+            description="Authentication Hex key Size",
+        ),
+    ] = 0
     key: Annotated[str, Field(repr=False, description="Authentication key")] = ""
-    key_id: str = Field(default="", alias="keyId", description="Authentication key id")
+    key_id: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=255,
+            validation_alias="keyId",
+            serialization_alias="keyId",
+            description="Authentication key id",
+        ),
+    ] = 1
     name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     authentication_type_of_the_bfd_session: BfdAuthT = Field(
-        default=BfdAuthT.NONE, alias="type", description="Authentication type"
+        default=BfdAuthT.NONE,
+        validation_alias="type",
+        serialization_alias="type",
+        description="Authentication type",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

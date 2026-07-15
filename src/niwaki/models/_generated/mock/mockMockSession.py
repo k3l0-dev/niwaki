@@ -63,20 +63,33 @@ class mockMockSession(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
-    duration_of_mock_session: Annotated[int, Field(ge=1, alias="duration")] = 1
+    duration_of_mock_session: Annotated[
+        int, Field(ge=1, validation_alias="duration", serialization_alias="duration")
+    ] = 1
     mock_session_mode: MockMode = Field(
-        default=MockMode.REPEATED, alias="mode", description="The BGP Domain mode."
+        default=MockMode.REPEATED,
+        validation_alias="mode",
+        serialization_alias="mode",
+        description="The BGP Domain mode.",
     )
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     dn_of_a_mocked_mo: str = Field(
         default="",
-        alias="observable",
+        validation_alias="observable",
+        serialization_alias="observable",
         description="This is generated and used only by internal processes",
     )
     owner_key: Annotated[
@@ -84,7 +97,8 @@ class mockMockSession(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerKey",
+            validation_alias="ownerKey",
+            serialization_alias="ownerKey",
             description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
@@ -93,7 +107,8 @@ class mockMockSession(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerTag",
+            validation_alias="ownerTag",
+            serialization_alias="ownerTag",
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""

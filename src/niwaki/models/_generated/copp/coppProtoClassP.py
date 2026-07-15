@@ -3,7 +3,10 @@
 from __future__ import annotations
 
 from typing import ClassVar, Annotated
-from pydantic import Field
+from pydantic import BeforeValidator, Field
+
+from niwaki.models._wire import Flags, parse_flags
+from niwaki.models._generated.enums.CoppProtocol import CoppProtocol
 
 from niwaki.models.base import ManagedObject
 
@@ -56,30 +59,44 @@ class coppProtoClassP(ManagedObject):
         ),
     ] = ""
     burst: Annotated[
-        str,
+        int,
         Field(
-            description="A committed burst size. This is the number of packets allowed at line rate during a burst."
+            ge=10,
+            le=549755813760,
+            description="A committed burst size. This is the number of packets allowed at line rate during a burst.",
         ),
-    ] = ""
+    ] = 10
     description: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
-    match_proto: str = Field(default="", alias="matchProto")
+    match_proto: Annotated[Flags[CoppProtocol], BeforeValidator(parse_flags)] = Field(
+        default_factory=lambda: frozenset(),
+        validation_alias="matchProto",
+        serialization_alias="matchProto",
+    )
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     owner_key: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerKey",
+            validation_alias="ownerKey",
+            serialization_alias="ownerKey",
             description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
@@ -88,14 +105,17 @@ class coppProtoClassP(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerTag",
+            validation_alias="ownerTag",
+            serialization_alias="ownerTag",
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
     rate: Annotated[
-        str,
+        int,
         Field(
-            description="An allowed rate. This is the committed rate at which the packets are allowed into the system (raw NTPD format)."
+            ge=10,
+            le=4398046510080,
+            description="An allowed rate. This is the committed rate at which the packets are allowed into the system (raw NTPD format).",
         ),
-    ] = ""
+    ] = 10
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

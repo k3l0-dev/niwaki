@@ -36,7 +36,15 @@ class vmmInjectedSvcEp(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    cont_grp_name: Annotated[str, Field(min_length=1, max_length=512, alias="contGrpName")]
+    cont_grp_name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=512,
+            validation_alias="contGrpName",
+            serialization_alias="contGrpName",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[
@@ -47,7 +55,12 @@ class vmmInjectedSvcEp(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    ep_ip: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="epIp")] = ""
+    ep_ip: Annotated[
+        str,
+        Field(pattern="^[0-9a-fA-F.:/ ]+$", validation_alias="epIp", serialization_alias="epIp"),
+    ] = ""
     name: Annotated[str, Field(max_length=128, description="The name of the object.")] = ""
-    display_name: Annotated[str, Field(max_length=128, alias="nameAlias")] = ""
+    display_name: Annotated[
+        str, Field(max_length=128, validation_alias="nameAlias", serialization_alias="nameAlias")
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

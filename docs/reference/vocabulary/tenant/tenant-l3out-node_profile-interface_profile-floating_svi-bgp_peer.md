@@ -24,20 +24,20 @@ Accepted as keyword arguments of `.bgp_peer(peer_address)` and of `.set(**attrs)
 | parameter | wire | type | values | default | description |
 | --- | --- | --- | --- | --- | --- |
 | `peer_address` *(positional)* | `addr` | `str` | — | — | The peer IP address. |
-| `address_type_af_controls` | `addrTCtrl` | `str` | — | — | Ucast/Mcast Addr Type AF Control |
+| `address_type_af_controls` | `addrTCtrl` | {ref}`BgpAddrTControl <enum-bgpaddrtcontrol>` | `af-ucast`, `af-mcast`, `af-label-ucast` | `af-ucast` | Ucast/Mcast Addr Type AF Control |
 | `administrative_state` | `adminSt` | {ref}`NwAdminSt <enum-nwadminst>` | `disabled`, `enabled` | `enabled` | Administrative State |
-| `allowed_self_as_count` | `allowedSelfAsCnt` | `str` | — | — | The number of occurrences of a local Autonomous System Number (ASN). |
-| `capability` | `capability` | `str` | — | — | Peer AF Capability |
-| `type_of_network_reachable_via_this_peer` | `connectivityType` | `str` | — | — | Network reachability via this Peer |
-| `peer_af_controls` | `ctrl` | `str` | — | — | The peer controls specify which Border Gateway Protocol (BGP) attributes are sent to a peer. |
-| `peer_af_controls_ext` | `ctrlExt` | `str` | — | — | Peer AF controls Ext |
+| `allowed_self_as_count` | `allowedSelfAsCnt` | `int` | — | `3` | The number of occurrences of a local Autonomous System Number (ASN). |
+| `capability` | `capability` | {ref}`BgpPeerAfCap <enum-bgppeerafcap>` | `none`, `receive-add-path` | `none` | Peer AF Capability |
+| `type_of_network_reachable_via_this_peer` | `connectivityType` | {ref}`BgpConnectivityType <enum-bgpconnectivitytype>` | `tenant`, `multipod`, `multisite` | `tenant` | Network reachability via this Peer |
+| `peer_af_controls` | `ctrl` | {ref}`BgpPeerControlPol <enum-bgppeercontrolpol>` | `send-com`, `send-ext-com`, `nh-self`, `dis-peer-as-check`, `allow-self-as`, `as-override`, `segment-routing-disable` | — | The peer controls specify which Border Gateway Protocol (BGP) attributes are sent to a peer. |
+| `peer_af_controls_ext` | `ctrlExt` | {ref}`BgpPeerControlPolExt <enum-bgppeercontrolpolext>` | `send-domain-path` | — | Peer AF controls Ext |
 | `description` | `descr` | `str` | — | — | Specifies the description of a policy component. |
 | `asn_name` | `name` | `str` | — | — | — |
 | `password` | `password` | `str` | — | — | Administrative state |
-| `peer_controls` | `peerCtrl` | `str` | — | — | The peer controls. |
-| `private_as_control` | `privateASctrl` | `str` | — | — | Remove private AS |
-| `ebgp_multihop_ttl_value` | `ttl` | `str` | — | — | Specifies time to live (TTL). |
-| `weight_for_routes_from_this_neighbor` | `weight` | `str` | — | — | Default weight for routes from this neighbor |
+| `peer_controls` | `peerCtrl` | {ref}`BgpPeerPControlType <enum-bgppeerpcontroltype>` | `bfd`, `dis-conn-check` | — | The peer controls. |
+| `private_as_control` | `privateASctrl` | {ref}`BgpPrivateASControl <enum-bgpprivateascontrol>` | `remove-exclusive`, `remove-all`, `replace-as` | — | Remove private AS |
+| `ebgp_multihop_ttl_value` | `ttl` | `int` | — | `1` | Specifies time to live (TTL). |
+| `weight_for_routes_from_this_neighbor` | `weight` | `int` | — | `0` | Default weight for routes from this neighbor |
 
 ## Children
 

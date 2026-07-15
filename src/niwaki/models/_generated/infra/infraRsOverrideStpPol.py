@@ -58,7 +58,8 @@ class infraRsOverrideStpPol(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9_.:-]+$",
-            alias="tnStpIfPolName",
+            validation_alias="tnStpIfPolName",
+            serialization_alias="tnStpIfPolName",
             description="The name of the spanning-tree protocol policy.",
         ),
     ] = ""

@@ -54,11 +54,21 @@ class fabricNodeIdentP(ManagedObject):
     ]
 
     # ── Create-only (ignored by APIC on modification) ─────────────────────────
-    ext_pool_id: str = Field(default="", alias="extPoolId")
-    fabric_id: str = Field(default="", alias="fabricId")
-    id: str = Field(default="", alias="nodeId")
-    node_type: TopNodeType = Field(default=TopNodeType.UNSPECIFIED, alias="nodeType")
-    pod_id: str = Field(default="", alias="podId")
+    ext_pool_id: Annotated[
+        int, Field(validation_alias="extPoolId", serialization_alias="extPoolId")
+    ] = 0
+    fabric_id: Annotated[
+        int, Field(validation_alias="fabricId", serialization_alias="fabricId")
+    ] = 1
+    id: Annotated[
+        int, Field(ge=101, le=4000, validation_alias="nodeId", serialization_alias="nodeId")
+    ] = 0
+    node_type: TopNodeType = Field(
+        default=TopNodeType.UNSPECIFIED, validation_alias="nodeType", serialization_alias="nodeType"
+    )
+    pod_id: Annotated[
+        int, Field(ge=1, le=254, validation_alias="podId", serialization_alias="podId")
+    ] = 1
     role: TopNodeRoleP = Field(
         default=TopNodeRoleP.UNSPECIFIED, description="The system role type."
     )
@@ -77,12 +87,19 @@ class fabricNodeIdentP(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies the description of a policy component.",
         ),
     ] = ""
     name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

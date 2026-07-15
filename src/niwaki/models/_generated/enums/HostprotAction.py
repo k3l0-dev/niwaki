@@ -6,9 +6,9 @@ from enum import StrEnum
 
 
 class HostprotAction(StrEnum):
-    DENY = "deny"
     LOG = "log"
     PERMIT = "permit"
+    DENY = "deny"
 
     @classmethod
     def _missing_(cls, value: object) -> HostprotAction | None:

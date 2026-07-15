@@ -40,7 +40,8 @@ class dbgexpSvccoreStatusInstance(ManagedObject):
     collection_time: Annotated[
         str,
         Field(
-            alias="collectionTime",
+            validation_alias="collectionTime",
+            serialization_alias="collectionTime",
             description="The time at which the core file was uploaded from APIC or the leaf to the specified destination.",
         ),
     ]

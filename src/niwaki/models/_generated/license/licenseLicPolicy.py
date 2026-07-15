@@ -44,7 +44,8 @@ class licenseLicPolicy(ManagedObject):
     # ── Configurable ───────────────────────────────────────────────────────────
     action_result: LicenseActionResult = Field(
         default=LicenseActionResult.NONE,
-        alias="actionResult",
+        validation_alias="actionResult",
+        serialization_alias="actionResult",
         description="actionResult is to indicate whether or not RUM report download or Acknowledgement import is succeeded or failed.",
     )
     annotation: Annotated[
@@ -59,34 +60,49 @@ class licenseLicPolicy(ManagedObject):
         str,
         Field(
             max_length=512,
-            alias="authCode",
+            validation_alias="authCode",
+            serialization_alias="authCode",
             description="Authorization code or permanent license installed by user.",
         ),
     ] = ""
-    certificate: str = Field(default="", alias="cert")
+    certificate: str = Field(default="", validation_alias="cert", serialization_alias="cert")
     force_re_register: bool = Field(
         default=False,
-        alias="forceRegister",
+        validation_alias="forceRegister",
+        serialization_alias="forceRegister",
         description="To force re-register the product with CSSM, regardless whether or not the product is alread registered. Per ELO requirement, let user decide if he/she wants to force re-register. If forceRegister = false, SA returns an error if the product is already registered.",
     )
-    hostname_privacy: bool = Field(default=False, alias="hostnamePrivacy")
+    hostname_privacy: bool = Field(
+        default=False, validation_alias="hostnamePrivacy", serialization_alias="hostnamePrivacy"
+    )
     ip_addr: Annotated[
-        str, Field(max_length=512, alias="ipAddr", description="For Call Home HTTP proxy server")
+        str,
+        Field(
+            max_length=512,
+            validation_alias="ipAddr",
+            serialization_alias="ipAddr",
+            description="For Call Home HTTP proxy server",
+        ),
     ] = ""
     smart_licensing_action: LicenseLicActionType = Field(
         default=LicenseLicActionType.NONE,
-        alias="licenseAction",
+        validation_alias="licenseAction",
+        serialization_alias="licenseAction",
         description="Action for manually renewing ID certificate, license authorization and so on. Based on action enum type, corresponding SA API is invoked and SA return a formatted long string encapsulating the data.",
     )
-    license_sync_freq: Annotated[int, Field(alias="licenseSyncFreq")] = 60
+    license_sync_freq: Annotated[
+        int, Field(validation_alias="licenseSyncFreq", serialization_alias="licenseSyncFreq")
+    ] = 60
     smart_license_mode: LicenseLicenseMode = Field(
         default=LicenseLicenseMode.SMART_LICENSING,
-        alias="mode",
+        validation_alias="mode",
+        serialization_alias="mode",
         description="Smart licensing mode.",
     )
     plr_admin_state: LicensePlrAdminState = Field(
         default=LicensePlrAdminState.NONE,
-        alias="plrAdminState",
+        validation_alias="plrAdminState",
+        serialization_alias="plrAdminState",
         description="Admin state for triggering request/cancel/install/return reservation action.",
     )
     proxy_server_port: Annotated[
@@ -94,20 +110,23 @@ class licenseLicPolicy(ManagedObject):
         Field(
             ge=0,
             le=65535,
-            alias="port",
+            validation_alias="port",
+            serialization_alias="port",
             description="The port number of third-party HTTP/HTTPs proxy server. When the mode is not proxy, port is not required and can be ignored.",
         ),
     ] = 443
     smart_licensing_admin_state: LicenseRegAdminState = Field(
         default=LicenseRegAdminState.NONE,
-        alias="regAdminState",
+        validation_alias="regAdminState",
+        serialization_alias="regAdminState",
         description="Admin state for triggering registration and unregistration.",
     )
     product_instance_id_token: Annotated[
         str,
         Field(
             max_length=512,
-            alias="regTokenId",
+            validation_alias="regTokenId",
+            serialization_alias="regTokenId",
             description="To register product with CSSM, a user need to input registration token ID. The registration token ID is created by customer from CSSM web site.",
         ),
     ] = ""
@@ -116,7 +135,8 @@ class licenseLicPolicy(ManagedObject):
         Field(
             ge=1,
             le=90,
-            alias="reportInterval",
+            validation_alias="reportInterval",
+            serialization_alias="reportInterval",
             description="SLE policy allows a user to change license reporting interval. Default value is 30 days, and min and max range is 1 - 90 days.",
         ),
     ] = 30

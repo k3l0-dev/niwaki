@@ -49,15 +49,27 @@ class vmmInjectedContGrp(ManagedObject):
         ),
     ] = ""
     compute_node_name: Annotated[
-        str, Field(max_length=255, pattern="^[a-zA-Z0-9_.:-]+$", alias="computeNodeName")
+        str,
+        Field(
+            max_length=255,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            validation_alias="computeNodeName",
+            serialization_alias="computeNodeName",
+        ),
     ] = ""
-    deployment_name: Annotated[str, Field(max_length=512, alias="deploymentName")] = ""
+    deployment_name: Annotated[
+        str,
+        Field(
+            max_length=512, validation_alias="deploymentName", serialization_alias="deploymentName"
+        ),
+    ] = ""
     description: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="The description of this configuration item.",
         ),
     ] = ""
@@ -73,15 +85,28 @@ class vmmInjectedContGrp(ManagedObject):
         str,
         Field(
             max_length=512,
-            alias="hostName",
+            validation_alias="hostName",
+            serialization_alias="hostName",
             description="The hostname of the router advertising the link-state packet.",
         ),
     ] = ""
-    if_name: Annotated[str, Field(max_length=512, alias="interfaceName")] = ""
+    if_name: Annotated[
+        str,
+        Field(
+            max_length=512, validation_alias="interfaceName", serialization_alias="interfaceName"
+        ),
+    ] = ""
     mac: Annotated[
         str,
         Field(pattern="^([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}$", description="The MAC address."),
     ] = ""
-    display_name: Annotated[str, Field(max_length=128, alias="nameAlias")] = ""
-    replica_set_name: Annotated[str, Field(max_length=512, alias="replicaSetName")] = ""
+    display_name: Annotated[
+        str, Field(max_length=128, validation_alias="nameAlias", serialization_alias="nameAlias")
+    ] = ""
+    replica_set_name: Annotated[
+        str,
+        Field(
+            max_length=512, validation_alias="replicaSetName", serialization_alias="replicaSetName"
+        ),
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

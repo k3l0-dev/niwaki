@@ -27,7 +27,7 @@ Accepted as keyword arguments of `.l2out(name)` and of `.set(**attrs)` on this c
 | `description` | `descr` | `str` | — | — | Specifies a description of the policy definition root. |
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |
-| `out_level_dscp` | `targetDscp` | `str` | — | — | The target differentiated services code point (DSCP) of the path attached to the layer 3 outside profile. |
+| `out_level_dscp` | `targetDscp` | `int` | — | `unspecified` | The target differentiated services code point (DSCP) of the path attached to the layer 3 outside profile. |
 
 ## Children
 

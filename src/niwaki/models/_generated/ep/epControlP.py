@@ -52,7 +52,10 @@ class epControlP(ManagedObject):
 
     # ── Configurable ───────────────────────────────────────────────────────────
     admin_state: NwAdminSt = Field(
-        default=NwAdminSt.DISABLED, alias="adminSt", description="Admin State of this Policy"
+        default=NwAdminSt.DISABLED,
+        validation_alias="adminSt",
+        serialization_alias="adminSt",
+        description="Admin State of this Policy",
     )
     annotation: Annotated[
         str,
@@ -67,24 +70,37 @@ class epControlP(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
-    hold_interval: str = Field(
-        default="",
-        alias="holdIntvl",
-        description="Duration the Endpoint is Quarantined in the last Known State",
-    )
+    hold_interval: Annotated[
+        int,
+        Field(
+            ge=300,
+            le=3600,
+            validation_alias="holdIntvl",
+            serialization_alias="holdIntvl",
+            description="Duration the Endpoint is Quarantined in the last Known State",
+        ),
+    ] = 1800
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     owner_key: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerKey",
+            validation_alias="ownerKey",
+            serialization_alias="ownerKey",
             description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
@@ -93,16 +109,29 @@ class epControlP(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerTag",
+            validation_alias="ownerTag",
+            serialization_alias="ownerTag",
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
-    rogue_endpoint_detection_interval: str = Field(
-        default="", alias="rogueEpDetectIntvl", description="Rogue Endpoint Detection Interval"
-    )
-    rogue_endpoint_detection_multiplier: str = Field(
-        default="",
-        alias="rogueEpDetectMult",
-        description="Rogue Endpoint Detection Multiplication Factor",
-    )
+    rogue_endpoint_detection_interval: Annotated[
+        int,
+        Field(
+            ge=30,
+            le=3600,
+            validation_alias="rogueEpDetectIntvl",
+            serialization_alias="rogueEpDetectIntvl",
+            description="Rogue Endpoint Detection Interval",
+        ),
+    ] = 60
+    rogue_endpoint_detection_multiplier: Annotated[
+        int,
+        Field(
+            ge=2,
+            le=65535,
+            validation_alias="rogueEpDetectMult",
+            serialization_alias="rogueEpDetectMult",
+            description="Rogue Endpoint Detection Multiplication Factor",
+        ),
+    ] = 6
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

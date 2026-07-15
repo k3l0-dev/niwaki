@@ -36,7 +36,7 @@ class faultThrValueUint16(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    property: Annotated[str, Field(alias="propId")]
+    property: Annotated[str, Field(validation_alias="propId", serialization_alias="propId")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[
@@ -47,10 +47,20 @@ class faultThrValueUint16(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    threshold_value_from_policy: str = Field(
-        default="", alias="thrValue", description="Threshold value from policy."
-    )
+    threshold_value_from_policy: Annotated[
+        int,
+        Field(
+            validation_alias="thrValue",
+            serialization_alias="thrValue",
+            description="Threshold value from policy.",
+        ),
+    ] = 0
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    value_of_the_property: str = Field(
-        default="", alias="value", description="Value of the property."
-    )
+    value_of_the_property: Annotated[
+        int,
+        Field(
+            validation_alias="value",
+            serialization_alias="value",
+            description="Value of the property.",
+        ),
+    ] = 0

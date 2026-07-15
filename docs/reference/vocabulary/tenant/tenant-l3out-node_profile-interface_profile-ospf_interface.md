@@ -24,7 +24,7 @@ Accepted as keyword arguments of `.ospf_interface()` and of `.set(**attrs)` on t
 | parameter | wire | type | values | default | description |
 | --- | --- | --- | --- | --- | --- |
 | `authentication_key` | `authKey` | `str` | — | — | The OSPF authentication key |
-| `authentication_key_id` | `authKeyId` | `str` | — | — | — |
+| `authentication_key_id` | `authKeyId` | `int` | — | `1` | — |
 | `authentication_type` | `authType` | {ref}`OspfAuthT <enum-ospfautht>` | `md5`, `none`, `simple` | `none` | The OSPF authentication type. The type options are; default, md5, none, and simple. |
 | `description` | `descr` | `str` | — | — | Specifies the description of a policy component. |
 | `name` | `name` | `str` | — | — | — |

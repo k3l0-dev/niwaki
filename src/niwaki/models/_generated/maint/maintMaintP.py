@@ -59,7 +59,8 @@ class maintMaintP(ManagedObject):
     # ── Configurable ───────────────────────────────────────────────────────────
     administrative_state: TrigExecState = Field(
         default=TrigExecState.UNTRIGGERED,
-        alias="adminSt",
+        validation_alias="adminSt",
+        serialization_alias="adminSt",
         description="The administrative state of the executable policies.",
     )
     annotation: Annotated[
@@ -75,56 +76,86 @@ class maintMaintP(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies the description of a policy component.",
         ),
     ] = ""
-    download_state: TrigExecState = Field(default=TrigExecState.UNTRIGGERED, alias="downloadSt")
+    download_state: TrigExecState = Field(
+        default=TrigExecState.UNTRIGGERED,
+        validation_alias="downloadSt",
+        serialization_alias="downloadSt",
+    )
     graceful_maintenance: bool = Field(
         default=False,
-        alias="graceful",
+        validation_alias="graceful",
+        serialization_alias="graceful",
         description="Graceful maintenance. Describe graceful maintenance",
     )
     ignore_compatibility: bool = Field(
         default=False,
-        alias="ignoreCompat",
+        validation_alias="ignoreCompat",
+        serialization_alias="ignoreCompat",
         description="Whether compatibility checks should be ignored when applying this firmware policy.",
     )
     internal_label: Annotated[
         str,
         Field(
-            max_length=512, alias="internalLabel", description="Firmware label - internal use only!"
+            max_length=512,
+            validation_alias="internalLabel",
+            serialization_alias="internalLabel",
+            description="Firmware label - internal use only!",
         ),
     ] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     notification_condition: MaintNotifCond = Field(
         default=MaintNotifCond.NOTIFYONLYONFAILURES,
-        alias="notifCond",
+        validation_alias="notifCond",
+        serialization_alias="notifCond",
         description="Specifies under what pause condition will admin be notified via email/text as configured. This notification mechanism is independent of events/faults.",
     )
     scheduler_run_mode: MaintRunMode = Field(
         default=MaintRunMode.PAUSEONLYONFAILURES,
-        alias="runMode",
+        validation_alias="runMode",
+        serialization_alias="runMode",
         description="Specifies whether to proceed automatically to next set of nodes once a set of nodes have gone through maintenance successfully.",
     )
     smu_operation_type: MaintSMUOperation = Field(
         default=MaintSMUOperation.SMUINSTALL,
-        alias="smuOperation",
+        validation_alias="smuOperation",
+        serialization_alias="smuOperation",
         description="Specifies SMU Operation",
     )
     smu_operation_flags: MaintSMUOperationFlags = Field(
-        default=MaintSMUOperationFlags.SMURELOADIMMEDIATE, alias="smuOperationFlags"
+        default=MaintSMUOperationFlags.SMURELOADIMMEDIATE,
+        validation_alias="smuOperationFlags",
+        serialization_alias="smuOperationFlags",
     )
-    sr_upgrade: bool = Field(default=False, alias="srUpgrade")
+    sr_upgrade: bool = Field(
+        default=False, validation_alias="srUpgrade", serialization_alias="srUpgrade"
+    )
     sr_version: Annotated[
-        str, Field(max_length=512, alias="srVersion", description="srFirmware version desired.")
+        str,
+        Field(
+            max_length=512,
+            validation_alias="srVersion",
+            serialization_alias="srVersion",
+            description="srFirmware version desired.",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     version: Annotated[str, Field(max_length=512, description="Firmware version desired.")] = ""
     version_check_override: TrigAdminState = Field(
         default=TrigAdminState.UNTRIGGERED,
-        alias="versionCheckOverride",
+        validation_alias="versionCheckOverride",
+        serialization_alias="versionCheckOverride",
         description="Version check override - directive to ignore version check for next install. What is version check? During maintenance window, check whether desired version matches running. If it does not match, perform maintenance(install). If it does, do not perform any maintenance(install).",
     )

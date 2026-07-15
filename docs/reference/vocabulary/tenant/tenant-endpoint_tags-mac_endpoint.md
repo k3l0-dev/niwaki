@@ -24,7 +24,7 @@ Accepted as keyword arguments of `.mac_endpoint(endpoint_mac_address, bridge_dom
 | `endpoint_mac_address` *(positional)* | `mac` | `str` | — | — | The MAC address. |
 | `bridge_domain_name` *(positional)* | `bdName` | `str` | — | — | — |
 | `vrf_name` | `ctxName` | `str` | — | — | The L3 context name. |
-| `id` | `id` | `str` | — | — | An identifier . |
+| `id` | `id` | `int` | — | `0` | An identifier . |
 | `name` | `name` | `str` | — | — | The name of the object. |
 
 ## APIC diagnostics

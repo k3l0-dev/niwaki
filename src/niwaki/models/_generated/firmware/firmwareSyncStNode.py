@@ -35,7 +35,15 @@ class firmwareSyncStNode(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    self_node_id: Annotated[str, Field(min_length=1, max_length=512, alias="SelfNodeId")]
+    self_node_id: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=512,
+            validation_alias="SelfNodeId",
+            serialization_alias="SelfNodeId",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[

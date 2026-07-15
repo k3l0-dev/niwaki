@@ -55,10 +55,16 @@ class lldpIfPol(ManagedObject):
 
     # ── Configurable ───────────────────────────────────────────────────────────
     receive_state: LldpAdminSt = Field(
-        default=LldpAdminSt.ENABLED, alias="adminRxSt", description="Receive admin state"
+        default=LldpAdminSt.ENABLED,
+        validation_alias="adminRxSt",
+        serialization_alias="adminRxSt",
+        description="Receive admin state",
     )
     transmit_state: LldpAdminSt = Field(
-        default=LldpAdminSt.ENABLED, alias="adminTxSt", description="Transmit admin state"
+        default=LldpAdminSt.ENABLED,
+        validation_alias="adminTxSt",
+        serialization_alias="adminTxSt",
+        description="Transmit admin state",
     )
     annotation: Annotated[
         str,
@@ -73,19 +79,27 @@ class lldpIfPol(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     owner_key: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerKey",
+            validation_alias="ownerKey",
+            serialization_alias="ownerKey",
             description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
@@ -94,11 +108,15 @@ class lldpIfPol(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerTag",
+            validation_alias="ownerTag",
+            serialization_alias="ownerTag",
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
     dcbxp_version: LldpDCBXPVerType = Field(
-        default=LldpDCBXPVerType.CEE, alias="portDCBXPVer", description="Port DCBXP Version"
+        default=LldpDCBXPVerType.CEE,
+        validation_alias="portDCBXPVer",
+        serialization_alias="portDCBXPVer",
+        description="Port DCBXP Version",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

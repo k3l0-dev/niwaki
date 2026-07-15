@@ -39,7 +39,8 @@ class vmmProtectedVmGroup(ManagedObject):
         Field(
             min_length=1,
             max_length=512,
-            alias="tDn",
+            validation_alias="tDn",
+            serialization_alias="tDn",
             description="The distinguished name of the target.",
         ),
     ]
@@ -55,6 +56,12 @@ class vmmProtectedVmGroup(ManagedObject):
     ] = ""
     name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

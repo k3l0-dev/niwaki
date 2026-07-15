@@ -40,7 +40,10 @@ class eptrkIpEpRslt(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    ip_address: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="addr")]
+    ip_address: Annotated[
+        str,
+        Field(pattern="^[0-9a-fA-F.:/ ]+$", validation_alias="addr", serialization_alias="addr"),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     ack: bool = Field(
@@ -55,15 +58,25 @@ class eptrkIpEpRslt(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    debug_internal_data: str = Field(default="", alias="dbgInternalData")
+    debug_internal_data: str = Field(
+        default="", validation_alias="dbgInternalData", serialization_alias="dbgInternalData"
+    )
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            validation_alias="descr",
+            serialization_alias="descr",
+        ),
     ] = ""
-    vrf: Annotated[str, Field(max_length=512, alias="epRsltVrf")] = ""
+    vrf: Annotated[
+        str, Field(max_length=512, validation_alias="epRsltVrf", serialization_alias="epRsltVrf")
+    ] = ""
     operational_state_qualifier: EptrkOperStQual = Field(
         default=EptrkOperStQual.OK,
-        alias="operStQual",
+        validation_alias="operStQual",
+        serialization_alias="operStQual",
         description="The chassis operational status qualifier.",
     )
     type: ActionType = Field(

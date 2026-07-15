@@ -48,7 +48,8 @@ class fabricRsSpCardP(ManagedObject):
     target_dn: Annotated[
         str,
         Field(
-            alias="tDn",
+            validation_alias="tDn",
+            serialization_alias="tDn",
             description="The distinguished name of the spine card profile. The maximum supported string length is 255 ASCII characters.",
         ),
     ]

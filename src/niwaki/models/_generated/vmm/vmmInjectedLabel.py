@@ -50,5 +50,7 @@ class vmmInjectedLabel(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    display_name: Annotated[str, Field(max_length=128, alias="nameAlias")] = ""
+    display_name: Annotated[
+        str, Field(max_length=128, validation_alias="nameAlias", serialization_alias="nameAlias")
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

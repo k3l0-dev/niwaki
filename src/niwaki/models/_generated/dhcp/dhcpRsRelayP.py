@@ -49,7 +49,13 @@ class dhcpRsRelayP(ManagedObject):
     # ── Naming (required) ──────────────────────────────────────────────────────
     name: Annotated[
         str,
-        Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="tnDhcpRelayPName"),
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            validation_alias="tnDhcpRelayPName",
+            serialization_alias="tnDhcpRelayPName",
+        ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────

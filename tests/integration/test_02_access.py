@@ -69,7 +69,7 @@ def access_design() -> Cursor:
         .mcp_policy("niwaki-mcp-on", admin_state="enabled")
         .stp_policy("niwaki-bpdu-guard", controls="bpdu-guard")
         .storm_control_policy("niwaki-storm",
-                              broadcast_traffic_rate="80.0", multicast_traffic_rate="80.0")
+                              broadcast_traffic_rate=80.0, multicast_traffic_rate=80.0)
         # ── 2 · VLAN pool + AAEP (domain bound by forward reference) ─────────
         .vlan_pool(VLAN_POOL, "static", description="niwaki walkthrough pool")
             .range("vlan-200", "vlan-249", allocation_mode="static")
@@ -106,7 +106,7 @@ def access_design() -> Cursor:
         # ── 7 · vPC protection: a sibling fabric domain, one maker away ───────
         .fabric()
             .vpc_protection()
-                .vpc_pair(VPC_PAIR_NAME, logical_pair_id="10")
+                .vpc_pair(VPC_PAIR_NAME, logical_pair_id=10)
                     .node(LEAF1_ID)
                     .node(LEAF2_ID)
     )  # fmt: skip
@@ -120,7 +120,7 @@ def access_design() -> Cursor:
         for port in range(1, 59):
             selector = prof.port_selector(f"1.{port:02d}", "range")
             selector.bind(policy_group=VPC_PG if port in (10, 11) else ACCESS_PG)
-            selector.port_block(f"blk-{port}", from_port_id=str(port), to_port_id=str(port))
+            selector.port_block(f"blk-{port}", from_port_id=port, to_port_id=port)
 
     return cfg
 

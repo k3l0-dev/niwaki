@@ -36,7 +36,12 @@ class analyticsRcvWindowSzBin(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    receive_window_size_bin_id: Annotated[str, Field(alias="id", description="Identifier")]
+    receive_window_size_bin_id: Annotated[
+        int,
+        Field(
+            ge=0, le=4, validation_alias="id", serialization_alias="id", description="Identifier"
+        ),
+    ] = 0
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[
@@ -49,8 +54,27 @@ class analyticsRcvWindowSzBin(ManagedObject):
     ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            validation_alias="descr",
+            serialization_alias="descr",
+        ),
     ] = ""
-    bin_high_value: Annotated[int, Field(ge=0, le=65535, alias="hi", description="High value")] = 0
-    bin_low_value: Annotated[int, Field(ge=0, le=65535, alias="lo", description="Low value")] = 0
+    bin_high_value: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=65535,
+            validation_alias="hi",
+            serialization_alias="hi",
+            description="High value",
+        ),
+    ] = 0
+    bin_low_value: Annotated[
+        int,
+        Field(
+            ge=0, le=65535, validation_alias="lo", serialization_alias="lo", description="Low value"
+        ),
+    ] = 0
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

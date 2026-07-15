@@ -205,7 +205,8 @@ class vnsParamInst(ManagedObject):
         str,
         Field(
             max_length=512,
-            alias="key",
+            validation_alias="key",
+            serialization_alias="key",
             description="The key uniquely identifying this configuration object.",
         ),
     ] = ""
@@ -217,7 +218,13 @@ class vnsParamInst(ManagedObject):
         default=False, description="The value that indicates if this parameter is mandatory."
     )
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     validation: Annotated[str, Field(max_length=512, description="The validation expression.")] = ""

@@ -6,8 +6,8 @@ from enum import StrEnum
 
 
 class CloudsecCapBm(StrEnum):
-    CLOUDSEC_IS_SUPPORTED = "cloudsec-is-supported"
     NONE = "none"
+    CLOUDSEC_IS_SUPPORTED = "cloudsec-is-supported"
 
     @classmethod
     def _missing_(cls, value: object) -> CloudsecCapBm | None:

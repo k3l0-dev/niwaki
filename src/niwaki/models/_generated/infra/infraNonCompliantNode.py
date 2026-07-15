@@ -45,7 +45,8 @@ class infraNonCompliantNode(ManagedObject):
         Field(
             min_length=1,
             max_length=512,
-            alias="serialNum",
+            validation_alias="serialNum",
+            serialization_alias="serialNum",
             description="Controller's motherboard serial number",
         ),
     ]
@@ -53,7 +54,8 @@ class infraNonCompliantNode(ManagedObject):
     # ── Configurable ───────────────────────────────────────────────────────────
     administrative_state: InfraAdminState = Field(
         default=InfraAdminState.OUT_OF_SERVICE,
-        alias="adminSt",
+        validation_alias="adminSt",
+        serialization_alias="adminSt",
         description="The administrative state of the object or policy.",
     )
     annotation: Annotated[
@@ -65,6 +67,12 @@ class infraNonCompliantNode(ManagedObject):
         ),
     ] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

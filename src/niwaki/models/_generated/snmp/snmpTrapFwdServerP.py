@@ -37,7 +37,13 @@ class snmpTrapFwdServerP(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     external_trap_server_address: Annotated[
-        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="addr", description="IP address entry")
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            validation_alias="addr",
+            serialization_alias="addr",
+            description="IP address entry",
+        ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
@@ -51,14 +57,21 @@ class snmpTrapFwdServerP(ManagedObject):
     ] = ""
     name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     external_trap_server_port: Annotated[
         int,
         Field(
             ge=0,
             le=65535,
-            alias="port",
+            validation_alias="port",
+            serialization_alias="port",
             description="The service port number for the LDAP service.",
         ),
     ] = 162

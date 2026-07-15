@@ -138,33 +138,47 @@ class mgmtInB(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies the description of a policy component.",
         ),
     ] = ""
     encap: Annotated[str, Field(description="The in-band access encapsulation.")] = ""
-    contract_exception_tag: Annotated[str, Field(max_length=512, alias="exceptionTag")] = ""
+    contract_exception_tag: Annotated[
+        str,
+        Field(max_length=512, validation_alias="exceptionTag", serialization_alias="exceptionTag"),
+    ] = ""
     flood_on_encap: FvFloodOnEncap = Field(
         default=FvFloodOnEncap.DISABLED,
-        alias="floodOnEncap",
+        validation_alias="floodOnEncap",
+        serialization_alias="floodOnEncap",
         description="Control at EPG level if the traffic L2 Multicast/Broadcast and Link Local Layer should be flooded only on ENCAP or based on bridg-domain settings",
     )
     provider_label_match_criteria: VzMatchT = Field(
         default=VzMatchT.ATLEASTONE,
-        alias="matchT",
+        validation_alias="matchT",
+        serialization_alias="matchT",
         description="The provider label match criteria.",
     )
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     preferred_group_member: FvPrefGrMemb = Field(
         default=FvPrefGrMemb.EXCLUDE,
-        alias="prefGrMemb",
+        validation_alias="prefGrMemb",
+        serialization_alias="prefGrMemb",
         description="Represents parameter used to determine if EPg is part of a group that does not a contract for communication",
     )
     qos_class: QosTenantPrio = Field(
         default=QosTenantPrio.UNSPECIFIED,
-        alias="prio",
+        validation_alias="prio",
+        serialization_alias="prio",
         description="The QoS priority class identifier.",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

@@ -109,7 +109,12 @@ class fvRsDomAtt(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     target_dn: Annotated[
-        str, Field(alias="tDn", description="The name of the Physical Domain Profile.")
+        str,
+        Field(
+            validation_alias="tDn",
+            serialization_alias="tDn",
+            description="The name of the Physical Domain Profile.",
+        ),
     ]
 
     # ── Create-only (ignored by APIC on modification) ─────────────────────────
@@ -126,73 +131,130 @@ class fvRsDomAtt(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    api_mode: FvapiModes = Field(default=FvapiModes.MGMT, alias="apiMode")
-    binding_type: FvBindingType = Field(
-        default=FvBindingType.NONE, alias="bindingType", description="Binding type for ports"
+    api_mode: FvapiModes = Field(
+        default=FvapiModes.MGMT, validation_alias="apiMode", serialization_alias="apiMode"
     )
-    class_pref: FvClassPref = Field(default=FvClassPref.ENCAP, alias="classPref")
+    binding_type: FvBindingType = Field(
+        default=FvBindingType.NONE,
+        validation_alias="bindingType",
+        serialization_alias="bindingType",
+        description="Binding type for ports",
+    )
+    class_pref: FvClassPref = Field(
+        default=FvClassPref.ENCAP, validation_alias="classPref", serialization_alias="classPref"
+    )
     custom_epg_name: Annotated[
         str,
         Field(
             max_length=80,
-            alias="customEpgName",
+            validation_alias="customEpgName",
+            serialization_alias="customEpgName",
             description="User-configured port-group display name",
         ),
     ] = ""
     encap: Annotated[str, Field(description="The port encapsulation.")] = ""
-    encap_mode: FvEncapMode = Field(default=FvEncapMode.AUTO, alias="encapMode")
+    encap_mode: FvEncapMode = Field(
+        default=FvEncapMode.AUTO, validation_alias="encapMode", serialization_alias="encapMode"
+    )
     epg_cos: FvEpgCos = Field(
-        default=FvEpgCos.COS0, alias="epgCos", description="Represents Epg Cos for AVS"
+        default=FvEpgCos.COS0,
+        validation_alias="epgCos",
+        serialization_alias="epgCos",
+        description="Represents Epg Cos for AVS",
     )
     epg_cos_pref: FvEpgCosPref = Field(
         default=FvEpgCosPref.DISABLED,
-        alias="epgCosPref",
+        validation_alias="epgCosPref",
+        serialization_alias="epgCosPref",
         description="Represents parameter used to enable/disable Epg Cos Policy",
     )
     deployment_immediacy: FvInstrImedcy = Field(
         default=FvInstrImedcy.LAZY,
-        alias="instrImedcy",
+        validation_alias="instrImedcy",
+        serialization_alias="instrImedcy",
         description="Once policies are downloaded to the leaf software, deployment immediacy can specify when the policy is pushed into the hardware policy CAM.",
     )
     ipam_dhcp_override: Annotated[
-        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="ipamDhcpOverride")
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            validation_alias="ipamDhcpOverride",
+            serialization_alias="ipamDhcpOverride",
+        ),
     ] = ""
-    ipam_enabled: bool = Field(default=False, alias="ipamEnabled")
-    ipam_gateway: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="ipamGateway")] = ""
+    ipam_enabled: bool = Field(
+        default=False, validation_alias="ipamEnabled", serialization_alias="ipamEnabled"
+    )
+    ipam_gateway: Annotated[
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            validation_alias="ipamGateway",
+            serialization_alias="ipamGateway",
+        ),
+    ] = ""
     lag_policy_name: Annotated[
-        str, Field(max_length=512, alias="lagPolicyName", description="LAG Policy Name")
+        str,
+        Field(
+            max_length=512,
+            validation_alias="lagPolicyName",
+            serialization_alias="lagPolicyName",
+            description="LAG Policy Name",
+        ),
     ] = ""
     netflow_dir: FvNetflowDir = Field(
         default=FvNetflowDir.BOTH,
-        alias="netflowDir",
+        validation_alias="netflowDir",
+        serialization_alias="netflowDir",
         description="Represents NetFlow monitoring direction",
     )
     netflow_pref: FvNetflowPref = Field(
         default=FvNetflowPref.DISABLED,
-        alias="netflowPref",
+        validation_alias="netflowPref",
+        serialization_alias="netflowPref",
         description="Represents parameter used to enable/disable Netflow Policy",
     )
-    num_ports: str = Field(
-        default="", alias="numPorts", description="Number of ports for binding type"
-    )
+    num_ports: Annotated[
+        int,
+        Field(
+            validation_alias="numPorts",
+            serialization_alias="numPorts",
+            description="Number of ports for binding type",
+        ),
+    ] = 0
     port_allocation: FvPortAllocation = Field(
         default=FvPortAllocation.NONE,
-        alias="portAllocation",
+        validation_alias="portAllocation",
+        serialization_alias="portAllocation",
         description="Port allocation for ports",
     )
     primary_encap: str = Field(
         default="",
-        alias="primaryEncap",
+        validation_alias="primaryEncap",
+        serialization_alias="primaryEncap",
         description="Represents the primary encap when the EPG is isolated",
     )
-    primary_encap_inner: str = Field(default="", alias="primaryEncapInner")
+    primary_encap_inner: str = Field(
+        default="", validation_alias="primaryEncapInner", serialization_alias="primaryEncapInner"
+    )
     resolution_immediacy: FvResImedcy = Field(
         default=FvResImedcy.LAZY,
-        alias="resImedcy",
+        validation_alias="resImedcy",
+        serialization_alias="resImedcy",
         description="Specifies if policies are to be resolved immmediately or when needed.",
     )
-    secondary_encap_inner: str = Field(default="", alias="secondaryEncapInner")
-    switching_mode: FvSwitchingModeT = Field(default=FvSwitchingModeT.NATIVE, alias="switchingMode")
+    secondary_encap_inner: str = Field(
+        default="",
+        validation_alias="secondaryEncapInner",
+        serialization_alias="secondaryEncapInner",
+    )
+    switching_mode: FvSwitchingModeT = Field(
+        default=FvSwitchingModeT.NATIVE,
+        validation_alias="switchingMode",
+        serialization_alias="switchingMode",
+    )
     untagged: bool = False
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    vnet_only: bool = Field(default=False, alias="vnetOnly")
+    vnet_only: bool = Field(
+        default=False, validation_alias="vnetOnly", serialization_alias="vnetOnly"
+    )

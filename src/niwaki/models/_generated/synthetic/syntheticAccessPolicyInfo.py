@@ -51,26 +51,58 @@ class syntheticAccessPolicyInfo(ManagedObject):
         Field(
             min_length=1,
             max_length=512,
-            alias="accBndlGrp",
+            validation_alias="accBndlGrp",
+            serialization_alias="accBndlGrp",
             description="The name of the PC/VPC Interface Policy Group deployed on this protection group.",
         ),
     ]
-    interface_profile: Annotated[str, Field(min_length=1, max_length=512, alias="accPortP")]
+    interface_profile: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=512,
+            validation_alias="accPortP",
+            serialization_alias="accPortP",
+        ),
+    ]
     attachable_access_entity_profile: Annotated[
-        str, Field(min_length=1, max_length=512, alias="attEntityP")
+        str,
+        Field(
+            min_length=1,
+            max_length=512,
+            validation_alias="attEntityP",
+            serialization_alias="attEntityP",
+        ),
     ]
     domain_name: Annotated[
         str,
         Field(
             min_length=1,
             max_length=512,
-            alias="domain",
+            validation_alias="domain",
+            serialization_alias="domain",
             description="The domain of the counts object.",
         ),
     ]
-    switch_profile: Annotated[str, Field(min_length=1, max_length=512, alias="nodeP")]
-    path_end_point: Annotated[str, Field(min_length=1, max_length=512, alias="pathEp")]
-    vlan_pool: Annotated[str, Field(min_length=1, max_length=512, alias="vLanPool")]
+    switch_profile: Annotated[
+        str,
+        Field(min_length=1, max_length=512, validation_alias="nodeP", serialization_alias="nodeP"),
+    ]
+    path_end_point: Annotated[
+        str,
+        Field(
+            min_length=1, max_length=512, validation_alias="pathEp", serialization_alias="pathEp"
+        ),
+    ]
+    vlan_pool: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=512,
+            validation_alias="vLanPool",
+            serialization_alias="vLanPool",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[

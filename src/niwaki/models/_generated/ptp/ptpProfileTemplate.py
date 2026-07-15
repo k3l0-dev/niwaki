@@ -40,7 +40,8 @@ class ptpProfileTemplate(ManagedObject):
     # ── Naming (required) ──────────────────────────────────────────────────────
     ptp_profile_template_name: PtpProfileTemplate = Field(
         default=PtpProfileTemplate.AES67,
-        alias="profile",
+        validation_alias="profile",
+        serialization_alias="profile",
         description="TemplateName (Defaut/AES/SMPTE/Telecom)",
     )
 
@@ -53,44 +54,100 @@ class ptpProfileTemplate(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    announce_interval_default_value: str = Field(
-        default="", alias="announceIntvlDefault", description="Announce interval default value"
-    )
-    announce_interval_range_end: str = Field(
-        default="", alias="announceIntvlEnd", description="Announce interval range end"
-    )
-    announce_interval_range_start: str = Field(
-        default="", alias="announceIntvlStart", description="Announce interval range start"
-    )
-    announce_timeout_default_value: str = Field(
-        default="", alias="announceTimeoutDefault", description="Announce timeout default value"
-    )
-    announce_timeout_range_end: str = Field(
-        default="", alias="announceTimeoutEnd", description="Announce timeout range end"
-    )
-    announce_timeout_range_start: str = Field(
-        default="", alias="announceTimeoutStart", description="Announce timeout range start"
-    )
-    delay_req_intvl_default: str = Field(
-        default="",
-        alias="delayReqIntvlDefault",
-        description="Minimum Delay Request Interval default value",
-    )
-    minimum_delay_request_interval_range_end: str = Field(
-        default="", alias="delayReqIntvlEnd", description="Minimum Delay Request Interval range end"
-    )
-    delay_req_intvl_start: str = Field(
-        default="",
-        alias="delayReqIntvlStart",
-        description="Minimum Delay Request Interval range start",
-    )
-    sync_intvl_default: str = Field(
-        default="", alias="syncIntvlDefault", description="Sync Interval default value"
-    )
-    sync_intvl_end: str = Field(
-        default="", alias="syncIntvlEnd", description="Sync Interval range end"
-    )
-    sync_intvl_start: str = Field(
-        default="", alias="syncIntvlStart", description="Sync Interval range start"
-    )
+    announce_interval_default_value: Annotated[
+        int,
+        Field(
+            validation_alias="announceIntvlDefault",
+            serialization_alias="announceIntvlDefault",
+            description="Announce interval default value",
+        ),
+    ] = 0
+    announce_interval_range_end: Annotated[
+        int,
+        Field(
+            validation_alias="announceIntvlEnd",
+            serialization_alias="announceIntvlEnd",
+            description="Announce interval range end",
+        ),
+    ] = 0
+    announce_interval_range_start: Annotated[
+        int,
+        Field(
+            validation_alias="announceIntvlStart",
+            serialization_alias="announceIntvlStart",
+            description="Announce interval range start",
+        ),
+    ] = 0
+    announce_timeout_default_value: Annotated[
+        int,
+        Field(
+            validation_alias="announceTimeoutDefault",
+            serialization_alias="announceTimeoutDefault",
+            description="Announce timeout default value",
+        ),
+    ] = 0
+    announce_timeout_range_end: Annotated[
+        int,
+        Field(
+            validation_alias="announceTimeoutEnd",
+            serialization_alias="announceTimeoutEnd",
+            description="Announce timeout range end",
+        ),
+    ] = 0
+    announce_timeout_range_start: Annotated[
+        int,
+        Field(
+            validation_alias="announceTimeoutStart",
+            serialization_alias="announceTimeoutStart",
+            description="Announce timeout range start",
+        ),
+    ] = 0
+    delay_req_intvl_default: Annotated[
+        int,
+        Field(
+            validation_alias="delayReqIntvlDefault",
+            serialization_alias="delayReqIntvlDefault",
+            description="Minimum Delay Request Interval default value",
+        ),
+    ] = 0
+    minimum_delay_request_interval_range_end: Annotated[
+        int,
+        Field(
+            validation_alias="delayReqIntvlEnd",
+            serialization_alias="delayReqIntvlEnd",
+            description="Minimum Delay Request Interval range end",
+        ),
+    ] = 0
+    delay_req_intvl_start: Annotated[
+        int,
+        Field(
+            validation_alias="delayReqIntvlStart",
+            serialization_alias="delayReqIntvlStart",
+            description="Minimum Delay Request Interval range start",
+        ),
+    ] = 0
+    sync_intvl_default: Annotated[
+        int,
+        Field(
+            validation_alias="syncIntvlDefault",
+            serialization_alias="syncIntvlDefault",
+            description="Sync Interval default value",
+        ),
+    ] = 0
+    sync_intvl_end: Annotated[
+        int,
+        Field(
+            validation_alias="syncIntvlEnd",
+            serialization_alias="syncIntvlEnd",
+            description="Sync Interval range end",
+        ),
+    ] = 0
+    sync_intvl_start: Annotated[
+        int,
+        Field(
+            validation_alias="syncIntvlStart",
+            serialization_alias="syncIntvlStart",
+            description="Sync Interval range start",
+        ),
+    ] = 0
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

@@ -3,8 +3,11 @@
 from __future__ import annotations
 
 from typing import ClassVar, Annotated
-from pydantic import Field
+from pydantic import BeforeValidator, Field
 
+from niwaki.models._wire import Flags, parse_flags
+from niwaki.models._generated.enums.SyntheticTestBitmask64 import SyntheticTestBitmask64
+from niwaki.models._generated.enums.SyntheticTestBitmask8 import SyntheticTestBitmask8
 from niwaki.models._generated.enums.SyntheticTestEnum16 import SyntheticTestEnum16
 
 from niwaki.models.base import ManagedObject
@@ -61,24 +64,49 @@ class syntheticSwTLTestObj(ManagedObject):
     descr: Annotated[
         str, Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$")
     ] = ""
-    id: Annotated[str, Field(description="An identifier .")] = ""
+    id: Annotated[int, Field(description="An identifier .")] = 0
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
-    obj_dn: str = Field(default="", alias="objDn")
+    obj_dn: str = Field(default="", validation_alias="objDn", serialization_alias="objDn")
     pri_key: str = Field(
         default="",
-        alias="priKey",
+        validation_alias="priKey",
+        serialization_alias="priKey",
         description="The private key for the state of the management interface of the concrete device.",
     )
-    prop_bmp64: str = Field(default="", alias="propBmp64")
-    prop_bmp8: str = Field(default="", alias="propBmp8")
-    prop_date: str = Field(default="", alias="propDate")
-    prop_enum16: SyntheticTestEnum16 = Field(
-        default=SyntheticTestEnum16.GENERIC, alias="propEnum16"
+    prop_bmp64: Annotated[Flags[SyntheticTestBitmask64], BeforeValidator(parse_flags)] = Field(
+        default_factory=lambda: frozenset(),
+        validation_alias="propBmp64",
+        serialization_alias="propBmp64",
     )
-    prop_string: Annotated[str, Field(max_length=512, alias="propString")] = ""
-    prop_u_byte: str = Field(default="", alias="propUByte")
-    prop_uint32: Annotated[int, Field(alias="propUint32")] = 0
-    prop_uint64: str = Field(default="", alias="propUint64")
+    prop_bmp8: Annotated[Flags[SyntheticTestBitmask8], BeforeValidator(parse_flags)] = Field(
+        default_factory=lambda: frozenset(),
+        validation_alias="propBmp8",
+        serialization_alias="propBmp8",
+    )
+    prop_date: str = Field(default="", validation_alias="propDate", serialization_alias="propDate")
+    prop_enum16: SyntheticTestEnum16 = Field(
+        default=SyntheticTestEnum16.GENERIC,
+        validation_alias="propEnum16",
+        serialization_alias="propEnum16",
+    )
+    prop_string: Annotated[
+        str, Field(max_length=512, validation_alias="propString", serialization_alias="propString")
+    ] = ""
+    prop_u_byte: Annotated[
+        int, Field(validation_alias="propUByte", serialization_alias="propUByte")
+    ] = 0
+    prop_uint32: Annotated[
+        int, Field(validation_alias="propUint32", serialization_alias="propUint32")
+    ] = 0
+    prop_uint64: Annotated[
+        int, Field(validation_alias="propUint64", serialization_alias="propUint64")
+    ] = 0
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

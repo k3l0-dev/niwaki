@@ -57,24 +57,64 @@ class cloudCredentials(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    client_id: Annotated[str, Field(max_length=512, alias="clientId", description="Client ID")] = ""
+    client_id: Annotated[
+        str,
+        Field(
+            max_length=512,
+            validation_alias="clientId",
+            serialization_alias="clientId",
+            description="Client ID",
+        ),
+    ] = ""
     credentials_email_address: Annotated[
         str,
-        Field(max_length=512, alias="email", description="Email associated to these Credentials"),
+        Field(
+            max_length=512,
+            validation_alias="email",
+            serialization_alias="email",
+            description="Email associated to these Credentials",
+        ),
     ] = ""
     http_proxy_to_connect_to_cloud_provider: Annotated[
-        str, Field(max_length=512, alias="httpProxy")
+        str, Field(max_length=512, validation_alias="httpProxy", serialization_alias="httpProxy")
     ] = ""
     secret_key: Annotated[
-        str, Field(min_length=1, max_length=512, alias="key", repr=False, description="Secret Key")
+        str,
+        Field(
+            min_length=1,
+            max_length=512,
+            validation_alias="key",
+            serialization_alias="key",
+            repr=False,
+            description="Secret Key",
+        ),
     ] = ""
     acces_key_id: Annotated[
-        str, Field(min_length=1, max_length=512, alias="keyId", description="Acces Key ID")
+        str,
+        Field(
+            min_length=1,
+            max_length=512,
+            validation_alias="keyId",
+            serialization_alias="keyId",
+            description="Acces Key ID",
+        ),
     ] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     rsa_private_key: Annotated[
-        str, Field(alias="rsaPrivateKey", repr=False, description="RSA Secret Key")
+        str,
+        Field(
+            validation_alias="rsaPrivateKey",
+            serialization_alias="rsaPrivateKey",
+            repr=False,
+            description="RSA Secret Key",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

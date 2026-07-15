@@ -49,14 +49,23 @@ class opflexOVm(ManagedObject):
         str,
         Field(
             max_length=512,
-            alias="ctrlrName",
+            validation_alias="ctrlrName",
+            serialization_alias="ctrlrName",
             description="The name of the controller object. For internal use only.",
         ),
     ] = ""
-    dom_name: Annotated[str, Field(max_length=512, alias="domName")] = ""
-    id: Annotated[str, Field(description="An identifier .")] = ""
+    dom_name: Annotated[
+        str, Field(max_length=512, validation_alias="domName", serialization_alias="domName")
+    ] = ""
+    id: Annotated[int, Field(description="An identifier .")] = 0
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     state: Annotated[str, Field(max_length=512, description="The state of the relationship.")] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

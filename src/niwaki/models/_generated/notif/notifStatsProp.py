@@ -39,13 +39,19 @@ class notifStatsProp(ManagedObject):
         Field(
             min_length=1,
             max_length=512,
-            alias="propName",
+            validation_alias="propName",
+            serialization_alias="propName",
             description="The name of the property used for a comparison filter. This property is used internally to validate compatibility between two firmware images.",
         ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    alias_prop_name: Annotated[str, Field(max_length=512, alias="aliasPropName")] = ""
+    alias_prop_name: Annotated[
+        str,
+        Field(
+            max_length=512, validation_alias="aliasPropName", serialization_alias="aliasPropName"
+        ),
+    ] = ""
     annotation: Annotated[
         str,
         Field(
@@ -57,7 +63,8 @@ class notifStatsProp(ManagedObject):
     time_interval_of_streaming: Annotated[
         int,
         Field(
-            alias="interval",
+            validation_alias="interval",
+            serialization_alias="interval",
             description="The time interval in milliseconds that the peer keepalives should be sent.",
         ),
     ] = 30

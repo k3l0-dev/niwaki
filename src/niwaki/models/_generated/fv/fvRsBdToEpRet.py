@@ -56,14 +56,17 @@ class fvRsBdToEpRet(ManagedObject):
         ),
     ] = ""
     resolve_act: FabricPolResolveAct = Field(
-        default=FabricPolResolveAct.RESOLVE, alias="resolveAct"
+        default=FabricPolResolveAct.RESOLVE,
+        validation_alias="resolveAct",
+        serialization_alias="resolveAct",
     )
     name: Annotated[
         str,
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9_.:-]+$",
-            alias="tnFvEpRetPolName",
+            validation_alias="tnFvEpRetPolName",
+            serialization_alias="tnFvEpRetPolName",
             description="The End Point Retention policy name associated with the bridge domain.",
         ),
     ] = ""

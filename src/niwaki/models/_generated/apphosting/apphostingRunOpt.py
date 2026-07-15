@@ -43,7 +43,8 @@ class apphostingRunOpt(ManagedObject):
         Field(
             ge=1,
             le=30,
-            alias="optIdx",
+            validation_alias="optIdx",
+            serialization_alias="optIdx",
             description="unique index to identify the package run options",
         ),
     ] = 1
@@ -51,7 +52,8 @@ class apphostingRunOpt(ManagedObject):
     # ── Configurable ───────────────────────────────────────────────────────────
     admin_state_to_enable_or_disable_run_opt: ApphostingAdminState = Field(
         default=ApphostingAdminState.ENABLED,
-        alias="adminSt",
+        validation_alias="adminSt",
+        serialization_alias="adminSt",
         description='Admin state to configure mo "',
     )
     annotation: Annotated[
@@ -67,7 +69,8 @@ class apphostingRunOpt(ManagedObject):
         Field(
             min_length=1,
             max_length=235,
-            alias="optVal",
+            validation_alias="optVal",
+            serialization_alias="optVal",
             description="run options to be stored as value for the key of index",
         ),
     ] = ""

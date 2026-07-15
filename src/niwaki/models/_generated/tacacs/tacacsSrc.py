@@ -3,9 +3,11 @@
 from __future__ import annotations
 
 from typing import ClassVar, Annotated
-from pydantic import Field
+from pydantic import BeforeValidator, Field
 
+from niwaki.models._wire import Flags, parse_flags
 from niwaki.models._generated.enums.ConditionSeverity import ConditionSeverity
+from niwaki.models._generated.enums.MonInclAction import MonInclAction
 from niwaki.models._generated.enums.TacacsSwitchTacacsAudit import TacacsSwitchTacacsAudit
 
 from niwaki.models.base import ManagedObject
@@ -63,18 +65,32 @@ class tacacsSrc(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies the description of a policy component.",
         ),
     ] = ""
-    include_action: str = Field(
-        default="", alias="incl", description="The information to include for the call home source."
+    include_action: Annotated[Flags[MonInclAction], BeforeValidator(parse_flags)] = Field(
+        default_factory=lambda: frozenset({MonInclAction.AUDIT, MonInclAction.SESSION}),
+        validation_alias="incl",
+        serialization_alias="incl",
+        description="The information to include for the call home source.",
     )
-    min_sev: ConditionSeverity = Field(default=ConditionSeverity.INFO, alias="minSev")
+    min_sev: ConditionSeverity = Field(
+        default=ConditionSeverity.INFO, validation_alias="minSev", serialization_alias="minSev"
+    )
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     switch_tacacs_audit: TacacsSwitchTacacsAudit = Field(
-        default=TacacsSwitchTacacsAudit.DISABLED, alias="switchAudit"
+        default=TacacsSwitchTacacsAudit.DISABLED,
+        validation_alias="switchAudit",
+        serialization_alias="switchAudit",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

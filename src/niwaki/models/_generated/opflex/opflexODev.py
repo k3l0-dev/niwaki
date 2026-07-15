@@ -48,7 +48,7 @@ class opflexODev(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    dev_id: Annotated[int, Field(alias="devId")] = 0
+    dev_id: Annotated[int, Field(validation_alias="devId", serialization_alias="devId")] = 0
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[
@@ -63,26 +63,44 @@ class opflexODev(ManagedObject):
         str,
         Field(
             max_length=512,
-            alias="ctrlrName",
+            validation_alias="ctrlrName",
+            serialization_alias="ctrlrName",
             description="The name of the controller object. For internal use only.",
         ),
     ] = ""
     dev_type: OpflexDeviceType = Field(
         default=OpflexDeviceType.N1KV,
-        alias="devType",
+        validation_alias="devType",
+        serialization_alias="devType",
         description="This is generated and used only by internal processes.",
     )
-    dom_name: Annotated[str, Field(max_length=512, alias="domName")] = ""
+    dom_name: Annotated[
+        str, Field(max_length=512, validation_alias="domName", serialization_alias="domName")
+    ] = ""
     encap: Annotated[str, Field(description="The port encapsulation.")] = ""
-    least_common_features: str = Field(
-        default="", alias="features", description="least common set of features between oe and oa"
-    )
-    fqdn_of_the_host: Annotated[str, Field(max_length=512, alias="hostName")] = ""
-    id: Annotated[str, Field(description="An identifier .")] = ""
+    least_common_features: Annotated[
+        int,
+        Field(
+            validation_alias="features",
+            serialization_alias="features",
+            description="least common set of features between oe and oa",
+        ),
+    ] = 0
+    fqdn_of_the_host: Annotated[
+        str, Field(max_length=512, validation_alias="hostName", serialization_alias="hostName")
+    ] = ""
+    id: Annotated[int, Field(description="An identifier .")] = 0
     ip: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", description="The IP address.")] = ""
-    ipaddress_of_the_host: Annotated[str, Field(max_length=512, alias="ipAddr")] = ""
-    is_secondary: Annotated[str, Field(max_length=512, alias="isSecondary")] = ""
-    lnode_dn: Annotated[str, Field(max_length=512, alias="lNodeDn")] = ""
+    ipaddress_of_the_host: Annotated[
+        str, Field(max_length=512, validation_alias="ipAddr", serialization_alias="ipAddr")
+    ] = ""
+    is_secondary: Annotated[
+        str,
+        Field(max_length=512, validation_alias="isSecondary", serialization_alias="isSecondary"),
+    ] = ""
+    lnode_dn: Annotated[
+        str, Field(max_length=512, validation_alias="lNodeDn", serialization_alias="lNodeDn")
+    ] = ""
     mac: Annotated[
         str,
         Field(pattern="^([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}$", description="The MAC address."),
@@ -92,16 +110,36 @@ class opflexODev(ManagedObject):
         Field(max_length=16, pattern="^[a-zA-Z0-9_.:-]+$", description="The name of the object."),
     ] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     num_hb: Annotated[
         int,
-        Field(alias="numHB", description="This is generated and used only by internal processes."),
+        Field(
+            validation_alias="numHB",
+            serialization_alias="numHB",
+            description="This is generated and used only by internal processes.",
+        ),
     ] = 0
-    pc_if_id: Annotated[int, Field(alias="pcIfId")] = 0
-    port_id: Annotated[int, Field(alias="portId", description="The port identifier.")] = 0
+    pc_if_id: Annotated[int, Field(validation_alias="pcIfId", serialization_alias="pcIfId")] = 0
+    port_id: Annotated[
+        int,
+        Field(
+            validation_alias="portId",
+            serialization_alias="portId",
+            description="The port identifier.",
+        ),
+    ] = 0
     opnic_state: CompHostState = Field(
-        default=CompHostState.UNKNOWN, alias="state", description="The state of the relationship."
+        default=CompHostState.UNKNOWN,
+        validation_alias="state",
+        serialization_alias="state",
+        description="The state of the relationship.",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     version: Annotated[str, Field(max_length=512, description="sw version of opflex device")] = ""

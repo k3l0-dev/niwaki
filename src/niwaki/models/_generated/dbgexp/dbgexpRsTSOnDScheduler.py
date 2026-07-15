@@ -56,7 +56,8 @@ class dbgexpRsTSOnDScheduler(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9_.:-]+$",
-            alias="tnTrigSchedPName",
+            validation_alias="tnTrigSchedPName",
+            serialization_alias="tnTrigSchedPName",
             description="A scheduler name for call home inventory.",
         ),
     ] = ""

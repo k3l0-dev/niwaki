@@ -60,7 +60,8 @@ class dhcpRsDhcpOptionPol(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9_.:-]+$",
-            alias="tnDhcpOptionPolName",
+            validation_alias="tnDhcpOptionPolName",
+            serialization_alias="tnDhcpOptionPolName",
             description="The DHCP option policy provides the DHCP clients with configuration parameters such as the domain, name server, subnet, and IP addresses.",
         ),
     ] = ""

@@ -63,15 +63,24 @@ class aaaOauthProvider(ManagedObject):
         ),
     ] = ""
     authorization_endpoint_url_of_the_idp: Annotated[
-        str, Field(min_length=1, max_length=1000, alias="authzEndpoint")
+        str,
+        Field(
+            min_length=1,
+            max_length=1000,
+            validation_alias="authzEndpoint",
+            serialization_alias="authzEndpoint",
+        ),
     ] = ""
-    issuer_url: Annotated[str, Field(max_length=512, alias="baseUrl")] = ""
+    issuer_url: Annotated[
+        str, Field(max_length=512, validation_alias="baseUrl", serialization_alias="baseUrl")
+    ] = ""
     client_id: Annotated[
         str,
         Field(
             min_length=1,
             max_length=500,
-            alias="clientId",
+            validation_alias="clientId",
+            serialization_alias="clientId",
             description="The client ID (option code 61).",
         ),
     ] = ""
@@ -80,34 +89,57 @@ class aaaOauthProvider(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
-    gui_redirect_banner_message: str = Field(default="", alias="guiBannerMessage")
-    jwks_endpoint_url_of_the_idp: Annotated[str, Field(max_length=512, alias="jwksEndpoint")] = ""
+    gui_redirect_banner_message: str = Field(
+        default="", validation_alias="guiBannerMessage", serialization_alias="guiBannerMessage"
+    )
+    jwks_endpoint_url_of_the_idp: Annotated[
+        str,
+        Field(max_length=512, validation_alias="jwksEndpoint", serialization_alias="jwksEndpoint"),
+    ] = ""
     client_secret: Annotated[
         str,
         Field(
-            alias="key",
+            validation_alias="key",
+            serialization_alias="key",
             repr=False,
             description="The key or password used to uniquely identify this configuration object.",
         ),
     ] = ""
     periodic_server_monitoring_password: Annotated[
-        str, Field(alias="monitoringPassword", repr=False)
+        str,
+        Field(
+            validation_alias="monitoringPassword",
+            serialization_alias="monitoringPassword",
+            repr=False,
+        ),
     ] = ""
-    periodic_server_monitoring_username: str = Field(default="", alias="monitoringUser")
+    periodic_server_monitoring_username: str = Field(
+        default="", validation_alias="monitoringUser", serialization_alias="monitoringUser"
+    )
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
-    enable_use_of_oidc_protocol: bool = Field(default=False, alias="oidcEnabled")
+    enable_use_of_oidc_protocol: bool = Field(
+        default=False, validation_alias="oidcEnabled", serialization_alias="oidcEnabled"
+    )
     owner_key: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerKey",
+            validation_alias="ownerKey",
+            serialization_alias="ownerKey",
             description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
@@ -116,7 +148,8 @@ class aaaOauthProvider(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerTag",
+            validation_alias="ownerTag",
+            serialization_alias="ownerTag",
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
@@ -129,18 +162,39 @@ class aaaOauthProvider(ManagedObject):
         Field(
             ge=5,
             le=30,
-            alias="timeout",
+            validation_alias="timeout",
+            serialization_alias="timeout",
             description="The following two properties are also defined in Ep MO. Here they reperesent per server configuration which would take precedence over global configuration defined in Ep MO",
         ),
     ] = 5
     token_endpoint_url_of_the_idp: Annotated[
-        str, Field(min_length=1, max_length=1000, alias="tokenEndpoint")
+        str,
+        Field(
+            min_length=1,
+            max_length=1000,
+            validation_alias="tokenEndpoint",
+            serialization_alias="tokenEndpoint",
+        ),
     ] = ""
     certificate_authority: Annotated[
-        str, Field(max_length=16, pattern="^[a-zA-Z0-9_.:-]+$", alias="tp")
+        str,
+        Field(
+            max_length=16,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            validation_alias="tp",
+            serialization_alias="tp",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     username_claim_eg_username_email_sub_etc: Annotated[
-        str, Field(min_length=1, max_length=500, alias="usernameAttribute")
+        str,
+        Field(
+            min_length=1,
+            max_length=500,
+            validation_alias="usernameAttribute",
+            serialization_alias="usernameAttribute",
+        ),
     ] = ""
-    verify_token_signature: bool = Field(default=False, alias="verifyEnabled")
+    verify_token_signature: bool = Field(
+        default=False, validation_alias="verifyEnabled", serialization_alias="verifyEnabled"
+    )

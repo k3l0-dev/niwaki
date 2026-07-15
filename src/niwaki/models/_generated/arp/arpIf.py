@@ -3,8 +3,9 @@
 from __future__ import annotations
 
 from typing import ClassVar, Annotated
-from pydantic import Field
+from pydantic import BeforeValidator, Field
 
+from niwaki.models._wire import Flags, parse_flags
 from niwaki.models._generated.enums.ArpIfControl import ArpIfControl
 from niwaki.models._generated.enums.NwAdminSt import NwAdminSt
 
@@ -50,7 +51,12 @@ class arpIf(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     interface_id: Annotated[
-        str, Field(alias="id", description="Specifies an identifier for the interface.")
+        str,
+        Field(
+            validation_alias="id",
+            serialization_alias="id",
+            description="Specifies an identifier for the interface.",
+        ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
@@ -62,52 +68,90 @@ class arpIf(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    interface_controls_for_arp: ArpIfControl = Field(
-        default=ArpIfControl.UNSPECIFIED, alias="ctrl", description="Interface controls"
+    interface_controls_for_arp: Annotated[Flags[ArpIfControl], BeforeValidator(parse_flags)] = (
+        Field(
+            default_factory=lambda: frozenset({ArpIfControl.UNSPECIFIED}),
+            validation_alias="ctrl",
+            serialization_alias="ctrl",
+            description="Interface controls",
+        )
     )
     delete_adj_on_mac_delete: NwAdminSt = Field(
         default=NwAdminSt.DISABLED,
-        alias="deleteAdjOnMacDelete",
+        validation_alias="deleteAdjOnMacDelete",
+        serialization_alias="deleteAdjOnMacDelete",
         description="Delete adjacency on MAC delete without refresh",
     )
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            validation_alias="descr",
+            serialization_alias="descr",
+        ),
     ] = ""
     duplicate_ip_detection_for_unnumbered_svi: NwAdminSt = Field(
         default=NwAdminSt.DISABLED,
-        alias="duplicateIpDetectionForUnnumberedSvi",
+        validation_alias="duplicateIpDetectionForUnnumberedSvi",
+        serialization_alias="duplicateIpDetectionForUnnumberedSvi",
         description="Enable duplicate IP detection across VLANs for IP unnumbered SVIs",
     )
     gratuitous_arp_hsrp_duplicate: NwAdminSt = Field(
         default=NwAdminSt.ENABLED,
-        alias="gratuitousHsrpDup",
+        validation_alias="gratuitousHsrpDup",
+        serialization_alias="gratuitousHsrpDup",
         description="Gratuitous ARP HSRP Duplicate",
     )
     gratuitous_arp_request: NwAdminSt = Field(
-        default=NwAdminSt.ENABLED, alias="gratuitousRequest", description="Gratuitous ARP request"
+        default=NwAdminSt.ENABLED,
+        validation_alias="gratuitousRequest",
+        serialization_alias="gratuitousRequest",
+        description="Gratuitous ARP request",
     )
     gratuitous_arp_update: NwAdminSt = Field(
-        default=NwAdminSt.ENABLED, alias="gratuitousUpdate", description="Gratuitous ARP Update"
+        default=NwAdminSt.ENABLED,
+        validation_alias="gratuitousUpdate",
+        serialization_alias="gratuitousUpdate",
+        description="Gratuitous ARP Update",
     )
     local_proxy_arp: NwAdminSt = Field(
-        default=NwAdminSt.DISABLED, alias="localProxyArp", description="Local Proxy ARP"
+        default=NwAdminSt.DISABLED,
+        validation_alias="localProxyArp",
+        serialization_alias="localProxyArp",
+        description="Local Proxy ARP",
     )
     local_proxy_arp_w_o_hw_flooding: NwAdminSt = Field(
         default=NwAdminSt.DISABLED,
-        alias="localProxyArpNoHwFlood",
+        validation_alias="localProxyArpNoHwFlood",
+        serialization_alias="localProxyArpNoHwFlood",
         description="Local Proxy ARP without HW Flooding",
     )
     name: Annotated[
         str, Field(min_length=1, max_length=128, description="The name of the object.")
     ] = ""
     proxy_arp: NwAdminSt = Field(
-        default=NwAdminSt.DISABLED, alias="proxyArp", description="Proxy ARP"
+        default=NwAdminSt.DISABLED,
+        validation_alias="proxyArp",
+        serialization_alias="proxyArp",
+        description="Proxy ARP",
     )
-    refresh_timer_for_mac_delete: str = Field(
-        default="",
-        alias="refreshTimerForMacDelete",
-        description="Set refresh timer for MAC delete adjacency request",
-    )
-    arp_timeout: str = Field(default="", alias="timeout", description="Timeout")
+    refresh_timer_for_mac_delete: Annotated[
+        int,
+        Field(
+            validation_alias="refreshTimerForMacDelete",
+            serialization_alias="refreshTimerForMacDelete",
+            description="Set refresh timer for MAC delete adjacency request",
+        ),
+    ] = 0
+    arp_timeout: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=28800,
+            validation_alias="timeout",
+            serialization_alias="timeout",
+            description="Timeout",
+        ),
+    ] = 0
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

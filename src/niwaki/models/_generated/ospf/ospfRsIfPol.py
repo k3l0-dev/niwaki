@@ -62,7 +62,8 @@ class ospfRsIfPol(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9_.:-]+$",
-            alias="tnOspfIfPolName",
+            validation_alias="tnOspfIfPolName",
+            serialization_alias="tnOspfIfPolName",
             description="The target interface policy name. This name can be between 1 and 64 alphanumeric characters. Note that you cannot change this name after the object has been saved",
         ),
     ] = ""

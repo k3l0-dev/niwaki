@@ -3,8 +3,10 @@
 from __future__ import annotations
 
 from typing import ClassVar, Annotated
-from pydantic import Field
+from pydantic import BeforeValidator, Field
 
+from niwaki.models._wire import Flags, parse_flags
+from niwaki.models._generated.enums.IpmcIfCtrl import IpmcIfCtrl
 from niwaki.models._generated.enums.IpmcifVer import IpmcifVer
 
 from niwaki.models.base import ManagedObject
@@ -65,27 +67,63 @@ class igmpIfPol(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
-    group_timeout: str = Field(default="", alias="grpTimeout", description="Group Timeout")
-    controls: str = Field(default="", alias="ifCtrl", description="Interface Control")
-    last_member_query_count: str = Field(
-        default="", alias="lastMbrCnt", description="Last member query count"
+    group_timeout: Annotated[
+        int,
+        Field(
+            ge=3,
+            le=65535,
+            validation_alias="grpTimeout",
+            serialization_alias="grpTimeout",
+            description="Group Timeout",
+        ),
+    ] = 260
+    controls: Annotated[Flags[IpmcIfCtrl], BeforeValidator(parse_flags)] = Field(
+        default_factory=lambda: frozenset(),
+        validation_alias="ifCtrl",
+        serialization_alias="ifCtrl",
+        description="Interface Control",
     )
-    last_member_response_time: str = Field(
-        default="", alias="lastMbrRespTime", description="Last member response time"
-    )
+    last_member_query_count: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=5,
+            validation_alias="lastMbrCnt",
+            serialization_alias="lastMbrCnt",
+            description="Last member query count",
+        ),
+    ] = 2
+    last_member_response_time: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=25,
+            validation_alias="lastMbrRespTime",
+            serialization_alias="lastMbrRespTime",
+            description="Last member response time",
+        ),
+    ] = 1
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     owner_key: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerKey",
+            validation_alias="ownerKey",
+            serialization_alias="ownerKey",
             description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
@@ -94,21 +132,75 @@ class igmpIfPol(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerTag",
+            validation_alias="ownerTag",
+            serialization_alias="ownerTag",
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
-    querier_timeout: str = Field(default="", alias="querierTimeout", description="Querier timeout")
-    query_interval: str = Field(default="", alias="queryIntvl", description="Query interval")
-    robustness_factor: str = Field(default="", alias="robustFac", description="Robustness factor")
-    response_interval: str = Field(
-        default="", alias="rspIntvl", description="Query response interval"
-    )
-    startup_query_count: str = Field(
-        default="", alias="startQueryCnt", description="Startup Query Count"
-    )
-    startup_query_interval: str = Field(
-        default="", alias="startQueryIntvl", description="Startup query interval"
-    )
+    querier_timeout: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=65535,
+            validation_alias="querierTimeout",
+            serialization_alias="querierTimeout",
+            description="Querier timeout",
+        ),
+    ] = 255
+    query_interval: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=18000,
+            validation_alias="queryIntvl",
+            serialization_alias="queryIntvl",
+            description="Query interval",
+        ),
+    ] = 125
+    robustness_factor: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=7,
+            validation_alias="robustFac",
+            serialization_alias="robustFac",
+            description="Robustness factor",
+        ),
+    ] = 2
+    response_interval: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=25,
+            validation_alias="rspIntvl",
+            serialization_alias="rspIntvl",
+            description="Query response interval",
+        ),
+    ] = 10
+    startup_query_count: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=10,
+            validation_alias="startQueryCnt",
+            serialization_alias="startQueryCnt",
+            description="Startup Query Count",
+        ),
+    ] = 2
+    startup_query_interval: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=18000,
+            validation_alias="startQueryIntvl",
+            serialization_alias="startQueryIntvl",
+            description="Startup query interval",
+        ),
+    ] = 31
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    version: IpmcifVer = Field(default=IpmcifVer.V2, alias="ver", description="Interface version")
+    version: IpmcifVer = Field(
+        default=IpmcifVer.V2,
+        validation_alias="ver",
+        serialization_alias="ver",
+        description="Interface version",
+    )

@@ -25,5 +25,5 @@ Accepted as keyword arguments of `.node_block(name)` and of `.set(**attrs)` on t
 | --- | --- | --- | --- | --- | --- |
 | `name` *(positional)* | `name` | `str` | — | — | — |
 | `description` | `descr` | `str` | — | — | The description of this configuration item. |
-| `from_node_id` | `from_` | `str` | — | — | — |
-| `to_node_id` | `to_` | `str` | — | — | — |
+| `from_node_id` | `from_` | `int` | — | `1` | — |
+| `to_node_id` | `to_` | `int` | — | `1` | — |

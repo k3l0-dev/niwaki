@@ -46,7 +46,12 @@ class dbgacRsToEpForEpToEp(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     target_dn: Annotated[
-        str, Field(alias="tDn", description="The destination end point IP address.")
+        str,
+        Field(
+            validation_alias="tDn",
+            serialization_alias="tDn",
+            description="The destination end point IP address.",
+        ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────

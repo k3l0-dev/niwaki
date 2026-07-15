@@ -48,19 +48,34 @@ class bfdMhKaP(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    detection_multiplier: str = Field(
-        default="",
-        alias="detectMult",
-        description="Detection multiplier. This is the desired detection time multiplier for BFD packets on the local system.",
-    )
-    required_minimum_rx_interval: str = Field(
-        default="",
-        alias="minRxIntvl",
-        description="Required minimum rx interval. This is the minimum interval, in ms, between received BFD control packets that this system is capable of supporting.",
-    )
-    desired_minimum_tx_interval: str = Field(
-        default="",
-        alias="minTxIntvl",
-        description="Desired minimum tx interval. This is the minimum interval, in ms, that the system would like to use when transmitting BFD control packets.",
-    )
+    detection_multiplier: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=50,
+            validation_alias="detectMult",
+            serialization_alias="detectMult",
+            description="Detection multiplier. This is the desired detection time multiplier for BFD packets on the local system.",
+        ),
+    ] = 3
+    required_minimum_rx_interval: Annotated[
+        int,
+        Field(
+            ge=250,
+            le=999,
+            validation_alias="minRxIntvl",
+            serialization_alias="minRxIntvl",
+            description="Required minimum rx interval. This is the minimum interval, in ms, between received BFD control packets that this system is capable of supporting.",
+        ),
+    ] = 250
+    desired_minimum_tx_interval: Annotated[
+        int,
+        Field(
+            ge=250,
+            le=999,
+            validation_alias="minTxIntvl",
+            serialization_alias="minTxIntvl",
+            description="Desired minimum tx interval. This is the minimum interval, in ms, that the system would like to use when transmitting BFD control packets.",
+        ),
+    ] = 250
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

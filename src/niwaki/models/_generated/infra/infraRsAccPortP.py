@@ -49,7 +49,11 @@ class infraRsAccPortP(ManagedObject):
     # ── Naming (required) ──────────────────────────────────────────────────────
     target_dn: Annotated[
         str,
-        Field(alias="tDn", description="The target name of the interface selector policy profile."),
+        Field(
+            validation_alias="tDn",
+            serialization_alias="tDn",
+            description="The target name of the interface selector policy profile.",
+        ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────

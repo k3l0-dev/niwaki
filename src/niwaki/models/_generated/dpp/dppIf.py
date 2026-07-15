@@ -44,7 +44,8 @@ class dppIf(ManagedObject):
     # ── Naming (required) ──────────────────────────────────────────────────────
     ingress_or_egress_direction: DppDirection = Field(
         default=DppDirection.INGRESS,
-        alias="direction",
+        validation_alias="direction",
+        serialization_alias="direction",
         description="direction in which policer is applied",
     )
     id: Annotated[str, Field(description="Interface ID")]

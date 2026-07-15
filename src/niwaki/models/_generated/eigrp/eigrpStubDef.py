@@ -3,7 +3,10 @@
 from __future__ import annotations
 
 from typing import ClassVar, Annotated
-from pydantic import Field
+from pydantic import BeforeValidator, Field
+
+from niwaki.models._wire import Flags, parse_flags
+from niwaki.models._generated.enums.EigrpStubRtAdvControl import EigrpStubRtAdvControl
 
 from niwaki.models.base import ManagedObject
 
@@ -49,15 +52,29 @@ class eigrpStubDef(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies a control instrumentation description.",
         ),
     ] = ""
     name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
-    stub_route_advertisement_controls: str = Field(
-        default="", alias="rtAdvCtrl", description="The route advertisement controls."
+    stub_route_advertisement_controls: Annotated[
+        Flags[EigrpStubRtAdvControl], BeforeValidator(parse_flags)
+    ] = Field(
+        default_factory=lambda: frozenset(
+            {EigrpStubRtAdvControl.CONNECTED, EigrpStubRtAdvControl.SUMMARY}
+        ),
+        validation_alias="rtAdvCtrl",
+        serialization_alias="rtAdvCtrl",
+        description="The route advertisement controls.",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

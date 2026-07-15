@@ -53,7 +53,9 @@ class fvOrchsInfo(ManagedObject):
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    addr_ns_name: Annotated[str, Field(max_length=512, alias="addrNsName")] = ""
+    addr_ns_name: Annotated[
+        str, Field(max_length=512, validation_alias="addrNsName", serialization_alias="addrNsName")
+    ] = ""
     annotation: Annotated[
         str,
         Field(
@@ -64,13 +66,23 @@ class fvOrchsInfo(ManagedObject):
     ] = ""
     cloud: Annotated[str, Field(max_length=512)] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
-    need_vip: bool = Field(default=False, alias="needVip")
+    need_vip: bool = Field(default=False, validation_alias="needVip", serialization_alias="needVip")
     plan: Annotated[str, Field(max_length=512)] = ""
-    svcs_mode: Annotated[str, Field(max_length=512, alias="svcsMode")] = ""
+    svcs_mode: Annotated[
+        str, Field(max_length=512, validation_alias="svcsMode", serialization_alias="svcsMode")
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    usr_acc: Annotated[str, Field(max_length=512, alias="usrAcc")] = ""
+    usr_acc: Annotated[
+        str, Field(max_length=512, validation_alias="usrAcc", serialization_alias="usrAcc")
+    ] = ""
     vip: Annotated[
         str,
         Field(

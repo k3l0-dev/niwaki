@@ -3,9 +3,11 @@
 from __future__ import annotations
 
 from typing import ClassVar, Annotated
-from pydantic import Field
+from pydantic import BeforeValidator, Field
 
+from niwaki.models._wire import Flags, parse_flags
 from niwaki.models._generated.enums.CompCtrlrOperState import CompCtrlrOperState
+from niwaki.models._generated.enums.CompRemoteOperIssues import CompRemoteOperIssues
 
 from niwaki.models.base import ManagedObject
 
@@ -43,7 +45,7 @@ class vmmAgtStatus(ManagedObject):
     name: Annotated[str, Field(min_length=1, max_length=256, description="The name of the object.")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    hb_count: Annotated[int, Field(alias="HbCount")] = 0
+    hb_count: Annotated[int, Field(validation_alias="HbCount", serialization_alias="HbCount")] = 0
     annotation: Annotated[
         str,
         Field(
@@ -53,17 +55,30 @@ class vmmAgtStatus(ManagedObject):
         ),
     ] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     status: CompCtrlrOperState = Field(
         default=CompCtrlrOperState.UNKNOWN,
-        alias="operSt",
+        validation_alias="operSt",
+        serialization_alias="operSt",
         description="The runtime state of the object or policy.",
     )
-    remote_err_msg: Annotated[str, Field(max_length=512, alias="remoteErrMsg")] = ""
-    remote_oper_issues: str = Field(
-        default="",
-        alias="remoteOperIssues",
-        description="The remote operational issues on this object not initiated by APIC.",
+    remote_err_msg: Annotated[
+        str,
+        Field(max_length=512, validation_alias="remoteErrMsg", serialization_alias="remoteErrMsg"),
+    ] = ""
+    remote_oper_issues: Annotated[Flags[CompRemoteOperIssues], BeforeValidator(parse_flags)] = (
+        Field(
+            default_factory=lambda: frozenset({CompRemoteOperIssues.NONE}),
+            validation_alias="remoteOperIssues",
+            serialization_alias="remoteOperIssues",
+            description="The remote operational issues on this object not initiated by APIC.",
+        )
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

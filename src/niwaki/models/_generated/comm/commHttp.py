@@ -46,17 +46,23 @@ class commHttp(ManagedObject):
 
     # ── Configurable ───────────────────────────────────────────────────────────
     access_control_allow_credential: CommAllowCredentialState = Field(
-        default=CommAllowCredentialState.DISABLED, alias="accessControlAllowCredential"
+        default=CommAllowCredentialState.DISABLED,
+        validation_alias="accessControlAllowCredential",
+        serialization_alias="accessControlAllowCredential",
     )
     access_control_allow_origins: Annotated[
         str,
         Field(
-            max_length=256, pattern="^[a-zA-Z0-9-_:/.,\\*\\s]+$", alias="accessControlAllowOrigins"
+            max_length=256,
+            pattern="^[a-zA-Z0-9-_:/.,\\*\\s]+$",
+            validation_alias="accessControlAllowOrigins",
+            serialization_alias="accessControlAllowOrigins",
         ),
     ] = ""
     admin_state: CommAdminState = Field(
         default=CommAdminState.DISABLED,
-        alias="adminSt",
+        validation_alias="adminSt",
+        serialization_alias="adminSt",
         description="The state of the HTTP communication service. This can be enabled or disabled.",
     )
     annotation: Annotated[
@@ -67,45 +73,88 @@ class commHttp(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    cli_only_mode: CommCliOnlyMode = Field(default=CommCliOnlyMode.DISABLED, alias="cliOnlyMode")
+    cli_only_mode: CommCliOnlyMode = Field(
+        default=CommCliOnlyMode.DISABLED,
+        validation_alias="cliOnlyMode",
+        serialization_alias="cliOnlyMode",
+    )
     description: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies the description of a policy component.",
         ),
     ] = ""
-    global_throttle_rate: Annotated[int, Field(ge=1, le=10000, alias="globalThrottleRate")] = 10000
+    global_throttle_rate: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=10000,
+            validation_alias="globalThrottleRate",
+            serialization_alias="globalThrottleRate",
+        ),
+    ] = 10000
     global_throttle_st: CommAdminState = Field(
-        default=CommAdminState.DISABLED, alias="globalThrottleSt"
+        default=CommAdminState.DISABLED,
+        validation_alias="globalThrottleSt",
+        serialization_alias="globalThrottleSt",
     )
-    unit_of_rate_limit: str = Field(default="", alias="globalThrottleUnit")
+    unit_of_rate_limit: str = Field(
+        default="", validation_alias="globalThrottleUnit", serialization_alias="globalThrottleUnit"
+    )
     max_request_status_count: Annotated[
-        int, Field(ge=0, le=1024, alias="maxRequestStatusCount")
+        int,
+        Field(
+            ge=0,
+            le=1024,
+            validation_alias="maxRequestStatusCount",
+            serialization_alias="maxRequestStatusCount",
+        ),
     ] = 0
     name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     node_exporter_service: CommNodeExporter = Field(
-        default=CommNodeExporter.DISABLED, alias="nodeExporter"
+        default=CommNodeExporter.DISABLED,
+        validation_alias="nodeExporter",
+        serialization_alias="nodeExporter",
     )
     port: Annotated[
         int, Field(ge=1, le=65535, description="The port used for HTTP communication service.")
     ] = 80
     redirect_state: CommRedirect = Field(
         default=CommRedirect.DISABLED,
-        alias="redirectSt",
+        validation_alias="redirectSt",
+        serialization_alias="redirectSt",
         description="The state of HTTPS communication service. This can be enabled or disabled.",
     )
     server_header_response: CommServerHeader = Field(
-        default=CommServerHeader.ENABLED, alias="serverHeader"
+        default=CommServerHeader.ENABLED,
+        validation_alias="serverHeader",
+        serialization_alias="serverHeader",
     )
-    throttle_rate: Annotated[int, Field(ge=1, le=100, alias="throttleRate")] = 2
+    throttle_rate: Annotated[
+        int,
+        Field(ge=1, le=100, validation_alias="throttleRate", serialization_alias="throttleRate"),
+    ] = 2
     login_refresh_throttle_state: CommAdminState = Field(
-        default=CommAdminState.ENABLED, alias="throttleSt"
+        default=CommAdminState.ENABLED,
+        validation_alias="throttleSt",
+        serialization_alias="throttleSt",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    visore_access: CommVisoreAccess = Field(default=CommVisoreAccess.ENABLED, alias="visoreAccess")
+    visore_access: CommVisoreAccess = Field(
+        default=CommVisoreAccess.ENABLED,
+        validation_alias="visoreAccess",
+        serialization_alias="visoreAccess",
+    )

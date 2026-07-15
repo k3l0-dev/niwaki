@@ -34,7 +34,9 @@ class mdpConsumerEPgInfoRef(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    consumer_epg_dn: Annotated[str, Field(alias="consumerEPgDn")]
+    consumer_epg_dn: Annotated[
+        str, Field(validation_alias="consumerEPgDn", serialization_alias="consumerEPgDn")
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[

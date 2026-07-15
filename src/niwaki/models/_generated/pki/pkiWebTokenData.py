@@ -3,7 +3,10 @@
 from __future__ import annotations
 
 from typing import ClassVar, Annotated
-from pydantic import Field
+from pydantic import BeforeValidator, Field
+
+from niwaki.models._wire import Flags, parse_flags
+from niwaki.models._generated.enums.PkiSessionRecordFlags import PkiSessionRecordFlags
 
 from niwaki.models.base import ManagedObject
 
@@ -53,27 +56,47 @@ class pkiWebTokenData(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
-    jwt_api_key: Annotated[str, Field(max_length=512, alias="jwtApiKey")] = ""
-    jwt_private_key: Annotated[str, Field(alias="jwtPrivateKey", repr=False)] = ""
-    jwt_public_key: str = Field(default="", alias="jwtPublicKey")
-    maximum_validity_period_in_hours: str = Field(
-        default="",
-        alias="maximumValidityPeriod",
-        description="The maximum validity period for a webt oken.",
+    jwt_api_key: Annotated[
+        str, Field(max_length=512, validation_alias="jwtApiKey", serialization_alias="jwtApiKey")
+    ] = ""
+    jwt_private_key: Annotated[
+        str,
+        Field(validation_alias="jwtPrivateKey", serialization_alias="jwtPrivateKey", repr=False),
+    ] = ""
+    jwt_public_key: str = Field(
+        default="", validation_alias="jwtPublicKey", serialization_alias="jwtPublicKey"
     )
+    maximum_validity_period_in_hours: Annotated[
+        int,
+        Field(
+            ge=4,
+            le=24,
+            validation_alias="maximumValidityPeriod",
+            serialization_alias="maximumValidityPeriod",
+            description="The maximum validity period for a webt oken.",
+        ),
+    ] = 24
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     owner_key: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerKey",
+            validation_alias="ownerKey",
+            serialization_alias="ownerKey",
             description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
@@ -82,21 +105,37 @@ class pkiWebTokenData(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerTag",
+            validation_alias="ownerTag",
+            serialization_alias="ownerTag",
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
-    session_recording_options: str = Field(
-        default="",
-        alias="sessionRecordFlags",
+    session_recording_options: Annotated[
+        Flags[PkiSessionRecordFlags], BeforeValidator(parse_flags)
+    ] = Field(
+        default_factory=lambda: frozenset(),
+        validation_alias="sessionRecordFlags",
+        serialization_alias="sessionRecordFlags",
         description="Enables or disables a refresh in the session records.",
     )
-    gui_idle_timeout_in_seconds: str = Field(
-        default="",
-        alias="uiIdleTimeoutSeconds",
-        description="The maximum interval time the GUI remains idle before login needs to be refreshed.",
-    )
+    gui_idle_timeout_in_seconds: Annotated[
+        int,
+        Field(
+            ge=60,
+            le=65525,
+            validation_alias="uiIdleTimeoutSeconds",
+            serialization_alias="uiIdleTimeoutSeconds",
+            description="The maximum interval time the GUI remains idle before login needs to be refreshed.",
+        ),
+    ] = 1200
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    timeout_in_seconds: str = Field(
-        default="", alias="webtokenTimeoutSeconds", description="The web token timeout interval."
-    )
+    timeout_in_seconds: Annotated[
+        int,
+        Field(
+            ge=300,
+            le=9600,
+            validation_alias="webtokenTimeoutSeconds",
+            serialization_alias="webtokenTimeoutSeconds",
+            description="The web token timeout interval.",
+        ),
+    ] = 600

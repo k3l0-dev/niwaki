@@ -57,27 +57,41 @@ class aaaDuoEp(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    ldap_attribute: Annotated[str, Field(max_length=63, alias="attribute")] = ""
-    ldap_base_dn: Annotated[str, Field(max_length=512, alias="basedn")] = ""
+    ldap_attribute: Annotated[
+        str, Field(max_length=63, validation_alias="attribute", serialization_alias="attribute")
+    ] = ""
+    ldap_base_dn: Annotated[
+        str, Field(max_length=512, validation_alias="basedn", serialization_alias="basedn")
+    ] = ""
     description: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
-    ldap_filter: Annotated[str, Field(max_length=63, alias="filter")] = ""
+    ldap_filter: Annotated[
+        str, Field(max_length=63, validation_alias="filter", serialization_alias="filter")
+    ] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     owner_key: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerKey",
+            validation_alias="ownerKey",
+            serialization_alias="ownerKey",
             description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
@@ -86,7 +100,8 @@ class aaaDuoEp(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerTag",
+            validation_alias="ownerTag",
+            serialization_alias="ownerTag",
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
@@ -103,7 +118,8 @@ class aaaDuoEp(ManagedObject):
         Field(
             ge=30,
             le=120,
-            alias="timeout",
+            validation_alias="timeout",
+            serialization_alias="timeout",
             description="add units for timeout. This helps display in CLI",
         ),
     ] = 60

@@ -37,7 +37,7 @@ class mdpServiceDef(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    contract_dn: Annotated[str, Field(alias="vzBrCPDn")]
+    contract_dn: Annotated[str, Field(validation_alias="vzBrCPDn", serialization_alias="vzBrCPDn")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[

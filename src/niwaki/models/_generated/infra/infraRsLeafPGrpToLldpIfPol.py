@@ -60,7 +60,8 @@ class infraRsLeafPGrpToLldpIfPol(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9_.:-]+$",
-            alias="tnLldpIfPolName",
+            validation_alias="tnLldpIfPolName",
+            serialization_alias="tnLldpIfPolName",
             description="The LLDP policy name.",
         ),
     ] = ""

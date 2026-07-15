@@ -47,7 +47,7 @@ from __future__ import annotations
 
 import asyncio
 from collections.abc import Coroutine
-from typing import TYPE_CHECKING, Any, NamedTuple
+from typing import TYPE_CHECKING, Any, NamedTuple, overload
 
 from niwaki.models.base import ManagedObject
 from niwaki.transport._config import RetryConfig
@@ -318,6 +318,12 @@ class NiwakiNode[T: ManagedObject](_JargonNavMixin[T]):
         """
         self._niwaki._sync_session.delete_mo(self._dn)  # pyright: ignore[reportPrivateUsage]
 
+    @overload
+    def query[U: ManagedObject](self, cls: type[U]) -> Query[U]: ...
+
+    @overload
+    def query(self, cls: str) -> Query[ManagedObject]: ...
+
     def query[U: ManagedObject](self, cls: type[U] | str) -> Query[U]:
         """Build a query scoped to this node's DN.
 
@@ -438,6 +444,12 @@ class AsyncNiwakiNode[T: ManagedObject](_JargonNavMixin[T]):
             ServerError: APIC server-side error.
         """
         await self._niwaki._active_session.delete_mo(self._dn)  # pyright: ignore[reportPrivateUsage]
+
+    @overload
+    def query[U: ManagedObject](self, cls: type[U]) -> AsyncQuery[U]: ...
+
+    @overload
+    def query(self, cls: str) -> AsyncQuery[ManagedObject]: ...
 
     def query[U: ManagedObject](self, cls: type[U] | str) -> AsyncQuery[U]:
         """Build a query scoped to this node's DN (async variant).
@@ -646,6 +658,12 @@ class AsyncNiwaki:
         return getattr(self.root, attr)
 
     # ── Queries ───────────────────────────────────────────────────────────────
+
+    @overload
+    def query[T: ManagedObject](self, cls: type[T]) -> AsyncQuery[T]: ...
+
+    @overload
+    def query(self, cls: str) -> AsyncQuery[ManagedObject]: ...
 
     def query[T: ManagedObject](self, cls: type[T] | str) -> AsyncQuery[T]:
         """Build a global class query for the entire ACI fabric (async variant).
@@ -965,6 +983,12 @@ class Niwaki:
         if attr.startswith("_"):
             raise AttributeError(attr)
         return getattr(self.root, attr)
+
+    @overload
+    def query[T: ManagedObject](self, cls: type[T]) -> Query[T]: ...
+
+    @overload
+    def query(self, cls: str) -> Query[ManagedObject]: ...
 
     def query[T: ManagedObject](self, cls: type[T] | str) -> Query[T]:
         """Build a global class query for the entire ACI fabric.

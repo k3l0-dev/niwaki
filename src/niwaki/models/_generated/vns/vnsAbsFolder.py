@@ -202,12 +202,16 @@ class vnsAbsFolder(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    aux_info: Annotated[str, Field(max_length=512, alias="auxInfo")] = ""
+    aux_info: Annotated[
+        str, Field(max_length=512, validation_alias="auxInfo", serialization_alias="auxInfo")
+    ] = ""
     cardinality: VnsVnsCardinalityType = Field(
         default=VnsVnsCardinalityType.UNSPECIFIED,
         description="A value to determine how many instances of this type can be present.",
     )
-    dev_ctx_lbl: Annotated[str, Field(max_length=512, alias="devCtxLbl")] = ""
+    dev_ctx_lbl: Annotated[
+        str, Field(max_length=512, validation_alias="devCtxLbl", serialization_alias="devCtxLbl")
+    ] = ""
     key: Annotated[
         str,
         Field(
@@ -219,17 +223,27 @@ class vnsAbsFolder(ManagedObject):
         description="A property that specifies if a value entered at configuration time can be modified at run time.",
     )
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     profile_behavior_shared: bool = Field(
         default=False,
-        alias="profileBehaviorShared",
+        validation_alias="profileBehaviorShared",
+        serialization_alias="profileBehaviorShared",
         description="Enabling sharing of AbsFolder. Used for the folders in AbsFuncProf.",
     )
     scoped_by: VnsItemScope = Field(
         default=VnsItemScope.EPG,
-        alias="scopedBy",
+        validation_alias="scopedBy",
+        serialization_alias="scopedBy",
         description="The scope used for resolving this parameter.",
     )
-    src_ref: Annotated[str, Field(max_length=512, alias="srcRef")] = ""
+    src_ref: Annotated[
+        str, Field(max_length=512, validation_alias="srcRef", serialization_alias="srcRef")
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

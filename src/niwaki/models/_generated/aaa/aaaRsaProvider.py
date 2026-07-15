@@ -65,16 +65,21 @@ class aaaRsaProvider(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    port: Annotated[int, Field(ge=1, le=65535, alias="authPort")] = 1812
+    port: Annotated[
+        int, Field(ge=1, le=65535, validation_alias="authPort", serialization_alias="authPort")
+    ] = 1812
     authentication_protocol: AaaauthenticationProtocol = Field(
-        default=AaaauthenticationProtocol.PAP, alias="authProtocol"
+        default=AaaauthenticationProtocol.PAP,
+        validation_alias="authProtocol",
+        serialization_alias="authProtocol",
     )
     description: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
@@ -82,21 +87,37 @@ class aaaRsaProvider(ManagedObject):
         str, Field(repr=False, description="A password for the AAA provider database.")
     ] = ""
     periodic_server_monitoring: AaaMonitorServerType = Field(
-        default=AaaMonitorServerType.DISABLED, alias="monitorServer"
+        default=AaaMonitorServerType.DISABLED,
+        validation_alias="monitorServer",
+        serialization_alias="monitorServer",
     )
     periodic_server_monitoring_password: Annotated[
-        str, Field(alias="monitoringPassword", repr=False)
+        str,
+        Field(
+            validation_alias="monitoringPassword",
+            serialization_alias="monitoringPassword",
+            repr=False,
+        ),
     ] = ""
-    periodic_server_monitoring_username: str = Field(default="", alias="monitoringUser")
+    periodic_server_monitoring_username: str = Field(
+        default="", validation_alias="monitoringUser", serialization_alias="monitoringUser"
+    )
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     owner_key: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerKey",
+            validation_alias="ownerKey",
+            serialization_alias="ownerKey",
             description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
@@ -105,7 +126,8 @@ class aaaRsaProvider(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerTag",
+            validation_alias="ownerTag",
+            serialization_alias="ownerTag",
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
@@ -115,7 +137,8 @@ class aaaRsaProvider(ManagedObject):
         Field(
             ge=0,
             le=60,
-            alias="timeout",
+            validation_alias="timeout",
+            serialization_alias="timeout",
             description="Per provider configuration, if set to 0, it uses global settings value",
         ),
     ] = 5

@@ -57,35 +57,64 @@ class plannerL3OutTmpl(ManagedObject):
     ] = ""
     count: Annotated[int, Field(ge=1, le=4000000000)] = 1
     epg_deployment_preference: bool = Field(
-        default=False, alias="deployOnExisting", description="Deploy EPG on existing topology"
+        default=False,
+        validation_alias="deployOnExisting",
+        serialization_alias="deployOnExisting",
+        description="Deploy EPG on existing topology",
     )
     description: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies the description of a policy component.",
         ),
     ] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     number_of_prefix_based_epgs: Annotated[
         int,
         Field(
-            ge=1, le=4000000000, alias="prefixBasedEpgs", description="Number of Prefix based EPGs"
+            ge=1,
+            le=4000000000,
+            validation_alias="prefixBasedEpgs",
+            serialization_alias="prefixBasedEpgs",
+            description="Number of Prefix based EPGs",
         ),
     ] = 1
     epg_span: Annotated[
         int,
-        Field(ge=1, le=4000000000, alias="span", description="No of leafs this EPG deployed on"),
+        Field(
+            ge=1,
+            le=4000000000,
+            validation_alias="span",
+            serialization_alias="span",
+            description="No of leafs this EPG deployed on",
+        ),
     ] = 1
     number_of_l3_interfaces: Annotated[
         int,
-        Field(alias="subifs", description="Number of L3 Sub Interfaces (per leaf) in this l2out"),
+        Field(
+            validation_alias="subifs",
+            serialization_alias="subifs",
+            description="Number of L3 Sub Interfaces (per leaf) in this l2out",
+        ),
     ] = 0
     number_of_svi_interfaces: Annotated[
-        int, Field(alias="svis", description="Number of SVI Interfaces (per leaf) in this l3out")
+        int,
+        Field(
+            validation_alias="svis",
+            serialization_alias="svis",
+            description="Number of SVI Interfaces (per leaf) in this l3out",
+        ),
     ] = 0
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

@@ -58,17 +58,36 @@ class lacpEnhancedLagPol(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    id: Annotated[str, Field(description="An identifier .")] = ""
+    id: Annotated[int, Field(description="An identifier .")] = 0
     loadbalancing_mode: LacpLBMode = Field(
-        default=LacpLBMode.SRC_DST_IP, alias="lbmode", description="Load Balancing mode"
+        default=LacpLBMode.SRC_DST_IP,
+        validation_alias="lbmode",
+        serialization_alias="lbmode",
+        description="Load Balancing mode",
     )
     lacp_mode: LacpEnLacpMode = Field(
-        default=LacpEnLacpMode.ACTIVE, alias="mode", description="Enhanced LACP mode"
+        default=LacpEnLacpMode.ACTIVE,
+        validation_alias="mode",
+        serialization_alias="mode",
+        description="Enhanced LACP mode",
     )
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     number_of_links: Annotated[
-        int, Field(ge=2, le=8, alias="numLinks", description="Number of Links")
+        int,
+        Field(
+            ge=2,
+            le=8,
+            validation_alias="numLinks",
+            serialization_alias="numLinks",
+            description="Number of Links",
+        ),
     ] = 2
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

@@ -36,7 +36,9 @@ class orchsLDevVipAttr(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    node_attr: OrchsnodeAttr = Field(default=OrchsnodeAttr.DYNPAT, alias="nodeAttr")
+    node_attr: OrchsnodeAttr = Field(
+        default=OrchsnodeAttr.DYNPAT, validation_alias="nodeAttr", serialization_alias="nodeAttr"
+    )
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[
@@ -52,11 +54,18 @@ class orchsLDevVipAttr(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="The description of this configuration item.",
         ),
     ] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

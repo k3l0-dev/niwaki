@@ -63,32 +63,60 @@ class ptpInstPol(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
-    ptp_node_level_domain: str = Field(
-        default="",
-        alias="nodeDomain",
-        description="PTP Node level domain number (configured in profile)",
-    )
-    ptp_node_level_priority1: str = Field(
-        default="", alias="nodePrio1", description="PTP Node level priority1 value"
-    )
-    ptp_node_level_priority2: str = Field(
-        default="", alias="nodePrio2", description="PTP Node level priority2 value"
-    )
+    ptp_node_level_domain: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=128,
+            validation_alias="nodeDomain",
+            serialization_alias="nodeDomain",
+            description="PTP Node level domain number (configured in profile)",
+        ),
+    ] = 24
+    ptp_node_level_priority1: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=255,
+            validation_alias="nodePrio1",
+            serialization_alias="nodePrio1",
+            description="PTP Node level priority1 value",
+        ),
+    ] = 128
+    ptp_node_level_priority2: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=255,
+            validation_alias="nodePrio2",
+            serialization_alias="nodePrio2",
+            description="PTP Node level priority2 value",
+        ),
+    ] = 128
     node_level_ptp_profile: PtpNodeProfTemplate = Field(
         default=PtpNodeProfTemplate.TELECOM_FULL_PATH,
-        alias="nodeProfile",
+        validation_alias="nodeProfile",
+        serialization_alias="nodeProfile",
         description="Node-level PTP profile Template",
     )
     ptp_operating_mode: PtpPtpOperatingMode = Field(
         default=PtpPtpOperatingMode.HYBRID,
-        alias="operatingMode",
+        validation_alias="operatingMode",
+        serialization_alias="operatingMode",
         description="Operating Mode (Hybrid or non-hybrid)",
     )
     owner_key: Annotated[
@@ -96,7 +124,8 @@ class ptpInstPol(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerKey",
+            validation_alias="ownerKey",
+            serialization_alias="ownerKey",
             description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
@@ -105,7 +134,8 @@ class ptpInstPol(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerTag",
+            validation_alias="ownerTag",
+            serialization_alias="ownerTag",
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""

@@ -25,10 +25,10 @@ Accepted as keyword arguments of `.bgp_timers_policy(name)` and of `.set(**attrs
 | --- | --- | --- | --- | --- | --- |
 | `name` *(positional)* | `name` | `str` | — | — | The context level policy name. This name can be up to 64 alphanumeric characters. |
 | `description` | `descr` | `str` | — | — | Specifies a description of the policy definition. |
-| `graceful_restart_controls` | `grCtrl` | `str` | — | — | A property to determine whether the entity functions only as a graceful restart helper, forwarding prefixes pointing to a restarting peer, or whether graceful restart is enabled completely. |
-| `hold_interval` | `holdIntvl` | `str` | — | — | The time period to wait before declaring the neighbor device down. |
-| `keepalive_interval` | `kaIntvl` | `str` | — | — | The interval time between sending keepalive messages. |
-| `max_as_limit` | `maxAsLimit` | `str` | — | — | Maximum AS limit, to discard routes that have excessive AS numbers |
+| `graceful_restart_controls` | `grCtrl` | {ref}`BgpGRControls <enum-bgpgrcontrols>` | `helper` | `helper` | A property to determine whether the entity functions only as a graceful restart helper, forwarding prefixes pointing to a restarting peer, or whether graceful restart is enabled completely. |
+| `hold_interval` | `holdIntvl` | `int` | — | `180` | The time period to wait before declaring the neighbor device down. |
+| `keepalive_interval` | `kaIntvl` | `int` | — | `60` | The interval time between sending keepalive messages. |
+| `max_as_limit` | `maxAsLimit` | `int` | — | `0` | Maximum AS limit, to discard routes that have excessive AS numbers |
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |
-| `stale_interval` | `staleIntvl` | `str` | — | — | Maximum time that BGP keeps stale routes from the restarting BGP peer. |
+| `stale_interval` | `staleIntvl` | `int` | — | `default` | Maximum time that BGP keeps stale routes from the restarting BGP peer. |

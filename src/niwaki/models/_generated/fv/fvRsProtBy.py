@@ -53,7 +53,8 @@ class fvRsProtBy(ManagedObject):
             min_length=1,
             max_length=64,
             pattern="^[a-zA-Z0-9_.:-]+$",
-            alias="tnVzTabooName",
+            validation_alias="tnVzTabooName",
+            serialization_alias="tnVzTabooName",
             description="A contract for denying specific classes of traffic. Taboo rules are applied in the hardware before applying the rules of regular contracts. Without a contract, the default forwarding policy is to not allow any communication between EPGs.",
         ),
     ]

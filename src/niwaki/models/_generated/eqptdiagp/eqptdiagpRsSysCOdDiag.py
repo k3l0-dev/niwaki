@@ -44,7 +44,12 @@ class eqptdiagpRsSysCOdDiag(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     target_dn: Annotated[
-        str, Field(alias="tDn", description="The target system controller module.")
+        str,
+        Field(
+            validation_alias="tDn",
+            serialization_alias="tDn",
+            description="The target system controller module.",
+        ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────

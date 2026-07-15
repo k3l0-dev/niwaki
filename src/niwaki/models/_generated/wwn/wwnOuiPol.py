@@ -36,7 +36,9 @@ class wwnOuiPol(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    organizationally_unique_identifier: Annotated[str, Field(alias="id", description="ID")]
+    organizationally_unique_identifier: Annotated[
+        str, Field(validation_alias="id", serialization_alias="id", description="ID")
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[

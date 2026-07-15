@@ -60,7 +60,8 @@ class infraRsFcLagPol(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9_.:-]+$",
-            alias="tnLacpLagPolName",
+            validation_alias="tnLacpLagPolName",
+            serialization_alias="tnLacpLagPolName",
             description="The name of the LLDP policy.",
         ),
     ] = ""

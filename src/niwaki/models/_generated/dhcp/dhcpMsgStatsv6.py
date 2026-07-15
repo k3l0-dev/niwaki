@@ -36,7 +36,9 @@ class dhcpMsgStatsv6(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    ipv6_message_type: DhcpMsgTv6 = Field(default=DhcpMsgTv6.SOLICIT, alias="typev6")
+    ipv6_message_type: DhcpMsgTv6 = Field(
+        default=DhcpMsgTv6.SOLICIT, validation_alias="typev6", serialization_alias="typev6"
+    )
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[

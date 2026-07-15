@@ -41,7 +41,8 @@ class eptrkKVInfo(ManagedObject):
         Field(
             min_length=1,
             max_length=512,
-            alias="key",
+            validation_alias="key",
+            serialization_alias="key",
             description="The key or password used to uniquely identify this configuration object.",
         ),
     ]
@@ -57,5 +58,8 @@ class eptrkKVInfo(ManagedObject):
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     debug_internal_data: str = Field(
-        default="", alias="value", description="The value of the property."
+        default="",
+        validation_alias="value",
+        serialization_alias="value",
+        description="The value of the property.",
     )

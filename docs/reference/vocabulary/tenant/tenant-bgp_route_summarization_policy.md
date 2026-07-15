@@ -22,9 +22,9 @@ Accepted as keyword arguments of `.bgp_route_summarization_policy(name)` and of 
 | parameter | wire | type | values | default | description |
 | --- | --- | --- | --- | --- | --- |
 | `name` *(positional)* | `name` | `str` | — | — | The name of the object. |
-| `address_type_af_controls` | `addrTCtrl` | `str` | — | — | Ucast/Mcast Addr Type AF Control |
+| `address_type_af_controls` | `addrTCtrl` | {ref}`BgpAddrTControl <enum-bgpaddrtcontrol>` | `af-ucast`, `af-mcast`, `af-label-ucast` | `af-ucast` | Ucast/Mcast Addr Type AF Control |
 | `route_summarization_attribute_route_map` | `attrmap` | `str` | — | — | Summary attribute map |
-| `summary_control` | `ctrl` | `str` | — | — | Summary controlTODO: CHECK if this is user configurable |
+| `summary_control` | `ctrl` | {ref}`BgpSumControlPolType <enum-bgpsumcontrolpoltype>` | `as-set`, `summary-only` | — | Summary controlTODO: CHECK if this is user configurable |
 | `description` | `descr` | `str` | — | — | Specifies a description of the policy definition. |
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |

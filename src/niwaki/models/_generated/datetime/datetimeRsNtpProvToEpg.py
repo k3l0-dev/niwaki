@@ -51,7 +51,8 @@ class datetimeRsNtpProvToEpg(ManagedObject):
     ] = ""
     target_dn: str = Field(
         default="",
-        alias="tDn",
+        validation_alias="tDn",
+        serialization_alias="tDn",
         description="The distinguished name of the NTP provider to endpoint group. This is the full path. The maximum supported string length is 255 ASCII characters",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

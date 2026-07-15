@@ -47,16 +47,33 @@ class syntheticSwitchMaintPValidate(ManagedObject):
         str,
         Field(
             max_length=512,
-            alias="description",
+            validation_alias="description",
+            serialization_alias="description",
             description="The description of this configuration item.",
         ),
     ] = ""
     name_of_validation_check: Annotated[
-        str, Field(max_length=512, alias="name", description="The name of the object.")
+        str,
+        Field(
+            max_length=512,
+            validation_alias="name",
+            serialization_alias="name",
+            description="The name of the object.",
+        ),
     ] = ""
     message_for_rejecting_upgrade_downgrade: Annotated[
-        str, Field(max_length=512, alias="reason", description="The reset reason.")
+        str,
+        Field(
+            max_length=512,
+            validation_alias="reason",
+            serialization_alias="reason",
+            description="The reset reason.",
+        ),
     ] = ""
-    maintenance_policy_validition_result: bool = Field(default=False, alias="result")
-    whether_to_show_this_validation_in_ui: bool = Field(default=True, alias="showValidation")
+    maintenance_policy_validition_result: bool = Field(
+        default=False, validation_alias="result", serialization_alias="result"
+    )
+    whether_to_show_this_validation_in_ui: bool = Field(
+        default=True, validation_alias="showValidation", serialization_alias="showValidation"
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

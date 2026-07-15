@@ -3,7 +3,10 @@
 from __future__ import annotations
 
 from typing import ClassVar, Annotated
-from pydantic import Field
+from pydantic import BeforeValidator, Field
+
+from niwaki.models._wire import Flags, parse_flags
+from niwaki.models._generated.enums.InfraSslProtocolTypes import InfraSslProtocolTypes
 
 from niwaki.models.base import ManagedObject
 
@@ -43,61 +46,95 @@ class infraSetPol(ManagedObject):
         ),
     ] = ""
     damp_penatly_factor_for_coop_dampening: Annotated[
-        int, Field(ge=1, le=5, alias="dampFactor")
+        int, Field(ge=1, le=5, validation_alias="dampFactor", serialization_alias="dampFactor")
     ] = 1
     description: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
     disable_ep_dampening_knob: bool = Field(
-        default=False, alias="disableEpDampening", description="Enable Ep Dampening knob"
+        default=False,
+        validation_alias="disableEpDampening",
+        serialization_alias="disableEpDampening",
+        description="Enable Ep Dampening knob",
     )
-    enforce_domain_validation: bool = Field(default=False, alias="domainValidation")
+    enforce_domain_validation: bool = Field(
+        default=False, validation_alias="domainValidation", serialization_alias="domainValidation"
+    )
     enable_mo_streaming: bool = Field(
-        default=False, alias="enableMoStreaming", description="Enable MO steaming feature"
+        default=False,
+        validation_alias="enableMoStreaming",
+        serialization_alias="enableMoStreaming",
+        description="Enable MO steaming feature",
     )
     enable_remote_leaf_direct_communication: bool = Field(
         default=False,
-        alias="enableRemoteLeafDirect",
+        validation_alias="enableRemoteLeafDirect",
+        serialization_alias="enableRemoteLeafDirect",
         description="Enable remote leaf direct communication for all RLs",
     )
     enforce_subnet_check_on_all_vrfs: bool = Field(
-        default=False, alias="enforceSubnetCheck", description="Enforce subnet check on all VRFs"
+        default=False,
+        validation_alias="enforceSubnetCheck",
+        serialization_alias="enforceSubnetCheck",
+        description="Enforce subnet check on all VRFs",
     )
     leaf_opflexp_authenticate_clients: bool = Field(
         default=True,
-        alias="leafOpflexpAuthenticateClients",
+        validation_alias="leafOpflexpAuthenticateClients",
+        serialization_alias="leafOpflexpAuthenticateClients",
         description="Require Opflexp Client Certificates for authentication for Leaf",
     )
     leaf_opflexp_use_ssl: bool = Field(
         default=True,
-        alias="leafOpflexpUseSsl",
+        validation_alias="leafOpflexpUseSsl",
+        serialization_alias="leafOpflexpUseSsl",
         description="Require SSL transport for Opflexp for Leaf",
     )
     name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     opflexp_authenticate_clients: bool = Field(
         default=True,
-        alias="opflexpAuthenticateClients",
+        validation_alias="opflexpAuthenticateClients",
+        serialization_alias="opflexpAuthenticateClients",
         description="Require Opflexp Client Certificates for authentication",
     )
-    opflexp_ssl_protocols: str = Field(default="", alias="opflexpSslProtocols")
+    opflexp_ssl_protocols: Annotated[Flags[InfraSslProtocolTypes], BeforeValidator(parse_flags)] = (
+        Field(
+            default_factory=lambda: frozenset(
+                {InfraSslProtocolTypes.TLSV1_1, InfraSslProtocolTypes.TLSV1_2}
+            ),
+            validation_alias="opflexpSslProtocols",
+            serialization_alias="opflexpSslProtocols",
+        )
+    )
     opflexp_use_ssl: bool = Field(
-        default=True, alias="opflexpUseSsl", description="Require SSL transport for Opflexp"
+        default=True,
+        validation_alias="opflexpUseSsl",
+        serialization_alias="opflexpUseSsl",
+        description="Require SSL transport for Opflexp",
     )
     owner_key: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerKey",
+            validation_alias="ownerKey",
+            serialization_alias="ownerKey",
             description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
@@ -106,29 +143,39 @@ class infraSetPol(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerTag",
+            validation_alias="ownerTag",
+            serialization_alias="ownerTag",
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
     policy_sync_node_bringup: bool = Field(
         default=True,
-        alias="policySyncNodeBringup",
+        validation_alias="policySyncNodeBringup",
+        serialization_alias="policySyncNodeBringup",
         description="Admin Down the Leaf frontpanel port until policy download during first time bringup",
     )
     reallocate_gipos: bool = Field(
         default=False,
-        alias="reallocateGipo",
+        validation_alias="reallocateGipo",
+        serialization_alias="reallocateGipo",
         description="Reallocate gipo such that stretched and non stretched BDs have non overlapping gipos",
     )
     enable_intra_leaf_communication: bool = Field(
-        default=False, alias="restrictInfraVLANTraffic", description="Enable Intra Leaf Comm knob"
+        default=False,
+        validation_alias="restrictInfraVLANTraffic",
+        serialization_alias="restrictInfraVLANTraffic",
+        description="Enable Intra Leaf Comm knob",
     )
     disable_xrleanrs: bool = Field(
-        default=False, alias="unicastXrEpLearnDisable", description="Disable xrLeanrs"
+        default=False,
+        validation_alias="unicastXrEpLearnDisable",
+        serialization_alias="unicastXrEpLearnDisable",
+        description="Disable xrLeanrs",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     validate_overlapping_vlans_on_aepg: bool = Field(
         default=False,
-        alias="validateOverlappingVlans",
+        validation_alias="validateOverlappingVlans",
+        serialization_alias="validateOverlappingVlans",
         description="Validate Overlapping VLANS on AEPg",
     )

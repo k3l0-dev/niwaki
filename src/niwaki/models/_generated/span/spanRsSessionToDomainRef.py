@@ -49,7 +49,8 @@ class spanRsSessionToDomainRef(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9_.:-]+$",
-            alias="tnAaaDomainRefName",
+            validation_alias="tnAaaDomainRefName",
+            serialization_alias="tnAaaDomainRefName",
             description="The name of the AAA domain.",
         ),
     ] = ""

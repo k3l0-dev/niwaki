@@ -42,7 +42,13 @@ class syntheticSwitchFirmwareCheck(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    size_of_copied_tmp_file: Annotated[str, Field(max_length=512, alias="copiedSize")] = ""
-    node_id: Annotated[str, Field(max_length=512, alias="nodeid")] = ""
-    firmware_copy_check_result: bool = Field(default=False, alias="result")
+    size_of_copied_tmp_file: Annotated[
+        str, Field(max_length=512, validation_alias="copiedSize", serialization_alias="copiedSize")
+    ] = ""
+    node_id: Annotated[
+        str, Field(max_length=512, validation_alias="nodeid", serialization_alias="nodeid")
+    ] = ""
+    firmware_copy_check_result: bool = Field(
+        default=False, validation_alias="result", serialization_alias="result"
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

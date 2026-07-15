@@ -45,22 +45,40 @@ class spanRsDestApic(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    analyser_ip: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="analyserIp")] = ""
+    analyser_ip: Annotated[
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            validation_alias="analyserIp",
+            serialization_alias="analyserIp",
+        ),
+    ] = ""
     annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    flow_id: str = Field(
-        default="", alias="flowId", description="The flow ID of the ERSPAN packet."
-    )
-    mtu: Annotated[str, Field(description="mtu")] = ""
+    flow_id: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=1023,
+            validation_alias="flowId",
+            serialization_alias="flowId",
+            description="The flow ID of the ERSPAN packet.",
+        ),
+    ] = 1
+    mtu: Annotated[int, Field(ge=64, le=9216, description="mtu")] = 1518
     src_ip_prefix: Annotated[
         str,
         Field(
             pattern="^[0-9a-fA-F.:/ ]+$",
-            alias="srcIpPrefix",
+            validation_alias="srcIpPrefix",
+            serialization_alias="srcIpPrefix",
             description="The source IP prefix of the ERSPAN packet.",
         ),
     ] = ""
     target_dn: str = Field(
-        default="", alias="tDn", description="The distinguished name of the target."
+        default="",
+        validation_alias="tDn",
+        serialization_alias="tDn",
+        description="The distinguished name of the target.",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     ver: SpanErSpanVer = Field(default=SpanErSpanVer.VER2, description="Erspan version")

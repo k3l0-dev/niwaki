@@ -48,10 +48,16 @@ class infraFabricRecovery(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    infra_ip_of_apic1: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="apicIp")] = ""
+    infra_ip_of_apic1: Annotated[
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$", validation_alias="apicIp", serialization_alias="apicIp"
+        ),
+    ] = ""
     fabric_recovery_enabled: bool = Field(
         default=False,
-        alias="enable",
+        validation_alias="enable",
+        serialization_alias="enable",
         description="A flag to enable/disable the stats policy for comp objects.",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

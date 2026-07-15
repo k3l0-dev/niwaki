@@ -64,7 +64,13 @@ class pimCSWEntry(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     interface_controls: Annotated[
-        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="grp", description="Group IP")
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            validation_alias="grp",
+            serialization_alias="grp",
+            description="Group IP",
+        ),
     ]
     src: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", description="Source IP")]
 
@@ -82,16 +88,35 @@ class pimCSWEntry(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies the description of a policy component.",
         ),
     ] = ""
     exclude_remote_leafs: bool = Field(
-        default=False, alias="excludeRemoteLeafs", description="Exclude Remote Leafs"
+        default=False,
+        validation_alias="excludeRemoteLeafs",
+        serialization_alias="excludeRemoteLeafs",
+        description="Exclude Remote Leafs",
     )
     name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
-    pod_id: str = Field(default="", alias="podId", description="Pod ID")
+    pod_id: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=254,
+            validation_alias="podId",
+            serialization_alias="podId",
+            description="Pod ID",
+        ),
+    ] = 1
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

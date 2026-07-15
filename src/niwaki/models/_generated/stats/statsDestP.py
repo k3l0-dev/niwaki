@@ -70,7 +70,8 @@ class statsDestP(ManagedObject):
     ] = ""
     authentication_type_choice: FileAuthenticationType = Field(
         default=FileAuthenticationType.USEPASSWORD,
-        alias="authType",
+        validation_alias="authType",
+        serialization_alias="authType",
         description="The OSPF authentication type specifier. The type options are; default, md5, none, and simple.",
     )
     description: Annotated[
@@ -78,21 +79,31 @@ class statsDestP(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies the description of a policy component.",
         ),
     ] = ""
     host_ip: str = Field(
-        default="", alias="host", description="Hostname or IP for export destination"
+        default="",
+        validation_alias="host",
+        serialization_alias="host",
+        description="Hostname or IP for export destination",
     )
     identity_private_key_contents: Annotated[
-        str, Field(alias="identityPrivateKeyContents", repr=False)
+        str,
+        Field(
+            validation_alias="identityPrivateKeyContents",
+            serialization_alias="identityPrivateKeyContents",
+            repr=False,
+        ),
     ] = ""
     ssh_private_key_passphrase: Annotated[
         str,
         Field(
             max_length=512,
-            alias="identityPrivateKeyPassphrase",
+            validation_alias="identityPrivateKeyPassphrase",
+            serialization_alias="identityPrivateKeyPassphrase",
             repr=False,
             description="Passphrase given at the identity key creation.",
         ),
@@ -100,13 +111,20 @@ class statsDestP(ManagedObject):
     identity_public_key_contents: Annotated[
         str,
         Field(
-            alias="identityPublicKeyContents",
+            validation_alias="identityPublicKeyContents",
+            serialization_alias="identityPublicKeyContents",
             repr=False,
             description="Certificate contents for data transfer. Used for credentials.",
         ),
     ] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     protocol: FileTransferProtocol2 = Field(
         default=FileTransferProtocol2.SFTP,
@@ -116,22 +134,32 @@ class statsDestP(ManagedObject):
         str,
         Field(
             max_length=512,
-            alias="remotePath",
+            validation_alias="remotePath",
+            serialization_alias="remotePath",
             description="Path where data will reside in the destination",
         ),
     ] = ""
-    remote_port: str = Field(
-        default="", alias="remotePort", description="Remote port for data export destination"
-    )
+    remote_port: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=65535,
+            validation_alias="remotePort",
+            serialization_alias="remotePort",
+            description="Remote port for data export destination",
+        ),
+    ] = 0
     user_name: str = Field(
         default="",
-        alias="userName",
+        validation_alias="userName",
+        serialization_alias="userName",
         description="Username to be used to transfer data to destination",
     )
     password: Annotated[
         str,
         Field(
-            alias="userPasswd",
+            validation_alias="userPasswd",
+            serialization_alias="userPasswd",
             repr=False,
             description="Password to be used to transfer data to destination",
         ),

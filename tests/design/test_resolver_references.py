@@ -17,6 +17,11 @@ from niwaki.exceptions import (
     DuplicateDeclarationError,
     UnresolvedReferenceError,
 )
+from niwaki.models._generated.fv.fvRsDomAtt import fvRsDomAtt
+from niwaki.models._generated.infra.infraRsAccBaseGrp import infraRsAccBaseGrp
+from niwaki.models._generated.infra.infraRsCdpIfPol import infraRsCdpIfPol
+from niwaki.models._generated.infra.infraRsDomP import infraRsDomP
+from niwaki.models._generated.infra.infraRsVlanNs import infraRsVlanNs
 
 
 class TestDnFlavor:
@@ -26,7 +31,7 @@ class TestDnFlavor:
         dom = cfg.phys_dom("prod-phys").bind(vlan_pool="prod")
         extras = resolve(dom.design_node.root())
         (rs,) = extras[dom.design_node]
-        assert type(rs).__name__ == "infraRsVlanNs"
+        assert isinstance(rs, infraRsVlanNs)
         assert rs.target_dn == "uni/infra/vlanns-[prod]-static"
 
     def test_forward_reference_resolves(self) -> None:
@@ -35,7 +40,9 @@ class TestDnFlavor:
         dom = cfg.phys_dom("prod-phys").bind(vlan_pool="prod")
         cfg.vlan_pool("prod", "static")
         extras = resolve(dom.design_node.root())
-        assert extras[dom.design_node][0].target_dn == "uni/infra/vlanns-[prod]-static"
+        (rs,) = extras[dom.design_node]
+        assert isinstance(rs, infraRsVlanNs)
+        assert rs.target_dn == "uni/infra/vlanns-[prod]-static"
 
     def test_name_flavor_still_stores_name(self) -> None:
         cfg = infra()
@@ -43,7 +50,7 @@ class TestDnFlavor:
         grp = cfg.func_profile().access_group("pg").bind(cdp="cdp-on")
         extras = resolve(grp.design_node.root())
         (rs,) = extras[grp.design_node]
-        assert type(rs).__name__ == "infraRsCdpIfPol"
+        assert isinstance(rs, infraRsCdpIfPol)
         assert rs.name == "cdp-on"
 
     def test_unresolved_dn_target_raises(self) -> None:
@@ -61,7 +68,7 @@ class TestAbstractTargets:
         aaep = cfg.infra().aaep("prod-aaep").bind(domain="prod-phys")
         extras = resolve(aaep.design_node.root())
         (rs,) = extras[aaep.design_node]
-        assert type(rs).__name__ == "infraRsDomP"
+        assert isinstance(rs, infraRsDomP)
         assert rs.target_dn == "uni/phys-prod-phys"
 
     def test_cross_domain_epg_to_phys_dom(self) -> None:
@@ -71,7 +78,7 @@ class TestAbstractTargets:
         epg = cfg.tenant("prod").app("a").epg("web").bind(domain="prod-phys")
         extras = resolve(epg.design_node.root())
         (rs,) = extras[epg.design_node]
-        assert type(rs).__name__ == "fvRsDomAtt"
+        assert isinstance(rs, fvRsDomAtt)
         assert rs.target_dn == "uni/phys-prod-phys"
 
     def test_policy_group_abstract_resolves_to_access_group(self) -> None:
@@ -81,6 +88,7 @@ class TestAbstractTargets:
         sel.bind(policy_group="server-pg")
         extras = resolve(sel.design_node.root())
         (rs,) = extras[sel.design_node]
+        assert isinstance(rs, infraRsAccBaseGrp)
         assert rs.target_dn == "uni/infra/funcprof/accportgrp-server-pg"
 
     def test_two_concrete_subclasses_same_name_is_ambiguous(self) -> None:
@@ -107,7 +115,7 @@ class TestBindDn:
         dom.bind_dn(vlan_pool="uni/infra/vlanns-[shared]-static")
         extras = resolve(dom.design_node.root())
         (rs,) = extras[dom.design_node]
-        assert type(rs).__name__ == "infraRsVlanNs"
+        assert isinstance(rs, infraRsVlanNs)
         assert rs.target_dn == "uni/infra/vlanns-[shared]-static"
 
     def test_typed_cursor_exposes_dn_aliases_only(self) -> None:

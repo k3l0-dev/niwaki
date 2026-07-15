@@ -38,7 +38,14 @@ class pim6If(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    interface_id: Annotated[str, Field(alias="id", description="Interface ID of this endpoint")]
+    interface_id: Annotated[
+        str,
+        Field(
+            validation_alias="id",
+            serialization_alias="id",
+            description="Interface ID of this endpoint",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[
@@ -51,7 +58,12 @@ class pim6If(ManagedObject):
     ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            validation_alias="descr",
+            serialization_alias="descr",
+        ),
     ] = ""
     name: Annotated[
         str, Field(min_length=1, max_length=128, description="The name of the object.")

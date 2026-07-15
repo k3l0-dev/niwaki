@@ -140,6 +140,56 @@ def _bool_field_line(
     return f"{py_name}: bool = {default_repr}"
 
 
+def _flags_field_line(
+    py_name: str,
+    prop: dict[str, Any],
+    enum_mapping: dict[str, str],
+    alias_arg: str | None,
+    secure: bool,
+    default: Any,
+    desc_arg: str | None,
+) -> str:
+    """Render the field line for a bitmask — a **set** of members, not one.
+
+    An ACI bitmask is a subset of a closed set, comma-joined on the wire and
+    reordered at will by the APIC.  Declaring it as ``frozenset[SomeEnum]`` is
+    what makes that reordering invisible: two sets are equal whatever order they
+    were written in, so the false drift that used to haunt ``plan`` cannot even
+    be expressed.
+
+    The ``Field`` goes in the **assignment** position, never inside ``Annotated``:
+    a default hidden in the metadata is invisible to type checkers, which then
+    read the field as *required* — ``fvBD(name="web")`` would be an error in the
+    user's editor for a field they never asked about.
+    """
+    model_type: str = prop.get("model_type", "")
+    values = prop.get("values", [])
+    enum_cls = enum_mapping.get(_enum_sig_key(model_type, values), "")
+    if not enum_cls:  # pragma: no cover - a flags prop always has an enum
+        return _str_field_line(
+            py_name, py_name, prop, alias_arg, False, secure, False, "", desc_arg
+        )
+
+    members = default if isinstance(default, list) else []
+    if members:
+        joined = ", ".join(f"{enum_cls}.{_enum_member(m)}" for m in members)
+        default_expr = f"frozenset({{{joined}}})"
+    else:
+        # The zero mask is an ordinary default: bgpBestPathCtrlPol.ctrl defaults
+        # to no flags at all, and shipping one enabled was a real bug.
+        default_expr = "frozenset()"
+
+    field_args: list[str] = [f"default_factory=lambda: {default_expr}"]
+    if alias_arg:
+        field_args.append(alias_arg)
+    if secure:
+        field_args.append("repr=False")
+    if desc_arg:
+        field_args.append(desc_arg)
+    args = ", ".join(field_args)
+    return f"{py_name}: Annotated[Flags[{enum_cls}], BeforeValidator(parse_flags)] = Field({args})"
+
+
 def _enum_field_line(
     py_name: str,
     prop: dict[str, Any],
@@ -194,7 +244,7 @@ def _literal_field_line(
     return f"{py_name}: Literal[{literal_args}] = {default_str}"
 
 
-def _int_field_line(
+def _numeric_field_line(
     py_name: str,
     prop: dict[str, Any],
     alias_arg: str | None,
@@ -202,22 +252,60 @@ def _int_field_line(
     default: Any,
     desc_arg: str | None,
 ) -> str:
-    """Render the field line for an ``int`` property (with ge/le constraints)."""
-    field_args: list[str] = []
+    """Render the field line for a number — which the APIC may *name*.
+
+    Most numbers are plain: ``Annotated[int, Field(ge=..., le=...)]``.  But 592 of
+    them declare named values, and the APIC canonicalises to the name — a filter
+    port written as ``80`` is stored as ``"http"``, a BGP stale interval of
+    ``300`` as ``"default"``.  Those become ``int | Literal[...]`` with a
+    validator that stores the *name*, so the model and the fabric agree on what
+    the value is.  Otherwise the object never converges in ``plan`` — and where
+    the property names the object (35 of them, filter ports among them), the DN
+    the SDK computes is not the DN that exists.
+    """
+    py_type = "float" if prop.get("python_type") == "float" else "int"
+    names: list[str] = prop.get("values", [])
+    aliases: dict[str, str] = prop.get("aliases", {})
+
+    bounds: list[str] = []
     if (ge := prop.get("ge")) is not None:
-        field_args.append(f"ge={ge}")
-    if (le := prop.get("le")) is not None and le > 0:
-        field_args.append(f"le={le}")
+        bounds.append(f"ge={ge}")
+    if (le := prop.get("le")) is not None:
+        bounds.append(f"le={le}")
+
+    outer: list[str] = []
     if alias_arg:
-        field_args.append(alias_arg)
+        outer.append(alias_arg)
     if secure:
-        field_args.append("repr=False")
+        outer.append("repr=False")
     if desc_arg:
-        field_args.append(desc_arg)
-    default_val = default if default is not None else 0
-    if field_args:
-        return f"{py_name}: Annotated[int, Field({', '.join(field_args)})] = {default_val}"
-    return f"{py_name}: int = {default_val}"
+        outer.append(desc_arg)
+
+    default_val = _numeric_default_repr(default, py_type)
+
+    if not names:
+        field_args = bounds + outer
+        if field_args:
+            args = ", ".join(field_args)
+            return f"{py_name}: Annotated[{py_type}, Field({args})] = {default_val}"
+        return f"{py_name}: {py_type} = {default_val}"
+
+    number = f"Annotated[{py_type}, Field({', '.join(bounds)})]" if bounds else py_type
+    literal = ", ".join(repr(n) for n in names)
+    alias_map = "{" + ", ".join(f"{k!r}: {v!r}" for k, v in sorted(aliases.items())) + "}"
+    parts = [f"{number} | Literal[{literal}]", f"AfterValidator(named_number({alias_map}))"]
+    if outer:
+        parts.append(f"Field({', '.join(outer)})")
+    return f"{py_name}: Annotated[{', '.join(parts)}] = {default_val}"
+
+
+def _numeric_default_repr(default: Any, py_type: str) -> str:
+    """The default, as source: a number, or the name the APIC stores it under."""
+    if isinstance(default, str):
+        return repr(default)
+    if default is None:
+        return "0" if py_type == "int" else "0.0"
+    return repr(default)
 
 
 def _str_field_line(
@@ -266,7 +354,11 @@ def _str_field_line(
     default_str = repr(default) if default is not None else '""'
     # Plain str with only an alias and no other constraints: use Field() form
     if is_aliased and not (min_length or max_length or pattern or validate_as or secure):
-        args = [f"default={default_str}", f"alias={prop_name!r}"]
+        args = [
+            f"default={default_str}",
+            f"validation_alias={prop_name!r}",
+            f"serialization_alias={prop_name!r}",
+        ]
         if desc_arg:
             args.append(desc_arg)
         return f"{py_name}: str = Field({', '.join(args)})"
@@ -312,7 +404,15 @@ def _field_line(
         json_label = prop.get("label", "")
         py_name = best_field_name(prop_name, json_label, sm_label, is_naming=is_naming)
     is_aliased = py_name != prop_name
-    alias_arg = f"alias={prop_name!r}" if is_aliased else None
+    # ``validation_alias``/``serialization_alias``, never ``alias`` — the wire
+    # name must reach pydantic without reaching the *type checker*.  A plain
+    # ``alias=`` is honoured by PEP 681, so the synthesised ``__init__`` takes
+    # ``arpFlood`` and rejects ``arp_flooding``: the readable names this SDK is
+    # built on would be errors in the user's editor while working at runtime.
+    # These two spellings are invisible to PEP 681, so the field name stands.
+    alias_arg = (
+        f"validation_alias={prop_name!r}, serialization_alias={prop_name!r}" if is_aliased else None
+    )
     # Cisco's schema comment, cleaned at extraction — surfaces in IDE hovers,
     # Pydantic errors and Sphinx autodoc.
     desc_arg = f"description={comment!r}" if (comment := prop.get("comment")) else None
@@ -321,10 +421,12 @@ def _field_line(
         return _bool_field_line(py_name, alias_arg, secure, default, desc_arg)
     if python_type == "enum":
         return _enum_field_line(py_name, prop, enum_mapping, alias_arg, secure, default, desc_arg)
+    if python_type == "flags":
+        return _flags_field_line(py_name, prop, enum_mapping, alias_arg, secure, default, desc_arg)
     if python_type == "literal":
         return _literal_field_line(py_name, prop, alias_arg, secure, default, desc_arg)
-    if python_type == "int":
-        return _int_field_line(py_name, prop, alias_arg, secure, default, desc_arg)
+    if python_type in ("int", "float"):
+        return _numeric_field_line(py_name, prop, alias_arg, secure, default, desc_arg)
     return _str_field_line(
         py_name, prop_name, prop, alias_arg, is_aliased, secure, is_naming, default, desc_arg
     )
@@ -396,7 +498,7 @@ def _render_class(
             sm_label=sm_class.get(prop_name, ""),
             py_name_override=py_names.get(prop_name),
         )
-        if prop_data.get("python_type") == "enum":
+        if prop_data.get("python_type") in ("enum", "flags"):
             key = _enum_sig_key(prop_data.get("model_type", ""), prop_data.get("values", []))
             enum_cls = inputs.enum_mapping.get(key, "")
             if enum_cls:
@@ -408,18 +510,32 @@ def _render_class(
         else:
             optional_fields.append(line)
 
-    needs_literal = any(p["python_type"] == "literal" for p in props.values())
-    needs_annotated = any(
-        (p["python_type"] == "int" and (p.get("ge") is not None or p.get("le") is not None))
-        or (
-            p["python_type"] == "str"
-            and any(p.get(k) for k in ("min_length", "max_length", "pattern", "validate_as"))
+    # A number the APIC names ("http" for 80) is int | Literal[...] with the
+    # canonicalising validator — so it needs Literal, and it is always Annotated.
+    needs_named_number = any(
+        p["python_type"] in ("int", "float") and p.get("values") for p in props.values()
+    )
+    needs_literal = needs_named_number or any(p["python_type"] == "literal" for p in props.values())
+    # A bitmask is always Annotated: frozenset[Enum] + the flags parser.
+    needs_flags = any(p["python_type"] == "flags" for p in props.values())
+    needs_annotated = (
+        needs_flags
+        or needs_named_number
+        or any(
+            (
+                p["python_type"] in ("int", "float")
+                and (p.get("ge") is not None or p.get("le") is not None)
+            )
+            or (
+                p["python_type"] == "str"
+                and any(p.get(k) for k in ("min_length", "max_length", "pattern", "validate_as"))
+            )
+            # secure str/int use Annotated[T, Field(repr=False)]
+            or (p.get("secure") and p["python_type"] in ("str", "int", "float"))
+            # described str/int use Annotated[T, Field(description=...)]
+            or (p.get("comment") and p["python_type"] in ("str", "int", "float"))
+            for p in props.values()
         )
-        # secure str/int use Annotated[T, Field(repr=False)]
-        or (p.get("secure") and p["python_type"] in ("str", "int"))
-        # described str/int use Annotated[T, Field(description=...)]
-        or (p.get("comment") and p["python_type"] in ("str", "int"))
-        for p in props.values()
     )
     # Field() is needed for aliased props, secure or described fields, or Annotated props
     needs_field = (
@@ -465,6 +581,8 @@ def _render_class(
         optional_fields=optional_fields,
         needs_literal=needs_literal,
         needs_annotated=needs_annotated,
+        needs_flags=needs_flags,
+        needs_named_number=needs_named_number,
         needs_field=needs_field,
         enum_imports=sorted(enum_imports),
         mo_category=mo_category,
@@ -583,6 +701,12 @@ def _naming_val(prop_data: dict[str, Any]) -> object:
     default = prop_data.get("default")
     if pt == "int":
         return default if default is not None else 0
+    if pt == "flags":
+        # A bitmask default is a list of members; an empty one is legal, but a
+        # naming prop that renders to nothing would produce an empty RN — take
+        # the first member instead, which is what the APIC would store.
+        members: list[str] = default or []
+        return members or prop_data.get("values", [])[:1]
     # literal / bool: use declared default
     return default
 
@@ -599,6 +723,12 @@ def _naming_attrs_str(prop_data: dict[str, Any], py_val: object) -> str:
     """
     if prop_data.get("python_type") == "bool":
         return "true" if py_val else "false"
+    if prop_data.get("python_type") == "flags":
+        # The wire form of a bitmask: its members, in the order the enum declares
+        # them (ascending bit weight — the order the APIC itself uses).
+        order: list[str] = prop_data.get("values", [])
+        members = py_val if isinstance(py_val, list) else [py_val]
+        return ",".join(sorted((str(m) for m in members), key=order.index))
     return str(py_val)
 
 
@@ -618,6 +748,9 @@ def _build_test_data(
       props have schema defaults and are not required.
     - ``rn``         : ``[cls, naming_kwargs, expected_rn]``
     - ``enums``      : ``[cls, naming_kwargs, prop, values, default]``
+    - ``flags``      : ``[cls, naming_kwargs, prop, values, default_members]``
+      A bitmask: the default is a *list* of members (possibly empty — the zero
+      mask is an ordinary default).
     - ``bools``      : ``[cls, naming_kwargs, prop, expected]``
     - ``surgical``   : ``[cls, naming_kwargs, expected_aci_attrs]``
 
@@ -637,6 +770,7 @@ def _build_test_data(
     no_naming: list[str] = []
     naming: list[list[object]] = []
     rn: list[list[object]] = []
+    flags: list[list[object]] = []
     enums: list[list[object]] = []
     bools: list[list[object]] = []
     surgical: list[list[object]] = []
@@ -725,6 +859,16 @@ def _build_test_data(
                         prop_data.get("default"),
                     ]
                 )
+            elif prop_data["python_type"] == "flags":
+                flags.append(
+                    [
+                        aci_class,
+                        naming_kwargs,
+                        _py(prop_name),
+                        prop_data.get("values", []),
+                        prop_data.get("default", []),
+                    ]
+                )
             elif prop_data["python_type"] == "bool":
                 bools.append(
                     [
@@ -752,6 +896,7 @@ def _build_test_data(
         "naming": naming,
         "rn": rn,
         "enums": enums,
+        "flags": flags,
         "bools": bools,
         "surgical": surgical,
     }

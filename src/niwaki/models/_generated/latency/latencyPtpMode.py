@@ -51,49 +51,98 @@ class latencyPtpMode(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    announce_interval: str = Field(
-        default="", alias="fabAnnounceIntvl", description="Fabric Interface Announce Interval"
-    )
-    announce_timeout: str = Field(
-        default="", alias="fabAnnounceTimeout", description="Fabric Interace Announce timeout"
-    )
-    delay_request_interval: str = Field(
-        default="",
-        alias="fabDelayIntvl",
-        description="Fabric Interace Minimum Delay Request Interval",
-    )
+    announce_interval: Annotated[
+        int,
+        Field(
+            ge=3,
+            le=4,
+            validation_alias="fabAnnounceIntvl",
+            serialization_alias="fabAnnounceIntvl",
+            description="Fabric Interface Announce Interval",
+        ),
+    ] = 1
+    announce_timeout: Annotated[
+        int,
+        Field(
+            ge=2,
+            le=10,
+            validation_alias="fabAnnounceTimeout",
+            serialization_alias="fabAnnounceTimeout",
+            description="Fabric Interace Announce timeout",
+        ),
+    ] = 3
+    delay_request_interval: Annotated[
+        int,
+        Field(
+            ge=4,
+            le=6,
+            validation_alias="fabDelayIntvl",
+            serialization_alias="fabDelayIntvl",
+            description="Fabric Interace Minimum Delay Request Interval",
+        ),
+    ] = -2
     ptp_profile_template: PtpProfileTemplate = Field(
         default=PtpProfileTemplate.AES67,
-        alias="fabProfileTemplate",
+        validation_alias="fabProfileTemplate",
+        serialization_alias="fabProfileTemplate",
         description="Fabric PTP profile Template",
     )
-    sync_interval: str = Field(
-        default="", alias="fabSyncIntvl", description="Fabric Interace Sync Interval"
-    )
-    ptp_global_domain: str = Field(default="", alias="globalDomain")
+    sync_interval: Annotated[
+        int,
+        Field(
+            ge=4,
+            le=1,
+            validation_alias="fabSyncIntvl",
+            serialization_alias="fabSyncIntvl",
+            description="Fabric Interace Sync Interval",
+        ),
+    ] = -3
+    ptp_global_domain: Annotated[
+        int,
+        Field(ge=0, le=128, validation_alias="globalDomain", serialization_alias="globalDomain"),
+    ] = 0
     is_count_valid: bool = Field(
         default=False,
-        alias="isCountValid",
+        validation_alias="isCountValid",
+        serialization_alias="isCountValid",
         description="Flag to tell if the policy count is valid or not",
     )
     latency_policy_count: Annotated[
-        int, Field(alias="latencyPolCount", description="Total number of active latency policies")
+        int,
+        Field(
+            validation_alias="latencyPolCount",
+            serialization_alias="latencyPolCount",
+            description="Total number of active latency policies",
+        ),
     ] = 0
-    ptp_global_priority_1_value: str = Field(
-        default="", alias="prio1", description="PTP Global properties"
-    )
-    ptp_global_priority_2_value: str = Field(default="", alias="prio2")
+    ptp_global_priority_1_value: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=255,
+            validation_alias="prio1",
+            serialization_alias="prio1",
+            description="PTP Global properties",
+        ),
+    ] = 255
+    ptp_global_priority_2_value: Annotated[
+        int, Field(ge=0, le=255, validation_alias="prio2", serialization_alias="prio2")
+    ] = 255
     state: NetflowAdminSt = Field(
         default=NetflowAdminSt.DISABLED, description="State of the PTP protocol"
     )
     system_resolution_factor_for_max_latency: Annotated[
         int,
         Field(
-            alias="systemResolution",
+            validation_alias="systemResolution",
+            serialization_alias="systemResolution",
             description="System Resolution factor, Value could be (0 or 11 )",
         ),
     ] = 0
     ttag_ether_type0x8905_status: bool = Field(
-        default=False, alias="ttagEtherType0x8905Status", description="State of the ttag ether type"
+        default=False,
+        validation_alias="ttagEtherType0x8905Status",
+        serialization_alias="ttagEtherType0x8905Status",
+        description="State of the ttag ether type",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

@@ -39,7 +39,8 @@ class notifObserverClass(ManagedObject):
         Field(
             min_length=1,
             max_length=512,
-            alias="className",
+            validation_alias="className",
+            serialization_alias="className",
             description="The class name of the object used for a comparison filter. This property is used internally to validate compatibility between two firmware images.",
         ),
     ]

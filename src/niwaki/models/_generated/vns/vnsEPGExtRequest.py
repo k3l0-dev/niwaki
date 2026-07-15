@@ -34,7 +34,9 @@ class vnsEPGExtRequest(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    epg_dn: Annotated[str, Field(alias="epgDn", description="EPG Name")]
+    epg_dn: Annotated[
+        str, Field(validation_alias="epgDn", serialization_alias="epgDn", description="EPG Name")
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[
@@ -58,7 +60,8 @@ class vnsEPGExtRequest(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies the description of a policy component.",
         ),
     ] = ""
@@ -73,7 +76,13 @@ class vnsEPGExtRequest(ManagedObject):
     mode: Annotated[str, Field(max_length=512, description="The BGP Domain mode.")] = ""
     name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     node: Annotated[
         str,
@@ -81,5 +90,10 @@ class vnsEPGExtRequest(ManagedObject):
             max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", description="node name, graphInst selector"
         ),
     ] = ""
-    srp_dn: str = Field(default="", alias="srpDn", description="Service Resource Pool")
+    srp_dn: str = Field(
+        default="",
+        validation_alias="srpDn",
+        serialization_alias="srpDn",
+        description="Service Resource Pool",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

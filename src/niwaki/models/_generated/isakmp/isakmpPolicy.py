@@ -53,45 +53,63 @@ class isakmpPolicy(ManagedObject):
         ),
     ] = ""
     auth_method: HcisakmpAuthMethod = Field(
-        default=HcisakmpAuthMethod.PRE_SHARE, alias="authMethod", description="Auth Type"
+        default=HcisakmpAuthMethod.PRE_SHARE,
+        validation_alias="authMethod",
+        serialization_alias="authMethod",
+        description="Auth Type",
     )
     description: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
     diffie_hellman_group: HcisakmpDhGroup = Field(
-        default=HcisakmpDhGroup._1, alias="dhGroup", description="Diffie Hellman Group"
+        default=HcisakmpDhGroup._1,
+        validation_alias="dhGroup",
+        serialization_alias="dhGroup",
+        description="Diffie Hellman Group",
     )
     encryption: HcisakmpEncrAlgo = Field(
         default=HcisakmpEncrAlgo.DES, description="Encryption algorithm for protection suite"
     )
     hash_algorithm: HcisakmpHash = Field(
-        default=HcisakmpHash.MD5, alias="hash", description="Hash for ISAKMP security association"
+        default=HcisakmpHash.MD5,
+        validation_alias="hash",
+        serialization_alias="hash",
+        description="Hash for ISAKMP security association",
     )
     lifetime_for_isakmp_security_association: Annotated[
         int,
         Field(
             ge=60,
             le=86400,
-            alias="lifetime",
+            validation_alias="lifetime",
+            serialization_alias="lifetime",
             description="lifetime for ISAKMP security association",
         ),
     ] = 28000
     name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     owner_key: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerKey",
+            validation_alias="ownerKey",
+            serialization_alias="ownerKey",
             description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
@@ -100,7 +118,8 @@ class isakmpPolicy(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerTag",
+            validation_alias="ownerTag",
+            serialization_alias="ownerTag",
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""

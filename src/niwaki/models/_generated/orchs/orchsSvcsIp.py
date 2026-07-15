@@ -52,7 +52,8 @@ class orchsSvcsIp(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="The description of this configuration item.",
         ),
     ] = ""
@@ -60,10 +61,22 @@ class orchsSvcsIp(ManagedObject):
         str, Field(pattern="^[0-9a-fA-F.:/ ]+$", description="IP Address aloocated by the BI")
     ] = ""
     ip_ns_name: Annotated[
-        str, Field(max_length=512, alias="ipNsName", description="Encap Address Pool")
+        str,
+        Field(
+            max_length=512,
+            validation_alias="ipNsName",
+            serialization_alias="ipNsName",
+            description="Encap Address Pool",
+        ),
     ] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     netmask: Annotated[
         str, Field(pattern="^[0-9a-fA-F.:/ ]+$", description="IP Address aloocated by the BI")

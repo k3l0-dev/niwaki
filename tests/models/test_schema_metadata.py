@@ -12,12 +12,15 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import pytest
 from pydantic.fields import FieldInfo
 
 from niwaki.models.base import ManagedObject
+
+if TYPE_CHECKING:
+    from niwaki.models._generated.aaa.aaaLdapProvider import aaaLdapProvider
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -30,7 +33,7 @@ def _load_fvBD() -> type[ManagedObject]:
     return fvBD
 
 
-def _load_aaaLdapProvider() -> type[ManagedObject]:
+def _load_aaaLdapProvider() -> type[aaaLdapProvider]:
     from niwaki.models._generated.aaa.aaaLdapProvider import aaaLdapProvider
 
     return aaaLdapProvider
@@ -166,7 +169,7 @@ class TestSecureFields:
         """repr=False only suppresses repr, not attribute access."""
         cls = _load_aaaLdapProvider()
         instance = cls(name="ldap-test", password="s3cr3t")
-        assert instance.password == "s3cr3t"  # type: ignore[attr-defined]
+        assert instance.password == "s3cr3t"
 
     def test_secure_field_included_in_to_apic_when_set(self) -> None:
         """Secure fields are still serialised by to_apic() when explicitly set."""

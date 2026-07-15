@@ -29,7 +29,7 @@ Accepted as keyword arguments of `.subject(name)` and of `.set(**attrs)` on this
 | `qos_class_id` | `prio` | {ref}`QosTenantPrio <enum-qostenantprio>` | `level1`, `level2`, `level3`, `level4`, `level5`, `level6`, `unspecified` | `unspecified` | The priority level of a sub application running behind an endpoint group, such as an Exchange server. |
 | `provider_label_match_type` | `provMatchT` | {ref}`VzMatchT <enum-vzmatcht>` | `All`, `AtleastOne`, `AtmostOne`, `None` | `AtleastOne` | The subject match criteria across consumers. |
 | `reverse_filter_ports` | `revFltPorts` | `bool` | — | `True` | Enables the filter to apply on both ingress and egress traffic. |
-| `subject_level_dscp` | `targetDscp` | `str` | — | — | The target differentiated services code point (DSCP) of the path attached to the layer 3 outside profile. |
+| `subject_level_dscp` | `targetDscp` | `int` | — | `unspecified` | The target differentiated services code point (DSCP) of the path attached to the layer 3 outside profile. |
 
 ## Children
 

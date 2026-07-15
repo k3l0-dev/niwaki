@@ -58,7 +58,8 @@ class conditionRsNodeEventRecRetP(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9_.:-]+$",
-            alias="tnEventSwRetPName",
+            validation_alias="tnEventSwRetPName",
+            serialization_alias="tnEventSwRetPName",
             description="A name for the event record retention policy used by the node policy group. The event record retention policy is referred by the node policy group. The node policy group also includes references to the Health, Audit, and Fault record retention policies.",
         ),
     ] = ""

@@ -57,9 +57,29 @@ class infraConnFexBlk(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    from_: str = Field(default="", alias="from", description="From Fex ID")
+    from_: Annotated[
+        int,
+        Field(
+            ge=101,
+            le=199,
+            validation_alias="from",
+            serialization_alias="from",
+            description="From Fex ID",
+        ),
+    ] = 101
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
-    to_fex_id: str = Field(default="", alias="to", description="To Fex ID")
+    to_fex_id: Annotated[
+        int,
+        Field(
+            ge=101, le=199, validation_alias="to", serialization_alias="to", description="To Fex ID"
+        ),
+    ] = 101
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

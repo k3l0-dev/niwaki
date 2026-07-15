@@ -30,7 +30,7 @@ Accepted as keyword arguments of `.oob_contract(name)` and of `.set(**attrs)` on
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |
 | `qos_class_id` | `prio` | {ref}`QosTenantPrio <enum-qostenantprio>` | `level1`, `level2`, `level3`, `level4`, `level5`, `level6`, `unspecified` | `unspecified` | — |
 | `scope` | `scope` | {ref}`VzScope <enum-vzscope>` | `application-profile`, `context`, `global`, `tenant` | `context` | Represents the scope of this contract. If the scope is set as application-profile, the epg can only communicate with epgs in the same application-profile |
-| `contract_level_dscp` | `targetDscp` | `str` | — | — | contract level dscp value |
+| `contract_level_dscp` | `targetDscp` | `int` | — | `unspecified` | contract level dscp value |
 
 ## Children
 

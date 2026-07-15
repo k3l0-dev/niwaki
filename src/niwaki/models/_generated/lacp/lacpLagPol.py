@@ -3,8 +3,9 @@
 from __future__ import annotations
 
 from typing import ClassVar, Annotated
-from pydantic import Field
+from pydantic import BeforeValidator, Field
 
+from niwaki.models._wire import Flags, parse_flags
 from niwaki.models._generated.enums.LacpMode import LacpMode
 from niwaki.models._generated.enums.PcIfControl import PcIfControl
 
@@ -64,40 +65,61 @@ class lacpLagPol(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    control: PcIfControl = Field(
-        default=PcIfControl.FAST_SEL_HOT_STDBY, alias="ctrl", description="LAG control properties"
+    control: Annotated[Flags[PcIfControl], BeforeValidator(parse_flags)] = Field(
+        default_factory=lambda: frozenset(
+            {PcIfControl.SUSP_INDIVIDUAL, PcIfControl.GRACEFUL_CONV, PcIfControl.FAST_SEL_HOT_STDBY}
+        ),
+        validation_alias="ctrl",
+        serialization_alias="ctrl",
+        description="LAG control properties",
     )
     description: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
     maximum_number_of_links: Annotated[
-        int, Field(ge=1, le=64, alias="maxLinks", description="maximum links")
+        int,
+        Field(
+            ge=1,
+            le=64,
+            validation_alias="maxLinks",
+            serialization_alias="maxLinks",
+            description="maximum links",
+        ),
     ] = 16
     minimum_number_of_links: Annotated[
         int,
         Field(
             ge=1,
             le=16,
-            alias="minLinks",
+            validation_alias="minLinks",
+            serialization_alias="minLinks",
             description="minimum links @@@ MinLinks in the port channel",
         ),
     ] = 1
     mode: LacpMode = Field(default=LacpMode.OFF, description="mode")
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     owner_key: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerKey",
+            validation_alias="ownerKey",
+            serialization_alias="ownerKey",
             description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
@@ -106,7 +128,8 @@ class lacpLagPol(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerTag",
+            validation_alias="ownerTag",
+            serialization_alias="ownerTag",
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""

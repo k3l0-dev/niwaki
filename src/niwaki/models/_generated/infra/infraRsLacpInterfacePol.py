@@ -60,7 +60,8 @@ class infraRsLacpInterfacePol(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9_.:-]+$",
-            alias="tnLacpIfPolName",
+            validation_alias="tnLacpIfPolName",
+            serialization_alias="tnLacpIfPolName",
             description="The name of the port level LACP member policy.",
         ),
     ] = ""

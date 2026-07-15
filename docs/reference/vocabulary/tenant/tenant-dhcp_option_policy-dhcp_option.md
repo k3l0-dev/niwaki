@@ -25,4 +25,4 @@ Accepted as keyword arguments of `.dhcp_option(name)` and of `.set(**attrs)` on 
 | --- | --- | --- | --- | --- | --- |
 | `name` *(positional)* | `name` | `str` | — | — | The DHCP option name. This name can be up to 64 alphanumeric characters. |
 | `model_regex` | `data` | `str` | — | — | The ID of the DHCP option. |
-| `id` | `id` | `str` | — | — | DHCP OPTION ID |
+| `id` | `id` | `int` | — | `0` | DHCP OPTION ID |

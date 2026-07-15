@@ -23,7 +23,7 @@ Accepted as keyword arguments of `.node(node_id)` and of `.set(**attrs)` on this
 
 | parameter | wire | type | values | default | description |
 | --- | --- | --- | --- | --- | --- |
-| `node_id` *(positional)* | `id` | `str` | — | — | Select the node identifier to be added to the vPC pair in the protection group. |
+| `node_id` *(positional)* | `id` | `int` | — | — | Select the node identifier to be added to the vPC pair in the protection group. |
 | `description` | `descr` | `str` | — | — | Specifies the description of a policy component. |
 | `name` | `name` | `str` | — | — | — |
-| `pod_id` | `podId` | `str` | — | — | Pod id |
+| `pod_id` | `podId` | `int` | — | `1` | Pod id |

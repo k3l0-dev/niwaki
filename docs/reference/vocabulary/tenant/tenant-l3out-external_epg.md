@@ -31,7 +31,7 @@ Accepted as keyword arguments of `.external_epg(name)` and of `.set(**attrs)` on
 | `policy_control_enforcement` | `pcEnfPref` | {ref}`FvPcEnfPref <enum-fvpcenfpref>` | `enforced`, `unenforced` | `unenforced` | Represents parameter used by the node (i.e. Leaf) to enforce filter rules in this EPG |
 | `preferred_group_member` | `prefGrMemb` | {ref}`FvPrefGrMemb <enum-fvprefgrmemb>` | `exclude`, `include` | `exclude` | Represents parameter used to determine if EPg is part of a group that does not a contract for communication |
 | `qos_class` | `prio` | {ref}`QosTenantPrio <enum-qostenantprio>` | `level1`, `level2`, `level3`, `level4`, `level5`, `level6`, `unspecified` | `unspecified` | The QoS priority class identifier. |
-| `epg_level_dscp` | `targetDscp` | `str` | — | — | The target differentiated services code point (DSCP) of the path attached to the layer 3 outside profile. |
+| `epg_level_dscp` | `targetDscp` | `int` | — | `unspecified` | The target differentiated services code point (DSCP) of the path attached to the layer 3 outside profile. |
 
 ## Children
 

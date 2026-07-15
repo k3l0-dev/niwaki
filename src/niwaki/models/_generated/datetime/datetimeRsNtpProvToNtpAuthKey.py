@@ -45,7 +45,15 @@ class datetimeRsNtpProvToNtpAuthKey(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    auth_key_id: Annotated[str, Field(alias="tnDatetimeNtpAuthKeyId")]
+    auth_key_id: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=65535,
+            validation_alias="tnDatetimeNtpAuthKeyId",
+            serialization_alias="tnDatetimeNtpAuthKeyId",
+        ),
+    ] = 1
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[

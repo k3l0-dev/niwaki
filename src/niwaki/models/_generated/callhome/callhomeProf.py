@@ -41,9 +41,19 @@ class callhomeProf(ManagedObject):
 
     # ── Configurable ───────────────────────────────────────────────────────────
     contact_address: Annotated[
-        str, Field(max_length=255, alias="addr", description="The contact address of the customer.")
+        str,
+        Field(
+            max_length=255,
+            validation_alias="addr",
+            serialization_alias="addr",
+            description="The contact address of the customer.",
+        ),
     ] = ""
-    admin_state: MonAdminState = Field(default=MonAdminState.ENABLED, alias="adminState")
+    admin_state: MonAdminState = Field(
+        default=MonAdminState.ENABLED,
+        validation_alias="adminState",
+        serialization_alias="adminState",
+    )
     annotation: Annotated[
         str,
         Field(
@@ -56,7 +66,8 @@ class callhomeProf(ManagedObject):
         str,
         Field(
             max_length=255,
-            alias="contact",
+            validation_alias="contact",
+            serialization_alias="contact",
             description="The customer contact ID. Note that the customer ID associated with the Smart Call Home configuration in Cisco UCS must be the CCO (Cisco.com) account name associated with a support contract that includes Smart Call Home.",
         ),
     ] = ""
@@ -64,14 +75,18 @@ class callhomeProf(ManagedObject):
         str,
         Field(
             max_length=512,
-            alias="contract",
+            validation_alias="contract",
+            serialization_alias="contract",
             description="The contract information provided by the customer.",
         ),
     ] = ""
     customer_name: Annotated[
         str,
         Field(
-            max_length=512, alias="customer", description="The customer for the Call Home profile."
+            max_length=512,
+            validation_alias="customer",
+            serialization_alias="customer",
+            description="The customer for the Call Home profile.",
         ),
     ] = ""
     description: Annotated[
@@ -79,16 +94,23 @@ class callhomeProf(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies the description of a policy component.",
         ),
     ] = ""
     contact_email: str = Field(
         default="",
-        alias="email",
+        validation_alias="email",
+        serialization_alias="email",
         description="The email address of the contact for the system or site. This address is not necessarily the same as the reply-to addresses used in the outgoing emails.",
     )
-    from_: str = Field(default="", alias="from", description="The email address of the sender.")
+    from_: str = Field(
+        default="",
+        validation_alias="from",
+        serialization_alias="from",
+        description="The email address of the sender.",
+    )
     name: Annotated[
         str,
         Field(
@@ -98,10 +120,22 @@ class callhomeProf(ManagedObject):
         ),
     ] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     contact_phone: Annotated[
-        str, Field(max_length=16, alias="phone", description="The contact phone number.")
+        str,
+        Field(
+            max_length=16,
+            validation_alias="phone",
+            serialization_alias="phone",
+            description="The contact phone number.",
+        ),
     ] = ""
     port: Annotated[
         int,
@@ -112,14 +146,24 @@ class callhomeProf(ManagedObject):
         ),
     ] = 25
     password: Annotated[
-        str, Field(max_length=512, alias="pwd", repr=False, description="The system user password.")
+        str,
+        Field(
+            max_length=512,
+            validation_alias="pwd",
+            serialization_alias="pwd",
+            repr=False,
+            description="The system user password.",
+        ),
     ] = ""
     replyto_address: str = Field(
         default="",
-        alias="replyTo",
+        validation_alias="replyTo",
+        serialization_alias="replyTo",
         description="The Reply-To email address for emails sent using the destination group policy.",
     )
-    secure_smtp: bool = Field(default=False, alias="secureSmtp")
+    secure_smtp: bool = Field(
+        default=False, validation_alias="secureSmtp", serialization_alias="secureSmtp"
+    )
     site: Annotated[
         str,
         Field(

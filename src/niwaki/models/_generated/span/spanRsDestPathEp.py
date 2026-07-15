@@ -45,11 +45,21 @@ class spanRsDestPathEp(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    target_dn: Annotated[str, Field(alias="tDn", description="The span destination path.")]
+    target_dn: Annotated[
+        str,
+        Field(
+            validation_alias="tDn",
+            serialization_alias="tDn",
+            description="The span destination path.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[str, Field(max_length=128, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     mtu: Annotated[
-        str, Field(description="The administrative MTU port on the aggregated interface.")
-    ] = ""
+        int,
+        Field(
+            ge=64, le=9216, description="The administrative MTU port on the aggregated interface."
+        ),
+    ] = 1518
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

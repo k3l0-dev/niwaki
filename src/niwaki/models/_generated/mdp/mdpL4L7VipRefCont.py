@@ -39,7 +39,8 @@ class mdpL4L7VipRefCont(ManagedObject):
         str,
         Field(
             pattern="^[0-9a-fA-F.:/ ]+$",
-            alias="vip",
+            validation_alias="vip",
+            serialization_alias="vip",
             description="The Infra Virtual IP of a VPC switch pair.",
         ),
     ]

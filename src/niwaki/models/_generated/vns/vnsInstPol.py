@@ -60,7 +60,8 @@ class vnsInstPol(ManagedObject):
         str,
         Field(
             max_length=512,
-            alias="dataStoreName",
+            validation_alias="dataStoreName",
+            serialization_alias="dataStoreName",
             description="datastore name on which the L4-L7 device will be created",
         ),
     ] = ""
@@ -68,16 +69,24 @@ class vnsInstPol(ManagedObject):
         str,
         Field(
             max_length=512,
-            alias="hostName",
+            validation_alias="hostName",
+            serialization_alias="hostName",
             description="Host name on which the L4-L7 device will be created",
         ),
     ] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     vm_template: str = Field(
         default="",
-        alias="vmTemplate",
+        validation_alias="vmTemplate",
+        serialization_alias="vmTemplate",
         description="vmtemplate which the L4-L7 device will be using",
     )

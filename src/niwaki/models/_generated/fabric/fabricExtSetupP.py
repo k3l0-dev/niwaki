@@ -35,12 +35,17 @@ class fabricExtSetupP(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    external_pool_identifier: Annotated[str, Field(alias="extPoolId")]
+    external_pool_identifier: Annotated[
+        int, Field(validation_alias="extPoolId", serialization_alias="extPoolId")
+    ] = 0
 
     # ── Create-only (ignored by APIC on modification) ─────────────────────────
-    infra_tep_address_pool: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="tepPool")] = (
-        ""
-    )
+    infra_tep_address_pool: Annotated[
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$", validation_alias="tepPool", serialization_alias="tepPool"
+        ),
+    ] = ""
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[
@@ -56,12 +61,19 @@ class fabricExtSetupP(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies the description of a policy component.",
         ),
     ] = ""
     name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

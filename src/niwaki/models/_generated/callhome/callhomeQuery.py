@@ -3,8 +3,9 @@
 from __future__ import annotations
 
 from typing import ClassVar, Annotated
-from pydantic import Field
+from pydantic import BeforeValidator, Field
 
+from niwaki.models._wire import Flags, parse_flags
 from niwaki.models._generated.enums.ConfigQueryTarget import ConfigQueryTarget
 from niwaki.models._generated.enums.ConfigQueryType import ConfigQueryType
 from niwaki.models._generated.enums.ConfigRspSubtreeDepth import ConfigRspSubtreeDepth
@@ -65,31 +66,42 @@ class callhomeQuery(ManagedObject):
         Field(
             max_length=512,
             pattern="^[a-zA-Z0-9_./\\[\\]:-]+$",
-            alias="entity",
+            validation_alias="entity",
+            serialization_alias="entity",
             description="The query entity as a distinguished name or class name.",
         ),
     ] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     response_depth: ConfigRspSubtreeDepth = Field(
         default=ConfigRspSubtreeDepth.NO,
-        alias="rspSubtree",
+        validation_alias="rspSubtree",
+        serialization_alias="rspSubtree",
         description="The subtree information that should be included in objects returned from the query.",
     )
-    response_data: ConfigRspSubtreeInclude = Field(
-        default=ConfigRspSubtreeInclude.NONE,
-        alias="rspSubtreeInclude",
+    response_data: Annotated[Flags[ConfigRspSubtreeInclude], BeforeValidator(parse_flags)] = Field(
+        default_factory=lambda: frozenset({ConfigRspSubtreeInclude.NONE}),
+        validation_alias="rspSubtreeInclude",
+        serialization_alias="rspSubtreeInclude",
         description="The types of subtrees for the objects returned from the query.",
     )
     query_target: ConfigQueryTarget = Field(
         default=ConfigQueryTarget.SELF,
-        alias="target",
+        validation_alias="target",
+        serialization_alias="target",
         description="A property to specify if the subtree information should be included for the objects returned by this query.",
     )
     query_type: ConfigQueryType = Field(
         default=ConfigQueryType.DN,
-        alias="type",
+        validation_alias="type",
+        serialization_alias="type",
         description="The type of query. The type can be a class-name or a distinguished-name.",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

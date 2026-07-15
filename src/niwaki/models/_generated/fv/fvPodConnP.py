@@ -41,7 +41,10 @@ class fvPodConnP(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    pod_id: Annotated[str, Field(alias="id", description="Pod id")]
+    pod_id: Annotated[
+        int,
+        Field(ge=0, le=255, validation_alias="id", serialization_alias="id", description="Pod id"),
+    ] = 1
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[
@@ -52,22 +55,34 @@ class fvPodConnP(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    assoc_intersite_pod_id: str = Field(
-        default="",
-        alias="assocIntersitePodId",
-        description="ID of the pod in the main fabric to which this pod is assocated. This property is valid only if this pod is a virtual pod",
-    )
+    assoc_intersite_pod_id: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=255,
+            validation_alias="assocIntersitePodId",
+            serialization_alias="assocIntersitePodId",
+            description="ID of the pod in the main fabric to which this pod is assocated. This property is valid only if this pod is a virtual pod",
+        ),
+    ] = 0
     description: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies the description of a policy component.",
         ),
     ] = ""
     name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

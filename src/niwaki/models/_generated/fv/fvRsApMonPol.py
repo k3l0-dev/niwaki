@@ -60,7 +60,8 @@ class fvRsApMonPol(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9_.:-]+$",
-            alias="tnMonEPGPolName",
+            validation_alias="tnMonEPGPolName",
+            serialization_alias="tnMonEPGPolName",
             description="The associated monitoring policy name.",
         ),
     ] = ""

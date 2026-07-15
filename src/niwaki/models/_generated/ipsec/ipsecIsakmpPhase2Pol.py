@@ -64,31 +64,49 @@ class ipsecIsakmpPhase2Pol(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
-    dh_group: HcisakmpDhGroup = Field(default=HcisakmpDhGroup._1, alias="dhGroup")
+    dh_group: HcisakmpDhGroup = Field(
+        default=HcisakmpDhGroup._1, validation_alias="dhGroup", serialization_alias="dhGroup"
+    )
     encapsulation_mode_eg_tunnel: HcipsecEncapsulationMode = Field(
-        default=HcipsecEncapsulationMode.TUNNEL, alias="encapsulationMode"
+        default=HcipsecEncapsulationMode.TUNNEL,
+        validation_alias="encapsulationMode",
+        serialization_alias="encapsulationMode",
     )
     encapsulation_type_eg_esp: HcipsecEncapsulationType = Field(
-        default=HcipsecEncapsulationType.ESP, alias="encapsulationType"
+        default=HcipsecEncapsulationType.ESP,
+        validation_alias="encapsulationType",
+        serialization_alias="encapsulationType",
     )
     encryption_algorithm_eg_aes: HcisakmpEncrAlgo = Field(
-        default=HcisakmpEncrAlgo.DES, alias="encryption"
+        default=HcisakmpEncrAlgo.DES,
+        validation_alias="encryption",
+        serialization_alias="encryption",
     )
-    hash_authentication_algorithm: HcisakmpHash = Field(default=HcisakmpHash.MD5, alias="hash")
+    hash_authentication_algorithm: HcisakmpHash = Field(
+        default=HcisakmpHash.MD5, validation_alias="hash", serialization_alias="hash"
+    )
     lifetime: Annotated[int, Field(ge=60, le=86400)] = 28000
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     owner_key: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerKey",
+            validation_alias="ownerKey",
+            serialization_alias="ownerKey",
             description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
@@ -97,7 +115,8 @@ class ipsecIsakmpPhase2Pol(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerTag",
+            validation_alias="ownerTag",
+            serialization_alias="ownerTag",
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""

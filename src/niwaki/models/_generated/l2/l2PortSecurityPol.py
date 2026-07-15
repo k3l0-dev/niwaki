@@ -64,22 +64,37 @@ class l2PortSecurityPol(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
-    port_security_maximum_can_be_0_12000: str = Field(
-        default="", alias="maximum", description="Port Security Maximum"
-    )
+    port_security_maximum_can_be_0_12000: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=12000,
+            validation_alias="maximum",
+            serialization_alias="maximum",
+            description="Port Security Maximum",
+        ),
+    ] = 0
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     owner_key: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerKey",
+            validation_alias="ownerKey",
+            serialization_alias="ownerKey",
             description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
@@ -88,16 +103,25 @@ class l2PortSecurityPol(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerTag",
+            validation_alias="ownerTag",
+            serialization_alias="ownerTag",
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
-    port_security_timeout_can_be_60_3600: str = Field(
-        default="", alias="timeout", description="Port Security Timeout"
-    )
+    port_security_timeout_can_be_60_3600: Annotated[
+        int,
+        Field(
+            ge=60,
+            le=3600,
+            validation_alias="timeout",
+            serialization_alias="timeout",
+            description="Port Security Timeout",
+        ),
+    ] = 60
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     port_security_violation: L2PortSecurityViolation = Field(
         default=L2PortSecurityViolation.PROTECT,
-        alias="violation",
+        validation_alias="violation",
+        serialization_alias="violation",
         description="Port Security Violation",
     )

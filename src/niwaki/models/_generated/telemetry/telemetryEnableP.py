@@ -38,7 +38,8 @@ class telemetryEnableP(ManagedObject):
     # ── Configurable ───────────────────────────────────────────────────────────
     admin_state: TelemetryAdminState = Field(
         default=TelemetryAdminState.ENABLED,
-        alias="adminSt",
+        validation_alias="adminSt",
+        serialization_alias="adminSt",
         description="The administrative state of the object or policy.",
     )
     annotation: Annotated[

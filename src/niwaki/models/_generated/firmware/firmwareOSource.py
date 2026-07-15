@@ -70,12 +70,14 @@ class firmwareOSource(ManagedObject):
     ] = ""
     authentication_type: FirmwareAuthPass = Field(
         default=FirmwareAuthPass.PASSWORD,
-        alias="authPass",
+        validation_alias="authPass",
+        serialization_alias="authPass",
         description="The authentication type for the source.",
     )
     authentication_type_choice: FirmwareAuthenticationType = Field(
         default=FirmwareAuthenticationType.USEPASSWORD,
-        alias="authType",
+        validation_alias="authType",
+        serialization_alias="authType",
         description="The OSPF authentication type specifier. The type options are; default, md5, none, and simple.",
     )
     description: Annotated[
@@ -83,21 +85,31 @@ class firmwareOSource(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies the description of a policy component.",
         ),
     ] = ""
     variable_to_reuse_download_task: bool = Field(
-        default=True, alias="dnldTaskFlip", description="Download Task Flip."
+        default=True,
+        validation_alias="dnldTaskFlip",
+        serialization_alias="dnldTaskFlip",
+        description="Download Task Flip.",
     )
     ssh_private_key_content: Annotated[
-        str, Field(alias="identityPrivateKeyContents", repr=False)
+        str,
+        Field(
+            validation_alias="identityPrivateKeyContents",
+            serialization_alias="identityPrivateKeyContents",
+            repr=False,
+        ),
     ] = ""
     ssh_private_key_passphrase: Annotated[
         str,
         Field(
             max_length=512,
-            alias="identityPrivateKeyPassphrase",
+            validation_alias="identityPrivateKeyPassphrase",
+            serialization_alias="identityPrivateKeyPassphrase",
             repr=False,
             description="Passphrase given at the identity key creation.",
         ),
@@ -105,30 +117,50 @@ class firmwareOSource(ManagedObject):
     ssh_public_key_content: Annotated[
         str,
         Field(
-            alias="identityPublicKeyContents",
+            validation_alias="identityPublicKeyContents",
+            serialization_alias="identityPublicKeyContents",
             repr=False,
             description="Certificate contents for data transfer. Used for credentials.",
         ),
     ] = ""
     load_catalog_if_exists_and_newer: bool = Field(
-        default=True, alias="loadCatalogIfExistsAndNewer"
+        default=True,
+        validation_alias="loadCatalogIfExistsAndNewer",
+        serialization_alias="loadCatalogIfExistsAndNewer",
     )
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     password: Annotated[
         str, Field(repr=False, description="The Firmware password or key string.")
     ] = ""
     polling_interval: Annotated[
-        int, Field(alias="pollingInterval", description="Polling interval in minutes.")
+        int,
+        Field(
+            validation_alias="pollingInterval",
+            serialization_alias="pollingInterval",
+            description="Polling interval in minutes.",
+        ),
     ] = 0
     protocol: FirmwareDownloadProtocol = Field(
         default=FirmwareDownloadProtocol.SCP,
-        alias="proto",
+        validation_alias="proto",
+        serialization_alias="proto",
         description="The Firmware download protocol.",
     )
     url: Annotated[
         str, Field(max_length=512, description="The firmware URL for the image(s) on the source.")
     ] = ""
-    username: str = Field(default="", alias="user", description="The username for the source.")
+    username: str = Field(
+        default="",
+        validation_alias="user",
+        serialization_alias="user",
+        description="The username for the source.",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

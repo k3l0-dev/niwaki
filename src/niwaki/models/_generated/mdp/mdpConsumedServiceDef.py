@@ -37,7 +37,9 @@ class mdpConsumedServiceDef(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    mdp_consumed_service_def_dn: Annotated[str, Field(alias="mdpServiceDefDn")]
+    mdp_consumed_service_def_dn: Annotated[
+        str, Field(validation_alias="mdpServiceDefDn", serialization_alias="mdpServiceDefDn")
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[

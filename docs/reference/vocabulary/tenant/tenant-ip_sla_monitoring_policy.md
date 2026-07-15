@@ -26,14 +26,14 @@ Accepted as keyword arguments of `.ip_sla_monitoring_policy(name)` and of `.set(
 | `http_method_used_for_probing` | `httpMethod` | {ref}`FvhttpMethod <enum-fvhttpmethod>` | `get` | `get` | — |
 | `uri_for_http_probing` | `httpUri` | `str` | — | — | — |
 | `http_version_used_for_probing` | `httpVersion` | {ref}`FvhttpVersion <enum-fvhttpversion>` | `HTTP10`, `HTTP11` | `HTTP10` | — |
-| `type_of_service_value` | `ipv4Tos` | `str` | — | — | — |
-| `traffic_class_value` | `ipv6TrfClass` | `str` | — | — | — |
+| `type_of_service_value` | `ipv4Tos` | `int` | — | `0` | — |
+| `traffic_class_value` | `ipv6TrfClass` | `int` | — | `0` | — |
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |
 | `request_data_size` | `reqDataSize` | `int` | — | `28` | — |
-| `detect_multiplier` | `slaDetectMultiplier` | `str` | — | — | — |
-| `frequency` | `slaFrequency` | `str` | — | — | — |
-| `port` | `slaPort` | `str` | — | — | — |
+| `detect_multiplier` | `slaDetectMultiplier` | `int` | — | `3` | — |
+| `frequency` | `slaFrequency` | `int` | — | `60` | — |
+| `port` | `slaPort` | `int` | — | `0` | — |
 | `sla_type` | `slaType` | {ref}`FvslaType <enum-fvslatype>` | `http`, `icmp`, `l2ping`, `tcp` | `icmp` | — |
 | `threshold` | `threshold` | `int` | — | `900` | — |
 | `operation_timeout` | `timeout` | `int` | — | `900` | The amount of time between authentication attempts. |

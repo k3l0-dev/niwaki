@@ -60,7 +60,8 @@ class fvRsCtx(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9_.-]+$",
-            alias="tnFvCtxName",
+            validation_alias="tnFvCtxName",
+            serialization_alias="tnFvCtxName",
             description="The associated layer 3 context.",
         ),
     ] = ""

@@ -43,5 +43,10 @@ class fteFte(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    enable_fte_instance: bool = Field(default=False, alias="enable", description="Enable FTE")
+    enable_fte_instance: bool = Field(
+        default=False,
+        validation_alias="enable",
+        serialization_alias="enable",
+        description="Enable FTE",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

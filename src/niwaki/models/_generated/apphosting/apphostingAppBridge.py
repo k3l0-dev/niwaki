@@ -41,14 +41,19 @@ class apphostingAppBridge(ManagedObject):
     bridge_id: Annotated[
         int,
         Field(
-            ge=1, le=8, alias="bridgeId", description="unique id of the bridge for app container"
+            ge=1,
+            le=8,
+            validation_alias="bridgeId",
+            serialization_alias="bridgeId",
+            description="unique id of the bridge for app container",
         ),
     ] = 1
 
     # ── Configurable ───────────────────────────────────────────────────────────
     admin_st: ApphostingAdminState = Field(
         default=ApphostingAdminState.ENABLED,
-        alias="adminSt",
+        validation_alias="adminSt",
+        serialization_alias="adminSt",
         description='Admin state to configure mo "',
     )
     annotation: Annotated[
@@ -63,7 +68,8 @@ class apphostingAppBridge(ManagedObject):
         str,
         Field(
             pattern="^[0-9a-fA-F.:/ ]+$",
-            alias="ipV4Addr",
+            validation_alias="ipV4Addr",
+            serialization_alias="ipV4Addr",
             description="ip v4 address of the bridge entry",
         ),
     ] = ""
@@ -71,7 +77,8 @@ class apphostingAppBridge(ManagedObject):
         str,
         Field(
             pattern="^[0-9a-fA-F.:/ ]+$",
-            alias="ipV6Addr",
+            validation_alias="ipV6Addr",
+            serialization_alias="ipV6Addr",
             description="ip v6 address of the bridge entry",
         ),
     ] = ""

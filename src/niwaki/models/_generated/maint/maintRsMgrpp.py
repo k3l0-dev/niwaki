@@ -58,7 +58,8 @@ class maintRsMgrpp(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9_.:-]+$",
-            alias="tnMaintMaintPName",
+            validation_alias="tnMaintMaintPName",
+            serialization_alias="tnMaintMaintPName",
             description="The maintenance policy name assigned to the maintenance group.",
         ),
     ] = ""

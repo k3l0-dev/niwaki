@@ -42,7 +42,12 @@ class dbgexpRsTsSrc(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     target_dn: Annotated[
-        str, Field(alias="tDn", description="The source node of the on-demand TechSupport object.")
+        str,
+        Field(
+            validation_alias="tDn",
+            serialization_alias="tDn",
+            description="The source node of the on-demand TechSupport object.",
+        ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────

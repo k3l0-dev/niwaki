@@ -48,7 +48,12 @@ class infraRsConnFexS(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     target_dn: Annotated[
-        str, Field(alias="tDn", description="The distinguished name of the target.")
+        str,
+        Field(
+            validation_alias="tDn",
+            serialization_alias="tDn",
+            description="The distinguished name of the target.",
+        ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
@@ -60,5 +65,7 @@ class infraRsConnFexS(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    fex_id: str = Field(default="", alias="fexId")
+    fex_id: Annotated[
+        int, Field(ge=101, le=199, validation_alias="fexId", serialization_alias="fexId")
+    ] = 101
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

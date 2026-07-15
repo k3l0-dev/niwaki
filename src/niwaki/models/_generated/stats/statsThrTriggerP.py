@@ -3,9 +3,11 @@
 from __future__ import annotations
 
 from typing import ClassVar, Annotated
-from pydantic import Field
+from pydantic import BeforeValidator, Field
 
+from niwaki.models._wire import Flags, parse_flags
 from niwaki.models._generated.enums.StatsThrDir import StatsThrDir
+from niwaki.models._generated.enums.StatsThrSeverityState import StatsThrSeverityState
 from niwaki.models._generated.enums.StatsTrigger import StatsTrigger
 
 from niwaki.models.base import ManagedObject
@@ -39,7 +41,7 @@ class statsThrTriggerP(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    property: Annotated[str, Field(alias="propId")]
+    property: Annotated[str, Field(validation_alias="propId", serialization_alias="propId")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[
@@ -50,41 +52,130 @@ class statsThrTriggerP(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    crit_high_reset: StatsTrigger = Field(default=StatsTrigger.OFF, alias="critHighReset")
-    crit_high_set: StatsTrigger = Field(default=StatsTrigger.OFF, alias="critHighSet")
-    crit_low_reset: StatsTrigger = Field(default=StatsTrigger.OFF, alias="critLowReset")
-    crit_low_set: StatsTrigger = Field(default=StatsTrigger.OFF, alias="critLowSet")
+    crit_high_reset: StatsTrigger = Field(
+        default=StatsTrigger.OFF,
+        validation_alias="critHighReset",
+        serialization_alias="critHighReset",
+    )
+    crit_high_set: StatsTrigger = Field(
+        default=StatsTrigger.OFF, validation_alias="critHighSet", serialization_alias="critHighSet"
+    )
+    crit_low_reset: StatsTrigger = Field(
+        default=StatsTrigger.OFF,
+        validation_alias="critLowReset",
+        serialization_alias="critLowReset",
+    )
+    crit_low_set: StatsTrigger = Field(
+        default=StatsTrigger.OFF, validation_alias="critLowSet", serialization_alias="critLowSet"
+    )
     description: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies the description of a policy component.",
         ),
     ] = ""
-    threshold_direction: StatsThrDir = Field(default=StatsThrDir.BOTH, alias="direction")
-    high_range_end: StatsTrigger = Field(default=StatsTrigger.OFF, alias="highRangeEnd")
-    high_range_start: StatsTrigger = Field(default=StatsTrigger.OFF, alias="highRangeStart")
-    raising_threshold_state: str = Field(default="", alias="highSevState")
-    low_range_end: StatsTrigger = Field(default=StatsTrigger.OFF, alias="lowRangeEnd")
-    low_range_start: StatsTrigger = Field(default=StatsTrigger.OFF, alias="lowRangeStart")
-    falling_threshold_state: str = Field(default="", alias="lowSevState")
-    major_high_reset: StatsTrigger = Field(default=StatsTrigger.OFF, alias="majorHighReset")
-    major_high_set: StatsTrigger = Field(default=StatsTrigger.OFF, alias="majorHighSet")
-    major_low_reset: StatsTrigger = Field(default=StatsTrigger.OFF, alias="majorLowReset")
-    major_low_set: StatsTrigger = Field(default=StatsTrigger.OFF, alias="majorLowSet")
-    minor_high_reset: StatsTrigger = Field(default=StatsTrigger.OFF, alias="minorHighReset")
-    minor_high_set: StatsTrigger = Field(default=StatsTrigger.OFF, alias="minorHighSet")
-    minor_low_reset: StatsTrigger = Field(default=StatsTrigger.OFF, alias="minorLowReset")
-    minor_low_set: StatsTrigger = Field(default=StatsTrigger.OFF, alias="minorLowSet")
+    threshold_direction: StatsThrDir = Field(
+        default=StatsThrDir.BOTH, validation_alias="direction", serialization_alias="direction"
+    )
+    high_range_end: StatsTrigger = Field(
+        default=StatsTrigger.OFF,
+        validation_alias="highRangeEnd",
+        serialization_alias="highRangeEnd",
+    )
+    high_range_start: StatsTrigger = Field(
+        default=StatsTrigger.OFF,
+        validation_alias="highRangeStart",
+        serialization_alias="highRangeStart",
+    )
+    raising_threshold_state: Annotated[
+        Flags[StatsThrSeverityState], BeforeValidator(parse_flags)
+    ] = Field(
+        default_factory=lambda: frozenset({StatsThrSeverityState.NONE}),
+        validation_alias="highSevState",
+        serialization_alias="highSevState",
+    )
+    low_range_end: StatsTrigger = Field(
+        default=StatsTrigger.OFF, validation_alias="lowRangeEnd", serialization_alias="lowRangeEnd"
+    )
+    low_range_start: StatsTrigger = Field(
+        default=StatsTrigger.OFF,
+        validation_alias="lowRangeStart",
+        serialization_alias="lowRangeStart",
+    )
+    falling_threshold_state: Annotated[
+        Flags[StatsThrSeverityState], BeforeValidator(parse_flags)
+    ] = Field(
+        default_factory=lambda: frozenset({StatsThrSeverityState.NONE}),
+        validation_alias="lowSevState",
+        serialization_alias="lowSevState",
+    )
+    major_high_reset: StatsTrigger = Field(
+        default=StatsTrigger.OFF,
+        validation_alias="majorHighReset",
+        serialization_alias="majorHighReset",
+    )
+    major_high_set: StatsTrigger = Field(
+        default=StatsTrigger.OFF,
+        validation_alias="majorHighSet",
+        serialization_alias="majorHighSet",
+    )
+    major_low_reset: StatsTrigger = Field(
+        default=StatsTrigger.OFF,
+        validation_alias="majorLowReset",
+        serialization_alias="majorLowReset",
+    )
+    major_low_set: StatsTrigger = Field(
+        default=StatsTrigger.OFF, validation_alias="majorLowSet", serialization_alias="majorLowSet"
+    )
+    minor_high_reset: StatsTrigger = Field(
+        default=StatsTrigger.OFF,
+        validation_alias="minorHighReset",
+        serialization_alias="minorHighReset",
+    )
+    minor_high_set: StatsTrigger = Field(
+        default=StatsTrigger.OFF,
+        validation_alias="minorHighSet",
+        serialization_alias="minorHighSet",
+    )
+    minor_low_reset: StatsTrigger = Field(
+        default=StatsTrigger.OFF,
+        validation_alias="minorLowReset",
+        serialization_alias="minorLowReset",
+    )
+    minor_low_set: StatsTrigger = Field(
+        default=StatsTrigger.OFF, validation_alias="minorLowSet", serialization_alias="minorLowSet"
+    )
     name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
-    threshold_normal_value: StatsTrigger = Field(default=StatsTrigger.OFF, alias="normal")
+    threshold_normal_value: StatsTrigger = Field(
+        default=StatsTrigger.OFF, validation_alias="normal", serialization_alias="normal"
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    warn_high_reset: StatsTrigger = Field(default=StatsTrigger.OFF, alias="warnHighReset")
-    warn_high_set: StatsTrigger = Field(default=StatsTrigger.OFF, alias="warnHighSet")
-    warn_low_reset: StatsTrigger = Field(default=StatsTrigger.OFF, alias="warnLowReset")
-    warn_low_set: StatsTrigger = Field(default=StatsTrigger.OFF, alias="warnLowSet")
+    warn_high_reset: StatsTrigger = Field(
+        default=StatsTrigger.OFF,
+        validation_alias="warnHighReset",
+        serialization_alias="warnHighReset",
+    )
+    warn_high_set: StatsTrigger = Field(
+        default=StatsTrigger.OFF, validation_alias="warnHighSet", serialization_alias="warnHighSet"
+    )
+    warn_low_reset: StatsTrigger = Field(
+        default=StatsTrigger.OFF,
+        validation_alias="warnLowReset",
+        serialization_alias="warnLowReset",
+    )
+    warn_low_set: StatsTrigger = Field(
+        default=StatsTrigger.OFF, validation_alias="warnLowSet", serialization_alias="warnLowSet"
+    )

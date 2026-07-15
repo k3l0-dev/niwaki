@@ -2,16 +2,25 @@
 
 from __future__ import annotations
 
+from typing import cast
+
 from niwaki.models._generated.fv.fvBD import fvBD
 from niwaki.models._generated.fv.fvSubnet import fvSubnet
 from niwaki.models.base import ManagedObject
 from niwaki.utils.diff import mo_diff
 
 
-def _current_bd(**wire_attrs: str) -> ManagedObject:
-    """A BD as it would come back from the APIC (wire names)."""
-    return ManagedObject.from_apic(
-        {"fvBD": {"attributes": {"name": "web", **wire_attrs}, "children": []}}
+def _current_bd(**wire_attrs: str) -> fvBD:
+    """A BD as it would come back from the APIC (wire names).
+
+    ``from_apic`` dispatches on the envelope's class name, so it is typed to the
+    base class; the envelope here says ``fvBD``.
+    """
+    return cast(
+        fvBD,
+        ManagedObject.from_apic(
+            {"fvBD": {"attributes": {"name": "web", **wire_attrs}, "children": []}}
+        ),
     )
 
 
@@ -26,7 +35,7 @@ class TestRespectFieldsSet:
         """Without the flag, the original all-fields comparison still applies."""
         desired = fvBD(name="web")
         current = _current_bd(arpFlood="yes")
-        delta = mo_diff(desired, current)  # type: ignore[arg-type]
+        delta = mo_diff(desired, current)
         assert delta is not None
         assert delta.arp_flooding is False
 
@@ -68,23 +77,39 @@ class TestRespectFieldsSet:
 
 
 class TestNumericNormalisation:
-    """The APIC canonicalises numeric strings ("80.0" → "80.000000")."""
+    """The APIC canonicalises numbers on write — and the SDK types them as numbers.
+
+    ``stormctrlIfPol.bcRate`` is a ``scalar:Float``.  While the SDK typed it as a
+    string, an ``"80.0"`` pushed and an ``"80.000000"`` read back were two
+    different strings, and the diff had to reparse both sides as floats to avoid
+    reporting a change that had not happened.  Typed as a ``float``, the APIC's
+    spelling stops being a fact anyone has to know.
+    """
 
     def test_apic_normalised_float_is_not_a_change(self) -> None:
         from niwaki.models._generated.stormctrl.stormctrlIfPol import stormctrlIfPol
 
-        desired = stormctrlIfPol(name="s", broadcast_traffic_rate="80.0")
+        desired = stormctrlIfPol(name="s", broadcast_traffic_rate=80.0)
+        current = stormctrlIfPol.model_validate({"name": "s", "bcRate": "80.000000"})
+        assert desired.broadcast_traffic_rate == 80.0
+        assert mo_diff(desired, current, respect_fields_set=True) is None
+
+    def test_the_string_spelling_is_accepted_too(self) -> None:
+        """A caller who writes the wire form is not punished for it."""
+        from niwaki.models._generated.stormctrl.stormctrlIfPol import stormctrlIfPol
+
+        desired = stormctrlIfPol(name="s", broadcast_traffic_rate=80.0)
         current = stormctrlIfPol.model_validate({"name": "s", "bcRate": "80.000000"})
         assert mo_diff(desired, current, respect_fields_set=True) is None
 
     def test_real_numeric_change_is_reported(self) -> None:
         from niwaki.models._generated.stormctrl.stormctrlIfPol import stormctrlIfPol
 
-        desired = stormctrlIfPol(name="s", broadcast_traffic_rate="90.0")
+        desired = stormctrlIfPol(name="s", broadcast_traffic_rate=90.0)
         current = stormctrlIfPol.model_validate({"name": "s", "bcRate": "80.000000"})
         delta = mo_diff(desired, current, respect_fields_set=True)
         assert delta is not None
-        assert delta.broadcast_traffic_rate == "90.0"
+        assert delta.broadcast_traffic_rate == 90.0
 
     def test_non_numeric_strings_compare_strictly(self) -> None:
         from niwaki.models._generated.fv.fvBD import fvBD

@@ -24,9 +24,9 @@ Accepted as keyword arguments of `.ra_guard_policy()` and of `.set(**attrs)` on 
 | `description` | `descr` | `str` | — | — | Specifies a description of the policy definition. |
 | `perform_managed_config_flag_check` | `managedConfigCheck` | `bool` | — | `False` | — |
 | `managed_config_flag_settting` | `managedConfigFlag` | `bool` | — | `False` | — |
-| `max_allowed_hop_limit` | `maxHopLimit` | `str` | — | — | — |
+| `max_allowed_hop_limit` | `maxHopLimit` | `int` | — | `0` | — |
 | `allowed_max_router_preference` | `maxRouterPref` | {ref}`FhsRAGuardMaxRouterPref <enum-fhsraguardmaxrouterpref>` | `disabled`, `high`, `low`, `medium` | `disabled` | — |
-| `min_allowed_hop_limit` | `minHopLimit` | `str` | — | — | — |
+| `min_allowed_hop_limit` | `minHopLimit` | `int` | — | `0` | — |
 | `name` | `name` | `str` | — | — | — |
 | `perform_other_config_flag_check` | `otherConfigCheck` | `bool` | — | `False` | — |
 | `other_config_flag_settting` | `otherConfigFlag` | `bool` | — | `False` | — |

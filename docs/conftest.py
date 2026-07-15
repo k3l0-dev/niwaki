@@ -25,7 +25,7 @@ import re
 from functools import cache
 from importlib import import_module
 from pathlib import Path
-from typing import Any
+from typing import Annotated, Any, get_args, get_origin
 
 import httpx
 import pytest
@@ -94,6 +94,7 @@ class FakeApic:
 
     def _ingest(self, cls_name: str, body: dict[str, Any], parent_dn: str) -> None:
         attrs = {str(k): str(v) for k, v in body.get("attributes", {}).items()}
+        attrs = _reorder_flags(cls_name, attrs)
         rn = _rn(cls_name, attrs)
         dn = f"{parent_dn}/{rn}" if parent_dn else rn
         _, existing = self.store.get(dn, (cls_name, {}))
@@ -161,6 +162,43 @@ class FakeApic:
 def _url_dn(path: str) -> str:
     """Extract the DN from an ``/api/mo/<dn>.json`` request path."""
     return path.removeprefix("/api/mo/").removesuffix(".json")
+
+
+def _reorder_flags(cls_name: str, attrs: dict[str, str]) -> dict[str, str]:
+    """Store a bitmask in an order of the APIC's own choosing, as the real one does.
+
+    A real APIC never echoes a bitmask back the way you wrote it: a subnet scope
+    posted as ``"shared,public"`` is stored ``"public,shared"``.  A fake that
+    parrots the payload would stay green on precisely the bug this class of type
+    exists to kill — so it reverses every bitmask it is handed, which is the
+    harshest honest thing it can do.
+
+    Args:
+        cls_name: ACI class of the object being stored.
+        attrs: Its wire attributes.
+
+    Returns:
+        The attributes, with every bitmask value reordered.
+    """
+    from niwaki.models.base import REGISTRY
+
+    _ensure_model(cls_name)
+    cls = REGISTRY.get(cls_name)
+    if cls is None:
+        return attrs
+
+    out = dict(attrs)
+    for field_name, field in cls.model_fields.items():
+        wire = field.serialization_alias or field_name
+        value = out.get(wire)
+        if not value or "," not in value:
+            continue
+        annotation = field.annotation
+        while get_origin(annotation) is Annotated:
+            annotation = get_args(annotation)[0]
+        if get_origin(annotation) in (frozenset, set):
+            out[wire] = ",".join(reversed(value.split(",")))
+    return out
 
 
 @cache

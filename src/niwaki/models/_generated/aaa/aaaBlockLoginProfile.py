@@ -56,40 +56,67 @@ class aaaBlockLoginProfile(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    block_duration: str = Field(
-        default="",
-        alias="blockDuration",
-        description="Duration in minutes for which future logins should be blocked",
-    )
+    block_duration: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=1440,
+            validation_alias="blockDuration",
+            serialization_alias="blockDuration",
+            description="Duration in minutes for which future logins should be blocked",
+        ),
+    ] = 60
     description: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
-    enable_login_block: AaaBoolState = Field(default=AaaBoolState.DISABLE, alias="enableLoginBlock")
-    max_failed_attempts: str = Field(
-        default="",
-        alias="maxFailedAttempts",
-        description="max failed login attempts before blocking user login",
+    enable_login_block: AaaBoolState = Field(
+        default=AaaBoolState.DISABLE,
+        validation_alias="enableLoginBlock",
+        serialization_alias="enableLoginBlock",
     )
-    max_failed_attempts_window: str = Field(
-        default="",
-        alias="maxFailedAttemptsWindow",
-        description="times in minutes for max login failures to occur before blocking the user",
-    )
+    max_failed_attempts: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=15,
+            validation_alias="maxFailedAttempts",
+            serialization_alias="maxFailedAttempts",
+            description="max failed login attempts before blocking user login",
+        ),
+    ] = 5
+    max_failed_attempts_window: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=720,
+            validation_alias="maxFailedAttemptsWindow",
+            serialization_alias="maxFailedAttemptsWindow",
+            description="times in minutes for max login failures to occur before blocking the user",
+        ),
+    ] = 5
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     owner_key: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerKey",
+            validation_alias="ownerKey",
+            serialization_alias="ownerKey",
             description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
@@ -98,7 +125,8 @@ class aaaBlockLoginProfile(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerTag",
+            validation_alias="ownerTag",
+            serialization_alias="ownerTag",
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""

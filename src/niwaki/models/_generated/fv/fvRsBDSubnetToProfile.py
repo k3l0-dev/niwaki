@@ -58,7 +58,8 @@ class fvRsBDSubnetToProfile(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9_.:-]+$",
-            alias="tnL3extOutName",
+            validation_alias="tnL3extOutName",
+            serialization_alias="tnL3extOutName",
             description="The layer 3 outside interface identifier controlling connectivity to outside networks.",
         ),
     ] = ""
@@ -67,7 +68,8 @@ class fvRsBDSubnetToProfile(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9_.:-]+$",
-            alias="tnRtctrlProfileName",
+            validation_alias="tnRtctrlProfileName",
+            serialization_alias="tnRtctrlProfileName",
             description="The name of the route profile associated with this subnet.",
         ),
     ] = ""

@@ -3,7 +3,11 @@
 from __future__ import annotations
 
 from typing import ClassVar, Annotated
-from pydantic import Field
+from pydantic import BeforeValidator, Field
+
+from niwaki.models._wire import Flags, parse_flags
+from niwaki.models._generated.enums.L3extRouteAggType import L3extRouteAggType
+from niwaki.models._generated.enums.L3extRouteScp import L3extRouteScp
 
 from niwaki.models.base import ManagedObject
 
@@ -40,11 +44,18 @@ class l3extSubnet(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    subnet: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="ip")]
+    subnet: Annotated[
+        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", validation_alias="ip", serialization_alias="ip")
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    aggregate_routes_for_subnet: str = Field(
-        default="", alias="aggregate", description="Aggregate Routes for Subnet"
+    aggregate_routes_for_subnet: Annotated[
+        Flags[L3extRouteAggType], BeforeValidator(parse_flags)
+    ] = Field(
+        default_factory=lambda: frozenset(),
+        validation_alias="aggregate",
+        serialization_alias="aggregate",
+        description="Aggregate Routes for Subnet",
     )
     annotation: Annotated[
         str,
@@ -59,15 +70,27 @@ class l3extSubnet(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies the description of a policy component.",
         ),
     ] = ""
     name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
-    scope_of_the_external_subnet: str = Field(
-        default="", alias="scope", description="The domain applicable to the capability."
+    scope_of_the_external_subnet: Annotated[Flags[L3extRouteScp], BeforeValidator(parse_flags)] = (
+        Field(
+            default_factory=lambda: frozenset({L3extRouteScp.IMPORT_SECURITY}),
+            validation_alias="scope",
+            serialization_alias="scope",
+            description="The domain applicable to the capability.",
+        )
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

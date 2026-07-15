@@ -111,7 +111,7 @@ class Test1FabricBringUp:
                     continue
                 node_id, name = slots[role].pop(0)
                 controller().fabric_membership().fabric_node_member(
-                    serial, id=node_id, name=name, role=role
+                    serial, id=int(node_id), name=name, role=role
                 ).push(live_aci)
                 _registered[serial] = name
                 progress = True
@@ -126,7 +126,10 @@ class Test1FabricBringUp:
 
     def test_02_membership_reflects_registration(self, live_aci: Niwaki) -> None:
         membership = live_aci.root.controller().fabric_membership_policy()
-        idents = {m.name for m in membership.query("fabricNodeIdentP").fetch()}
+        idents = {
+            str(m.model_dump().get("name", ""))
+            for m in membership.query("fabricNodeIdentP").fetch()
+        }
         assert set(_registered.values()) <= idents
 
     def test_03_nodes_join_the_fabric(self, live_aci: Niwaki) -> None:
@@ -134,7 +137,9 @@ class Test1FabricBringUp:
         deadline = time.monotonic() + 90
         names: set[str] = set()
         while time.monotonic() < deadline:
-            names = {n.name for n in live_aci.query("fabricNode").fetch()}
+            names = {
+                str(n.model_dump().get("name", "")) for n in live_aci.query("fabricNode").fetch()
+            }
             if set(_registered.values()) <= names:
                 break
             time.sleep(10)

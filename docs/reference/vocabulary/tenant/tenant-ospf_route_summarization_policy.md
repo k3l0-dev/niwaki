@@ -24,7 +24,7 @@ Accepted as keyword arguments of `.ospf_route_summarization_policy(name)` and of
 | parameter | wire | type | values | default | description |
 | --- | --- | --- | --- | --- | --- |
 | `name` *(positional)* | `name` | `str` | — | — | The name of the object. |
-| `area_range_cost` | `cost` | `int` | — | `0` | Route summary cost |
+| `area_range_cost` | `cost` | `int` | — | `unspecified` | Route summary cost |
 | `description` | `descr` | `str` | — | — | Specifies a description of the policy definition. |
 | `inter_area_summarization_enabled` | `interAreaEnabled` | `bool` | — | `False` | — |
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |

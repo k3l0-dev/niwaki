@@ -38,7 +38,16 @@ class bgpRRNodePEp(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    node_id: Annotated[str, Field(alias="id", description="The spine node ID.")]
+    node_id: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=4000,
+            validation_alias="id",
+            serialization_alias="id",
+            description="The spine node ID.",
+        ),
+    ] = 1
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[
@@ -54,12 +63,28 @@ class bgpRRNodePEp(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies the description of a policy component.",
         ),
     ] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
-    pod_id: str = Field(default="", alias="podId", description="Pod id")
+    pod_id: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=255,
+            validation_alias="podId",
+            serialization_alias="podId",
+            description="Pod id",
+        ),
+    ] = 1
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

@@ -55,7 +55,8 @@ class mgmtRsOoBCons(ManagedObject):
             min_length=1,
             max_length=64,
             pattern="^[a-zA-Z0-9_.:-]+$",
-            alias="tnVzOOBBrCPName",
+            validation_alias="tnVzOOBBrCPName",
+            serialization_alias="tnVzOOBBrCPName",
             description="An out-of-band management endpoint group contract consists of switches (leaves/spines) and APICs that are part of the associated out-of-band management zone.",
         ),
     ]
@@ -71,7 +72,8 @@ class mgmtRsOoBCons(ManagedObject):
     ] = ""
     qos_priority: QosTenantPrio = Field(
         default=QosTenantPrio.UNSPECIFIED,
-        alias="prio",
+        validation_alias="prio",
+        serialization_alias="prio",
         description="The Quality of service (QoS) priority class ID. QoS refers to the capability of a network to provide better service to selected network traffic over various technologies.",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

@@ -26,8 +26,8 @@ Accepted as keyword arguments of `.service_redirect_policy(name)` and of `.set(*
 | `description` | `descr` | `str` | — | — | Specifies a description of the policy definition. |
 | `dest_type` | `destType` | {ref}`VnsDestType <enum-vnsdesttype>` | `L1`, `L2`, `L3` | `L3` | — |
 | `hashing_algorithm` | `hashingAlgorithm` | {ref}`VnshashingAlgorithm <enum-vnshashingalgorithm>` | `dip`, `sip`, `sip-dip-prototype` | `sip-dip-prototype` | — |
-| `maximum_threshold_percentage` | `maxThresholdPercent` | `str` | — | — | — |
-| `minimum_threshold_percentage` | `minThresholdPercent` | `str` | — | — | — |
+| `maximum_threshold_percentage` | `maxThresholdPercent` | `int` | — | `0` | — |
+| `minimum_threshold_percentage` | `minThresholdPercent` | `int` | — | `0` | — |
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |
 | `program_local_pod_only` | `programLocalPodOnly` | `bool` | — | `False` | — |

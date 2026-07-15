@@ -60,29 +60,72 @@ class fvCepNetCfgPol(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies the description of a policy component.",
         ),
     ] = ""
     dns_search_suffix_for_network_ip_pool: Annotated[
-        str, Field(max_length=512, alias="dnsSearchSuffix", description="DNS Search Suffix")
+        str,
+        Field(
+            max_length=512,
+            validation_alias="dnsSearchSuffix",
+            serialization_alias="dnsSearchSuffix",
+            description="DNS Search Suffix",
+        ),
     ] = ""
     dns_servers: Annotated[
-        str, Field(max_length=512, alias="dnsServers", description="DNS Server name")
+        str,
+        Field(
+            max_length=512,
+            validation_alias="dnsServers",
+            serialization_alias="dnsServers",
+            description="DNS Server name",
+        ),
     ] = ""
     dns_suffix_for_network_ip_pool: Annotated[
-        str, Field(max_length=512, alias="dnsSuffix", description="DNS Suffix name")
+        str,
+        Field(
+            max_length=512,
+            validation_alias="dnsSuffix",
+            serialization_alias="dnsSuffix",
+            description="DNS Suffix name",
+        ),
     ] = ""
     end_ip_address_for_network_ip_pool: Annotated[
-        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="endIp", description="Ending ip address")
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            validation_alias="endIp",
+            serialization_alias="endIp",
+            description="Ending ip address",
+        ),
     ] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     start_ip_address_for_network_ip_pool: Annotated[
-        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="startIp", description="Starting ip address")
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            validation_alias="startIp",
+            serialization_alias="startIp",
+            description="Starting ip address",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     wins_servers: Annotated[
-        str, Field(max_length=512, alias="winsServers", description="DNS Search Suffix")
+        str,
+        Field(
+            max_length=512,
+            validation_alias="winsServers",
+            serialization_alias="winsServers",
+            description="DNS Search Suffix",
+        ),
     ] = ""

@@ -25,16 +25,16 @@ Accepted as keyword arguments of `.igmp_interface_policy(name)` and of `.set(**a
 | --- | --- | --- | --- | --- | --- |
 | `name` *(positional)* | `name` | `str` | — | — | The name of the object. |
 | `description` | `descr` | `str` | — | — | Specifies a description of the policy definition. |
-| `group_timeout` | `grpTimeout` | `str` | — | — | Group Timeout |
-| `controls` | `ifCtrl` | `str` | — | — | Interface Control |
-| `last_member_query_count` | `lastMbrCnt` | `str` | — | — | Last member query count |
-| `last_member_response_time` | `lastMbrRespTime` | `str` | — | — | Last member response time |
+| `group_timeout` | `grpTimeout` | `int` | — | `260` | Group Timeout |
+| `controls` | `ifCtrl` | {ref}`IpmcIfCtrl <enum-ipmcifctrl>` | `rep-ll`, `fast-leave`, `allow-v3-asm` | — | Interface Control |
+| `last_member_query_count` | `lastMbrCnt` | `int` | — | `2` | Last member query count |
+| `last_member_response_time` | `lastMbrRespTime` | `int` | — | `1` | Last member response time |
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |
-| `querier_timeout` | `querierTimeout` | `str` | — | — | Querier timeout |
-| `query_interval` | `queryIntvl` | `str` | — | — | Query interval |
-| `robustness_factor` | `robustFac` | `str` | — | — | Robustness factor |
-| `response_interval` | `rspIntvl` | `str` | — | — | Query response interval |
-| `startup_query_count` | `startQueryCnt` | `str` | — | — | Startup Query Count |
-| `startup_query_interval` | `startQueryIntvl` | `str` | — | — | Startup query interval |
+| `querier_timeout` | `querierTimeout` | `int` | — | `255` | Querier timeout |
+| `query_interval` | `queryIntvl` | `int` | — | `125` | Query interval |
+| `robustness_factor` | `robustFac` | `int` | — | `2` | Robustness factor |
+| `response_interval` | `rspIntvl` | `int` | — | `10` | Query response interval |
+| `startup_query_count` | `startQueryCnt` | `int` | — | `2` | Startup Query Count |
+| `startup_query_interval` | `startQueryIntvl` | `int` | — | `31` | Startup query interval |
 | `version` | `ver` | {ref}`IpmcifVer <enum-ipmcifver>` | `v2`, `v3` | `v2` | Interface version |

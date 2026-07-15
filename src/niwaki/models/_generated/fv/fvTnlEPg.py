@@ -3,11 +3,13 @@
 from __future__ import annotations
 
 from typing import ClassVar, Annotated
-from pydantic import Field
+from pydantic import BeforeValidator, Field
 
+from niwaki.models._wire import Flags, parse_flags
 from niwaki.models._generated.enums.FvFloodOnEncap import FvFloodOnEncap
 from niwaki.models._generated.enums.FvPrefGrMemb import FvPrefGrMemb
 from niwaki.models._generated.enums.FvTnlFwdCtrl import FvTnlFwdCtrl
+from niwaki.models._generated.enums.L2qiqL2ProtTunMaskT import L2qiqL2ProtTunMaskT
 from niwaki.models._generated.enums.QosTenantPrio import QosTenantPrio
 from niwaki.models._generated.enums.VzMatchT import VzMatchT
 
@@ -127,7 +129,10 @@ class fvTnlEPg(ManagedObject):
 
     # ── Configurable ───────────────────────────────────────────────────────────
     access_encapsulation: str = Field(
-        default="", alias="accEncap", description="Access encap (vlan or vnid)"
+        default="",
+        validation_alias="accEncap",
+        serialization_alias="accEncap",
+        description="Access encap (vlan or vnid)",
     )
     annotation: Annotated[
         str,
@@ -142,36 +147,59 @@ class fvTnlEPg(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies the description of a policy component.",
         ),
     ] = ""
-    contract_exception_tag: Annotated[str, Field(max_length=512, alias="exceptionTag")] = ""
+    contract_exception_tag: Annotated[
+        str,
+        Field(max_length=512, validation_alias="exceptionTag", serialization_alias="exceptionTag"),
+    ] = ""
     flood_on_encap: FvFloodOnEncap = Field(
         default=FvFloodOnEncap.DISABLED,
-        alias="floodOnEncap",
+        validation_alias="floodOnEncap",
+        serialization_alias="floodOnEncap",
         description="Control at EPG level if the traffic L2 Multicast/Broadcast and Link Local Layer should be flooded only on ENCAP or based on bridg-domain settings",
     )
-    forwarding_controls: FvTnlFwdCtrl = Field(
-        default=FvTnlFwdCtrl.MAC_LEARN_ENABLE, alias="fwdCtrl", description="Forwarding controls"
+    forwarding_controls: Annotated[Flags[FvTnlFwdCtrl], BeforeValidator(parse_flags)] = Field(
+        default_factory=lambda: frozenset({FvTnlFwdCtrl.MAC_LEARN_ENABLE}),
+        validation_alias="fwdCtrl",
+        serialization_alias="fwdCtrl",
+        description="Forwarding controls",
     )
     provider_label_match_criteria: VzMatchT = Field(
         default=VzMatchT.ATLEASTONE,
-        alias="matchT",
+        validation_alias="matchT",
+        serialization_alias="matchT",
         description="The provider label match criteria.",
     )
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     preferred_group_member: FvPrefGrMemb = Field(
         default=FvPrefGrMemb.EXCLUDE,
-        alias="prefGrMemb",
+        validation_alias="prefGrMemb",
+        serialization_alias="prefGrMemb",
         description="Represents parameter used to determine if EPg is part of a group that does not a contract for communication",
     )
     qos_class: QosTenantPrio = Field(
         default=QosTenantPrio.UNSPECIFIED,
-        alias="prio",
+        validation_alias="prio",
+        serialization_alias="prio",
         description="The QoS priority class identifier.",
     )
-    dot1q_tunnel_l2_protocol_tunneling_mask: str = Field(default="", alias="qiqL2ProtTunMask")
+    dot1q_tunnel_l2_protocol_tunneling_mask: Annotated[
+        Flags[L2qiqL2ProtTunMaskT], BeforeValidator(parse_flags)
+    ] = Field(
+        default_factory=lambda: frozenset({L2qiqL2ProtTunMaskT.NONE}),
+        validation_alias="qiqL2ProtTunMask",
+        serialization_alias="qiqL2ProtTunMask",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

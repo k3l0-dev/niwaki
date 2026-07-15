@@ -29,7 +29,7 @@ Accepted as keyword arguments of `.bd(name)` and of `.set(**attrs)` on this curs
 | `description` | `descr` | `str` | — | — | Specifies a description of the policy definition root. |
 | `enable_rogue_except_mac` | `enableRogueExceptMac` | `bool` | — | `False` | rogue exception mac wildcard support at bd level |
 | `clear_endpoints` | `epClear` | `bool` | — | `False` | Represents the parameter used by the node (i.e. Leaf) to clear all EPs in all leaves for this BD. |
-| `ep_move_detection_mode` | `epMoveDetectMode` | {ref}`L2EpMoveDetectMode <enum-l2epmovedetectmode>` | `garp` | `garp` | The End Point move detection option uses the Gratuitous Address Resolution Protocol (GARP). A gratuitous ARP is an ARP broadcast-type of packet that is used to verify that no other device on the network has the same IP address as the sending device. |
+| `ep_move_detection_mode` | `epMoveDetectMode` | {ref}`L2EpMoveDetectMode <enum-l2epmovedetectmode>` | `garp` | — | The End Point move detection option uses the Gratuitous Address Resolution Protocol (GARP). A gratuitous ARP is an ARP broadcast-type of packet that is used to verify that no other device on the network has the same IP address as the sending device. |
 | `bd_host_based_routing` | `hostBasedRouting` | `bool` | — | `False` | Enables advertising host routes (/32 prefixes) out of the L3OUT(s) that are associated to this BD. |
 | `allow_bum_traffic_between_sites` | `intersiteBumTrafficAllow` | `bool` | — | `False` | Control whether BUM traffic is allowed between sites |
 | `allow_l2stretch_between_sites` | `intersiteL2Stretch` | `bool` | — | `False` | l2Stretch flag is enabled between sites |

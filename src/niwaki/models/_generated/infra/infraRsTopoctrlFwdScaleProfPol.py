@@ -58,7 +58,10 @@ class infraRsTopoctrlFwdScaleProfPol(ManagedObject):
     name: Annotated[
         str,
         Field(
-            max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="tnTopoctrlFwdScaleProfilePolName"
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            validation_alias="tnTopoctrlFwdScaleProfilePolName",
+            serialization_alias="tnTopoctrlFwdScaleProfilePolName",
         ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

@@ -36,7 +36,16 @@ class mdpSpineP(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    node_id: Annotated[str, Field(alias="id", description="An object identifier.")]
+    node_id: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=16000,
+            validation_alias="id",
+            serialization_alias="id",
+            description="An object identifier.",
+        ),
+    ] = 1
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[

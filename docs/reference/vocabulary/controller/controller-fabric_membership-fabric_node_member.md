@@ -24,11 +24,11 @@ Accepted as keyword arguments of `.fabric_node_member(serial)` and of `.set(**at
 | parameter | wire | type | values | default | description |
 | --- | --- | --- | --- | --- | --- |
 | `serial` *(positional)* | `serial` | `str` | — | — | The node manufacturer serial number. |
-| `ext_pool_id` | `extPoolId` | `str` | — | — | — |
-| `fabric_id` | `fabricId` | `str` | — | — | — |
-| `id` | `nodeId` | `str` | — | — | — |
+| `ext_pool_id` | `extPoolId` | `int` | — | `0` | — |
+| `fabric_id` | `fabricId` | `int` | — | `1` | — |
+| `id` | `nodeId` | `int` | — | `0` | — |
 | `node_type` | `nodeType` | {ref}`TopNodeType <enum-topnodetype>` | `remote-leaf-wan`, `tier-2-leaf`, `unspecified`, `virtual` | `unspecified` | — |
-| `pod_id` | `podId` | `str` | — | — | — |
+| `pod_id` | `podId` | `int` | — | `1` | — |
 | `role` | `role` | {ref}`TopNodeRoleP <enum-topnoderolep>` | `leaf`, `spine`, `unspecified` | `unspecified` | The system role type. |
 | `description` | `descr` | `str` | — | — | Specifies the description of a policy component. |
 | `name` | `name` | `str` | — | — | — |

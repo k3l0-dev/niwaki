@@ -62,19 +62,35 @@ class bfdInst(ManagedObject):
         ),
     ] = ""
     echo_if: str = Field(
-        default="", alias="echoIf", description="Loopback interface to be used for bfd echo frames"
+        default="",
+        validation_alias="echoIf",
+        serialization_alias="echoIf",
+        description="Loopback interface to be used for bfd echo frames",
     )
     hw_offload: BfdHwOffload = Field(
         default=BfdHwOffload.ENABLE,
-        alias="hwOffload",
+        validation_alias="hwOffload",
+        serialization_alias="hwOffload",
         description="Hardware Offload Enable/Disable flag",
     )
-    slow_timer_interval: str = Field(
-        default="",
-        alias="slowIntvl",
-        description="Slow mode timer interval. This is the interval at which BFD control packets are sent.",
-    )
-    startup_timer_interval: str = Field(
-        default="", alias="startupIntvl", description="Startup timer interval."
-    )
+    slow_timer_interval: Annotated[
+        int,
+        Field(
+            ge=1000,
+            le=30000,
+            validation_alias="slowIntvl",
+            serialization_alias="slowIntvl",
+            description="Slow mode timer interval. This is the interval at which BFD control packets are sent.",
+        ),
+    ] = 2000
+    startup_timer_interval: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=60,
+            validation_alias="startupIntvl",
+            serialization_alias="startupIntvl",
+            description="Startup timer interval.",
+        ),
+    ] = 10
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

@@ -207,31 +207,49 @@ class vnsCDev(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    clone_count: Annotated[int, Field(alias="cloneCount")] = 0
-    context_label: Annotated[str, Field(max_length=512, alias="devCtxLbl")] = ""
+    clone_count: Annotated[
+        int, Field(validation_alias="cloneCount", serialization_alias="cloneCount")
+    ] = 0
+    context_label: Annotated[
+        str, Field(max_length=512, validation_alias="devCtxLbl", serialization_alias="devCtxLbl")
+    ] = ""
     management_address: Annotated[
         str,
         Field(
             max_length=512,
-            alias="host",
+            validation_alias="host",
+            serialization_alias="host",
             description="The hostname or IP for export destination. Call Home sends email messages to either the IP address or hostname, and the associated port number.",
         ),
     ] = ""
     is_clone_operation: bool = Field(
-        default=False, alias="isCloneOperation", description="Tell whether Template or not"
+        default=False,
+        validation_alias="isCloneOperation",
+        serialization_alias="isCloneOperation",
+        description="Tell whether Template or not",
     )
     is_template: bool = Field(
-        default=False, alias="isTemplate", description="Tell whether Template or not"
+        default=False,
+        validation_alias="isTemplate",
+        serialization_alias="isTemplate",
+        description="Tell whether Template or not",
     )
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     vcenter_name: Annotated[
         str,
         Field(
             max_length=512,
-            alias="vcenterName",
+            validation_alias="vcenterName",
+            serialization_alias="vcenterName",
             description="The virtual center name on which the device is hosted in the L4-L7 device cluster. The virtual center name uniquely identifies the center.",
         ),
     ] = ""
@@ -239,7 +257,8 @@ class vnsCDev(ManagedObject):
         str,
         Field(
             max_length=512,
-            alias="vmName",
+            validation_alias="vmName",
+            serialization_alias="vmName",
             description="The virtual center VM name on which the device is hosted in the L4-L7 device cluster. The virtual center VM name uniquely identifies the VM.",
         ),
     ] = ""

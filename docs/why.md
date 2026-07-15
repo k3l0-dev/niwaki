@@ -113,7 +113,7 @@ API dump of the model.
 
 niwaki spends its entire codegen budget on this problem: human-readable
 field names with the wire name as alias (`arp_flooding` ↔ `arpFlood`),
-558 real enums, typed cursors **per position** so autocompletion knows that
+676 real enums, typed cursors **per position** so autocompletion knows that
 `.node_block()` under a leaf selector differs from the one under a spine
 selector, and eager Pydantic validation at the call site.  The
 {doc}`DSL reference <reference/vocabulary/index>` is generated from the

@@ -45,12 +45,23 @@ class mgmtRsInBStNode(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     target_dn: Annotated[
-        str, Field(alias="tDn", description="The distinguished name of the target.")
+        str,
+        Field(
+            validation_alias="tDn",
+            serialization_alias="tDn",
+            description="The distinguished name of the target.",
+        ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     address: Annotated[
-        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="addr", description="The peer IP address.")
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            validation_alias="addr",
+            serialization_alias="addr",
+            description="The peer IP address.",
+        ),
     ] = ""
     annotation: Annotated[
         str,
@@ -62,7 +73,8 @@ class mgmtRsInBStNode(ManagedObject):
     ] = ""
     configuration_mode: MgmtConfigurationMode = Field(
         default=MgmtConfigurationMode.STATIC,
-        alias="configurationMode",
+        validation_alias="configurationMode",
+        serialization_alias="configurationMode",
         description="Address allocated either static or auto",
     )
     descr: Annotated[
@@ -77,18 +89,27 @@ class mgmtRsInBStNode(ManagedObject):
         str,
         Field(
             pattern="^[0-9a-fA-F.:/ ]+$",
-            alias="gw",
+            validation_alias="gw",
+            serialization_alias="gw",
             description="The gateway IP address. This property is only valid when crossing VRFs and should always be present when the client is crossing a VRF to get its IP address.",
         ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     v6_addr: Annotated[
         str,
-        Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="v6Addr", description="IP address of the node"),
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            validation_alias="v6Addr",
+            serialization_alias="v6Addr",
+            description="IP address of the node",
+        ),
     ] = ""
     v6_gw: Annotated[
         str,
         Field(
-            pattern="^[0-9a-fA-F.:/ ]+$", alias="v6Gw", description="Gateway IP address of the node"
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            validation_alias="v6Gw",
+            serialization_alias="v6Gw",
+            description="Gateway IP address of the node",
         ),
     ] = ""

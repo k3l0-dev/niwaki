@@ -42,14 +42,26 @@ class syntheticCtSubtree(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    number_of_controllers_to_be_extracted: Annotated[int, Field(alias="ctrlrs")] = 0
-    number_of_leafs_to_be_extracted: Annotated[int, Field(alias="leafs")] = 0
+    number_of_controllers_to_be_extracted: Annotated[
+        int, Field(validation_alias="ctrlrs", serialization_alias="ctrlrs")
+    ] = 0
+    number_of_leafs_to_be_extracted: Annotated[
+        int, Field(validation_alias="leafs", serialization_alias="leafs")
+    ] = 0
     name: Annotated[
         str,
         Field(max_length=16, pattern="^[a-zA-Z0-9_.:-]+$", description="The name of the object."),
     ] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
-    number_of_spines_to_be_extracted: Annotated[int, Field(alias="spines")] = 0
+    number_of_spines_to_be_extracted: Annotated[
+        int, Field(validation_alias="spines", serialization_alias="spines")
+    ] = 0
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

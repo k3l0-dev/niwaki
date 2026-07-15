@@ -49,10 +49,12 @@ import textwrap
 from enum import StrEnum
 from functools import cache
 from pathlib import Path
-from typing import Annotated, Any, Literal, NamedTuple, get_args, get_origin
+from types import UnionType
+from typing import Annotated, Any, NamedTuple, Union, get_args, get_origin
 
 from niwaki._codegen._label_utils import label_to_snake
 from niwaki.design._cursor import _load_class, _tables
+from niwaki.models._wire import Flags
 from niwaki.models.base import ManagedObject
 
 _REPO_ROOT = Path(__file__).parent.parent.parent.parent
@@ -248,22 +250,63 @@ def _field_params(cls: type[ManagedObject]) -> tuple[list[tuple[str, str]], set[
     for name, info in cls.model_fields.items():
         if name == "children" or name in naming:
             continue
-        ann = info.annotation
-        if get_origin(ann) is Annotated:
-            ann = get_args(ann)[0]
-        if ann is bool:
-            type_str = "bool"
-        elif isinstance(ann, type) and issubclass(ann, StrEnum):
-            type_str = f"{ann.__name__} | str"
-            enum_imports.add((ann.__module__, ann.__name__))
-        elif ann is int:
-            type_str = "int"
-        elif get_origin(ann) is Literal:
-            type_str = "str"
-        else:
-            type_str = "str"
+        type_str, enums = _param_type(info.annotation)
+        enum_imports |= enums
         params.append((name, f"{type_str} | None"))
     return params, enum_imports
+
+
+def _param_type(annotation: Any) -> tuple[str, set[tuple[str, str]]]:
+    """Render a model field's annotation as a cursor keyword type.
+
+    The cursor must accept everything the model accepts — no more, no less.  It
+    used to render every shape it did not recognise as ``str``, which made the
+    DSL reject in the editor what the model takes at runtime: a named number
+    (``area_range_cost=120``), a port (``first_source_port=0``), a float, a set
+    of flags.  The type is read off the annotation instead of guessed.
+
+    Args:
+        annotation: The model field's annotation (possibly ``Annotated``).
+
+    Returns:
+        ``(type_str, enum_imports)`` — the rendered type and the ``(module,
+        name)`` pairs it needs imported under ``TYPE_CHECKING``.
+    """
+    ann = _unannotate(annotation)
+    origin = get_origin(ann)
+
+    if ann is bool:
+        return "bool", set()
+    if isinstance(ann, type) and issubclass(ann, StrEnum):
+        return f"{ann.__name__} | str", {(ann.__module__, ann.__name__)}
+    if ann is int:
+        return "int", set()
+    if ann is float:
+        return "float", set()
+
+    # A bitmask: Flags[E] — a set of members, or the comma-joined wire form.
+    if origin is Flags:
+        (member,) = get_args(ann)
+        enums = {(member.__module__, member.__name__)}
+        return f"frozenset[{member.__name__}] | set[{member.__name__}] | str", enums
+
+    # A named number: int | Literal["unspecified", …] — the APIC stores the name
+    # ("http"), the engineer writes the number (80).  Both must type-check.
+    if origin in (Union, UnionType):
+        members = [_unannotate(arg) for arg in get_args(ann)]
+        if int in members:
+            return "int | str", set()
+        if float in members:
+            return "float | str", set()
+
+    return "str", set()
+
+
+def _unannotate(annotation: Any) -> Any:
+    """Strip ``Annotated[X, ...]`` down to ``X`` (a numeric arm carries its bounds)."""
+    while get_origin(annotation) is Annotated:
+        annotation = get_args(annotation)[0]
+    return annotation
 
 
 def _sugar_params(aci_class: str) -> list[tuple[str, str]]:
@@ -311,9 +354,31 @@ def _alias_targets_by_dn(owner_aci_class: str, target_aci_class: str) -> bool:
     return len(entries) == 1 and next(iter(entries))[1] == "dn"
 
 
-def _naming_params(cls: type[ManagedObject]) -> list[str]:
-    """Naming props of *cls* as required positional parameter names."""
-    return list(cls._naming_props)  # pyright: ignore[reportPrivateUsage]
+def _naming_params(
+    cls: type[ManagedObject],
+) -> tuple[list[str], dict[str, str], set[tuple[str, str]]]:
+    """Naming props of *cls*, with the type each one really takes.
+
+    A naming prop is not always a string: a SPAN filter entry is named by four
+    **ports**, and the APIC names them (``0`` is stored as ``"unspecified"``,
+    ``80`` as ``"http"``).  Rendering them all as ``str`` made the DSL reject
+    ``filter_entry("tcp", …, 0, 0, 80, 80)`` — the way anyone writes it.
+
+    Returns:
+        ``(names, types, enum_imports)`` — the props in RN order, their rendered
+        types, and the enums those types name (a naming prop can be an enum:
+        ``vlan_pool(name, "static")``).
+    """
+    names = list(cls._naming_props)  # pyright: ignore[reportPrivateUsage]
+    types: dict[str, str] = {}
+    enum_imports: set[tuple[str, str]] = set()
+    for name in names:
+        info = cls.model_fields.get(name)
+        if info is None:
+            continue
+        types[name], enums = _param_type(info.annotation)
+        enum_imports |= enums
+    return names, types, enum_imports
 
 
 def _render_signature(
@@ -321,10 +386,12 @@ def _render_signature(
     naming: list[str],
     keyword_params: list[tuple[str, str]],
     return_type: str,
+    naming_types: dict[str, str] | None = None,
 ) -> list[str]:
     """Render a def line with one parameter per line (ruff-format friendly)."""
+    types = naming_types or {}
     lines = [f"    def {method}(", "        self,"]
-    lines.extend(f"        {p}: str," for p in naming)
+    lines.extend(f"        {p}: {types.get(p, 'str')}," for p in naming)
     if keyword_params:
         lines.append("        *,")
         lines.extend(f"        {name}: {type_str} = None," for name, type_str in keyword_params)
@@ -423,12 +490,12 @@ def _render_maker(
     owner_label: str,
 ) -> list[str]:
     child_cls = _load_class(child_aci)
-    naming = _naming_params(child_cls)
+    naming, naming_types, naming_enums = _naming_params(child_cls)
     params, imports = _field_params(child_cls)
-    enum_imports |= imports
+    enum_imports |= imports | naming_enums
     sugar = _sugar_params(child_aci)
     keyword_params = sugar + params
-    lines = _render_signature(label, naming, keyword_params, return_type)
+    lines = _render_signature(label, naming, keyword_params, return_type, naming_types)
 
     summary = f"Declare a ``{child_aci}`` child under the {owner_label} level."
     class_comment = _docstring_safe(getattr(child_cls, "__doc__", "") or "")
@@ -620,13 +687,13 @@ def _render_factory(
 ) -> list[str]:
     """Render a module-level root factory (``tenant()``, ``infra()``, …)."""
     cls = _load_class(pos.aci_class)
-    naming = _naming_params(cls)
+    naming, naming_types, naming_enums = _naming_params(cls)
     params, imports = _field_params(cls)
-    enum_imports |= imports
+    enum_imports |= imports | naming_enums
     return_type = names[pos.key]
 
     lines = [f"def {label}("]
-    lines.extend(f"    {p}: str," for p in naming)
+    lines.extend(f"    {p}: {naming_types.get(p, 'str')}," for p in naming)
     if params:
         lines.append("    *,")
         lines.extend(f"    {n}: {t} = None," for n, t in params)

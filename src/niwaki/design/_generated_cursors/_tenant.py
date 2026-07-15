@@ -24,15 +24,31 @@ from niwaki.design._generated_cursors._uni import _UniMakers
 
 if TYPE_CHECKING:
     from niwaki.models._generated.enums.AnalyticsCollVersion import AnalyticsCollVersion
+    from niwaki.models._generated.enums.AnalyticsCollectParams import AnalyticsCollectParams
+    from niwaki.models._generated.enums.AnalyticsMatchParams import AnalyticsMatchParams
     from niwaki.models._generated.enums.ArpIfControl import ArpIfControl
     from niwaki.models._generated.enums.ArpOpcode import ArpOpcode
     from niwaki.models._generated.enums.BfdAuthT import BfdAuthT
+    from niwaki.models._generated.enums.BfdIfControl import BfdIfControl
+    from niwaki.models._generated.enums.BgpAddlPathCapT import BgpAddlPathCapT
+    from niwaki.models._generated.enums.BgpAddrTControl import BgpAddrTControl
     from niwaki.models._generated.enums.BgpAsnPropagation import BgpAsnPropagation
+    from niwaki.models._generated.enums.BgpConnectivityType import BgpConnectivityType
+    from niwaki.models._generated.enums.BgpDomAfCtrl import BgpDomAfCtrl
+    from niwaki.models._generated.enums.BgpGRControls import BgpGRControls
     from niwaki.models._generated.enums.BgpMaxPfxAct import BgpMaxPfxAct
     from niwaki.models._generated.enums.BgpPathCtrlType import BgpPathCtrlType
+    from niwaki.models._generated.enums.BgpPeerAfCap import BgpPeerAfCap
+    from niwaki.models._generated.enums.BgpPeerControlPol import BgpPeerControlPol
+    from niwaki.models._generated.enums.BgpPeerControlPolExt import BgpPeerControlPolExt
+    from niwaki.models._generated.enums.BgpPeerPControlType import BgpPeerPControlType
+    from niwaki.models._generated.enums.BgpPeerT import BgpPeerT
+    from niwaki.models._generated.enums.BgpPrivateASControl import BgpPrivateASControl
     from niwaki.models._generated.enums.BgpRtTargetT import BgpRtTargetT
     from niwaki.models._generated.enums.BgpSrcIfT import BgpSrcIfT
+    from niwaki.models._generated.enums.BgpSumControlPolType import BgpSumControlPolType
     from niwaki.models._generated.enums.BgpTrustCtrlT import BgpTrustCtrlT
+    from niwaki.models._generated.enums.DhcpAddrPreferences import DhcpAddrPreferences
     from niwaki.models._generated.enums.DhcpOwner import DhcpOwner
     from niwaki.models._generated.enums.DhcpRelayVisibility import DhcpRelayVisibility
     from niwaki.models._generated.enums.DppBurstUnit import DppBurstUnit
@@ -53,12 +69,16 @@ if TYPE_CHECKING:
     from niwaki.models._generated.enums.FvBDType import FvBDType
     from niwaki.models._generated.enums.FvCrtrnScopeT import FvCrtrnScopeT
     from niwaki.models._generated.enums.FvFloodOnEncap import FvFloodOnEncap
+    from niwaki.models._generated.enums.FvFwdCtrl import FvFwdCtrl
     from niwaki.models._generated.enums.FvInstrImedcy import FvInstrImedcy
     from niwaki.models._generated.enums.FvMatchT import FvMatchT
     from niwaki.models._generated.enums.FvMode import FvMode
     from niwaki.models._generated.enums.FvOperT import FvOperT
     from niwaki.models._generated.enums.FvPcEnfPref import FvPcEnfPref
     from niwaki.models._generated.enums.FvPrefGrMemb import FvPrefGrMemb
+    from niwaki.models._generated.enums.FvRouteScp import FvRouteScp
+    from niwaki.models._generated.enums.FvStCEpType import FvStCEpType
+    from niwaki.models._generated.enums.FvSubnetControl import FvSubnetControl
     from niwaki.models._generated.enums.FvTnlFwdCtrl import FvTnlFwdCtrl
     from niwaki.models._generated.enums.FvValueOperator import FvValueOperator
     from niwaki.models._generated.enums.FvVmAttrT import FvVmAttrT
@@ -69,29 +89,50 @@ if TYPE_CHECKING:
     from niwaki.models._generated.enums.FvnsAddrType import FvnsAddrType
     from niwaki.models._generated.enums.FvslaType import FvslaType
     from niwaki.models._generated.enums.HsrpAuthT import HsrpAuthT
+    from niwaki.models._generated.enums.HsrpConfigIssues import HsrpConfigIssues
     from niwaki.models._generated.enums.HsrpGroupAf import HsrpGroupAf
+    from niwaki.models._generated.enums.HsrpGrpControl import HsrpGrpControl
     from niwaki.models._generated.enums.HsrpGrpIpObtainMode import HsrpGrpIpObtainMode
+    from niwaki.models._generated.enums.HsrpIfControl import HsrpIfControl
     from niwaki.models._generated.enums.Hsrpversion import Hsrpversion
+    from niwaki.models._generated.enums.IpmcIfCtrl import IpmcIfCtrl
     from niwaki.models._generated.enums.IpmcifVer import IpmcifVer
+    from niwaki.models._generated.enums.IpmcsnoopDomControl import IpmcsnoopDomControl
+    from niwaki.models._generated.enums.L2BounceTrig import L2BounceTrig
     from niwaki.models._generated.enums.L2EpMoveDetectMode import L2EpMoveDetectMode
     from niwaki.models._generated.enums.L2EtherType import L2EtherType
     from niwaki.models._generated.enums.L2MultiDstPktAct import L2MultiDstPktAct
     from niwaki.models._generated.enums.L2UnkMacUcastAct import L2UnkMacUcastAct
     from niwaki.models._generated.enums.L2UnkMcastAct import L2UnkMcastAct
+    from niwaki.models._generated.enums.L2qiqL2ProtTunMaskT import L2qiqL2ProtTunMaskT
     from niwaki.models._generated.enums.L3extAlways import L3extAlways
+    from niwaki.models._generated.enums.L3extConfigIssues import L3extConfigIssues
+    from niwaki.models._generated.enums.L3extCtrlDirection import L3extCtrlDirection
     from niwaki.models._generated.enums.L3extDefaultRtLeakCriteriaType import (
         L3extDefaultRtLeakCriteriaType,
+    )
+    from niwaki.models._generated.enums.L3extDefaultRtLeakScopeType import (
+        L3extDefaultRtLeakScopeType,
     )
     from niwaki.models._generated.enums.L3extEncapScope import L3extEncapScope
     from niwaki.models._generated.enums.L3extIpv6Dad import L3extIpv6Dad
     from niwaki.models._generated.enums.L3extPcEnfDir import L3extPcEnfDir
+    from niwaki.models._generated.enums.L3extRouteAggType import L3extRouteAggType
+    from niwaki.models._generated.enums.L3extRouteScp import L3extRouteScp
+    from niwaki.models._generated.enums.L3extSide import L3extSide
     from niwaki.models._generated.enums.L4TcpFlags import L4TcpFlags
     from niwaki.models._generated.enums.McastVer import McastVer
     from niwaki.models._generated.enums.McastVer2 import McastVer2
+    from niwaki.models._generated.enums.NdIfControl import NdIfControl
+    from niwaki.models._generated.enums.NdPfxControl import NdPfxControl
     from niwaki.models._generated.enums.NetflowSrcIpType import NetflowSrcIpType
     from niwaki.models._generated.enums.NwAdminSt import NwAdminSt
+    from niwaki.models._generated.enums.OspfAreaControl import OspfAreaControl
     from niwaki.models._generated.enums.OspfAreaT import OspfAreaT
     from niwaki.models._generated.enums.OspfAuthT import OspfAuthT
+    from niwaki.models._generated.enums.OspfDomControl import OspfDomControl
+    from niwaki.models._generated.enums.OspfGRControls import OspfGRControls
+    from niwaki.models._generated.enums.OspfIfControl import OspfIfControl
     from niwaki.models._generated.enums.OspfIfPfxSuppress import OspfIfPfxSuppress
     from niwaki.models._generated.enums.OspfMaxLsaAct import OspfMaxLsaAct
     from niwaki.models._generated.enums.OspfNwT import OspfNwT
@@ -99,7 +140,10 @@ if TYPE_CHECKING:
     from niwaki.models._generated.enums.QosDppPolAdminState import QosDppPolAdminState
     from niwaki.models._generated.enums.QosTenantPrio import QosTenantPrio
     from niwaki.models._generated.enums.RtctrlPolicyType import RtctrlPolicyType
+    from niwaki.models._generated.enums.RtdmcAfType import RtdmcAfType
     from niwaki.models._generated.enums.RtdmcAuthT import RtdmcAuthT
+    from niwaki.models._generated.enums.RtdmcDomUserCtrl import RtdmcDomUserCtrl
+    from niwaki.models._generated.enums.RtdmcIfUserCtrl import RtdmcIfUserCtrl
     from niwaki.models._generated.enums.RtdmcRtMapAction import RtdmcRtMapAction
     from niwaki.models._generated.enums.RtfltAction import RtfltAction
     from niwaki.models._generated.enums.SpanDirection import SpanDirection
@@ -174,7 +218,10 @@ class _TenantMakers(Cursor):
         description: str | None = None,
         enable_rogue_except_mac: bool | None = None,
         clear_endpoints: bool | None = None,
-        ep_move_detection_mode: L2EpMoveDetectMode | str | None = None,
+        ep_move_detection_mode: frozenset[L2EpMoveDetectMode]
+        | set[L2EpMoveDetectMode]
+        | str
+        | None = None,
         bd_host_based_routing: bool | None = None,
         allow_bum_traffic_between_sites: bool | None = None,
         allow_l2stretch_between_sites: bool | None = None,
@@ -219,7 +266,7 @@ class _TenantMakers(Cursor):
             ep_move_detection_mode: The End Point move detection option uses the Gratuitous
                 Address Resolution Protocol (GARP). A gratuitous ARP is an ARP broadcast-type of
                 packet that is used to verify that no other device on the network has the same
-                IP address as the sending device. Values: ``garp``. Default: ``garp``.
+                IP address as the sending device. Default: ``PydanticUndefined``.
             bd_host_based_routing: Enables advertising host routes (/32 prefixes) out of the
                 L3OUT(s) that are associated to this BD. Default: ``False``.
             allow_bum_traffic_between_sites: Control whether BUM traffic is allowed between
@@ -334,12 +381,12 @@ class _TenantMakers(Cursor):
         *,
         annotation: str | None = None,
         description: str | None = None,
-        enforce_rtctrl: str | None = None,
+        enforce_rtctrl: frozenset[L3extCtrlDirection] | set[L3extCtrlDirection] | str | None = None,
         indicate_whether_mpls_is_enabled_or_not: bool | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
-        out_level_dscp: str | None = None,
+        out_level_dscp: int | str | None = None,
         userdom: str | None = None,
     ) -> L3outCursor:
         """Declare a ``l3extOut`` child under the tenant level.
@@ -352,14 +399,14 @@ class _TenantMakers(Cursor):
                 the object has been saved.
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies a description of the policy definition root.
-            enforce_rtctrl: The enforce route control type.
+            enforce_rtctrl: The enforce route control type. Default: ``PydanticUndefined``.
             indicate_whether_mpls_is_enabled_or_not: Indiscate whether MPLS is enabled or not
                 Default: ``False``.
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
             out_level_dscp: The target differentiated services code point (DSCP) of the path
-                attached to the layer 3 outside profile.
+                attached to the layer 3 outside profile. Default: ``unspecified``.
         """
         params = {
             k: v
@@ -384,7 +431,7 @@ class _TenantMakers(Cursor):
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
-        out_level_dscp: str | None = None,
+        out_level_dscp: int | str | None = None,
         userdom: str | None = None,
     ) -> L2outCursor:
         """Declare a ``l2extOut`` child under the tenant level.
@@ -401,7 +448,7 @@ class _TenantMakers(Cursor):
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
             out_level_dscp: The target differentiated services code point (DSCP) of the path
-                attached to the layer 3 outside profile.
+                attached to the layer 3 outside profile. Default: ``unspecified``.
         """
         params = {
             k: v
@@ -426,12 +473,15 @@ class _TenantMakers(Cursor):
         description: str | None = None,
         contract_exception_tag: str | None = None,
         flood_on_encap: FvFloodOnEncap | str | None = None,
-        forwarding_controls: FvTnlFwdCtrl | str | None = None,
+        forwarding_controls: frozenset[FvTnlFwdCtrl] | set[FvTnlFwdCtrl] | str | None = None,
         provider_label_match_criteria: VzMatchT | str | None = None,
         display_name: str | None = None,
         preferred_group_member: FvPrefGrMemb | str | None = None,
         qos_class: QosTenantPrio | str | None = None,
-        dot1q_tunnel_l2_protocol_tunneling_mask: str | None = None,
+        dot1q_tunnel_l2_protocol_tunneling_mask: frozenset[L2qiqL2ProtTunMaskT]
+        | set[L2qiqL2ProtTunMaskT]
+        | str
+        | None = None,
         userdom: str | None = None,
     ) -> Dot1qTunnelCursor:
         """Declare a ``fvTnlEPg`` child under the tenant level.
@@ -446,8 +496,7 @@ class _TenantMakers(Cursor):
             flood_on_encap: Control at EPG level if the traffic L2 Multicast/Broadcast and Link
                 Local Layer should be flooded only on ENCAP or based on bridg-domain settings
                 Values: ``disabled``, ``enabled``. Default: ``disabled``.
-            forwarding_controls: Forwarding controls Values: ``mac-learn-disable``, ``mac-learn-
-                enable``. Default: ``mac-learn-enable``.
+            forwarding_controls: Forwarding controls Default: ``PydanticUndefined``.
             provider_label_match_criteria: The provider label match criteria. Values: ``All``,
                 ``AtleastOne``, ``AtmostOne``, ``None``. Default: ``AtleastOne``.
             preferred_group_member: Represents parameter used to determine if EPg is part of a
@@ -456,6 +505,7 @@ class _TenantMakers(Cursor):
             qos_class: The QoS priority class identifier. Values: ``level1``, ``level2``,
                 ``level3``, ``level4``, ``level5``, ``level6``, ``unspecified``. Default:
                 ``unspecified``.
+            dot1q_tunnel_l2_protocol_tunneling_mask: Default: ``PydanticUndefined``.
         """
         params = {
             k: v
@@ -588,7 +638,7 @@ class _TenantMakers(Cursor):
         owner_tag: str | None = None,
         qos_class_id: QosTenantPrio | str | None = None,
         scope: VzScope | str | None = None,
-        contract_level_dscp: str | None = None,
+        contract_level_dscp: int | str | None = None,
         userdom: str | None = None,
     ) -> ContractCursor:
         """Declare a ``vzBrCP`` child under the tenant level.
@@ -618,7 +668,7 @@ class _TenantMakers(Cursor):
                 profile, the epg can only communicate with epgs in the same application-profile
                 Values: ``application-profile``, ``context``, ``global``, ``tenant``. Default:
                 ``context``.
-            contract_level_dscp: contract level dscp value
+            contract_level_dscp: contract level dscp value Default: ``unspecified``.
         """
         params = {
             k: v
@@ -724,7 +774,7 @@ class _TenantMakers(Cursor):
         owner_tag: str | None = None,
         qos_class_id: QosTenantPrio | str | None = None,
         scope: VzScope | str | None = None,
-        contract_level_dscp: str | None = None,
+        contract_level_dscp: int | str | None = None,
         userdom: str | None = None,
     ) -> OobContractCursor:
         """Declare a ``vzOOBBrCP`` child under the tenant level.
@@ -750,7 +800,7 @@ class _TenantMakers(Cursor):
                 profile, the epg can only communicate with epgs in the same application-profile
                 Values: ``application-profile``, ``context``, ``global``, ``tenant``. Default:
                 ``context``.
-            contract_level_dscp: contract level dscp value
+            contract_level_dscp: contract level dscp value Default: ``unspecified``.
         """
         params = {
             k: v
@@ -772,14 +822,17 @@ class _TenantMakers(Cursor):
         *,
         annotation: str | None = None,
         description: str | None = None,
-        graceful_restart_controls: str | None = None,
-        hold_interval: str | None = None,
-        keepalive_interval: str | None = None,
-        max_as_limit: str | None = None,
+        graceful_restart_controls: frozenset[BgpGRControls]
+        | set[BgpGRControls]
+        | str
+        | None = None,
+        hold_interval: int | None = None,
+        keepalive_interval: int | None = None,
+        max_as_limit: int | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
-        stale_interval: str | None = None,
+        stale_interval: int | str | None = None,
         userdom: str | None = None,
     ) -> BgpTimersPolicyCursor:
         """Declare a ``bgpCtxPol`` child under the tenant level.
@@ -796,15 +849,19 @@ class _TenantMakers(Cursor):
             description: Specifies a description of the policy definition.
             graceful_restart_controls: A property to determine whether the entity functions only
                 as a graceful restart helper, forwarding prefixes pointing to a restarting peer,
-                or whether graceful restart is enabled completely.
+                or whether graceful restart is enabled completely. Default:
+                ``PydanticUndefined``.
             hold_interval: The time period to wait before declaring the neighbor device down.
-            keepalive_interval: The interval time between sending keepalive messages.
+                Default: ``180``.
+            keepalive_interval: The interval time between sending keepalive messages. Default:
+                ``60``.
             max_as_limit: Maximum AS limit, to discard routes that have excessive AS numbers
+                Default: ``0``.
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
             stale_interval: Maximum time that BGP keeps stale routes from the restarting BGP
-                peer.
+                peer. Default: ``default``.
         """
         params = {
             k: v
@@ -825,14 +882,14 @@ class _TenantMakers(Cursor):
         name: str,
         *,
         annotation: str | None = None,
-        controls: str | None = None,
+        controls: frozenset[BgpDomAfCtrl] | set[BgpDomAfCtrl] | str | None = None,
         description: str | None = None,
-        ebgp_distance: str | None = None,
-        ibgp_distance: str | None = None,
-        local_distance: str | None = None,
-        max_ecmp_for_ebgp_routes: str | None = None,
-        max_ecmp_for_ibgp_routes: str | None = None,
-        max_local_ecmp_for_redistribute_rotes: str | None = None,
+        ebgp_distance: int | None = None,
+        ibgp_distance: int | None = None,
+        local_distance: int | None = None,
+        max_ecmp_for_ebgp_routes: int | None = None,
+        max_ecmp_for_ibgp_routes: int | None = None,
+        max_local_ecmp_for_redistribute_rotes: int | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
@@ -843,15 +900,15 @@ class _TenantMakers(Cursor):
         Args:
             name: The name of the policy.
             annotation: User annotation. Suggested format orchestrator:value
-            controls: The control state.
+            controls: The control state. Default: ``PydanticUndefined``.
             description: Specifies a description of the policy definition.
-            ebgp_distance: The administrative distance of eBGP routes.
-            ibgp_distance: The administrative distance of iBGP routes.
-            local_distance: The administrative distance of local routes.
-            max_ecmp_for_ebgp_routes: eBGP max-path
-            max_ecmp_for_ibgp_routes: iBGP max-path
+            ebgp_distance: The administrative distance of eBGP routes. Default: ``20``.
+            ibgp_distance: The administrative distance of iBGP routes. Default: ``200``.
+            local_distance: The administrative distance of local routes. Default: ``220``.
+            max_ecmp_for_ebgp_routes: eBGP max-path Default: ``16``.
+            max_ecmp_for_ibgp_routes: iBGP max-path Default: ``16``.
             max_local_ecmp_for_redistribute_rotes: Maximum number of equal-cost local paths for
-                redist
+                redist Default: ``0``.
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
@@ -875,7 +932,7 @@ class _TenantMakers(Cursor):
         name: str,
         *,
         annotation: str | None = None,
-        best_path_control: BgpPathCtrlType | str | None = None,
+        best_path_control: frozenset[BgpPathCtrlType] | set[BgpPathCtrlType] | str | None = None,
         description: str | None = None,
         display_name: str | None = None,
         userdom: str | None = None,
@@ -885,8 +942,7 @@ class _TenantMakers(Cursor):
         Args:
             name: The name of the object.
             annotation: User annotation. Suggested format orchestrator:value
-            best_path_control: Best Path control Values: ``asPathMultipathRelax``. Default:
-                ``asPathMultipathRelax``.
+            best_path_control: Best Path control Default: ``PydanticUndefined``.
             description: Specifies the description of a policy component.
         """
         params = {
@@ -914,8 +970,8 @@ class _TenantMakers(Cursor):
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
-        prefix_limit_restart_time: str | None = None,
-        warning_threshold: str | None = None,
+        prefix_limit_restart_time: int | str | None = None,
+        warning_threshold: int | None = None,
         userdom: str | None = None,
     ) -> BgpPeerPrefixPolicyCursor:
         """Declare a ``bgpPeerPfxPol`` child under the tenant level.
@@ -937,11 +993,11 @@ class _TenantMakers(Cursor):
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
             prefix_limit_restart_time: The period of time in minutes before restarting the peer
-                when the prefix limit is reached.
+                when the prefix limit is reached. Default: ``infinite``.
             warning_threshold: The threshold percentage of the maximum number of prefixes before
                 a warning is issued. For example, if the maximum number of prefixes is 10 and
                 the threshold is 70%, a warning is issued when the number of prefixes exceeds 7
-                (70%).
+                (70%). Default: ``75``.
         """
         params = {
             k: v
@@ -961,10 +1017,16 @@ class _TenantMakers(Cursor):
         self,
         name: str,
         *,
-        address_type_af_controls: str | None = None,
+        address_type_af_controls: frozenset[BgpAddrTControl]
+        | set[BgpAddrTControl]
+        | str
+        | None = None,
         annotation: str | None = None,
         route_summarization_attribute_route_map: str | None = None,
-        summary_control: str | None = None,
+        summary_control: frozenset[BgpSumControlPolType]
+        | set[BgpSumControlPolType]
+        | str
+        | None = None,
         description: str | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
@@ -975,10 +1037,12 @@ class _TenantMakers(Cursor):
 
         Args:
             name: The name of the object.
-            address_type_af_controls: Ucast/Mcast Addr Type AF Control
+            address_type_af_controls: Ucast/Mcast Addr Type AF Control Default:
+                ``PydanticUndefined``.
             annotation: User annotation. Suggested format orchestrator:value
             route_summarization_attribute_route_map: Summary attribute map
-            summary_control: Summary controlTODO: CHECK if this is user configurable
+            summary_control: Summary controlTODO: CHECK if this is user configurable Default:
+                ``PydanticUndefined``.
             description: Specifies a description of the policy definition.
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
@@ -1003,20 +1067,20 @@ class _TenantMakers(Cursor):
         name: str,
         *,
         annotation: str | None = None,
-        cost_of_interface: str | None = None,
-        interface_controls: str | None = None,
-        dead_interval: str | None = None,
+        cost_of_interface: int | str | None = None,
+        interface_controls: frozenset[OspfIfControl] | set[OspfIfControl] | str | None = None,
+        dead_interval: int | None = None,
         description: str | None = None,
-        hello_interval: str | None = None,
+        hello_interval: int | None = None,
         display_name: str | None = None,
         network_type: OspfNwT | str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
         prefix_suppression: OspfIfPfxSuppress | str | None = None,
-        prioriity: str | None = None,
-        retransmit_interval: str | None = None,
+        prioriity: int | None = None,
+        retransmit_interval: int | None = None,
         userdom: str | None = None,
-        transmit_delay: str | None = None,
+        transmit_delay: int | None = None,
     ) -> OspfInterfacePolicyCursor:
         """Declare a ``ospfIfPol`` child under the tenant level.
 
@@ -1030,16 +1094,16 @@ class _TenantMakers(Cursor):
             cost_of_interface: The OSPF cost for the interface. The cost (also called metric) of
                 an interface in OSPF is an indication of the overhead required to send packets
                 across a certain interface. The cost of an interface is inversely proportional
-                to the bandwidth of that interface.
-            interface_controls: The interface policy controls.
+                to the bandwidth of that interface. Default: ``unspecified``.
+            interface_controls: The interface policy controls. Default: ``PydanticUndefined``.
             dead_interval: The interval between hello packets from a neighbor before the router
                 declares the neighbor as down. This value must be the same for all networking
-                devices on a specific network.
+                devices on a specific network. Default: ``40``.
             description: Specifies a description of the policy definition.
             hello_interval: The interval between hello packets that OSPF sends on the interface.
                 Note that the smaller the hello interval, the faster topological changes will be
                 detected, but more routing traffic will ensue. This value must be the same for
-                all routers and access servers on a specific network.
+                all routers and access servers on a specific network. Default: ``10``.
             network_type: The OSPF interface policy network type. OSPF supports point-to-point
                 and broadcast. Values: ``bcast``, ``p2p``, ``unspecified``. Default:
                 ``unspecified``.
@@ -1051,15 +1115,15 @@ class _TenantMakers(Cursor):
             prioriity: The OSPF interface priority used to determine the designated router (DR)
                 on a specific network. The router with the highest OSPF priority on a segment
                 will become the DR for that segment. The same process is repeated for the backup
-                designated router (BDR).
+                designated router (BDR). Default: ``1``.
             retransmit_interval: The interval between LSA retransmissions. The retransmit
                 interval occurs while the router is waiting for an acknowledgement from the
                 neighbor router that it received the LSA. If no acknowlegment is received at the
-                end of the interval, then the LSA is resent.
+                end of the interval, then the LSA is resent. Default: ``5``.
             transmit_delay: The delay time needed to send an LSA update packet. OSPF increments
                 the LSA age time by the transmit delay amount before transmitting the LSA
                 update. You should take into account the transmission and propagation delays for
-                the interface when you set this value.
+                the interface when you set this value. Default: ``1``.
         """
         params = {
             k: v
@@ -1081,22 +1145,25 @@ class _TenantMakers(Cursor):
         *,
         annotation: str | None = None,
         bandwidth_preference: int | None = None,
-        control_knobs: str | None = None,
+        control_knobs: frozenset[OspfDomControl] | set[OspfDomControl] | str | None = None,
         description: str | None = None,
-        distance_preference: str | None = None,
-        graceful_restart_controls: str | None = None,
+        distance_preference: int | None = None,
+        graceful_restart_controls: frozenset[OspfGRControls]
+        | set[OspfGRControls]
+        | str
+        | None = None,
         min_arrival_interval: int | None = None,
-        pacing_interval: str | None = None,
+        pacing_interval: int | None = None,
         throttle_hold_interval: int | None = None,
         throttle_max_interval: int | None = None,
         throttle_start_wait_interval: int | None = None,
-        max_ecmp: str | None = None,
+        max_ecmp: int | None = None,
         action: OspfMaxLsaAct | str | None = None,
         maximum_of_non_self_generated_lsas: int | None = None,
         reset_interval: int | None = None,
         sleep_count: int | None = None,
-        sleep_interval: str | None = None,
-        threshold: str | None = None,
+        sleep_interval: int | None = None,
+        threshold: int | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
@@ -1117,23 +1184,24 @@ class _TenantMakers(Cursor):
             annotation: User annotation. Suggested format orchestrator:value
             bandwidth_preference: The OSPF policy bandwidth reference. This is used to calculate
                 the default metrics for an interface. Default: ``40000``.
-            control_knobs: DOM controls
+            control_knobs: DOM controls Default: ``PydanticUndefined``.
             description: Specifies a description of the policy definition.
-            distance_preference: The preferred administrative distance.
-            graceful_restart_controls: The graceful restart controls.
+            distance_preference: The preferred administrative distance. Default: ``110``.
+            graceful_restart_controls: The graceful restart controls. Default:
+                ``PydanticUndefined``.
             min_arrival_interval: The minimum interval between the arrival of each link-state
                 advertisement (LSA). Default: ``1000``.
             pacing_interval: The interval in which LSAs are grouped and refreshed, checksummed,
                 or aged. The duration of the LSA group pacing is inversely proportional to the
                 number of LSAs that the router is handling. For example, if you have about
-                10,000 LSAs, you should decrease the pacing interval.
+                10,000 LSAs, you should decrease the pacing interval. Default: ``10``.
             throttle_hold_interval: The incremental time (in milliseconds) used to calculate the
                 subsequent rate limiting times for LSA generation. Default: ``5000``.
             throttle_max_interval: The generation throttle maximum interval between LSAs.
                 Default: ``5000``.
             throttle_start_wait_interval: The generation throttle start-wait interval between
                 LSAs. Default: ``0``.
-            max_ecmp: The maximum ECMP for the OSPF protocol.
+            max_ecmp: The maximum ECMP for the OSPF protocol. Default: ``8``.
             action: The action to take when the maximum LSA limit is reached. Values: ``log``,
                 ``reject``, ``restart``. Default: ``reject``.
             maximum_of_non_self_generated_lsas: The maximum number of LSAs that are not self-
@@ -1143,9 +1211,9 @@ class _TenantMakers(Cursor):
             sleep_count: The number of times the OSPF process can consecutively be placed into
                 the sleep state. Default: ``5``.
             sleep_interval: The time (in minutes) to ignore all neighbors after the maximum
-                limit of LSAs has been exceeded.
+                limit of LSAs has been exceeded. Default: ``5``.
             threshold: The maximum link-state advertisement (LSA) threshold value (%) at which
-                to generate a warning message.
+                to generate a warning message. Default: ``75``.
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
@@ -1176,7 +1244,7 @@ class _TenantMakers(Cursor):
         name: str,
         *,
         annotation: str | None = None,
-        area_range_cost: int | None = None,
+        area_range_cost: int | str | None = None,
         description: str | None = None,
         inter_area_summarization_enabled: bool | None = None,
         display_name: str | None = None,
@@ -1192,7 +1260,7 @@ class _TenantMakers(Cursor):
         Args:
             name: The name of the object.
             annotation: User annotation. Suggested format orchestrator:value
-            area_range_cost: Route summary cost Default: ``0``.
+            area_range_cost: Route summary cost Default: ``unspecified``.
             description: Specifies a description of the policy definition.
             inter_area_summarization_enabled: Default: ``False``.
             owner_key: The key for enabling clients to own their data for entity correlation.
@@ -1220,12 +1288,12 @@ class _TenantMakers(Cursor):
         *,
         annotation: str | None = None,
         eigrp_interface_bandwidth: int | None = None,
-        interface_controls: EigrpIfAfControl | str | None = None,
+        interface_controls: frozenset[EigrpIfAfControl] | set[EigrpIfAfControl] | str | None = None,
         eigrp_interface_delay: int | None = None,
         units_for_eigrp_interface_delay: EigrpDelayUnit | str | None = None,
         description: str | None = None,
-        hello_interval: str | None = None,
-        hold_interval: str | None = None,
+        hello_interval: int | None = None,
+        hold_interval: int | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
@@ -1241,16 +1309,16 @@ class _TenantMakers(Cursor):
             annotation: User annotation. Suggested format orchestrator:value
             eigrp_interface_bandwidth: EIGRP bandwidth in kbps, overrides the bandwidth
                 configured on an interface. Used to influence path selection Default: ``0``.
-            interface_controls: The control state. Values: ``bfd``, ``nh-self``, ``passive``,
-                ``split-horizon``. Default: ``bfd``.
+            interface_controls: The control state. Default: ``PydanticUndefined``.
             eigrp_interface_delay: EIGRP throughput delay, overrides the delay configured on an
                 interface. Used to influence path selection Default: ``0``.
             units_for_eigrp_interface_delay: EIGRP delay units, Wide metrics can use picosecond
                 accuracy for delay Values: ``pico``, ``tens-of-micro``. Default: ``tens-of-
                 micro``.
             description: Specifies a description of the policy definition.
-            hello_interval: The hello interval.
+            hello_interval: The hello interval. Default: ``5``.
             hold_interval: The period of time before declaring that the neighbor is down.
+                Default: ``15``.
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
@@ -1273,12 +1341,12 @@ class _TenantMakers(Cursor):
         self,
         name: str,
         *,
-        active_timer: str | None = None,
+        active_timer: int | None = None,
         annotation: str | None = None,
         description: str | None = None,
-        external_distance: str | None = None,
-        internal_distance: str | None = None,
-        maximum_ecmp_paths: str | None = None,
+        external_distance: int | None = None,
+        internal_distance: int | None = None,
+        maximum_ecmp_paths: int | None = None,
         metric_style: EigrpMetricStyle | str | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
@@ -1295,12 +1363,15 @@ class _TenantMakers(Cursor):
             name: The EIGRP Address Family Context policy name.
             active_timer: The active timer interval, which specifies the length of time an EIGRP
                 route can stay in the Active state without a best path. When the time ends, the
-                route is moved to the Stuck-In-Active state.
+                route is moved to the Stuck-In-Active state. Default: ``3``.
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies a description of the policy definition.
             external_distance: The administrative distance preference for external routes.
+                Default: ``170``.
             internal_distance: The administrative distance preference for internal routes.
-            maximum_ecmp_paths: The maximum number of equal cost different paths.
+                Default: ``90``.
+            maximum_ecmp_paths: The maximum number of equal cost different paths. Default:
+                ``8``.
             metric_style: The metric version used for metric calculations. EIRGP supports 32 and
                 64 bit metrics. Values: ``narrow``, ``wide``. Default: ``narrow``.
             owner_key: The key for enabling clients to own their data for entity correlation.
@@ -1361,13 +1432,13 @@ class _TenantMakers(Cursor):
         name: str,
         *,
         annotation: str | None = None,
-        controls: str | None = None,
-        hsrp_interface_delay: str | None = None,
+        controls: frozenset[HsrpIfControl] | set[HsrpIfControl] | str | None = None,
+        hsrp_interface_delay: int | None = None,
         description: str | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
-        hsrp_reload_delay: str | None = None,
+        hsrp_reload_delay: int | None = None,
         userdom: str | None = None,
     ) -> HsrpInterfacePolicyCursor:
         """Declare a ``hsrpIfPol`` child under the tenant level.
@@ -1377,13 +1448,13 @@ class _TenantMakers(Cursor):
         Args:
             name: The name of the object.
             annotation: User annotation. Suggested format orchestrator:value
-            controls: Interface controls
-            hsrp_interface_delay: Interface delay
+            controls: Interface controls Default: ``PydanticUndefined``.
+            hsrp_interface_delay: Interface delay Default: ``0``.
             description: Specifies a description of the policy definition.
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
-            hsrp_reload_delay: Reload delay
+            hsrp_reload_delay: Reload delay Default: ``0``.
         """
         params = {
             k: v
@@ -1404,7 +1475,7 @@ class _TenantMakers(Cursor):
         name: str,
         *,
         annotation: str | None = None,
-        group_control_bits: str | None = None,
+        group_control_bits: frozenset[HsrpGrpControl] | set[HsrpGrpControl] | str | None = None,
         description: str | None = None,
         hello_interval: int | None = None,
         hold_interval: int | None = None,
@@ -1412,12 +1483,12 @@ class _TenantMakers(Cursor):
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
-        miminum_delay_before_preempt: str | None = None,
-        preempt_delay_after_a_switch_reload: str | None = None,
-        wait_for_ip_redundancy_clients: str | None = None,
-        group_priority: str | None = None,
+        miminum_delay_before_preempt: int | None = None,
+        preempt_delay_after_a_switch_reload: int | None = None,
+        wait_for_ip_redundancy_clients: int | None = None,
+        group_priority: int | None = None,
         secure_authentication_key: str | None = None,
-        authentication_key_timeout: str | None = None,
+        authentication_key_timeout: int | None = None,
         authentication_type: HsrpAuthT | str | None = None,
         userdom: str | None = None,
     ) -> HsrpGroupPolicyCursor:
@@ -1428,7 +1499,7 @@ class _TenantMakers(Cursor):
         Args:
             name: The name of the object.
             annotation: User annotation. Suggested format orchestrator:value
-            group_control_bits: HSRP Group Control Bits
+            group_control_bits: HSRP Group Control Bits Default: ``PydanticUndefined``.
             description: Specifies a description of the policy definition.
             hello_interval: HSRP Hello packet interval Default: ``3000``.
             hold_interval: HSRP Hold interval Default: ``10000``.
@@ -1436,13 +1507,14 @@ class _TenantMakers(Cursor):
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
-            miminum_delay_before_preempt: HSRP Group's Minimum Preemption delay
-            preempt_delay_after_a_switch_reload: Preemption delay after switch reboot
+            miminum_delay_before_preempt: HSRP Group's Minimum Preemption delay Default: ``0``.
+            preempt_delay_after_a_switch_reload: Preemption delay after switch reboot Default:
+                ``0``.
             wait_for_ip_redundancy_clients: Maximum number of seconds to allow IPredundancy
-                clients to prevent preemption
-            group_priority: Grouph Priority
+                clients to prevent preemption Default: ``0``.
+            group_priority: Grouph Priority Default: ``100``.
             secure_authentication_key: Secure Authentication key
-            authentication_key_timeout: Authentication timeout
+            authentication_key_timeout: Authentication timeout Default: ``0``.
             authentication_type: Authentication type Values: ``md5``, ``simple``. Default:
                 ``simple``.
         """
@@ -1466,13 +1538,13 @@ class _TenantMakers(Cursor):
         *,
         enable_disable_sessions: NwAdminSt | str | None = None,
         annotation: str | None = None,
-        interface_controls: str | None = None,
+        interface_controls: frozenset[BfdIfControl] | set[BfdIfControl] | str | None = None,
         description: str | None = None,
-        detection_multiplier: str | None = None,
+        detection_multiplier: int | None = None,
         enable_disable_echo_mode: NwAdminSt | str | None = None,
-        echo_rx_interval: str | None = None,
-        required_minimum_rx_interval: str | None = None,
-        desired_minimum_tx_interval: str | None = None,
+        echo_rx_interval: int | None = None,
+        required_minimum_rx_interval: int | None = None,
+        desired_minimum_tx_interval: int | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
@@ -1487,14 +1559,14 @@ class _TenantMakers(Cursor):
             enable_disable_sessions: Enable/Disable sessions Values: ``disabled``, ``enabled``.
                 Default: ``enabled``.
             annotation: User annotation. Suggested format orchestrator:value
-            interface_controls: Interface controls
+            interface_controls: Interface controls Default: ``PydanticUndefined``.
             description: Specifies a description of the policy definition.
-            detection_multiplier: Detection multiplier.
+            detection_multiplier: Detection multiplier. Default: ``3``.
             enable_disable_echo_mode: Enable/Disable Echo mode. Values: ``disabled``,
                 ``enabled``. Default: ``enabled``.
-            echo_rx_interval: Echo rx interval.
-            required_minimum_rx_interval: Required minimum rx interval.
-            desired_minimum_tx_interval: Desired minimum tx interval.
+            echo_rx_interval: Echo rx interval. Default: ``50``.
+            required_minimum_rx_interval: Required minimum rx interval. Default: ``50``.
+            desired_minimum_tx_interval: Desired minimum tx interval. Default: ``50``.
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
@@ -1520,9 +1592,9 @@ class _TenantMakers(Cursor):
         enable_disable_sessions: NwAdminSt | str | None = None,
         annotation: str | None = None,
         description: str | None = None,
-        detection_multiplier: str | None = None,
-        required_minimum_rx_interval: str | None = None,
-        desired_minimum_tx_interval: str | None = None,
+        detection_multiplier: int | None = None,
+        required_minimum_rx_interval: int | None = None,
+        desired_minimum_tx_interval: int | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
@@ -1538,9 +1610,9 @@ class _TenantMakers(Cursor):
                 Default: ``enabled``.
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies a description of the policy definition.
-            detection_multiplier: Detection multiplier.
-            required_minimum_rx_interval: Required minimum rx interval.
-            desired_minimum_tx_interval: Desired minimum tx interval.
+            detection_multiplier: Detection multiplier. Default: ``3``.
+            required_minimum_rx_interval: Required minimum rx interval. Default: ``250``.
+            desired_minimum_tx_interval: Desired minimum tx interval. Default: ``250``.
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
@@ -1566,9 +1638,9 @@ class _TenantMakers(Cursor):
         enable_disable_sessions: NwAdminSt | str | None = None,
         annotation: str | None = None,
         description: str | None = None,
-        detection_multiplier: str | None = None,
-        required_minimum_rx_interval: str | None = None,
-        desired_minimum_tx_interval: str | None = None,
+        detection_multiplier: int | None = None,
+        required_minimum_rx_interval: int | None = None,
+        desired_minimum_tx_interval: int | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
@@ -1584,9 +1656,9 @@ class _TenantMakers(Cursor):
                 Default: ``enabled``.
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies a description of the policy definition.
-            detection_multiplier: Detection multiplier.
-            required_minimum_rx_interval: Required minimum rx interval.
-            desired_minimum_tx_interval: Desired minimum tx interval.
+            detection_multiplier: Detection multiplier. Default: ``3``.
+            required_minimum_rx_interval: Required minimum rx interval. Default: ``250``.
+            desired_minimum_tx_interval: Desired minimum tx interval. Default: ``250``.
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
@@ -1611,19 +1683,19 @@ class _TenantMakers(Cursor):
         *,
         annotation: str | None = None,
         description: str | None = None,
-        group_timeout: str | None = None,
-        controls: str | None = None,
-        last_member_query_count: str | None = None,
-        last_member_response_time: str | None = None,
+        group_timeout: int | None = None,
+        controls: frozenset[IpmcIfCtrl] | set[IpmcIfCtrl] | str | None = None,
+        last_member_query_count: int | None = None,
+        last_member_response_time: int | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
-        querier_timeout: str | None = None,
-        query_interval: str | None = None,
-        robustness_factor: str | None = None,
-        response_interval: str | None = None,
-        startup_query_count: str | None = None,
-        startup_query_interval: str | None = None,
+        querier_timeout: int | None = None,
+        query_interval: int | None = None,
+        robustness_factor: int | None = None,
+        response_interval: int | None = None,
+        startup_query_count: int | None = None,
+        startup_query_interval: int | None = None,
         userdom: str | None = None,
         version: IpmcifVer | str | None = None,
     ) -> IgmpInterfacePolicyCursor:
@@ -1635,19 +1707,19 @@ class _TenantMakers(Cursor):
             name: The name of the object.
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies a description of the policy definition.
-            group_timeout: Group Timeout
-            controls: Interface Control
-            last_member_query_count: Last member query count
-            last_member_response_time: Last member response time
+            group_timeout: Group Timeout Default: ``260``.
+            controls: Interface Control Default: ``PydanticUndefined``.
+            last_member_query_count: Last member query count Default: ``2``.
+            last_member_response_time: Last member response time Default: ``1``.
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
-            querier_timeout: Querier timeout
-            query_interval: Query interval
-            robustness_factor: Robustness factor
-            response_interval: Query response interval
-            startup_query_count: Startup Query Count
-            startup_query_interval: Startup query interval
+            querier_timeout: Querier timeout Default: ``255``.
+            query_interval: Query interval Default: ``125``.
+            robustness_factor: Robustness factor Default: ``2``.
+            response_interval: Query response interval Default: ``10``.
+            startup_query_count: Startup Query Count Default: ``2``.
+            startup_query_interval: Startup query interval Default: ``31``.
             version: Interface version Values: ``v2``, ``v3``. Default: ``v2``.
         """
         params = {
@@ -1670,16 +1742,16 @@ class _TenantMakers(Cursor):
         *,
         admin_state: NwAdminSt | str | None = None,
         annotation: str | None = None,
-        controls: str | None = None,
+        controls: frozenset[IpmcsnoopDomControl] | set[IpmcsnoopDomControl] | str | None = None,
         description: str | None = None,
-        last_member_query_interval: str | None = None,
+        last_member_query_interval: int | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
-        query_interval: str | None = None,
-        response_interval: str | None = None,
-        startup_query_count: str | None = None,
-        startup_query_interval: str | None = None,
+        query_interval: int | None = None,
+        response_interval: int | None = None,
+        startup_query_count: int | None = None,
+        startup_query_interval: int | None = None,
         userdom: str | None = None,
         version: McastVer | str | None = None,
     ) -> TenantIgmpSnoopPolicyCursor:
@@ -1694,17 +1766,19 @@ class _TenantMakers(Cursor):
             admin_state: Administrative State Values: ``disabled``, ``enabled``. Default:
                 ``enabled``.
             annotation: User annotation. Suggested format orchestrator:value
+            controls: Default: ``PydanticUndefined``.
             description: Specifies a description of the policy definition.
             last_member_query_interval: When the last member query interval parameter is
                 configured, the software removes the group state if no host responds before the
-                timeout.
+                timeout. Default: ``1``.
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
-            response_interval: The IGMP snooping query response interval.
-            startup_query_count: The interval before the IGMP query begins.
+            query_interval: Default: ``125``.
+            response_interval: The IGMP snooping query response interval. Default: ``10``.
+            startup_query_count: The interval before the IGMP query begins. Default: ``2``.
             startup_query_interval: The startup query interval. This configures the IGMP
-                snooping query interval at startup.
+                snooping query interval at startup. Default: ``31``.
             version: Version Values: ``unspecified``, ``v1``, ``v2``, ``v3``. Default: ``v3``.
         """
         params = {
@@ -1727,16 +1801,16 @@ class _TenantMakers(Cursor):
         *,
         admin_state: NwAdminSt | str | None = None,
         annotation: str | None = None,
-        controls: str | None = None,
+        controls: frozenset[IpmcsnoopDomControl] | set[IpmcsnoopDomControl] | str | None = None,
         description: str | None = None,
-        last_member_query_interval: str | None = None,
+        last_member_query_interval: int | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
-        query_interval: str | None = None,
-        response_interval: str | None = None,
-        startup_query_count: str | None = None,
-        startup_query_interval: str | None = None,
+        query_interval: int | None = None,
+        response_interval: int | None = None,
+        startup_query_count: int | None = None,
+        startup_query_interval: int | None = None,
         userdom: str | None = None,
         version: McastVer2 | str | None = None,
     ) -> TenantMldSnoopPolicyCursor:
@@ -1749,19 +1823,19 @@ class _TenantMakers(Cursor):
         Args:
             name: The name of the MLD Snoop policy
             admin_state: Values: ``disabled``, ``enabled``. Default: ``disabled``.
-            controls: Controls for MLD Snoop Policy
+            controls: Controls for MLD Snoop Policy Default: ``PydanticUndefined``.
             description: Specifies a description of the policy definition.
             last_member_query_interval: When the last member query interval parameter is
                 configured, the software removes the group state if no host responds before the
-                timeout.
+                timeout. Default: ``1``.
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
-            query_interval: Query interval
-            response_interval: The snooping query response interval.
-            startup_query_count: The interval before the query begins.
+            query_interval: Query interval Default: ``125``.
+            response_interval: The snooping query response interval. Default: ``10``.
+            startup_query_count: The interval before the query begins. Default: ``2``.
             startup_query_interval: The startup query interval. This configures the snooping
-                query interval at startup.
+                query interval at startup. Default: ``31``.
             version: Version Values: ``unspecified``, ``v1``, ``v2``. Default: ``v2``.
         """
         params = {
@@ -1784,12 +1858,12 @@ class _TenantMakers(Cursor):
         *,
         annotation: str | None = None,
         authentication_type: RtdmcAuthT | str | None = None,
-        interface_controls: str | None = None,
+        interface_controls: frozenset[RtdmcIfUserCtrl] | set[RtdmcIfUserCtrl] | str | None = None,
         description: str | None = None,
-        designated_router_delay: str | None = None,
+        designated_router_delay: int | None = None,
         designated_router_priority: int | None = None,
         hello_interval: int | None = None,
-        join_prune_interval_seconds: str | None = None,
+        join_prune_interval_seconds: int | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
@@ -1805,12 +1879,12 @@ class _TenantMakers(Cursor):
             annotation: User annotation. Suggested format orchestrator:value
             authentication_type: Authentication Type Values: ``ah-md5``, ``none``. Default:
                 ``none``.
-            interface_controls: Interface controls
+            interface_controls: Interface controls Default: ``PydanticUndefined``.
             description: Specifies a description of the policy definition.
-            designated_router_delay: Designated Router Delay
+            designated_router_delay: Designated Router Delay Default: ``3``.
             designated_router_priority: Designated Router Priority Default: ``1``.
             hello_interval: Hello Traffic Policy Default: ``30000``.
-            join_prune_interval_seconds: JP Traffic Policy
+            join_prune_interval_seconds: JP Traffic Policy Default: ``60``.
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
@@ -1872,20 +1946,20 @@ class _TenantMakers(Cursor):
         name: str,
         *,
         annotation: str | None = None,
-        controls: str | None = None,
+        controls: frozenset[NdIfControl] | set[NdIfControl] | str | None = None,
         description: str | None = None,
-        hop_limit: str | None = None,
-        mtu: str | None = None,
+        hop_limit: int | None = None,
+        mtu: int | None = None,
         display_name: str | None = None,
         neighbor_solicit_interval: int | None = None,
-        neighbor_solicit_retry_count: str | None = None,
-        nud_retry_base: str | None = None,
+        neighbor_solicit_retry_count: int | None = None,
+        nud_retry_base: int | None = None,
         nud_retry_interval: int | None = None,
-        nud_retry_max_attempts: str | None = None,
+        nud_retry_max_attempts: int | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
-        router_advertisement_interval: str | None = None,
-        router_advertisement_lifetime: str | None = None,
+        router_advertisement_interval: int | None = None,
+        router_advertisement_lifetime: int | None = None,
         reachable_time: int | None = None,
         retransmit_timer: int | None = None,
         userdom: str | None = None,
@@ -1898,31 +1972,33 @@ class _TenantMakers(Cursor):
         Args:
             name: The name of the object.
             annotation: User annotation. Suggested format orchestrator:value
-            controls: The control state.
+            controls: The control state. Default: ``PydanticUndefined``.
             description: Specifies a description of the policy definition.
             hop_limit: The hop limit is used by hosts in outgoing packets and link parameters
                 such as the link MTU. This facilitates centralized administration of critical
                 parameters that can be set on routers and automatically propagated to all
-                attached hosts.
+                attached hosts. Default: ``64``.
             mtu: In the RA message, the maximum transmission unit (MTU) value that a host should
-                use in packets that it originates.
+                use in packets that it originates. Default: ``9000``.
             neighbor_solicit_interval: The neighbor solicitation interval is sent by a node to
                 determine the link-layer address of a neighbor, or to verify that a neighbor is
                 still reachable through a cached link-layer address. Neighbor solicitations are
                 also used for duplicate address detection. Default: ``1000``.
             neighbor_solicit_retry_count: The retransmission retry count for for sending
-                neighbor solicitation messages.
-            nud_retry_base: Retransmission base for NUD neighbor solication messages
+                neighbor solicitation messages. Default: ``3``.
+            nud_retry_base: Retransmission base for NUD neighbor solication messages Default:
+                ``1``.
             nud_retry_interval: Retransmission interval between NUD neighbor solication messages
                 Default: ``1000``.
             nud_retry_max_attempts: Retransmission maximum number of attempts for NUD neighbor
-                solication messages
+                solication messages Default: ``3``.
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
             router_advertisement_interval: The interval for sending router advertisement
-                messages.
+                messages. Default: ``600``.
             router_advertisement_lifetime: The lifetime associated with the default router.
+                Default: ``1800``.
             reachable_time: The reachable time, which is the time in milliseconds that a node
                 assumes a neighbor is reachable after receiving a reachability confirmation.
                 Default: ``0``.
@@ -1948,7 +2024,7 @@ class _TenantMakers(Cursor):
         name: str,
         *,
         annotation: str | None = None,
-        prefix_controls: str | None = None,
+        prefix_controls: frozenset[NdPfxControl] | set[NdPfxControl] | str | None = None,
         description: str | None = None,
         valid_lifetime: int | None = None,
         display_name: str | None = None,
@@ -1964,7 +2040,7 @@ class _TenantMakers(Cursor):
         Args:
             name: The name of the object.
             annotation: User annotation. Suggested format orchestrator:value
-            prefix_controls: The RA prefix controls.
+            prefix_controls: The RA prefix controls. Default: ``PydanticUndefined``.
             description: Specifies a description of the policy definition.
             valid_lifetime: The length of time for the prefix to remain valid. Default:
                 ``2592000``.
@@ -1992,7 +2068,7 @@ class _TenantMakers(Cursor):
         name: str,
         *,
         annotation: str | None = None,
-        interface_controls_for_arp: ArpIfControl | str | None = None,
+        interface_controls_for_arp: frozenset[ArpIfControl] | set[ArpIfControl] | str | None = None,
         description: str | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
@@ -2004,8 +2080,7 @@ class _TenantMakers(Cursor):
         Args:
             name: The name of the object.
             annotation: User annotation. Suggested format orchestrator:value
-            interface_controls_for_arp: Interface controls Values: ``garp-adj-enable``,
-                ``unspecified``. Default: ``unspecified``.
+            interface_controls_for_arp: Interface controls Default: ``PydanticUndefined``.
             description: Specifies a description of the policy definition.
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
@@ -2355,15 +2430,15 @@ class _TenantMakers(Cursor):
         http_method_used_for_probing: FvhttpMethod | str | None = None,
         uri_for_http_probing: str | None = None,
         http_version_used_for_probing: FvhttpVersion | str | None = None,
-        type_of_service_value: str | None = None,
-        traffic_class_value: str | None = None,
+        type_of_service_value: int | None = None,
+        traffic_class_value: int | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
         request_data_size: int | None = None,
-        detect_multiplier: str | None = None,
-        frequency: str | None = None,
-        port: str | None = None,
+        detect_multiplier: int | None = None,
+        frequency: int | None = None,
+        port: int | None = None,
         sla_type: FvslaType | str | None = None,
         threshold: int | None = None,
         operation_timeout: int | None = None,
@@ -2377,10 +2452,15 @@ class _TenantMakers(Cursor):
             description: Specifies a description of the policy definition.
             http_method_used_for_probing: Values: ``get``. Default: ``get``.
             http_version_used_for_probing: Values: ``HTTP10``, ``HTTP11``. Default: ``HTTP10``.
+            type_of_service_value: Default: ``0``.
+            traffic_class_value: Default: ``0``.
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
             request_data_size: Default: ``28``.
+            detect_multiplier: Default: ``3``.
+            frequency: Default: ``60``.
+            port: Default: ``0``.
             sla_type: Values: ``http``, ``icmp``, ``l2ping``, ``tcp``. Default: ``icmp``.
             threshold: Default: ``900``.
             operation_timeout: The amount of time between authentication attempts. Default:
@@ -2410,11 +2490,11 @@ class _TenantMakers(Cursor):
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
-        percentage_down: str | None = None,
-        percentage_up: str | None = None,
+        percentage_down: int | None = None,
+        percentage_up: int | None = None,
         userdom: str | None = None,
-        weight_down_value: str | None = None,
-        weight_up_value: str | None = None,
+        weight_down_value: int | None = None,
+        weight_up_value: int | None = None,
     ) -> TrackListCursor:
         """Declare a ``fvTrackList`` child under the tenant level.
 
@@ -2428,13 +2508,13 @@ class _TenantMakers(Cursor):
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
             percentage_down: Down Threshold percentage. This specifies the threshold percentage
-                down. This applies when track:List.type is 'percentageDown'.
+                down. This applies when track:List.type is 'percentageDown'. Default: ``0``.
             percentage_up: Up Threshold percentage. This specifies the threshold percentage up.
-                This applies when track:List.type is 'percentage'.
+                This applies when track:List.type is 'percentage'. Default: ``1``.
             weight_down_value: Down Threshold weight. This specifies the threshold weight down.
-                This applies when track:List.type is 'weight'.
+                This applies when track:List.type is 'weight'. Default: ``0``.
             weight_up_value: Up Threshold weight. This specifies the threshold weight up. This
-                applies when track:List.type is 'weight'.
+                applies when track:List.type is 'weight'. Default: ``1``.
         """
         params = {
             k: v
@@ -2571,16 +2651,16 @@ class _TenantMakers(Cursor):
         name: str,
         *,
         annotation: str | None = None,
-        ep_bounce_age_interval: str | None = None,
-        ep_bounce_trigger: str | None = None,
+        ep_bounce_age_interval: int | str | None = None,
+        ep_bounce_trigger: frozenset[L2BounceTrig] | set[L2BounceTrig] | str | None = None,
         description: str | None = None,
-        ep_hold_interval: str | None = None,
-        local_ep_age_interval: str | None = None,
-        ep_move_frequency: str | None = None,
+        ep_hold_interval: int | None = None,
+        local_ep_age_interval: int | str | None = None,
+        ep_move_frequency: int | str | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
-        remote_ep_age_interval: str | None = None,
+        remote_ep_age_interval: int | str | None = None,
         userdom: str | None = None,
     ) -> EpRetentionPolicyCursor:
         """Declare a ``fvEpRetPol`` child under the tenant level.
@@ -2592,25 +2672,26 @@ class _TenantMakers(Cursor):
             annotation: User annotation. Suggested format orchestrator:value
             ep_bounce_age_interval: The aging interval for a bounce entry. When an endpoint (VM)
                 migrates to another switch, the endpoint is marked as bouncing for the specified
-                aging interval and is deleted afterwards.
+                aging interval and is deleted afterwards. Default: ``630``.
             ep_bounce_trigger: Specifies whether to install the bounce entry by RARP flood or by
-                COOP protocol.
+                COOP protocol. Default: ``PydanticUndefined``.
             description: Specifies a description of the policy definition.
             ep_hold_interval: A time period during which new endpoint learn events will not be
                 honored. This interval is triggered when the maximum endpoint move frequency is
-                exceeded.
+                exceeded. Default: ``300``.
             local_ep_age_interval: The aging interval for all local endpoints learned in this
                 bridge domain. When 75% of the interval is reached, 3 ARP requests are sent to
                 verify the existence of the endpoint. If no response is received, the endpoint
-                is deleted.
+                is deleted. Default: ``900``.
             ep_move_frequency: A maximum allowed number of endpoint moves per second. If the
                 move frequency is exceeded, the hold interval is triggered, and new endpoint
-                learn events will not be honored until after the hold interval expires.
+                learn events will not be honored until after the hold interval expires. Default:
+                ``256``.
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
             remote_ep_age_interval: The aging interval for all remote endpoints learned in this
-                bridge domain.
+                bridge domain. Default: ``300``.
         """
         params = {
             k: v
@@ -2735,31 +2816,31 @@ class _TenantMakers(Cursor):
         *,
         admin_st: QosDppPolAdminState | str | None = None,
         annotation: str | None = None,
-        excessive_burst: str | None = None,
+        excessive_burst: int | str | None = None,
         excessive_burst_unit: DppBurstUnit | str | None = None,
-        burst: str | None = None,
+        burst: int | str | None = None,
         burst_unit: DppBurstUnit | str | None = None,
         confirm_action: DppConformRateAction | str | None = None,
-        conform_mark_cos: str | None = None,
-        conform_mark_dscp: str | None = None,
+        conform_mark_cos: int | str | None = None,
+        conform_mark_dscp: int | str | None = None,
         description: str | None = None,
         exceed_action: DppExceedRateAction | str | None = None,
-        exceed_mark_cos: str | None = None,
-        exceed_mark_dscp: str | None = None,
+        exceed_mark_cos: int | str | None = None,
+        exceed_mark_dscp: int | str | None = None,
         bit_or_packet: DppMode | str | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
-        peak_rate: str | None = None,
+        peak_rate: int | None = None,
         peak_rate_unit: DppRateUnit | str | None = None,
-        rate: str | None = None,
+        rate: int | None = None,
         rate_unit: DppRateUnit | str | None = None,
         policer_sharing_mode: DppSharingMode | str | None = None,
         type: DppType | str | None = None,
         userdom: str | None = None,
         violate_action: DppViolateRateAction | str | None = None,
-        violate_mark_cos: str | None = None,
-        violate_mark_dscp: str | None = None,
+        violate_mark_cos: int | str | None = None,
+        violate_mark_dscp: int | str | None = None,
     ) -> TenantDppPolicyCursor:
         """Declare a ``qosDppPol`` child under the tenant level.
 
@@ -2771,31 +2852,33 @@ class _TenantMakers(Cursor):
             admin_st: The Administrative state of the policy Values: ``disabled``, ``enabled``.
                 Default: ``disabled``.
             annotation: User annotation. Suggested format orchestrator:value
-            excessive_burst: Excessive burst size (2R3C policer only)
+            excessive_burst: Excessive burst size (2R3C policer only) Default: ``unspecified``.
             excessive_burst_unit: Excessive Burst unit - none, Kilo, Mega, Giga, ms, us Values:
                 ``giga``, ``kilo``, ``mega``, ``msec``, ``unspecified``, ``usec``. Default:
                 ``unspecified``.
-            burst: Committed burst size, number of packets to absorb during a burst
+            burst: Committed burst size, number of packets to absorb during a burst Default:
+                ``unspecified``.
             burst_unit: Burst unit - byte, kbyte, mbyte etc. Values: ``giga``, ``kilo``,
                 ``mega``, ``msec``, ``unspecified``, ``usec``. Default: ``unspecified``.
             confirm_action: Confirm action Values: ``drop``, ``mark``, ``transmit``. Default:
                 ``transmit``.
-            conform_mark_cos: Conform Mark cos
-            conform_mark_dscp: Conform Mark Dscp
+            conform_mark_cos: Conform Mark cos Default: ``unspecified``.
+            conform_mark_dscp: Conform Mark Dscp Default: ``unspecified``.
             description: Specifies a description of the policy definition.
             exceed_action: Exceed action Values: ``drop``, ``mark``, ``transmit``. Default:
                 ``drop``.
-            exceed_mark_cos: Exceed Mark cos
-            exceed_mark_dscp: Exceed Mark Dscp
+            exceed_mark_cos: Exceed Mark cos Default: ``unspecified``.
+            exceed_mark_dscp: Exceed Mark Dscp Default: ``unspecified``.
             bit_or_packet: Policer mode - bytes or packet policer Values: ``bit``, ``packet``.
                 Default: ``bit``.
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
-            peak_rate: Peak rate (pir) (2R3C policer only)
+            peak_rate: Peak rate (pir) (2R3C policer only) Default: ``0``.
             peak_rate_unit: Peak Rate unit - none, Kilo, Mega, Giga Values: ``giga``, ``kilo``,
                 ``mega``, ``unspecified``. Default: ``unspecified``.
             rate: Allowed rate, committed rate at which the packets are allowed into the system
+                Default: ``0``.
             rate_unit: Rate unit - bps, kbps, mbps, packets etc. Values: ``giga``, ``kilo``,
                 ``mega``, ``unspecified``. Default: ``unspecified``.
             policer_sharing_mode: Policer sharing mode Values: ``dedicated``, ``shared``.
@@ -2803,8 +2886,8 @@ class _TenantMakers(Cursor):
             type: Policer type Values: ``1R2C``, ``2R3C``. Default: ``1R2C``.
             violate_action: Violate action Values: ``drop``, ``mark``, ``transmit``. Default:
                 ``drop``.
-            violate_mark_cos: Violate Mark cos
-            violate_mark_dscp: Violate Mark Dscp
+            violate_mark_cos: Violate Mark cos Default: ``unspecified``.
+            violate_mark_dscp: Violate Mark Dscp Default: ``unspecified``.
         """
         params = {
             k: v
@@ -2898,20 +2981,20 @@ class _TenantMakers(Cursor):
         *,
         admin_state: NwAdminSt | str | None = None,
         annotation: str | None = None,
-        control_plane_traffic: str | None = None,
+        control_plane_traffic: int | str | None = None,
         description: str | None = None,
-        user_level_1: str | None = None,
-        user_level_2: str | None = None,
-        user_level_3: str | None = None,
-        user_level_4: str | None = None,
-        user_level_5: str | None = None,
-        user_level_6: str | None = None,
+        user_level_1: int | str | None = None,
+        user_level_2: int | str | None = None,
+        user_level_3: int | str | None = None,
+        user_level_4: int | str | None = None,
+        user_level_5: int | str | None = None,
+        user_level_6: int | str | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
-        policy_plane_traffic: str | None = None,
-        span_traffic: str | None = None,
-        traceroute_traffic: str | None = None,
+        policy_plane_traffic: int | str | None = None,
+        span_traffic: int | str | None = None,
+        traceroute_traffic: int | str | None = None,
         userdom: str | None = None,
     ) -> DscpTranslationPolicyCursor:
         """Declare a ``qosDscpTransPol`` child under the tenant level.
@@ -2921,20 +3004,20 @@ class _TenantMakers(Cursor):
             admin_state: TRACEROUTE traffic Values: ``disabled``, ``enabled``. Default:
                 ``disabled``.
             annotation: User annotation. Suggested format orchestrator:value
-            control_plane_traffic: Control Plane Traffic
+            control_plane_traffic: Control Plane Traffic Default: ``CS0``.
             description: Specifies a description of the policy definition.
-            user_level_1: User Level 1
-            user_level_2: User Level 2
-            user_level_3: User Level 3
-            user_level_4: User Level 4
-            user_level_5: User Level 5
-            user_level_6: User Level 6
+            user_level_1: User Level 1 Default: ``CS1``.
+            user_level_2: User Level 2 Default: ``CS2``.
+            user_level_3: User Level 3 Default: ``CS3``.
+            user_level_4: User Level 4 Default: ``AF11``.
+            user_level_5: User Level 5 Default: ``AF21``.
+            user_level_6: User Level 6 Default: ``AF31``.
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
-            policy_plane_traffic: Policy Plane Traffic
-            span_traffic: SPAN Traffic
-            traceroute_traffic: TRACEROUTE traffic
+            policy_plane_traffic: Policy Plane Traffic Default: ``CS4``.
+            span_traffic: SPAN Traffic Default: ``CS5``.
+            traceroute_traffic: TRACEROUTE traffic Default: ``CS6``.
         """
         params = {
             k: v
@@ -2991,9 +3074,9 @@ class _TenantMakers(Cursor):
         *,
         annotation: str | None = None,
         description: str | None = None,
-        qos_dscp_value: str | None = None,
+        qos_dscp_value: int | str | None = None,
         remote_entity_ip: str | None = None,
-        remote_entity_l4_port: str | None = None,
+        remote_entity_l4_port: int | str | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
@@ -3010,9 +3093,9 @@ class _TenantMakers(Cursor):
             name: The name of the object.
             annotation: User annotation. Suggested format orchestrator:value
             description: The description of this configuration item.
-            qos_dscp_value: IP dscp value
+            qos_dscp_value: IP dscp value Default: ``CS2``.
             remote_entity_ip: Remote node destination IP address
-            remote_entity_l4_port: Remote node destination port
+            remote_entity_l4_port: Remote node destination port Default: ``unspecified``.
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
@@ -3041,9 +3124,15 @@ class _TenantMakers(Cursor):
         name: str,
         *,
         annotation: str | None = None,
-        collect_params: str | None = None,
+        collect_params: frozenset[AnalyticsCollectParams]
+        | set[AnalyticsCollectParams]
+        | str
+        | None = None,
         description: str | None = None,
-        match_params: str | None = None,
+        match_params: frozenset[AnalyticsMatchParams]
+        | set[AnalyticsMatchParams]
+        | str
+        | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
@@ -3056,9 +3145,10 @@ class _TenantMakers(Cursor):
         Args:
             name: The name of the object.
             annotation: User annotation. Suggested format orchestrator:value
-            collect_params: Collect parameters for the flow record
+            collect_params: Collect parameters for the flow record Default:
+                ``PydanticUndefined``.
             description: Specifies a description of the policy definition.
-            match_params: Match parameters for the flow record
+            match_params: Match parameters for the flow record Default: ``PydanticUndefined``.
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
@@ -3594,7 +3684,7 @@ class _AppMakers(Cursor):
         description: str | None = None,
         contract_exception_tag: str | None = None,
         flood_on_encap: FvFloodOnEncap | str | None = None,
-        forwarding_control_bits: str | None = None,
+        forwarding_control_bits: frozenset[FvFwdCtrl] | set[FvFwdCtrl] | str | None = None,
         epg_with_multisite_mcast_source: bool | None = None,
         attribute_based_epg: bool | None = None,
         provider_label_match_criteria: VzMatchT | str | None = None,
@@ -3617,7 +3707,7 @@ class _AppMakers(Cursor):
             flood_on_encap: Control at EPG level if the traffic L2 Multicast/Broadcast and Link
                 Local Layer should be flooded only on ENCAP or based on bridg-domain settings
                 Values: ``disabled``, ``enabled``. Default: ``disabled``.
-            forwarding_control_bits: Forwarding Control
+            forwarding_control_bits: Forwarding Control Default: ``PydanticUndefined``.
             epg_with_multisite_mcast_source: Default: ``False``.
             attribute_based_epg: Default: ``False``.
             provider_label_match_criteria: The provider label match criteria. Values: ``All``,
@@ -3753,7 +3843,7 @@ class ArpInterfacePolicyCursor(_TenantMakers, _UniMakers):
         self,
         *,
         annotation: str | None = None,
-        interface_controls_for_arp: ArpIfControl | str | None = None,
+        interface_controls_for_arp: frozenset[ArpIfControl] | set[ArpIfControl] | str | None = None,
         description: str | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
@@ -3776,13 +3866,13 @@ class _BdMakers(Cursor):
         subnet: str,
         *,
         annotation: str | None = None,
-        subnet_control: str | None = None,
+        subnet_control: frozenset[FvSubnetControl] | set[FvSubnetControl] | str | None = None,
         description: str | None = None,
         ip_dp_learning: FvipDPLearning | str | None = None,
         name: str | None = None,
         display_name: str | None = None,
         preferred_as_primary_subnet: bool | None = None,
-        scope: str | None = None,
+        scope: frozenset[FvRouteScp] | set[FvRouteScp] | str | None = None,
         userdom: str | None = None,
         treated_as_virtual_ip_address: bool | None = None,
     ) -> BdSubnetCursor:
@@ -3796,14 +3886,14 @@ class _BdMakers(Cursor):
             subnet: The IP address and mask of the default gateway.
             annotation: User annotation. Suggested format orchestrator:value
             subnet_control: The subnet control state. The control can be specific protocols
-                applied to the subnet such as IGMP Snooping.
+                applied to the subnet such as IGMP Snooping. Default: ``PydanticUndefined``.
             description: Specifies the description of a policy component.
             ip_dp_learning: Knob to disable IP Dataplane Learning for Host(/32, /128) and for BD
                 Subnet Values: ``disabled``, ``enabled``. Default: ``enabled``.
             preferred_as_primary_subnet: Indicates if the subnet is preferred (primary) over the
                 available alternatives. Only one preferred subnet is allowed. Default:
                 ``False``.
-            scope: The network visibility of the subnet.
+            scope: The network visibility of the subnet. Default: ``PydanticUndefined``.
             treated_as_virtual_ip_address: Treated as virtual IP address. Used in case of BD
                 extended to multiple sites. Default: ``False``.
         """
@@ -3842,7 +3932,10 @@ class BdCursor(_BdMakers, _TenantMakers, _UniMakers):
         description: str | None = None,
         enable_rogue_except_mac: bool | None = None,
         clear_endpoints: bool | None = None,
-        ep_move_detection_mode: L2EpMoveDetectMode | str | None = None,
+        ep_move_detection_mode: frozenset[L2EpMoveDetectMode]
+        | set[L2EpMoveDetectMode]
+        | str
+        | None = None,
         bd_host_based_routing: bool | None = None,
         allow_bum_traffic_between_sites: bool | None = None,
         allow_l2stretch_between_sites: bool | None = None,
@@ -3899,13 +3992,13 @@ class BfdInterfacePolicyCursor(_TenantMakers, _UniMakers):
         *,
         enable_disable_sessions: NwAdminSt | str | None = None,
         annotation: str | None = None,
-        interface_controls: str | None = None,
+        interface_controls: frozenset[BfdIfControl] | set[BfdIfControl] | str | None = None,
         description: str | None = None,
-        detection_multiplier: str | None = None,
+        detection_multiplier: int | None = None,
         enable_disable_echo_mode: NwAdminSt | str | None = None,
-        echo_rx_interval: str | None = None,
-        required_minimum_rx_interval: str | None = None,
-        desired_minimum_tx_interval: str | None = None,
+        echo_rx_interval: int | None = None,
+        required_minimum_rx_interval: int | None = None,
+        desired_minimum_tx_interval: int | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
@@ -3934,9 +4027,9 @@ class BfdMhInterfacePolicyCursor(_TenantMakers, _UniMakers):
         enable_disable_sessions: NwAdminSt | str | None = None,
         annotation: str | None = None,
         description: str | None = None,
-        detection_multiplier: str | None = None,
-        required_minimum_rx_interval: str | None = None,
-        desired_minimum_tx_interval: str | None = None,
+        detection_multiplier: int | None = None,
+        required_minimum_rx_interval: int | None = None,
+        desired_minimum_tx_interval: int | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
@@ -3965,9 +4058,9 @@ class BfdMultihopNodePolicyCursor(_TenantMakers, _UniMakers):
         enable_disable_sessions: NwAdminSt | str | None = None,
         annotation: str | None = None,
         description: str | None = None,
-        detection_multiplier: str | None = None,
-        required_minimum_rx_interval: str | None = None,
-        desired_minimum_tx_interval: str | None = None,
+        detection_multiplier: int | None = None,
+        required_minimum_rx_interval: int | None = None,
+        desired_minimum_tx_interval: int | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
@@ -3988,7 +4081,7 @@ class _BgpAddressFamilyContextPolicyMakers(Cursor):
         self,
         *,
         annotation: str | None = None,
-        capability: str | None = None,
+        capability: frozenset[BgpAddlPathCapT] | set[BgpAddlPathCapT] | str | None = None,
         description: str | None = None,
         name: str | None = None,
         display_name: str | None = None,
@@ -4002,7 +4095,7 @@ class _BgpAddressFamilyContextPolicyMakers(Cursor):
 
         Args:
             annotation: User annotation. Suggested format orchestrator:value
-            capability: The neighbor system capability.
+            capability: The neighbor system capability. Default: ``PydanticUndefined``.
             description: Specifies a description of the policy definition.
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
@@ -4032,14 +4125,14 @@ class BgpAddressFamilyContextPolicyCursor(
         self,
         *,
         annotation: str | None = None,
-        controls: str | None = None,
+        controls: frozenset[BgpDomAfCtrl] | set[BgpDomAfCtrl] | str | None = None,
         description: str | None = None,
-        ebgp_distance: str | None = None,
-        ibgp_distance: str | None = None,
-        local_distance: str | None = None,
-        max_ecmp_for_ebgp_routes: str | None = None,
-        max_ecmp_for_ibgp_routes: str | None = None,
-        max_local_ecmp_for_redistribute_rotes: str | None = None,
+        ebgp_distance: int | None = None,
+        ibgp_distance: int | None = None,
+        local_distance: int | None = None,
+        max_ecmp_for_ebgp_routes: int | None = None,
+        max_ecmp_for_ibgp_routes: int | None = None,
+        max_local_ecmp_for_redistribute_rotes: int | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
@@ -4066,7 +4159,7 @@ class BgpBestPathControlPolicyCursor(_TenantMakers, _UniMakers):
         self,
         *,
         annotation: str | None = None,
-        best_path_control: BgpPathCtrlType | str | None = None,
+        best_path_control: frozenset[BgpPathCtrlType] | set[BgpPathCtrlType] | str | None = None,
         description: str | None = None,
         display_name: str | None = None,
         userdom: str | None = None,
@@ -4098,8 +4191,8 @@ class BgpPeerPrefixPolicyCursor(_TenantMakers, _UniMakers):
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
-        prefix_limit_restart_time: str | None = None,
-        warning_threshold: str | None = None,
+        prefix_limit_restart_time: int | str | None = None,
+        warning_threshold: int | None = None,
         userdom: str | None = None,
     ) -> BgpPeerPrefixPolicyCursor:
         """Set ``bgpPeerPfxPol`` attributes (merged; validated eagerly)."""
@@ -4122,10 +4215,16 @@ class BgpRouteSummarizationPolicyCursor(_TenantMakers, _UniMakers):
     def set(
         self,
         *,
-        address_type_af_controls: str | None = None,
+        address_type_af_controls: frozenset[BgpAddrTControl]
+        | set[BgpAddrTControl]
+        | str
+        | None = None,
         annotation: str | None = None,
         route_summarization_attribute_route_map: str | None = None,
-        summary_control: str | None = None,
+        summary_control: frozenset[BgpSumControlPolType]
+        | set[BgpSumControlPolType]
+        | str
+        | None = None,
         description: str | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
@@ -4154,14 +4253,17 @@ class BgpTimersPolicyCursor(_TenantMakers, _UniMakers):
         *,
         annotation: str | None = None,
         description: str | None = None,
-        graceful_restart_controls: str | None = None,
-        hold_interval: str | None = None,
-        keepalive_interval: str | None = None,
-        max_as_limit: str | None = None,
+        graceful_restart_controls: frozenset[BgpGRControls]
+        | set[BgpGRControls]
+        | str
+        | None = None,
+        hold_interval: int | None = None,
+        keepalive_interval: int | None = None,
+        max_as_limit: int | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
-        stale_interval: str | None = None,
+        stale_interval: int | str | None = None,
         userdom: str | None = None,
     ) -> BgpTimersPolicyCursor:
         """Set ``bgpCtxPol`` attributes (merged; validated eagerly)."""
@@ -4186,7 +4288,7 @@ class _ContractMakers(Cursor):
         qos_class_id: QosTenantPrio | str | None = None,
         provider_label_match_type: VzMatchT | str | None = None,
         reverse_filter_ports: bool | None = None,
-        subject_level_dscp: str | None = None,
+        subject_level_dscp: int | str | None = None,
         userdom: str | None = None,
     ) -> ContractSubjectCursor:
         """Declare a ``vzSubj`` child under the contract level.
@@ -4210,7 +4312,7 @@ class _ContractMakers(Cursor):
             reverse_filter_ports: Enables the filter to apply on both ingress and egress
                 traffic. Default: ``True``.
             subject_level_dscp: The target differentiated services code point (DSCP) of the path
-                attached to the layer 3 outside profile.
+                attached to the layer 3 outside profile. Default: ``unspecified``.
         """
         params = {
             k: v
@@ -4281,7 +4383,7 @@ class ContractCursor(_ContractMakers, _TenantMakers, _UniMakers):
         owner_tag: str | None = None,
         qos_class_id: QosTenantPrio | str | None = None,
         scope: VzScope | str | None = None,
-        contract_level_dscp: str | None = None,
+        contract_level_dscp: int | str | None = None,
         userdom: str | None = None,
     ) -> ContractCursor:
         """Set ``vzBrCP`` attributes (merged; validated eagerly)."""
@@ -4328,7 +4430,7 @@ class _DhcpOptionPolicyMakers(Cursor):
         *,
         annotation: str | None = None,
         model_regex: str | None = None,
-        id: str | None = None,
+        id: int | None = None,
         display_name: str | None = None,
         userdom: str | None = None,
     ) -> DhcpOptionCursor:
@@ -4342,7 +4444,7 @@ class _DhcpOptionPolicyMakers(Cursor):
             name: The DHCP option name. This name can be up to 64 alphanumeric characters.
             annotation: User annotation. Suggested format orchestrator:value
             model_regex: The ID of the DHCP option.
-            id: DHCP OPTION ID
+            id: DHCP OPTION ID Default: ``0``.
         """
         params = {
             k: v
@@ -4397,7 +4499,7 @@ class _TenantDhcpRelayPolicyMakers(Cursor):
         *,
         dhcp_server_address: str | None = None,
         annotation: str | None = None,
-        pref: str | None = None,
+        pref: frozenset[DhcpAddrPreferences] | set[DhcpAddrPreferences] | str | None = None,
         userdom: str | None = None,
     ) -> TenantDhcpRelayPolicyProviderCursor:
         """Declare a ``dhcpRsProv`` child under the dhcp_relay_policy level.
@@ -4410,7 +4512,7 @@ class _TenantDhcpRelayPolicyMakers(Cursor):
             dhcp_server_address: The DHCP server address. This address is configured onto the
                 relationship between a relay profile and an endpoint group.
             annotation: User annotation. Suggested format orchestrator:value
-            pref: DHCP server preferences
+            pref: DHCP server preferences Default: ``PydanticUndefined``.
         """
         params = {
             k: v
@@ -4475,12 +4577,15 @@ class Dot1qTunnelCursor(_TenantMakers, _UniMakers):
         description: str | None = None,
         contract_exception_tag: str | None = None,
         flood_on_encap: FvFloodOnEncap | str | None = None,
-        forwarding_controls: FvTnlFwdCtrl | str | None = None,
+        forwarding_controls: frozenset[FvTnlFwdCtrl] | set[FvTnlFwdCtrl] | str | None = None,
         provider_label_match_criteria: VzMatchT | str | None = None,
         display_name: str | None = None,
         preferred_group_member: FvPrefGrMemb | str | None = None,
         qos_class: QosTenantPrio | str | None = None,
-        dot1q_tunnel_l2_protocol_tunneling_mask: str | None = None,
+        dot1q_tunnel_l2_protocol_tunneling_mask: frozenset[L2qiqL2ProtTunMaskT]
+        | set[L2qiqL2ProtTunMaskT]
+        | str
+        | None = None,
         userdom: str | None = None,
     ) -> Dot1qTunnelCursor:
         """Set ``fvTnlEPg`` attributes (merged; validated eagerly)."""
@@ -4505,31 +4610,31 @@ class TenantDppPolicyCursor(_TenantMakers, _UniMakers):
         *,
         admin_st: QosDppPolAdminState | str | None = None,
         annotation: str | None = None,
-        excessive_burst: str | None = None,
+        excessive_burst: int | str | None = None,
         excessive_burst_unit: DppBurstUnit | str | None = None,
-        burst: str | None = None,
+        burst: int | str | None = None,
         burst_unit: DppBurstUnit | str | None = None,
         confirm_action: DppConformRateAction | str | None = None,
-        conform_mark_cos: str | None = None,
-        conform_mark_dscp: str | None = None,
+        conform_mark_cos: int | str | None = None,
+        conform_mark_dscp: int | str | None = None,
         description: str | None = None,
         exceed_action: DppExceedRateAction | str | None = None,
-        exceed_mark_cos: str | None = None,
-        exceed_mark_dscp: str | None = None,
+        exceed_mark_cos: int | str | None = None,
+        exceed_mark_dscp: int | str | None = None,
         bit_or_packet: DppMode | str | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
-        peak_rate: str | None = None,
+        peak_rate: int | None = None,
         peak_rate_unit: DppRateUnit | str | None = None,
-        rate: str | None = None,
+        rate: int | None = None,
         rate_unit: DppRateUnit | str | None = None,
         policer_sharing_mode: DppSharingMode | str | None = None,
         type: DppType | str | None = None,
         userdom: str | None = None,
         violate_action: DppViolateRateAction | str | None = None,
-        violate_mark_cos: str | None = None,
-        violate_mark_dscp: str | None = None,
+        violate_mark_cos: int | str | None = None,
+        violate_mark_dscp: int | str | None = None,
     ) -> TenantDppPolicyCursor:
         """Set ``qosDppPol`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -4553,20 +4658,20 @@ class DscpTranslationPolicyCursor(_TenantMakers, _UniMakers):
         *,
         admin_state: NwAdminSt | str | None = None,
         annotation: str | None = None,
-        control_plane_traffic: str | None = None,
+        control_plane_traffic: int | str | None = None,
         description: str | None = None,
-        user_level_1: str | None = None,
-        user_level_2: str | None = None,
-        user_level_3: str | None = None,
-        user_level_4: str | None = None,
-        user_level_5: str | None = None,
-        user_level_6: str | None = None,
+        user_level_1: int | str | None = None,
+        user_level_2: int | str | None = None,
+        user_level_3: int | str | None = None,
+        user_level_4: int | str | None = None,
+        user_level_5: int | str | None = None,
+        user_level_6: int | str | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
-        policy_plane_traffic: str | None = None,
-        span_traffic: str | None = None,
-        traceroute_traffic: str | None = None,
+        policy_plane_traffic: int | str | None = None,
+        span_traffic: int | str | None = None,
+        traceroute_traffic: int | str | None = None,
         userdom: str | None = None,
     ) -> DscpTranslationPolicyCursor:
         """Set ``qosDscpTransPol`` attributes (merged; validated eagerly)."""
@@ -4589,12 +4694,12 @@ class EigrpAddressFamilyContextPolicyCursor(_TenantMakers, _UniMakers):
     def set(
         self,
         *,
-        active_timer: str | None = None,
+        active_timer: int | None = None,
         annotation: str | None = None,
         description: str | None = None,
-        external_distance: str | None = None,
-        internal_distance: str | None = None,
-        maximum_ecmp_paths: str | None = None,
+        external_distance: int | None = None,
+        internal_distance: int | None = None,
+        maximum_ecmp_paths: int | None = None,
         metric_style: EigrpMetricStyle | str | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
@@ -4623,12 +4728,12 @@ class EigrpInterfacePolicyCursor(_TenantMakers, _UniMakers):
         *,
         annotation: str | None = None,
         eigrp_interface_bandwidth: int | None = None,
-        interface_controls: EigrpIfAfControl | str | None = None,
+        interface_controls: frozenset[EigrpIfAfControl] | set[EigrpIfAfControl] | str | None = None,
         eigrp_interface_delay: int | None = None,
         units_for_eigrp_interface_delay: EigrpDelayUnit | str | None = None,
         description: str | None = None,
-        hello_interval: str | None = None,
-        hold_interval: str | None = None,
+        hello_interval: int | None = None,
+        hold_interval: int | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
@@ -4679,7 +4784,7 @@ class _EndpointTagsMakers(Cursor):
         *,
         annotation: str | None = None,
         vrf_name: str | None = None,
-        id: str | None = None,
+        id: int | None = None,
         name: str | None = None,
         display_name: str | None = None,
         userdom: str | None = None,
@@ -4691,7 +4796,7 @@ class _EndpointTagsMakers(Cursor):
             bridge_domain_name: Naming property — forms the object's RN.
             annotation: User annotation. Suggested format orchestrator:value
             vrf_name: The L3 context name.
-            id: An identifier .
+            id: An identifier . Default: ``0``.
             name: The name of the object.
         """
         params = {
@@ -4722,7 +4827,7 @@ class _EndpointTagsMakers(Cursor):
         vrf_name: str,
         *,
         annotation: str | None = None,
-        id: str | None = None,
+        id: int | None = None,
         name: str | None = None,
         display_name: str | None = None,
         userdom: str | None = None,
@@ -4733,7 +4838,7 @@ class _EndpointTagsMakers(Cursor):
             endpoint_ip_address: The IP address.
             vrf_name: The L3 context name.
             annotation: User annotation. Suggested format orchestrator:value
-            id: An identifier .
+            id: An identifier . Default: ``0``.
             name: The name of the object.
         """
         params = {
@@ -4797,16 +4902,16 @@ class EpRetentionPolicyCursor(_TenantMakers, _UniMakers):
         self,
         *,
         annotation: str | None = None,
-        ep_bounce_age_interval: str | None = None,
-        ep_bounce_trigger: str | None = None,
+        ep_bounce_age_interval: int | str | None = None,
+        ep_bounce_trigger: frozenset[L2BounceTrig] | set[L2BounceTrig] | str | None = None,
         description: str | None = None,
-        ep_hold_interval: str | None = None,
-        local_ep_age_interval: str | None = None,
-        ep_move_frequency: str | None = None,
+        ep_hold_interval: int | None = None,
+        local_ep_age_interval: int | str | None = None,
+        ep_move_frequency: int | str | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
-        remote_ep_age_interval: str | None = None,
+        remote_ep_age_interval: int | str | None = None,
         userdom: str | None = None,
     ) -> EpRetentionPolicyCursor:
         """Set ``fvEpRetPol`` attributes (merged; validated eagerly)."""
@@ -4922,9 +5027,9 @@ class _FhsBdPolicyMakers(Cursor):
         description: str | None = None,
         perform_managed_config_flag_check: bool | None = None,
         managed_config_flag_settting: bool | None = None,
-        max_allowed_hop_limit: str | None = None,
+        max_allowed_hop_limit: int | None = None,
         allowed_max_router_preference: FhsRAGuardMaxRouterPref | str | None = None,
-        min_allowed_hop_limit: str | None = None,
+        min_allowed_hop_limit: int | None = None,
         name: str | None = None,
         display_name: str | None = None,
         perform_other_config_flag_check: bool | None = None,
@@ -4940,8 +5045,10 @@ class _FhsBdPolicyMakers(Cursor):
             description: Specifies a description of the policy definition.
             perform_managed_config_flag_check: Default: ``False``.
             managed_config_flag_settting: Default: ``False``.
+            max_allowed_hop_limit: Default: ``0``.
             allowed_max_router_preference: Values: ``disabled``, ``high``, ``low``, ``medium``.
                 Default: ``disabled``.
+            min_allowed_hop_limit: Default: ``0``.
             perform_other_config_flag_check: Default: ``False``.
             other_config_flag_settting: Default: ``False``.
             owner_key: The key for enabling clients to own their data for entity correlation.
@@ -4999,19 +5106,19 @@ class _FilterMakers(Cursor):
         annotation: str | None = None,
         apply_rule_for_all_fragments: bool | None = None,
         arp_opcodes: ArpOpcode | str | None = None,
-        destination_from_port: str | None = None,
-        destination_to_port: str | None = None,
+        destination_from_port: int | str | None = None,
+        destination_to_port: int | str | None = None,
         description: str | None = None,
         ethernet_type: L2EtherType | str | None = None,
-        icmpv4_type: str | None = None,
-        icmpv6_type: str | None = None,
-        dscp_match_for_filter_entry: str | None = None,
+        icmpv4_type: int | str | None = None,
+        icmpv6_type: int | str | None = None,
+        dscp_match_for_filter_entry: int | str | None = None,
         display_name: str | None = None,
-        protocol: str | None = None,
-        source_from_port: str | None = None,
-        source_to_port: str | None = None,
+        protocol: int | str | None = None,
+        source_from_port: int | str | None = None,
+        source_to_port: int | str | None = None,
         stateful: bool | None = None,
-        tcp_rules: L4TcpFlags | str | None = None,
+        tcp_rules: frozenset[L4TcpFlags] | set[L4TcpFlags] | str | None = None,
         userdom: str | None = None,
     ) -> EntryCursor:
         """Declare a ``vzEntry`` child under the filter level.
@@ -5027,17 +5134,19 @@ class _FilterMakers(Cursor):
             apply_rule_for_all_fragments: Default: ``False``.
             arp_opcodes: ARP opcodes Values: ``reply``, ``req``, ``unspecified``. Default:
                 ``unspecified``.
-            destination_from_port: Destination From Port
-            destination_to_port: Destination To Port
+            destination_from_port: Destination From Port Default: ``unspecified``.
+            destination_to_port: Destination To Port Default: ``unspecified``.
             description: Specifies the description of a policy component.
             ethernet_type: Ether type Values: ``arp``, ``fcoe``, ``ip``, ``ipv4``, ``ipv6``,
                 ``mac_security``, ``mpls_ucast``, ``trill``, …. Default: ``unspecified``.
-            protocol: L3 Ip Protocol
-            source_from_port: Source From Port
-            source_to_port: Source To Port
+            icmpv4_type: Default: ``unspecified``.
+            icmpv6_type: Default: ``unspecified``.
+            dscp_match_for_filter_entry: Default: ``unspecified``.
+            protocol: L3 Ip Protocol Default: ``unspecified``.
+            source_from_port: Source From Port Default: ``unspecified``.
+            source_to_port: Source To Port Default: ``unspecified``.
             stateful: Default: ``False``.
-            tcp_rules: TCP Session Rules Values: ``ack``, ``est``, ``fin``, ``rst``, ``syn``,
-                ``unspecified``. Default: ``unspecified``.
+            tcp_rules: TCP Session Rules Default: ``PydanticUndefined``.
         """
         params = {
             k: v
@@ -5096,7 +5205,7 @@ class HsrpGroupPolicyCursor(_TenantMakers, _UniMakers):
         self,
         *,
         annotation: str | None = None,
-        group_control_bits: str | None = None,
+        group_control_bits: frozenset[HsrpGrpControl] | set[HsrpGrpControl] | str | None = None,
         description: str | None = None,
         hello_interval: int | None = None,
         hold_interval: int | None = None,
@@ -5104,12 +5213,12 @@ class HsrpGroupPolicyCursor(_TenantMakers, _UniMakers):
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
-        miminum_delay_before_preempt: str | None = None,
-        preempt_delay_after_a_switch_reload: str | None = None,
-        wait_for_ip_redundancy_clients: str | None = None,
-        group_priority: str | None = None,
+        miminum_delay_before_preempt: int | None = None,
+        preempt_delay_after_a_switch_reload: int | None = None,
+        wait_for_ip_redundancy_clients: int | None = None,
+        group_priority: int | None = None,
         secure_authentication_key: str | None = None,
-        authentication_key_timeout: str | None = None,
+        authentication_key_timeout: int | None = None,
         authentication_type: HsrpAuthT | str | None = None,
         userdom: str | None = None,
     ) -> HsrpGroupPolicyCursor:
@@ -5134,13 +5243,13 @@ class HsrpInterfacePolicyCursor(_TenantMakers, _UniMakers):
         self,
         *,
         annotation: str | None = None,
-        controls: str | None = None,
-        hsrp_interface_delay: str | None = None,
+        controls: frozenset[HsrpIfControl] | set[HsrpIfControl] | str | None = None,
+        hsrp_interface_delay: int | None = None,
         description: str | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
-        hsrp_reload_delay: str | None = None,
+        hsrp_reload_delay: int | None = None,
         userdom: str | None = None,
     ) -> HsrpInterfacePolicyCursor:
         """Set ``hsrpIfPol`` attributes (merged; validated eagerly)."""
@@ -5165,19 +5274,19 @@ class IgmpInterfacePolicyCursor(_TenantMakers, _UniMakers):
         *,
         annotation: str | None = None,
         description: str | None = None,
-        group_timeout: str | None = None,
-        controls: str | None = None,
-        last_member_query_count: str | None = None,
-        last_member_response_time: str | None = None,
+        group_timeout: int | None = None,
+        controls: frozenset[IpmcIfCtrl] | set[IpmcIfCtrl] | str | None = None,
+        last_member_query_count: int | None = None,
+        last_member_response_time: int | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
-        querier_timeout: str | None = None,
-        query_interval: str | None = None,
-        robustness_factor: str | None = None,
-        response_interval: str | None = None,
-        startup_query_count: str | None = None,
-        startup_query_interval: str | None = None,
+        querier_timeout: int | None = None,
+        query_interval: int | None = None,
+        robustness_factor: int | None = None,
+        response_interval: int | None = None,
+        startup_query_count: int | None = None,
+        startup_query_interval: int | None = None,
         userdom: str | None = None,
         version: IpmcifVer | str | None = None,
     ) -> IgmpInterfacePolicyCursor:
@@ -5203,16 +5312,16 @@ class TenantIgmpSnoopPolicyCursor(_TenantMakers, _UniMakers):
         *,
         admin_state: NwAdminSt | str | None = None,
         annotation: str | None = None,
-        controls: str | None = None,
+        controls: frozenset[IpmcsnoopDomControl] | set[IpmcsnoopDomControl] | str | None = None,
         description: str | None = None,
-        last_member_query_interval: str | None = None,
+        last_member_query_interval: int | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
-        query_interval: str | None = None,
-        response_interval: str | None = None,
-        startup_query_count: str | None = None,
-        startup_query_interval: str | None = None,
+        query_interval: int | None = None,
+        response_interval: int | None = None,
+        startup_query_count: int | None = None,
+        startup_query_interval: int | None = None,
         userdom: str | None = None,
         version: McastVer | str | None = None,
     ) -> TenantIgmpSnoopPolicyCursor:
@@ -5425,15 +5534,15 @@ class IpSlaMonitoringPolicyCursor(_IpSlaMonitoringPolicyMakers, _TenantMakers, _
         http_method_used_for_probing: FvhttpMethod | str | None = None,
         uri_for_http_probing: str | None = None,
         http_version_used_for_probing: FvhttpVersion | str | None = None,
-        type_of_service_value: str | None = None,
-        traffic_class_value: str | None = None,
+        type_of_service_value: int | None = None,
+        traffic_class_value: int | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
         request_data_size: int | None = None,
-        detect_multiplier: str | None = None,
-        frequency: str | None = None,
-        port: str | None = None,
+        detect_multiplier: int | None = None,
+        frequency: int | None = None,
+        port: int | None = None,
         sla_type: FvslaType | str | None = None,
         threshold: int | None = None,
         operation_timeout: int | None = None,
@@ -5506,7 +5615,7 @@ class _L2outMakers(Cursor):
         display_name: str | None = None,
         preferred_group_member: FvPrefGrMemb | str | None = None,
         qos_class: QosTenantPrio | str | None = None,
-        epg_level_dscp: str | None = None,
+        epg_level_dscp: int | str | None = None,
         userdom: str | None = None,
     ) -> L2outExternalEpgCursor:
         """Declare a ``l2extInstP`` child under the l2out level.
@@ -5533,7 +5642,7 @@ class _L2outMakers(Cursor):
                 ``level3``, ``level4``, ``level5``, ``level6``, ``unspecified``. Default:
                 ``unspecified``.
             epg_level_dscp: The target differentiated services code point (DSCP) of the path
-                attached to the layer 3 outside profile.
+                attached to the layer 3 outside profile. Default: ``unspecified``.
         """
         params = {
             k: v
@@ -5569,7 +5678,7 @@ class L2outCursor(_L2outMakers, _TenantMakers, _UniMakers):
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
-        out_level_dscp: str | None = None,
+        out_level_dscp: int | str | None = None,
         userdom: str | None = None,
     ) -> L2outCursor:
         """Set ``l2extOut`` attributes (merged; validated eagerly)."""
@@ -5609,13 +5718,16 @@ class _L3outMakers(Cursor):
         name: str,
         *,
         annotation: str | None = None,
-        node_path_misconfiguration: str | None = None,
+        node_path_misconfiguration: frozenset[L3extConfigIssues]
+        | set[L3extConfigIssues]
+        | str
+        | None = None,
         description: str | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
         tag: PolColor | str | None = None,
-        dscp_value: str | None = None,
+        dscp_value: int | str | None = None,
         userdom: str | None = None,
     ) -> L3outNodeProfileCursor:
         """Declare a ``l3extLNodeP`` child under the l3out level.
@@ -5629,7 +5741,7 @@ class _L3outMakers(Cursor):
                 saved.
             annotation: User annotation. Suggested format orchestrator:value
             node_path_misconfiguration: Bitmask representation of the configuration issues found
-                during the endpoint group deployment.
+                during the endpoint group deployment. Default: ``PydanticUndefined``.
             description: Specifies a description of the policy definition.
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
@@ -5637,7 +5749,7 @@ class _L3outMakers(Cursor):
             tag: Specifies the color of a policy label. Values: ``alice-blue``, ``antique-
                 white``, ``aqua``, ``aquamarine``, ``azure``, ``beige``, ``bisque``, ``black``,
                 …. Default: ``alice-blue``.
-            dscp_value: Node level Dscp value.
+            dscp_value: Node level Dscp value. Default: ``unspecified``.
         """
         params = {
             k: v
@@ -5666,7 +5778,7 @@ class _L3outMakers(Cursor):
         policy_control_enforcement: FvPcEnfPref | str | None = None,
         preferred_group_member: FvPrefGrMemb | str | None = None,
         qos_class: QosTenantPrio | str | None = None,
-        epg_level_dscp: str | None = None,
+        epg_level_dscp: int | str | None = None,
         userdom: str | None = None,
     ) -> L3outExternalEpgCursor:
         """Declare a ``l3extInstP`` child under the l3out level.
@@ -5696,7 +5808,7 @@ class _L3outMakers(Cursor):
                 ``level3``, ``level4``, ``level5``, ``level6``, ``unspecified``. Default:
                 ``unspecified``.
             epg_level_dscp: The target differentiated services code point (DSCP) of the path
-                attached to the layer 3 outside profile.
+                attached to the layer 3 outside profile. Default: ``unspecified``.
         """
         params = {
             k: v
@@ -5740,8 +5852,9 @@ class _L3outMakers(Cursor):
         *,
         annotation: str | None = None,
         area_cost: int | None = None,
-        area_type: OspfAreaT | str | None = None,
+        area_ctrl: frozenset[OspfAreaControl] | set[OspfAreaControl] | str | None = None,
         area_id: str | None = None,
+        area_type: OspfAreaT | str | None = None,
         description: str | None = None,
         create_multipod_internal_ospf_instance: bool | None = None,
         display_name: str | None = None,
@@ -5754,11 +5867,13 @@ class _L3outMakers(Cursor):
         Args:
             annotation: User annotation. Suggested format orchestrator:value
             area_cost: Default: ``1``.
-            area_type: The area type. Values: ``nssa``, ``regular``, ``stub``. Default:
-                ``nssa``.
+            area_ctrl: The controls of redistribution and summary LSA generation into NSSA and
+                Stub areas. Default: ``PydanticUndefined``.
             area_id: The OSPF Area ID. An area is a logical collection of OSPF networks,
                 routers, and links that have the same area identification. A router within an
                 area must maintain a topological database for the area to which it belongs.
+            area_type: The area type. Values: ``nssa``, ``regular``, ``stub``. Default:
+                ``nssa``.
             description: Specifies the description of a policy component.
             create_multipod_internal_ospf_instance: Start OSPF in WAN instance instead of
                 default Default: ``False``.
@@ -5799,7 +5914,7 @@ class _L3outMakers(Cursor):
         *,
         annotation: str | None = None,
         description: str | None = None,
-        enabled_pim_address_families: str | None = None,
+        enabled_pim_address_families: frozenset[RtdmcAfType] | set[RtdmcAfType] | str | None = None,
         name: str | None = None,
         display_name: str | None = None,
         userdom: str | None = None,
@@ -5811,7 +5926,8 @@ class _L3outMakers(Cursor):
         Args:
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies the description of a policy component.
-            enabled_pim_address_families: Enabled Multicast Address Families
+            enabled_pim_address_families: Enabled Multicast Address Families Default:
+                ``PydanticUndefined``.
         """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
@@ -5845,7 +5961,10 @@ class _L3outMakers(Cursor):
         always_advertise_default_leak: L3extAlways | str | None = None,
         annotation: str | None = None,
         default_leak_advertise_criteria: L3extDefaultRtLeakCriteriaType | str | None = None,
-        scope_of_default_route_leak_policy: str | None = None,
+        scope_of_default_route_leak_policy: frozenset[L3extDefaultRtLeakScopeType]
+        | set[L3extDefaultRtLeakScopeType]
+        | str
+        | None = None,
         userdom: str | None = None,
     ) -> DefaultRouteLeakPolicyCursor:
         """Declare a ``l3extDefaultRouteLeakP`` child under the l3out level.
@@ -5861,6 +5980,7 @@ class _L3outMakers(Cursor):
                 matching of communities. Values: ``in-addition``, ``none``, ``only``. Default:
                 ``only``.
             scope_of_default_route_leak_policy: The domain applicable to the capability.
+                Default: ``PydanticUndefined``.
         """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
@@ -5958,12 +6078,12 @@ class L3outCursor(_L3outMakers, _TenantMakers, _UniMakers):
         *,
         annotation: str | None = None,
         description: str | None = None,
-        enforce_rtctrl: str | None = None,
+        enforce_rtctrl: frozenset[L3extCtrlDirection] | set[L3extCtrlDirection] | str | None = None,
         indicate_whether_mpls_is_enabled_or_not: bool | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
-        out_level_dscp: str | None = None,
+        out_level_dscp: int | str | None = None,
         userdom: str | None = None,
     ) -> L3outCursor:
         """Set ``l3extOut`` attributes (merged; validated eagerly)."""
@@ -6160,16 +6280,16 @@ class TenantMldSnoopPolicyCursor(_TenantMakers, _UniMakers):
         *,
         admin_state: NwAdminSt | str | None = None,
         annotation: str | None = None,
-        controls: str | None = None,
+        controls: frozenset[IpmcsnoopDomControl] | set[IpmcsnoopDomControl] | str | None = None,
         description: str | None = None,
-        last_member_query_interval: str | None = None,
+        last_member_query_interval: int | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
-        query_interval: str | None = None,
-        response_interval: str | None = None,
-        startup_query_count: str | None = None,
-        startup_query_interval: str | None = None,
+        query_interval: int | None = None,
+        response_interval: int | None = None,
+        startup_query_count: int | None = None,
+        startup_query_interval: int | None = None,
         userdom: str | None = None,
         version: McastVer2 | str | None = None,
     ) -> TenantMldSnoopPolicyCursor:
@@ -6213,16 +6333,16 @@ class _MplsCustomQosPolicyMakers(Cursor):
 
     def mpls_ingress_rule(
         self,
-        from_: str,
-        to: str,
+        from_: int | str,
+        to: int | str,
         *,
         annotation: str | None = None,
         description: str | None = None,
         name: str | None = None,
         display_name: str | None = None,
         prio: QosTenantPrio | str | None = None,
-        target: str | None = None,
-        target_cos: str | None = None,
+        target: int | str | None = None,
+        target_cos: int | str | None = None,
         userdom: str | None = None,
     ) -> MplsIngressRuleCursor:
         """Declare a ``qosMplsIngressRule`` child under the mpls_custom_qos_policy level.
@@ -6237,8 +6357,9 @@ class _MplsCustomQosPolicyMakers(Cursor):
             prio: Class id Values: ``level1``, ``level2``, ``level3``, ``level4``, ``level5``,
                 ``level6``, ``unspecified``. Default: ``unspecified``.
             target: Our Fabric only supports DSCP mutation. Dot1P mutation is not supported
+                Default: ``unspecified``.
             target_cos: Target COS to be driven based on the range of input values of DSCP
-                coming into the fabric
+                coming into the fabric Default: ``unspecified``.
         """
         params = {
             k: v
@@ -6264,16 +6385,16 @@ class _MplsCustomQosPolicyMakers(Cursor):
 
     def mpls_egress_rule(
         self,
-        from_: str,
-        to: str,
+        from_: int | str,
+        to: int | str,
         *,
         annotation: str | None = None,
         description: str | None = None,
         name: str | None = None,
         display_name: str | None = None,
-        target: str | None = None,
-        target_cos: str | None = None,
-        target_exp: str | None = None,
+        target: int | str | None = None,
+        target_cos: int | str | None = None,
+        target_exp: int | str | None = None,
         userdom: str | None = None,
     ) -> MplsEgressRuleCursor:
         """Declare a ``qosMplsEgressRule`` child under the mpls_custom_qos_policy level.
@@ -6286,10 +6407,11 @@ class _MplsCustomQosPolicyMakers(Cursor):
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies the description of a policy component.
             target: Our Fabric only supports DSCP mutation. Dot1P mutation is not supported
+                Default: ``unspecified``.
             target_cos: Target COS to be driven based on the range of input values of DSCP
-                coming into the fabric
+                coming into the fabric Default: ``unspecified``.
             target_exp: Target Exp to be driven based on the range of input values of DSCP
-                coming into the fabric
+                coming into the fabric Default: ``unspecified``.
         """
         params = {
             k: v
@@ -6414,20 +6536,20 @@ class NdInterfacePolicyCursor(_TenantMakers, _UniMakers):
         self,
         *,
         annotation: str | None = None,
-        controls: str | None = None,
+        controls: frozenset[NdIfControl] | set[NdIfControl] | str | None = None,
         description: str | None = None,
-        hop_limit: str | None = None,
-        mtu: str | None = None,
+        hop_limit: int | None = None,
+        mtu: int | None = None,
         display_name: str | None = None,
         neighbor_solicit_interval: int | None = None,
-        neighbor_solicit_retry_count: str | None = None,
-        nud_retry_base: str | None = None,
+        neighbor_solicit_retry_count: int | None = None,
+        nud_retry_base: int | None = None,
         nud_retry_interval: int | None = None,
-        nud_retry_max_attempts: str | None = None,
+        nud_retry_max_attempts: int | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
-        router_advertisement_interval: str | None = None,
-        router_advertisement_lifetime: str | None = None,
+        router_advertisement_interval: int | None = None,
+        router_advertisement_lifetime: int | None = None,
         reachable_time: int | None = None,
         retransmit_timer: int | None = None,
         userdom: str | None = None,
@@ -6453,7 +6575,7 @@ class NdRaPrefixPolicyCursor(_TenantMakers, _UniMakers):
         self,
         *,
         annotation: str | None = None,
-        prefix_controls: str | None = None,
+        prefix_controls: frozenset[NdPfxControl] | set[NdPfxControl] | str | None = None,
         description: str | None = None,
         valid_lifetime: int | None = None,
         display_name: str | None = None,
@@ -6484,9 +6606,9 @@ class TenantNetflowExporterCursor(_TenantMakers, _UniMakers):
         *,
         annotation: str | None = None,
         description: str | None = None,
-        qos_dscp_value: str | None = None,
+        qos_dscp_value: int | str | None = None,
         remote_entity_ip: str | None = None,
-        remote_entity_l4_port: str | None = None,
+        remote_entity_l4_port: int | str | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
@@ -6576,9 +6698,15 @@ class TenantNetflowRecordCursor(_TenantMakers, _UniMakers):
         self,
         *,
         annotation: str | None = None,
-        collect_params: str | None = None,
+        collect_params: frozenset[AnalyticsCollectParams]
+        | set[AnalyticsCollectParams]
+        | str
+        | None = None,
         description: str | None = None,
-        match_params: str | None = None,
+        match_params: frozenset[AnalyticsMatchParams]
+        | set[AnalyticsMatchParams]
+        | str
+        | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
@@ -6606,7 +6734,7 @@ class _OobContractMakers(Cursor):
         qos_class_id: QosTenantPrio | str | None = None,
         provider_label_match_type: VzMatchT | str | None = None,
         reverse_filter_ports: bool | None = None,
-        subject_level_dscp: str | None = None,
+        subject_level_dscp: int | str | None = None,
         userdom: str | None = None,
     ) -> OobContractSubjectCursor:
         """Declare a ``vzSubj`` child under the oob_contract level.
@@ -6630,7 +6758,7 @@ class _OobContractMakers(Cursor):
             reverse_filter_ports: Enables the filter to apply on both ingress and egress
                 traffic. Default: ``True``.
             subject_level_dscp: The target differentiated services code point (DSCP) of the path
-                attached to the layer 3 outside profile.
+                attached to the layer 3 outside profile. Default: ``unspecified``.
         """
         params = {
             k: v
@@ -6700,7 +6828,7 @@ class OobContractCursor(_OobContractMakers, _TenantMakers, _UniMakers):
         owner_tag: str | None = None,
         qos_class_id: QosTenantPrio | str | None = None,
         scope: VzScope | str | None = None,
-        contract_level_dscp: str | None = None,
+        contract_level_dscp: int | str | None = None,
         userdom: str | None = None,
     ) -> OobContractCursor:
         """Set ``vzOOBBrCP`` attributes (merged; validated eagerly)."""
@@ -6724,20 +6852,20 @@ class OspfInterfacePolicyCursor(_TenantMakers, _UniMakers):
         self,
         *,
         annotation: str | None = None,
-        cost_of_interface: str | None = None,
-        interface_controls: str | None = None,
-        dead_interval: str | None = None,
+        cost_of_interface: int | str | None = None,
+        interface_controls: frozenset[OspfIfControl] | set[OspfIfControl] | str | None = None,
+        dead_interval: int | None = None,
         description: str | None = None,
-        hello_interval: str | None = None,
+        hello_interval: int | None = None,
         display_name: str | None = None,
         network_type: OspfNwT | str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
         prefix_suppression: OspfIfPfxSuppress | str | None = None,
-        prioriity: str | None = None,
-        retransmit_interval: str | None = None,
+        prioriity: int | None = None,
+        retransmit_interval: int | None = None,
         userdom: str | None = None,
-        transmit_delay: str | None = None,
+        transmit_delay: int | None = None,
     ) -> OspfInterfacePolicyCursor:
         """Set ``ospfIfPol`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -6760,7 +6888,7 @@ class OspfRouteSummarizationPolicyCursor(_TenantMakers, _UniMakers):
         self,
         *,
         annotation: str | None = None,
-        area_range_cost: int | None = None,
+        area_range_cost: int | str | None = None,
         description: str | None = None,
         inter_area_summarization_enabled: bool | None = None,
         display_name: str | None = None,
@@ -6791,22 +6919,25 @@ class OspfTimersPolicyCursor(_TenantMakers, _UniMakers):
         *,
         annotation: str | None = None,
         bandwidth_preference: int | None = None,
-        control_knobs: str | None = None,
+        control_knobs: frozenset[OspfDomControl] | set[OspfDomControl] | str | None = None,
         description: str | None = None,
-        distance_preference: str | None = None,
-        graceful_restart_controls: str | None = None,
+        distance_preference: int | None = None,
+        graceful_restart_controls: frozenset[OspfGRControls]
+        | set[OspfGRControls]
+        | str
+        | None = None,
         min_arrival_interval: int | None = None,
-        pacing_interval: str | None = None,
+        pacing_interval: int | None = None,
         throttle_hold_interval: int | None = None,
         throttle_max_interval: int | None = None,
         throttle_start_wait_interval: int | None = None,
-        max_ecmp: str | None = None,
+        max_ecmp: int | None = None,
         action: OspfMaxLsaAct | str | None = None,
         maximum_of_non_self_generated_lsas: int | None = None,
         reset_interval: int | None = None,
         sleep_count: int | None = None,
-        sleep_interval: str | None = None,
-        threshold: str | None = None,
+        sleep_interval: int | None = None,
+        threshold: int | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
@@ -6837,12 +6968,12 @@ class PimInterfacePolicyCursor(_TenantMakers, _UniMakers):
         *,
         annotation: str | None = None,
         authentication_type: RtdmcAuthT | str | None = None,
-        interface_controls: str | None = None,
+        interface_controls: frozenset[RtdmcIfUserCtrl] | set[RtdmcIfUserCtrl] | str | None = None,
         description: str | None = None,
-        designated_router_delay: str | None = None,
+        designated_router_delay: int | None = None,
         designated_router_priority: int | None = None,
         hello_interval: int | None = None,
-        join_prune_interval_seconds: str | None = None,
+        join_prune_interval_seconds: int | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
@@ -6862,7 +6993,7 @@ class _PimRouteMapPolicyMakers(Cursor):
 
     def pim_route_map_entry(
         self,
-        order: str,
+        order: int,
         *,
         action: RtdmcRtMapAction | str | None = None,
         annotation: str | None = None,
@@ -6939,7 +7070,7 @@ class _QosRequirementMakers(Cursor):
         *,
         annotation: str | None = None,
         description: str | None = None,
-        mark: str | None = None,
+        mark: int | str | None = None,
         name: str | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
@@ -6951,7 +7082,7 @@ class _QosRequirementMakers(Cursor):
         Args:
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies a description of the policy definition.
-            mark: Range from
+            mark: Range from Default: ``0``.
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
@@ -7013,7 +7144,7 @@ class _TenantRouteControlProfileMakers(Cursor):
         annotation: str | None = None,
         description: str | None = None,
         display_name: str | None = None,
-        local_order: str | None = None,
+        local_order: int | None = None,
         userdom: str | None = None,
     ) -> TenantRouteControlProfileRouteControlContextCursor:
         """Declare a ``rtctrlCtxP`` child under the route_control_profile level.
@@ -7027,7 +7158,7 @@ class _TenantRouteControlProfileMakers(Cursor):
                 Default: ``permit``.
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies the description of a policy component.
-            local_order: The order of the policy context.
+            local_order: The order of the policy context. Default: ``0``.
         """
         params = {
             k: v
@@ -7115,8 +7246,8 @@ class _ServiceContainerMakers(Cursor):
         description: str | None = None,
         dest_type: VnsDestType | str | None = None,
         hashing_algorithm: VnshashingAlgorithm | str | None = None,
-        maximum_threshold_percentage: str | None = None,
-        minimum_threshold_percentage: str | None = None,
+        maximum_threshold_percentage: int | None = None,
+        minimum_threshold_percentage: int | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
@@ -7137,6 +7268,8 @@ class _ServiceContainerMakers(Cursor):
             dest_type: Values: ``L1``, ``L2``, ``L3``. Default: ``L3``.
             hashing_algorithm: Values: ``dip``, ``sip``, ``sip-dip-prototype``. Default: ``sip-
                 dip-prototype``.
+            maximum_threshold_percentage: Default: ``0``.
+            minimum_threshold_percentage: Default: ``0``.
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
@@ -7577,7 +7710,7 @@ class _TenantKeychainPolicyMakers(Cursor):
 
     def key_policy(
         self,
-        key_id: str,
+        key_id: int,
         *,
         annotation: str | None = None,
         description: str | None = None,
@@ -7667,11 +7800,11 @@ class TrackListCursor(_TenantMakers, _UniMakers):
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
-        percentage_down: str | None = None,
-        percentage_up: str | None = None,
+        percentage_down: int | None = None,
+        percentage_up: int | None = None,
         userdom: str | None = None,
-        weight_down_value: str | None = None,
-        weight_up_value: str | None = None,
+        weight_down_value: int | None = None,
+        weight_up_value: int | None = None,
     ) -> TrackListCursor:
         """Set ``fvTrackList`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -7790,7 +7923,7 @@ class _VrfMakers(Cursor):
         self,
         *,
         annotation: str | None = None,
-        control_knobs: str | None = None,
+        control_knobs: frozenset[RtdmcDomUserCtrl] | set[RtdmcDomUserCtrl] | str | None = None,
         description: str | None = None,
         mtu: int | None = None,
         name: str | None = None,
@@ -7805,7 +7938,7 @@ class _VrfMakers(Cursor):
 
         Args:
             annotation: User annotation. Suggested format orchestrator:value
-            control_knobs: DOM controls
+            control_knobs: DOM controls Default: ``PydanticUndefined``.
             description: Specifies a description of the policy definition.
             mtu: MTU Default: ``1500``.
             owner_key: The key for enabling clients to own their data for entity correlation.
@@ -8072,13 +8205,13 @@ class _EpgMakers(Cursor):
         subnet: str,
         *,
         annotation: str | None = None,
-        subnet_control: str | None = None,
+        subnet_control: frozenset[FvSubnetControl] | set[FvSubnetControl] | str | None = None,
         description: str | None = None,
         ip_dp_learning: FvipDPLearning | str | None = None,
         name: str | None = None,
         display_name: str | None = None,
         preferred_as_primary_subnet: bool | None = None,
-        scope: str | None = None,
+        scope: frozenset[FvRouteScp] | set[FvRouteScp] | str | None = None,
         userdom: str | None = None,
         treated_as_virtual_ip_address: bool | None = None,
     ) -> EpgSubnetCursor:
@@ -8092,14 +8225,14 @@ class _EpgMakers(Cursor):
             subnet: The IP address and mask of the default gateway.
             annotation: User annotation. Suggested format orchestrator:value
             subnet_control: The subnet control state. The control can be specific protocols
-                applied to the subnet such as IGMP Snooping.
+                applied to the subnet such as IGMP Snooping. Default: ``PydanticUndefined``.
             description: Specifies the description of a policy component.
             ip_dp_learning: Knob to disable IP Dataplane Learning for Host(/32, /128) and for BD
                 Subnet Values: ``disabled``, ``enabled``. Default: ``enabled``.
             preferred_as_primary_subnet: Indicates if the subnet is preferred (primary) over the
                 available alternatives. Only one preferred subnet is allowed. Default:
                 ``False``.
-            scope: The network visibility of the subnet.
+            scope: The network visibility of the subnet. Default: ``PydanticUndefined``.
             treated_as_virtual_ip_address: Treated as virtual IP address. Used in case of BD
                 extended to multiple sites. Default: ``False``.
         """
@@ -8120,11 +8253,11 @@ class _EpgMakers(Cursor):
     def static_endpoint(
         self,
         macaddress: str,
-        type: str,
+        type: FvStCEpType | str,
         *,
         annotation: str | None = None,
         encap: str | None = None,
-        id: str | None = None,
+        id: int | None = None,
         ip_address: str | None = None,
         name: str | None = None,
         display_name: str | None = None,
@@ -8141,7 +8274,7 @@ class _EpgMakers(Cursor):
             type: The specific type of endpoint.
             annotation: User annotation. Suggested format orchestrator:value
             encap: The encapsulation (VXLAN or VLAN) to be used for this endpoint.
-            id: An identifier .
+            id: An identifier . Default: ``0``.
             ip_address: The IP address of the endpoint.
             name: The name of the object.
         """
@@ -8536,7 +8669,7 @@ class EpgCursor(_EpgMakers, _AppMakers, _TenantMakers, _UniMakers):
         description: str | None = None,
         contract_exception_tag: str | None = None,
         flood_on_encap: FvFloodOnEncap | str | None = None,
-        forwarding_control_bits: str | None = None,
+        forwarding_control_bits: frozenset[FvFwdCtrl] | set[FvFwdCtrl] | str | None = None,
         epg_with_multisite_mcast_source: bool | None = None,
         attribute_based_epg: bool | None = None,
         provider_label_match_criteria: VzMatchT | str | None = None,
@@ -9096,13 +9229,13 @@ class BdSubnetCursor(_BdMakers, _TenantMakers, _UniMakers):
         self,
         *,
         annotation: str | None = None,
-        subnet_control: str | None = None,
+        subnet_control: frozenset[FvSubnetControl] | set[FvSubnetControl] | str | None = None,
         description: str | None = None,
         ip_dp_learning: FvipDPLearning | str | None = None,
         name: str | None = None,
         display_name: str | None = None,
         preferred_as_primary_subnet: bool | None = None,
-        scope: str | None = None,
+        scope: frozenset[FvRouteScp] | set[FvRouteScp] | str | None = None,
         userdom: str | None = None,
         treated_as_virtual_ip_address: bool | None = None,
     ) -> BdSubnetCursor:
@@ -9141,7 +9274,7 @@ class BgpAdditionalPathContextPolicyCursor(
         self,
         *,
         annotation: str | None = None,
-        capability: str | None = None,
+        capability: frozenset[BgpAddlPathCapT] | set[BgpAddlPathCapT] | str | None = None,
         description: str | None = None,
         name: str | None = None,
         display_name: str | None = None,
@@ -9194,7 +9327,7 @@ class _ContractSubjectMakers(Cursor):
         name: str | None = None,
         display_name: str | None = None,
         qos_class_id: QosTenantPrio | str | None = None,
-        terminal_level_dscp: str | None = None,
+        terminal_level_dscp: int | str | None = None,
         userdom: str | None = None,
     ) -> ContractSubjectInTermCursor:
         """Declare a ``vzInTerm`` child under the subject level.
@@ -9206,7 +9339,7 @@ class _ContractSubjectMakers(Cursor):
             description: Specifies the description of a policy component.
             qos_class_id: Values: ``level1``, ``level2``, ``level3``, ``level4``, ``level5``,
                 ``level6``, ``unspecified``. Default: ``unspecified``.
-            terminal_level_dscp: Terminal level dscp value
+            terminal_level_dscp: Terminal level dscp value Default: ``unspecified``.
         """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
@@ -9222,7 +9355,7 @@ class _ContractSubjectMakers(Cursor):
         name: str | None = None,
         display_name: str | None = None,
         qos_class_id: QosTenantPrio | str | None = None,
-        terminal_level_dscp: str | None = None,
+        terminal_level_dscp: int | str | None = None,
         userdom: str | None = None,
     ) -> ContractSubjectOutTermCursor:
         """Declare a ``vzOutTerm`` child under the subject level.
@@ -9234,7 +9367,7 @@ class _ContractSubjectMakers(Cursor):
             description: Specifies the description of a policy component.
             qos_class_id: Values: ``level1``, ``level2``, ``level3``, ``level4``, ``level5``,
                 ``level6``, ``unspecified``. Default: ``unspecified``.
-            terminal_level_dscp: Terminal level dscp value
+            terminal_level_dscp: Terminal level dscp value Default: ``unspecified``.
         """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
@@ -9392,7 +9525,7 @@ class ContractSubjectCursor(_ContractSubjectMakers, _ContractMakers, _TenantMake
         qos_class_id: QosTenantPrio | str | None = None,
         provider_label_match_type: VzMatchT | str | None = None,
         reverse_filter_ports: bool | None = None,
-        subject_level_dscp: str | None = None,
+        subject_level_dscp: int | str | None = None,
         userdom: str | None = None,
     ) -> ContractSubjectCursor:
         """Set ``vzSubj`` attributes (merged; validated eagerly)."""
@@ -9427,7 +9560,7 @@ class DhcpOptionCursor(_DhcpOptionPolicyMakers, _TenantMakers, _UniMakers):
         *,
         annotation: str | None = None,
         model_regex: str | None = None,
-        id: str | None = None,
+        id: int | None = None,
         display_name: str | None = None,
         userdom: str | None = None,
     ) -> DhcpOptionCursor:
@@ -9453,7 +9586,7 @@ class TenantDhcpRelayPolicyProviderCursor(_TenantDhcpRelayPolicyMakers, _TenantM
         *,
         dhcp_server_address: str | None = None,
         annotation: str | None = None,
-        pref: str | None = None,
+        pref: frozenset[DhcpAddrPreferences] | set[DhcpAddrPreferences] | str | None = None,
         userdom: str | None = None,
     ) -> TenantDhcpRelayPolicyProviderCursor:
         """Set ``dhcpRsProv`` attributes (merged; validated eagerly)."""
@@ -9477,7 +9610,7 @@ class IpEndpointCursor(_EndpointTagsMakers, _TenantMakers, _UniMakers):
         self,
         *,
         annotation: str | None = None,
-        id: str | None = None,
+        id: int | None = None,
         name: str | None = None,
         display_name: str | None = None,
         userdom: str | None = None,
@@ -9504,7 +9637,7 @@ class MacEndpointCursor(_EndpointTagsMakers, _TenantMakers, _UniMakers):
         *,
         annotation: str | None = None,
         vrf_name: str | None = None,
-        id: str | None = None,
+        id: int | None = None,
         name: str | None = None,
         display_name: str | None = None,
         userdom: str | None = None,
@@ -9610,9 +9743,9 @@ class RaGuardPolicyCursor(_FhsBdPolicyMakers, _TenantMakers, _UniMakers):
         description: str | None = None,
         perform_managed_config_flag_check: bool | None = None,
         managed_config_flag_settting: bool | None = None,
-        max_allowed_hop_limit: str | None = None,
+        max_allowed_hop_limit: int | None = None,
         allowed_max_router_preference: FhsRAGuardMaxRouterPref | str | None = None,
-        min_allowed_hop_limit: str | None = None,
+        min_allowed_hop_limit: int | None = None,
         name: str | None = None,
         display_name: str | None = None,
         perform_other_config_flag_check: bool | None = None,
@@ -9646,19 +9779,19 @@ class EntryCursor(_FilterMakers, _TenantMakers, _UniMakers):
         annotation: str | None = None,
         apply_rule_for_all_fragments: bool | None = None,
         arp_opcodes: ArpOpcode | str | None = None,
-        destination_from_port: str | None = None,
-        destination_to_port: str | None = None,
+        destination_from_port: int | str | None = None,
+        destination_to_port: int | str | None = None,
         description: str | None = None,
         ethernet_type: L2EtherType | str | None = None,
-        icmpv4_type: str | None = None,
-        icmpv6_type: str | None = None,
-        dscp_match_for_filter_entry: str | None = None,
+        icmpv4_type: int | str | None = None,
+        icmpv6_type: int | str | None = None,
+        dscp_match_for_filter_entry: int | str | None = None,
         display_name: str | None = None,
-        protocol: str | None = None,
-        source_from_port: str | None = None,
-        source_to_port: str | None = None,
+        protocol: int | str | None = None,
+        source_from_port: int | str | None = None,
+        source_to_port: int | str | None = None,
         stateful: bool | None = None,
-        tcp_rules: L4TcpFlags | str | None = None,
+        tcp_rules: frozenset[L4TcpFlags] | set[L4TcpFlags] | str | None = None,
         userdom: str | None = None,
     ) -> EntryCursor:
         """Set ``vzEntry`` attributes (merged; validated eagerly)."""
@@ -9759,13 +9892,13 @@ class _L2outExternalEpgMakers(Cursor):
         subnet: str,
         *,
         annotation: str | None = None,
-        subnet_control: str | None = None,
+        subnet_control: frozenset[FvSubnetControl] | set[FvSubnetControl] | str | None = None,
         description: str | None = None,
         ip_dp_learning: FvipDPLearning | str | None = None,
         name: str | None = None,
         display_name: str | None = None,
         preferred_as_primary_subnet: bool | None = None,
-        scope: str | None = None,
+        scope: frozenset[FvRouteScp] | set[FvRouteScp] | str | None = None,
         userdom: str | None = None,
         treated_as_virtual_ip_address: bool | None = None,
     ) -> L2outExternalEpgSubnetCursor:
@@ -9779,14 +9912,14 @@ class _L2outExternalEpgMakers(Cursor):
             subnet: The IP address and mask of the default gateway.
             annotation: User annotation. Suggested format orchestrator:value
             subnet_control: The subnet control state. The control can be specific protocols
-                applied to the subnet such as IGMP Snooping.
+                applied to the subnet such as IGMP Snooping. Default: ``PydanticUndefined``.
             description: Specifies the description of a policy component.
             ip_dp_learning: Knob to disable IP Dataplane Learning for Host(/32, /128) and for BD
                 Subnet Values: ``disabled``, ``enabled``. Default: ``enabled``.
             preferred_as_primary_subnet: Indicates if the subnet is preferred (primary) over the
                 available alternatives. Only one preferred subnet is allowed. Default:
                 ``False``.
-            scope: The network visibility of the subnet.
+            scope: The network visibility of the subnet. Default: ``PydanticUndefined``.
             treated_as_virtual_ip_address: Treated as virtual IP address. Used in case of BD
                 extended to multiple sites. Default: ``False``.
         """
@@ -10104,7 +10237,7 @@ class L2outExternalEpgCursor(_L2outExternalEpgMakers, _L2outMakers, _TenantMaker
         display_name: str | None = None,
         preferred_group_member: FvPrefGrMemb | str | None = None,
         qos_class: QosTenantPrio | str | None = None,
-        epg_level_dscp: str | None = None,
+        epg_level_dscp: int | str | None = None,
         userdom: str | None = None,
     ) -> L2outExternalEpgCursor:
         """Set ``l2extInstP`` attributes (merged; validated eagerly)."""
@@ -10318,7 +10451,10 @@ class DefaultRouteLeakPolicyCursor(_L3outMakers, _TenantMakers, _UniMakers):
         always_advertise_default_leak: L3extAlways | str | None = None,
         annotation: str | None = None,
         default_leak_advertise_criteria: L3extDefaultRtLeakCriteriaType | str | None = None,
-        scope_of_default_route_leak_policy: str | None = None,
+        scope_of_default_route_leak_policy: frozenset[L3extDefaultRtLeakScopeType]
+        | set[L3extDefaultRtLeakScopeType]
+        | str
+        | None = None,
         userdom: str | None = None,
     ) -> DefaultRouteLeakPolicyCursor:
         """Set ``l3extDefaultRouteLeakP`` attributes (merged; validated eagerly)."""
@@ -10408,12 +10544,18 @@ class _L3outExternalEpgMakers(Cursor):
         self,
         subnet: str,
         *,
-        aggregate_routes_for_subnet: str | None = None,
+        aggregate_routes_for_subnet: frozenset[L3extRouteAggType]
+        | set[L3extRouteAggType]
+        | str
+        | None = None,
         annotation: str | None = None,
         description: str | None = None,
         name: str | None = None,
         display_name: str | None = None,
-        scope_of_the_external_subnet: str | None = None,
+        scope_of_the_external_subnet: frozenset[L3extRouteScp]
+        | set[L3extRouteScp]
+        | str
+        | None = None,
         userdom: str | None = None,
     ) -> L3outExternalEpgSubnetCursor:
         """Declare a ``l3extSubnet`` child under the external_epg level.
@@ -10422,10 +10564,12 @@ class _L3outExternalEpgMakers(Cursor):
 
         Args:
             subnet: Naming property — forms the object's RN.
-            aggregate_routes_for_subnet: Aggregate Routes for Subnet
+            aggregate_routes_for_subnet: Aggregate Routes for Subnet Default:
+                ``PydanticUndefined``.
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies the description of a policy component.
-            scope_of_the_external_subnet: The domain applicable to the capability.
+            scope_of_the_external_subnet: The domain applicable to the capability. Default:
+                ``PydanticUndefined``.
         """
         params = {
             k: v
@@ -10742,7 +10886,7 @@ class L3outExternalEpgCursor(_L3outExternalEpgMakers, _L3outMakers, _TenantMaker
         policy_control_enforcement: FvPcEnfPref | str | None = None,
         preferred_group_member: FvPrefGrMemb | str | None = None,
         qos_class: QosTenantPrio | str | None = None,
-        epg_level_dscp: str | None = None,
+        epg_level_dscp: int | str | None = None,
         userdom: str | None = None,
     ) -> L3outExternalEpgCursor:
         """Set ``l3extInstP`` attributes (merged; validated eagerly)."""
@@ -10908,7 +11052,7 @@ class _L3outNodeProfileMakers(Cursor):
         target_dn: str,
         *,
         annotation: str | None = None,
-        config_issues: str | None = None,
+        config_issues: frozenset[L3extConfigIssues] | set[L3extConfigIssues] | str | None = None,
         rtr_id: str | None = None,
         rtr_id_loop_back: bool | None = None,
         userdom: str | None = None,
@@ -10924,7 +11068,7 @@ class _L3outNodeProfileMakers(Cursor):
                 profile. The maximum supported string length is 255 ASCII characters.
             annotation: User annotation. Suggested format orchestrator:value
             config_issues: Bitmask representation of the configuration issues found during the
-                endpoint group deployment.
+                endpoint group deployment. Default: ``PydanticUndefined``.
             rtr_id: The router identifier used as the OSPF/BGP router ID.
             rtr_id_loop_back: Default: ``True``.
         """
@@ -10946,23 +11090,38 @@ class _L3outNodeProfileMakers(Cursor):
         self,
         peer_address: str,
         *,
-        address_type_af_controls: str | None = None,
+        address_type_af_controls: frozenset[BgpAddrTControl]
+        | set[BgpAddrTControl]
+        | str
+        | None = None,
         administrative_state: NwAdminSt | str | None = None,
-        allowed_self_as_count: str | None = None,
+        allowed_self_as_count: int | None = None,
         annotation: str | None = None,
-        capability: str | None = None,
-        type_of_network_reachable_via_this_peer: str | None = None,
-        peer_af_controls: str | None = None,
-        peer_af_controls_ext: str | None = None,
+        capability: frozenset[BgpPeerAfCap] | set[BgpPeerAfCap] | str | None = None,
+        type_of_network_reachable_via_this_peer: frozenset[BgpConnectivityType]
+        | set[BgpConnectivityType]
+        | str
+        | None = None,
+        peer_af_controls: frozenset[BgpPeerControlPol] | set[BgpPeerControlPol] | str | None = None,
+        peer_af_controls_ext: frozenset[BgpPeerControlPolExt]
+        | set[BgpPeerControlPolExt]
+        | str
+        | None = None,
         description: str | None = None,
         asn_name: str | None = None,
         display_name: str | None = None,
         password: str | None = None,
-        peer_controls: str | None = None,
-        private_as_control: str | None = None,
-        ebgp_multihop_ttl_value: str | None = None,
+        peer_controls: frozenset[BgpPeerPControlType]
+        | set[BgpPeerPControlType]
+        | str
+        | None = None,
+        private_as_control: frozenset[BgpPrivateASControl]
+        | set[BgpPrivateASControl]
+        | str
+        | None = None,
+        ebgp_multihop_ttl_value: int | None = None,
         userdom: str | None = None,
-        weight_for_routes_from_this_neighbor: str | None = None,
+        weight_for_routes_from_this_neighbor: int | None = None,
     ) -> NodeProfileBgpPeerCursor:
         """Declare a ``bgpPeerP`` child under the node_profile level.
 
@@ -10972,23 +11131,26 @@ class _L3outNodeProfileMakers(Cursor):
 
         Args:
             peer_address: The peer IP address.
-            address_type_af_controls: Ucast/Mcast Addr Type AF Control
+            address_type_af_controls: Ucast/Mcast Addr Type AF Control Default:
+                ``PydanticUndefined``.
             administrative_state: Administrative State Values: ``disabled``, ``enabled``.
                 Default: ``enabled``.
             allowed_self_as_count: The number of occurrences of a local Autonomous System Number
-                (ASN).
+                (ASN). Default: ``3``.
             annotation: User annotation. Suggested format orchestrator:value
-            capability: Peer AF Capability
-            type_of_network_reachable_via_this_peer: Network reachability via this Peer
+            capability: Peer AF Capability Default: ``PydanticUndefined``.
+            type_of_network_reachable_via_this_peer: Network reachability via this Peer Default:
+                ``PydanticUndefined``.
             peer_af_controls: The peer controls specify which Border Gateway Protocol (BGP)
-                attributes are sent to a peer.
-            peer_af_controls_ext: Peer AF controls Ext
+                attributes are sent to a peer. Default: ``PydanticUndefined``.
+            peer_af_controls_ext: Peer AF controls Ext Default: ``PydanticUndefined``.
             description: Specifies the description of a policy component.
             password: Administrative state
-            peer_controls: The peer controls.
-            private_as_control: Remove private AS
-            ebgp_multihop_ttl_value: Specifies time to live (TTL).
+            peer_controls: The peer controls. Default: ``PydanticUndefined``.
+            private_as_control: Remove private AS Default: ``PydanticUndefined``.
+            ebgp_multihop_ttl_value: Specifies time to live (TTL). Default: ``1``.
             weight_for_routes_from_this_neighbor: Default weight for routes from this neighbor
+                Default: ``0``.
         """
         params = {
             k: v
@@ -11030,27 +11192,39 @@ class _L3outNodeProfileMakers(Cursor):
         self,
         peer_address: str,
         *,
-        address_type_af_controls: str | None = None,
+        address_type_af_controls: frozenset[BgpAddrTControl]
+        | set[BgpAddrTControl]
+        | str
+        | None = None,
         administrative_state: NwAdminSt | str | None = None,
-        allowed_self_as_count: str | None = None,
+        allowed_self_as_count: int | None = None,
         annotation: str | None = None,
-        capability: str | None = None,
-        peer_af_controls: str | None = None,
-        peer_af_controls_ext: str | None = None,
+        capability: frozenset[BgpPeerAfCap] | set[BgpPeerAfCap] | str | None = None,
+        peer_af_controls: frozenset[BgpPeerControlPol] | set[BgpPeerControlPol] | str | None = None,
+        peer_af_controls_ext: frozenset[BgpPeerControlPolExt]
+        | set[BgpPeerControlPolExt]
+        | str
+        | None = None,
         data_plane_address: str | None = None,
         description: str | None = None,
         name: str | None = None,
         display_name: str | None = None,
         password: str | None = None,
-        peer_controls: str | None = None,
-        peer_type: str | None = None,
-        private_as_control: str | None = None,
+        peer_controls: frozenset[BgpPeerPControlType]
+        | set[BgpPeerPControlType]
+        | str
+        | None = None,
+        peer_type: frozenset[BgpPeerT] | set[BgpPeerT] | str | None = None,
+        private_as_control: frozenset[BgpPrivateASControl]
+        | set[BgpPrivateASControl]
+        | str
+        | None = None,
         intersite_route_reflector: bool | None = None,
         source_interface_type: BgpSrcIfT | str | None = None,
         control_type: BgpTrustCtrlT | str | None = None,
-        ebgp_multihop_ttl_value: str | None = None,
+        ebgp_multihop_ttl_value: int | None = None,
         userdom: str | None = None,
-        weight_for_routes_from_this_neighbor: str | None = None,
+        weight_for_routes_from_this_neighbor: int | None = None,
     ) -> NodeProfileInfraPeerConnectivityProfileCursor:
         """Declare a ``bgpInfraPeerP`` child under the node_profile level.
 
@@ -11058,28 +11232,30 @@ class _L3outNodeProfileMakers(Cursor):
 
         Args:
             peer_address: Peer address
-            address_type_af_controls: Ucast/Mcast Addr Type AF Control
+            address_type_af_controls: Ucast/Mcast Addr Type AF Control Default:
+                ``PydanticUndefined``.
             administrative_state: Administrative State Values: ``disabled``, ``enabled``.
                 Default: ``enabled``.
             allowed_self_as_count: The number of occurrences of a local Autonomous System Number
-                (ASN).
+                (ASN). Default: ``3``.
             annotation: User annotation. Suggested format orchestrator:value
-            capability: Peer AF Capability
-            peer_af_controls: Peer Controls
-            peer_af_controls_ext: Peer AF controls Ext
+            capability: Peer AF Capability Default: ``PydanticUndefined``.
+            peer_af_controls: Peer Controls Default: ``PydanticUndefined``.
+            peer_af_controls_ext: Peer AF controls Ext Default: ``PydanticUndefined``.
             data_plane_address: Data plane address
             description: Specifies the description of a policy component.
             password: Administrative state
-            peer_controls: The peer controls.
-            peer_type: Peer Type
-            private_as_control: Remove private AS
+            peer_controls: The peer controls. Default: ``PydanticUndefined``.
+            peer_type: Peer Type Default: ``PydanticUndefined``.
+            private_as_control: Remove private AS Default: ``PydanticUndefined``.
             intersite_route_reflector: Is the peer an intersite route reflector Default:
                 ``False``.
             source_interface_type: Source Interface Type Values: ``l3out-loopback``, ``routable-
                 loopback``. Default: ``l3out-loopback``.
             control_type: Values: ``trusted``, ``untrusted``. Default: ``untrusted``.
-            ebgp_multihop_ttl_value: Specifies time to live (TTL).
+            ebgp_multihop_ttl_value: Specifies time to live (TTL). Default: ``1``.
             weight_for_routes_from_this_neighbor: Default weight for routes from this neighbor
+                Default: ``0``.
         """
         params = {
             k: v
@@ -11101,7 +11277,7 @@ class _L3outNodeProfileMakers(Cursor):
         annotation: str | None = None,
         description: str | None = None,
         authentication_key: str | None = None,
-        authentication_key_id: str | None = None,
+        authentication_key_id: int | None = None,
         name: str | None = None,
         display_name: str | None = None,
         authentication_type: BfdAuthT | str | None = None,
@@ -11113,7 +11289,7 @@ class _L3outNodeProfileMakers(Cursor):
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies the description of a policy component.
             authentication_key: Authentication key
-            authentication_key_id: Authentication key id
+            authentication_key_id: Authentication key id Default: ``1``.
             authentication_type: Authentication type Values: ``none``, ``sha1``. Default:
                 ``none``.
         """
@@ -11139,13 +11315,16 @@ class L3outNodeProfileCursor(_L3outNodeProfileMakers, _L3outMakers, _TenantMaker
         self,
         *,
         annotation: str | None = None,
-        node_path_misconfiguration: str | None = None,
+        node_path_misconfiguration: frozenset[L3extConfigIssues]
+        | set[L3extConfigIssues]
+        | str
+        | None = None,
         description: str | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
         tag: PolColor | str | None = None,
-        dscp_value: str | None = None,
+        dscp_value: int | str | None = None,
         userdom: str | None = None,
     ) -> L3outNodeProfileCursor:
         """Set ``l3extLNodeP`` attributes (merged; validated eagerly)."""
@@ -11197,8 +11376,9 @@ class OspfCursor(_L3outMakers, _TenantMakers, _UniMakers):
         *,
         annotation: str | None = None,
         area_cost: int | None = None,
-        area_type: OspfAreaT | str | None = None,
+        area_ctrl: frozenset[OspfAreaControl] | set[OspfAreaControl] | str | None = None,
         area_id: str | None = None,
+        area_type: OspfAreaT | str | None = None,
         description: str | None = None,
         create_multipod_internal_ospf_instance: bool | None = None,
         display_name: str | None = None,
@@ -11249,7 +11429,7 @@ class PimExternalCursor(_L3outMakers, _TenantMakers, _UniMakers):
         *,
         annotation: str | None = None,
         description: str | None = None,
-        enabled_pim_address_families: str | None = None,
+        enabled_pim_address_families: frozenset[RtdmcAfType] | set[RtdmcAfType] | str | None = None,
         name: str | None = None,
         display_name: str | None = None,
         userdom: str | None = None,
@@ -11296,7 +11476,7 @@ class _L3outRouteControlProfileMakers(Cursor):
         annotation: str | None = None,
         description: str | None = None,
         display_name: str | None = None,
-        local_order: str | None = None,
+        local_order: int | None = None,
         userdom: str | None = None,
     ) -> L3outRouteControlProfileRouteControlContextCursor:
         """Declare a ``rtctrlCtxP`` child under the route_control_profile level.
@@ -11310,7 +11490,7 @@ class _L3outRouteControlProfileMakers(Cursor):
                 Default: ``permit``.
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies the description of a policy component.
-            local_order: The order of the policy context.
+            local_order: The order of the policy context. Default: ``0``.
         """
         params = {
             k: v
@@ -11443,13 +11623,13 @@ class _InBandEpgMakers(Cursor):
         subnet: str,
         *,
         annotation: str | None = None,
-        subnet_control: str | None = None,
+        subnet_control: frozenset[FvSubnetControl] | set[FvSubnetControl] | str | None = None,
         description: str | None = None,
         ip_dp_learning: FvipDPLearning | str | None = None,
         name: str | None = None,
         display_name: str | None = None,
         preferred_as_primary_subnet: bool | None = None,
-        scope: str | None = None,
+        scope: frozenset[FvRouteScp] | set[FvRouteScp] | str | None = None,
         userdom: str | None = None,
         treated_as_virtual_ip_address: bool | None = None,
     ) -> InBandEpgSubnetCursor:
@@ -11463,14 +11643,14 @@ class _InBandEpgMakers(Cursor):
             subnet: The IP address and mask of the default gateway.
             annotation: User annotation. Suggested format orchestrator:value
             subnet_control: The subnet control state. The control can be specific protocols
-                applied to the subnet such as IGMP Snooping.
+                applied to the subnet such as IGMP Snooping. Default: ``PydanticUndefined``.
             description: Specifies the description of a policy component.
             ip_dp_learning: Knob to disable IP Dataplane Learning for Host(/32, /128) and for BD
                 Subnet Values: ``disabled``, ``enabled``. Default: ``enabled``.
             preferred_as_primary_subnet: Indicates if the subnet is preferred (primary) over the
                 available alternatives. Only one preferred subnet is allowed. Default:
                 ``False``.
-            scope: The network visibility of the subnet.
+            scope: The network visibility of the subnet. Default: ``PydanticUndefined``.
             treated_as_virtual_ip_address: Treated as virtual IP address. Used in case of BD
                 extended to multiple sites. Default: ``False``.
         """
@@ -11690,9 +11870,9 @@ class MplsEgressRuleCursor(_MplsCustomQosPolicyMakers, _TenantMakers, _UniMakers
         description: str | None = None,
         name: str | None = None,
         display_name: str | None = None,
-        target: str | None = None,
-        target_cos: str | None = None,
-        target_exp: str | None = None,
+        target: int | str | None = None,
+        target_cos: int | str | None = None,
+        target_exp: int | str | None = None,
         userdom: str | None = None,
     ) -> MplsEgressRuleCursor:
         """Set ``qosMplsEgressRule`` attributes (merged; validated eagerly)."""
@@ -11720,8 +11900,8 @@ class MplsIngressRuleCursor(_MplsCustomQosPolicyMakers, _TenantMakers, _UniMaker
         name: str | None = None,
         display_name: str | None = None,
         prio: QosTenantPrio | str | None = None,
-        target: str | None = None,
-        target_cos: str | None = None,
+        target: int | str | None = None,
+        target_cos: int | str | None = None,
         userdom: str | None = None,
     ) -> MplsIngressRuleCursor:
         """Set ``qosMplsIngressRule`` attributes (merged; validated eagerly)."""
@@ -11769,7 +11949,7 @@ class _OobContractSubjectMakers(Cursor):
         name: str | None = None,
         display_name: str | None = None,
         qos_class_id: QosTenantPrio | str | None = None,
-        terminal_level_dscp: str | None = None,
+        terminal_level_dscp: int | str | None = None,
         userdom: str | None = None,
     ) -> OobContractSubjectInTermCursor:
         """Declare a ``vzInTerm`` child under the subject level.
@@ -11781,7 +11961,7 @@ class _OobContractSubjectMakers(Cursor):
             description: Specifies the description of a policy component.
             qos_class_id: Values: ``level1``, ``level2``, ``level3``, ``level4``, ``level5``,
                 ``level6``, ``unspecified``. Default: ``unspecified``.
-            terminal_level_dscp: Terminal level dscp value
+            terminal_level_dscp: Terminal level dscp value Default: ``unspecified``.
         """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
@@ -11797,7 +11977,7 @@ class _OobContractSubjectMakers(Cursor):
         name: str | None = None,
         display_name: str | None = None,
         qos_class_id: QosTenantPrio | str | None = None,
-        terminal_level_dscp: str | None = None,
+        terminal_level_dscp: int | str | None = None,
         userdom: str | None = None,
     ) -> OobContractSubjectOutTermCursor:
         """Declare a ``vzOutTerm`` child under the subject level.
@@ -11809,7 +11989,7 @@ class _OobContractSubjectMakers(Cursor):
             description: Specifies the description of a policy component.
             qos_class_id: Values: ``level1``, ``level2``, ``level3``, ``level4``, ``level5``,
                 ``level6``, ``unspecified``. Default: ``unspecified``.
-            terminal_level_dscp: Terminal level dscp value
+            terminal_level_dscp: Terminal level dscp value Default: ``unspecified``.
         """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
@@ -11969,7 +12149,7 @@ class OobContractSubjectCursor(
         qos_class_id: QosTenantPrio | str | None = None,
         provider_label_match_type: VzMatchT | str | None = None,
         reverse_filter_ports: bool | None = None,
-        subject_level_dscp: str | None = None,
+        subject_level_dscp: int | str | None = None,
         userdom: str | None = None,
     ) -> OobContractSubjectCursor:
         """Set ``vzSubj`` attributes (merged; validated eagerly)."""
@@ -12034,7 +12214,7 @@ class DscpMarkingCursor(_QosRequirementMakers, _TenantMakers, _UniMakers):
         *,
         annotation: str | None = None,
         description: str | None = None,
-        mark: str | None = None,
+        mark: int | str | None = None,
         name: str | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
@@ -12099,7 +12279,7 @@ class TenantRouteControlProfileRouteControlContextCursor(
         annotation: str | None = None,
         description: str | None = None,
         display_name: str | None = None,
-        local_order: str | None = None,
+        local_order: int | None = None,
         userdom: str | None = None,
     ) -> TenantRouteControlProfileRouteControlContextCursor:
         """Set ``rtctrlCtxP`` attributes (merged; validated eagerly)."""
@@ -12161,7 +12341,7 @@ class _PbrBackupPolicyMakers(Cursor):
         mac_address: str | None = None,
         name: str | None = None,
         display_name: str | None = None,
-        pod_id: str | None = None,
+        pod_id: int | None = None,
         userdom: str | None = None,
         weight: int | None = None,
     ) -> PbrBackupPolicyDestinationOfRedirectedTrafficCursor:
@@ -12175,7 +12355,7 @@ class _PbrBackupPolicyMakers(Cursor):
                 summary report containing configuration information, logs and diagnostic data
                 that will help TAC in troubleshooting and resolving a technical issue.
             mac_address: The MAC address.
-            pod_id: The POD identifier.
+            pod_id: The POD identifier. Default: ``1``.
             weight: The weight of the fault in calculating the health score of an object. A
                 higher weight causes a higher degradation of the health score of the affected
                 object. Default: ``1``.
@@ -12268,7 +12448,7 @@ class _ServiceRedirectPolicyMakers(Cursor):
         mac_address: str | None = None,
         name: str | None = None,
         display_name: str | None = None,
-        pod_id: str | None = None,
+        pod_id: int | None = None,
         userdom: str | None = None,
         weight: int | None = None,
     ) -> ServiceRedirectPolicyDestinationOfRedirectedTrafficCursor:
@@ -12282,7 +12462,7 @@ class _ServiceRedirectPolicyMakers(Cursor):
                 summary report containing configuration information, logs and diagnostic data
                 that will help TAC in troubleshooting and resolving a technical issue.
             mac_address: The MAC address.
-            pod_id: The POD identifier.
+            pod_id: The POD identifier. Default: ``1``.
             weight: The weight of the fault in calculating the health score of an object. A
                 higher weight causes a higher degradation of the health score of the affected
                 object. Default: ``1``.
@@ -12323,8 +12503,8 @@ class ServiceRedirectPolicyCursor(
         description: str | None = None,
         dest_type: VnsDestType | str | None = None,
         hashing_algorithm: VnshashingAlgorithm | str | None = None,
-        maximum_threshold_percentage: str | None = None,
-        minimum_threshold_percentage: str | None = None,
+        maximum_threshold_percentage: int | None = None,
+        minimum_threshold_percentage: int | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
@@ -12713,7 +12893,7 @@ class PimCursor(_VrfMakers, _TenantMakers, _UniMakers):
         self,
         *,
         annotation: str | None = None,
-        control_knobs: str | None = None,
+        control_knobs: frozenset[RtdmcDomUserCtrl] | set[RtdmcDomUserCtrl] | str | None = None,
         description: str | None = None,
         mtu: int | None = None,
         name: str | None = None,
@@ -13803,7 +13983,7 @@ class StaticEndpointCursor(
         *,
         annotation: str | None = None,
         encap: str | None = None,
-        id: str | None = None,
+        id: int | None = None,
         ip_address: str | None = None,
         name: str | None = None,
         display_name: str | None = None,
@@ -13922,13 +14102,13 @@ class EpgSubnetCursor(_EpgMakers, _AppMakers, _TenantMakers, _UniMakers):
         self,
         *,
         annotation: str | None = None,
-        subnet_control: str | None = None,
+        subnet_control: frozenset[FvSubnetControl] | set[FvSubnetControl] | str | None = None,
         description: str | None = None,
         ip_dp_learning: FvipDPLearning | str | None = None,
         name: str | None = None,
         display_name: str | None = None,
         preferred_as_primary_subnet: bool | None = None,
-        scope: str | None = None,
+        scope: frozenset[FvRouteScp] | set[FvRouteScp] | str | None = None,
         userdom: str | None = None,
         treated_as_virtual_ip_address: bool | None = None,
     ) -> EpgSubnetCursor:
@@ -14600,7 +14780,7 @@ class ContractSubjectInTermCursor(
         name: str | None = None,
         display_name: str | None = None,
         qos_class_id: QosTenantPrio | str | None = None,
-        terminal_level_dscp: str | None = None,
+        terminal_level_dscp: int | str | None = None,
         userdom: str | None = None,
     ) -> ContractSubjectInTermCursor:
         """Set ``vzInTerm`` attributes (merged; validated eagerly)."""
@@ -14640,7 +14820,7 @@ class ContractSubjectOutTermCursor(
         name: str | None = None,
         display_name: str | None = None,
         qos_class_id: QosTenantPrio | str | None = None,
-        terminal_level_dscp: str | None = None,
+        terminal_level_dscp: int | str | None = None,
         userdom: str | None = None,
     ) -> ContractSubjectOutTermCursor:
         """Set ``vzOutTerm`` attributes (merged; validated eagerly)."""
@@ -15084,13 +15264,13 @@ class L2outExternalEpgSubnetCursor(
         self,
         *,
         annotation: str | None = None,
-        subnet_control: str | None = None,
+        subnet_control: frozenset[FvSubnetControl] | set[FvSubnetControl] | str | None = None,
         description: str | None = None,
         ip_dp_learning: FvipDPLearning | str | None = None,
         name: str | None = None,
         display_name: str | None = None,
         preferred_as_primary_subnet: bool | None = None,
-        scope: str | None = None,
+        scope: frozenset[FvRouteScp] | set[FvRouteScp] | str | None = None,
         userdom: str | None = None,
         treated_as_virtual_ip_address: bool | None = None,
     ) -> L2outExternalEpgSubnetCursor:
@@ -15139,7 +15319,7 @@ class _L2outNodeProfileInterfaceProfileMakers(Cursor):
         *,
         annotation: str | None = None,
         descr: str | None = None,
-        target_dscp: str | None = None,
+        target_dscp: int | str | None = None,
         userdom: str | None = None,
     ) -> InterfaceProfileStaticPathCursor:
         """Declare a ``l2extRsPathL2OutAtt`` child under the interface_profile level.
@@ -15152,7 +15332,7 @@ class _L2outNodeProfileInterfaceProfileMakers(Cursor):
             annotation: User annotation. Suggested format orchestrator:value
             descr: The description of this configuration item.
             target_dscp: This property is for future use and is not supported in the current
-                release.
+                release. Default: ``unspecified``.
         """
         params = {
             k: v
@@ -15663,12 +15843,18 @@ class L3outExternalEpgSubnetCursor(
     def set(
         self,
         *,
-        aggregate_routes_for_subnet: str | None = None,
+        aggregate_routes_for_subnet: frozenset[L3extRouteAggType]
+        | set[L3extRouteAggType]
+        | str
+        | None = None,
         annotation: str | None = None,
         description: str | None = None,
         name: str | None = None,
         display_name: str | None = None,
-        scope_of_the_external_subnet: str | None = None,
+        scope_of_the_external_subnet: frozenset[L3extRouteScp]
+        | set[L3extRouteScp]
+        | str
+        | None = None,
         userdom: str | None = None,
     ) -> L3outExternalEpgSubnetCursor:
         """Set ``l3extSubnet`` attributes (merged; validated eagerly)."""
@@ -15742,7 +15928,7 @@ class BfdMultihopNodeProfileCursor(
         annotation: str | None = None,
         description: str | None = None,
         authentication_key: str | None = None,
-        authentication_key_id: str | None = None,
+        authentication_key_id: int | None = None,
         name: str | None = None,
         display_name: str | None = None,
         authentication_type: BfdAuthT | str | None = None,
@@ -15883,23 +16069,38 @@ class NodeProfileBgpPeerCursor(
     def set(
         self,
         *,
-        address_type_af_controls: str | None = None,
+        address_type_af_controls: frozenset[BgpAddrTControl]
+        | set[BgpAddrTControl]
+        | str
+        | None = None,
         administrative_state: NwAdminSt | str | None = None,
-        allowed_self_as_count: str | None = None,
+        allowed_self_as_count: int | None = None,
         annotation: str | None = None,
-        capability: str | None = None,
-        type_of_network_reachable_via_this_peer: str | None = None,
-        peer_af_controls: str | None = None,
-        peer_af_controls_ext: str | None = None,
+        capability: frozenset[BgpPeerAfCap] | set[BgpPeerAfCap] | str | None = None,
+        type_of_network_reachable_via_this_peer: frozenset[BgpConnectivityType]
+        | set[BgpConnectivityType]
+        | str
+        | None = None,
+        peer_af_controls: frozenset[BgpPeerControlPol] | set[BgpPeerControlPol] | str | None = None,
+        peer_af_controls_ext: frozenset[BgpPeerControlPolExt]
+        | set[BgpPeerControlPolExt]
+        | str
+        | None = None,
         description: str | None = None,
         asn_name: str | None = None,
         display_name: str | None = None,
         password: str | None = None,
-        peer_controls: str | None = None,
-        private_as_control: str | None = None,
-        ebgp_multihop_ttl_value: str | None = None,
+        peer_controls: frozenset[BgpPeerPControlType]
+        | set[BgpPeerPControlType]
+        | str
+        | None = None,
+        private_as_control: frozenset[BgpPrivateASControl]
+        | set[BgpPrivateASControl]
+        | str
+        | None = None,
+        ebgp_multihop_ttl_value: int | None = None,
         userdom: str | None = None,
-        weight_for_routes_from_this_neighbor: str | None = None,
+        weight_for_routes_from_this_neighbor: int | None = None,
     ) -> NodeProfileBgpPeerCursor:
         """Set ``bgpPeerP`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -16017,27 +16218,39 @@ class NodeProfileInfraPeerConnectivityProfileCursor(
     def set(
         self,
         *,
-        address_type_af_controls: str | None = None,
+        address_type_af_controls: frozenset[BgpAddrTControl]
+        | set[BgpAddrTControl]
+        | str
+        | None = None,
         administrative_state: NwAdminSt | str | None = None,
-        allowed_self_as_count: str | None = None,
+        allowed_self_as_count: int | None = None,
         annotation: str | None = None,
-        capability: str | None = None,
-        peer_af_controls: str | None = None,
-        peer_af_controls_ext: str | None = None,
+        capability: frozenset[BgpPeerAfCap] | set[BgpPeerAfCap] | str | None = None,
+        peer_af_controls: frozenset[BgpPeerControlPol] | set[BgpPeerControlPol] | str | None = None,
+        peer_af_controls_ext: frozenset[BgpPeerControlPolExt]
+        | set[BgpPeerControlPolExt]
+        | str
+        | None = None,
         data_plane_address: str | None = None,
         description: str | None = None,
         name: str | None = None,
         display_name: str | None = None,
         password: str | None = None,
-        peer_controls: str | None = None,
-        peer_type: str | None = None,
-        private_as_control: str | None = None,
+        peer_controls: frozenset[BgpPeerPControlType]
+        | set[BgpPeerPControlType]
+        | str
+        | None = None,
+        peer_type: frozenset[BgpPeerT] | set[BgpPeerT] | str | None = None,
+        private_as_control: frozenset[BgpPrivateASControl]
+        | set[BgpPrivateASControl]
+        | str
+        | None = None,
         intersite_route_reflector: bool | None = None,
         source_interface_type: BgpSrcIfT | str | None = None,
         control_type: BgpTrustCtrlT | str | None = None,
-        ebgp_multihop_ttl_value: str | None = None,
+        ebgp_multihop_ttl_value: int | None = None,
         userdom: str | None = None,
-        weight_for_routes_from_this_neighbor: str | None = None,
+        weight_for_routes_from_this_neighbor: int | None = None,
     ) -> NodeProfileInfraPeerConnectivityProfileCursor:
         """Set ``bgpInfraPeerP`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -16094,8 +16307,8 @@ class _L3outNodeProfileInterfaceProfileMakers(Cursor):
         ll_addr: str | None = None,
         mac: str | None = None,
         mode: FvMode | str | None = None,
-        mtu: int | None = None,
-        target_dscp: str | None = None,
+        mtu: int | str | None = None,
+        target_dscp: int | str | None = None,
         userdom: str | None = None,
     ) -> PathAttachmentCursor:
         """Declare a ``l3extRsPathL3OutAtt`` child under the interface_profile level.
@@ -16126,9 +16339,9 @@ class _L3outNodeProfileInterfaceProfileMakers(Cursor):
                 affect ifInstT (Interface Instantiation Type) is external-svi and is ignored for
                 sub-interface and l3-port Values: ``native``, ``regular``, ``untagged``.
                 Default: ``regular``.
-            mtu: The maximum transmit unit of the external network. Default: ``0``.
+            mtu: The maximum transmit unit of the external network. Default: ``inherit``.
             target_dscp: The target differentiated service code point (DSCP) of the path
-                attached to the layer 3 outside profile.
+                attached to the layer 3 outside profile. Default: ``unspecified``.
         """
         params = {
             k: v
@@ -16159,9 +16372,9 @@ class _L3outNodeProfileInterfaceProfileMakers(Cursor):
         ipv6_link_local_address: str | None = None,
         external_l3_interface_mac_address: str | None = None,
         encap_mode: FvMode | str | None = None,
-        mtu_size: int | None = None,
+        mtu_size: int | str | None = None,
         name_of_virtuallifp: str | None = None,
-        dscp_value: str | None = None,
+        dscp_value: int | str | None = None,
         userdom: str | None = None,
     ) -> FloatingSviCursor:
         """Declare a ``l3extVirtualLIfP`` child under the interface_profile level.
@@ -16187,9 +16400,10 @@ class _L3outNodeProfileInterfaceProfileMakers(Cursor):
                 and all the l3 interfaces by default use this mac as the router mac.
             encap_mode: The BGP Domain mode. Values: ``native``, ``regular``, ``untagged``.
                 Default: ``regular``.
-            mtu_size: The administrative MTU port on the aggregated interface. Default: ``0``.
+            mtu_size: The administrative MTU port on the aggregated interface. Default:
+                ``inherit``.
             name_of_virtuallifp: The name of the object.
-            dscp_value: Interface level Dscp value.
+            dscp_value: Interface level Dscp value. Default: ``unspecified``.
         """
         params = {
             k: v
@@ -16218,7 +16432,7 @@ class _L3outNodeProfileInterfaceProfileMakers(Cursor):
         *,
         annotation: str | None = None,
         authentication_key: str | None = None,
-        authentication_key_id: str | None = None,
+        authentication_key_id: int | None = None,
         authentication_type: OspfAuthT | str | None = None,
         description: str | None = None,
         name: str | None = None,
@@ -16234,6 +16448,7 @@ class _L3outNodeProfileInterfaceProfileMakers(Cursor):
         Args:
             annotation: User annotation. Suggested format orchestrator:value
             authentication_key: The OSPF authentication key
+            authentication_key_id: Default: ``1``.
             authentication_type: The OSPF authentication type. The type options are; default,
                 md5, none, and simple. Values: ``md5``, ``none``, ``simple``. Default: ``none``.
             description: Specifies the description of a policy component.
@@ -16364,7 +16579,7 @@ class _L3outNodeProfileInterfaceProfileMakers(Cursor):
         annotation: str | None = None,
         description: str | None = None,
         authentication_key: str | None = None,
-        authentication_key_id: str | None = None,
+        authentication_key_id: int | None = None,
         name: str | None = None,
         display_name: str | None = None,
         authentication_type: BfdAuthT | str | None = None,
@@ -16376,7 +16591,7 @@ class _L3outNodeProfileInterfaceProfileMakers(Cursor):
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies the description of a policy component.
             authentication_key: Authentication key
-            authentication_key_id: Authentication key id
+            authentication_key_id: Authentication key id Default: ``1``.
             authentication_type: Authentication type Values: ``none``, ``sha1``. Default:
                 ``none``.
         """
@@ -16392,7 +16607,7 @@ class _L3outNodeProfileInterfaceProfileMakers(Cursor):
         annotation: str | None = None,
         description: str | None = None,
         authentication_key: str | None = None,
-        authentication_key_id: str | None = None,
+        authentication_key_id: int | None = None,
         name: str | None = None,
         display_name: str | None = None,
         authentication_type: BfdAuthT | str | None = None,
@@ -16404,7 +16619,7 @@ class _L3outNodeProfileInterfaceProfileMakers(Cursor):
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies the description of a policy component.
             authentication_key: Authentication key
-            authentication_key_id: Authentication key id
+            authentication_key_id: Authentication key id Default: ``1``.
             authentication_type: Authentication type Values: ``none``, ``sha1``. Default:
                 ``none``.
         """
@@ -16563,7 +16778,7 @@ class NodeAttachmentCursor(_L3outNodeProfileMakers, _L3outMakers, _TenantMakers,
         self,
         *,
         annotation: str | None = None,
-        config_issues: str | None = None,
+        config_issues: frozenset[L3extConfigIssues] | set[L3extConfigIssues] | str | None = None,
         rtr_id: str | None = None,
         rtr_id_loop_back: bool | None = None,
         userdom: str | None = None,
@@ -16708,7 +16923,7 @@ class L3outRouteControlProfileRouteControlContextCursor(
         annotation: str | None = None,
         description: str | None = None,
         display_name: str | None = None,
-        local_order: str | None = None,
+        local_order: int | None = None,
         userdom: str | None = None,
     ) -> L3outRouteControlProfileRouteControlContextCursor:
         """Set ``rtctrlCtxP`` attributes (merged; validated eagerly)."""
@@ -16808,13 +17023,13 @@ class InBandEpgSubnetCursor(_InBandEpgMakers, _ManagementProfileMakers, _TenantM
         self,
         *,
         annotation: str | None = None,
-        subnet_control: str | None = None,
+        subnet_control: frozenset[FvSubnetControl] | set[FvSubnetControl] | str | None = None,
         description: str | None = None,
         ip_dp_learning: FvipDPLearning | str | None = None,
         name: str | None = None,
         display_name: str | None = None,
         preferred_as_primary_subnet: bool | None = None,
-        scope: str | None = None,
+        scope: frozenset[FvRouteScp] | set[FvRouteScp] | str | None = None,
         userdom: str | None = None,
         treated_as_virtual_ip_address: bool | None = None,
     ) -> InBandEpgSubnetCursor:
@@ -16998,7 +17213,7 @@ class OobContractSubjectInTermCursor(
         name: str | None = None,
         display_name: str | None = None,
         qos_class_id: QosTenantPrio | str | None = None,
-        terminal_level_dscp: str | None = None,
+        terminal_level_dscp: int | str | None = None,
         userdom: str | None = None,
     ) -> OobContractSubjectInTermCursor:
         """Set ``vzInTerm`` attributes (merged; validated eagerly)."""
@@ -17038,7 +17253,7 @@ class OobContractSubjectOutTermCursor(
         name: str | None = None,
         display_name: str | None = None,
         qos_class_id: QosTenantPrio | str | None = None,
-        terminal_level_dscp: str | None = None,
+        terminal_level_dscp: int | str | None = None,
         userdom: str | None = None,
     ) -> OobContractSubjectOutTermCursor:
         """Set ``vzOutTerm`` attributes (merged; validated eagerly)."""
@@ -17163,7 +17378,7 @@ class PbrBackupPolicyDestinationOfRedirectedTrafficCursor(
         mac_address: str | None = None,
         name: str | None = None,
         display_name: str | None = None,
-        pod_id: str | None = None,
+        pod_id: int | None = None,
         userdom: str | None = None,
         weight: int | None = None,
     ) -> PbrBackupPolicyDestinationOfRedirectedTrafficCursor:
@@ -17216,7 +17431,7 @@ class ServiceRedirectPolicyDestinationOfRedirectedTrafficCursor(
         mac_address: str | None = None,
         name: str | None = None,
         display_name: str | None = None,
-        pod_id: str | None = None,
+        pod_id: int | None = None,
         userdom: str | None = None,
         weight: int | None = None,
     ) -> ServiceRedirectPolicyDestinationOfRedirectedTrafficCursor:
@@ -17994,7 +18209,7 @@ class InterfaceProfileStaticPathCursor(
         *,
         annotation: str | None = None,
         descr: str | None = None,
-        target_dscp: str | None = None,
+        target_dscp: int | str | None = None,
         userdom: str | None = None,
     ) -> InterfaceProfileStaticPathCursor:
         """Set ``l2extRsPathL2OutAtt`` attributes (merged; validated eagerly)."""
@@ -18348,7 +18563,7 @@ class BfdInterfaceCursor(
         annotation: str | None = None,
         description: str | None = None,
         authentication_key: str | None = None,
-        authentication_key_id: str | None = None,
+        authentication_key_id: int | None = None,
         name: str | None = None,
         display_name: str | None = None,
         authentication_type: BfdAuthT | str | None = None,
@@ -18415,7 +18630,7 @@ class BfdMhInterfaceCursor(
         annotation: str | None = None,
         description: str | None = None,
         authentication_key: str | None = None,
-        authentication_key_id: str | None = None,
+        authentication_key_id: int | None = None,
         name: str | None = None,
         display_name: str | None = None,
         authentication_type: BfdAuthT | str | None = None,
@@ -18625,23 +18840,38 @@ class _FloatingSviMakers(Cursor):
         self,
         peer_address: str,
         *,
-        address_type_af_controls: str | None = None,
+        address_type_af_controls: frozenset[BgpAddrTControl]
+        | set[BgpAddrTControl]
+        | str
+        | None = None,
         administrative_state: NwAdminSt | str | None = None,
-        allowed_self_as_count: str | None = None,
+        allowed_self_as_count: int | None = None,
         annotation: str | None = None,
-        capability: str | None = None,
-        type_of_network_reachable_via_this_peer: str | None = None,
-        peer_af_controls: str | None = None,
-        peer_af_controls_ext: str | None = None,
+        capability: frozenset[BgpPeerAfCap] | set[BgpPeerAfCap] | str | None = None,
+        type_of_network_reachable_via_this_peer: frozenset[BgpConnectivityType]
+        | set[BgpConnectivityType]
+        | str
+        | None = None,
+        peer_af_controls: frozenset[BgpPeerControlPol] | set[BgpPeerControlPol] | str | None = None,
+        peer_af_controls_ext: frozenset[BgpPeerControlPolExt]
+        | set[BgpPeerControlPolExt]
+        | str
+        | None = None,
         description: str | None = None,
         asn_name: str | None = None,
         display_name: str | None = None,
         password: str | None = None,
-        peer_controls: str | None = None,
-        private_as_control: str | None = None,
-        ebgp_multihop_ttl_value: str | None = None,
+        peer_controls: frozenset[BgpPeerPControlType]
+        | set[BgpPeerPControlType]
+        | str
+        | None = None,
+        private_as_control: frozenset[BgpPrivateASControl]
+        | set[BgpPrivateASControl]
+        | str
+        | None = None,
+        ebgp_multihop_ttl_value: int | None = None,
         userdom: str | None = None,
-        weight_for_routes_from_this_neighbor: str | None = None,
+        weight_for_routes_from_this_neighbor: int | None = None,
     ) -> FloatingSviBgpPeerCursor:
         """Declare a ``bgpPeerP`` child under the floating_svi level.
 
@@ -18651,23 +18881,26 @@ class _FloatingSviMakers(Cursor):
 
         Args:
             peer_address: The peer IP address.
-            address_type_af_controls: Ucast/Mcast Addr Type AF Control
+            address_type_af_controls: Ucast/Mcast Addr Type AF Control Default:
+                ``PydanticUndefined``.
             administrative_state: Administrative State Values: ``disabled``, ``enabled``.
                 Default: ``enabled``.
             allowed_self_as_count: The number of occurrences of a local Autonomous System Number
-                (ASN).
+                (ASN). Default: ``3``.
             annotation: User annotation. Suggested format orchestrator:value
-            capability: Peer AF Capability
-            type_of_network_reachable_via_this_peer: Network reachability via this Peer
+            capability: Peer AF Capability Default: ``PydanticUndefined``.
+            type_of_network_reachable_via_this_peer: Network reachability via this Peer Default:
+                ``PydanticUndefined``.
             peer_af_controls: The peer controls specify which Border Gateway Protocol (BGP)
-                attributes are sent to a peer.
-            peer_af_controls_ext: Peer AF controls Ext
+                attributes are sent to a peer. Default: ``PydanticUndefined``.
+            peer_af_controls_ext: Peer AF controls Ext Default: ``PydanticUndefined``.
             description: Specifies the description of a policy component.
             password: Administrative state
-            peer_controls: The peer controls.
-            private_as_control: Remove private AS
-            ebgp_multihop_ttl_value: Specifies time to live (TTL).
+            peer_controls: The peer controls. Default: ``PydanticUndefined``.
+            private_as_control: Remove private AS Default: ``PydanticUndefined``.
+            ebgp_multihop_ttl_value: Specifies time to live (TTL). Default: ``1``.
             weight_for_routes_from_this_neighbor: Default weight for routes from this neighbor
+                Default: ``0``.
         """
         params = {
             k: v
@@ -18687,27 +18920,39 @@ class _FloatingSviMakers(Cursor):
         self,
         peer_address: str,
         *,
-        address_type_af_controls: str | None = None,
+        address_type_af_controls: frozenset[BgpAddrTControl]
+        | set[BgpAddrTControl]
+        | str
+        | None = None,
         administrative_state: NwAdminSt | str | None = None,
-        allowed_self_as_count: str | None = None,
+        allowed_self_as_count: int | None = None,
         annotation: str | None = None,
-        capability: str | None = None,
-        peer_af_controls: str | None = None,
-        peer_af_controls_ext: str | None = None,
+        capability: frozenset[BgpPeerAfCap] | set[BgpPeerAfCap] | str | None = None,
+        peer_af_controls: frozenset[BgpPeerControlPol] | set[BgpPeerControlPol] | str | None = None,
+        peer_af_controls_ext: frozenset[BgpPeerControlPolExt]
+        | set[BgpPeerControlPolExt]
+        | str
+        | None = None,
         data_plane_address: str | None = None,
         description: str | None = None,
         name: str | None = None,
         display_name: str | None = None,
         password: str | None = None,
-        peer_controls: str | None = None,
-        peer_type: str | None = None,
-        private_as_control: str | None = None,
+        peer_controls: frozenset[BgpPeerPControlType]
+        | set[BgpPeerPControlType]
+        | str
+        | None = None,
+        peer_type: frozenset[BgpPeerT] | set[BgpPeerT] | str | None = None,
+        private_as_control: frozenset[BgpPrivateASControl]
+        | set[BgpPrivateASControl]
+        | str
+        | None = None,
         intersite_route_reflector: bool | None = None,
         source_interface_type: BgpSrcIfT | str | None = None,
         control_type: BgpTrustCtrlT | str | None = None,
-        ebgp_multihop_ttl_value: str | None = None,
+        ebgp_multihop_ttl_value: int | None = None,
         userdom: str | None = None,
-        weight_for_routes_from_this_neighbor: str | None = None,
+        weight_for_routes_from_this_neighbor: int | None = None,
     ) -> FloatingSviInfraPeerConnectivityProfileCursor:
         """Declare a ``bgpInfraPeerP`` child under the floating_svi level.
 
@@ -18715,28 +18960,30 @@ class _FloatingSviMakers(Cursor):
 
         Args:
             peer_address: Peer address
-            address_type_af_controls: Ucast/Mcast Addr Type AF Control
+            address_type_af_controls: Ucast/Mcast Addr Type AF Control Default:
+                ``PydanticUndefined``.
             administrative_state: Administrative State Values: ``disabled``, ``enabled``.
                 Default: ``enabled``.
             allowed_self_as_count: The number of occurrences of a local Autonomous System Number
-                (ASN).
+                (ASN). Default: ``3``.
             annotation: User annotation. Suggested format orchestrator:value
-            capability: Peer AF Capability
-            peer_af_controls: Peer Controls
-            peer_af_controls_ext: Peer AF controls Ext
+            capability: Peer AF Capability Default: ``PydanticUndefined``.
+            peer_af_controls: Peer Controls Default: ``PydanticUndefined``.
+            peer_af_controls_ext: Peer AF controls Ext Default: ``PydanticUndefined``.
             data_plane_address: Data plane address
             description: Specifies the description of a policy component.
             password: Administrative state
-            peer_controls: The peer controls.
-            peer_type: Peer Type
-            private_as_control: Remove private AS
+            peer_controls: The peer controls. Default: ``PydanticUndefined``.
+            peer_type: Peer Type Default: ``PydanticUndefined``.
+            private_as_control: Remove private AS Default: ``PydanticUndefined``.
             intersite_route_reflector: Is the peer an intersite route reflector Default:
                 ``False``.
             source_interface_type: Source Interface Type Values: ``l3out-loopback``, ``routable-
                 loopback``. Default: ``l3out-loopback``.
             control_type: Values: ``trusted``, ``untrusted``. Default: ``untrusted``.
-            ebgp_multihop_ttl_value: Specifies time to live (TTL).
+            ebgp_multihop_ttl_value: Specifies time to live (TTL). Default: ``1``.
             weight_for_routes_from_this_neighbor: Default weight for routes from this neighbor
+                Default: ``0``.
         """
         params = {
             k: v
@@ -18754,7 +19001,7 @@ class _FloatingSviMakers(Cursor):
 
     def member_node_configuration(
         self,
-        side: str,
+        side: L3extSide | str,
         *,
         addr: str | None = None,
         annotation: str | None = None,
@@ -18896,9 +19143,9 @@ class FloatingSviCursor(
         ipv6_link_local_address: str | None = None,
         external_l3_interface_mac_address: str | None = None,
         encap_mode: FvMode | str | None = None,
-        mtu_size: int | None = None,
+        mtu_size: int | str | None = None,
         name_of_virtuallifp: str | None = None,
-        dscp_value: str | None = None,
+        dscp_value: int | str | None = None,
         userdom: str | None = None,
     ) -> FloatingSviCursor:
         """Set ``l3extVirtualLIfP`` attributes (merged; validated eagerly)."""
@@ -18948,10 +19195,13 @@ class _HsrpInterfaceMakers(Cursor):
         name: str,
         *,
         annotation: str | None = None,
-        group_vip_misconfiguration: str | None = None,
+        group_vip_misconfiguration: frozenset[HsrpConfigIssues]
+        | set[HsrpConfigIssues]
+        | str
+        | None = None,
         description: str | None = None,
         group_af: HsrpGroupAf | str | None = None,
-        group_id: str | None = None,
+        group_id: int | None = None,
         group_name: str | None = None,
         primary_ip_address: str | None = None,
         vip_obtain_mode: HsrpGrpIpObtainMode | str | None = None,
@@ -18967,10 +19217,10 @@ class _HsrpInterfaceMakers(Cursor):
             name: The name of the object.
             annotation: User annotation. Suggested format orchestrator:value
             group_vip_misconfiguration: Bitmask representation of the configuration issues found
-                during the endpoint group deployment.
+                during the endpoint group deployment. Default: ``PydanticUndefined``.
             description: Specifies the description of a policy component.
             group_af: HSRP Group Type Values: ``ipv4``, ``ipv6``. Default: ``ipv4``.
-            group_id: HSRP Group ID
+            group_id: HSRP Group ID Default: ``0``.
             group_name: Redundancy name string
             primary_ip_address: HSRP primary Virtual IP address (VIP)
             vip_obtain_mode: HSRP primary Virtual IP Obtain Mode Values: ``admin``, ``auto``,
@@ -19209,7 +19459,7 @@ class OspfInterfaceCursor(
         *,
         annotation: str | None = None,
         authentication_key: str | None = None,
-        authentication_key_id: str | None = None,
+        authentication_key_id: int | None = None,
         authentication_type: OspfAuthT | str | None = None,
         description: str | None = None,
         name: str | None = None,
@@ -19286,8 +19536,8 @@ class PathAttachmentCursor(
         ll_addr: str | None = None,
         mac: str | None = None,
         mode: FvMode | str | None = None,
-        mtu: int | None = None,
-        target_dscp: str | None = None,
+        mtu: int | str | None = None,
+        target_dscp: int | str | None = None,
         userdom: str | None = None,
     ) -> PathAttachmentCursor:
         """Set ``l3extRsPathL3OutAtt`` attributes (merged; validated eagerly)."""
@@ -19811,23 +20061,38 @@ class FloatingSviBgpPeerCursor(
     def set(
         self,
         *,
-        address_type_af_controls: str | None = None,
+        address_type_af_controls: frozenset[BgpAddrTControl]
+        | set[BgpAddrTControl]
+        | str
+        | None = None,
         administrative_state: NwAdminSt | str | None = None,
-        allowed_self_as_count: str | None = None,
+        allowed_self_as_count: int | None = None,
         annotation: str | None = None,
-        capability: str | None = None,
-        type_of_network_reachable_via_this_peer: str | None = None,
-        peer_af_controls: str | None = None,
-        peer_af_controls_ext: str | None = None,
+        capability: frozenset[BgpPeerAfCap] | set[BgpPeerAfCap] | str | None = None,
+        type_of_network_reachable_via_this_peer: frozenset[BgpConnectivityType]
+        | set[BgpConnectivityType]
+        | str
+        | None = None,
+        peer_af_controls: frozenset[BgpPeerControlPol] | set[BgpPeerControlPol] | str | None = None,
+        peer_af_controls_ext: frozenset[BgpPeerControlPolExt]
+        | set[BgpPeerControlPolExt]
+        | str
+        | None = None,
         description: str | None = None,
         asn_name: str | None = None,
         display_name: str | None = None,
         password: str | None = None,
-        peer_controls: str | None = None,
-        private_as_control: str | None = None,
-        ebgp_multihop_ttl_value: str | None = None,
+        peer_controls: frozenset[BgpPeerPControlType]
+        | set[BgpPeerPControlType]
+        | str
+        | None = None,
+        private_as_control: frozenset[BgpPrivateASControl]
+        | set[BgpPrivateASControl]
+        | str
+        | None = None,
+        ebgp_multihop_ttl_value: int | None = None,
         userdom: str | None = None,
-        weight_for_routes_from_this_neighbor: str | None = None,
+        weight_for_routes_from_this_neighbor: int | None = None,
     ) -> FloatingSviBgpPeerCursor:
         """Set ``bgpPeerP`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -19951,27 +20216,39 @@ class FloatingSviInfraPeerConnectivityProfileCursor(
     def set(
         self,
         *,
-        address_type_af_controls: str | None = None,
+        address_type_af_controls: frozenset[BgpAddrTControl]
+        | set[BgpAddrTControl]
+        | str
+        | None = None,
         administrative_state: NwAdminSt | str | None = None,
-        allowed_self_as_count: str | None = None,
+        allowed_self_as_count: int | None = None,
         annotation: str | None = None,
-        capability: str | None = None,
-        peer_af_controls: str | None = None,
-        peer_af_controls_ext: str | None = None,
+        capability: frozenset[BgpPeerAfCap] | set[BgpPeerAfCap] | str | None = None,
+        peer_af_controls: frozenset[BgpPeerControlPol] | set[BgpPeerControlPol] | str | None = None,
+        peer_af_controls_ext: frozenset[BgpPeerControlPolExt]
+        | set[BgpPeerControlPolExt]
+        | str
+        | None = None,
         data_plane_address: str | None = None,
         description: str | None = None,
         name: str | None = None,
         display_name: str | None = None,
         password: str | None = None,
-        peer_controls: str | None = None,
-        peer_type: str | None = None,
-        private_as_control: str | None = None,
+        peer_controls: frozenset[BgpPeerPControlType]
+        | set[BgpPeerPControlType]
+        | str
+        | None = None,
+        peer_type: frozenset[BgpPeerT] | set[BgpPeerT] | str | None = None,
+        private_as_control: frozenset[BgpPrivateASControl]
+        | set[BgpPrivateASControl]
+        | str
+        | None = None,
         intersite_route_reflector: bool | None = None,
         source_interface_type: BgpSrcIfT | str | None = None,
         control_type: BgpTrustCtrlT | str | None = None,
-        ebgp_multihop_ttl_value: str | None = None,
+        ebgp_multihop_ttl_value: int | None = None,
         userdom: str | None = None,
-        weight_for_routes_from_this_neighbor: str | None = None,
+        weight_for_routes_from_this_neighbor: int | None = None,
     ) -> FloatingSviInfraPeerConnectivityProfileCursor:
         """Set ``bgpInfraPeerP`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -20227,10 +20504,13 @@ class HsrpGroupProfileCursor(
         self,
         *,
         annotation: str | None = None,
-        group_vip_misconfiguration: str | None = None,
+        group_vip_misconfiguration: frozenset[HsrpConfigIssues]
+        | set[HsrpConfigIssues]
+        | str
+        | None = None,
         description: str | None = None,
         group_af: HsrpGroupAf | str | None = None,
-        group_id: str | None = None,
+        group_id: int | None = None,
         group_name: str | None = None,
         primary_ip_address: str | None = None,
         vip_obtain_mode: HsrpGrpIpObtainMode | str | None = None,

@@ -40,7 +40,8 @@ class l3StaticRtIpEp(ManagedObject):
         str,
         Field(
             pattern="^[0-9a-fA-F.:/ ]+$",
-            alias="routeIpAddr",
+            validation_alias="routeIpAddr",
+            serialization_alias="routeIpAddr",
             description="IP address for the static route",
         ),
     ]

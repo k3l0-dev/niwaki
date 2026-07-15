@@ -61,17 +61,36 @@ class infraSubPortBlk(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="The description of this configuration item.",
         ),
     ] = ""
-    from_module_id: str = Field(default="", alias="fromCard")
-    from_port_id: str = Field(default="", alias="fromPort")
-    from_sub_port_id: str = Field(default="", alias="fromSubPort")
+    from_module_id: Annotated[
+        int, Field(ge=1, le=100, validation_alias="fromCard", serialization_alias="fromCard")
+    ] = 1
+    from_port_id: Annotated[
+        int, Field(ge=1, le=127, validation_alias="fromPort", serialization_alias="fromPort")
+    ] = 1
+    from_sub_port_id: Annotated[
+        int, Field(ge=1, le=16, validation_alias="fromSubPort", serialization_alias="fromSubPort")
+    ] = 1
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
-    to_module_id: str = Field(default="", alias="toCard")
-    to_port_id: str = Field(default="", alias="toPort")
-    to_sub_port_id: str = Field(default="", alias="toSubPort")
+    to_module_id: Annotated[
+        int, Field(ge=1, le=100, validation_alias="toCard", serialization_alias="toCard")
+    ] = 1
+    to_port_id: Annotated[
+        int, Field(ge=1, le=127, validation_alias="toPort", serialization_alias="toPort")
+    ] = 1
+    to_sub_port_id: Annotated[
+        int, Field(ge=1, le=16, validation_alias="toSubPort", serialization_alias="toSubPort")
+    ] = 1
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

@@ -55,26 +55,38 @@ class equipmentFlashConfigPol(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    delta_program_erase_cycles_on_the_flash: str = Field(default="", alias="deltape")
+    delta_program_erase_cycles_on_the_flash: Annotated[
+        int, Field(ge=21, le=40, validation_alias="deltape", serialization_alias="deltape")
+    ] = 21
     description: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
-    grown_bad_block_count_on_the_flash: str = Field(default="", alias="gbb")
+    grown_bad_block_count_on_the_flash: Annotated[
+        int, Field(ge=4, le=15, validation_alias="gbb", serialization_alias="gbb")
+    ] = 5
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     owner_key: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerKey",
+            validation_alias="ownerKey",
+            serialization_alias="ownerKey",
             description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
@@ -83,10 +95,15 @@ class equipmentFlashConfigPol(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerTag",
+            validation_alias="ownerTag",
+            serialization_alias="ownerTag",
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
-    program_erase_cycles_on_the_flash: str = Field(default="", alias="peCycles")
-    read_err: str = Field(default="", alias="readErr")
+    program_erase_cycles_on_the_flash: Annotated[
+        int, Field(ge=3000, le=10000, validation_alias="peCycles", serialization_alias="peCycles")
+    ] = 5000
+    read_err: Annotated[
+        int, Field(ge=500, le=2000, validation_alias="readErr", serialization_alias="readErr")
+    ] = 1000
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

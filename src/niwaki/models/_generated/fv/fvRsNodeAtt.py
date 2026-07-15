@@ -51,7 +51,9 @@ class fvRsNodeAtt(ManagedObject):
     target_dn: Annotated[
         str,
         Field(
-            alias="tDn", description="The distinguished name of the target of this static binding."
+            validation_alias="tDn",
+            serialization_alias="tDn",
+            description="The distinguished name of the target of this static binding.",
         ),
     ]
 
@@ -75,7 +77,11 @@ class fvRsNodeAtt(ManagedObject):
     encap: Annotated[
         str, Field(description="The encapsulation method (VLAN) for the static binding.")
     ] = ""
-    deployment_immediacy: FvInstrImedcy = Field(default=FvInstrImedcy.LAZY, alias="instrImedcy")
+    deployment_immediacy: FvInstrImedcy = Field(
+        default=FvInstrImedcy.LAZY,
+        validation_alias="instrImedcy",
+        serialization_alias="instrImedcy",
+    )
     mode: FvMode = Field(
         default=FvMode.REGULAR, description="The mode of the static association with the path."
     )

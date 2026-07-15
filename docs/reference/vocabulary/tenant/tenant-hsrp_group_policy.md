@@ -24,17 +24,17 @@ Accepted as keyword arguments of `.hsrp_group_policy(name)` and of `.set(**attrs
 | parameter | wire | type | values | default | description |
 | --- | --- | --- | --- | --- | --- |
 | `name` *(positional)* | `name` | `str` | — | — | The name of the object. |
-| `group_control_bits` | `ctrl` | `str` | — | — | HSRP Group Control Bits |
+| `group_control_bits` | `ctrl` | {ref}`HsrpGrpControl <enum-hsrpgrpcontrol>` | `preempt` | — | HSRP Group Control Bits |
 | `description` | `descr` | `str` | — | — | Specifies a description of the policy definition. |
 | `hello_interval` | `helloIntvl` | `int` | — | `3000` | HSRP Hello packet interval |
 | `hold_interval` | `holdIntvl` | `int` | — | `10000` | HSRP Hold interval |
 | `authentication_key` | `key` | `str` | — | — | Authentication key |
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |
-| `miminum_delay_before_preempt` | `preemptDelayMin` | `str` | — | — | HSRP Group's Minimum Preemption delay |
-| `preempt_delay_after_a_switch_reload` | `preemptDelayReload` | `str` | — | — | Preemption delay after switch reboot |
-| `wait_for_ip_redundancy_clients` | `preemptDelaySync` | `str` | — | — | Maximum number of seconds to allow IPredundancy clients to prevent preemption |
-| `group_priority` | `prio` | `str` | — | — | Grouph Priority |
+| `miminum_delay_before_preempt` | `preemptDelayMin` | `int` | — | `0` | HSRP Group's Minimum Preemption delay |
+| `preempt_delay_after_a_switch_reload` | `preemptDelayReload` | `int` | — | `0` | Preemption delay after switch reboot |
+| `wait_for_ip_redundancy_clients` | `preemptDelaySync` | `int` | — | `0` | Maximum number of seconds to allow IPredundancy clients to prevent preemption |
+| `group_priority` | `prio` | `int` | — | `100` | Grouph Priority |
 | `secure_authentication_key` | `secureAuthKey` | `str` | — | — | Secure Authentication key |
-| `authentication_key_timeout` | `timeout` | `str` | — | — | Authentication timeout |
+| `authentication_key_timeout` | `timeout` | `int` | — | `0` | Authentication timeout |
 | `authentication_type` | `type` | {ref}`HsrpAuthT <enum-hsrpautht>` | `md5`, `simple` | `simple` | Authentication type |

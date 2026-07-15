@@ -43,7 +43,10 @@ class eqptdiagpRsLpOdDiag(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    target_dn: Annotated[str, Field(alias="tDn", description="The target port.")]
+    target_dn: Annotated[
+        str,
+        Field(validation_alias="tDn", serialization_alias="tDn", description="The target port."),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[

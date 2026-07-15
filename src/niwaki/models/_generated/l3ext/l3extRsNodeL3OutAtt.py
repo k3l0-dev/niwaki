@@ -3,7 +3,10 @@
 from __future__ import annotations
 
 from typing import ClassVar, Annotated
-from pydantic import Field
+from pydantic import BeforeValidator, Field
+
+from niwaki.models._wire import Flags, parse_flags
+from niwaki.models._generated.enums.L3extConfigIssues import L3extConfigIssues
 
 from niwaki.models.base import ManagedObject
 
@@ -86,7 +89,8 @@ class l3extRsNodeL3OutAtt(ManagedObject):
     target_dn: Annotated[
         str,
         Field(
-            alias="tDn",
+            validation_alias="tDn",
+            serialization_alias="tDn",
             description="The distinguished name for the node attached to the layer 3 outside profile. The maximum supported string length is 255 ASCII characters.",
         ),
     ]
@@ -100,15 +104,22 @@ class l3extRsNodeL3OutAtt(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    config_issues: str = Field(
-        default="",
-        alias="configIssues",
+    config_issues: Annotated[Flags[L3extConfigIssues], BeforeValidator(parse_flags)] = Field(
+        default_factory=lambda: frozenset({L3extConfigIssues.NONE}),
+        validation_alias="configIssues",
+        serialization_alias="configIssues",
         description="Bitmask representation of the configuration issues found during the endpoint group deployment.",
     )
-    rtr_id: str = Field(
-        default="",
-        alias="rtrId",
-        description="The router identifier used as the OSPF/BGP router ID.",
+    rtr_id: Annotated[
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            validation_alias="rtrId",
+            serialization_alias="rtrId",
+            description="The router identifier used as the OSPF/BGP router ID.",
+        ),
+    ] = ""
+    rtr_id_loop_back: bool = Field(
+        default=True, validation_alias="rtrIdLoopBack", serialization_alias="rtrIdLoopBack"
     )
-    rtr_id_loop_back: bool = Field(default=True, alias="rtrIdLoopBack")
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

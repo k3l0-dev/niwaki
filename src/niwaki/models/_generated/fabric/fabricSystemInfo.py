@@ -47,7 +47,8 @@ class fabricSystemInfo(ManagedObject):
         Field(
             max_length=16,
             pattern="^[a-zA-Z0-9_.:-]+$",
-            alias="name",
+            validation_alias="name",
+            serialization_alias="name",
             description="The name of the object.",
         ),
     ] = ""

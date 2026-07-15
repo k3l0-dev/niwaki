@@ -36,10 +36,17 @@ class rtctrlMatchRtSrc(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    match_ip_address: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="ip")]
+    match_ip_address: Annotated[
+        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", validation_alias="ip", serialization_alias="ip")
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    aggregated_route: bool = Field(default=False, alias="aggregate", description="Aggregated Route")
+    aggregated_route: bool = Field(
+        default=False,
+        validation_alias="aggregate",
+        serialization_alias="aggregate",
+        description="Aggregated Route",
+    )
     annotation: Annotated[
         str,
         Field(
@@ -53,16 +60,32 @@ class rtctrlMatchRtSrc(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies the description of a policy component.",
         ),
     ] = ""
-    start_of_prefix_length: str = Field(
-        default="", alias="fromPfxLen", description="Prefix list range"
-    )
+    start_of_prefix_length: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=128,
+            validation_alias="fromPfxLen",
+            serialization_alias="fromPfxLen",
+            description="Prefix list range",
+        ),
+    ] = 0
     name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
-    end_of_prefix_length: str = Field(default="", alias="toPfxLen")
+    end_of_prefix_length: Annotated[
+        int, Field(ge=0, le=128, validation_alias="toPfxLen", serialization_alias="toPfxLen")
+    ] = 0
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

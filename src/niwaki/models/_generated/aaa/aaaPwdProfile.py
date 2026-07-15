@@ -56,54 +56,88 @@ class aaaPwdProfile(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    number_of_password_changes_in_interval: str = Field(
-        default="",
-        alias="changeCount",
-        description="The number of password changes allowed within the change interval.",
-    )
+    number_of_password_changes_in_interval: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=10,
+            validation_alias="changeCount",
+            serialization_alias="changeCount",
+            description="The number of password changes allowed within the change interval.",
+        ),
+    ] = 2
     password_policy: AaaPwdPolicy = Field(
         default=AaaPwdPolicy.ENABLE,
-        alias="changeDuringInterval",
+        validation_alias="changeDuringInterval",
+        serialization_alias="changeDuringInterval",
         description="The change count/change interval policy selector. This property enables you to select an option for enforcing password change.",
     )
-    change_interval_in_hours: str = Field(
-        default="",
-        alias="changeInterval",
-        description="A time interval for limiting the number of password changes.",
-    )
+    change_interval_in_hours: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=745,
+            validation_alias="changeInterval",
+            serialization_alias="changeInterval",
+            description="A time interval for limiting the number of password changes.",
+        ),
+    ] = 48
     description: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
-    password_expiration_warn_time_in_days: str = Field(
-        default="",
-        alias="expirationWarnTime",
-        description="A warning period before password expiration. A warning will be displayed when a user logs in within this number of days of an impending password expiration.",
-    )
-    password_history_count: str = Field(
-        default="",
-        alias="historyCount",
-        description="How many retired passwords are stored in a user's password history.",
-    )
+    password_expiration_warn_time_in_days: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=30,
+            validation_alias="expirationWarnTime",
+            serialization_alias="expirationWarnTime",
+            description="A warning period before password expiration. A warning will be displayed when a user logs in within this number of days of an impending password expiration.",
+        ),
+    ] = 15
+    password_history_count: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=15,
+            validation_alias="historyCount",
+            serialization_alias="historyCount",
+            description="How many retired passwords are stored in a user's password history.",
+        ),
+    ] = 5
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
-    no_password_change_interval_in_hours: str = Field(
-        default="",
-        alias="noChangeInterval",
-        description="A minimum period after a password change before the user can change the password again.",
-    )
+    no_password_change_interval_in_hours: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=745,
+            validation_alias="noChangeInterval",
+            serialization_alias="noChangeInterval",
+            description="A minimum period after a password change before the user can change the password again.",
+        ),
+    ] = 24
     owner_key: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerKey",
+            validation_alias="ownerKey",
+            serialization_alias="ownerKey",
             description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
@@ -112,7 +146,8 @@ class aaaPwdProfile(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerTag",
+            validation_alias="ownerTag",
+            serialization_alias="ownerTag",
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""

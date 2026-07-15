@@ -58,7 +58,8 @@ class commRsKeyRing(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9_.:-]+$",
-            alias="tnPkiKeyRingName",
+            validation_alias="tnPkiKeyRingName",
+            serialization_alias="tnPkiKeyRingName",
             description="The HTTP connection key ring. Each PKI device holds a pair of asymmetric Rivest-Shamir-Adleman (RSA) or Elliptic Curve Cryptography (ECC) encryption keys, one kept private and one made public, stored in an internal key ring.",
         ),
     ] = ""

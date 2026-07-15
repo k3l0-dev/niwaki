@@ -24,7 +24,7 @@ Accepted as keyword arguments of `.stp_policy(name)` and of `.set(**attrs)` on t
 | parameter | wire | type | values | default | description |
 | --- | --- | --- | --- | --- | --- |
 | `name` *(positional)* | `name` | `str` | — | — | The STP interface policy name. |
-| `controls` | `ctrl` | `str` | — | — | Interface controls |
+| `controls` | `ctrl` | {ref}`StpIfControl <enum-stpifcontrol>` | `unspecified`, `bpdu-guard`, `bpdu-filter` | `unspecified` | Interface controls |
 | `description` | `descr` | `str` | — | — | Specifies a description of the policy definition. |
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |

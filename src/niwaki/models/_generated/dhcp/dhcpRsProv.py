@@ -3,7 +3,10 @@
 from __future__ import annotations
 
 from typing import ClassVar, Annotated
-from pydantic import Field
+from pydantic import BeforeValidator, Field
+
+from niwaki.models._wire import Flags, parse_flags
+from niwaki.models._generated.enums.DhcpAddrPreferences import DhcpAddrPreferences
 
 from niwaki.models.base import ManagedObject
 
@@ -46,7 +49,12 @@ class dhcpRsProv(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     target_dn: Annotated[
-        str, Field(alias="tDn", description="The distinguished name of the target endpoint group.")
+        str,
+        Field(
+            validation_alias="tDn",
+            serialization_alias="tDn",
+            description="The distinguished name of the target endpoint group.",
+        ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
@@ -54,7 +62,8 @@ class dhcpRsProv(ManagedObject):
         str,
         Field(
             pattern="^[0-9a-fA-F.:/ ]+$",
-            alias="addr",
+            validation_alias="addr",
+            serialization_alias="addr",
             description="The DHCP server address. This address is configured onto the relationship between a relay profile and an endpoint group.",
         ),
     ] = ""
@@ -66,5 +75,8 @@ class dhcpRsProv(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    pref: Annotated[str, Field(description="DHCP server preferences")] = ""
+    pref: Annotated[Flags[DhcpAddrPreferences], BeforeValidator(parse_flags)] = Field(
+        default_factory=lambda: frozenset({DhcpAddrPreferences.NONE}),
+        description="DHCP server preferences",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

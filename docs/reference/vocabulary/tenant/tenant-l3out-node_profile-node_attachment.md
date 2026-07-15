@@ -24,7 +24,7 @@ Accepted as keyword arguments of `.node_attachment(target_dn)` and of `.set(**at
 | parameter | wire | type | values | default | description |
 | --- | --- | --- | --- | --- | --- |
 | `target_dn` *(positional)* | `tDn` | `str` | — | — | The distinguished name for the node attached to the layer 3 outside profile. The maximum supported string length is 255 ASCII characters. |
-| `config_issues` | `configIssues` | `str` | — | — | Bitmask representation of the configuration issues found during the endpoint group deployment. |
+| `config_issues` | `configIssues` | {ref}`L3extConfigIssues <enum-l3extconfigissues>` | `none`, `node-path-misconfig`, `routerid-not-changable-with-mcast`, `loopback-ip-missing`, `subnet-mismatch`, `node-vlif-misconfig`, `anchor-node-mismatch`, `missing-rs-export-route-profile`, `missing-mpls-infra-l3out`, `bd-profile-mismatch`, `mtu-mac-mismatch`, `anchor-encap-mismatch`, `access-encap-node-overlap`, `access-encap-bd-map-conflict`, `rtsumsubnet-l3extsubnet-conflict` | `none` | Bitmask representation of the configuration issues found during the endpoint group deployment. |
 | `rtr_id` | `rtrId` | `str` | — | — | The router identifier used as the OSPF/BGP router ID. |
 | `rtr_id_loop_back` | `rtrIdLoopBack` | `bool` | — | `True` | — |
 

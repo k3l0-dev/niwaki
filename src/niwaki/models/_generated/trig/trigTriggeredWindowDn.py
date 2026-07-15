@@ -35,7 +35,12 @@ class trigTriggeredWindowDn(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     window_dn: Annotated[
-        str, Field(alias="windowDn", description="The distinguished name of scheduler window.")
+        str,
+        Field(
+            validation_alias="windowDn",
+            serialization_alias="windowDn",
+            description="The distinguished name of scheduler window.",
+        ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────

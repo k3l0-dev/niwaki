@@ -52,7 +52,8 @@ class smartfaultRule(ManagedObject):
         str,
         Field(
             max_length=512,
-            alias="genericRuleName",
+            validation_alias="genericRuleName",
+            serialization_alias="genericRuleName",
             description="Generic Rule Name represents the name of the generic rule that triggers this fault",
         ),
     ] = ""

@@ -39,7 +39,11 @@ class statstoreObsClassHolder(ManagedObject):
     # ── Naming (required) ──────────────────────────────────────────────────────
     observable_class: Annotated[
         str,
-        Field(alias="obsClass", description="Class of observables contained under this holder."),
+        Field(
+            validation_alias="obsClass",
+            serialization_alias="obsClass",
+            description="Class of observables contained under this holder.",
+        ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────

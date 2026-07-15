@@ -67,7 +67,8 @@ class fvStCEp(ManagedObject):
         str,
         Field(
             pattern="^([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}$",
-            alias="mac",
+            validation_alias="mac",
+            serialization_alias="mac",
             description="The MAC address of the endpoint.",
         ),
     ]
@@ -87,15 +88,24 @@ class fvStCEp(ManagedObject):
     encap: Annotated[
         str, Field(description="The encapsulation (VXLAN or VLAN) to be used for this endpoint.")
     ] = ""
-    id: Annotated[str, Field(description="An identifier .")] = ""
+    id: Annotated[int, Field(description="An identifier .")] = 0
     ip_address: Annotated[
         str,
         Field(
-            pattern="^[0-9a-fA-F.:/ ]+$", alias="ip", description="The IP address of the endpoint."
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            validation_alias="ip",
+            serialization_alias="ip",
+            description="The IP address of the endpoint.",
         ),
     ] = ""
     name: Annotated[str, Field(max_length=128, description="The name of the object.")] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

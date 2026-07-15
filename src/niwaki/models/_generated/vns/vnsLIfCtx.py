@@ -54,7 +54,8 @@ class vnsLIfCtx(ManagedObject):
             min_length=1,
             max_length=16,
             pattern="^[a-zA-Z0-9_.:-]+$",
-            alias="connNameOrLbl",
+            validation_alias="connNameOrLbl",
+            serialization_alias="connNameOrLbl",
             description="The connector name or label for the logical interface context.",
         ),
     ]
@@ -74,18 +75,43 @@ class vnsLIfCtx(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies the description of a policy component.",
         ),
     ] = ""
     l3_dest: bool = Field(
-        default=True, alias="l3Dest", description="Is this LIF a L3 Destination (VIP)"
+        default=True,
+        validation_alias="l3Dest",
+        serialization_alias="l3Dest",
+        description="Is this LIF a L3 Destination (VIP)",
     )
     name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
-    permit_handoff: bool = Field(default=False, alias="permitHandoff", description="Permit Handoff")
-    permit_log: bool = Field(default=False, alias="permitLog", description="Permit Logging Action")
-    rule_type: bool = Field(default=False, alias="ruleType", description="Rule Type")
+    permit_handoff: bool = Field(
+        default=False,
+        validation_alias="permitHandoff",
+        serialization_alias="permitHandoff",
+        description="Permit Handoff",
+    )
+    permit_log: bool = Field(
+        default=False,
+        validation_alias="permitLog",
+        serialization_alias="permitLog",
+        description="Permit Logging Action",
+    )
+    rule_type: bool = Field(
+        default=False,
+        validation_alias="ruleType",
+        serialization_alias="ruleType",
+        description="Rule Type",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

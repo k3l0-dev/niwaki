@@ -67,8 +67,8 @@ def observability_design() -> Cursor:
     tenant = cfg.tenant(TENANT)
     tenant.vrf("prod")
     tenant.bd("obs-bd", unicast_routing=True).bind(vrf="prod").subnet("10.30.7.1/24")
-    tenant.dpp_policy("obs-dpp-in", rate="100", rate_unit="mega")
-    tenant.dpp_policy("obs-dpp-out", rate="50", rate_unit="mega")
+    tenant.dpp_policy("obs-dpp-in", rate=100, rate_unit="mega")
+    tenant.dpp_policy("obs-dpp-out", rate=50, rate_unit="mega")
 
     # One requirement, two relations to the same class — the verbs tell them apart.
     qos = tenant.qos_requirement("obs-qos")
@@ -88,7 +88,7 @@ def observability_design() -> Cursor:
     # ERSPAN: the destination relation carries the collector's parameters.
     dst = tenant.span_destination_group(SPAN_DST_GRP)
     dst.span_destination("erspan").bind(
-        epg=ref(EPG, ip="10.30.8.8", src_ip_prefix="10.30.1.0/24", ttl="64", mtu="1518", ver="ver2")
+        epg=ref(EPG, ip="10.30.8.8", src_ip_prefix="10.30.1.0/24", ttl=64, mtu=1518, ver="ver2")
     )
     return cfg
 
@@ -126,7 +126,7 @@ class Test5Observability:
         assert relation is not None
         assert relation.ip == "10.30.8.8"
         assert relation.src_ip_prefix == "10.30.1.0/24"
-        assert relation.ttl == "64"
+        assert relation.ttl == 64  # a TTL is a number
 
     def test_05_netflow_monitor_reads_back(self, live_aci: Niwaki) -> None:
         infra = live_aci.root.infra()

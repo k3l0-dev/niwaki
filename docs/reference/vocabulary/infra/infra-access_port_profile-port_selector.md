@@ -24,7 +24,7 @@ Accepted as keyword arguments of `.port_selector(name, selector_type)` and of `.
 | parameter | wire | type | values | default | description |
 | --- | --- | --- | --- | --- | --- |
 | `name` *(positional)* | `name` | `str` | — | — | The host port selector name. This name can be up to 64 alphanumeric characters. Note that you cannot change this name after the object has been saved. |
-| `selector_type` *(positional)* | `type` | `str` | — | — | The host port selector type. |
+| `selector_type` *(positional)* | `type` | {ref}`FabricSelector2 <enum-fabricselector2>` | `ALL`, `range` | — | The host port selector type. |
 | `description` | `descr` | `str` | — | — | Specifies a description of the policy definition. |
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |

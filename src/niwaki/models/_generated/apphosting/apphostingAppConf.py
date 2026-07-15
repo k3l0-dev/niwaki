@@ -66,7 +66,8 @@ class apphostingAppConf(ManagedObject):
         Field(
             min_length=1,
             max_length=64,
-            alias="appId",
+            validation_alias="appId",
+            serialization_alias="appId",
             description='unique identifier of app e.g: "nginx_1"',
         ),
     ]
@@ -74,7 +75,8 @@ class apphostingAppConf(ManagedObject):
     # ── Configurable ───────────────────────────────────────────────────────────
     admin_state_for_appconf_config: ApphostingAdminState = Field(
         default=ApphostingAdminState.ENABLED,
-        alias="adminSt",
+        validation_alias="adminSt",
+        serialization_alias="adminSt",
         description='Adminstate state to configure application host information., e.g: "enable or disable [no app-hosting appid app1]"',
     )
     annotation: Annotated[
@@ -87,30 +89,53 @@ class apphostingAppConf(ManagedObject):
     ] = ""
     exec_command_of_application: ApphostingAppActionCont = Field(
         default=ApphostingAppActionCont.INIT,
-        alias="appCfgState",
+        validation_alias="appCfgState",
+        serialization_alias="appCfgState",
         description="application life cycle command. applicable only for aci",
     )
     maximum_cpu_limit_of_app: Annotated[
-        int, Field(alias="appMaxCpu", description="custom cpu unit allocation in profile")
+        int,
+        Field(
+            validation_alias="appMaxCpu",
+            serialization_alias="appMaxCpu",
+            description="custom cpu unit allocation in profile",
+        ),
     ] = 0
-    maximum_disk_allocation_of_app: str = Field(
-        default="", alias="appMaxDisk", description="custom persistent disk utilization in profile"
-    )
-    maximum_memory_allocation_of_app: str = Field(
-        default="", alias="appMaxMem", description="custom memory in profile"
-    )
+    maximum_disk_allocation_of_app: Annotated[
+        int,
+        Field(
+            validation_alias="appMaxDisk",
+            serialization_alias="appMaxDisk",
+            description="custom persistent disk utilization in profile",
+        ),
+    ] = 0
+    maximum_memory_allocation_of_app: Annotated[
+        int,
+        Field(
+            validation_alias="appMaxMem",
+            serialization_alias="appMaxMem",
+            description="custom memory in profile",
+        ),
+    ] = 0
     app_param_list: str = Field(
-        default="", alias="appParamList", description="application parameter list"
+        default="",
+        validation_alias="appParamList",
+        serialization_alias="appParamList",
+        description="application parameter list",
     )
     extended_application_parameter_list: str = Field(
-        default="", alias="appParamListExt", description="application parameter list extended"
+        default="",
+        validation_alias="appParamListExt",
+        serialization_alias="appParamListExt",
+        description="application parameter list extended",
     )
     complete_url_path_of_application: Annotated[
         str,
         Field(
             min_length=1,
             max_length=128,
-            alias="appPkgName",
+            validation_alias="appPkgName",
+            serialization_alias="appPkgName",
             description="url of application package",
         ),
     ] = ""
@@ -118,7 +143,8 @@ class apphostingAppConf(ManagedObject):
         str,
         Field(
             pattern="^[0-9a-fA-F.:/ ]+$",
-            alias="gwIpV4Addr",
+            validation_alias="gwIpV4Addr",
+            serialization_alias="gwIpV4Addr",
             description="default gateway ip address",
         ),
     ] = ""
@@ -127,7 +153,8 @@ class apphostingAppConf(ManagedObject):
         Field(
             ge=0,
             le=3,
-            alias="gwIpV4IntfIdx",
+            validation_alias="gwIpV4IntfIdx",
+            serialization_alias="gwIpV4IntfIdx",
             description="default gateway interface index - v4guest interface index. e.g: specify '0' for interface eth0 inside the container",
         ),
     ] = 0
@@ -135,22 +162,35 @@ class apphostingAppConf(ManagedObject):
         str,
         Field(
             pattern="^[0-9a-fA-F.:/ ]+$",
-            alias="gwIpV6Addr",
+            validation_alias="gwIpV6Addr",
+            serialization_alias="gwIpV6Addr",
             description="default gateway ip v6 address",
         ),
     ] = ""
     guest_interface_index_ipv6: Annotated[
         int,
         Field(
-            ge=0, le=3, alias="gwIpV6IntfIdx", description="default gateway interface index - v6"
+            ge=0,
+            le=3,
+            validation_alias="gwIpV6IntfIdx",
+            serialization_alias="gwIpV6IntfIdx",
+            description="default gateway interface index - v6",
         ),
     ] = 0
     pkg_opts: ApphostingPkgRunOptState = Field(
         default=ApphostingPkgRunOptState.APPEND,
-        alias="pkgOpts",
+        validation_alias="pkgOpts",
+        serialization_alias="pkgOpts",
         description="Application Container package file may come with its own runOpts. This is to indicate whether to append the user configure runOpts List to run-opts from the package file or over-write the run-opts from package file with with the user configured runOpts list.",
     )
     vrf_id_to_bind_with_opt_socket: Annotated[
-        str, Field(min_length=1, max_length=64, alias="switchIntf", description="switch interface")
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            validation_alias="switchIntf",
+            serialization_alias="switchIntf",
+            description="switch interface",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

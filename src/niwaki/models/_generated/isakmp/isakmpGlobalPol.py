@@ -49,23 +49,38 @@ class isakmpGlobalPol(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
     isakmp_keepalive_interval: Annotated[
-        int, Field(ge=10, le=3600, alias="keepalive", description="IsaKmp Keepalive interval")
+        int,
+        Field(
+            ge=10,
+            le=3600,
+            validation_alias="keepalive",
+            serialization_alias="keepalive",
+            description="IsaKmp Keepalive interval",
+        ),
     ] = 10
     name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     owner_key: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerKey",
+            validation_alias="ownerKey",
+            serialization_alias="ownerKey",
             description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
@@ -74,12 +89,19 @@ class isakmpGlobalPol(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerTag",
+            validation_alias="ownerTag",
+            serialization_alias="ownerTag",
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
     number_of_seconds_between_keep_alives: Annotated[
         int,
-        Field(ge=2, le=60, alias="retryInterval", description="IsaKmp Keepalive Retry Interval"),
+        Field(
+            ge=2,
+            le=60,
+            validation_alias="retryInterval",
+            serialization_alias="retryInterval",
+            description="IsaKmp Keepalive Retry Interval",
+        ),
     ] = 2
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

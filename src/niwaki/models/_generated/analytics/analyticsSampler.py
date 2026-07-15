@@ -51,20 +51,35 @@ class analyticsSampler(ManagedObject):
     ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            validation_alias="descr",
+            serialization_alias="descr",
+        ),
     ] = ""
     sampler_mode: AnalyticsSamplerMode = Field(
-        default=AnalyticsSamplerMode.FLOW, alias="mode", description="Sampler mode"
+        default=AnalyticsSamplerMode.FLOW,
+        validation_alias="mode",
+        serialization_alias="mode",
+        description="Sampler mode",
     )
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     sample_size: Annotated[
         int,
         Field(
             ge=1,
             le=65535,
-            alias="sampleSz",
+            validation_alias="sampleSz",
+            serialization_alias="sampleSz",
             description="Numerator of the sampling size expressed as a fraction",
         ),
     ] = 1
@@ -74,7 +89,8 @@ class analyticsSampler(ManagedObject):
         Field(
             ge=1,
             le=65535,
-            alias="windowSz",
+            validation_alias="windowSz",
+            serialization_alias="windowSz",
             description="Denominator of the sampling size expressed as a fraction",
         ),
     ] = 1

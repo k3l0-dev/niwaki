@@ -45,6 +45,11 @@ class fabricNodeInfo(ManagedObject):
     ] = ""
     node_name: Annotated[
         str,
-        Field(max_length=64, alias="name", description="The host name assigned to the controller."),
+        Field(
+            max_length=64,
+            validation_alias="name",
+            serialization_alias="name",
+            description="The host name assigned to the controller.",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

@@ -3,8 +3,11 @@
 from __future__ import annotations
 
 from typing import ClassVar, Annotated
-from pydantic import Field
+from pydantic import BeforeValidator, Field
 
+from niwaki.models._wire import Flags, parse_flags
+from niwaki.models._generated.enums.FvRouteScp import FvRouteScp
+from niwaki.models._generated.enums.FvSubnetControl import FvSubnetControl
 from niwaki.models._generated.enums.FvipDPLearning import FvipDPLearning
 
 from niwaki.models.base import ManagedObject
@@ -67,7 +70,8 @@ class fvSubnet(ManagedObject):
         str,
         Field(
             pattern="^[0-9a-fA-F.:/ ]+$",
-            alias="ip",
+            validation_alias="ip",
+            serialization_alias="ip",
             description="The IP address and mask of the default gateway.",
         ),
     ]
@@ -81,9 +85,10 @@ class fvSubnet(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    subnet_control: str = Field(
-        default="",
-        alias="ctrl",
+    subnet_control: Annotated[Flags[FvSubnetControl], BeforeValidator(parse_flags)] = Field(
+        default_factory=lambda: frozenset({FvSubnetControl.ND}),
+        validation_alias="ctrl",
+        serialization_alias="ctrl",
         description="The subnet control state. The control can be specific protocols applied to the subnet such as IGMP Snooping.",
     )
     description: Annotated[
@@ -91,28 +96,41 @@ class fvSubnet(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies the description of a policy component.",
         ),
     ] = ""
     ip_dp_learning: FvipDPLearning = Field(
         default=FvipDPLearning.ENABLED,
-        alias="ipDPLearning",
+        validation_alias="ipDPLearning",
+        serialization_alias="ipDPLearning",
         description="Knob to disable IP Dataplane Learning for Host(/32, /128) and for BD Subnet",
     )
     name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     preferred_as_primary_subnet: bool = Field(
         default=False,
-        alias="preferred",
+        validation_alias="preferred",
+        serialization_alias="preferred",
         description="Indicates if the subnet is preferred (primary) over the available alternatives. Only one preferred subnet is allowed.",
     )
-    scope: Annotated[str, Field(description="The network visibility of the subnet.")] = ""
+    scope: Annotated[Flags[FvRouteScp], BeforeValidator(parse_flags)] = Field(
+        default_factory=lambda: frozenset({FvRouteScp.PRIVATE}),
+        description="The network visibility of the subnet.",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     treated_as_virtual_ip_address: bool = Field(
         default=False,
-        alias="virtual",
+        validation_alias="virtual",
+        serialization_alias="virtual",
         description="Treated as virtual IP address. Used in case of BD extended to multiple sites.",
     )

@@ -49,7 +49,8 @@ class syslogRemoteDest(ManagedObject):
     # ── Configurable ───────────────────────────────────────────────────────────
     admin_state: MonAdminState = Field(
         default=MonAdminState.ENABLED,
-        alias="adminState",
+        validation_alias="adminState",
+        serialization_alias="adminState",
         description="The administrative state of the remote destination host.",
     )
     annotation: Annotated[
@@ -65,23 +66,32 @@ class syslogRemoteDest(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies the description of a policy component.",
         ),
     ] = ""
     format_setting: SyslogFormatSetting = Field(
         default=SyslogFormatSetting.ACI,
-        alias="format",
+        validation_alias="format",
+        serialization_alias="format",
         description="The Call Home destination message format.",
     )
     forward_facility: SyslogForwardingFacility = Field(
         default=SyslogForwardingFacility.LOCAL7,
-        alias="forwardingFacility",
+        validation_alias="forwardingFacility",
+        serialization_alias="forwardingFacility",
         description="The facility to be used to send messages to this destination.",
     )
     name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     port: Annotated[
         int, Field(ge=1, le=65535, description="The syslog service port of the remote destination.")

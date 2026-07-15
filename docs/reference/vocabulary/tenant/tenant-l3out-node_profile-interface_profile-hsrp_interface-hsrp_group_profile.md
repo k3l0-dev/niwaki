@@ -24,10 +24,10 @@ Accepted as keyword arguments of `.hsrp_group_profile(name)` and of `.set(**attr
 | parameter | wire | type | values | default | description |
 | --- | --- | --- | --- | --- | --- |
 | `name` *(positional)* | `name` | `str` | — | — | The name of the object. |
-| `group_vip_misconfiguration` | `configIssues` | `str` | — | — | Bitmask representation of the configuration issues found during the endpoint group deployment. |
+| `group_vip_misconfiguration` | `configIssues` | {ref}`HsrpConfigIssues <enum-hsrpconfigissues>` | `none`, `group-vip-subnet-mismatch`, `Secondary-vip-subnet-mismatch`, `GroupVIP-Conflicts-Other-Group`, `GroupName-Conflicts-Other-Group`, `GroupMac-Conflicts-Other-Group`, `group-vip-conflicts-if-ip`, `Secondary-vip-conflicts-if-ip`, `Multiple-Version-On-Interface` | `none` | Bitmask representation of the configuration issues found during the endpoint group deployment. |
 | `description` | `descr` | `str` | — | — | Specifies the description of a policy component. |
 | `group_af` | `groupAf` | {ref}`HsrpGroupAf <enum-hsrpgroupaf>` | `ipv4`, `ipv6` | `ipv4` | HSRP Group Type |
-| `group_id` | `groupId` | `str` | — | — | HSRP Group ID |
+| `group_id` | `groupId` | `int` | — | `0` | HSRP Group ID |
 | `group_name` | `groupName` | `str` | — | — | Redundancy name string |
 | `primary_ip_address` | `ip` | `str` | — | — | HSRP primary Virtual IP address (VIP) |
 | `vip_obtain_mode` | `ipObtainMode` | {ref}`HsrpGrpIpObtainMode <enum-hsrpgrpipobtainmode>` | `admin`, `auto`, `learn` | `admin` | HSRP primary Virtual IP Obtain Mode |

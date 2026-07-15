@@ -53,7 +53,8 @@ class thirdpartyappNodeGlobalConfig(ManagedObject):
     # ── Configurable ───────────────────────────────────────────────────────────
     allow_unsigned_app: ThirdpartyappAllowUnsignedApp = Field(
         default=ThirdpartyappAllowUnsignedApp.NO,
-        alias="allowUnsignedApp",
+        validation_alias="allowUnsignedApp",
+        serialization_alias="allowUnsignedApp",
         description="properties to enable or disable signed verification",
     )
     annotation: Annotated[
@@ -65,14 +66,21 @@ class thirdpartyappNodeGlobalConfig(ManagedObject):
         ),
     ] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     storage_limit: Annotated[
         int,
         Field(
             ge=0,
             le=2147483647,
-            alias="storageLimit",
+            validation_alias="storageLimit",
+            serialization_alias="storageLimit",
             description="properties to set bootflash backend storage limit.",
         ),
     ] = 0

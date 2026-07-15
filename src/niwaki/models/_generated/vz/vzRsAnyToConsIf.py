@@ -50,7 +50,14 @@ class vzRsAnyToConsIf(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     name: Annotated[
-        str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="tnVzCPIfName")
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            validation_alias="tnVzCPIfName",
+            serialization_alias="tnVzCPIfName",
+        ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
@@ -62,5 +69,7 @@ class vzRsAnyToConsIf(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    priority: QosTenantPrio = Field(default=QosTenantPrio.UNSPECIFIED, alias="prio")
+    priority: QosTenantPrio = Field(
+        default=QosTenantPrio.UNSPECIFIED, validation_alias="prio", serialization_alias="prio"
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

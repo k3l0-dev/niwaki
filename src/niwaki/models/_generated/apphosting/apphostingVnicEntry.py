@@ -44,7 +44,8 @@ class apphostingVnicEntry(ManagedObject):
         Field(
             ge=0,
             le=3,
-            alias="guestIntfId",
+            validation_alias="guestIntfId",
+            serialization_alias="guestIntfId",
             description="guest interface identifier in the range of 0 to 3",
         ),
     ] = 0
@@ -52,7 +53,8 @@ class apphostingVnicEntry(ManagedObject):
     # ── Configurable ───────────────────────────────────────────────────────────
     admin_st: ApphostingAdminState = Field(
         default=ApphostingAdminState.ENABLED,
-        alias="adminSt",
+        validation_alias="adminSt",
+        serialization_alias="adminSt",
         description='vnic Admin state to configure mo "',
     )
     annotation: Annotated[
@@ -65,14 +67,16 @@ class apphostingVnicEntry(ManagedObject):
     ] = ""
     host_intf: ApphostingHostIntfType = Field(
         default=ApphostingHostIntfType.MANAGEMENT,
-        alias="hostIntf",
+        validation_alias="hostIntf",
+        serialization_alias="hostIntf",
         description='host interface type. e.g: "management or bridge<1-8>"',
     )
     v4_ip_address_of_the_interface: Annotated[
         str,
         Field(
             pattern="^[0-9a-fA-F.:/ ]+$",
-            alias="ipV4Addr",
+            validation_alias="ipV4Addr",
+            serialization_alias="ipV4Addr",
             description="v4 ip address for vnic entry",
         ),
     ] = ""
@@ -80,7 +84,8 @@ class apphostingVnicEntry(ManagedObject):
         str,
         Field(
             pattern="^[0-9a-fA-F.:/ ]+$",
-            alias="ipV6Addr",
+            validation_alias="ipV6Addr",
+            serialization_alias="ipV6Addr",
             description="v6 ip address for vnic entry",
         ),
     ] = ""
@@ -89,7 +94,8 @@ class apphostingVnicEntry(ManagedObject):
         Field(
             min_length=1,
             max_length=32,
-            alias="p2pBridgeVrf",
+            validation_alias="p2pBridgeVrf",
+            serialization_alias="p2pBridgeVrf",
             description="point to point bridge vrf name",
         ),
     ] = ""

@@ -49,7 +49,12 @@ class infraRsFuncToEpg(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     target_dn: Annotated[
-        str, Field(alias="tDn", description="The description of the application endpoint group.")
+        str,
+        Field(
+            validation_alias="tDn",
+            serialization_alias="tDn",
+            description="The description of the application endpoint group.",
+        ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
@@ -64,7 +69,8 @@ class infraRsFuncToEpg(ManagedObject):
     encap: Annotated[str, Field(description="The VLAN number encapsulation.")] = ""
     instr_imedcy: FvInstrImedcy = Field(
         default=FvInstrImedcy.LAZY,
-        alias="instrImedcy",
+        validation_alias="instrImedcy",
+        serialization_alias="instrImedcy",
         description="Represents the deployment immediacy preference of the EpG",
     )
     mode: FvMode = Field(
@@ -72,7 +78,8 @@ class infraRsFuncToEpg(ManagedObject):
     )
     primary_encap: str = Field(
         default="",
-        alias="primaryEncap",
+        validation_alias="primaryEncap",
+        serialization_alias="primaryEncap",
         description="Represents the primary encap when the EPG is isolated",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

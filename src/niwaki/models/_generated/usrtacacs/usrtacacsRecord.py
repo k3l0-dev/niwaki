@@ -48,13 +48,15 @@ class usrtacacsRecord(ManagedObject):
         str,
         Field(
             max_length=512,
-            alias="message",
+            validation_alias="message",
+            serialization_alias="message",
             description="The contents of the informational banner to be displayed before user login authentication.",
         ),
     ] = ""
     severity_of_log: ConditionSeverity = Field(
         default=ConditionSeverity.INFO,
-        alias="severity",
+        validation_alias="severity",
+        serialization_alias="severity",
         description="The severity level of the reportable object.",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

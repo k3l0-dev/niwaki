@@ -42,7 +42,12 @@ class extdevRsToApPlugin(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     target_dn: Annotated[
-        str, Field(alias="tDn", description="The distinguished name of the target.")
+        str,
+        Field(
+            validation_alias="tDn",
+            serialization_alias="tDn",
+            description="The distinguished name of the target.",
+        ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
@@ -54,5 +59,7 @@ class extdevRsToApPlugin(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    is_app_managed: bool = Field(default=False, alias="isAppManaged")
+    is_app_managed: bool = Field(
+        default=False, validation_alias="isAppManaged", serialization_alias="isAppManaged"
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

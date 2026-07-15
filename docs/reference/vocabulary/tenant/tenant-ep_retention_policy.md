@@ -24,12 +24,12 @@ Accepted as keyword arguments of `.ep_retention_policy(name)` and of `.set(**att
 | parameter | wire | type | values | default | description |
 | --- | --- | --- | --- | --- | --- |
 | `name` *(positional)* | `name` | `str` | — | — | The name for the endpoint retention policy. |
-| `ep_bounce_age_interval` | `bounceAgeIntvl` | `str` | — | — | The aging interval for a bounce entry. When an endpoint (VM) migrates to another switch, the endpoint is marked as bouncing for the specified aging interval and is deleted afterwards. |
-| `ep_bounce_trigger` | `bounceTrig` | `str` | — | — | Specifies whether to install the bounce entry by RARP flood or by COOP protocol. |
+| `ep_bounce_age_interval` | `bounceAgeIntvl` | `int` | — | `630` | The aging interval for a bounce entry. When an endpoint (VM) migrates to another switch, the endpoint is marked as bouncing for the specified aging interval and is deleted afterwards. |
+| `ep_bounce_trigger` | `bounceTrig` | {ref}`L2BounceTrig <enum-l2bouncetrig>` | `rarp-flood`, `protocol` | `protocol` | Specifies whether to install the bounce entry by RARP flood or by COOP protocol. |
 | `description` | `descr` | `str` | — | — | Specifies a description of the policy definition. |
-| `ep_hold_interval` | `holdIntvl` | `str` | — | — | A time period during which new endpoint learn events will not be honored. This interval is triggered when the maximum endpoint move frequency is exceeded. |
-| `local_ep_age_interval` | `localEpAgeIntvl` | `str` | — | — | The aging interval for all local endpoints learned in this bridge domain. When 75% of the interval is reached, 3 ARP requests are sent to verify the existence of the endpoint. If no response is received, the endpoint is deleted. |
-| `ep_move_frequency` | `moveFreq` | `str` | — | — | A maximum allowed number of endpoint moves per second. If the move frequency is exceeded, the hold interval is triggered, and new endpoint learn events will not be honored until after the hold interval expires. |
+| `ep_hold_interval` | `holdIntvl` | `int` | — | `300` | A time period during which new endpoint learn events will not be honored. This interval is triggered when the maximum endpoint move frequency is exceeded. |
+| `local_ep_age_interval` | `localEpAgeIntvl` | `int` | — | `900` | The aging interval for all local endpoints learned in this bridge domain. When 75% of the interval is reached, 3 ARP requests are sent to verify the existence of the endpoint. If no response is received, the endpoint is deleted. |
+| `ep_move_frequency` | `moveFreq` | `int` | — | `256` | A maximum allowed number of endpoint moves per second. If the move frequency is exceeded, the hold interval is triggered, and new endpoint learn events will not be honored until after the hold interval expires. |
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |
-| `remote_ep_age_interval` | `remoteEpAgeIntvl` | `str` | — | — | The aging interval for all remote endpoints learned in this bridge domain. |
+| `remote_ep_age_interval` | `remoteEpAgeIntvl` | `int` | — | `300` | The aging interval for all remote endpoints learned in this bridge domain. |

@@ -38,7 +38,8 @@ class telemetryStatsStreamP(ManagedObject):
     # ── Configurable ───────────────────────────────────────────────────────────
     administrative_state: TelemetryAdminState = Field(
         default=TelemetryAdminState.DISABLED,
-        alias="adminSt",
+        validation_alias="adminSt",
+        serialization_alias="adminSt",
         description="The administrative state of the object or policy.",
     )
     annotation: Annotated[
@@ -50,9 +51,27 @@ class telemetryStatsStreamP(ManagedObject):
         ),
     ] = ""
     collection_interval_in_milliseconds: Annotated[
-        int, Field(ge=0, le=1000, alias="apicCollectIntvl")
+        int,
+        Field(
+            ge=0,
+            le=1000,
+            validation_alias="apicCollectIntvl",
+            serialization_alias="apicCollectIntvl",
+        ),
     ] = 30
-    number_of_stats_to_bulk: Annotated[int, Field(alias="bulkCount")] = 500
-    switch_collect_intvl: Annotated[int, Field(ge=0, le=1000, alias="switchCollectIntvl")] = 30
-    topic_associated_with_server: Annotated[str, Field(max_length=512, alias="topic")] = ""
+    number_of_stats_to_bulk: Annotated[
+        int, Field(validation_alias="bulkCount", serialization_alias="bulkCount")
+    ] = 500
+    switch_collect_intvl: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=1000,
+            validation_alias="switchCollectIntvl",
+            serialization_alias="switchCollectIntvl",
+        ),
+    ] = 30
+    topic_associated_with_server: Annotated[
+        str, Field(max_length=512, validation_alias="topic", serialization_alias="topic")
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

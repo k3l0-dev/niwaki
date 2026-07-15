@@ -61,7 +61,8 @@ class l2extRsEBd(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9_.-]+$",
-            alias="tnFvBDName",
+            validation_alias="tnFvBDName",
+            serialization_alias="tnFvBDName",
             description="The name of the bridge domain getting extended outside through the L2 outside profile. This name can be up to 64 alphanumeric characters. Note that you cannot change this name after the object has been saved.",
         ),
     ] = ""

@@ -3,7 +3,10 @@
 from __future__ import annotations
 
 from typing import ClassVar, Annotated
-from pydantic import Field
+from pydantic import BeforeValidator, Field
+
+from niwaki.models._wire import Flags, parse_flags
+from niwaki.models._generated.enums.DbgexpServiceType import DbgexpServiceType
 
 from niwaki.models.base import ManagedObject
 
@@ -37,7 +40,11 @@ class dbgexpTechSupData(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    policy_name: Annotated[str, Field(alias="feature")]
+    policy_name: Annotated[Flags[DbgexpServiceType], BeforeValidator(parse_flags)] = Field(
+        default_factory=lambda: frozenset({DbgexpServiceType.SYSTEM}),
+        validation_alias="feature",
+        serialization_alias="feature",
+    )
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[
@@ -50,6 +57,12 @@ class dbgexpTechSupData(ManagedObject):
     ] = ""
     name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

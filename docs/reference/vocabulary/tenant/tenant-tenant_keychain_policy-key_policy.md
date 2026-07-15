@@ -23,7 +23,7 @@ Accepted as keyword arguments of `.key_policy(key_id)` and of `.set(**attrs)` on
 
 | parameter | wire | type | values | default | description |
 | --- | --- | --- | --- | --- | --- |
-| `key_id` *(positional)* | `id` | `str` | — | — | An object identifier. |
+| `key_id` *(positional)* | `id` | `int` | — | — | An object identifier. |
 | `description` | `descr` | `str` | — | — | Specifies a description of the policy definition. |
 | `end_time` | `endTime` | `str` | — | — | end time |
 | `name` | `name` | `str` | — | — | — |

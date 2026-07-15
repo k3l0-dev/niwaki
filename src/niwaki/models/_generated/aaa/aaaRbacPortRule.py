@@ -60,24 +60,48 @@ class aaaRbacPortRule(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
     domain: Annotated[str, Field(description="The domain of the counts object.")] = ""
-    from_module_id: str = Field(
-        default="", alias="fromCard", description="The first port in the fabric card's port range."
-    )
-    from_port_id: str = Field(default="", alias="fromPort", description="The port block from port.")
+    from_module_id: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=255,
+            validation_alias="fromCard",
+            serialization_alias="fromCard",
+            description="The first port in the fabric card's port range.",
+        ),
+    ] = 1
+    from_port_id: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=127,
+            validation_alias="fromPort",
+            serialization_alias="fromPort",
+            description="The port block from port.",
+        ),
+    ] = 1
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     owner_key: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerKey",
+            validation_alias="ownerKey",
+            serialization_alias="ownerKey",
             description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
@@ -86,17 +110,35 @@ class aaaRbacPortRule(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerTag",
+            validation_alias="ownerTag",
+            serialization_alias="ownerTag",
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
-    to_module_id: str = Field(
-        default="", alias="toCard", description="The last port in the fabric card's port range."
-    )
-    to_port_id: str = Field(default="", alias="toPort", description="The fabric card's port.")
+    to_module_id: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=255,
+            validation_alias="toCard",
+            serialization_alias="toCard",
+            description="The last port in the fabric card's port range.",
+        ),
+    ] = 1
+    to_port_id: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=127,
+            validation_alias="toPort",
+            serialization_alias="toPort",
+            description="The fabric card's port.",
+        ),
+    ] = 1
     selector_type: AaaSelector = Field(
         default=AaaSelector.ALL,
-        alias="type",
+        validation_alias="type",
+        serialization_alias="type",
         description="The specific type of the object or component.",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

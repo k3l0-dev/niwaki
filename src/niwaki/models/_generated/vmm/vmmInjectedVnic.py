@@ -40,7 +40,8 @@ class vmmInjectedVnic(ManagedObject):
         str,
         Field(
             pattern="^([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}$",
-            alias="mac",
+            validation_alias="mac",
+            serialization_alias="mac",
             description="The MAC address.",
         ),
     ]
@@ -59,7 +60,8 @@ class vmmInjectedVnic(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="The description of this configuration item.",
         ),
     ] = ""
@@ -71,5 +73,7 @@ class vmmInjectedVnic(ManagedObject):
         ),
     ] = ""
     name: Annotated[str, Field(max_length=128, description="The name of the object.")] = ""
-    display_name: Annotated[str, Field(max_length=128, alias="nameAlias")] = ""
+    display_name: Annotated[
+        str, Field(max_length=128, validation_alias="nameAlias", serialization_alias="nameAlias")
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

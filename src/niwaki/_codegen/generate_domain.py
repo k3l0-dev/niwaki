@@ -302,8 +302,7 @@ def _build_child_map(
         ``(child_map, collisions_resolved)``
     """
     # Pass 1 ── accumulate (parent, method) → [(child_cls, is_explicit), …]
-    Slot = list[tuple[str, bool]]
-    slots: dict[str, dict[str, Slot]] = defaultdict(lambda: defaultdict(list))
+    slots: dict[str, dict[str, list[tuple[str, bool]]]] = defaultdict(lambda: defaultdict(list))
 
     for child_cls, info in classes.items():
         is_explicit = child_cls in jargon

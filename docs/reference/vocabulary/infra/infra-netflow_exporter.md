@@ -25,9 +25,9 @@ Accepted as keyword arguments of `.netflow_exporter(name)` and of `.set(**attrs)
 | --- | --- | --- | --- | --- | --- |
 | `name` *(positional)* | `name` | `str` | — | — | The name of the object. |
 | `description` | `descr` | `str` | — | — | The description of this configuration item. |
-| `qos_dscp_value` | `dscp` | `str` | — | — | IP dscp value |
+| `qos_dscp_value` | `dscp` | `int` | — | `CS2` | IP dscp value |
 | `remote_entity_ip` | `dstAddr` | `str` | — | — | Remote node destination IP address |
-| `remote_entity_l4_port` | `dstPort` | `str` | — | — | Remote node destination port |
+| `remote_entity_l4_port` | `dstPort` | `int` | — | `unspecified` | Remote node destination port |
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |
 | `source_ip_type` | `sourceIpType` | {ref}`NetflowSrcIpType <enum-netflowsrciptype>` | `custom-src-ip`, `inband-mgmt-ip`, `oob-mgmt-ip`, `ptep` | `custom-src-ip` | — |

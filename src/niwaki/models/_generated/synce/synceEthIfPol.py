@@ -56,7 +56,10 @@ class synceEthIfPol(ManagedObject):
 
     # ── Configurable ───────────────────────────────────────────────────────────
     admin_state: NwAdminSt = Field(
-        default=NwAdminSt.DISABLED, alias="adminSt", description="Admin State"
+        default=NwAdminSt.DISABLED,
+        validation_alias="adminSt",
+        serialization_alias="adminSt",
+        description="Admin State",
     )
     annotation: Annotated[
         str,
@@ -71,19 +74,27 @@ class synceEthIfPol(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     owner_key: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerKey",
+            validation_alias="ownerKey",
+            serialization_alias="ownerKey",
             description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
@@ -92,33 +103,39 @@ class synceEthIfPol(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerTag",
+            validation_alias="ownerTag",
+            serialization_alias="ownerTag",
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
     quality_transmit_exact_ql_option_type: SynceQloptype = Field(
         default=SynceQloptype.NONE,
-        alias="qloptype",
+        validation_alias="qloptype",
+        serialization_alias="qloptype",
         description="quality transmit exact option type",
     )
     quality_receive_exact_ql_value: SynceQlvalue = Field(
         default=SynceQlvalue.FSYNC_QL_COMMON_NONE,
-        alias="qlrcvexactval",
+        validation_alias="qlrcvexactval",
+        serialization_alias="qlrcvexactval",
         description="quality receive exact value",
     )
     quality_receive_highest_ql_value: SynceQlvalue = Field(
         default=SynceQlvalue.FSYNC_QL_COMMON_NONE,
-        alias="qlrcvhval",
+        validation_alias="qlrcvhval",
+        serialization_alias="qlrcvhval",
         description="quality receive highest value",
     )
     quality_receive_lowest_ql_value: SynceQlvalue = Field(
         default=SynceQlvalue.FSYNC_QL_COMMON_NONE,
-        alias="qlrcvlval",
+        validation_alias="qlrcvlval",
+        serialization_alias="qlrcvlval",
         description="quality receive lowest value",
     )
     quality_transmit_exact_ql_value: SynceQlvalue = Field(
         default=SynceQlvalue.FSYNC_QL_COMMON_NONE,
-        alias="qltxexactval",
+        validation_alias="qltxexactval",
+        serialization_alias="qltxexactval",
         description="quality receive exact option typequality transmit exact value",
     )
     qltxhval: SynceQlvalue = Field(
@@ -126,19 +143,33 @@ class synceEthIfPol(ManagedObject):
     )
     quality_transmit_lowest_ql_value: SynceQlvalue = Field(
         default=SynceQlvalue.FSYNC_QL_COMMON_NONE,
-        alias="qltxlval",
+        validation_alias="qltxlval",
+        serialization_alias="qltxlval",
         description="quality transmit lowest value",
     )
     selection_configuration: bool = Field(
-        default=False, alias="selinput", description="selection input"
+        default=False,
+        validation_alias="selinput",
+        serialization_alias="selinput",
+        description="selection input",
     )
-    source_priority_1_254_default100: str = Field(default="", alias="srcpriority")
+    source_priority_1_254_default100: Annotated[
+        int, Field(ge=1, le=254, validation_alias="srcpriority", serialization_alias="srcpriority")
+    ] = 100
     ssm_configuration_enable_disable: bool = Field(
-        default=True, alias="ssm", description="ssm enabled/disabled"
+        default=True,
+        validation_alias="ssm",
+        serialization_alias="ssm",
+        description="ssm enabled/disabled",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    wait_to_restore_time: str = Field(
-        default="",
-        alias="wtr",
-        description="Time-of-the-day prioritywait-to-restore time value in minutes",
-    )
+    wait_to_restore_time: Annotated[
+        int,
+        Field(
+            ge=0,
+            le=12,
+            validation_alias="wtr",
+            serialization_alias="wtr",
+            description="Time-of-the-day prioritywait-to-restore time value in minutes",
+        ),
+    ] = 5

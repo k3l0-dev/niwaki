@@ -55,10 +55,20 @@ class infraRsAccBaseGrp(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    fex_id: str = Field(default="", alias="fexId", description="The interface policy group FEX ID.")
+    fex_id: Annotated[
+        int,
+        Field(
+            ge=101,
+            le=199,
+            validation_alias="fexId",
+            serialization_alias="fexId",
+            description="The interface policy group FEX ID.",
+        ),
+    ] = 101
     target_dn: str = Field(
         default="",
-        alias="tDn",
+        validation_alias="tDn",
+        serialization_alias="tDn",
         description="Select or create an interface policy group to associate to the Access Port selector.",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

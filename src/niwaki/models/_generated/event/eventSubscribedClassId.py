@@ -34,7 +34,9 @@ class eventSubscribedClassId(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    sub_class_id: Annotated[str, Field(alias="subClassId")]
+    sub_class_id: Annotated[
+        str, Field(validation_alias="subClassId", serialization_alias="subClassId")
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[

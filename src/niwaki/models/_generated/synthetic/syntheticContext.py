@@ -3,9 +3,11 @@
 from __future__ import annotations
 
 from typing import ClassVar, Annotated
-from pydantic import Field
+from pydantic import BeforeValidator, Field
 
+from niwaki.models._wire import Flags, parse_flags
 from niwaki.models._generated.enums.ScalarEnum82 import ScalarEnum82
+from niwaki.models._generated.enums.SyntheticBitState import SyntheticBitState
 from niwaki.models._generated.enums.SyntheticTrigState import SyntheticTrigState
 
 from niwaki.models.base import ManagedObject
@@ -53,16 +55,21 @@ class syntheticContext(ManagedObject):
     ]
 
     # ── Create-only (ignored by APIC on modification) ─────────────────────────
-    num_eps: Annotated[int, Field(alias="numEps")] = 0
-    num_groups: Annotated[int, Field(alias="numGroups")] = 0
-    sec_key: Annotated[int, Field(alias="secKey")] = 0
+    num_eps: Annotated[int, Field(validation_alias="numEps", serialization_alias="numEps")] = 0
+    num_groups: Annotated[
+        int, Field(validation_alias="numGroups", serialization_alias="numGroups")
+    ] = 0
+    sec_key: Annotated[int, Field(validation_alias="secKey", serialization_alias="secKey")] = 0
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    a_if_index_array: str = Field(default="", alias="aIfIndexArray")
+    a_if_index_array: str = Field(
+        default="", validation_alias="aIfIndexArray", serialization_alias="aIfIndexArray"
+    )
     abitarray: str = ""
     admin_state: ScalarEnum82 = Field(
         default=ScalarEnum82.ENABLED,
-        alias="adminState",
+        validation_alias="adminState",
+        serialization_alias="adminState",
         description="The destination policy administrative state. If enabled, the system uses the destination policy when an error matching the associated cause is encountered. Otherwise, the system ignores the policy even if a matching error occurs. By default, all policies are enabled.",
     )
     amac: Annotated[str, Field(pattern="^([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}$")] = ""
@@ -80,13 +87,21 @@ class syntheticContext(ManagedObject):
     auint32array: str = ""
     auint64array: str = ""
     auint8array: str = ""
-    bits: str = ""
+    bits: Annotated[Flags[SyntheticBitState], BeforeValidator(parse_flags)] = Field(
+        default_factory=lambda: frozenset()
+    )
     descr: Annotated[
         str, Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$")
     ] = ""
-    id: Annotated[str, Field(description="An identifier .")] = ""
+    id: Annotated[int, Field(description="An identifier .")] = 0
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     state: ScalarEnum82 = Field(
         default=ScalarEnum82.ENABLED, description="Represents the state of the relationship."

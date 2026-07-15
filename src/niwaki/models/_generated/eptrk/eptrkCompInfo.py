@@ -39,7 +39,15 @@ class eptrkCompInfo(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name: Annotated[str, Field(min_length=1, max_length=512, alias="compName")]
+    name: Annotated[
+        str,
+        Field(
+            min_length=1,
+            max_length=512,
+            validation_alias="compName",
+            serialization_alias="compName",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[
@@ -50,10 +58,13 @@ class eptrkCompInfo(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    debug_internal_data: str = Field(default="", alias="dbgInternalData")
+    debug_internal_data: str = Field(
+        default="", validation_alias="dbgInternalData", serialization_alias="dbgInternalData"
+    )
     operational_state_qualifier: EptrkOperStQual = Field(
         default=EptrkOperStQual.OK,
-        alias="operStQual",
+        validation_alias="operStQual",
+        serialization_alias="operStQual",
         description="The chassis operational status qualifier.",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

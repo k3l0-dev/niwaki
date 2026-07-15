@@ -45,7 +45,9 @@ class tracerouteExecFab(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    destination_node_id: Annotated[str, Field(alias="dstNodeId")]
+    destination_node_id: Annotated[
+        int, Field(ge=1, le=16000, validation_alias="dstNodeId", serialization_alias="dstNodeId")
+    ] = 1
     name: Annotated[
         str,
         Field(
@@ -55,12 +57,15 @@ class tracerouteExecFab(ManagedObject):
             description="The name of the object.",
         ),
     ]
-    source_node_id: Annotated[str, Field(alias="srcNodeId")]
+    source_node_id: Annotated[
+        int, Field(ge=1, le=16000, validation_alias="srcNodeId", serialization_alias="srcNodeId")
+    ] = 1
 
     # ── Configurable ───────────────────────────────────────────────────────────
     admin_state: ActionAdminSt = Field(
         default=ActionAdminSt.UNKNOWN,
-        alias="adminSt",
+        validation_alias="adminSt",
+        serialization_alias="adminSt",
         description="The administrative state of the object or policy.",
     )
     annotation: Annotated[
@@ -73,51 +78,105 @@ class tracerouteExecFab(ManagedObject):
     ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            validation_alias="descr",
+            serialization_alias="descr",
+        ),
     ] = ""
-    destination_port_end: str = Field(default="", alias="destPortEnd")
-    destination_port_start: str = Field(default="", alias="destPortStart")
+    destination_port_end: Annotated[
+        int,
+        Field(ge=0, le=65535, validation_alias="destPortEnd", serialization_alias="destPortEnd"),
+    ] = 65535
+    destination_port_start: Annotated[
+        int,
+        Field(
+            ge=0, le=65535, validation_alias="destPortStart", serialization_alias="destPortStart"
+        ),
+    ] = 0
     do_ext_traceroute: TracerouteExtTracerouteFlag = Field(
-        default=TracerouteExtTracerouteFlag.TRUE, alias="doExtTraceroute"
+        default=TracerouteExtTracerouteFlag.TRUE,
+        validation_alias="doExtTraceroute",
+        serialization_alias="doExtTraceroute",
     )
     destination_ip: Annotated[
         str,
         Field(
-            pattern="^[0-9a-fA-F.:/ ]+$", alias="dstIp", description="The destination IP address."
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            validation_alias="dstIp",
+            serialization_alias="dstIp",
+            description="The destination IP address.",
         ),
     ] = ""
     destination_mac: Annotated[
         str,
         Field(
             pattern="^([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}$",
-            alias="dstMac",
+            validation_alias="dstMac",
+            serialization_alias="dstMac",
             description="Specifies the destination MAC address for the rule.",
         ),
     ] = ""
-    external_interval: str = Field(default="", alias="extInterval")
-    max_hops: str = Field(default="", alias="extMaxHops")
-    ext_max_probes_per_path: str = Field(default="", alias="extMaxProbesPerPath")
-    external_timeout: str = Field(default="", alias="extTimeout")
+    external_interval: str = Field(
+        default="", validation_alias="extInterval", serialization_alias="extInterval"
+    )
+    ext_max_hops: Annotated[
+        int, Field(ge=1, le=255, validation_alias="extMaxHops", serialization_alias="extMaxHops")
+    ] = 32
+    ext_max_probes_per_path: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=512,
+            validation_alias="extMaxProbesPerPath",
+            serialization_alias="extMaxProbesPerPath",
+        ),
+    ] = 5
+    external_timeout: str = Field(
+        default="", validation_alias="extTimeout", serialization_alias="extTimeout"
+    )
     task_frequency: str = Field(
-        default="", alias="freq", description="Frequency at which tasks are executed"
-    )
-    max_hops: str = Field(
         default="",
-        alias="maxHops",
-        description="Indicates the maximum number of hops that the traceroute took to reach the destination.",
+        validation_alias="freq",
+        serialization_alias="freq",
+        description="Frequency at which tasks are executed",
     )
-    max_paths: str = Field(default="", alias="maxPaths")
-    payload_size: str = Field(
-        default="", alias="payloadSz", description="Indicates the payload size."
-    )
+    max_hops: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=255,
+            validation_alias="maxHops",
+            serialization_alias="maxHops",
+            description="Indicates the maximum number of hops that the traceroute took to reach the destination.",
+        ),
+    ] = 32
+    max_paths: Annotated[
+        int, Field(ge=1, le=512, validation_alias="maxPaths", serialization_alias="maxPaths")
+    ] = 100
+    payload_size: Annotated[
+        int,
+        Field(
+            ge=20,
+            le=9144,
+            validation_alias="payloadSz",
+            serialization_alias="payloadSz",
+            description="Indicates the payload size.",
+        ),
+    ] = 56
     protocol_type: TracerouteProtT = Field(
-        default=TracerouteProtT.UDP, alias="prot", description="The IP protocol."
+        default=TracerouteProtT.UDP,
+        validation_alias="prot",
+        serialization_alias="prot",
+        description="The IP protocol.",
     )
     source_ip: Annotated[
         str,
         Field(
             pattern="^[0-9a-fA-F.:/ ]+$",
-            alias="srcIp",
+            validation_alias="srcIp",
+            serialization_alias="srcIp",
             description="The source IP address. Traffic from this IP address to the EP is counted",
         ),
     ] = ""
@@ -125,14 +184,26 @@ class tracerouteExecFab(ManagedObject):
         str,
         Field(
             pattern="^([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}$",
-            alias="srcMac",
+            validation_alias="srcMac",
+            serialization_alias="srcMac",
             description="Specifies the source MAC address for the rule.",
         ),
     ] = ""
-    source_port_end: str = Field(default="", alias="srcPortEnd")
-    source_port_start: str = Field(default="", alias="srcPortStart")
+    source_port_end: Annotated[
+        int, Field(ge=0, le=65535, validation_alias="srcPortEnd", serialization_alias="srcPortEnd")
+    ] = 65535
+    source_port_start: Annotated[
+        int,
+        Field(ge=0, le=65535, validation_alias="srcPortStart", serialization_alias="srcPortStart"),
+    ] = 0
     tenant_name: Annotated[
-        str, Field(max_length=16, pattern="^[a-zA-Z0-9_.:-]+$", alias="tenant")
+        str,
+        Field(
+            max_length=16,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            validation_alias="tenant",
+            serialization_alias="tenant",
+        ),
     ] = ""
     type: ActionType = Field(
         default=ActionType.CLEAR, description="The specific type of the object or component."
@@ -141,5 +212,10 @@ class tracerouteExecFab(ManagedObject):
     vrf: Annotated[
         str, Field(max_length=512, description="Identifies the VRF for the NTP providers")
     ] = ""
-    vtep_ip: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="vtep")] = ""
-    vtep_encapsulation: str = Field(default="", alias="vtepEncap")
+    vtep_ip: Annotated[
+        str,
+        Field(pattern="^[0-9a-fA-F.:/ ]+$", validation_alias="vtep", serialization_alias="vtep"),
+    ] = ""
+    vtep_encapsulation: str = Field(
+        default="", validation_alias="vtepEncap", serialization_alias="vtepEncap"
+    )

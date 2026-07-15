@@ -22,5 +22,5 @@ Accepted as keyword arguments of `.bgp_best_path_control_policy(name)` and of `.
 | parameter | wire | type | values | default | description |
 | --- | --- | --- | --- | --- | --- |
 | `name` *(positional)* | `name` | `str` | — | — | The name of the object. |
-| `best_path_control` | `ctrl` | {ref}`BgpPathCtrlType <enum-bgppathctrltype>` | `asPathMultipathRelax` | `asPathMultipathRelax` | Best Path control |
+| `best_path_control` | `ctrl` | {ref}`BgpPathCtrlType <enum-bgppathctrltype>` | `asPathMultipathRelax` | — | Best Path control |
 | `description` | `descr` | `str` | — | — | Specifies the description of a policy component. |

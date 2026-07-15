@@ -60,7 +60,8 @@ class infraRsLeafPGrpToCdpIfPol(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9_.:-]+$",
-            alias="tnCdpIfPolName",
+            validation_alias="tnCdpIfPolName",
+            serialization_alias="tnCdpIfPolName",
             description="The CDP policy name.",
         ),
     ] = ""

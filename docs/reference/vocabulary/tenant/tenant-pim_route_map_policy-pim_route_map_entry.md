@@ -23,7 +23,7 @@ Accepted as keyword arguments of `.pim_route_map_entry(order)` and of `.set(**at
 
 | parameter | wire | type | values | default | description |
 | --- | --- | --- | --- | --- | --- |
-| `order` *(positional)* | `order` | `str` | — | — | PIM route map entry order |
+| `order` *(positional)* | `order` | `int` | — | — | PIM route map entry order |
 | `action` | `action` | {ref}`RtdmcRtMapAction <enum-rtdmcrtmapaction>` | `deny`, `permit` | `permit` | route action |
 | `description` | `descr` | `str` | — | — | Specifies the description of a policy component. |
 | `destination_filter` | `grp` | `str` | — | — | Multicast group ip/prefix |

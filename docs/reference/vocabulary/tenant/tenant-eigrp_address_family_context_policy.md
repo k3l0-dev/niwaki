@@ -24,11 +24,11 @@ Accepted as keyword arguments of `.eigrp_address_family_context_policy(name)` an
 | parameter | wire | type | values | default | description |
 | --- | --- | --- | --- | --- | --- |
 | `name` *(positional)* | `name` | `str` | — | — | The EIGRP Address Family Context policy name. |
-| `active_timer` | `actIntvl` | `str` | — | — | The active timer interval, which specifies the length of time an EIGRP route can stay in the Active state without a best path. When the time ends, the route is moved to the Stuck-In-Active state. |
+| `active_timer` | `actIntvl` | `int` | — | `3` | The active timer interval, which specifies the length of time an EIGRP route can stay in the Active state without a best path. When the time ends, the route is moved to the Stuck-In-Active state. |
 | `description` | `descr` | `str` | — | — | Specifies a description of the policy definition. |
-| `external_distance` | `extDist` | `str` | — | — | The administrative distance preference for external routes. |
-| `internal_distance` | `intDist` | `str` | — | — | The administrative distance preference for internal routes. |
-| `maximum_ecmp_paths` | `maxPaths` | `str` | — | — | The maximum number of equal cost different paths. |
+| `external_distance` | `extDist` | `int` | — | `170` | The administrative distance preference for external routes. |
+| `internal_distance` | `intDist` | `int` | — | `90` | The administrative distance preference for internal routes. |
+| `maximum_ecmp_paths` | `maxPaths` | `int` | — | `8` | The maximum number of equal cost different paths. |
 | `metric_style` | `metricStyle` | {ref}`EigrpMetricStyle <enum-eigrpmetricstyle>` | `narrow`, `wide` | `narrow` | The metric version used for metric calculations. EIRGP supports 32 and 64 bit metrics. |
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |

@@ -53,14 +53,33 @@ class vmmCapInfo(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    count_of_hypervisors: Annotated[int, Field(alias="countHvs")] = 0
-    count_of_virtual_machines: Annotated[int, Field(alias="countVms")] = 0
-    count_of_virtual_machines_per_hypervisor: str = Field(default="", alias="countVmsPerHv")
+    count_of_hypervisors: Annotated[
+        int, Field(validation_alias="countHvs", serialization_alias="countHvs")
+    ] = 0
+    count_of_virtual_machines: Annotated[
+        int, Field(validation_alias="countVms", serialization_alias="countVms")
+    ] = 0
+    count_of_virtual_machines_per_hypervisor: Annotated[
+        float, Field(validation_alias="countVmsPerHv", serialization_alias="countVmsPerHv")
+    ] = 0.0
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     node: Annotated[
-        int, Field(alias="nodeId", description="The ID of the APIC, leaf, or spine.")
+        int,
+        Field(
+            validation_alias="nodeId",
+            serialization_alias="nodeId",
+            description="The ID of the APIC, leaf, or spine.",
+        ),
     ] = 0
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    percentage_of_virtualization: str = Field(default="", alias="virt")
+    percentage_of_virtualization: Annotated[
+        float, Field(validation_alias="virt", serialization_alias="virt")
+    ] = 0.0

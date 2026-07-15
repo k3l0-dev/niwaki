@@ -42,7 +42,8 @@ class l3CtxClearEpLTask(ManagedObject):
     # ── Configurable ───────────────────────────────────────────────────────────
     admin_state: ActionAdminSt = Field(
         default=ActionAdminSt.UNKNOWN,
-        alias="adminSt",
+        validation_alias="adminSt",
+        serialization_alias="adminSt",
         description="The administrative state of the object or policy.",
     )
     annotation: Annotated[
@@ -55,10 +56,18 @@ class l3CtxClearEpLTask(ManagedObject):
     ] = ""
     description: Annotated[
         str,
-        Field(max_length=128, pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$", alias="descr"),
+        Field(
+            max_length=128,
+            pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
+            validation_alias="descr",
+            serialization_alias="descr",
+        ),
     ] = ""
     task_frequency: str = Field(
-        default="", alias="freq", description="Frequency at which tasks are executed"
+        default="",
+        validation_alias="freq",
+        serialization_alias="freq",
+        description="Frequency at which tasks are executed",
     )
     remote: L3flushType = L3flushType.MAC_IP
     type: ActionType = Field(

@@ -97,11 +97,11 @@ class _FabricMembershipMakers(Cursor):
         self,
         serial: str,
         *,
-        ext_pool_id: str | None = None,
-        fabric_id: str | None = None,
-        id: str | None = None,
+        ext_pool_id: int | None = None,
+        fabric_id: int | None = None,
+        id: int | None = None,
         node_type: TopNodeType | str | None = None,
-        pod_id: str | None = None,
+        pod_id: int | None = None,
         role: TopNodeRoleP | str | None = None,
         annotation: str | None = None,
         description: str | None = None,
@@ -115,8 +115,12 @@ class _FabricMembershipMakers(Cursor):
 
         Args:
             serial: The node manufacturer serial number.
+            ext_pool_id: Default: ``0``.
+            fabric_id: Default: ``1``.
+            id: Default: ``0``.
             node_type: Values: ``remote-leaf-wan``, ``tier-2-leaf``, ``unspecified``,
                 ``virtual``. Default: ``unspecified``.
+            pod_id: Default: ``1``.
             role: The system role type. Values: ``leaf``, ``spine``, ``unspecified``. Default:
                 ``unspecified``.
             annotation: User annotation. Suggested format orchestrator:value
@@ -179,11 +183,11 @@ class FabricNodeMemberCursor(_FabricMembershipMakers, _ControllerMakers, _UniMak
     def set(
         self,
         *,
-        ext_pool_id: str | None = None,
-        fabric_id: str | None = None,
-        id: str | None = None,
+        ext_pool_id: int | None = None,
+        fabric_id: int | None = None,
+        id: int | None = None,
         node_type: TopNodeType | str | None = None,
-        pod_id: str | None = None,
+        pod_id: int | None = None,
         role: TopNodeRoleP | str | None = None,
         annotation: str | None = None,
         description: str | None = None,

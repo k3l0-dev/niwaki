@@ -56,31 +56,53 @@ class aaaKafkaTopic(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    clean_dirty_segment_ratio: Annotated[str, Field(max_length=128, alias="cleanDirtyRatio")] = ""
+    clean_dirty_segment_ratio: Annotated[
+        str,
+        Field(
+            max_length=128,
+            validation_alias="cleanDirtyRatio",
+            serialization_alias="cleanDirtyRatio",
+        ),
+    ] = ""
     topic_cleanup_policy: AaaKafkaTopicCleanupType = Field(
-        default=AaaKafkaTopicCleanupType.DELETE, alias="cleanupPolicy"
+        default=AaaKafkaTopicCleanupType.DELETE,
+        validation_alias="cleanupPolicy",
+        serialization_alias="cleanupPolicy",
     )
     topic_delete_retention_time_in_ms: Annotated[
-        str, Field(max_length=128, alias="deleteRetentionMs")
+        str,
+        Field(
+            max_length=128,
+            validation_alias="deleteRetentionMs",
+            serialization_alias="deleteRetentionMs",
+        ),
     ] = ""
     description: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     owner_key: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerKey",
+            validation_alias="ownerKey",
+            serialization_alias="ownerKey",
             description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
@@ -89,16 +111,30 @@ class aaaKafkaTopic(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerTag",
+            validation_alias="ownerTag",
+            serialization_alias="ownerTag",
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
-    number_of_topic_partitions: str = Field(
-        default="", alias="partition", description="An ISIS link-state packet partition flag."
-    )
-    number_of_topic_replicas: str = Field(default="", alias="replica")
+    number_of_topic_partitions: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=1024,
+            validation_alias="partition",
+            serialization_alias="partition",
+            description="An ISIS link-state packet partition flag.",
+        ),
+    ] = 0
+    number_of_topic_replicas: Annotated[
+        int, Field(ge=1, le=16, validation_alias="replica", serialization_alias="replica")
+    ] = 0
     replica_assignment: AaaKafkaTopicType = Field(
-        default=AaaKafkaTopicType.ANY, alias="replicaAssignment"
+        default=AaaKafkaTopicType.ANY,
+        validation_alias="replicaAssignment",
+        serialization_alias="replicaAssignment",
     )
-    topic_segmentation_interval_in_ms: Annotated[str, Field(max_length=128, alias="segmentMs")] = ""
+    topic_segmentation_interval_in_ms: Annotated[
+        str, Field(max_length=128, validation_alias="segmentMs", serialization_alias="segmentMs")
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

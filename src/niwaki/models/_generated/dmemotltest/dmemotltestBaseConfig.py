@@ -45,10 +45,20 @@ class dmemotltestBaseConfig(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    cfg_prop0: Annotated[int, Field(alias="cfgProp0")] = 0
-    db_size: Annotated[int, Field(alias="dbSize")] = 0
+    cfg_prop0: Annotated[
+        int, Field(validation_alias="cfgProp0", serialization_alias="cfgProp0")
+    ] = 0
+    db_size: Annotated[int, Field(validation_alias="dbSize", serialization_alias="dbSize")] = 0
     log_path: Annotated[
-        str, Field(max_length=512, alias="logPath", description="Config properties")
+        str,
+        Field(
+            max_length=512,
+            validation_alias="logPath",
+            serialization_alias="logPath",
+            description="Config properties",
+        ),
     ] = ""
-    notify_flag: str = Field(default="", alias="notifyFlag")
+    notify_flag: Annotated[
+        int, Field(validation_alias="notifyFlag", serialization_alias="notifyFlag")
+    ] = 0
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

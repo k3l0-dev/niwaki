@@ -26,8 +26,8 @@ Accepted as keyword arguments of `.bfd_multihop_node_policy(name)` and of `.set(
 | `name` *(positional)* | `name` | `str` | — | — | The name of the object. |
 | `enable_disable_sessions` | `adminSt` | {ref}`NwAdminSt <enum-nwadminst>` | `disabled`, `enabled` | `enabled` | Enable/Disable sessions |
 | `description` | `descr` | `str` | — | — | Specifies a description of the policy definition. |
-| `detection_multiplier` | `detectMult` | `str` | — | — | Detection multiplier. |
-| `required_minimum_rx_interval` | `minRxIntvl` | `str` | — | — | Required minimum rx interval. |
-| `desired_minimum_tx_interval` | `minTxIntvl` | `str` | — | — | Desired minimum tx interval. |
+| `detection_multiplier` | `detectMult` | `int` | — | `3` | Detection multiplier. |
+| `required_minimum_rx_interval` | `minRxIntvl` | `int` | — | `250` | Required minimum rx interval. |
+| `desired_minimum_tx_interval` | `minTxIntvl` | `int` | — | `250` | Desired minimum tx interval. |
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |

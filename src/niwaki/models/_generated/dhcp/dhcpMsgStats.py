@@ -38,7 +38,9 @@ class dhcpMsgStats(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    message_type: DhcpMsgT = Field(default=DhcpMsgT.DISCOVER, alias="type")
+    message_type: DhcpMsgT = Field(
+        default=DhcpMsgT.DISCOVER, validation_alias="type", serialization_alias="type"
+    )
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[

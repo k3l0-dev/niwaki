@@ -54,7 +54,8 @@ class pkiExportEncryptionKey(ManagedObject):
     ] = ""
     clear_encryption_key: bool = Field(
         default=False,
-        alias="clearEncryptionKey",
+        validation_alias="clearEncryptionKey",
+        serialization_alias="clearEncryptionKey",
         description="Setting this property to true will trigger the clearing of all fields in this mo, set the strongEncryptionEnabled policy to False and keyConfigured to False. There is no method to recover the previous passphrase before the clear operation.",
     )
     description: Annotated[
@@ -62,19 +63,27 @@ class pkiExportEncryptionKey(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     owner_key: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerKey",
+            validation_alias="ownerKey",
+            serialization_alias="ownerKey",
             description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
@@ -83,7 +92,8 @@ class pkiExportEncryptionKey(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerTag",
+            validation_alias="ownerTag",
+            serialization_alias="ownerTag",
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
@@ -96,12 +106,14 @@ class pkiExportEncryptionKey(ManagedObject):
     ] = ""
     passphrase_key_derivation_version: PkipassphraseKeyDerivationVersionType = Field(
         default=PkipassphraseKeyDerivationVersionType.V1,
-        alias="passphraseKeyDerivationVersion",
+        validation_alias="passphraseKeyDerivationVersion",
+        serialization_alias="passphraseKeyDerivationVersion",
         description="Version of the algorithm used - used for forward compatibility",
     )
     strong_encryption_enabled: bool = Field(
         default=False,
-        alias="strongEncryptionEnabled",
+        validation_alias="strongEncryptionEnabled",
+        serialization_alias="strongEncryptionEnabled",
         description="Toggle to choose between weak and strong encryption - this flag can be set to True only when keyConfigured=True",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

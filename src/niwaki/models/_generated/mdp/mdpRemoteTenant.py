@@ -49,20 +49,30 @@ class mdpRemoteTenant(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies the description of a policy component.",
         ),
     ] = ""
-    remote_domain_id: str = Field(default="", alias="domainId")
+    remote_domain_id: Annotated[
+        int, Field(ge=0, le=255, validation_alias="domainId", serialization_alias="domainId")
+    ] = 1
     name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     remote_tenant_name: Annotated[
         str,
         Field(
             max_length=512,
-            alias="tenant",
+            validation_alias="tenant",
+            serialization_alias="tenant",
             description="The tenant under which this traceroute policy is configured.",
         ),
     ] = ""

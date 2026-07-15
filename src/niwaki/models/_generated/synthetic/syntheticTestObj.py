@@ -38,13 +38,13 @@ class syntheticTestObj(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    dn_bin: Annotated[str, Field(alias="dnBin")]
-    dn_str: Annotated[str, Field(alias="dnStr")]
-    id: Annotated[str, Field(description="An identifier .")]
+    dn_bin: Annotated[str, Field(validation_alias="dnBin", serialization_alias="dnBin")]
+    dn_str: Annotated[str, Field(validation_alias="dnStr", serialization_alias="dnStr")]
+    id: Annotated[int, Field(description="An identifier .")] = 0
 
     # ── Create-only (ignored by APIC on modification) ─────────────────────────
-    num_eps: Annotated[int, Field(alias="numEps")] = 0
-    sec_key: Annotated[int, Field(alias="secKey")] = 0
+    num_eps: Annotated[int, Field(validation_alias="numEps", serialization_alias="numEps")] = 0
+    sec_key: Annotated[int, Field(validation_alias="secKey", serialization_alias="secKey")] = 0
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[
@@ -63,7 +63,13 @@ class syntheticTestObj(ManagedObject):
         Field(max_length=16, pattern="^[a-zA-Z0-9_.:-]+$", description="The name of the object."),
     ] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     state: ScalarEnum82 = Field(
         default=ScalarEnum82.ENABLED, description="Represents the state of the relationship."

@@ -53,15 +53,33 @@ class vmmInjectedHost(ManagedObject):
         str,
         Field(
             max_length=512,
-            alias="hostName",
+            validation_alias="hostName",
+            serialization_alias="hostName",
             description="The hostname of the router advertising the link-state packet.",
         ),
     ] = ""
-    id: Annotated[str, Field(description="An object identifier.")] = ""
-    kernel_version: Annotated[str, Field(max_length=512, alias="kernelVer")] = ""
-    management_ip: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="mgmtIp")] = ""
-    display_name: Annotated[str, Field(max_length=128, alias="nameAlias")] = ""
-    nested_vm_dn: str = Field(default="", alias="nestedVmDn")
-    operational_status: CompHostState = Field(default=CompHostState.UNKNOWN, alias="operStatus")
-    runtime_operating_system: Annotated[str, Field(max_length=512, alias="os")] = ""
+    id: Annotated[int, Field(description="An object identifier.")] = 0
+    kernel_version: Annotated[
+        str, Field(max_length=512, validation_alias="kernelVer", serialization_alias="kernelVer")
+    ] = ""
+    management_ip: Annotated[
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$", validation_alias="mgmtIp", serialization_alias="mgmtIp"
+        ),
+    ] = ""
+    display_name: Annotated[
+        str, Field(max_length=128, validation_alias="nameAlias", serialization_alias="nameAlias")
+    ] = ""
+    nested_vm_dn: str = Field(
+        default="", validation_alias="nestedVmDn", serialization_alias="nestedVmDn"
+    )
+    operational_status: CompHostState = Field(
+        default=CompHostState.UNKNOWN,
+        validation_alias="operStatus",
+        serialization_alias="operStatus",
+    )
+    runtime_operating_system: Annotated[
+        str, Field(max_length=512, validation_alias="os", serialization_alias="os")
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

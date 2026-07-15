@@ -54,28 +54,54 @@ class plannerL2OutTmpl(ManagedObject):
     ] = ""
     count: Annotated[int, Field(ge=1, le=4000000000)] = 1
     epg_deployment_preference: bool = Field(
-        default=False, alias="deployOnExisting", description="Deploy EPG on existing topology"
+        default=False,
+        validation_alias="deployOnExisting",
+        serialization_alias="deployOnExisting",
+        description="Deploy EPG on existing topology",
     )
     description: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies the description of a policy component.",
         ),
     ] = ""
     number_of_fex_ports: Annotated[
-        int, Field(alias="fexPorts", description="Number of fex ports (per leaf) in this l2out")
+        int,
+        Field(
+            validation_alias="fexPorts",
+            serialization_alias="fexPorts",
+            description="Number of fex ports (per leaf) in this l2out",
+        ),
     ] = 0
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     number_of_ports: Annotated[
-        int, Field(alias="ports", description="Number of ports (per leaf) in this l2out")
+        int,
+        Field(
+            validation_alias="ports",
+            serialization_alias="ports",
+            description="Number of ports (per leaf) in this l2out",
+        ),
     ] = 0
     epg_span: Annotated[
         int,
-        Field(ge=1, le=4000000000, alias="span", description="No of leafs this EPG deployed on"),
+        Field(
+            ge=1,
+            le=4000000000,
+            validation_alias="span",
+            serialization_alias="span",
+            description="No of leafs this EPG deployed on",
+        ),
     ] = 1
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

@@ -60,7 +60,8 @@ class fvRsBgpCtxPol(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9_.:-]+$",
-            alias="tnBgpCtxPolName",
+            validation_alias="tnBgpCtxPolName",
+            serialization_alias="tnBgpCtxPolName",
             description="Name of the BGP timers policy associated with this context.",
         ),
     ] = ""

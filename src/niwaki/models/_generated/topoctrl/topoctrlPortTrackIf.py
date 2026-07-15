@@ -38,11 +38,16 @@ class topoctrlPortTrackIf(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    interface_id: Annotated[str, Field(alias="id", description="Interface ID")]
+    interface_id: Annotated[
+        str, Field(validation_alias="id", serialization_alias="id", description="Interface ID")
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     administrative_state: L1AdminSt = Field(
-        default=L1AdminSt.DOWN, alias="adminSt", description="Administrative port state"
+        default=L1AdminSt.DOWN,
+        validation_alias="adminSt",
+        serialization_alias="adminSt",
+        description="Administrative port state",
     )
     annotation: Annotated[
         str,

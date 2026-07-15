@@ -3,7 +3,10 @@
 from __future__ import annotations
 
 from typing import ClassVar, Annotated
-from pydantic import Field
+from pydantic import BeforeValidator, Field
+
+from niwaki.models._wire import Flags, parse_flags
+from niwaki.models._generated.enums.BgpSpineRoleType import BgpSpineRoleType
 
 from niwaki.models.base import ManagedObject
 
@@ -51,25 +54,37 @@ class l3extInfraNodeP(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies the description of a policy component.",
         ),
     ] = ""
     fabric_external_control_peering: bool = Field(
         default=True,
-        alias="fabricExtCtrlPeering",
+        validation_alias="fabricExtCtrlPeering",
+        serialization_alias="fabricExtCtrlPeering",
         description="Enable/Disable participation of this node in peering for fabric external control traffic",
     )
     fabric_ext_intersite_ctrl_peering: bool = Field(
         default=False,
-        alias="fabricExtIntersiteCtrlPeering",
+        validation_alias="fabricExtIntersiteCtrlPeering",
+        serialization_alias="fabricExtIntersiteCtrlPeering",
         description="Enable/Disable participation of this node in peering for intersite control traffic",
     )
     name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
-    spine_role: str = Field(
-        default="", alias="spineRole", description="Spine role played by this node"
+    spine_role: Annotated[Flags[BgpSpineRoleType], BeforeValidator(parse_flags)] = Field(
+        default_factory=lambda: frozenset({BgpSpineRoleType.UNSPECIFIED}),
+        validation_alias="spineRole",
+        serialization_alias="spineRole",
+        description="Spine role played by this node",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

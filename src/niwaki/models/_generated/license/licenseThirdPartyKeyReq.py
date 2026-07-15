@@ -46,8 +46,8 @@ class licenseThirdPartyKeyReq(ManagedObject):
         ),
     ] = ""
     compliance: bool = False
-    id: Annotated[str, Field(description="An object identifier.")] = ""
-    key_id: str = ""
+    id: Annotated[int, Field(description="An object identifier.")] = 0
+    key_id: int = 0
     live: bool = False
     name: Annotated[str, Field(max_length=512, description="The name of the object.")] = ""
     routing: Annotated[str, Field(max_length=512)] = ""

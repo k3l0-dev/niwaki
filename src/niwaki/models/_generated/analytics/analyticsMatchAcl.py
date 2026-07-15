@@ -50,7 +50,13 @@ class analyticsMatchAcl(ManagedObject):
 
     # ── Configurable ───────────────────────────────────────────────────────────
     match_using_acl: Annotated[
-        str, Field(max_length=512, alias="aclName", description="ACL to match")
+        str,
+        Field(
+            max_length=512,
+            validation_alias="aclName",
+            serialization_alias="aclName",
+            description="ACL to match",
+        ),
     ] = ""
     annotation: Annotated[
         str,
@@ -65,14 +71,24 @@ class analyticsMatchAcl(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="The description of this configuration item.",
         ),
     ] = ""
     acl_filter_type: AnalyticsFltType = Field(
-        default=AnalyticsFltType.IPV4, alias="fltType", description="Filter type"
+        default=AnalyticsFltType.IPV4,
+        validation_alias="fltType",
+        serialization_alias="fltType",
+        description="Filter type",
     )
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

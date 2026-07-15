@@ -39,9 +39,11 @@ deliberately kept out of the rendered class documentation):
 
 from __future__ import annotations
 
-from typing import Annotated, Any, ClassVar, Self, get_args, get_origin
+from typing import Any, ClassVar, Self
 
 from pydantic import BaseModel, ConfigDict
+
+from niwaki.models._wire import from_wire, to_wire
 
 REGISTRY: dict[str, type[ManagedObject]] = {}
 """ACI class name → generated Python class, for every imported model.
@@ -54,46 +56,22 @@ right typed class.
 # Per-class alias map cache: avoids recomputing {aci_alias → python_field} on every from_apic().
 _ALIAS_MAP_CACHE: dict[type[ManagedObject], dict[str, str]] = {}
 
-# APIC truthy/falsy string representations for bool fields
-_APIC_TRUE = frozenset(("yes", "true", "1", "on"))
-_APIC_FALSE = frozenset(("no", "false", "0", "off"))
-
 
 def _coerce_apic_value(annotation: Any, value: Any) -> Any:
-    """Coerce a raw APIC string attribute value to the correct Python type.
+    """Coerce a raw APIC attribute onto the field's declared Python type.
 
-    Called during :meth:`ManagedObject.from_apic` to ensure that values
-    deserialized via ``model_construct`` (which skips Pydantic validators) have
-    the correct Python type.  Without this, ``bool`` fields would hold APIC
-    strings like ``"yes"``/``"no"`` rather than Python ``True``/``False``,
-    breaking comparisons in :func:`~niwaki.utils.diff.mo_diff`.
+    Thin seam over :func:`niwaki.models._wire.from_wire`: ``from_apic`` builds
+    instances with ``model_construct``, so no validator ever runs and this is
+    the only thing that gives a read-back field its declared type.
 
     Args:
-        annotation: The Pydantic field annotation (possibly ``Annotated[...]``).
+        annotation: The Pydantic field annotation (possibly ``Annotated``).
         value: Raw value from the APIC attributes dict.
 
     Returns:
-        Coerced value, or the original value when no coercion applies.
+        The coerced value, or the original when the type keeps the wire form.
     """
-    if value is None:
-        return value
-    # Unwrap Annotated[X, Field(...)] → X
-    if get_origin(annotation) is Annotated:
-        annotation = get_args(annotation)[0]
-    if annotation is bool:
-        if isinstance(value, bool):
-            return value
-        sv = str(value).lower()
-        if sv in _APIC_TRUE:
-            return True
-        if sv in _APIC_FALSE:
-            return False
-    elif annotation is int and isinstance(value, str):
-        try:
-            return int(value)
-        except ValueError:
-            pass
-    return value
+    return from_wire(annotation, value)
 
 
 class ManagedObject(BaseModel):
@@ -150,15 +128,22 @@ class ManagedObject(BaseModel):
         deserialisation) pay only a single dict lookup rather than a full
         comprehension over ``model_fields``.
 
+        The wire name lives in ``validation_alias``/``serialization_alias``, not
+        in ``alias``: the plain ``alias=`` is the one PEP 681 reads, and a type
+        checker that reads it synthesises an ``__init__`` taking ``arpFlood`` and
+        rejecting ``arp_flooding`` — the readable name would be an error in the
+        user's editor while working at runtime.  The two-sided spelling keeps the
+        wire name for pydantic and the Python name for the type checker.
+
         Returns:
             Dict mapping ACI camelCase attribute names to snake_case Python field
-            names, for every field that has a ``Field(alias=...)`` declaration.
+            names, for every field whose wire name differs from its Python name.
         """
         if cls not in _ALIAS_MAP_CACHE:
             _ALIAS_MAP_CACHE[cls] = {
-                info.alias: name
+                info.validation_alias: name
                 for name, info in cls.model_fields.items()
-                if info.alias is not None
+                if isinstance(info.validation_alias, str)
             }
         return _ALIAS_MAP_CACHE[cls]
 
@@ -191,7 +176,9 @@ class ManagedObject(BaseModel):
         """
         rn = self._rn_format
         for prop in self._naming_props:
-            rn = rn.replace(f"{{{prop}}}", str(getattr(self, prop, "")))
+            value = getattr(self, prop, "")
+            wire = "" if value is None else to_wire(value)
+            rn = rn.replace(f"{{{prop}}}", wire)
         return rn
 
     # ── Serialisation ─────────────────────────────────────────────────────────
@@ -238,15 +225,15 @@ class ManagedObject(BaseModel):
             # are always included even when empty (the APIC requires them).
             if val == "" and field_name not in naming_set:
                 continue
-            # When the Python name was renamed to avoid a keyword (e.g. from_ → from),
-            # use the alias as the ACI attribute key.
+            # A renamed field carries the ACI attribute name in its
+            # serialization_alias (arp_flooding → arpFlood, from_ → from).
             field_info = self.__class__.model_fields.get(field_name)
-            aci_key = field_info.alias if field_info and field_info.alias else field_name
-            # Pydantic bool → APIC "true" / "false" string
-            if isinstance(val, bool):
-                attrs[aci_key] = "true" if val else "false"
-            else:
-                attrs[aci_key] = str(val)
+            aci_key = (
+                field_info.serialization_alias
+                if field_info and field_info.serialization_alias
+                else field_name
+            )
+            attrs[aci_key] = to_wire(val)
 
         envelope: dict[str, Any] = {self._aci_class: {"attributes": attrs}}
         if self.children:

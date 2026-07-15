@@ -52,16 +52,26 @@ class rtctrlSetRtMetricType(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies the description of a policy component.",
         ),
     ] = ""
     metric_type: RtctrlMetricType = Field(
-        default=RtctrlMetricType.OSPF_TYPE1, alias="metricType", description="The Metric Type."
+        default=RtctrlMetricType.OSPF_TYPE1,
+        validation_alias="metricType",
+        serialization_alias="metricType",
+        description="The Metric Type.",
     )
     name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     type: RtctrlSetType = Field(
         default=RtctrlSetType.METRIC_TYPE,

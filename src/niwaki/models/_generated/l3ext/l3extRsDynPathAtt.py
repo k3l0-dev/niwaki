@@ -85,7 +85,12 @@ class l3extRsDynPathAtt(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     target_dn: Annotated[
-        str, Field(alias="tDn", description="The distinguished name of the target.")
+        str,
+        Field(
+            validation_alias="tDn",
+            serialization_alias="tDn",
+            description="The distinguished name of the target.",
+        ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
@@ -102,21 +107,27 @@ class l3extRsDynPathAtt(ManagedObject):
         str,
         Field(
             pattern="^[0-9a-fA-F.:/ ]+$",
-            alias="floatingAddr",
+            validation_alias="floatingAddr",
+            serialization_alias="floatingAddr",
             description="Address of the dynamic l3 interface",
         ),
     ] = ""
     forged_transmit: CompConfigMode = Field(
         default=CompConfigMode.DISABLED,
-        alias="forgedTransmit",
+        validation_alias="forgedTransmit",
+        serialization_alias="forgedTransmit",
         description="Forged Transmits setting",
     )
     mac_change: CompConfigMode = Field(
         default=CompConfigMode.DISABLED,
-        alias="macChange",
+        validation_alias="macChange",
+        serialization_alias="macChange",
         description="MAC address changes setting",
     )
     prom_mode: CompConfigMode = Field(
-        default=CompConfigMode.DISABLED, alias="promMode", description="Promiscous mode setting"
+        default=CompConfigMode.DISABLED,
+        validation_alias="promMode",
+        serialization_alias="promMode",
+        description="Promiscous mode setting",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

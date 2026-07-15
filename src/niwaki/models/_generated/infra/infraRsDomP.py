@@ -50,7 +50,12 @@ class infraRsDomP(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     target_dn: Annotated[
-        str, Field(alias="tDn", description="The virtual machine manager domain profile.")
+        str,
+        Field(
+            validation_alias="tDn",
+            serialization_alias="tDn",
+            description="The virtual machine manager domain profile.",
+        ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────

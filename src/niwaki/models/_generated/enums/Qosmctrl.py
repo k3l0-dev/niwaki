@@ -6,10 +6,10 @@ from enum import StrEnum
 
 
 class Qosmctrl(StrEnum):
-    DOT1P_PRESERVE = "dot1p-preserve"
-    """Preserve dot1p within ACI"""
     NONE = "none"
     """Default value"""
+    DOT1P_PRESERVE = "dot1p-preserve"
+    """Preserve dot1p within ACI"""
 
     @classmethod
     def _missing_(cls, value: object) -> Qosmctrl | None:

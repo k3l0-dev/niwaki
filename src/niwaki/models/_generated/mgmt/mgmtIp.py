@@ -41,7 +41,13 @@ class mgmtIp(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     ip_address: Annotated[
-        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="addr", description="IP address of the node")
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            validation_alias="addr",
+            serialization_alias="addr",
+            description="IP address of the node",
+        ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
@@ -55,7 +61,8 @@ class mgmtIp(ManagedObject):
     ] = ""
     configuration_mode: MgmtConfigurationMode = Field(
         default=MgmtConfigurationMode.STATIC,
-        alias="configurationMode",
+        validation_alias="configurationMode",
+        serialization_alias="configurationMode",
         description="Address allocated either static or auto",
     )
     description: Annotated[
@@ -63,18 +70,28 @@ class mgmtIp(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies the description of a policy component.",
         ),
     ] = ""
     gateway_ip_address: Annotated[
         str,
         Field(
-            pattern="^[0-9a-fA-F.:/ ]+$", alias="gw", description="Gateway IP address of the node"
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            validation_alias="gw",
+            serialization_alias="gw",
+            description="Gateway IP address of the node",
         ),
     ] = ""
     name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

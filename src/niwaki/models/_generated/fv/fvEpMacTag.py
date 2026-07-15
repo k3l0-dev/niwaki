@@ -55,13 +55,21 @@ class fvEpMacTag(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     bridge_domain_name: Annotated[
-        str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.-]+|[*]$", alias="bdName")
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.-]+|[*]$",
+            validation_alias="bdName",
+            serialization_alias="bdName",
+        ),
     ]
     endpoint_mac_address: Annotated[
         str,
         Field(
             pattern="^([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}$",
-            alias="mac",
+            validation_alias="mac",
+            serialization_alias="mac",
             description="The MAC address.",
         ),
     ]
@@ -80,16 +88,23 @@ class fvEpMacTag(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9_.-]+$",
-            alias="ctxName",
+            validation_alias="ctxName",
+            serialization_alias="ctxName",
             description="The L3 context name.",
         ),
     ] = ""
-    id: Annotated[str, Field(description="An identifier .")] = ""
+    id: Annotated[int, Field(description="An identifier .")] = 0
     name: Annotated[
         str,
         Field(max_length=16, pattern="^[a-zA-Z0-9_.:-]+$", description="The name of the object."),
     ] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

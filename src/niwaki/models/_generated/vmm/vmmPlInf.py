@@ -3,7 +3,11 @@
 from __future__ import annotations
 
 from typing import ClassVar, Annotated
-from pydantic import Field
+from pydantic import BeforeValidator, Field
+
+from niwaki.models._wire import Flags, parse_flags
+from niwaki.models._generated.enums.CompRemoteOperIssues import CompRemoteOperIssues
+from niwaki.models._generated.enums.VmmStatusInVmm import VmmStatusInVmm
 
 from niwaki.models.base import ManagedObject
 
@@ -41,7 +45,8 @@ class vmmPlInf(ManagedObject):
     epg_p_key: Annotated[
         str,
         Field(
-            alias="epgPKey",
+            validation_alias="epgPKey",
+            serialization_alias="epgPKey",
             description="The domain name of the endpoint group to which the fault will be delegated.",
         ),
     ]
@@ -58,13 +63,30 @@ class vmmPlInf(ManagedObject):
     encap: Annotated[str, Field(description="The port encapsulation.")] = ""
     name: Annotated[str, Field(max_length=128, description="The name of the object.")] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
-    remote_err_msg: Annotated[str, Field(max_length=256, alias="remoteErrMsg")] = ""
-    remote_oper_issues: str = Field(
-        default="",
-        alias="remoteOperIssues",
-        description="The remote operational issues on this object not initiated by APIC.",
+    remote_err_msg: Annotated[
+        str,
+        Field(max_length=256, validation_alias="remoteErrMsg", serialization_alias="remoteErrMsg"),
+    ] = ""
+    remote_oper_issues: Annotated[Flags[CompRemoteOperIssues], BeforeValidator(parse_flags)] = (
+        Field(
+            default_factory=lambda: frozenset({CompRemoteOperIssues.NONE}),
+            validation_alias="remoteOperIssues",
+            serialization_alias="remoteOperIssues",
+            description="The remote operational issues on this object not initiated by APIC.",
+        )
     )
-    status: str = Field(default="", alias="state", description="The state of the relationship.")
+    status: Annotated[Flags[VmmStatusInVmm], BeforeValidator(parse_flags)] = Field(
+        default_factory=lambda: frozenset({VmmStatusInVmm.UNKNOWN}),
+        validation_alias="state",
+        serialization_alias="state",
+        description="The state of the relationship.",
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

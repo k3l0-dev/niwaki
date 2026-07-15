@@ -62,7 +62,8 @@ class pkiKeyRing(ManagedObject):
     # ── Configurable ───────────────────────────────────────────────────────────
     admin_state: PkiKeyringState = Field(
         default=PkiKeyringState.STARTED,
-        alias="adminState",
+        validation_alias="adminState",
+        serialization_alias="adminState",
         description="The current administrative state of the certificate request process.",
     )
     annotation: Annotated[
@@ -75,7 +76,8 @@ class pkiKeyRing(ManagedObject):
     ] = ""
     certificate: str = Field(
         default="",
-        alias="cert",
+        validation_alias="cert",
+        serialization_alias="cert",
         description="A certificate is a file containing a device's public key along with signed information verifying the identity of the device.",
     )
     description: Annotated[
@@ -83,26 +85,38 @@ class pkiKeyRing(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
-    ecc_curve: PkiEccCurve = Field(default=PkiEccCurve.NONE, alias="eccCurve")
+    ecc_curve: PkiEccCurve = Field(
+        default=PkiEccCurve.NONE, validation_alias="eccCurve", serialization_alias="eccCurve"
+    )
     key: Annotated[str, Field(repr=False, description="The private key of the certificate.")] = ""
-    key_type: PkiKeyType = Field(default=PkiKeyType.RSA, alias="keyType")
+    key_type: PkiKeyType = Field(
+        default=PkiKeyType.RSA, validation_alias="keyType", serialization_alias="keyType"
+    )
     modulus: PkiModulus = Field(
         default=PkiModulus.MOD2048,
         description="The length of the encryption keys. A longer key length increases the difficulty of breaking the key.",
     )
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     owner_key: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerKey",
+            validation_alias="ownerKey",
+            serialization_alias="ownerKey",
             description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
@@ -111,13 +125,15 @@ class pkiKeyRing(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerTag",
+            validation_alias="ownerTag",
+            serialization_alias="ownerTag",
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
     regenerate: bool = Field(
         default=False,
-        alias="regen",
+        validation_alias="regen",
+        serialization_alias="regen",
         description="Forces regeneration of the keypair. Each PKI device holds a pair of asymmetric Rivest-Shamir-Adleman (RSA) or Elliptic Curve Cryptography (ECC) encryption keys, one kept private and one made public, stored in an internal key ring.",
     )
     certificate_authority: Annotated[
@@ -125,7 +141,8 @@ class pkiKeyRing(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9_.:-]+$",
-            alias="tp",
+            validation_alias="tp",
+            serialization_alias="tp",
             description="A third-party certificate from a trusted source, or trusted point, that affirms the identity of your device.",
         ),
     ] = ""

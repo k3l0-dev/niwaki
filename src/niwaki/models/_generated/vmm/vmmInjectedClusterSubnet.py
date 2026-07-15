@@ -47,7 +47,16 @@ class vmmInjectedClusterSubnet(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    availability_zone: Annotated[str, Field(max_length=512, alias="availabilityZone")] = ""
+    availability_zone: Annotated[
+        str,
+        Field(
+            max_length=512,
+            validation_alias="availabilityZone",
+            serialization_alias="availabilityZone",
+        ),
+    ] = ""
     name: Annotated[str, Field(max_length=128, description="The name of the object.")] = ""
-    display_name: Annotated[str, Field(max_length=128, alias="nameAlias")] = ""
+    display_name: Annotated[
+        str, Field(max_length=128, validation_alias="nameAlias", serialization_alias="nameAlias")
+    ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

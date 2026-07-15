@@ -48,7 +48,8 @@ class fabricRsSpPortP(ManagedObject):
     target_dn: Annotated[
         str,
         Field(
-            alias="tDn",
+            validation_alias="tDn",
+            serialization_alias="tDn",
             description="A distinguished name for a spine port profile. This is the full path to the organization. The maximum supported string length is 255 ASCII characters.",
         ),
     ]

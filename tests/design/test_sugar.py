@@ -15,14 +15,14 @@ class TestEntrySugar:
         assert entry.design_node.attrs == {
             "ethernet_type": "ip",
             "protocol": "tcp",
-            "destination_from_port": "80",
-            "destination_to_port": "80",
+            "destination_from_port": 80,
+            "destination_to_port": 80,
         }
 
     def test_tcp_tuple_range(self) -> None:
         attrs = apply_sugar("vzEntry", {"tcp": (8000, 8090)})
-        assert attrs["destination_from_port"] == "8000"
-        assert attrs["destination_to_port"] == "8090"
+        assert attrs["destination_from_port"] == 8000
+        assert attrs["destination_to_port"] == 8090
 
     def test_tcp_dashed_string_range(self) -> None:
         attrs = apply_sugar("vzEntry", {"tcp": "8000-8090"})
@@ -37,7 +37,9 @@ class TestEntrySugar:
     def test_udp(self) -> None:
         attrs = apply_sugar("vzEntry", {"udp": 53})
         assert attrs["protocol"] == "udp"
-        assert attrs["destination_from_port"] == "53"
+        # The sugar passes the port through as written; the model owns the rest
+        # (53 has a name in the schema — the APIC stores it as "dns").
+        assert attrs["destination_from_port"] == 53
 
     def test_icmp_implies_ip(self) -> None:
         attrs = apply_sugar("vzEntry", {"protocol": "icmp"})
@@ -56,8 +58,20 @@ class TestEntrySugar:
         attrs = payload["vzEntry"]["attributes"]
         assert attrs["etherT"] == "ip"
         assert attrs["prot"] == "tcp"
-        assert attrs["dFromPort"] == "80"
-        assert attrs["dToPort"] == "80"
+        # 80 has a name in the ACI schema, and the APIC stores it under that name
+        # — a port pushed as 80 is read back as "http".  The SDK stores what the
+        # APIC stores, so the two never disagree.
+        assert attrs["dFromPort"] == "http"
+        assert attrs["dToPort"] == "http"
+
+    def test_a_port_without_a_name_stays_a_number(self) -> None:
+        payload = tenant("t").filter("web").entry("api", tcp=8080).design_node.mo().to_apic()
+        attrs = payload["vzEntry"]["attributes"]
+        assert attrs["dFromPort"] == "8080"
+
+    def test_the_name_may_be_written_directly(self) -> None:
+        payload = tenant("t").filter("web").entry("http", tcp="http").design_node.mo().to_apic()
+        assert payload["vzEntry"]["attributes"]["dFromPort"] == "http"
 
 
 class TestPortSpecErrors:

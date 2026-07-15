@@ -64,32 +64,45 @@ class lbpPol(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
     dynamic_load_balancing_mode: TopoctrlDLbMode = Field(
         default=TopoctrlDLbMode.OFF,
-        alias="dlbMode",
+        validation_alias="dlbMode",
+        serialization_alias="dlbMode",
         description="The dynamic load balancer (DLB) mode adjusts the traffic allocations according to congestion levels. It measures the congestion across the available paths and places the flows on the least congested paths, which results in an optimal or near optimal placement of the data.",
     )
     hash_gtp_policy: bool = Field(
-        default=False, alias="hashGtp", description="GTP Hash for Load Balancing"
+        default=False,
+        validation_alias="hashGtp",
+        serialization_alias="hashGtp",
+        description="GTP Hash for Load Balancing",
     )
     load_balancing_mode: TopoctrlLbMode = Field(
         default=TopoctrlLbMode.TRADITIONAL,
-        alias="mode",
+        validation_alias="mode",
+        serialization_alias="mode",
         description="The load balancer administrative state. In all modes of load balancing, static or dynamic, the traffic is sent only on those uplinks or paths that meet the criteria for equal cost multipath (ECMP); these paths are equal and the lowest cost from a routing perspective.",
     )
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     owner_key: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerKey",
+            validation_alias="ownerKey",
+            serialization_alias="ownerKey",
             description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
@@ -98,13 +111,15 @@ class lbpPol(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerTag",
+            validation_alias="ownerTag",
+            serialization_alias="ownerTag",
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
     prioritization_mode: TopoctrlPrioritization = Field(
         default=TopoctrlPrioritization.OFF,
-        alias="pri",
+        validation_alias="pri",
+        serialization_alias="pri",
         description="Dynamic Packet Prioritization (DPP) prioritizes short flows higher than long flows; a short flow is less than approximately 15 packets. Short flows are more sensitive to latency than long ones. DPP can improve overall application performance.",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

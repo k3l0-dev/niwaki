@@ -46,7 +46,14 @@ class fvTagSelector(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     key_tagtag_to_be_associated_with: Annotated[
-        str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$", alias="matchKey")
+        str,
+        Field(
+            min_length=1,
+            max_length=64,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            validation_alias="matchKey",
+            serialization_alias="matchKey",
+        ),
     ]
     value_tagtag_to_be_associated_with: Annotated[
         str,
@@ -54,7 +61,8 @@ class fvTagSelector(ManagedObject):
             min_length=1,
             max_length=128,
             pattern="^[a-zA-Z0-9_.,:^$\\[\\]\\(\\)\\{\\}\\|+*-]+$",
-            alias="matchValue",
+            validation_alias="matchValue",
+            serialization_alias="matchValue",
         ),
     ]
 
@@ -72,20 +80,28 @@ class fvTagSelector(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
     name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     owner_key: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerKey",
+            validation_alias="ownerKey",
+            serialization_alias="ownerKey",
             description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
@@ -94,11 +110,14 @@ class fvTagSelector(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerTag",
+            validation_alias="ownerTag",
+            serialization_alias="ownerTag",
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     match_value_operator: FvValueOperator = Field(
-        default=FvValueOperator.EQUALS, alias="valueOperator"
+        default=FvValueOperator.EQUALS,
+        validation_alias="valueOperator",
+        serialization_alias="valueOperator",
     )

@@ -41,13 +41,20 @@ class licenseFeature(ManagedObject):
     # ── Naming (required) ──────────────────────────────────────────────────────
     entitlement_tag_name: Annotated[
         str,
-        Field(min_length=1, max_length=512, alias="featureName", description="Name of the feature"),
+        Field(
+            min_length=1,
+            max_length=512,
+            validation_alias="featureName",
+            serialization_alias="featureName",
+            description="Name of the feature",
+        ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     entitlement_tag_description: LicenseAdminState = Field(
         default=LicenseAdminState.DISABLED,
-        alias="adminSt",
+        validation_alias="adminSt",
+        serialization_alias="adminSt",
         description="Admin State of the app that says if it is enabled/disabled",
     )
     annotation: Annotated[
@@ -60,7 +67,8 @@ class licenseFeature(ManagedObject):
     ] = ""
     feature_license_type: LicenseFeatureLicense = Field(
         default=LicenseFeatureLicense.NONE,
-        alias="licenseType",
+        validation_alias="licenseType",
+        serialization_alias="licenseType",
         description="Defines if the license type of the feature is leaf-based or not",
     )
     mode: LicenseFeatureMode = Field(

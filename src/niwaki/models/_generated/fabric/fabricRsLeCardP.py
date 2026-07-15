@@ -48,7 +48,8 @@ class fabricRsLeCardP(ManagedObject):
     target_dn: Annotated[
         str,
         Field(
-            alias="tDn",
+            validation_alias="tDn",
+            serialization_alias="tDn",
             description="The distinguished name of the leaf card profile. This is the full path to the organization. The maximum supported string length is 1024 ASCII characters.",
         ),
     ]

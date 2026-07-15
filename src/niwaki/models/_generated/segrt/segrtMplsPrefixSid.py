@@ -41,7 +41,13 @@ class segrtMplsPrefixSid(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     prefix: Annotated[
-        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", alias="pfx", description="Address of the prefix")
+        str,
+        Field(
+            pattern="^[0-9a-fA-F.:/ ]+$",
+            validation_alias="pfx",
+            serialization_alias="pfx",
+            description="Address of the prefix",
+        ),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
@@ -54,11 +60,19 @@ class segrtMplsPrefixSid(ManagedObject):
         ),
     ] = ""
     value_of_sid: Annotated[
-        int, Field(ge=0, le=471804, alias="sidValue", description="Value of Segment Identifier")
+        int,
+        Field(
+            ge=0,
+            le=471804,
+            validation_alias="sidValue",
+            serialization_alias="sidValue",
+            description="Value of Segment Identifier",
+        ),
     ] = 0
     type_of_segment_identifier_value: SegrtSidValueType = Field(
         default=SegrtSidValueType.INDEX,
-        alias="sidValueType",
+        validation_alias="sidValueType",
+        serialization_alias="sidValueType",
         description="Type of segment identifier",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

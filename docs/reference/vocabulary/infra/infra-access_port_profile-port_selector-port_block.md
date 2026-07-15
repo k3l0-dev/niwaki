@@ -25,7 +25,7 @@ Accepted as keyword arguments of `.port_block(name)` and of `.set(**attrs)` on t
 | --- | --- | --- | --- | --- | --- |
 | `name` *(positional)* | `name` | `str` | — | — | The port block name |
 | `description` | `descr` | `str` | — | — | The description of this configuration item. |
-| `from_module_id` | `fromCard` | `str` | — | — | — |
-| `from_port_id` | `fromPort` | `str` | — | — | — |
-| `to_module_id` | `toCard` | `str` | — | — | — |
-| `to_port_id` | `toPort` | `str` | — | — | — |
+| `from_module_id` | `fromCard` | `int` | — | `1` | — |
+| `from_port_id` | `fromPort` | `int` | — | `1` | — |
+| `to_module_id` | `toCard` | `int` | — | `1` | — |
+| `to_port_id` | `toPort` | `int` | — | `1` | — |

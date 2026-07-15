@@ -3,8 +3,9 @@
 from __future__ import annotations
 
 from typing import ClassVar, Annotated
-from pydantic import Field
+from pydantic import BeforeValidator, Field
 
+from niwaki.models._wire import Flags, parse_flags
 from niwaki.models._generated.enums.EigrpDelayUnit import EigrpDelayUnit
 from niwaki.models._generated.enums.EigrpIfAfControl import EigrpIfAfControl
 
@@ -63,24 +64,32 @@ class eigrpIfPol(ManagedObject):
         Field(
             ge=0,
             le=2560000000,
-            alias="bw",
+            validation_alias="bw",
+            serialization_alias="bw",
             description="EIGRP bandwidth in kbps, overrides the bandwidth configured on an interface. Used to influence path selection",
         ),
     ] = 0
-    interface_controls: EigrpIfAfControl = Field(
-        default=EigrpIfAfControl.BFD, alias="ctrl", description="The control state."
+    interface_controls: Annotated[Flags[EigrpIfAfControl], BeforeValidator(parse_flags)] = Field(
+        default_factory=lambda: frozenset(
+            {EigrpIfAfControl.SPLIT_HORIZON, EigrpIfAfControl.NH_SELF}
+        ),
+        validation_alias="ctrl",
+        serialization_alias="ctrl",
+        description="The control state.",
     )
     eigrp_interface_delay: Annotated[
         int,
         Field(
             ge=0,
-            alias="delay",
+            validation_alias="delay",
+            serialization_alias="delay",
             description="EIGRP throughput delay, overrides the delay configured on an interface. Used to influence path selection",
         ),
     ] = 0
     units_for_eigrp_interface_delay: EigrpDelayUnit = Field(
         default=EigrpDelayUnit.TENS_OF_MICRO,
-        alias="delayUnit",
+        validation_alias="delayUnit",
+        serialization_alias="delayUnit",
         description="EIGRP delay units, Wide metrics can use picosecond accuracy for delay",
     )
     description: Annotated[
@@ -88,25 +97,47 @@ class eigrpIfPol(ManagedObject):
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="descr",
+            validation_alias="descr",
+            serialization_alias="descr",
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
-    hello_interval: str = Field(default="", alias="helloIntvl", description="The hello interval.")
-    hold_interval: str = Field(
-        default="",
-        alias="holdIntvl",
-        description="The period of time before declaring that the neighbor is down.",
-    )
+    hello_interval: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=65535,
+            validation_alias="helloIntvl",
+            serialization_alias="helloIntvl",
+            description="The hello interval.",
+        ),
+    ] = 5
+    hold_interval: Annotated[
+        int,
+        Field(
+            ge=1,
+            le=65535,
+            validation_alias="holdIntvl",
+            serialization_alias="holdIntvl",
+            description="The period of time before declaring that the neighbor is down.",
+        ),
+    ] = 15
     display_name: Annotated[
-        str, Field(max_length=63, pattern="^[a-zA-Z0-9_.-]+$", alias="nameAlias")
+        str,
+        Field(
+            max_length=63,
+            pattern="^[a-zA-Z0-9_.-]+$",
+            validation_alias="nameAlias",
+            serialization_alias="nameAlias",
+        ),
     ] = ""
     owner_key: Annotated[
         str,
         Field(
             max_length=128,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerKey",
+            validation_alias="ownerKey",
+            serialization_alias="ownerKey",
             description="The key for enabling clients to own their data for entity correlation.",
         ),
     ] = ""
@@ -115,7 +146,8 @@ class eigrpIfPol(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9\\\\!#$%()*,-./:;@ _{|}~?&+]+$",
-            alias="ownerTag",
+            validation_alias="ownerTag",
+            serialization_alias="ownerTag",
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""

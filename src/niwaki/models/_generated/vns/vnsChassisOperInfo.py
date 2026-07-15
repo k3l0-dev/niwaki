@@ -38,7 +38,14 @@ class vnsChassisOperInfo(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    t_dn: Annotated[str, Field(alias="tDn", description="The distinguished name of the target.")]
+    t_dn: Annotated[
+        str,
+        Field(
+            validation_alias="tDn",
+            serialization_alias="tDn",
+            description="The distinguished name of the target.",
+        ),
+    ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[
@@ -50,9 +57,15 @@ class vnsChassisOperInfo(ManagedObject):
         ),
     ] = ""
     chassis_state: VnsChassisStateType = Field(
-        default=VnsChassisStateType.INIT, alias="chassisState", description="chassis state"
+        default=VnsChassisStateType.INIT,
+        validation_alias="chassisState",
+        serialization_alias="chassisState",
+        description="chassis state",
     )
     trig_re_sync: VnsTrigState = Field(
-        default=VnsTrigState.OFF, alias="trigReSync", description="trigger chassis sync message"
+        default=VnsTrigState.OFF,
+        validation_alias="trigReSync",
+        serialization_alias="trigReSync",
+        description="trigger chassis sync message",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

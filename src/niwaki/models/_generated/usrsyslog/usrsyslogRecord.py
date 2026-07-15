@@ -45,11 +45,27 @@ class usrsyslogRecord(ManagedObject):
         ),
     ] = ""
     destination_group: Annotated[
-        str, Field(max_length=16, pattern="^[a-zA-Z0-9_.:-]+$", alias="destGrp")
+        str,
+        Field(
+            max_length=16,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            validation_alias="destGrp",
+            serialization_alias="destGrp",
+        ),
     ] = ""
-    sysllog_message: Annotated[str, Field(max_length=512, alias="msg")] = ""
+    sysllog_message: Annotated[
+        str, Field(max_length=512, validation_alias="msg", serialization_alias="msg")
+    ] = ""
     remote_destination_name: Annotated[
-        str, Field(max_length=16, pattern="^[a-zA-Z0-9_.:-]+$", alias="remoteDest")
+        str,
+        Field(
+            max_length=16,
+            pattern="^[a-zA-Z0-9_.:-]+$",
+            validation_alias="remoteDest",
+            serialization_alias="remoteDest",
+        ),
     ] = ""
-    severity_of_log: SyslogSeverity = Field(default=SyslogSeverity.WARNINGS, alias="severity")
+    severity_of_log: SyslogSeverity = Field(
+        default=SyslogSeverity.WARNINGS, validation_alias="severity", serialization_alias="severity"
+    )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

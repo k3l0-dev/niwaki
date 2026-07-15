@@ -23,7 +23,7 @@ Accepted as keyword arguments of `.pim()` and of `.set(**attrs)` on this cursor.
 
 | parameter | wire | type | values | default | description |
 | --- | --- | --- | --- | --- | --- |
-| `control_knobs` | `ctrl` | `str` | — | — | DOM controls |
+| `control_knobs` | `ctrl` | {ref}`RtdmcDomUserCtrl <enum-rtdmcdomuserctrl>` | `fast-conv`, `strict-rfc-compliant` | — | DOM controls |
 | `description` | `descr` | `str` | — | — | Specifies a description of the policy definition. |
 | `mtu` | `mtu` | `int` | — | `1500` | MTU |
 | `name` | `name` | `str` | — | — | — |

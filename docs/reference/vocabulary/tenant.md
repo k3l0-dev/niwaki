@@ -102,7 +102,7 @@ VRFs, bridge domains, application profiles, EPGs, contracts and filters — one 
       - {ref}`tenant.l3out.external_epg.consumer_subject_label <vocab-tenant-l3out-external_epg-consumer_subject_label>` — `vzConsSubjLbl`, 6 attributes
       - {ref}`tenant.l3out.external_epg.provider_subject_label <vocab-tenant-l3out-external_epg-provider_subject_label>` — `vzProvSubjLbl`, 6 attributes
     - {ref}`tenant.l3out.bgp <vocab-tenant-l3out-bgp>` — `bgpExtP`, 1 attributes
-    - {ref}`tenant.l3out.ospf <vocab-tenant-l3out-ospf>` — `ospfExtP`, 5 attributes
+    - {ref}`tenant.l3out.ospf <vocab-tenant-l3out-ospf>` — `ospfExtP`, 6 attributes
     - {ref}`tenant.l3out.eigrp <vocab-tenant-l3out-eigrp>` — `eigrpExtP`, 2 attributes
     - {ref}`tenant.l3out.pim_external <vocab-tenant-l3out-pim_external>` — `pimExtP`, 3 attributes
     - {ref}`tenant.l3out.mpls_external <vocab-tenant-l3out-mpls_external>` — `mplsExtP`, 1 attributes

@@ -39,7 +39,10 @@ class pkiCertReq(ManagedObject):
     alternate_subject_name: Annotated[
         str,
         Field(
-            max_length=1024, pattern="^[a-zA-Z0-9\\!#$%()*,-\\/.:;@ _{|}~?]+$", alias="altSubjName"
+            max_length=1024,
+            pattern="^[a-zA-Z0-9\\!#$%()*,-\\/.:;@ _{|}~?]+$",
+            validation_alias="altSubjName",
+            serialization_alias="altSubjName",
         ),
     ] = ""
     annotation: Annotated[
@@ -61,7 +64,8 @@ class pkiCertReq(ManagedObject):
         Field(
             max_length=40,
             pattern="^[a-zA-Z0-9()+,-./:@_^\\s]+$",
-            alias="email",
+            validation_alias="email",
+            serialization_alias="email",
             description="The email address of the organization's contact person.",
         ),
     ] = ""
@@ -78,7 +82,8 @@ class pkiCertReq(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9()+,-./:@_^\\s]+$",
-            alias="orgName",
+            validation_alias="orgName",
+            serialization_alias="orgName",
             description="The full legal name of the organization.",
         ),
     ] = ""
@@ -87,11 +92,17 @@ class pkiCertReq(ManagedObject):
         Field(
             max_length=64,
             pattern="^[a-zA-Z0-9()+,-./:@_^\\s]+$",
-            alias="orgUnitName",
+            validation_alias="orgUnitName",
+            serialization_alias="orgUnitName",
             description="A department or unit name within the organization.",
         ),
     ] = ""
-    password: str = Field(default="", alias="pwd", description="The new password.")
+    password: str = Field(
+        default="",
+        validation_alias="pwd",
+        serialization_alias="pwd",
+        description="The new password.",
+    )
     state: Annotated[
         str,
         Field(
@@ -106,7 +117,8 @@ class pkiCertReq(ManagedObject):
             min_length=1,
             max_length=64,
             pattern="^[a-zA-Z0-9\\!#$%()*,-\\/.:;@ _{|}~?]+$",
-            alias="subjName",
+            validation_alias="subjName",
+            serialization_alias="subjName",
             description="The fully qualified domain name or distinguished name of the requesting device.",
         ),
     ] = ""
