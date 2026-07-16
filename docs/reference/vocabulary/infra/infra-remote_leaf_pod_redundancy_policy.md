@@ -23,7 +23,7 @@ Accepted as keyword arguments of `.remote_leaf_pod_redundancy_policy()` and of `
 | --- | --- | --- | --- | --- | --- |
 | `description` | `descr` | `str` | — | — | Specifies a description of the policy definition. |
 | `enable_pod_red_preemption` | `enablePodRedPreemption` | `bool` | — | `False` | Switch back to the configured POD when it comes up. This could impact traffic for a few seconds. |
-| `enable_remote_leaf_pod_redundancy_policy` | `enableRlPodRedPol` | `bool` | — | `False` | Remote Leafs will move to an availabe healthy pod if the configured Pod is down |
+| `enable_rl_pod_red_pol` | `enableRlPodRedPol` | `bool` | — | `False` | Remote Leafs will move to an availabe healthy pod if the configured Pod is down |
 | `name` | `name` | `str` | — | — | — |
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |

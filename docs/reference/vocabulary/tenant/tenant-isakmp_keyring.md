@@ -22,7 +22,7 @@ Accepted as keyword arguments of `.isakmp_keyring(name)` and of `.set(**attrs)` 
 | parameter | wire | type | values | default | description |
 | --- | --- | --- | --- | --- | --- |
 | `name` *(positional)* | `name` | `str` | — | — | The name of the object. |
-| `ip_address_of_peer_that_shares_the_key` | `address` | `str` | — | — | IP Address of peer that shares the key |
+| `address` | `address` | `str` | — | — | IP Address of peer that shares the key |
 | `description` | `descr` | `str` | — | — | Specifies a description of the policy definition. |
 | `key_type` | `keyType` | {ref}`HcisakmpKeyType <enum-hcisakmpkeytype>` | `pre-shared` | `pre-shared` | IsaKmp Key Type |
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |

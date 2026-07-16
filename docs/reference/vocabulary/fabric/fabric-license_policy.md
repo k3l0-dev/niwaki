@@ -36,5 +36,5 @@ Accepted as keyword arguments of `.license_policy()` and of `.set(**attrs)` on t
 | `proxy_server_port` | `port` | `int` | — | `443` | The port number of third-party HTTP/HTTPs proxy server. When the mode is not proxy, port is not required and can be ignored. |
 | `smart_licensing_admin_state` | `regAdminState` | {ref}`LicenseRegAdminState <enum-licenseregadminstate>` | `deregister`, `none`, `register` | `none` | Admin state for triggering registration and unregistration. |
 | `product_instance_id_token` | `regTokenId` | `str` | — | — | To register product with CSSM, a user need to input registration token ID. The registration token ID is created by customer from CSSM web site. |
-| `license_usage_reporting_interval_in_day` | `reportInterval` | `int` | — | `30` | SLE policy allows a user to change license reporting interval. Default value is 30 days, and min and max range is 1 - 90 days. |
+| `report_interval` | `reportInterval` | `int` | — | `30` | SLE policy allows a user to change license reporting interval. Default value is 30 days, and min and max range is 1 - 90 days. |
 | `url` | `url` | `str` | — | — | The url of remote manager (CSSM, Satellite manager or SCH gateway server). When the mode is plr, url is not required and can be ignored. |

@@ -441,7 +441,6 @@ The facade resolves operator names into typed child handles — `aci.tenant("pro
 | `tenant` | `.dns_server_group(…)` | `dnsepgSvrGrp` — {ref}`tenant.dns_server_group <vocab-tenant-dns_server_group>` |
 | `tenant` | `.dot1q_tunnel(…)` | `fvTnlEPg` — {ref}`tenant.dot1q_tunnel <vocab-tenant-dot1q_tunnel>` |
 | `tenant` | `.dpp_policy(…)` | `qosDppPol` — {ref}`tenant.dpp_policy <vocab-tenant-dpp_policy>` |
-| `tenant` | `.dscp_translation_policy(…)` | `qosDscpTransPol` — {ref}`tenant.dscp_translation_policy <vocab-tenant-dscp_translation_policy>` |
 | `tenant` | `.eigrp_address_family_context_policy(…)` | `eigrpCtxAfPol` — {ref}`tenant.eigrp_address_family_context_policy <vocab-tenant-eigrp_address_family_context_policy>` |
 | `tenant` | `.eigrp_interface_policy(…)` | `eigrpIfPol` — {ref}`tenant.eigrp_interface_policy <vocab-tenant-eigrp_interface_policy>` |
 | `tenant` | `.eigrp_route_summarization_policy(…)` | `eigrpRtSummPol` — {ref}`tenant.eigrp_route_summarization_policy <vocab-tenant-eigrp_route_summarization_policy>` |
@@ -961,6 +960,7 @@ The facade resolves operator names into typed child handles — `aci.tenant("pro
 | `tenant.vrf` | `.l4_l7_services_relation(…)` | `vnsAbsCfgRel` — {ref}`tenant.service_graph.function_node.function_connector.folder.relation <vocab-tenant-service_graph-function_node-function_connector-folder-relation>` |
 | `tenant.vrf` | `.pim_ctx(…)` | `pimCtxP` — {ref}`tenant.vrf.pim <vocab-tenant-vrf-pim>` |
 | `tenant.vrf` | `.relation_to_l4_l7_services_param_relation_abstract_class(…)` | `vnsCfgRelInst` — {ref}`tenant.policy_container.folder_instance.relation <vocab-tenant-policy_container-folder_instance-relation>` |
+| `tenant.vrf` | `.route_target_profile(…)` | `bgpRtTargetP` — {ref}`tenant.vrf.route_target_profile <vocab-tenant-vrf-route_target_profile>` |
 | `tenant.vrf` | `.snmp_context_profile(…)` | `snmpCtxP` — {ref}`tenant.vrf.snmp_context <vocab-tenant-vrf-snmp_context>` |
 | `tenant.vrf` | `.vrf_level_route_deployment_policy(…)` | `fvRouteDeployP` — {ref}`tenant.vrf.route_deployment <vocab-tenant-vrf-route_deployment>` |
 | `tenant.vrf` | `.vrf_level_route_summarization_policy(…)` | `fvCtxRtSummPol` — {ref}`tenant.vrf.route_summarization <vocab-tenant-vrf-route_summarization>` |
@@ -1014,6 +1014,7 @@ The facade resolves operator names into typed child handles — `aci.tenant("pro
 | `tenant.vrf.pim6.ssm_pattern` | `.ssm_group_range_policy(…)` | `pimSSMRangePol` — {ref}`tenant.vrf.pim.ssm_pattern.ssm_range <vocab-tenant-vrf-pim-ssm_pattern-ssm_range>` |
 | `tenant.vrf.pim6.static_rp` | `.pim_static_rp_entry_policy(…)` | `pimStaticRPEntryPol` — {ref}`tenant.vrf.pim.fabric_rp.rp_entry <vocab-tenant-vrf-pim-fabric_rp-rp_entry>` |
 | `tenant.vrf.pim6.static_rp.rp_entry` | `.pim_rp_group_range_policy(…)` | `pimRPGrpRangePol` — {ref}`tenant.vrf.pim.fabric_rp.rp_entry.group_range <vocab-tenant-vrf-pim-fabric_rp-rp_entry-group_range>` |
+| `tenant.vrf.route_target_profile` | `.route_target(…)` | `bgpRtTarget` — {ref}`tenant.vrf.route_target_profile.route_target <vocab-tenant-vrf-route_target_profile-route_target>` |
 | `tenant.vrf.snmp_context` | `.snmp_community(…)` | `snmpCommunityP` — {ref}`tenant.vrf.snmp_context.community <vocab-tenant-vrf-snmp_context-community>` |
 | `tenant.vrf.vzany` | `.consumer_contract_label(…)` | `vzConsCtrctLbl` — {ref}`tenant.app.epg.consumer_contract_label <vocab-tenant-app-epg-consumer_contract_label>` |
 | `tenant.vrf.vzany` | `.consumer_label(…)` | `vzConsLbl` — {ref}`tenant.app.epg.consumer_label <vocab-tenant-app-epg-consumer_label>` |

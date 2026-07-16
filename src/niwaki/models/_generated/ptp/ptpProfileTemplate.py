@@ -111,7 +111,7 @@ class ptpProfileTemplate(ManagedObject):
             description="Minimum Delay Request Interval default value",
         ),
     ] = 0
-    minimum_delay_request_interval_range_end: Annotated[
+    delay_req_intvl_end: Annotated[
         int,
         Field(
             validation_alias="delayReqIntvlEnd",
@@ -135,7 +135,7 @@ class ptpProfileTemplate(ManagedObject):
             description="Sync Interval default value",
         ),
     ] = 0
-    sync_intvl_end: Annotated[
+    minimum_delay_request_interval_range_end: Annotated[
         int,
         Field(
             validation_alias="syncIntvlEnd",

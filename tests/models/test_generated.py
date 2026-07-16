@@ -170,8 +170,8 @@ class TestFvBD:
         assert bd.unicast_routing is True
         assert bd.arp_flooding is False
         assert bd.ip_learning is True
-        assert bd.limit_ip_learning_to_bd_subnets_only is True
-        assert bd.bd_rogue_mcast_arp_packet_drop is True
+        assert bd.limit_ip_learn_to_subnets is True
+        assert bd.mcast_arp_drop is True
         assert bd.multi_destination_packet_action == "bd-flood"
         assert bd.unknown_mac_unicast_action == "proxy"
         assert bd.unknown_multicast_destination_action == "flood"

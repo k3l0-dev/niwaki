@@ -373,16 +373,30 @@ class TestWrite:
             with pytest.raises(exceptions.NotFoundError):
                 await s.delete_mo("uni/tn-gone")
 
-    async def test_write_retry_on_transport_error(
+    async def test_write_retry_on_pre_send_error(
         self, httpx_mock: HTTPXMock, real_retries: None
     ) -> None:
+        # Writes retry only on pre-send errors (ConnectError): the request
+        # provably never reached the server, so re-sending is safe (audit T2).
         httpx_mock.add_response(method="POST", url=LOGIN_URL, json=_login_resp())
-        httpx_mock.add_exception(httpx.RemoteProtocolError("reset"))
-        httpx_mock.add_exception(httpx.RemoteProtocolError("reset"))
+        httpx_mock.add_exception(httpx.ConnectError("refused"))
+        httpx_mock.add_exception(httpx.ConnectError("refused"))
         httpx_mock.add_response(method="POST", json=_ok())
 
         async with AsyncApicSession(HOST, "admin", "pass") as s:
             await s.post_mo("uni/tn-prod", {})  # should succeed on third attempt
+
+    async def test_write_not_retried_on_read_timeout(
+        self, httpx_mock: HTTPXMock, real_retries: None
+    ) -> None:
+        # A read/write timeout may mean the APIC already accepted the write, so
+        # it must NOT be retried — the error propagates (audit T2).
+        httpx_mock.add_response(method="POST", url=LOGIN_URL, json=_login_resp())
+        httpx_mock.add_exception(httpx.ReadTimeout("timed out"))
+
+        async with AsyncApicSession(HOST, "admin", "pass") as s:
+            with pytest.raises(exceptions.TimeoutError):
+                await s.post_mo("uni/tn-prod", {})
 
     async def test_mid_session_401_relogs_and_replays_write(self, httpx_mock: HTTPXMock) -> None:
         httpx_mock.add_response(method="POST", url=LOGIN_URL, json=_login_resp("t1"))

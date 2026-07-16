@@ -70,16 +70,7 @@ class l2PortSecurityPol(ManagedObject):
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
-    port_security_maximum_can_be_0_12000: Annotated[
-        int,
-        Field(
-            ge=0,
-            le=12000,
-            validation_alias="maximum",
-            serialization_alias="maximum",
-            description="Port Security Maximum",
-        ),
-    ] = 0
+    maximum: Annotated[int, Field(ge=0, le=12000, description="Port Security Maximum")] = 0
     display_name: Annotated[
         str,
         Field(
@@ -109,16 +100,7 @@ class l2PortSecurityPol(ManagedObject):
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
-    port_security_timeout_can_be_60_3600: Annotated[
-        int,
-        Field(
-            ge=60,
-            le=3600,
-            validation_alias="timeout",
-            serialization_alias="timeout",
-            description="Port Security Timeout",
-        ),
-    ] = 60
+    timeout: Annotated[int, Field(ge=60, le=3600, description="Port Security Timeout")] = 60
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     port_security_violation: L2PortSecurityViolation = Field(
         default=L2PortSecurityViolation.PROTECT,

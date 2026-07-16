@@ -102,7 +102,6 @@ Accepted as keyword arguments of `.tenant(name)` and of `.set(**attrs)` on this 
 | `.dpp_policy(name, **attrs)` | `qosDppPol` | {ref}`tenant.dpp_policy <vocab-tenant-dpp_policy>` |
 | `.qos_requirement(name, **attrs)` | `qosRequirement` | {ref}`tenant.qos_requirement <vocab-tenant-qos_requirement>` |
 | `.mpls_custom_qos_policy(name, **attrs)` | `qosMplsCustomPol` | {ref}`tenant.mpls_custom_qos_policy <vocab-tenant-mpls_custom_qos_policy>` |
-| `.dscp_translation_policy(name, **attrs)` | `qosDscpTransPol` | {ref}`tenant.dscp_translation_policy <vocab-tenant-dscp_translation_policy>` |
 | `.netflow_monitor(name, **attrs)` | `netflowMonitorPol` | {ref}`tenant.netflow_monitor <vocab-tenant-netflow_monitor>` |
 | `.netflow_exporter(name, **attrs)` | `netflowExporterPol` | {ref}`tenant.netflow_exporter <vocab-tenant-netflow_exporter>` |
 | `.netflow_record(name, **attrs)` | `netflowRecordPol` | {ref}`tenant.netflow_record <vocab-tenant-netflow_record>` |

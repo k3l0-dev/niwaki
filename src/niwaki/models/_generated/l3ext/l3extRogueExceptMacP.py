@@ -46,7 +46,7 @@ class l3extRogueExceptMacP(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    indicate_whether_all_macs_are_excluded: bool = Field(
+    enable_all_macs: bool = Field(
         default=False,
         validation_alias="enableAllMacs",
         serialization_alias="enableAllMacs",

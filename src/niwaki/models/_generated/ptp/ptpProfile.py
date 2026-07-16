@@ -82,7 +82,7 @@ class ptpProfile(ManagedObject):
             description="Announce timeout",
         ),
     ] = 3
-    delay_request_interval_for_ptp_profile: Annotated[
+    delay_intvl: Annotated[
         int,
         Field(
             ge=4,
@@ -102,7 +102,7 @@ class ptpProfile(ManagedObject):
             description="Telecom profile related propertiesLocal Priority or PTP Cost",
         ),
     ] = 128
-    flag_to_over_ride_node_level_config: bool = Field(
+    node_profile_override: bool = Field(
         default=False,
         validation_alias="nodeProfileOverride",
         serialization_alias="nodeProfileOverride",

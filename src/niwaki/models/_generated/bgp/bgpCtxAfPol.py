@@ -124,7 +124,7 @@ class bgpCtxAfPol(ManagedObject):
             description="iBGP max-path",
         ),
     ] = 16
-    max_local_ecmp_for_redistribute_rotes: Annotated[
+    max_local_ecmp: Annotated[
         int,
         Field(
             ge=0,

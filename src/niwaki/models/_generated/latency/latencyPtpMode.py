@@ -132,7 +132,7 @@ class latencyPtpMode(ManagedObject):
     state: NetflowAdminSt = Field(
         default=NetflowAdminSt.DISABLED, description="State of the PTP protocol"
     )
-    system_resolution_factor_for_max_latency: Annotated[
+    system_resolution: Annotated[
         int,
         Field(
             validation_alias="systemResolution",

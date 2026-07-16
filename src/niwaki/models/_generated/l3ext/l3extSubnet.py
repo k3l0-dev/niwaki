@@ -50,13 +50,8 @@ class l3extSubnet(ManagedObject):
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    aggregate_routes_for_subnet: Annotated[
-        Flags[L3extRouteAggType], BeforeValidator(parse_flags)
-    ] = Field(
-        default_factory=lambda: frozenset(),
-        validation_alias="aggregate",
-        serialization_alias="aggregate",
-        description="Aggregate Routes for Subnet",
+    aggregate: Annotated[Flags[L3extRouteAggType], BeforeValidator(parse_flags)] = Field(
+        default_factory=lambda: frozenset(), description="Aggregate Routes for Subnet"
     )
     annotation: Annotated[
         str,
@@ -86,12 +81,8 @@ class l3extSubnet(ManagedObject):
             serialization_alias="nameAlias",
         ),
     ] = ""
-    scope_of_the_external_subnet: Annotated[Flags[L3extRouteScp], BeforeValidator(parse_flags)] = (
-        Field(
-            default_factory=lambda: frozenset({L3extRouteScp.IMPORT_SECURITY}),
-            validation_alias="scope",
-            serialization_alias="scope",
-            description="The domain applicable to the capability.",
-        )
+    scope: Annotated[Flags[L3extRouteScp], BeforeValidator(parse_flags)] = Field(
+        default_factory=lambda: frozenset({L3extRouteScp.IMPORT_SECURITY}),
+        description="The domain applicable to the capability.",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

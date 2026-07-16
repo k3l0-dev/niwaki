@@ -326,6 +326,44 @@ class TestMakers:
             f"jargon {jargon[child]!r} without a documented rename"
         )
 
+    def test_never_creatable_makers_under_multi_instance_parents_are_reviewed(self) -> None:
+        """Guard against the qosDscpTransPol bug class (dropped in 0.14.2).
+
+        A never-creatable, name-keyed class curated as a maker under a *creatable*
+        (multi-instance) parent only works if its default MO exists at the
+        maker's own DN.  When that default lives only under one specific parent
+        instance (``tn-infra``, ``tn-mgmt``, …), the POST hits a non-existent,
+        non-creatable DN and the APIC returns HTTP 400 everywhere else.  Every
+        such maker must be reviewed against a live fabric and recorded here.
+        """
+        reviewed = {
+            "vzAny": "auto-exists per VRF at uni/tn-*/ctx-*/any — POST-modifies it",
+            "mgmtMgmtP": "only under tn-mgmt; the management-EPG subtree hangs off it",
+            "mgmtExtMgmtEntity": "only under tn-mgmt; external management network profile",
+            # Mandatory service singletons auto-created under every commPol — the
+            # HTTP/HTTPS/SSH access config lives here (the vzAny pattern).
+            "commHttp": "auto-exists under every commPol",
+            "commHttps": "auto-exists under every commPol",
+            "commSsh": "auto-exists under every commPol",
+            "commShellinabox": "auto-exists under every commPol",
+        }
+        offenders: dict[str, str] = {}
+        for parent, name, child in _makers():
+            if getattr(_load_class(parent), "_is_creatable", True) is False:
+                continue  # singleton parent — the default always sits at the maker DN
+            child_cls = _load_class(child)
+            if getattr(child_cls, "_is_creatable", True) is not False:
+                continue  # creatable child — the maker can create it outright
+            if "name" not in child_cls.model_fields:
+                continue  # fixed-RN singleton (e.g. vnsSvcCont), not name-keyed
+            if child not in reviewed:
+                offenders[f"{parent}.{name}"] = child
+        assert not offenders, (
+            f"un-reviewed never-creatable makers under multi-instance parents: "
+            f"{offenders}. Verify against a fabric and add to `reviewed`, or drop the "
+            f"maker — this is the qosDscpTransPol pattern (HTTP 400 under user tenants)."
+        )
+
     def test_poluni_is_the_single_root_table(self) -> None:
         """Every maker parent is polUni or reachable from it (one rooted tree)."""
         makers = _tables().makers

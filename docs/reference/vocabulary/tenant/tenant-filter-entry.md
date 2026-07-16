@@ -26,7 +26,7 @@ Accepted as keyword arguments of `.entry(name)` and of `.set(**attrs)` on this c
 | `name` *(positional)* | `name` | `str` | — | — | The name of a filter entry. This name can be up to 64 alphanumeric characters. Note that you cannot change this name after the object has been saved. |
 | `tcp` | — | `int | str | tuple[int, int]` | — | — | Curated shorthand — expanded to the real schema fields. |
 | `udp` | — | `int | str | tuple[int, int]` | — | — | Curated shorthand — expanded to the real schema fields. |
-| `apply_rule_for_all_fragments` | `applyToFrag` | `bool` | — | `False` | — |
+| `apply_to_frag` | `applyToFrag` | `bool` | — | `False` | — |
 | `arp_opcodes` | `arpOpc` | {ref}`ArpOpcode <enum-arpopcode>` | `reply`, `req`, `unspecified` | `unspecified` | ARP opcodes |
 | `destination_from_port` | `dFromPort` | `int` | — | `unspecified` | Destination From Port |
 | `destination_to_port` | `dToPort` | `int` | — | `unspecified` | Destination To Port |
@@ -34,7 +34,7 @@ Accepted as keyword arguments of `.entry(name)` and of `.set(**attrs)` on this c
 | `ethernet_type` | `etherT` | {ref}`L2EtherType <enum-l2ethertype>` | `arp`, `fcoe`, `ip`, `ipv4`, `ipv6`, `mac_security`, `mpls_ucast`, `trill`, `unspecified` | `unspecified` | Ether type |
 | `icmpv4_type` | `icmpv4T` | `int` | — | `unspecified` | — |
 | `icmpv6_type` | `icmpv6T` | `int` | — | `unspecified` | — |
-| `dscp_match_for_filter_entry` | `matchDscp` | `int` | — | `unspecified` | — |
+| `match_dscp` | `matchDscp` | `int` | — | `unspecified` | — |
 | `protocol` | `prot` | `int` | — | `unspecified` | L3 Ip Protocol |
 | `source_from_port` | `sFromPort` | `int` | — | `unspecified` | Source From Port |
 | `source_to_port` | `sToPort` | `int` | — | `unspecified` | Source To Port |

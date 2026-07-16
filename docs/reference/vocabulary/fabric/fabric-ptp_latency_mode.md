@@ -34,7 +34,7 @@ Accepted as keyword arguments of `.ptp_latency_mode()` and of `.set(**attrs)` on
 | `ptp_global_priority_1_value` | `prio1` | `int` | — | `255` | PTP Global properties |
 | `ptp_global_priority_2_value` | `prio2` | `int` | — | `255` | — |
 | `state` | `state` | {ref}`NetflowAdminSt <enum-netflowadminst>` | `disabled`, `enabled` | `disabled` | State of the PTP protocol |
-| `system_resolution_factor_for_max_latency` | `systemResolution` | `int` | — | `0` | System Resolution factor, Value could be (0 or 11 ) |
+| `system_resolution` | `systemResolution` | `int` | — | `0` | System Resolution factor, Value could be (0 or 11 ) |
 | `ttag_ether_type0x8905_status` | `ttagEtherType0x8905Status` | `bool` | — | `False` | State of the ttag ether type |
 
 ## APIC diagnostics

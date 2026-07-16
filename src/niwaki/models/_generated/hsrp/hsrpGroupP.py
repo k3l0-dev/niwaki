@@ -150,13 +150,10 @@ class hsrpGroupP(ManagedObject):
         serialization_alias="ipObtainMode",
         description="HSRP primary Virtual IP Obtain Mode",
     )
-    configured_mac_address_for_the_group: Annotated[
+    mac: Annotated[
         str,
         Field(
-            pattern="^([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}$",
-            validation_alias="mac",
-            serialization_alias="mac",
-            description="HSRP VMAC for the group",
+            pattern="^([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}$", description="HSRP VMAC for the group"
         ),
     ] = ""
     display_name: Annotated[

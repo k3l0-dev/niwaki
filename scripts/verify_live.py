@@ -60,6 +60,7 @@ def _acts() -> dict[str, list[tuple[str, Callable[[], Cursor]]]]:
         test_04_l3out,
         test_05_observability,
         test_06_edge_and_management,
+        test_07_srmpls,
     )
 
     return {
@@ -77,6 +78,10 @@ def _acts() -> dict[str, list[tuple[str, Callable[[], Cursor]]]]:
         "6": [
             ("L2 edge", test_06_edge_and_management.edge_design),
             ("management", test_06_edge_and_management.management_design),
+        ],
+        "7": [
+            ("SR-MPLS infra", test_07_srmpls.infra_srmpls_design),
+            ("SR-MPLS user", test_07_srmpls.user_srmpls_design),
         ],
     }
 

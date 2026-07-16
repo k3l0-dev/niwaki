@@ -54,7 +54,7 @@ class datetimePol(ManagedObject):
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    ntp_stratum_value_see_ntp_rfc_5905: Annotated[
+    stratum_value: Annotated[
         Annotated[int, Field(ge=1, le=14)] | Literal["primary"],
         AfterValidator(named_number({"1": "primary"})),
         Field(

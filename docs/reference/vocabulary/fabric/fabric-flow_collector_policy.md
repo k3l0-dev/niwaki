@@ -24,7 +24,7 @@ Accepted as keyword arguments of `.flow_collector_policy()` and of `.set(**attrs
 | `admin_state` | `adminSt` | {ref}`TelemetryAdminState <enum-telemetryadminstate>` | `disabled`, `enabled` | `disabled` | The administrative state of the object or policy. |
 | `collector_placement` | `collectorPlacement` | `int` | — | `apic` | — |
 | `description` | `descr` | `str` | — | — | Specifies a description of the policy definition. |
-| `external_ip_where_collector_is_listening` | `externalServerIp` | `str` | — | — | External Server Ip and Port would be used to export the streams to an external server |
+| `external_server_ip` | `externalServerIp` | `str` | — | — | External Server Ip and Port would be used to export the streams to an external server |
 | `external_server_port` | `externalServerPort` | `int` | — | `0` | — |
 | `enable_fte_instance` | `fteEn` | {ref}`TelemetryAdminState <enum-telemetryadminstate>` | `disabled`, `enabled` | `disabled` | Enable FTE |
 | `name` | `name` | `str` | — | — | — |

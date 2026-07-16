@@ -38,7 +38,7 @@ def epg_world() -> Cursor:
                 .bind(bd="b", contract_master="db", imported_contract="imp",
                       taboo_contract="tb", monitoring_policy="mon", custom_qos_policy="qos")
                 .provide("web").consume("web").intra_epg("web")
-                .subnet("10.0.1.1/24", scope="public", preferred_as_primary_subnet=True)
+                .subnet("10.0.1.1/24", scope="public", preferred=True)
                 .static_endpoint("00:11:22:33:44:55", "silent-host",
                                  encap="vlan-101", ip_address="10.0.1.9")
                     .static_ip("10.0.1.10")
@@ -51,11 +51,11 @@ def epg_world() -> Cursor:
                     .ip_attribute("ip1", ip_address="10.0.1.50")
                     .mac_attribute("m1", macaddress="00:AA:BB:CC:DD:EE")
                     .vm_attribute("vm1", attribute_type="guest-os", operator="contains",
-                                  custom_attribute_value_or_tag_name="Ubuntu")
+                                  value="Ubuntu")
                     .dns_attribute("dns1", domain_name_filter="*.corp.local")
                     .sub_criterion("sub1", matching_rule_type="all")
                         .vm_attribute("vm2", attribute_type="vm-name", operator="equals",
-                                      custom_attribute_value_or_tag_name="web-01")
+                                      value="web-01")
             .esg("secure", policy_control_enforcement="enforced", qos_class="level3")
                 .bind(vrf="v", contract_master="secure2")
                 .provide("web").consume("web").intra_epg("web")

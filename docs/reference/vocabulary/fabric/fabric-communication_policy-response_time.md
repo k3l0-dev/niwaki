@@ -24,4 +24,4 @@ Accepted as keyword arguments of `.response_time()` and of `.set(**attrs)` on th
 | `calc_window` | `calcWindow` | `int` | — | `300` | Window in which averageTime, and number of requests that go beyond the threshold is calculated |
 | `admin_state` | `enableCalculation` | {ref}`CommAdminState <enum-commadminstate>` | `disabled`, `enabled` | `disabled` | Property is set to enable or disable the calculation |
 | `resp_time_threshold` | `respTimeThreshold` | `int` | — | `85000` | An event will be created if the response time of any request in the window is beyond this threshold |
-| `set_the_value_for_n_in_top_n_requests` | `topNRequests` | `int` | — | `5` | Property to set the number of slowest requests to be seen |
+| `top_n_requests` | `topNRequests` | `int` | — | `5` | Property to set the number of slowest requests to be seen |

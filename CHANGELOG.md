@@ -4,6 +4,117 @@ All notable changes to this project are documented here.  The format follows
 [Keep a Changelog](https://keepachangelog.com/); versions follow semver
 (0.x — the API may still change between minor versions).
 
+## [0.14.9] — 2026-07-16
+
+### Fixed
+
+- **Writes are no longer retried after a timeout.**  A read/write timeout can
+  mean the APIC already accepted the `POST`/`DELETE`, so retrying risked a
+  double-apply or a spurious `NotFoundError` on a delete that actually
+  succeeded.  Writes now retry only on pre-send errors (connection/pool); reads
+  retry on any transport error as before.
+
+## [0.14.8] — 2026-07-16
+
+### Fixed
+
+- **Query filter values are escaped.**  A `"` in a `where(prop=value)` / `wcard`
+  value is now escaped instead of breaking the `eq(prop,"...")` filter grammar
+  (which could 400 or silently match the wrong set).
+- **Pagination no longer stops after page 0 when `totalCount` is absent.**  A
+  missing/zero `totalCount` is treated as "unknown" and pages continue until an
+  empty page, instead of being read as "no more pages".
+- **`PushReport.request_count` on a failed staged push** now counts the requests
+  actually issued, not the full op list.
+- **`gather()` docstring** corrected to `TaskGroup` semantics — the first raise
+  cancels in-flight siblings, so it must not be used for concurrent writes.
+
+## [0.14.7] — 2026-07-16
+
+### Fixed
+
+- **`plan` no longer reports a change `push` never makes.**  `to_apic()` drops an
+  empty string on a non-naming field (sending `""` would clobber the APIC value),
+  so `push` never sends it — but `mo_diff` still compared it, so a design with a
+  field set to `""` produced a plan `update` that never applied and never
+  converged.  `mo_diff` now mirrors the `to_apic` rule (found in a runtime audit).
+
+## [0.14.6] — 2026-07-16
+
+### Fixed
+
+- **`protocol="icmpv6"` filter-entry sugar** now defaults `ethernet_type` to
+  `ipv6` (was `ip`), since ICMPv6 exists only over IPv6.  `tcp=` / `udp=` keep
+  the generic `ip` ether-type, which already matches both IPv4 and IPv6 — no
+  extra `ethernet_type` is needed for an IPv6 port filter.
+
+## [0.14.5] — 2026-07-16
+
+### Fixed
+
+- **Readable names on the high-traffic classes** (batch 3, from a deep audit):
+  `fvSubnet.virtual` / `.preferred`, `vzEntry.apply_to_frag` / `.match_dscp`,
+  `l3extSubnet.aggregate` / `.scope`, and `fvBD.optimize_wan_bandwidth` /
+  `.intersite_bum_traffic_allow` / `.service_bd_routing_disable`.  The
+  `l3extSubnet.scope` rename also makes `scope` consistent across the three
+  subnet-like classes (it was `scope_of_the_external_subnet`).
+
+## [0.14.4] — 2026-07-16
+
+### Fixed
+
+- **Readable names for 45 more sentence-labelled fields** (batch 2): the
+  telemetry FTE event fields (`telemetryFteEventSetP.drop_flow_count`, …),
+  `fvBD.limit_ip_learn_to_subnets` / `.mcast_arp_drop`, `fvTagSelector.match_key`
+  / `.match_value`, `fvVmAttr.value`, `l3extRogueExceptMacP.enable_all_macs`,
+  `l3extVrfValidationPol.enable_vrf_validation_*`, `ptpProfile.node_profile_override`
+  / `.delay_intvl`, `qosLlfcIfPol.llfc_rcv_admin_st` / `.llfc_send_admin_st`, and
+  `bfdIpv4InstPol` / `bfdIpv6InstPol.echo_src_addr` — the last also sheds a
+  mislabelled "ipv4" that the schema stamped on the *ipv6* policy.  Cryptic wire
+  names (`qiqL2ProtTunMask`, the flash counters) are deliberately left as-is.
+
+## [0.14.3] — 2026-07-16
+
+### Fixed
+
+- **Readable names for 20 everyday config knobs.**  Fields whose ACI schema
+  label is a full sentence (which slipped under the codegen's length cap) now
+  take their wire prop name instead: `bgpPeerP.weight` / `.connectivity_type`,
+  `bgpInfraPeerP.weight`, `bgpCtxAfPol.max_local_ecmp`, `l2IfPol.vlan_scope`,
+  `l2PortSecurityPol.maximum` / `.timeout`, `hsrpGroupP.mac`,
+  `hsrpGroupPol.preempt_delay_reload`, `l3extDefaultRouteLeakP.scope`,
+  `infraPortTrackPol.minlinks`, `l4VxlanInstPol.udp_port`, `ospfCtxPol.max_lsa_num`,
+  `isakmpKeyring.address`, `mplsNodeSidP.loopback_addr`,
+  `fvCepNetCfgPol.start_ip` / `.end_ip` / `.dns_suffix` / `.dns_search_suffix`,
+  `infraSetPol.enforce_subnet_check`.
+
+## [0.14.2] — 2026-07-16
+
+### Fixed
+
+- **Dropped the `dscp_translation_policy` tenant maker.**  `qosDscpTransPol` is a
+  `never`-creatable global singleton that exists only at
+  `uni/tn-infra/dscptranspol-default`, so the per-tenant maker always failed
+  (HTTP 400) under any user tenant.  Configure the infra default via
+  `.mo(qosDscpTransPol, ...)` if needed.
+
+## [0.14.1] — 2026-07-16
+
+### Added
+
+- **VRF route targets.**  `vrf(name).route_target_profile(af)` (per address
+  family, `ipv4-ucast` / `ipv6-ucast`) with `route_target(value, "import")` /
+  `route_target(value, "export")` — the BGP route targets that map a VRF into an
+  MPLS-VPN, EVPN or SR-MPLS hand-off.  Completes the tenant-side SR-MPLS VRF
+  L3Out: consumer label, route targets, and import/export route maps.
+
+### Fixed
+
+- **SR-MPLS VRF L3Out.**  `l3out(name, mpls_enabled=True)` now marks an L3Out as
+  a SR-MPLS VRF L3Out (the `mplsEnabled` flag) rather than a classic L3Out.
+- **Field name.**  `l3extOut`'s MPLS flag is now `mpls_enabled` (its schema
+  label — a full sentence — had produced an unusable name).
+
 ## [0.14.0] — 2026-07-15
 
 L4-L7 service graphs join the vocabulary — the last large domain of the ACI
@@ -35,14 +146,14 @@ The device-package metamodel and normalized LB/NAT requests stay uncurated.
 The declarable config plane across the five domains (operational, diagnostic and
 out-of-scope families — cloud, multi-site/NDO, device-package meta — excluded):
 
-| Domain            | Declarable | Curated |    % |
-| ----------------- | ---------: | ------: | ---: |
-| Tenant            |        368 |     318 | 86 % |
-| Access (`infra`)  |        164 |     141 | 85 % |
-| Fabric            |        179 |     145 | 81 % |
-| Controller        |         20 |       9 | 45 % |
-| VMM               |         22 |      15 | 68 % |
-| **Global (union)**|    **753** | **628** | **83 %** |
+| Domain             | Declarable | Curated |        % |
+| ------------------ | ---------: | ------: | -------: |
+| Tenant             |        368 |     318 |     86 % |
+| Access (`infra`)   |        164 |     141 |     85 % |
+| Fabric             |        179 |     145 |     81 % |
+| Controller         |         20 |       9 |     45 % |
+| VMM                |         22 |      15 |     68 % |
+| **Global (union)** |    **753** | **628** | **83 %** |
 
 790 curated positions across 652 distinct classes.
 

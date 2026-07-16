@@ -70,12 +70,12 @@ class qosLlfcIfPol(ManagedObject):
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
-    link_level_flow_control_receive_mode: L1LinkLevelFlowCtrl = Field(
+    llfc_rcv_admin_st: L1LinkLevelFlowCtrl = Field(
         default=L1LinkLevelFlowCtrl.OFF,
         validation_alias="llfcRcvAdminSt",
         serialization_alias="llfcRcvAdminSt",
     )
-    link_level_flow_control_send_mode: L1LinkLevelFlowCtrl = Field(
+    llfc_send_admin_st: L1LinkLevelFlowCtrl = Field(
         default=L1LinkLevelFlowCtrl.OFF,
         validation_alias="llfcSendAdminSt",
         serialization_alias="llfcSendAdminSt",

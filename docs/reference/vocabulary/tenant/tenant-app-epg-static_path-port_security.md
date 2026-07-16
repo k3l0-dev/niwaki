@@ -25,8 +25,8 @@ Accepted as keyword arguments of `.port_security(name)` and of `.set(**attrs)` o
 | --- | --- | --- | --- | --- | --- |
 | `name` *(positional)* | `name` | `str` | — | — | The name of the object. |
 | `description` | `descr` | `str` | — | — | Specifies a description of the policy definition. |
-| `port_security_maximum_can_be_0_12000` | `maximum` | `int` | — | `0` | Port Security Maximum |
+| `maximum` | `maximum` | `int` | — | `0` | Port Security Maximum |
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |
-| `port_security_timeout_can_be_60_3600` | `timeout` | `int` | — | `60` | Port Security Timeout |
+| `timeout` | `timeout` | `int` | — | `60` | Port Security Timeout |
 | `port_security_violation` | `violation` | {ref}`L2PortSecurityViolation <enum-l2portsecurityviolation>` | `protect` | `protect` | Port Security Violation |

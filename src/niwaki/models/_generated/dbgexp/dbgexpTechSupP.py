@@ -80,12 +80,8 @@ class dbgexpTechSupP(ManagedObject):
     app_name: Annotated[
         str, Field(max_length=512, validation_alias="appName", serialization_alias="appName")
     ] = ""
-    category_of_feature_to_be_collected: Annotated[
-        Flags[DbgexpCategory], BeforeValidator(parse_flags)
-    ] = Field(
+    category: Annotated[Flags[DbgexpCategory], BeforeValidator(parse_flags)] = Field(
         default_factory=lambda: frozenset({DbgexpCategory.ALL}),
-        validation_alias="category",
-        serialization_alias="category",
         description="The category name. This is the name of the grouping used when calculating the healthscore. If unspecified, the child's class name is used.",
     )
     compression: MonCompression = Field(

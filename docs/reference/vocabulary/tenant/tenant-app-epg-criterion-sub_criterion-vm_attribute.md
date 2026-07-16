@@ -31,4 +31,4 @@ Accepted as keyword arguments of `.vm_attribute(name)` and of `.set(**attrs)` on
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |
 | `attribute_type` | `type` | {ref}`FvVmAttrT <enum-fvvmattrt>` | `custom-label`, `domain`, `guest-os`, `hv`, `rootContName`, `tag`, `vm`, `vm-folder`, `vm-name`, `vmfolder-path`, `vnic` | `vm-name` | The attribute type. |
-| `custom_attribute_value_or_tag_name` | `value` | `str` | — | — | The assigned number value of the attribute. |
+| `value` | `value` | `str` | — | — | The assigned number value of the attribute. |

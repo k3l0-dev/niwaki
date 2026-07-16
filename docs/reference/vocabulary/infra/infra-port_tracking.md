@@ -26,6 +26,6 @@ Accepted as keyword arguments of `.port_tracking(name)` and of `.set(**attrs)` o
 | `delay_timeout` | `delay` | `int` | — | `120` | The administrative port delay. |
 | `description` | `descr` | `str` | — | — | Specifies a description of the policy definition. |
 | `include_apic_ports` | `includeApicPorts` | `bool` | — | `False` | — |
-| `minimum_links_left_up_before_trigger` | `minlinks` | `int` | — | `0` | — |
+| `minlinks` | `minlinks` | `int` | — | `0` | — |
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |

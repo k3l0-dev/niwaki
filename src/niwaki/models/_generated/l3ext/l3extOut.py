@@ -97,7 +97,7 @@ class l3extOut(ManagedObject):
         serialization_alias="enforceRtctrl",
         description="The enforce route control type.",
     )
-    indicate_whether_mpls_is_enabled_or_not: bool = Field(
+    mpls_enabled: bool = Field(
         default=False,
         validation_alias="mplsEnabled",
         serialization_alias="mplsEnabled",

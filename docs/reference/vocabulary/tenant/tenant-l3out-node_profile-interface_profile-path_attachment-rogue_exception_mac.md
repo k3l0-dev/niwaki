@@ -23,4 +23,4 @@ Accepted as keyword arguments of `.rogue_exception_mac()` and of `.set(**attrs)`
 
 | parameter | wire | type | values | default | description |
 | --- | --- | --- | --- | --- | --- |
-| `indicate_whether_all_macs_are_excluded` | `enableAllMacs` | `bool` | — | `False` | Indicate whether all MACs are excluded or not |
+| `enable_all_macs` | `enableAllMacs` | `bool` | — | `False` | Indicate whether all MACs are excluded or not |

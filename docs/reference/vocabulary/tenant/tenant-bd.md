@@ -24,26 +24,26 @@ Accepted as keyword arguments of `.bd(name)` and of `.set(**attrs)` on this curs
 | parameter | wire | type | values | default | description |
 | --- | --- | --- | --- | --- | --- |
 | `name` *(positional)* | `name` | `str` | — | — | The bridge domain name. |
-| `optimize_wan_bandwidth_between_sites` | `OptimizeWanBandwidth` | `bool` | — | `False` | OptimizeWanBandwidth flag is enabled between sites |
+| `optimize_wan_bandwidth` | `OptimizeWanBandwidth` | `bool` | — | `False` | OptimizeWanBandwidth flag is enabled between sites |
 | `arp_flooding` | `arpFlood` | `bool` | — | `False` | A property to specify whether ARP flooding is enabled. If flooding is disabled, unicast routing will be performed on the target IP address. |
 | `description` | `descr` | `str` | — | — | Specifies a description of the policy definition root. |
 | `enable_rogue_except_mac` | `enableRogueExceptMac` | `bool` | — | `False` | rogue exception mac wildcard support at bd level |
 | `clear_endpoints` | `epClear` | `bool` | — | `False` | Represents the parameter used by the node (i.e. Leaf) to clear all EPs in all leaves for this BD. |
 | `ep_move_detection_mode` | `epMoveDetectMode` | {ref}`L2EpMoveDetectMode <enum-l2epmovedetectmode>` | `garp` | — | The End Point move detection option uses the Gratuitous Address Resolution Protocol (GARP). A gratuitous ARP is an ARP broadcast-type of packet that is used to verify that no other device on the network has the same IP address as the sending device. |
 | `bd_host_based_routing` | `hostBasedRouting` | `bool` | — | `False` | Enables advertising host routes (/32 prefixes) out of the L3OUT(s) that are associated to this BD. |
-| `allow_bum_traffic_between_sites` | `intersiteBumTrafficAllow` | `bool` | — | `False` | Control whether BUM traffic is allowed between sites |
+| `intersite_bum_traffic_allow` | `intersiteBumTrafficAllow` | `bool` | — | `False` | Control whether BUM traffic is allowed between sites |
 | `allow_l2stretch_between_sites` | `intersiteL2Stretch` | `bool` | — | `False` | l2Stretch flag is enabled between sites |
 | `ip_learning` | `ipLearning` | `bool` | — | `True` | — |
 | `ipv6_multicast_allow` | `ipv6McastAllow` | `bool` | — | `False` | Multicast. Flag to indicate if ipv6 multicast is enabled |
-| `limit_ip_learning_to_bd_subnets_only` | `limitIpLearnToSubnets` | `bool` | — | `True` | Limits IP address learning to the bridge domain subnets only. Every BD can have multiple subnets associated with it. By default, all IPs are learned. |
+| `limit_ip_learn_to_subnets` | `limitIpLearnToSubnets` | `bool` | — | `True` | Limits IP address learning to the bridge domain subnets only. Every BD can have multiple subnets associated with it. By default, all IPs are learned. |
 | `ipv6_link_local_address` | `llAddr` | `str` | — | — | The override of the system generated IPv6 link-local address. |
 | `mac_address` | `mac` | `str` | — | — | The MAC address of the bridge domain (BD) or switched virtual interface (SVI). Every BD by default takes the fabric-wide default MAC address. You can override that address with a different one. By default the BD will take a 00:22:BD:F8:19:FF mac address. |
-| `bd_rogue_mcast_arp_packet_drop` | `mcastARPDrop` | `bool` | — | `True` | rogue mcast ARP packet drop |
+| `mcast_arp_drop` | `mcastARPDrop` | `bool` | — | `True` | rogue mcast ARP packet drop |
 | `multicast_allow` | `mcastAllow` | `bool` | — | `False` | Multicast. Flag to indicate if multicast is enabled |
 | `multi_destination_packet_action` | `multiDstPktAct` | {ref}`L2MultiDstPktAct <enum-l2multidstpktact>` | `bd-flood`, `drop`, `encap-flood` | `bd-flood` | The multiple destination forwarding method for L2 Multicast, Broadcast, and Link Layer traffic types. |
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |
-| `disable_routing_on_service_bd` | `serviceBdRoutingDisable` | `bool` | — | `False` | Disable Routing on service BD |
+| `service_bd_routing_disable` | `serviceBdRoutingDisable` | `bool` | — | `False` | Disable Routing on service BD |
 | `type` | `type` | {ref}`FvBDType <enum-fvbdtype>` | `fc`, `regular` | `regular` | domain type |
 | `unicast_routing` | `unicastRoute` | `bool` | — | `True` | The forwarding method based on predefined forwarding criteria (IP or MAC address). |
 | `unknown_mac_unicast_action` | `unkMacUcastAct` | {ref}`L2UnkMacUcastAct <enum-l2unkmacucastact>` | `flood`, `proxy` | `proxy` | The forwarding method for unknown layer 2 destinations. |

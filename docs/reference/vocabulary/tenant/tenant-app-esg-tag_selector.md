@@ -12,19 +12,19 @@ Endpoint Security Group Tag Selector, to decide which endpoints belong to the ES
 | | |
 | --- | --- |
 | ACI class | `fvTagSelector` |
-| RN | `tagselectorkey-[{key_tagtag_to_be_associated_with}]-value-[{value_tagtag_to_be_associated_with}]` |
+| RN | `tagselectorkey-[{match_key}]-value-[{match_value}]` |
 | Cursor | `TagSelectorCursor` |
 | Parent | {ref}`tenant.app.esg <vocab-tenant-app-esg>` |
 | Atomic | — |
 
 ## Attributes
 
-Accepted as keyword arguments of `.tag_selector(key_tagtag_to_be_associated_with, value_tagtag_to_be_associated_with)` and of `.set(**attrs)` on this cursor.  Enum parameters also accept the plain string.
+Accepted as keyword arguments of `.tag_selector(match_key, match_value)` and of `.set(**attrs)` on this cursor.  Enum parameters also accept the plain string.
 
 | parameter | wire | type | values | default | description |
 | --- | --- | --- | --- | --- | --- |
-| `key_tagtag_to_be_associated_with` *(positional)* | `matchKey` | `str` | — | — | — |
-| `value_tagtag_to_be_associated_with` *(positional)* | `matchValue` | `str` | — | — | — |
+| `match_key` *(positional)* | `matchKey` | `str` | — | — | — |
+| `match_value` *(positional)* | `matchValue` | `str` | — | — | — |
 | `description` | `descr` | `str` | — | — | Specifies a description of the policy definition. |
 | `name` | `name` | `str` | — | — | — |
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |

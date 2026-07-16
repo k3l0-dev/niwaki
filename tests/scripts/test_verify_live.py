@@ -84,7 +84,7 @@ class TestActs:
     def test_every_act_design_compiles(self) -> None:
         """The verifier audits the acts themselves — they must all be reachable."""
         acts = _acts()
-        assert set(acts) == {"1", "2", "3", "4", "5", "6"}
+        assert set(acts) == {"1", "2", "3", "4", "5", "6", "7"}
         for designs in acts.values():
             for _name, factory in designs:
                 assert _expectations(factory()), "a design with nothing to verify"

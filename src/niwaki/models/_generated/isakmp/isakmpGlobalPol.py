@@ -95,7 +95,7 @@ class isakmpGlobalPol(ManagedObject):
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
-    number_of_seconds_between_keep_alives: Annotated[
+    retry_interval: Annotated[
         int,
         Field(
             ge=2,

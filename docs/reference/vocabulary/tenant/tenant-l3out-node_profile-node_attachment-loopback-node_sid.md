@@ -25,5 +25,5 @@ Accepted as keyword arguments of `.node_sid(srgb_index)` and of `.set(**attrs)` 
 | --- | --- | --- | --- | --- | --- |
 | `srgb_index` *(positional)* | `sidoffset` | `int` | — | — | Index |
 | `description` | `descr` | `str` | — | — | Specifies the description of a policy component. |
-| `loopback_address_for_mpls_data_plane` | `loopbackAddr` | `str` | — | — | Data plane TEP |
+| `loopback_addr` | `loopbackAddr` | `str` | — | — | Data plane TEP |
 | `name` | `name` | `str` | — | — | — |

@@ -27,4 +27,4 @@ Accepted as keyword arguments of `.l2_interface_policy(name)` and of `.set(**att
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |
 | `dot1q_tunnel_policy_configuration` | `qinq` | {ref}`L2QinQConfig <enum-l2qinqconfig>` | `corePort`, `disabled`, `doubleQtagPort`, `edgePort` | `disabled` | QinQ Configuration |
 | `vepa_policy_configuration` | `vepa` | {ref}`L2VepaConfig <enum-l2vepaconfig>` | `disabled`, `enabled` | `disabled` | Vepa Configuration |
-| `vlan_scope_can_be_global_or_port_local` | `vlanScope` | {ref}`L2VlanScope <enum-l2vlanscope>` | `global`, `portlocal` | `global` | The Layer 2 interface VLAN scope |
+| `vlan_scope` | `vlanScope` | {ref}`L2VlanScope <enum-l2vlanscope>` | `global`, `portlocal` | `global` | The Layer 2 interface VLAN scope |

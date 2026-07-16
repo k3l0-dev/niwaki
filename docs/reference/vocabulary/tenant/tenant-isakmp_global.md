@@ -28,4 +28,4 @@ Accepted as keyword arguments of `.isakmp_global()` and of `.set(**attrs)` on th
 | `name` | `name` | `str` | — | — | — |
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |
-| `number_of_seconds_between_keep_alives` | `retryInterval` | `int` | — | `2` | IsaKmp Keepalive Retry Interval |
+| `retry_interval` | `retryInterval` | `int` | — | `2` | IsaKmp Keepalive Retry Interval |

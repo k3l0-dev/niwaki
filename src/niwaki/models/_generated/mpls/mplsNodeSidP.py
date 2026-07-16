@@ -61,7 +61,7 @@ class mplsNodeSidP(ManagedObject):
             description="Specifies the description of a policy component.",
         ),
     ] = ""
-    loopback_address_for_mpls_data_plane: Annotated[
+    loopback_addr: Annotated[
         str,
         Field(
             pattern="^[0-9a-fA-F.:/ ]+$",

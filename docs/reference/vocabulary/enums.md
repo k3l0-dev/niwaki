@@ -5,7 +5,7 @@ Re-generate: uv run python -m niwaki._codegen.generate_docs
 
 # Enums
 
-The 394 enum types reachable from the curated vocabulary — every constrained parameter of every maker.  A parameter typed as an enum also accepts the plain string; the value is validated at the call site either way.
+The 396 enum types reachable from the curated vocabulary — every constrained parameter of every maker.  A parameter typed as an enum also accepts the plain string; the value is validated at the call site either way.
 
 The remaining generated enums back the non-curated classes and live in `niwaki.models._generated.enums`.
 
@@ -303,6 +303,17 @@ Used by: {ref}`tenant.l3out.node_profile.infra_peer_connectivity_profile <vocab-
 
 Used by: {ref}`tenant.l3out.node_profile.bgp_peer <vocab-tenant-l3out-node_profile-bgp_peer>`, {ref}`tenant.l3out.node_profile.infra_peer_connectivity_profile <vocab-tenant-l3out-node_profile-infra_peer_connectivity_profile>`, {ref}`tenant.l3out.node_profile.interface_profile.floating_svi.bgp_peer <vocab-tenant-l3out-node_profile-interface_profile-floating_svi-bgp_peer>`, {ref}`tenant.l3out.node_profile.interface_profile.floating_svi.infra_peer_connectivity_profile <vocab-tenant-l3out-node_profile-interface_profile-floating_svi-infra_peer_connectivity_profile>`
 
+(enum-bgprtsourceaftype)=
+
+## `BgpRtSourceAfType`
+
+| value | meaning |
+| --- | --- |
+| `ipv4-ucast` | ipv4 unicast |
+| `ipv6-ucast` | ipv6 unicast |
+
+Used by: {ref}`tenant.vrf.route_target_profile <vocab-tenant-vrf-route_target_profile>`
+
 (enum-bgprttargett)=
 
 ## `BgpRtTargetT`
@@ -313,6 +324,17 @@ Used by: {ref}`tenant.l3out.node_profile.bgp_peer <vocab-tenant-l3out-node_profi
 | `explicit` | user will configure route targets explicitly |
 
 Used by: {ref}`tenant.l3out.route_target_instrumentation_profile <vocab-tenant-l3out-route_target_instrumentation_profile>`
+
+(enum-bgprttptype)=
+
+## `BgpRttPType`
+
+| value | meaning |
+| --- | --- |
+| `export` | export |
+| `import` | import |
+
+Used by: {ref}`tenant.vrf.route_target_profile.route_target <vocab-tenant-vrf-route_target_profile-route_target>`
 
 (enum-bgpspineroletype)=
 
@@ -6437,7 +6459,7 @@ Used by: {ref}`tenant.host_protection.subject.rule <vocab-tenant-host_protection
 | `disabled` | Disabled |
 | `enabled` | Enabled |
 
-Used by: {ref}`fabric.igmp_snoop_policy <vocab-fabric-igmp_snoop_policy>`, {ref}`fabric.mld_snoop_policy <vocab-fabric-mld_snoop_policy>`, {ref}`fabric.snmp_policy <vocab-fabric-snmp_policy>`, {ref}`fabric.span_source_group <vocab-fabric-span_source_group>`, {ref}`fabric.twamp_responder_policy <vocab-fabric-twamp_responder_policy>`, {ref}`fabric.twamp_server_policy <vocab-fabric-twamp_server_policy>`, {ref}`infra.dot1x_port_authentication <vocab-infra-dot1x_port_authentication>`, {ref}`infra.poe_interface_policy <vocab-infra-poe_interface_policy>` *(+16 more)*
+Used by: {ref}`fabric.igmp_snoop_policy <vocab-fabric-igmp_snoop_policy>`, {ref}`fabric.mld_snoop_policy <vocab-fabric-mld_snoop_policy>`, {ref}`fabric.snmp_policy <vocab-fabric-snmp_policy>`, {ref}`fabric.span_source_group <vocab-fabric-span_source_group>`, {ref}`fabric.twamp_responder_policy <vocab-fabric-twamp_responder_policy>`, {ref}`fabric.twamp_server_policy <vocab-fabric-twamp_server_policy>`, {ref}`infra.dot1x_port_authentication <vocab-infra-dot1x_port_authentication>`, {ref}`infra.poe_interface_policy <vocab-infra-poe_interface_policy>` *(+15 more)*
 
 (enum-nwifadminst)=
 

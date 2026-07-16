@@ -66,12 +66,8 @@ class l3extDefaultRouteLeakP(ManagedObject):
         serialization_alias="criteria",
         description="A property that specifies an exact or subset matching of communities.",
     )
-    scope_of_default_route_leak_policy: Annotated[
-        Flags[L3extDefaultRtLeakScopeType], BeforeValidator(parse_flags)
-    ] = Field(
+    scope: Annotated[Flags[L3extDefaultRtLeakScopeType], BeforeValidator(parse_flags)] = Field(
         default_factory=lambda: frozenset({L3extDefaultRtLeakScopeType.L3_OUT}),
-        validation_alias="scope",
-        serialization_alias="scope",
         description="The domain applicable to the capability.",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

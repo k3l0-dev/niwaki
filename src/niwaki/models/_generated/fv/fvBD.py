@@ -105,7 +105,7 @@ class fvBD(ManagedObject):
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    optimize_wan_bandwidth_between_sites: bool = Field(
+    optimize_wan_bandwidth: bool = Field(
         default=False,
         validation_alias="OptimizeWanBandwidth",
         serialization_alias="OptimizeWanBandwidth",
@@ -161,7 +161,7 @@ class fvBD(ManagedObject):
         serialization_alias="hostBasedRouting",
         description="Enables advertising host routes (/32 prefixes) out of the L3OUT(s) that are associated to this BD.",
     )
-    allow_bum_traffic_between_sites: bool = Field(
+    intersite_bum_traffic_allow: bool = Field(
         default=False,
         validation_alias="intersiteBumTrafficAllow",
         serialization_alias="intersiteBumTrafficAllow",
@@ -182,7 +182,7 @@ class fvBD(ManagedObject):
         serialization_alias="ipv6McastAllow",
         description="Multicast. Flag to indicate if ipv6 multicast is enabled",
     )
-    limit_ip_learning_to_bd_subnets_only: bool = Field(
+    limit_ip_learn_to_subnets: bool = Field(
         default=True,
         validation_alias="limitIpLearnToSubnets",
         serialization_alias="limitIpLearnToSubnets",
@@ -206,7 +206,7 @@ class fvBD(ManagedObject):
             description="The MAC address of the bridge domain (BD) or switched virtual interface (SVI). Every BD by default takes the fabric-wide default MAC address. You can override that address with a different one. By default the BD will take a 00:22:BD:F8:19:FF mac address.",
         ),
     ] = ""
-    bd_rogue_mcast_arp_packet_drop: bool = Field(
+    mcast_arp_drop: bool = Field(
         default=True,
         validation_alias="mcastARPDrop",
         serialization_alias="mcastARPDrop",
@@ -253,7 +253,7 @@ class fvBD(ManagedObject):
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
-    disable_routing_on_service_bd: bool = Field(
+    service_bd_routing_disable: bool = Field(
         default=False,
         validation_alias="serviceBdRoutingDisable",
         serialization_alias="serviceBdRoutingDisable",

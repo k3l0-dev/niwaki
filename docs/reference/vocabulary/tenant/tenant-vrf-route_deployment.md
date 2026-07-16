@@ -25,4 +25,4 @@ Accepted as keyword arguments of `.route_deployment()` and of `.set(**attrs)` on
 | `name` | `name` | `str` | — | — | — |
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |
-| `spine_intra_vrf_route_deployment_type` | `spineIntraVrf` | {ref}`FvSpineIntraVrfType <enum-fvspineintravrftype>` | `automatic`, `contract` | `contract` | — |
+| `spine_intra_vrf` | `spineIntraVrf` | {ref}`FvSpineIntraVrfType <enum-fvspineintravrftype>` | `automatic`, `contract` | `contract` | — |

@@ -15,17 +15,12 @@ class fvTagSelector(ManagedObject):
 
     Endpoint Security Group Tag Selector, to decide which endpoints belong to the ESG based on a tag
 
-    RN format: ``tagselectorkey-[{key_tagtag_to_be_associated_with}]-value-[{value_tagtag_to_be_associated_with}]``
+    RN format: ``tagselectorkey-[{match_key}]-value-[{match_value}]``
     """
 
     _aci_class: ClassVar[str] = "fvTagSelector"
-    _rn_format: ClassVar[str] = (
-        "tagselectorkey-[{key_tagtag_to_be_associated_with}]-value-[{value_tagtag_to_be_associated_with}]"
-    )
-    _naming_props: ClassVar[list[str]] = [
-        "key_tagtag_to_be_associated_with",
-        "value_tagtag_to_be_associated_with",
-    ]
+    _rn_format: ClassVar[str] = "tagselectorkey-[{match_key}]-value-[{match_value}]"
+    _naming_props: ClassVar[list[str]] = ["match_key", "match_value"]
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",
@@ -46,7 +41,7 @@ class fvTagSelector(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    key_tagtag_to_be_associated_with: Annotated[
+    match_key: Annotated[
         str,
         Field(
             min_length=1,
@@ -56,7 +51,7 @@ class fvTagSelector(ManagedObject):
             serialization_alias="matchKey",
         ),
     ]
-    value_tagtag_to_be_associated_with: Annotated[
+    match_value: Annotated[
         str,
         Field(
             min_length=1,

@@ -706,8 +706,10 @@ class AsyncNiwaki:
 
         The APIC concurrency semaphore (``max_concurrent``) is already applied
         at the session level, so each coroutine naturally respects the limit.
-        All errors from individual coroutines are collected and raised together
-        as an :class:`ExceptionGroup` (Python 3.11+).
+        On the first coroutine that raises, ``TaskGroup`` **cancels the others**
+        and raises an :class:`ExceptionGroup` (Python 3.11+).  Do not use
+        ``gather`` for concurrent *writes*: a failure cancels the in-flight
+        siblings, which can leave a second design partially applied.
 
         Args:
             *coros: Coroutines to run concurrently (e.g. results of
@@ -717,8 +719,8 @@ class AsyncNiwaki:
             Tuple of results in the same order as the input coroutines.
 
         Raises:
-            ExceptionGroup: If one or more coroutines raise, all exceptions are
-                grouped and raised together after all coroutines complete.
+            ExceptionGroup: If one or more coroutines raise.  Remaining siblings
+                are cancelled (``TaskGroup`` semantics), not awaited.
 
         Example::
 

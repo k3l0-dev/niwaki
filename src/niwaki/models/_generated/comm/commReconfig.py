@@ -45,7 +45,5 @@ class commReconfig(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    toggle_state_for_nginx_process_restart: CommRedirect = Field(
-        default=CommRedirect.DISABLED, validation_alias="toggle", serialization_alias="toggle"
-    )
+    toggle: CommRedirect = CommRedirect.DISABLED
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

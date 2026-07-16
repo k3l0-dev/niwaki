@@ -261,3 +261,30 @@ class TestSecureProps:
         current = fvKeyPol.model_validate({"id": "1", "name": "rollover"})
         delta = mo_diff(desired, current)
         assert delta is not None and delta.name == "rotated"
+
+
+class TestMoDiffEmptyStringMirrorsToApic:
+    """A desired empty string on a non-naming field is dropped by ``to_apic``,
+    so ``mo_diff`` must not report it as a change — else ``plan`` promises an
+    update ``push`` never makes and the drift never converges (audit P1)."""
+
+    # aaaConsoleAuth.provider_group is a non-naming field whose pattern accepts
+    # "" (most string fields require ≥1 char and reject it).
+
+    def test_desired_empty_string_is_not_a_change(self) -> None:
+        from niwaki.models._generated.aaa.aaaConsoleAuth import aaaConsoleAuth
+
+        desired = aaaConsoleAuth.model_validate({"providerGroup": ""})
+        current = aaaConsoleAuth.model_validate({"providerGroup": "radius-grp"})
+        # to_apic drops the empty field → push sends nothing → no real change
+        assert "providerGroup" not in desired.to_apic()["aaaConsoleAuth"]["attributes"]
+        assert mo_diff(desired, current) is None
+        assert mo_diff(desired, current, respect_fields_set=True) is None
+
+    def test_a_real_value_over_empty_current_still_diffs(self) -> None:
+        from niwaki.models._generated.aaa.aaaConsoleAuth import aaaConsoleAuth
+
+        desired = aaaConsoleAuth.model_validate({"providerGroup": "radius-grp"})
+        current = aaaConsoleAuth.model_validate({"providerGroup": ""})
+        delta = mo_diff(desired, current)
+        assert delta is not None and delta.provider_group == "radius-grp"

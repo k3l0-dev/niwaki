@@ -89,7 +89,7 @@ class fvRouteDeployP(ManagedObject):
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
-    spine_intra_vrf_route_deployment_type: FvSpineIntraVrfType = Field(
+    spine_intra_vrf: FvSpineIntraVrfType = Field(
         default=FvSpineIntraVrfType.CONTRACT,
         validation_alias="spineIntraVrf",
         serialization_alias="spineIntraVrf",

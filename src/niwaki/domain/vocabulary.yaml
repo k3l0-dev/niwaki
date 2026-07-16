@@ -337,7 +337,9 @@ makers:
     dpp_policy: qosDppPol
     qos_requirement: qosRequirement
     mpls_custom_qos_policy: qosMplsCustomPol
-    dscp_translation_policy: qosDscpTransPol
+    # qosDscpTransPol dropped: a never-creatable global singleton that only
+    # exists at uni/tn-infra/dscptranspol-default, so the per-tenant maker
+    # always 400s under a user tenant.  Configure the infra default via .mo().
 
     # ── Policies › NetFlow ────────────────────────────────────────────────────
     netflow_monitor: netflowMonitorPol
@@ -466,12 +468,17 @@ makers:
     dns_label: dnsLbl
     route_summarization: fvCtxRtSummPol   # VRF route summarization (wave 2026-07-15)
     route_deployment: fvRouteDeployP
+    route_target_profile: bgpRtTargetP    # BGP route targets per address family
     vzany: vzAny                   # the VRF-wide EPG collection
     fallback_route_group: fvFBRGroup
 
   fvFBRGroup:
     fallback_route: fvFBRoute
     fallback_member: fvFBRMember
+
+  # VRF BGP route targets (MPLS-VPN / EVPN / SR-MPLS / GOLF import-export).
+  bgpRtTargetP:                    # keyed by address family (ipv4-ucast / ipv6-ucast)
+    route_target: bgpRtTarget      # the target value + import/export direction
 
   # ══ Multicast — PIM / IGMP / MLD (wave: 2026-07-15) ════════════════════════
   # VRF PIM hub (.pim / .pim6 on the VRF): the RP, pattern and filter policies.

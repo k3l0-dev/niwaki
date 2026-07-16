@@ -66,7 +66,7 @@ class fvCepNetCfgPol(ManagedObject):
             description="Specifies the description of a policy component.",
         ),
     ] = ""
-    dns_search_suffix_for_network_ip_pool: Annotated[
+    dns_search_suffix: Annotated[
         str,
         Field(
             max_length=512,
@@ -84,7 +84,7 @@ class fvCepNetCfgPol(ManagedObject):
             description="DNS Server name",
         ),
     ] = ""
-    dns_suffix_for_network_ip_pool: Annotated[
+    dns_suffix: Annotated[
         str,
         Field(
             max_length=512,
@@ -93,7 +93,7 @@ class fvCepNetCfgPol(ManagedObject):
             description="DNS Suffix name",
         ),
     ] = ""
-    end_ip_address_for_network_ip_pool: Annotated[
+    end_ip: Annotated[
         str,
         Field(
             pattern="^[0-9a-fA-F.:/ ]+$",
@@ -111,7 +111,7 @@ class fvCepNetCfgPol(ManagedObject):
             serialization_alias="nameAlias",
         ),
     ] = ""
-    start_ip_address_for_network_ip_pool: Annotated[
+    start_ip: Annotated[
         str,
         Field(
             pattern="^[0-9a-fA-F.:/ ]+$",

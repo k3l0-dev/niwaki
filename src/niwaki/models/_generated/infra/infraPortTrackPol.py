@@ -87,9 +87,7 @@ class infraPortTrackPol(ManagedObject):
     include_apic_ports: bool = Field(
         default=False, validation_alias="includeApicPorts", serialization_alias="includeApicPorts"
     )
-    minimum_links_left_up_before_trigger: Annotated[
-        int, Field(ge=0, le=48, validation_alias="minlinks", serialization_alias="minlinks")
-    ] = 0
+    minlinks: Annotated[int, Field(ge=0, le=48)] = 0
     display_name: Annotated[
         str,
         Field(

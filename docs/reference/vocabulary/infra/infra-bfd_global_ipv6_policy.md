@@ -25,7 +25,7 @@ Accepted as keyword arguments of `.bfd_global_ipv6_policy(name)` and of `.set(**
 | `description` | `descr` | `str` | — | — | Specifies a description of the policy definition. |
 | `detection_multiplier` | `detectMult` | `int` | — | `3` | Detection multiplier. |
 | `echo_rx_interval` | `echoRxIntvl` | `int` | — | `50` | Echo rx interval. |
-| `bfd_ipv4_source_address_for_echo_frames` | `echoSrcAddr` | `str` | — | — | BFD Source Address for Echo frames. |
+| `echo_src_addr` | `echoSrcAddr` | `str` | — | — | BFD Source Address for Echo frames. |
 | `required_minimum_rx_interval` | `minRxIntvl` | `int` | — | `50` | Required minimum rx interval. |
 | `desired_minimum_tx_interval` | `minTxIntvl` | `int` | — | `50` | Desired minimum tx interval. |
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |

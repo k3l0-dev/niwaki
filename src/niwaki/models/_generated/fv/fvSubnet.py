@@ -118,10 +118,8 @@ class fvSubnet(ManagedObject):
             serialization_alias="nameAlias",
         ),
     ] = ""
-    preferred_as_primary_subnet: bool = Field(
+    preferred: bool = Field(
         default=False,
-        validation_alias="preferred",
-        serialization_alias="preferred",
         description="Indicates if the subnet is preferred (primary) over the available alternatives. Only one preferred subnet is allowed.",
     )
     scope: Annotated[Flags[FvRouteScp], BeforeValidator(parse_flags)] = Field(
@@ -129,9 +127,7 @@ class fvSubnet(ManagedObject):
         description="The network visibility of the subnet.",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    treated_as_virtual_ip_address: bool = Field(
+    virtual: bool = Field(
         default=False,
-        validation_alias="virtual",
-        serialization_alias="virtual",
         description="Treated as virtual IP address. Used in case of BD extended to multiple sites.",
     )

@@ -37,6 +37,14 @@ _T = TypeVar("_T", bound=ManagedObject)
 # Exceeds any real ACI fabric; prevents runaway loops on corrupted totalCount.
 _MAX_PAGINATION_PAGES: int = 2000
 _DEFAULT_RETRY: RetryConfig = RetryConfig()
+# Writes are only safe to retry on errors that provably occurred BEFORE the
+# request reached the server (connection/pool).  A read/write timeout may mean
+# the APIC accepted the write, so retrying could double-apply or 404 (audit T2).
+_WRITE_SAFE_RETRY: tuple[type[Exception], ...] = (
+    httpx.ConnectError,
+    httpx.ConnectTimeout,
+    httpx.PoolTimeout,
+)
 
 
 class AsyncApicSession:
@@ -408,7 +416,11 @@ class AsyncApicSession:
         """
         page_params = {**params, "page": "0", "page-size": str(page_size)}
         data: dict[str, Any] = (await self._request_checked(path, page_params)).json()
-        total = int(data.get("totalCount", 0))
+        # Treat an absent totalCount as "unknown" and page until an empty
+        # page; never let a missing/zero totalCount stop after page 0 when
+        # a full first page came back (audit T3).
+        total_raw = data.get("totalCount")
+        total = int(total_raw) if total_raw is not None else None
         first: list[dict[str, Any]] = list(data.get("imdata", []))
         if not first:
             return
@@ -416,7 +428,7 @@ class AsyncApicSession:
 
         fetched = len(first)
         page = 1
-        while fetched < total:
+        while total is None or fetched < total:
             if page > _MAX_PAGINATION_PAGES:
                 raise exceptions.ServerError(
                     0,
@@ -525,7 +537,9 @@ class AsyncApicSession:
         await self._ensure_token()
 
         async with self._semaphore, self._http_transport():
-            resp = await self._request_with_retry(method, path, **kwargs)
+            resp = await self._request_with_retry(
+                method, path, retry_on=_WRITE_SAFE_RETRY, **kwargs
+            )
 
         if resp.status_code == 401:
             await self.login()
@@ -534,7 +548,14 @@ class AsyncApicSession:
 
         raise_for_apic_status(resp)
 
-    async def _request_with_retry(self, method: str, path: str, **kwargs: Any) -> httpx.Response:
+    async def _request_with_retry(
+        self,
+        method: str,
+        path: str,
+        *,
+        retry_on: type[Exception] | tuple[type[Exception], ...] = httpx.TransportError,
+        **kwargs: Any,
+    ) -> httpx.Response:
         """Execute a request with stamina retry on transient network errors.
 
         Shared by reads and writes.  Uses a nested async function decorated
@@ -553,7 +574,7 @@ class AsyncApicSession:
         """
 
         @stamina.retry(
-            on=httpx.TransportError,
+            on=retry_on,
             attempts=self._retry.attempts,
             wait_initial=self._retry.wait_initial,
             wait_max=self._retry.wait_max,

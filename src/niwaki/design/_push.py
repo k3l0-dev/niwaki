@@ -198,7 +198,7 @@ def _staged_report(ops: list[_Op], outcome: _WaveOutcome) -> PushReport:
     report = PushReport(
         mode="staged",
         dns=[op.dn for op in outcome.succeeded],
-        request_count=len(ops),
+        request_count=len(outcome.succeeded) + len(outcome.failed),
     )
     if not outcome.ok:
         raise StagedPushError(

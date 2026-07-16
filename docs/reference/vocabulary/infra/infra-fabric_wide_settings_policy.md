@@ -21,13 +21,13 @@ Accepted as keyword arguments of `.fabric_wide_settings_policy()` and of `.set(*
 
 | parameter | wire | type | values | default | description |
 | --- | --- | --- | --- | --- | --- |
-| `damp_penatly_factor_for_coop_dampening` | `dampFactor` | `int` | — | `1` | — |
+| `damp_factor` | `dampFactor` | `int` | — | `1` | — |
 | `description` | `descr` | `str` | — | — | Specifies a description of the policy definition. |
 | `disable_ep_dampening_knob` | `disableEpDampening` | `bool` | — | `False` | Enable Ep Dampening knob |
 | `enforce_domain_validation` | `domainValidation` | `bool` | — | `False` | — |
 | `enable_mo_streaming` | `enableMoStreaming` | `bool` | — | `False` | Enable MO steaming feature |
 | `enable_remote_leaf_direct_communication` | `enableRemoteLeafDirect` | `bool` | — | `False` | Enable remote leaf direct communication for all RLs |
-| `enforce_subnet_check_on_all_vrfs` | `enforceSubnetCheck` | `bool` | — | `False` | Enforce subnet check on all VRFs |
+| `enforce_subnet_check` | `enforceSubnetCheck` | `bool` | — | `False` | Enforce subnet check on all VRFs |
 | `leaf_opflexp_authenticate_clients` | `leafOpflexpAuthenticateClients` | `bool` | — | `True` | Require Opflexp Client Certificates for authentication for Leaf |
 | `leaf_opflexp_use_ssl` | `leafOpflexpUseSsl` | `bool` | — | `True` | Require SSL transport for Opflexp for Leaf |
 | `name` | `name` | `str` | — | — | — |

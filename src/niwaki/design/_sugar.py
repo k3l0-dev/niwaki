@@ -66,7 +66,15 @@ def apply_sugar(aci_class: str, attrs: dict[str, Any]) -> dict[str, Any]:
 
 
 def _entry_sugar(attrs: dict[str, Any]) -> dict[str, Any]:
-    """Expand ``tcp=`` / ``udp=`` / ``protocol="icmp"`` on a ``vzEntry``."""
+    """Expand ``tcp=`` / ``udp=`` / ``protocol="icmp"`` on a ``vzEntry``.
+
+    The defaulted ``ethernet_type="ip"`` is the *generic* IP ether-type: it
+    matches both IPv4 and IPv6 traffic, so a ``tcp=``/``udp=`` entry needs no
+    extra work for IPv6.  Pass ``ethernet_type="ipv4"`` or ``"ipv6"`` explicitly
+    to restrict to one family (the sugar uses ``setdefault``, so it is honoured).
+    ``protocol="icmpv6"`` defaults to ``ethernet_type="ipv6"`` since ICMPv6 only
+    exists over IPv6.
+    """
     given = [k for k in _PORT_RANGE_KEYS if k in attrs]
     if len(given) > 1:
         raise DesignError("Filter entry accepts either tcp= or udp=, not both.")
@@ -79,6 +87,8 @@ def _entry_sugar(attrs: dict[str, Any]) -> dict[str, Any]:
         out.setdefault("protocol", proto)
         out.setdefault("destination_from_port", lo)
         out.setdefault("destination_to_port", hi)
-    elif out.get("protocol") in ("icmp", "icmpv6"):
+    elif out.get("protocol") == "icmp":
         out.setdefault("ethernet_type", "ip")
+    elif out.get("protocol") == "icmpv6":
+        out.setdefault("ethernet_type", "ipv6")
     return out

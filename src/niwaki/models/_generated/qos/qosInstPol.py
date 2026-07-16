@@ -46,7 +46,7 @@ class qosInstPol(ManagedObject):
     name: Annotated[str, Field(min_length=1, max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    e_trap_flow_age_out_timer: Annotated[
+    etrap_age_timer: Annotated[
         int, Field(validation_alias="EtrapAgeTimer", serialization_alias="EtrapAgeTimer")
     ] = 0
     track_activeness_of_elephant_flow: Annotated[

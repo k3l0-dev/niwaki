@@ -78,7 +78,7 @@ class bfdIpv4InstPol(ManagedObject):
             description="Echo rx interval.",
         ),
     ] = 50
-    bfd_ipv4_source_address_for_echo_frames: Annotated[
+    echo_src_addr: Annotated[
         str,
         Field(
             pattern="^[0-9a-fA-F.:/ ]+$",

@@ -126,6 +126,8 @@ VRFs, bridge domains, application profiles, EPGs, contracts and filters — one 
     - {ref}`tenant.vrf.dns_label <vocab-tenant-vrf-dns_label>` — `dnsLbl`, 5 attributes
     - {ref}`tenant.vrf.route_summarization <vocab-tenant-vrf-route_summarization>` — `fvCtxRtSummPol`, 4 attributes
     - {ref}`tenant.vrf.route_deployment <vocab-tenant-vrf-route_deployment>` — `fvRouteDeployP`, 5 attributes
+    - {ref}`tenant.vrf.route_target_profile <vocab-tenant-vrf-route_target_profile>` — `bgpRtTargetP`, 5 attributes
+      - {ref}`tenant.vrf.route_target_profile.route_target <vocab-tenant-vrf-route_target_profile-route_target>` — `bgpRtTarget`, 6 attributes
     - {ref}`tenant.vrf.vzany <vocab-tenant-vrf-vzany>` — `vzAny`, 4 attributes
       - {ref}`tenant.vrf.vzany.provider_label <vocab-tenant-vrf-vzany-provider_label>` — `vzProvLbl`, 6 attributes
       - {ref}`tenant.vrf.vzany.consumer_label <vocab-tenant-vrf-vzany-consumer_label>` — `vzConsLbl`, 5 attributes
@@ -363,7 +365,6 @@ VRFs, bridge domains, application profiles, EPGs, contracts and filters — one 
   - {ref}`tenant.mpls_custom_qos_policy <vocab-tenant-mpls_custom_qos_policy>` — `qosMplsCustomPol`, 4 attributes
     - {ref}`tenant.mpls_custom_qos_policy.mpls_ingress_rule <vocab-tenant-mpls_custom_qos_policy-mpls_ingress_rule>` — `qosMplsIngressRule`, 7 attributes
     - {ref}`tenant.mpls_custom_qos_policy.mpls_egress_rule <vocab-tenant-mpls_custom_qos_policy-mpls_egress_rule>` — `qosMplsEgressRule`, 7 attributes
-  - {ref}`tenant.dscp_translation_policy <vocab-tenant-dscp_translation_policy>` — `qosDscpTransPol`, 15 attributes
   - {ref}`tenant.netflow_monitor <vocab-tenant-netflow_monitor>` — `netflowMonitorPol`, 4 attributes
   - {ref}`tenant.netflow_exporter <vocab-tenant-netflow_exporter>` — `netflowExporterPol`, 10 attributes
   - {ref}`tenant.netflow_record <vocab-tenant-netflow_record>` — `netflowRecordPol`, 6 attributes
@@ -570,6 +571,8 @@ tenant/tenant-vrf-snmp_context-community
 tenant/tenant-vrf-dns_label
 tenant/tenant-vrf-route_summarization
 tenant/tenant-vrf-route_deployment
+tenant/tenant-vrf-route_target_profile
+tenant/tenant-vrf-route_target_profile-route_target
 tenant/tenant-vrf-vzany
 tenant/tenant-vrf-vzany-provider_label
 tenant/tenant-vrf-vzany-consumer_label
@@ -807,7 +810,6 @@ tenant/tenant-qos_requirement-dscp_marking
 tenant/tenant-mpls_custom_qos_policy
 tenant/tenant-mpls_custom_qos_policy-mpls_ingress_rule
 tenant/tenant-mpls_custom_qos_policy-mpls_egress_rule
-tenant/tenant-dscp_translation_policy
 tenant/tenant-netflow_monitor
 tenant/tenant-netflow_exporter
 tenant/tenant-netflow_record

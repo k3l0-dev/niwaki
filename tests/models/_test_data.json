@@ -3907,14 +3907,14 @@
     ],
     [
       "fvTagSelector",
-      "key_tagtag_to_be_associated_with",
+      "match_key",
       1,
       64,
       true
     ],
     [
       "fvTagSelector",
-      "value_tagtag_to_be_associated_with",
+      "match_value",
       1,
       128,
       true
@@ -13796,8 +13796,8 @@
     [
       "fvTagSelector",
       {
-        "key_tagtag_to_be_associated_with": "ab",
-        "value_tagtag_to_be_associated_with": "ab"
+        "match_key": "ab",
+        "match_value": "ab"
       },
       "tagselectorkey-[ab]-value-[ab]"
     ],
@@ -23667,7 +23667,7 @@
     [
       "commReconfig",
       {},
-      "toggle_state_for_nginx_process_restart",
+      "toggle",
       [
         "disabled",
         "enabled",
@@ -27830,7 +27830,7 @@
     [
       "fvRouteDeployP",
       {},
-      "spine_intra_vrf_route_deployment_type",
+      "spine_intra_vrf",
       [
         "automatic",
         "contract"
@@ -28196,8 +28196,8 @@
     [
       "fvTagSelector",
       {
-        "key_tagtag_to_be_associated_with": "ab",
-        "value_tagtag_to_be_associated_with": "ab"
+        "match_key": "ab",
+        "match_value": "ab"
       },
       "match_value_operator",
       [
@@ -29681,7 +29681,7 @@
       {
         "name": "ab"
       },
-      "vlan_scope_can_be_global_or_port_local",
+      "vlan_scope",
       [
         "global",
         "portlocal"
@@ -32216,7 +32216,7 @@
     [
       "mgmtConnectivityPrefs",
       {},
-      "management_interface_that_has_to_be_used",
+      "interface_pref",
       [
         "inband",
         "ooband"
@@ -33621,7 +33621,7 @@
       {
         "name": "ab"
       },
-      "link_level_flow_control_receive_mode",
+      "llfc_rcv_admin_st",
       [
         "off",
         "on"
@@ -33633,7 +33633,7 @@
       {
         "name": "ab"
       },
-      "link_level_flow_control_send_mode",
+      "llfc_send_admin_st",
       [
         "off",
         "on"
@@ -35285,7 +35285,7 @@
       {
         "name": "ab"
       },
-      "packet_type_uc_bc_mc_config_valid_yes_no",
+      "is_uc_mc_bc_storm_pkt_cfg_valid",
       [
         "Invalid",
         "Valid"
@@ -35389,7 +35389,7 @@
       {
         "name": "ab"
       },
-      "quality_transmit_exact_ql_option_type",
+      "qloptype",
       [
         "none",
         "op1",
@@ -40804,7 +40804,7 @@
       {
         "name": "ab"
       },
-      "category_of_feature_to_be_collected",
+      "category",
       [
         "all",
         "policy",
@@ -42142,7 +42142,7 @@
     [
       "l3extDefaultRouteLeakP",
       {},
-      "scope_of_default_route_leak_policy",
+      "scope",
       [
         "none",
         "ctx",
@@ -45248,7 +45248,7 @@
       {
         "name": "ab"
       },
-      "optimize_wan_bandwidth_between_sites",
+      "optimize_wan_bandwidth",
       false
     ],
     [
@@ -45288,7 +45288,7 @@
       {
         "name": "ab"
       },
-      "allow_bum_traffic_between_sites",
+      "intersite_bum_traffic_allow",
       false
     ],
     [
@@ -45320,7 +45320,7 @@
       {
         "name": "ab"
       },
-      "limit_ip_learning_to_bd_subnets_only",
+      "limit_ip_learn_to_subnets",
       true
     ],
     [
@@ -45328,7 +45328,7 @@
       {
         "name": "ab"
       },
-      "bd_rogue_mcast_arp_packet_drop",
+      "mcast_arp_drop",
       true
     ],
     [
@@ -45344,7 +45344,7 @@
       {
         "name": "ab"
       },
-      "disable_routing_on_service_bd",
+      "service_bd_routing_disable",
       false
     ],
     [
@@ -45496,7 +45496,7 @@
     [
       "infraRlPodRedPol",
       {},
-      "enable_remote_leaf_pod_redundancy_policy",
+      "enable_rl_pod_red_pol",
       false
     ],
     [
@@ -45526,7 +45526,7 @@
     [
       "infraSetPol",
       {},
-      "enforce_subnet_check_on_all_vrfs",
+      "enforce_subnet_check",
       false
     ],
     [
@@ -45612,13 +45612,13 @@
       {
         "name": "ab"
       },
-      "indicate_whether_mpls_is_enabled_or_not",
+      "mpls_enabled",
       false
     ],
     [
       "l3extRogueExceptMacP",
       {},
-      "indicate_whether_all_macs_are_excluded",
+      "enable_all_macs",
       false
     ],
     [
@@ -45690,7 +45690,7 @@
       {
         "name": "ab"
       },
-      "enable_ospf_interface_and_area_validaton",
+      "enable_vrf_validation_ospf_area",
       true
     ],
     [
@@ -45738,7 +45738,7 @@
       {
         "name": "ab"
       },
-      "enable_svi_link_local_address_validation",
+      "enable_vrf_validation_svi_link_local_addr",
       true
     ],
     [
@@ -46090,7 +46090,7 @@
       {
         "ptp_user_profile_name": "ab"
       },
-      "flag_to_over_ride_node_level_config",
+      "node_profile_override",
       false
     ],
     [
@@ -46504,7 +46504,7 @@
       {
         "name": "ab"
       },
-      "sub_event_configuration_for_acl_span",
+      "acl_span",
       false
     ],
     [
@@ -47525,7 +47525,7 @@
       {
         "name": "ab"
       },
-      "source_mac_rewrite_enabled_or_not",
+      "src_mac_rewrite_enabled",
       false
     ],
     [
@@ -47549,7 +47549,7 @@
       {
         "name": "ab"
       },
-      "apply_rule_for_all_fragments",
+      "apply_to_frag",
       false
     ],
     [
@@ -53517,8 +53517,8 @@
     [
       "fvTagSelector",
       {
-        "key_tagtag_to_be_associated_with": "ab",
-        "value_tagtag_to_be_associated_with": "ab"
+        "match_key": "ab",
+        "match_value": "ab"
       },
       {
         "matchKey": "ab",

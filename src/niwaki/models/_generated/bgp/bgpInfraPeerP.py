@@ -209,11 +209,4 @@ class bgpInfraPeerP(ManagedObject):
         ),
     ] = 1
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    weight_for_routes_from_this_neighbor: Annotated[
-        int,
-        Field(
-            validation_alias="weight",
-            serialization_alias="weight",
-            description="Default weight for routes from this neighbor",
-        ),
-    ] = 0
+    weight: Annotated[int, Field(description="Default weight for routes from this neighbor")] = 0

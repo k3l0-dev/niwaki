@@ -193,3 +193,17 @@ class TestLogicalOperators:
         assert s.startswith("and(")
         assert "or(" in s
         assert "wcard(" in s
+
+
+class TestFilterValueEscaping:
+    """A double-quote in a value is escaped so it can't break the
+    ``eq(prop,"...")`` filter grammar (audit Q1)."""
+
+    def test_coerce_value_escapes_double_quote(self) -> None:
+        assert _coerce_value('a"b') == 'a\\"b'
+
+    def test_eq_escapes_double_quote(self) -> None:
+        assert str(eq("name", 'a"b', cls_name="fvBD")) == 'eq(fvBD.name,"a\\"b")'
+
+    def test_wcard_escapes_double_quote_keeps_wildcard(self) -> None:
+        assert str(wcard("descr", 'x"y*', cls_name="fvBD")) == 'wcard(fvBD.descr,"x\\"y*")'

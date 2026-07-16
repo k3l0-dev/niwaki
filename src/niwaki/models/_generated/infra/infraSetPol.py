@@ -46,7 +46,7 @@ class infraSetPol(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    damp_penatly_factor_for_coop_dampening: Annotated[
+    damp_factor: Annotated[
         int, Field(ge=1, le=5, validation_alias="dampFactor", serialization_alias="dampFactor")
     ] = 1
     description: Annotated[
@@ -80,7 +80,7 @@ class infraSetPol(ManagedObject):
         serialization_alias="enableRemoteLeafDirect",
         description="Enable remote leaf direct communication for all RLs",
     )
-    enforce_subnet_check_on_all_vrfs: bool = Field(
+    enforce_subnet_check: bool = Field(
         default=False,
         validation_alias="enforceSubnetCheck",
         serialization_alias="enforceSubnetCheck",

@@ -25,4 +25,4 @@ Accepted as keyword arguments of `.fabric_vxlan_policy(name)` and of `.set(**att
 | `description` | `descr` | `str` | — | — | Specifies a description of the policy definition. |
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |
-| `udp_port_number_for_vxlan_traffic` | `udpPort` | `int` | — | `48879` | The port number. |
+| `udp_port` | `udpPort` | `int` | — | `48879` | The port number. |

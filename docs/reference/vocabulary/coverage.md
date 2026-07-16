@@ -5,7 +5,7 @@ Re-generate: uv run python -m niwaki._codegen.generate_docs
 
 # Coverage matrix
 
-**869 curated positions** across the four design domains plus the `uni`-level domains.  Everything else in the 2,222 generated classes stays reachable through `.mo(Class, ...)` and `bind_dn(alias=dn)` — see the design guide.
+**870 curated positions** across the four design domains plus the `uni`-level domains.  Everything else in the 2,222 generated classes stays reachable through `.mo(Class, ...)` and `bind_dn(alias=dn)` — see the design guide.
 
 ## fabric
 
@@ -415,7 +415,7 @@ Re-generate: uv run python -m niwaki._codegen.generate_docs
 
 | position | ACI class | makers | bind aliases | verbs | sugar | atomic |
 | --- | --- | --- | --- | --- | --- | --- |
-| {ref}`tenant <vocab-tenant>` | `fvTenant` | 92 | — | — | — | — |
+| {ref}`tenant <vocab-tenant>` | `fvTenant` | 91 | — | — | — | — |
 | {ref}`tenant.app <vocab-tenant-app>` | `fvAp` | 2 | `monitoring_policy=` | — | — | — |
 | {ref}`tenant.app.epg <vocab-tenant-app-epg>` | `fvAEPg` | 12 | `bd=`, `domain=`, `contract_master=`, `imported_contract=`, `taboo_contract=`, `custom_qos_policy=`, `dpp_policy=`, `monitoring_policy=`, `trust_control_policy=`, `qos_requirement=` | `.provide()`, `.consume()`, `.intra_epg()` | — | — |
 | {ref}`tenant.app.epg.static_path <vocab-tenant-app-epg-static_path>` | `fvRsPathAtt` | 7 | — | — | — | — |
@@ -474,7 +474,7 @@ Re-generate: uv run python -m niwaki._codegen.generate_docs
 | {ref}`tenant.bd.nd_ra_subnet <vocab-tenant-bd-nd_ra_subnet>` | `ndRaSubnet` | — | — | — | — | — |
 | {ref}`tenant.bd.legacy_mode <vocab-tenant-bd-legacy_mode>` | `fvAccP` | — | — | — | — | — |
 | {ref}`tenant.bd.rogue_exception_mac <vocab-tenant-bd-rogue_exception_mac>` | `fvRogueExceptionMac` | — | — | — | — | — |
-| {ref}`tenant.vrf <vocab-tenant-vrf>` | `fvCtx` | 11 | `l3out=` | — | — | — |
+| {ref}`tenant.vrf <vocab-tenant-vrf>` | `fvCtx` | 12 | `l3out=` | — | — | — |
 | {ref}`tenant.vrf.pim <vocab-tenant-vrf-pim>` | `pimCtxP` | 9 | — | — | — | — |
 | {ref}`tenant.vrf.pim.asm_pattern <vocab-tenant-vrf-pim-asm_pattern>` | `pimASMPatPol` | 3 | — | — | — | — |
 | {ref}`tenant.vrf.pim.asm_pattern.register_traffic <vocab-tenant-vrf-pim-asm_pattern-register_traffic>` | `pimRegTrPol` | — | `pim_route_map_policy=` | — | — | — |
@@ -532,6 +532,8 @@ Re-generate: uv run python -m niwaki._codegen.generate_docs
 | {ref}`tenant.vrf.dns_label <vocab-tenant-vrf-dns_label>` | `dnsLbl` | — | — | — | — | — |
 | {ref}`tenant.vrf.route_summarization <vocab-tenant-vrf-route_summarization>` | `fvCtxRtSummPol` | — | — | — | — | — |
 | {ref}`tenant.vrf.route_deployment <vocab-tenant-vrf-route_deployment>` | `fvRouteDeployP` | — | — | — | — | — |
+| {ref}`tenant.vrf.route_target_profile <vocab-tenant-vrf-route_target_profile>` | `bgpRtTargetP` | 1 | — | — | — | — |
+| {ref}`tenant.vrf.route_target_profile.route_target <vocab-tenant-vrf-route_target_profile-route_target>` | `bgpRtTarget` | — | — | — | — | — |
 | {ref}`tenant.vrf.vzany <vocab-tenant-vrf-vzany>` | `vzAny` | 6 | `imported_contract=` | `.provide()`, `.consume()` | — | — |
 | {ref}`tenant.vrf.vzany.provider_label <vocab-tenant-vrf-vzany-provider_label>` | `vzProvLbl` | — | — | — | — | — |
 | {ref}`tenant.vrf.vzany.consumer_label <vocab-tenant-vrf-vzany-consumer_label>` | `vzConsLbl` | — | — | — | — | — |
@@ -769,7 +771,6 @@ Re-generate: uv run python -m niwaki._codegen.generate_docs
 | {ref}`tenant.mpls_custom_qos_policy <vocab-tenant-mpls_custom_qos_policy>` | `qosMplsCustomPol` | 2 | — | — | — | — |
 | {ref}`tenant.mpls_custom_qos_policy.mpls_ingress_rule <vocab-tenant-mpls_custom_qos_policy-mpls_ingress_rule>` | `qosMplsIngressRule` | — | — | — | — | — |
 | {ref}`tenant.mpls_custom_qos_policy.mpls_egress_rule <vocab-tenant-mpls_custom_qos_policy-mpls_egress_rule>` | `qosMplsEgressRule` | — | — | — | — | — |
-| {ref}`tenant.dscp_translation_policy <vocab-tenant-dscp_translation_policy>` | `qosDscpTransPol` | — | — | — | — | — |
 | {ref}`tenant.netflow_monitor <vocab-tenant-netflow_monitor>` | `netflowMonitorPol` | — | `netflow_exporter=`, `netflow_record=` | — | — | — |
 | {ref}`tenant.netflow_exporter <vocab-tenant-netflow_exporter>` | `netflowExporterPol` | — | `vrf=`, `epg=` | — | — | — |
 | {ref}`tenant.netflow_record <vocab-tenant-netflow_record>` | `netflowRecordPol` | — | — | — | — | — |

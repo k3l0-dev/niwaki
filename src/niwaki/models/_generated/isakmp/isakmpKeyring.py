@@ -48,14 +48,9 @@ class isakmpKeyring(ManagedObject):
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    ip_address_of_peer_that_shares_the_key: Annotated[
+    address: Annotated[
         str,
-        Field(
-            pattern="^[0-9a-fA-F.:/ ]+$",
-            validation_alias="address",
-            serialization_alias="address",
-            description="IP Address of peer that shares the key",
-        ),
+        Field(pattern="^[0-9a-fA-F.:/ ]+$", description="IP Address of peer that shares the key"),
     ] = ""
     annotation: Annotated[
         str,

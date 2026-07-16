@@ -25,9 +25,9 @@ Accepted as keyword arguments of `.endpoint_network_config(name)` and of `.set(*
 | --- | --- | --- | --- | --- | --- |
 | `name` *(positional)* | `name` | `str` | — | — | The name of the object. |
 | `description` | `descr` | `str` | — | — | Specifies the description of a policy component. |
-| `dns_search_suffix_for_network_ip_pool` | `dnsSearchSuffix` | `str` | — | — | DNS Search Suffix |
+| `dns_search_suffix` | `dnsSearchSuffix` | `str` | — | — | DNS Search Suffix |
 | `dns_servers` | `dnsServers` | `str` | — | — | DNS Server name |
-| `dns_suffix_for_network_ip_pool` | `dnsSuffix` | `str` | — | — | DNS Suffix name |
-| `end_ip_address_for_network_ip_pool` | `endIp` | `str` | — | — | Ending ip address |
-| `start_ip_address_for_network_ip_pool` | `startIp` | `str` | — | — | Starting ip address |
+| `dns_suffix` | `dnsSuffix` | `str` | — | — | DNS Suffix name |
+| `end_ip` | `endIp` | `str` | — | — | Ending ip address |
+| `start_ip` | `startIp` | `str` | — | — | Starting ip address |
 | `wins_servers` | `winsServers` | `str` | — | — | DNS Search Suffix |

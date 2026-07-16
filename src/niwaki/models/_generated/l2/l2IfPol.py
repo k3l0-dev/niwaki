@@ -112,7 +112,7 @@ class l2IfPol(ManagedObject):
         serialization_alias="vepa",
         description="Vepa Configuration",
     )
-    vlan_scope_can_be_global_or_port_local: L2VlanScope = Field(
+    vlan_scope: L2VlanScope = Field(
         default=L2VlanScope.GLOBAL,
         validation_alias="vlanScope",
         serialization_alias="vlanScope",

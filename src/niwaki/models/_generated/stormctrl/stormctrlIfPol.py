@@ -130,7 +130,7 @@ class stormctrlIfPol(ManagedObject):
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
-    packet_type_uc_bc_mc_config_valid_yes_no: L1StormCtrlCfgValid = Field(
+    is_uc_mc_bc_storm_pkt_cfg_valid: L1StormCtrlCfgValid = Field(
         default=L1StormCtrlCfgValid.INVALID,
         validation_alias="isUcMcBcStormPktCfgValid",
         serialization_alias="isUcMcBcStormPktCfgValid",

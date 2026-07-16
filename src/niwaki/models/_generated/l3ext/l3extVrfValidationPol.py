@@ -103,7 +103,7 @@ class l3extVrfValidationPol(ManagedObject):
         serialization_alias="enableVrfValidationNodeRouterIdBgpPeer",
         description="Implementation note: Corresponds to kVrfValidationNodeRouterIdBgpPeer",
     )
-    enable_ospf_interface_and_area_validaton: bool = Field(
+    enable_vrf_validation_ospf_area: bool = Field(
         default=True,
         validation_alias="enableVrfValidationOspfArea",
         serialization_alias="enableVrfValidationOspfArea",
@@ -139,7 +139,7 @@ class l3extVrfValidationPol(ManagedObject):
         serialization_alias="enableVrfValidationSubnet",
         description="Implementation note: Corresponds to kVrfValidationSubnet",
     )
-    enable_svi_link_local_address_validation: bool = Field(
+    enable_vrf_validation_svi_link_local_addr: bool = Field(
         default=True,
         validation_alias="enableVrfValidationSviLinkLocalAddr",
         serialization_alias="enableVrfValidationSviLinkLocalAddr",

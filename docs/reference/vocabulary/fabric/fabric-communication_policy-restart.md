@@ -21,4 +21,4 @@ Accepted as keyword arguments of `.restart()` and of `.set(**attrs)` on this cur
 
 | parameter | wire | type | values | default | description |
 | --- | --- | --- | --- | --- | --- |
-| `toggle_state_for_nginx_process_restart` | `toggle` | {ref}`CommRedirect <enum-commredirect>` | `disabled`, `enabled`, `tested` | `disabled` | — |
+| `toggle` | `toggle` | {ref}`CommRedirect <enum-commredirect>` | `disabled`, `enabled`, `tested` | `disabled` | — |

@@ -131,7 +131,7 @@ class licenseLicPolicy(ManagedObject):
             description="To register product with CSSM, a user need to input registration token ID. The registration token ID is created by customer from CSSM web site.",
         ),
     ] = ""
-    license_usage_reporting_interval_in_day: Annotated[
+    report_interval: Annotated[
         int,
         Field(
             ge=1,

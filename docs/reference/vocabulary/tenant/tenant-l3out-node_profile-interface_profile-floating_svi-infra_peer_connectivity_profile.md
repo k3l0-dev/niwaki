@@ -41,7 +41,7 @@ Accepted as keyword arguments of `.infra_peer_connectivity_profile(peer_address)
 | `source_interface_type` | `srcIfT` | {ref}`BgpSrcIfT <enum-bgpsrcift>` | `l3out-loopback`, `routable-loopback` | `l3out-loopback` | Source Interface Type |
 | `control_type` | `trustCtrl` | {ref}`BgpTrustCtrlT <enum-bgptrustctrlt>` | `trusted`, `untrusted` | `untrusted` | — |
 | `ebgp_multihop_ttl_value` | `ttl` | `int` | — | `1` | Specifies time to live (TTL). |
-| `weight_for_routes_from_this_neighbor` | `weight` | `int` | — | `0` | Default weight for routes from this neighbor |
+| `weight` | `weight` | `int` | — | `0` | Default weight for routes from this neighbor |
 
 ## Children
 

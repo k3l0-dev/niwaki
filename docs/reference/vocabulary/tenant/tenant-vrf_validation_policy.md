@@ -31,12 +31,12 @@ Accepted as keyword arguments of `.vrf_validation_policy(name)` and of `.set(**a
 | `enable_vrf_validation_ip_address` | `enableVrfValidationIpAddress` | `bool` | — | `True` | Implementation note: Corresponds to kVrfValidationRsPathAddress |
 | `enable_loopback_interface_validation` | `enableVrfValidationLoopbackIf` | `bool` | — | `True` | Implementation note: Corresponds to kVrfValidationNodeRouterLoopback |
 | `enable_vrf_validation_node_router_id_bgp_peer` | `enableVrfValidationNodeRouterIdBgpPeer` | `bool` | — | `True` | Implementation note: Corresponds to kVrfValidationNodeRouterIdBgpPeer |
-| `enable_ospf_interface_and_area_validaton` | `enableVrfValidationOspfArea` | `bool` | — | `True` | Implementation note: Corresponds to kVrfValidationRsPathOspfArea |
+| `enable_vrf_validation_ospf_area` | `enableVrfValidationOspfArea` | `bool` | — | `True` | Implementation note: Corresponds to kVrfValidationRsPathOspfArea |
 | `enable_ospf_area_id_validation` | `enableVrfValidationOspfAreaId` | `bool` | — | `True` | Implementation note: Corresponds to kVrfValidationOspfAreaId |
 | `enable_vrf_validation_ospf_if_pol` | `enableVrfValidationOspfIfPol` | `bool` | — | `True` | Implementation note: Corresponds to kVrfValidationRsPathOspfIfPol |
 | `enable_redistribute_policy_validation` | `enableVrfValidationRedistributePol` | `bool` | — | `True` | Implementation note: Corresponds to kVrfValidationRedistributePol |
 | `enable_node_routerid_validation` | `enableVrfValidationRouterId` | `bool` | — | `True` | Implementation note: Corresponds to kVrfValidationNodeRouterId |
 | `enable_subnet_non_duplication_validation` | `enableVrfValidationSubnet` | `bool` | — | `True` | Implementation note: Corresponds to kVrfValidationSubnet |
-| `enable_svi_link_local_address_validation` | `enableVrfValidationSviLinkLocalAddr` | `bool` | — | `True` | Implementation note: Corresponds to kVrfValidationRsPathSviLinkLocalAddr |
+| `enable_vrf_validation_svi_link_local_addr` | `enableVrfValidationSviLinkLocalAddr` | `bool` | — | `True` | Implementation note: Corresponds to kVrfValidationRsPathSviLinkLocalAddr |
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |

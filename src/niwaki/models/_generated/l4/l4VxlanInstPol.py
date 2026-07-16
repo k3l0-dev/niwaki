@@ -94,7 +94,7 @@ class l4VxlanInstPol(ManagedObject):
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
-    udp_port_number_for_vxlan_traffic: Annotated[
+    udp_port: Annotated[
         Annotated[int, Field(ge=0, le=65535)]
         | Literal["dns", "ftpData", "http", "https", "pop3", "rtsp", "smtp", "ssh", "unspecified"],
         AfterValidator(

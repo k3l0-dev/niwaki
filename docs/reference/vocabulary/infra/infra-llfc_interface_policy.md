@@ -25,7 +25,7 @@ Accepted as keyword arguments of `.llfc_interface_policy(name)` and of `.set(**a
 | --- | --- | --- | --- | --- | --- |
 | `name` *(positional)* | `name` | `str` | — | — | The name of the object. |
 | `description` | `descr` | `str` | — | — | Specifies a description of the policy definition. |
-| `link_level_flow_control_receive_mode` | `llfcRcvAdminSt` | {ref}`L1LinkLevelFlowCtrl <enum-l1linklevelflowctrl>` | `off`, `on` | `off` | — |
-| `link_level_flow_control_send_mode` | `llfcSendAdminSt` | {ref}`L1LinkLevelFlowCtrl <enum-l1linklevelflowctrl>` | `off`, `on` | `off` | — |
+| `llfc_rcv_admin_st` | `llfcRcvAdminSt` | {ref}`L1LinkLevelFlowCtrl <enum-l1linklevelflowctrl>` | `off`, `on` | `off` | — |
+| `llfc_send_admin_st` | `llfcSendAdminSt` | {ref}`L1LinkLevelFlowCtrl <enum-l1linklevelflowctrl>` | `off`, `on` | `off` | — |
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |

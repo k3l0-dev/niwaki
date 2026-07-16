@@ -32,7 +32,7 @@ Accepted as keyword arguments of `.service_redirect_policy(name)` and of `.set(*
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |
 | `program_local_pod_only` | `programLocalPodOnly` | `bool` | — | `False` | — |
 | `resilient_hashing_enabled_or_not` | `resilientHashEnabled` | `bool` | — | `False` | — |
-| `source_mac_rewrite_enabled_or_not` | `srcMacRewriteEnabled` | `bool` | — | `False` | — |
+| `src_mac_rewrite_enabled` | `srcMacRewriteEnabled` | `bool` | — | `False` | — |
 | `threshold_down_action` | `thresholdDownAction` | {ref}`VnsThresholdDownAction <enum-vnsthresholddownaction>` | `bypass`, `deny`, `permit` | `permit` | Down action |
 | `threshold_enable` | `thresholdEnable` | `bool` | — | `False` | — |
 

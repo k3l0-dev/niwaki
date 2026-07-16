@@ -47,6 +47,7 @@ Accepted as keyword arguments of `.vrf(name)` and of `.set(**attrs)` on this cur
 | `.dns_label(name, **attrs)` | `dnsLbl` | {ref}`tenant.vrf.dns_label <vocab-tenant-vrf-dns_label>` |
 | `.route_summarization(name, **attrs)` | `fvCtxRtSummPol` | {ref}`tenant.vrf.route_summarization <vocab-tenant-vrf-route_summarization>` |
 | `.route_deployment(**attrs)` | `fvRouteDeployP` | {ref}`tenant.vrf.route_deployment <vocab-tenant-vrf-route_deployment>` |
+| `.route_target_profile(route_target_source_address_family, **attrs)` | `bgpRtTargetP` | {ref}`tenant.vrf.route_target_profile <vocab-tenant-vrf-route_target_profile>` |
 | `.vzany(**attrs)` | `vzAny` | {ref}`tenant.vrf.vzany <vocab-tenant-vrf-vzany>` |
 | `.fallback_route_group(name, **attrs)` | `fvFBRGroup` | {ref}`tenant.vrf.fallback_route_group <vocab-tenant-vrf-fallback_route_group>` |
 

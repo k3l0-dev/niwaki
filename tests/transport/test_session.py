@@ -590,3 +590,26 @@ class TestEnsureTokenLock:
 
         # Lock ensures refresh is called exactly once even with 5 concurrent threads
         assert refresh_count == 1
+
+
+class TestPaginationMissingTotalCount:
+    """An absent/zero totalCount must not stop pagination after page 0 when
+    more pages exist — page until an empty page instead (audit T3)."""
+
+    def test_missing_total_count_pages_until_empty(
+        self, logged_session: ApicSession, httpx_mock: HTTPXMock
+    ) -> None:
+        # page 0 carries items but NO totalCount at all
+        httpx_mock.add_response(
+            method="GET", json={"imdata": [{"fvBD": {"attributes": {"name": "a"}}}]}
+        )
+        # page 1 carries more items
+        httpx_mock.add_response(
+            method="GET", json={"imdata": [{"fvBD": {"attributes": {"name": "b"}}}]}
+        )
+        # page 2 is empty → stop
+        httpx_mock.add_response(method="GET", json={"imdata": []})
+
+        result = logged_session._get_all_pages("/api/class/fvBD.json", {})  # type: ignore[reportPrivateUsage]
+        names = [r["fvBD"]["attributes"]["name"] for r in result]
+        assert names == ["a", "b"]  # both pages fetched, not just page 0

@@ -142,7 +142,7 @@ class hsrpGroupPol(ManagedObject):
             description="HSRP Group's Minimum Preemption delay",
         ),
     ] = 0
-    preempt_delay_after_a_switch_reload: Annotated[
+    preempt_delay_reload: Annotated[
         int,
         Field(
             ge=0,

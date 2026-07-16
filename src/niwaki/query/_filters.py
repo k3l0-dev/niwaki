@@ -117,7 +117,10 @@ def _coerce_value(value: Any) -> str:
         APIC string: ``True`` → ``"yes"``, ``False`` → ``"no"``, a set of flags
         → its canonical comma-joined form, everything else as it is stored.
     """
-    return to_filter(value)
+    # Escape the double-quote that would otherwise break the eq(prop,"...")
+    # filter grammar (a raw " in a value yields a malformed or mis-parsed
+    # filter — audit Q1).
+    return to_filter(value).replace('"', '\\"')
 
 
 def _qualify(prop: str, cls_name: str) -> str:
@@ -263,7 +266,7 @@ def wcard(prop: str, pattern: str, *, cls_name: str = "") -> FilterExpr:
         # → FilterExpr('wcard(fvBD.name,"prod-*")')
     """
     qprop = _qualify(prop, cls_name)
-    return FilterExpr(f'wcard({qprop},"{pattern}")')
+    return FilterExpr(f'wcard({qprop},"{pattern.replace(chr(34), chr(92) + chr(34))}")')
 
 
 def bw(prop: str, start: Any, end: Any, *, cls_name: str = "") -> FilterExpr:

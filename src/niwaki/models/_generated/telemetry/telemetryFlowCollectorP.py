@@ -83,7 +83,7 @@ class telemetryFlowCollectorP(ManagedObject):
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
-    external_ip_where_collector_is_listening: Annotated[
+    external_server_ip: Annotated[
         str,
         Field(
             pattern="^[0-9a-fA-F.:/ ]+$",

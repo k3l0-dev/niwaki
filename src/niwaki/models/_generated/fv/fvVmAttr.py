@@ -128,12 +128,6 @@ class fvVmAttr(ManagedObject):
         description="The attribute type.",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    custom_attribute_value_or_tag_name: Annotated[
-        str,
-        Field(
-            max_length=512,
-            validation_alias="value",
-            serialization_alias="value",
-            description="The assigned number value of the attribute.",
-        ),
+    value: Annotated[
+        str, Field(max_length=512, description="The assigned number value of the attribute.")
     ] = ""

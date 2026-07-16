@@ -71,7 +71,7 @@ class commApiRespTime(ManagedObject):
             description="An event will be created if the response time of any request in the window is beyond this threshold",
         ),
     ] = 85000
-    set_the_value_for_n_in_top_n_requests: Annotated[
+    top_n_requests: Annotated[
         int,
         Field(
             ge=1,

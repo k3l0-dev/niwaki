@@ -31,7 +31,7 @@ Accepted as keyword arguments of `.storm_control_policy(name)` and of `.set(**at
 | `max_burst_size` | `burstPps` | `int` | — | `unspecified` | The packets per second (PPS) burst interval rate for the storm control policy. During this interval, the traffic level which is expressed as packets flowing per second through the port, is then compared with the traffic storm control level that you configured. |
 | `burst_rate` | `burstRate` | `float` | — | `100.0` | The traffic burst rate percentage. |
 | `description` | `descr` | `str` | — | — | Specifies a description of the policy definition. |
-| `packet_type_uc_bc_mc_config_valid_yes_no` | `isUcMcBcStormPktCfgValid` | {ref}`L1StormCtrlCfgValid <enum-l1stormctrlcfgvalid>` | `Invalid`, `Valid` | `Invalid` | — |
+| `is_uc_mc_bc_storm_pkt_cfg_valid` | `isUcMcBcStormPktCfgValid` | {ref}`L1StormCtrlCfgValid <enum-l1stormctrlcfgvalid>` | `Invalid`, `Valid` | `Invalid` | — |
 | `multicast_max_burst_size` | `mcBurstPps` | `int` | — | `unspecified` | burst rate in pps |
 | `mc_burst_rate` | `mcBurstRate` | `float` | — | `100.0` | burst rate in % (upto 1 decimal) |
 | `multicast_traffic_rate` | `mcRate` | `float` | — | `100.0` | rate in % (upto 1 decimal) |

@@ -197,6 +197,12 @@ def mo_diff[T: ManagedObject](
     for field in model_fields:
         d_val = getattr(desired, field, None)
         c_val = getattr(current, field, None)
+        # Mirror ``to_apic()``: an empty string on a non-naming field is dropped
+        # from the POST (it would clobber the APIC value), so ``push`` never
+        # sends it.  Reporting it as a change would make ``plan`` promise an
+        # update ``push`` never makes — and the drift would never converge.
+        if d_val == "":
+            continue
         if not _values_equal(d_val, c_val):
             changed[field] = d_val
 

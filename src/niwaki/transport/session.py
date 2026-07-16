@@ -35,6 +35,14 @@ _T = TypeVar("_T", bound=ManagedObject)
 # Exceeds any real ACI fabric; prevents runaway loops on corrupted totalCount.
 _MAX_PAGINATION_PAGES: int = 2000
 _DEFAULT_RETRY: RetryConfig = RetryConfig()
+# Writes are only safe to retry on errors that provably occurred BEFORE the
+# request reached the server (connection/pool).  A read/write timeout may mean
+# the APIC accepted the write, so retrying could double-apply or 404 (audit T2).
+_WRITE_SAFE_RETRY: tuple[type[Exception], ...] = (
+    httpx.ConnectError,
+    httpx.ConnectTimeout,
+    httpx.PoolTimeout,
+)
 
 
 class ApicSession:
@@ -437,7 +445,11 @@ class ApicSession:
         """
         page_params = {**params, "page": "0", "page-size": str(page_size)}
         data: dict[str, Any] = self._request_checked(path, page_params).json()
-        total = int(data.get("totalCount", 0))
+        # Treat an absent totalCount as "unknown" and page until an empty
+        # page; never let a missing/zero totalCount stop after page 0 when
+        # a full first page came back (audit T3).
+        total_raw = data.get("totalCount")
+        total = int(total_raw) if total_raw is not None else None
         first: list[dict[str, Any]] = list(data.get("imdata", []))
         if not first:
             return
@@ -445,7 +457,7 @@ class ApicSession:
 
         fetched = len(first)
         page = 1
-        while fetched < total:
+        while total is None or fetched < total:
             if page > _MAX_PAGINATION_PAGES:
                 raise exceptions.ServerError(
                     0,
@@ -581,7 +593,7 @@ class ApicSession:
         self._ensure_token()
 
         with self._http_transport():
-            resp = self._request_with_retry(method, path, **kwargs)
+            resp = self._request_with_retry(method, path, retry_on=_WRITE_SAFE_RETRY, **kwargs)
 
         if resp.status_code == 401:
             self.login()
@@ -590,7 +602,14 @@ class ApicSession:
 
         raise_for_apic_status(resp)
 
-    def _request_with_retry(self, method: str, path: str, **kwargs: Any) -> httpx.Response:
+    def _request_with_retry(
+        self,
+        method: str,
+        path: str,
+        *,
+        retry_on: type[Exception] | tuple[type[Exception], ...] = httpx.TransportError,
+        **kwargs: Any,
+    ) -> httpx.Response:
         """
         Execute a request with stamina retry on transient network errors.
 
@@ -610,7 +629,7 @@ class ApicSession:
             ``httpx.TransportError``, caught by ``_http_transport``.
         """
         for attempt in stamina.retry_context(
-            on=httpx.TransportError,
+            on=retry_on,
             attempts=self._retry.attempts,
             wait_initial=self._retry.wait_initial,
             wait_max=self._retry.wait_max,

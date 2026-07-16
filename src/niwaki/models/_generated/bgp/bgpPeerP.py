@@ -116,9 +116,7 @@ class bgpPeerP(ManagedObject):
     capability: Annotated[Flags[BgpPeerAfCap], BeforeValidator(parse_flags)] = Field(
         default_factory=lambda: frozenset({BgpPeerAfCap.NONE}), description="Peer AF Capability"
     )
-    type_of_network_reachable_via_this_peer: Annotated[
-        Flags[BgpConnectivityType], BeforeValidator(parse_flags)
-    ] = Field(
+    connectivity_type: Annotated[Flags[BgpConnectivityType], BeforeValidator(parse_flags)] = Field(
         default_factory=lambda: frozenset({BgpConnectivityType.TENANT}),
         validation_alias="connectivityType",
         serialization_alias="connectivityType",
@@ -190,11 +188,4 @@ class bgpPeerP(ManagedObject):
         ),
     ] = 1
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    weight_for_routes_from_this_neighbor: Annotated[
-        int,
-        Field(
-            validation_alias="weight",
-            serialization_alias="weight",
-            description="Default weight for routes from this neighbor",
-        ),
-    ] = 0
+    weight: Annotated[int, Field(description="Default weight for routes from this neighbor")] = 0

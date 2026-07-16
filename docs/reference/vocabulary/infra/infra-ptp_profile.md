@@ -24,9 +24,9 @@ Accepted as keyword arguments of `.ptp_profile(ptp_user_profile_name)` and of `.
 | `ptp_user_profile_name` *(positional)* | `name` | `str` | — | — | PTP user profile name |
 | `announce_interval_for_ptp_profile` | `announceIntvl` | `int` | — | `1` | Announce Interval |
 | `announce_timeout_for_ptp_profile` | `announceTimeout` | `int` | — | `3` | Announce timeout |
-| `delay_request_interval_for_ptp_profile` | `delayIntvl` | `int` | — | `-2` | Minimum Delay Request Interval |
+| `delay_intvl` | `delayIntvl` | `int` | — | `-2` | Minimum Delay Request Interval |
 | `local_priority` | `localPriority` | `int` | — | `128` | Telecom profile related propertiesLocal Priority or PTP Cost |
-| `flag_to_over_ride_node_level_config` | `nodeProfileOverride` | `bool` | — | `False` | Override Node-level configurationProfile Applicable when Node Telecom Profile is configured |
+| `node_profile_override` | `nodeProfileOverride` | `bool` | — | `False` | Override Node-level configurationProfile Applicable when Node Telecom Profile is configured |
 | `ptp_profile_template` | `profileTemplate` | {ref}`PtpProfileTemplate <enum-ptpprofiletemplate>` | `aes67`, `default`, `smpte`, `telecom_full_path` | `aes67` | PTP template |
 | `ptpoe_dst_mac_rx_no_match` | `ptpoeDstMacRxNoMatch` | {ref}`PtpPtpoeDstMacRxNoMatch <enum-ptpptpoedstmacrxnomatch>` | `drop`, `replyWithCfgMac`, `replyWithRxMac` | `replyWithCfgMac` | PTPoE - Handling of RX packets with non-matching Mac type |
 | `ptpoe_dst_mac_type` | `ptpoeDstMacType` | {ref}`PtpPtpoeDstMacType <enum-ptpptpoedstmactype>` | `forwardable`, `non-forwardable` | `forwardable` | PTPoE destination mac type |

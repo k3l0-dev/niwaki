@@ -24,7 +24,7 @@ Accepted as keyword arguments of `.qos_instance_policy(name)` and of `.set(**att
 | parameter | wire | type | values | default | description |
 | --- | --- | --- | --- | --- | --- |
 | `name` *(positional)* | `name` | `str` | — | — | — |
-| `e_trap_flow_age_out_timer` | `EtrapAgeTimer` | `int` | — | `0` | — |
+| `etrap_age_timer` | `EtrapAgeTimer` | `int` | — | `0` | — |
 | `track_activeness_of_elephant_flow` | `EtrapBwThresh` | `int` | — | `0` | — |
 | `e_trap_elephant_flow_identifier` | `EtrapByteCt` | `int` | — | `0` | — |
 | `e_trap_enable_knob` | `EtrapSt` | `bool` | — | `False` | E-trap parameters |

@@ -142,7 +142,7 @@ class vnsSvcRedirectPol(ManagedObject):
         validation_alias="resilientHashEnabled",
         serialization_alias="resilientHashEnabled",
     )
-    source_mac_rewrite_enabled_or_not: bool = Field(
+    src_mac_rewrite_enabled: bool = Field(
         default=False,
         validation_alias="srcMacRewriteEnabled",
         serialization_alias="srcMacRewriteEnabled",

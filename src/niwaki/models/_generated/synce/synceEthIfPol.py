@@ -109,11 +109,8 @@ class synceEthIfPol(ManagedObject):
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
-    quality_transmit_exact_ql_option_type: SynceQloptype = Field(
-        default=SynceQloptype.NONE,
-        validation_alias="qloptype",
-        serialization_alias="qloptype",
-        description="quality transmit exact option type",
+    qloptype: SynceQloptype = Field(
+        default=SynceQloptype.NONE, description="quality transmit exact option type"
     )
     quality_receive_exact_ql_value: SynceQlvalue = Field(
         default=SynceQlvalue.FSYNC_QL_COMMON_NONE,

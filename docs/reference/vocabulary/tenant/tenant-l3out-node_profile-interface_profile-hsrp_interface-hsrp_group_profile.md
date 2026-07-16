@@ -31,7 +31,7 @@ Accepted as keyword arguments of `.hsrp_group_profile(name)` and of `.set(**attr
 | `group_name` | `groupName` | `str` | — | — | Redundancy name string |
 | `primary_ip_address` | `ip` | `str` | — | — | HSRP primary Virtual IP address (VIP) |
 | `vip_obtain_mode` | `ipObtainMode` | {ref}`HsrpGrpIpObtainMode <enum-hsrpgrpipobtainmode>` | `admin`, `auto`, `learn` | `admin` | HSRP primary Virtual IP Obtain Mode |
-| `configured_mac_address_for_the_group` | `mac` | `str` | — | — | HSRP VMAC for the group |
+| `mac` | `mac` | `str` | — | — | HSRP VMAC for the group |
 
 ## Children
 

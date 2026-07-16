@@ -28,9 +28,9 @@ Accepted as keyword arguments of `.subnet(subnet)` and of `.set(**attrs)` on thi
 | `description` | `descr` | `str` | — | — | Specifies the description of a policy component. |
 | `ip_dp_learning` | `ipDPLearning` | {ref}`FvipDPLearning <enum-fvipdplearning>` | `disabled`, `enabled` | `enabled` | Knob to disable IP Dataplane Learning for Host(/32, /128) and for BD Subnet |
 | `name` | `name` | `str` | — | — | — |
-| `preferred_as_primary_subnet` | `preferred` | `bool` | — | `False` | Indicates if the subnet is preferred (primary) over the available alternatives. Only one preferred subnet is allowed. |
+| `preferred` | `preferred` | `bool` | — | `False` | Indicates if the subnet is preferred (primary) over the available alternatives. Only one preferred subnet is allowed. |
 | `scope` | `scope` | {ref}`FvRouteScp <enum-fvroutescp>` | `public`, `private`, `shared` | `private` | The network visibility of the subnet. |
-| `treated_as_virtual_ip_address` | `virtual` | `bool` | — | `False` | Treated as virtual IP address. Used in case of BD extended to multiple sites. |
+| `virtual` | `virtual` | `bool` | — | `False` | Treated as virtual IP address. Used in case of BD extended to multiple sites. |
 
 ## Children
 

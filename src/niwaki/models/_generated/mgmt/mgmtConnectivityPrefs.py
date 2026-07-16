@@ -57,7 +57,7 @@ class mgmtConnectivityPrefs(ManagedObject):
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
-    management_interface_that_has_to_be_used: MgmtMgmtIntfType = Field(
+    interface_pref: MgmtMgmtIntfType = Field(
         default=MgmtMgmtIntfType.INBAND,
         validation_alias="interfacePref",
         serialization_alias="interfacePref",

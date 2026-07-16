@@ -259,7 +259,7 @@ def protocol_policies_design() -> Cursor:
     cfg.ospf_timers_policy(
         "ospf-timers-log",
         action="log",
-        maximum_of_non_self_generated_lsas=10000,
+        max_lsa_num=10000,
         bandwidth_preference=80000,
         max_ecmp=6,
     )
@@ -308,7 +308,7 @@ def protocol_policies_design() -> Cursor:
         local_distance=220,
         max_ecmp_for_ebgp_routes=8,
         max_ecmp_for_ibgp_routes=8,
-        max_local_ecmp_for_redistribute_rotes=8,
+        max_local_ecmp=8,
     )
     for action in ("log", "reject", "restart", "shut"):
         peer_prefix = cfg.bgp_peer_prefix_policy(
@@ -783,21 +783,21 @@ def epg_world_design() -> Cursor:
                     .dns_attribute("dns-corp", domain_name_filter="*.corp.local")
                     .vm_attribute("vm-guest-os", attribute_type="guest-os",
                                   operator="contains",
-                                  custom_attribute_value_or_tag_name="Ubuntu")
+                                  value="Ubuntu")
                     .vm_attribute("vm-name", attribute_type="vm-name", operator="equals",
-                                  custom_attribute_value_or_tag_name="web-01")
+                                  value="web-01")
                     .vm_attribute("vm-hv", attribute_type="hv", operator="startsWith",
-                                  custom_attribute_value_or_tag_name="esx-")
+                                  value="esx-")
                     .vm_attribute("vm-folder", attribute_type="vm-folder",
                                   operator="endsWith",
-                                  custom_attribute_value_or_tag_name="/prod")
+                                  value="/prod")
                     # A nested criterion: "all of these" inside the "any" above.
                     # (The MIT hangs IP and MAC attributes here too; the APIC
                     # refuses both — a sub-criterion takes VM attributes only.)
                     .sub_criterion("nested-all", matching_rule_type="all")
                         .vm_attribute("nested-vm", attribute_type="vm-name",
                                       operator="notEquals",
-                                      custom_attribute_value_or_tag_name="db-01")
+                                      value="db-01")
 
             # ── ESG: selectors, VRF scope, contract master ────────────────────
             .esg("shop-esg", policy_control_enforcement="enforced", qos_class="level5",
@@ -883,7 +883,7 @@ class Test3EpgWorld:
         esg = live_aci.tenant(TENANT).app(APP).esg("shop-esg")
         assert esg.read().policy_control_enforcement == "enforced"
 
-        tags = {t.key_tagtag_to_be_associated_with: t for t in esg.query("fvTagSelector").fetch()}
+        tags = {t.match_key: t for t in esg.query("fvTagSelector").fetch()}
         assert {t.match_value_operator for t in tags.values()} == {"equals", "contains", "regex"}
 
         epg_selectors = esg.query("fvEPgSelector").fetch()

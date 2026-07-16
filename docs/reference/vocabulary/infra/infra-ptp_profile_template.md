@@ -31,8 +31,8 @@ Accepted as keyword arguments of `.ptp_profile_template(ptp_profile_template_nam
 | `announce_timeout_range_end` | `announceTimeoutEnd` | `int` | — | `0` | Announce timeout range end |
 | `announce_timeout_range_start` | `announceTimeoutStart` | `int` | — | `0` | Announce timeout range start |
 | `delay_req_intvl_default` | `delayReqIntvlDefault` | `int` | — | `0` | Minimum Delay Request Interval default value |
-| `minimum_delay_request_interval_range_end` | `delayReqIntvlEnd` | `int` | — | `0` | Minimum Delay Request Interval range end |
+| `delay_req_intvl_end` | `delayReqIntvlEnd` | `int` | — | `0` | Minimum Delay Request Interval range end |
 | `delay_req_intvl_start` | `delayReqIntvlStart` | `int` | — | `0` | Minimum Delay Request Interval range start |
 | `sync_intvl_default` | `syncIntvlDefault` | `int` | — | `0` | Sync Interval default value |
-| `sync_intvl_end` | `syncIntvlEnd` | `int` | — | `0` | Sync Interval range end |
+| `minimum_delay_request_interval_range_end` | `syncIntvlEnd` | `int` | — | `0` | Sync Interval range end |
 | `sync_intvl_start` | `syncIntvlStart` | `int` | — | `0` | Sync Interval range start |

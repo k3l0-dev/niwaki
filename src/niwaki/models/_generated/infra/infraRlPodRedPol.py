@@ -59,7 +59,7 @@ class infraRlPodRedPol(ManagedObject):
         serialization_alias="enablePodRedPreemption",
         description="Switch back to the configured POD when it comes up. This could impact traffic for a few seconds.",
     )
-    enable_remote_leaf_pod_redundancy_policy: bool = Field(
+    enable_rl_pod_red_pol: bool = Field(
         default=False,
         validation_alias="enableRlPodRedPol",
         serialization_alias="enableRlPodRedPol",

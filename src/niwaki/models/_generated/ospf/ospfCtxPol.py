@@ -171,7 +171,7 @@ class ospfCtxPol(ManagedObject):
         serialization_alias="maxLsaAction",
         description="The action to take when the maximum LSA limit is reached.",
     )
-    maximum_of_non_self_generated_lsas: Annotated[
+    max_lsa_num: Annotated[
         int,
         Field(
             ge=1,

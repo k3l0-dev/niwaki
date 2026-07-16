@@ -542,7 +542,7 @@ class _InfraMakers(Cursor):
         max_burst_size: int | str | None = None,
         burst_rate: float | None = None,
         description: str | None = None,
-        packet_type_uc_bc_mc_config_valid_yes_no: L1StormCtrlCfgValid | str | None = None,
+        is_uc_mc_bc_storm_pkt_cfg_valid: L1StormCtrlCfgValid | str | None = None,
         multicast_max_burst_size: int | str | None = None,
         mc_burst_rate: float | None = None,
         multicast_traffic_rate: float | None = None,
@@ -579,7 +579,7 @@ class _InfraMakers(Cursor):
                 storm control level that you configured. Default: ``unspecified``.
             burst_rate: The traffic burst rate percentage. Default: ``100.0``.
             description: Specifies a description of the policy definition.
-            packet_type_uc_bc_mc_config_valid_yes_no: Values: ``Invalid``, ``Valid``. Default:
+            is_uc_mc_bc_storm_pkt_cfg_valid: Values: ``Invalid``, ``Valid``. Default:
                 ``Invalid``.
             multicast_max_burst_size: burst rate in pps Default: ``unspecified``.
             mc_burst_rate: burst rate in % (upto 1 decimal) Default: ``100.0``.
@@ -633,7 +633,7 @@ class _InfraMakers(Cursor):
         dot1q_tunnel_policy_configuration: L2QinQConfig | str | None = None,
         userdom: str | None = None,
         vepa_policy_configuration: L2VepaConfig | str | None = None,
-        vlan_scope_can_be_global_or_port_local: L2VlanScope | str | None = None,
+        vlan_scope: L2VlanScope | str | None = None,
     ) -> L2InterfacePolicyCursor:
         """Declare a ``l2IfPol`` child under the infra level.
 
@@ -648,8 +648,8 @@ class _InfraMakers(Cursor):
                 ``disabled``, ``doubleQtagPort``, ``edgePort``. Default: ``disabled``.
             vepa_policy_configuration: Vepa Configuration Values: ``disabled``, ``enabled``.
                 Default: ``disabled``.
-            vlan_scope_can_be_global_or_port_local: The Layer 2 interface VLAN scope Values:
-                ``global``, ``portlocal``. Default: ``global``.
+            vlan_scope: The Layer 2 interface VLAN scope Values: ``global``, ``portlocal``.
+                Default: ``global``.
         """
         params = {
             k: v
@@ -820,7 +820,7 @@ class _InfraMakers(Cursor):
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
-        quality_transmit_exact_ql_option_type: SynceQloptype | str | None = None,
+        qloptype: SynceQloptype | str | None = None,
         quality_receive_exact_ql_value: SynceQlvalue | str | None = None,
         quality_receive_highest_ql_value: SynceQlvalue | str | None = None,
         quality_receive_lowest_ql_value: SynceQlvalue | str | None = None,
@@ -845,8 +845,8 @@ class _InfraMakers(Cursor):
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
-            quality_transmit_exact_ql_option_type: quality transmit exact option type Values:
-                ``none``, ``op1``, ``op2g1``, ``op2g2``. Default: ``none``.
+            qloptype: quality transmit exact option type Values: ``none``, ``op1``, ``op2g1``,
+                ``op2g2``. Default: ``none``.
             quality_receive_exact_ql_value: quality receive exact value Values: ``fsync-ql-
                 common-dnu``, ``fsync-ql-common-failed``, ``fsync-ql-common-invalid``, ``fsync-
                 ql-common-none``, ``fsync-ql-o1-eec1``, ``fsync-ql-o1-eeec``, ``fsync-
@@ -1373,7 +1373,7 @@ class _InfraMakers(Cursor):
         self,
         name: str = "default",
         *,
-        e_trap_flow_age_out_timer: int | None = None,
+        etrap_age_timer: int | None = None,
         track_activeness_of_elephant_flow: int | None = None,
         e_trap_elephant_flow_identifier: int | None = None,
         e_trap_enable_knob: bool | None = None,
@@ -1395,7 +1395,7 @@ class _InfraMakers(Cursor):
 
         Args:
             name: Naming property — forms the object's RN.
-            e_trap_flow_age_out_timer: Default: ``0``.
+            etrap_age_timer: Default: ``0``.
             track_activeness_of_elephant_flow: Default: ``0``.
             e_trap_elephant_flow_identifier: Default: ``0``.
             e_trap_enable_knob: E-trap parameters Default: ``False``.
@@ -1431,8 +1431,8 @@ class _InfraMakers(Cursor):
         *,
         annotation: str | None = None,
         description: str | None = None,
-        link_level_flow_control_receive_mode: L1LinkLevelFlowCtrl | str | None = None,
-        link_level_flow_control_send_mode: L1LinkLevelFlowCtrl | str | None = None,
+        llfc_rcv_admin_st: L1LinkLevelFlowCtrl | str | None = None,
+        llfc_send_admin_st: L1LinkLevelFlowCtrl | str | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
@@ -1446,8 +1446,8 @@ class _InfraMakers(Cursor):
             name: The name of the object.
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies a description of the policy definition.
-            link_level_flow_control_receive_mode: Values: ``off``, ``on``. Default: ``off``.
-            link_level_flow_control_send_mode: Values: ``off``, ``on``. Default: ``off``.
+            llfc_rcv_admin_st: Values: ``off``, ``on``. Default: ``off``.
+            llfc_send_admin_st: Values: ``off``, ``on``. Default: ``off``.
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
@@ -1846,13 +1846,13 @@ class _InfraMakers(Cursor):
         self,
         *,
         annotation: str | None = None,
-        damp_penatly_factor_for_coop_dampening: int | None = None,
+        damp_factor: int | None = None,
         description: str | None = None,
         disable_ep_dampening_knob: bool | None = None,
         enforce_domain_validation: bool | None = None,
         enable_mo_streaming: bool | None = None,
         enable_remote_leaf_direct_communication: bool | None = None,
-        enforce_subnet_check_on_all_vrfs: bool | None = None,
+        enforce_subnet_check: bool | None = None,
         leaf_opflexp_authenticate_clients: bool | None = None,
         leaf_opflexp_use_ssl: bool | None = None,
         name: str | None = None,
@@ -1876,15 +1876,14 @@ class _InfraMakers(Cursor):
 
         Args:
             annotation: User annotation. Suggested format orchestrator:value
-            damp_penatly_factor_for_coop_dampening: Default: ``1``.
+            damp_factor: Default: ``1``.
             description: Specifies a description of the policy definition.
             disable_ep_dampening_knob: Enable Ep Dampening knob Default: ``False``.
             enforce_domain_validation: Default: ``False``.
             enable_mo_streaming: Enable MO steaming feature Default: ``False``.
             enable_remote_leaf_direct_communication: Enable remote leaf direct communication for
                 all RLs Default: ``False``.
-            enforce_subnet_check_on_all_vrfs: Enforce subnet check on all VRFs Default:
-                ``False``.
+            enforce_subnet_check: Enforce subnet check on all VRFs Default: ``False``.
             leaf_opflexp_authenticate_clients: Require Opflexp Client Certificates for
                 authentication for Leaf Default: ``True``.
             leaf_opflexp_use_ssl: Require SSL transport for Opflexp for Leaf Default: ``True``.
@@ -1919,7 +1918,7 @@ class _InfraMakers(Cursor):
         delay_timeout: int | None = None,
         description: str | None = None,
         include_apic_ports: bool | None = None,
-        minimum_links_left_up_before_trigger: int | None = None,
+        minlinks: int | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
@@ -1935,7 +1934,7 @@ class _InfraMakers(Cursor):
             delay_timeout: The administrative port delay. Default: ``120``.
             description: Specifies a description of the policy definition.
             include_apic_ports: Default: ``False``.
-            minimum_links_left_up_before_trigger: Default: ``0``.
+            minlinks: Default: ``0``.
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
@@ -1977,7 +1976,7 @@ class _InfraMakers(Cursor):
         annotation: str | None = None,
         description: str | None = None,
         enable_pod_red_preemption: bool | None = None,
-        enable_remote_leaf_pod_redundancy_policy: bool | None = None,
+        enable_rl_pod_red_pol: bool | None = None,
         name: str | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
@@ -1991,8 +1990,8 @@ class _InfraMakers(Cursor):
             description: Specifies a description of the policy definition.
             enable_pod_red_preemption: Switch back to the configured POD when it comes up. This
                 could impact traffic for a few seconds. Default: ``False``.
-            enable_remote_leaf_pod_redundancy_policy: Remote Leafs will move to an availabe
-                healthy pod if the configured Pod is down Default: ``False``.
+            enable_rl_pod_red_pol: Remote Leafs will move to an availabe healthy pod if the
+                configured Pod is down Default: ``False``.
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
@@ -3447,9 +3446,9 @@ class _InfraMakers(Cursor):
         annotation: str | None = None,
         announce_interval_for_ptp_profile: int | None = None,
         announce_timeout_for_ptp_profile: int | None = None,
-        delay_request_interval_for_ptp_profile: int | None = None,
+        delay_intvl: int | None = None,
         local_priority: int | None = None,
-        flag_to_over_ride_node_level_config: bool | None = None,
+        node_profile_override: bool | None = None,
         ptp_profile_template: PtpProfileTemplate | str | None = None,
         ptpoe_dst_mac_rx_no_match: PtpPtpoeDstMacRxNoMatch | str | None = None,
         ptpoe_dst_mac_type: PtpPtpoeDstMacType | str | None = None,
@@ -3463,12 +3462,11 @@ class _InfraMakers(Cursor):
             annotation: User annotation. Suggested format orchestrator:value
             announce_interval_for_ptp_profile: Announce Interval Default: ``1``.
             announce_timeout_for_ptp_profile: Announce timeout Default: ``3``.
-            delay_request_interval_for_ptp_profile: Minimum Delay Request Interval Default:
-                ``-2``.
+            delay_intvl: Minimum Delay Request Interval Default: ``-2``.
             local_priority: Telecom profile related propertiesLocal Priority or PTP Cost
                 Default: ``128``.
-            flag_to_over_ride_node_level_config: Override Node-level configurationProfile
-                Applicable when Node Telecom Profile is configured Default: ``False``.
+            node_profile_override: Override Node-level configurationProfile Applicable when Node
+                Telecom Profile is configured Default: ``False``.
             ptp_profile_template: PTP template Values: ``aes67``, ``default``, ``smpte``,
                 ``telecom_full_path``. Default: ``aes67``.
             ptpoe_dst_mac_rx_no_match: PTPoE - Handling of RX packets with non-matching Mac type
@@ -3535,10 +3533,10 @@ class _InfraMakers(Cursor):
         announce_timeout_range_end: int | None = None,
         announce_timeout_range_start: int | None = None,
         delay_req_intvl_default: int | None = None,
-        minimum_delay_request_interval_range_end: int | None = None,
+        delay_req_intvl_end: int | None = None,
         delay_req_intvl_start: int | None = None,
         sync_intvl_default: int | None = None,
-        sync_intvl_end: int | None = None,
+        minimum_delay_request_interval_range_end: int | None = None,
         sync_intvl_start: int | None = None,
         userdom: str | None = None,
     ) -> PtpProfileTemplateCursor:
@@ -3557,11 +3555,10 @@ class _InfraMakers(Cursor):
             announce_timeout_range_start: Announce timeout range start Default: ``0``.
             delay_req_intvl_default: Minimum Delay Request Interval default value Default:
                 ``0``.
-            minimum_delay_request_interval_range_end: Minimum Delay Request Interval range end
-                Default: ``0``.
+            delay_req_intvl_end: Minimum Delay Request Interval range end Default: ``0``.
             delay_req_intvl_start: Minimum Delay Request Interval range start Default: ``0``.
             sync_intvl_default: Sync Interval default value Default: ``0``.
-            sync_intvl_end: Sync Interval range end Default: ``0``.
+            minimum_delay_request_interval_range_end: Sync Interval range end Default: ``0``.
             sync_intvl_start: Sync Interval range start Default: ``0``.
         """
         params = {
@@ -3588,7 +3585,7 @@ class _InfraMakers(Cursor):
         description: str | None = None,
         detection_multiplier: int | None = None,
         echo_rx_interval: int | None = None,
-        bfd_ipv4_source_address_for_echo_frames: str | None = None,
+        echo_src_addr: str | None = None,
         required_minimum_rx_interval: int | None = None,
         desired_minimum_tx_interval: int | None = None,
         display_name: str | None = None,
@@ -3606,7 +3603,7 @@ class _InfraMakers(Cursor):
             description: Specifies a description of the policy definition.
             detection_multiplier: Detection multiplier. Default: ``3``.
             echo_rx_interval: Echo rx interval. Default: ``50``.
-            bfd_ipv4_source_address_for_echo_frames: BFD Source Address for Echo frames.
+            echo_src_addr: BFD Source Address for Echo frames.
             required_minimum_rx_interval: Required minimum rx interval. Default: ``50``.
             desired_minimum_tx_interval: Desired minimum tx interval. Default: ``50``.
             owner_key: The key for enabling clients to own their data for entity correlation.
@@ -3638,7 +3635,7 @@ class _InfraMakers(Cursor):
         description: str | None = None,
         detection_multiplier: int | None = None,
         echo_rx_interval: int | None = None,
-        bfd_ipv4_source_address_for_echo_frames: str | None = None,
+        echo_src_addr: str | None = None,
         required_minimum_rx_interval: int | None = None,
         desired_minimum_tx_interval: int | None = None,
         display_name: str | None = None,
@@ -3656,7 +3653,7 @@ class _InfraMakers(Cursor):
             description: Specifies a description of the policy definition.
             detection_multiplier: Detection multiplier. Default: ``3``.
             echo_rx_interval: Echo rx interval. Default: ``50``.
-            bfd_ipv4_source_address_for_echo_frames: BFD Source Address for Echo frames.
+            echo_src_addr: BFD Source Address for Echo frames.
             required_minimum_rx_interval: Required minimum rx interval. Default: ``50``.
             desired_minimum_tx_interval: Desired minimum tx interval. Default: ``50``.
             owner_key: The key for enabling clients to own their data for entity correlation.
@@ -4039,7 +4036,7 @@ class BfdGlobalIpv4PolicyCursor(_InfraMakers, _UniMakers):
         description: str | None = None,
         detection_multiplier: int | None = None,
         echo_rx_interval: int | None = None,
-        bfd_ipv4_source_address_for_echo_frames: str | None = None,
+        echo_src_addr: str | None = None,
         required_minimum_rx_interval: int | None = None,
         desired_minimum_tx_interval: int | None = None,
         display_name: str | None = None,
@@ -4103,7 +4100,7 @@ class BfdGlobalIpv6PolicyCursor(_InfraMakers, _UniMakers):
         description: str | None = None,
         detection_multiplier: int | None = None,
         echo_rx_interval: int | None = None,
-        bfd_ipv4_source_address_for_echo_frames: str | None = None,
+        echo_src_addr: str | None = None,
         required_minimum_rx_interval: int | None = None,
         desired_minimum_tx_interval: int | None = None,
         display_name: str | None = None,
@@ -5116,13 +5113,13 @@ class FabricWideSettingsPolicyCursor(_InfraMakers, _UniMakers):
         self,
         *,
         annotation: str | None = None,
-        damp_penatly_factor_for_coop_dampening: int | None = None,
+        damp_factor: int | None = None,
         description: str | None = None,
         disable_ep_dampening_knob: bool | None = None,
         enforce_domain_validation: bool | None = None,
         enable_mo_streaming: bool | None = None,
         enable_remote_leaf_direct_communication: bool | None = None,
-        enforce_subnet_check_on_all_vrfs: bool | None = None,
+        enforce_subnet_check: bool | None = None,
         leaf_opflexp_authenticate_clients: bool | None = None,
         leaf_opflexp_use_ssl: bool | None = None,
         name: str | None = None,
@@ -6118,7 +6115,7 @@ class L2InterfacePolicyCursor(_InfraMakers, _UniMakers):
         dot1q_tunnel_policy_configuration: L2QinQConfig | str | None = None,
         userdom: str | None = None,
         vepa_policy_configuration: L2VepaConfig | str | None = None,
-        vlan_scope_can_be_global_or_port_local: L2VlanScope | str | None = None,
+        vlan_scope: L2VlanScope | str | None = None,
     ) -> L2InterfacePolicyCursor:
         """Set ``l2IfPol`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -6429,8 +6426,8 @@ class LlfcInterfacePolicyCursor(_InfraMakers, _UniMakers):
         *,
         annotation: str | None = None,
         description: str | None = None,
-        link_level_flow_control_receive_mode: L1LinkLevelFlowCtrl | str | None = None,
-        link_level_flow_control_send_mode: L1LinkLevelFlowCtrl | str | None = None,
+        llfc_rcv_admin_st: L1LinkLevelFlowCtrl | str | None = None,
+        llfc_send_admin_st: L1LinkLevelFlowCtrl | str | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
@@ -7610,7 +7607,7 @@ class PortTrackingCursor(_InfraMakers, _UniMakers):
         delay_timeout: int | None = None,
         description: str | None = None,
         include_apic_ports: bool | None = None,
-        minimum_links_left_up_before_trigger: int | None = None,
+        minlinks: int | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
@@ -7695,9 +7692,9 @@ class PtpProfileCursor(_InfraMakers, _UniMakers):
         annotation: str | None = None,
         announce_interval_for_ptp_profile: int | None = None,
         announce_timeout_for_ptp_profile: int | None = None,
-        delay_request_interval_for_ptp_profile: int | None = None,
+        delay_intvl: int | None = None,
         local_priority: int | None = None,
-        flag_to_over_ride_node_level_config: bool | None = None,
+        node_profile_override: bool | None = None,
         ptp_profile_template: PtpProfileTemplate | str | None = None,
         ptpoe_dst_mac_rx_no_match: PtpPtpoeDstMacRxNoMatch | str | None = None,
         ptpoe_dst_mac_type: PtpPtpoeDstMacType | str | None = None,
@@ -7732,10 +7729,10 @@ class PtpProfileTemplateCursor(_InfraMakers, _UniMakers):
         announce_timeout_range_end: int | None = None,
         announce_timeout_range_start: int | None = None,
         delay_req_intvl_default: int | None = None,
-        minimum_delay_request_interval_range_end: int | None = None,
+        delay_req_intvl_end: int | None = None,
         delay_req_intvl_start: int | None = None,
         sync_intvl_default: int | None = None,
-        sync_intvl_end: int | None = None,
+        minimum_delay_request_interval_range_end: int | None = None,
         sync_intvl_start: int | None = None,
         userdom: str | None = None,
     ) -> PtpProfileTemplateCursor:
@@ -7809,7 +7806,7 @@ class QosInstancePolicyCursor(_QosInstancePolicyMakers, _InfraMakers, _UniMakers
     def set(
         self,
         *,
-        e_trap_flow_age_out_timer: int | None = None,
+        etrap_age_timer: int | None = None,
         track_activeness_of_elephant_flow: int | None = None,
         e_trap_elephant_flow_identifier: int | None = None,
         e_trap_enable_knob: bool | None = None,
@@ -7848,7 +7845,7 @@ class RemoteLeafPodRedundancyPolicyCursor(_InfraMakers, _UniMakers):
         annotation: str | None = None,
         description: str | None = None,
         enable_pod_red_preemption: bool | None = None,
-        enable_remote_leaf_pod_redundancy_policy: bool | None = None,
+        enable_rl_pod_red_pol: bool | None = None,
         name: str | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
@@ -8385,7 +8382,7 @@ class StormControlPolicyCursor(_InfraMakers, _UniMakers):
         max_burst_size: int | str | None = None,
         burst_rate: float | None = None,
         description: str | None = None,
-        packet_type_uc_bc_mc_config_valid_yes_no: L1StormCtrlCfgValid | str | None = None,
+        is_uc_mc_bc_storm_pkt_cfg_valid: L1StormCtrlCfgValid | str | None = None,
         multicast_max_burst_size: int | str | None = None,
         mc_burst_rate: float | None = None,
         multicast_traffic_rate: float | None = None,
@@ -8458,7 +8455,7 @@ class SynceInterfacePolicyCursor(_InfraMakers, _UniMakers):
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
-        quality_transmit_exact_ql_option_type: SynceQloptype | str | None = None,
+        qloptype: SynceQloptype | str | None = None,
         quality_receive_exact_ql_value: SynceQlvalue | str | None = None,
         quality_receive_highest_ql_value: SynceQlvalue | str | None = None,
         quality_receive_lowest_ql_value: SynceQlvalue | str | None = None,

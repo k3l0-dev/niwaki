@@ -63,7 +63,7 @@ class vzEntry(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    apply_rule_for_all_fragments: bool = Field(
+    apply_to_frag: bool = Field(
         default=False, validation_alias="applyToFrag", serialization_alias="applyToFrag"
     )
     arp_opcodes: ArpOpcode = Field(
@@ -181,7 +181,7 @@ class vzEntry(ManagedObject):
         ),
         Field(validation_alias="icmpv6T", serialization_alias="icmpv6T"),
     ] = "unspecified"
-    dscp_match_for_filter_entry: Annotated[
+    match_dscp: Annotated[
         Annotated[int, Field(ge=0, le=64)]
         | Literal[
             "AF11",

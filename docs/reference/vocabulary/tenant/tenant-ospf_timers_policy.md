@@ -36,7 +36,7 @@ Accepted as keyword arguments of `.ospf_timers_policy(name)` and of `.set(**attr
 | `throttle_start_wait_interval` | `lsaStartIntvl` | `int` | — | `0` | The generation throttle start-wait interval between LSAs. |
 | `max_ecmp` | `maxEcmp` | `int` | — | `8` | The maximum ECMP for the OSPF protocol. |
 | `action` | `maxLsaAction` | {ref}`OspfMaxLsaAct <enum-ospfmaxlsaact>` | `log`, `reject`, `restart` | `reject` | The action to take when the maximum LSA limit is reached. |
-| `maximum_of_non_self_generated_lsas` | `maxLsaNum` | `int` | — | `20000` | The maximum number of LSAs that are not self-generated. |
+| `max_lsa_num` | `maxLsaNum` | `int` | — | `20000` | The maximum number of LSAs that are not self-generated. |
 | `reset_interval` | `maxLsaResetIntvl` | `int` | — | `10` | The time (in minutes) before the sleep count is reset to zero. |
 | `sleep_count` | `maxLsaSleepCnt` | `int` | — | `5` | The number of times the OSPF process can consecutively be placed into the sleep state. |
 | `sleep_interval` | `maxLsaSleepIntvl` | `int` | — | `5` | The time (in minutes) to ignore all neighbors after the maximum limit of LSAs has been exceeded. |

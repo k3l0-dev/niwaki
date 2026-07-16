@@ -263,7 +263,7 @@ class _FabricMakers(Cursor):
         self,
         name: str,
         *,
-        ntp_stratum_value_see_ntp_rfc_5905: int | str | None = None,
+        stratum_value: int | str | None = None,
         admin_state: DatetimeAdminState | str | None = None,
         annotation: str | None = None,
         authentication_state: DatetimeAdminState | str | None = None,
@@ -286,7 +286,7 @@ class _FabricMakers(Cursor):
             name: The user-configured date/time policy name. This value can be between 1 and 64
                 alphanumeric characters. Note that you cannot change this name after the object
                 has been saved.
-            ntp_stratum_value_see_ntp_rfc_5905: NTP Stratum value, see RFC 5905 Default: ``8``.
+            stratum_value: NTP Stratum value, see RFC 5905 Default: ``8``.
             admin_state: A property that indicates if the NTP protocol is enabled or disabled.
                 Values: ``disabled``, ``enabled``. Default: ``enabled``.
             annotation: User annotation. Suggested format orchestrator:value
@@ -1201,7 +1201,7 @@ class _FabricMakers(Cursor):
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
-        udp_port_number_for_vxlan_traffic: int | str | None = None,
+        udp_port: int | str | None = None,
         userdom: str | None = None,
     ) -> FabricVxlanPolicyCursor:
         """Declare a ``l4VxlanInstPol`` child under the fabric level.
@@ -1213,7 +1213,7 @@ class _FabricMakers(Cursor):
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
-            udp_port_number_for_vxlan_traffic: The port number. Default: ``48879``.
+            udp_port: The port number. Default: ``48879``.
         """
         params = {
             k: v
@@ -2145,7 +2145,7 @@ class _FabricMakers(Cursor):
         *,
         annotation: str | None = None,
         description: str | None = None,
-        management_interface_that_has_to_be_used: MgmtMgmtIntfType | str | None = None,
+        interface_pref: MgmtMgmtIntfType | str | None = None,
         name: str | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
@@ -2159,8 +2159,7 @@ class _FabricMakers(Cursor):
         Args:
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies a description of the policy definition.
-            management_interface_that_has_to_be_used: Values: ``inband``, ``ooband``. Default:
-                ``inband``.
+            interface_pref: Values: ``inband``, ``ooband``. Default: ``inband``.
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
@@ -3070,7 +3069,7 @@ class _FabricMakers(Cursor):
         proxy_server_port: int | None = None,
         smart_licensing_admin_state: LicenseRegAdminState | str | None = None,
         product_instance_id_token: str | None = None,
-        license_usage_reporting_interval_in_day: int | None = None,
+        report_interval: int | None = None,
         url: str | None = None,
         userdom: str | None = None,
     ) -> LicensePolicyCursor:
@@ -3113,9 +3112,8 @@ class _FabricMakers(Cursor):
             product_instance_id_token: To register product with CSSM, a user need to input
                 registration token ID. The registration token ID is created by customer from
                 CSSM web site.
-            license_usage_reporting_interval_in_day: SLE policy allows a user to change license
-                reporting interval. Default value is 30 days, and min and max range is 1 - 90
-                days. Default: ``30``.
+            report_interval: SLE policy allows a user to change license reporting interval.
+                Default value is 30 days, and min and max range is 1 - 90 days. Default: ``30``.
             url: The url of remote manager (CSSM, Satellite manager or SCH gateway server). When
                 the mode is plr, url is not required and can be ignored.
         """
@@ -3207,7 +3205,7 @@ class _FabricMakers(Cursor):
         annotation: str | None = None,
         collector_placement: int | str | None = None,
         description: str | None = None,
-        external_ip_where_collector_is_listening: str | None = None,
+        external_server_ip: str | None = None,
         external_server_port: int | None = None,
         enable_fte_instance: TelemetryAdminState | str | None = None,
         name: str | None = None,
@@ -3225,8 +3223,8 @@ class _FabricMakers(Cursor):
             annotation: User annotation. Suggested format orchestrator:value
             collector_placement: Default: ``apic``.
             description: Specifies a description of the policy definition.
-            external_ip_where_collector_is_listening: External Server Ip and Port would be used
-                to export the streams to an external server
+            external_server_ip: External Server Ip and Port would be used to export the streams
+                to an external server
             external_server_port: Default: ``0``.
             enable_fte_instance: Enable FTE Values: ``disabled``, ``enabled``. Default:
                 ``disabled``.
@@ -3412,10 +3410,7 @@ class _FabricMakers(Cursor):
         annotation: str | None = None,
         apic_path: str | None = None,
         app_name: str | None = None,
-        category_of_feature_to_be_collected: frozenset[DbgexpCategory]
-        | set[DbgexpCategory]
-        | str
-        | None = None,
+        category: frozenset[DbgexpCategory] | set[DbgexpCategory] | str | None = None,
         compression: MonCompression | str | None = None,
         export_location: ScalarEnum8 | str | None = None,
         include_db_metadata_file: bool | None = None,
@@ -3440,9 +3435,9 @@ class _FabricMakers(Cursor):
             administrative_state: The administrative state of the executable policies. Values:
                 ``triggered``, ``untriggered``. Default: ``untriggered``.
             annotation: User annotation. Suggested format orchestrator:value
-            category_of_feature_to_be_collected: The category name. This is the name of the
-                grouping used when calculating the healthscore. If unspecified, the child's
-                class name is used. Default: ``PydanticUndefined``.
+            category: The category name. This is the name of the grouping used when calculating
+                the healthscore. If unspecified, the child's class name is used. Default:
+                ``PydanticUndefined``.
             compression: The compression format for technical support. The format can either be
                 gzip or no compression. Values: ``gzip``, ``none``. Default: ``gzip``.
             export_location: Values: ``apic``, ``apicx``. Default: ``apic``.
@@ -3511,7 +3506,7 @@ class _FabricMakers(Cursor):
         ptp_global_priority_1_value: int | None = None,
         ptp_global_priority_2_value: int | None = None,
         state: NetflowAdminSt | str | None = None,
-        system_resolution_factor_for_max_latency: int | None = None,
+        system_resolution: int | None = None,
         ttag_ether_type0x8905_status: bool | None = None,
         userdom: str | None = None,
     ) -> PtpLatencyModeCursor:
@@ -3535,8 +3530,8 @@ class _FabricMakers(Cursor):
             ptp_global_priority_2_value: Default: ``255``.
             state: State of the PTP protocol Values: ``disabled``, ``enabled``. Default:
                 ``disabled``.
-            system_resolution_factor_for_max_latency: System Resolution factor, Value could be
-                (0 or 11 ) Default: ``0``.
+            system_resolution: System Resolution factor, Value could be (0 or 11 ) Default:
+                ``0``.
             ttag_ether_type0x8905_status: State of the ttag ether type Default: ``False``.
         """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
@@ -4363,7 +4358,7 @@ class _CommunicationPolicyMakers(Cursor):
         calc_window: int | None = None,
         admin_state: CommAdminState | str | None = None,
         resp_time_threshold: int | None = None,
-        set_the_value_for_n_in_top_n_requests: int | None = None,
+        top_n_requests: int | None = None,
         userdom: str | None = None,
     ) -> ResponseTimeCursor:
         """Declare a ``commApiRespTime`` child under the communication_policy level.
@@ -4376,8 +4371,8 @@ class _CommunicationPolicyMakers(Cursor):
                 ``disabled``, ``enabled``. Default: ``disabled``.
             resp_time_threshold: An event will be created if the response time of any request in
                 the window is beyond this threshold Default: ``85000``.
-            set_the_value_for_n_in_top_n_requests: Property to set the number of slowest
-                requests to be seen Default: ``5``.
+            top_n_requests: Property to set the number of slowest requests to be seen Default:
+                ``5``.
         """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
@@ -4389,15 +4384,14 @@ class _CommunicationPolicyMakers(Cursor):
         self,
         *,
         annotation: str | None = None,
-        toggle_state_for_nginx_process_restart: CommRedirect | str | None = None,
+        toggle: CommRedirect | str | None = None,
         userdom: str | None = None,
     ) -> RestartCursor:
         """Declare a ``commReconfig`` child under the communication_policy level.
 
         Args:
             annotation: User annotation. Suggested format orchestrator:value
-            toggle_state_for_nginx_process_restart: Values: ``disabled``, ``enabled``,
-                ``tested``. Default: ``disabled``.
+            toggle: Values: ``disabled``, ``enabled``, ``tested``. Default: ``disabled``.
         """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
@@ -4715,7 +4709,7 @@ class DatetimePolicyCursor(_DatetimePolicyMakers, _FabricMakers, _UniMakers):
     def set(
         self,
         *,
-        ntp_stratum_value_see_ntp_rfc_5905: int | str | None = None,
+        stratum_value: int | str | None = None,
         admin_state: DatetimeAdminState | str | None = None,
         annotation: str | None = None,
         authentication_state: DatetimeAdminState | str | None = None,
@@ -5062,7 +5056,7 @@ class FabricVxlanPolicyCursor(_FabricMakers, _UniMakers):
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
-        udp_port_number_for_vxlan_traffic: int | str | None = None,
+        udp_port: int | str | None = None,
         userdom: str | None = None,
     ) -> FabricVxlanPolicyCursor:
         """Set ``l4VxlanInstPol`` attributes (merged; validated eagerly)."""
@@ -5440,7 +5434,7 @@ class _FlowCollectorPolicyMakers(Cursor):
         name: str,
         *,
         acl_drops: bool | None = None,
-        sub_event_configuration_for_acl_span: bool | None = None,
+        acl_span: bool | None = None,
         analytics_changed_bit: bool | None = None,
         analytics_changed_count: int | None = None,
         analytics_changed_limit: int | None = None,
@@ -5448,26 +5442,26 @@ class _FlowCollectorPolicyMakers(Cursor):
         black_hole: bool | None = None,
         buffer_drops: bool | None = None,
         description: str | None = None,
-        configure_fte_drop_events_flow_count: int | None = None,
-        configure_fte_event_export_max_value: int | None = None,
+        drop_flow_count: int | None = None,
+        event_export_max: int | None = None,
         export_flow_bit: bool | None = None,
-        configure_fte_export_flow_bucket_count: int | None = None,
-        configure_fte_export_flow_bucket_limit: int | None = None,
+        export_flow_count: int | None = None,
+        export_flow_limit: int | None = None,
         first_packet_bit: bool | None = None,
-        configure_fte_first_packet_bucket_count: int | None = None,
-        configure_fte_first_packet_bucket_limit: int | None = None,
+        first_packet_count: int | None = None,
+        first_packet_limit: int | None = None,
         flow_type: int | None = None,
         fwd_drops: bool | None = None,
         group_drop_events: bool | None = None,
         group_latency_events: bool | None = None,
         configure_fte_latency_bucket_count: int | None = None,
-        configure_fte_latency_events_flow_count: int | None = None,
+        latency_flow_count: int | None = None,
         configure_fte_latency_bucket_limit: int | None = None,
         configure_fte_latency_threshold_limit: int | None = None,
         configure_fte_latency_threshold_unit: TelemetryLatencyUnit | str | None = None,
         mouse_packet_bit: bool | None = None,
-        configure_fte_mouse_packet_bucket_count: int | None = None,
-        configure_fte_mouse_packet_bucket_limit: int | None = None,
+        mouse_packet_count: int | None = None,
+        mouse_packet_limit: int | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
@@ -5485,13 +5479,13 @@ class _FlowCollectorPolicyMakers(Cursor):
         packet_value_match_limit: int | None = None,
         ping_of_death: bool | None = None,
         receive_window_zero: bool | None = None,
-        configure_fte_rtt_ack_bucket_count: int | None = None,
-        configure_fte_rtt_ack_bucket_limit: int | None = None,
+        rtt_ack_count: int | None = None,
+        rtt_ack_limit: int | None = None,
         rtt_sample_ack_bit: bool | None = None,
         rtt_sample_seq_bit: bool | None = None,
         table_full_bit: bool | None = None,
-        configure_fte_table_full_bucket_count: int | None = None,
-        configure_fte_table_full_bucket_limit: int | None = None,
+        table_full_count: int | None = None,
+        table_full_limit: int | None = None,
         ttl_match_enable: bool | None = None,
         ttl_match_value: int | None = None,
         userdom: str | None = None,
@@ -5504,7 +5498,7 @@ class _FlowCollectorPolicyMakers(Cursor):
             name: The name of the object.
             acl_drops: 11. Capture the acl drops for the FTE events under FTE Default:
                 ``False``.
-            sub_event_configuration_for_acl_span: 46. ACL span configuration Default: ``False``.
+            acl_span: 46. ACL span configuration Default: ``False``.
             analytics_changed_bit: 04. Analytics Changed bit configuration Default: ``False``.
             analytics_changed_count: 26. FTE analytics_changed Bucket count Default: ``0``.
             analytics_changed_limit: 25. FTE Bucket analytics_changed limit Default: ``0``.
@@ -5514,19 +5508,14 @@ class _FlowCollectorPolicyMakers(Cursor):
             buffer_drops: 12. Capture the buffer drops for the FTE events under FTE Default:
                 ``False``.
             description: The description of this configuration item.
-            configure_fte_drop_events_flow_count: 18. Drop events flow count under FTE Default:
-                ``0``.
-            configure_fte_event_export_max_value: 35. Event Export max Default: ``3``.
+            drop_flow_count: 18. Drop events flow count under FTE Default: ``0``.
+            event_export_max: 35. Event Export max Default: ``3``.
             export_flow_bit: 01. Export Flow bit configuration Default: ``False``.
-            configure_fte_export_flow_bucket_count: 20. FTE export_flow Bucket count Default:
-                ``0``.
-            configure_fte_export_flow_bucket_limit: 19. FTE export_flow Bucket limit Default:
-                ``0``.
+            export_flow_count: 20. FTE export_flow Bucket count Default: ``0``.
+            export_flow_limit: 19. FTE export_flow Bucket limit Default: ``0``.
             first_packet_bit: 02. First Pkt bit configuration Default: ``False``.
-            configure_fte_first_packet_bucket_count: 22. FTE first_pkt Bucket count Default:
-                ``0``.
-            configure_fte_first_packet_bucket_limit: 21. FTE first_pkt Bucket limit Default:
-                ``0``.
+            first_packet_count: 22. FTE first_pkt Bucket count Default: ``0``.
+            first_packet_limit: 21. FTE first_pkt Bucket limit Default: ``0``.
             flow_type: 49. Flow Type Default: ``0``.
             fwd_drops: 13. Capture the forward drops for the FTE events under FTE Default:
                 ``False``.
@@ -5536,18 +5525,15 @@ class _FlowCollectorPolicyMakers(Cursor):
                 ``False``.
             configure_fte_latency_bucket_count: 32. FTE rtt_sample_seq Bucket count Default:
                 ``0``.
-            configure_fte_latency_events_flow_count: 17. Latency events flow count under FTE
-                Default: ``0``.
+            latency_flow_count: 17. Latency events flow count under FTE Default: ``0``.
             configure_fte_latency_bucket_limit: 31. FTE rtt_sample_seq Bucket limit Default:
                 ``0``.
             configure_fte_latency_threshold_limit: 15. Latency under FTE Default: ``0``.
             configure_fte_latency_threshold_unit: 16. Latency Unit under FTE Values: ``micro-
                 sec``, ``milli-sec``. Default: ``micro-sec``.
             mouse_packet_bit: 03. Mouse Pkt bit configuration Default: ``False``.
-            configure_fte_mouse_packet_bucket_count: 24. FTE Bucket mouse_pkt count Default:
-                ``0``.
-            configure_fte_mouse_packet_bucket_limit: 23. FTE Bucket mouse_pkt limit Default:
-                ``0``.
+            mouse_packet_count: 24. FTE Bucket mouse_pkt count Default: ``0``.
+            mouse_packet_limit: 23. FTE Bucket mouse_pkt limit Default: ``0``.
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
@@ -5572,17 +5558,13 @@ class _FlowCollectorPolicyMakers(Cursor):
             packet_value_match_limit: 29. FTE pkt_value_match Bucket limit Default: ``0``.
             ping_of_death: 45. Ping of death configuration Default: ``False``.
             receive_window_zero: 44. Receive window zero configuration Default: ``False``.
-            configure_fte_rtt_ack_bucket_count: 34. FTE rtt_sample_ack Bucket count Default:
-                ``0``.
-            configure_fte_rtt_ack_bucket_limit: 33. FTE rtt_sample_ack Bucket limit Default:
-                ``0``.
+            rtt_ack_count: 34. FTE rtt_sample_ack Bucket count Default: ``0``.
+            rtt_ack_limit: 33. FTE rtt_sample_ack Bucket limit Default: ``0``.
             rtt_sample_ack_bit: 08. RTT Sample Ack bit configuration Default: ``False``.
             rtt_sample_seq_bit: 07. RTT Sample Seq bit configuration Default: ``False``.
             table_full_bit: 05. Table Full bit configuration Default: ``False``.
-            configure_fte_table_full_bucket_count: 28. FTE table_full Bucket count Default:
-                ``0``.
-            configure_fte_table_full_bucket_limit: 27. FTE table_full Bucket limit Default:
-                ``0``.
+            table_full_count: 28. FTE table_full Bucket count Default: ``0``.
+            table_full_limit: 27. FTE table_full Bucket limit Default: ``0``.
             ttl_match_enable: 47. TTL match enable configuration Default: ``False``.
             ttl_match_value: 48. TTL match value configuration Default: ``0``.
         """
@@ -5619,7 +5601,7 @@ class FlowCollectorPolicyCursor(_FlowCollectorPolicyMakers, _FabricMakers, _UniM
         annotation: str | None = None,
         collector_placement: int | str | None = None,
         description: str | None = None,
-        external_ip_where_collector_is_listening: str | None = None,
+        external_server_ip: str | None = None,
         external_server_port: int | None = None,
         enable_fte_instance: TelemetryAdminState | str | None = None,
         name: str | None = None,
@@ -6538,7 +6520,7 @@ class LicensePolicyCursor(_FabricMakers, _UniMakers):
         proxy_server_port: int | None = None,
         smart_licensing_admin_state: LicenseRegAdminState | str | None = None,
         product_instance_id_token: str | None = None,
-        license_usage_reporting_interval_in_day: int | None = None,
+        report_interval: int | None = None,
         url: str | None = None,
         userdom: str | None = None,
     ) -> LicensePolicyCursor:
@@ -6923,7 +6905,7 @@ class MgmtConnectivityPreferenceCursor(_FabricMakers, _UniMakers):
         *,
         annotation: str | None = None,
         description: str | None = None,
-        management_interface_that_has_to_be_used: MgmtMgmtIntfType | str | None = None,
+        interface_pref: MgmtMgmtIntfType | str | None = None,
         name: str | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
@@ -7859,7 +7841,7 @@ class PtpLatencyModeCursor(_FabricMakers, _UniMakers):
         ptp_global_priority_1_value: int | None = None,
         ptp_global_priority_2_value: int | None = None,
         state: NetflowAdminSt | str | None = None,
-        system_resolution_factor_for_max_latency: int | None = None,
+        system_resolution: int | None = None,
         ttag_ether_type0x8905_status: bool | None = None,
         userdom: str | None = None,
     ) -> PtpLatencyModeCursor:
@@ -9216,10 +9198,7 @@ class TechsupportExportPolicyCursor(_FabricMakers, _UniMakers):
         annotation: str | None = None,
         apic_path: str | None = None,
         app_name: str | None = None,
-        category_of_feature_to_be_collected: frozenset[DbgexpCategory]
-        | set[DbgexpCategory]
-        | str
-        | None = None,
+        category: frozenset[DbgexpCategory] | set[DbgexpCategory] | str | None = None,
         compression: MonCompression | str | None = None,
         export_location: ScalarEnum8 | str | None = None,
         include_db_metadata_file: bool | None = None,
@@ -10110,7 +10089,7 @@ class ResponseTimeCursor(_CommunicationPolicyMakers, _FabricMakers, _UniMakers):
         calc_window: int | None = None,
         admin_state: CommAdminState | str | None = None,
         resp_time_threshold: int | None = None,
-        set_the_value_for_n_in_top_n_requests: int | None = None,
+        top_n_requests: int | None = None,
         userdom: str | None = None,
     ) -> ResponseTimeCursor:
         """Set ``commApiRespTime`` attributes (merged; validated eagerly)."""
@@ -10134,7 +10113,7 @@ class RestartCursor(_CommunicationPolicyMakers, _FabricMakers, _UniMakers):
         self,
         *,
         annotation: str | None = None,
-        toggle_state_for_nginx_process_restart: CommRedirect | str | None = None,
+        toggle: CommRedirect | str | None = None,
         userdom: str | None = None,
     ) -> RestartCursor:
         """Set ``commReconfig`` attributes (merged; validated eagerly)."""
@@ -10467,7 +10446,7 @@ class FteEventsCursor(_FlowCollectorPolicyMakers, _FabricMakers, _UniMakers):
         self,
         *,
         acl_drops: bool | None = None,
-        sub_event_configuration_for_acl_span: bool | None = None,
+        acl_span: bool | None = None,
         analytics_changed_bit: bool | None = None,
         analytics_changed_count: int | None = None,
         analytics_changed_limit: int | None = None,
@@ -10475,26 +10454,26 @@ class FteEventsCursor(_FlowCollectorPolicyMakers, _FabricMakers, _UniMakers):
         black_hole: bool | None = None,
         buffer_drops: bool | None = None,
         description: str | None = None,
-        configure_fte_drop_events_flow_count: int | None = None,
-        configure_fte_event_export_max_value: int | None = None,
+        drop_flow_count: int | None = None,
+        event_export_max: int | None = None,
         export_flow_bit: bool | None = None,
-        configure_fte_export_flow_bucket_count: int | None = None,
-        configure_fte_export_flow_bucket_limit: int | None = None,
+        export_flow_count: int | None = None,
+        export_flow_limit: int | None = None,
         first_packet_bit: bool | None = None,
-        configure_fte_first_packet_bucket_count: int | None = None,
-        configure_fte_first_packet_bucket_limit: int | None = None,
+        first_packet_count: int | None = None,
+        first_packet_limit: int | None = None,
         flow_type: int | None = None,
         fwd_drops: bool | None = None,
         group_drop_events: bool | None = None,
         group_latency_events: bool | None = None,
         configure_fte_latency_bucket_count: int | None = None,
-        configure_fte_latency_events_flow_count: int | None = None,
+        latency_flow_count: int | None = None,
         configure_fte_latency_bucket_limit: int | None = None,
         configure_fte_latency_threshold_limit: int | None = None,
         configure_fte_latency_threshold_unit: TelemetryLatencyUnit | str | None = None,
         mouse_packet_bit: bool | None = None,
-        configure_fte_mouse_packet_bucket_count: int | None = None,
-        configure_fte_mouse_packet_bucket_limit: int | None = None,
+        mouse_packet_count: int | None = None,
+        mouse_packet_limit: int | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
@@ -10512,13 +10491,13 @@ class FteEventsCursor(_FlowCollectorPolicyMakers, _FabricMakers, _UniMakers):
         packet_value_match_limit: int | None = None,
         ping_of_death: bool | None = None,
         receive_window_zero: bool | None = None,
-        configure_fte_rtt_ack_bucket_count: int | None = None,
-        configure_fte_rtt_ack_bucket_limit: int | None = None,
+        rtt_ack_count: int | None = None,
+        rtt_ack_limit: int | None = None,
         rtt_sample_ack_bit: bool | None = None,
         rtt_sample_seq_bit: bool | None = None,
         table_full_bit: bool | None = None,
-        configure_fte_table_full_bucket_count: int | None = None,
-        configure_fte_table_full_bucket_limit: int | None = None,
+        table_full_count: int | None = None,
+        table_full_limit: int | None = None,
         ttl_match_enable: bool | None = None,
         ttl_match_value: int | None = None,
         userdom: str | None = None,

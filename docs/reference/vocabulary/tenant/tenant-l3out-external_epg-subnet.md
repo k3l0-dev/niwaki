@@ -24,10 +24,10 @@ Accepted as keyword arguments of `.subnet(subnet)` and of `.set(**attrs)` on thi
 | parameter | wire | type | values | default | description |
 | --- | --- | --- | --- | --- | --- |
 | `subnet` *(positional)* | `ip` | `str` | — | — | — |
-| `aggregate_routes_for_subnet` | `aggregate` | {ref}`L3extRouteAggType <enum-l3extrouteaggtype>` | `import-rtctrl`, `export-rtctrl`, `shared-rtctrl` | — | Aggregate Routes for Subnet |
+| `aggregate` | `aggregate` | {ref}`L3extRouteAggType <enum-l3extrouteaggtype>` | `import-rtctrl`, `export-rtctrl`, `shared-rtctrl` | — | Aggregate Routes for Subnet |
 | `description` | `descr` | `str` | — | — | Specifies the description of a policy component. |
 | `name` | `name` | `str` | — | — | — |
-| `scope_of_the_external_subnet` | `scope` | {ref}`L3extRouteScp <enum-l3extroutescp>` | `import-rtctrl`, `export-rtctrl`, `import-security`, `shared-security`, `shared-rtctrl` | `import-security` | The domain applicable to the capability. |
+| `scope` | `scope` | {ref}`L3extRouteScp <enum-l3extroutescp>` | `import-rtctrl`, `export-rtctrl`, `import-security`, `shared-security`, `shared-rtctrl` | `import-security` | The domain applicable to the capability. |
 
 ## Bind aliases
 

@@ -119,6 +119,7 @@ class TestStagedPush:
         assert [dn for dn, _ in exc.failures] == ["uni/tn-prod"]
         assert len(exc.not_run) == 3  # deeper waves never attempted
         assert exc.report.dns == []  # nothing was written
+        assert exc.report.request_count == 1  # only tn-prod was attempted, not all 4 ops (P3)
         # The public surface carries plain DNs — no engine internals.
         assert all(isinstance(dn, str) for dn in exc.not_run)
 

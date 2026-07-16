@@ -27,7 +27,7 @@ Accepted as keyword arguments of `.techsupport_export_policy(name)` and of `.set
 | `administrative_state` | `adminSt` | {ref}`TrigExecState <enum-trigexecstate>` | `triggered`, `untriggered` | `untriggered` | The administrative state of the executable policies. |
 | `apic_path` | `apicPath` | `str` | — | — | — |
 | `app_name` | `appName` | `str` | — | — | — |
-| `category_of_feature_to_be_collected` | `category` | {ref}`DbgexpCategory <enum-dbgexpcategory>` | `all`, `policy`, `L4L7`, `virtualization`, `monitoring`, `infra`, `stats`, `forwarding`, `nx-os`, `dme` | `all` | The category name. This is the name of the grouping used when calculating the healthscore. If unspecified, the child's class name is used. |
+| `category` | `category` | {ref}`DbgexpCategory <enum-dbgexpcategory>` | `all`, `policy`, `L4L7`, `virtualization`, `monitoring`, `infra`, `stats`, `forwarding`, `nx-os`, `dme` | `all` | The category name. This is the name of the grouping used when calculating the healthscore. If unspecified, the child's class name is used. |
 | `compression` | `compression` | {ref}`MonCompression <enum-moncompression>` | `gzip`, `none` | `gzip` | The compression format for technical support. The format can either be gzip or no compression. |
 | `export_location` | `controllerLocation` | {ref}`ScalarEnum8 <enum-scalarenum8>` | `apic`, `apicx` | `apic` | — |
 | `include_db_metadata_file` | `dbMetadata` | `bool` | — | `True` | — |
