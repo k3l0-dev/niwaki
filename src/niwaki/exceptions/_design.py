@@ -56,10 +56,12 @@ class StagedPushError(DesignError):
     surface.
 
     Args:
-        report: Partial push report — ``report.dns`` are the DNs written
-            before (and, in best-effort scenarios, around) the failure.
+        report: Partial push report — ``report.dns`` are the DNs written,
+            including every independent branch that succeeded around a failure.
         failures: ``(dn, exception)`` for every operation that failed.
-        not_run: DNs that were never attempted because an earlier wave failed.
+        not_run: DNs never attempted because an *ancestor* object failed —
+            pushing them without their parent would only 404.  A failure
+            isolates its own subtree; sibling branches are still written.
 
     Example::
 

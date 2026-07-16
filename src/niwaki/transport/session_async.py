@@ -292,6 +292,30 @@ class AsyncApicSession:
                 f"Session cannot be renewed ({reason}): {exc}"
             ) from exc
 
+    async def _reactive_relogin(self, stale_token: str | None) -> None:
+        """Serialise a re-login triggered by a mid-session 401.
+
+        When many coroutines share a session and its token is revoked, they
+        each receive a 401 at once.  Routing every one straight into
+        :meth:`login` would stampede concurrent logins racing on
+        ``_token_state`` and the cookie jar — the very race
+        :meth:`_ensure_token` prevents on the proactive path.  This guard takes
+        the token lock and re-logs in **only** when the live token still equals
+        the one that failed; a coroutine that finds a newer token (another
+        already re-authenticated) returns without a second login.
+
+        Args:
+            stale_token: The token in force when the failing request was sent.
+
+        Raises:
+            SessionExpiredError: The re-login attempt was rejected.
+        """
+        async with self._token_lock:
+            current = self._token_state.token if self._token_state else None
+            if current is not None and current != stale_token:
+                return  # another coroutine already refreshed — its token is live
+            await self._relogin(reason="mid-session 401")
+
     # ── Public GET ────────────────────────────────────────────────────────────
 
     async def get(self, path: str, **params: Any) -> list[dict[str, Any]]:
@@ -370,11 +394,12 @@ class AsyncApicSession:
         await self._ensure_token()
 
         async with self._semaphore, self._http_transport():
+            stale = self._token_state.token if self._token_state else None
             resp = await self._request_with_retry("GET", path, params=params)
 
         if resp.status_code == 401:
-            await self.login()
-            async with self._http_transport():
+            await self._reactive_relogin(stale)
+            async with self._semaphore, self._http_transport():
                 resp = await self._client.get(path, params=params)
 
         raise_for_apic_status(resp)
@@ -537,13 +562,14 @@ class AsyncApicSession:
         await self._ensure_token()
 
         async with self._semaphore, self._http_transport():
+            stale = self._token_state.token if self._token_state else None
             resp = await self._request_with_retry(
                 method, path, retry_on=_WRITE_SAFE_RETRY, **kwargs
             )
 
         if resp.status_code == 401:
-            await self.login()
-            async with self._http_transport():
+            await self._reactive_relogin(stale)
+            async with self._semaphore, self._http_transport():
                 resp = await self._client.request(method, path, **kwargs)
 
         raise_for_apic_status(resp)

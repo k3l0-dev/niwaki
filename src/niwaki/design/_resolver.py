@@ -37,19 +37,11 @@ from niwaki.exceptions._design import (
 )
 from niwaki.models.base import ManagedObject
 
-
-# Sentinel for index entries where two nodes share (class, name) — binding to
-# such a name is ambiguous and must fail loudly.  A distinct object, not None:
-# "no node here" and "several nodes here" are different answers, and a type
-# checker narrows ``node is _AMBIGUOUS`` to the node only when the sentinel has
-# a type of its own.
-class _Ambiguous:
-    """The marker stored when a (class, name) pair is declared more than once."""
-
-
-_AMBIGUOUS = _Ambiguous()
-
-_Index = dict[str, dict[str, DesignNode | _Ambiguous]]
+# Names are namespaced per parent in ACI, so a ``(class, name)`` pair may be
+# declared more than once across a multi-tenant design (``bd("web")`` in two
+# tenants).  The index keeps **every** node under its key; which one a bind
+# resolves to is decided per-owner by enclosing scope (see ``_lookup_target``).
+_Index = dict[str, dict[str, list[DesignNode]]]
 
 
 def build_index(root: DesignNode) -> _Index:
@@ -59,17 +51,47 @@ def build_index(root: DesignNode) -> _Index:
         root: Design root node.
 
     Returns:
-        ``{aci_class: {primary_name: node}}``; a value of ``_AMBIGUOUS`` marks a
-        name declared more than once for that class (ambiguous target).
+        ``{aci_class: {primary_name: [node, ...]}}`` — every node sharing a
+        ``(class, name)`` pair is kept; scope resolution disambiguates at
+        lookup time, so a name reused across tenants is not lost here.
     """
     index: _Index = {}
     for node in root.iter_subtree():
         name = node.primary_name
         if not name:
             continue
-        by_name = index.setdefault(node.aci_class, {})
-        by_name[name] = _AMBIGUOUS if name in by_name else node
+        index.setdefault(node.aci_class, {}).setdefault(name, []).append(node)
     return index
+
+
+def _common_ancestor_depth(owner: DesignNode, candidate: DesignNode) -> int:
+    """Depth of the nearest ancestor shared by *owner* and *candidate*.
+
+    ACI namespaces object names per parent DN, so a reference resolves to the
+    same-named target that shares the **deepest** enclosing scope with its
+    owner: a BD in tenant *a* binds tenant *a*'s VRF, not a same-named VRF in
+    tenant *b*.  The score is the distance of that shared ancestor from the
+    ``polUni`` root — larger means a closer, more specific scope.
+
+    Args:
+        owner: The node carrying the reference.
+        candidate: A declared node matching the reference's class and name.
+
+    Returns:
+        The shared ancestor's distance from the root (``0`` = only ``polUni``
+        in common), or ``-1`` when the two share no ancestor (distinct trees —
+        never within one design, but keeps the ordering total).
+    """
+    depth_of: dict[int, int] = {
+        id(node): depth for depth, node in enumerate(reversed(list(owner.ancestors_and_self())))
+    }
+    # candidate.ancestors_and_self() runs deepest → root, so the first hit is
+    # the lowest (nearest) common ancestor.
+    for node in candidate.ancestors_and_self():
+        hit = depth_of.get(id(node))
+        if hit is not None:
+            return hit
+    return -1
 
 
 def _target_classes(target_aci_class: str) -> list[str]:
@@ -126,37 +148,49 @@ def _build_rs(rs_aci_class: str, target_fields: dict[str, str], bind: PendingBin
 
 
 def _lookup_target(index: _Index, owner: DesignNode, bind: PendingBind) -> DesignNode:
-    """Return the declared node for a reference, or raise with a suggestion."""
+    """Return the declared node for a reference, scoped to the owner.
+
+    Every declared node matching the target class (and, for abstract aliases,
+    its concrete subclasses) and name is gathered, then the one sharing the
+    **nearest enclosing scope** with *owner* wins — ACI namespaces names per
+    parent, so a same-named target in another tenant/domain never shadows the
+    owner's own.  A tie between two equally-near candidates is a genuine
+    ambiguity and fails loudly.
+
+    Raises:
+        UnresolvedReferenceError: No declared node matches (with a suggestion).
+        AmbiguousBindError: Two candidates share the owner's nearest scope.
+    """
     classes = _target_classes(bind.target_aci_class)
-    matches = [
-        (aci_class, index[aci_class][bind.target_name])
+    candidates = [
+        (aci_class, node)
         for aci_class in classes
-        if bind.target_name in index.get(aci_class, {})
+        for node in index.get(aci_class, {}).get(bind.target_name, ())
     ]
-    if len(matches) > 1:
+    if not candidates:
+        names = sorted({name for aci in classes for name in index.get(aci, {})})
+        hint = difflib.get_close_matches(bind.target_name, names, n=1)
+        suggestion = f" Did you mean {hint[0]!r}?" if hint else ""
+        wanted = bind.target_aci_class if len(classes) == 1 else f"{'/'.join(classes[1:])}"
+        raise UnresolvedReferenceError(
+            f"{owner.path()}: {bind.alias}={bind.target_name!r} does not resolve — no "
+            f"{wanted} named {bind.target_name!r} is declared in this design. "
+            f"Declared: {', '.join(names) or 'none'}.{suggestion}"
+        )
+
+    scored = [
+        (_common_ancestor_depth(owner, node), aci_class, node) for aci_class, node in candidates
+    ]
+    nearest_depth = max(depth for depth, _, _ in scored)
+    nearest = [(aci_class, node) for depth, aci_class, node in scored if depth == nearest_depth]
+    if len(nearest) > 1:
+        hit = ", ".join(sorted({aci_class for aci_class, _ in nearest}))
         raise AmbiguousBindError(
-            f"{owner.path()}: {bind.alias}={bind.target_name!r} matches several "
-            f"declared classes ({', '.join(aci for aci, _ in matches)}) — "
+            f"{owner.path()}: {bind.alias}={bind.target_name!r} matches "
+            f"{len(nearest)} objects declared at the same scope ({hit}) — "
             "rename one of the targets."
         )
-    if matches:
-        _, node = matches[0]
-        if isinstance(node, _Ambiguous):
-            raise AmbiguousBindError(
-                f"{owner.path()}: {bind.alias}={bind.target_name!r} matches more "
-                f"than one {matches[0][0]} declared in this design."
-            )
-        return node
-
-    names = sorted({name for aci in classes for name in index.get(aci, {})})
-    hint = difflib.get_close_matches(bind.target_name, names, n=1)
-    suggestion = f" Did you mean {hint[0]!r}?" if hint else ""
-    wanted = bind.target_aci_class if len(classes) == 1 else f"{'/'.join(classes[1:])}"
-    raise UnresolvedReferenceError(
-        f"{owner.path()}: {bind.alias}={bind.target_name!r} does not resolve — no "
-        f"{wanted} named {bind.target_name!r} is declared in this design. "
-        f"Declared: {', '.join(names) or 'none'}.{suggestion}"
-    )
+    return nearest[0][1]
 
 
 def resolve(root: DesignNode) -> dict[DesignNode, list[ManagedObject]]:

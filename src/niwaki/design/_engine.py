@@ -57,7 +57,9 @@ class _WaveOutcome:
     Attributes:
         succeeded: Ops that completed, in execution order.
         failed: ``(op, exception)`` pairs for ops that raised.
-        not_run: Ops skipped because an earlier wave failed.
+        not_run: Ops skipped because an *ancestor* op failed — pushing a child
+            whose parent never landed would only 404.  Independent branches are
+            never in here: a failure isolates its own subtree, not its siblings.
     """
 
     succeeded: list[_Op]
@@ -79,68 +81,49 @@ def _toposort(ops: Sequence[_Op]) -> list[list[_Op]]:
     return [by_depth[d] for d in sorted(by_depth)]
 
 
-def _account_waves(
-    waves: list[list[_Op]],
-    wave_results: list[list[tuple[_Op, Exception | None]]],
-    *,
-    continue_on_failure: bool,
-) -> _WaveOutcome:
-    """Fold per-wave results into one outcome (shared sync/async accounting).
+def _descends_from_failed(dn: str, failed_dns: set[str]) -> bool:
+    """Whether *dn* is at or below a DN that already failed this run.
 
-    ``wave_results`` may be shorter than ``waves`` when the caller stopped
-    early — every op of the unexecuted waves is recorded as ``not_run``.
+    DN ancestry is a clean segment-prefix test: ``uni/tn-p/BD-web/subnet-[..]``
+    descends from ``uni/tn-p/BD-web`` (prefix followed by ``/``), while the
+    sibling ``uni/tn-p/BD-web2`` does not — the separating slash keeps
+    ``BD-web`` from matching ``BD-web2``.
+    """
+    return any(dn == failed or dn.startswith(f"{failed}/") for failed in failed_dns)
+
+
+def _run_waves_sync(execute: Callable[[_Op], None], ops: Sequence[_Op]) -> _WaveOutcome:
+    """Run *ops* in DN-depth waves, one at a time, through *execute*.
+
+    A failure isolates only its own subtree: descendants of a failed op are
+    recorded as ``not_run`` (they would 404 without their parent), while every
+    independent branch runs to completion.  Same-depth ops in a wave are never
+    ancestors of one another, so a failure never skips a sibling.
     """
     outcome = _WaveOutcome(succeeded=[], failed=[], not_run=[])
-    for results in wave_results:
-        for op, exc in results:
-            if exc is None:
+    failed_dns: set[str] = set()
+    for wave in _toposort(ops):
+        for op in wave:
+            if _descends_from_failed(op.dn, failed_dns):
+                outcome.not_run.append(op)
+                continue
+            try:
+                execute(op)
                 outcome.succeeded.append(op)
-            else:
+            except Exception as exc:
                 outcome.failed.append((op, exc))
-    if outcome.failed and not continue_on_failure:
-        executed = len(wave_results)
-        for remaining in waves[executed:]:
-            outcome.not_run.extend(remaining)
+                failed_dns.add(op.dn)
     return outcome
 
 
-def _run_waves_sync(
-    execute: Callable[[_Op], None],
-    ops: Sequence[_Op],
-    *,
-    continue_on_failure: bool = False,
-) -> _WaveOutcome:
-    """Run *ops* in DN-depth waves, one at a time, through *execute*.
-
-    A failing wave stops the remaining ones unless *continue_on_failure*.
-    """
-    waves = _toposort(ops)
-    wave_results: list[list[tuple[_Op, Exception | None]]] = []
-    for wave in waves:
-        results: list[tuple[_Op, Exception | None]] = []
-        for op in wave:
-            try:
-                execute(op)
-                results.append((op, None))
-            except Exception as exc:
-                results.append((op, exc))
-        wave_results.append(results)
-        if any(exc is not None for _, exc in results) and not continue_on_failure:
-            break
-    return _account_waves(waves, wave_results, continue_on_failure=continue_on_failure)
-
-
-async def _run_waves(
-    session: AsyncMoWriter,
-    ops: Sequence[_Op],
-    *,
-    continue_on_failure: bool = False,
-) -> _WaveOutcome:
+async def _run_waves(session: AsyncMoWriter, ops: Sequence[_Op]) -> _WaveOutcome:
     """Run *ops* in DN-depth waves; ops within a wave run concurrently.
 
-    Same toposort, same failure semantics, same accounting as
+    Same toposort and same subtree-isolated failure semantics as
     :func:`_run_waves_sync` — only the intra-wave execution differs
-    (``asyncio.gather`` against an :class:`AsyncMoWriter`).
+    (``asyncio.gather`` against an :class:`AsyncMoWriter`).  The skip decision
+    reads the previous waves' failures, so partitioning a wave before gathering
+    it is safe: same-depth ops never descend from one another.
     """
 
     async def _run(op: _Op) -> tuple[_Op, Exception | None]:
@@ -153,11 +136,19 @@ async def _run_waves(
         except Exception as exc:
             return op, exc
 
-    waves = _toposort(ops)
-    wave_results: list[list[tuple[_Op, Exception | None]]] = []
-    for wave in waves:
-        results = list(await asyncio.gather(*[_run(op) for op in wave]))
-        wave_results.append(results)
-        if any(exc is not None for _, exc in results) and not continue_on_failure:
-            break
-    return _account_waves(waves, wave_results, continue_on_failure=continue_on_failure)
+    outcome = _WaveOutcome(succeeded=[], failed=[], not_run=[])
+    failed_dns: set[str] = set()
+    for wave in _toposort(ops):
+        to_run: list[_Op] = []
+        for op in wave:
+            if _descends_from_failed(op.dn, failed_dns):
+                outcome.not_run.append(op)
+            else:
+                to_run.append(op)
+        for op, exc in await asyncio.gather(*[_run(op) for op in to_run]):
+            if exc is None:
+                outcome.succeeded.append(op)
+            else:
+                outcome.failed.append((op, exc))
+                failed_dns.add(op.dn)
+    return outcome

@@ -97,16 +97,48 @@ class TestConflicts:
         extras = resolve(cfg.design_node.root())
         assert [rs.rn for rs in extras[epg.design_node]] == ["rsprov-http", "rsprov-https"]
 
-    def test_ambiguous_index_entry_raises(self) -> None:
-        """Two design nodes sharing (class, name) make that name unbindable."""
-        from niwaki.design._node import PendingBind
-        from niwaki.design._resolver import _AMBIGUOUS, _Ambiguous
+    def test_same_scope_duplicate_name_is_ambiguous(self) -> None:
+        """Two same-class nodes sharing (scope, name) stay unbindable.
 
-        index: dict[str, dict[str, DesignNode | _Ambiguous]] = {"fvCtx": {"prod": _AMBIGUOUS}}
-        owner = tenant("t").design_node
+        The makers reject this structurally (a name is declared once per
+        parent), so it is assembled directly to prove the tie-breaker: two
+        equally-near candidates fail loudly rather than one silently winning.
+        """
+        from niwaki.design._cursor import _load_class
+
+        root = tenant("prod").design_node.root()
+        parent = root.children[0]  # the fvTenant node
+        fvCtx = _load_class("fvCtx")
+        parent.children.append(DesignNode(fvCtx, "vrf", {"name": "dup"}, {}, parent))
+        parent.children.append(DesignNode(fvCtx, "vrf", {"name": "dup"}, {}, parent))
+        index = build_index(root)
+        bind = PendingBind(kind="bind", alias="vrf", target_aci_class="fvCtx", target_name="dup")
+        with pytest.raises(AmbiguousBindError, match="same scope"):
+            _lookup_target(index, parent, bind)
+
+
+class TestScoping:
+    """R1 — a name reused across tenants resolves to the owner's own scope."""
+
+    def test_same_name_across_tenants_resolves_locally(self) -> None:
+        from niwaki.design import design
+
+        cfg = design()
+        a = cfg.tenant("a")
+        vrf_a = a.vrf("prod")
+        bd_a = a.bd("web").bind(vrf="prod")
+        b = cfg.tenant("b")
+        b.vrf("prod")
+        b.bd("web").bind(vrf="prod")
+
+        # Neither bind is ambiguous any more — resolution succeeds for both.
+        extras = resolve(cfg.design_node.root())
+        assert len(extras[bd_a.design_node]) == 1
+
+        # And the winning target is tenant a's own VRF, not tenant b's.
+        index = build_index(cfg.design_node.root())
         bind = PendingBind(kind="bind", alias="vrf", target_aci_class="fvCtx", target_name="prod")
-        with pytest.raises(AmbiguousBindError, match="more than one"):
-            _lookup_target(index, owner, bind)
+        assert _lookup_target(index, bd_a.design_node, bind) is vrf_a.design_node
 
 
 class TestIndex:
@@ -114,7 +146,7 @@ class TestIndex:
         cfg = tenant("prod")
         cfg.vrf("v").pim()  # pimCtxP is a singleton — no primary name
         index = build_index(cfg.design_node.root())
-        assert index["fvCtx"]["v"] is not None
+        assert [node.primary_name for node in index["fvCtx"]["v"]] == ["v"]
         assert "pimCtxP" not in index
 
     def test_resolution_does_not_mutate_design(self) -> None:

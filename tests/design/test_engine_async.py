@@ -43,12 +43,13 @@ class TestRunWaves:
         assert outcome.ok
         session.delete_mo.assert_called_once_with("uni/tn-p")
 
-    async def test_failure_stops_next_waves(self) -> None:
+    async def test_descendant_of_failure_is_skipped(self) -> None:
         session = _make_session(post_side_effect=RuntimeError("boom"))
         ops = [_op("uni/tn-p"), _op("uni/tn-p/BD-w")]
         outcome = await _run_waves(session, ops)
         assert not outcome.ok
         assert [op.dn for op, _ in outcome.failed] == ["uni/tn-p"]
+        # BD-w descends from the failed tenant → skipped, not attempted.
         assert [op.dn for op in outcome.not_run] == ["uni/tn-p/BD-w"]
 
     async def test_failure_within_wave_attempts_siblings(self) -> None:
@@ -62,16 +63,27 @@ class TestRunWaves:
         assert [op.dn for op in outcome.succeeded] == ["uni/tn-p", "uni/tn-p/BD-good"]
         assert [op.dn for op, _ in outcome.failed] == ["uni/tn-p/BD-bad"]
 
-    async def test_continue_on_failure_runs_all_waves(self) -> None:
+    async def test_independent_branch_survives_failure(self) -> None:
+        """A failure isolates its own subtree; a sibling branch still lands."""
+
         async def _post(dn: str, payload: Any) -> None:
-            if dn == "uni/tn-p":
+            if dn == "uni/tn-p/BD-a":
                 raise RuntimeError("boom")
 
         session = _make_session(post_side_effect=_post)
-        ops = [_op("uni/tn-p"), _op("uni/tn-p/BD-w")]
-        outcome = await _run_waves(session, ops, continue_on_failure=True)
-        assert [op.dn for op in outcome.succeeded] == ["uni/tn-p/BD-w"]
-        assert outcome.not_run == []
+        ops = [
+            _op("uni/tn-p"),
+            _op("uni/tn-p/BD-a"),
+            _op("uni/tn-p/BD-b"),
+            _op("uni/tn-p/BD-a/subnet-[10.0.0.1/24]"),
+            _op("uni/tn-p/BD-b/subnet-[10.0.1.1/24]"),
+        ]
+        outcome = await _run_waves(session, ops)
+        assert not outcome.ok
+        assert [op.dn for op, _ in outcome.failed] == ["uni/tn-p/BD-a"]
+        # BD-b and its subnet land — only BD-a's own subnet is skipped.
+        assert "uni/tn-p/BD-b/subnet-[10.0.1.1/24]" in [op.dn for op in outcome.succeeded]
+        assert [op.dn for op in outcome.not_run] == ["uni/tn-p/BD-a/subnet-[10.0.0.1/24]"]
 
     async def test_empty_ops(self) -> None:
         session = _make_session()

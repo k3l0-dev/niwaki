@@ -4,6 +4,43 @@ All notable changes to this project are documented here.  The format follows
 [Keep a Changelog](https://keepachangelog.com/); versions follow semver
 (0.x — the API may still change between minor versions).
 
+## [0.14.12] — 2026-07-16
+
+### Fixed
+
+- **A staged push now isolates a failure to its own subtree.**  When one object
+  failed, `push(mode="staged")` marked *every* deeper object as "not attempted"
+  — keyed on DN depth alone — so an unrelated sibling branch whose parent had
+  succeeded was left half-built (e.g. a failure on `BD-a` skipped `BD-b`'s
+  subnet).  The engine now skips only the descendants of a failed object;
+  independent branches run to completion, and `StagedPushError.not_run` lists
+  only objects whose ancestor genuinely failed.
+
+## [0.14.11] — 2026-07-16
+
+### Fixed
+
+- **Concurrent mid-session 401s no longer stampede re-logins (async).**  When
+  many coroutines shared an `AsyncApicSession` whose token was revoked, each
+  received a 401 and called `login()` directly — outside the token lock and
+  semaphore — so *N* coroutines raced *N* concurrent re-logins on the shared
+  token state and cookie jar.  Reactive re-login now goes through a
+  lock-guarded path that re-authenticates only once (the first coroutine in;
+  the rest see the fresh token and replay), and the replay runs under the
+  concurrency semaphore.
+
+## [0.14.10] — 2026-07-16
+
+### Fixed
+
+- **References resolve to the nearest scope, not globally.**  A name reused
+  across tenants (a `bd("web")` or `vrf("prod")` in two tenants) previously made
+  that name unbindable — every `bind()` targeting it raised `AmbiguousBindError`,
+  even though ACI namespaces object names per parent.  A reference now resolves
+  to the same-named target sharing the deepest enclosing scope with its owner
+  (a BD in tenant *a* binds tenant *a*'s VRF); only two candidates at the *same*
+  scope remain a genuine ambiguity.
+
 ## [0.14.9] — 2026-07-16
 
 ### Fixed

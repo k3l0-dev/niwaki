@@ -261,6 +261,34 @@ class TestGet:
             result = await s.get("/api/class/fvTenant.json")
             assert len(result) == 3
 
+    async def test_concurrent_401_triggers_single_relogin(self, httpx_mock: HTTPXMock) -> None:
+        """Many coroutines hitting a revoked token together re-login exactly once (T1).
+
+        Without lock-guarded reactive re-login, each 401 would call ``login()``
+        directly and N coroutines would stampede N concurrent logins racing on
+        the token state and cookie jar.  The guard lets only the first re-auth.
+        """
+        logins = 0
+
+        def handler(request: httpx.Request) -> httpx.Response:
+            nonlocal logins
+            if request.url.path == "/api/aaaLogin.json":
+                logins += 1
+                return httpx.Response(200, json=_login_resp(f"t{logins}"))
+            # GETs 401 until a reactive re-login has happened, then serve data.
+            if logins < 2:
+                return httpx.Response(401, json=_ok())
+            return httpx.Response(200, json=load_fixture("fvTenant_list"))
+
+        httpx_mock.add_callback(handler, is_reusable=True)
+
+        async with AsyncApicSession(HOST, "admin", "pass") as s:
+            results = await asyncio.gather(*[s.get("/api/class/fvTenant.json") for _ in range(5)])
+
+        assert all(len(r) == 3 for r in results)
+        assert logins == 2  # one initial login + exactly one reactive re-login
+        assert s._token_state.token == "t2"  # type: ignore[reportPrivateUsage]
+
 
 # ── get_mo (typed single-MO read) ────────────────────────────────────────────
 

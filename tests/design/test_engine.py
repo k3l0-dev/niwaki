@@ -78,7 +78,7 @@ class TestRunWavesSync:
         assert executed == ["uni/tn-p", "uni/tn-p/BD-w"]
         assert [op.dn for op in outcome.succeeded] == executed
 
-    def test_failure_stops_next_waves(self) -> None:
+    def test_descendant_of_failure_is_skipped(self) -> None:
         err = RuntimeError("boom")
 
         def _execute(op: _Op) -> None:
@@ -89,6 +89,7 @@ class TestRunWavesSync:
         outcome = _run_waves_sync(_execute, ops)
         assert not outcome.ok
         assert outcome.failed == [(ops[0], err)]
+        # BD-w descends from the failed tenant → skipped, not attempted.
         assert [op.dn for op in outcome.not_run] == ["uni/tn-p/BD-w"]
 
     def test_failure_within_wave_attempts_siblings(self) -> None:
@@ -102,15 +103,26 @@ class TestRunWavesSync:
         assert [op.dn for op, _ in outcome.failed] == ["uni/tn-p/BD-bad"]
         assert outcome.not_run == []
 
-    def test_continue_on_failure_runs_all_waves(self) -> None:
+    def test_independent_branch_survives_failure(self) -> None:
+        """A failure isolates its own subtree; a sibling branch still lands."""
+
         def _execute(op: _Op) -> None:
-            if op.dn == "uni/tn-p":
+            if op.dn == "uni/tn-p/BD-a":
                 raise RuntimeError("boom")
 
-        ops = [_op("uni/tn-p"), _op("uni/tn-p/BD-w")]
-        outcome = _run_waves_sync(_execute, ops, continue_on_failure=True)
-        assert [op.dn for op in outcome.succeeded] == ["uni/tn-p/BD-w"]
-        assert outcome.not_run == []
+        ops = [
+            _op("uni/tn-p"),
+            _op("uni/tn-p/BD-a"),
+            _op("uni/tn-p/BD-b"),
+            _op("uni/tn-p/BD-a/subnet-[10.0.0.1/24]"),
+            _op("uni/tn-p/BD-b/subnet-[10.0.1.1/24]"),
+        ]
+        outcome = _run_waves_sync(_execute, ops)
+        assert not outcome.ok
+        assert [op.dn for op, _ in outcome.failed] == ["uni/tn-p/BD-a"]
+        # BD-b and its subnet land — only BD-a's own subnet is skipped.
+        assert "uni/tn-p/BD-b/subnet-[10.0.1.1/24]" in [op.dn for op in outcome.succeeded]
+        assert [op.dn for op in outcome.not_run] == ["uni/tn-p/BD-a/subnet-[10.0.0.1/24]"]
 
     def test_delete_ops_flow_through(self) -> None:
         methods: list[str] = []
