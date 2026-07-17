@@ -17,11 +17,12 @@ where a position is not curated, the recipe shows the honest escape hatch
 (`.mo()`, `bind_dn()`, `static_path()`).
 
 :::{warning}
-**These recipes are purely illustrative.** Their only purpose is to help you
-learn the SDK progressively and understand how it works — nothing more. They are
-**not** configuration recommendations and **not** architecture guidance: the
-names, addressing, and settings are chosen to teach the SDK, not to model a
-well-designed fabric.
+**These recipes are not production configuration.**
+
+They are purely illustrative — their only purpose is to help you learn the SDK
+progressively and understand how it works. They are **not** configuration
+recommendations and **not** architecture guidance: the names, addressing, and
+settings are chosen to teach the SDK, not to model a well-designed fabric.
 
 For production, always follow Cisco's official design guidance (Cisco Validated
 Designs) and engage a qualified data center network architect to design for your
