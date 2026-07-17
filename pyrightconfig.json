@@ -5,7 +5,10 @@
     "**/__pycache__",
     "**/.*",
     "docs/_build",
-    "src/niwaki/models/_generated"
+    "src/niwaki/models/_generated",
+    // Obsolete: replays the integration acts that the operator-scripts reorg
+    // removed. Kept pending a rewrite to the new (self-verifying) model.
+    "scripts/verify_live.py"
   ],
   "venvPath": ".",
   "venv": ".venv",

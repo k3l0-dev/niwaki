@@ -509,7 +509,7 @@ def curated_position_count() -> int:
     drift from the generated vocabulary.
 
     Returns:
-        The count of curated positions across the four design domains plus
+        The count of curated positions across the design domains plus
         the ``uni``-level domains (the ``polUni`` root itself is not counted).
     """
     positions = _positions()
@@ -535,7 +535,7 @@ def _render_coverage() -> str:
         _HEADER,
         "# Coverage matrix",
         "",
-        f"**{total} curated positions** across the four design domains plus "
+        f"**{total} curated positions** across the design domains plus "
         "the `uni`-level domains.  Everything else in the 2,222 generated "
         "classes stays reachable through `.mo(Class, ...)` and "
         "`bind_dn(alias=dn)` — see the design guide.",

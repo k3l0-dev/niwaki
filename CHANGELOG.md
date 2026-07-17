@@ -6,6 +6,22 @@ All notable changes to this project are documented here.  The format follows
 
 ## [Unreleased]
 
+## [0.14.16] — 2026-07-17
+
+### Added
+
+- **`tests/integration/README.md`** — explains what the live walkthroughs are
+  for (evaluating the SDK against a lab APIC / simulator) and states plainly that
+  they are **not** production configuration and **not** best-practice snippets:
+  their values are illustrative and their job is to confirm the code runs against
+  a real controller.
+
+### Fixed
+
+- The generated coverage-matrix intro no longer hardcodes the number of design
+  domains — it read "the four design domains" after further roots (`aaa`,
+  `vmm_provider`) were added.
+
 ## [0.14.15] — 2026-07-17
 
 ### Added
