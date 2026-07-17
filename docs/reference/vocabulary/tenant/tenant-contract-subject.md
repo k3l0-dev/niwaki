@@ -48,6 +48,7 @@ Lazy references, resolved closed-world at push time.
 | alias | target | flavor | relation |
 | --- | --- | --- | --- |
 | `filter=` | `vzFilter` | name | `vzRsSubjFiltAtt` |
+| `service_graph=` | `vnsAbsGraph` | name | `vzRsSubjGraphAtt` |
 
 ## APIC diagnostics
 

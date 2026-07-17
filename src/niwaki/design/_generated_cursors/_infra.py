@@ -4814,6 +4814,16 @@ class DhcpNodeGroupCursor(_DhcpNodeGroupMakers, _InfraMakers, _UniMakers):
         Cursor.set(self, **_prune(params))
         return self
 
+    def bind(
+        self,
+        *,
+        dhcp_relay: str | Ref | None = None,
+    ) -> DhcpNodeGroupCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
 
 class _DhcpPodGroupMakers(Cursor):
     """Makers declared at the dhcp_pod_group level (``dhcpPodGrp``)."""
@@ -4880,6 +4890,26 @@ class DhcpPodGroupCursor(_DhcpPodGroupMakers, _InfraMakers, _UniMakers):
         """Set ``dhcpPodGrp`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        node_group: str | Ref | None = None,
+    ) -> DhcpPodGroupCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        node_group: str | Ref | None = None,
+    ) -> DhcpPodGroupCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -4979,6 +5009,26 @@ class Dot1xNodeAuthenticationCursor(_InfraMakers, _UniMakers):
         """Set ``l2NodeAuthPol`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        radius_provider_group: str | Ref | None = None,
+    ) -> Dot1xNodeAuthenticationCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        radius_provider_group: str | Ref | None = None,
+    ) -> Dot1xNodeAuthenticationCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -6767,7 +6817,7 @@ class _InfraMonitoringPolicyMakers(Cursor):
         min_severity: SyslogSeverity | str | None = None,
         display_name: str | None = None,
         userdom: str | None = None,
-    ) -> MonitoringPolicySyslogSourceCursor:
+    ) -> InfraMonitoringPolicySyslogSourceCursor:
         """Declare a ``syslogSrc`` child under the monitoring_policy level.
 
         The syslog source configures a syslog source that specifies the minimum severity of items to
@@ -6792,7 +6842,7 @@ class _InfraMonitoringPolicyMakers(Cursor):
             )
         }
         return cast(
-            "MonitoringPolicySyslogSourceCursor",
+            "InfraMonitoringPolicySyslogSourceCursor",
             self._invoke_maker("syslog_source", (name,), _prune(params)),
         )
 
@@ -6806,7 +6856,7 @@ class _InfraMonitoringPolicyMakers(Cursor):
         min_severity: ConditionSeverity | str | None = None,
         display_name: str | None = None,
         userdom: str | None = None,
-    ) -> MonitoringPolicySnmpSourceCursor:
+    ) -> InfraMonitoringPolicySnmpSourceCursor:
         """Declare a ``snmpSrc`` child under the monitoring_policy level.
 
         The SNMP source profile determines the fault information, severity level, and destination
@@ -6835,7 +6885,7 @@ class _InfraMonitoringPolicyMakers(Cursor):
             )
         }
         return cast(
-            "MonitoringPolicySnmpSourceCursor",
+            "InfraMonitoringPolicySnmpSourceCursor",
             self._invoke_maker("snmp_source", (name,), _prune(params)),
         )
 
@@ -6849,7 +6899,7 @@ class _InfraMonitoringPolicyMakers(Cursor):
         display_name: str | None = None,
         message_severity: CallhomeUrgency | str | None = None,
         userdom: str | None = None,
-    ) -> MonitoringPolicyCallhomeSourceCursor:
+    ) -> InfraMonitoringPolicyCallhomeSourceCursor:
         """Declare a ``callhomeSrc`` child under the monitoring_policy level.
 
         The call home source profile determines the information to deliver and the urgency level for
@@ -6876,7 +6926,7 @@ class _InfraMonitoringPolicyMakers(Cursor):
             )
         }
         return cast(
-            "MonitoringPolicyCallhomeSourceCursor",
+            "InfraMonitoringPolicyCallhomeSourceCursor",
             self._invoke_maker("callhome_source", (name,), _prune(params)),
         )
 
@@ -6888,7 +6938,7 @@ class _InfraMonitoringPolicyMakers(Cursor):
         name: str | None = None,
         display_name: str | None = None,
         userdom: str | None = None,
-    ) -> MonitoringPolicySmartCallhomeSourceCursor:
+    ) -> InfraMonitoringPolicySmartCallhomeSourceCursor:
         """Declare a ``callhomeSmartSrc`` child under the monitoring_policy level.
 
         Args:
@@ -6897,7 +6947,7 @@ class _InfraMonitoringPolicyMakers(Cursor):
         """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
-            "MonitoringPolicySmartCallhomeSourceCursor",
+            "InfraMonitoringPolicySmartCallhomeSourceCursor",
             self._invoke_maker("smart_callhome_source", (), _prune(params)),
         )
 
@@ -6912,7 +6962,7 @@ class _InfraMonitoringPolicyMakers(Cursor):
         display_name: str | None = None,
         switch_tacacs_audit: TacacsSwitchTacacsAudit | str | None = None,
         userdom: str | None = None,
-    ) -> MonitoringPolicyTacacsSourceCursor:
+    ) -> InfraMonitoringPolicyTacacsSourceCursor:
         """Declare a ``tacacsSrc`` child under the monitoring_policy level.
 
         Args:
@@ -6935,8 +6985,84 @@ class _InfraMonitoringPolicyMakers(Cursor):
             )
         }
         return cast(
-            "MonitoringPolicyTacacsSourceCursor",
+            "InfraMonitoringPolicyTacacsSourceCursor",
             self._invoke_maker("tacacs_source", (name,), _prune(params)),
+        )
+
+    def lifecycle_policy(
+        self,
+        condition_code: int | str,
+        *,
+        annotation: str | None = None,
+        clear_interval: int | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        retain: int | str | None = None,
+        soaking_interval: int | None = None,
+        userdom: str | None = None,
+    ) -> InfraMonitoringPolicyLifecyclePolicyCursor:
+        """Declare a ``faultLcP`` child under the monitoring_policy level.
+
+        The fault lifecycle policy specifies the timer intervals of faults in their lifecycle. This
+        policy can be specified in a common, default, or custom monitoring policy. Custom and
+        default monitoring policies can be applied globally, per monitoring object or to a group of
+        monitoring objects.
+
+        Args:
+            condition_code: Contains a category code that helps to categorize and identify
+                different types of fault lifecycle policy objects.
+            annotation: User annotation. Suggested format orchestrator:value
+            clear_interval: The time period between when the system detects the resolution a
+                fault and when the fault severity is set to 'cleared'. This interval refers to
+                the time between the Soaking-Clearing and Retaining fault states. Default:
+                ``120``.
+            description: Specifies the description of a policy component.
+            retain: The time period between when the system sets the fault severity to 'cleared'
+                and when the fault object is deleted. This interval refers to the time between
+                the Retaining fault state and when it is deleted. Default: ``3600``.
+            soaking_interval: The time period between when the system creates the fault with the
+                initial severity and when it sets the fault to the target severity. This
+                interval refers to the time between the Soaking and Raised fault states.
+                Default: ``120``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "condition_code",
+            )
+        }
+        return cast(
+            "InfraMonitoringPolicyLifecyclePolicyCursor",
+            self._invoke_maker("lifecycle_policy", (condition_code,), _prune(params)),
+        )
+
+    def stats_limit_pol(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        include_action: frozenset[MonInclAction] | set[MonInclAction] | str | None = None,
+        instance_limit: int | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> InfraMonitoringPolicyStatsLimitPolCursor:
+        """Declare a ``statslimitInstLimitPol`` child under the monitoring_policy level.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            include_action: Default: ``PydanticUndefined``.
+            instance_limit: Default: ``514``.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "InfraMonitoringPolicyStatsLimitPolCursor",
+            self._invoke_maker("stats_limit_pol", (), _prune(params)),
         )
 
 
@@ -7299,6 +7425,26 @@ class NodeManagementAddressCursor(_NodeManagementAddressMakers, _InfraMakers, _U
         Cursor.set(self, **_prune(params))
         return self
 
+    def bind(
+        self,
+        *,
+        management_group: str | Ref | None = None,
+    ) -> NodeManagementAddressCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        management_group: str | Ref | None = None,
+    ) -> NodeManagementAddressCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
 
 class PfcInterfacePolicyCursor(_InfraMakers, _UniMakers):
     """Typed cursor for ``qosPfcIfPol`` (pfc_interface_policy level).
@@ -7393,6 +7539,26 @@ class PodManagementAddressCursor(_PodManagementAddressMakers, _InfraMakers, _Uni
         """Set ``mgmtPodGrp`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        node_group: str | Ref | None = None,
+    ) -> PodManagementAddressCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        node_group: str | Ref | None = None,
+    ) -> PodManagementAddressCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -9004,6 +9170,26 @@ class InfraVspanSessionCursor(_InfraVspanSessionMakers, _InfraMakers, _UniMakers
         Cursor.set(self, **_prune(params))
         return self
 
+    def bind(
+        self,
+        *,
+        filter_group: str | Ref | None = None,
+    ) -> InfraVspanSessionCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        filter_group: str | Ref | None = None,
+    ) -> InfraVspanSessionCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
 
 class _VxlanPoolMakers(Cursor):
     """Makers declared at the vxlan_pool level (``fvnsVxlanInstP``)."""
@@ -9496,6 +9682,16 @@ class DhcpNodeGroupNodeBlockCursor(_DhcpNodeGroupMakers, _InfraMakers, _UniMaker
         Cursor.set(self, **_prune(params))
         return self
 
+    def bind(
+        self,
+        *,
+        dhcp_relay: str | Ref | None = None,
+    ) -> DhcpNodeGroupNodeBlockCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
 
 class DhcpPodGroupPodBlockCursor(_DhcpPodGroupMakers, _InfraMakers, _UniMakers):
     """Typed cursor for ``infraPodBlk`` (pod_block level).
@@ -9521,6 +9717,26 @@ class DhcpPodGroupPodBlockCursor(_DhcpPodGroupMakers, _InfraMakers, _UniMakers):
         """Set ``infraPodBlk`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        node_group: str | Ref | None = None,
+    ) -> DhcpPodGroupPodBlockCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        node_group: str | Ref | None = None,
+    ) -> DhcpPodGroupPodBlockCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -10256,6 +10472,18 @@ class PortChannelCursor(_PortChannelMakers, _FuncProfileMakers, _InfraMakers, _U
         copp: str | Ref | None = None,
         llfc: str | Ref | None = None,
         pfc: str | Ref | None = None,
+        fc_interface: str | Ref | None = None,
+        l2_mtu: str | Ref | None = None,
+        port_authentication: str | Ref | None = None,
+        port_security: str | Ref | None = None,
+        link_flap: str | Ref | None = None,
+        monitoring: str | Ref | None = None,
+        netflow_monitor: str | Ref | None = None,
+        optics: str | Ref | None = None,
+        slow_drain: str | Ref | None = None,
+        synce: str | Ref | None = None,
+        span_destination_group: str | Ref | None = None,
+        span_source_group: str | Ref | None = None,
     ) -> PortChannelCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -10266,10 +10494,22 @@ class PortChannelCursor(_PortChannelMakers, _FuncProfileMakers, _InfraMakers, _U
         self,
         *,
         aaep: str | Ref | None = None,
+        l2_mtu: str | Ref | None = None,
+        optics: str | Ref | None = None,
     ) -> PortChannelCursor:
         """Reference objects outside the design by raw DN."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind_dn(self, **_prune(params))
+        return self
+
+    def ingress_dpp(self, dpp_policy: str | Ref) -> PortChannelCursor:
+        """Reference the qosDppPol *dpp_policy* through ``infraRsQosIngressDppIfPol`` (lazy)."""
+        Cursor._verb(self, "ingress_dpp", dpp_policy)
+        return self
+
+    def egress_dpp(self, dpp_policy: str | Ref) -> PortChannelCursor:
+        """Reference the qosDppPol *dpp_policy* through ``infraRsQosEgressDppIfPol`` (lazy)."""
+        Cursor._verb(self, "egress_dpp", dpp_policy)
         return self
 
 
@@ -10646,6 +10886,7 @@ class LeafSelectorCursor(_LeafSelectorMakers, _LeafProfileMakers, _InfraMakers, 
     def bind(
         self,
         *,
+        policy_group: str | Ref | None = None,
         interface_profile: str | Ref | None = None,
     ) -> LeafSelectorCursor:
         """Declare lazy Rs references (resolved at push time)."""
@@ -10656,6 +10897,7 @@ class LeafSelectorCursor(_LeafSelectorMakers, _LeafProfileMakers, _InfraMakers, 
     def bind_dn(
         self,
         *,
+        policy_group: str | Ref | None = None,
         interface_profile: str | Ref | None = None,
     ) -> LeafSelectorCursor:
         """Reference objects outside the design by raw DN."""
@@ -10802,7 +11044,9 @@ class McastAddrPoolRangeCursor(_McastAddrPoolMakers, _InfraMakers, _UniMakers):
         return self
 
 
-class MonitoringPolicyCallhomeSourceCursor(_InfraMonitoringPolicyMakers, _InfraMakers, _UniMakers):
+class InfraMonitoringPolicyCallhomeSourceCursor(
+    _InfraMonitoringPolicyMakers, _InfraMakers, _UniMakers
+):
     """Typed cursor for ``callhomeSrc`` (callhome_source level).
 
     Position: ``uni.infra.monitoring_policy.callhome_source``
@@ -10822,8 +11066,39 @@ class MonitoringPolicyCallhomeSourceCursor(_InfraMonitoringPolicyMakers, _InfraM
         display_name: str | None = None,
         message_severity: CallhomeUrgency | str | None = None,
         userdom: str | None = None,
-    ) -> MonitoringPolicyCallhomeSourceCursor:
+    ) -> InfraMonitoringPolicyCallhomeSourceCursor:
         """Set ``callhomeSrc`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class InfraMonitoringPolicyLifecyclePolicyCursor(
+    _InfraMonitoringPolicyMakers, _InfraMakers, _UniMakers
+):
+    """Typed cursor for ``faultLcP`` (lifecycle_policy level).
+
+    Position: ``uni.infra.monitoring_policy.lifecycle_policy``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        clear_interval: int | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        retain: int | str | None = None,
+        soaking_interval: int | None = None,
+        userdom: str | None = None,
+    ) -> InfraMonitoringPolicyLifecyclePolicyCursor:
+        """Set ``faultLcP`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
         return self
@@ -11140,7 +11415,7 @@ class MonitoringPolicyMonitoringTargetCursor(
         return self
 
 
-class MonitoringPolicySmartCallhomeSourceCursor(
+class InfraMonitoringPolicySmartCallhomeSourceCursor(
     _InfraMonitoringPolicyMakers, _InfraMakers, _UniMakers
 ):
     """Typed cursor for ``callhomeSmartSrc`` (smart_callhome_source level).
@@ -11161,14 +11436,14 @@ class MonitoringPolicySmartCallhomeSourceCursor(
         name: str | None = None,
         display_name: str | None = None,
         userdom: str | None = None,
-    ) -> MonitoringPolicySmartCallhomeSourceCursor:
+    ) -> InfraMonitoringPolicySmartCallhomeSourceCursor:
         """Set ``callhomeSmartSrc`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
         return self
 
 
-class MonitoringPolicySnmpSourceCursor(_InfraMonitoringPolicyMakers, _InfraMakers, _UniMakers):
+class InfraMonitoringPolicySnmpSourceCursor(_InfraMonitoringPolicyMakers, _InfraMakers, _UniMakers):
     """Typed cursor for ``snmpSrc`` (snmp_source level).
 
     Position: ``uni.infra.monitoring_policy.snmp_source``
@@ -11188,14 +11463,46 @@ class MonitoringPolicySnmpSourceCursor(_InfraMonitoringPolicyMakers, _InfraMaker
         min_severity: ConditionSeverity | str | None = None,
         display_name: str | None = None,
         userdom: str | None = None,
-    ) -> MonitoringPolicySnmpSourceCursor:
+    ) -> InfraMonitoringPolicySnmpSourceCursor:
         """Set ``snmpSrc`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
         return self
 
 
-class MonitoringPolicySyslogSourceCursor(_InfraMonitoringPolicyMakers, _InfraMakers, _UniMakers):
+class InfraMonitoringPolicyStatsLimitPolCursor(
+    _InfraMonitoringPolicyMakers, _InfraMakers, _UniMakers
+):
+    """Typed cursor for ``statslimitInstLimitPol`` (stats_limit_pol level).
+
+    Position: ``uni.infra.monitoring_policy.stats_limit_pol``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        include_action: frozenset[MonInclAction] | set[MonInclAction] | str | None = None,
+        instance_limit: int | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> InfraMonitoringPolicyStatsLimitPolCursor:
+        """Set ``statslimitInstLimitPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class InfraMonitoringPolicySyslogSourceCursor(
+    _InfraMonitoringPolicyMakers, _InfraMakers, _UniMakers
+):
     """Typed cursor for ``syslogSrc`` (syslog_source level).
 
     Position: ``uni.infra.monitoring_policy.syslog_source``
@@ -11215,14 +11522,16 @@ class MonitoringPolicySyslogSourceCursor(_InfraMonitoringPolicyMakers, _InfraMak
         min_severity: SyslogSeverity | str | None = None,
         display_name: str | None = None,
         userdom: str | None = None,
-    ) -> MonitoringPolicySyslogSourceCursor:
+    ) -> InfraMonitoringPolicySyslogSourceCursor:
         """Set ``syslogSrc`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
         return self
 
 
-class MonitoringPolicyTacacsSourceCursor(_InfraMonitoringPolicyMakers, _InfraMakers, _UniMakers):
+class InfraMonitoringPolicyTacacsSourceCursor(
+    _InfraMonitoringPolicyMakers, _InfraMakers, _UniMakers
+):
     """Typed cursor for ``tacacsSrc`` (tacacs_source level).
 
     Position: ``uni.infra.monitoring_policy.tacacs_source``
@@ -11243,7 +11552,7 @@ class MonitoringPolicyTacacsSourceCursor(_InfraMonitoringPolicyMakers, _InfraMak
         display_name: str | None = None,
         switch_tacacs_audit: TacacsSwitchTacacsAudit | str | None = None,
         userdom: str | None = None,
-    ) -> MonitoringPolicyTacacsSourceCursor:
+    ) -> InfraMonitoringPolicyTacacsSourceCursor:
         """Set ``tacacsSrc`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
@@ -11345,6 +11654,26 @@ class NodeManagementAddressNodeBlockCursor(_NodeManagementAddressMakers, _InfraM
         Cursor.set(self, **_prune(params))
         return self
 
+    def bind(
+        self,
+        *,
+        management_group: str | Ref | None = None,
+    ) -> NodeManagementAddressNodeBlockCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        management_group: str | Ref | None = None,
+    ) -> NodeManagementAddressNodeBlockCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
 
 class PodManagementAddressPodBlockCursor(_PodManagementAddressMakers, _InfraMakers, _UniMakers):
     """Typed cursor for ``infraPodBlk`` (pod_block level).
@@ -11370,6 +11699,26 @@ class PodManagementAddressPodBlockCursor(_PodManagementAddressMakers, _InfraMake
         """Set ``infraPodBlk`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        node_group: str | Ref | None = None,
+    ) -> PodManagementAddressPodBlockCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        node_group: str | Ref | None = None,
+    ) -> PodManagementAddressPodBlockCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -12211,6 +12560,7 @@ class SpineProfileSpineSelectorCursor(
     def bind(
         self,
         *,
+        policy_group: str | Ref | None = None,
         interface_profile: str | Ref | None = None,
     ) -> SpineProfileSpineSelectorCursor:
         """Declare lazy Rs references (resolved at push time)."""
@@ -12221,6 +12571,7 @@ class SpineProfileSpineSelectorCursor(
     def bind_dn(
         self,
         *,
+        policy_group: str | Ref | None = None,
         interface_profile: str | Ref | None = None,
     ) -> SpineProfileSpineSelectorCursor:
         """Reference objects outside the design by raw DN."""
@@ -12387,6 +12738,32 @@ class InfraVspanDestinationGroupVspanVdestinationCursor(
         Cursor.set(self, **_prune(params))
         return self
 
+    def bind(
+        self,
+        *,
+        epg: str | Ref | None = None,
+        path: str | Ref | None = None,
+        apic_node: str | Ref | None = None,
+        virtual_port: str | Ref | None = None,
+    ) -> InfraVspanDestinationGroupVspanVdestinationCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        epg: str | Ref | None = None,
+        path: str | Ref | None = None,
+        apic_node: str | Ref | None = None,
+        virtual_port: str | Ref | None = None,
+    ) -> InfraVspanDestinationGroupVspanVdestinationCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
 
 class InfraVspanSessionSpanLabelCursor(_InfraVspanSessionMakers, _InfraMakers, _UniMakers):
     """Typed cursor for ``spanSpanLbl`` (span_label level).
@@ -12415,6 +12792,26 @@ class InfraVspanSessionSpanLabelCursor(_InfraVspanSessionMakers, _InfraMakers, _
         Cursor.set(self, **_prune(params))
         return self
 
+    def bind(
+        self,
+        *,
+        filter_group: str | Ref | None = None,
+    ) -> InfraVspanSessionSpanLabelCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        filter_group: str | Ref | None = None,
+    ) -> InfraVspanSessionSpanLabelCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
 
 class InfraVspanSessionVspanVsourceCursor(_InfraVspanSessionMakers, _InfraMakers, _UniMakers):
     """Typed cursor for ``spanVSrc`` (vspan_vsource level).
@@ -12441,6 +12838,26 @@ class InfraVspanSessionVspanVsourceCursor(_InfraVspanSessionMakers, _InfraMakers
         """Set ``spanVSrc`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        filter_group: str | Ref | None = None,
+    ) -> InfraVspanSessionVspanVsourceCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        filter_group: str | Ref | None = None,
+    ) -> InfraVspanSessionVspanVsourceCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -12778,6 +13195,18 @@ class OverridePolicyGroupCursor(_PortChannelMakers, _FuncProfileMakers, _InfraMa
         copp: str | Ref | None = None,
         llfc: str | Ref | None = None,
         pfc: str | Ref | None = None,
+        fc_interface: str | Ref | None = None,
+        l2_mtu: str | Ref | None = None,
+        port_authentication: str | Ref | None = None,
+        port_security: str | Ref | None = None,
+        link_flap: str | Ref | None = None,
+        monitoring: str | Ref | None = None,
+        netflow_monitor: str | Ref | None = None,
+        optics: str | Ref | None = None,
+        slow_drain: str | Ref | None = None,
+        synce: str | Ref | None = None,
+        span_destination_group: str | Ref | None = None,
+        span_source_group: str | Ref | None = None,
     ) -> OverridePolicyGroupCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -12788,6 +13217,8 @@ class OverridePolicyGroupCursor(_PortChannelMakers, _FuncProfileMakers, _InfraMa
         self,
         *,
         aaep: str | Ref | None = None,
+        l2_mtu: str | Ref | None = None,
+        optics: str | Ref | None = None,
     ) -> OverridePolicyGroupCursor:
         """Reference objects outside the design by raw DN."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -12945,6 +13376,26 @@ class PodGroupCursor(
         Cursor.set(self, **_prune(params))
         return self
 
+    def bind(
+        self,
+        *,
+        node_group: str | Ref | None = None,
+    ) -> PodGroupCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        node_group: str | Ref | None = None,
+    ) -> PodGroupCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
 
 class LeafSelectorNodeBlockCursor(
     _LeafSelectorMakers, _LeafProfileMakers, _InfraMakers, _UniMakers
@@ -12977,6 +13428,7 @@ class LeafSelectorNodeBlockCursor(
     def bind(
         self,
         *,
+        policy_group: str | Ref | None = None,
         interface_profile: str | Ref | None = None,
     ) -> LeafSelectorNodeBlockCursor:
         """Declare lazy Rs references (resolved at push time)."""
@@ -12987,6 +13439,7 @@ class LeafSelectorNodeBlockCursor(
     def bind_dn(
         self,
         *,
+        policy_group: str | Ref | None = None,
         interface_profile: str | Ref | None = None,
     ) -> LeafSelectorNodeBlockCursor:
         """Reference objects outside the design by raw DN."""
@@ -14123,6 +14576,7 @@ class SpineProfileSpineSelectorNodeBlockCursor(
     def bind(
         self,
         *,
+        policy_group: str | Ref | None = None,
         interface_profile: str | Ref | None = None,
     ) -> SpineProfileSpineSelectorNodeBlockCursor:
         """Declare lazy Rs references (resolved at push time)."""
@@ -14133,6 +14587,7 @@ class SpineProfileSpineSelectorNodeBlockCursor(
     def bind_dn(
         self,
         *,
+        policy_group: str | Ref | None = None,
         interface_profile: str | Ref | None = None,
     ) -> SpineProfileSpineSelectorNodeBlockCursor:
         """Reference objects outside the design by raw DN."""
@@ -14179,6 +14634,32 @@ class InfraVspanDestinationGroupVspanVdestinationVspanDestinationEpgSummaryCurso
         """Set ``spanVEpgSummary`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        epg: str | Ref | None = None,
+        path: str | Ref | None = None,
+        apic_node: str | Ref | None = None,
+        virtual_port: str | Ref | None = None,
+    ) -> InfraVspanDestinationGroupVspanVdestinationVspanDestinationEpgSummaryCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        epg: str | Ref | None = None,
+        path: str | Ref | None = None,
+        apic_node: str | Ref | None = None,
+        virtual_port: str | Ref | None = None,
+    ) -> InfraVspanDestinationGroupVspanVdestinationVspanDestinationEpgSummaryCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -14245,6 +14726,26 @@ class PodGroupPodBlockCursor(
         """Set ``infraPodBlk`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        node_group: str | Ref | None = None,
+    ) -> PodGroupPodBlockCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        node_group: str | Ref | None = None,
+    ) -> PodGroupPodBlockCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
         return self
 
 

@@ -52,6 +52,7 @@ Lazy references, resolved closed-world at push time.
 | alias | target | flavor | relation |
 | --- | --- | --- | --- |
 | `contract_master=` | `fvEPg` *(abstract: `fvAEPg`, `fvESg`, `fvTnlEPg`, `infraCEPg`…)* | DN — `bind_dn()` allowed | `fvRsSecInherited` |
+| `imported_contract=` | `vzCPIf` | name | `fvRsConsIf` |
 | `endpoint_security_group=` | `fvESg` | DN — `bind_dn()` allowed | `fvRsSecInherited` |
 | `external_epg=` | `l3extInstP` | DN — `bind_dn()` allowed | `fvRsSecInherited` |
 | `custom_qos_policy=` | `qosCustomPol` | name | `fvRsCustQosPol` |
@@ -66,6 +67,7 @@ Lazy references, resolved closed-world at push time.
 
 - `.provide(name)` → `fvRsProv` targeting `vzBrCP`
 - `.consume(name)` → `fvRsCons` targeting `vzBrCP`
+- `.intra_epg(name)` → `fvRsIntraEpg` targeting `vzBrCP`
 
 ## APIC diagnostics
 

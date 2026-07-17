@@ -13,7 +13,7 @@ A secondary IP address policy.
 | --- | --- |
 | ACI class | `l3extIp` |
 | RN | `addr-[{ip_address}]` |
-| Cursor | `SecondaryIpAddressCursor` |
+| Cursor | `FloatingSviSecondaryIpAddressCursor` |
 | Parent | {ref}`tenant.l3out.node_profile.interface_profile.floating_svi <vocab-tenant-l3out-node_profile-interface_profile-floating_svi>` |
 | Atomic | — |
 

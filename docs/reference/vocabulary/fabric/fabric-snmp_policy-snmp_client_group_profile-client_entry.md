@@ -13,7 +13,7 @@ The client profile information.
 | --- | --- |
 | ACI class | `snmpClientP` |
 | RN | `client-[{client_address}]` |
-| Cursor | `SnmpClientGroupProfileClientEntryCursor` |
+| Cursor | `ClientEntryCursor` |
 | Parent | {ref}`fabric.snmp_policy.snmp_client_group_profile <vocab-fabric-snmp_policy-snmp_client_group_profile>` |
 | Atomic | — |
 

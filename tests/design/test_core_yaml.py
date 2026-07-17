@@ -289,6 +289,15 @@ _MAKER_RENAMES = {
     ("fvCrtrn", "identity_group"): "identity_group_attribute",
     ("fvCrtrn", "useg_bd"): "container_for_bds",
     ("fvESg", "lif_ctx_selector"): "endpoint_security_group_lifctx_selector",
+    # SNMP trap-forward-server maker clarified (the facade keeps the auto label)
+    ("snmpPol", "trap_forward_server"): "client_entry",
+    # NTP authentication-key maker (the facade keeps the auto label)
+    ("datetimePol", "ntp_auth_key"): "datetime_client_authentication_key",
+    # NTP provider → auth-key relation maker (the facade keeps the auto label)
+    ("datetimeNtpProv", "authentication_key"): "relation_to_datetime_authentication_key",
+    # AAA / RADIUS makers (the facade keeps the auto labels)
+    ("aaaUserEp", "radius"): "aaa_radius_default_radius_authentication_settings",
+    ("aaaRadiusProviderGroup", "provider"): "provider_group_member",
 }
 
 

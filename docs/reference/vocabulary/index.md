@@ -15,6 +15,7 @@ Every design is rooted at `polUni` (`design()`); the pages below cover one domai
 - `.infra(**attrs)` → `infraInfra`
 - `.fabric(**attrs)` → `fabricInst`
 - `.controller(**attrs)` → `ctrlrInst`
+- `.aaa(**attrs)` → `aaaUserEp`
 - `.phys_dom(name, **attrs)` → `physDomP`
 - `.l3_dom(name, **attrs)` → `l3extDomP`
 - `.l2_dom(name, **attrs)` → `l2extDomP`
@@ -38,6 +39,7 @@ fabric
 infra
 tenant
 controller
+aaa
 vmm_provider
 uni
 enums

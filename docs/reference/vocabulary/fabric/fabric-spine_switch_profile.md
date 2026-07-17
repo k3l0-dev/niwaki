@@ -41,3 +41,4 @@ Lazy references, resolved closed-world at push time.
 | alias | target | flavor | relation |
 | --- | --- | --- | --- |
 | `interface_profile=` | `fabricSpPortP` | DN — `bind_dn()` allowed | `fabricRsSpPortP` |
+| `module_profile=` | `fabricSpCardP` | DN — `bind_dn()` allowed | `fabricRsSpCardP` |

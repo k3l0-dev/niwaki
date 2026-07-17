@@ -34,3 +34,11 @@ Accepted as keyword arguments of `.spine_selector(name, selector_type)` and of `
 | maker | creates | position |
 | --- | --- | --- |
 | `.node_block(name, **attrs)` | `infraNodeBlk` | {ref}`infra.spine_profile.spine_selector.node_block <vocab-infra-spine_profile-spine_selector-node_block>` |
+
+## Bind aliases
+
+Lazy references, resolved closed-world at push time.
+
+| alias | target | flavor | relation |
+| --- | --- | --- | --- |
+| `policy_group=` | `infraSpineAccNodePGrp` | DN — `bind_dn()` allowed | `infraRsSpineAccNodePGrp` |

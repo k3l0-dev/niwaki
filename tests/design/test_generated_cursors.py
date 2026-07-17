@@ -86,7 +86,20 @@ class TestSignatures:
 
     def test_bind_exposes_curated_aliases(self) -> None:
         params = inspect.signature(BdCursor.bind).parameters
-        assert set(params) == {"self", "vrf", "l3out"}
+        assert set(params) == {
+            "self",
+            "vrf",
+            "l3out",
+            "fhs",
+            "nd_policy",
+            "igmp_snoop",
+            "mld_snoop",
+            "dhcp_relay",
+            "endpoint_retention",
+            "netflow_monitor",
+            "monitoring_policy",
+            "flood_filter",
+        }
 
     def test_subnet_bind_inherits_bd_aliases(self) -> None:
         params = inspect.signature(BdSubnetCursor.bind).parameters

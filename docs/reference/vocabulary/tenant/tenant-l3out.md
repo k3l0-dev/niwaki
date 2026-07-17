@@ -57,3 +57,9 @@ Lazy references, resolved closed-world at push time.
 | `vrf=` | `fvCtx` | name | `l3extRsEctx` |
 | `domain=` | `extnwDomP` *(abstract: `l2extDomP`, `l3extDomP`…)* | DN — `bind_dn()` allowed | `l3extRsL3DomAtt` |
 | `fallback_route_group=` | `fvFBRGroup` | DN — `bind_dn()` allowed | `l3extRsOutToFBRGroup` |
+
+## Verbs
+
+- `.dampening(name)` → `l3extRsDampeningPol` targeting `rtctrlProfile`
+- `.interleak(name)` → `l3extRsInterleakPol` targeting `rtctrlProfile`
+- `.redistribute(name)` → `l3extRsRedistributePol` targeting `rtctrlProfile`

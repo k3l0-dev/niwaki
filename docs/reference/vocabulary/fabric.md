@@ -14,6 +14,8 @@ NTP, DNS, syslog, BGP route reflectors, vPC protection — everything under `uni
   - {ref}`fabric.mld_snoop_policy <vocab-fabric-mld_snoop_policy>` — `mldSnoopPol`, 12 attributes
   - {ref}`fabric.datetime_policy <vocab-fabric-datetime_policy>` — `datetimePol`, 9 attributes
     - {ref}`fabric.datetime_policy.ntp_provider <vocab-fabric-datetime_policy-ntp_provider>` — `datetimeNtpProv`, 7 attributes
+      - {ref}`fabric.datetime_policy.ntp_provider.authentication_key <vocab-fabric-datetime_policy-ntp_provider-authentication_key>` — `datetimeRsNtpProvToNtpAuthKey`, 1 attributes
+    - {ref}`fabric.datetime_policy.ntp_auth_key <vocab-fabric-datetime_policy-ntp_auth_key>` — `datetimeNtpAuthKey`, 6 attributes
   - {ref}`fabric.dns_profile <vocab-fabric-dns_profile>` — `dnsProfile`, 5 attributes
     - {ref}`fabric.dns_profile.provider <vocab-fabric-dns_profile-provider>` — `dnsProv`, 3 attributes
     - {ref}`fabric.dns_profile.domain <vocab-fabric-dns_profile-domain>` — `dnsDomain`, 3 attributes
@@ -23,6 +25,9 @@ NTP, DNS, syslog, BGP route reflectors, vPC protection — everything under `uni
       - {ref}`fabric.bgp_instance.route_reflector.node <vocab-fabric-bgp_instance-route_reflector-node>` — `bgpRRNodePEp`, 3 attributes
   - {ref}`fabric.syslog_group <vocab-fabric-syslog_group>` — `syslogGroup`, 5 attributes
     - {ref}`fabric.syslog_group.remote_destination <vocab-fabric-syslog_group-remote_destination>` — `syslogRemoteDest`, 9 attributes
+    - {ref}`fabric.syslog_group.console <vocab-fabric-syslog_group-console>` — `syslogConsole`, 5 attributes
+    - {ref}`fabric.syslog_group.file <vocab-fabric-syslog_group-file>` — `syslogFile`, 5 attributes
+    - {ref}`fabric.syslog_group.protocol_profile <vocab-fabric-syslog_group-protocol_profile>` — `syslogProf`, 3 attributes
   - {ref}`fabric.vpc_protection <vocab-fabric-vpc_protection>` — `fabricProtPol`, 5 attributes
     - {ref}`fabric.vpc_protection.vpc_pair <vocab-fabric-vpc_protection-vpc_pair>` — `fabricExplicitGEp`, 2 attributes
       - {ref}`fabric.vpc_protection.vpc_pair.node <vocab-fabric-vpc_protection-vpc_pair-node>` — `fabricNodePEp`, 4 attributes
@@ -64,6 +69,10 @@ NTP, DNS, syslog, BGP route reflectors, vPC protection — everything under `uni
   - {ref}`fabric.pod_profile <vocab-fabric-pod_profile>` — `fabricPodP`, 4 attributes
     - {ref}`fabric.pod_profile.pod_selector <vocab-fabric-pod_profile-pod_selector>` — `fabricPodS`, 5 attributes
       - {ref}`fabric.pod_profile.pod_selector.pod_block <vocab-fabric-pod_profile-pod_selector-pod_block>` — `fabricPodBlk`, 4 attributes
+  - {ref}`fabric.leaf_path_selector <vocab-fabric-leaf_path_selector>` — `fabricLFPathS`, 4 attributes
+  - {ref}`fabric.spine_path_selector <vocab-fabric-spine_path_selector>` — `fabricSFPathS`, 4 attributes
+  - {ref}`fabric.override_leaf_selector <vocab-fabric-override_leaf_selector>` — `fabricOLeafS`, 4 attributes
+  - {ref}`fabric.override_spine_selector <vocab-fabric-override_spine_selector>` — `fabricOSpineS`, 4 attributes
   - {ref}`fabric.fabric_link_level_policy <vocab-fabric-fabric_link_level_policy>` — `fabricFIfPol`, 5 attributes
   - {ref}`fabric.fabric_link_flap_policy <vocab-fabric-fabric_link_flap_policy>` — `fabricFLinkFlapPol`, 6 attributes
   - {ref}`fabric.l3_interface_policy <vocab-fabric-l3_interface_policy>` — `l3IfPol`, 5 attributes
@@ -87,6 +96,9 @@ NTP, DNS, syslog, BGP route reflectors, vPC protection — everything under `uni
   - {ref}`fabric.load_balance_policy <vocab-fabric-load_balance_policy>` — `lbpPol`, 8 attributes
   - {ref}`fabric.global_ep_listen_policy <vocab-fabric-global_ep_listen_policy>` — `fabricGlbEpListenPol`, 6 attributes
   - {ref}`fabric.fabric_node_control <vocab-fabric-fabric_node_control>` — `fabricNodeControl`, 6 attributes
+  - {ref}`fabric.switch_event_retention_policy <vocab-fabric-switch_event_retention_policy>` — `eventSwRetP`, 6 attributes
+  - {ref}`fabric.switch_fault_retention_policy <vocab-fabric-switch_fault_retention_policy>` — `faultSwRetP`, 6 attributes
+  - {ref}`fabric.switch_health_retention_policy <vocab-fabric-switch_health_retention_policy>` — `healthSwRetP`, 6 attributes
   - {ref}`fabric.callhome_destination_group <vocab-fabric-callhome_destination_group>` — `callhomeGroup`, 2 attributes
     - {ref}`fabric.callhome_destination_group.callhome_destination <vocab-fabric-callhome_destination_group-callhome_destination>` — `callhomeDest`, 8 attributes
     - {ref}`fabric.callhome_destination_group.callhome_protocol_profile <vocab-fabric-callhome_destination_group-callhome_protocol_profile>` — `callhomeProf`, 16 attributes
@@ -101,7 +113,7 @@ NTP, DNS, syslog, BGP route reflectors, vPC protection — everything under `uni
     - {ref}`fabric.snmp_policy.user_profile <vocab-fabric-snmp_policy-user_profile>` — `snmpUserP`, 6 attributes
     - {ref}`fabric.snmp_policy.snmp_client_group_profile <vocab-fabric-snmp_policy-snmp_client_group_profile>` — `snmpClientGrpP`, 2 attributes
       - {ref}`fabric.snmp_policy.snmp_client_group_profile.client_entry <vocab-fabric-snmp_policy-snmp_client_group_profile-client_entry>` — `snmpClientP`, 2 attributes
-    - {ref}`fabric.snmp_policy.client_entry <vocab-fabric-snmp_policy-client_entry>` — `snmpTrapFwdServerP`, 3 attributes
+    - {ref}`fabric.snmp_policy.trap_forward_server <vocab-fabric-snmp_policy-trap_forward_server>` — `snmpTrapFwdServerP`, 3 attributes
   - {ref}`fabric.snmp_monitoring_destination_group <vocab-fabric-snmp_monitoring_destination_group>` — `snmpGroup`, 2 attributes
     - {ref}`fabric.snmp_monitoring_destination_group.snmp_trap_destination <vocab-fabric-snmp_monitoring_destination_group-snmp_trap_destination>` — `snmpTrapDest`, 8 attributes
   - {ref}`fabric.snmp_trap_destination_info <vocab-fabric-snmp_trap_destination_info>` — `snmpCtrlrInst`, 3 attributes
@@ -131,6 +143,8 @@ NTP, DNS, syslog, BGP route reflectors, vPC protection — everything under `uni
     - {ref}`fabric.mon_fabric_monitoring_policy.callhome_source <vocab-fabric-mon_fabric_monitoring_policy-callhome_source>` — `callhomeSrc`, 4 attributes
     - {ref}`fabric.mon_fabric_monitoring_policy.smart_callhome_source <vocab-fabric-mon_fabric_monitoring_policy-smart_callhome_source>` — `callhomeSmartSrc`, 2 attributes
     - {ref}`fabric.mon_fabric_monitoring_policy.tacacs_source <vocab-fabric-mon_fabric_monitoring_policy-tacacs_source>` — `tacacsSrc`, 5 attributes
+    - {ref}`fabric.mon_fabric_monitoring_policy.lifecycle_policy <vocab-fabric-mon_fabric_monitoring_policy-lifecycle_policy>` — `faultLcP`, 6 attributes
+    - {ref}`fabric.mon_fabric_monitoring_policy.stats_limit_pol <vocab-fabric-mon_fabric_monitoring_policy-stats_limit_pol>` — `statslimitInstLimitPol`, 4 attributes
   - {ref}`fabric.mon_common_monitoring_policy <vocab-fabric-mon_common_monitoring_policy>` — `monCommonPol`, 4 attributes
     - {ref}`fabric.mon_common_monitoring_policy.syslog_source <vocab-fabric-mon_common_monitoring_policy-syslog_source>` — `syslogSrc`, 4 attributes
     - {ref}`fabric.mon_common_monitoring_policy.snmp_source <vocab-fabric-mon_common_monitoring_policy-snmp_source>` — `snmpSrc`, 4 attributes
@@ -149,6 +163,8 @@ NTP, DNS, syslog, BGP route reflectors, vPC protection — everything under `uni
       - {ref}`fabric.mon_common_monitoring_policy.event_severity_assignment_policy.callhome_source <vocab-fabric-mon_common_monitoring_policy-event_severity_assignment_policy-callhome_source>` — `callhomeSrc`, 4 attributes
       - {ref}`fabric.mon_common_monitoring_policy.event_severity_assignment_policy.smart_callhome_source <vocab-fabric-mon_common_monitoring_policy-event_severity_assignment_policy-smart_callhome_source>` — `callhomeSmartSrc`, 2 attributes
       - {ref}`fabric.mon_common_monitoring_policy.event_severity_assignment_policy.tacacs_source <vocab-fabric-mon_common_monitoring_policy-event_severity_assignment_policy-tacacs_source>` — `tacacsSrc`, 5 attributes
+    - {ref}`fabric.mon_common_monitoring_policy.lifecycle_policy <vocab-fabric-mon_common_monitoring_policy-lifecycle_policy>` — `faultLcP`, 6 attributes
+    - {ref}`fabric.mon_common_monitoring_policy.stats_limit_pol <vocab-fabric-mon_common_monitoring_policy-stats_limit_pol>` — `statslimitInstLimitPol`, 4 attributes
   - {ref}`fabric.communication_policy <vocab-fabric-communication_policy>` — `commPol`, 4 attributes
     - {ref}`fabric.communication_policy.http_service <vocab-fabric-communication_policy-http_service>` — `commHttp`, 17 attributes
     - {ref}`fabric.communication_policy.http_ssl_configuration <vocab-fabric-communication_policy-http_ssl_configuration>` — `commHttps`, 19 attributes
@@ -227,6 +243,8 @@ fabric/fabric-igmp_snoop_policy
 fabric/fabric-mld_snoop_policy
 fabric/fabric-datetime_policy
 fabric/fabric-datetime_policy-ntp_provider
+fabric/fabric-datetime_policy-ntp_provider-authentication_key
+fabric/fabric-datetime_policy-ntp_auth_key
 fabric/fabric-dns_profile
 fabric/fabric-dns_profile-provider
 fabric/fabric-dns_profile-domain
@@ -236,6 +254,9 @@ fabric/fabric-bgp_instance-route_reflector
 fabric/fabric-bgp_instance-route_reflector-node
 fabric/fabric-syslog_group
 fabric/fabric-syslog_group-remote_destination
+fabric/fabric-syslog_group-console
+fabric/fabric-syslog_group-file
+fabric/fabric-syslog_group-protocol_profile
 fabric/fabric-vpc_protection
 fabric/fabric-vpc_protection-vpc_pair
 fabric/fabric-vpc_protection-vpc_pair-node
@@ -277,6 +298,10 @@ fabric/fabric-spine_module_profile-spine_module_selector
 fabric/fabric-pod_profile
 fabric/fabric-pod_profile-pod_selector
 fabric/fabric-pod_profile-pod_selector-pod_block
+fabric/fabric-leaf_path_selector
+fabric/fabric-spine_path_selector
+fabric/fabric-override_leaf_selector
+fabric/fabric-override_spine_selector
 fabric/fabric-fabric_link_level_policy
 fabric/fabric-fabric_link_flap_policy
 fabric/fabric-l3_interface_policy
@@ -300,6 +325,9 @@ fabric/fabric-wwn_inst_policy
 fabric/fabric-load_balance_policy
 fabric/fabric-global_ep_listen_policy
 fabric/fabric-fabric_node_control
+fabric/fabric-switch_event_retention_policy
+fabric/fabric-switch_fault_retention_policy
+fabric/fabric-switch_health_retention_policy
 fabric/fabric-callhome_destination_group
 fabric/fabric-callhome_destination_group-callhome_destination
 fabric/fabric-callhome_destination_group-callhome_protocol_profile
@@ -314,7 +342,7 @@ fabric/fabric-snmp_policy-snmp_community
 fabric/fabric-snmp_policy-user_profile
 fabric/fabric-snmp_policy-snmp_client_group_profile
 fabric/fabric-snmp_policy-snmp_client_group_profile-client_entry
-fabric/fabric-snmp_policy-client_entry
+fabric/fabric-snmp_policy-trap_forward_server
 fabric/fabric-snmp_monitoring_destination_group
 fabric/fabric-snmp_monitoring_destination_group-snmp_trap_destination
 fabric/fabric-snmp_trap_destination_info
@@ -344,6 +372,8 @@ fabric/fabric-mon_fabric_monitoring_policy-snmp_source
 fabric/fabric-mon_fabric_monitoring_policy-callhome_source
 fabric/fabric-mon_fabric_monitoring_policy-smart_callhome_source
 fabric/fabric-mon_fabric_monitoring_policy-tacacs_source
+fabric/fabric-mon_fabric_monitoring_policy-lifecycle_policy
+fabric/fabric-mon_fabric_monitoring_policy-stats_limit_pol
 fabric/fabric-mon_common_monitoring_policy
 fabric/fabric-mon_common_monitoring_policy-syslog_source
 fabric/fabric-mon_common_monitoring_policy-snmp_source
@@ -362,6 +392,8 @@ fabric/fabric-mon_common_monitoring_policy-event_severity_assignment_policy-snmp
 fabric/fabric-mon_common_monitoring_policy-event_severity_assignment_policy-callhome_source
 fabric/fabric-mon_common_monitoring_policy-event_severity_assignment_policy-smart_callhome_source
 fabric/fabric-mon_common_monitoring_policy-event_severity_assignment_policy-tacacs_source
+fabric/fabric-mon_common_monitoring_policy-lifecycle_policy
+fabric/fabric-mon_common_monitoring_policy-stats_limit_pol
 fabric/fabric-communication_policy
 fabric/fabric-communication_policy-http_service
 fabric/fabric-communication_policy-http_ssl_configuration

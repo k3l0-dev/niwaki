@@ -35,3 +35,11 @@ Accepted as keyword arguments of `.dns_profile(name)` and of `.set(**attrs)` on 
 | --- | --- | --- |
 | `.provider(ip_address, **attrs)` | `dnsProv` | {ref}`fabric.dns_profile.provider <vocab-fabric-dns_profile-provider>` |
 | `.domain(name, **attrs)` | `dnsDomain` | {ref}`fabric.dns_profile.domain <vocab-fabric-dns_profile-domain>` |
+
+## Bind aliases
+
+Lazy references, resolved closed-world at push time.
+
+| alias | target | flavor | relation |
+| --- | --- | --- | --- |
+| `management_epg=` | `mgmtOoB` | DN — `bind_dn()` allowed | `dnsRsProfileToEpg` |

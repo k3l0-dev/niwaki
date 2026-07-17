@@ -38,4 +38,4 @@ Accepted as keyword arguments of `.snmp_policy(name)` and of `.set(**attrs)` on 
 | `.snmp_community(name, **attrs)` | `snmpCommunityP` | {ref}`fabric.snmp_policy.snmp_community <vocab-fabric-snmp_policy-snmp_community>` |
 | `.user_profile(name, **attrs)` | `snmpUserP` | {ref}`fabric.snmp_policy.user_profile <vocab-fabric-snmp_policy-user_profile>` |
 | `.snmp_client_group_profile(name, **attrs)` | `snmpClientGrpP` | {ref}`fabric.snmp_policy.snmp_client_group_profile <vocab-fabric-snmp_policy-snmp_client_group_profile>` |
-| `.client_entry(external_trap_server_address, **attrs)` | `snmpTrapFwdServerP` | {ref}`fabric.snmp_policy.client_entry <vocab-fabric-snmp_policy-client_entry>` |
+| `.trap_forward_server(external_trap_server_address, **attrs)` | `snmpTrapFwdServerP` | {ref}`fabric.snmp_policy.trap_forward_server <vocab-fabric-snmp_policy-trap_forward_server>` |

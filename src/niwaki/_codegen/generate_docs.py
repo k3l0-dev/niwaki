@@ -75,6 +75,12 @@ _DOMAINS = [
         "Root factory: `controller()`.",
     ),
     (
+        "aaa",
+        "aaa — AAA & security",
+        "RADIUS providers and provider groups under `uni/userext`, the "
+        "AAA/security root.  Root factory: `aaa()`.",
+    ),
+    (
         "vmm_provider",
         "vmm_provider — VMM domains",
         "Virtual Machine Manager domains under `uni/vmmp-<vendor>`: the domain, "

@@ -11,7 +11,7 @@ Re-generate: uv run python -m niwaki._codegen.generate_docs
 | --- | --- |
 | ACI class | `tacacsSrc` |
 | RN | `tacacssrc-{name}` |
-| Cursor | `MonitoringPolicyTacacsSourceCursor` |
+| Cursor | `InfraMonitoringPolicyTacacsSourceCursor` |
 | Parent | {ref}`infra.monitoring_policy <vocab-infra-monitoring_policy>` |
 | Atomic | — |
 

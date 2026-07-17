@@ -46,7 +46,7 @@ Core rules (see the *Design-first architecture* page in the documentation):
 from __future__ import annotations
 
 from niwaki.design._cursor import Cursor
-from niwaki.design._generated_cursors import controller, design, fabric, infra, tenant
+from niwaki.design._generated_cursors import aaa, controller, design, fabric, infra, tenant
 from niwaki.design._node import Ref, ref
 from niwaki.design._push import PlanResult, PushReport
 
@@ -55,6 +55,7 @@ __all__ = [
     "PlanResult",
     "PushReport",
     "Ref",
+    "aaa",
     "controller",
     "design",
     "fabric",

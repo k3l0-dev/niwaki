@@ -34,3 +34,11 @@ Accepted as keyword arguments of `.dhcp_node_group(name)` and of `.set(**attrs)`
 | maker | creates | position |
 | --- | --- | --- |
 | `.node_block(name, **attrs)` | `infraNodeBlk` | {ref}`infra.dhcp_node_group.node_block <vocab-infra-dhcp_node_group-node_block>` |
+
+## Bind aliases
+
+Lazy references, resolved closed-world at push time.
+
+| alias | target | flavor | relation |
+| --- | --- | --- | --- |
+| `dhcp_relay=` | `dhcpRelayP` | name | `dhcpRsRelayP` |

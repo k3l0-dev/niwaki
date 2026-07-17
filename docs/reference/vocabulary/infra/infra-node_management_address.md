@@ -34,3 +34,11 @@ Accepted as keyword arguments of `.node_management_address(name)` and of `.set(*
 | maker | creates | position |
 | --- | --- | --- |
 | `.node_block(name, **attrs)` | `infraNodeBlk` | {ref}`infra.node_management_address.node_block <vocab-infra-node_management_address-node_block>` |
+
+## Bind aliases
+
+Lazy references, resolved closed-world at push time.
+
+| alias | target | flavor | relation |
+| --- | --- | --- | --- |
+| `management_group=` | `mgmtGrp` | DN — `bind_dn()` allowed | `mgmtRsGrp` |

@@ -22,6 +22,7 @@ from niwaki.design._cursor import Cursor, _prune
 from niwaki.design._node import Ref
 
 if TYPE_CHECKING:
+    from niwaki.models._generated.enums.AaaBoolean import AaaBoolean
     from niwaki.models._generated.enums.CompAllocMode import CompAllocMode
     from niwaki.models._generated.enums.CompConfigMode import CompConfigMode
     from niwaki.models._generated.enums.CompVendor import CompVendor
@@ -49,6 +50,7 @@ if TYPE_CHECKING:
     from niwaki.models._generated.enums.VmmStatsMode import VmmStatsMode
     from niwaki.models._generated.enums.VmmTrigSt import VmmTrigSt
     from niwaki.models._generated.enums.VmmVxlanDeplPref import VmmVxlanDeplPref
+    from niwaki.design._generated_cursors._aaa import AaaCursor
     from niwaki.design._generated_cursors._controller import ControllerCursor
     from niwaki.design._generated_cursors._fabric import FabricCursor
     from niwaki.design._generated_cursors._infra import InfraCursor
@@ -174,6 +176,40 @@ class _UniMakers(Cursor):
         return cast(
             "ControllerCursor",
             self._invoke_maker("controller", (), _prune(params)),
+        )
+
+    def aaa(
+        self,
+        *,
+        name: str | None = None,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        password_strength_check: AaaBoolean | str | None = None,
+        userdom: str | None = None,
+    ) -> AaaCursor:
+        """Declare a ``aaaUserEp`` child under the uni level.
+
+        A user endpoint is a local user. A user is assigned a role determines the user's privileges,
+        and belongs to a security domain, which determines the user's scope of control
+
+        Args:
+            name: The name of the AAA definition object.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            password_strength_check: The password strength check specifies if the system
+                enforces the strength of the user password. Values: ``no``, ``yes``. Default:
+                ``yes``.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "AaaCursor",
+            self._invoke_maker("aaa", (), _prune(params)),
         )
 
     def phys_dom(

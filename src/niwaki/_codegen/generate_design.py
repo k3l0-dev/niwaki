@@ -63,7 +63,7 @@ _LEGACY_FILE = OUTPUT_DIR.with_suffix(".py")
 
 # polUni makers promoted to module-level factories (the other root makers stay
 # reachable through design().<maker>()).
-_ROOT_FACTORIES = ("tenant", "infra", "fabric", "controller")
+_ROOT_FACTORIES = ("tenant", "infra", "fabric", "controller", "aaa")
 
 # Domain roots that get their own module; every other first segment (the
 # uni-level domains such as phys_dom/l3_dom) stays in _uni with the root.

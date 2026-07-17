@@ -30,6 +30,7 @@ jargon:
   vmmDomP: vmm_dom
   infraInfra: infra
   fabricInst: fabric
+  aaaUserEp: aaa
 
   # ── infra children ──────────────────────────────────────────────────────────
   fvnsVlanInstP: vlan_pool
@@ -220,11 +221,31 @@ makers:
     infra: infraInfra
     fabric: fabricInst
     controller: ctrlrInst
+    aaa: aaaUserEp          # AAA / RADIUS (uni/userext) — a top-level MIT branch
     phys_dom: physDomP
     l3_dom: l3extDomP
     l2_dom: l2extDomP     # the domain an L2Out attaches to
     fc_dom: fcDomP        # Fibre Channel domain
     vmm_provider: vmmProvP  # VMM vendor container (VMware / Microsoft / …)
+
+  # ══ AAA (uni/userext) ══════════════════════════════════════════════════════
+  aaaUserEp:
+    radius: aaaRadiusEp
+    local_user: aaaUser
+    remote_user: aaaRemoteUser
+    aaa_role: aaaRole
+    security_domain: aaaDomain
+    login_domain: aaaLoginDomain
+    password_strength_policy: aaaPwdStrengthProfile
+    block_user_logins_policy: aaaBlockLoginProfile
+    pre_login_banner: aaaPreLoginBanner
+    service_node_cluster_settings: aaaServiceNodeCluster
+    fabric_sec: aaaFabricSec
+  aaaRadiusEp:
+    radius_provider: aaaRadiusProvider
+    radius_provider_group: aaaRadiusProviderGroup
+  aaaRadiusProviderGroup:
+    provider: aaaProviderRef
 
   # ══ Tenant world ═══════════════════════════════════════════════════════════
   # Ordered like the APIC GUI tree under Tenants > <tenant>, so a new maker
@@ -349,6 +370,8 @@ makers:
     # ── Policies › Troubleshooting (SPAN) ─────────────────────────────────────
     span_source_group: spanSrcGrp
     span_destination_group: spanDestGrp
+    vspan_destination_group: spanVDestGrp
+    vspan_session: spanVSrcGrp
 
     # ── Policies › Monitoring ─────────────────────────────────────────────────
     monitoring_policy: monEPGPol
@@ -456,6 +479,7 @@ makers:
     nd_ra_subnet: ndRaSubnet       # ND proxy / RA subnet
     legacy_mode: fvAccP            # BD access profile / legacy mode (wave 2026-07-15)
     rogue_exception_mac: fvRogueExceptionMac
+    dhcp_relay_label: dhcpLbl      # DHCP relay label on the BD
 
   # ══ VRF ════════════════════════════════════════════════════════════════════
   fvCtx:
@@ -592,6 +616,7 @@ makers:
     static_route: ipRouteP
     infra_node: l3extInfraNodeP      # infra logical node profile (GOLF)
     loopback: l3extLoopBackIfP       # node loopback (OSPF/BGP router-id)
+    node_sid_profile: mplsNodeSidP   # SR-MPLS node SID on the node attachment
   ipRouteP:
     next_hop: ipNexthopP
 
@@ -617,6 +642,8 @@ makers:
     rogue_exception_mac: l3extRogueExceptMacP
     micro_bfd: bfdMicroBfdP                   # wave 2026-07-15
     ptp_l3out: ptpRtdEpgCfg
+    secondary_ip_address: l3extIp             # secondary IP on the SVI/routed path
+    member_node_configuration: l3extMember    # per-node config on a vPC SVI
   l3extRogueExceptionMacGroup:
     mac: l3extRogueExceptionMac
 
@@ -636,6 +663,13 @@ makers:
     dhcp_relay_gw_ext_ip: dhcpRelayGwExtIp
   monEPGPol:
     target: monEPGTarget
+    syslog_source: syslogSrc
+    snmp_source: snmpSrc
+    callhome_source: callhomeSrc
+    smart_callhome_source: callhomeSmartSrc
+    tacacs_source: tacacsSrc
+    lifecycle_policy: faultLcP
+    stats_limit_pol: statslimitInstLimitPol
   spanDest:
     vspan_epg_summary: spanVEpgSummary
   dnsepgSvrGrp:
@@ -711,6 +745,12 @@ makers:
   mgmtInB:
     subnet: fvSubnet
     static_route: mgmtStaticRoute
+    consumer_contract_label: vzConsCtrctLbl
+    consumer_label: vzConsLbl
+    consumer_subject_label: vzConsSubjLbl
+    provider_contract_label: vzProvCtrctLbl
+    provider_label: vzProvLbl
+    provider_subject_label: vzProvSubjLbl
 
   mgmtOoB:
     static_route: mgmtStaticRoute
@@ -1175,6 +1215,8 @@ makers:
     callhome_source: callhomeSrc
     smart_callhome_source: callhomeSmartSrc
     tacacs_source: tacacsSrc
+    lifecycle_policy: faultLcP
+    stats_limit_pol: statslimitInstLimitPol
   monInfraTarget:
     syslog_source: syslogSrc
     snmp_source: snmpSrc
@@ -1226,6 +1268,10 @@ makers:
     leaf_module_profile: fabricLeCardP
     spine_module_profile: fabricSpCardP
     pod_profile: fabricPodP
+    leaf_path_selector: fabricLFPathS
+    spine_path_selector: fabricSFPathS
+    override_leaf_selector: fabricOLeafS
+    override_spine_selector: fabricOSpineS
 
     # ── Interface / protocol policies (F2) ────────────────────────────────────
     fabric_link_level_policy: fabricFIfPol
@@ -1247,6 +1293,9 @@ makers:
     load_balance_policy: lbpPol
     global_ep_listen_policy: fabricGlbEpListenPol
     fabric_node_control: fabricNodeControl
+    switch_event_retention_policy: eventSwRetP
+    switch_fault_retention_policy: faultSwRetP
+    switch_health_retention_policy: healthSwRetP
 
     # ── Monitoring destinations & policies (F3) ───────────────────────────────
     callhome_destination_group: callhomeGroup
@@ -1357,7 +1406,7 @@ makers:
     snmp_community: snmpCommunityP
     user_profile: snmpUserP
     snmp_client_group_profile: snmpClientGrpP
-    client_entry: snmpTrapFwdServerP
+    trap_forward_server: snmpTrapFwdServerP
   snmpClientGrpP:
     client_entry: snmpClientP
   snmpGroup:
@@ -1371,6 +1420,8 @@ makers:
     callhome_source: callhomeSrc
     smart_callhome_source: callhomeSmartSrc
     tacacs_source: tacacsSrc
+    lifecycle_policy: faultLcP
+    stats_limit_pol: statslimitInstLimitPol
   monFabricTarget:
     syslog_source: syslogSrc
     snmp_source: snmpSrc
@@ -1387,6 +1438,8 @@ makers:
     tacacs_source: tacacsSrc
     fault_severity_assignment_policy: faultSevAsnP
     event_severity_assignment_policy: eventSevAsnP
+    lifecycle_policy: faultLcP
+    stats_limit_pol: statslimitInstLimitPol
   # ── System / global sub-structure (F4) ───────────────────────────────────────
   commPol:
     http_service: commHttp
@@ -1433,11 +1486,17 @@ makers:
     analytics_cluster: analyticsCluster
   datetimePol:
     ntp_provider: datetimeNtpProv
+    ntp_auth_key: datetimeNtpAuthKey
+  datetimeNtpProv:
+    authentication_key: datetimeRsNtpProvToNtpAuthKey
   dnsProfile:
     provider: dnsProv
     domain: dnsDomain
   syslogGroup:
     remote_destination: syslogRemoteDest
+    console: syslogConsole
+    file: syslogFile
+    protocol_profile: syslogProf
   bgpInstPol:
     autonomous_system: bgpAsP
     route_reflector: bgpRRP
@@ -1588,6 +1647,13 @@ binds:
     epg: fvEPg                      # abstract
     path: fabricPathEp              # fabric-discovered — bind_dn(path=...)
     apic_node: fabricNode           # ERSPAN to an APIC — bind_dn(...)
+  spanVDest:
+    epg: fvEPg                      # abstract — the VSPAN destination EPG
+    path: fabricPathEp              # fabric-discovered — bind_dn(path=...)
+    apic_node: fabricNode           # ERSPAN to an APIC — bind_dn(...)
+    virtual_port: fvEp              # fabric-learned endpoint — bind_dn(...)
+  spanVSrcGrp:
+    filter_group: spanFilterGrp
   netflowMonitorPol:
     netflow_exporter: netflowExporterPol
     netflow_record: netflowRecordPol
@@ -1608,22 +1674,57 @@ binds:
     bd: fvBD                        # the in-band management BD
     contract_master: fvEPg          # abstract
     imported_contract: vzCPIf
+    taboo_contract: vzTaboo
     custom_qos_policy: qosCustomPol
     static_node: fabricNode         # fabric-discovered — bind_dn(...)
   mgmtOoB:
     static_node: fabricNode         # fabric-discovered — bind_dn(...)
 
+  # ── Management / DHCP / DNS node-group associations ──────────────────────────
+  mgmtNodeGrp:
+    management_group: mgmtGrp
+  mgmtPodGrp:
+    node_group: mgmtNodeGrp
+  dhcpNodeGrp:
+    dhcp_relay: dhcpRelayP
+  dhcpPodGrp:
+    node_group: dhcpNodeGrp
+  infrazonePodGrp:
+    node_group: infrazoneNodeGrp
+  dnsepgSvrGrp:
+    epg: fvEPg                       # abstract EPG the DNS server sits behind
+
   fvBD:
     vrf: fvCtx
     l3out: l3extOut
+    fhs: fhsBDPol
+    nd_policy: ndIfPol
+    igmp_snoop: igmpSnoopPol
+    mld_snoop: mldSnoopPol
+    dhcp_relay: dhcpRelayP
+    endpoint_retention: fvEpRetPol
+    netflow_monitor: netflowMonitorPol
+    monitoring_policy: monEPGPol
+    flood_filter: vzFilter
   fvCtx:
     l3out: l3extOut
+    bgp_timers: bgpCtxPol
+    bgp_address_family: bgpCtxAfPol
+    eigrp_address_family: eigrpCtxAfPol
+    endpoint_retention: fvEpRetPol
+    route_tag: l3extRouteTagPol
+    route_control_profile: rtctrlProfile
+    vrf_validation: l3extVrfValidationPol
+    monitoring_policy: monEPGPol
   l3extOut:
     vrf: fvCtx
     domain: extnwDomP        # abstract — l3_dom / l2_dom
     fallback_route_group: fvFBRGroup
   vzSubj:
     filter: vzFilter
+    service_graph: vnsAbsGraph
+  vzBrCP:
+    service_graph: vnsAbsGraph
 
   # ── L3Out (wave 1, 2026-07-12) ──────────────────────────────────────────────
   l3extLNodeP:
@@ -1636,6 +1737,7 @@ binds:
     netflow_monitor: netflowMonitorPol
   l3extInstP:
     contract_master: fvEPg   # abstract — inherit contracts from another EPG
+    imported_contract: vzCPIf
     endpoint_security_group: fvESg
     external_epg: l3extInstP
     custom_qos_policy: qosCustomPol
@@ -1763,6 +1865,18 @@ binds:
     copp: coppIfPol
     llfc: qosLlfcIfPol
     pfc: qosPfcIfPol
+    fc_interface: fcIfPol
+    l2_mtu: l2InstPol
+    port_authentication: l2PortAuthPol
+    port_security: l2PortSecurityPol
+    link_flap: fabricLinkFlapPol
+    monitoring: monInfraPol
+    netflow_monitor: netflowMonitorPol
+    optics: xcvrOpticsIfPol
+    slow_drain: qosSdIfPol
+    synce: synceEthIfPol
+    span_destination_group: spanVDestGrp
+    span_source_group: spanVSrcGrp
   # PC/vPC interface policy override group (interface policies only — the
   # remaining protocol binds accrue as their policies are curated in later waves)
   infraAccBndlPolGrp:
@@ -1843,12 +1957,20 @@ binds:
     interface_profile: infraAccPortP
   infraSpineP:
     interface_profile: infraSpAccPortP
+  infraLeafS:
+    policy_group: infraAccNodePGrp
+  infraSpineS:
+    policy_group: infraSpineAccNodePGrp
 
   # ── Fabric ports charpente (F1) ──────────────────────────────────────────────
   fabricLeafP:
     interface_profile: fabricLePortP
+    module_profile: fabricLeCardP
   fabricSpineP:
     interface_profile: fabricSpPortP
+    module_profile: fabricSpCardP
+  fabricExplicitGEp:
+    vpc_policy: vpcInstPol
   fabricLeafS:
     policy_group: fabricLeNodePGrp
   fabricSpineS:
@@ -1900,8 +2022,54 @@ binds:
     link_level: fabricFIfPol
     l3_interface: l3IfPol
     macsec: macsecFabIfPol
+  snmpClientGrpP:
+    management_epg: mgmtOoB          # associated management EPG (bind_dn to the default OOB)
+  syslogRemoteDest:
+    management_epg: mgmtOoB          # associated management EPG (bind_dn to the default OOB)
+  snmpTrapDest:
+    management_epg: mgmtOoB          # associated management EPG (bind_dn to the default OOB)
+  datetimeNtpProv:
+    management_epg: mgmtOoB          # associated management EPG (bind_dn to the default OOB)
+  maintMaintGrp:
+    maintenance_policy: maintMaintP  # the group's maintenance policy (target version + scheduler)
+  dnsProfile:
+    management_epg: mgmtOoB          # associated management EPG (bind_dn to the default OOB)
+  l2NodeAuthPol:
+    radius_provider_group: aaaRadiusProviderGroup  # 802.1x RADIUS group (bind_dn)
 
 verbs:
+  infraAccBndlGrp:
+    ingress_dpp:
+      rs: infraRsQosIngressDppIfPol
+      target: qosDppPol
+    egress_dpp:
+      rs: infraRsQosEgressDppIfPol
+      target: qosDppPol
+  fvCtx:
+    # VRF OSPF timers — per-address-family relation (the legacy VRF-wide
+    # fvRsOspfCtxPol is superseded and left uncurated).
+    ospf_timers:
+      rs: fvRsCtxToOspfCtxPol
+      target: ospfCtxPol
+  l3extLIfP:
+    ingress_dpp:
+      rs: l3extRsIngressQosDppPol
+      target: qosDppPol
+    egress_dpp:
+      rs: l3extRsEgressQosDppPol
+      target: qosDppPol
+  l3extOut:
+    # Three route-control profiles on the L3Out, one per role — all target
+    # rtctrlProfile, so automatic resolution can't tell them apart.
+    dampening:
+      rs: l3extRsDampeningPol
+      target: rtctrlProfile
+    interleak:
+      rs: l3extRsInterleakPol
+      target: rtctrlProfile
+    redistribute:
+      rs: l3extRsRedistributePol
+      target: rtctrlProfile
   fvAEPg:
     provide:
       rs: fvRsProv
@@ -1929,6 +2097,9 @@ verbs:
     consume:
       rs: fvRsCons
       target: vzBrCP
+    intra_epg:
+      rs: fvRsIntraEpg
+      target: vzBrCP
   # vzAny reaches contracts through its own Rs classes, not the EPG ones.
   vzAny:
     provide:
@@ -1953,6 +2124,9 @@ verbs:
       target: vzBrCP
     consume:
       rs: fvRsCons
+      target: vzBrCP
+    intra_epg:
+      rs: fvRsIntraEpg
       target: vzBrCP
   # The out-of-band world speaks the same two words, over its own Rs classes.
   mgmtOoB:

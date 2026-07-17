@@ -31,3 +31,11 @@ Accepted as keyword arguments of `.snmp_client_group_profile(name)` and of `.set
 | maker | creates | position |
 | --- | --- | --- |
 | `.client_entry(client_address, **attrs)` | `snmpClientP` | {ref}`fabric.snmp_policy.snmp_client_group_profile.client_entry <vocab-fabric-snmp_policy-snmp_client_group_profile-client_entry>` |
+
+## Bind aliases
+
+Lazy references, resolved closed-world at push time.
+
+| alias | target | flavor | relation |
+| --- | --- | --- | --- |
+| `management_epg=` | `mgmtOoB` | DN — `bind_dn()` allowed | `snmpRsEpg` |

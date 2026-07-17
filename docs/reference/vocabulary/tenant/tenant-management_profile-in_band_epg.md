@@ -38,6 +38,12 @@ Accepted as keyword arguments of `.in_band_epg(name)` and of `.set(**attrs)` on 
 | --- | --- | --- |
 | `.subnet(subnet, **attrs)` | `fvSubnet` | {ref}`tenant.management_profile.in_band_epg.subnet <vocab-tenant-management_profile-in_band_epg-subnet>` |
 | `.static_route(ip_address, **attrs)` | `mgmtStaticRoute` | {ref}`tenant.management_profile.in_band_epg.static_route <vocab-tenant-management_profile-in_band_epg-static_route>` |
+| `.consumer_contract_label(name, **attrs)` | `vzConsCtrctLbl` | {ref}`tenant.management_profile.in_band_epg.consumer_contract_label <vocab-tenant-management_profile-in_band_epg-consumer_contract_label>` |
+| `.consumer_label(name, **attrs)` | `vzConsLbl` | {ref}`tenant.management_profile.in_band_epg.consumer_label <vocab-tenant-management_profile-in_band_epg-consumer_label>` |
+| `.consumer_subject_label(name, **attrs)` | `vzConsSubjLbl` | {ref}`tenant.management_profile.in_band_epg.consumer_subject_label <vocab-tenant-management_profile-in_band_epg-consumer_subject_label>` |
+| `.provider_contract_label(name, **attrs)` | `vzProvCtrctLbl` | {ref}`tenant.management_profile.in_band_epg.provider_contract_label <vocab-tenant-management_profile-in_band_epg-provider_contract_label>` |
+| `.provider_label(name, **attrs)` | `vzProvLbl` | {ref}`tenant.management_profile.in_band_epg.provider_label <vocab-tenant-management_profile-in_band_epg-provider_label>` |
+| `.provider_subject_label(name, **attrs)` | `vzProvSubjLbl` | {ref}`tenant.management_profile.in_band_epg.provider_subject_label <vocab-tenant-management_profile-in_band_epg-provider_subject_label>` |
 
 ## Bind aliases
 
@@ -48,6 +54,7 @@ Lazy references, resolved closed-world at push time.
 | `bd=` | `fvBD` | name | `mgmtRsMgmtBD` |
 | `contract_master=` | `fvEPg` *(abstract: `fvAEPg`, `fvESg`, `fvTnlEPg`, `infraCEPg`…)* | DN — `bind_dn()` allowed | `fvRsSecInherited` |
 | `imported_contract=` | `vzCPIf` | name | `fvRsConsIf` |
+| `taboo_contract=` | `vzTaboo` | name | `fvRsProtBy` |
 | `custom_qos_policy=` | `qosCustomPol` | name | `fvRsCustQosPol` |
 | `static_node=` | `fabricNode` | DN — `bind_dn()` allowed | `mgmtRsInBStNode` |
 
@@ -55,6 +62,7 @@ Lazy references, resolved closed-world at push time.
 
 - `.provide(name)` → `fvRsProv` targeting `vzBrCP`
 - `.consume(name)` → `fvRsCons` targeting `vzBrCP`
+- `.intra_epg(name)` → `fvRsIntraEpg` targeting `vzBrCP`
 
 ## APIC diagnostics
 

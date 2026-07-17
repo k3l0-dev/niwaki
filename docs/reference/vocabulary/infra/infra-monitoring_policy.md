@@ -38,3 +38,5 @@ Accepted as keyword arguments of `.monitoring_policy(name)` and of `.set(**attrs
 | `.callhome_source(name, **attrs)` | `callhomeSrc` | {ref}`infra.monitoring_policy.callhome_source <vocab-infra-monitoring_policy-callhome_source>` |
 | `.smart_callhome_source(**attrs)` | `callhomeSmartSrc` | {ref}`infra.monitoring_policy.smart_callhome_source <vocab-infra-monitoring_policy-smart_callhome_source>` |
 | `.tacacs_source(name, **attrs)` | `tacacsSrc` | {ref}`infra.monitoring_policy.tacacs_source <vocab-infra-monitoring_policy-tacacs_source>` |
+| `.lifecycle_policy(condition_code, **attrs)` | `faultLcP` | {ref}`infra.monitoring_policy.lifecycle_policy <vocab-infra-monitoring_policy-lifecycle_policy>` |
+| `.stats_limit_pol(**attrs)` | `statslimitInstLimitPol` | {ref}`infra.monitoring_policy.stats_limit_pol <vocab-infra-monitoring_policy-stats_limit_pol>` |

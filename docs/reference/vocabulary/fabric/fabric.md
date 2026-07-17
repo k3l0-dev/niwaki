@@ -48,6 +48,10 @@ Accepted as keyword arguments of `.fabric()` and of `.set(**attrs)` on this curs
 | `.leaf_module_profile(name, **attrs)` | `fabricLeCardP` | {ref}`fabric.leaf_module_profile <vocab-fabric-leaf_module_profile>` |
 | `.spine_module_profile(name, **attrs)` | `fabricSpCardP` | {ref}`fabric.spine_module_profile <vocab-fabric-spine_module_profile>` |
 | `.pod_profile(name, **attrs)` | `fabricPodP` | {ref}`fabric.pod_profile <vocab-fabric-pod_profile>` |
+| `.leaf_path_selector(name, **attrs)` | `fabricLFPathS` | {ref}`fabric.leaf_path_selector <vocab-fabric-leaf_path_selector>` |
+| `.spine_path_selector(name, **attrs)` | `fabricSFPathS` | {ref}`fabric.spine_path_selector <vocab-fabric-spine_path_selector>` |
+| `.override_leaf_selector(name, **attrs)` | `fabricOLeafS` | {ref}`fabric.override_leaf_selector <vocab-fabric-override_leaf_selector>` |
+| `.override_spine_selector(name, **attrs)` | `fabricOSpineS` | {ref}`fabric.override_spine_selector <vocab-fabric-override_spine_selector>` |
 | `.fabric_link_level_policy(name, **attrs)` | `fabricFIfPol` | {ref}`fabric.fabric_link_level_policy <vocab-fabric-fabric_link_level_policy>` |
 | `.fabric_link_flap_policy(name, **attrs)` | `fabricFLinkFlapPol` | {ref}`fabric.fabric_link_flap_policy <vocab-fabric-fabric_link_flap_policy>` |
 | `.l3_interface_policy(name, **attrs)` | `l3IfPol` | {ref}`fabric.l3_interface_policy <vocab-fabric-l3_interface_policy>` |
@@ -67,6 +71,9 @@ Accepted as keyword arguments of `.fabric()` and of `.set(**attrs)` on this curs
 | `.load_balance_policy(name, **attrs)` | `lbpPol` | {ref}`fabric.load_balance_policy <vocab-fabric-load_balance_policy>` |
 | `.global_ep_listen_policy(name, **attrs)` | `fabricGlbEpListenPol` | {ref}`fabric.global_ep_listen_policy <vocab-fabric-global_ep_listen_policy>` |
 | `.fabric_node_control(name, **attrs)` | `fabricNodeControl` | {ref}`fabric.fabric_node_control <vocab-fabric-fabric_node_control>` |
+| `.switch_event_retention_policy(name, **attrs)` | `eventSwRetP` | {ref}`fabric.switch_event_retention_policy <vocab-fabric-switch_event_retention_policy>` |
+| `.switch_fault_retention_policy(name, **attrs)` | `faultSwRetP` | {ref}`fabric.switch_fault_retention_policy <vocab-fabric-switch_fault_retention_policy>` |
+| `.switch_health_retention_policy(name, **attrs)` | `healthSwRetP` | {ref}`fabric.switch_health_retention_policy <vocab-fabric-switch_health_retention_policy>` |
 | `.callhome_destination_group(name, **attrs)` | `callhomeGroup` | {ref}`fabric.callhome_destination_group <vocab-fabric-callhome_destination_group>` |
 | `.smart_callhome_destination_group(name, **attrs)` | `callhomeSmartGroup` | {ref}`fabric.smart_callhome_destination_group <vocab-fabric-smart_callhome_destination_group>` |
 | `.callhome_inventory_policy(name, **attrs)` | `callhomeInvP` | {ref}`fabric.callhome_inventory_policy <vocab-fabric-callhome_inventory_policy>` |

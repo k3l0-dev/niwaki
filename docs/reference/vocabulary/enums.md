@@ -5,9 +5,180 @@ Re-generate: uv run python -m niwaki._codegen.generate_docs
 
 # Enums
 
-The 396 enum types reachable from the curated vocabulary — every constrained parameter of every maker.  A parameter typed as an enum also accepts the plain string; the value is validated at the call site either way.
+The 409 enum types reachable from the curated vocabulary — every constrained parameter of every maker.  A parameter typed as an enum also accepts the plain string; the value is validated at the call site either way.
 
 The remaining generated enums back the non-curated classes and live in `niwaki.models._generated.enums`.
+
+(enum-aaaaccess)=
+
+## `AaaAccess`
+
+| value | meaning |
+| --- | --- |
+| `none` | — |
+| `admin` | — |
+| `aaa` | — |
+| `tenant-connectivity` | — |
+| `tenant-protocol` | — |
+| `vmm-policy` | — |
+| `tenant-ext-connectivity` | — |
+| `tenant-ext-protocol` | — |
+| `tenant-qos` | — |
+| `tenant-security` | — |
+| `tenant-network-profile` | — |
+| `tenant-epg` | — |
+| `fabric-connectivity` | — |
+| `fabric-protocol` | — |
+| `fabric-equipment` | — |
+| `access-connectivity` | — |
+| `access-protocol` | — |
+| `access-equipment` | — |
+| `access-qos` | — |
+| `nw-svc-params` | — |
+| `ops` | — |
+| `nw-svc-policy` | — |
+| `site-admin` | — |
+| `site-policy` | — |
+| `config-manager` | — |
+| `custom-privilege-1` | — |
+| `custom-privilege-2` | — |
+| `custom-privilege-3` | — |
+| `custom-privilege-4` | — |
+| `custom-privilege-5` | — |
+| `custom-privilege-6` | — |
+| `custom-privilege-7` | — |
+| `custom-privilege-8` | — |
+| `custom-privilege-9` | — |
+| `custom-privilege-10` | — |
+| `custom-privilege-11` | — |
+| `custom-privilege-12` | — |
+| `custom-privilege-13` | — |
+| `custom-privilege-14` | — |
+| `custom-privilege-15` | — |
+| `custom-privilege-16` | — |
+| `custom-privilege-17` | — |
+| `custom-privilege-18` | — |
+| `custom-privilege-19` | — |
+| `custom-privilege-20` | — |
+| `custom-privilege-21` | — |
+| `custom-privilege-22` | — |
+| `custom-port-privilege` | — |
+
+Used by: {ref}`aaa.aaa_role <vocab-aaa-aaa_role>`
+
+(enum-aaaaccountstatus)=
+
+## `AaaAccountStatus`
+
+| value | meaning |
+| --- | --- |
+| `active` | — |
+| `blocked` | — |
+| `inactive` | — |
+
+Used by: {ref}`aaa.local_user <vocab-aaa-local_user>`
+
+(enum-aaaboolstate)=
+
+## `AaaBoolState`
+
+| value | meaning |
+| --- | --- |
+| `disable` | — |
+| `enable` | — |
+
+Used by: {ref}`aaa.block_user_logins_policy <vocab-aaa-block_user_logins_policy>`, {ref}`aaa.fabric_sec <vocab-aaa-fabric_sec>`
+
+(enum-aaaboolean)=
+
+## `AaaBoolean`
+
+| value | meaning |
+| --- | --- |
+| `no` | — |
+| `yes` | — |
+
+Used by: {ref}`aaa <vocab-aaa>`, {ref}`aaa.aaa_role <vocab-aaa-aaa_role>`, {ref}`aaa.local_user <vocab-aaa-local_user>`, {ref}`aaa.security_domain <vocab-aaa-security_domain>`
+
+(enum-aaaclear)=
+
+## `AaaClear`
+
+| value | meaning |
+| --- | --- |
+| `no` | — |
+| `yes` | — |
+
+Used by: {ref}`aaa.local_user <vocab-aaa-local_user>`
+
+(enum-aaamonitorservertype)=
+
+## `AaaMonitorServerType`
+
+| value | meaning |
+| --- | --- |
+| `disabled` | — |
+| `enabled` | — |
+
+Used by: {ref}`aaa.radius.radius_provider <vocab-aaa-radius-radius_provider>`
+
+(enum-aaaotpboolean)=
+
+## `AaaOtpBoolean`
+
+| value | meaning |
+| --- | --- |
+| `no` | — |
+| `yes` | — |
+
+Used by: {ref}`aaa.local_user <vocab-aaa-local_user>`
+
+(enum-aaapwdclassflags)=
+
+## `AaaPwdClassFlags`
+
+| value | meaning |
+| --- | --- |
+| `lowercase` | — |
+| `uppercase` | — |
+| `digits` | — |
+| `specialchars` | — |
+
+Used by: {ref}`aaa.password_strength_policy <vocab-aaa-password_strength_policy>`
+
+(enum-aaapwdstrengthtesttype)=
+
+## `AaaPwdStrengthTestType`
+
+| value | meaning |
+| --- | --- |
+| `custom` | — |
+| `default` | — |
+
+Used by: {ref}`aaa.password_strength_policy <vocab-aaa-password_strength_policy>`
+
+(enum-aaasnmodetype)=
+
+## `AaaSNModeType`
+
+| value | meaning |
+| --- | --- |
+| `ACI` | — |
+| `Standalone` | — |
+
+Used by: {ref}`aaa.service_node_cluster_settings <vocab-aaa-service_node_cluster_settings>`
+
+(enum-aaaauthenticationprotocol)=
+
+## `AaaauthenticationProtocol`
+
+| value | meaning |
+| --- | --- |
+| `chap` | — |
+| `mschap` | — |
+| `pap` | — |
+
+Used by: {ref}`aaa.radius.radius_provider <vocab-aaa-radius-radius_provider>`
 
 (enum-analyticscollversion)=
 
@@ -410,7 +581,7 @@ Used by: {ref}`fabric.callhome_destination_group.callhome_destination <vocab-fab
 | `notice` | — |
 | `warning` | — |
 
-Used by: {ref}`fabric.callhome_destination_group.callhome_destination <vocab-fabric-callhome_destination_group-callhome_destination>`, {ref}`fabric.mon_common_monitoring_policy.callhome_source <vocab-fabric-mon_common_monitoring_policy-callhome_source>`, {ref}`fabric.mon_common_monitoring_policy.event_severity_assignment_policy.callhome_source <vocab-fabric-mon_common_monitoring_policy-event_severity_assignment_policy-callhome_source>`, {ref}`fabric.mon_common_monitoring_policy.fault_severity_assignment_policy.callhome_source <vocab-fabric-mon_common_monitoring_policy-fault_severity_assignment_policy-callhome_source>`, {ref}`fabric.mon_fabric_monitoring_policy.callhome_source <vocab-fabric-mon_fabric_monitoring_policy-callhome_source>`, {ref}`fabric.mon_fabric_monitoring_policy.monitoring_target.callhome_source <vocab-fabric-mon_fabric_monitoring_policy-monitoring_target-callhome_source>`, {ref}`fabric.mon_fabric_monitoring_policy.monitoring_target.event_severity_assignment_policy.callhome_source <vocab-fabric-mon_fabric_monitoring_policy-monitoring_target-event_severity_assignment_policy-callhome_source>`, {ref}`fabric.mon_fabric_monitoring_policy.monitoring_target.fault_severity_assignment_policy.callhome_source <vocab-fabric-mon_fabric_monitoring_policy-monitoring_target-fault_severity_assignment_policy-callhome_source>` *(+4 more)*
+Used by: {ref}`fabric.callhome_destination_group.callhome_destination <vocab-fabric-callhome_destination_group-callhome_destination>`, {ref}`fabric.mon_common_monitoring_policy.callhome_source <vocab-fabric-mon_common_monitoring_policy-callhome_source>`, {ref}`fabric.mon_common_monitoring_policy.event_severity_assignment_policy.callhome_source <vocab-fabric-mon_common_monitoring_policy-event_severity_assignment_policy-callhome_source>`, {ref}`fabric.mon_common_monitoring_policy.fault_severity_assignment_policy.callhome_source <vocab-fabric-mon_common_monitoring_policy-fault_severity_assignment_policy-callhome_source>`, {ref}`fabric.mon_fabric_monitoring_policy.callhome_source <vocab-fabric-mon_fabric_monitoring_policy-callhome_source>`, {ref}`fabric.mon_fabric_monitoring_policy.monitoring_target.callhome_source <vocab-fabric-mon_fabric_monitoring_policy-monitoring_target-callhome_source>`, {ref}`fabric.mon_fabric_monitoring_policy.monitoring_target.event_severity_assignment_policy.callhome_source <vocab-fabric-mon_fabric_monitoring_policy-monitoring_target-event_severity_assignment_policy-callhome_source>`, {ref}`fabric.mon_fabric_monitoring_policy.monitoring_target.fault_severity_assignment_policy.callhome_source <vocab-fabric-mon_fabric_monitoring_policy-monitoring_target-fault_severity_assignment_policy-callhome_source>` *(+5 more)*
 
 (enum-commadminstate)=
 
@@ -665,7 +836,7 @@ Used by: {ref}`fabric.mon_common_monitoring_policy.fault_severity_assignment_pol
 | `minor` | The Minor severity level indicates the existence of a non-service affecting fault condition and that corrective action should be taken in order to prevent a more serious (for example, service affecting) fault. |
 | `warning` | The Warning severity level indicates the detection of a potential or impending service affecting fault, before any significant effects have been felt. |
 
-Used by: {ref}`fabric.mon_common_monitoring_policy.event_severity_assignment_policy.snmp_source <vocab-fabric-mon_common_monitoring_policy-event_severity_assignment_policy-snmp_source>`, {ref}`fabric.mon_common_monitoring_policy.event_severity_assignment_policy.tacacs_source <vocab-fabric-mon_common_monitoring_policy-event_severity_assignment_policy-tacacs_source>`, {ref}`fabric.mon_common_monitoring_policy.fault_severity_assignment_policy.snmp_source <vocab-fabric-mon_common_monitoring_policy-fault_severity_assignment_policy-snmp_source>`, {ref}`fabric.mon_common_monitoring_policy.fault_severity_assignment_policy.tacacs_source <vocab-fabric-mon_common_monitoring_policy-fault_severity_assignment_policy-tacacs_source>`, {ref}`fabric.mon_common_monitoring_policy.snmp_source <vocab-fabric-mon_common_monitoring_policy-snmp_source>`, {ref}`fabric.mon_common_monitoring_policy.tacacs_source <vocab-fabric-mon_common_monitoring_policy-tacacs_source>`, {ref}`fabric.mon_fabric_monitoring_policy.monitoring_target.event_severity_assignment_policy.snmp_source <vocab-fabric-mon_fabric_monitoring_policy-monitoring_target-event_severity_assignment_policy-snmp_source>`, {ref}`fabric.mon_fabric_monitoring_policy.monitoring_target.event_severity_assignment_policy.tacacs_source <vocab-fabric-mon_fabric_monitoring_policy-monitoring_target-event_severity_assignment_policy-tacacs_source>` *(+14 more)*
+Used by: {ref}`aaa.pre_login_banner <vocab-aaa-pre_login_banner>`, {ref}`fabric.mon_common_monitoring_policy.event_severity_assignment_policy.snmp_source <vocab-fabric-mon_common_monitoring_policy-event_severity_assignment_policy-snmp_source>`, {ref}`fabric.mon_common_monitoring_policy.event_severity_assignment_policy.tacacs_source <vocab-fabric-mon_common_monitoring_policy-event_severity_assignment_policy-tacacs_source>`, {ref}`fabric.mon_common_monitoring_policy.fault_severity_assignment_policy.snmp_source <vocab-fabric-mon_common_monitoring_policy-fault_severity_assignment_policy-snmp_source>`, {ref}`fabric.mon_common_monitoring_policy.fault_severity_assignment_policy.tacacs_source <vocab-fabric-mon_common_monitoring_policy-fault_severity_assignment_policy-tacacs_source>`, {ref}`fabric.mon_common_monitoring_policy.snmp_source <vocab-fabric-mon_common_monitoring_policy-snmp_source>`, {ref}`fabric.mon_common_monitoring_policy.tacacs_source <vocab-fabric-mon_common_monitoring_policy-tacacs_source>`, {ref}`fabric.mon_fabric_monitoring_policy.monitoring_target.event_severity_assignment_policy.snmp_source <vocab-fabric-mon_fabric_monitoring_policy-monitoring_target-event_severity_assignment_policy-snmp_source>` *(+17 more)*
 
 (enum-configformat)=
 
@@ -847,6 +1018,17 @@ Used by: {ref}`fabric.datetime_policy <vocab-fabric-datetime_policy>`
 | `utc` | Coordinated Universal Time (UTC), of the form YYYY-MM-DDThh:mm:ss.mmm |
 
 Used by: {ref}`fabric.datetime_format <vocab-fabric-datetime_format>`
+
+(enum-datetimekeytype)=
+
+## `DatetimeKeyType`
+
+| value | meaning |
+| --- | --- |
+| `md5` | Use HMAC MD5 algorithm for authentication |
+| `sha1` | Use HMAC SHA1 algorithm for authentication |
+
+Used by: {ref}`fabric.datetime_policy.ntp_auth_key <vocab-fabric-datetime_policy-ntp_auth_key>`
 
 (enum-datetimeoffsetstate)=
 
@@ -1345,7 +1527,7 @@ Used by: {ref}`infra.dhcp_relay_policy.provider <vocab-infra-dhcp_relay_policy-p
 | `infra` | The dhcp server to relay to should be chosen from the ones configured under the infrastructure |
 | `tenant` | The dhcp server to relay to should be chosen from the ones configured under the tenant |
 
-Used by: {ref}`infra.dhcp_relay_policy <vocab-infra-dhcp_relay_policy>`, {ref}`tenant.dhcp_relay_policy <vocab-tenant-dhcp_relay_policy>`, {ref}`tenant.l3out.node_profile.interface_profile.dhcp_relay_label <vocab-tenant-l3out-node_profile-interface_profile-dhcp_relay_label>`
+Used by: {ref}`infra.dhcp_relay_policy <vocab-infra-dhcp_relay_policy>`, {ref}`tenant.bd.dhcp_relay_label <vocab-tenant-bd-dhcp_relay_label>`, {ref}`tenant.dhcp_relay_policy <vocab-tenant-dhcp_relay_policy>`, {ref}`tenant.l3out.node_profile.interface_profile.dhcp_relay_label <vocab-tenant-l3out-node_profile-interface_profile-dhcp_relay_label>`
 
 (enum-dhcprelayvisibility)=
 
@@ -3093,7 +3275,7 @@ Used by: {ref}`tenant.l3out.node_profile.interface_profile.floating_svi <vocab-t
 | `disabled` | — |
 | `enabled` | — |
 
-Used by: {ref}`tenant.l3out.node_profile.interface_profile.floating_svi <vocab-tenant-l3out-node_profile-interface_profile-floating_svi>`, {ref}`tenant.l3out.node_profile.interface_profile.floating_svi.member_node_configuration <vocab-tenant-l3out-node_profile-interface_profile-floating_svi-member_node_configuration>`, {ref}`tenant.l3out.node_profile.interface_profile.floating_svi.secondary_ip_address <vocab-tenant-l3out-node_profile-interface_profile-floating_svi-secondary_ip_address>`, {ref}`tenant.l3out.node_profile.interface_profile.path_attachment <vocab-tenant-l3out-node_profile-interface_profile-path_attachment>`, {ref}`tenant.l3out.node_profile.interface_profile.path_attachment.forwarder_address <vocab-tenant-l3out-node_profile-interface_profile-path_attachment-forwarder_address>`
+Used by: {ref}`tenant.l3out.node_profile.interface_profile.floating_svi <vocab-tenant-l3out-node_profile-interface_profile-floating_svi>`, {ref}`tenant.l3out.node_profile.interface_profile.floating_svi.member_node_configuration <vocab-tenant-l3out-node_profile-interface_profile-floating_svi-member_node_configuration>`, {ref}`tenant.l3out.node_profile.interface_profile.floating_svi.secondary_ip_address <vocab-tenant-l3out-node_profile-interface_profile-floating_svi-secondary_ip_address>`, {ref}`tenant.l3out.node_profile.interface_profile.path_attachment <vocab-tenant-l3out-node_profile-interface_profile-path_attachment>`, {ref}`tenant.l3out.node_profile.interface_profile.path_attachment.forwarder_address <vocab-tenant-l3out-node_profile-interface_profile-path_attachment-forwarder_address>`, {ref}`tenant.l3out.node_profile.interface_profile.path_attachment.member_node_configuration <vocab-tenant-l3out-node_profile-interface_profile-path_attachment-member_node_configuration>`, {ref}`tenant.l3out.node_profile.interface_profile.path_attachment.secondary_ip_address <vocab-tenant-l3out-node_profile-interface_profile-path_attachment-secondary_ip_address>`
 
 (enum-l3extowner)=
 
@@ -3153,7 +3335,7 @@ Used by: {ref}`tenant.l3out.external_epg.subnet <vocab-tenant-l3out-external_epg
 | `A` | Left represents the node with small Id in the group |
 | `B` | Right represents the node with big Id in the group |
 
-Used by: {ref}`tenant.l3out.node_profile.interface_profile.floating_svi.member_node_configuration <vocab-tenant-l3out-node_profile-interface_profile-floating_svi-member_node_configuration>`
+Used by: {ref}`tenant.l3out.node_profile.interface_profile.floating_svi.member_node_configuration <vocab-tenant-l3out-node_profile-interface_profile-floating_svi-member_node_configuration>`, {ref}`tenant.l3out.node_profile.interface_profile.path_attachment.member_node_configuration <vocab-tenant-l3out-node_profile-interface_profile-path_attachment-member_node_configuration>`
 
 (enum-l4tcpflags)=
 
@@ -3536,7 +3718,7 @@ Used by: {ref}`fabric.mgmt_connectivity_preference <vocab-fabric-mgmt_connectivi
 | `disabled` | — |
 | `enabled` | — |
 
-Used by: {ref}`fabric.callhome_destination_group.callhome_destination <vocab-fabric-callhome_destination_group-callhome_destination>`, {ref}`fabric.callhome_destination_group.callhome_protocol_profile <vocab-fabric-callhome_destination_group-callhome_protocol_profile>`, {ref}`fabric.callhome_inventory_policy <vocab-fabric-callhome_inventory_policy>`, {ref}`fabric.smart_callhome_destination_group.callhome_protocol_profile <vocab-fabric-smart_callhome_destination_group-callhome_protocol_profile>`, {ref}`fabric.smart_callhome_destination_group.smart_callhome_destination <vocab-fabric-smart_callhome_destination_group-smart_callhome_destination>`, {ref}`fabric.syslog_group.remote_destination <vocab-fabric-syslog_group-remote_destination>`
+Used by: {ref}`fabric.callhome_destination_group.callhome_destination <vocab-fabric-callhome_destination_group-callhome_destination>`, {ref}`fabric.callhome_destination_group.callhome_protocol_profile <vocab-fabric-callhome_destination_group-callhome_protocol_profile>`, {ref}`fabric.callhome_inventory_policy <vocab-fabric-callhome_inventory_policy>`, {ref}`fabric.smart_callhome_destination_group.callhome_protocol_profile <vocab-fabric-smart_callhome_destination_group-callhome_protocol_profile>`, {ref}`fabric.smart_callhome_destination_group.smart_callhome_destination <vocab-fabric-smart_callhome_destination_group-smart_callhome_destination>`, {ref}`fabric.syslog_group.console <vocab-fabric-syslog_group-console>`, {ref}`fabric.syslog_group.file <vocab-fabric-syslog_group-file>`, {ref}`fabric.syslog_group.protocol_profile <vocab-fabric-syslog_group-protocol_profile>` *(+1 more)*
 
 (enum-moncompression)=
 
@@ -3562,7 +3744,7 @@ Used by: {ref}`fabric.core_export_policy <vocab-fabric-core_export_policy>`, {re
 | `session` | — |
 | `all` | — |
 
-Used by: {ref}`fabric.mon_common_monitoring_policy.callhome_source <vocab-fabric-mon_common_monitoring_policy-callhome_source>`, {ref}`fabric.mon_common_monitoring_policy.event_severity_assignment_policy.callhome_source <vocab-fabric-mon_common_monitoring_policy-event_severity_assignment_policy-callhome_source>`, {ref}`fabric.mon_common_monitoring_policy.event_severity_assignment_policy.snmp_source <vocab-fabric-mon_common_monitoring_policy-event_severity_assignment_policy-snmp_source>`, {ref}`fabric.mon_common_monitoring_policy.event_severity_assignment_policy.syslog_source <vocab-fabric-mon_common_monitoring_policy-event_severity_assignment_policy-syslog_source>`, {ref}`fabric.mon_common_monitoring_policy.event_severity_assignment_policy.tacacs_source <vocab-fabric-mon_common_monitoring_policy-event_severity_assignment_policy-tacacs_source>`, {ref}`fabric.mon_common_monitoring_policy.fault_severity_assignment_policy.callhome_source <vocab-fabric-mon_common_monitoring_policy-fault_severity_assignment_policy-callhome_source>`, {ref}`fabric.mon_common_monitoring_policy.fault_severity_assignment_policy.snmp_source <vocab-fabric-mon_common_monitoring_policy-fault_severity_assignment_policy-snmp_source>`, {ref}`fabric.mon_common_monitoring_policy.fault_severity_assignment_policy.syslog_source <vocab-fabric-mon_common_monitoring_policy-fault_severity_assignment_policy-syslog_source>` *(+36 more)*
+Used by: {ref}`fabric.mon_common_monitoring_policy.callhome_source <vocab-fabric-mon_common_monitoring_policy-callhome_source>`, {ref}`fabric.mon_common_monitoring_policy.event_severity_assignment_policy.callhome_source <vocab-fabric-mon_common_monitoring_policy-event_severity_assignment_policy-callhome_source>`, {ref}`fabric.mon_common_monitoring_policy.event_severity_assignment_policy.snmp_source <vocab-fabric-mon_common_monitoring_policy-event_severity_assignment_policy-snmp_source>`, {ref}`fabric.mon_common_monitoring_policy.event_severity_assignment_policy.syslog_source <vocab-fabric-mon_common_monitoring_policy-event_severity_assignment_policy-syslog_source>`, {ref}`fabric.mon_common_monitoring_policy.event_severity_assignment_policy.tacacs_source <vocab-fabric-mon_common_monitoring_policy-event_severity_assignment_policy-tacacs_source>`, {ref}`fabric.mon_common_monitoring_policy.fault_severity_assignment_policy.callhome_source <vocab-fabric-mon_common_monitoring_policy-fault_severity_assignment_policy-callhome_source>`, {ref}`fabric.mon_common_monitoring_policy.fault_severity_assignment_policy.snmp_source <vocab-fabric-mon_common_monitoring_policy-fault_severity_assignment_policy-snmp_source>`, {ref}`fabric.mon_common_monitoring_policy.fault_severity_assignment_policy.syslog_source <vocab-fabric-mon_common_monitoring_policy-fault_severity_assignment_policy-syslog_source>` *(+44 more)*
 
 (enum-montargetscope)=
 
@@ -6799,7 +6981,7 @@ Used by: {ref}`infra.poe_policy <vocab-infra-poe_policy>`
 | `yellow` | — |
 | `yellow-green` | — |
 
-Used by: {ref}`fabric.span_source_group.span_label <vocab-fabric-span_source_group-span_label>`, {ref}`fabric.vspan_session.span_label <vocab-fabric-vspan_session-span_label>`, {ref}`infra.span_source_group.span_label <vocab-infra-span_source_group-span_label>`, {ref}`infra.vspan_session.span_label <vocab-infra-vspan_session-span_label>`, {ref}`tenant.app.epg.consumer_contract_label <vocab-tenant-app-epg-consumer_contract_label>`, {ref}`tenant.app.epg.consumer_label <vocab-tenant-app-epg-consumer_label>`, {ref}`tenant.app.epg.consumer_subject_label <vocab-tenant-app-epg-consumer_subject_label>`, {ref}`tenant.app.epg.provider_contract_label <vocab-tenant-app-epg-provider_contract_label>` *(+39 more)*
+Used by: {ref}`fabric.span_source_group.span_label <vocab-fabric-span_source_group-span_label>`, {ref}`fabric.vspan_session.span_label <vocab-fabric-vspan_session-span_label>`, {ref}`infra.span_source_group.span_label <vocab-infra-span_source_group-span_label>`, {ref}`infra.vspan_session.span_label <vocab-infra-vspan_session-span_label>`, {ref}`tenant.app.epg.consumer_contract_label <vocab-tenant-app-epg-consumer_contract_label>`, {ref}`tenant.app.epg.consumer_label <vocab-tenant-app-epg-consumer_label>`, {ref}`tenant.app.epg.consumer_subject_label <vocab-tenant-app-epg-consumer_subject_label>`, {ref}`tenant.app.epg.provider_contract_label <vocab-tenant-app-epg-provider_contract_label>` *(+47 more)*
 
 (enum-ptpnodeproftemplate)=
 
@@ -7274,7 +7456,7 @@ Used by: {ref}`fabric.snmp_monitoring_destination_group.snmp_trap_destination <v
 | `stop` | — |
 | `unknown` | — |
 
-Used by: {ref}`fabric.vspan_session <vocab-fabric-vspan_session>`, {ref}`infra.vspan_session <vocab-infra-vspan_session>`
+Used by: {ref}`fabric.vspan_session <vocab-fabric-vspan_session>`, {ref}`infra.vspan_session <vocab-infra-vspan_session>`, {ref}`tenant.vspan_session <vocab-tenant-vspan_session>`
 
 (enum-spandirection)=
 
@@ -7286,7 +7468,7 @@ Used by: {ref}`fabric.vspan_session <vocab-fabric-vspan_session>`, {ref}`infra.v
 | `in` | Incoming |
 | `out` | Outgoing |
 
-Used by: {ref}`fabric.span_source_group.span_source <vocab-fabric-span_source_group-span_source>`, {ref}`fabric.span_source_group.vspan_source <vocab-fabric-span_source_group-vspan_source>`, {ref}`fabric.span_source_group.vspan_source_def <vocab-fabric-span_source_group-vspan_source_def>`, {ref}`fabric.vspan_session.vspan_vsource <vocab-fabric-vspan_session-vspan_vsource>`, {ref}`infra.span_source_group.span_source <vocab-infra-span_source_group-span_source>`, {ref}`infra.span_source_group.vspan_source <vocab-infra-span_source_group-vspan_source>`, {ref}`infra.span_source_group.vspan_source_def <vocab-infra-span_source_group-vspan_source_def>`, {ref}`infra.vspan_session.vspan_vsource <vocab-infra-vspan_session-vspan_vsource>` *(+3 more)*
+Used by: {ref}`fabric.span_source_group.span_source <vocab-fabric-span_source_group-span_source>`, {ref}`fabric.span_source_group.vspan_source <vocab-fabric-span_source_group-vspan_source>`, {ref}`fabric.span_source_group.vspan_source_def <vocab-fabric-span_source_group-vspan_source_def>`, {ref}`fabric.vspan_session.vspan_vsource <vocab-fabric-vspan_session-vspan_vsource>`, {ref}`infra.span_source_group.span_source <vocab-infra-span_source_group-span_source>`, {ref}`infra.span_source_group.vspan_source <vocab-infra-span_source_group-vspan_source>`, {ref}`infra.span_source_group.vspan_source_def <vocab-infra-span_source_group-vspan_source_def>`, {ref}`infra.vspan_session.vspan_vsource <vocab-infra-vspan_session-vspan_vsource>` *(+4 more)*
 
 (enum-spanerspandestmode)=
 
@@ -7297,7 +7479,7 @@ Used by: {ref}`fabric.span_source_group.span_source <vocab-fabric-span_source_gr
 | `not-visible` | The ERSPAN dest. may or may not be in a diffenet private network but the ip address of the ERSPAN destination will not get leaked into the consumers private network |
 | `visible` | The ERSPAN dest. is in a diffenet private network. The ip address of the ERSPAN dest. will get leaked into the consumers private network. Hence the ERSPAN destination IP address must not overlap with esiting IP addresses in the Source EPGs whose traffic is being remote spanned. |
 
-Used by: {ref}`fabric.span_destination_group.span_destination.vspan_epg_summary <vocab-fabric-span_destination_group-span_destination-vspan_epg_summary>`, {ref}`fabric.vspan_destination_group.vspan_vdestination.vspan_destination_epg_summary <vocab-fabric-vspan_destination_group-vspan_vdestination-vspan_destination_epg_summary>`, {ref}`infra.span_destination_group.span_destination.vspan_epg_summary <vocab-infra-span_destination_group-span_destination-vspan_epg_summary>`, {ref}`infra.vspan_destination_group.vspan_vdestination.vspan_destination_epg_summary <vocab-infra-vspan_destination_group-vspan_vdestination-vspan_destination_epg_summary>`, {ref}`tenant.span_destination_group.span_destination.vspan_epg_summary <vocab-tenant-span_destination_group-span_destination-vspan_epg_summary>`
+Used by: {ref}`fabric.span_destination_group.span_destination.vspan_epg_summary <vocab-fabric-span_destination_group-span_destination-vspan_epg_summary>`, {ref}`fabric.vspan_destination_group.vspan_vdestination.vspan_destination_epg_summary <vocab-fabric-vspan_destination_group-vspan_vdestination-vspan_destination_epg_summary>`, {ref}`infra.span_destination_group.span_destination.vspan_epg_summary <vocab-infra-span_destination_group-span_destination-vspan_epg_summary>`, {ref}`infra.vspan_destination_group.vspan_vdestination.vspan_destination_epg_summary <vocab-infra-vspan_destination_group-vspan_vdestination-vspan_destination_epg_summary>`, {ref}`tenant.span_destination_group.span_destination.vspan_epg_summary <vocab-tenant-span_destination_group-span_destination-vspan_epg_summary>`, {ref}`tenant.vspan_destination_group.vspan_vdestination.vspan_destination_epg_summary <vocab-tenant-vspan_destination_group-vspan_vdestination-vspan_destination_epg_summary>`
 
 (enum-stpifcontrol)=
 
@@ -7423,7 +7605,7 @@ Used by: {ref}`infra.synce_interface_policy <vocab-infra-synce_interface_policy>
 | `nxos` | — |
 | `rfc5424-ts` | — |
 
-Used by: {ref}`fabric.syslog_group <vocab-fabric-syslog_group>`, {ref}`fabric.syslog_group.remote_destination <vocab-fabric-syslog_group-remote_destination>`
+Used by: {ref}`fabric.syslog_group <vocab-fabric-syslog_group>`, {ref}`fabric.syslog_group.console <vocab-fabric-syslog_group-console>`, {ref}`fabric.syslog_group.file <vocab-fabric-syslog_group-file>`, {ref}`fabric.syslog_group.remote_destination <vocab-fabric-syslog_group-remote_destination>`
 
 (enum-syslogforwardingfacility)=
 
@@ -7454,6 +7636,18 @@ Used by: {ref}`fabric.syslog_group.remote_destination <vocab-fabric-syslog_group
 
 Used by: {ref}`fabric.syslog_group.remote_destination <vocab-fabric-syslog_group-remote_destination>`
 
+(enum-syslogrestrictedseverity)=
+
+## `SyslogRestrictedSeverity`
+
+| value | meaning |
+| --- | --- |
+| `alerts` | — |
+| `critical` | — |
+| `emergencies` | — |
+
+Used by: {ref}`fabric.syslog_group.console <vocab-fabric-syslog_group-console>`
+
 (enum-syslogseverity)=
 
 ## `SyslogSeverity`
@@ -7469,7 +7663,7 @@ Used by: {ref}`fabric.syslog_group.remote_destination <vocab-fabric-syslog_group
 | `notifications` | — |
 | `warnings` | — |
 
-Used by: {ref}`fabric.mon_common_monitoring_policy.event_severity_assignment_policy.syslog_source <vocab-fabric-mon_common_monitoring_policy-event_severity_assignment_policy-syslog_source>`, {ref}`fabric.mon_common_monitoring_policy.fault_severity_assignment_policy.syslog_source <vocab-fabric-mon_common_monitoring_policy-fault_severity_assignment_policy-syslog_source>`, {ref}`fabric.mon_common_monitoring_policy.syslog_source <vocab-fabric-mon_common_monitoring_policy-syslog_source>`, {ref}`fabric.mon_fabric_monitoring_policy.monitoring_target.event_severity_assignment_policy.syslog_source <vocab-fabric-mon_fabric_monitoring_policy-monitoring_target-event_severity_assignment_policy-syslog_source>`, {ref}`fabric.mon_fabric_monitoring_policy.monitoring_target.fault_severity_assignment_policy.syslog_source <vocab-fabric-mon_fabric_monitoring_policy-monitoring_target-fault_severity_assignment_policy-syslog_source>`, {ref}`fabric.mon_fabric_monitoring_policy.monitoring_target.syslog_source <vocab-fabric-mon_fabric_monitoring_policy-monitoring_target-syslog_source>`, {ref}`fabric.mon_fabric_monitoring_policy.syslog_source <vocab-fabric-mon_fabric_monitoring_policy-syslog_source>`, {ref}`fabric.syslog_group.remote_destination <vocab-fabric-syslog_group-remote_destination>` *(+4 more)*
+Used by: {ref}`fabric.mon_common_monitoring_policy.event_severity_assignment_policy.syslog_source <vocab-fabric-mon_common_monitoring_policy-event_severity_assignment_policy-syslog_source>`, {ref}`fabric.mon_common_monitoring_policy.fault_severity_assignment_policy.syslog_source <vocab-fabric-mon_common_monitoring_policy-fault_severity_assignment_policy-syslog_source>`, {ref}`fabric.mon_common_monitoring_policy.syslog_source <vocab-fabric-mon_common_monitoring_policy-syslog_source>`, {ref}`fabric.mon_fabric_monitoring_policy.monitoring_target.event_severity_assignment_policy.syslog_source <vocab-fabric-mon_fabric_monitoring_policy-monitoring_target-event_severity_assignment_policy-syslog_source>`, {ref}`fabric.mon_fabric_monitoring_policy.monitoring_target.fault_severity_assignment_policy.syslog_source <vocab-fabric-mon_fabric_monitoring_policy-monitoring_target-fault_severity_assignment_policy-syslog_source>`, {ref}`fabric.mon_fabric_monitoring_policy.monitoring_target.syslog_source <vocab-fabric-mon_fabric_monitoring_policy-monitoring_target-syslog_source>`, {ref}`fabric.mon_fabric_monitoring_policy.syslog_source <vocab-fabric-mon_fabric_monitoring_policy-syslog_source>`, {ref}`fabric.syslog_group.file <vocab-fabric-syslog_group-file>` *(+6 more)*
 
 (enum-tacacsswitchtacacsaudit)=
 
@@ -7480,7 +7674,7 @@ Used by: {ref}`fabric.mon_common_monitoring_policy.event_severity_assignment_pol
 | `disabled` | — |
 | `enabled` | — |
 
-Used by: {ref}`fabric.mon_common_monitoring_policy.event_severity_assignment_policy.tacacs_source <vocab-fabric-mon_common_monitoring_policy-event_severity_assignment_policy-tacacs_source>`, {ref}`fabric.mon_common_monitoring_policy.fault_severity_assignment_policy.tacacs_source <vocab-fabric-mon_common_monitoring_policy-fault_severity_assignment_policy-tacacs_source>`, {ref}`fabric.mon_common_monitoring_policy.tacacs_source <vocab-fabric-mon_common_monitoring_policy-tacacs_source>`, {ref}`fabric.mon_fabric_monitoring_policy.monitoring_target.event_severity_assignment_policy.tacacs_source <vocab-fabric-mon_fabric_monitoring_policy-monitoring_target-event_severity_assignment_policy-tacacs_source>`, {ref}`fabric.mon_fabric_monitoring_policy.monitoring_target.fault_severity_assignment_policy.tacacs_source <vocab-fabric-mon_fabric_monitoring_policy-monitoring_target-fault_severity_assignment_policy-tacacs_source>`, {ref}`fabric.mon_fabric_monitoring_policy.monitoring_target.tacacs_source <vocab-fabric-mon_fabric_monitoring_policy-monitoring_target-tacacs_source>`, {ref}`fabric.mon_fabric_monitoring_policy.tacacs_source <vocab-fabric-mon_fabric_monitoring_policy-tacacs_source>`, {ref}`infra.monitoring_policy.monitoring_target.event_severity_assignment_policy.tacacs_source <vocab-infra-monitoring_policy-monitoring_target-event_severity_assignment_policy-tacacs_source>` *(+3 more)*
+Used by: {ref}`fabric.mon_common_monitoring_policy.event_severity_assignment_policy.tacacs_source <vocab-fabric-mon_common_monitoring_policy-event_severity_assignment_policy-tacacs_source>`, {ref}`fabric.mon_common_monitoring_policy.fault_severity_assignment_policy.tacacs_source <vocab-fabric-mon_common_monitoring_policy-fault_severity_assignment_policy-tacacs_source>`, {ref}`fabric.mon_common_monitoring_policy.tacacs_source <vocab-fabric-mon_common_monitoring_policy-tacacs_source>`, {ref}`fabric.mon_fabric_monitoring_policy.monitoring_target.event_severity_assignment_policy.tacacs_source <vocab-fabric-mon_fabric_monitoring_policy-monitoring_target-event_severity_assignment_policy-tacacs_source>`, {ref}`fabric.mon_fabric_monitoring_policy.monitoring_target.fault_severity_assignment_policy.tacacs_source <vocab-fabric-mon_fabric_monitoring_policy-monitoring_target-fault_severity_assignment_policy-tacacs_source>`, {ref}`fabric.mon_fabric_monitoring_policy.monitoring_target.tacacs_source <vocab-fabric-mon_fabric_monitoring_policy-monitoring_target-tacacs_source>`, {ref}`fabric.mon_fabric_monitoring_policy.tacacs_source <vocab-fabric-mon_fabric_monitoring_policy-tacacs_source>`, {ref}`infra.monitoring_policy.monitoring_target.event_severity_assignment_policy.tacacs_source <vocab-infra-monitoring_policy-monitoring_target-event_severity_assignment_policy-tacacs_source>` *(+4 more)*
 
 (enum-tacacsauthenticationprotocol)=
 

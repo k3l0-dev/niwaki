@@ -32,3 +32,11 @@ Accepted as keyword arguments of `.pod_management_address(name)` and of `.set(**
 | maker | creates | position |
 | --- | --- | --- |
 | `.pod_block(name, **attrs)` | `infraPodBlk` | {ref}`infra.pod_management_address.pod_block <vocab-infra-pod_management_address-pod_block>` |
+
+## Bind aliases
+
+Lazy references, resolved closed-world at push time.
+
+| alias | target | flavor | relation |
+| --- | --- | --- | --- |
+| `node_group=` | `mgmtNodeGrp` | DN — `bind_dn()` allowed | `mgmtRsToNodeGrp` |

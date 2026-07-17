@@ -30,3 +30,17 @@ Accepted as keyword arguments of `.ntp_provider(name)` and of `.set(**attrs)` on
 | `min_poll` | `minPoll` | `int` | — | `4` | The NTP minimum interval default in seconds. |
 | `preferred_state` | `preferred` | `bool` | — | `False` | A property that indicates if the NTP server is preferred. Only one preferred server is allowed. |
 | `truechimer_status` | `trueChimer` | {ref}`DatetimeTrueChimerStatus <enum-datetimetruechimerstatus>` | `disabled`, `enabled` | `disabled` | — |
+
+## Children
+
+| maker | creates | position |
+| --- | --- | --- |
+| `.authentication_key(auth_key_id, **attrs)` | `datetimeRsNtpProvToNtpAuthKey` | {ref}`fabric.datetime_policy.ntp_provider.authentication_key <vocab-fabric-datetime_policy-ntp_provider-authentication_key>` |
+
+## Bind aliases
+
+Lazy references, resolved closed-world at push time.
+
+| alias | target | flavor | relation |
+| --- | --- | --- | --- |
+| `management_epg=` | `mgmtOoB` | DN — `bind_dn()` allowed | `datetimeRsNtpProvToEpg` |

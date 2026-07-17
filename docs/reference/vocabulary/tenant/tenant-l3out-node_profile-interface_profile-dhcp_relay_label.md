@@ -13,7 +13,7 @@ A DHCP relay label contains a name for the label, the scope, and a DHCP option p
 | --- | --- |
 | ACI class | `dhcpLbl` |
 | RN | `dhcplbl-{name}` |
-| Cursor | `DhcpRelayLabelCursor` |
+| Cursor | `InterfaceProfileDhcpRelayLabelCursor` |
 | Parent | {ref}`tenant.l3out.node_profile.interface_profile <vocab-tenant-l3out-node_profile-interface_profile>` |
 | Atomic | — |
 

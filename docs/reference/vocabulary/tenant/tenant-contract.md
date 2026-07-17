@@ -40,6 +40,14 @@ Accepted as keyword arguments of `.contract(name)` and of `.set(**attrs)` on thi
 | `.subject(name, **attrs)` | `vzSubj` | {ref}`tenant.contract.subject <vocab-tenant-contract-subject>` |
 | `.exception(name, **attrs)` | `vzException` | {ref}`tenant.contract.exception <vocab-tenant-contract-exception>` |
 
+## Bind aliases
+
+Lazy references, resolved closed-world at push time.
+
+| alias | target | flavor | relation |
+| --- | --- | --- | --- |
+| `service_graph=` | `vnsAbsGraph` | name | `vzRsGraphAtt` |
+
 ## APIC diagnostics
 
 States the APIC can flag on this class — it accepts the configuration and reports the inconsistency afterwards.

@@ -34,3 +34,6 @@ Accepted as keyword arguments of `.syslog_group(name)` and of `.set(**attrs)` on
 | maker | creates | position |
 | --- | --- | --- |
 | `.remote_destination(host, **attrs)` | `syslogRemoteDest` | {ref}`fabric.syslog_group.remote_destination <vocab-fabric-syslog_group-remote_destination>` |
+| `.console(**attrs)` | `syslogConsole` | {ref}`fabric.syslog_group.console <vocab-fabric-syslog_group-console>` |
+| `.file(**attrs)` | `syslogFile` | {ref}`fabric.syslog_group.file <vocab-fabric-syslog_group-file>` |
+| `.protocol_profile(**attrs)` | `syslogProf` | {ref}`fabric.syslog_group.protocol_profile <vocab-fabric-syslog_group-protocol_profile>` |

@@ -38,3 +38,4 @@ Accepted as keyword arguments of `.datetime_policy(name)` and of `.set(**attrs)`
 | maker | creates | position |
 | --- | --- | --- |
 | `.ntp_provider(name, **attrs)` | `datetimeNtpProv` | {ref}`fabric.datetime_policy.ntp_provider <vocab-fabric-datetime_policy-ntp_provider>` |
+| `.ntp_auth_key(auth_key_id, **attrs)` | `datetimeNtpAuthKey` | {ref}`fabric.datetime_policy.ntp_auth_key <vocab-fabric-datetime_policy-ntp_auth_key>` |

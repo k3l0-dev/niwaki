@@ -54,6 +54,8 @@ if TYPE_CHECKING:
     from niwaki.models._generated.enums.BgpSrcIfT import BgpSrcIfT
     from niwaki.models._generated.enums.BgpSumControlPolType import BgpSumControlPolType
     from niwaki.models._generated.enums.BgpTrustCtrlT import BgpTrustCtrlT
+    from niwaki.models._generated.enums.CallhomeUrgency import CallhomeUrgency
+    from niwaki.models._generated.enums.ConditionSeverity import ConditionSeverity
     from niwaki.models._generated.enums.DhcpAddrPreferences import DhcpAddrPreferences
     from niwaki.models._generated.enums.DhcpOwner import DhcpOwner
     from niwaki.models._generated.enums.DhcpRelayVisibility import DhcpRelayVisibility
@@ -149,6 +151,7 @@ if TYPE_CHECKING:
     from niwaki.models._generated.enums.LeakToRouteScp import LeakToRouteScp
     from niwaki.models._generated.enums.McastVer import McastVer
     from niwaki.models._generated.enums.McastVer2 import McastVer2
+    from niwaki.models._generated.enums.MonInclAction import MonInclAction
     from niwaki.models._generated.enums.MonTargetScope import MonTargetScope
     from niwaki.models._generated.enums.NdIfControl import NdIfControl
     from niwaki.models._generated.enums.NdPfxControl import NdPfxControl
@@ -184,9 +187,12 @@ if TYPE_CHECKING:
     from niwaki.models._generated.enums.RtfltAction import RtfltAction
     from niwaki.models._generated.enums.RtmapASCritT import RtmapASCritT
     from niwaki.models._generated.enums.RtmapSetCriteria import RtmapSetCriteria
+    from niwaki.models._generated.enums.SpanAdminSt import SpanAdminSt
     from niwaki.models._generated.enums.SpanDirection import SpanDirection
     from niwaki.models._generated.enums.SpanErspanDestMode import SpanErspanDestMode
     from niwaki.models._generated.enums.SviAutostate import SviAutostate
+    from niwaki.models._generated.enums.SyslogSeverity import SyslogSeverity
+    from niwaki.models._generated.enums.TacacsSwitchTacacsAudit import TacacsSwitchTacacsAudit
     from niwaki.models._generated.enums.TrackListObj import TrackListObj
     from niwaki.models._generated.enums.VmmStatsMode import VmmStatsMode
     from niwaki.models._generated.enums.VnsConnAdjType import VnsConnAdjType
@@ -3784,6 +3790,85 @@ class _TenantMakers(Cursor):
             self._invoke_maker("span_destination_group", (name,), _prune(params)),
         )
 
+    def vspan_destination_group(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> TenantVspanDestinationGroupCursor:
+        """Declare a ``spanVDestGrp`` child under the tenant level.
+
+        The VSPAN destination group contains a group of VSPAN destinations. A VSPAN destination is
+        where network traffic is sent for analysis by a network analyzer. A VSPAN destination can be
+        local or remote (VERSPAN).
+
+        Args:
+            name: The name of the VSPAN destination group.
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "TenantVspanDestinationGroupCursor",
+            self._invoke_maker("vspan_destination_group", (name,), _prune(params)),
+        )
+
+    def vspan_session(
+        self,
+        name: str,
+        *,
+        admin_state: SpanAdminSt | str | None = None,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> TenantVspanSessionCursor:
+        """Declare a ``spanVSrcGrp`` child under the tenant level.
+
+        The VSPAN source group can contain a group of VSPAN sources. A VSPAN source is where network
+        traffic is sampled. A VSPAN source can be an endpoint group (EPG), one or more ports; or
+        port traffic filtered by an EPG (access VSPAN), a Layer 2 bridge domain, or a Layer 3
+        context (fabric VSPAN).
+
+        Args:
+            name: The name of the source group.
+            admin_state: Values: ``start``, ``stop``, ``unknown``. Default: ``start``.
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "TenantVspanSessionCursor",
+            self._invoke_maker("vspan_session", (name,), _prune(params)),
+        )
+
     def monitoring_policy(
         self,
         name: str,
@@ -5604,6 +5689,52 @@ class _BdMakers(Cursor):
             self._invoke_maker("rogue_exception_mac", (exception_mac,), _prune(params)),
         )
 
+    def dhcp_relay_label(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        scope: DhcpOwner | str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        tag: PolColor | str | None = None,
+        userdom: str | None = None,
+    ) -> BdDhcpRelayLabelCursor:
+        """Declare a ``dhcpLbl`` child under the bd level.
+
+        A DHCP relay label contains a name for the label, the scope, and a DHCP option policy. The
+        scope is the owner of the relay server and the DHCP option policy supplies DHCP clients with
+        configuration parameters such as domain, nameserver, and subnet router addresses.
+
+        Args:
+            name: The DHCP relay label name. This name can be up to 64 alphanumeric characters.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            scope: Represents the target relay servers ownership Values: ``infra``, ``tenant``.
+                Default: ``infra``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            tag: Specifies the color of a policy label. Values: ``alice-blue``, ``antique-
+                white``, ``aqua``, ``aquamarine``, ``azure``, ``beige``, ``bisque``, ``black``,
+                …. Default: ``alice-blue``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "BdDhcpRelayLabelCursor",
+            self._invoke_maker("dhcp_relay_label", (name,), _prune(params)),
+        )
+
 
 class BdCursor(_BdMakers, _TenantMakers, _UniMakers):
     """Typed cursor for ``fvBD`` (bd level).
@@ -5662,10 +5793,29 @@ class BdCursor(_BdMakers, _TenantMakers, _UniMakers):
         *,
         vrf: str | Ref | None = None,
         l3out: str | Ref | None = None,
+        fhs: str | Ref | None = None,
+        nd_policy: str | Ref | None = None,
+        igmp_snoop: str | Ref | None = None,
+        mld_snoop: str | Ref | None = None,
+        dhcp_relay: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        netflow_monitor: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
+        flood_filter: str | Ref | None = None,
     ) -> BdCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        flood_filter: str | Ref | None = None,
+    ) -> BdCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -6178,6 +6328,16 @@ class ContractCursor(_ContractMakers, _TenantMakers, _UniMakers):
         Cursor.set(self, **_prune(params))
         return self
 
+    def bind(
+        self,
+        *,
+        service_graph: str | Ref | None = None,
+    ) -> ContractCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
 
 class _CustomQosPolicyMakers(Cursor):
     """Makers declared at the custom_qos_policy level (``qosCustomPol``)."""
@@ -6609,6 +6769,26 @@ class DnsServerGroupCursor(_DnsServerGroupMakers, _TenantMakers, _UniMakers):
         """Set ``dnsepgSvrGrp`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        epg: str | Ref | None = None,
+    ) -> DnsServerGroupCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        epg: str | Ref | None = None,
+    ) -> DnsServerGroupCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -8885,6 +9065,21 @@ class L3outCursor(_L3outMakers, _TenantMakers, _UniMakers):
         Cursor.bind_dn(self, **_prune(params))
         return self
 
+    def dampening(self, rtctrlprofile: str | Ref) -> L3outCursor:
+        """Reference the rtctrlProfile *rtctrlprofile* through ``l3extRsDampeningPol`` (lazy)."""
+        Cursor._verb(self, "dampening", rtctrlprofile)
+        return self
+
+    def interleak(self, rtctrlprofile: str | Ref) -> L3outCursor:
+        """Reference the rtctrlProfile *rtctrlprofile* through ``l3extRsInterleakPol`` (lazy)."""
+        Cursor._verb(self, "interleak", rtctrlprofile)
+        return self
+
+    def redistribute(self, rtctrlprofile: str | Ref) -> L3outCursor:
+        """Reference the rtctrlProfile *rtctrlprofile* through ``l3extRsRedistributePol`` (lazy)."""
+        Cursor._verb(self, "redistribute", rtctrlprofile)
+        return self
+
 
 class _LogicalDeviceMakers(Cursor):
     """Makers declared at the logical_device level (``vnsLDevVip``)."""
@@ -9549,6 +9744,264 @@ class _TenantMonitoringPolicyMakers(Cursor):
         return cast(
             "TargetCursor",
             self._invoke_maker("target", (target_scope,), _prune(params)),
+        )
+
+    def syslog_source(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        include_action: frozenset[MonInclAction] | set[MonInclAction] | str | None = None,
+        min_severity: SyslogSeverity | str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> TenantMonitoringPolicySyslogSourceCursor:
+        """Declare a ``syslogSrc`` child under the monitoring_policy level.
+
+        The syslog source configures a syslog source that specifies the minimum severity of items to
+        be sent as syslog messages to the syslog servers in the destination group.
+
+        Args:
+            name: The name for the system logging source.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            include_action: Default: ``PydanticUndefined``.
+            min_severity: The minimum severity level of messages to be sent. Values: ``alerts``,
+                ``critical``, ``debugging``, ``emergencies``, ``errors``, ``information``,
+                ``notifications``, ``warnings``. Default: ``warnings``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "TenantMonitoringPolicySyslogSourceCursor",
+            self._invoke_maker("syslog_source", (name,), _prune(params)),
+        )
+
+    def snmp_source(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        include_action: frozenset[MonInclAction] | set[MonInclAction] | str | None = None,
+        min_severity: ConditionSeverity | str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> TenantMonitoringPolicySnmpSourceCursor:
+        """Declare a ``snmpSrc`` child under the monitoring_policy level.
+
+        The SNMP source profile determines the fault information, severity level, and destination
+        for sending messages to the SNMP destination. SNMP is an application-layer protocol that
+        provides a message format for communication between SNMP managers and agents.
+
+        Args:
+            name: The name for the SNMP source. This name can be between 1 and 64 alphanumeric
+                characters.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            include_action: The options to include for the SNMP source. Default:
+                ``PydanticUndefined``.
+            min_severity: The minimum severity level of SNMP traps. SNMP traps enable an agent
+                to notify the management station of significant events by way of an unsolicited
+                SNMP message. Values: ``cleared``, ``critical``, ``info``, ``major``, ``minor``,
+                ``warning``. Default: ``info``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "TenantMonitoringPolicySnmpSourceCursor",
+            self._invoke_maker("snmp_source", (name,), _prune(params)),
+        )
+
+    def callhome_source(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        include_action: frozenset[MonInclAction] | set[MonInclAction] | str | None = None,
+        display_name: str | None = None,
+        message_severity: CallhomeUrgency | str | None = None,
+        userdom: str | None = None,
+    ) -> TenantMonitoringPolicyCallhomeSourceCursor:
+        """Declare a ``callhomeSrc`` child under the monitoring_policy level.
+
+        The call home source profile determines the information to deliver and the urgency level for
+        sending email-based alert notifications to a call home destination. A range of message
+        formats are available for compatibility with pager services or XML-based automated parsing
+        applications.
+
+        Args:
+            name: The name for the source.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            include_action: Default: ``PydanticUndefined``.
+            message_severity: The severity level for messages generated from a specific source.
+                Values: ``alert``, ``critical``, ``debug``, ``emergency``, ``error``, ``info``,
+                ``notice``, ``warning``. Default: ``alert``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "TenantMonitoringPolicyCallhomeSourceCursor",
+            self._invoke_maker("callhome_source", (name,), _prune(params)),
+        )
+
+    def smart_callhome_source(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> TenantMonitoringPolicySmartCallhomeSourceCursor:
+        """Declare a ``callhomeSmartSrc`` child under the monitoring_policy level.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "TenantMonitoringPolicySmartCallhomeSourceCursor",
+            self._invoke_maker("smart_callhome_source", (), _prune(params)),
+        )
+
+    def tacacs_source(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        include_action: frozenset[MonInclAction] | set[MonInclAction] | str | None = None,
+        min_sev: ConditionSeverity | str | None = None,
+        display_name: str | None = None,
+        switch_tacacs_audit: TacacsSwitchTacacsAudit | str | None = None,
+        userdom: str | None = None,
+    ) -> TenantMonitoringPolicyTacacsSourceCursor:
+        """Declare a ``tacacsSrc`` child under the monitoring_policy level.
+
+        Args:
+            name: The name of the object.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            include_action: The information to include for the call home source. Default:
+                ``PydanticUndefined``.
+            min_sev: Values: ``cleared``, ``critical``, ``info``, ``major``, ``minor``,
+                ``warning``. Default: ``info``.
+            switch_tacacs_audit: Values: ``disabled``, ``enabled``. Default: ``disabled``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "TenantMonitoringPolicyTacacsSourceCursor",
+            self._invoke_maker("tacacs_source", (name,), _prune(params)),
+        )
+
+    def lifecycle_policy(
+        self,
+        condition_code: int | str,
+        *,
+        annotation: str | None = None,
+        clear_interval: int | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        retain: int | str | None = None,
+        soaking_interval: int | None = None,
+        userdom: str | None = None,
+    ) -> TenantMonitoringPolicyLifecyclePolicyCursor:
+        """Declare a ``faultLcP`` child under the monitoring_policy level.
+
+        The fault lifecycle policy specifies the timer intervals of faults in their lifecycle. This
+        policy can be specified in a common, default, or custom monitoring policy. Custom and
+        default monitoring policies can be applied globally, per monitoring object or to a group of
+        monitoring objects.
+
+        Args:
+            condition_code: Contains a category code that helps to categorize and identify
+                different types of fault lifecycle policy objects.
+            annotation: User annotation. Suggested format orchestrator:value
+            clear_interval: The time period between when the system detects the resolution a
+                fault and when the fault severity is set to 'cleared'. This interval refers to
+                the time between the Soaking-Clearing and Retaining fault states. Default:
+                ``120``.
+            description: Specifies the description of a policy component.
+            retain: The time period between when the system sets the fault severity to 'cleared'
+                and when the fault object is deleted. This interval refers to the time between
+                the Retaining fault state and when it is deleted. Default: ``3600``.
+            soaking_interval: The time period between when the system creates the fault with the
+                initial severity and when it sets the fault to the target severity. This
+                interval refers to the time between the Soaking and Raised fault states.
+                Default: ``120``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "condition_code",
+            )
+        }
+        return cast(
+            "TenantMonitoringPolicyLifecyclePolicyCursor",
+            self._invoke_maker("lifecycle_policy", (condition_code,), _prune(params)),
+        )
+
+    def stats_limit_pol(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        include_action: frozenset[MonInclAction] | set[MonInclAction] | str | None = None,
+        instance_limit: int | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> TenantMonitoringPolicyStatsLimitPolCursor:
+        """Declare a ``statslimitInstLimitPol`` child under the monitoring_policy level.
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            include_action: Default: ``PydanticUndefined``.
+            instance_limit: Default: ``514``.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "TenantMonitoringPolicyStatsLimitPolCursor",
+            self._invoke_maker("stats_limit_pol", (), _prune(params)),
         )
 
 
@@ -12181,10 +12634,33 @@ class VrfCursor(_VrfMakers, _TenantMakers, _UniMakers):
         self,
         *,
         l3out: str | Ref | None = None,
+        bgp_timers: str | Ref | None = None,
+        bgp_address_family: str | Ref | None = None,
+        eigrp_address_family: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        route_tag: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
+        vrf_validation: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
     ) -> VrfCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        route_control_profile: str | Ref | None = None,
+    ) -> VrfCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+    def ospf_timers(self, ospfctxpol: str | Ref) -> VrfCursor:
+        """Reference the ospfCtxPol *ospfctxpol* through ``fvRsCtxToOspfCtxPol`` (lazy)."""
+        Cursor._verb(self, "ospf_timers", ospfctxpol)
         return self
 
 
@@ -12225,6 +12701,215 @@ class VrfValidationPolicyCursor(_TenantMakers, _UniMakers):
         """Set ``l3extVrfValidationPol`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
+        return self
+
+
+class _TenantVspanDestinationGroupMakers(Cursor):
+    """Makers declared at the vspan_destination_group level (``spanVDestGrp``)."""
+
+    __slots__ = ()
+
+    def vspan_vdestination(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> TenantVspanDestinationGroupVspanVdestinationCursor:
+        """Declare a ``spanVDest`` child under the vspan_destination_group level.
+
+        The VSPAN destination is where network traffic is sent for analysis by a network analyzer. A
+        VSPAN destination can be local or remote (VERSPAN). When you create a traffic monitoring
+        session, you must select a VSPAN source and a VSPAN destination.
+
+        Args:
+            name: The name of the destination.
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "TenantVspanDestinationGroupVspanVdestinationCursor",
+            self._invoke_maker("vspan_vdestination", (name,), _prune(params)),
+        )
+
+
+class TenantVspanDestinationGroupCursor(
+    _TenantVspanDestinationGroupMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``spanVDestGrp`` (vspan_destination_group level).
+
+    Position: ``uni.tenant.vspan_destination_group``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> TenantVspanDestinationGroupCursor:
+        """Set ``spanVDestGrp`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class _TenantVspanSessionMakers(Cursor):
+    """Makers declared at the vspan_session level (``spanVSrcGrp``)."""
+
+    __slots__ = ()
+
+    def vspan_vsource(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        direction_ingress_egress_both: SpanDirection | str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> TenantVspanSessionVspanVsourceCursor:
+        """Declare a ``spanVSrc`` child under the vspan_session level.
+
+        The VSPAN source, which is where traffic is sampled. A VSPAN source can be an endpoint group
+        (EPG), one or more ports, or port traffic filtered by an EPG (Access VSPAN), a Layer 2
+        bridge domain, or a Layer 3 context (Fabric VSPAN).
+
+        Args:
+            name: The name of the source.
+            description: Specifies a description of the policy definition.
+            direction_ingress_egress_both: The direction of the packets to monitor Values:
+                ``both``, ``in``, ``out``. Default: ``both``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "TenantVspanSessionVspanVsourceCursor",
+            self._invoke_maker("vspan_vsource", (name,), _prune(params)),
+        )
+
+    def span_label(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        tag: PolColor | str | None = None,
+        userdom: str | None = None,
+    ) -> TenantVspanSessionSpanLabelCursor:
+        """Declare a ``spanSpanLbl`` child under the vspan_session level.
+
+        The SPAN label is used for SPAN label parameters.
+
+        Args:
+            name: The name of the label that is used to match SPAN sources with SPAN
+                destination(s).
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            tag: Specifies the color of a policy label. Values: ``alice-blue``, ``antique-
+                white``, ``aqua``, ``aquamarine``, ``azure``, ``beige``, ``bisque``, ``black``,
+                …. Default: ``alice-blue``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "TenantVspanSessionSpanLabelCursor",
+            self._invoke_maker("span_label", (name,), _prune(params)),
+        )
+
+
+class TenantVspanSessionCursor(_TenantVspanSessionMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``spanVSrcGrp`` (vspan_session level).
+
+    Position: ``uni.tenant.vspan_session``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        admin_state: SpanAdminSt | str | None = None,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> TenantVspanSessionCursor:
+        """Set ``spanVSrcGrp`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        filter_group: str | Ref | None = None,
+    ) -> TenantVspanSessionCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        filter_group: str | Ref | None = None,
+    ) -> TenantVspanSessionCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -13921,6 +14606,66 @@ class AuthServerGroupServerCursor(
         return self
 
 
+class BdDhcpRelayLabelCursor(_BdMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``dhcpLbl`` (dhcp_relay_label level).
+
+    Position: ``uni.tenant.bd.dhcp_relay_label``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        scope: DhcpOwner | str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        tag: PolColor | str | None = None,
+        userdom: str | None = None,
+    ) -> BdDhcpRelayLabelCursor:
+        """Set ``dhcpLbl`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        dhcp_option_policy: str | Ref | None = None,
+        vrf: str | Ref | None = None,
+        l3out: str | Ref | None = None,
+        fhs: str | Ref | None = None,
+        nd_policy: str | Ref | None = None,
+        igmp_snoop: str | Ref | None = None,
+        mld_snoop: str | Ref | None = None,
+        dhcp_relay: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        netflow_monitor: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
+        flood_filter: str | Ref | None = None,
+    ) -> BdDhcpRelayLabelCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        flood_filter: str | Ref | None = None,
+    ) -> BdDhcpRelayLabelCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
 class LegacyModeCursor(_BdMakers, _TenantMakers, _UniMakers):
     """Typed cursor for ``fvAccP`` (legacy_mode level).
 
@@ -13954,10 +14699,29 @@ class LegacyModeCursor(_BdMakers, _TenantMakers, _UniMakers):
         *,
         vrf: str | Ref | None = None,
         l3out: str | Ref | None = None,
+        fhs: str | Ref | None = None,
+        nd_policy: str | Ref | None = None,
+        igmp_snoop: str | Ref | None = None,
+        mld_snoop: str | Ref | None = None,
+        dhcp_relay: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        netflow_monitor: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
+        flood_filter: str | Ref | None = None,
     ) -> LegacyModeCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        flood_filter: str | Ref | None = None,
+    ) -> LegacyModeCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -13991,10 +14755,29 @@ class NdRaSubnetCursor(_BdMakers, _TenantMakers, _UniMakers):
         *,
         vrf: str | Ref | None = None,
         l3out: str | Ref | None = None,
+        fhs: str | Ref | None = None,
+        nd_policy: str | Ref | None = None,
+        igmp_snoop: str | Ref | None = None,
+        mld_snoop: str | Ref | None = None,
+        dhcp_relay: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        netflow_monitor: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
+        flood_filter: str | Ref | None = None,
     ) -> NdRaSubnetCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        flood_filter: str | Ref | None = None,
+    ) -> NdRaSubnetCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -14059,10 +14842,29 @@ class BdPimCursor(_BdPimMakers, _BdMakers, _TenantMakers, _UniMakers):
         *,
         vrf: str | Ref | None = None,
         l3out: str | Ref | None = None,
+        fhs: str | Ref | None = None,
+        nd_policy: str | Ref | None = None,
+        igmp_snoop: str | Ref | None = None,
+        mld_snoop: str | Ref | None = None,
+        dhcp_relay: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        netflow_monitor: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
+        flood_filter: str | Ref | None = None,
     ) -> BdPimCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        flood_filter: str | Ref | None = None,
+    ) -> BdPimCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -14096,10 +14898,29 @@ class BdRogueExceptionMacCursor(_BdMakers, _TenantMakers, _UniMakers):
         *,
         vrf: str | Ref | None = None,
         l3out: str | Ref | None = None,
+        fhs: str | Ref | None = None,
+        nd_policy: str | Ref | None = None,
+        igmp_snoop: str | Ref | None = None,
+        mld_snoop: str | Ref | None = None,
+        dhcp_relay: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        netflow_monitor: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
+        flood_filter: str | Ref | None = None,
     ) -> BdRogueExceptionMacCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        flood_filter: str | Ref | None = None,
+    ) -> BdRogueExceptionMacCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -14248,10 +15069,29 @@ class BdSubnetCursor(_BdSubnetMakers, _BdMakers, _TenantMakers, _UniMakers):
         l3out: str | Ref | None = None,
         nd_ra_prefix_policy: str | Ref | None = None,
         vrf: str | Ref | None = None,
+        fhs: str | Ref | None = None,
+        nd_policy: str | Ref | None = None,
+        igmp_snoop: str | Ref | None = None,
+        mld_snoop: str | Ref | None = None,
+        dhcp_relay: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        netflow_monitor: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
+        flood_filter: str | Ref | None = None,
     ) -> BdSubnetCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        flood_filter: str | Ref | None = None,
+    ) -> BdSubnetCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -14361,6 +15201,16 @@ class ContractExceptionCursor(_ContractMakers, _TenantMakers, _UniMakers):
         """Set ``vzException`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        service_graph: str | Ref | None = None,
+    ) -> ContractExceptionCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
         return self
 
 
@@ -14587,6 +15437,7 @@ class ContractSubjectCursor(_ContractSubjectMakers, _ContractMakers, _TenantMake
         self,
         *,
         filter: str | Ref | None = None,
+        service_graph: str | Ref | None = None,
     ) -> ContractSubjectCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -14823,6 +15674,26 @@ class DnsServerGroupServerCursor(
         """Set ``dnsepgSvr`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        epg: str | Ref | None = None,
+    ) -> DnsServerGroupServerCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        epg: str | Ref | None = None,
+    ) -> DnsServerGroupServerCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -16650,6 +17521,7 @@ class L3outExternalEpgCursor(_L3outExternalEpgMakers, _L3outMakers, _TenantMaker
         self,
         *,
         contract_master: str | Ref | None = None,
+        imported_contract: str | Ref | None = None,
         endpoint_security_group: str | Ref | None = None,
         external_epg: str | Ref | None = None,
         custom_qos_policy: str | Ref | None = None,
@@ -16694,6 +17566,11 @@ class L3outExternalEpgCursor(_L3outExternalEpgMakers, _L3outMakers, _TenantMaker
     def consume(self, contract: str | Ref) -> L3outExternalEpgCursor:
         """Reference the vzBrCP *contract* through ``fvRsCons`` (lazy)."""
         Cursor._verb(self, "consume", contract)
+        return self
+
+    def intra_epg(self, contract: str | Ref) -> L3outExternalEpgCursor:
+        """Reference the vzBrCP *contract* through ``fvRsIntraEpg`` (lazy)."""
+        Cursor._verb(self, "intra_epg", contract)
         return self
 
 
@@ -16924,7 +17801,7 @@ class _L3outNodeProfileMakers(Cursor):
         name: str | None = None,
         display_name: str | None = None,
         userdom: str | None = None,
-    ) -> ProtocolProfileCursor:
+    ) -> NodeProfileProtocolProfileCursor:
         """Declare a ``bgpProtP`` child under the node_profile level.
 
         Protocol profile
@@ -16935,7 +17812,7 @@ class _L3outNodeProfileMakers(Cursor):
         """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
-            "ProtocolProfileCursor",
+            "NodeProfileProtocolProfileCursor",
             self._invoke_maker("protocol_profile", (), _prune(params)),
         )
 
@@ -17799,6 +18676,283 @@ class _InBandEpgMakers(Cursor):
             self._invoke_maker("static_route", (ip_address,), _prune(params)),
         )
 
+    def consumer_contract_label(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        tag: PolColor | str | None = None,
+        userdom: str | None = None,
+    ) -> InBandEpgConsumerContractLabelCursor:
+        """Declare a ``vzConsCtrctLbl`` child under the in_band_epg level.
+
+        A consumer contract label. A contract label can be parented by the relation between an
+        endpoint group (EPG) and security group. The EPG is associated with a group and lists all
+        contracts it provides out of the group, as well as, optionally, contracts that it chooses to
+        consume.
+
+        Args:
+            name: Naming property — forms the object's RN.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            tag: Specifies the color of a policy label. Values: ``alice-blue``, ``antique-
+                white``, ``aqua``, ``aquamarine``, ``azure``, ``beige``, ``bisque``, ``black``,
+                …. Default: ``alice-blue``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "InBandEpgConsumerContractLabelCursor",
+            self._invoke_maker("consumer_contract_label", (name,), _prune(params)),
+        )
+
+    def consumer_label(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        tag: PolColor | str | None = None,
+        userdom: str | None = None,
+    ) -> InBandEpgConsumerLabelCursor:
+        """Declare a ``vzConsLbl`` child under the in_band_epg level.
+
+        A label used by consumers to filter the providers. The label can be parented as follows: *
+        By the consumer endpoint group. * By the relation between the consumer endpoint group and
+        contract. * By the relation between the contract interface and contract.
+
+        Args:
+            name: Naming property — forms the object's RN.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            tag: Specifies the color of a policy label. Values: ``alice-blue``, ``antique-
+                white``, ``aqua``, ``aquamarine``, ``azure``, ``beige``, ``bisque``, ``black``,
+                …. Default: ``alice-blue``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "InBandEpgConsumerLabelCursor",
+            self._invoke_maker("consumer_label", (name,), _prune(params)),
+        )
+
+    def consumer_subject_label(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        complement: bool | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        tag: PolColor | str | None = None,
+        userdom: str | None = None,
+    ) -> InBandEpgConsumerSubjectLabelCursor:
+        """Declare a ``vzConsSubjLbl`` child under the in_band_epg level.
+
+        A consumer subject label. In general, a subject label is used as a classification criteria
+        for subjects being consumed/provided by the endpoint groups (EPGs) participating in the
+        contract. The label identifies a subject being consumed by a consumer. It can be parented by
+        2 different methods.
+
+        Args:
+            name: The subject label name.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            complement: Specify the behavior of the label. @@@ 1. true
+                &amp;amp;amp;amp;amp;amp;amp;amp;&amp;amp;amp;amp;amp;amp;amp;amp;
+                parent::MatchT==AND: Then this label should not match for @@@ the compound
+                subject label statement across consumers to be true @@@ 2. Default: ``False``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            tag: Specifies the color of a policy label. Values: ``alice-blue``, ``antique-
+                white``, ``aqua``, ``aquamarine``, ``azure``, ``beige``, ``bisque``, ``black``,
+                …. Default: ``alice-blue``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "InBandEpgConsumerSubjectLabelCursor",
+            self._invoke_maker("consumer_subject_label", (name,), _prune(params)),
+        )
+
+    def provider_contract_label(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        tag: PolColor | str | None = None,
+        userdom: str | None = None,
+    ) -> InBandEpgProviderContractLabelCursor:
+        """Declare a ``vzProvCtrctLbl`` child under the in_band_epg level.
+
+        A label identifying a contract. A contract label can be parented by the relation between an
+        endpoint group (EPG) and security group. The EPG is associated with a group and lists all
+        contracts it provides out of the group, as well as, optionally, contracts that it chooses to
+        consume.
+
+        Args:
+            name: Naming property — forms the object's RN.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            tag: Specifies the color of a policy label. Values: ``alice-blue``, ``antique-
+                white``, ``aqua``, ``aquamarine``, ``azure``, ``beige``, ``bisque``, ``black``,
+                …. Default: ``alice-blue``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "InBandEpgProviderContractLabelCursor",
+            self._invoke_maker("provider_contract_label", (name,), _prune(params)),
+        )
+
+    def provider_label(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        complement: bool | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        tag: PolColor | str | None = None,
+        userdom: str | None = None,
+    ) -> InBandEpgProviderLabelCursor:
+        """Declare a ``vzProvLbl`` child under the in_band_epg level.
+
+        A label used by a provider for specifying its identity. The parent can be either the
+        provider endpoint group or the relation between the provider endpoint group and a contract.
+        A consumer with no label will consume from all the providers of the contract regardless of
+        the provider label.
+
+        Args:
+            name: Naming property — forms the object's RN.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            complement: Specify the behavior of the label. @@@ 1. true
+                &amp;amp;amp;amp;amp;amp;amp;amp;&amp;amp;amp;amp;amp;amp;amp;amp;
+                parent::MatchT==AND: Then this label should not match for @@@ the compound
+                subject label statement across consumers to be true @@@ 2. Default: ``False``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            tag: Specifies the color of a policy label. Values: ``alice-blue``, ``antique-
+                white``, ``aqua``, ``aquamarine``, ``azure``, ``beige``, ``bisque``, ``black``,
+                …. Default: ``alice-blue``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "InBandEpgProviderLabelCursor",
+            self._invoke_maker("provider_label", (name,), _prune(params)),
+        )
+
+    def provider_subject_label(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        complement: bool | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        tag: PolColor | str | None = None,
+        userdom: str | None = None,
+    ) -> InBandEpgProviderSubjectLabelCursor:
+        """Declare a ``vzProvSubjLbl`` child under the in_band_epg level.
+
+        A subject label is used as classification criteria for subjects being consumed/provided by
+        the endpoint groups (EPGs) participating in the contract. The label identifies a subject
+        being provided by a provider. It can be parented by 2 different methods.
+
+        Args:
+            name: The provider label name.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies a description of the policy definition.
+            complement: Specify the behavior of the label. @@@ 1. true
+                &amp;amp;amp;amp;amp;amp;amp;amp;&amp;amp;amp;amp;amp;amp;amp;amp;
+                parent::MatchT==AND: Then this label should not match for @@@ the compound
+                subject label statement across consumers to be true @@@ 2. Default: ``False``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            tag: Specifies the color of a policy label. Values: ``alice-blue``, ``antique-
+                white``, ``aqua``, ``aquamarine``, ``azure``, ``beige``, ``bisque``, ``black``,
+                …. Default: ``alice-blue``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "InBandEpgProviderSubjectLabelCursor",
+            self._invoke_maker("provider_subject_label", (name,), _prune(params)),
+        )
+
 
 class InBandEpgCursor(_InBandEpgMakers, _ManagementProfileMakers, _TenantMakers, _UniMakers):
     """Typed cursor for ``mgmtInB`` (in_band_epg level).
@@ -17836,6 +18990,7 @@ class InBandEpgCursor(_InBandEpgMakers, _ManagementProfileMakers, _TenantMakers,
         bd: str | Ref | None = None,
         contract_master: str | Ref | None = None,
         imported_contract: str | Ref | None = None,
+        taboo_contract: str | Ref | None = None,
         custom_qos_policy: str | Ref | None = None,
         static_node: str | Ref | None = None,
     ) -> InBandEpgCursor:
@@ -17863,6 +19018,11 @@ class InBandEpgCursor(_InBandEpgMakers, _ManagementProfileMakers, _TenantMakers,
     def consume(self, contract: str | Ref) -> InBandEpgCursor:
         """Reference the vzBrCP *contract* through ``fvRsCons`` (lazy)."""
         Cursor._verb(self, "consume", contract)
+        return self
+
+    def intra_epg(self, contract: str | Ref) -> InBandEpgCursor:
+        """Reference the vzBrCP *contract* through ``fvRsIntraEpg`` (lazy)."""
+        Cursor._verb(self, "intra_epg", contract)
         return self
 
 
@@ -18097,6 +19257,212 @@ class MatchPrefixCursor(_MatchRuleMakers, _TenantMakers, _UniMakers):
         userdom: str | None = None,
     ) -> MatchPrefixCursor:
         """Set ``rtctrlMatchRtDest`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class TenantMonitoringPolicyCallhomeSourceCursor(
+    _TenantMonitoringPolicyMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``callhomeSrc`` (callhome_source level).
+
+    Position: ``uni.tenant.monitoring_policy.callhome_source``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        include_action: frozenset[MonInclAction] | set[MonInclAction] | str | None = None,
+        display_name: str | None = None,
+        message_severity: CallhomeUrgency | str | None = None,
+        userdom: str | None = None,
+    ) -> TenantMonitoringPolicyCallhomeSourceCursor:
+        """Set ``callhomeSrc`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class TenantMonitoringPolicyLifecyclePolicyCursor(
+    _TenantMonitoringPolicyMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``faultLcP`` (lifecycle_policy level).
+
+    Position: ``uni.tenant.monitoring_policy.lifecycle_policy``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        clear_interval: int | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        retain: int | str | None = None,
+        soaking_interval: int | None = None,
+        userdom: str | None = None,
+    ) -> TenantMonitoringPolicyLifecyclePolicyCursor:
+        """Set ``faultLcP`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class TenantMonitoringPolicySmartCallhomeSourceCursor(
+    _TenantMonitoringPolicyMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``callhomeSmartSrc`` (smart_callhome_source level).
+
+    Position: ``uni.tenant.monitoring_policy.smart_callhome_source``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> TenantMonitoringPolicySmartCallhomeSourceCursor:
+        """Set ``callhomeSmartSrc`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class TenantMonitoringPolicySnmpSourceCursor(
+    _TenantMonitoringPolicyMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``snmpSrc`` (snmp_source level).
+
+    Position: ``uni.tenant.monitoring_policy.snmp_source``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        include_action: frozenset[MonInclAction] | set[MonInclAction] | str | None = None,
+        min_severity: ConditionSeverity | str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> TenantMonitoringPolicySnmpSourceCursor:
+        """Set ``snmpSrc`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class TenantMonitoringPolicyStatsLimitPolCursor(
+    _TenantMonitoringPolicyMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``statslimitInstLimitPol`` (stats_limit_pol level).
+
+    Position: ``uni.tenant.monitoring_policy.stats_limit_pol``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        include_action: frozenset[MonInclAction] | set[MonInclAction] | str | None = None,
+        instance_limit: int | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> TenantMonitoringPolicyStatsLimitPolCursor:
+        """Set ``statslimitInstLimitPol`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class TenantMonitoringPolicySyslogSourceCursor(
+    _TenantMonitoringPolicyMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``syslogSrc`` (syslog_source level).
+
+    Position: ``uni.tenant.monitoring_policy.syslog_source``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        include_action: frozenset[MonInclAction] | set[MonInclAction] | str | None = None,
+        min_severity: SyslogSeverity | str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> TenantMonitoringPolicySyslogSourceCursor:
+        """Set ``syslogSrc`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class TenantMonitoringPolicyTacacsSourceCursor(
+    _TenantMonitoringPolicyMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``tacacsSrc`` (tacacs_source level).
+
+    Position: ``uni.tenant.monitoring_policy.tacacs_source``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        include_action: frozenset[MonInclAction] | set[MonInclAction] | str | None = None,
+        min_sev: ConditionSeverity | str | None = None,
+        display_name: str | None = None,
+        switch_tacacs_audit: TacacsSwitchTacacsAudit | str | None = None,
+        userdom: str | None = None,
+    ) -> TenantMonitoringPolicyTacacsSourceCursor:
+        """Set ``tacacsSrc`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
         return self
@@ -18467,6 +19833,7 @@ class OobContractSubjectCursor(
         self,
         *,
         filter: str | Ref | None = None,
+        service_graph: str | Ref | None = None,
     ) -> OobContractSubjectCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -19947,10 +21314,28 @@ class DnsLabelCursor(_VrfMakers, _TenantMakers, _UniMakers):
         self,
         *,
         l3out: str | Ref | None = None,
+        bgp_timers: str | Ref | None = None,
+        bgp_address_family: str | Ref | None = None,
+        eigrp_address_family: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        route_tag: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
+        vrf_validation: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
     ) -> DnsLabelCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        route_control_profile: str | Ref | None = None,
+    ) -> DnsLabelCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -20052,10 +21437,28 @@ class FallbackRouteGroupCursor(_FallbackRouteGroupMakers, _VrfMakers, _TenantMak
         self,
         *,
         l3out: str | Ref | None = None,
+        bgp_timers: str | Ref | None = None,
+        bgp_address_family: str | Ref | None = None,
+        eigrp_address_family: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        route_tag: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
+        vrf_validation: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
     ) -> FallbackRouteGroupCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        route_control_profile: str | Ref | None = None,
+    ) -> FallbackRouteGroupCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -20088,10 +21491,28 @@ class GlobalVrfNameCursor(_VrfMakers, _TenantMakers, _UniMakers):
         self,
         *,
         l3out: str | Ref | None = None,
+        bgp_timers: str | Ref | None = None,
+        bgp_address_family: str | Ref | None = None,
+        eigrp_address_family: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        route_tag: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
+        vrf_validation: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
     ) -> GlobalVrfNameCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        route_control_profile: str | Ref | None = None,
+    ) -> GlobalVrfNameCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -20175,10 +21596,28 @@ class IgmpCursor(_IgmpMakers, _VrfMakers, _TenantMakers, _UniMakers):
         self,
         *,
         l3out: str | Ref | None = None,
+        bgp_timers: str | Ref | None = None,
+        bgp_address_family: str | Ref | None = None,
+        eigrp_address_family: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        route_tag: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
+        vrf_validation: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
     ) -> IgmpCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        route_control_profile: str | Ref | None = None,
+    ) -> IgmpCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -20321,10 +21760,28 @@ class LeakRoutesCursor(_LeakRoutesMakers, _VrfMakers, _TenantMakers, _UniMakers)
         self,
         *,
         l3out: str | Ref | None = None,
+        bgp_timers: str | Ref | None = None,
+        bgp_address_family: str | Ref | None = None,
+        eigrp_address_family: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        route_tag: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
+        vrf_validation: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
     ) -> LeakRoutesCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        route_control_profile: str | Ref | None = None,
+    ) -> LeakRoutesCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -20584,10 +22041,28 @@ class VrfPimCursor(_VrfPimMakers, _VrfMakers, _TenantMakers, _UniMakers):
         self,
         *,
         l3out: str | Ref | None = None,
+        bgp_timers: str | Ref | None = None,
+        bgp_address_family: str | Ref | None = None,
+        eigrp_address_family: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        route_tag: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
+        vrf_validation: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
     ) -> VrfPimCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        route_control_profile: str | Ref | None = None,
+    ) -> VrfPimCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -20824,10 +22299,28 @@ class Pim6Cursor(_Pim6Makers, _VrfMakers, _TenantMakers, _UniMakers):
         self,
         *,
         l3out: str | Ref | None = None,
+        bgp_timers: str | Ref | None = None,
+        bgp_address_family: str | Ref | None = None,
+        eigrp_address_family: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        route_tag: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
+        vrf_validation: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
     ) -> Pim6Cursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        route_control_profile: str | Ref | None = None,
+    ) -> Pim6Cursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -20863,10 +22356,28 @@ class RouteDeploymentCursor(_VrfMakers, _TenantMakers, _UniMakers):
         self,
         *,
         l3out: str | Ref | None = None,
+        bgp_timers: str | Ref | None = None,
+        bgp_address_family: str | Ref | None = None,
+        eigrp_address_family: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        route_tag: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
+        vrf_validation: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
     ) -> RouteDeploymentCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        route_control_profile: str | Ref | None = None,
+    ) -> RouteDeploymentCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -20900,10 +22411,28 @@ class RouteSummarizationCursor(_VrfMakers, _TenantMakers, _UniMakers):
         self,
         *,
         l3out: str | Ref | None = None,
+        bgp_timers: str | Ref | None = None,
+        bgp_address_family: str | Ref | None = None,
+        eigrp_address_family: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        route_tag: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
+        vrf_validation: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
     ) -> RouteSummarizationCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        route_control_profile: str | Ref | None = None,
+    ) -> RouteSummarizationCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -20992,10 +22521,28 @@ class RouteTargetProfileCursor(_RouteTargetProfileMakers, _VrfMakers, _TenantMak
         self,
         *,
         l3out: str | Ref | None = None,
+        bgp_timers: str | Ref | None = None,
+        bgp_address_family: str | Ref | None = None,
+        eigrp_address_family: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        route_tag: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
+        vrf_validation: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
     ) -> RouteTargetProfileCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        route_control_profile: str | Ref | None = None,
+    ) -> RouteTargetProfileCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -21068,10 +22615,28 @@ class SnmpContextCursor(_SnmpContextMakers, _VrfMakers, _TenantMakers, _UniMaker
         self,
         *,
         l3out: str | Ref | None = None,
+        bgp_timers: str | Ref | None = None,
+        bgp_address_family: str | Ref | None = None,
+        eigrp_address_family: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        route_tag: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
+        vrf_validation: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
     ) -> SnmpContextCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        route_control_profile: str | Ref | None = None,
+    ) -> SnmpContextCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -21390,10 +22955,28 @@ class VzanyCursor(_VzanyMakers, _VrfMakers, _TenantMakers, _UniMakers):
         *,
         imported_contract: str | Ref | None = None,
         l3out: str | Ref | None = None,
+        bgp_timers: str | Ref | None = None,
+        bgp_address_family: str | Ref | None = None,
+        eigrp_address_family: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        route_tag: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
+        vrf_validation: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
     ) -> VzanyCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        route_control_profile: str | Ref | None = None,
+    ) -> VzanyCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
         return self
 
     def provide(self, contract: str | Ref) -> VzanyCursor:
@@ -21404,6 +22987,206 @@ class VzanyCursor(_VzanyMakers, _VrfMakers, _TenantMakers, _UniMakers):
     def consume(self, contract: str | Ref) -> VzanyCursor:
         """Reference the vzBrCP *contract* through ``vzRsAnyToCons`` (lazy)."""
         Cursor._verb(self, "consume", contract)
+        return self
+
+
+class _TenantVspanDestinationGroupVspanVdestinationMakers(Cursor):
+    """Makers declared at the vspan_vdestination level (``spanVDest``)."""
+
+    __slots__ = ()
+
+    def vspan_destination_epg_summary(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        dscp: int | str | None = None,
+        destination_ip: str | None = None,
+        flow_id: int | None = None,
+        mode: SpanErspanDestMode | str | None = None,
+        mtu: int | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        source_ip_of_erspan_packet: str | None = None,
+        time_to_live: int | str | None = None,
+        userdom: str | None = None,
+        vrf: str | None = None,
+    ) -> TenantVspanDestinationGroupVspanVdestinationVspanDestinationEpgSummaryCursor:
+        """Declare a ``spanVEpgSummary`` child under the vspan_vdestination level.
+
+        The VEpg summary.
+
+        Args:
+            description: Specifies a description of the policy definition.
+            dscp: Default: ``unspecified``.
+            flow_id: Default: ``1``.
+            mode: Values: ``not-visible``, ``visible``. Default: ``not-visible``.
+            mtu: Default: ``1518``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            time_to_live: Default: ``64``.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "TenantVspanDestinationGroupVspanVdestinationVspanDestinationEpgSummaryCursor",
+            self._invoke_maker("vspan_destination_epg_summary", (), _prune(params)),
+        )
+
+
+class TenantVspanDestinationGroupVspanVdestinationCursor(
+    _TenantVspanDestinationGroupVspanVdestinationMakers,
+    _TenantVspanDestinationGroupMakers,
+    _TenantMakers,
+    _UniMakers,
+):
+    """Typed cursor for ``spanVDest`` (vspan_vdestination level).
+
+    Position: ``uni.tenant.vspan_destination_group.vspan_vdestination``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> TenantVspanDestinationGroupVspanVdestinationCursor:
+        """Set ``spanVDest`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        epg: str | Ref | None = None,
+        path: str | Ref | None = None,
+        apic_node: str | Ref | None = None,
+        virtual_port: str | Ref | None = None,
+    ) -> TenantVspanDestinationGroupVspanVdestinationCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        epg: str | Ref | None = None,
+        path: str | Ref | None = None,
+        apic_node: str | Ref | None = None,
+        virtual_port: str | Ref | None = None,
+    ) -> TenantVspanDestinationGroupVspanVdestinationCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class TenantVspanSessionSpanLabelCursor(_TenantVspanSessionMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``spanSpanLbl`` (span_label level).
+
+    Position: ``uni.tenant.vspan_session.span_label``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        tag: PolColor | str | None = None,
+        userdom: str | None = None,
+    ) -> TenantVspanSessionSpanLabelCursor:
+        """Set ``spanSpanLbl`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        filter_group: str | Ref | None = None,
+    ) -> TenantVspanSessionSpanLabelCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        filter_group: str | Ref | None = None,
+    ) -> TenantVspanSessionSpanLabelCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class TenantVspanSessionVspanVsourceCursor(_TenantVspanSessionMakers, _TenantMakers, _UniMakers):
+    """Typed cursor for ``spanVSrc`` (vspan_vsource level).
+
+    Position: ``uni.tenant.vspan_session.vspan_vsource``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        direction_ingress_egress_both: SpanDirection | str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        userdom: str | None = None,
+    ) -> TenantVspanSessionVspanVsourceCursor:
+        """Set ``spanVSrc`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        filter_group: str | Ref | None = None,
+    ) -> TenantVspanSessionVspanVsourceCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        filter_group: str | Ref | None = None,
+    ) -> TenantVspanSessionVspanVsourceCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -23479,10 +25262,29 @@ class PimFilterCursor(_PimFilterMakers, _BdPimMakers, _BdMakers, _TenantMakers, 
         *,
         vrf: str | Ref | None = None,
         l3out: str | Ref | None = None,
+        fhs: str | Ref | None = None,
+        nd_policy: str | Ref | None = None,
+        igmp_snoop: str | Ref | None = None,
+        mld_snoop: str | Ref | None = None,
+        dhcp_relay: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        netflow_monitor: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
+        flood_filter: str | Ref | None = None,
     ) -> PimFilterCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        flood_filter: str | Ref | None = None,
+    ) -> PimFilterCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -23517,10 +25319,29 @@ class BdSubnetAnycastEndpointCursor(_BdSubnetMakers, _BdMakers, _TenantMakers, _
         l3out: str | Ref | None = None,
         nd_ra_prefix_policy: str | Ref | None = None,
         vrf: str | Ref | None = None,
+        fhs: str | Ref | None = None,
+        nd_policy: str | Ref | None = None,
+        igmp_snoop: str | Ref | None = None,
+        mld_snoop: str | Ref | None = None,
+        dhcp_relay: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        netflow_monitor: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
+        flood_filter: str | Ref | None = None,
     ) -> BdSubnetAnycastEndpointCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        flood_filter: str | Ref | None = None,
+    ) -> BdSubnetAnycastEndpointCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -23560,10 +25381,29 @@ class BdSubnetEndpointNetworkConfigCursor(_BdSubnetMakers, _BdMakers, _TenantMak
         l3out: str | Ref | None = None,
         nd_ra_prefix_policy: str | Ref | None = None,
         vrf: str | Ref | None = None,
+        fhs: str | Ref | None = None,
+        nd_policy: str | Ref | None = None,
+        igmp_snoop: str | Ref | None = None,
+        mld_snoop: str | Ref | None = None,
+        dhcp_relay: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        netflow_monitor: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
+        flood_filter: str | Ref | None = None,
     ) -> BdSubnetEndpointNetworkConfigCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        flood_filter: str | Ref | None = None,
+    ) -> BdSubnetEndpointNetworkConfigCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -23601,10 +25441,29 @@ class BdSubnetNlbEndpointCursor(_BdSubnetMakers, _BdMakers, _TenantMakers, _UniM
         l3out: str | Ref | None = None,
         nd_ra_prefix_policy: str | Ref | None = None,
         vrf: str | Ref | None = None,
+        fhs: str | Ref | None = None,
+        nd_policy: str | Ref | None = None,
+        igmp_snoop: str | Ref | None = None,
+        mld_snoop: str | Ref | None = None,
+        dhcp_relay: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        netflow_monitor: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
+        flood_filter: str | Ref | None = None,
     ) -> BdSubnetNlbEndpointCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        flood_filter: str | Ref | None = None,
+    ) -> BdSubnetNlbEndpointCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -23642,6 +25501,7 @@ class ContractSubjectConsumerSubjectLabelCursor(
         self,
         *,
         filter: str | Ref | None = None,
+        service_graph: str | Ref | None = None,
     ) -> ContractSubjectConsumerSubjectLabelCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -23680,6 +25540,7 @@ class ContractSubjectExceptionCursor(
         self,
         *,
         filter: str | Ref | None = None,
+        service_graph: str | Ref | None = None,
     ) -> ContractSubjectExceptionCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -23720,6 +25581,7 @@ class ContractSubjectInTermCursor(
         self,
         *,
         filter: str | Ref | None = None,
+        service_graph: str | Ref | None = None,
     ) -> ContractSubjectInTermCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -23760,6 +25622,7 @@ class ContractSubjectOutTermCursor(
         self,
         *,
         filter: str | Ref | None = None,
+        service_graph: str | Ref | None = None,
     ) -> ContractSubjectOutTermCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -23801,6 +25664,7 @@ class ContractSubjectProviderSubjectLabelCursor(
         self,
         *,
         filter: str | Ref | None = None,
+        service_graph: str | Ref | None = None,
     ) -> ContractSubjectProviderSubjectLabelCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -23835,6 +25699,26 @@ class ServerDomainCursor(
         """Set ``dnsepgDomain`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        epg: str | Ref | None = None,
+    ) -> ServerDomainCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        epg: str | Ref | None = None,
+    ) -> ServerDomainCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -24816,6 +26700,7 @@ class L3outExternalEpgConsumerContractLabelCursor(
         self,
         *,
         contract_master: str | Ref | None = None,
+        imported_contract: str | Ref | None = None,
         endpoint_security_group: str | Ref | None = None,
         external_epg: str | Ref | None = None,
         custom_qos_policy: str | Ref | None = None,
@@ -24886,6 +26771,7 @@ class L3outExternalEpgConsumerLabelCursor(
         self,
         *,
         contract_master: str | Ref | None = None,
+        imported_contract: str | Ref | None = None,
         endpoint_security_group: str | Ref | None = None,
         external_epg: str | Ref | None = None,
         custom_qos_policy: str | Ref | None = None,
@@ -24957,6 +26843,7 @@ class L3outExternalEpgConsumerSubjectLabelCursor(
         self,
         *,
         contract_master: str | Ref | None = None,
+        imported_contract: str | Ref | None = None,
         endpoint_security_group: str | Ref | None = None,
         external_epg: str | Ref | None = None,
         custom_qos_policy: str | Ref | None = None,
@@ -25027,6 +26914,7 @@ class L3outExternalEpgProviderContractLabelCursor(
         self,
         *,
         contract_master: str | Ref | None = None,
+        imported_contract: str | Ref | None = None,
         endpoint_security_group: str | Ref | None = None,
         external_epg: str | Ref | None = None,
         custom_qos_policy: str | Ref | None = None,
@@ -25098,6 +26986,7 @@ class L3outExternalEpgProviderLabelCursor(
         self,
         *,
         contract_master: str | Ref | None = None,
+        imported_contract: str | Ref | None = None,
         endpoint_security_group: str | Ref | None = None,
         external_epg: str | Ref | None = None,
         custom_qos_policy: str | Ref | None = None,
@@ -25169,6 +27058,7 @@ class L3outExternalEpgProviderSubjectLabelCursor(
         self,
         *,
         contract_master: str | Ref | None = None,
+        imported_contract: str | Ref | None = None,
         endpoint_security_group: str | Ref | None = None,
         external_epg: str | Ref | None = None,
         custom_qos_policy: str | Ref | None = None,
@@ -25243,6 +27133,7 @@ class L3outExternalEpgSubnetCursor(
         ospf_route_summarization_policy: str | Ref | None = None,
         route_control_profile: str | Ref | None = None,
         contract_master: str | Ref | None = None,
+        imported_contract: str | Ref | None = None,
         endpoint_security_group: str | Ref | None = None,
         external_epg: str | Ref | None = None,
         custom_qos_policy: str | Ref | None = None,
@@ -26039,7 +27930,7 @@ class _L3outNodeProfileInterfaceProfileMakers(Cursor):
         owner_tag: str | None = None,
         tag: PolColor | str | None = None,
         userdom: str | None = None,
-    ) -> DhcpRelayLabelCursor:
+    ) -> InterfaceProfileDhcpRelayLabelCursor:
         """Declare a ``dhcpLbl`` child under the interface_profile level.
 
         A DHCP relay label contains a name for the label, the scope, and a DHCP option policy. The
@@ -26069,7 +27960,7 @@ class _L3outNodeProfileInterfaceProfileMakers(Cursor):
             )
         }
         return cast(
-            "DhcpRelayLabelCursor",
+            "InterfaceProfileDhcpRelayLabelCursor",
             self._invoke_maker("dhcp_relay_label", (name,), _prune(params)),
         )
 
@@ -26158,6 +28049,16 @@ class L3outNodeProfileInterfaceProfileCursor(
         """Reference objects outside the design by raw DN."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind_dn(self, **_prune(params))
+        return self
+
+    def ingress_dpp(self, dpp_policy: str | Ref) -> L3outNodeProfileInterfaceProfileCursor:
+        """Reference the qosDppPol *dpp_policy* through ``l3extRsIngressQosDppPol`` (lazy)."""
+        Cursor._verb(self, "ingress_dpp", dpp_policy)
+        return self
+
+    def egress_dpp(self, dpp_policy: str | Ref) -> L3outNodeProfileInterfaceProfileCursor:
+        """Reference the qosDppPol *dpp_policy* through ``l3extRsEgressQosDppPol`` (lazy)."""
+        Cursor._verb(self, "egress_dpp", dpp_policy)
         return self
 
 
@@ -26274,6 +28175,41 @@ class _NodeAttachmentMakers(Cursor):
             self._invoke_maker("loopback", (loop_back_interface_address,), _prune(params)),
         )
 
+    def node_sid_profile(
+        self,
+        srgb_index: int,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        loopback_addr: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> NodeSidProfileCursor:
+        """Declare a ``mplsNodeSidP`` child under the node_attachment level.
+
+        MPLS-SR Sid Node Profile
+
+        Args:
+            srgb_index: Index
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            loopback_addr: Data plane TEP
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "srgb_index",
+            )
+        }
+        return cast(
+            "NodeSidProfileCursor",
+            self._invoke_maker("node_sid_profile", (srgb_index,), _prune(params)),
+        )
+
 
 class NodeAttachmentCursor(
     _NodeAttachmentMakers, _L3outNodeProfileMakers, _L3outMakers, _TenantMakers, _UniMakers
@@ -26330,7 +28266,9 @@ class NodeAttachmentCursor(
         return self
 
 
-class ProtocolProfileCursor(_L3outNodeProfileMakers, _L3outMakers, _TenantMakers, _UniMakers):
+class NodeProfileProtocolProfileCursor(
+    _L3outNodeProfileMakers, _L3outMakers, _TenantMakers, _UniMakers
+):
     """Typed cursor for ``bgpProtP`` (protocol_profile level).
 
     Position: ``uni.tenant.l3out.node_profile.protocol_profile``
@@ -26348,7 +28286,7 @@ class ProtocolProfileCursor(_L3outNodeProfileMakers, _L3outMakers, _TenantMakers
         name: str | None = None,
         display_name: str | None = None,
         userdom: str | None = None,
-    ) -> ProtocolProfileCursor:
+    ) -> NodeProfileProtocolProfileCursor:
         """Set ``bgpProtP`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
@@ -26364,7 +28302,7 @@ class ProtocolProfileCursor(_L3outNodeProfileMakers, _L3outMakers, _TenantMakers
         vrf: str | Ref | None = None,
         domain: str | Ref | None = None,
         fallback_route_group: str | Ref | None = None,
-    ) -> ProtocolProfileCursor:
+    ) -> NodeProfileProtocolProfileCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind(self, **_prune(params))
@@ -26377,7 +28315,7 @@ class ProtocolProfileCursor(_L3outNodeProfileMakers, _L3outMakers, _TenantMakers
         mpls_custom_qos_policy: str | Ref | None = None,
         domain: str | Ref | None = None,
         fallback_route_group: str | Ref | None = None,
-    ) -> ProtocolProfileCursor:
+    ) -> NodeProfileProtocolProfileCursor:
         """Reference objects outside the design by raw DN."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind_dn(self, **_prune(params))
@@ -26576,6 +28514,345 @@ class LogicalInterfaceContextVirtualIpCursor(
         return self
 
 
+class InBandEpgConsumerContractLabelCursor(
+    _InBandEpgMakers, _ManagementProfileMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``vzConsCtrctLbl`` (consumer_contract_label level).
+
+    Position: ``uni.tenant.management_profile.in_band_epg.consumer_contract_label``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        tag: PolColor | str | None = None,
+        userdom: str | None = None,
+    ) -> InBandEpgConsumerContractLabelCursor:
+        """Set ``vzConsCtrctLbl`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        bd: str | Ref | None = None,
+        contract_master: str | Ref | None = None,
+        imported_contract: str | Ref | None = None,
+        taboo_contract: str | Ref | None = None,
+        custom_qos_policy: str | Ref | None = None,
+        static_node: str | Ref | None = None,
+    ) -> InBandEpgConsumerContractLabelCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        contract_master: str | Ref | None = None,
+        static_node: str | Ref | None = None,
+    ) -> InBandEpgConsumerContractLabelCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class InBandEpgConsumerLabelCursor(
+    _InBandEpgMakers, _ManagementProfileMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``vzConsLbl`` (consumer_label level).
+
+    Position: ``uni.tenant.management_profile.in_band_epg.consumer_label``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        tag: PolColor | str | None = None,
+        userdom: str | None = None,
+    ) -> InBandEpgConsumerLabelCursor:
+        """Set ``vzConsLbl`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        bd: str | Ref | None = None,
+        contract_master: str | Ref | None = None,
+        imported_contract: str | Ref | None = None,
+        taboo_contract: str | Ref | None = None,
+        custom_qos_policy: str | Ref | None = None,
+        static_node: str | Ref | None = None,
+    ) -> InBandEpgConsumerLabelCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        contract_master: str | Ref | None = None,
+        static_node: str | Ref | None = None,
+    ) -> InBandEpgConsumerLabelCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class InBandEpgConsumerSubjectLabelCursor(
+    _InBandEpgMakers, _ManagementProfileMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``vzConsSubjLbl`` (consumer_subject_label level).
+
+    Position: ``uni.tenant.management_profile.in_band_epg.consumer_subject_label``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        complement: bool | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        tag: PolColor | str | None = None,
+        userdom: str | None = None,
+    ) -> InBandEpgConsumerSubjectLabelCursor:
+        """Set ``vzConsSubjLbl`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        bd: str | Ref | None = None,
+        contract_master: str | Ref | None = None,
+        imported_contract: str | Ref | None = None,
+        taboo_contract: str | Ref | None = None,
+        custom_qos_policy: str | Ref | None = None,
+        static_node: str | Ref | None = None,
+    ) -> InBandEpgConsumerSubjectLabelCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        contract_master: str | Ref | None = None,
+        static_node: str | Ref | None = None,
+    ) -> InBandEpgConsumerSubjectLabelCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class InBandEpgProviderContractLabelCursor(
+    _InBandEpgMakers, _ManagementProfileMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``vzProvCtrctLbl`` (provider_contract_label level).
+
+    Position: ``uni.tenant.management_profile.in_band_epg.provider_contract_label``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        tag: PolColor | str | None = None,
+        userdom: str | None = None,
+    ) -> InBandEpgProviderContractLabelCursor:
+        """Set ``vzProvCtrctLbl`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        bd: str | Ref | None = None,
+        contract_master: str | Ref | None = None,
+        imported_contract: str | Ref | None = None,
+        taboo_contract: str | Ref | None = None,
+        custom_qos_policy: str | Ref | None = None,
+        static_node: str | Ref | None = None,
+    ) -> InBandEpgProviderContractLabelCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        contract_master: str | Ref | None = None,
+        static_node: str | Ref | None = None,
+    ) -> InBandEpgProviderContractLabelCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class InBandEpgProviderLabelCursor(
+    _InBandEpgMakers, _ManagementProfileMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``vzProvLbl`` (provider_label level).
+
+    Position: ``uni.tenant.management_profile.in_band_epg.provider_label``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        complement: bool | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        tag: PolColor | str | None = None,
+        userdom: str | None = None,
+    ) -> InBandEpgProviderLabelCursor:
+        """Set ``vzProvLbl`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        bd: str | Ref | None = None,
+        contract_master: str | Ref | None = None,
+        imported_contract: str | Ref | None = None,
+        taboo_contract: str | Ref | None = None,
+        custom_qos_policy: str | Ref | None = None,
+        static_node: str | Ref | None = None,
+    ) -> InBandEpgProviderLabelCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        contract_master: str | Ref | None = None,
+        static_node: str | Ref | None = None,
+    ) -> InBandEpgProviderLabelCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class InBandEpgProviderSubjectLabelCursor(
+    _InBandEpgMakers, _ManagementProfileMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``vzProvSubjLbl`` (provider_subject_label level).
+
+    Position: ``uni.tenant.management_profile.in_band_epg.provider_subject_label``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        complement: bool | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        tag: PolColor | str | None = None,
+        userdom: str | None = None,
+    ) -> InBandEpgProviderSubjectLabelCursor:
+        """Set ``vzProvSubjLbl`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        bd: str | Ref | None = None,
+        contract_master: str | Ref | None = None,
+        imported_contract: str | Ref | None = None,
+        taboo_contract: str | Ref | None = None,
+        custom_qos_policy: str | Ref | None = None,
+        static_node: str | Ref | None = None,
+    ) -> InBandEpgProviderSubjectLabelCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        contract_master: str | Ref | None = None,
+        static_node: str | Ref | None = None,
+    ) -> InBandEpgProviderSubjectLabelCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
 class InBandEpgStaticRouteCursor(
     _InBandEpgMakers, _ManagementProfileMakers, _TenantMakers, _UniMakers
 ):
@@ -26608,6 +28885,7 @@ class InBandEpgStaticRouteCursor(
         bd: str | Ref | None = None,
         contract_master: str | Ref | None = None,
         imported_contract: str | Ref | None = None,
+        taboo_contract: str | Ref | None = None,
         custom_qos_policy: str | Ref | None = None,
         static_node: str | Ref | None = None,
     ) -> InBandEpgStaticRouteCursor:
@@ -26777,6 +29055,7 @@ class InBandEpgSubnetCursor(
         bd: str | Ref | None = None,
         contract_master: str | Ref | None = None,
         imported_contract: str | Ref | None = None,
+        taboo_contract: str | Ref | None = None,
         custom_qos_policy: str | Ref | None = None,
         static_node: str | Ref | None = None,
     ) -> InBandEpgSubnetCursor:
@@ -26905,6 +29184,7 @@ class OobContractSubjectConsumerSubjectLabelCursor(
         self,
         *,
         filter: str | Ref | None = None,
+        service_graph: str | Ref | None = None,
     ) -> OobContractSubjectConsumerSubjectLabelCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -26943,6 +29223,7 @@ class OobContractSubjectExceptionCursor(
         self,
         *,
         filter: str | Ref | None = None,
+        service_graph: str | Ref | None = None,
     ) -> OobContractSubjectExceptionCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -26983,6 +29264,7 @@ class OobContractSubjectInTermCursor(
         self,
         *,
         filter: str | Ref | None = None,
+        service_graph: str | Ref | None = None,
     ) -> OobContractSubjectInTermCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -27023,6 +29305,7 @@ class OobContractSubjectOutTermCursor(
         self,
         *,
         filter: str | Ref | None = None,
+        service_graph: str | Ref | None = None,
     ) -> OobContractSubjectOutTermCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -27064,6 +29347,7 @@ class OobContractSubjectProviderSubjectLabelCursor(
         self,
         *,
         filter: str | Ref | None = None,
+        service_graph: str | Ref | None = None,
     ) -> OobContractSubjectProviderSubjectLabelCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -27763,10 +30047,28 @@ class FallbackMemberCursor(_FallbackRouteGroupMakers, _VrfMakers, _TenantMakers,
         self,
         *,
         l3out: str | Ref | None = None,
+        bgp_timers: str | Ref | None = None,
+        bgp_address_family: str | Ref | None = None,
+        eigrp_address_family: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        route_tag: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
+        vrf_validation: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
     ) -> FallbackMemberCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        route_control_profile: str | Ref | None = None,
+    ) -> FallbackMemberCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -27799,10 +30101,28 @@ class FallbackRouteCursor(_FallbackRouteGroupMakers, _VrfMakers, _TenantMakers, 
         self,
         *,
         l3out: str | Ref | None = None,
+        bgp_timers: str | Ref | None = None,
+        bgp_address_family: str | Ref | None = None,
+        eigrp_address_family: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        route_tag: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
+        vrf_validation: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
     ) -> FallbackRouteCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        route_control_profile: str | Ref | None = None,
+    ) -> FallbackRouteCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -27835,10 +30155,28 @@ class SsmTranslateCursor(_IgmpMakers, _VrfMakers, _TenantMakers, _UniMakers):
         self,
         *,
         l3out: str | Ref | None = None,
+        bgp_timers: str | Ref | None = None,
+        bgp_address_family: str | Ref | None = None,
+        eigrp_address_family: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        route_tag: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
+        vrf_validation: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
     ) -> SsmTranslateCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        route_control_profile: str | Ref | None = None,
+    ) -> SsmTranslateCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -27925,10 +30263,28 @@ class ExternalPrefixCursor(
         self,
         *,
         l3out: str | Ref | None = None,
+        bgp_timers: str | Ref | None = None,
+        bgp_address_family: str | Ref | None = None,
+        eigrp_address_family: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        route_tag: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
+        vrf_validation: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
     ) -> ExternalPrefixCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        route_control_profile: str | Ref | None = None,
+    ) -> ExternalPrefixCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -28015,10 +30371,28 @@ class InternalPrefixCursor(
         self,
         *,
         l3out: str | Ref | None = None,
+        bgp_timers: str | Ref | None = None,
+        bgp_address_family: str | Ref | None = None,
+        eigrp_address_family: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        route_tag: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
+        vrf_validation: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
     ) -> InternalPrefixCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        route_control_profile: str | Ref | None = None,
+    ) -> InternalPrefixCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -28104,10 +30478,28 @@ class InternalSubnetCursor(
         self,
         *,
         l3out: str | Ref | None = None,
+        bgp_timers: str | Ref | None = None,
+        bgp_address_family: str | Ref | None = None,
+        eigrp_address_family: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        route_tag: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
+        vrf_validation: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
     ) -> InternalSubnetCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        route_control_profile: str | Ref | None = None,
+    ) -> InternalSubnetCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -28224,10 +30616,28 @@ class PimAsmPatternCursor(
         self,
         *,
         l3out: str | Ref | None = None,
+        bgp_timers: str | Ref | None = None,
+        bgp_address_family: str | Ref | None = None,
+        eigrp_address_family: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        route_tag: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
+        vrf_validation: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
     ) -> PimAsmPatternCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        route_control_profile: str | Ref | None = None,
+    ) -> PimAsmPatternCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -28290,10 +30700,28 @@ class PimAutoRpCursor(_PimAutoRpMakers, _VrfPimMakers, _VrfMakers, _TenantMakers
         self,
         *,
         l3out: str | Ref | None = None,
+        bgp_timers: str | Ref | None = None,
+        bgp_address_family: str | Ref | None = None,
+        eigrp_address_family: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        route_tag: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
+        vrf_validation: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
     ) -> PimAutoRpCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        route_control_profile: str | Ref | None = None,
+    ) -> PimAutoRpCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -28358,10 +30786,28 @@ class PimBootstrapRpCursor(
         self,
         *,
         l3out: str | Ref | None = None,
+        bgp_timers: str | Ref | None = None,
+        bgp_address_family: str | Ref | None = None,
+        eigrp_address_family: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        route_tag: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
+        vrf_validation: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
     ) -> PimBootstrapRpCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        route_control_profile: str | Ref | None = None,
+    ) -> PimBootstrapRpCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -28433,10 +30879,28 @@ class PimFabricRpCursor(_PimFabricRpMakers, _VrfPimMakers, _VrfMakers, _TenantMa
         self,
         *,
         l3out: str | Ref | None = None,
+        bgp_timers: str | Ref | None = None,
+        bgp_address_family: str | Ref | None = None,
+        eigrp_address_family: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        route_tag: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
+        vrf_validation: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
     ) -> PimFabricRpCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        route_control_profile: str | Ref | None = None,
+    ) -> PimFabricRpCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -28508,10 +30972,28 @@ class PimInterVrfCursor(_PimInterVrfMakers, _VrfPimMakers, _VrfMakers, _TenantMa
         self,
         *,
         l3out: str | Ref | None = None,
+        bgp_timers: str | Ref | None = None,
+        bgp_address_family: str | Ref | None = None,
+        eigrp_address_family: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        route_tag: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
+        vrf_validation: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
     ) -> PimInterVrfCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        route_control_profile: str | Ref | None = None,
+    ) -> PimInterVrfCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -28547,6 +31029,14 @@ class PimResourceCursor(_VrfPimMakers, _VrfMakers, _TenantMakers, _UniMakers):
         *,
         pim_route_map_policy: str | Ref | None = None,
         l3out: str | Ref | None = None,
+        bgp_timers: str | Ref | None = None,
+        bgp_address_family: str | Ref | None = None,
+        eigrp_address_family: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        route_tag: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
+        vrf_validation: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
     ) -> PimResourceCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -28557,6 +31047,7 @@ class PimResourceCursor(_VrfPimMakers, _VrfMakers, _TenantMakers, _UniMakers):
         self,
         *,
         pim_route_map_policy: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
     ) -> PimResourceCursor:
         """Reference objects outside the design by raw DN."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -28624,10 +31115,28 @@ class PimSsmPatternCursor(
         self,
         *,
         l3out: str | Ref | None = None,
+        bgp_timers: str | Ref | None = None,
+        bgp_address_family: str | Ref | None = None,
+        eigrp_address_family: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        route_tag: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
+        vrf_validation: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
     ) -> PimSsmPatternCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        route_control_profile: str | Ref | None = None,
+    ) -> PimSsmPatternCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -28699,10 +31208,28 @@ class PimStaticRpCursor(_PimStaticRpMakers, _VrfPimMakers, _VrfMakers, _TenantMa
         self,
         *,
         l3out: str | Ref | None = None,
+        bgp_timers: str | Ref | None = None,
+        bgp_address_family: str | Ref | None = None,
+        eigrp_address_family: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        route_tag: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
+        vrf_validation: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
     ) -> PimStaticRpCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        route_control_profile: str | Ref | None = None,
+    ) -> PimStaticRpCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -28788,10 +31315,28 @@ class StripeWinnerCursor(_StripeWinnerMakers, _VrfPimMakers, _VrfMakers, _Tenant
         self,
         *,
         l3out: str | Ref | None = None,
+        bgp_timers: str | Ref | None = None,
+        bgp_address_family: str | Ref | None = None,
+        eigrp_address_family: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        route_tag: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
+        vrf_validation: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
     ) -> StripeWinnerCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        route_control_profile: str | Ref | None = None,
+    ) -> StripeWinnerCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -28908,10 +31453,28 @@ class Pim6AsmPatternCursor(
         self,
         *,
         l3out: str | Ref | None = None,
+        bgp_timers: str | Ref | None = None,
+        bgp_address_family: str | Ref | None = None,
+        eigrp_address_family: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        route_tag: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
+        vrf_validation: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
     ) -> Pim6AsmPatternCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        route_control_profile: str | Ref | None = None,
+    ) -> Pim6AsmPatternCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -28974,10 +31537,28 @@ class Pim6AutoRpCursor(_Pim6AutoRpMakers, _Pim6Makers, _VrfMakers, _TenantMakers
         self,
         *,
         l3out: str | Ref | None = None,
+        bgp_timers: str | Ref | None = None,
+        bgp_address_family: str | Ref | None = None,
+        eigrp_address_family: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        route_tag: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
+        vrf_validation: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
     ) -> Pim6AutoRpCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        route_control_profile: str | Ref | None = None,
+    ) -> Pim6AutoRpCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -29042,10 +31623,28 @@ class Pim6BootstrapRpCursor(
         self,
         *,
         l3out: str | Ref | None = None,
+        bgp_timers: str | Ref | None = None,
+        bgp_address_family: str | Ref | None = None,
+        eigrp_address_family: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        route_tag: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
+        vrf_validation: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
     ) -> Pim6BootstrapRpCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        route_control_profile: str | Ref | None = None,
+    ) -> Pim6BootstrapRpCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -29117,10 +31716,28 @@ class Pim6FabricRpCursor(_Pim6FabricRpMakers, _Pim6Makers, _VrfMakers, _TenantMa
         self,
         *,
         l3out: str | Ref | None = None,
+        bgp_timers: str | Ref | None = None,
+        bgp_address_family: str | Ref | None = None,
+        eigrp_address_family: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        route_tag: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
+        vrf_validation: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
     ) -> Pim6FabricRpCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        route_control_profile: str | Ref | None = None,
+    ) -> Pim6FabricRpCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -29192,10 +31809,28 @@ class Pim6InterVrfCursor(_Pim6InterVrfMakers, _Pim6Makers, _VrfMakers, _TenantMa
         self,
         *,
         l3out: str | Ref | None = None,
+        bgp_timers: str | Ref | None = None,
+        bgp_address_family: str | Ref | None = None,
+        eigrp_address_family: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        route_tag: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
+        vrf_validation: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
     ) -> Pim6InterVrfCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        route_control_profile: str | Ref | None = None,
+    ) -> Pim6InterVrfCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -29231,6 +31866,14 @@ class Pim6ResourceCursor(_Pim6Makers, _VrfMakers, _TenantMakers, _UniMakers):
         *,
         pim_route_map_policy: str | Ref | None = None,
         l3out: str | Ref | None = None,
+        bgp_timers: str | Ref | None = None,
+        bgp_address_family: str | Ref | None = None,
+        eigrp_address_family: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        route_tag: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
+        vrf_validation: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
     ) -> Pim6ResourceCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -29241,6 +31884,7 @@ class Pim6ResourceCursor(_Pim6Makers, _VrfMakers, _TenantMakers, _UniMakers):
         self,
         *,
         pim_route_map_policy: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
     ) -> Pim6ResourceCursor:
         """Reference objects outside the design by raw DN."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -29308,10 +31952,28 @@ class Pim6SsmPatternCursor(
         self,
         *,
         l3out: str | Ref | None = None,
+        bgp_timers: str | Ref | None = None,
+        bgp_address_family: str | Ref | None = None,
+        eigrp_address_family: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        route_tag: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
+        vrf_validation: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
     ) -> Pim6SsmPatternCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        route_control_profile: str | Ref | None = None,
+    ) -> Pim6SsmPatternCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -29383,10 +32045,28 @@ class Pim6StaticRpCursor(_Pim6StaticRpMakers, _Pim6Makers, _VrfMakers, _TenantMa
         self,
         *,
         l3out: str | Ref | None = None,
+        bgp_timers: str | Ref | None = None,
+        bgp_address_family: str | Ref | None = None,
+        eigrp_address_family: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        route_tag: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
+        vrf_validation: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
     ) -> Pim6StaticRpCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        route_control_profile: str | Ref | None = None,
+    ) -> Pim6StaticRpCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -29421,10 +32101,28 @@ class RouteTargetCursor(_RouteTargetProfileMakers, _VrfMakers, _TenantMakers, _U
         self,
         *,
         l3out: str | Ref | None = None,
+        bgp_timers: str | Ref | None = None,
+        bgp_address_family: str | Ref | None = None,
+        eigrp_address_family: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        route_tag: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
+        vrf_validation: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
     ) -> RouteTargetCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        route_control_profile: str | Ref | None = None,
+    ) -> RouteTargetCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -29456,10 +32154,28 @@ class CommunityCursor(_SnmpContextMakers, _VrfMakers, _TenantMakers, _UniMakers)
         self,
         *,
         l3out: str | Ref | None = None,
+        bgp_timers: str | Ref | None = None,
+        bgp_address_family: str | Ref | None = None,
+        eigrp_address_family: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        route_tag: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
+        vrf_validation: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
     ) -> CommunityCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        route_control_profile: str | Ref | None = None,
+    ) -> CommunityCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -29495,10 +32211,28 @@ class VzanyConsumerContractLabelCursor(_VzanyMakers, _VrfMakers, _TenantMakers, 
         *,
         imported_contract: str | Ref | None = None,
         l3out: str | Ref | None = None,
+        bgp_timers: str | Ref | None = None,
+        bgp_address_family: str | Ref | None = None,
+        eigrp_address_family: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        route_tag: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
+        vrf_validation: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
     ) -> VzanyConsumerContractLabelCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        route_control_profile: str | Ref | None = None,
+    ) -> VzanyConsumerContractLabelCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -29534,10 +32268,28 @@ class VzanyConsumerLabelCursor(_VzanyMakers, _VrfMakers, _TenantMakers, _UniMake
         *,
         imported_contract: str | Ref | None = None,
         l3out: str | Ref | None = None,
+        bgp_timers: str | Ref | None = None,
+        bgp_address_family: str | Ref | None = None,
+        eigrp_address_family: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        route_tag: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
+        vrf_validation: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
     ) -> VzanyConsumerLabelCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        route_control_profile: str | Ref | None = None,
+    ) -> VzanyConsumerLabelCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -29574,10 +32326,28 @@ class VzanyConsumerSubjectLabelCursor(_VzanyMakers, _VrfMakers, _TenantMakers, _
         *,
         imported_contract: str | Ref | None = None,
         l3out: str | Ref | None = None,
+        bgp_timers: str | Ref | None = None,
+        bgp_address_family: str | Ref | None = None,
+        eigrp_address_family: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        route_tag: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
+        vrf_validation: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
     ) -> VzanyConsumerSubjectLabelCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        route_control_profile: str | Ref | None = None,
+    ) -> VzanyConsumerSubjectLabelCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -29613,10 +32383,28 @@ class VzanyProviderContractLabelCursor(_VzanyMakers, _VrfMakers, _TenantMakers, 
         *,
         imported_contract: str | Ref | None = None,
         l3out: str | Ref | None = None,
+        bgp_timers: str | Ref | None = None,
+        bgp_address_family: str | Ref | None = None,
+        eigrp_address_family: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        route_tag: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
+        vrf_validation: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
     ) -> VzanyProviderContractLabelCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        route_control_profile: str | Ref | None = None,
+    ) -> VzanyProviderContractLabelCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -29653,10 +32441,28 @@ class VzanyProviderLabelCursor(_VzanyMakers, _VrfMakers, _TenantMakers, _UniMake
         *,
         imported_contract: str | Ref | None = None,
         l3out: str | Ref | None = None,
+        bgp_timers: str | Ref | None = None,
+        bgp_address_family: str | Ref | None = None,
+        eigrp_address_family: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        route_tag: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
+        vrf_validation: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
     ) -> VzanyProviderLabelCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        route_control_profile: str | Ref | None = None,
+    ) -> VzanyProviderLabelCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -29693,10 +32499,95 @@ class VzanyProviderSubjectLabelCursor(_VzanyMakers, _VrfMakers, _TenantMakers, _
         *,
         imported_contract: str | Ref | None = None,
         l3out: str | Ref | None = None,
+        bgp_timers: str | Ref | None = None,
+        bgp_address_family: str | Ref | None = None,
+        eigrp_address_family: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        route_tag: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
+        vrf_validation: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
     ) -> VzanyProviderSubjectLabelCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        route_control_profile: str | Ref | None = None,
+    ) -> VzanyProviderSubjectLabelCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class TenantVspanDestinationGroupVspanVdestinationVspanDestinationEpgSummaryCursor(
+    _TenantVspanDestinationGroupVspanVdestinationMakers,
+    _TenantVspanDestinationGroupMakers,
+    _TenantMakers,
+    _UniMakers,
+):
+    """Typed cursor for ``spanVEpgSummary`` (vspan_destination_epg_summary level).
+
+    Position: ``uni.tenant.vspan_destination_group.vspan_vdestination.vspan_destination_epg_summary``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        dscp: int | str | None = None,
+        destination_ip: str | None = None,
+        flow_id: int | None = None,
+        mode: SpanErspanDestMode | str | None = None,
+        mtu: int | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        source_ip_of_erspan_packet: str | None = None,
+        time_to_live: int | str | None = None,
+        userdom: str | None = None,
+        vrf: str | None = None,
+    ) -> TenantVspanDestinationGroupVspanVdestinationVspanDestinationEpgSummaryCursor:
+        """Set ``spanVEpgSummary`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        epg: str | Ref | None = None,
+        path: str | Ref | None = None,
+        apic_node: str | Ref | None = None,
+        virtual_port: str | Ref | None = None,
+    ) -> TenantVspanDestinationGroupVspanVdestinationVspanDestinationEpgSummaryCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        epg: str | Ref | None = None,
+        path: str | Ref | None = None,
+        apic_node: str | Ref | None = None,
+        virtual_port: str | Ref | None = None,
+    ) -> TenantVspanDestinationGroupVspanVdestinationVspanDestinationEpgSummaryCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -30952,6 +33843,15 @@ class DestinationFilterCursor(_PimFilterMakers, _BdPimMakers, _BdMakers, _Tenant
         pim_route_map_policy: str | Ref | None = None,
         vrf: str | Ref | None = None,
         l3out: str | Ref | None = None,
+        fhs: str | Ref | None = None,
+        nd_policy: str | Ref | None = None,
+        igmp_snoop: str | Ref | None = None,
+        mld_snoop: str | Ref | None = None,
+        dhcp_relay: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        netflow_monitor: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
+        flood_filter: str | Ref | None = None,
     ) -> DestinationFilterCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -30962,6 +33862,7 @@ class DestinationFilterCursor(_PimFilterMakers, _BdPimMakers, _BdMakers, _Tenant
         self,
         *,
         pim_route_map_policy: str | Ref | None = None,
+        flood_filter: str | Ref | None = None,
     ) -> DestinationFilterCursor:
         """Reference objects outside the design by raw DN."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -31000,6 +33901,15 @@ class SourceFilterCursor(_PimFilterMakers, _BdPimMakers, _BdMakers, _TenantMaker
         pim_route_map_policy: str | Ref | None = None,
         vrf: str | Ref | None = None,
         l3out: str | Ref | None = None,
+        fhs: str | Ref | None = None,
+        nd_policy: str | Ref | None = None,
+        igmp_snoop: str | Ref | None = None,
+        mld_snoop: str | Ref | None = None,
+        dhcp_relay: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        netflow_monitor: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
+        flood_filter: str | Ref | None = None,
     ) -> SourceFilterCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -31010,6 +33920,7 @@ class SourceFilterCursor(_PimFilterMakers, _BdPimMakers, _BdMakers, _TenantMaker
         self,
         *,
         pim_route_map_policy: str | Ref | None = None,
+        flood_filter: str | Ref | None = None,
     ) -> SourceFilterCursor:
         """Reference objects outside the design by raw DN."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -32035,7 +34946,7 @@ class BfdMhInterfaceCursor(
         return self
 
 
-class DhcpRelayLabelCursor(
+class InterfaceProfileDhcpRelayLabelCursor(
     _L3outNodeProfileInterfaceProfileMakers,
     _L3outNodeProfileMakers,
     _L3outMakers,
@@ -32063,7 +34974,7 @@ class DhcpRelayLabelCursor(
         owner_tag: str | None = None,
         tag: PolColor | str | None = None,
         userdom: str | None = None,
-    ) -> DhcpRelayLabelCursor:
+    ) -> InterfaceProfileDhcpRelayLabelCursor:
         """Set ``dhcpLbl`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
@@ -32082,7 +34993,7 @@ class DhcpRelayLabelCursor(
         vrf: str | Ref | None = None,
         domain: str | Ref | None = None,
         fallback_route_group: str | Ref | None = None,
-    ) -> DhcpRelayLabelCursor:
+    ) -> InterfaceProfileDhcpRelayLabelCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind(self, **_prune(params))
@@ -32095,7 +35006,7 @@ class DhcpRelayLabelCursor(
         mpls_custom_qos_policy: str | Ref | None = None,
         domain: str | Ref | None = None,
         fallback_route_group: str | Ref | None = None,
-    ) -> DhcpRelayLabelCursor:
+    ) -> InterfaceProfileDhcpRelayLabelCursor:
         """Reference objects outside the design by raw DN."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind_dn(self, **_prune(params))
@@ -32370,7 +35281,7 @@ class _FloatingSviMakers(Cursor):
         name: str | None = None,
         display_name: str | None = None,
         userdom: str | None = None,
-    ) -> MemberNodeConfigurationCursor:
+    ) -> FloatingSviMemberNodeConfigurationCursor:
         """Declare a ``l3extMember`` child under the floating_svi level.
 
         The member. The member is used for providing per node IP address configuration.
@@ -32394,7 +35305,7 @@ class _FloatingSviMakers(Cursor):
             )
         }
         return cast(
-            "MemberNodeConfigurationCursor",
+            "FloatingSviMemberNodeConfigurationCursor",
             self._invoke_maker("member_node_configuration", (side,), _prune(params)),
         )
 
@@ -32427,7 +35338,7 @@ class _FloatingSviMakers(Cursor):
         name: str | None = None,
         display_name: str | None = None,
         userdom: str | None = None,
-    ) -> SecondaryIpAddressCursor:
+    ) -> FloatingSviSecondaryIpAddressCursor:
         """Declare a ``l3extIp`` child under the floating_svi level.
 
         A secondary IP address policy.
@@ -32449,7 +35360,7 @@ class _FloatingSviMakers(Cursor):
             )
         }
         return cast(
-            "SecondaryIpAddressCursor",
+            "FloatingSviSecondaryIpAddressCursor",
             self._invoke_maker("secondary_ip_address", (ip_address,), _prune(params)),
         )
 
@@ -32986,6 +35897,82 @@ class _PathAttachmentMakers(Cursor):
             self._invoke_maker("ptp_l3out", (), _prune(params)),
         )
 
+    def secondary_ip_address(
+        self,
+        ip_address: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        ipv6_dad: L3extIpv6Dad | str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> PathAttachmentSecondaryIpAddressCursor:
+        """Declare a ``l3extIp`` child under the path_attachment level.
+
+        A secondary IP address policy.
+
+        Args:
+            ip_address: The peer IP address.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            ipv6_dad: IPv6 DAD feature When disabled it will IPv6 DAD will be diasabled Values:
+                ``disabled``, ``enabled``. Default: ``enabled``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "ip_address",
+            )
+        }
+        return cast(
+            "PathAttachmentSecondaryIpAddressCursor",
+            self._invoke_maker("secondary_ip_address", (ip_address,), _prune(params)),
+        )
+
+    def member_node_configuration(
+        self,
+        side: L3extSide | str,
+        *,
+        addr: str | None = None,
+        annotation: str | None = None,
+        description: str | None = None,
+        ipv6_dad: L3extIpv6Dad | str | None = None,
+        ipv6_link_local_address: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> PathAttachmentMemberNodeConfigurationCursor:
+        """Declare a ``l3extMember`` child under the path_attachment level.
+
+        The member. The member is used for providing per node IP address configuration.
+
+        Args:
+            side: Naming property — forms the object's RN.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+            ipv6_dad: IPv6 DAD feature When disabled it will IPv6 DAD will be diasabled Values:
+                ``disabled``, ``enabled``. Default: ``enabled``.
+            ipv6_link_local_address: The override of the system generated Ipv6 link local
+                address.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "side",
+            )
+        }
+        return cast(
+            "PathAttachmentMemberNodeConfigurationCursor",
+            self._invoke_maker("member_node_configuration", (side,), _prune(params)),
+        )
+
 
 class PathAttachmentCursor(
     _PathAttachmentMakers,
@@ -33350,6 +36337,62 @@ class LoopbackCursor(
         return self
 
 
+class NodeSidProfileCursor(
+    _NodeAttachmentMakers, _L3outNodeProfileMakers, _L3outMakers, _TenantMakers, _UniMakers
+):
+    """Typed cursor for ``mplsNodeSidP`` (node_sid_profile level).
+
+    Position: ``uni.tenant.l3out.node_profile.node_attachment.node_sid_profile``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        loopback_addr: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> NodeSidProfileCursor:
+        """Set ``mplsNodeSidP`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        fabric_node: str | Ref | None = None,
+        mpls_custom_qos_policy: str | Ref | None = None,
+        vrf: str | Ref | None = None,
+        domain: str | Ref | None = None,
+        fallback_route_group: str | Ref | None = None,
+    ) -> NodeSidProfileCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        fabric_node: str | Ref | None = None,
+        mpls_custom_qos_policy: str | Ref | None = None,
+        domain: str | Ref | None = None,
+        fallback_route_group: str | Ref | None = None,
+    ) -> NodeSidProfileCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
 class _NodeAttachmentStaticRouteMakers(Cursor):
     """Makers declared at the static_route level (``ipRouteP``)."""
 
@@ -33552,6 +36595,7 @@ class InBandEpgSubnetAnycastEndpointCursor(
         bd: str | Ref | None = None,
         contract_master: str | Ref | None = None,
         imported_contract: str | Ref | None = None,
+        taboo_contract: str | Ref | None = None,
         custom_qos_policy: str | Ref | None = None,
         static_node: str | Ref | None = None,
     ) -> InBandEpgSubnetAnycastEndpointCursor:
@@ -33612,6 +36656,7 @@ class InBandEpgSubnetEndpointNetworkConfigCursor(
         bd: str | Ref | None = None,
         contract_master: str | Ref | None = None,
         imported_contract: str | Ref | None = None,
+        taboo_contract: str | Ref | None = None,
         custom_qos_policy: str | Ref | None = None,
         static_node: str | Ref | None = None,
     ) -> InBandEpgSubnetEndpointNetworkConfigCursor:
@@ -33670,6 +36715,7 @@ class InBandEpgSubnetNlbEndpointCursor(
         bd: str | Ref | None = None,
         contract_master: str | Ref | None = None,
         imported_contract: str | Ref | None = None,
+        taboo_contract: str | Ref | None = None,
         custom_qos_policy: str | Ref | None = None,
         static_node: str | Ref | None = None,
     ) -> InBandEpgSubnetNlbEndpointCursor:
@@ -33936,10 +36982,28 @@ class ExternalPrefixLeakToCursor(
         self,
         *,
         l3out: str | Ref | None = None,
+        bgp_timers: str | Ref | None = None,
+        bgp_address_family: str | Ref | None = None,
+        eigrp_address_family: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        route_tag: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
+        vrf_validation: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
     ) -> ExternalPrefixLeakToCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        route_control_profile: str | Ref | None = None,
+    ) -> ExternalPrefixLeakToCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -33975,10 +37039,28 @@ class InternalPrefixLeakToCursor(
         self,
         *,
         l3out: str | Ref | None = None,
+        bgp_timers: str | Ref | None = None,
+        bgp_address_family: str | Ref | None = None,
+        eigrp_address_family: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        route_tag: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
+        vrf_validation: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
     ) -> InternalPrefixLeakToCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        route_control_profile: str | Ref | None = None,
+    ) -> InternalPrefixLeakToCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -34014,10 +37096,28 @@ class InternalSubnetLeakToCursor(
         self,
         *,
         l3out: str | Ref | None = None,
+        bgp_timers: str | Ref | None = None,
+        bgp_address_family: str | Ref | None = None,
+        eigrp_address_family: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        route_tag: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
+        vrf_validation: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
     ) -> InternalSubnetLeakToCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        route_control_profile: str | Ref | None = None,
+    ) -> InternalSubnetLeakToCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -34055,6 +37155,14 @@ class PimAsmPatternRegisterTrafficCursor(
         *,
         pim_route_map_policy: str | Ref | None = None,
         l3out: str | Ref | None = None,
+        bgp_timers: str | Ref | None = None,
+        bgp_address_family: str | Ref | None = None,
+        eigrp_address_family: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        route_tag: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
+        vrf_validation: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
     ) -> PimAsmPatternRegisterTrafficCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -34065,6 +37173,7 @@ class PimAsmPatternRegisterTrafficCursor(
         self,
         *,
         pim_route_map_policy: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
     ) -> PimAsmPatternRegisterTrafficCursor:
         """Reference objects outside the design by raw DN."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -34105,6 +37214,14 @@ class PimAsmPatternSgExpiryCursor(
         *,
         pim_route_map_policy: str | Ref | None = None,
         l3out: str | Ref | None = None,
+        bgp_timers: str | Ref | None = None,
+        bgp_address_family: str | Ref | None = None,
+        eigrp_address_family: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        route_tag: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
+        vrf_validation: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
     ) -> PimAsmPatternSgExpiryCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -34115,6 +37232,7 @@ class PimAsmPatternSgExpiryCursor(
         self,
         *,
         pim_route_map_policy: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
     ) -> PimAsmPatternSgExpiryCursor:
         """Reference objects outside the design by raw DN."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -34154,6 +37272,14 @@ class PimAsmPatternSharedRangeCursor(
         *,
         pim_route_map_policy: str | Ref | None = None,
         l3out: str | Ref | None = None,
+        bgp_timers: str | Ref | None = None,
+        bgp_address_family: str | Ref | None = None,
+        eigrp_address_family: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        route_tag: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
+        vrf_validation: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
     ) -> PimAsmPatternSharedRangeCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -34164,6 +37290,7 @@ class PimAsmPatternSharedRangeCursor(
         self,
         *,
         pim_route_map_policy: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
     ) -> PimAsmPatternSharedRangeCursor:
         """Reference objects outside the design by raw DN."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -34203,6 +37330,14 @@ class PimAutoRpMaFilterCursor(
         *,
         pim_route_map_policy: str | Ref | None = None,
         l3out: str | Ref | None = None,
+        bgp_timers: str | Ref | None = None,
+        bgp_address_family: str | Ref | None = None,
+        eigrp_address_family: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        route_tag: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
+        vrf_validation: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
     ) -> PimAutoRpMaFilterCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -34213,6 +37348,7 @@ class PimAutoRpMaFilterCursor(
         self,
         *,
         pim_route_map_policy: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
     ) -> PimAutoRpMaFilterCursor:
         """Reference objects outside the design by raw DN."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -34252,6 +37388,14 @@ class PimBootstrapRpBsrFilterCursor(
         *,
         pim_route_map_policy: str | Ref | None = None,
         l3out: str | Ref | None = None,
+        bgp_timers: str | Ref | None = None,
+        bgp_address_family: str | Ref | None = None,
+        eigrp_address_family: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        route_tag: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
+        vrf_validation: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
     ) -> PimBootstrapRpBsrFilterCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -34262,6 +37406,7 @@ class PimBootstrapRpBsrFilterCursor(
         self,
         *,
         pim_route_map_policy: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
     ) -> PimBootstrapRpBsrFilterCursor:
         """Reference objects outside the design by raw DN."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -34334,10 +37479,28 @@ class PimFabricRpRpEntryCursor(
         self,
         *,
         l3out: str | Ref | None = None,
+        bgp_timers: str | Ref | None = None,
+        bgp_address_family: str | Ref | None = None,
+        eigrp_address_family: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        route_tag: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
+        vrf_validation: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
     ) -> PimFabricRpRpEntryCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        route_control_profile: str | Ref | None = None,
+    ) -> PimFabricRpRpEntryCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -34373,6 +37536,14 @@ class PimInterVrfEntryCursor(
         *,
         pim_route_map_policy: str | Ref | None = None,
         l3out: str | Ref | None = None,
+        bgp_timers: str | Ref | None = None,
+        bgp_address_family: str | Ref | None = None,
+        eigrp_address_family: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        route_tag: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
+        vrf_validation: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
     ) -> PimInterVrfEntryCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -34383,6 +37554,7 @@ class PimInterVrfEntryCursor(
         self,
         *,
         pim_route_map_policy: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
     ) -> PimInterVrfEntryCursor:
         """Reference objects outside the design by raw DN."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -34422,6 +37594,14 @@ class PimSsmPatternSsmRangeCursor(
         *,
         pim_route_map_policy: str | Ref | None = None,
         l3out: str | Ref | None = None,
+        bgp_timers: str | Ref | None = None,
+        bgp_address_family: str | Ref | None = None,
+        eigrp_address_family: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        route_tag: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
+        vrf_validation: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
     ) -> PimSsmPatternSsmRangeCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -34432,6 +37612,7 @@ class PimSsmPatternSsmRangeCursor(
         self,
         *,
         pim_route_map_policy: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
     ) -> PimSsmPatternSsmRangeCursor:
         """Reference objects outside the design by raw DN."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -34504,10 +37685,28 @@ class PimStaticRpRpEntryCursor(
         self,
         *,
         l3out: str | Ref | None = None,
+        bgp_timers: str | Ref | None = None,
+        bgp_address_family: str | Ref | None = None,
+        eigrp_address_family: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        route_tag: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
+        vrf_validation: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
     ) -> PimStaticRpRpEntryCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        route_control_profile: str | Ref | None = None,
+    ) -> PimStaticRpRpEntryCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -34544,10 +37743,28 @@ class StripeWinnerEntryCursor(
         self,
         *,
         l3out: str | Ref | None = None,
+        bgp_timers: str | Ref | None = None,
+        bgp_address_family: str | Ref | None = None,
+        eigrp_address_family: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        route_tag: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
+        vrf_validation: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
     ) -> StripeWinnerEntryCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        route_control_profile: str | Ref | None = None,
+    ) -> StripeWinnerEntryCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -34585,6 +37802,14 @@ class Pim6AsmPatternRegisterTrafficCursor(
         *,
         pim_route_map_policy: str | Ref | None = None,
         l3out: str | Ref | None = None,
+        bgp_timers: str | Ref | None = None,
+        bgp_address_family: str | Ref | None = None,
+        eigrp_address_family: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        route_tag: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
+        vrf_validation: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
     ) -> Pim6AsmPatternRegisterTrafficCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -34595,6 +37820,7 @@ class Pim6AsmPatternRegisterTrafficCursor(
         self,
         *,
         pim_route_map_policy: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
     ) -> Pim6AsmPatternRegisterTrafficCursor:
         """Reference objects outside the design by raw DN."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -34635,6 +37861,14 @@ class Pim6AsmPatternSgExpiryCursor(
         *,
         pim_route_map_policy: str | Ref | None = None,
         l3out: str | Ref | None = None,
+        bgp_timers: str | Ref | None = None,
+        bgp_address_family: str | Ref | None = None,
+        eigrp_address_family: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        route_tag: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
+        vrf_validation: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
     ) -> Pim6AsmPatternSgExpiryCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -34645,6 +37879,7 @@ class Pim6AsmPatternSgExpiryCursor(
         self,
         *,
         pim_route_map_policy: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
     ) -> Pim6AsmPatternSgExpiryCursor:
         """Reference objects outside the design by raw DN."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -34684,6 +37919,14 @@ class Pim6AsmPatternSharedRangeCursor(
         *,
         pim_route_map_policy: str | Ref | None = None,
         l3out: str | Ref | None = None,
+        bgp_timers: str | Ref | None = None,
+        bgp_address_family: str | Ref | None = None,
+        eigrp_address_family: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        route_tag: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
+        vrf_validation: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
     ) -> Pim6AsmPatternSharedRangeCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -34694,6 +37937,7 @@ class Pim6AsmPatternSharedRangeCursor(
         self,
         *,
         pim_route_map_policy: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
     ) -> Pim6AsmPatternSharedRangeCursor:
         """Reference objects outside the design by raw DN."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -34733,6 +37977,14 @@ class Pim6AutoRpMaFilterCursor(
         *,
         pim_route_map_policy: str | Ref | None = None,
         l3out: str | Ref | None = None,
+        bgp_timers: str | Ref | None = None,
+        bgp_address_family: str | Ref | None = None,
+        eigrp_address_family: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        route_tag: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
+        vrf_validation: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
     ) -> Pim6AutoRpMaFilterCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -34743,6 +37995,7 @@ class Pim6AutoRpMaFilterCursor(
         self,
         *,
         pim_route_map_policy: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
     ) -> Pim6AutoRpMaFilterCursor:
         """Reference objects outside the design by raw DN."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -34782,6 +38035,14 @@ class Pim6BootstrapRpBsrFilterCursor(
         *,
         pim_route_map_policy: str | Ref | None = None,
         l3out: str | Ref | None = None,
+        bgp_timers: str | Ref | None = None,
+        bgp_address_family: str | Ref | None = None,
+        eigrp_address_family: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        route_tag: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
+        vrf_validation: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
     ) -> Pim6BootstrapRpBsrFilterCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -34792,6 +38053,7 @@ class Pim6BootstrapRpBsrFilterCursor(
         self,
         *,
         pim_route_map_policy: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
     ) -> Pim6BootstrapRpBsrFilterCursor:
         """Reference objects outside the design by raw DN."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -34864,10 +38126,28 @@ class Pim6FabricRpRpEntryCursor(
         self,
         *,
         l3out: str | Ref | None = None,
+        bgp_timers: str | Ref | None = None,
+        bgp_address_family: str | Ref | None = None,
+        eigrp_address_family: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        route_tag: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
+        vrf_validation: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
     ) -> Pim6FabricRpRpEntryCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        route_control_profile: str | Ref | None = None,
+    ) -> Pim6FabricRpRpEntryCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -34903,6 +38183,14 @@ class Pim6InterVrfEntryCursor(
         *,
         pim_route_map_policy: str | Ref | None = None,
         l3out: str | Ref | None = None,
+        bgp_timers: str | Ref | None = None,
+        bgp_address_family: str | Ref | None = None,
+        eigrp_address_family: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        route_tag: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
+        vrf_validation: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
     ) -> Pim6InterVrfEntryCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -34913,6 +38201,7 @@ class Pim6InterVrfEntryCursor(
         self,
         *,
         pim_route_map_policy: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
     ) -> Pim6InterVrfEntryCursor:
         """Reference objects outside the design by raw DN."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -34952,6 +38241,14 @@ class Pim6SsmPatternSsmRangeCursor(
         *,
         pim_route_map_policy: str | Ref | None = None,
         l3out: str | Ref | None = None,
+        bgp_timers: str | Ref | None = None,
+        bgp_address_family: str | Ref | None = None,
+        eigrp_address_family: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        route_tag: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
+        vrf_validation: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
     ) -> Pim6SsmPatternSsmRangeCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -34962,6 +38259,7 @@ class Pim6SsmPatternSsmRangeCursor(
         self,
         *,
         pim_route_map_policy: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
     ) -> Pim6SsmPatternSsmRangeCursor:
         """Reference objects outside the design by raw DN."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -35034,10 +38332,28 @@ class Pim6StaticRpRpEntryCursor(
         self,
         *,
         l3out: str | Ref | None = None,
+        bgp_timers: str | Ref | None = None,
+        bgp_address_family: str | Ref | None = None,
+        eigrp_address_family: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        route_tag: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
+        vrf_validation: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
     ) -> Pim6StaticRpRpEntryCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        route_control_profile: str | Ref | None = None,
+    ) -> Pim6StaticRpRpEntryCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -35719,7 +39035,7 @@ class FloatingSviInfraPeerConnectivityProfileCursor(
         return self
 
 
-class MemberNodeConfigurationCursor(
+class FloatingSviMemberNodeConfigurationCursor(
     _FloatingSviMakers,
     _L3outNodeProfileInterfaceProfileMakers,
     _L3outNodeProfileMakers,
@@ -35748,7 +39064,7 @@ class MemberNodeConfigurationCursor(
         name: str | None = None,
         display_name: str | None = None,
         userdom: str | None = None,
-    ) -> MemberNodeConfigurationCursor:
+    ) -> FloatingSviMemberNodeConfigurationCursor:
         """Set ``l3extMember`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
@@ -35766,7 +39082,7 @@ class MemberNodeConfigurationCursor(
         mpls_custom_qos_policy: str | Ref | None = None,
         vrf: str | Ref | None = None,
         fallback_route_group: str | Ref | None = None,
-    ) -> MemberNodeConfigurationCursor:
+    ) -> FloatingSviMemberNodeConfigurationCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind(self, **_prune(params))
@@ -35779,7 +39095,7 @@ class MemberNodeConfigurationCursor(
         fabric_node: str | Ref | None = None,
         mpls_custom_qos_policy: str | Ref | None = None,
         fallback_route_group: str | Ref | None = None,
-    ) -> MemberNodeConfigurationCursor:
+    ) -> FloatingSviMemberNodeConfigurationCursor:
         """Reference objects outside the design by raw DN."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind_dn(self, **_prune(params))
@@ -35848,7 +39164,7 @@ class NdPrefixProfileCursor(
         return self
 
 
-class _SecondaryIpAddressMakers(Cursor):
+class _FloatingSviSecondaryIpAddressMakers(Cursor):
     """Makers declared at the secondary_ip_address level (``l3extIp``)."""
 
     __slots__ = ()
@@ -35861,7 +39177,7 @@ class _SecondaryIpAddressMakers(Cursor):
         name: str | None = None,
         display_name: str | None = None,
         userdom: str | None = None,
-    ) -> DhcpRelayGwExtIpCursor:
+    ) -> FloatingSviSecondaryIpAddressDhcpRelayGwExtIpCursor:
         """Declare a ``dhcpRelayGwExtIp`` child under the secondary_ip_address level.
 
         Enable external secondary IPs for DHCP relay gateway
@@ -35872,13 +39188,13 @@ class _SecondaryIpAddressMakers(Cursor):
         """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
-            "DhcpRelayGwExtIpCursor",
+            "FloatingSviSecondaryIpAddressDhcpRelayGwExtIpCursor",
             self._invoke_maker("dhcp_relay_gw_ext_ip", (), _prune(params)),
         )
 
 
-class SecondaryIpAddressCursor(
-    _SecondaryIpAddressMakers,
+class FloatingSviSecondaryIpAddressCursor(
+    _FloatingSviSecondaryIpAddressMakers,
     _FloatingSviMakers,
     _L3outNodeProfileInterfaceProfileMakers,
     _L3outNodeProfileMakers,
@@ -35905,7 +39221,7 @@ class SecondaryIpAddressCursor(
         name: str | None = None,
         display_name: str | None = None,
         userdom: str | None = None,
-    ) -> SecondaryIpAddressCursor:
+    ) -> FloatingSviSecondaryIpAddressCursor:
         """Set ``l3extIp`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
@@ -35923,7 +39239,7 @@ class SecondaryIpAddressCursor(
         mpls_custom_qos_policy: str | Ref | None = None,
         vrf: str | Ref | None = None,
         fallback_route_group: str | Ref | None = None,
-    ) -> SecondaryIpAddressCursor:
+    ) -> FloatingSviSecondaryIpAddressCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind(self, **_prune(params))
@@ -35936,7 +39252,7 @@ class SecondaryIpAddressCursor(
         fabric_node: str | Ref | None = None,
         mpls_custom_qos_policy: str | Ref | None = None,
         fallback_route_group: str | Ref | None = None,
-    ) -> SecondaryIpAddressCursor:
+    ) -> FloatingSviSecondaryIpAddressCursor:
         """Reference objects outside the design by raw DN."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind_dn(self, **_prune(params))
@@ -36123,6 +39439,73 @@ class ForwarderAddressCursor(
         domain: str | Ref | None = None,
         fallback_route_group: str | Ref | None = None,
     ) -> ForwarderAddressCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class PathAttachmentMemberNodeConfigurationCursor(
+    _PathAttachmentMakers,
+    _L3outNodeProfileInterfaceProfileMakers,
+    _L3outNodeProfileMakers,
+    _L3outMakers,
+    _TenantMakers,
+    _UniMakers,
+):
+    """Typed cursor for ``l3extMember`` (member_node_configuration level).
+
+    Position: ``uni.tenant.l3out.node_profile.interface_profile.path_attachment.member_node_configuration``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        addr: str | None = None,
+        annotation: str | None = None,
+        description: str | None = None,
+        ipv6_dad: L3extIpv6Dad | str | None = None,
+        ipv6_link_local_address: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> PathAttachmentMemberNodeConfigurationCursor:
+        """Set ``l3extMember`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        arp_interface_policy: str | Ref | None = None,
+        nd_interface_policy: str | Ref | None = None,
+        custom_qos_policy: str | Ref | None = None,
+        netflow_monitor: str | Ref | None = None,
+        fabric_node: str | Ref | None = None,
+        mpls_custom_qos_policy: str | Ref | None = None,
+        vrf: str | Ref | None = None,
+        domain: str | Ref | None = None,
+        fallback_route_group: str | Ref | None = None,
+    ) -> PathAttachmentMemberNodeConfigurationCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        fabric_node: str | Ref | None = None,
+        mpls_custom_qos_policy: str | Ref | None = None,
+        domain: str | Ref | None = None,
+        fallback_route_group: str | Ref | None = None,
+    ) -> PathAttachmentMemberNodeConfigurationCursor:
         """Reference objects outside the design by raw DN."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind_dn(self, **_prune(params))
@@ -36318,6 +39701,101 @@ class PathAttachmentRogueExceptionMacCursor(
         domain: str | Ref | None = None,
         fallback_route_group: str | Ref | None = None,
     ) -> PathAttachmentRogueExceptionMacCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class _PathAttachmentSecondaryIpAddressMakers(Cursor):
+    """Makers declared at the secondary_ip_address level (``l3extIp``)."""
+
+    __slots__ = ()
+
+    def dhcp_relay_gw_ext_ip(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> PathAttachmentSecondaryIpAddressDhcpRelayGwExtIpCursor:
+        """Declare a ``dhcpRelayGwExtIp`` child under the secondary_ip_address level.
+
+        Enable external secondary IPs for DHCP relay gateway
+
+        Args:
+            annotation: User annotation. Suggested format orchestrator:value
+            description: Specifies the description of a policy component.
+        """
+        params = {k: v for k, v in locals().items() if k not in ("self",)}
+        return cast(
+            "PathAttachmentSecondaryIpAddressDhcpRelayGwExtIpCursor",
+            self._invoke_maker("dhcp_relay_gw_ext_ip", (), _prune(params)),
+        )
+
+
+class PathAttachmentSecondaryIpAddressCursor(
+    _PathAttachmentSecondaryIpAddressMakers,
+    _PathAttachmentMakers,
+    _L3outNodeProfileInterfaceProfileMakers,
+    _L3outNodeProfileMakers,
+    _L3outMakers,
+    _TenantMakers,
+    _UniMakers,
+):
+    """Typed cursor for ``l3extIp`` (secondary_ip_address level).
+
+    Position: ``uni.tenant.l3out.node_profile.interface_profile.path_attachment.secondary_ip_address``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        ipv6_dad: L3extIpv6Dad | str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> PathAttachmentSecondaryIpAddressCursor:
+        """Set ``l3extIp`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        arp_interface_policy: str | Ref | None = None,
+        nd_interface_policy: str | Ref | None = None,
+        custom_qos_policy: str | Ref | None = None,
+        netflow_monitor: str | Ref | None = None,
+        fabric_node: str | Ref | None = None,
+        mpls_custom_qos_policy: str | Ref | None = None,
+        vrf: str | Ref | None = None,
+        domain: str | Ref | None = None,
+        fallback_route_group: str | Ref | None = None,
+    ) -> PathAttachmentSecondaryIpAddressCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        fabric_node: str | Ref | None = None,
+        mpls_custom_qos_policy: str | Ref | None = None,
+        domain: str | Ref | None = None,
+        fallback_route_group: str | Ref | None = None,
+    ) -> PathAttachmentSecondaryIpAddressCursor:
         """Reference objects outside the design by raw DN."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind_dn(self, **_prune(params))
@@ -36603,6 +40081,14 @@ class PimFabricRpRpEntryGroupRangeCursor(
         *,
         pim_route_map_policy: str | Ref | None = None,
         l3out: str | Ref | None = None,
+        bgp_timers: str | Ref | None = None,
+        bgp_address_family: str | Ref | None = None,
+        eigrp_address_family: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        route_tag: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
+        vrf_validation: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
     ) -> PimFabricRpRpEntryGroupRangeCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -36613,6 +40099,7 @@ class PimFabricRpRpEntryGroupRangeCursor(
         self,
         *,
         pim_route_map_policy: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
     ) -> PimFabricRpRpEntryGroupRangeCursor:
         """Reference objects outside the design by raw DN."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -36657,6 +40144,14 @@ class PimStaticRpRpEntryGroupRangeCursor(
         *,
         pim_route_map_policy: str | Ref | None = None,
         l3out: str | Ref | None = None,
+        bgp_timers: str | Ref | None = None,
+        bgp_address_family: str | Ref | None = None,
+        eigrp_address_family: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        route_tag: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
+        vrf_validation: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
     ) -> PimStaticRpRpEntryGroupRangeCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -36667,6 +40162,7 @@ class PimStaticRpRpEntryGroupRangeCursor(
         self,
         *,
         pim_route_map_policy: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
     ) -> PimStaticRpRpEntryGroupRangeCursor:
         """Reference objects outside the design by raw DN."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -36711,6 +40207,14 @@ class Pim6FabricRpRpEntryGroupRangeCursor(
         *,
         pim_route_map_policy: str | Ref | None = None,
         l3out: str | Ref | None = None,
+        bgp_timers: str | Ref | None = None,
+        bgp_address_family: str | Ref | None = None,
+        eigrp_address_family: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        route_tag: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
+        vrf_validation: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
     ) -> Pim6FabricRpRpEntryGroupRangeCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -36721,6 +40225,7 @@ class Pim6FabricRpRpEntryGroupRangeCursor(
         self,
         *,
         pim_route_map_policy: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
     ) -> Pim6FabricRpRpEntryGroupRangeCursor:
         """Reference objects outside the design by raw DN."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -36765,6 +40270,14 @@ class Pim6StaticRpRpEntryGroupRangeCursor(
         *,
         pim_route_map_policy: str | Ref | None = None,
         l3out: str | Ref | None = None,
+        bgp_timers: str | Ref | None = None,
+        bgp_address_family: str | Ref | None = None,
+        eigrp_address_family: str | Ref | None = None,
+        endpoint_retention: str | Ref | None = None,
+        route_tag: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
+        vrf_validation: str | Ref | None = None,
+        monitoring_policy: str | Ref | None = None,
     ) -> Pim6StaticRpRpEntryGroupRangeCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -36775,6 +40288,7 @@ class Pim6StaticRpRpEntryGroupRangeCursor(
         self,
         *,
         pim_route_map_policy: str | Ref | None = None,
+        route_control_profile: str | Ref | None = None,
     ) -> Pim6StaticRpRpEntryGroupRangeCursor:
         """Reference objects outside the design by raw DN."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -37192,8 +40706,8 @@ class FloatingSviInfraPeerConnectivityProfileLocalAutonomousSystemProfileCursor(
         return self
 
 
-class DhcpRelayGwExtIpCursor(
-    _SecondaryIpAddressMakers,
+class FloatingSviSecondaryIpAddressDhcpRelayGwExtIpCursor(
+    _FloatingSviSecondaryIpAddressMakers,
     _FloatingSviMakers,
     _L3outNodeProfileInterfaceProfileMakers,
     _L3outNodeProfileMakers,
@@ -37219,7 +40733,7 @@ class DhcpRelayGwExtIpCursor(
         name: str | None = None,
         display_name: str | None = None,
         userdom: str | None = None,
-    ) -> DhcpRelayGwExtIpCursor:
+    ) -> FloatingSviSecondaryIpAddressDhcpRelayGwExtIpCursor:
         """Set ``dhcpRelayGwExtIp`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
@@ -37237,7 +40751,7 @@ class DhcpRelayGwExtIpCursor(
         mpls_custom_qos_policy: str | Ref | None = None,
         vrf: str | Ref | None = None,
         fallback_route_group: str | Ref | None = None,
-    ) -> DhcpRelayGwExtIpCursor:
+    ) -> FloatingSviSecondaryIpAddressDhcpRelayGwExtIpCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind(self, **_prune(params))
@@ -37250,7 +40764,7 @@ class DhcpRelayGwExtIpCursor(
         fabric_node: str | Ref | None = None,
         mpls_custom_qos_policy: str | Ref | None = None,
         fallback_route_group: str | Ref | None = None,
-    ) -> DhcpRelayGwExtIpCursor:
+    ) -> FloatingSviSecondaryIpAddressDhcpRelayGwExtIpCursor:
         """Reference objects outside the design by raw DN."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind_dn(self, **_prune(params))
@@ -37322,6 +40836,71 @@ class SecondaryVipCursor(
         domain: str | Ref | None = None,
         fallback_route_group: str | Ref | None = None,
     ) -> SecondaryVipCursor:
+        """Reference objects outside the design by raw DN."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind_dn(self, **_prune(params))
+        return self
+
+
+class PathAttachmentSecondaryIpAddressDhcpRelayGwExtIpCursor(
+    _PathAttachmentSecondaryIpAddressMakers,
+    _PathAttachmentMakers,
+    _L3outNodeProfileInterfaceProfileMakers,
+    _L3outNodeProfileMakers,
+    _L3outMakers,
+    _TenantMakers,
+    _UniMakers,
+):
+    """Typed cursor for ``dhcpRelayGwExtIp`` (dhcp_relay_gw_ext_ip level).
+
+    Position: ``uni.tenant.l3out.node_profile.interface_profile.path_attachment.secondary_ip_address.dhcp_relay_gw_ext_ip``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        name: str | None = None,
+        display_name: str | None = None,
+        userdom: str | None = None,
+    ) -> PathAttachmentSecondaryIpAddressDhcpRelayGwExtIpCursor:
+        """Set ``dhcpRelayGwExtIp`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+    def bind(
+        self,
+        *,
+        arp_interface_policy: str | Ref | None = None,
+        nd_interface_policy: str | Ref | None = None,
+        custom_qos_policy: str | Ref | None = None,
+        netflow_monitor: str | Ref | None = None,
+        fabric_node: str | Ref | None = None,
+        mpls_custom_qos_policy: str | Ref | None = None,
+        vrf: str | Ref | None = None,
+        domain: str | Ref | None = None,
+        fallback_route_group: str | Ref | None = None,
+    ) -> PathAttachmentSecondaryIpAddressDhcpRelayGwExtIpCursor:
+        """Declare lazy Rs references (resolved at push time)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.bind(self, **_prune(params))
+        return self
+
+    def bind_dn(
+        self,
+        *,
+        fabric_node: str | Ref | None = None,
+        mpls_custom_qos_policy: str | Ref | None = None,
+        domain: str | Ref | None = None,
+        fallback_route_group: str | Ref | None = None,
+    ) -> PathAttachmentSecondaryIpAddressDhcpRelayGwExtIpCursor:
         """Reference objects outside the design by raw DN."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.bind_dn(self, **_prune(params))

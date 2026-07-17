@@ -35,3 +35,11 @@ Accepted as keyword arguments of `.vspan_session(name)` and of `.set(**attrs)` o
 | --- | --- | --- |
 | `.vspan_vsource(name, **attrs)` | `spanVSrc` | {ref}`infra.vspan_session.vspan_vsource <vocab-infra-vspan_session-vspan_vsource>` |
 | `.span_label(name, **attrs)` | `spanSpanLbl` | {ref}`infra.vspan_session.span_label <vocab-infra-vspan_session-span_label>` |
+
+## Bind aliases
+
+Lazy references, resolved closed-world at push time.
+
+| alias | target | flavor | relation |
+| --- | --- | --- | --- |
+| `filter_group=` | `spanFilterGrp` | DN — `bind_dn()` allowed | `spanRsVSrcGrpToFilterGrp` |

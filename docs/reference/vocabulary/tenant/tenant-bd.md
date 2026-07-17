@@ -60,6 +60,7 @@ Accepted as keyword arguments of `.bd(name)` and of `.set(**attrs)` on this curs
 | `.nd_ra_subnet(subnet, **attrs)` | `ndRaSubnet` | {ref}`tenant.bd.nd_ra_subnet <vocab-tenant-bd-nd_ra_subnet>` |
 | `.legacy_mode(**attrs)` | `fvAccP` | {ref}`tenant.bd.legacy_mode <vocab-tenant-bd-legacy_mode>` |
 | `.rogue_exception_mac(exception_mac, **attrs)` | `fvRogueExceptionMac` | {ref}`tenant.bd.rogue_exception_mac <vocab-tenant-bd-rogue_exception_mac>` |
+| `.dhcp_relay_label(name, **attrs)` | `dhcpLbl` | {ref}`tenant.bd.dhcp_relay_label <vocab-tenant-bd-dhcp_relay_label>` |
 
 ## Bind aliases
 
@@ -69,6 +70,15 @@ Lazy references, resolved closed-world at push time.
 | --- | --- | --- | --- |
 | `vrf=` | `fvCtx` | name | `fvRsCtx` |
 | `l3out=` | `l3extOut` | name | `fvRsBDToOut` |
+| `fhs=` | `fhsBDPol` | name | `fvRsBDToFhs` |
+| `nd_policy=` | `ndIfPol` | name | `fvRsBDToNdP` |
+| `igmp_snoop=` | `igmpSnoopPol` | name | `fvRsIgmpsn` |
+| `mld_snoop=` | `mldSnoopPol` | name | `fvRsMldsn` |
+| `dhcp_relay=` | `dhcpRelayP` | name | `fvRsBDToRelayP` |
+| `endpoint_retention=` | `fvEpRetPol` | name | `fvRsBdToEpRet` |
+| `netflow_monitor=` | `netflowMonitorPol` | name | `fvRsBDToNetflowMonitorPol` |
+| `monitoring_policy=` | `monEPGPol` | name | `fvRsABDPolMonPol` |
+| `flood_filter=` | `vzFilter` | DN — `bind_dn()` allowed | `fvRsBdFloodTo` |
 
 ## APIC diagnostics
 

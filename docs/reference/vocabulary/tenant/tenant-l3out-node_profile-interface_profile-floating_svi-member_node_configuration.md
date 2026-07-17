@@ -13,7 +13,7 @@ The member. The member is used for providing per node IP address configuration.
 | --- | --- |
 | ACI class | `l3extMember` |
 | RN | `mem-{side}` |
-| Cursor | `MemberNodeConfigurationCursor` |
+| Cursor | `FloatingSviMemberNodeConfigurationCursor` |
 | Parent | {ref}`tenant.l3out.node_profile.interface_profile.floating_svi <vocab-tenant-l3out-node_profile-interface_profile-floating_svi>` |
 | Atomic | — |
 

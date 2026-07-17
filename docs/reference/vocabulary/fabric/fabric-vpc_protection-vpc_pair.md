@@ -31,3 +31,11 @@ Accepted as keyword arguments of `.vpc_pair(name)` and of `.set(**attrs)` on thi
 | maker | creates | position |
 | --- | --- | --- |
 | `.node(node_id, **attrs)` | `fabricNodePEp` | {ref}`fabric.vpc_protection.vpc_pair.node <vocab-fabric-vpc_protection-vpc_pair-node>` |
+
+## Bind aliases
+
+Lazy references, resolved closed-world at push time.
+
+| alias | target | flavor | relation |
+| --- | --- | --- | --- |
+| `vpc_policy=` | `vpcInstPol` | name | `fabricRsVpcInstPol` |

@@ -58,3 +58,15 @@ Lazy references, resolved closed-world at push time.
 | alias | target | flavor | relation |
 | --- | --- | --- | --- |
 | `l3out=` | `l3extOut` | name | `l3extRsEctx` (on the target side) |
+| `bgp_timers=` | `bgpCtxPol` | name | `fvRsBgpCtxPol` |
+| `bgp_address_family=` | `bgpCtxAfPol` | name | `fvRsCtxToBgpCtxAfPol` |
+| `eigrp_address_family=` | `eigrpCtxAfPol` | name | `fvRsCtxToEigrpCtxAfPol` |
+| `endpoint_retention=` | `fvEpRetPol` | name | `fvRsCtxToEpRet` |
+| `route_tag=` | `l3extRouteTagPol` | name | `fvRsCtxToExtRouteTagPol` |
+| `route_control_profile=` | `rtctrlProfile` | DN — `bind_dn()` allowed | `fvRsCtxToRtctrlProfile` |
+| `vrf_validation=` | `l3extVrfValidationPol` | name | `fvRsVrfValidationPol` |
+| `monitoring_policy=` | `monEPGPol` | name | `fvRsCtxMonPol` |
+
+## Verbs
+
+- `.ospf_timers(name)` → `fvRsCtxToOspfCtxPol` targeting `ospfCtxPol`

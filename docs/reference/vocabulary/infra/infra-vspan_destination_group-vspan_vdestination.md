@@ -33,3 +33,14 @@ Accepted as keyword arguments of `.vspan_vdestination(name)` and of `.set(**attr
 | maker | creates | position |
 | --- | --- | --- |
 | `.vspan_destination_epg_summary(**attrs)` | `spanVEpgSummary` | {ref}`infra.vspan_destination_group.vspan_vdestination.vspan_destination_epg_summary <vocab-infra-vspan_destination_group-vspan_vdestination-vspan_destination_epg_summary>` |
+
+## Bind aliases
+
+Lazy references, resolved closed-world at push time.
+
+| alias | target | flavor | relation |
+| --- | --- | --- | --- |
+| `epg=` | `fvEPg` *(abstract: `fvAEPg`, `fvESg`, `fvTnlEPg`, `infraCEPg`…)* | DN — `bind_dn()` allowed | `spanRsDestEpg` |
+| `path=` | `fabricPathEp` | DN — `bind_dn()` allowed | `spanRsDestPathEp` |
+| `apic_node=` | `fabricNode` | DN — `bind_dn()` allowed | `spanRsDestApic` |
+| `virtual_port=` | `fvEp` *(abstract: `fvCEp`…)* | DN — `bind_dn()` allowed | `spanRsDestToVPort` |

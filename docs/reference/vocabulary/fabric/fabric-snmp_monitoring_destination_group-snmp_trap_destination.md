@@ -32,6 +32,14 @@ Accepted as keyword arguments of `.snmp_trap_destination(host, port)` and of `.s
 | `v3_security_level` | `v3SecLvl` | {ref}`SnmpV3SecLvl <enum-snmpv3seclvl>` | `auth`, `noauth`, `priv` | `noauth` | The SNMP V3 security level for the destination path. |
 | `version` | `ver` | {ref}`SnmpVersion <enum-snmpversion>` | `v1`, `v2c`, `v3` | `v2c` | The CDP version supported by the device. |
 
+## Bind aliases
+
+Lazy references, resolved closed-world at push time.
+
+| alias | target | flavor | relation |
+| --- | --- | --- | --- |
+| `management_epg=` | `mgmtOoB` | DN — `bind_dn()` allowed | `fileRsARemoteHostToEpg` |
+
 ## APIC diagnostics
 
 States the APIC can flag on this class — it accepts the configuration and reports the inconsistency afterwards.

@@ -28,6 +28,14 @@ Accepted as keyword arguments of `.dot1x_node_authentication(name)` and of `.set
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |
 
+## Bind aliases
+
+Lazy references, resolved closed-world at push time.
+
+| alias | target | flavor | relation |
+| --- | --- | --- | --- |
+| `radius_provider_group=` | `aaaRadiusProviderGroup` | DN — `bind_dn()` allowed | `l2RsAaaRadiusProviderGroup` |
+
 ## APIC diagnostics
 
 States the APIC can flag on this class — it accepts the configuration and reports the inconsistency afterwards.

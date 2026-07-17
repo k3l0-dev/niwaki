@@ -54,3 +54,20 @@ Lazy references, resolved closed-world at push time.
 | `copp=` | `coppIfPol` | name | `infraRsCoppIfPol` |
 | `llfc=` | `qosLlfcIfPol` | name | `infraRsQosLlfcIfPol` |
 | `pfc=` | `qosPfcIfPol` | name | `infraRsQosPfcIfPol` |
+| `fc_interface=` | `fcIfPol` | name | `infraRsFcIfPol` |
+| `l2_mtu=` | `l2InstPol` | DN — `bind_dn()` allowed | `infraRsL2InstPol` |
+| `port_authentication=` | `l2PortAuthPol` | name | `infraRsL2PortAuthPol` |
+| `port_security=` | `l2PortSecurityPol` | name | `infraRsL2PortSecurityPol` |
+| `link_flap=` | `fabricLinkFlapPol` | name | `infraRsLinkFlapPol` |
+| `monitoring=` | `monInfraPol` | name | `infraRsMonIfInfraPol` |
+| `netflow_monitor=` | `netflowMonitorPol` | name | `infraRsNetflowMonitorPol` |
+| `optics=` | `xcvrOpticsIfPol` *(abstract: `xcvrZRIfPol`, `xcvrZRPIfPol`…)* | DN — `bind_dn()` allowed | `infraRsOpticsIfPol` |
+| `slow_drain=` | `qosSdIfPol` | name | `infraRsQosSdIfPol` |
+| `synce=` | `synceEthIfPol` | name | `infraRsSynceEthIfPolBndlGrp` |
+| `span_destination_group=` | `spanVDestGrp` | name | `infraRsSpanVDestGrp` |
+| `span_source_group=` | `spanVSrcGrp` | name | `infraRsSpanVSrcGrp` |
+
+## Verbs
+
+- `.ingress_dpp(name)` → `infraRsQosIngressDppIfPol` targeting `qosDppPol`
+- `.egress_dpp(name)` → `infraRsQosEgressDppIfPol` targeting `qosDppPol`

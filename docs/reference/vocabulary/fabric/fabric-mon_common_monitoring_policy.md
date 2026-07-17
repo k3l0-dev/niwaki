@@ -39,3 +39,5 @@ Accepted as keyword arguments of `.mon_common_monitoring_policy()` and of `.set(
 | `.tacacs_source(name, **attrs)` | `tacacsSrc` | {ref}`fabric.mon_common_monitoring_policy.tacacs_source <vocab-fabric-mon_common_monitoring_policy-tacacs_source>` |
 | `.fault_severity_assignment_policy(condition_code, **attrs)` | `faultSevAsnP` | {ref}`fabric.mon_common_monitoring_policy.fault_severity_assignment_policy <vocab-fabric-mon_common_monitoring_policy-fault_severity_assignment_policy>` |
 | `.event_severity_assignment_policy(condition_code, **attrs)` | `eventSevAsnP` | {ref}`fabric.mon_common_monitoring_policy.event_severity_assignment_policy <vocab-fabric-mon_common_monitoring_policy-event_severity_assignment_policy>` |
+| `.lifecycle_policy(condition_code, **attrs)` | `faultLcP` | {ref}`fabric.mon_common_monitoring_policy.lifecycle_policy <vocab-fabric-mon_common_monitoring_policy-lifecycle_policy>` |
+| `.stats_limit_pol(**attrs)` | `statslimitInstLimitPol` | {ref}`fabric.mon_common_monitoring_policy.stats_limit_pol <vocab-fabric-mon_common_monitoring_policy-stats_limit_pol>` |

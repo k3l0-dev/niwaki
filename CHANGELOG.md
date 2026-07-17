@@ -4,6 +4,123 @@ All notable changes to this project are documented here.  The format follows
 [Keep a Changelog](https://keepachangelog.com/); versions follow semver
 (0.x — the API may still change between minor versions).
 
+## [Unreleased]
+
+## [0.14.15] — 2026-07-17
+
+### Added
+
+- **Fabric switch profiles, module cards and vPC protection.**  The fabric root
+  gains `leaf_path_selector`, `spine_path_selector`, `override_leaf_selector` and
+  `override_spine_selector` makers; leaf and spine switch profiles bind their
+  `module_profile` (FEX card); the vPC explicit protection group binds its
+  `vpc_policy`; and switch event/fault/health retention policies are declarable.
+- **Management and DHCP node-group associations.**  Management, DHCP and
+  deployment-zone pod groups bind their node groups (`management_group`,
+  `node_group`); DHCP node groups bind their `dhcp_relay` policy; DNS server
+  groups bind their `epg`; and bridge domains gain a `dhcp_relay_label` maker.
+- **Observability — monitoring sources, syslog destinations, SPAN and
+  retention.**  EPG monitoring policies gain the SNMP/syslog/callhome/TACACS
+  sources plus `lifecycle_policy` and `stats_limit_pol` (the latter two across
+  every monitoring policy); syslog groups gain `console`, `file` and
+  `protocol_profile` destinations; tenants declare VSPAN sessions and destination
+  groups, whose destinations bind an EPG, path, APIC node or virtual port.
+
+### Coverage
+
+Declarable-surface coverage after these fixes — curated positions against the
+remaining **in-scope** backlog, by design domain:
+
+| Domain     |  Curated | In-scope gaps | Coverage |
+| ---------- | -------: | ------------: | -------: |
+| tenant     |      553 |           141 |     80 % |
+| access     |      212 |            29 |     88 % |
+| fabric     |      206 |            36 |     85 % |
+| controller |       12 |             1 |     92 % |
+| aaa        |       14 |             1 |     93 % |
+| vmm        |       33 |             1 |     97 % |
+| **Total**  | **1030** |       **209** | **83 %** |
+
+The 322 detected gaps split into **209 in-scope**, **26 deferred** (VMM,
+Intersight and on-switch third-party integrations — these need a live backend to
+verify) and **87 out of scope** (imperative actions, Cloud Network Controller,
+Nexus Dashboard Orchestrator / multi-site, and SD-WAN).  Anything outside the
+curated vocabulary stays reachable through `.mo(Class, ...)` and
+`bind_dn(alias=dn)`.
+
+## [0.14.14] — 2026-07-17
+
+### Added
+
+- **VRF, bridge-domain and external-EPG protocol relations are now declarable
+  (tenant).**  Bridge domains bind `fhs`, `nd_policy`, `igmp_snoop`, `mld_snoop`,
+  `dhcp_relay`, `endpoint_retention`, `netflow_monitor`, `monitoring_policy` and
+  `flood_filter`; VRFs bind `bgp_timers`, `bgp_address_family`,
+  `eigrp_address_family`, `endpoint_retention`, `route_tag`,
+  `route_control_profile`, `vrf_validation`, `monitoring_policy` and the
+  `ospf_timers` verb (per-address-family).  L3Out external EPGs gain
+  `imported_contract` and the `intra_epg` verb; in-band management EPGs gain
+  `taboo_contract` and `intra_epg`.
+- **L3Out route-control, QoS and SR-MPLS relations (tenant).**  The L3Out gains
+  the `dampening`, `interleak` and `redistribute` verbs (three route-control
+  profiles that automatic resolution cannot tell apart); logical interface
+  profiles gain `ingress_dpp` / `egress_dpp` (data-plane policing); node
+  attachments gain the SR-MPLS `node_sid_profile` maker; path attachments gain
+  `secondary_ip_address` and `member_node_configuration` makers.
+- **Contract service-graph attachment and in-band management contract labels.**
+  Contracts and subjects bind `service_graph` (`vzRsGraphAtt` /
+  `vzRsSubjGraphAtt`); in-band management EPGs gain the six contract and subject
+  labels (`consumer_contract_label`, `provider_label`, …).
+
+## [0.14.13] — 2026-07-17
+
+### Changed
+
+- **SNMP trap-forward-server maker renamed to `trap_forward_server`.**  Under
+  `fabric().snmp_policy(...)`, the maker that declares an `snmpTrapFwdServerP`
+  was called `client_entry` — the same word as the SNMP client-group's client
+  entry, which was misleading.  Use `.trap_forward_server(<address>)`.
+
+### Added
+
+- **Local AAA & security objects are now declarable under `aaa()`.**  Alongside
+  `radius()`, the `uni/userext` root makes local users (`local_user`), remote
+  users (`remote_user`), roles (`aaa_role`), security domains (`security_domain`)
+  and login domains (`login_domain`), plus the fabric-security singletons
+  `password_strength_policy`, `block_user_logins_policy`, `pre_login_banner`,
+  `fabric_sec` and `service_node_cluster_settings`.
+- **Interface policies attach to PC/vPC policy groups, and switch selectors to
+  their policy groups (access-binds).**  `infra().func_profile().port_channel(...)`
+  now binds `fc_interface`, `l2_mtu`, `port_authentication`, `port_security`,
+  `link_flap`, `monitoring`, `netflow_monitor`, `optics`, `slow_drain`, `synce`,
+  `span_destination_group` and `span_source_group`, plus the `ingress_dpp` /
+  `egress_dpp` verbs for data-plane policing (two relations to one `qosDppPol`).
+  Leaf and spine switch selectors bind `policy_group` (`infraRsAccNodePGrp` /
+  `infraRsSpineAccNodePGrp`) — the link that attaches a switch profile to its
+  switch policy group.
+- **Associated management EPG is now declarable on SNMP client groups, SNMP
+  trap destinations, syslog remote destinations, NTP providers, and DNS
+  profiles.**  `snmp_client_group_profile(...)`,
+  `snmp_monitoring_destination_group(...).snmp_trap_destination(...)`,
+  `syslog_group(...).remote_destination(...)`,
+  `datetime_policy(...).ntp_provider(...)`, and `fabric().dns_profile(...)`
+  accept `bind_dn(management_epg="uni/tn-mgmt/mgmtp-default/oob-default")` — the
+  `snmpRsEpg` / `fileRsARemoteHostToEpg` / `datetimeRsNtpProvToEpg` /
+  `dnsRsProfileToEpg` relation to the associated (OOB or in-band) management EPG.
+- **AAA / RADIUS is now declarable.**  A new top-level `aaa()` root — a sibling
+  of `controller()`, mirroring the MIT's `uni/userext` branch — with `radius()`,
+  `radius_provider(...)`, `radius_provider_group(...)` and its provider members.
+  The 802.1x node-auth policy can point at a group with
+  `dot1x_node_authentication(...).bind_dn(radius_provider_group=<dn>)`.
+- **Maintenance groups can reference their maintenance policy** —
+  `fabric().maintenance_group(...).bind(maintenance_policy=<name>)` creates the
+  `maintRsMgrpp` relation to a `maintMaintP`.
+- **NTP authentication keys are now declarable** —
+  `datetime_policy(...).ntp_auth_key(<id>, key=..., type_of_authentication_key=...)`
+  creates a `datetimeNtpAuthKey`, and
+  `datetime_policy(...).ntp_provider(...).authentication_key(<id>)` trusts one on
+  a provider (the `datetimeRsNtpProvToNtpAuthKey` relation, keyed by the key id).
+
 ## [0.14.12] — 2026-07-16
 
 ### Fixed

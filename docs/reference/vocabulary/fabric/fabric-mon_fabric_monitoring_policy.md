@@ -38,3 +38,5 @@ Accepted as keyword arguments of `.mon_fabric_monitoring_policy(name)` and of `.
 | `.callhome_source(name, **attrs)` | `callhomeSrc` | {ref}`fabric.mon_fabric_monitoring_policy.callhome_source <vocab-fabric-mon_fabric_monitoring_policy-callhome_source>` |
 | `.smart_callhome_source(**attrs)` | `callhomeSmartSrc` | {ref}`fabric.mon_fabric_monitoring_policy.smart_callhome_source <vocab-fabric-mon_fabric_monitoring_policy-smart_callhome_source>` |
 | `.tacacs_source(name, **attrs)` | `tacacsSrc` | {ref}`fabric.mon_fabric_monitoring_policy.tacacs_source <vocab-fabric-mon_fabric_monitoring_policy-tacacs_source>` |
+| `.lifecycle_policy(condition_code, **attrs)` | `faultLcP` | {ref}`fabric.mon_fabric_monitoring_policy.lifecycle_policy <vocab-fabric-mon_fabric_monitoring_policy-lifecycle_policy>` |
+| `.stats_limit_pol(**attrs)` | `statslimitInstLimitPol` | {ref}`fabric.mon_fabric_monitoring_policy.stats_limit_pol <vocab-fabric-mon_fabric_monitoring_policy-stats_limit_pol>` |

@@ -34,3 +34,11 @@ Accepted as keyword arguments of `.pod_group(name)` and of `.set(**attrs)` on th
 | maker | creates | position |
 | --- | --- | --- |
 | `.pod_block(name, **attrs)` | `infraPodBlk` | {ref}`infra.infrastructure_zoning_profile.infrastructure_zone.pod_group.pod_block <vocab-infra-infrastructure_zoning_profile-infrastructure_zone-pod_group-pod_block>` |
+
+## Bind aliases
+
+Lazy references, resolved closed-world at push time.
+
+| alias | target | flavor | relation |
+| --- | --- | --- | --- |
+| `node_group=` | `infrazoneNodeGrp` | DN — `bind_dn()` allowed | `infrazoneRsToNodeGrp` |

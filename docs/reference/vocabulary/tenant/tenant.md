@@ -107,6 +107,8 @@ Accepted as keyword arguments of `.tenant(name)` and of `.set(**attrs)` on this 
 | `.netflow_record(name, **attrs)` | `netflowRecordPol` | {ref}`tenant.netflow_record <vocab-tenant-netflow_record>` |
 | `.span_source_group(name, **attrs)` | `spanSrcGrp` | {ref}`tenant.span_source_group <vocab-tenant-span_source_group>` |
 | `.span_destination_group(name, **attrs)` | `spanDestGrp` | {ref}`tenant.span_destination_group <vocab-tenant-span_destination_group>` |
+| `.vspan_destination_group(name, **attrs)` | `spanVDestGrp` | {ref}`tenant.vspan_destination_group <vocab-tenant-vspan_destination_group>` |
+| `.vspan_session(name, **attrs)` | `spanVSrcGrp` | {ref}`tenant.vspan_session <vocab-tenant-vspan_session>` |
 | `.monitoring_policy(name, **attrs)` | `monEPGPol` | {ref}`tenant.monitoring_policy <vocab-tenant-monitoring_policy>` |
 | `.management_profile(name, **attrs)` | `mgmtMgmtP` | {ref}`tenant.management_profile <vocab-tenant-management_profile>` |
 | `.external_management_entity(name, **attrs)` | `mgmtExtMgmtEntity` | {ref}`tenant.external_management_entity <vocab-tenant-external_management_entity>` |

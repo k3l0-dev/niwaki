@@ -46,6 +46,8 @@ Accepted as keyword arguments of `.path_attachment(target_dn)` and of `.set(**at
 | `.rogue_exception_mac(**attrs)` | `l3extRogueExceptMacP` | {ref}`tenant.l3out.node_profile.interface_profile.path_attachment.rogue_exception_mac <vocab-tenant-l3out-node_profile-interface_profile-path_attachment-rogue_exception_mac>` |
 | `.micro_bfd(**attrs)` | `bfdMicroBfdP` | {ref}`tenant.l3out.node_profile.interface_profile.path_attachment.micro_bfd <vocab-tenant-l3out-node_profile-interface_profile-path_attachment-micro_bfd>` |
 | `.ptp_l3out(**attrs)` | `ptpRtdEpgCfg` | {ref}`tenant.l3out.node_profile.interface_profile.path_attachment.ptp_l3out <vocab-tenant-l3out-node_profile-interface_profile-path_attachment-ptp_l3out>` |
+| `.secondary_ip_address(ip_address, **attrs)` | `l3extIp` | {ref}`tenant.l3out.node_profile.interface_profile.path_attachment.secondary_ip_address <vocab-tenant-l3out-node_profile-interface_profile-path_attachment-secondary_ip_address>` |
+| `.member_node_configuration(side, **attrs)` | `l3extMember` | {ref}`tenant.l3out.node_profile.interface_profile.path_attachment.member_node_configuration <vocab-tenant-l3out-node_profile-interface_profile-path_attachment-member_node_configuration>` |
 
 ## APIC diagnostics
 

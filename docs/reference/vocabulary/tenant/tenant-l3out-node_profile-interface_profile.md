@@ -57,3 +57,8 @@ Lazy references, resolved closed-world at push time.
 | `nd_interface_policy=` | `ndIfPol` | name | `l3extRsNdIfPol` |
 | `custom_qos_policy=` | `qosCustomPol` | name | `l3extRsLIfPCustQosPol` |
 | `netflow_monitor=` | `netflowMonitorPol` | name | `l3extRsLIfPToNetflowMonitorPol` |
+
+## Verbs
+
+- `.ingress_dpp(name)` → `l3extRsIngressQosDppPol` targeting `qosDppPol`
+- `.egress_dpp(name)` → `l3extRsEgressQosDppPol` targeting `qosDppPol`

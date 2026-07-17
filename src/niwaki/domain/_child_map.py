@@ -9,6 +9,7 @@ from typing import Literal
 # The special key "_root" covers objects directly under uni (pol:Uni).
 CHILD_MAP: dict[str, dict[str, str]] = {
     "_root": {
+        "aaa": "aaaUserEp",
         "aes_encryption_passphrase_and_keys_for_config_export_and_import": "pkiExportEncryptionKey",
         "alias": "tagAliasDef",
         "annotation": "tagAnnotation",
@@ -40,7 +41,6 @@ CHILD_MAP: dict[str, dict[str, str]] = {
         "tag_definition": "tagDef",
         "tenant": "fvTenant",
         "ui_page_usage": "uiPageUsage",
-        "user_management": "aaaUserEp",
     },
     "aaaActiveUserSession": {
         "annotation": "tagAnnotation",

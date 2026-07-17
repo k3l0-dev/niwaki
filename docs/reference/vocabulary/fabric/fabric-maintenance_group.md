@@ -35,3 +35,11 @@ Accepted as keyword arguments of `.maintenance_group(name)` and of `.set(**attrs
 | maker | creates | position |
 | --- | --- | --- |
 | `.node_block(name, **attrs)` | `fabricNodeBlk` | {ref}`fabric.maintenance_group.node_block <vocab-fabric-maintenance_group-node_block>` |
+
+## Bind aliases
+
+Lazy references, resolved closed-world at push time.
+
+| alias | target | flavor | relation |
+| --- | --- | --- | --- |
+| `maintenance_policy=` | `maintMaintP` | name | `maintRsMgrpp` |

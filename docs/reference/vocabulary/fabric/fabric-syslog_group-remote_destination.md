@@ -32,3 +32,11 @@ Accepted as keyword arguments of `.remote_destination(host)` and of `.set(**attr
 | `port` | `port` | `int` | — | `514` | The syslog service port of the remote destination. |
 | `protocol` | `protocol` | {ref}`SyslogProtocolType <enum-syslogprotocoltype>` | `ssl`, `tcp`, `udp` | `udp` | The transfer protocol to be used for data export. |
 | `severity` | `severity` | {ref}`SyslogSeverity <enum-syslogseverity>` | `alerts`, `critical`, `debugging`, `emergencies`, `errors`, `information`, `notifications`, `warnings` | `warnings` | The severity of the event, alert, or issue that caused the syslog entry to be generated. |
+
+## Bind aliases
+
+Lazy references, resolved closed-world at push time.
+
+| alias | target | flavor | relation |
+| --- | --- | --- | --- |
+| `management_epg=` | `mgmtOoB` | DN — `bind_dn()` allowed | `fileRsARemoteHostToEpg` |

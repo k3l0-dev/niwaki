@@ -13,7 +13,7 @@ Enable external secondary IPs for DHCP relay gateway
 | --- | --- |
 | ACI class | `dhcpRelayGwExtIp` |
 | RN | `relayGwExtIp` |
-| Cursor | `DhcpRelayGwExtIpCursor` |
+| Cursor | `FloatingSviSecondaryIpAddressDhcpRelayGwExtIpCursor` |
 | Parent | {ref}`tenant.l3out.node_profile.interface_profile.floating_svi.secondary_ip_address <vocab-tenant-l3out-node_profile-interface_profile-floating_svi-secondary_ip_address>` |
 | Atomic | — |
 

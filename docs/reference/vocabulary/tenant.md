@@ -68,6 +68,7 @@ VRFs, bridge domains, application profiles, EPGs, contracts and filters — one 
     - {ref}`tenant.bd.nd_ra_subnet <vocab-tenant-bd-nd_ra_subnet>` — `ndRaSubnet`, 3 attributes
     - {ref}`tenant.bd.legacy_mode <vocab-tenant-bd-legacy_mode>` — `fvAccP`, 5 attributes
     - {ref}`tenant.bd.rogue_exception_mac <vocab-tenant-bd-rogue_exception_mac>` — `fvRogueExceptionMac`, 3 attributes
+    - {ref}`tenant.bd.dhcp_relay_label <vocab-tenant-bd-dhcp_relay_label>` — `dhcpLbl`, 6 attributes
   - {ref}`tenant.vrf <vocab-tenant-vrf>` — `fvCtx`, 10 attributes
     - {ref}`tenant.vrf.pim <vocab-tenant-vrf-pim>` — `pimCtxP`, 6 attributes
       - {ref}`tenant.vrf.pim.asm_pattern <vocab-tenant-vrf-pim-asm_pattern>` — `pimASMPatPol`, 3 attributes
@@ -146,6 +147,9 @@ VRFs, bridge domains, application profiles, EPGs, contracts and filters — one 
           - {ref}`tenant.l3out.node_profile.interface_profile.path_attachment.rogue_exception_mac <vocab-tenant-l3out-node_profile-interface_profile-path_attachment-rogue_exception_mac>` — `l3extRogueExceptMacP`, 1 attributes
           - {ref}`tenant.l3out.node_profile.interface_profile.path_attachment.micro_bfd <vocab-tenant-l3out-node_profile-interface_profile-path_attachment-micro_bfd>` — `bfdMicroBfdP`, 5 attributes
           - {ref}`tenant.l3out.node_profile.interface_profile.path_attachment.ptp_l3out <vocab-tenant-l3out-node_profile-interface_profile-path_attachment-ptp_l3out>` — `ptpRtdEpgCfg`, 4 attributes
+          - {ref}`tenant.l3out.node_profile.interface_profile.path_attachment.secondary_ip_address <vocab-tenant-l3out-node_profile-interface_profile-path_attachment-secondary_ip_address>` — `l3extIp`, 4 attributes
+            - {ref}`tenant.l3out.node_profile.interface_profile.path_attachment.secondary_ip_address.dhcp_relay_gw_ext_ip <vocab-tenant-l3out-node_profile-interface_profile-path_attachment-secondary_ip_address-dhcp_relay_gw_ext_ip>` — `dhcpRelayGwExtIp`, 2 attributes
+          - {ref}`tenant.l3out.node_profile.interface_profile.path_attachment.member_node_configuration <vocab-tenant-l3out-node_profile-interface_profile-path_attachment-member_node_configuration>` — `l3extMember`, 6 attributes
         - {ref}`tenant.l3out.node_profile.interface_profile.floating_svi <vocab-tenant-l3out-node_profile-interface_profile-floating_svi>` — `l3extVirtualLIfP`, 14 attributes
           - {ref}`tenant.l3out.node_profile.interface_profile.floating_svi.bgp_peer <vocab-tenant-l3out-node_profile-interface_profile-floating_svi-bgp_peer>` — `bgpPeerP`, 15 attributes
             - {ref}`tenant.l3out.node_profile.interface_profile.floating_svi.bgp_peer.autonomous_system_profile <vocab-tenant-l3out-node_profile-interface_profile-floating_svi-bgp_peer-autonomous_system_profile>` — `bgpAsP`, 3 attributes
@@ -179,6 +183,7 @@ VRFs, bridge domains, application profiles, EPGs, contracts and filters — one 
         - {ref}`tenant.l3out.node_profile.node_attachment.infra_node <vocab-tenant-l3out-node_profile-node_attachment-infra_node>` — `l3extInfraNodeP`, 5 attributes
         - {ref}`tenant.l3out.node_profile.node_attachment.loopback <vocab-tenant-l3out-node_profile-node_attachment-loopback>` — `l3extLoopBackIfP`, 3 attributes
           - {ref}`tenant.l3out.node_profile.node_attachment.loopback.node_sid <vocab-tenant-l3out-node_profile-node_attachment-loopback-node_sid>` — `mplsNodeSidP`, 4 attributes
+        - {ref}`tenant.l3out.node_profile.node_attachment.node_sid_profile <vocab-tenant-l3out-node_profile-node_attachment-node_sid_profile>` — `mplsNodeSidP`, 4 attributes
       - {ref}`tenant.l3out.node_profile.bgp_peer <vocab-tenant-l3out-node_profile-bgp_peer>` — `bgpPeerP`, 15 attributes
         - {ref}`tenant.l3out.node_profile.bgp_peer.autonomous_system_profile <vocab-tenant-l3out-node_profile-bgp_peer-autonomous_system_profile>` — `bgpAsP`, 3 attributes
         - {ref}`tenant.l3out.node_profile.bgp_peer.local_autonomous_system_profile <vocab-tenant-l3out-node_profile-bgp_peer-local_autonomous_system_profile>` — `bgpLocalAsnP`, 4 attributes
@@ -376,8 +381,21 @@ VRFs, bridge domains, application profiles, EPGs, contracts and filters — one 
   - {ref}`tenant.span_destination_group <vocab-tenant-span_destination_group>` — `spanDestGrp`, 4 attributes
     - {ref}`tenant.span_destination_group.span_destination <vocab-tenant-span_destination_group-span_destination>` — `spanDest`, 4 attributes
       - {ref}`tenant.span_destination_group.span_destination.vspan_epg_summary <vocab-tenant-span_destination_group-span_destination-vspan_epg_summary>` — `spanVEpgSummary`, 12 attributes
+  - {ref}`tenant.vspan_destination_group <vocab-tenant-vspan_destination_group>` — `spanVDestGrp`, 4 attributes
+    - {ref}`tenant.vspan_destination_group.vspan_vdestination <vocab-tenant-vspan_destination_group-vspan_vdestination>` — `spanVDest`, 4 attributes
+      - {ref}`tenant.vspan_destination_group.vspan_vdestination.vspan_destination_epg_summary <vocab-tenant-vspan_destination_group-vspan_vdestination-vspan_destination_epg_summary>` — `spanVEpgSummary`, 12 attributes
+  - {ref}`tenant.vspan_session <vocab-tenant-vspan_session>` — `spanVSrcGrp`, 5 attributes
+    - {ref}`tenant.vspan_session.vspan_vsource <vocab-tenant-vspan_session-vspan_vsource>` — `spanVSrc`, 5 attributes
+    - {ref}`tenant.vspan_session.span_label <vocab-tenant-vspan_session-span_label>` — `spanSpanLbl`, 5 attributes
   - {ref}`tenant.monitoring_policy <vocab-tenant-monitoring_policy>` — `monEPGPol`, 4 attributes
     - {ref}`tenant.monitoring_policy.target <vocab-tenant-monitoring_policy-target>` — `monEPGTarget`, 3 attributes
+    - {ref}`tenant.monitoring_policy.syslog_source <vocab-tenant-monitoring_policy-syslog_source>` — `syslogSrc`, 4 attributes
+    - {ref}`tenant.monitoring_policy.snmp_source <vocab-tenant-monitoring_policy-snmp_source>` — `snmpSrc`, 4 attributes
+    - {ref}`tenant.monitoring_policy.callhome_source <vocab-tenant-monitoring_policy-callhome_source>` — `callhomeSrc`, 4 attributes
+    - {ref}`tenant.monitoring_policy.smart_callhome_source <vocab-tenant-monitoring_policy-smart_callhome_source>` — `callhomeSmartSrc`, 2 attributes
+    - {ref}`tenant.monitoring_policy.tacacs_source <vocab-tenant-monitoring_policy-tacacs_source>` — `tacacsSrc`, 5 attributes
+    - {ref}`tenant.monitoring_policy.lifecycle_policy <vocab-tenant-monitoring_policy-lifecycle_policy>` — `faultLcP`, 6 attributes
+    - {ref}`tenant.monitoring_policy.stats_limit_pol <vocab-tenant-monitoring_policy-stats_limit_pol>` — `statslimitInstLimitPol`, 4 attributes
   - {ref}`tenant.management_profile <vocab-tenant-management_profile>` — `mgmtMgmtP`, 4 attributes
     - {ref}`tenant.management_profile.in_band_epg <vocab-tenant-management_profile-in_band_epg>` — `mgmtInB`, 8 attributes
       - {ref}`tenant.management_profile.in_band_epg.subnet <vocab-tenant-management_profile-in_band_epg-subnet>` — `fvSubnet`, 8 attributes
@@ -385,6 +403,12 @@ VRFs, bridge domains, application profiles, EPGs, contracts and filters — one 
         - {ref}`tenant.management_profile.in_band_epg.subnet.nlb_endpoint <vocab-tenant-management_profile-in_band_epg-subnet-nlb_endpoint>` — `fvEpNlb`, 5 attributes
         - {ref}`tenant.management_profile.in_band_epg.subnet.endpoint_network_config <vocab-tenant-management_profile-in_band_epg-subnet-endpoint_network_config>` — `fvCepNetCfgPol`, 8 attributes
       - {ref}`tenant.management_profile.in_band_epg.static_route <vocab-tenant-management_profile-in_band_epg-static_route>` — `mgmtStaticRoute`, 2 attributes
+      - {ref}`tenant.management_profile.in_band_epg.consumer_contract_label <vocab-tenant-management_profile-in_band_epg-consumer_contract_label>` — `vzConsCtrctLbl`, 5 attributes
+      - {ref}`tenant.management_profile.in_band_epg.consumer_label <vocab-tenant-management_profile-in_band_epg-consumer_label>` — `vzConsLbl`, 5 attributes
+      - {ref}`tenant.management_profile.in_band_epg.consumer_subject_label <vocab-tenant-management_profile-in_band_epg-consumer_subject_label>` — `vzConsSubjLbl`, 6 attributes
+      - {ref}`tenant.management_profile.in_band_epg.provider_contract_label <vocab-tenant-management_profile-in_band_epg-provider_contract_label>` — `vzProvCtrctLbl`, 5 attributes
+      - {ref}`tenant.management_profile.in_band_epg.provider_label <vocab-tenant-management_profile-in_band_epg-provider_label>` — `vzProvLbl`, 6 attributes
+      - {ref}`tenant.management_profile.in_band_epg.provider_subject_label <vocab-tenant-management_profile-in_band_epg-provider_subject_label>` — `vzProvSubjLbl`, 6 attributes
     - {ref}`tenant.management_profile.out_of_band_epg <vocab-tenant-management_profile-out_of_band_epg>` — `mgmtOoB`, 3 attributes
       - {ref}`tenant.management_profile.out_of_band_epg.static_route <vocab-tenant-management_profile-out_of_band_epg-static_route>` — `mgmtStaticRoute`, 2 attributes
   - {ref}`tenant.external_management_entity <vocab-tenant-external_management_entity>` — `mgmtExtMgmtEntity`, 4 attributes
@@ -513,6 +537,7 @@ tenant/tenant-bd-pim-filter-destination_filter
 tenant/tenant-bd-nd_ra_subnet
 tenant/tenant-bd-legacy_mode
 tenant/tenant-bd-rogue_exception_mac
+tenant/tenant-bd-dhcp_relay_label
 tenant/tenant-vrf
 tenant/tenant-vrf-pim
 tenant/tenant-vrf-pim-asm_pattern
@@ -591,6 +616,9 @@ tenant/tenant-l3out-node_profile-interface_profile-path_attachment-forwarder_add
 tenant/tenant-l3out-node_profile-interface_profile-path_attachment-rogue_exception_mac
 tenant/tenant-l3out-node_profile-interface_profile-path_attachment-micro_bfd
 tenant/tenant-l3out-node_profile-interface_profile-path_attachment-ptp_l3out
+tenant/tenant-l3out-node_profile-interface_profile-path_attachment-secondary_ip_address
+tenant/tenant-l3out-node_profile-interface_profile-path_attachment-secondary_ip_address-dhcp_relay_gw_ext_ip
+tenant/tenant-l3out-node_profile-interface_profile-path_attachment-member_node_configuration
 tenant/tenant-l3out-node_profile-interface_profile-floating_svi
 tenant/tenant-l3out-node_profile-interface_profile-floating_svi-bgp_peer
 tenant/tenant-l3out-node_profile-interface_profile-floating_svi-bgp_peer-autonomous_system_profile
@@ -624,6 +652,7 @@ tenant/tenant-l3out-node_profile-node_attachment-static_route-next_hop
 tenant/tenant-l3out-node_profile-node_attachment-infra_node
 tenant/tenant-l3out-node_profile-node_attachment-loopback
 tenant/tenant-l3out-node_profile-node_attachment-loopback-node_sid
+tenant/tenant-l3out-node_profile-node_attachment-node_sid_profile
 tenant/tenant-l3out-node_profile-bgp_peer
 tenant/tenant-l3out-node_profile-bgp_peer-autonomous_system_profile
 tenant/tenant-l3out-node_profile-bgp_peer-local_autonomous_system_profile
@@ -821,8 +850,21 @@ tenant/tenant-span_source_group-vspan_source_def
 tenant/tenant-span_destination_group
 tenant/tenant-span_destination_group-span_destination
 tenant/tenant-span_destination_group-span_destination-vspan_epg_summary
+tenant/tenant-vspan_destination_group
+tenant/tenant-vspan_destination_group-vspan_vdestination
+tenant/tenant-vspan_destination_group-vspan_vdestination-vspan_destination_epg_summary
+tenant/tenant-vspan_session
+tenant/tenant-vspan_session-vspan_vsource
+tenant/tenant-vspan_session-span_label
 tenant/tenant-monitoring_policy
 tenant/tenant-monitoring_policy-target
+tenant/tenant-monitoring_policy-syslog_source
+tenant/tenant-monitoring_policy-snmp_source
+tenant/tenant-monitoring_policy-callhome_source
+tenant/tenant-monitoring_policy-smart_callhome_source
+tenant/tenant-monitoring_policy-tacacs_source
+tenant/tenant-monitoring_policy-lifecycle_policy
+tenant/tenant-monitoring_policy-stats_limit_pol
 tenant/tenant-management_profile
 tenant/tenant-management_profile-in_band_epg
 tenant/tenant-management_profile-in_band_epg-subnet
@@ -830,6 +872,12 @@ tenant/tenant-management_profile-in_band_epg-subnet-anycast_endpoint
 tenant/tenant-management_profile-in_band_epg-subnet-nlb_endpoint
 tenant/tenant-management_profile-in_band_epg-subnet-endpoint_network_config
 tenant/tenant-management_profile-in_band_epg-static_route
+tenant/tenant-management_profile-in_band_epg-consumer_contract_label
+tenant/tenant-management_profile-in_band_epg-consumer_label
+tenant/tenant-management_profile-in_band_epg-consumer_subject_label
+tenant/tenant-management_profile-in_band_epg-provider_contract_label
+tenant/tenant-management_profile-in_band_epg-provider_label
+tenant/tenant-management_profile-in_band_epg-provider_subject_label
 tenant/tenant-management_profile-out_of_band_epg
 tenant/tenant-management_profile-out_of_band_epg-static_route
 tenant/tenant-external_management_entity

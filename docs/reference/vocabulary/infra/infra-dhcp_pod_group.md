@@ -34,3 +34,11 @@ Accepted as keyword arguments of `.dhcp_pod_group(name)` and of `.set(**attrs)` 
 | maker | creates | position |
 | --- | --- | --- |
 | `.pod_block(name, **attrs)` | `infraPodBlk` | {ref}`infra.dhcp_pod_group.pod_block <vocab-infra-dhcp_pod_group-pod_block>` |
+
+## Bind aliases
+
+Lazy references, resolved closed-world at push time.
+
+| alias | target | flavor | relation |
+| --- | --- | --- | --- |
+| `node_group=` | `dhcpNodeGrp` | DN — `bind_dn()` allowed | `dhcpRsToNodeGrp` |

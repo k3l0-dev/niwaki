@@ -31,3 +31,11 @@ Accepted as keyword arguments of `.dns_server_group(name)` and of `.set(**attrs)
 | maker | creates | position |
 | --- | --- | --- |
 | `.server(ip_address, **attrs)` | `dnsepgSvr` | {ref}`tenant.dns_server_group.server <vocab-tenant-dns_server_group-server>` |
+
+## Bind aliases
+
+Lazy references, resolved closed-world at push time.
+
+| alias | target | flavor | relation |
+| --- | --- | --- | --- |
+| `epg=` | `fvEPg` *(abstract: `fvAEPg`, `fvESg`, `fvTnlEPg`, `infraCEPg`…)* | DN — `bind_dn()` allowed | `dnsepgRsSvrEpg` |

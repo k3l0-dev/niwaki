@@ -33,3 +33,10 @@ Accepted as keyword arguments of `.monitoring_policy(name)` and of `.set(**attrs
 | maker | creates | position |
 | --- | --- | --- |
 | `.target(target_scope, **attrs)` | `monEPGTarget` | {ref}`tenant.monitoring_policy.target <vocab-tenant-monitoring_policy-target>` |
+| `.syslog_source(name, **attrs)` | `syslogSrc` | {ref}`tenant.monitoring_policy.syslog_source <vocab-tenant-monitoring_policy-syslog_source>` |
+| `.snmp_source(name, **attrs)` | `snmpSrc` | {ref}`tenant.monitoring_policy.snmp_source <vocab-tenant-monitoring_policy-snmp_source>` |
+| `.callhome_source(name, **attrs)` | `callhomeSrc` | {ref}`tenant.monitoring_policy.callhome_source <vocab-tenant-monitoring_policy-callhome_source>` |
+| `.smart_callhome_source(**attrs)` | `callhomeSmartSrc` | {ref}`tenant.monitoring_policy.smart_callhome_source <vocab-tenant-monitoring_policy-smart_callhome_source>` |
+| `.tacacs_source(name, **attrs)` | `tacacsSrc` | {ref}`tenant.monitoring_policy.tacacs_source <vocab-tenant-monitoring_policy-tacacs_source>` |
+| `.lifecycle_policy(condition_code, **attrs)` | `faultLcP` | {ref}`tenant.monitoring_policy.lifecycle_policy <vocab-tenant-monitoring_policy-lifecycle_policy>` |
+| `.stats_limit_pol(**attrs)` | `statslimitInstLimitPol` | {ref}`tenant.monitoring_policy.stats_limit_pol <vocab-tenant-monitoring_policy-stats_limit_pol>` |

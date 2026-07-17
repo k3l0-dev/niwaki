@@ -13,7 +13,7 @@ Protocol profile
 | --- | --- |
 | ACI class | `bgpProtP` |
 | RN | `protp` |
-| Cursor | `ProtocolProfileCursor` |
+| Cursor | `NodeProfileProtocolProfileCursor` |
 | Parent | {ref}`tenant.l3out.node_profile <vocab-tenant-l3out-node_profile>` |
 | Atomic | — |
 

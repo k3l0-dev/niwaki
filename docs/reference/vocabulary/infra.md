@@ -181,6 +181,8 @@ Interface policies, VLAN pools, AAEPs, policy groups, interface and switch profi
     - {ref}`infra.monitoring_policy.callhome_source <vocab-infra-monitoring_policy-callhome_source>` — `callhomeSrc`, 4 attributes
     - {ref}`infra.monitoring_policy.smart_callhome_source <vocab-infra-monitoring_policy-smart_callhome_source>` — `callhomeSmartSrc`, 2 attributes
     - {ref}`infra.monitoring_policy.tacacs_source <vocab-infra-monitoring_policy-tacacs_source>` — `tacacsSrc`, 5 attributes
+    - {ref}`infra.monitoring_policy.lifecycle_policy <vocab-infra-monitoring_policy-lifecycle_policy>` — `faultLcP`, 6 attributes
+    - {ref}`infra.monitoring_policy.stats_limit_pol <vocab-infra-monitoring_policy-stats_limit_pol>` — `statslimitInstLimitPol`, 4 attributes
   - {ref}`infra.vspan_session <vocab-infra-vspan_session>` — `spanVSrcGrp`, 5 attributes
     - {ref}`infra.vspan_session.vspan_vsource <vocab-infra-vspan_session-vspan_vsource>` — `spanVSrc`, 5 attributes
     - {ref}`infra.vspan_session.span_label <vocab-infra-vspan_session-span_label>` — `spanSpanLbl`, 5 attributes
@@ -372,6 +374,8 @@ infra/infra-monitoring_policy-snmp_source
 infra/infra-monitoring_policy-callhome_source
 infra/infra-monitoring_policy-smart_callhome_source
 infra/infra-monitoring_policy-tacacs_source
+infra/infra-monitoring_policy-lifecycle_policy
+infra/infra-monitoring_policy-stats_limit_pol
 infra/infra-vspan_session
 infra/infra-vspan_session-vspan_vsource
 infra/infra-vspan_session-span_label

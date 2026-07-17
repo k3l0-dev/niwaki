@@ -35,6 +35,7 @@ Accepted as keyword arguments of `.node_attachment(target_dn)` and of `.set(**at
 | `.static_route(match_ip_address, **attrs)` | `ipRouteP` | {ref}`tenant.l3out.node_profile.node_attachment.static_route <vocab-tenant-l3out-node_profile-node_attachment-static_route>` |
 | `.infra_node(**attrs)` | `l3extInfraNodeP` | {ref}`tenant.l3out.node_profile.node_attachment.infra_node <vocab-tenant-l3out-node_profile-node_attachment-infra_node>` |
 | `.loopback(loop_back_interface_address, **attrs)` | `l3extLoopBackIfP` | {ref}`tenant.l3out.node_profile.node_attachment.loopback <vocab-tenant-l3out-node_profile-node_attachment-loopback>` |
+| `.node_sid_profile(srgb_index, **attrs)` | `mplsNodeSidP` | {ref}`tenant.l3out.node_profile.node_attachment.node_sid_profile <vocab-tenant-l3out-node_profile-node_attachment-node_sid_profile>` |
 
 ## APIC diagnostics
 
