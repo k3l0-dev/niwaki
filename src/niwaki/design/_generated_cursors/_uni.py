@@ -1157,36 +1157,6 @@ class CustomEpgAggregatorCursor(
         Cursor.set(self, **_prune(params))
         return self
 
-    def bind(
-        self,
-        *,
-        vlan_pool: str | Ref | None = None,
-        mcast_pool: str | Ref | None = None,
-        address_pool: str | Ref | None = None,
-        cdp: str | Ref | None = None,
-        lldp: str | Ref | None = None,
-        lacp: str | Ref | None = None,
-        stp: str | Ref | None = None,
-        l2_mtu: str | Ref | None = None,
-        firewall: str | Ref | None = None,
-    ) -> CustomEpgAggregatorCursor:
-        """Declare lazy Rs references (resolved at push time)."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind(self, **_prune(params))
-        return self
-
-    def bind_dn(
-        self,
-        *,
-        vlan_pool: str | Ref | None = None,
-        mcast_pool: str | Ref | None = None,
-        address_pool: str | Ref | None = None,
-    ) -> CustomEpgAggregatorCursor:
-        """Reference objects outside the design by raw DN."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind_dn(self, **_prune(params))
-        return self
-
 
 class _EpgAggregatorMakers(Cursor):
     """Makers declared at the epg_aggregator level (``vmmUsrAggr``)."""
@@ -1276,36 +1246,6 @@ class EpgAggregatorCursor(_EpgAggregatorMakers, _VmmDomMakers, _VmmProviderMaker
         Cursor.set(self, **_prune(params))
         return self
 
-    def bind(
-        self,
-        *,
-        vlan_pool: str | Ref | None = None,
-        mcast_pool: str | Ref | None = None,
-        address_pool: str | Ref | None = None,
-        cdp: str | Ref | None = None,
-        lldp: str | Ref | None = None,
-        lacp: str | Ref | None = None,
-        stp: str | Ref | None = None,
-        l2_mtu: str | Ref | None = None,
-        firewall: str | Ref | None = None,
-    ) -> EpgAggregatorCursor:
-        """Declare lazy Rs references (resolved at push time)."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind(self, **_prune(params))
-        return self
-
-    def bind_dn(
-        self,
-        *,
-        vlan_pool: str | Ref | None = None,
-        mcast_pool: str | Ref | None = None,
-        address_pool: str | Ref | None = None,
-    ) -> EpgAggregatorCursor:
-        """Reference objects outside the design by raw DN."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind_dn(self, **_prune(params))
-        return self
-
 
 class _UplinkPolicyContainerMakers(Cursor):
     """Makers declared at the uplink_policy_container level (``vmmUplinkPCont``)."""
@@ -1373,36 +1313,6 @@ class UplinkPolicyContainerCursor(
         """Set ``vmmUplinkPCont`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
-        return self
-
-    def bind(
-        self,
-        *,
-        vlan_pool: str | Ref | None = None,
-        mcast_pool: str | Ref | None = None,
-        address_pool: str | Ref | None = None,
-        cdp: str | Ref | None = None,
-        lldp: str | Ref | None = None,
-        lacp: str | Ref | None = None,
-        stp: str | Ref | None = None,
-        l2_mtu: str | Ref | None = None,
-        firewall: str | Ref | None = None,
-    ) -> UplinkPolicyContainerCursor:
-        """Declare lazy Rs references (resolved at push time)."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind(self, **_prune(params))
-        return self
-
-    def bind_dn(
-        self,
-        *,
-        vlan_pool: str | Ref | None = None,
-        mcast_pool: str | Ref | None = None,
-        address_pool: str | Ref | None = None,
-    ) -> UplinkPolicyContainerCursor:
-        """Reference objects outside the design by raw DN."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -1540,36 +1450,6 @@ class VmmControllerCursor(_VmmControllerMakers, _VmmDomMakers, _VmmProviderMaker
         Cursor.set(self, **_prune(params))
         return self
 
-    def bind(
-        self,
-        *,
-        vlan_pool: str | Ref | None = None,
-        mcast_pool: str | Ref | None = None,
-        address_pool: str | Ref | None = None,
-        cdp: str | Ref | None = None,
-        lldp: str | Ref | None = None,
-        lacp: str | Ref | None = None,
-        stp: str | Ref | None = None,
-        l2_mtu: str | Ref | None = None,
-        firewall: str | Ref | None = None,
-    ) -> VmmControllerCursor:
-        """Declare lazy Rs references (resolved at push time)."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind(self, **_prune(params))
-        return self
-
-    def bind_dn(
-        self,
-        *,
-        vlan_pool: str | Ref | None = None,
-        mcast_pool: str | Ref | None = None,
-        address_pool: str | Ref | None = None,
-    ) -> VmmControllerCursor:
-        """Reference objects outside the design by raw DN."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind_dn(self, **_prune(params))
-        return self
-
 
 class VmmCredentialCursor(_VmmDomMakers, _VmmProviderMakers, _UniMakers):
     """Typed cursor for ``vmmUsrAccP`` (vmm_credential level).
@@ -1597,36 +1477,6 @@ class VmmCredentialCursor(_VmmDomMakers, _VmmProviderMakers, _UniMakers):
         """Set ``vmmUsrAccP`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
-        return self
-
-    def bind(
-        self,
-        *,
-        vlan_pool: str | Ref | None = None,
-        mcast_pool: str | Ref | None = None,
-        address_pool: str | Ref | None = None,
-        cdp: str | Ref | None = None,
-        lldp: str | Ref | None = None,
-        lacp: str | Ref | None = None,
-        stp: str | Ref | None = None,
-        l2_mtu: str | Ref | None = None,
-        firewall: str | Ref | None = None,
-    ) -> VmmCredentialCursor:
-        """Declare lazy Rs references (resolved at push time)."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind(self, **_prune(params))
-        return self
-
-    def bind_dn(
-        self,
-        *,
-        vlan_pool: str | Ref | None = None,
-        mcast_pool: str | Ref | None = None,
-        address_pool: str | Ref | None = None,
-    ) -> VmmCredentialCursor:
-        """Reference objects outside the design by raw DN."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -1711,9 +1561,6 @@ class VswitchPolicyGroupCursor(
         l2_mtu: str | Ref | None = None,
         netflow: str | Ref | None = None,
         firewall: str | Ref | None = None,
-        vlan_pool: str | Ref | None = None,
-        mcast_pool: str | Ref | None = None,
-        address_pool: str | Ref | None = None,
     ) -> VswitchPolicyGroupCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -1731,9 +1578,6 @@ class VswitchPolicyGroupCursor(
         l2_mtu: str | Ref | None = None,
         netflow: str | Ref | None = None,
         firewall: str | Ref | None = None,
-        vlan_pool: str | Ref | None = None,
-        mcast_pool: str | Ref | None = None,
-        address_pool: str | Ref | None = None,
     ) -> VswitchPolicyGroupCursor:
         """Reference objects outside the design by raw DN."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -1770,36 +1614,6 @@ class CustomEpgAggregatorRangeCursor(
         Cursor.set(self, **_prune(params))
         return self
 
-    def bind(
-        self,
-        *,
-        vlan_pool: str | Ref | None = None,
-        mcast_pool: str | Ref | None = None,
-        address_pool: str | Ref | None = None,
-        cdp: str | Ref | None = None,
-        lldp: str | Ref | None = None,
-        lacp: str | Ref | None = None,
-        stp: str | Ref | None = None,
-        l2_mtu: str | Ref | None = None,
-        firewall: str | Ref | None = None,
-    ) -> CustomEpgAggregatorRangeCursor:
-        """Declare lazy Rs references (resolved at push time)."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind(self, **_prune(params))
-        return self
-
-    def bind_dn(
-        self,
-        *,
-        vlan_pool: str | Ref | None = None,
-        mcast_pool: str | Ref | None = None,
-        address_pool: str | Ref | None = None,
-    ) -> CustomEpgAggregatorRangeCursor:
-        """Reference objects outside the design by raw DN."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind_dn(self, **_prune(params))
-        return self
-
 
 class EpgAggregatorRangeCursor(_EpgAggregatorMakers, _VmmDomMakers, _VmmProviderMakers, _UniMakers):
     """Typed cursor for ``fvnsEncapBlk`` (range level).
@@ -1826,36 +1640,6 @@ class EpgAggregatorRangeCursor(_EpgAggregatorMakers, _VmmDomMakers, _VmmProvider
         """Set ``fvnsEncapBlk`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
-        return self
-
-    def bind(
-        self,
-        *,
-        vlan_pool: str | Ref | None = None,
-        mcast_pool: str | Ref | None = None,
-        address_pool: str | Ref | None = None,
-        cdp: str | Ref | None = None,
-        lldp: str | Ref | None = None,
-        lacp: str | Ref | None = None,
-        stp: str | Ref | None = None,
-        l2_mtu: str | Ref | None = None,
-        firewall: str | Ref | None = None,
-    ) -> EpgAggregatorRangeCursor:
-        """Declare lazy Rs references (resolved at push time)."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind(self, **_prune(params))
-        return self
-
-    def bind_dn(
-        self,
-        *,
-        vlan_pool: str | Ref | None = None,
-        mcast_pool: str | Ref | None = None,
-        address_pool: str | Ref | None = None,
-    ) -> EpgAggregatorRangeCursor:
-        """Reference objects outside the design by raw DN."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -1885,36 +1669,6 @@ class UplinkPolicyCursor(
         """Set ``vmmUplinkP`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
-        return self
-
-    def bind(
-        self,
-        *,
-        vlan_pool: str | Ref | None = None,
-        mcast_pool: str | Ref | None = None,
-        address_pool: str | Ref | None = None,
-        cdp: str | Ref | None = None,
-        lldp: str | Ref | None = None,
-        lacp: str | Ref | None = None,
-        stp: str | Ref | None = None,
-        l2_mtu: str | Ref | None = None,
-        firewall: str | Ref | None = None,
-    ) -> UplinkPolicyCursor:
-        """Declare lazy Rs references (resolved at push time)."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind(self, **_prune(params))
-        return self
-
-    def bind_dn(
-        self,
-        *,
-        vlan_pool: str | Ref | None = None,
-        mcast_pool: str | Ref | None = None,
-        address_pool: str | Ref | None = None,
-    ) -> UplinkPolicyCursor:
-        """Reference objects outside the design by raw DN."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -1950,36 +1704,6 @@ class ClusterControllerCursor(_VmmControllerMakers, _VmmDomMakers, _VmmProviderM
         Cursor.set(self, **_prune(params))
         return self
 
-    def bind(
-        self,
-        *,
-        vlan_pool: str | Ref | None = None,
-        mcast_pool: str | Ref | None = None,
-        address_pool: str | Ref | None = None,
-        cdp: str | Ref | None = None,
-        lldp: str | Ref | None = None,
-        lacp: str | Ref | None = None,
-        stp: str | Ref | None = None,
-        l2_mtu: str | Ref | None = None,
-        firewall: str | Ref | None = None,
-    ) -> ClusterControllerCursor:
-        """Declare lazy Rs references (resolved at push time)."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind(self, **_prune(params))
-        return self
-
-    def bind_dn(
-        self,
-        *,
-        vlan_pool: str | Ref | None = None,
-        mcast_pool: str | Ref | None = None,
-        address_pool: str | Ref | None = None,
-    ) -> ClusterControllerCursor:
-        """Reference objects outside the design by raw DN."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind_dn(self, **_prune(params))
-        return self
-
 
 class EpValidatorPolicyCursor(_VmmControllerMakers, _VmmDomMakers, _VmmProviderMakers, _UniMakers):
     """Typed cursor for ``vmmEpValidatorPol`` (ep_validator_policy level).
@@ -2005,36 +1729,6 @@ class EpValidatorPolicyCursor(_VmmControllerMakers, _VmmDomMakers, _VmmProviderM
         """Set ``vmmEpValidatorPol`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
-        return self
-
-    def bind(
-        self,
-        *,
-        vlan_pool: str | Ref | None = None,
-        mcast_pool: str | Ref | None = None,
-        address_pool: str | Ref | None = None,
-        cdp: str | Ref | None = None,
-        lldp: str | Ref | None = None,
-        lacp: str | Ref | None = None,
-        stp: str | Ref | None = None,
-        l2_mtu: str | Ref | None = None,
-        firewall: str | Ref | None = None,
-    ) -> EpValidatorPolicyCursor:
-        """Declare lazy Rs references (resolved at push time)."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind(self, **_prune(params))
-        return self
-
-    def bind_dn(
-        self,
-        *,
-        vlan_pool: str | Ref | None = None,
-        mcast_pool: str | Ref | None = None,
-        address_pool: str | Ref | None = None,
-    ) -> EpValidatorPolicyCursor:
-        """Reference objects outside the design by raw DN."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -2136,36 +1830,6 @@ class HostAvailabilityPolicyCursor(
         Cursor.set(self, **_prune(params))
         return self
 
-    def bind(
-        self,
-        *,
-        vlan_pool: str | Ref | None = None,
-        mcast_pool: str | Ref | None = None,
-        address_pool: str | Ref | None = None,
-        cdp: str | Ref | None = None,
-        lldp: str | Ref | None = None,
-        lacp: str | Ref | None = None,
-        stp: str | Ref | None = None,
-        l2_mtu: str | Ref | None = None,
-        firewall: str | Ref | None = None,
-    ) -> HostAvailabilityPolicyCursor:
-        """Declare lazy Rs references (resolved at push time)."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind(self, **_prune(params))
-        return self
-
-    def bind_dn(
-        self,
-        *,
-        vlan_pool: str | Ref | None = None,
-        mcast_pool: str | Ref | None = None,
-        address_pool: str | Ref | None = None,
-    ) -> HostAvailabilityPolicyCursor:
-        """Reference objects outside the design by raw DN."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind_dn(self, **_prune(params))
-        return self
-
 
 class EnhancedLacpPolicyCursor(
     _VswitchPolicyGroupMakers, _VmmDomMakers, _VmmProviderMakers, _UniMakers
@@ -2194,46 +1858,6 @@ class EnhancedLacpPolicyCursor(
         """Set ``lacpEnhancedLagPol`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
-        return self
-
-    def bind(
-        self,
-        *,
-        cdp: str | Ref | None = None,
-        lldp: str | Ref | None = None,
-        lacp: str | Ref | None = None,
-        stp: str | Ref | None = None,
-        mcp: str | Ref | None = None,
-        l2_mtu: str | Ref | None = None,
-        netflow: str | Ref | None = None,
-        firewall: str | Ref | None = None,
-        vlan_pool: str | Ref | None = None,
-        mcast_pool: str | Ref | None = None,
-        address_pool: str | Ref | None = None,
-    ) -> EnhancedLacpPolicyCursor:
-        """Declare lazy Rs references (resolved at push time)."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind(self, **_prune(params))
-        return self
-
-    def bind_dn(
-        self,
-        *,
-        cdp: str | Ref | None = None,
-        lldp: str | Ref | None = None,
-        lacp: str | Ref | None = None,
-        stp: str | Ref | None = None,
-        mcp: str | Ref | None = None,
-        l2_mtu: str | Ref | None = None,
-        netflow: str | Ref | None = None,
-        firewall: str | Ref | None = None,
-        vlan_pool: str | Ref | None = None,
-        mcast_pool: str | Ref | None = None,
-        address_pool: str | Ref | None = None,
-    ) -> EnhancedLacpPolicyCursor:
-        """Reference objects outside the design by raw DN."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -2268,36 +1892,6 @@ class HostDesiredStateCursor(
         Cursor.set(self, **_prune(params))
         return self
 
-    def bind(
-        self,
-        *,
-        vlan_pool: str | Ref | None = None,
-        mcast_pool: str | Ref | None = None,
-        address_pool: str | Ref | None = None,
-        cdp: str | Ref | None = None,
-        lldp: str | Ref | None = None,
-        lacp: str | Ref | None = None,
-        stp: str | Ref | None = None,
-        l2_mtu: str | Ref | None = None,
-        firewall: str | Ref | None = None,
-    ) -> HostDesiredStateCursor:
-        """Declare lazy Rs references (resolved at push time)."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind(self, **_prune(params))
-        return self
-
-    def bind_dn(
-        self,
-        *,
-        vlan_pool: str | Ref | None = None,
-        mcast_pool: str | Ref | None = None,
-        address_pool: str | Ref | None = None,
-    ) -> HostDesiredStateCursor:
-        """Reference objects outside the design by raw DN."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind_dn(self, **_prune(params))
-        return self
-
 
 class ProtectVmGroupCursor(
     _HostAvailabilityPolicyMakers,
@@ -2327,34 +1921,4 @@ class ProtectVmGroupCursor(
         """Set ``vmmProtectedVmGroup`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
-        return self
-
-    def bind(
-        self,
-        *,
-        vlan_pool: str | Ref | None = None,
-        mcast_pool: str | Ref | None = None,
-        address_pool: str | Ref | None = None,
-        cdp: str | Ref | None = None,
-        lldp: str | Ref | None = None,
-        lacp: str | Ref | None = None,
-        stp: str | Ref | None = None,
-        l2_mtu: str | Ref | None = None,
-        firewall: str | Ref | None = None,
-    ) -> ProtectVmGroupCursor:
-        """Declare lazy Rs references (resolved at push time)."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind(self, **_prune(params))
-        return self
-
-    def bind_dn(
-        self,
-        *,
-        vlan_pool: str | Ref | None = None,
-        mcast_pool: str | Ref | None = None,
-        address_pool: str | Ref | None = None,
-    ) -> ProtectVmGroupCursor:
-        """Reference objects outside the design by raw DN."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind_dn(self, **_prune(params))
         return self

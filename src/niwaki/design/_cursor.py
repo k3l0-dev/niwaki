@@ -348,8 +348,10 @@ class Cursor:
         ``REFERENCE_MAP``, so ``.vrf("prod").bind(l3out="prod")`` works even
         though the Rs object lives on the L3Out side.
 
-        The alias is looked up on this level first, then on ancestors
-        (``.subnet(...).bind(vrf=...)`` binds the enclosing BD).
+        The alias must be curated on the **current** level — binds do not
+        climb to an ancestor.  Declare each alias on the object that owns it
+        (``.bd("b").bind(vrf="v")``), so a relation can never land silently on
+        a parent.
 
         Args:
             **targets: One or more ``alias=name`` pairs (e.g. ``vrf="prod"``).
@@ -376,20 +378,28 @@ class Cursor:
         return self
 
     def _find_bind_owner(self, alias: str, binds: dict[str, dict[str, str]]) -> DesignNode:
-        """Nearest ancestor-or-self level where *alias* is a curated bind.
+        """The current level, when *alias* is a curated bind there.
+
+        Binds attach to the object the cursor is on — there is **no** implicit
+        climb to an ancestor.  Declare each alias on the level that owns it
+        (``.bd("b").bind(vrf="v")``, not ``.bd("b").subnet(...).bind(vrf="v")``):
+        an implicit climb silently placed the relation on the nearest ancestor
+        that happened to curate the alias, so ``esg.bind(monitoring_policy=...)``
+        landed on the app profile instead of the ESG — configuration on the
+        wrong object, with no signal.
 
         Raises:
-            DesignError: The alias is bindable at no level of the path.
+            DesignError: *alias* is not a curated bind on the current level.
         """
-        for level in self._node.ancestors_and_self():
-            if alias in binds.get(level.aci_class, {}):
-                return level
-        available = sorted(
-            {a for level in self._node.ancestors_and_self() for a in binds.get(level.aci_class, {})}
-        )
+        level = self._node
+        if alias in binds.get(level.aci_class, {}):
+            return level
+        available = sorted(binds.get(level.aci_class, {}))
         raise DesignError(
-            f"No bind alias {alias!r} at any level of {self._node.path()}. "
-            f"Available aliases on this path: {', '.join(available) or 'none'}."
+            f"No bind alias {alias!r} on {level.aci_class} ({level.path()}). "
+            f"Available aliases here: {', '.join(available) or 'none'}. "
+            "Binds attach to the current level — declare the alias on the "
+            "level that owns it (no climb to an ancestor)."
         )
 
     def bind_dn(self, **targets: str | Ref) -> Cursor:

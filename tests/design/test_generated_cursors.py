@@ -101,9 +101,12 @@ class TestSignatures:
             "flood_filter",
         }
 
-    def test_subnet_bind_inherits_bd_aliases(self) -> None:
+    def test_subnet_bind_does_not_expose_bd_aliases(self) -> None:
+        # Binds do not climb: a subnet cursor exposes only fvSubnet's own bind
+        # aliases, never the enclosing BD's (e.g. ``vrf`` lives on the BD).
         params = inspect.signature(BdSubnetCursor.bind).parameters
-        assert "vrf" in params
+        assert "vrf" not in params
+        assert set(params) == {"self", "l3out", "nd_ra_prefix_policy"}
 
     def test_entry_maker_exposes_sugar_params(self) -> None:
         params = inspect.signature(TenantFilterCursor.entry).parameters

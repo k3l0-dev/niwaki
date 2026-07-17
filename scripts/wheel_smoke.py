@@ -32,7 +32,7 @@ def main() -> None:
     cfg.fabric().datetime_policy("ntp").ntp_provider("10.0.0.1")
     tn = cfg.tenant("prod")
     tn.vrf("main")
-    tn.bd("web", unicast_routing=True).subnet("10.0.1.1/24").bind(vrf="main")
+    tn.bd("web", unicast_routing=True).bind(vrf="main").subnet("10.0.1.1/24")
 
     payload = json.dumps(cfg.to_payload())
     assert "fabricInst" in payload, "fabric domain missing from the envelope"

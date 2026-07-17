@@ -220,14 +220,31 @@ class TestBindDeclaration:
         assert pending.target_aci_class == "fvCtx"
         assert pending.target_name == "prod"
 
-    def test_bind_walks_up_from_subnet_to_bd(self) -> None:
-        bd = tenant("prod").bd("web")
-        bd.subnet("10.0.1.1/24").bind(vrf="prod")
-        assert len(bd.design_node.binds) == 1
+    def test_bind_does_not_climb_to_ancestor(self) -> None:
+        # Binds attach to the current level — never a silent climb to a parent.
+        # `vrf` is curated on the BD, not the subnet, and used to land silently
+        # on the BD.  Now both layers fail loud: the typed subnet cursor does
+        # not even expose `vrf` (TypeError at the call site)...
+        from niwaki.design._cursor import Cursor
+
+        subnet = tenant("prod").bd("web").subnet("10.0.1.1/24")
+        with pytest.raises(TypeError):
+            subnet.bind(vrf="prod")  # type: ignore[call-arg]
+        # ...and the dynamic path's runtime guard rejects it too.
+        with pytest.raises(DesignError, match="No bind alias 'vrf' on fvSubnet"):
+            Cursor.bind(subnet, vrf="prod")
+
+    def test_bind_does_not_climb_from_maker_child(self) -> None:
+        # A maker-then-bind climb also fails loud: `.pim()` returns a pimCtxP
+        # cursor, which does not curate `l3out` (the VRF does) — the relation
+        # must be declared on the VRF, not climbed from its pim child.
+        pim = tenant("prod").vrf("prod").pim()
+        with pytest.raises(DesignError, match="No bind alias 'l3out' on pimCtxP"):
+            pim.bind(l3out="prod")
 
     def test_bind_returns_calling_cursor(self) -> None:
-        subnet = tenant("prod").bd("web").subnet("10.0.1.1/24")
-        assert subnet.bind(vrf="prod") is subnet
+        bd = tenant("prod").bd("web")
+        assert bd.bind(vrf="prod") is bd
 
     def test_unknown_alias_raises_natively_on_typed_cursor(self) -> None:
         """Typed bind() rejects unknown aliases at the call site."""

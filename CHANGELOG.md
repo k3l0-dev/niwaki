@@ -1,10 +1,87 @@
 # Changelog
 
 All notable changes to this project are documented here.  The format follows
-[Keep a Changelog](https://keepachangelog.com/); versions follow semver
-(0.x — the API may still change between minor versions).
+[Keep a Changelog](https://keepachangelog.com/); versions follow
+[semver](https://semver.org/).  From 1.0.0 the configuration API is stable:
+breaking changes ship in a new major version with a migration note.
 
 ## [Unreleased]
+
+## [1.0.0] — 2026-07-17
+
+Niwaki leaves beta.  The design-first **configuration** surface is proven against
+a live Cisco APIC: the SDK expresses the ACI configuration model in depth, and a
+real controller accepts what it produces.
+
+### Out of beta
+
+- **Stable configuration API.**  The design DSL (`design`, `tenant`, `infra`,
+  `fabric`, `controller`, `aaa`, the makers, `bind`, `bind_dn`, `ref`, the verbs),
+  the push modes (`strict`, `staged`, `plan`) and the observation façade are now
+  stable; breaking changes will land in a new major version with a migration note.
+- Development-status classifier moved from **4 - Beta** to **5 -
+  Production/Stable**.
+
+### Changed
+
+- **`bind()` no longer climbs to an ancestor.**  A relation attaches to the
+  object the cursor is on — declare each alias on the level that owns it
+  (`.bd("web").bind(vrf="prod").subnet(...)`, not
+  `.bd("web").subnet(...).bind(vrf="prod")`).  Binding an alias the current level
+  does not curate now fails loud — at the type level (the typed cursor no longer
+  exposes the alias) and at runtime (`DesignError`) — instead of silently placing
+  the relation on a parent object.
+- **Typed cursor `bind()` signatures expose only the aliases curated on that
+  level**, never an ancestor's, so the editor and type-checker reject a bind the
+  controller would never accept.
+- **Two references that resolve to the same relation now coexist** instead of
+  raising: `vrf.bind(l3out="x")` and `l3out("x").bind(vrf="v")` build the same
+  `l3extRsEctx` and collapse to one; a same-relation collision with *conflicting*
+  attributes still raises.
+
+### Proven on a live fabric
+
+An exhaustive integration suite drives the SDK against a live APIC simulator,
+organised as eight domain walkthroughs an operator would recognise —
+fabric/access, fabric, tenant, contracts, external connectivity (L3Out / L2Out),
+service graphs, observability and management.  Together they:
+
+- push **more than 10,000 configuration objects** across **101 walkthrough files**
+  and **225 test functions** — every one **accepted by the controller, with zero
+  rejections**;
+- sweep each object's configuration surface in depth — every enum value, the
+  combinations of interacting fields, and **every curated child of every parent**,
+  with mutually-exclusive settings factored across separate tenants, VRFs and
+  bridge domains so both sides of each exclusion are covered;
+- **encode the controller's real cross-field rules** that the schema does not
+  express (one SPAN destination per session, NetFlow v9-only, OSPF/EIGRP mutual
+  exclusion on an L3Out, redistribution route-maps permit-only, a backup policy
+  serving a single redirect, …), so every pushed object is accepted *in context*,
+  not merely syntactically valid;
+- confirm that **every declared object** is present on the fabric with the
+  attributes and children its design declared, and that every relation reads
+  `state=formed`.
+
+Residual faults a lab run may show are **deployment-layer**, not configuration
+defects — a static path whose VLAN no domain binds yet, a routing peer with no
+neighbour on the simulator, a VMM infra port-group without the fabric-wide
+infra-VLAN scaffolding — and each is documented in its domain's walkthrough
+README.  The SDK expresses every knob; the controller accepts every object.
+
+### Scope
+
+The walkthroughs run on a simulator, so they prove the **configuration surface** —
+the SDK expresses the ACI model and a real controller accepts it — not hardware
+or data-plane behaviour.  The **configuration** side of the SDK is
+production-ready; the read / query and observation surfaces continue to grow.
+
+### Verifying it yourself
+
+Point the suite at your own lab and watch it configure a fabric end to end
+(`uv run pytest tests/integration/<phase> -m integration -s`), then confront the
+result through an **independent read path** — for example a read-only oracle over
+the APIC such as [`aci-mcp`](https://github.com/k3l0-dev/aci-mcp) — to confirm
+each object landed.  See [`tests/integration/README.md`](tests/integration/README.md).
 
 ## [0.14.16] — 2026-07-17
 

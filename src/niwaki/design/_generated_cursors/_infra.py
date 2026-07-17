@@ -9682,16 +9682,6 @@ class DhcpNodeGroupNodeBlockCursor(_DhcpNodeGroupMakers, _InfraMakers, _UniMaker
         Cursor.set(self, **_prune(params))
         return self
 
-    def bind(
-        self,
-        *,
-        dhcp_relay: str | Ref | None = None,
-    ) -> DhcpNodeGroupNodeBlockCursor:
-        """Declare lazy Rs references (resolved at push time)."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind(self, **_prune(params))
-        return self
-
 
 class DhcpPodGroupPodBlockCursor(_DhcpPodGroupMakers, _InfraMakers, _UniMakers):
     """Typed cursor for ``infraPodBlk`` (pod_block level).
@@ -9717,26 +9707,6 @@ class DhcpPodGroupPodBlockCursor(_DhcpPodGroupMakers, _InfraMakers, _UniMakers):
         """Set ``infraPodBlk`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
-        return self
-
-    def bind(
-        self,
-        *,
-        node_group: str | Ref | None = None,
-    ) -> DhcpPodGroupPodBlockCursor:
-        """Declare lazy Rs references (resolved at push time)."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind(self, **_prune(params))
-        return self
-
-    def bind_dn(
-        self,
-        *,
-        node_group: str | Ref | None = None,
-    ) -> DhcpPodGroupPodBlockCursor:
-        """Reference objects outside the design by raw DN."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -10887,7 +10857,6 @@ class LeafSelectorCursor(_LeafSelectorMakers, _LeafProfileMakers, _InfraMakers, 
         self,
         *,
         policy_group: str | Ref | None = None,
-        interface_profile: str | Ref | None = None,
     ) -> LeafSelectorCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -10898,7 +10867,6 @@ class LeafSelectorCursor(_LeafSelectorMakers, _LeafProfileMakers, _InfraMakers, 
         self,
         *,
         policy_group: str | Ref | None = None,
-        interface_profile: str | Ref | None = None,
     ) -> LeafSelectorCursor:
         """Reference objects outside the design by raw DN."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -11654,26 +11622,6 @@ class NodeManagementAddressNodeBlockCursor(_NodeManagementAddressMakers, _InfraM
         Cursor.set(self, **_prune(params))
         return self
 
-    def bind(
-        self,
-        *,
-        management_group: str | Ref | None = None,
-    ) -> NodeManagementAddressNodeBlockCursor:
-        """Declare lazy Rs references (resolved at push time)."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind(self, **_prune(params))
-        return self
-
-    def bind_dn(
-        self,
-        *,
-        management_group: str | Ref | None = None,
-    ) -> NodeManagementAddressNodeBlockCursor:
-        """Reference objects outside the design by raw DN."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind_dn(self, **_prune(params))
-        return self
-
 
 class PodManagementAddressPodBlockCursor(_PodManagementAddressMakers, _InfraMakers, _UniMakers):
     """Typed cursor for ``infraPodBlk`` (pod_block level).
@@ -11699,26 +11647,6 @@ class PodManagementAddressPodBlockCursor(_PodManagementAddressMakers, _InfraMake
         """Set ``infraPodBlk`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
-        return self
-
-    def bind(
-        self,
-        *,
-        node_group: str | Ref | None = None,
-    ) -> PodManagementAddressPodBlockCursor:
-        """Declare lazy Rs references (resolved at push time)."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind(self, **_prune(params))
-        return self
-
-    def bind_dn(
-        self,
-        *,
-        node_group: str | Ref | None = None,
-    ) -> PodManagementAddressPodBlockCursor:
-        """Reference objects outside the design by raw DN."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -12167,26 +12095,6 @@ class InfraSpanSourceGroupSpanLabelCursor(_InfraSpanSourceGroupMakers, _InfraMak
         Cursor.set(self, **_prune(params))
         return self
 
-    def bind(
-        self,
-        *,
-        filter_group: str | Ref | None = None,
-    ) -> InfraSpanSourceGroupSpanLabelCursor:
-        """Declare lazy Rs references (resolved at push time)."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind(self, **_prune(params))
-        return self
-
-    def bind_dn(
-        self,
-        *,
-        filter_group: str | Ref | None = None,
-    ) -> InfraSpanSourceGroupSpanLabelCursor:
-        """Reference objects outside the design by raw DN."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind_dn(self, **_prune(params))
-        return self
-
 
 class InfraSpanSourceGroupSpanSourceCursor(_InfraSpanSourceGroupMakers, _InfraMakers, _UniMakers):
     """Typed cursor for ``spanSrc`` (span_source level).
@@ -12276,26 +12184,6 @@ class InfraSpanSourceGroupVspanSourceCursor(_InfraSpanSourceGroupMakers, _InfraM
         Cursor.set(self, **_prune(params))
         return self
 
-    def bind(
-        self,
-        *,
-        filter_group: str | Ref | None = None,
-    ) -> InfraSpanSourceGroupVspanSourceCursor:
-        """Declare lazy Rs references (resolved at push time)."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind(self, **_prune(params))
-        return self
-
-    def bind_dn(
-        self,
-        *,
-        filter_group: str | Ref | None = None,
-    ) -> InfraSpanSourceGroupVspanSourceCursor:
-        """Reference objects outside the design by raw DN."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind_dn(self, **_prune(params))
-        return self
-
 
 class InfraSpanSourceGroupVspanSourceDefCursor(
     _InfraSpanSourceGroupMakers, _InfraMakers, _UniMakers
@@ -12324,26 +12212,6 @@ class InfraSpanSourceGroupVspanSourceDefCursor(
         """Set ``spanVSrcDef`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
-        return self
-
-    def bind(
-        self,
-        *,
-        filter_group: str | Ref | None = None,
-    ) -> InfraSpanSourceGroupVspanSourceDefCursor:
-        """Declare lazy Rs references (resolved at push time)."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind(self, **_prune(params))
-        return self
-
-    def bind_dn(
-        self,
-        *,
-        filter_group: str | Ref | None = None,
-    ) -> InfraSpanSourceGroupVspanSourceDefCursor:
-        """Reference objects outside the design by raw DN."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -12561,7 +12429,6 @@ class SpineProfileSpineSelectorCursor(
         self,
         *,
         policy_group: str | Ref | None = None,
-        interface_profile: str | Ref | None = None,
     ) -> SpineProfileSpineSelectorCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -12572,7 +12439,6 @@ class SpineProfileSpineSelectorCursor(
         self,
         *,
         policy_group: str | Ref | None = None,
-        interface_profile: str | Ref | None = None,
     ) -> SpineProfileSpineSelectorCursor:
         """Reference objects outside the design by raw DN."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -12792,26 +12658,6 @@ class InfraVspanSessionSpanLabelCursor(_InfraVspanSessionMakers, _InfraMakers, _
         Cursor.set(self, **_prune(params))
         return self
 
-    def bind(
-        self,
-        *,
-        filter_group: str | Ref | None = None,
-    ) -> InfraVspanSessionSpanLabelCursor:
-        """Declare lazy Rs references (resolved at push time)."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind(self, **_prune(params))
-        return self
-
-    def bind_dn(
-        self,
-        *,
-        filter_group: str | Ref | None = None,
-    ) -> InfraVspanSessionSpanLabelCursor:
-        """Reference objects outside the design by raw DN."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind_dn(self, **_prune(params))
-        return self
-
 
 class InfraVspanSessionVspanVsourceCursor(_InfraVspanSessionMakers, _InfraMakers, _UniMakers):
     """Typed cursor for ``spanVSrc`` (vspan_vsource level).
@@ -12838,26 +12684,6 @@ class InfraVspanSessionVspanVsourceCursor(_InfraVspanSessionMakers, _InfraMakers
         """Set ``spanVSrc`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
-        return self
-
-    def bind(
-        self,
-        *,
-        filter_group: str | Ref | None = None,
-    ) -> InfraVspanSessionVspanVsourceCursor:
-        """Declare lazy Rs references (resolved at push time)."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind(self, **_prune(params))
-        return self
-
-    def bind_dn(
-        self,
-        *,
-        filter_group: str | Ref | None = None,
-    ) -> InfraVspanSessionVspanVsourceCursor:
-        """Reference objects outside the design by raw DN."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -12919,26 +12745,6 @@ class AccessPortProfilePortSelectorPortBlockCursor(
         Cursor.set(self, **_prune(params))
         return self
 
-    def bind(
-        self,
-        *,
-        policy_group: str | Ref | None = None,
-    ) -> AccessPortProfilePortSelectorPortBlockCursor:
-        """Declare lazy Rs references (resolved at push time)."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind(self, **_prune(params))
-        return self
-
-    def bind_dn(
-        self,
-        *,
-        policy_group: str | Ref | None = None,
-    ) -> AccessPortProfilePortSelectorPortBlockCursor:
-        """Reference objects outside the design by raw DN."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind_dn(self, **_prune(params))
-        return self
-
 
 class AccessPortProfilePortSelectorSubPortBlockCursor(
     _AccessPortProfilePortSelectorMakers, _AccessPortProfileMakers, _InfraMakers, _UniMakers
@@ -12972,26 +12778,6 @@ class AccessPortProfilePortSelectorSubPortBlockCursor(
         Cursor.set(self, **_prune(params))
         return self
 
-    def bind(
-        self,
-        *,
-        policy_group: str | Ref | None = None,
-    ) -> AccessPortProfilePortSelectorSubPortBlockCursor:
-        """Declare lazy Rs references (resolved at push time)."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind(self, **_prune(params))
-        return self
-
-    def bind_dn(
-        self,
-        *,
-        policy_group: str | Ref | None = None,
-    ) -> AccessPortProfilePortSelectorSubPortBlockCursor:
-        """Reference objects outside the design by raw DN."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind_dn(self, **_prune(params))
-        return self
-
 
 class FexProfilePortSelectorPortBlockCursor(
     _FexProfilePortSelectorMakers, _FexProfileMakers, _InfraMakers, _UniMakers
@@ -13021,26 +12807,6 @@ class FexProfilePortSelectorPortBlockCursor(
         """Set ``infraPortBlk`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
-        return self
-
-    def bind(
-        self,
-        *,
-        policy_group: str | Ref | None = None,
-    ) -> FexProfilePortSelectorPortBlockCursor:
-        """Declare lazy Rs references (resolved at push time)."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind(self, **_prune(params))
-        return self
-
-    def bind_dn(
-        self,
-        *,
-        policy_group: str | Ref | None = None,
-    ) -> FexProfilePortSelectorPortBlockCursor:
-        """Reference objects outside the design by raw DN."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -13074,26 +12840,6 @@ class FexProfilePortSelectorSubPortBlockCursor(
         """Set ``infraSubPortBlk`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
-        return self
-
-    def bind(
-        self,
-        *,
-        policy_group: str | Ref | None = None,
-    ) -> FexProfilePortSelectorSubPortBlockCursor:
-        """Declare lazy Rs references (resolved at push time)."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind(self, **_prune(params))
-        return self
-
-    def bind_dn(
-        self,
-        *,
-        policy_group: str | Ref | None = None,
-    ) -> FexProfilePortSelectorSubPortBlockCursor:
-        """Reference objects outside the design by raw DN."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -13177,52 +12923,6 @@ class OverridePolicyGroupCursor(_PortChannelMakers, _FuncProfileMakers, _InfraMa
         """Set ``infraAccBndlSubgrp`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
-        return self
-
-    def bind(
-        self,
-        *,
-        aaep: str | Ref | None = None,
-        cdp: str | Ref | None = None,
-        lldp: str | Ref | None = None,
-        lacp: str | Ref | None = None,
-        link_level: str | Ref | None = None,
-        stp: str | Ref | None = None,
-        mcp: str | Ref | None = None,
-        storm_control: str | Ref | None = None,
-        l2_interface: str | Ref | None = None,
-        macsec: str | Ref | None = None,
-        copp: str | Ref | None = None,
-        llfc: str | Ref | None = None,
-        pfc: str | Ref | None = None,
-        fc_interface: str | Ref | None = None,
-        l2_mtu: str | Ref | None = None,
-        port_authentication: str | Ref | None = None,
-        port_security: str | Ref | None = None,
-        link_flap: str | Ref | None = None,
-        monitoring: str | Ref | None = None,
-        netflow_monitor: str | Ref | None = None,
-        optics: str | Ref | None = None,
-        slow_drain: str | Ref | None = None,
-        synce: str | Ref | None = None,
-        span_destination_group: str | Ref | None = None,
-        span_source_group: str | Ref | None = None,
-    ) -> OverridePolicyGroupCursor:
-        """Declare lazy Rs references (resolved at push time)."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind(self, **_prune(params))
-        return self
-
-    def bind_dn(
-        self,
-        *,
-        aaep: str | Ref | None = None,
-        l2_mtu: str | Ref | None = None,
-        optics: str | Ref | None = None,
-    ) -> OverridePolicyGroupCursor:
-        """Reference objects outside the design by raw DN."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -13423,28 +13123,6 @@ class LeafSelectorNodeBlockCursor(
         """Set ``infraNodeBlk`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
-        return self
-
-    def bind(
-        self,
-        *,
-        policy_group: str | Ref | None = None,
-        interface_profile: str | Ref | None = None,
-    ) -> LeafSelectorNodeBlockCursor:
-        """Declare lazy Rs references (resolved at push time)."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind(self, **_prune(params))
-        return self
-
-    def bind_dn(
-        self,
-        *,
-        policy_group: str | Ref | None = None,
-        interface_profile: str | Ref | None = None,
-    ) -> LeafSelectorNodeBlockCursor:
-        """Reference objects outside the design by raw DN."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -14416,30 +14094,6 @@ class InfraSpanDestinationGroupSpanDestinationVspanEpgSummaryCursor(
         Cursor.set(self, **_prune(params))
         return self
 
-    def bind(
-        self,
-        *,
-        epg: str | Ref | None = None,
-        path: str | Ref | None = None,
-        apic_node: str | Ref | None = None,
-    ) -> InfraSpanDestinationGroupSpanDestinationVspanEpgSummaryCursor:
-        """Declare lazy Rs references (resolved at push time)."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind(self, **_prune(params))
-        return self
-
-    def bind_dn(
-        self,
-        *,
-        epg: str | Ref | None = None,
-        path: str | Ref | None = None,
-        apic_node: str | Ref | None = None,
-    ) -> InfraSpanDestinationGroupSpanDestinationVspanEpgSummaryCursor:
-        """Reference objects outside the design by raw DN."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind_dn(self, **_prune(params))
-        return self
-
 
 class SpineInterfaceProfilePortSelectorPortBlockCursor(
     _SpineInterfaceProfilePortSelectorMakers, _SpineInterfaceProfileMakers, _InfraMakers, _UniMakers
@@ -14469,26 +14123,6 @@ class SpineInterfaceProfilePortSelectorPortBlockCursor(
         """Set ``infraPortBlk`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
-        return self
-
-    def bind(
-        self,
-        *,
-        policy_group: str | Ref | None = None,
-    ) -> SpineInterfaceProfilePortSelectorPortBlockCursor:
-        """Declare lazy Rs references (resolved at push time)."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind(self, **_prune(params))
-        return self
-
-    def bind_dn(
-        self,
-        *,
-        policy_group: str | Ref | None = None,
-    ) -> SpineInterfaceProfilePortSelectorPortBlockCursor:
-        """Reference objects outside the design by raw DN."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -14524,26 +14158,6 @@ class SpineInterfaceProfilePortSelectorSubPortBlockCursor(
         Cursor.set(self, **_prune(params))
         return self
 
-    def bind(
-        self,
-        *,
-        policy_group: str | Ref | None = None,
-    ) -> SpineInterfaceProfilePortSelectorSubPortBlockCursor:
-        """Declare lazy Rs references (resolved at push time)."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind(self, **_prune(params))
-        return self
-
-    def bind_dn(
-        self,
-        *,
-        policy_group: str | Ref | None = None,
-    ) -> SpineInterfaceProfilePortSelectorSubPortBlockCursor:
-        """Reference objects outside the design by raw DN."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind_dn(self, **_prune(params))
-        return self
-
 
 class SpineProfileSpineSelectorNodeBlockCursor(
     _SpineProfileSpineSelectorMakers, _SpineProfileMakers, _InfraMakers, _UniMakers
@@ -14571,28 +14185,6 @@ class SpineProfileSpineSelectorNodeBlockCursor(
         """Set ``infraNodeBlk`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
-        return self
-
-    def bind(
-        self,
-        *,
-        policy_group: str | Ref | None = None,
-        interface_profile: str | Ref | None = None,
-    ) -> SpineProfileSpineSelectorNodeBlockCursor:
-        """Declare lazy Rs references (resolved at push time)."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind(self, **_prune(params))
-        return self
-
-    def bind_dn(
-        self,
-        *,
-        policy_group: str | Ref | None = None,
-        interface_profile: str | Ref | None = None,
-    ) -> SpineProfileSpineSelectorNodeBlockCursor:
-        """Reference objects outside the design by raw DN."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -14634,32 +14226,6 @@ class InfraVspanDestinationGroupVspanVdestinationVspanDestinationEpgSummaryCurso
         """Set ``spanVEpgSummary`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
-        return self
-
-    def bind(
-        self,
-        *,
-        epg: str | Ref | None = None,
-        path: str | Ref | None = None,
-        apic_node: str | Ref | None = None,
-        virtual_port: str | Ref | None = None,
-    ) -> InfraVspanDestinationGroupVspanVdestinationVspanDestinationEpgSummaryCursor:
-        """Declare lazy Rs references (resolved at push time)."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind(self, **_prune(params))
-        return self
-
-    def bind_dn(
-        self,
-        *,
-        epg: str | Ref | None = None,
-        path: str | Ref | None = None,
-        apic_node: str | Ref | None = None,
-        virtual_port: str | Ref | None = None,
-    ) -> InfraVspanDestinationGroupVspanVdestinationVspanDestinationEpgSummaryCursor:
-        """Reference objects outside the design by raw DN."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -14726,26 +14292,6 @@ class PodGroupPodBlockCursor(
         """Set ``infraPodBlk`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
-        return self
-
-    def bind(
-        self,
-        *,
-        node_group: str | Ref | None = None,
-    ) -> PodGroupPodBlockCursor:
-        """Declare lazy Rs references (resolved at push time)."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind(self, **_prune(params))
-        return self
-
-    def bind_dn(
-        self,
-        *,
-        node_group: str | Ref | None = None,
-    ) -> PodGroupPodBlockCursor:
-        """Reference objects outside the design by raw DN."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind_dn(self, **_prune(params))
         return self
 
 

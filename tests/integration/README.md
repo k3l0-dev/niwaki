@@ -32,21 +32,42 @@ fabric end to end.
 
 ## Layout
 
-Numbered phases, in the order an operator brings a fabric up:
+Numbered phases, in the order an operator brings a fabric up. Each phase is a
+folder of focused walkthroughs; each file names its concern
+(`test_00N_<topic>.py`) and carries its exact run command at the top of its
+docstring.
 
-- `01_day0/` — fresh-install day-0: node registration and fabric BGP, NTP,
-  syslog, SNMP, DNS, tenant management addresses, update groups, RADIUS, …
-- `02_fabric-access/` — fabric provisioning: switch profiles, policy groups, and
-  switch policies.
+- `01_day0/` — fresh-install day-0: node registration, fabric BGP, NTP, syslog,
+  SNMP, DNS, management addresses, RADIUS.
+- `02_fabric-access/` — access policies: pools, domains, AAEPs, policy groups,
+  leaf / spine / interface profiles, interface policies.
+- `03_fabric/` — fabric policies: ports, protocols, monitoring, system,
+  firmware and config management.
+- `04_tenant/` — the tenant world: VRFs, bridge domains, application EPGs,
+  subnets, endpoints, micro-segmentation.
+- `05_contracts/` — contracts: filters, subjects, labels, taboo, `vzAny`, QoS.
+- `06_l3out/` — external connectivity: L3Outs (OSPF / EIGRP / BGP / static),
+  route-maps, external EPGs, L2Outs, SR-MPLS.
+- `07_services/` — L4-L7 service graphs, PBR / redirect, logical devices, VMM.
+- `08_observability/` — SPAN / VSPAN, NetFlow, syslog, monitoring policies.
+- `09_management/` — in-band / out-of-band management, node groups.
 
-Each file names its concern (`test_00N_<topic>.py`) and carries its exact run
-command at the top of its docstring.
+## Running them on your lab — step by step
 
-## Running them
+These walkthroughs **talk to a real controller and change it**, so they are
+opt-in and never run in the offline test suite. Point them at a **lab** APIC or
+the APIC simulator — never production (see the warning above).
 
-They talk to a real controller, so they are **opt-in** (marked
-`pytest.mark.integration`) and read the target from the **environment** — never a
-hardcoded address. Put your lab in a `.env` file:
+### 1. Install the SDK
+
+```bash
+uv sync
+```
+
+### 2. Point the suite at your fabric
+
+The target is read from the **environment** — never a hardcoded address. Put your
+lab's credentials in a `.env` file at the repository root:
 
 ```dotenv
 APIC_HOST=https://your-apic.example.com
@@ -54,14 +75,62 @@ APIC_USERNAME=admin
 APIC_PASSWORD=...
 ```
 
-Then run a phase (or a single walkthrough):
+If any of the three is missing, or the controller is unreachable, every
+integration test **skips** instead of failing — so it is always safe to run.
+
+### 3. Run the whole suite in one pass
+
+`pytest` recurses into every phase folder, so a single command runs them all —
+no need to invoke files one by one:
 
 ```bash
-uv run pytest tests/integration/01_day0 -m integration -s
-uv run pytest tests/integration/01_day0/test_002_ntp.py -m integration -s
+uv run pytest tests/integration -m integration -s
 ```
 
-If `APIC_HOST` / `APIC_USERNAME` / `APIC_PASSWORD` are unset, or the controller is
-unreachable, the suite **skips** — so it is safe to keep in the tree and is
-excluded from the offline CI. The walkthroughs **mutate** the target fabric (that
-is the point) and never tear down, so run them against a **lab**, not production.
+- `-m integration` selects the opt-in walkthroughs (they carry that marker);
+- `-s` streams the output so you watch each design compile and push live.
+
+Expect it to take a while and to create **thousands of objects** on your fabric.
+Run it **serially** — do **not** use `pytest-xdist` (`-n`): the phases share
+fabric-wide singletons (fabric and infra policies), and parallel workers would
+race on them.
+
+### 4. Or run a narrower slice
+
+```bash
+# one phase
+uv run pytest tests/integration/06_l3out -m integration -s
+
+# one file
+uv run pytest tests/integration/06_l3out/test_004_bgp.py -m integration -s
+```
+
+Each phase lands in its **own tenant and VLAN lane**, and each file **wipes what
+it owns at the start of its run** — so re-running a phase, or the whole suite, is
+safe and repeatable.
+
+### 5. Verify what landed
+
+The walkthroughs push configuration and **never tear it down** — the state stays
+on the fabric for inspection. Confront what is live against what the designs
+declared:
+
+- open the APIC **GUI** and browse the `niwaki-it-*` tenants and policies; or
+- read the fabric back through an **independent, read-only** path and compare —
+  for example the [`aci-mcp`](https://github.com/k3l0-dev/aci-mcp) read-only
+  oracle over the APIC.
+
+### 6. Clean up (operator-only)
+
+Nothing cleans up automatically. When you want the objects gone, run the manual
+wipe — it calls each file's `wipe()` and is deliberately kept out of pytest so it
+can never fire on its own:
+
+```bash
+# wipe one phase
+uv run python tests/integration/wipe.py 06_l3out
+
+# wipe a single file, or several targets at once
+uv run python tests/integration/wipe.py 06_l3out/test_004_bgp.py
+uv run python tests/integration/wipe.py 06_l3out 04_tenant
+```

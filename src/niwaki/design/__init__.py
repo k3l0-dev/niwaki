@@ -14,8 +14,8 @@ no session), then validate and push it in one call.  The DSL covers the whole
             .epg("frontend").bind(bd="frontend")
         .bd("frontend")
             .set(unicast_routing=True)
-            .subnet("10.0.1.1/24")
             .bind(vrf="prod")
+            .subnet("10.0.1.1/24")
         .vrf("prod")
     )
 

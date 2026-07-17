@@ -617,16 +617,15 @@ def _render_cursor(
     lines.append("        return self")
     lines.append("")
 
-    # bind() — aliases available on this level and every ancestor level.
+    # bind() — aliases curated on THIS level only.  Binds never climb to an
+    # ancestor at runtime (a relation must land on the object that owns it), so
+    # the typed surface must not advertise ancestor aliases either.
     aliases: list[str] = []
     dn_aliases: list[str] = []
-    for level in chain:
-        for alias, target in tables.binds.get(level.aci_class, {}).items():
-            if alias in aliases:
-                continue
-            aliases.append(alias)
-            if _alias_targets_by_dn(level.aci_class, target):
-                dn_aliases.append(alias)
+    for alias, target in tables.binds.get(pos.aci_class, {}).items():
+        aliases.append(alias)
+        if _alias_targets_by_dn(pos.aci_class, target):
+            dn_aliases.append(alias)
     if aliases:
         alias_params = [(a, "str | Ref | None") for a in aliases]
         lines.extend(_render_signature("bind", [], alias_params, cursor_name))

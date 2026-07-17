@@ -1,53 +1,47 @@
 # Cookbook
 
-Task-oriented recipes: each one takes a real operator problem and walks it
-through the same arc — **describe** the desired configuration as a design,
-**plan** it against the fabric, **push** it, **verify** it through the read
-side.  Every code block on these pages is executable and runs as a test in
-the SDK's own suite; copy any recipe and adapt the names.
+Task-oriented recipes for adopting the SDK, ordered the way a real deployment
+grows.  They follow one fabric from its first tenant to confident day-2
+operation — the `commerce` platform, a `prod` VRF, a `10.30.0.0/16` address
+plan — so the recipes read as one continuous story, not twelve disconnected
+snippets.
 
-All recipes stay within the [curated vocabulary](../reference/vocabulary/index.md)
-unless explicitly flagged — where a position is not curated yet, the recipe
-shows the honest escape hatch (`.mo()`, `bind_dn()`) and links the
-*vocabulary request* issue template.
+Every recipe takes one operator goal through the same arc — **describe** the
+desired state as a design, **plan** it against the fabric, **push** it,
+**verify** it through the read side.  Every code block on these pages is
+executable and runs as a test in the SDK's own suite; copy any recipe and adapt
+the names.
 
-## Provision
+Recipes stay within the [curated vocabulary](../reference/vocabulary/index.md);
+where a position is not curated, the recipe shows the honest escape hatch
+(`.mo()`, `bind_dn()`, `static_path()`).
+
+## Provision — grow the deployment
+
+Start here and read in order: each recipe adds a layer to the same fabric.
 
 ```{toctree}
 :maxdepth: 1
 
-three-tier-app
-access-policies-vpc
-static-paths
-l3out-basic
+onboard-tenant
+application-contracts
+microsegmentation-esg
+external-connectivity
+turn-up-a-rack
 ```
 
-## Fabric day-0
+## Operate — run it day to day
 
 ```{toctree}
 :maxdepth: 1
 
-fabric-baseline
-node-registration
-```
-
-## Day-2
-
-```{toctree}
-:maxdepth: 1
-
-vlan-migration
-```
-
-## Operate
-
-```{toctree}
-:maxdepth: 1
-
+day-2-changes
+gitops-pipeline
 fabric-audit
+async-at-scale
 ```
 
-## Diagnose
+## Diagnose — when something is wrong
 
 ```{toctree}
 :maxdepth: 1
@@ -56,15 +50,7 @@ troubleshooting-connection
 troubleshooting
 ```
 
-## Integrate
-
-```{toctree}
-:maxdepth: 1
-
-gitops-pipeline
-```
-
-## Migrate
+## Migrate — coming from cobra
 
 ```{toctree}
 :maxdepth: 1

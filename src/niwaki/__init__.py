@@ -30,7 +30,7 @@ if TYPE_CHECKING:
     from niwaki.design import infra as infra
     from niwaki.design import tenant as tenant
 
-__version__ = "0.14.16"
+__version__ = "1.0.0"
 __all__ = [
     "AsyncNiwaki",
     "AsyncNiwakiNode",

@@ -54,8 +54,8 @@ from niwaki.design import tenant
 config = (
     tenant("prod")
     .bd("web")
+        .bind(vrf="main")          # the BD's own alias, declared on the BD
         .subnet("10.0.1.1/24")     # child of the BD
-        .bind(vrf="main")          # declared on the BD (alias found by walking up)
     .vrf("main")                   # pops back to the tenant
 )  # fmt: skip
 ```

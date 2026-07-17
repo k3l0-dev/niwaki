@@ -11146,26 +11146,6 @@ class DnsProfileDomainCursor(_DnsProfileMakers, _FabricMakers, _UniMakers):
         Cursor.set(self, **_prune(params))
         return self
 
-    def bind(
-        self,
-        *,
-        management_epg: str | Ref | None = None,
-    ) -> DnsProfileDomainCursor:
-        """Declare lazy Rs references (resolved at push time)."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind(self, **_prune(params))
-        return self
-
-    def bind_dn(
-        self,
-        *,
-        management_epg: str | Ref | None = None,
-    ) -> DnsProfileDomainCursor:
-        """Reference objects outside the design by raw DN."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind_dn(self, **_prune(params))
-        return self
-
 
 class DnsProfileProviderCursor(_DnsProfileMakers, _FabricMakers, _UniMakers):
     """Typed cursor for ``dnsProv`` (provider level).
@@ -11190,26 +11170,6 @@ class DnsProfileProviderCursor(_DnsProfileMakers, _FabricMakers, _UniMakers):
         """Set ``dnsProv`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
-        return self
-
-    def bind(
-        self,
-        *,
-        management_epg: str | Ref | None = None,
-    ) -> DnsProfileProviderCursor:
-        """Declare lazy Rs references (resolved at push time)."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind(self, **_prune(params))
-        return self
-
-    def bind_dn(
-        self,
-        *,
-        management_epg: str | Ref | None = None,
-    ) -> DnsProfileProviderCursor:
-        """Reference objects outside the design by raw DN."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -12090,8 +12050,6 @@ class SwitchAssociationCursor(
         self,
         *,
         policy_group: str | Ref | None = None,
-        interface_profile: str | Ref | None = None,
-        module_profile: str | Ref | None = None,
     ) -> SwitchAssociationCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -12102,8 +12060,6 @@ class SwitchAssociationCursor(
         self,
         *,
         policy_group: str | Ref | None = None,
-        interface_profile: str | Ref | None = None,
-        module_profile: str | Ref | None = None,
     ) -> SwitchAssociationCursor:
         """Reference objects outside the design by raw DN."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -12245,16 +12201,6 @@ class MaintenanceGroupNodeBlockCursor(_MaintenanceGroupMakers, _FabricMakers, _U
         """Set ``fabricNodeBlk`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
-        return self
-
-    def bind(
-        self,
-        *,
-        maintenance_policy: str | Ref | None = None,
-    ) -> MaintenanceGroupNodeBlockCursor:
-        """Declare lazy Rs references (resolved at push time)."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind(self, **_prune(params))
         return self
 
 
@@ -14047,26 +13993,6 @@ class FabricSpanSourceGroupSpanLabelCursor(_FabricSpanSourceGroupMakers, _Fabric
         Cursor.set(self, **_prune(params))
         return self
 
-    def bind(
-        self,
-        *,
-        filter_group: str | Ref | None = None,
-    ) -> FabricSpanSourceGroupSpanLabelCursor:
-        """Declare lazy Rs references (resolved at push time)."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind(self, **_prune(params))
-        return self
-
-    def bind_dn(
-        self,
-        *,
-        filter_group: str | Ref | None = None,
-    ) -> FabricSpanSourceGroupSpanLabelCursor:
-        """Reference objects outside the design by raw DN."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind_dn(self, **_prune(params))
-        return self
-
 
 class FabricSpanSourceGroupSpanSourceCursor(
     _FabricSpanSourceGroupMakers, _FabricMakers, _UniMakers
@@ -14160,26 +14086,6 @@ class FabricSpanSourceGroupVspanSourceCursor(
         Cursor.set(self, **_prune(params))
         return self
 
-    def bind(
-        self,
-        *,
-        filter_group: str | Ref | None = None,
-    ) -> FabricSpanSourceGroupVspanSourceCursor:
-        """Declare lazy Rs references (resolved at push time)."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind(self, **_prune(params))
-        return self
-
-    def bind_dn(
-        self,
-        *,
-        filter_group: str | Ref | None = None,
-    ) -> FabricSpanSourceGroupVspanSourceCursor:
-        """Reference objects outside the design by raw DN."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind_dn(self, **_prune(params))
-        return self
-
 
 class FabricSpanSourceGroupVspanSourceDefCursor(
     _FabricSpanSourceGroupMakers, _FabricMakers, _UniMakers
@@ -14208,26 +14114,6 @@ class FabricSpanSourceGroupVspanSourceDefCursor(
         """Set ``spanVSrcDef`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
-        return self
-
-    def bind(
-        self,
-        *,
-        filter_group: str | Ref | None = None,
-    ) -> FabricSpanSourceGroupVspanSourceDefCursor:
-        """Declare lazy Rs references (resolved at push time)."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind(self, **_prune(params))
-        return self
-
-    def bind_dn(
-        self,
-        *,
-        filter_group: str | Ref | None = None,
-    ) -> FabricSpanSourceGroupVspanSourceDefCursor:
-        """Reference objects outside the design by raw DN."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -14494,8 +14380,6 @@ class SpineSwitchProfileSpineSelectorCursor(
         self,
         *,
         policy_group: str | Ref | None = None,
-        interface_profile: str | Ref | None = None,
-        module_profile: str | Ref | None = None,
     ) -> SpineSwitchProfileSpineSelectorCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -14506,8 +14390,6 @@ class SpineSwitchProfileSpineSelectorCursor(
         self,
         *,
         policy_group: str | Ref | None = None,
-        interface_profile: str | Ref | None = None,
-        module_profile: str | Ref | None = None,
     ) -> SpineSwitchProfileSpineSelectorCursor:
         """Reference objects outside the design by raw DN."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -14888,26 +14770,6 @@ class FabricVspanSessionSpanLabelCursor(_FabricVspanSessionMakers, _FabricMakers
         Cursor.set(self, **_prune(params))
         return self
 
-    def bind(
-        self,
-        *,
-        filter_group: str | Ref | None = None,
-    ) -> FabricVspanSessionSpanLabelCursor:
-        """Declare lazy Rs references (resolved at push time)."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind(self, **_prune(params))
-        return self
-
-    def bind_dn(
-        self,
-        *,
-        filter_group: str | Ref | None = None,
-    ) -> FabricVspanSessionSpanLabelCursor:
-        """Reference objects outside the design by raw DN."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind_dn(self, **_prune(params))
-        return self
-
 
 class FabricVspanSessionVspanVsourceCursor(_FabricVspanSessionMakers, _FabricMakers, _UniMakers):
     """Typed cursor for ``spanVSrc`` (vspan_vsource level).
@@ -14934,26 +14796,6 @@ class FabricVspanSessionVspanVsourceCursor(_FabricVspanSessionMakers, _FabricMak
         """Set ``spanVSrc`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
-        return self
-
-    def bind(
-        self,
-        *,
-        filter_group: str | Ref | None = None,
-    ) -> FabricVspanSessionVspanVsourceCursor:
-        """Declare lazy Rs references (resolved at push time)."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind(self, **_prune(params))
-        return self
-
-    def bind_dn(
-        self,
-        *,
-        filter_group: str | Ref | None = None,
-    ) -> FabricVspanSessionVspanVsourceCursor:
-        """Reference objects outside the design by raw DN."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -15031,26 +14873,6 @@ class AuthenticationKeyCursor(_NtpProviderMakers, _DatetimePolicyMakers, _Fabric
         """Set ``datetimeRsNtpProvToNtpAuthKey`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
-        return self
-
-    def bind(
-        self,
-        *,
-        management_epg: str | Ref | None = None,
-    ) -> AuthenticationKeyCursor:
-        """Declare lazy Rs references (resolved at push time)."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind(self, **_prune(params))
-        return self
-
-    def bind_dn(
-        self,
-        *,
-        management_epg: str | Ref | None = None,
-    ) -> AuthenticationKeyCursor:
-        """Reference objects outside the design by raw DN."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -15153,26 +14975,6 @@ class LeafFabricPortSelectorFabricSubPortBlockCursor(
         Cursor.set(self, **_prune(params))
         return self
 
-    def bind(
-        self,
-        *,
-        policy_group: str | Ref | None = None,
-    ) -> LeafFabricPortSelectorFabricSubPortBlockCursor:
-        """Declare lazy Rs references (resolved at push time)."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind(self, **_prune(params))
-        return self
-
-    def bind_dn(
-        self,
-        *,
-        policy_group: str | Ref | None = None,
-    ) -> LeafFabricPortSelectorFabricSubPortBlockCursor:
-        """Reference objects outside the design by raw DN."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind_dn(self, **_prune(params))
-        return self
-
 
 class LeafFabricPortSelectorPortBlockCursor(
     _LeafFabricPortSelectorMakers, _LeafFabricInterfaceProfileMakers, _FabricMakers, _UniMakers
@@ -15204,26 +15006,6 @@ class LeafFabricPortSelectorPortBlockCursor(
         Cursor.set(self, **_prune(params))
         return self
 
-    def bind(
-        self,
-        *,
-        policy_group: str | Ref | None = None,
-    ) -> LeafFabricPortSelectorPortBlockCursor:
-        """Declare lazy Rs references (resolved at push time)."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind(self, **_prune(params))
-        return self
-
-    def bind_dn(
-        self,
-        *,
-        policy_group: str | Ref | None = None,
-    ) -> LeafFabricPortSelectorPortBlockCursor:
-        """Reference objects outside the design by raw DN."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind_dn(self, **_prune(params))
-        return self
-
 
 class SwitchAssociationNodeBlockCursor(
     _SwitchAssociationMakers, _LeafSwitchProfileMakers, _FabricMakers, _UniMakers
@@ -15251,30 +15033,6 @@ class SwitchAssociationNodeBlockCursor(
         """Set ``fabricNodeBlk`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
-        return self
-
-    def bind(
-        self,
-        *,
-        policy_group: str | Ref | None = None,
-        interface_profile: str | Ref | None = None,
-        module_profile: str | Ref | None = None,
-    ) -> SwitchAssociationNodeBlockCursor:
-        """Declare lazy Rs references (resolved at push time)."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind(self, **_prune(params))
-        return self
-
-    def bind_dn(
-        self,
-        *,
-        policy_group: str | Ref | None = None,
-        interface_profile: str | Ref | None = None,
-        module_profile: str | Ref | None = None,
-    ) -> SwitchAssociationNodeBlockCursor:
-        """Reference objects outside the design by raw DN."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -16263,26 +16021,6 @@ class FabricPodProfilePodSelectorPodBlockCursor(
         Cursor.set(self, **_prune(params))
         return self
 
-    def bind(
-        self,
-        *,
-        policy_group: str | Ref | None = None,
-    ) -> FabricPodProfilePodSelectorPodBlockCursor:
-        """Declare lazy Rs references (resolved at push time)."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind(self, **_prune(params))
-        return self
-
-    def bind_dn(
-        self,
-        *,
-        policy_group: str | Ref | None = None,
-    ) -> FabricPodProfilePodSelectorPodBlockCursor:
-        """Reference objects outside the design by raw DN."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind_dn(self, **_prune(params))
-        return self
-
 
 class ClientEntryCursor(
     _SnmpClientGroupProfileMakers, _SnmpPolicyMakers, _FabricMakers, _UniMakers
@@ -16308,26 +16046,6 @@ class ClientEntryCursor(
         """Set ``snmpClientP`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
-        return self
-
-    def bind(
-        self,
-        *,
-        management_epg: str | Ref | None = None,
-    ) -> ClientEntryCursor:
-        """Declare lazy Rs references (resolved at push time)."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind(self, **_prune(params))
-        return self
-
-    def bind_dn(
-        self,
-        *,
-        management_epg: str | Ref | None = None,
-    ) -> ClientEntryCursor:
-        """Reference objects outside the design by raw DN."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind_dn(self, **_prune(params))
         return self
 
 
@@ -16371,30 +16089,6 @@ class FabricSpanDestinationGroupSpanDestinationVspanEpgSummaryCursor(
         Cursor.set(self, **_prune(params))
         return self
 
-    def bind(
-        self,
-        *,
-        epg: str | Ref | None = None,
-        path: str | Ref | None = None,
-        apic_node: str | Ref | None = None,
-    ) -> FabricSpanDestinationGroupSpanDestinationVspanEpgSummaryCursor:
-        """Declare lazy Rs references (resolved at push time)."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind(self, **_prune(params))
-        return self
-
-    def bind_dn(
-        self,
-        *,
-        epg: str | Ref | None = None,
-        path: str | Ref | None = None,
-        apic_node: str | Ref | None = None,
-    ) -> FabricSpanDestinationGroupSpanDestinationVspanEpgSummaryCursor:
-        """Reference objects outside the design by raw DN."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind_dn(self, **_prune(params))
-        return self
-
 
 class SpineFabricPortSelectorFabricSubPortBlockCursor(
     _SpineFabricPortSelectorMakers, _SpineFabricInterfaceProfileMakers, _FabricMakers, _UniMakers
@@ -16428,26 +16122,6 @@ class SpineFabricPortSelectorFabricSubPortBlockCursor(
         Cursor.set(self, **_prune(params))
         return self
 
-    def bind(
-        self,
-        *,
-        policy_group: str | Ref | None = None,
-    ) -> SpineFabricPortSelectorFabricSubPortBlockCursor:
-        """Declare lazy Rs references (resolved at push time)."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind(self, **_prune(params))
-        return self
-
-    def bind_dn(
-        self,
-        *,
-        policy_group: str | Ref | None = None,
-    ) -> SpineFabricPortSelectorFabricSubPortBlockCursor:
-        """Reference objects outside the design by raw DN."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind_dn(self, **_prune(params))
-        return self
-
 
 class SpineFabricPortSelectorPortBlockCursor(
     _SpineFabricPortSelectorMakers, _SpineFabricInterfaceProfileMakers, _FabricMakers, _UniMakers
@@ -16479,26 +16153,6 @@ class SpineFabricPortSelectorPortBlockCursor(
         Cursor.set(self, **_prune(params))
         return self
 
-    def bind(
-        self,
-        *,
-        policy_group: str | Ref | None = None,
-    ) -> SpineFabricPortSelectorPortBlockCursor:
-        """Declare lazy Rs references (resolved at push time)."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind(self, **_prune(params))
-        return self
-
-    def bind_dn(
-        self,
-        *,
-        policy_group: str | Ref | None = None,
-    ) -> SpineFabricPortSelectorPortBlockCursor:
-        """Reference objects outside the design by raw DN."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind_dn(self, **_prune(params))
-        return self
-
 
 class SpineSwitchProfileSpineSelectorNodeBlockCursor(
     _SpineSwitchProfileSpineSelectorMakers, _SpineSwitchProfileMakers, _FabricMakers, _UniMakers
@@ -16528,30 +16182,6 @@ class SpineSwitchProfileSpineSelectorNodeBlockCursor(
         Cursor.set(self, **_prune(params))
         return self
 
-    def bind(
-        self,
-        *,
-        policy_group: str | Ref | None = None,
-        interface_profile: str | Ref | None = None,
-        module_profile: str | Ref | None = None,
-    ) -> SpineSwitchProfileSpineSelectorNodeBlockCursor:
-        """Declare lazy Rs references (resolved at push time)."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind(self, **_prune(params))
-        return self
-
-    def bind_dn(
-        self,
-        *,
-        policy_group: str | Ref | None = None,
-        interface_profile: str | Ref | None = None,
-        module_profile: str | Ref | None = None,
-    ) -> SpineSwitchProfileSpineSelectorNodeBlockCursor:
-        """Reference objects outside the design by raw DN."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind_dn(self, **_prune(params))
-        return self
-
 
 class VpcPairNodeCursor(_VpcPairMakers, _VpcProtectionMakers, _FabricMakers, _UniMakers):
     """Typed cursor for ``fabricNodePEp`` (node level).
@@ -16577,16 +16207,6 @@ class VpcPairNodeCursor(_VpcPairMakers, _VpcProtectionMakers, _FabricMakers, _Un
         """Set ``fabricNodePEp`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
-        return self
-
-    def bind(
-        self,
-        *,
-        vpc_policy: str | Ref | None = None,
-    ) -> VpcPairNodeCursor:
-        """Declare lazy Rs references (resolved at push time)."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind(self, **_prune(params))
         return self
 
 
@@ -16628,32 +16248,6 @@ class FabricVspanDestinationGroupVspanVdestinationVspanDestinationEpgSummaryCurs
         """Set ``spanVEpgSummary`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
-        return self
-
-    def bind(
-        self,
-        *,
-        epg: str | Ref | None = None,
-        path: str | Ref | None = None,
-        apic_node: str | Ref | None = None,
-        virtual_port: str | Ref | None = None,
-    ) -> FabricVspanDestinationGroupVspanVdestinationVspanDestinationEpgSummaryCursor:
-        """Declare lazy Rs references (resolved at push time)."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind(self, **_prune(params))
-        return self
-
-    def bind_dn(
-        self,
-        *,
-        epg: str | Ref | None = None,
-        path: str | Ref | None = None,
-        apic_node: str | Ref | None = None,
-        virtual_port: str | Ref | None = None,
-    ) -> FabricVspanDestinationGroupVspanVdestinationVspanDestinationEpgSummaryCursor:
-        """Reference objects outside the design by raw DN."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.bind_dn(self, **_prune(params))
         return self
 
 

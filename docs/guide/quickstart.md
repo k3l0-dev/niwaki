@@ -29,7 +29,7 @@ from niwaki.design import tenant
 
 config = tenant("prod", description="my first tenant")
 config.vrf("main")
-config.bd("web", unicast_routing=True).subnet("10.0.1.1/24").bind(vrf="main")
+config.bd("web", unicast_routing=True).bind(vrf="main").subnet("10.0.1.1/24")
 
 with Niwaki("https://apic.example.com", "admin", "secret") as aci:
     plan = config.push(aci, mode="plan")     # dry run — nothing written

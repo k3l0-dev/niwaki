@@ -91,12 +91,12 @@ config = (
         .epg("backend").bind(bd="backend").provide("fe-to-be")
     .bd("frontend")
         .set(unicast_routing=True)
-        .subnet("10.0.1.1/24")
         .bind(vrf="prod")
+        .subnet("10.0.1.1/24")
     .bd("backend")
         .set(unicast_routing=True)
-        .subnet("10.0.2.1/24")
         .bind(vrf="prod")
+        .subnet("10.0.2.1/24")
     .vrf("prod")
     .filter("api")
         .entry("rest", tcp=8080)
@@ -208,21 +208,85 @@ async with AsyncNiwaki("https://apic.example.com", "admin", "secret") as aci:
     await config.push(aci, mode="strict")   # the design DSL is async-ready too
 ```
 
-## What's inside
+## Features
 
-- **Design DSL** (`niwaki.design`): THE write path — see above.  Curated
-  vocabulary in `domain/vocabulary.yaml`, typed cursors generated per
-  position, unified reference resolver (`REFERENCE_MAP`, name + DN flavors,
-  abstract targets).
-- **2,222 generated Pydantic models** (APIC v6.0 schemas) with human-readable
-  field names, constraints, and 676 enums — models carry data and validation,
-  never write logic.
-- **Facade** (observation): vocabulary navigation (`aci.tenant("x").bd("y")`),
+**Design-first configuration — one way to write, three ways to apply.**
+
+- Describe the **whole `uni` subtree** — tenants, access policies (`infra`),
+  fabric policies (`fabric`), controller, AAA — with one operator vocabulary and
+  full IDE autocompletion. Structure is literal (every maker maps 1:1 to a real
+  APIC child class), vocabulary is translated (`entry("rest", tcp=8080)` compiles
+  to `etherT` / `prot` / `dFromPort` / `dToPort`).
+- **Three push modes**: `strict` (one atomic POST of the whole design), `staged`
+  (dependency-ordered waves, a partial failure raises `StagedPushError` with
+  plain DNs), `plan` (dry-run diff — nothing is pushed). `to_payload()` inspects
+  the exact payload without executing.
+- **Closed-world references** — `bind()`, `provide()`, `consume()` resolve at
+  push time; forward references are fine; a typo fails **before any request**,
+  with a did-you-mean. Relation direction is handled for you.
+- **References that configure the relationship** — `ref()` sets the fields some
+  ACI relations carry (domain-attachment immediacy, the `directives` of a filter
+  under a subject = contract logging). `bind_dn()` references objects outside the
+  design by raw DN; `.mo(AnyClass, ...)` is the escape hatch to any class.
+- **Day-2 changes are just smaller designs** — declare the field you want and the
+  parent chain rides along as attribute-less upserts.
+
+**Typed models and vocabulary.**
+
+- **2,222 Pydantic models** generated from APIC v6.0 schemas, with human-readable
+  field names (`arp_flooding` ↔ wire `arpFlood`), schema constraints and **676
+  enums**. Models carry data + validation only, never write logic.
+- A **complete type system**: named numbers (port `80` ↔ `"http"`), bitmask
+  flags, validated IP/MAC addresses, and wire-name aliases that stay visible to
+  the type-checker (PEP 681). Validation is **eager, at the call site** — never
+  "discover it on the wire".
+- **Typed cursors per position** — makers, `set()` fields and `bind()` aliases are
+  generated with full signatures, so autocompletion and mypy cover the entire
+  curated vocabulary. Cisco's own schema comments flow into every hover.
+
+**Reading and observing.**
+
+- **Query builder**: filters, scoping (`under`, `children`), enrichment
+  (`with_faults` / `health` / `stats`), `naming_only` / `config_only`, sorting,
+  pagination; `build()` to inspect. Any of ~15k APIC classes by name.
+- **Observation facade**: vocabulary navigation (`aci.tenant("x").bd("y").read()`),
   typed reads, queries, delete.
-- **Sync + async transport**: cookie/token auth, proactive refresh, retry
-  with backoff, transparent pagination, typed exception hierarchy.
-- Imports stay lightweight — everything heavy (child maps, vocabulary
-  tables) loads lazily on first use.
+
+**Transport and packaging.**
+
+- **Sync + async mirrors**: cookie/token auth with proactive refresh, retries with
+  backoff, transparent pagination, a typed exception hierarchy, and `gather()` for
+  concurrent reads.
+- **One wheel**, standard packaging, installable from any index; `Typing ::
+  Typed`. Every [GitHub Release](https://github.com/k3l0-dev/niwaki/releases)
+  ships an offline wheelhouse (all dependencies, checksums, provenance
+  attestations) for air-gapped networks. Imports stay lightweight — heavy tables
+  load lazily on first use.
+
+## Validated on a live fabric
+
+The design-first **configuration surface is proven against a live Cisco APIC**.
+An exhaustive integration suite provisions a real controller (or the APIC
+simulator) through the SDK — eight domain walkthroughs (fabric/access, fabric,
+tenant, contracts, L3Out/L2Out, service graphs, observability, management) that
+sweep the configuration surface in depth: every enum value, the combinations of
+interacting fields, and **every curated child of every parent**, with
+mutually-exclusive settings factored across separate tenants and VRFs so both
+sides of each exclusion are covered. The controller **accepts what the SDK
+produces**, and each declared object is confirmed live with the attributes and
+children its design declared.
+
+**You can reproduce every one of these on your own lab.** Point the suite at your
+fabric and run it in a single pass:
+
+```bash
+uv run pytest tests/integration -m integration -s
+```
+
+The suite reads your APIC from a `.env` file and skips when no fabric is
+reachable, so it is always safe to run. The step-by-step method — install, point
+at your fabric, run the whole suite or one phase, verify what landed, and clean
+up — is in **[`tests/integration/README.md`](tests/integration/README.md)**.
 
 ## Development
 

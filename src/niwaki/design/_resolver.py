@@ -257,19 +257,40 @@ def resolve(root: DesignNode) -> dict[DesignNode, list[ManagedObject]]:
 
 
 def _check_rn_collisions(extras: dict[DesignNode, list[ManagedObject]]) -> None:
-    """Reject duplicate RNs among resolved Rs objects and explicit children.
+    """Collapse identical duplicate relations; reject conflicting ones.
 
-    Catches both a double ``bind(vrf=...)`` on the same BD (singleton Rs →
-    same fixed RN) and a bind colliding with an explicit ``.mo(RsClass, ...)``
-    declaration.
+    Two references can legitimately resolve to the same Rs on the same parent —
+    e.g. ``vrf.bind(l3out="x")`` (inverse edge) and ``l3out("x").bind(vrf="v")``
+    (direct edge) both build the same ``l3extRsEctx``.  When the duplicates are
+    byte-identical (same RN **and** same attributes) they are the one relation
+    declared twice, so the extra copy is pruned and the relation is emitted once.
+
+    A same-RN collision with **different** attributes is a real contradiction
+    (``bind(vrf="a").bind(vrf="b")`` → conflicting ``tnFvCtxName``), and a bind
+    colliding with an explicit ``.mo(RsClass, ...)`` child of the same RN is
+    ambiguous — both still raise.
+
+    Mutates ``extras`` in place, dropping pruned duplicates.
     """
     for node, rs_list in extras.items():
-        seen: set[str] = {child.rn for child in node.children}
+        child_rns: set[str] = {child.rn for child in node.children}
+        by_rn: dict[str, ManagedObject] = {}
+        kept: list[ManagedObject] = []
         for rs_mo in rs_list:
             rn = rs_mo.rn
-            if rn in seen:
+            if rn in child_rns:
                 raise DuplicateDeclarationError(
                     f"{node.path()}: relationship {rn!r} is declared twice "
-                    "(duplicate bind on the same target class?)."
+                    "(a bind collides with an explicit .mo() child)."
                 )
-            seen.add(rn)
+            prior = by_rn.get(rn)
+            if prior is not None:
+                if prior.to_apic() == rs_mo.to_apic():
+                    continue  # identical relation declared twice — collapse
+                raise DuplicateDeclarationError(
+                    f"{node.path()}: relationship {rn!r} is declared twice with "
+                    "conflicting attributes (two binds to different targets?)."
+                )
+            by_rn[rn] = rs_mo
+            kept.append(rs_mo)
+        rs_list[:] = kept

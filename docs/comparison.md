@@ -62,7 +62,7 @@ from niwaki.design import tenant
 
 config = tenant("acme")
 config.vrf("prod")
-config.bd("web", unicast_routing=True).subnet("10.30.1.1/24").bind(vrf="prod")
+config.bd("web", unicast_routing=True).bind(vrf="prod").subnet("10.30.1.1/24")
 config.push(aci)
 ```
 
