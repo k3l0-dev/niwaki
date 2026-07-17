@@ -286,7 +286,8 @@ uv run pytest tests/integration -m integration -s
 The suite reads your APIC from a `.env` file and skips when no fabric is
 reachable, so it is always safe to run. The step-by-step method — install, point
 at your fabric, run the whole suite or one phase, verify what landed, and clean
-up — is in **[`tests/integration/README.md`](tests/integration/README.md)**.
+up — is in
+**[`tests/integration/README.md`](https://github.com/k3l0-dev/niwaki/blob/main/tests/integration/README.md)**.
 
 ## Development
 

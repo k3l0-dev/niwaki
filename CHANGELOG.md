@@ -81,7 +81,8 @@ Point the suite at your own lab and watch it configure a fabric end to end
 (`uv run pytest tests/integration/<phase> -m integration -s`), then confront the
 result through an **independent read path** — for example a read-only oracle over
 the APIC such as [`aci-mcp`](https://github.com/k3l0-dev/aci-mcp) — to confirm
-each object landed.  See [`tests/integration/README.md`](tests/integration/README.md).
+each object landed.  See
+[`tests/integration/README.md`](https://github.com/k3l0-dev/niwaki/blob/main/tests/integration/README.md).
 
 ## [0.14.16] — 2026-07-17
 
