@@ -42,6 +42,8 @@ Hierarchy::
     │   ├── NotFoundError
     │   └── ServerError
     ├── DeserializationError
+    ├── NoResultError               (query .one() matched nothing)
+    ├── MultipleResultsError        (query .one() matched several)
     └── DesignError
         ├── UnknownMakerError          (also an AttributeError)
         ├── DuplicateDeclarationError
@@ -75,6 +77,7 @@ from niwaki.exceptions._design import (
     UnresolvedReferenceError,
 )
 from niwaki.exceptions._models import DeserializationError
+from niwaki.exceptions._query import MultipleResultsError, NoResultError
 from niwaki.exceptions._transport import (
     ConnectionError,
     TimeoutError,
@@ -92,7 +95,9 @@ __all__ = [
     "DuplicateDeclarationError",
     "ForbiddenError",
     "LoginError",
+    "MultipleResultsError",
     "NiwakiError",
+    "NoResultError",
     "NotFoundError",
     "ServerError",
     "SessionExpiredError",

@@ -171,3 +171,162 @@ class TestAsyncStream:
         session = _make_async_session(pages=[])
         results = [obj async for obj in AsyncQuery(fvBD, session).stream()]
         assert results == []
+
+
+# ── aiter / slice / limit ─────────────────────────────────────────────────────
+
+
+class TestAsyncIterAndSlice:
+    @pytest.mark.anyio
+    async def test_aiter_streams(self) -> None:
+        from niwaki.models._generated.fv.fvTenant import fvTenant
+        from niwaki.query import AsyncQuery
+
+        session = _make_async_session(pages=[[_fvTenant_item("a"), _fvTenant_item("b")]])
+        got = [t.name async for t in AsyncQuery(fvTenant, session)]
+        assert got == ["a", "b"]
+
+    @pytest.mark.anyio
+    async def test_slice_limits_results(self) -> None:
+        from niwaki.models._generated.fv.fvTenant import fvTenant
+        from niwaki.query import AsyncQuery
+
+        page = [_fvTenant_item(str(i)) for i in range(5)]
+        session = _make_async_session(pages=[page])
+        got = [t async for t in AsyncQuery(fvTenant, session)[:2]]
+        assert len(got) == 2
+
+    @pytest.mark.anyio
+    async def test_fetch_honors_limit(self) -> None:
+        from niwaki.models._generated.fv.fvTenant import fvTenant
+        from niwaki.query import AsyncQuery
+
+        page = [_fvTenant_item(str(i)) for i in range(5)]
+        session = _make_async_session(pages=[page])
+        assert len(await AsyncQuery(fvTenant, session)[:2].fetch()) == 2
+
+
+# ── one / exists / execute_raw ────────────────────────────────────────────────
+
+
+class TestAsyncOne:
+    @pytest.mark.anyio
+    async def test_one_returns_single(self) -> None:
+        from niwaki.models._generated.fv.fvTenant import fvTenant
+        from niwaki.query import AsyncQuery
+
+        session = _make_async_session(raw_items=[_fvTenant_item("prod")])
+        result = await AsyncQuery(fvTenant, session).one()
+        assert result.name == "prod"
+
+    @pytest.mark.anyio
+    async def test_one_no_result_raises(self) -> None:
+        from niwaki.exceptions import NoResultError
+        from niwaki.models._generated.fv.fvBD import fvBD
+        from niwaki.query import AsyncQuery
+
+        session = _make_async_session(raw_items=[])
+        with pytest.raises(NoResultError):
+            await AsyncQuery(fvBD, session).one()
+
+    @pytest.mark.anyio
+    async def test_one_multiple_raises(self) -> None:
+        from niwaki.exceptions import MultipleResultsError
+        from niwaki.models._generated.fv.fvTenant import fvTenant
+        from niwaki.query import AsyncQuery
+
+        session = _make_async_session(raw_items=[_fvTenant_item("a"), _fvTenant_item("b")])
+        with pytest.raises(MultipleResultsError):
+            await AsyncQuery(fvTenant, session).one()
+
+    @pytest.mark.anyio
+    async def test_one_requests_page_size_2(self) -> None:
+        from niwaki.models._generated.fv.fvTenant import fvTenant
+        from niwaki.query import AsyncQuery
+
+        session = _make_async_session(raw_items=[_fvTenant_item("prod")])
+        await AsyncQuery(fvTenant, session).one()
+        assert session._get_imdata.call_args[0][1]["page-size"] == "2"
+
+
+class TestAsyncExistsAndRaw:
+    @pytest.mark.anyio
+    async def test_exists_true(self) -> None:
+        from niwaki.models._generated.fv.fvBD import fvBD
+        from niwaki.query import AsyncQuery
+
+        session = _make_async_session(count_response={"totalCount": "2", "imdata": []})
+        assert await AsyncQuery(fvBD, session).exists() is True
+
+    @pytest.mark.anyio
+    async def test_exists_false(self) -> None:
+        from niwaki.models._generated.fv.fvBD import fvBD
+        from niwaki.query import AsyncQuery
+
+        session = _make_async_session(count_response={"totalCount": "0", "imdata": []})
+        assert await AsyncQuery(fvBD, session).exists() is False
+
+    @pytest.mark.anyio
+    async def test_execute_raw_parses_and_paginates(self) -> None:
+        from niwaki.models._generated.fv.fvTenant import fvTenant
+        from niwaki.query import AsyncQuery
+
+        session = _make_async_session(raw_items=[_fvTenant_item("prod")])
+        results = await AsyncQuery(fvTenant, session).execute_raw("/api/class/fvTenant.json", {})
+        assert len(results) == 1
+        session._get_all_pages.assert_awaited_once()
+
+
+# ── limit / count / sync-iteration guard (async parity) ───────────────────────
+
+
+class TestAsyncLimitAndIter:
+    @pytest.mark.anyio
+    async def test_slice_zero_yields_nothing_without_request(self) -> None:
+        from niwaki.models._generated.fv.fvBD import fvBD
+        from niwaki.query import AsyncQuery
+
+        session = _make_async_session(pages=[[_fvTenant_item("a")]])
+        got = [x async for x in AsyncQuery(fvBD, session)[:0]]
+        assert got == []
+        session._aiter_pages.assert_not_called()
+
+    @pytest.mark.anyio
+    async def test_slice_caps_page_size_server_side(self) -> None:
+        from niwaki.models._generated.fv.fvTenant import fvTenant
+        from niwaki.query import AsyncQuery
+
+        session = _make_async_session(pages=[[_fvTenant_item("a")]])
+        _ = [x async for x in AsyncQuery(fvTenant, session)[:3]]
+        assert session._aiter_pages.call_args.kwargs["page_size"] == 3
+
+    @pytest.mark.anyio
+    async def test_count_honors_limit(self) -> None:
+        from niwaki.models._generated.fv.fvBD import fvBD
+        from niwaki.query import AsyncQuery
+
+        session = _make_async_session(count_response={"totalCount": "10", "imdata": []})
+        assert await AsyncQuery(fvBD, session)[:3].count() == 3
+
+    @pytest.mark.anyio
+    async def test_count_zero_limit_skips_request(self) -> None:
+        from niwaki.models._generated.fv.fvBD import fvBD
+        from niwaki.query import AsyncQuery
+
+        session = _make_async_session(count_response={"totalCount": "5", "imdata": []})
+        assert await AsyncQuery(fvBD, session)[:0].count() == 0
+        session._request_checked.assert_not_called()
+
+    def test_sync_iteration_rejected(self) -> None:
+        from niwaki.models._generated.fv.fvBD import fvBD
+        from niwaki.query import AsyncQuery
+
+        with pytest.raises(TypeError, match="async for"):
+            list(AsyncQuery(fvBD, MagicMock()))
+
+    def test_bool_raises(self) -> None:
+        from niwaki.models._generated.fv.fvBD import fvBD
+        from niwaki.query import AsyncQuery
+
+        with pytest.raises(TypeError, match="no boolean value"):
+            bool(AsyncQuery(fvBD, MagicMock()))

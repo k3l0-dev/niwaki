@@ -13,7 +13,7 @@ The modern, typed, design-first Python SDK for Cisco ACI.
 [![pydantic](https://img.shields.io/badge/Pydantic-e92063?logo=pydantic&logoColor=white)](https://docs.pydantic.dev)
 [![python](https://img.shields.io/badge/Python-3.12%2B-3776AB?logo=python&logoColor=white)](https://pypi.org/project/niwaki/)
 [![license](https://img.shields.io/badge/License-Apache--2.0-blue)](https://github.com/k3l0-dev/niwaki/blob/main/LICENSE)
-
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/k3l0-dev/niwaki)
 </div>
 
 ---

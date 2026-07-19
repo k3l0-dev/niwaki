@@ -11,15 +11,40 @@ This split avoids code duplication while keeping execution-layer concerns
 
 from __future__ import annotations
 
-from typing import Any, Literal, Self
+from enum import StrEnum
+from typing import Literal, Self
 
 from niwaki.models.base import ManagedObject
 from niwaki.query._filters import (  # pyright: ignore[reportPrivateUsage]
     FilterExpr,
-    _coerce_value,
+    FilterValue,
+    _kwarg_to_expr,
     _qualify,
     and_,
 )
+
+
+class SubtreeInclude(StrEnum):
+    """A response-subtree facet an APIC query can embed (``rsp-subtree-include``).
+
+    The exhaustive set the APIC offers.  Pass any of these to
+    :meth:`~niwaki.query._base._QueryBase.include_subtree`; the ``with_*``
+    builder methods are ergonomic shortcuts for the common ones.
+    """
+
+    FAULTS = "faults"
+    HEALTH = "health"
+    STATS = "stats"
+    RELATIONS = "relations"
+    COUNT = "count"
+    REQUIRED = "required"
+    SUBTREE = "subtree"
+    NO_SCOPED = "no-scoped"
+    AUDIT_LOGS = "audit-logs"
+    EVENT_LOGS = "event-logs"
+    FAULT_RECORDS = "fault-records"
+    HEALTH_RECORDS = "health-records"
+    TASKS = "tasks"
 
 
 class _QueryBase[T: ManagedObject]:
@@ -54,22 +79,25 @@ class _QueryBase[T: ManagedObject]:
         self._aci_class: str = cls if isinstance(cls, str) else cls.__name__
         self._scope_dn = scope_dn
         self._query_target: Literal["self", "children", "subtree"] = "subtree"
+        self._also_classes: list[str] = []
         self._filter_expr: FilterExpr | None = None
         self._rsp_subtree: Literal["no", "children", "full"] = "no"
         self._rsp_subtree_classes: list[str] = []
         self._rsp_subtree_filter: FilterExpr | None = None
         self._rsp_subtree_include: list[str] = []
         self._rsp_prop_include: Literal["all", "naming-only", "config-only"] = "all"
-        self._order_by_prop: str | None = None
-        self._order_by_dir: Literal["asc", "desc"] = "asc"
+        self._order_by: list[str] = []
         self._page_size: int = 500
+        self._limit: int | None = None
 
     def _copy(self) -> Self:
         """Return a shallow copy with mutable list fields independently copied."""
         other = object.__new__(type(self))
         other.__dict__.update(self.__dict__)
+        other._also_classes = list(self._also_classes)
         other._rsp_subtree_classes = list(self._rsp_subtree_classes)
         other._rsp_subtree_include = list(self._rsp_subtree_include)
+        other._order_by = list(self._order_by)
         return other
 
     # ── Scope ─────────────────────────────────────────────────────────────────
@@ -122,9 +150,50 @@ class _QueryBase[T: ManagedObject]:
         q._query_target = "subtree"
         return q
 
+    def self_only(self) -> Self:
+        """Return only the scoped object itself (``query-target=self``).
+
+        Only meaningful with a scope DN (:meth:`under` or jargon navigation):
+        the MO at that DN is returned with no descendants.  A no-op on a global
+        class query, which already addresses a single class.
+
+        Returns:
+            New query with ``query-target=self``.
+        """
+        q = self._copy()
+        q._query_target = "self"
+        return q
+
+    def also(self, *classes: type[ManagedObject] | str) -> Self:
+        """Return additional ACI classes alongside the queried one (scoped only).
+
+        Adds to ``target-subtree-class`` so a DN-scoped subtree/children query
+        returns several types at once (e.g. BDs *and* their subnets) in a single
+        request.  Results are polymorphic — each object deserialises to its own
+        type.  Only affects a scoped query (:meth:`under`); it is ignored on a
+        global class query, which addresses a single class by URL.
+
+        Args:
+            *classes: Extra ACI class type(s) or string class name(s) to return.
+
+        Returns:
+            New query with the extra target classes registered.
+
+        Example::
+
+            # Every BD and every subnet under the tenant, in one request
+            objs = aci.query(fvBD).under("uni/tn-prod").also(fvSubnet).fetch()
+        """
+        q = self._copy()
+        for cls in classes:
+            name = cls if isinstance(cls, str) else cls.__name__
+            if name != q._aci_class and name not in q._also_classes:
+                q._also_classes.append(name)
+        return q
+
     # ── Filters ───────────────────────────────────────────────────────────────
 
-    def where(self, *exprs: FilterExpr, **kwargs: Any) -> Self:
+    def where(self, *exprs: FilterExpr, **kwargs: FilterValue) -> Self:
         """Add a filter to the query.
 
         Accepts explicit :class:`~niwaki.query.FilterExpr` objects (built with
@@ -173,8 +242,7 @@ class _QueryBase[T: ManagedObject]:
         """
         all_exprs: list[FilterExpr] = list(exprs)
         for prop, value in kwargs.items():
-            qprop = _qualify(prop, self._aci_class)
-            all_exprs.append(FilterExpr(f'eq({qprop},"{_coerce_value(value)}")'))
+            all_exprs.append(_kwarg_to_expr(prop, value, self._aci_class))
 
         if not all_exprs:
             return self
@@ -216,7 +284,46 @@ class _QueryBase[T: ManagedObject]:
                 q._rsp_subtree_classes.append(name)
         return q
 
-    def subtree_where(self, *exprs: FilterExpr, **kwargs: Any) -> Self:
+    def subtree_full(self) -> Self:
+        """Embed the entire subtree of each object (``rsp-subtree=full``).
+
+        Unlike :meth:`include`, which embeds only the named direct children,
+        this returns every descendant at unlimited depth, reachable through the
+        ``.children`` tree of each result.
+
+        Returns:
+            New query with ``rsp-subtree=full``.
+        """
+        q = self._copy()
+        q._rsp_subtree = "full"
+        return q
+
+    def _subtree_filter_class(self) -> str:
+        """The class to qualify a :meth:`subtree_where` keyword against.
+
+        A ``subtree_where(prop=value)`` keyword filters the *embedded* children —
+        the class(es) named by :meth:`include` — not the top-level query class.
+        Qualifying with the query class produces a filter the APIC **rejects**
+        (verified live: ``eq(fvBD.scope,…)`` on ``fvSubnet`` children → HTTP 301)
+        or silently mis-matches.  So the keyword form needs exactly one included
+        class; anything else must be an explicitly-qualified expression.
+
+        Raises:
+            ValueError: No included class is set, or more than one is.
+        """
+        classes = self._rsp_subtree_classes
+        if len(classes) == 1:
+            return classes[0]
+        detail = (
+            "no include() class is set" if not classes else f"several are ({', '.join(classes)})"
+        )
+        raise ValueError(
+            "subtree_where(prop=value) qualifies the property with the included "
+            f"subtree class, but {detail} — call include(OneClass) first, or pass an "
+            'explicitly-qualified expression, e.g. subtree_where(eq("fvSubnet.ip", "10.*"))'
+        )
+
+    def subtree_where(self, *exprs: FilterExpr, **kwargs: FilterValue) -> Self:
         """Filter the *included subtree* children by an attribute expression.
 
         Sets ``rsp-subtree-filter`` on the APIC request.  This is a
@@ -256,9 +363,10 @@ class _QueryBase[T: ManagedObject]:
             bds = aci.query(fvBD).include(fvSubnet).subtree_where(ip="10.0.0.1/24").fetch()
         """
         all_exprs: list[FilterExpr] = list(exprs)
-        for prop, value in kwargs.items():
-            qprop = _qualify(prop, self._aci_class)
-            all_exprs.append(FilterExpr(f'eq({qprop},"{_coerce_value(value)}")'))
+        if kwargs:
+            subtree_class = self._subtree_filter_class()
+            for prop, value in kwargs.items():
+                all_exprs.append(_kwarg_to_expr(prop, value, subtree_class))
 
         if not all_exprs:
             raise ValueError("subtree_where() requires at least one filter expression.")
@@ -271,63 +379,92 @@ class _QueryBase[T: ManagedObject]:
         )
         return q
 
-    def with_faults(self) -> Self:
-        """Include fault objects in the subtree response.
+    def _add_subtree_include(self, *values: str) -> Self:
+        """Append ``rsp-subtree-include`` facets, de-duplicated (shared helper)."""
+        q = self._copy()
+        for value in values:
+            if value not in q._rsp_subtree_include:
+                q._rsp_subtree_include.append(value)
+        return q
 
-        Sets ``rsp-subtree-include=faults,required``.  Only objects that
-        *have* faults are returned (``required`` option).
+    def include_subtree(self, *kinds: SubtreeInclude) -> Self:
+        """Embed one or more response-subtree facets (``rsp-subtree-include``).
+
+        The typed, exhaustive entry point: every facet the APIC offers is a
+        member of :class:`SubtreeInclude` (faults, health, stats, relations,
+        count, the audit/event/fault/health record streams, tasks, …).  The
+        ``with_*`` methods are ergonomic shortcuts for the common ones.
+
+        Args:
+            *kinds: One or more :class:`SubtreeInclude` facets.
 
         Returns:
-            New query with faults included.
+            New query with the facets added.
 
         Example::
 
-            faulted = aci.root.tenant("prod").bd().with_faults().fetch()
+            from niwaki.query import SubtreeInclude
+
+            aci.query(fvBD).include_subtree(
+                SubtreeInclude.FAULT_RECORDS, SubtreeInclude.AUDIT_LOGS
+            ).fetch()
         """
-        q = self._copy()
-        for opt in ("faults", "required"):
-            if opt not in q._rsp_subtree_include:
-                q._rsp_subtree_include.append(opt)
-        return q
+        return self._add_subtree_include(*(str(kind) for kind in kinds))
+
+    def with_faults(self) -> Self:
+        """Embed fault objects in the subtree response (``rsp-subtree-include=faults``).
+
+        By default this embeds faults on *every* returned object, faulted or
+        not.  Chain :meth:`only_faulted` to restrict the result to objects that
+        actually carry a fault.
+
+        Returns:
+            New query with faults embedded.
+
+        Example::
+
+            # Every BD, faults embedded where present
+            aci.root.tenant("prod").bd().with_faults().fetch()
+            # Only the faulted BDs
+            aci.root.tenant("prod").bd().with_faults().only_faulted().fetch()
+        """
+        return self._add_subtree_include("faults")
+
+    def only_faulted(self) -> Self:
+        """Restrict results to objects that carry the embedded subtree items.
+
+        Adds the ``required`` modifier to ``rsp-subtree-include``: only
+        top-level objects that actually have the requested facet — typically the
+        faults embedded by :meth:`with_faults` — are returned.
+
+        Returns:
+            New query with ``required`` set.
+        """
+        return self._add_subtree_include("required")
 
     def with_health(self) -> Self:
-        """Include health score data in the subtree response.
-
-        Sets ``rsp-subtree-include=health``.
+        """Embed health score data in the subtree response (``rsp-subtree-include=health``).
 
         Returns:
-            New query with health data included.
+            New query with health data embedded.
         """
-        q = self._copy()
-        if "health" not in q._rsp_subtree_include:
-            q._rsp_subtree_include.append("health")
-        return q
+        return self._add_subtree_include("health")
 
     def with_stats(self) -> Self:
-        """Include statistics counters in the subtree response.
-
-        Sets ``rsp-subtree-include=stats``.
+        """Embed statistics counters in the subtree response (``rsp-subtree-include=stats``).
 
         Returns:
-            New query with stats data included.
+            New query with stats data embedded.
         """
-        q = self._copy()
-        if "stats" not in q._rsp_subtree_include:
-            q._rsp_subtree_include.append("stats")
-        return q
+        return self._add_subtree_include("stats")
 
     def with_relations(self) -> Self:
-        """Include relation objects (Rs/Rt) in the subtree response.
-
-        Sets ``rsp-subtree-include=relations``.
+        """Embed relation objects (Rs/Rt) — ``rsp-subtree-include=relations``.
 
         Returns:
-            New query with relations included.
+            New query with relations embedded.
         """
-        q = self._copy()
-        if "relations" not in q._rsp_subtree_include:
-            q._rsp_subtree_include.append("relations")
-        return q
+        return self._add_subtree_include("relations")
 
     def config_only(self) -> Self:
         """Return only configurable properties, omitting read-only APIC metadata.
@@ -358,10 +495,11 @@ class _QueryBase[T: ManagedObject]:
     # ── Sort ──────────────────────────────────────────────────────────────────
 
     def order_by(self, prop: str, *, desc: bool = False) -> Self:
-        """Sort results by a property.
+        """Sort results by a property (chain for multi-key ordering).
 
         The property name is auto-prefixed with the ACI class name when it does
-        not already contain a dot.
+        not already contain a dot.  Calling :meth:`order_by` more than once
+        appends additional sort keys, applied left to right.
 
         Args:
             prop: Property name (e.g. ``"name"`` → qualified as
@@ -369,16 +507,18 @@ class _QueryBase[T: ManagedObject]:
             desc: Sort descending when ``True``.  Default: ascending.
 
         Returns:
-            New query with the ordering set.
+            New query with the ordering key appended.
 
         Example::
 
             aci.query(fvBD).order_by("name").fetch()
             aci.query(fvBD).order_by("name", desc=True).fetch()
+            # Multi-key: most severe first, then by code
+            aci.query("faultInst").order_by("severity", desc=True).order_by("code").fetch()
         """
         q = self._copy()
-        q._order_by_prop = _qualify(prop, self._aci_class)
-        q._order_by_dir = "desc" if desc else "asc"
+        direction = "desc" if desc else "asc"
+        q._order_by.append(f"{_qualify(prop, self._aci_class)}|{direction}")
         return q
 
     def page_size(self, n: int) -> Self:
@@ -402,6 +542,81 @@ class _QueryBase[T: ManagedObject]:
         q._page_size = n
         return q
 
+    # ── Limit / slicing ─────────────────────────────────────────────────────────
+
+    def _effective_page_size(self) -> int:
+        """The page size to request, capped to the result limit when one is set.
+
+        With a small limit (``q[:5]``) there is no point fetching pages of 500 —
+        capping the page size makes the limit **server-side**: the first page
+        already carries at most *limit* objects.
+        """
+        if self._limit is None:
+            return self._page_size
+        return max(1, min(self._page_size, self._limit))
+
+    def __getitem__(self, index: slice) -> Self:
+        """Cap the number of results with a leading slice — ``q[:50]``.
+
+        Returns a **new lazy query** that yields at most *stop* objects; nothing
+        executes until the query is iterated or an executor is called.  Only a
+        leading ``[:n]`` is supported: the APIC has no result offset, so a
+        non-zero start, a step, or a negative bound is rejected, and an integer
+        index (``q[0]``) is deliberately unsupported — use :meth:`first`.
+
+        Args:
+            index: A ``[:n]`` slice with a non-negative ``stop``.  ``q[:]`` is an
+                unlimited copy.
+
+        Returns:
+            New query limited to at most *n* results.
+
+        Raises:
+            TypeError: *index* is not a slice (e.g. an integer index).
+            ValueError: The slice has a step, a non-zero start, or a negative or
+                non-integer stop.
+
+        Example::
+
+            first_fifty = aci.query("fvCEp")[:50]
+            for endpoint in aci.query("fvCEp").where(ip="10.0.0.5")[:10]:
+                ...
+        """
+        if not isinstance(index, slice):  # pyright: ignore[reportUnnecessaryIsInstance]
+            raise TypeError(
+                "a query is sliced, not indexed — use q[:n] to limit the result, "
+                f"or .first() for a single object, not q[{index!r}]"
+            )
+        if index.step is not None:
+            raise ValueError("query slicing does not support a step (q[:n] only)")
+        if index.start not in (None, 0):
+            raise ValueError(
+                "query slicing supports only a leading q[:n] — the APIC has no result offset"
+            )
+        stop = index.stop
+        if stop is None:
+            return self._copy()
+        if not isinstance(stop, int) or isinstance(stop, bool) or stop < 0:
+            raise ValueError(f"query slice stop must be a non-negative integer, got {stop!r}")
+        q = self._copy()
+        q._limit = stop
+        return q
+
+    def __bool__(self) -> bool:
+        """Guard ``if query:`` — a query object is not a result check.
+
+        A builder is always truthy on its own, so ``if aci.query(...)...:`` would
+        pass whether or not anything matches — a classic footgun.  Fail loud:
+        use :meth:`~niwaki.query.Query.exists` to test for matches, or ``.count()``.
+
+        Raises:
+            TypeError: Always — a query has no boolean meaning.
+        """
+        raise TypeError(
+            "a query has no boolean value — use .exists() to test for matches, "
+            "or .count() for how many"
+        )
+
     # ── URL building ──────────────────────────────────────────────────────────
 
     def build(self) -> tuple[str, dict[str, str]]:
@@ -424,14 +639,23 @@ class _QueryBase[T: ManagedObject]:
         """
         params: dict[str, str] = {}
 
+        if self._also_classes and not (
+            self._scope_dn and self._query_target in ("subtree", "children")
+        ):
+            raise ValueError(
+                "also() adds classes to a DN-scoped subtree/children query's "
+                "target-subtree-class; it has no effect on a global class query or a "
+                "self_only() query — scope with under(dn) first, without self_only()"
+            )
+
         if self._scope_dn:
             path = f"/api/mo/{self._scope_dn}.json"
             params["query-target"] = self._query_target
             if self._query_target in ("subtree", "children"):
-                # Restrict to this query's class so that a subtree-scoped
-                # query on a parent DN returns only the requested type, not
-                # everything under the parent.
-                params["target-subtree-class"] = self._aci_class
+                # Restrict to this query's class(es) so that a subtree-scoped
+                # query on a parent DN returns only the requested type(s), not
+                # everything under the parent.  ``also()`` adds extra classes.
+                params["target-subtree-class"] = ",".join([self._aci_class, *self._also_classes])
         else:
             path = f"/api/class/{self._aci_class}.json"
 
@@ -447,7 +671,7 @@ class _QueryBase[T: ManagedObject]:
             params["rsp-subtree-include"] = ",".join(self._rsp_subtree_include)
         if self._rsp_prop_include != "all":
             params["rsp-prop-include"] = self._rsp_prop_include
-        if self._order_by_prop:
-            params["order-by"] = f"{self._order_by_prop}|{self._order_by_dir}"
+        if self._order_by:
+            params["order-by"] = ",".join(self._order_by)
 
         return path, params

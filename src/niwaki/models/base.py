@@ -184,6 +184,111 @@ class ManagedObject(BaseModel):
             rn = rn.replace(f"{{{prop}}}", wire)
         return rn
 
+    @property
+    def dn(self) -> str:
+        """The APIC Distinguished Name, as returned on a read.
+
+        A read result always carries ``dn`` — it is structural, present even
+        under :meth:`~niwaki.query.Query.naming_only` and
+        :meth:`~niwaki.query.Query.config_only` — and it lands in ``model_extra``
+        because it is not a configurable field.  A locally-constructed object has
+        no DN yet, so accessing ``.dn`` on one raises :class:`AttributeError`.
+
+        This reads the same whether the class is generated or not — one uniform
+        accessor over the whole readable object space.
+
+        Returns:
+            The Distinguished Name string.
+
+        Raises:
+            AttributeError: The object was built locally, not read from the
+                APIC, so no ``dn`` is present.
+        """
+        extra = self.model_extra
+        if extra is not None and "dn" in extra:
+            return str(extra["dn"])
+        raise AttributeError(
+            f"{type(self).__name__!r} object has no 'dn': it was constructed "
+            "locally, not read from the APIC"
+        )
+
+    def __getitem__(self, key: str) -> object:
+        """Read any attribute by its APIC (wire) name — uniform across all classes.
+
+        The escape hatch for reading an object the way the APIC names it, without
+        caring whether the class is one of the generated models (typed fields) or
+        an operational class absorbed into ``model_extra``.  Resolution order:
+        the read-only APIC attributes (``model_extra``), then a renamed config
+        field (by its wire alias), then a config field whose wire name equals its
+        Python name.
+
+        Args:
+            key: An APIC wire name (``"arpFlood"``) or the Python field name
+                (``"arp_flooding"``); read-only APIC attributes such as ``"dn"``
+                or ``"role"`` are addressed by their wire name.
+
+        Returns:
+            The attribute value — a typed value for a config field, the raw wire
+            value for an APIC-originated attribute.
+
+        Raises:
+            TypeError: *key* is not a string.
+            KeyError: No attribute by that wire name exists on this object.
+        """
+        # Runtime guard for dynamically-typed callers: a non-str key (e.g. an
+        # int index or a slice) must fail loudly as a TypeError, not silently as
+        # a KeyError.  Pyright sees ``key: str`` and flags this as unnecessary.
+        if not isinstance(key, str):  # pyright: ignore[reportUnnecessaryIsInstance]
+            raise TypeError(
+                "managed-object subscription takes a wire attribute name (str), "
+                f"not {type(key).__name__}"
+            )
+        extra = self.model_extra
+        if extra is not None and key in extra:
+            return extra[key]
+        alias_map = self._get_alias_map()  # {wire_alias: python_field}
+        if key in alias_map:
+            return getattr(self, alias_map[key])
+        if key in type(self).model_fields:
+            return getattr(self, key)
+        raise KeyError(key)
+
+    @property
+    def attrs(self) -> dict[str, str]:
+        """The object's attributes as APIC wire strings — one flat view for any class.
+
+        Every config field, at its current value, is rendered back to wire form
+        (``True`` → ``"true"``, a flags set → ``"a,b"``) under its wire name, then
+        merged with the read-only attributes the APIC returned (``model_extra``,
+        already wire strings); ``children`` is excluded.  A generated object and
+        an operational one read identically through this one call — it never
+        exposes the typed/dynamic split.
+
+        This is the object's **current state** re-rendered to wire form, not a
+        verbatim copy of the APIC response: a generated object read from the APIC
+        carries every field (:meth:`from_apic` builds a complete instance), so
+        ``attrs`` includes defaults the APIC may not have sent, and a value is
+        re-rendered (a bool becomes ``"true"``/``"false"``) and so can differ
+        from the exact string the APIC returned.
+
+        Returns:
+            ``{wire_attribute_name: wire_string_value}``.
+        """
+        wire_of = {python: wire for wire, python in self._get_alias_map().items()}
+        out: dict[str, str] = {}
+        for name in type(self).model_fields:
+            if name == "children":
+                continue
+            value = getattr(self, name)
+            if value is None:
+                continue
+            out[wire_of.get(name, name)] = to_wire(value)
+        extra = self.model_extra
+        if extra:
+            for key, value in extra.items():
+                out[key] = value if isinstance(value, str) else to_wire(value)
+        return out
+
     # ── Serialisation ─────────────────────────────────────────────────────────
 
     def to_apic(self) -> dict[str, Any]:

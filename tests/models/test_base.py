@@ -400,3 +400,110 @@ class TestSurgical:
         assert attrs["name"] == "web"
         assert attrs["arpFlood"] == "true"
         assert "unicastRoute" not in attrs
+
+
+# ── Uniform read access (.dn / __getitem__ / .attrs) ──────────────────────────
+
+
+def _read_simple() -> SimpleMO:
+    """A SimpleMO as it comes back from a read: config props + APIC-only attrs."""
+    return SimpleMO.from_apic(
+        {"simpleMO": {"attributes": {"name": "x", "descr": "hi", "dn": "mo-x", "modTs": "2026"}}}
+    )  # type: ignore[return-value]
+
+
+class TestDnAccessor:
+    def test_dn_from_read_result(self) -> None:
+        assert _read_simple().dn == "mo-x"
+
+    def test_dn_from_generated_read_result(self) -> None:
+        from niwaki.models._generated.fv.fvBD import fvBD
+
+        bd = fvBD.from_apic({"fvBD": {"attributes": {"name": "web", "dn": "uni/tn-p/BD-web"}}})
+        assert bd.dn == "uni/tn-p/BD-web"
+
+    def test_dn_from_unregistered_read_result(self) -> None:
+        top = ManagedObject.from_apic(
+            {"topSystem": {"attributes": {"dn": "topology/pod-1/node-101", "role": "leaf"}}}
+        )
+        assert top.dn == "topology/pod-1/node-101"
+
+    def test_dn_absent_on_local_object_raises(self) -> None:
+        with pytest.raises(AttributeError, match="constructed locally"):
+            _ = SimpleMO(name="x").dn
+
+
+class TestGetItem:
+    def test_extra_attribute(self) -> None:
+        mo = _read_simple()
+        assert mo["dn"] == "mo-x"
+        assert mo["modTs"] == "2026"
+
+    def test_non_renamed_field(self) -> None:
+        assert _read_simple()["name"] == "x"
+
+    def test_renamed_field_by_wire_name_returns_typed_value(self) -> None:
+        from niwaki.models._generated.fv.fvBD import fvBD
+
+        bd = fvBD.from_apic({"fvBD": {"attributes": {"name": "web", "arpFlood": "yes"}}})
+        # Addressed by the wire name, but the value is the typed (coerced) one.
+        assert bd["arpFlood"] is True
+
+    def test_unknown_key_raises_keyerror(self) -> None:
+        with pytest.raises(KeyError):
+            _ = _read_simple()["nope"]
+
+    def test_non_string_key_raises_typeerror(self) -> None:
+        with pytest.raises(TypeError, match="wire attribute name"):
+            _ = _read_simple()[0]  # type: ignore[index]
+
+
+class TestAttrsView:
+    def test_wire_view_merges_fields_and_extras(self) -> None:
+        attrs = _read_simple().attrs
+        assert attrs["name"] == "x"
+        assert attrs["descr"] == "hi"
+        assert attrs["dn"] == "mo-x"
+        assert attrs["modTs"] == "2026"
+
+    def test_reflects_full_object_state(self) -> None:
+        # A generated object read from the APIC carries every field, so the wire
+        # view is the object's whole state (config fields at their current
+        # values), not only the ones that differ from a default.
+        attrs = _read_simple().attrs
+        assert attrs["active"] == "true"  # a config field at its default value
+
+    def test_renamed_field_uses_wire_name_and_wire_value(self) -> None:
+        from niwaki.models._generated.fv.fvBD import fvBD
+
+        bd = fvBD.from_apic({"fvBD": {"attributes": {"name": "web", "arpFlood": "yes"}}})
+        attrs = bd.attrs
+        assert attrs["arpFlood"] == "true"  # bool wire form, under the wire name
+        assert attrs["unicastRoute"] == "true"  # config fields render under wire names
+
+    def test_unregistered_class_view_is_all_extras(self) -> None:
+        top = ManagedObject.from_apic(
+            {"topSystem": {"attributes": {"dn": "topology/pod-1/node-101", "role": "leaf"}}}
+        )
+        assert top.attrs == {"dn": "topology/pod-1/node-101", "role": "leaf"}
+
+    def test_children_excluded(self) -> None:
+        raw = {
+            "simpleMO": {
+                "attributes": {"name": "x"},
+                "children": [{"simpleChild": {"attributes": {"id": "1"}}}],
+            }
+        }
+        mo = ManagedObject.from_apic(raw)
+        assert mo.children  # the child was parsed
+        assert "children" not in mo.attrs
+
+
+class TestIterationSentinel:
+    """Adding ``__getitem__`` must not turn the model into an old-style iterable
+    (Pydantic already defines ``__iter__``, which yields ``(name, value)``)."""
+
+    def test_iter_still_yields_field_tuples(self) -> None:
+        items = dict(iter(SimpleMO(name="x", descr="hi")))
+        assert items["name"] == "x"
+        assert items["descr"] == "hi"

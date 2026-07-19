@@ -56,12 +56,62 @@ epgs = aci.query("fvAEPg").where(
     or_(eq("fvAEPg.name", "web"), gt("fvAEPg.pcTag", "10000"))
 ).fetch()
 
-# Enrichment
-unhealthy = aci.query(fvBD).with_health().with_faults().fetch()
+# Enrichment — health and faults embedded on every returned object
+# (chain .only_faulted() to keep only the objects that carry a fault)
+enriched = aci.query(fvBD).with_health().with_faults().fetch()
 
 # Streaming for large result sets
 for bd in aci.query(fvBD).stream():
     ...
+```
+
+### Iterate, slice, and fetch exactly one
+
+A query is a lazy iterable — loop it, `list()` it, or take a leading `[:n]`
+slice without an explicit `.fetch()`.  Use `.one()` when exactly one object is
+expected (a typed `NoResultError` / `MultipleResultsError` otherwise), and
+`.exists()` for a cheap presence check:
+
+```python
+# Iterate lazily — every result reads the same, generated class or not:
+# .dn and obj["wireName"] work uniformly across all ~15,000 APIC classes.
+for bd in aci.query(fvBD):
+    print(bd.dn, bd["name"])
+
+# A leading slice caps the result (server-side page size), lazily:
+first_page = list(aci.query(fvBD)[:50])
+
+# Exactly one object, or a typed error:
+web = aci.query(fvBD).where(name="web").one()
+assert web["name"] == "web"
+
+# Cheap existence check:
+assert aci.query(fvBD).where(name="web").exists()
+```
+
+### Smart keyword filters
+
+In `where(prop=value)`, the value's *type* chooses the APIC operator.  Inspect
+the compiled filter with `.build()` without touching the network:
+
+```python
+from niwaki.query import any_of, anybit
+
+# list -> membership OR
+_, params = aci.query(fvBD).where(name=["web", "db"]).build()
+assert params["query-target-filter"] == 'or(eq(fvBD.name,"web"),eq(fvBD.name,"db"))'
+
+# a "*" makes a wildcard
+_, params = aci.query(fvBD).where(name="prod-*").build()
+assert params["query-target-filter"] == 'wcard(fvBD.name,"prod-*")'
+
+# a set stays a bitmask equality (Flags fields), never a membership OR
+_, params = aci.query("fvSubnet").where(scope={"public", "shared"}).build()
+assert params["query-target-filter"] == 'eq(fvSubnet.scope,"public,shared")'
+
+# explicit helpers: any_of(...), and anybit(...) to match a single bit of a mask
+faults = aci.query("faultInst").where(code=any_of("F0467", "F1394")).fetch()
+open_subnets = aci.query("fvSubnet").where(anybit("fvSubnet.scope", "shared")).fetch()
 ```
 
 Any of the ~15,000 APIC classes is queryable **by name** — including

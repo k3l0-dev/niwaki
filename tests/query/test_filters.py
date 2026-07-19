@@ -14,7 +14,24 @@ from __future__ import annotations
 
 import pytest
 
-from niwaki.query import FilterExpr, and_, bw, eq, ge, gt, le, lt, ne, not_, or_, wcard
+from niwaki.query import (
+    FilterExpr,
+    allbit,
+    and_,
+    anybit,
+    bw,
+    eq,
+    ge,
+    gt,
+    le,
+    lt,
+    ne,
+    not_,
+    or_,
+    raw,
+    wcard,
+    xor,
+)
 from niwaki.query._filters import _coerce_value, _qualify  # type: ignore[reportPrivateUsage]
 
 # ── FilterExpr basics ─────────────────────────────────────────────────────────
@@ -207,3 +224,139 @@ class TestFilterValueEscaping:
 
     def test_wcard_escapes_double_quote_keeps_wildcard(self) -> None:
         assert str(wcard("descr", 'x"y*', cls_name="fvBD")) == 'wcard(fvBD.descr,"x\\"y*")'
+
+
+# ── Bitmask operators ─────────────────────────────────────────────────────────
+
+
+class TestBitmaskOperators:
+    def test_anybit_wire_string(self) -> None:
+        assert (
+            str(anybit("tcpRules", "syn,ack", cls_name="vzEntry"))
+            == 'anybit(vzEntry.tcpRules,"syn,ack")'
+        )
+
+    def test_allbit_compiles_to_and_of_anybits(self) -> None:
+        # No native `allbit` on the APIC — "all bits set" = and(anybit,anybit).
+        assert str(allbit("tcpRules", "syn,ack", cls_name="vzEntry")) == (
+            'and(anybit(vzEntry.tcpRules,"syn"),anybit(vzEntry.tcpRules,"ack"))'
+        )
+
+    def test_allbit_single_flag_is_just_anybit(self) -> None:
+        assert (
+            str(allbit("scope", "public", cls_name="fvSubnet")) == 'anybit(fvSubnet.scope,"public")'
+        )
+
+    def test_allbit_empty_raises(self) -> None:
+        with pytest.raises(ValueError, match="at least one flag"):
+            allbit("fvSubnet.scope", "")
+
+    def test_anybit_single_flag(self) -> None:
+        assert (
+            str(anybit("scope", "public", cls_name="fvSubnet")) == 'anybit(fvSubnet.scope,"public")'
+        )
+
+    def test_anybit_from_set_canonical_order(self) -> None:
+        # A set of names is joined in the enum's canonical order — sorted for
+        # plain strings — so the wire form is deterministic.
+        assert str(anybit("scope", {"shared", "public"}, cls_name="fvSubnet")) == (
+            'anybit(fvSubnet.scope,"public,shared")'
+        )
+
+    def test_anybit_from_list_preserves_order(self) -> None:
+        assert str(anybit("scope", ["public", "shared"], cls_name="fvSubnet")) == (
+            'anybit(fvSubnet.scope,"public,shared")'
+        )
+
+    def test_allbit_from_frozenset(self) -> None:
+        assert str(allbit("scope", frozenset({"public", "shared"}), cls_name="fvSubnet")) == (
+            'and(anybit(fvSubnet.scope,"public"),anybit(fvSubnet.scope,"shared"))'
+        )
+
+    def test_anybit_already_qualified(self) -> None:
+        assert str(anybit("vzEntry.tcpRules", "syn")) == 'anybit(vzEntry.tcpRules,"syn")'
+
+    def test_anybit_from_enum_set_uses_declaration_order(self) -> None:
+        from niwaki.models._generated.enums.FvRouteScp import FvRouteScp
+
+        # A set of enum members joins in the enum's declaration order (bit
+        # weight), not alphabetically: PUBLIC is declared before PRIVATE, so
+        # "public,private" — never the alphabetical "private,public".
+        result = str(anybit("fvSubnet.scope", {FvRouteScp.PRIVATE, FvRouteScp.PUBLIC}))
+        assert result == 'anybit(fvSubnet.scope,"public,private")'
+
+    def test_allbit_from_enum_list_preserves_given_order(self) -> None:
+        from niwaki.models._generated.enums.FvRouteScp import FvRouteScp
+
+        result = str(allbit("fvSubnet.scope", [FvRouteScp.PRIVATE, FvRouteScp.PUBLIC]))
+        assert result == 'and(anybit(fvSubnet.scope,"private"),anybit(fvSubnet.scope,"public"))'
+
+
+# ── XOR ───────────────────────────────────────────────────────────────────────
+
+
+class TestXor:
+    def test_xor_two(self) -> None:
+        a = eq("name", "web")
+        b = eq("name", "app")
+        assert str(xor(a, b)) == f"xor({a},{b})"
+
+    def test_xor_three(self) -> None:
+        a = eq("name", "web")
+        b = eq("name", "app")
+        c = eq("name", "db")
+        assert str(xor(a, b, c)) == f"xor({a},{b},{c})"
+
+    def test_xor_requires_two(self) -> None:
+        with pytest.raises(ValueError, match="at least 2"):
+            xor(eq("name", "web"))
+
+
+# ── Raw escape hatch ──────────────────────────────────────────────────────────
+
+
+class TestRaw:
+    def test_raw_is_verbatim(self) -> None:
+        assert str(raw('anybit(vzEntry.tcpRules,"syn")')) == 'anybit(vzEntry.tcpRules,"syn")'
+
+    def test_raw_not_escaped(self) -> None:
+        # Raw is the verbatim escape hatch — it is not re-escaped.
+        assert str(raw("true()")) == "true()"
+
+    def test_raw_composes_with_operators(self) -> None:
+        combined = raw("true()") & eq("name", "web")
+        assert str(combined) == 'and(true(),eq(name,"web"))'
+
+    def test_filterexpr_str_constructor_is_verbatim(self) -> None:
+        # Backward-compat: a raw string passed to FilterExpr is taken as-is.
+        assert str(FilterExpr('eq(fvBD.name,"web")')) == 'eq(fvBD.name,"web")'
+
+
+# ── AST composition of the new operators ──────────────────────────────────────
+
+
+class TestNewOperatorComposition:
+    def test_new_ops_compose_with_and_or_not(self) -> None:
+        expr = and_(
+            anybit("vzEntry.tcpRules", "syn"),
+            or_(wcard("fvBD.name", "web*"), bw("fvBD.pcTag", "1", "100")),
+        )
+        s = str(expr)
+        assert s.startswith("and(")
+        assert 'anybit(vzEntry.tcpRules,"syn")' in s
+        assert 'wcard(fvBD.name,"web*")' in s
+        assert 'bw(fvBD.pcTag,"1","100")' in s
+
+    def test_bitmask_negation(self) -> None:
+        assert str(~anybit("vzEntry.tcpRules", "syn")) == 'not(anybit(vzEntry.tcpRules,"syn"))'
+
+
+# ── Keyword-value wrappers ────────────────────────────────────────────────────
+
+
+class TestValueWrappers:
+    def test_any_of_requires_a_value(self) -> None:
+        from niwaki.query import any_of
+
+        with pytest.raises(ValueError, match="at least one value"):
+            any_of()

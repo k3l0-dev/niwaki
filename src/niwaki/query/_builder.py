@@ -84,7 +84,9 @@ class Query(_QueryBase[_T]):
 
         Transparently paginates through all APIC pages.  For very large result
         sets (tens of thousands of objects) consider :meth:`stream` to process
-        objects page-by-page without holding everything in memory at once.
+        objects page-by-page without holding everything in memory at once.  When
+        the query is limited by a ``[:n]`` slice, only that many objects are
+        fetched.
 
         Returns:
             List of typed :class:`~niwaki.models.base.ManagedObject` instances.
@@ -102,9 +104,22 @@ class Query(_QueryBase[_T]):
         """
         from niwaki.utils.response import parse_imdata
 
+        if self._limit is not None:
+            return list(self.stream())
         path, params = self.build()
         raw = self._session._get_all_pages(path, params, page_size=self._page_size)
         return cast(list[_T], parse_imdata({"imdata": raw}))
+
+    def __iter__(self) -> Iterator[_T]:
+        """Iterate the query lazily — ``for obj in query`` streams page by page.
+
+        Equivalent to :meth:`stream`; it also makes ``list(query)`` and a
+        ``query[:n]`` slice work directly, honouring any limit set by slicing.
+
+        Yields:
+            Typed :class:`~niwaki.models.base.ManagedObject` instances.
+        """
+        return self.stream()
 
     def first(self) -> _T | None:
         """Execute the query and return the first matching object, or ``None``.
@@ -134,11 +149,61 @@ class Query(_QueryBase[_T]):
         objects = parse_imdata({"imdata": raw})
         return cast(_T, objects[0]) if objects else None
 
+    def one(self) -> _T:
+        """Execute the query and return the single matching object.
+
+        For queries that must resolve to exactly one object.  Fetches at most two
+        objects (``page=0&page-size=2``) so it can tell "none", "one" and "more
+        than one" apart in a single request.
+
+        Returns:
+            The one matching instance.
+
+        Raises:
+            NoResultError: No object matched — use :meth:`first` when *no match*
+                is acceptable.
+            MultipleResultsError: More than one object matched — narrow the query
+                or use :meth:`first` / :meth:`fetch`.
+
+        Example::
+
+            bd = aci.query(fvBD).where(name="web").one()
+        """
+        from niwaki.exceptions._query import MultipleResultsError, NoResultError
+        from niwaki.utils.response import parse_imdata
+
+        path, params = self.build()
+        params = {**params, "page": "0", "page-size": "2"}
+        raw = self._session._get_imdata(path, params)
+        objects = parse_imdata({"imdata": raw})
+        if not objects:
+            raise NoResultError(f"one() matched no {self._aci_class} object")
+        if len(objects) > 1:
+            raise MultipleResultsError(
+                f"one() matched more than one {self._aci_class} object; narrow the "
+                "query or use first()/fetch()"
+            )
+        return cast(_T, objects[0])
+
+    def exists(self) -> bool:
+        """Return whether any object matches — a single lightweight request.
+
+        Returns:
+            ``True`` when at least one object matches, ``False`` otherwise.
+
+        Example::
+
+            if aci.query(fvBD).where(name="web").exists():
+                ...
+        """
+        return self.count() > 0
+
     def count(self) -> int:
         """Return the count of matching objects without fetching them.
 
-        Uses the APIC ``count-only=yes`` mode — a single lightweight request
-        that returns only the ``totalCount`` header.
+        Issues a single one-object page and reads the APIC ``totalCount`` — this
+        composes with any query and works on every APIC version (6.0 rejects the
+        ``count-only`` argument).
 
         Returns:
             Integer count of objects matching the current query.
@@ -153,13 +218,17 @@ class Query(_QueryBase[_T]):
             n = aci.query(fvBD).under("uni/tn-prod").count()
             print(f"{n} BDs in tenant prod")
         """
+        if self._limit == 0:
+            return 0
         path, params = self.build()
         # A minimal one-object page still carries the full totalCount —
         # unlike "count-only", this composes with any query and every
         # APIC version (6.0 rejects the count-only argument).
         params = {**params, "page": "0", "page-size": "1"}
         data: dict[str, Any] = self._session._request_checked(path, params).json()
-        return int(data.get("totalCount", 0))
+        total = int(data.get("totalCount", 0))
+        # A sliced query (q[:n]) counts what it would actually yield.
+        return min(total, self._limit) if self._limit is not None else total
 
     def stream(self) -> Iterator[_T]:
         """Yield objects one page at a time — O(page_size) memory footprint.
@@ -183,6 +252,40 @@ class Query(_QueryBase[_T]):
         """
         from niwaki.utils.response import parse_imdata
 
+        limit = self._limit
+        if limit == 0:
+            return
         path, params = self.build()
-        for page in self._session._iter_pages(path, params, page_size=self._page_size):
-            yield from cast(list[_T], parse_imdata({"imdata": page}))
+        yielded = 0
+        for page in self._session._iter_pages(path, params, page_size=self._effective_page_size()):
+            for obj in cast(list[_T], parse_imdata({"imdata": page})):
+                yield obj
+                yielded += 1
+                if limit is not None and yielded >= limit:
+                    return
+
+    def execute_raw(self, path: str, params: dict[str, str]) -> list[ManagedObject]:
+        """Run raw APIC query params through the typed, paginated pipeline.
+
+        The escape hatch for anything :meth:`build` cannot express yet: pass an
+        APIC path and parameter dict (often derived from ``build()`` and then
+        tweaked) and get back typed, fully-paginated objects — unlike the
+        transport's raw ``get`` helper, which returns a single unparsed page.
+
+        Args:
+            path:   APIC-relative path (e.g. ``"/api/class/fvBD.json"``).
+            params: APIC query-string parameters.
+
+        Returns:
+            All matching objects across every page, typed via ``REGISTRY``.
+
+        Example::
+
+            path, params = aci.query(fvBD).build()
+            params["rsp-subtree-include"] = "count"
+            objs = aci.query(fvBD).execute_raw(path, params)
+        """
+        from niwaki.utils.response import parse_imdata
+
+        raw = self._session._get_all_pages(path, params, page_size=self._page_size)
+        return parse_imdata({"imdata": raw})

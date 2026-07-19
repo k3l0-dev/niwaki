@@ -50,13 +50,13 @@ Quick-start
 
     # 15 000+ APIC classes accessible by string name
     nodes = aci.query("topSystem").naming_only().fetch()
-    # Attributes accessible as obj.attribute_name (Pydantic extra="allow")
+    # Uniform read access, generated class or not: .dn and obj["wireName"]
     for node in nodes:
-        print(node.model_extra.get("dn"), node.model_extra.get("role"))
+        print(node.dn, node["role"])
 
 **Response enrichment**::
 
-    aci.root.tenant("prod").bd().with_faults().fetch()  # only faulted BDs
+    aci.root.tenant("prod").bd().with_faults().fetch()  # faults embedded on each BD
     aci.query(fvBD).with_health().fetch()               # include health
     aci.query(fvBD).include(fvSubnet).fetch()           # embed children
 
@@ -64,7 +64,7 @@ Quick-start
 
     query.fetch()          # list[T] — all pages, in memory
     query.first()          # T | None — page-size=1 optimisation
-    query.count()          # int — count-only=yes, no objects transferred
+    query.count()          # int — one lightweight request, no objects transferred
     query.stream()         # Iterator[T] / AsyncIterator[T] — page-by-page
 
 Public API
@@ -72,35 +72,53 @@ Public API
 """
 
 from niwaki.query._async_builder import AsyncQuery
+from niwaki.query._base import SubtreeInclude  # pyright: ignore[reportPrivateUsage]
 from niwaki.query._builder import Query
 from niwaki.query._filters import (
     FilterExpr,
+    FilterValue,
+    allbit,
     and_,
+    any_of,
+    anybit,
+    between,
     bw,
     eq,
     ge,
     gt,
     le,
+    like,
     lt,
     ne,
     not_,
     or_,
+    raw,
     wcard,
+    xor,
 )
 
 __all__ = [
     "AsyncQuery",
     "FilterExpr",
+    "FilterValue",
     "Query",
+    "SubtreeInclude",
+    "allbit",
     "and_",
+    "any_of",
+    "anybit",
+    "between",
     "bw",
     "eq",
     "ge",
     "gt",
     "le",
+    "like",
     "lt",
     "ne",
     "not_",
     "or_",
+    "raw",
     "wcard",
+    "xor",
 ]

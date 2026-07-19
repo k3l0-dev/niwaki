@@ -7,6 +7,52 @@ breaking changes ship in a new major version with a migration note.
 
 ## [Unreleased]
 
+## [1.1.0] — 2026-07-19
+
+The **observation / query** surface — which 1.0.0 declared still-evolving — gets
+its read foundation: the full APIC query grammar, expressed as a fluent, typed
+API and validated against a live controller.  The **configuration** API (design
+DSL, push modes) is unchanged and remains stable; the breaking changes below are
+confined to reading.
+
+### Added
+
+- **Filter operators.**  `anybit`, `allbit` (emulated as `and_(anybit, …)`),
+  `xor` and `raw` join `eq`/`ne`/`lt`/`le`/`gt`/`ge`/`bw`/`wcard` and
+  `and_`/`or_`/`not_`.  `anybit` closes the write-but-not-filter gap on bitmask
+  (`Flags`) fields — you can now filter "where this flag is set".
+- **Smart values in `where(...)`.**  A list or tuple means membership, a `*` in a
+  string means wildcard, a `set` stays bitmask equality; explicit wrappers
+  `any_of(...)`, `like(pattern)` and `between(start, end)` remove any ambiguity.
+- **Response shaping — full GET grammar.**  `self_only()`, `also(...)`,
+  `subtree_full()`, and `include_subtree(...)` with the `SubtreeInclude` facets
+  (faults, health, stats, audit/event/fault/health records, tasks, count, …);
+  multi-key `order_by`.
+- **Executors and Python protocols.**  A query is a lazy iterable
+  (`for mo in q`, `list(q)`); `q[:n]` sets a server-side limit; `.one()` and
+  `.exists()`; `execute_raw()`.  `count()` and `exists()` honor the limit.  New
+  typed `NoResultError` / `MultipleResultsError`.
+- **Uniform result access** on every object, generated model or operational
+  class alike: `.dn`, `mo["wireName"]`, and `.attrs` (the full wire view).
+
+### Changed
+
+- **`with_faults()` no longer filters.**  It embeds faults on each object without
+  restricting the result; chain `only_faulted()` to return only faulted objects.
+  (Previously `with_faults()` implicitly restricted to faulted objects.)
+- **`bool(query)` / `if query:` now raises `TypeError`.**  A query is lazy, so
+  truthiness would hide a network call — use `.exists()`.
+- **`subtree_where(prop=value)` qualifies the property with the included subtree
+  class.**  `include(fvSubnet).subtree_where(scope=...)` filters `fvSubnet.scope`,
+  not the queried class; when several classes are included, pass an explicitly
+  qualified expression (`subtree_where(eq("fvSubnet.scope", …))`).
+
+### Removed
+
+- `contains()` and `isdigit()` filter operators — the APIC has no such filter
+  types (verified on 6.0(9c)).  Use `like("*x*")` (subject to the property's
+  format) or `raw(...)`.
+
 ## [1.0.0] — 2026-07-17
 
 Niwaki leaves beta.  The design-first **configuration** surface is proven against

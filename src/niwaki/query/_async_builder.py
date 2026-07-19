@@ -30,7 +30,7 @@ Typical usage::
 from __future__ import annotations
 
 from collections.abc import AsyncIterator
-from typing import Any, TypeVar, cast
+from typing import Any, Never, TypeVar, cast
 
 from niwaki.models.base import ManagedObject
 from niwaki.query._base import _QueryBase  # pyright: ignore[reportPrivateUsage]
@@ -108,9 +108,35 @@ class AsyncQuery(_QueryBase[_T]):
         """
         from niwaki.utils.response import parse_imdata
 
+        if self._limit is not None:
+            return [obj async for obj in self.stream()]
         path, params = self.build()
         raw = await self._session._get_all_pages(path, params, page_size=self._page_size)
         return cast(list[_T], parse_imdata({"imdata": raw}))
+
+    def __aiter__(self) -> AsyncIterator[_T]:
+        """Async-iterate the query lazily — ``async for obj in query``.
+
+        Equivalent to :meth:`stream`; it also makes ``[x async for x in query]``
+        and a ``query[:n]`` slice work directly, honouring any limit set by
+        slicing.
+
+        Yields:
+            Typed :class:`~niwaki.models.base.ManagedObject` instances.
+        """
+        return self.stream()
+
+    def __iter__(self) -> Never:
+        """Reject synchronous iteration — an async query needs ``async for``.
+
+        Raises:
+            TypeError: Always — use ``async for obj in query`` or
+                ``await query.fetch()``.
+        """
+        raise TypeError(
+            "AsyncQuery is not synchronously iterable — use 'async for obj in query' "
+            "or 'await query.fetch()'"
+        )
 
     async def first(self) -> _T | None:
         """Execute the query and return the first matching object, or ``None``.
@@ -138,6 +164,55 @@ class AsyncQuery(_QueryBase[_T]):
         objects = parse_imdata({"imdata": raw})
         return cast(_T, objects[0]) if objects else None
 
+    async def one(self) -> _T:
+        """Execute the query and return the single matching object.
+
+        For queries that must resolve to exactly one object.  Fetches at most two
+        objects (``page=0&page-size=2``) so it can tell "none", "one" and "more
+        than one" apart in a single request.
+
+        Returns:
+            The one matching instance.
+
+        Raises:
+            NoResultError: No object matched — use :meth:`first` when *no match*
+                is acceptable.
+            MultipleResultsError: More than one object matched — narrow the query
+                or use :meth:`first` / :meth:`fetch`.
+
+        Example::
+
+            bd = await aci.query(fvBD).where(name="web").one()
+        """
+        from niwaki.exceptions._query import MultipleResultsError, NoResultError
+        from niwaki.utils.response import parse_imdata
+
+        path, params = self.build()
+        params = {**params, "page": "0", "page-size": "2"}
+        raw = await self._session._get_imdata(path, params)
+        objects = parse_imdata({"imdata": raw})
+        if not objects:
+            raise NoResultError(f"one() matched no {self._aci_class} object")
+        if len(objects) > 1:
+            raise MultipleResultsError(
+                f"one() matched more than one {self._aci_class} object; narrow the "
+                "query or use first()/fetch()"
+            )
+        return cast(_T, objects[0])
+
+    async def exists(self) -> bool:
+        """Return whether any object matches — a single lightweight request.
+
+        Returns:
+            ``True`` when at least one object matches, ``False`` otherwise.
+
+        Example::
+
+            if await aci.query(fvBD).where(name="web").exists():
+                ...
+        """
+        return await self.count() > 0
+
     async def count(self) -> int:
         """Return the count of matching objects without fetching them.
 
@@ -155,13 +230,17 @@ class AsyncQuery(_QueryBase[_T]):
 
             n = await aci.query(fvBD).under("uni/tn-prod").count()
         """
+        if self._limit == 0:
+            return 0
         path, params = self.build()
         # A minimal one-object page still carries the full totalCount —
         # unlike "count-only", this composes with any query and every
         # APIC version (6.0 rejects the count-only argument).
         params = {**params, "page": "0", "page-size": "1"}
         data: dict[str, Any] = (await self._session._request_checked(path, params)).json()
-        return int(data.get("totalCount", 0))
+        total = int(data.get("totalCount", 0))
+        # A sliced query (q[:n]) counts what it would actually yield.
+        return min(total, self._limit) if self._limit is not None else total
 
     async def stream(self) -> AsyncIterator[_T]:
         """Yield objects one page at a time — O(page_size) memory footprint.
@@ -185,7 +264,36 @@ class AsyncQuery(_QueryBase[_T]):
         """
         from niwaki.utils.response import parse_imdata
 
+        limit = self._limit
+        if limit == 0:
+            return
         path, params = self.build()
-        async for page in self._session._aiter_pages(path, params, page_size=self._page_size):
+        yielded = 0
+        async for page in self._session._aiter_pages(
+            path, params, page_size=self._effective_page_size()
+        ):
             for obj in cast(list[_T], parse_imdata({"imdata": page})):
                 yield obj
+                yielded += 1
+                if limit is not None and yielded >= limit:
+                    return
+
+    async def execute_raw(self, path: str, params: dict[str, str]) -> list[ManagedObject]:
+        """Run raw APIC query params through the typed, paginated pipeline.
+
+        The escape hatch for anything :meth:`build` cannot express yet: pass an
+        APIC path and parameter dict (often derived from ``build()`` and then
+        tweaked) and get back typed, fully-paginated objects — unlike the
+        transport's raw ``get`` helper, which returns a single unparsed page.
+
+        Args:
+            path:   APIC-relative path (e.g. ``"/api/class/fvBD.json"``).
+            params: APIC query-string parameters.
+
+        Returns:
+            All matching objects across every page, typed via ``REGISTRY``.
+        """
+        from niwaki.utils.response import parse_imdata
+
+        raw = await self._session._get_all_pages(path, params, page_size=self._page_size)
+        return parse_imdata({"imdata": raw})
