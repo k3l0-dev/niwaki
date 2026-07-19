@@ -28,8 +28,8 @@ class SubtreeInclude(StrEnum):
     """A response-subtree facet an APIC query can embed (``rsp-subtree-include``).
 
     The exhaustive set the APIC offers.  Pass any of these to
-    :meth:`~niwaki.query._base._QueryBase.include_subtree`; the ``with_*``
-    builder methods are ergonomic shortcuts for the common ones.
+    ``include_subtree()``; the ``with_*`` builder methods are ergonomic
+    shortcuts for the common ones.
     """
 
     FAULTS = "faults"

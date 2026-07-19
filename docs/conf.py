@@ -97,6 +97,7 @@ nitpick_ignore = [
     ("py:class", "M"),
     ("py:class", "_T"),
     ("py:class", "_Coroutine"),
+    ("py:class", "_FilterNode"),
     ("py:class", "PushMode"),
     ("py:class", "niwaki.transport.session._T"),
     ("py:class", "niwaki.transport.session_async._T"),
