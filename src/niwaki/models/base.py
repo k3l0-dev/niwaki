@@ -43,9 +43,9 @@ from __future__ import annotations
 
 from typing import Any, ClassVar, Self
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, PrivateAttr
 
-from niwaki.models._wire import from_wire, to_wire
+from niwaki.models._wire import from_wire, parse_flags, to_wire
 
 REGISTRY: dict[str, type[ManagedObject]] = {}
 """ACI class name → generated Python class, for every imported model.
@@ -76,6 +76,39 @@ def _coerce_apic_value(annotation: Any, value: Any) -> Any:
     return from_wire(annotation, value)
 
 
+# A catalogue FieldKind ("bool"/"int"/"float") maps to the Python type whose wire
+# coercer (via ``from_wire``) is the SINGLE source of truth for reading it back.
+_KIND_TO_TYPE: dict[str, type] = {"bool": bool, "int": int, "float": float}
+
+
+def _coerce_read(value: object, kind: str | None) -> object:
+    """Coerce a raw wire string by its catalogue *kind* (not a Python annotation).
+
+    The wire boundary (:func:`niwaki.models._wire.from_wire`) coerces by a field's
+    annotation; a non-generated class has no annotation, only the catalogue's
+    :class:`~niwaki._codegen.basetypes.FieldKind`.  This is the read-side twin, and
+    it reuses the very same coercers so a value reads **identically** whether its
+    class is generated or not: ``"yes"``/``"1"``/``"on"`` → ``True``, ``"0xff"`` →
+    ``255``, ``"public,shared"`` → a ``frozenset`` of member names; and — like the
+    wire boundary — anything the type cannot hold (a sentinel like
+    ``"not-applicable"``) is returned **untouched**.  Enums, addresses and free
+    strings keep the wire string (a non-generated class has no ``StrEnum`` to
+    instantiate; a ``StrEnum`` compares equal to its value, so equality holds).
+    """
+    if kind is None or not isinstance(value, str):
+        return value
+    if kind == "flags":
+        return frozenset(parse_flags(value))
+    py_type = _KIND_TO_TYPE.get(kind)
+    if py_type is None:
+        return value  # enum / ip / mac / named_number / str keep the wire string
+    return from_wire(py_type, value)
+
+
+_MISS: object = object()
+"""Sentinel: a name the catalogue does not resolve (fall back to Pydantic)."""
+
+
 class ManagedObject(BaseModel):
     """Base class for every ACI Managed Object.
 
@@ -103,6 +136,12 @@ class ManagedObject(BaseModel):
     """
 
     model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    # The wire class name (e.g. "fvCEp") of an object read from the APIC.  A
+    # generated subclass knows its class from ``_aci_class``; this is what lets a
+    # *non-generated* object look itself up in the read catalogue for readable
+    # field access.  Empty on objects built locally rather than read back.
+    _wire_class: str = PrivateAttr(default="")
 
     _aci_class: ClassVar[str] = ""
     _rn_format: ClassVar[str] = ""
@@ -289,6 +328,65 @@ class ManagedObject(BaseModel):
                 out[key] = value if isinstance(value, str) else to_wire(value)
         return out
 
+    def __getattr__(self, name: str) -> Any:
+        """Model fields and extras resolve normally; readable names via the catalogue.
+
+        A generated object answers ``bd.arp_flooding`` from its typed field.  A
+        **non-generated** object (a learned endpoint, a stat), or a **read-only**
+        property a model omits, has no such field — so the readable name is
+        recovered from the read catalogue: readable → wire → the value in
+        ``model_extra``, coerced by the property's kind (``"yes"`` → ``True``,
+        ``"public,shared"`` → a ``frozenset``).  **Every** catalogue property
+        coerces this way, whether its readable name was renamed (``arpFlood`` →
+        ``arp_flooding``) or spelled like its wire name (``scope``); the attribute
+        is the typed view, ``mo["wireName"]`` stays the raw wire view.
+
+        Raises ``AttributeError`` — like any missing attribute — when the object
+        was built locally (no wire class), the catalogue is absent, or the name is
+        neither a field, an extra, nor a readable property of the class.
+        """
+        if not name.startswith("_"):
+            # A property/method on the class that raises AttributeError (``.dn`` on
+            # a locally-built object) re-enters here; re-run it so its own message
+            # stands rather than being masked by catalogue resolution.
+            if hasattr(type(self), name):
+                return object.__getattribute__(self, name)
+            # The catalogue coerces every known property — consulted *before* the
+            # raw extras so a homonym (``scope`` → ``scope``) is typed, not a string.
+            resolved = self._catalogue_read(name)
+            if resolved is not _MISS:
+                return resolved
+        # Pydantic resolves genuine extras (dn, modTs, uid…), private attrs, and the
+        # final "no such attribute" (including the ``_``-prefixed names skipped here).
+        return super().__getattr__(name)  # type: ignore[misc]  # BaseModel defines it
+
+    def _catalogue_read(self, name: str) -> Any:
+        """Coerced value of a readable property via the catalogue, or :data:`_MISS`.
+
+        Returns :data:`_MISS` — so the caller falls back to Pydantic — when the
+        object has no wire class, the catalogue is unavailable, or *name* is not
+        one of the class's readable properties (or its value was not returned).
+        """
+        private = object.__getattribute__(self, "__pydantic_private__") or {}
+        wire_class = private.get("_wire_class", "")
+        if not wire_class:
+            return _MISS
+        # Function-local import: the catalogue subsystem stays off the import path
+        # of ``niwaki`` until the first readable access on a non-generated object.
+        from niwaki.query._catalog import catalog
+
+        try:
+            meta = catalog().class_meta(wire_class)
+        except (KeyError, FileNotFoundError):
+            return _MISS
+        wire = meta.readable_to_wire.get(name)
+        if wire is None:
+            return _MISS
+        extra = object.__getattribute__(self, "__pydantic_extra__") or {}
+        if wire not in extra:
+            return _MISS  # known property, but the APIC did not return its value
+        return _coerce_read(extra[wire], meta.wire_to_kind.get(wire))
+
     # ── Serialisation ─────────────────────────────────────────────────────────
 
     def to_apic(self) -> dict[str, Any]:
@@ -462,6 +560,9 @@ class ManagedObject(BaseModel):
             _fields_set=set(target_cls._naming_props),
             **coerced,
         )
+        # Retain the wire class name so a non-generated object can resolve its
+        # readable field names through the catalogue (see ``__getattr__``).
+        obj._wire_class = aci_class
 
         for child_raw in inner.get("children", []):
             obj.children.append(ManagedObject.from_apic(child_raw))

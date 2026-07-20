@@ -180,9 +180,32 @@ def kind_for(base_type: str) -> FieldKind:
         ) from None
 
 
+def kind_value_or_none(base_type: str) -> str | None:
+    """The FieldKind *value* for a baseType, or None for an empty or unclassified one.
+
+    The lenient companion to :func:`kind_for`, and the single place the read
+    catalogue (which spans *every* readable class, including read-only families
+    beyond the configurable model set) classifies a baseType: an unclassified one
+    reads back as a plain string (``None``) rather than raising.
+
+    Args:
+        base_type: The ``baseType`` string, or ``""``.
+
+    Returns:
+        The :class:`FieldKind` value (e.g. ``"bool"``), or ``None``.
+    """
+    if not base_type:
+        return None
+    try:
+        return kind_for(base_type).value
+    except UnknownBaseTypeError:
+        return None
+
+
 __all__ = [
     "BASETYPE_MAP",
     "FieldKind",
     "UnknownBaseTypeError",
     "kind_for",
+    "kind_value_or_none",
 ]

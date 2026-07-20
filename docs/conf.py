@@ -103,7 +103,9 @@ nitpick_ignore = [
     ("py:class", "niwaki.transport.session_async._T"),
     ("py:obj", "niwaki.query._builder._T"),
     ("py:obj", "niwaki.query._async_builder._T"),
-    # pydantic's inventory does not expose its exceptions.
+    # pydantic's inventory does not expose its base class or exceptions.
+    ("py:class", "BaseModel"),
+    ("py:class", "pydantic.BaseModel"),
     ("py:exc", "pydantic.ValidationError"),
     ("py:exc", "ValidationError"),
     ("py:class", "pydantic.ValidationError"),

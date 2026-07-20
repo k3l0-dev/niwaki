@@ -11,6 +11,7 @@ reference ({doc}`../vocabulary/index`).
 | the design DSL: roots, `Cursor`, push results | {doc}`design` |
 | **the fields of a maker** (`.bd()`, `.epg()`, …) | {doc}`../vocabulary/index` |
 | reads: query builder and filters | {doc}`query` |
+| discovering any of the ~15,300 readable classes | {doc}`catalog` |
 | what a failure raises | {doc}`exceptions` |
 | the model contract | {doc}`models` |
 | sessions, retries, the transport protocols | {doc}`transport` |
@@ -23,6 +24,7 @@ niwaki
 client
 design
 query
+catalog
 exceptions
 models
 transport

@@ -97,3 +97,29 @@ def test_entry_point_does_not_import_the_model_tree() -> None:
         f"{leaked} generated model module(s) were imported by `import niwaki` "
         "alone — the model tree must load lazily, on first use, not at import."
     )
+
+
+@pytest.mark.perf
+def test_entry_point_does_not_open_the_read_catalogue() -> None:
+    """The read catalogue is lazy too: no ``query._catalog``, no ``sqlite3`` at import.
+
+    The catalogue reader opens a multi-MB ``.db`` on first use; if ``import
+    niwaki`` pulled it (or ``sqlite3``) in, every startup would pay for a
+    subsystem most sessions never touch.  The absence of both modules right after
+    import is the direct proof the reader stays lazy.
+    """
+    probe = (
+        "import sys; from niwaki import Niwaki; "
+        "watch = ('niwaki.catalog', 'niwaki.query._catalog', 'sqlite3'); "
+        "leaked = [m for m in watch if m in sys.modules]; "
+        "print(','.join(leaked))"
+    )
+    completed = subprocess.run(
+        [sys.executable, "-c", probe], capture_output=True, cwd=_ROOT, text=True
+    )
+    assert completed.returncode == 0, completed.stderr
+    leaked = completed.stdout.strip()
+    assert not leaked, (
+        f"`import niwaki` pulled in {leaked} — the read catalogue must open "
+        "lazily, on first use, never at import."
+    )

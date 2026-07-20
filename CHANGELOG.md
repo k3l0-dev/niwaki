@@ -5,7 +5,47 @@ All notable changes to this project are documented here.  The format follows
 [semver](https://semver.org/).  From 1.0.0 the configuration API is stable:
 breaking changes ship in a new major version with a migration note.
 
-## [Unreleased]
+## [1.2.0] — 2026-07-20
+
+Discovery for the ~15,300 ACI classes the SDK does not generate a model for —
+learned endpoints, stats, hardware, routing runtime. Purely additive: the
+configuration API and the 1.1.0 query surface are unchanged.
+
+### Added
+
+- **The read catalogue.**  A shipped, lazily-opened sqlite store (~31 MB) of
+  read metadata for every readable ACI class, not just the 2,239 with generated
+  models — so any class can be searched, described, and read with readable
+  field names.
+
+  Readable names are recomputed with the code generator's own naming logic, so
+  a catalogue-served class reads with the same field names its model would
+  use — **except for ~0.07 % of properties on a handful of generated classes**
+  (11 properties across 7 of 2,211 on APIC 6.0(9c)), where the catalogue
+  resolves name collisions over a class's whole readable property set while
+  the model resolves over its configurable subset, so the two can pick
+  different names (e.g. ``l3extOut.enforceRtctrl`` → ``enforce_route_control``
+  vs ``enforce_rtctrl``).  This never affects a result object — a generated
+  class is served by its typed model, never the catalogue — and is visible
+  only when introspecting those classes.
+
+- **`niwaki.catalog`** — the public door to it: `search(term)`,
+  `describe(class_name)`, `prop_meta(class_name, name)`, `find_prop(term)`,
+  `concrete_subclasses(class_name)`, `class_meta(class_name)`, and
+  `fault_name(code)` (a fault code to its rule name, independent of which class
+  raised it). Entirely offline — no APIC connection needed.
+
+- **Readable field access on any result object.**  A `ManagedObject` built
+  from a class with no generated model now exposes readable attribute names
+  (`ep.infrastructure_ip`, not just `ep["address"]`) via the catalogue, with
+  the same per-property coercion (`bool`/`int`/`float`/`flags`/…) the wire
+  boundary uses for generated models — reading is uniform across all ~15,300
+  classes, generated or not.
+
+- Validated live: real non-generated classes (`topSystem`, `fabricNode`,
+  `lldpAdjEp`, `eqptSensor`, `faultInst`), the abstract-class query fan-out
+  (`aci.query("fvEPg")` resolving server-side to its concrete descendants), and
+  `fault_name` against every fault code a live fabric actually raised.
 
 ## [1.1.0] — 2026-07-19
 
