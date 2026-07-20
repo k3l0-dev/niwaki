@@ -400,7 +400,7 @@ class AsyncApicSession:
 
         Part of the transport boundary
         (:class:`niwaki.transport._protocols.AsyncMoSubscriber`). Mirrors
-        :meth:`niwaki.transport.session.ApicSession.subscribe`: the APIC
+        :meth:`niwaki.transport.ApicSession.subscribe`: the APIC
         multiplexes every subscription for a session over one WebSocket,
         opened lazily on the first call to this method; a refresh sweep and
         reconnect-and-resubscribe are handled automatically in the

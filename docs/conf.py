@@ -99,6 +99,10 @@ nitpick_ignore = [
     ("py:class", "_Coroutine"),
     ("py:class", "_FilterNode"),
     ("py:class", "PushMode"),
+    # A Union type alias (RawSubscriptionEvent | SubscriptionGap |
+    # SubscriptionRefreshFailed) -- autodoc_typehints renders a field
+    # annotation using the alias's local name, which is not a resolvable target.
+    ("py:class", "RawPushItem"),
     ("py:class", "niwaki.transport.session._T"),
     ("py:class", "niwaki.transport.session_async._T"),
     ("py:obj", "niwaki.query._builder._T"),
