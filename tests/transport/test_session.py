@@ -613,3 +613,35 @@ class TestPaginationMissingTotalCount:
         result = logged_session._get_all_pages("/api/class/fvBD.json", {})  # type: ignore[reportPrivateUsage]
         names = [r["fvBD"]["attributes"]["name"] for r in result]
         assert names == ["a", "b"]  # both pages fetched, not just page 0
+
+
+class TestSubscriptionDelegation:
+    """The three bulk subscription methods delegate to the socket — see
+    ``tests/transport/test_subscription_socket.py`` for the actual escalation/
+    bulk-tool behaviour. These only prove the pass-through, including the
+    no-op case before any subscription was ever opened.
+    """
+
+    def test_no_op_before_any_subscribe(self, logged_session: ApicSession) -> None:
+        assert logged_session.list_subscriptions() == []
+        assert logged_session.refresh_all_subscriptions() == []
+        logged_session.close_all_subscriptions()  # must not raise
+
+    def test_delegates_to_the_socket_once_open(
+        self, ws_session: ApicSession, httpx_mock: HTTPXMock
+    ) -> None:
+        from tests.conftest import subscribe_response
+
+        httpx_mock.add_response(method="GET", json=subscribe_response("1001"))
+        ws_session.subscribe("/api/class/fvBD.json", {})
+
+        infos = ws_session.list_subscriptions()
+        assert len(infos) == 1
+        assert infos[0].subscription_id == "1001"
+
+        httpx_mock.add_response(method="GET", json={"totalCount": "0", "imdata": []})
+        refreshed = ws_session.refresh_all_subscriptions()
+        assert len(refreshed) == 1
+
+        ws_session.close_all_subscriptions()
+        assert ws_session.list_subscriptions() == []

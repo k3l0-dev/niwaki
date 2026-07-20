@@ -72,8 +72,10 @@ Public API
 """
 
 from niwaki.query._async_builder import AsyncQuery
+from niwaki.query._async_subscription import AsyncSubscription
 from niwaki.query._base import SubtreeInclude  # pyright: ignore[reportPrivateUsage]
 from niwaki.query._builder import Query
+from niwaki.query._events import EventKind, SubscriptionEvent
 from niwaki.query._filters import (
     FilterExpr,
     FilterValue,
@@ -96,12 +98,19 @@ from niwaki.query._filters import (
     wcard,
     xor,
 )
+from niwaki.query._subscription import Subscription
+from niwaki.transport._subscription_socket import SubscriptionInfo
 
 __all__ = [
     "AsyncQuery",
+    "AsyncSubscription",
+    "EventKind",
     "FilterExpr",
     "FilterValue",
     "Query",
+    "Subscription",
+    "SubscriptionEvent",
+    "SubscriptionInfo",
     "SubtreeInclude",
     "allbit",
     "and_",

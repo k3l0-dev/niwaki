@@ -49,6 +49,13 @@ class ClassMeta:
         wire_to_kind:     ``{wire_name: FieldKind value | None}`` — how to coerce
                           a wire value on read (``None`` = read as a plain string).
         naming:           The wire names of the identifying properties.
+        is_stat:          The class is a statistics class (a granularity variant
+                          of a stats family, e.g. ``eqptEgrBytes5min``). Cisco's
+                          own docs state stats updates bypass the APIC's event
+                          manager entirely — architecturally incapable of ever
+                          pushing — so this is what gates
+                          :class:`~niwaki.exceptions.StatsClassNotSubscribableError`,
+                          not ``isObservable`` (see :attr:`ClassDoc.is_observable`).
     """
 
     class_name: str
@@ -56,6 +63,7 @@ class ClassMeta:
     wire_to_readable: dict[str, str]
     wire_to_kind: dict[str, str | None]
     naming: frozenset[str]
+    is_stat: bool
 
 
 @dataclass(frozen=True, slots=True)
@@ -74,12 +82,22 @@ class PropDoc:
 
 @dataclass(frozen=True, slots=True)
 class ClassDoc:
-    """A class, as ``describe`` presents it: identity, properties, faults, kin."""
+    """A class, as ``describe`` presents it: identity, properties, faults, kin.
+
+    Attributes:
+        is_observable: APIC schema metadata, **informational only** — do not
+            treat this as a gate on whether the class can be subscribed to.
+            Empirically falsified live: a class with ``is_observable=False``
+            (``faultInst``) was subscribed to successfully and delivered real
+            push notifications. The flag that actually governs subscribability
+            is ``isStat`` (see :attr:`ClassMeta.is_stat`).
+    """
 
     name: str
     label: str
     comment: str
     is_abstract: bool
+    is_observable: bool
     props: tuple[PropDoc, ...]
     faults: dict[str, str]
     concrete_subclasses: tuple[str, ...]
@@ -170,10 +188,10 @@ class Catalog:
 
     def _build_class_meta(self, class_name: str) -> ClassMeta:
         con = self._connection
-        row = con.execute("SELECT id FROM mo WHERE class_name=?", (class_name,)).fetchone()
+        row = con.execute("SELECT id, is_stat FROM mo WHERE class_name=?", (class_name,)).fetchone()
         if row is None:
             raise KeyError(class_name)
-        class_id = row[0]
+        class_id, is_stat = row
         naming_bit = self._naming_bit()
 
         shaped: dict[str, dict[str, object]] = {}
@@ -201,6 +219,7 @@ class Catalog:
             wire_to_readable=wire_to_readable,
             wire_to_kind=wire_to_kind,
             naming=frozenset(naming),
+            is_stat=bool(is_stat),
         )
 
     def _comment_text(self, pool_id: int | None) -> str:
@@ -239,12 +258,13 @@ class Catalog:
         """
         con = self._connection
         row = con.execute(
-            "SELECT id, label_id, comment_id, is_abstract FROM mo WHERE class_name=?",
+            "SELECT id, label_id, comment_id, is_abstract, is_observable "
+            "FROM mo WHERE class_name=?",
             (class_name,),
         ).fetchone()
         if row is None:
             raise KeyError(class_name)
-        class_id, label_id, comment_id, is_abstract = row
+        class_id, label_id, comment_id, is_abstract, is_observable = row
         meta = self.class_meta(class_name)
         props: list[PropDoc] = []
         for wire, p_label, p_comment, enum_id, default_val in con.execute(
@@ -275,6 +295,7 @@ class Catalog:
             label=self._label(label_id),
             comment=self._comment_text(comment_id),
             is_abstract=bool(is_abstract),
+            is_observable=bool(is_observable),
             props=tuple(props),
             faults=faults,
             concrete_subclasses=subs,

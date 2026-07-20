@@ -5,6 +5,44 @@ All notable changes to this project are documented here.  The format follows
 [semver](https://semver.org/).  From 1.0.0 the configuration API is stable:
 breaking changes ship in a new major version with a migration note.
 
+## [1.3.0] — 2026-07-20
+
+Native APIC object-subscription: a query becomes a live push stream instead
+of a one-off read, over the same WebSocket mechanism the APIC GUI itself
+uses. Purely additive — the configuration API and the query surface are
+unchanged.
+
+### Added
+
+- **`Query.subscribe()` / `AsyncQuery.subscribe()`.**  Any single-class query
+  can be subscribed instead of fetched: `.initial` gives the synchronous
+  snapshot, then the returned `Subscription`/`AsyncSubscription` iterates
+  live push events for as long as it stays open. One shared WebSocket per
+  session multiplexes every subscription; refresh and reconnect run
+  automatically in the background — nothing here needs a caller-driven loop.
+
+- **Typed events.**  Each item is a `SubscriptionEvent`: `.kind`
+  (`EventKind.CREATED`/`MODIFIED`/`DELETED`/`GAP`/`REFRESH_FAILED`), `.mo`
+  deserialised through the same readable field names a normal read uses,
+  with `.mo.model_fields_set` reporting exactly what that push carried (the
+  APIC sends sparse deltas on `MODIFIED`, `dn` only on `DELETED`).
+
+- **Automatic recovery, never silent.**  The APIC has no replay mechanism at
+  all, so a reconnect resubscribes everything from scratch and delivers a
+  `GAP` event rather than continuing as if nothing happened. Two consecutive
+  missed refreshes trigger the same kind of recovery for that one
+  subscription. `SubscriptionLostError` — with `.reason` — is raised only
+  once recovery itself has been tried and failed.
+
+- **Bulk and single-subscription tools.**  `aci.subscriptions.list()` /
+  `.refresh_all()` / `.close_all()` manage every subscription open on a
+  session at once (`close_all()` stops them without tearing down the shared
+  socket); `sub.info` / `sub.refresh_now()` do the same for one subscription.
+
+- Validated live against a real fabric: genuine create/modify/delete push
+  payloads, a real `subscriptionId`, and the `subscriptionRefresh` endpoint
+  accepting a real id.
+
 ## [1.2.0] — 2026-07-20
 
 Discovery for the ~15,300 ACI classes the SDK does not generate a model for —

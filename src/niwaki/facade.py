@@ -46,11 +46,13 @@ Writing (design DSL)::
 from __future__ import annotations
 
 import asyncio
+import builtins
 from collections.abc import Coroutine
 from typing import TYPE_CHECKING, Any, NamedTuple, overload
 
 from niwaki.models.base import ManagedObject
 from niwaki.transport._config import RetryConfig
+from niwaki.transport._subscription_socket import SubscriptionInfo
 from niwaki.transport.session import ApicSession
 from niwaki.transport.session_async import AsyncApicSession
 
@@ -203,6 +205,91 @@ class _JargonNavMixin[T: ManagedObject]:
             raise AttributeError(attr)
         child_cls, naming_props, is_rs_target = _navigate_jargon(self._cls, attr)
         return _make_jargon_navigator(self, child_cls, naming_props, is_rs_target)  # type: ignore[arg-type]
+
+
+# ── Subscription managers ───────────────────────────────────────────────────────
+
+
+class SubscriptionManager:
+    """Bulk introspection/management for a session's object-subscriptions (sync).
+
+    Reached via :attr:`~niwaki.Niwaki.subscriptions`. Operates on whichever
+    subscriptions are currently open on the session's shared WebSocket — every
+    method is a safe no-op (empty list, or nothing to do) until at least one
+    ``aci.query(...).subscribe()`` call has opened it.
+    """
+
+    def __init__(self, session: ApicSession) -> None:
+        self._session = session
+
+    def list(self) -> builtins.list[SubscriptionInfo]:
+        """List every subscription currently tracked, or ``[]`` if none is open.
+
+        Returns:
+            One :class:`~niwaki.transport._subscription_socket.SubscriptionInfo`
+            per tracked subscription — ``.is_stale`` flags one with at least
+            one recent refresh failure.
+
+        Example::
+
+            for info in aci.subscriptions.list():
+                print(info.path, info.consecutive_refresh_failures, info.is_stale)
+        """
+        return self._session.list_subscriptions()
+
+    def refresh_all(self) -> builtins.list[SubscriptionInfo]:
+        """Force an immediate refresh of every tracked subscription, on demand.
+
+        A diagnostic tool, distinct from the automatic background refresh
+        sweep — a failure here never triggers the automatic recovery
+        escalation a missed *scheduled* refresh would.
+
+        Returns:
+            The post-refresh snapshot of every subscription.
+        """
+        return self._session.refresh_all_subscriptions()
+
+    def close_all(self) -> None:
+        """Stop every tracked subscription — the shared socket itself stays open.
+
+        Every open :class:`~niwaki.query.Subscription`'s iterator ends with a
+        plain ``StopIteration``. Distinct from closing the whole
+        :class:`Niwaki` session: a later ``aci.query(...).subscribe()`` reuses
+        the same still-open socket immediately, with no reconnect needed.
+        """
+        self._session.close_all_subscriptions()
+
+
+class AsyncSubscriptionManager:
+    """Async counterpart of :class:`~niwaki.facade.SubscriptionManager`. Reached via
+    :attr:`~niwaki.AsyncNiwaki.subscriptions`."""
+
+    def __init__(self, session: AsyncApicSession) -> None:
+        self._session = session
+
+    def list(self) -> builtins.list[SubscriptionInfo]:
+        """List every subscription currently tracked, or ``[]`` if none is open.
+
+        Synchronous even on the async facade — see
+        :meth:`~niwaki.transport.AsyncApicSession.list_subscriptions`.
+
+        Returns:
+            One :class:`~niwaki.transport._subscription_socket.SubscriptionInfo`
+            per tracked subscription.
+        """
+        return self._session.list_subscriptions()
+
+    async def refresh_all(self) -> builtins.list[SubscriptionInfo]:
+        """Force an immediate refresh of every tracked subscription, on demand.
+
+        Returns:
+            The post-refresh snapshot of every subscription.
+        """
+        return await self._session.refresh_all_subscriptions()
+
+    async def close_all(self) -> None:
+        """Stop every tracked subscription — the shared socket itself stays open."""
+        await self._session.close_all_subscriptions()
 
 
 # ── NiwakiNode ─────────────────────────────────────────────────────────────────
@@ -591,6 +678,23 @@ class AsyncNiwaki:
         """
         return self._retry
 
+    @property
+    def subscriptions(self) -> AsyncSubscriptionManager:
+        """Bulk introspection/management for this session's object-subscriptions.
+
+        Returns:
+            An :class:`~niwaki.facade.AsyncSubscriptionManager` over the active session.
+
+        Example::
+
+            async with AsyncNiwaki(...) as aci:
+                sub = await aci.query(fvBD).subscribe()
+                for info in aci.subscriptions.list():
+                    print(info.path, info.is_stale)
+                await aci.subscriptions.close_all()
+        """
+        return AsyncSubscriptionManager(self._active_session)
+
     # ── Internal session guard ────────────────────────────────────────────────
 
     @property
@@ -911,6 +1015,23 @@ class Niwaki:
             when the session default (3 attempts) is in use.
         """
         return self._retry
+
+    @property
+    def subscriptions(self) -> SubscriptionManager:
+        """Bulk introspection/management for this session's object-subscriptions.
+
+        Returns:
+            A :class:`~niwaki.facade.SubscriptionManager` over the active session.
+
+        Example::
+
+            with Niwaki(...) as aci:
+                sub = aci.query(fvBD).subscribe()
+                for info in aci.subscriptions.list():
+                    print(info.path, info.is_stale)
+                aci.subscriptions.close_all()
+        """
+        return SubscriptionManager(self._sync_session)
 
     # ── Sync navigation (delegated to NiwakiNode) ─────────────────────────────
 

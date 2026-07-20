@@ -123,3 +123,49 @@ def test_entry_point_does_not_open_the_read_catalogue() -> None:
         f"`import niwaki` pulled in {leaked} — the read catalogue must open "
         "lazily, on first use, never at import."
     )
+
+
+@pytest.mark.perf
+def test_entry_point_does_not_open_the_subscription_websocket() -> None:
+    """The object-subscription WebSocket is lazy: no ``websockets`` at import.
+
+    ``ApicSession.subscribe()`` opens a session-shared WebSocket on first use;
+    ``websockets`` is imported only inside
+    ``SubscriptionSocket._open_socket_locked``, never at module level, so a
+    session that never subscribes never pays for it.
+    """
+    probe = (
+        "import sys; from niwaki import Niwaki; leaked = 'websockets' in sys.modules; print(leaked)"
+    )
+    completed = subprocess.run(
+        [sys.executable, "-c", probe], capture_output=True, cwd=_ROOT, text=True
+    )
+    assert completed.returncode == 0, completed.stderr
+    leaked = completed.stdout.strip()
+    assert leaked == "False", (
+        "`import niwaki` pulled in `websockets` — the subscription WebSocket "
+        "must open lazily, on first use, never at import."
+    )
+
+
+@pytest.mark.perf
+def test_async_entry_point_does_not_open_the_subscription_websocket() -> None:
+    """Same guard as above, for the async entry point.
+
+    ``AsyncSubscriptionSocket._connect`` lazy-imports
+    ``websockets.asyncio.client`` the same way the sync socket does — closing
+    the async import path explicitly, not just assuming symmetry with sync.
+    """
+    probe = (
+        "import sys; from niwaki import AsyncNiwaki; "
+        "leaked = 'websockets' in sys.modules; print(leaked)"
+    )
+    completed = subprocess.run(
+        [sys.executable, "-c", probe], capture_output=True, cwd=_ROOT, text=True
+    )
+    assert completed.returncode == 0, completed.stderr
+    leaked = completed.stdout.strip()
+    assert leaked == "False", (
+        "`from niwaki import AsyncNiwaki` pulled in `websockets` — the async "
+        "subscription WebSocket must open lazily, on first use, never at import."
+    )

@@ -30,11 +30,14 @@ Typical usage::
 from __future__ import annotations
 
 from collections.abc import AsyncIterator
-from typing import Any, Never, TypeVar, cast
+from typing import TYPE_CHECKING, Any, Never, TypeVar, cast
 
 from niwaki.models.base import ManagedObject
 from niwaki.query._base import _QueryBase  # pyright: ignore[reportPrivateUsage]
 from niwaki.transport.session_async import AsyncApicSession
+
+if TYPE_CHECKING:
+    from niwaki.query._async_subscription import AsyncSubscription
 
 _T = TypeVar("_T", bound=ManagedObject)
 
@@ -277,6 +280,53 @@ class AsyncQuery(_QueryBase[_T]):
                 yielded += 1
                 if limit is not None and yielded >= limit:
                     return
+
+    async def subscribe(self, *, refresh_timeout: int | None = None) -> AsyncSubscription[_T]:
+        """Subscribe to push notifications for this query.
+
+        Mirrors :meth:`~niwaki.query.Query.subscribe` — a subscription is a
+        query plus ``subscription=yes`` at the wire level, so every
+        accumulator that maps onto the same GET mechanism carries over
+        unchanged, and state with no meaning on an open-ended push stream is
+        rejected up front, before any network I/O — see
+        :meth:`~niwaki.query._base._QueryBase._reject_unstreamable`. Because
+        that rejection is synchronous, it surfaces the moment this coroutine
+        is awaited, still before any network call.
+
+        The APIC multiplexes every subscription for a session over **one**
+        WebSocket, opened lazily on the first call to this method on the
+        session; refresh and reconnect-and-resubscribe run automatically in
+        the background, so nothing here needs a caller-driven loop.
+
+        Args:
+            refresh_timeout: Override the APIC's default 60 s subscription
+                timeout. The subscription refreshes itself automatically on a
+                schedule derived from this value regardless.
+
+        Returns:
+            An :class:`~niwaki.query._async_subscription.AsyncSubscription`
+            — ``.initial`` for the synchronous snapshot, then async-iterate
+            for live push events.
+
+        Raises:
+            ValueError: The query carries state with no meaning on a live
+                stream (``order_by()``, a slice limit, subtree enrichment,
+                ``also()``).
+            StatsClassNotSubscribableError: The queried class is a statistics
+                class — the APIC never pushes for it.
+            SubscribeRejectedError: The APIC rejected the subscribe request.
+
+        Example::
+
+            async with aci.query(fvBD).under("uni/tn-prod").subscribe() as sub:
+                async for event in sub:
+                    print(event.kind, event.dn)
+        """
+        from niwaki.query._async_subscription import AsyncSubscription
+
+        path, params = self._subscription_build()
+        raw = await self._session.subscribe(path, params, refresh_timeout=refresh_timeout)
+        return AsyncSubscription(raw)
 
     async def execute_raw(self, path: str, params: dict[str, str]) -> list[ManagedObject]:
         """Run raw APIC query params through the typed, paginated pipeline.

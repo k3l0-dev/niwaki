@@ -856,3 +856,139 @@ class TestLimitAndBool:
         got = list(Query(fvTenant, session)[:1])
         assert len(got) == 1
         assert pages_consumed == [0]  # the second page is never requested
+
+
+# ── subscribe(): rejection matrix (fail loud, zero I/O) ────────────────────────
+
+
+def _subscribing_session() -> MagicMock:
+    """A mock session whose subscribe() returns a minimal, valid RawSubscription-shaped stub."""
+    session = MagicMock()
+    session.subscribe.return_value.initial = []
+    return session
+
+
+class TestSubscribeRejections:
+    def test_order_by_is_rejected(self) -> None:
+        from niwaki.models._generated.fv.fvBD import fvBD
+
+        session = _subscribing_session()
+        with pytest.raises(ValueError, match="order_by"):
+            Query(fvBD, session).order_by("name").subscribe()
+        session.subscribe.assert_not_called()
+
+    def test_slice_limit_is_rejected(self) -> None:
+        from niwaki.models._generated.fv.fvBD import fvBD
+
+        session = _subscribing_session()
+        with pytest.raises(ValueError, match="slice limit"):
+            Query(fvBD, session)[:5].subscribe()
+        session.subscribe.assert_not_called()
+
+    def test_unlimited_slice_is_not_rejected(self) -> None:
+        from niwaki.models._generated.fv.fvBD import fvBD
+
+        session = _subscribing_session()
+        Query(fvBD, session)[:].subscribe()
+        session.subscribe.assert_called_once()
+
+    def test_also_is_rejected(self) -> None:
+        from niwaki.models._generated.fv.fvBD import fvBD
+        from niwaki.models._generated.fv.fvSubnet import fvSubnet
+
+        session = _subscribing_session()
+        with pytest.raises(ValueError, match="also"):
+            Query(fvBD, session).under("uni/tn-prod").also(fvSubnet).subscribe()
+        session.subscribe.assert_not_called()
+
+    @pytest.mark.parametrize(
+        "accumulate",
+        [
+            lambda q: q.with_faults(),
+            lambda q: q.with_health(),
+            lambda q: q.with_stats(),
+            lambda q: q.with_relations(),
+            lambda q: q.only_faulted(),
+            lambda q: q.subtree_full(),
+        ],
+    )
+    def test_subtree_enrichment_shortcuts_are_rejected(self, accumulate: Any) -> None:
+        from niwaki.models._generated.fv.fvBD import fvBD
+
+        session = _subscribing_session()
+        with pytest.raises(ValueError, match="subtree enrichment"):
+            accumulate(Query(fvBD, session)).subscribe()
+        session.subscribe.assert_not_called()
+
+    def test_include_is_rejected(self) -> None:
+        from niwaki.models._generated.fv.fvBD import fvBD
+        from niwaki.models._generated.fv.fvSubnet import fvSubnet
+
+        session = _subscribing_session()
+        with pytest.raises(ValueError, match="subtree enrichment"):
+            Query(fvBD, session).include(fvSubnet).subscribe()
+        session.subscribe.assert_not_called()
+
+    def test_include_subtree_is_rejected(self) -> None:
+        from niwaki.models._generated.fv.fvBD import fvBD
+        from niwaki.query._base import SubtreeInclude
+
+        session = _subscribing_session()
+        with pytest.raises(ValueError, match="subtree enrichment"):
+            Query(fvBD, session).include_subtree(SubtreeInclude.FAULTS).subscribe()
+        session.subscribe.assert_not_called()
+
+    def test_subtree_where_is_rejected(self) -> None:
+        from niwaki.models._generated.fv.fvBD import fvBD
+        from niwaki.models._generated.fv.fvSubnet import fvSubnet
+
+        session = _subscribing_session()
+        with pytest.raises(ValueError, match="subtree enrichment"):
+            Query(fvBD, session).include(fvSubnet).subtree_where(ip="10.0.0.1/24").subscribe()
+        session.subscribe.assert_not_called()
+
+    def test_naming_only_is_allowed(self) -> None:
+        from niwaki.models._generated.fv.fvBD import fvBD
+
+        session = _subscribing_session()
+        Query(fvBD, session).naming_only().subscribe()
+        session.subscribe.assert_called_once()
+
+    def test_config_only_is_allowed(self) -> None:
+        from niwaki.models._generated.fv.fvBD import fvBD
+
+        session = _subscribing_session()
+        Query(fvBD, session).config_only().subscribe()
+        session.subscribe.assert_called_once()
+
+    def test_where_and_under_are_allowed(self) -> None:
+        from niwaki.models._generated.fv.fvBD import fvBD
+
+        session = _subscribing_session()
+        Query(fvBD, session).under("uni/tn-prod").where(name="web").subscribe()
+        session.subscribe.assert_called_once()
+        path, params = session.subscribe.call_args[0][:2]
+        assert path == "/api/mo/uni/tn-prod.json"
+        assert params["query-target-filter"] == 'eq(fvBD.name,"web")'
+
+
+class TestSubscribeStatsGuard:
+    def test_stats_class_raises_before_any_io(self) -> None:
+        from niwaki import exceptions
+
+        session = _subscribing_session()
+        with pytest.raises(exceptions.StatsClassNotSubscribableError):
+            Query("acllogFlowCounter15min", session).subscribe()
+        session.subscribe.assert_not_called()
+
+    def test_configurable_class_does_not_raise(self) -> None:
+        from niwaki.models._generated.fv.fvBD import fvBD
+
+        session = _subscribing_session()
+        Query(fvBD, session).subscribe()
+        session.subscribe.assert_called_once()
+
+    def test_unknown_class_fails_open(self) -> None:
+        session = _subscribing_session()
+        Query("totallyUnknownClassXYZ", session).subscribe()
+        session.subscribe.assert_called_once()

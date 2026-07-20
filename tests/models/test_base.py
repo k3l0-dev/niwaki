@@ -213,6 +213,83 @@ class TestFromApic:
         assert isinstance(obj, NoNamingMO)
 
 
+# ── from_event ────────────────────────────────────────────────────────────────
+
+
+class TestFromEvent:
+    def test_modified_event_fields_set_is_exactly_the_delta(self) -> None:
+        raw = {"simpleMO": {"attributes": {"dn": "uni/mo-x", "active": "no", "status": "modified"}}}
+        obj = ManagedObject.from_event(raw)
+        assert isinstance(obj, SimpleMO)
+        assert obj.model_fields_set == {"active"}
+        assert obj.active is False
+        assert obj["dn"] == "uni/mo-x"
+
+    def test_deleted_event_has_empty_fields_set(self) -> None:
+        raw = {"simpleMO": {"attributes": {"dn": "uni/mo-x", "status": "deleted"}}}
+        obj = ManagedObject.from_event(raw)
+        assert obj.model_fields_set == set()
+        assert obj["dn"] == "uni/mo-x"
+
+    def test_created_event_fields_set_is_the_full_reported_set(self) -> None:
+        raw = {
+            "simpleMO": {
+                "attributes": {"name": "prod", "descr": "hi", "active": "yes", "status": "created"}
+            }
+        }
+        obj = ManagedObject.from_event(raw)
+        assert isinstance(obj, SimpleMO)
+        assert obj.model_fields_set == {"name", "descr", "active"}
+        assert obj.name == "prod"
+        assert obj.descr == "hi"
+        assert obj.active is True
+
+    def test_unknown_class_falls_back_to_managedobj(self) -> None:
+        raw = {"unknownClass": {"attributes": {"dn": "x", "status": "modified"}}}
+        obj = ManagedObject.from_event(raw)
+        assert isinstance(obj, ManagedObject)
+        assert obj.model_fields_set == set()
+
+    def test_children_are_recursively_deserialized(self) -> None:
+        raw = {
+            "simpleMO": {
+                "attributes": {"dn": "uni/mo-parent", "status": "modified"},
+                "children": [{"simpleChild": {"attributes": {"id": "c1", "status": "created"}}}],
+            }
+        }
+        obj = ManagedObject.from_event(raw)
+        assert isinstance(obj, SimpleMO)
+        assert len(obj.children) == 1
+        child = obj.children[0]
+        assert isinstance(child, SimpleChild)
+        assert child.model_fields_set == {"id"}
+
+    def test_no_children_key_gives_empty_list(self) -> None:
+        raw = {"simpleMO": {"attributes": {"dn": "uni/mo-x", "status": "modified"}}}
+        obj = ManagedObject.from_event(raw)
+        assert obj.children == []
+
+    def test_missing_attributes_returns_object_without_raising(self) -> None:
+        raw = {"simpleMO": {}}
+        obj = ManagedObject.from_event(raw)
+        assert isinstance(obj, SimpleMO)
+        assert obj.model_fields_set == set()
+
+    def test_contrast_from_apic_is_naming_only_from_event_is_exact_delta(self) -> None:
+        """Regression guard: the two must diverge exactly this way.
+
+        Same modify-shaped raw payload (no naming prop reported, one changed
+        field): from_apic always claims the naming prop was reported (it
+        keeps a full read surgical on round-trip) even though this payload
+        never carried it; from_event reports exactly what the payload said.
+        """
+        raw = {"simpleMO": {"attributes": {"dn": "uni/mo-x", "active": "no", "status": "modified"}}}
+        via_apic = ManagedObject.from_apic(raw)
+        via_event = ManagedObject.from_event(raw)
+        assert via_apic.model_fields_set == {"name"}
+        assert via_event.model_fields_set == {"active"}
+
+
 # ── Generated class smoke tests ───────────────────────────────────────────────
 
 
@@ -286,6 +363,38 @@ class TestGeneratedFvBD:
         obj = ManagedObject.from_apic(raw)
         assert isinstance(obj, fvBD)
         assert obj.name == "web"
+
+    def test_fvbd_from_event_modified_reports_exactly_the_delta(self) -> None:
+        """The worked example from ``from_event``'s docstring, on a real generated class."""
+        from niwaki.models._generated.fv.fvBD import fvBD
+
+        raw = {
+            "fvBD": {
+                "attributes": {
+                    "dn": "uni/tn-prod/BD-web",
+                    "arpFlood": "yes",
+                    "status": "modified",
+                }
+            }
+        }
+        mo = ManagedObject.from_event(raw)
+        assert isinstance(mo, fvBD)
+        assert mo.model_fields_set == {"arp_flooding"}
+        assert mo.arp_flooding is True
+        assert mo["dn"] == "uni/tn-prod/BD-web"
+        # unicast_routing reads its Pydantic default, but the event never
+        # reported it — model_fields_set is the authoritative "did not report".
+        assert mo.unicast_routing is True
+        assert "unicast_routing" not in mo.model_fields_set
+
+    def test_fvbd_from_event_deleted_has_empty_fields_set(self) -> None:
+        from niwaki.models._generated.fv.fvBD import fvBD
+
+        raw = {"fvBD": {"attributes": {"dn": "uni/tn-prod/BD-web", "status": "deleted"}}}
+        mo = ManagedObject.from_event(raw)
+        assert isinstance(mo, fvBD)
+        assert mo.model_fields_set == set()
+        assert mo["dn"] == "uni/tn-prod/BD-web"
 
 
 # ── to_apic() value filtering ─────────────────────────────────────────────────

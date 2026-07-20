@@ -18,6 +18,28 @@ Accumulators are synchronous on both builders; only the executors differ
    :inherited-members:
 ```
 
+## Subscribing (push)
+
+`Query.subscribe()`/`AsyncQuery.subscribe()` open a live push stream instead
+of a one-off read — see {doc}`../../guide/subscribing`.
+
+```{eval-rst}
+.. autoclass:: niwaki.query.Subscription
+   :members:
+
+.. autoclass:: niwaki.query.AsyncSubscription
+   :members:
+
+.. autoclass:: niwaki.query.SubscriptionEvent
+   :members:
+
+.. autoclass:: niwaki.query.EventKind
+   :members:
+
+.. autoclass:: niwaki.query.SubscriptionInfo
+   :members:
+```
+
 ## Response-subtree facets
 
 `include_subtree` embeds one or more of these facets into the response

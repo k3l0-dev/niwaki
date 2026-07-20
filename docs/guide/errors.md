@@ -21,12 +21,18 @@ NiwakiError
 │   ├── NotFoundError                  404 — MO does not exist
 │   └── ServerError                    5xx — APIC internal error
 ├── DeserializationError           "can I type this response?"
-└── DesignError                    "is my design coherent?"
-    ├── UnknownMakerError              no such maker at this position
-    ├── DuplicateDeclarationError      same object declared twice
-    ├── UnresolvedReferenceError       bind() target not in the design
-    ├── AmbiguousBindError             bind() matches several declarations
-    └── StagedPushError                staged push partially applied
+├── NoResultError                  .one() matched nothing
+├── MultipleResultsError           .one() matched more than one
+├── DesignError                    "is my design coherent?"
+│   ├── UnknownMakerError              no such maker at this position
+│   ├── DuplicateDeclarationError      same object declared twice
+│   ├── UnresolvedReferenceError       bind() target not in the design
+│   ├── AmbiguousBindError             bind() matches several declarations
+│   └── StagedPushError                staged push partially applied
+└── SubscriptionError              "what went wrong with a live subscription?"
+    ├── StatsClassNotSubscribableError    stats class — the APIC never pushes for it
+    ├── SubscribeRejectedError            the APIC rejected subscription=yes
+    └── SubscriptionLostError              could not recover — see .reason
 ```
 
 ## What to catch when
@@ -40,6 +46,7 @@ NiwakiError
 | permission-scoped tooling | `ForbiddenError` | report the missing privilege |
 | any push pipeline | `DesignError` | fix the design — do not retry |
 | a staged rollout | `StagedPushError` | see the playbook below |
+| a live subscription's stream | `SubscriptionLostError` | resubscribe, or exit the watcher |
 
 ## Design errors are eager
 
@@ -121,6 +128,19 @@ Recovery is declarative, like everything else:
    converges; already-applied objects are simply confirmed.
 4. When in doubt, `mode="plan"` first: it shows precisely what a new push
    would still change (see {doc}`push-modes`).
+
+## A subscription's stream ends with `SubscriptionLostError`
+
+Every other subscription condition — a missed refresh, a reconnect that
+*did* recover — is delivered as data in the event stream, not raised (see
+{doc}`subscribing`). Only a subscription that could not be recovered at all
+raises, and `.reason` says which recovery path was exhausted:
+
+```python
+from niwaki.exceptions import SubscriptionLostReason
+
+assert SubscriptionLostReason.RECONNECT_EXHAUSTED == "reconnect_exhausted"
+```
 
 ## Transport errors and retries
 

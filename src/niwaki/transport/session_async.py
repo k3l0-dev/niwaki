@@ -28,6 +28,11 @@ from niwaki import exceptions
 from niwaki.models.base import ManagedObject
 from niwaki.transport._config import RetryConfig
 from niwaki.transport._errors import extract_apic_error, raise_for_apic_status
+from niwaki.transport._subscription_socket import SubscriptionInfo
+from niwaki.transport._subscription_socket_async import (
+    AsyncRawSubscription,
+    AsyncSubscriptionSocket,
+)
 from niwaki.transport._token import TokenState
 from niwaki.utils.response import parse_imdata
 
@@ -128,6 +133,10 @@ class AsyncApicSession:
             ),
             timeout=timeout,
         )
+        # Reused for the subscription WebSocket (wss://), which needs a real
+        # ssl.SSLContext rather than httpx's bool-or-path verify shorthand.
+        self._ws_ssl_context = self._build_ws_ssl_context(verify_ssl)
+        self._subscription_socket: AsyncSubscriptionSocket | None = None
 
     # ── Context manager ───────────────────────────────────────────────────────
 
@@ -152,8 +161,13 @@ class AsyncApicSession:
         """Close the async HTTP client and release network resources.
 
         Call explicitly when not using the session as an async context manager.
-        After ``close()``, any request will raise an httpx error.
+        After ``close()``, any request will raise an httpx error. Also tears
+        down the subscription WebSocket, if one was ever opened — every
+        blocked subscription iterator ends with a plain ``StopAsyncIteration``.
         """
+        if self._subscription_socket is not None:
+            await self._subscription_socket.aclose()
+            self._subscription_socket = None
         await self._client.aclose()
 
     # ── Public state ──────────────────────────────────────────────────────────
@@ -375,6 +389,95 @@ class AsyncApicSession:
         if not objects:
             raise exceptions.NotFoundError(404, f"MO not found at DN: {dn!r}")
         return cast(_T, objects[0])
+
+    # ── Public subscribe ──────────────────────────────────────────────────────
+
+    async def subscribe(
+        self, path: str, params: dict[str, str], *, refresh_timeout: int | None = None
+    ) -> AsyncRawSubscription:
+        """
+        Subscribe to push notifications for a query, over the session's shared WebSocket.
+
+        Part of the transport boundary
+        (:class:`niwaki.transport._protocols.AsyncMoSubscriber`). Mirrors
+        :meth:`niwaki.transport.session.ApicSession.subscribe`: the APIC
+        multiplexes every subscription for a session over one WebSocket,
+        opened lazily on the first call to this method; a refresh sweep and
+        reconnect-and-resubscribe are handled automatically in the
+        background — a caller never hand-rolls either.
+
+        Args:
+            path: API path relative to base URL, exactly as passed to
+                :meth:`get` (e.g. ``"/api/class/fvBD.json"``).
+            params: Query string parameters (filters/scoping). ``subscription``
+                and ``refresh-timeout`` are added internally — do not include
+                them here.
+            refresh_timeout: Override the APIC's default 60 s subscription
+                timeout. The subscription refreshes itself automatically on a
+                schedule derived from this value regardless.
+
+        Returns:
+            A :class:`~niwaki.transport._subscription_socket_async.AsyncRawSubscription`
+            — ``.initial`` for the synchronous snapshot, then iterate
+            (``async for``) for live push items.
+
+        Raises:
+            AuthError: Not authenticated.
+            SessionExpiredError: Token expired and re-auth failed.
+            SubscribeRejectedError: The APIC rejected the subscribe request.
+
+        Example::
+
+            sub = await session.subscribe("/api/class/fvBD.json", {})
+            async for item in sub:
+                print(item)
+        """
+        await self._ensure_token()
+        if self._subscription_socket is None:
+            self._subscription_socket = AsyncSubscriptionSocket(self)
+        return await self._subscription_socket.subscribe(
+            path, params, refresh_timeout=refresh_timeout
+        )
+
+    def list_subscriptions(self) -> list[SubscriptionInfo]:
+        """List every subscription currently tracked on this session's socket.
+
+        Returns an empty list if no subscription was ever opened — this never
+        opens the WebSocket itself. Synchronous (matches the sync
+        :class:`~niwaki.transport.session.ApicSession` accessor and the
+        underlying lock-free read) even on this async session.
+
+        Returns:
+            One :class:`~niwaki.transport._subscription_socket.SubscriptionInfo`
+            per tracked subscription.
+        """
+        if self._subscription_socket is None:
+            return []
+        return self._subscription_socket.list_subscriptions()
+
+    async def refresh_all_subscriptions(self) -> list[SubscriptionInfo]:
+        """Force an immediate refresh of every tracked subscription, on demand.
+
+        A no-op returning an empty list if no subscription was ever opened.
+        See :class:`~niwaki.transport._subscription_socket.SubscriptionSocket`'s
+        method of the same name for the escalation-safety semantics.
+
+        Returns:
+            The post-refresh snapshot of every subscription.
+        """
+        if self._subscription_socket is None:
+            return []
+        return await self._subscription_socket.refresh_all_subscriptions()
+
+    async def close_all_subscriptions(self) -> None:
+        """Stop every tracked subscription — the shared socket itself stays open.
+
+        A no-op if no subscription was ever opened. Distinct from
+        :meth:`close`, which tears down the whole socket; see
+        :meth:`~niwaki.transport._subscription_socket.SubscriptionSocket.close_all_subscriptions`.
+        """
+        if self._subscription_socket is not None:
+            await self._subscription_socket.close_all_subscriptions()
 
     # ── Internal HTTP ─────────────────────────────────────────────────────────
 
@@ -636,6 +739,33 @@ class AsyncApicSession:
             raise exceptions.TransportError(str(exc)) from exc
 
     # ── Response parsing ──────────────────────────────────────────────────────
+
+    @staticmethod
+    def _build_ws_ssl_context(verify_ssl: bool | str) -> ssl.SSLContext | None:
+        """Build the ``ssl.SSLContext`` the subscription WebSocket connects with.
+
+        Mirrors :meth:`niwaki.transport.session.ApicSession._build_ws_ssl_context`
+        — translates ``verify_ssl`` to what ``websockets.asyncio.client.connect``
+        expects (a real context, not httpx's bool-or-path verify shorthand).
+
+        Args:
+            verify_ssl: Same argument as this class's constructor.
+
+        Returns:
+            ``None`` for ``verify_ssl=True`` (``websockets`` builds its own
+            default verifying context for a ``wss://`` URL); a permissive,
+            non-verifying context for ``verify_ssl=False`` (self-signed lab
+            certificates); a context pinned to the given CA bundle for a
+            ``str`` path.
+        """
+        if isinstance(verify_ssl, str):
+            return ssl.create_default_context(cafile=verify_ssl)
+        if verify_ssl is False:
+            context = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
+            context.check_hostname = False
+            context.verify_mode = ssl.CERT_NONE
+            return context
+        return None
 
     @staticmethod
     def _parse_token_response(resp: httpx.Response, *, threshold: timedelta) -> TokenState:

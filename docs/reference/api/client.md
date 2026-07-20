@@ -20,6 +20,20 @@ goes through the design DSL ({doc}`design`).
 .. autoclass:: niwaki.AsyncNiwakiNode
 ```
 
+## Subscription management
+
+`aci.subscriptions` — bulk introspection/refresh/stop over every
+subscription open on the session's shared WebSocket; see
+{doc}`../../guide/subscribing`.
+
+```{eval-rst}
+.. autoclass:: niwaki.facade.SubscriptionManager
+   :members:
+
+.. autoclass:: niwaki.facade.AsyncSubscriptionManager
+   :members:
+```
+
 ## Vocabulary navigation
 
 Nodes — and the clients themselves — resolve **operator vocabulary** into

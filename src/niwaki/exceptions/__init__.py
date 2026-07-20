@@ -23,6 +23,11 @@ write a single broad ``except NiwakiError`` or target a specific branch:
         ServerError,          # 5xx — APIC internal error
         DeserializationError, # response cannot be parsed into a typed model
         StagedPushError,      # staged design push partially succeeded
+        SubscriptionError,             # any object-subscription (WebSocket push) failure
+        StatsClassNotSubscribableError,  # subscribed to a stats class — never pushes
+        SubscribeRejectedError,        # the APIC rejected a subscription=yes request
+        SubscriptionLostError,         # a subscription could not be recovered
+        SubscriptionLostReason,        # which recovery path was exhausted (see .reason)
     )
 
 Hierarchy::
@@ -44,12 +49,16 @@ Hierarchy::
     ├── DeserializationError
     ├── NoResultError               (query .one() matched nothing)
     ├── MultipleResultsError        (query .one() matched several)
-    └── DesignError
-        ├── UnknownMakerError          (also an AttributeError)
-        ├── DuplicateDeclarationError
-        ├── UnresolvedReferenceError
-        ├── AmbiguousBindError
-        └── StagedPushError
+    ├── DesignError
+    │   ├── UnknownMakerError          (also an AttributeError)
+    │   ├── DuplicateDeclarationError
+    │   ├── UnresolvedReferenceError
+    │   ├── AmbiguousBindError
+    │   └── StagedPushError
+    └── SubscriptionError
+        ├── StatsClassNotSubscribableError
+        ├── SubscribeRejectedError      (also an APIError)
+        └── SubscriptionLostError       (.reason: SubscriptionLostReason)
 """
 
 from __future__ import annotations
@@ -78,6 +87,13 @@ from niwaki.exceptions._design import (
 )
 from niwaki.exceptions._models import DeserializationError
 from niwaki.exceptions._query import MultipleResultsError, NoResultError
+from niwaki.exceptions._subscription import (
+    StatsClassNotSubscribableError,
+    SubscribeRejectedError,
+    SubscriptionError,
+    SubscriptionLostError,
+    SubscriptionLostReason,
+)
 from niwaki.exceptions._transport import (
     ConnectionError,
     TimeoutError,
@@ -102,6 +118,11 @@ __all__ = [
     "ServerError",
     "SessionExpiredError",
     "StagedPushError",
+    "StatsClassNotSubscribableError",
+    "SubscribeRejectedError",
+    "SubscriptionError",
+    "SubscriptionLostError",
+    "SubscriptionLostReason",
     "TLSError",
     "TimeoutError",
     "TokenRefreshError",

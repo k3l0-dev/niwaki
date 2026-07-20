@@ -111,11 +111,19 @@ nitpick_ignore = [
     ("py:class", "pydantic.ValidationError"),
 ]
 nitpick_ignore_regex = [
-    # Design/facade/query internals: documented through their public wrappers.
+    # Design/facade/query/transport internals: documented through their public
+    # wrappers, never autodoc'd directly — any cross-reference role (class,
+    # method, or attribute) to one of these private modules is expected to be
+    # unresolvable, e.g. the transport-level RawSubscription/SubscriptionSocket
+    # that Subscription (query/_subscription.py) wraps and documents publicly.
     ("py:class", r"niwaki\.design\._.*"),
     ("py:mod", r"niwaki\.design\._.*"),
     ("py:class", r"niwaki\.facade\._.*"),
     ("py:class", r"niwaki\.query\._.*"),
+    ("py:meth", r"niwaki\.query\._.*"),
+    ("py:class", r"niwaki\.transport\._.*"),
+    ("py:meth", r"niwaki\.transport\._.*"),
+    ("py:attr", r"niwaki\.transport\._.*"),
     ("py:class", r"niwaki\.models\._generated\..*"),
 ]
 

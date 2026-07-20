@@ -8,6 +8,8 @@ private-attribute reach-through.
 Protocols:
     :class:`MoWriter` / :class:`AsyncMoWriter` — ``post_mo`` / ``delete_mo``.
     :class:`MoReader` / :class:`AsyncMoReader` — typed single-MO ``get_mo``.
+    :class:`MoSubscriber` / :class:`AsyncMoSubscriber` — object-subscription
+        (WebSocket push).
 """
 
 from __future__ import annotations
@@ -15,6 +17,8 @@ from __future__ import annotations
 from typing import Any, Protocol, runtime_checkable
 
 from niwaki.models.base import ManagedObject
+from niwaki.transport._subscription_socket import RawSubscription, SubscriptionInfo
+from niwaki.transport._subscription_socket_async import AsyncRawSubscription
 
 
 @runtime_checkable
@@ -94,4 +98,82 @@ class AsyncMoReader(Protocol):
         Raises:
             NotFoundError: No object exists at *dn*.
         """
+        ...
+
+
+@runtime_checkable
+class MoSubscriber(Protocol):
+    """Structural type for synchronous ACI object-subscription transports."""
+
+    def subscribe(
+        self, path: str, params: dict[str, str], *, refresh_timeout: int | None = None
+    ) -> RawSubscription:
+        """Subscribe to push notifications for a query.
+
+        Args:
+            path: API path relative to base URL, exactly as passed to a
+                normal GET (e.g. ``"/api/class/fvBD.json"``).
+            params: Query string parameters (filters/scoping). ``subscription``
+                and ``refresh-timeout`` are added internally.
+            refresh_timeout: Override the APIC's default 60 s subscription
+                timeout. The subscription refreshes itself automatically
+                regardless of this value.
+
+        Returns:
+            A :class:`~niwaki.transport._subscription_socket.RawSubscription`.
+
+        Raises:
+            SubscribeRejectedError: The APIC rejected the subscribe request.
+        """
+        ...
+
+    def list_subscriptions(self) -> list[SubscriptionInfo]:
+        """List every subscription currently tracked, or ``[]`` if none was ever opened."""
+        ...
+
+    def refresh_all_subscriptions(self) -> list[SubscriptionInfo]:
+        """Force an immediate refresh of every tracked subscription, on demand."""
+        ...
+
+    def close_all_subscriptions(self) -> None:
+        """Stop every tracked subscription — the shared socket itself stays open."""
+        ...
+
+
+@runtime_checkable
+class AsyncMoSubscriber(Protocol):
+    """Structural type for asynchronous ACI object-subscription transports."""
+
+    async def subscribe(
+        self, path: str, params: dict[str, str], *, refresh_timeout: int | None = None
+    ) -> AsyncRawSubscription:
+        """Subscribe to push notifications for a query.
+
+        Args:
+            path: API path relative to base URL, exactly as passed to a
+                normal GET (e.g. ``"/api/class/fvBD.json"``).
+            params: Query string parameters (filters/scoping). ``subscription``
+                and ``refresh-timeout`` are added internally.
+            refresh_timeout: Override the APIC's default 60 s subscription
+                timeout. The subscription refreshes itself automatically
+                regardless of this value.
+
+        Returns:
+            An :class:`~niwaki.transport._subscription_socket_async.AsyncRawSubscription`.
+
+        Raises:
+            SubscribeRejectedError: The APIC rejected the subscribe request.
+        """
+        ...
+
+    def list_subscriptions(self) -> list[SubscriptionInfo]:
+        """List every subscription currently tracked, or ``[]`` if none was ever opened."""
+        ...
+
+    async def refresh_all_subscriptions(self) -> list[SubscriptionInfo]:
+        """Force an immediate refresh of every tracked subscription, on demand."""
+        ...
+
+    async def close_all_subscriptions(self) -> None:
+        """Stop every tracked subscription — the shared socket itself stays open."""
         ...

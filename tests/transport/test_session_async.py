@@ -590,3 +590,37 @@ class TestTransportErrors:
         async with AsyncApicSession(HOST, "admin", "pass") as s:
             with pytest.raises(exceptions.TLSError):
                 await s.get("/api/class/fvTenant.json")
+
+
+class TestSubscriptionDelegation:
+    """The three bulk subscription methods delegate to the socket — see
+    ``tests/transport/test_subscription_socket_async.py`` for the actual
+    escalation/bulk-tool behaviour. These only prove the pass-through,
+    including the no-op case before any subscription was ever opened.
+    """
+
+    async def test_no_op_before_any_subscribe(self, httpx_mock: HTTPXMock) -> None:
+        httpx_mock.add_response(method="POST", url=LOGIN_URL, json=_login_resp())
+        async with AsyncApicSession(HOST, "admin", "pass") as s:
+            assert s.list_subscriptions() == []
+            assert await s.refresh_all_subscriptions() == []
+            await s.close_all_subscriptions()  # must not raise
+
+    async def test_delegates_to_the_socket_once_open(
+        self, async_ws_session: AsyncApicSession, httpx_mock: HTTPXMock
+    ) -> None:
+        from tests.conftest import subscribe_response
+
+        httpx_mock.add_response(method="GET", json=subscribe_response("1001"))
+        await async_ws_session.subscribe("/api/class/fvBD.json", {})
+
+        infos = async_ws_session.list_subscriptions()
+        assert len(infos) == 1
+        assert infos[0].subscription_id == "1001"
+
+        httpx_mock.add_response(method="GET", json={"totalCount": "0", "imdata": []})
+        refreshed = await async_ws_session.refresh_all_subscriptions()
+        assert len(refreshed) == 1
+
+        await async_ws_session.close_all_subscriptions()
+        assert async_ws_session.list_subscriptions() == []

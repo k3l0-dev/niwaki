@@ -49,8 +49,10 @@ def describe(class_name: str) -> ClassDoc:
 
     Returns:
         A :class:`ClassDoc` — ``name``, ``label``, ``comment``, ``is_abstract``,
-        a tuple of :class:`PropDoc`, a ``{code: name}`` fault map, and (for an
-        abstract class) its concrete subclasses.
+        ``is_observable`` (informational only — not a subscribability gate, see
+        the field's own docstring), a tuple of :class:`PropDoc`, a
+        ``{code: name}`` fault map, and (for an abstract class) its concrete
+        subclasses.
 
     Raises:
         KeyError: No such class in the catalogue.
@@ -151,7 +153,9 @@ def class_meta(class_name: str) -> ClassMeta:
     """A class's readable↔wire name maps and per-property coercion kinds.
 
     Lower-level than :func:`describe`; the same metadata the result objects use to
-    expose readable field names on non-generated classes.
+    expose readable field names on non-generated classes. Also carries
+    ``is_stat`` — whether the APIC can ever push for this class (a stats
+    class, e.g. a granularity variant like ``eqptEgrBytes5min``, never can).
 
     Args:
         class_name: The wire class name.

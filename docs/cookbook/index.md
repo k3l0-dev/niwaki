@@ -54,6 +54,7 @@ day-2-changes
 gitops-pipeline
 fabric-audit
 async-at-scale
+watch-for-changes
 ```
 
 ## Diagnose — when something is wrong

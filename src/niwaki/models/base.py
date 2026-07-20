@@ -33,7 +33,12 @@ deliberately kept out of the rendered class documentation):
 - ``_write_access``    APIC privilege roles allowed to write the class.
 - ``_is_creatable``    The APIC accepts a POST that creates the class (``always``);
   ``never`` (default singletons, non-creatable carriers) and ``derived`` are False.
-- ``_is_observable``   The class supports WebSocket subscription.
+- ``_is_observable``   APIC schema metadata, informational only — empirically
+  found *not* to reliably gate WebSocket subscription eligibility (a class
+  with ``_is_observable=False`` was live-confirmed to accept a subscription
+  and deliver real pushes). Never used as a subscribe-time gate; see
+  :class:`~niwaki.exceptions.StatsClassNotSubscribableError` for the flag
+  that actually governs it (``isStat``).
 - ``_is_faultable``    The APIC can raise faults on the class.
 - ``_is_health_scorable`` The APIC tracks a health score for instances.
 - ``_has_stats``       Statistics counters exist as children.
@@ -483,6 +488,52 @@ class ManagedObject(BaseModel):
     # ── Deserialisation ───────────────────────────────────────────────────────
 
     @classmethod
+    def _dispatch_and_coerce(
+        cls, data: dict[str, Any]
+    ) -> tuple[type[ManagedObject], dict[str, Any], dict[str, Any], str]:
+        """Shared first half of :meth:`from_apic`/:meth:`from_event`: dispatch, alias, coerce.
+
+        Args:
+            data: One envelope, e.g. ``{"fvBD": {"attributes": {...}}}``.
+
+        Returns:
+            ``(target_cls, coerced, inner, aci_class)`` — the REGISTRY-resolved
+            subclass, the alias-remapped and type-coerced attributes, the raw
+            inner envelope (attributes + children, for the caller to recurse
+            on), and the wire class name.
+        """
+        aci_class = next(iter(data))
+        target_cls: type[ManagedObject] = REGISTRY.get(aci_class, cls)
+        inner = data[aci_class]
+
+        # Use model_construct to bypass Pydantic validation:
+        # - APIC returns sentinel strings like "not-applicable" for unset fields
+        #   that don't match strict pattern validators (e.g. MAC address patterns).
+        # - We trust the APIC to return well-formed data.
+        # - Extra APIC fields (dn, modTs, uid, …) land in __pydantic_extra__
+        #   because extra="allow" is set on the model config.
+        # - _coerce_apic_value converts "yes"/"no" strings to Python bools (and
+        #   digit-strings to int) so that mo_diff comparisons are type-correct.
+        raw_attrs: dict[str, Any] = inner.get("attributes", {})
+
+        # Remap ACI wire names → Python field names via Field aliases.
+        # After D2 codegen, model_fields keys are snake_case (e.g. "arp_flooding")
+        # while APIC returns camelCase (e.g. "arpFlood").  model_construct does
+        # not resolve aliases, so we translate before calling it.
+        # The alias map is cached per-class to avoid recomputing on every object.
+        alias_map = target_cls._get_alias_map()
+        raw_attrs = {alias_map.get(k, k): v for k, v in raw_attrs.items()}
+
+        coerced: dict[str, Any] = {
+            k: _coerce_apic_value(
+                target_cls.model_fields[k].annotation if k in target_cls.model_fields else None,
+                v,
+            )
+            for k, v in raw_attrs.items()
+        }
+        return target_cls, coerced, inner, aci_class
+
+    @classmethod
     def from_apic(cls, data: dict[str, Any]) -> ManagedObject:
         """Deserialise an APIC JSON response envelope into a typed ManagedObject.
 
@@ -525,37 +576,9 @@ class ManagedObject(BaseModel):
             bd = ManagedObject.from_apic(raw)
             isinstance(bd, fvBD)  # → True (if fvBD is registered)
         """
-        aci_class = next(iter(data))
-        target_cls: type[ManagedObject] = REGISTRY.get(aci_class, cls)
-        inner = data[aci_class]
-
-        # Use model_construct to bypass Pydantic validation:
-        # - APIC returns sentinel strings like "not-applicable" for unset fields
-        #   that don't match strict pattern validators (e.g. MAC address patterns).
-        # - We trust the APIC to return well-formed data.
-        # - _fields_set is limited to naming props so that to_apic() on a
-        #   deserialized object remains surgical (only naming props are re-sent).
-        # - Extra APIC fields (dn, modTs, uid, …) land in __pydantic_extra__
-        #   because extra="allow" is set on the model config.
-        # - _coerce_apic_value converts "yes"/"no" strings to Python bools (and
-        #   digit-strings to int) so that mo_diff comparisons are type-correct.
-        raw_attrs: dict[str, Any] = inner.get("attributes", {})
-
-        # Remap ACI wire names → Python field names via Field aliases.
-        # After D2 codegen, model_fields keys are snake_case (e.g. "arp_flooding")
-        # while APIC returns camelCase (e.g. "arpFlood").  model_construct does
-        # not resolve aliases, so we translate before calling it.
-        # The alias map is cached per-class to avoid recomputing on every object.
-        alias_map = target_cls._get_alias_map()
-        raw_attrs = {alias_map.get(k, k): v for k, v in raw_attrs.items()}
-
-        coerced: dict[str, Any] = {
-            k: _coerce_apic_value(
-                target_cls.model_fields[k].annotation if k in target_cls.model_fields else None,
-                v,
-            )
-            for k, v in raw_attrs.items()
-        }
+        # _fields_set is limited to naming props so that to_apic() on a
+        # deserialized object remains surgical (only naming props are re-sent).
+        target_cls, coerced, inner, aci_class = cls._dispatch_and_coerce(data)
         obj = target_cls.model_construct(
             _fields_set=set(target_cls._naming_props),
             **coerced,
@@ -566,6 +589,66 @@ class ManagedObject(BaseModel):
 
         for child_raw in inner.get("children", []):
             obj.children.append(ManagedObject.from_apic(child_raw))
+
+        return obj
+
+    @classmethod
+    def from_event(cls, data: dict[str, Any]) -> ManagedObject:
+        """Deserialise one object-subscription push item into a typed ManagedObject.
+
+        A sibling of :meth:`from_apic`, differing in exactly one respect:
+        ``model_fields_set``. ``from_apic`` narrows it to the naming props,
+        because a full read must stay surgical on round-trip through
+        :meth:`to_apic`. A subscription push is a different shape entirely —
+        confirmed live, a ``created`` event carries the full object, a
+        ``modified`` event carries only the changed properties plus ``dn``,
+        and a ``deleted`` event carries only ``dn`` — so reusing ``from_apic``'s
+        naming-only narrowing here would be actively wrong: every field a
+        modify delta did not mention would read as though it were a reported
+        value instead of "this event said nothing about it," and the naming
+        props themselves would be marked reported even when a modify/delete
+        payload typically omits them.
+
+        Instead, ``from_event`` sets ``model_fields_set`` to exactly the config
+        fields *this event's payload* reported:
+        ``set(coerced) & set(target_cls.model_fields)`` — mirroring the same
+        "an instance whose ``model_fields_set`` faithfully describes what is
+        populated" idiom :meth:`surgical` already uses for locally-built
+        payloads, applied here to a payload read off the wire instead.
+        ``event.mo.model_fields_set`` is therefore the caller's authoritative
+        answer to "what did this event actually tell me?" — empty for a
+        ``deleted`` event (identity only: ``dn`` lands in ``model_extra``,
+        which is unaffected by ``model_fields_set``), the complete reported
+        set for a ``created`` event.
+
+        Args:
+            data: One push item's envelope, matching :meth:`from_apic`'s shape
+                but typically sparse, e.g.::
+
+                    {"fvBD": {"attributes": {"dn": "uni/tn-prod/BD-web",
+                                              "arpFlood": "yes",
+                                              "status": "modified"}}}
+
+        Returns:
+            Typed ManagedObject instance (or the base ManagedObject for a
+            class with no generated model), with ``model_fields_set`` matching
+            exactly what the payload reported.
+
+        Example::
+
+            mo = ManagedObject.from_event(
+                {"fvBD": {"attributes": {"dn": "uni/tn-prod/BD-web", "arpFlood": "yes"}}}
+            )
+            mo.model_fields_set   # → {"arp_flooding"} — "dn" is not a config field
+            mo.arp_flooding       # → True
+        """
+        target_cls, coerced, inner, aci_class = cls._dispatch_and_coerce(data)
+        fields_set = set(coerced) & set(target_cls.model_fields)
+        obj = target_cls.model_construct(_fields_set=fields_set, **coerced)
+        obj._wire_class = aci_class
+
+        for child_raw in inner.get("children", []):
+            obj.children.append(ManagedObject.from_event(child_raw))
 
         return obj
 

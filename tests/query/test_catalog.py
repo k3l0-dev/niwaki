@@ -60,6 +60,13 @@ def test_class_meta_is_memoised(cat: _catalog.Catalog) -> None:
 
 
 @needs_corpus
+def test_class_meta_exposes_is_stat(cat: _catalog.Catalog) -> None:
+    # A real granularity-variant stats class shipped in the corpus.
+    assert cat.class_meta("acllogFlowCounter15min").is_stat is True
+    assert cat.class_meta("fvBD").is_stat is False
+
+
+@needs_corpus
 def test_naming_parity_with_the_generated_model(cat: _catalog.Catalog) -> None:
     """The catalogue names a class exactly as its generated model does.
 
@@ -156,6 +163,14 @@ def test_describe_abstract_lists_concrete_subclasses(cat: _catalog.Catalog) -> N
     assert doc.is_abstract
     assert doc.concrete_subclasses  # non-empty
     assert "fvAEPg" in doc.concrete_subclasses
+
+
+@needs_corpus
+def test_describe_exposes_is_observable(cat: _catalog.Catalog) -> None:
+    assert cat.describe("fvBD").is_observable is True
+    # The falsified-heuristic case: not observable per schema, yet live-confirmed
+    # subscribable and delivering real push notifications (see StatsClassNotSubscribableError).
+    assert cat.describe("faultInst").is_observable is False
 
 
 @needs_corpus

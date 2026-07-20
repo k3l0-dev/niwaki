@@ -14,6 +14,7 @@ from __future__ import annotations
 from enum import StrEnum
 from typing import Literal, Self
 
+from niwaki import exceptions
 from niwaki.models.base import ManagedObject
 from niwaki.query._filters import (  # pyright: ignore[reportPrivateUsage]
     FilterExpr,
@@ -616,6 +617,130 @@ class _QueryBase[T: ManagedObject]:
             "a query has no boolean value — use .exists() to test for matches, "
             "or .count() for how many"
         )
+
+    # ── Subscription guards ──────────────────────────────────────────────────
+
+    def _reject_unstreamable(self) -> None:
+        """Fail loud on accumulated state with no meaning on an open-ended push stream.
+
+        Called by :meth:`_subscription_build` before any network I/O. Each
+        check below rejects a specific accumulator, not on principle alone —
+        every one of them either cannot reach :meth:`build` for a subscribe
+        request or would silently misrepresent what the caller asked for:
+
+        - ``order_by()``: there is no sorted position in a live stream of
+          discrete push events.
+        - a slice limit (``q[:n]``): the limit is applied client-side by
+          :meth:`~niwaki.query.Query.fetch`/:meth:`~niwaki.query.Query.stream`,
+          never as a request parameter — a non-rejecting ``subscribe()`` would
+          make ``q[:5].subscribe()`` stream forever, silently ignoring the
+          limit actually written.
+        - ``also()``: a :class:`~niwaki.query._subscription.Subscription` is
+          typed to one class; supporting multiple classes here would force an
+          untyped result, for a capability the socket's own multiplexing
+          already covers better — open one subscription per class instead.
+        - subtree enrichment (:meth:`include`/:meth:`subtree_full`/
+          :meth:`subtree_where`/:meth:`with_faults`/:meth:`with_health`/
+          :meth:`with_stats`/:meth:`with_relations`/:meth:`include_subtree`/
+          :meth:`only_faulted`): whether a *push* carries the same embedded
+          subtree data a GET does is unconfirmed, and a live-confirmed
+          ``modified``/``deleted`` push is a sparse delta — enrichment would
+          plausibly decorate the subscribe response's initial snapshot but
+          vanish from every change event after it, a contract this SDK will
+          not silently promise. Re-fetch enriched detail after being notified
+          instead (``aci.query(...).with_faults().fetch()``).
+
+        ``page_size()`` and ``naming_only()``/``config_only()`` are
+        deliberately **not** rejected here — see :meth:`Query.subscribe` /
+        :meth:`~niwaki.query.AsyncQuery.subscribe` for why.
+
+        Raises:
+            ValueError: One of the states above is set.
+        """
+        if self._order_by:
+            raise ValueError(
+                "subscribe() does not support order_by() — there is no sorted "
+                "position in an open-ended push stream"
+            )
+        if self._limit is not None:
+            raise ValueError(
+                "subscribe() does not support a slice limit (q[:n]) — the limit "
+                "is applied client-side on fetch()/stream() and would silently "
+                "never apply to a live stream; iterate the subscription and "
+                "stop yourself once you have enough events"
+            )
+        if self._also_classes:
+            raise ValueError(
+                "subscribe() does not support also() — a subscription is typed "
+                "to one class; open one subscription per class instead (they "
+                "share the same underlying WebSocket)"
+            )
+        if (
+            self._rsp_subtree != "no"
+            or self._rsp_subtree_filter is not None
+            or self._rsp_subtree_include
+        ):
+            raise ValueError(
+                "subscribe() does not support subtree enrichment (include()/"
+                "subtree_full()/subtree_where()/with_faults()/with_health()/"
+                "with_stats()/with_relations()/include_subtree()/only_faulted()) "
+                "— whether a push carries the same embedded data as a GET is "
+                "unconfirmed; re-fetch enriched detail after being notified "
+                "instead, e.g. aci.query(...).with_faults().fetch()"
+            )
+
+    def _stats_guard(self) -> None:
+        """Fail loud, before any network I/O, on a class the APIC can never push for.
+
+        Checks the queried class and every class named by :meth:`also` against
+        the read catalogue's ``isStat`` flag — a statistics class (a
+        granularity variant like ``eqptEgrBytes5min``) bypasses the APIC's
+        event manager entirely (Cisco's own documentation), so it would accept
+        a subscribe request and simply never push anything. This is an
+        architectural fact, unlike ``isObservable``, which was empirically
+        found *not* to gate subscribability and is therefore never checked
+        here (see :class:`~niwaki.exceptions.StatsClassNotSubscribableError`).
+
+        Fails open — a class unknown to the catalogue, or a checkout with no
+        catalogue at all, does not raise: this guard is a UX safeguard, not a
+        correctness gate, and an unknown class may simply not exist in this
+        build's catalogue yet.
+
+        Raises:
+            StatsClassNotSubscribableError: The queried class (or one named by
+                ``also()``) is a stats class.
+        """
+        # Function-local import: keeps the catalogue subsystem off the import
+        # path of ``niwaki`` until a subscribe() call actually needs it.
+        from niwaki.query._catalog import catalog
+
+        for name in (self._aci_class, *self._also_classes):
+            try:
+                meta = catalog().class_meta(name)
+            except (KeyError, FileNotFoundError):
+                continue
+            if meta.is_stat:
+                raise exceptions.StatsClassNotSubscribableError(
+                    f"{name!r} is a stats class — the APIC never pushes for it "
+                    "(stats updates bypass the event manager entirely)"
+                )
+
+    def _subscription_build(self) -> tuple[str, dict[str, str]]:
+        """Validate, then translate accumulated state for a subscribe request.
+
+        Runs :meth:`_reject_unstreamable` and :meth:`_stats_guard` — both
+        before any network I/O — then delegates to :meth:`build`.
+
+        Returns:
+            Same ``(path, params)`` shape as :meth:`build`.
+
+        Raises:
+            ValueError: See :meth:`_reject_unstreamable`.
+            StatsClassNotSubscribableError: See :meth:`_stats_guard`.
+        """
+        self._reject_unstreamable()
+        self._stats_guard()
+        return self.build()
 
     # ── URL building ──────────────────────────────────────────────────────────
 
