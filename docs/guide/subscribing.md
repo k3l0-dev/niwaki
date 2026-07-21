@@ -26,6 +26,12 @@ exhaustive read `fetch()` would give you. Everything after that is push: the
 stream never ends on its own, so a real program iterates it from a dedicated
 task/thread, or breaks out once it has seen what it needed.
 
+Subscribing to a scope right after creating its parent can miss the very
+first push under it: the APIC needs a brief moment after a brand-new object
+materializes before it reliably notifies on children created under it. A
+scope that already existed is unaffected — this only bites the instant right
+after the parent itself was created.
+
 ## Typed events
 
 Each item is a `SubscriptionEvent` — `.kind` tells you what happened, `.mo` is

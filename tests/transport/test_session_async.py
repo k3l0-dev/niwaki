@@ -73,6 +73,24 @@ class TestLogin:
         async with AsyncApicSession(HOST, "admin", "pass") as s:
             assert s._client.cookies.get("APIC-cookie") == "cookie_tok"  # type: ignore[reportPrivateUsage]
 
+    async def test_does_not_duplicate_cookie_already_set_via_header(
+        self, httpx_mock: HTTPXMock
+    ) -> None:
+        """A real APIC also sets APIC-cookie via a Set-Cookie response header;
+        the explicit ``.set()`` call must overwrite that entry, not add a
+        second one next to it (a duplicate the APIC's ordinary auth tolerates
+        but that silently breaks its subscription<->WebSocket linkage)."""
+        httpx_mock.add_response(
+            method="POST",
+            url=LOGIN_URL,
+            json=_login_resp("cookie_tok"),
+            headers={"set-cookie": "APIC-cookie=cookie_tok; path=/; HttpOnly; Secure"},
+        )
+        async with AsyncApicSession(HOST, "admin", "pass") as s:
+            assert s._client.cookies.get("APIC-cookie") == "cookie_tok"  # type: ignore[reportPrivateUsage]
+            matching = [c for c in s._client.cookies.jar if c.name == "APIC-cookie"]  # type: ignore[reportPrivateUsage]
+            assert len(matching) == 1
+
     async def test_failure_raises_login_error(self, httpx_mock: HTTPXMock) -> None:
         httpx_mock.add_response(
             method="POST",
@@ -117,6 +135,33 @@ class TestTokenRefresh:
             await s.get("/api/class/fvTenant.json")
             assert s.is_authenticated
             assert s._token_state.token == "t2"  # type: ignore[reportPrivateUsage]
+
+    async def test_refresh_does_not_duplicate_cookie_already_set_via_header(
+        self, httpx_mock: HTTPXMock
+    ) -> None:
+        """Across a login-then-refresh cycle, each Set-Cookie-bearing response
+        must overwrite the same jar entry rather than accumulating one per
+        call -- otherwise a stale login-time entry could linger alongside the
+        refreshed one."""
+        httpx_mock.add_response(
+            method="POST",
+            url=LOGIN_URL,
+            json=_login_resp("t1", ttl=30),
+            headers={"set-cookie": "APIC-cookie=t1; path=/; HttpOnly; Secure"},
+        )
+        httpx_mock.add_response(
+            method="GET",
+            url=REFRESH_URL,
+            json=_refresh_resp("t2"),
+            headers={"set-cookie": "APIC-cookie=t2; path=/; HttpOnly; Secure"},
+        )
+        httpx_mock.add_response(method="GET", json=_ok())
+
+        async with AsyncApicSession(HOST, "admin", "pass", refresh_threshold=60) as s:
+            await s.get("/api/class/fvTenant.json")
+            assert s._client.cookies.get("APIC-cookie") == "t2"  # type: ignore[reportPrivateUsage]
+            matching = [c for c in s._client.cookies.jar if c.name == "APIC-cookie"]  # type: ignore[reportPrivateUsage]
+            assert len(matching) == 1
 
     async def test_refresh_failure_triggers_relogin(self, httpx_mock: HTTPXMock) -> None:
         httpx_mock.add_response(method="POST", url=LOGIN_URL, json=_login_resp("t1", ttl=30))

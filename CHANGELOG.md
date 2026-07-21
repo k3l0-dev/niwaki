@@ -5,6 +5,31 @@ All notable changes to this project are documented here.  The format follows
 [semver](https://semver.org/).  From 1.0.0 the configuration API is stable:
 breaking changes ship in a new major version with a migration note.
 
+## [1.3.1] — 2026-07-21
+
+### Fixed
+
+- **Subscription push silently never delivered.** `login()`/`_refresh_token()`
+  (sync and async) explicitly set the `APIC-cookie` cookie on the httpx
+  client, on top of the cookie httpx already stores automatically from the
+  APIC's own `Set-Cookie` response header. The explicit call didn't pin a
+  `domain`, so it landed as a second, distinct jar entry (same name, empty
+  domain) rather than overwriting the first. The APIC accepts the resulting
+  malformed, duplicated `Cookie: APIC-cookie=...; APIC-cookie=...` header for
+  ordinary reads/writes and even for the subscribe GET itself (a valid
+  `subscriptionId` still comes back) — but it silently breaks the APIC's
+  internal link between that request and the caller's already-open
+  WebSocket, so no push ever arrives, and the subscribe response's initial
+  `imdata` can come back empty even when matching objects exist. Fixed by
+  pinning the cookie to the session's own host on every `login()`/
+  `_refresh_token()` call, so it overwrites in place instead of duplicating.
+  Only `subscribe()` was affected — every other read/write path was already
+  correct, which is why this went unnoticed until a live subscription
+  investigation traced the exact `Cookie` header sent on the wire.
+  Re-validated live end to end on a freshly provisioned fabric: create,
+  modify, delete, filtered subscriptions, forced reconnect, and refresh
+  escalation all deliver correctly now.
+
 ## [1.3.0] — 2026-07-20
 
 Native APIC object-subscription: a query becomes a live push stream instead

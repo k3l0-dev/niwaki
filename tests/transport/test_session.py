@@ -98,6 +98,26 @@ class TestLogin:
         assert session._token_state.token == "my-token"  # type: ignore[reportPrivateUsage]
         assert session._client.cookies.get("APIC-cookie") == "my-token"  # type: ignore[reportPrivateUsage]
 
+    def test_does_not_duplicate_cookie_already_set_via_header(
+        self, session: ApicSession, httpx_mock: HTTPXMock
+    ) -> None:
+        """A real APIC also sets APIC-cookie via a Set-Cookie response header;
+        the explicit ``.set()`` call must overwrite that entry, not add a
+        second one next to it (a duplicate the APIC's ordinary auth tolerates
+        but that silently breaks its subscription<->WebSocket linkage)."""
+        httpx_mock.add_response(
+            method="POST",
+            url=LOGIN_URL,
+            json=login_payload("my-token"),
+            headers={"set-cookie": "APIC-cookie=my-token; path=/; HttpOnly; Secure"},
+        )
+
+        session.login()
+
+        assert session._client.cookies.get("APIC-cookie") == "my-token"  # type: ignore[reportPrivateUsage]
+        matching = [c for c in session._client.cookies.jar if c.name == "APIC-cookie"]  # type: ignore[reportPrivateUsage]
+        assert len(matching) == 1
+
     def test_success_sets_expiry(self, session: ApicSession, httpx_mock: HTTPXMock) -> None:
         """After login, the token has a future expiry based on the APIC TTL."""
         httpx_mock.add_response(method="POST", url=LOGIN_URL, json=login_payload(ttl=600))
@@ -172,6 +192,25 @@ class TestRefreshToken:
         assert logged_session.is_authenticated
         assert logged_session._token_state.token == "refreshed-tok"  # type: ignore[reportPrivateUsage]
         assert logged_session._client.cookies.get("APIC-cookie") == "refreshed-tok"  # type: ignore[reportPrivateUsage]
+
+    def test_does_not_duplicate_cookie_already_set_via_header(
+        self, logged_session: ApicSession, httpx_mock: HTTPXMock
+    ) -> None:
+        """Same header-plus-explicit-set overwrite guarantee as login(), across
+        a refresh cycle (where a stale first-login entry could otherwise
+        linger alongside a freshly refreshed one)."""
+        httpx_mock.add_response(
+            method="GET",
+            url=REFRESH_URL,
+            json=_refresh_payload("refreshed-tok"),
+            headers={"set-cookie": "APIC-cookie=refreshed-tok; path=/; HttpOnly; Secure"},
+        )
+
+        logged_session._refresh_token()  # type: ignore[reportPrivateUsage]
+
+        assert logged_session._client.cookies.get("APIC-cookie") == "refreshed-tok"  # type: ignore[reportPrivateUsage]
+        matching = [c for c in logged_session._client.cookies.jar if c.name == "APIC-cookie"]  # type: ignore[reportPrivateUsage]
+        assert len(matching) == 1
 
     def test_failure_raises_token_refresh_error(
         self, logged_session: ApicSession, httpx_mock: HTTPXMock

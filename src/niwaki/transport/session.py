@@ -18,6 +18,7 @@ from collections.abc import Iterator
 from contextlib import contextmanager
 from datetime import timedelta
 from typing import Any, TypeVar, cast
+from urllib.parse import urlsplit
 
 import httpx
 import stamina
@@ -115,6 +116,12 @@ class ApicSession:
         self._host = (host or os.environ["APIC_HOST"]).rstrip("/")
         self._username = username or os.environ["APIC_USERNAME"]
         self._password = password or os.environ["APIC_PASSWORD"]
+        # Pin the cookie jar entry to the session's own host so it overwrites
+        # in place rather than accumulating a second, domain-less entry next
+        # to the one httpx auto-stores from the APIC's own Set-Cookie header
+        # (a duplicate the APIC accepts for ordinary auth but that silently
+        # breaks its internal subscription<->WebSocket linkage).
+        self._cookie_domain = urlsplit(self._host).hostname or ""
         self._refresh_threshold = timedelta(seconds=refresh_threshold)
         self._retry = retry
         self._token_state: TokenState | None = None
@@ -232,7 +239,7 @@ class ApicSession:
             )
 
         self._token_state = self._parse_token_response(resp, threshold=self._refresh_threshold)
-        self._client.cookies.set("APIC-cookie", self._token_state.token)
+        self._client.cookies.set("APIC-cookie", self._token_state.token, domain=self._cookie_domain)
 
     # ── Internal auth ─────────────────────────────────────────────────────────
 
@@ -261,7 +268,7 @@ class ApicSession:
             )
 
         self._token_state = self._parse_token_response(resp, threshold=self._refresh_threshold)
-        self._client.cookies.set("APIC-cookie", self._token_state.token)
+        self._client.cookies.set("APIC-cookie", self._token_state.token, domain=self._cookie_domain)
 
     def _ensure_token(self) -> None:
         """
