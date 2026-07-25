@@ -21,8 +21,8 @@ config.vrf("main")
 config.bd("web", unicast_routing=True).bind(vrf="main").subnet("10.0.1.1/24")
 
 with Niwaki("https://apic.example.com", "admin", "secret") as aci:
-    config.push(aci, mode="plan")   # dry run — see the diff first
-    config.push(aci)                # one atomic POST
+    config.push(aci, mode="plan")  # dry run — see the diff first
+    config.push(aci)  # one atomic POST
 ```
 
 `bind(vrf="main")` is resolved and checked **before anything touches the
@@ -104,4 +104,5 @@ Changelog <project/CHANGELOG>
 Contributing <project/CONTRIBUTING>
 Security <project/SECURITY>
 Code of conduct <project/CODE_OF_CONDUCT>
+Credits <project/credits>
 ```

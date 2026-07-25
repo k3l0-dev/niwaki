@@ -40,7 +40,7 @@ os.environ["APIC_HOST"] = "https://apic.example.com"
 os.environ["APIC_USERNAME"] = "admin"
 os.environ["APIC_PASSWORD"] = "secret"
 
-with Niwaki() as aci:            # everything comes from the environment
+with Niwaki() as aci:  # everything comes from the environment
     ...
 ```
 
@@ -82,7 +82,7 @@ is loud on purpose:
 
 ```python
 with Niwaki("https://apic.example.com", "admin", "secret", verify_ssl=False) as aci:
-    ...   # lab only — never disable verification against production
+    ...  # lab only — never disable verification against production
 ```
 
 A failed verification surfaces as {class}`~niwaki.exceptions.TLSError` —
@@ -105,8 +105,8 @@ jitter.  The policy is a frozen value object,
 ```python
 from niwaki import RetryConfig
 
-fail_fast = RetryConfig(attempts=1)                    # no retries at all
-patient = RetryConfig(attempts=5, wait_max=30.0)       # unreliable WAN link
+fail_fast = RetryConfig(attempts=1)  # no retries at all
+patient = RetryConfig(attempts=5, wait_max=30.0)  # unreliable WAN link
 
 with Niwaki("https://apic.example.com", "admin", "secret", retry=patient) as aci:
     ...

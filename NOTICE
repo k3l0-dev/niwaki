@@ -9,3 +9,13 @@ Licensed under the Apache License, Version 2.0 (see LICENSE).
 Cisco, Cisco ACI and APIC are trademarks of Cisco Systems, Inc.
 This project is an independent SDK and is not affiliated with,
 endorsed or sponsored by Cisco Systems, Inc.
+
+The ACI class and property metadata shipped with this product — class and
+property names, types, formats, containment relations, labels, and the
+descriptive text embedded in the read catalogue, the generated model
+docstrings and the reference documentation — is derived from the Cisco APIC
+Management Information Model, as published by Cisco Systems, Inc. and served
+by every APIC controller. That content remains the property of Cisco
+Systems, Inc. and is reproduced solely to enable interoperability with, and
+documentation of, the Cisco ACI API. It is not covered by this project's
+Apache-2.0 license.

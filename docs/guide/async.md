@@ -20,7 +20,7 @@ config.vrf("main")
 
 async def apply() -> None:
     async with AsyncNiwaki("https://apic.example.com", "admin", "secret") as aci:
-        await config.push(aci)                    # designs are transport-agnostic
+        await config.push(aci)  # designs are transport-agnostic
         bd = await aci.tenant("prod").bd("web").read()
         assert bd.unicast_routing is True
 

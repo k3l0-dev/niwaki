@@ -39,12 +39,12 @@ world named in the message ({doc}`../guide/errors`):
 from niwaki.exceptions import DesignError
 
 probe = tenant("commerce")
-probe.bd("bd-web").bind(vrf="prd")            # typo — no such VRF declared
+probe.bd("bd-web").bind(vrf="prd")  # typo — no such VRF declared
 
 try:
     probe.to_payload()
 except DesignError as exc:
-    print(exc)     # ...no fvCtx named 'prd' is declared... (with a did-you-mean)
+    print(exc)  # ...no fvCtx named 'prd' is declared... (with a did-you-mean)
 ```
 
 `to_payload()` triggers the same resolution as `push()`, so it is the offline way

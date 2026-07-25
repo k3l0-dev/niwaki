@@ -81,3 +81,32 @@ def test_fault_name(wired: None) -> None:
 @needs_corpus
 def test_fault_name_unknown_code(wired: None) -> None:
     assert catalog.fault_name("F-nonexistent") is None
+
+
+# ── generated_classes() / has_model — offline, no corpus needed ───────────────
+# (they read the codegen's shipped index and the shipped catalogue, not a
+# fixture build; the exhaustive cross-surface parity lives in
+# tests/models/test_generated_parity.py)
+
+
+def test_generated_classes_is_sorted_deduplicated_and_memoised() -> None:
+    classes = catalog.generated_classes()
+    assert isinstance(classes, tuple)
+    assert list(classes) == sorted(set(classes))
+    assert catalog.generated_classes() is classes  # computed once per process
+
+
+def test_generated_classes_membership() -> None:
+    classes = catalog.generated_classes()
+    assert "fvBD" in classes  # configurable → generated model
+    assert "faultInst" in classes  # the FaultCurrent exception still has a model
+    assert "topSystem" not in classes  # readable only → catalogue-served
+    assert "commTelnet" not in classes  # deprecated → no model
+
+
+def test_has_model_agrees_with_generated_classes() -> None:
+    classes = set(catalog.generated_classes())
+    assert catalog.class_meta("fvBD").has_model is ("fvBD" in classes)
+    assert catalog.class_meta("topSystem").has_model is False
+    assert catalog.class_meta("lldpAdjEp").has_model is False  # learned, operational-only
+    assert catalog.class_meta("faultThrValueDouble").has_model is True

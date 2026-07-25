@@ -61,13 +61,13 @@ from niwaki.exceptions import UnresolvedReferenceError
 
 config = tenant("prod")
 config.vrf("main")
-config.bd("web").bind(vrf="mian")          # typo — no such VRF declared
+config.bd("web").bind(vrf="mian")  # typo — no such VRF declared
 
 aci = Niwaki.connect("https://apic.example.com", "admin", "secret")
 try:
     config.push(aci)
 except UnresolvedReferenceError as exc:
-    print(exc)      # …no fvCtx named 'mian' is declared… Did you mean 'main'?
+    print(exc)  # …no fvCtx named 'mian' is declared… Did you mean 'main'?
 ```
 
 The `with` form closes the session for you; `connect()` is used here so the
@@ -89,8 +89,8 @@ from niwaki.exceptions import NotFoundError
 try:
     aci.tenant("ghost").read()
 except NotFoundError as exc:
-    print(exc.status_code)      # 404
-    print(exc)                  # HTTP 404: MO not found at DN: 'uni/tn-ghost'
+    print(exc.status_code)  # 404
+    print(exc)  # HTTP 404: MO not found at DN: 'uni/tn-ghost'
 ```
 
 `APIError` exposes `status_code` and `apic_message` on every branch — log
@@ -113,9 +113,9 @@ rollout.bd("web").bind(vrf="main")
 try:
     rollout.push(aci, mode="staged")
 except StagedPushError as exc:
-    print("applied :", exc.report.dns)             # what landed
+    print("applied :", exc.report.dns)  # what landed
     print("failed  :", [dn for dn, _ in exc.failures])
-    print("skipped :", exc.not_run)                # never attempted
+    print("skipped :", exc.not_run)  # never attempted
 ```
 
 Recovery is declarative, like everything else:

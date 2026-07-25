@@ -36,9 +36,44 @@ __all__ = [
     "describe",
     "fault_name",
     "find_prop",
+    "generated_classes",
     "prop_meta",
     "search",
 ]
+
+_generated_classes_cache: tuple[str, ...] | None = None
+
+
+def generated_classes() -> tuple[str, ...]:
+    """Wire names of every class the SDK generates a typed model for, sorted.
+
+    The set behind "generated" everywhere in this module: the ~2,200 concrete,
+    configurable, non-deprecated classes that ship as Pydantic models with
+    readable field names. Everything else the catalogue serves dynamically.
+    Offline — no APIC connection required — and derived from the code
+    generator's own shipped index, so it cannot drift from the model files.
+
+    Every returned name resolves through :func:`describe` and
+    :func:`class_meta` without ``KeyError``, and every returned class is
+    concrete and non-stat.
+
+    Returns:
+        Sorted, deduplicated wire class names, computed once per process.
+
+    Example::
+
+        classes = catalog.generated_classes()
+        assert "fvBD" in classes           # configurable → has a model
+        assert "topSystem" not in classes  # readable only → catalogue-served
+    """
+    global _generated_classes_cache
+    if _generated_classes_cache is None:
+        # Lazy: the package index is a plain dict (no model modules load),
+        # and staying off the import path keeps `import niwaki` at budget.
+        from niwaki.models._generated import _PKG_MAP
+
+        _generated_classes_cache = tuple(sorted(_PKG_MAP))
+    return _generated_classes_cache
 
 
 def describe(class_name: str) -> ClassDoc:

@@ -53,8 +53,8 @@ import convention as the models:
 ```python
 from niwaki.models.enums.FvBDType import FvBDType
 
-bd = fvBD(name="storage", type="fc")       # plain strings coerce…
-assert bd.type is FvBDType.FC              # …into the enum member
+bd = fvBD(name="storage", type="fc")  # plain strings coerce…
+assert bd.type is FvBDType.FC  # …into the enum member
 assert list(FvBDType) == [FvBDType.FC, FvBDType.REGULAR]
 ```
 

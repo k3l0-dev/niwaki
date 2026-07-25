@@ -36,7 +36,7 @@ config = design()
 config.fabric().datetime_policy("prod-ntp").ntp_provider("10.0.0.1")
 config.infra().vlan_pool("prod", "static").range("vlan-100", "vlan-199")
 config.tenant("prod").vrf("main")
-config.push(aci)                    # the three domains in ONE atomic POST
+config.push(aci)  # the three domains in ONE atomic POST
 ```
 
 `tenant(...)` is exactly `design().tenant(...)` — sibling domains stay one
@@ -103,11 +103,11 @@ port_selector = inf.access_port_profile("leaf101").port_selector("esxi", "range"
 every reference is one alias away:
 
 ```python
-epg.bind(bd="web")                  # name-flavor Rs (tnFvBDName)
-aaep.bind(domain="prod-phys")       # dn-flavor Rs, abstract target: matches the
-                                    # declared phys_dom / l3_dom / ... by name
+epg.bind(bd="web")  # name-flavor Rs (tnFvBDName)
+aaep.bind(domain="prod-phys")  # dn-flavor Rs, abstract target: matches the
+# declared phys_dom / l3_dom / ... by name
 port_selector.bind(policy_group="esxi-vpc")  # abstract → access_group or port_channel
-vrf.bind(l3out="ext")               # inverse edge: the Rs lands on the L3Out side
+vrf.bind(l3out="ext")  # inverse edge: the Rs lands on the L3Out side
 ```
 
 Contract verbs are the EPG shorthand: `epg.provide("web-api")` /
@@ -155,7 +155,7 @@ upserts that touch nothing:
 
 ```python
 patch = tenant("prod").bd("backend").set(description="patched")
-patch.push(aci, mode="plan")   # exactly one field change reported
+patch.push(aci, mode="plan")  # exactly one field change reported
 patch.push(aci)
 ```
 

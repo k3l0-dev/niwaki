@@ -45,13 +45,13 @@ verbatim:
 from cobra.model.fv import Tenant, Ctx, BD, RsCtx, Ap, AEPg, RsBd
 from cobra.mit.request import ConfigRequest
 
-fvTenantMo = Tenant(uniMo, 'ExampleCorp')
-Ctx(fvTenantMo, 'private-net1')
-fvBDMo = BD(fvTenantMo, 'bridge-domain1')
-RsCtx(fvBDMo, tnFvCtxName='private-net1')
-fvApMo = Ap(fvTenantMo, 'WebApp')
-fvAEPgMo = AEPg(fvApMo, 'WebEPG')
-RsBd(fvAEPgMo, tnFvBDName='bridge-domain1')
+fvTenantMo = Tenant(uniMo, "ExampleCorp")
+Ctx(fvTenantMo, "private-net1")
+fvBDMo = BD(fvTenantMo, "bridge-domain1")
+RsCtx(fvBDMo, tnFvCtxName="private-net1")
+fvApMo = Ap(fvTenantMo, "WebApp")
+fvAEPgMo = AEPg(fvApMo, "WebEPG")
+RsBd(fvAEPgMo, tnFvBDName="bridge-domain1")
 
 configReq = ConfigRequest()
 configReq.addMo(fvTenantMo)

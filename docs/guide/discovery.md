@@ -32,8 +32,8 @@ doc = catalog.describe("fvBD")
 assert doc.label == "Bridge Domain"
 
 arp = next(prop for prop in doc.props if prop.wire == "arpFlood")
-assert arp.readable == "arp_flooding"   # the human field name
-assert arp.kind == "bool"               # how a wire value reads back
+assert arp.readable == "arp_flooding"  # the human field name
+assert arp.kind == "bool"  # how a wire value reads back
 ```
 
 It works for a class the SDK does not model, too — a learned endpoint:
@@ -41,7 +41,7 @@ It works for a class the SDK does not model, too — a learned endpoint:
 ```python
 endpoint = catalog.describe("fvCEp")
 assert endpoint.label == "Client End Point"
-assert endpoint.props                    # every readable property, described
+assert endpoint.props  # every readable property, described
 ```
 
 ## Find which class carries a property
@@ -50,7 +50,7 @@ The complement to `search` — a scan across every class's properties:
 
 ```python
 hits = catalog.find_prop("arpFlood")
-assert ("fvBD", "arpFlood") in hits      # (class, wire property)
+assert ("fvBD", "arpFlood") in hits  # (class, wire property)
 ```
 
 ## The concrete classes behind an abstract one
@@ -78,6 +78,35 @@ mints its fault code at runtime from an operator-configured
 `statsThresholdPolicy`, so it exists nowhere in the static class schema the
 catalogue is built from.
 
+## Which classes have a generated model
+
+`generated_classes()` enumerates the set behind "generated" everywhere on this
+page: every class the SDK ships a typed Pydantic model for, sorted — derived
+from the code generator's own index, so it cannot drift from the shipped
+models. Offline, like everything else here:
+
+```python
+classes = catalog.generated_classes()
+
+assert "fvBD" in classes  # configurable → typed model
+assert "topSystem" not in classes  # readable only → catalogue-served
+assert list(classes) == sorted(classes)  # deterministic, sorted
+
+catalog.describe(classes[0])  # every name resolves, no KeyError
+```
+
+The per-class form is `ClassMeta.has_model` — handy when you already hold a
+class name and want to know which world serves it:
+
+```python
+assert catalog.class_meta("fvBD").has_model
+assert not catalog.class_meta("topSystem").has_model
+```
+
+Feeding it a systematic sweep is the intended use — for example, auditing what
+a fabric actually uses, one `count()` per configurable class, with this as the
+candidate list.
+
 ## Readable names on any result
 
 An object read from the APIC exposes **readable field names** even when the SDK
@@ -90,8 +119,8 @@ from niwaki.models.base import ManagedObject
 # what a query over an operational class yields, one object
 top = ManagedObject.from_apic({"topSystem": {"attributes": {"address": "10.0.0.1"}}})
 
-assert top.infrastructure_ip == "10.0.0.1"   # readable name, from the catalogue
-assert top["address"] == "10.0.0.1"          # the raw wire attribute, always there
+assert top.infrastructure_ip == "10.0.0.1"  # readable name, from the catalogue
+assert top["address"] == "10.0.0.1"  # the raw wire attribute, always there
 ```
 
 A generated class keeps answering from its typed model; the catalogue only steps

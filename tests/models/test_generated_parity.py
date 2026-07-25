@@ -73,9 +73,11 @@ def test_every_generated_class_resolves_in_the_shipped_catalogue() -> None:
     unresolvable = []
     for name in sorted(_PKG_MAP):
         try:
-            catalog.class_meta(name)
+            meta = catalog.class_meta(name)
         except KeyError:
             unresolvable.append(name)
+        else:
+            assert meta.has_model, f"{name} is generated but has_model is False"
     assert not unresolvable, (
         f"{len(unresolvable)} generated class(es) missing from the shipped "
         f"catalogue: {unresolvable[:12]}. "

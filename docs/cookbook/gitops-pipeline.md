@@ -38,7 +38,7 @@ from niwaki import Niwaki
 
 
 def apply(config, *, plan_only: bool) -> bool:
-    with Niwaki() as aci:                     # APIC_* environment variables
+    with Niwaki() as aci:  # APIC_* environment variables
         plan = config.push(aci, mode="plan")
         for dn in plan.creates:
             print(f"+ {dn}")
@@ -57,8 +57,8 @@ os.environ["APIC_HOST"] = "https://apic.example.com"
 os.environ["APIC_USERNAME"] = "admin"
 os.environ["APIC_PASSWORD"] = "from-the-secret-store"
 
-changed = apply(build(), plan_only=True)     # the merge-request job
-assert changed is True                        # empty fabric: the tenant is new
+changed = apply(build(), plan_only=True)  # the merge-request job
+assert changed is True  # empty fabric: the tenant is new
 ```
 
 The `+` / `~` lines are the merge-request comment: reviewers approve DNs and
@@ -70,8 +70,8 @@ The main-branch job drops `plan_only`.  Run it twice and watch idempotence: the
 first apply writes, the second is a no-op because the design is converged:
 
 ```python
-apply(build(), plan_only=False)               # main-branch job: writes
-assert apply(build(), plan_only=False) is False   # re-run converges to a no-op
+apply(build(), plan_only=False)  # main-branch job: writes
+assert apply(build(), plan_only=False) is False  # re-run converges to a no-op
 ```
 
 ## The pipeline

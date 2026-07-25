@@ -32,12 +32,12 @@ config.vrf("main")
 config.bd("web", unicast_routing=True).bind(vrf="main").subnet("10.0.1.1/24")
 
 with Niwaki("https://apic.example.com", "admin", "secret") as aci:
-    plan = config.push(aci, mode="plan")     # dry run — nothing written
-    print(plan.creates)                      # every DN that would be created
+    plan = config.push(aci, mode="plan")  # dry run — nothing written
+    print(plan.creates)  # every DN that would be created
 
-    config.push(aci)                         # one atomic POST
+    config.push(aci)  # one atomic POST
 
-    bd = aci.tenant("prod").bd("web").read() # observe it back
+    bd = aci.tenant("prod").bd("web").read()  # observe it back
     assert bd.unicast_routing is True
 ```
 
@@ -62,7 +62,7 @@ from niwaki.design import infra
 flip = infra().cdp_policy("cdp-on", admin_state="disabled")
 
 with Niwaki("https://apic.example.com", "admin", "secret") as aci:
-    flip.push(aci, mode="plan")   # shows exactly one field changing
+    flip.push(aci, mode="plan")  # shows exactly one field changing
     flip.push(aci)
 ```
 

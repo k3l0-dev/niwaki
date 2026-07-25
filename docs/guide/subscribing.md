@@ -15,9 +15,9 @@ Any query that targets a single class can be subscribed instead of fetched:
 from niwaki.models.fv.fvBD import fvBD
 
 with aci.query(fvBD).under("uni/tn-prod").subscribe() as sub:
-    for bd in sub.initial:            # the synchronous snapshot, first
+    for bd in sub.initial:  # the synchronous snapshot, first
         print("already there:", bd.dn)
-    for event in sub:                 # then the live stream, forever
+    for event in sub:  # then the live stream, forever
         print(event.kind, event.dn)
 ```
 
@@ -53,11 +53,11 @@ reports exactly what *this* event carried — not what a full read would:
 ```python
 for event in sub:
     if event.kind is EventKind.DELETED:
-        print("gone:", event.dn)               # event.mo carries no fields
+        print("gone:", event.dn)  # event.mo carries no fields
     elif event.kind is EventKind.MODIFIED:
-        print("changed:", event.mo.model_fields_set)   # only the changed props
+        print("changed:", event.mo.model_fields_set)  # only the changed props
     elif event.kind is EventKind.CREATED:
-        print("new:", event.mo.model_fields_set)       # the full object
+        print("new:", event.mo.model_fields_set)  # the full object
 ```
 
 Two kinds carry no object at all — they describe the *subscription*, not the
@@ -104,11 +104,11 @@ check without tracking each `Subscription` object itself:
 <!--- skip: next --->
 ```python
 for info in aci.subscriptions.list():
-    if info.is_stale:                 # at least one recent refresh failure
+    if info.is_stale:  # at least one recent refresh failure
         print("struggling:", info.path, info.consecutive_refresh_failures)
 
-aci.subscriptions.refresh_all()       # force a refresh sweep now, diagnostically
-aci.subscriptions.close_all()         # stop every subscription — the socket stays open
+aci.subscriptions.refresh_all()  # force a refresh sweep now, diagnostically
+aci.subscriptions.close_all()  # stop every subscription — the socket stays open
 ```
 
 `close_all()` is deliberately not the same as closing the client: the shared

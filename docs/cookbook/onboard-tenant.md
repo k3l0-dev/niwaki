@@ -23,9 +23,9 @@ config = tenant("commerce", description="Retail commerce platform")
 config.vrf("prod")
 
 segments = {
-    "bd-web": "10.30.10.1/24",   # public-facing web tier
-    "bd-app": "10.30.20.1/24",   # application tier
-    "bd-db": "10.30.30.1/24",    # database tier
+    "bd-web": "10.30.10.1/24",  # public-facing web tier
+    "bd-app": "10.30.20.1/24",  # application tier
+    "bd-db": "10.30.30.1/24",  # database tier
 }
 for name, gateway in segments.items():
     config.bd(name, unicast_routing=True).bind(vrf="prod").subnet(gateway)

@@ -20,9 +20,9 @@ The `with` form closes the session for you; `connect()` is used here so the
 rest of the page can share one client — see {doc}`connection`.
 
 ```python
-report = config.push(aci)                  # strict (default)
+report = config.push(aci)  # strict (default)
 report = config.push(aci, mode="staged")
-plan   = config.push(aci, mode="plan")
+plan = config.push(aci, mode="plan")
 ```
 
 ## `strict` — one atomic POST
@@ -61,9 +61,9 @@ whole access-policy tree.  Returns a {class}`~niwaki.design.PlanResult`:
 
 ```python
 plan = config.push(aci, mode="plan")
-plan.creates      # DNs that do not exist yet
-plan.updates      # {dn: {field: (current, desired)}}
-plan.unchanged    # DNs already matching
+plan.creates  # DNs that do not exist yet
+plan.updates  # {dn: {field: (current, desired)}}
+plan.unchanged  # DNs already matching
 plan.has_changes  # False → the design is fully converged
 ```
 
@@ -87,6 +87,7 @@ builder's `build()`): validation and reference resolution run, no transport.
 
 ```python
 import json
+
 print(json.dumps(config.to_payload(), indent=2))
 ```
 

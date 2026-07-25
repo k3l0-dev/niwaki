@@ -54,7 +54,9 @@ inf.bgp_peer_prefix_policy("sr-mpls-limit", max_number_of_prefixes=20000, max_pr
 
 # MPLS EXP marking is supported only under tenant infra, so it lives here and
 # the node profile binds it by name below.
-qos = inf.mpls_custom_qos_policy("mpls-exp-marking", description="MPLS EXP marking for the handoff.")
+qos = inf.mpls_custom_qos_policy(
+    "mpls-exp-marking", description="MPLS EXP marking for the handoff."
+)
 qos.mpls_ingress_rule("0", "3", prio="level3", target="CS3", target_cos="3", description="EXP in.")
 qos.mpls_egress_rule("0", "31", target_cos="5", target_exp="5", description="DSCP out.")
 
@@ -69,7 +71,9 @@ inf.l3_dom("sr-mpls-idom").bind(vlan_pool="sr-mpls-underlay")
 inf.vrf("overlay-1")
 
 # The infra SR-MPLS L3Out, its MPLS-external config, and the provider label
-out = inf.l3out("sr-mpls-infra", mpls_enabled=True).bind(vrf="overlay-1").bind(domain="sr-mpls-idom")
+out = (
+    inf.l3out("sr-mpls-infra", mpls_enabled=True).bind(vrf="overlay-1").bind(domain="sr-mpls-idom")
+)
 out.mpls_external(description="MPLS handoff config.").bind(mpls_global_configuration="default")
 out.provider_label("sr-backbone", tag="green", description="SR-MPLS provider label.")
 ```
@@ -103,7 +107,9 @@ for idx, (name, node_id) in enumerate(border_leaves, start=1):
     )
     peer.autonomous_system_profile(autonomous_system_number=65000, description="Remote AS.")
     peer.local_autonomous_system_profile(local_asn=65100, asn_propagation="none")
-    peer.data_plane(mdp_data_plane_address=f"10.11.3.{idx}", description="MPLS data-plane loopback.")
+    peer.data_plane(
+        mdp_data_plane_address=f"10.11.3.{idx}", description="MPLS data-plane loopback."
+    )
     peer.bind(bgp_peer_prefix_policy="sr-mpls-limit")
 
     # The MPLS-enabled handoff interface
@@ -114,7 +120,9 @@ for idx, (name, node_id) in enumerate(border_leaves, start=1):
         addr=f"10.11.4.{idx}/30",
         encap="vlan-2690",
     )
-    ifp.mpls_interface(description="MPLS-enabled interface.").bind(mpls_interface_policy="mpls-backbone")
+    ifp.mpls_interface(description="MPLS-enabled interface.").bind(
+        mpls_interface_policy="mpls-backbone"
+    )
 ```
 
 Note every bind sits on the object that owns it: the node profile binds its
@@ -139,7 +147,9 @@ edge = t.l3out("sr-mpls-edge", mpls_enabled=True).bind(vrf="prod").bind(domain="
 
 for idx, (name, node_id) in enumerate(border_leaves, start=1):
     np = edge.node_profile(f"np-{name}")
-    np.node_attachment(f"topology/pod-1/node-{node_id}", rtr_id=f"10.12.0.{idx}", rtr_id_loop_back=False)
+    np.node_attachment(
+        f"topology/pod-1/node-{node_id}", rtr_id=f"10.12.0.{idx}", rtr_id_loop_back=False
+    )
 
 # The consumer label stitches onto the provider label of the same name.
 edge.consumer_label(
@@ -156,7 +166,7 @@ anywhere:
 
 ```python
 payload = inf.to_payload()
-assert payload["polUni"]["children"]     # the whole infra handoff, resolved
+assert payload["polUni"]["children"]  # the whole infra handoff, resolved
 ```
 
 Then plan and push each side.  The underlay first, so the provider label exists

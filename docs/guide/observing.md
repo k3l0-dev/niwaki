@@ -27,10 +27,10 @@ Every node is a DN-scoped handle.  Navigate with the same vocabulary the GUI
 tree uses; the DN is computed for you:
 
 ```python
-bd = aci.tenant("prod").bd("web")           # NiwakiNode at uni/tn-prod/BD-web
+bd = aci.tenant("prod").bd("web")  # NiwakiNode at uni/tn-prod/BD-web
 assert bd.dn == "uni/tn-prod/BD-web"
-mo = bd.read()                              # typed fvBD instance
-assert mo.unicast_routing is True           # human-readable field names
+mo = bd.read()  # typed fvBD instance
+assert mo.unicast_routing is True  # human-readable field names
 ```
 
 `aci.node(dn, cls)` reaches any explicit DN; `.mo(Class, **naming)` descends
@@ -47,14 +47,13 @@ from niwaki.models.fv.fvBD import fvBD
 # Filters, scoping, counting — filters address the APIC attribute
 # names (the wire side: arpFlood, not arp_flooding)
 bds = aci.query(fvBD).where(arpFlood=True).under("uni/tn-prod").fetch()
-n   = aci.tenant("prod").query(fvBD).count()
+n = aci.tenant("prod").query(fvBD).count()
 
 # Filter expressions when kwargs are not enough — qualify the
 # property (or build with cls_name="fvAEPg")
 from niwaki.query import gt, or_, eq
-epgs = aci.query("fvAEPg").where(
-    or_(eq("fvAEPg.name", "web"), gt("fvAEPg.pcTag", "10000"))
-).fetch()
+
+epgs = aci.query("fvAEPg").where(or_(eq("fvAEPg.name", "web"), gt("fvAEPg.pcTag", "10000"))).fetch()
 
 # Enrichment — health and faults embedded on every returned object
 # (chain .only_faulted() to keep only the objects that carry a fault)
@@ -131,9 +130,9 @@ removes what it does not declare, so removals are always an explicit act:
 
 ```python
 retired = tenant("prod-old")
-retired.push(aci)                    # a tenant to retire
+retired.push(aci)  # a tenant to retire
 
-aci.tenant("prod-old").delete()      # removes the object AND its subtree
+aci.tenant("prod-old").delete()  # removes the object AND its subtree
 ```
 
 Deleting a DN removes the whole subtree beneath it, exactly as in the GUI.
@@ -147,7 +146,7 @@ import pytest
 from niwaki.exceptions import NotFoundError
 
 with pytest.raises(NotFoundError):
-    aci.tenant("prod-old").read()    # gone, subtree included
+    aci.tenant("prod-old").read()  # gone, subtree included
 ```
 
 Day-2 removal of a single child (a subnet, a static path) is the same

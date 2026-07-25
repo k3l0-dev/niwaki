@@ -15,8 +15,8 @@ Everything below is importable straight from the package root:
 | `tenant`, `infra`, `fabric`, `controller`, `design` | the design roots — {doc}`design` |
 
 Sub-packages: `niwaki.design` (write), `niwaki.query` (read),
-`niwaki.models` (typed ACI classes), `niwaki.exceptions`,
-`niwaki.transport`, `niwaki.utils`.
+`niwaki.catalog` (offline discovery), `niwaki.models` (typed ACI classes),
+`niwaki.exceptions`, `niwaki.transport`, `niwaki.utils`.
 
 ```{eval-rst}
 .. autodata:: niwaki.__version__

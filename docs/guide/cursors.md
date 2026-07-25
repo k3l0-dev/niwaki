@@ -21,8 +21,8 @@ follow from that, and they explain everything else on this page:
 ```python
 from niwaki.design import tenant
 
-tn = tenant("prod")          # a cursor at the tenant
-bd = tn.bd("web")            # a cursor at the new BD — a different position
+tn = tenant("prod")  # a cursor at the tenant
+bd = tn.bd("web")  # a cursor at the new BD — a different position
 assert bd.dn == "uni/tn-prod/BD-web"
 ```
 
@@ -42,7 +42,7 @@ argument(s) and, optionally, its attributes:
 
 ```python
 tn = tenant("prod")
-tn.bd("web", arp_flooding=True, unicast_routing=False)   # declare + configure
+tn.bd("web", arp_flooding=True, unicast_routing=False)  # declare + configure
 ```
 
 Makers are the backbone; every other build operation configures or connects
@@ -66,7 +66,7 @@ There is **one attribute schema**, reachable at **two moments**:
 tn = tenant("prod")
 bd = tn.bd("web")
 bd.set(arp_flooding=True)
-bd.set(unicast_routing=False)   # merges — both attributes are now set
+bd.set(unicast_routing=False)  # merges — both attributes are now set
 ```
 
 Re-calling the maker to add an attribute is a mistake the SDK catches for you,
@@ -78,7 +78,7 @@ from niwaki.exceptions import DuplicateDeclarationError
 tn = tenant("prod")
 tn.bd("web", arp_flooding=True)
 try:
-    tn.bd("web", unicast_routing=False)   # NOT how you add an attribute
+    tn.bd("web", unicast_routing=False)  # NOT how you add an attribute
 except DuplicateDeclarationError as exc:
     assert "already declared" in str(exc)  # the message points at set()
 ```
@@ -109,8 +109,8 @@ with the list of what *is* declared.
 
 ```python
 tn = tenant("prod")
-tn.bd("web").bind(vrf="main")   # the fvRsCtx relation, resolved to the VRF below
-tn.vrf("main")                  # declared after — closed world, not ordering
+tn.bd("web").bind(vrf="main")  # the fvRsCtx relation, resolved to the VRF below
+tn.vrf("main")  # declared after — closed world, not ordering
 ```
 
 You never write an `fvRsCtx` or a `tnFvCtxName` by hand — that is the schema's
@@ -126,8 +126,8 @@ relation class in the vocabulary, so `provide` and `consume` stay distinct:
 
 ```python
 epg = tenant("prod").app("shop").epg("web")
-epg.provide("web-api")     # fvRsProv
-epg.consume("db")          # fvRsCons
+epg.provide("web-api")  # fvRsProv
+epg.consume("db")  # fvRsCons
 ```
 
 A bind lets the schema choose the relation class; a verb is used exactly when
@@ -160,7 +160,7 @@ DN-flavored aliases qualify; a name-flavored one is refused with an explanation.
 from niwaki.design import design
 
 cfg = design()
-dom = cfg.phys_dom("prod-phys")          # the VLAN pool is not declared here
+dom = cfg.phys_dom("prod-phys")  # the VLAN pool is not declared here
 dom.bind_dn(vlan_pool="uni/infra/vlanns-[shared]-static")
 ```
 
@@ -175,7 +175,7 @@ schema, so you never leave the safety of the models:
 from niwaki.models.mgmt.mgmtMgmtP import mgmtMgmtP  # any generated class
 
 tn = tenant("mgmt")
-tn.mo(mgmtMgmtP, name="default")   # a curated maker may not exist; the class does
+tn.mo(mgmtMgmtP, name="default")  # a curated maker may not exist; the class does
 ```
 
 If you find yourself reaching for `mo()` often, that is the signal to
@@ -198,7 +198,7 @@ aci = Niwaki.connect("https://apic.example.com", "admin", "secret")
 config = tenant("prod")
 config.bd("web").bind(vrf="main")
 config.vrf("main")
-report = config.push(aci, mode="plan")   # what would change, no write
+report = config.push(aci, mode="plan")  # what would change, no write
 ```
 
 ### `to_payload()` — see the compiled wire payload

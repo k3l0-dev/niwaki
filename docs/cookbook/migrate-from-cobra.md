@@ -35,15 +35,15 @@ from cobra.mit.session import LoginSession
 from cobra.mit.request import ConfigRequest
 from cobra.model.fv import Tenant, Ctx, BD, RsCtx
 
-ls = LoginSession('https://apic.example.com', 'admin', 'secret')
+ls = LoginSession("https://apic.example.com", "admin", "secret")
 moDir = MoDirectory(ls)
 moDir.login()
 
-uniMo = moDir.lookupByDn('uni')
-tenantMo = Tenant(uniMo, 'commerce')
-Ctx(tenantMo, 'prod')
-bdMo = BD(tenantMo, 'bd-web')
-RsCtx(bdMo, tnFvCtxName='prod')
+uniMo = moDir.lookupByDn("uni")
+tenantMo = Tenant(uniMo, "commerce")
+Ctx(tenantMo, "prod")
+bdMo = BD(tenantMo, "bd-web")
+RsCtx(bdMo, tnFvCtxName="prod")
 
 req = ConfigRequest()
 req.addMo(tenantMo)
@@ -76,9 +76,7 @@ relation.
 
 <!--- skip: next --->
 ```python
-tenants = moDir.lookupByClass(
-    "fvTenant", propFilter='and(eq(fvTenant.name, "commerce"))'
-)
+tenants = moDir.lookupByClass("fvTenant", propFilter='and(eq(fvTenant.name, "commerce"))')
 ```
 
 ```python
@@ -108,7 +106,7 @@ back.  The niwaki port turns that inside out — the check comes *first*:
 change = tenant("commerce").bd("bd-web").set(arp_flooding=True)
 
 plan = change.push(aci, mode="plan")
-print(plan.updates or plan.creates)     # review artifact — nothing written yet
+print(plan.updates or plan.creates)  # review artifact — nothing written yet
 
 change.push(aci)
 assert change.push(aci, mode="plan").has_changes is False

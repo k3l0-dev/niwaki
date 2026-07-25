@@ -5,6 +5,32 @@ All notable changes to this project are documented here.  The format follows
 [semver](https://semver.org/).  From 1.0.0 the configuration API is stable:
 breaking changes ship in a new major version with a migration note.
 
+## [1.4.0] — 2026-07-25
+
+### Added
+
+- **`catalog.generated_classes()`** — the wire names of every class the SDK
+  generates a typed model for, as a sorted tuple. Offline, deterministic,
+  and derived from the code generator's own shipped index, so it cannot
+  drift from the model files. Every returned name resolves through
+  `catalog.describe()`/`class_meta()` without `KeyError`, and every returned
+  class is concrete and non-stat — both pinned by tests. The intended use
+  is systematic sweeps: auditing what a fabric actually uses, one `count()`
+  per configurable class, with this as the candidate list.
+- **`ClassMeta.has_model`** — the per-class form: whether the SDK ships a
+  generated model for the class (results then deserialize through the typed
+  model rather than the catalogue). Recomputed from the same index, never
+  stored in the `.db`.
+- **Provenance statement in `NOTICE`.** The ACI schema-derived metadata the
+  package ships — class and property names, types, formats, labels, and the
+  descriptive text in the read catalogue, model docstrings, and reference
+  documentation — derives from the Cisco APIC Management Information Model.
+  `NOTICE` now states this explicitly: that content remains the property of
+  Cisco Systems, Inc., is reproduced solely for interoperability with and
+  documentation of the Cisco ACI API, and is not covered by this project's
+  Apache-2.0 license. (`NOTICE` ships in the wheel via the project's
+  `license-files`.)
+
 ## [1.3.2] — 2026-07-25
 
 ### Fixed

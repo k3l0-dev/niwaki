@@ -15,6 +15,7 @@
 .. autofunction:: niwaki.catalog.concrete_subclasses
 .. autofunction:: niwaki.catalog.class_meta
 .. autofunction:: niwaki.catalog.fault_name
+.. autofunction:: niwaki.catalog.generated_classes
 ```
 
 ## Result types

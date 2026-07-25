@@ -37,6 +37,22 @@ from niwaki._codegen.basetypes import kind_value_or_none
 
 DEFAULT_PATH = Path(__file__).resolve().parent / "catalog.db"
 
+_generated_set_cache: frozenset[str] | None = None
+
+
+def _generated_set() -> frozenset[str]:
+    """The generated-model class names, from the codegen's own shipped index.
+
+    Lazy and memoised: the package index is a plain dict (no model modules
+    load), and staying off the import path preserves the cold-start budget.
+    """
+    global _generated_set_cache
+    if _generated_set_cache is None:
+        from niwaki.models._generated import _PKG_MAP
+
+        _generated_set_cache = frozenset(_PKG_MAP)
+    return _generated_set_cache
+
 
 @dataclass(frozen=True, slots=True)
 class ClassMeta:
@@ -56,6 +72,11 @@ class ClassMeta:
                           pushing — so this is what gates
                           :class:`~niwaki.exceptions.StatsClassNotSubscribableError`,
                           not ``isObservable`` (see :attr:`ClassDoc.is_observable`).
+        has_model:        The SDK ships a generated Pydantic model for this
+                          class — results deserialize through the typed model
+                          rather than this catalogue metadata. Recomputed from
+                          the code generator's own shipped index, never stored
+                          in the ``.db`` (the catalogue's derived-fields rule).
     """
 
     class_name: str
@@ -64,6 +85,7 @@ class ClassMeta:
     wire_to_kind: dict[str, str | None]
     naming: frozenset[str]
     is_stat: bool
+    has_model: bool = False
 
 
 @dataclass(frozen=True, slots=True)
@@ -220,6 +242,7 @@ class Catalog:
             wire_to_kind=wire_to_kind,
             naming=frozenset(naming),
             is_stat=bool(is_stat),
+            has_model=class_name in _generated_set(),
         )
 
     def _comment_text(self, pool_id: int | None) -> str:

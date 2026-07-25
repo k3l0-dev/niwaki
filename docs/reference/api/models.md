@@ -6,9 +6,9 @@ write logic.  Import them by package alias:
 ```python
 from niwaki.models.fv.fvBD import fvBD
 
-bd = fvBD(name="web", unicast_routing=True)   # validated at construction
-bd.rn                                          # "BD-web"
-bd.to_apic()                                   # wire payload, ACI attribute names
+bd = fvBD(name="web", unicast_routing=True)  # validated at construction
+bd.rn  # "BD-web"
+bd.to_apic()  # wire payload, ACI attribute names
 ```
 
 **Where the fields are documented.**  Every class reachable through the

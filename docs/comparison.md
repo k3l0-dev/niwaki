@@ -20,7 +20,7 @@ how-to.
 from cobra.mit.access import MoDirectory
 from cobra.mit.session import LoginSession
 
-ls = LoginSession('https://apic.example.com', 'admin', 'secret')
+ls = LoginSession("https://apic.example.com", "admin", "secret")
 moDir = MoDirectory(ls)
 moDir.login()
 # … your code …
@@ -45,12 +45,12 @@ the client.
 from cobra.model.fv import Tenant, Ctx, BD, RsCtx, Subnet
 from cobra.mit.request import ConfigRequest
 
-uniMo = moDir.lookupByDn('uni')
-tnMo = Tenant(uniMo, 'acme')
-Ctx(tnMo, 'prod')
-bdMo = BD(tnMo, 'web')
-Subnet(bdMo, '10.30.1.1/24')
-RsCtx(bdMo, tnFvCtxName='prod')
+uniMo = moDir.lookupByDn("uni")
+tnMo = Tenant(uniMo, "acme")
+Ctx(tnMo, "prod")
+bdMo = BD(tnMo, "web")
+Subnet(bdMo, "10.30.1.1/24")
+RsCtx(bdMo, tnFvCtxName="prod")
 
 req = ConfigRequest()
 req.addMo(tnMo)
@@ -76,15 +76,15 @@ checked against the design before anything is sent.
 from cobra.model.fv import Ap, AEPg, RsBd, RsProv, RsCons
 from cobra.model.vz import Filter, Entry, BrCP, Subj, RsSubjFiltAtt
 
-apMo = Ap(tnMo, 'shop')
-webMo = AEPg(apMo, 'web')
-RsBd(webMo, tnFvBDName='web')
-RsProv(webMo, tnVzBrCPName='web-api')
-filterMo = Filter(tnMo, 'http')
-Entry(filterMo, 'e1', etherT='ip', prot='tcp', dFromPort='8080', dToPort='8080')
-brcpMo = BrCP(tnMo, 'web-api')
-subjMo = Subj(brcpMo, 's1')
-RsSubjFiltAtt(subjMo, tnVzFilterName='http')
+apMo = Ap(tnMo, "shop")
+webMo = AEPg(apMo, "web")
+RsBd(webMo, tnFvBDName="web")
+RsProv(webMo, tnVzBrCPName="web-api")
+filterMo = Filter(tnMo, "http")
+Entry(filterMo, "e1", etherT="ip", prot="tcp", dFromPort="8080", dToPort="8080")
+brcpMo = BrCP(tnMo, "web-api")
+subjMo = Subj(brcpMo, "s1")
+RsSubjFiltAtt(subjMo, tnVzFilterName="http")
 ```
 
 ```python
@@ -102,9 +102,7 @@ and a verb; `tcp=8080` compiles to `etherT/prot/dFromPort/dToPort`.
 
 <!--- skip: next --->
 ```python
-bds = moDir.lookupByClass(
-    "fvBD", propFilter='and(eq(fvBD.arpFlood, "no"))'
-)
+bds = moDir.lookupByClass("fvBD", propFilter='and(eq(fvBD.arpFlood, "no"))')
 ```
 
 ```python
@@ -121,9 +119,9 @@ run out ({doc}`guide/observing`).
 ```python
 from cobra.mit.request import DnQuery
 
-dq = DnQuery('uni/tn-acme')
-dq.queryTarget = 'subtree'
-dq.classFilter = 'fvBD'
+dq = DnQuery("uni/tn-acme")
+dq.queryTarget = "subtree"
+dq.classFilter = "fvBD"
 bds = moDir.query(dq)
 ```
 
@@ -138,7 +136,7 @@ assert [bd.name for bd in bds] == ["web"]
 ```python
 from cobra.mit.request import ClassQuery
 
-cq = ClassQuery('fvCEp')
+cq = ClassQuery("fvCEp")
 cq.pageSize = 1000
 cq.page = 0
 endpoints = []
@@ -152,7 +150,7 @@ while True:
 
 ```python
 for endpoint in aci.query("fvCEp").stream():
-    ...                        # pages fetched transparently as you iterate
+    ...  # pages fetched transparently as you iterate
 ```
 
 ## 7 — Dry run and failure modes
@@ -164,7 +162,7 @@ read the APIC's answer:
 ```python
 try:
     moDir.commit(req)
-except Exception as ex:        # error arrives from the APIC, after the POST
+except Exception as ex:  # error arrives from the APIC, after the POST
     print(ex)
 ```
 
@@ -176,15 +174,15 @@ from niwaki.exceptions import DesignError
 
 probe = tenant("acme")
 probe.vrf("prod")
-probe.bd("web").bind(vrf="prdo")            # typo
+probe.bd("web").bind(vrf="prdo")  # typo
 
 try:
-    probe.to_payload()                      # fails offline, before any request
+    probe.to_payload()  # fails offline, before any request
 except DesignError as exc:
-    print(exc)                              # …Did you mean 'prod'?
+    print(exc)  # …Did you mean 'prod'?
 
 # config: the task-2 design, already on the fabric
-plan = config.push(aci, mode="plan")        # and the dry run is first-class
+plan = config.push(aci, mode="plan")  # and the dry run is first-class
 assert plan.has_changes is False
 ```
 
