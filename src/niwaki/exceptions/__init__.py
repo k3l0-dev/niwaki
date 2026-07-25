@@ -48,6 +48,7 @@ Hierarchy::
     │   └── ServerError
     ├── DeserializationError
     ├── NoResultError               (query .one() matched nothing)
+    ├── UnknownClassError           (catalogue lookup on an unknown class; also KeyError)
     ├── MultipleResultsError        (query .one() matched several)
     ├── DesignError
     │   ├── UnknownMakerError          (also an AttributeError)
@@ -86,7 +87,7 @@ from niwaki.exceptions._design import (
     UnresolvedReferenceError,
 )
 from niwaki.exceptions._models import DeserializationError
-from niwaki.exceptions._query import MultipleResultsError, NoResultError
+from niwaki.exceptions._query import MultipleResultsError, NoResultError, UnknownClassError
 from niwaki.exceptions._subscription import (
     StatsClassNotSubscribableError,
     SubscribeRejectedError,
@@ -128,6 +129,7 @@ __all__ = [
     "TokenRefreshError",
     "TransportError",
     "UnauthorizedError",
+    "UnknownClassError",
     "UnknownMakerError",
     "UnresolvedReferenceError",
 ]

@@ -137,6 +137,12 @@ class TestNiwakiNodeGetattr:
         with pytest.raises(AttributeError, match="no child accessor"):
             _ = mock_niwaki.root.tenant("prod").nonexistent_thing  # type: ignore[attr-defined]
 
+    def test_write_verb_points_to_the_design_dsl(self, mock_niwaki: Niwaki) -> None:
+        """``.create()`` — the first thing a cobra/ORM user tries — must steer
+        to the design DSL, not deeper into the observation surface."""
+        with pytest.raises(AttributeError, match="design DSL"):
+            _ = mock_niwaki.root.tenant("prod").create  # type: ignore[attr-defined]
+
     def test_dunder_raises_attribute_error(self, mock_niwaki: Niwaki) -> None:
         with pytest.raises(AttributeError):
             _ = mock_niwaki.root.__nonexistent__  # type: ignore[attr-defined]

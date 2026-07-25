@@ -45,6 +45,22 @@ Two places still speak wire names, because the APIC does: query filters
 (`where(arpFlood=True)` — the filter string goes to the APIC verbatim) and
 raw payloads you inspect with `to_payload()`.
 
+Serialisation is **surgical** on read-back objects too: an object returned
+by a query re-serialises only its naming props plus whatever you explicitly
+assigned since — never the attributes it absorbed from the read. That holds
+whether the class has a generated model or is served by the read catalogue
+(a string query):
+
+```python
+from niwaki.models.base import ManagedObject
+
+top = ManagedObject.from_apic({"fvBD": {"attributes": {"name": "web", "arpFlood": "yes"}}})
+top.arp_flooding = False  # explicit assignment — readable name
+
+assert top.to_apic() == {"fvBD": {"attributes": {"name": "web", "arpFlood": "false"}}}
+assert top.arp_flooding is False  # the assigned value, not the stale read
+```
+
 ## Enums
 
 Constrained attributes are real `StrEnum`s — one module per enum, same

@@ -376,6 +376,14 @@ class ManagedObject(BaseModel):
         wire_class = private.get("_wire_class", "")
         if not wire_class:
             return _MISS
+        # An explicitly-assigned value wins over what the APIC returned:
+        # ``mo.arp_flooding = False`` stores under the readable name in the
+        # extras — without this check, the read below would keep serving the
+        # stale wire value (``arpFlood: "yes"``) through the catalogue mapping.
+        if name in self.model_fields_set:
+            extra_now = object.__getattribute__(self, "__pydantic_extra__") or {}
+            if name in extra_now:
+                return extra_now[name]
         # Function-local import: the catalogue subsystem stays off the import path
         # of ``niwaki`` until the first readable access on a non-generated object.
         from niwaki.query._catalog import catalog
@@ -421,35 +429,77 @@ class ManagedObject(BaseModel):
             bd.to_apic()
             # → {"fvBD": {"attributes": {"name": "web", "unicastRoute": "true"}}}
         """
-        # Only send defined model fields (not APIC-originated extra fields)
-        model_field_names = set(self.__class__.model_fields.keys()) - {"children"}
-        fields_to_send = set(self._naming_props) | (self.model_fields_set & model_field_names)
+        # A catalogue-served instance (read back through a string query, no
+        # generated model) serialises through the catalogue under the same
+        # surgical contract: the wire class it was read as, its naming props,
+        # and any field explicitly assigned since — never the absorbed extras.
+        if not self._aci_class and self._wire_class:
+            envelope_class = self._wire_class
+            attrs = self._catalogue_serialize()
+        else:
+            envelope_class = self._aci_class
+            # Only send defined model fields (not APIC-originated extra fields)
+            model_field_names = set(self.__class__.model_fields.keys()) - {"children"}
+            fields_to_send = set(self._naming_props) | (self.model_fields_set & model_field_names)
 
-        naming_set = set(self._naming_props)
-        attrs: dict[str, Any] = {}
-        for field_name in fields_to_send:
-            val = getattr(self, field_name, None)
-            if val is None:
-                continue
-            # Skip empty strings for optional fields — sending "" would silently
-            # overwrite existing APIC values with an empty string. Naming props
-            # are always included even when empty (the APIC requires them).
-            if val == "" and field_name not in naming_set:
-                continue
-            # A renamed field carries the ACI attribute name in its
-            # serialization_alias (arp_flooding → arpFlood, from_ → from).
-            field_info = self.__class__.model_fields.get(field_name)
-            aci_key = (
-                field_info.serialization_alias
-                if field_info and field_info.serialization_alias
-                else field_name
-            )
-            attrs[aci_key] = to_wire(val)
+            naming_set = set(self._naming_props)
+            attrs = {}
+            for field_name in fields_to_send:
+                val = getattr(self, field_name, None)
+                if val is None:
+                    continue
+                # Skip empty strings for optional fields — sending "" would silently
+                # overwrite existing APIC values with an empty string. Naming props
+                # are always included even when empty (the APIC requires them).
+                if val == "" and field_name not in naming_set:
+                    continue
+                # A renamed field carries the ACI attribute name in its
+                # serialization_alias (arp_flooding → arpFlood, from_ → from).
+                field_info = self.__class__.model_fields.get(field_name)
+                aci_key = (
+                    field_info.serialization_alias
+                    if field_info and field_info.serialization_alias
+                    else field_name
+                )
+                attrs[aci_key] = to_wire(val)
 
-        envelope: dict[str, Any] = {self._aci_class: {"attributes": attrs}}
+        envelope: dict[str, Any] = {envelope_class: {"attributes": attrs}}
         if self.children:
-            envelope[self._aci_class]["children"] = [child.to_apic() for child in self.children]
+            envelope[envelope_class]["children"] = [child.to_apic() for child in self.children]
         return envelope
+
+    def _catalogue_serialize(self) -> dict[str, Any]:
+        """Surgical attributes of a catalogue-served instance, via the catalogue.
+
+        Mirrors the typed path's contract exactly: the naming props (the APIC
+        requires them) plus every field explicitly assigned after the read
+        (``model_fields_set``), translated readable → wire and coerced through
+        :func:`~niwaki.models._wire.to_wire`. Extras absorbed from the read are
+        never included. Returns naming props only when the catalogue has no
+        metadata for the class (e.g. a class minted after this build).
+        """
+        extra = self.model_extra or {}
+        attrs: dict[str, Any] = {}
+        from niwaki.query._catalog import catalog
+
+        try:
+            meta = catalog().class_meta(self._wire_class)
+        except (KeyError, FileNotFoundError):
+            return attrs
+        for wire in meta.naming:
+            if wire in extra:
+                attrs[wire] = str(extra[wire])
+        for name in self.model_fields_set:
+            if name == "children" or name not in extra:
+                continue
+            if name in meta.readable_to_wire:
+                wire = meta.readable_to_wire[name]
+            elif name in meta.wire_to_readable:
+                wire = name  # assigned directly by its wire name
+            else:
+                continue  # not a property of this class — never guess
+            attrs[wire] = to_wire(extra[name])
+        return attrs
 
     # ── Surgical construction ─────────────────────────────────────────────────
 
@@ -565,6 +615,11 @@ class ManagedObject(BaseModel):
                 bd = session.get_mo("uni/tn-prod/BD-web", cls=fvBD)
                 bd.unicast_routing = False   # ← Pydantic adds to model_fields_set
                 bd.to_apic()                 # ← unicastRoute: "false" sent ✓
+
+            The same contract holds for a catalogue-served object (a string
+            query on a class with no generated model): the envelope carries
+            the wire class it was read as, and assigned readable names are
+            translated through the catalogue.
 
             For patch-style configuration, prefer a small design:
             ``tenant("prod").bd("web").set(unicast_routing=False).push(aci)``

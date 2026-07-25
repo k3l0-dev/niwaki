@@ -1,0 +1,45 @@
+{
+  "$schema": "https://context7.com/schema/context7.json",
+  "projectTitle": "Niwaki",
+  "description": "Typed, design-first Python SDK for Cisco ACI (APIC): declare tenants, BDs, EPGs and contracts as code, push atomically or as a dry-run plan, query and subscribe live, discover any class offline.",
+  "folders": [
+    "docs"
+  ],
+  "excludeFolders": [
+    "docs/reference/vocabulary",
+    "docs/wiki",
+    "docs/project",
+    "docs/_build",
+    "docs/_static"
+  ],
+  "excludeFiles": [
+    "CHANGELOG.md",
+    "LICENSE",
+    "NOTICE",
+    "CODE_OF_CONDUCT.md",
+    "SECURITY.md",
+    "CONTRIBUTING.md"
+  ],
+  "rules": [
+    "Niwaki is the typed, design-first layer over the Cisco APIC REST API — what an ORM is to SQL. Express configuration through the design DSL (`niwaki.design`); never hand-build `uni/...` JSON payloads or URL strings.",
+    "Do not configure through the `Niwaki`/`AsyncNiwaki` facade — it has no write methods (it navigates, reads, queries, deletes). All configuration writes go through the design DSL.",
+    "Canonical flow: `tenant(\"prod\").vrf(\"main\")` then `tenant(\"prod\").bd(\"web\", arp_flooding=True).bind(vrf=\"main\")` then `.push(aci)` — designs are built detached (no session, no I/O) and applied afterwards.",
+    "Push modes: `push(aci)` is one atomic POST (all-or-nothing, default); `push(aci, mode=\"plan\")` is the dry-run diff (`.creates/.updates/.unchanged`) — use it before any change.",
+    "When partial progress matters, `push(aci, mode=\"staged\")` applies ordered waves and raises `StagedPushError` naming the failing DNs.",
+    "A design never removes what it does not declare — there is no reconciliation or pruning. Deletion is an explicit act: `aci.tenant(\"prod\").bd(\"old\").delete()`.",
+    "Use readable field names in models and the DSL (`arp_flooding=True`); wire names are legal in exactly two places: query filters (`where(arpFlood=True)` goes to the APIC verbatim) and raw payloads/item access (`mo[\"arpFlood\"]`).",
+    "`bool(query)` raises by design — use `.exists()`. `.one()` demands exactly one match (`NoResultError`/`MultipleResultsError`); use `.first()` when zero matches is acceptable.",
+    "`with_faults()` embeds fault children in results; it does not filter. To restrict results to faulted objects, use `only_faulted()`.",
+    "Query any of the ~15,450 ACI classes by wire-name string — `aci.query(\"topSystem\")` — including operational classes with no generated model; results still expose readable field names via the read catalogue.",
+    "Class and property discovery is offline via `niwaki.catalog` (`search`, `describe`, `prop_meta`, `generated_classes`) — no APIC connection needed. `catalog.generated_classes()` enumerates the ~2,200 classes with typed models.",
+    "Subscribe to live changes with `aci.query(fvBD).under(dn).subscribe()`; iterate typed CREATED/MODIFIED/DELETED events. Stats classes can never push — `StatsClassNotSubscribableError` fires before any network call.",
+    "A subscription GAP event means the socket reconnected and events were lost forever (the APIC has no replay) — reconcile with a fresh read when it matters.",
+    "Imports like `from niwaki.models.fv.fvBD import fvBD` are valid at runtime (module alias); static analyzers may flag them — expected, do not fix. If tooling insists, the statically-resolvable path is `niwaki.models._generated.fv.fvBD`.",
+    "Do not emit APIs that do not exist: the facade has no `create/push/update/bind`, models have no `add_*`/`bind_*` builders, and filter operators `contains`/`isdigit` do not exist (use `wcard`).",
+    "Niwaki is not cobra or acitoolkit — never import `cobra.*` or mix its `ConfigRequest` pattern with niwaki code.",
+    "Catch typed exceptions: every SDK error subclasses `NiwakiError` (auth/transport/API/query/design/subscription branches). `catalog` lookups raise `UnknownClassError`, which is also a `KeyError`.",
+    "Everything has an async twin with the same names: `AsyncNiwaki`, `await query.fetch()`, `async for event in sub` — sync and async mirror each other.",
+    "Requires Python 3.12+; models track the APIC 6.0 schema release. Install: `pip install niwaki` (or `uv add niwaki`).",
+    "This context covers the niwaki SDK only; full documentation lives at https://k3l0-dev.github.io/niwaki/."
+  ]
+}

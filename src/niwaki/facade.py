@@ -78,6 +78,13 @@ class _JargonTarget(NamedTuple):
     is_rs_target: bool
 
 
+# The write vocabulary of every demolished facade-write era and of the ORMs/
+# cobra users arrive from — anything here gets pointed at the design DSL.
+_WRITE_VERBS = frozenset(
+    {"create", "add", "update", "modify", "push", "apply", "bind", "set", "commit", "save"}
+)
+
+
 def _navigate_jargon(parent_cls: type[ManagedObject], attr: str) -> _JargonTarget:
     """Resolve a vocabulary attribute to its child class and navigation metadata.
 
@@ -100,6 +107,16 @@ def _navigate_jargon(parent_cls: type[ManagedObject], attr: str) -> _JargonTarge
     children = CHILD_MAP.get(parent_key, {})
 
     if attr not in children:
+        # A write verb is the single most likely stumble on the three-trades
+        # split (the facade observes; configuration is the design DSL's job) —
+        # steer it there instead of deeper into the observation surface.
+        if attr in _WRITE_VERBS:
+            raise AttributeError(
+                f"{parent_cls.__name__!r} node has no {attr!r}: the facade is "
+                "read-only (navigate, read, query, delete). Configuration goes "
+                "through the design DSL — e.g. "
+                'tenant("prod").bd("web").push(aci); see niwaki.design.'
+            )
         raise AttributeError(
             f"{parent_cls.__name__!r} node has no child accessor {attr!r}. "
             "Use .mo(ChildClass, ...) for unlisted classes."

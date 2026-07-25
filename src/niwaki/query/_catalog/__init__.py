@@ -34,6 +34,7 @@ from pathlib import Path
 
 from niwaki._codegen._label_utils import resolve_py_names
 from niwaki._codegen.basetypes import kind_value_or_none
+from niwaki.exceptions._query import UnknownClassError
 
 DEFAULT_PATH = Path(__file__).resolve().parent / "catalog.db"
 
@@ -212,7 +213,7 @@ class Catalog:
         con = self._connection
         row = con.execute("SELECT id, is_stat FROM mo WHERE class_name=?", (class_name,)).fetchone()
         if row is None:
-            raise KeyError(class_name)
+            raise UnknownClassError(class_name)
         class_id, is_stat = row
         naming_bit = self._naming_bit()
 
@@ -286,7 +287,7 @@ class Catalog:
             (class_name,),
         ).fetchone()
         if row is None:
-            raise KeyError(class_name)
+            raise UnknownClassError(class_name)
         class_id, label_id, comment_id, is_abstract, is_observable = row
         meta = self.class_meta(class_name)
         props: list[PropDoc] = []
@@ -329,7 +330,7 @@ class Catalog:
         for prop in self.describe(class_name).props:
             if name in (prop.readable, prop.wire):
                 return prop
-        raise KeyError(f"{class_name}.{name}")
+        raise UnknownClassError(f"{class_name}.{name}")
 
     def concrete_subclasses(self, class_name: str) -> list[str]:
         """Every concrete descendant of a class, walked transitively (for fan-out)."""

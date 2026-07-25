@@ -35,7 +35,7 @@ YAML file** and **the APIC schemas**.
 
 Every word of the DSL is a line in
 [`src/niwaki/domain/vocabulary.yaml`](https://github.com/k3l0-dev/niwaki/blob/main/src/niwaki/domain/vocabulary.yaml)
-— {{ positions }} curated positions and counting.  Six sections, each with one job:
+— {{ positions }} curated positions and counting.  Seven sections, each with one job:
 
 ```yaml
 jargon:                        # ACI class → operator short name
@@ -62,6 +62,9 @@ sugar:                         # typed convenience parameters
 
 atomic:                        # subtrees the APIC validates as a unit
   - fabricExplicitGEp
+
+carrier:                       # path-only classes the APIC materialises itself
+  - vmmProvP
 ```
 
 The rule behind every line: **structure is literal, vocabulary is
@@ -122,9 +125,12 @@ uv run python -m niwaki._codegen.propose_vocabulary l3extOut --wave my-wave
 ```
 
 `propose_vocabulary` walks a schema subtree and emits a candidate YAML block
-shaped exactly like `vocabulary.yaml`: maker names taken from the facade's
-navigation names (the `jargon` table — the DSL and the facade always agree),
-bind aliases derived from
+shaped exactly like `vocabulary.yaml`: maker names *seeded* from the facade's
+auto-derived navigation names, then reviewed — curation deliberately shortens
+many of them to their Cisco-aligned form (`bd`, not `bridge_domain`), so the
+write-side DSL name and the read-side navigation label can differ for the
+same class; the {doc}`navigation reference <reference/vocabulary/navigation>`
+is the mapping between the two. Bind aliases derive from
 `REFERENCE_MAP`, contract verbs detected from the `Rs*Prov`/`Rs*Cons` pairs
 — and a `# REVIEW:` comment on every line that deserves a human eye
 (collision-resolved names, over-long labels, abstract targets).  The

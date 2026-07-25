@@ -23,6 +23,7 @@ NiwakiError
 ├── DeserializationError           "can I type this response?"
 ├── NoResultError                  .one() matched nothing
 ├── MultipleResultsError           .one() matched more than one
+├── UnknownClassError              catalogue lookup on an unknown class (also a KeyError)
 ├── DesignError                    "is my design coherent?"
 │   ├── UnknownMakerError              no such maker at this position
 │   ├── DuplicateDeclarationError      same object declared twice

@@ -5,6 +5,54 @@ All notable changes to this project are documented here.  The format follows
 [semver](https://semver.org/).  From 1.0.0 the configuration API is stable:
 breaking changes ship in a new major version with a migration note.
 
+## [1.4.1] — 2026-07-25
+
+### Fixed
+
+- **`from niwaki import aaa` raised `ImportError`.** The `aaa` design root
+  (AAA/authentication configuration) was exported by `niwaki.design` but
+  missing from the package's lazy top-level roots, while every sibling
+  (`tenant`, `infra`, `fabric`, `controller`) worked. Also added to the API
+  reference, which omitted it.
+- **`to_apic()` on catalogue-served objects produced an unusable envelope.**
+  An object read back through a string query on a class with no generated
+  model serialised as `{'': {'attributes': {}}}` — empty class, empty
+  attributes, no error — and a field assigned after the read (documented as
+  the read-modify-write idiom) was silently dropped, while reading it back
+  returned the stale pre-assignment value. Such objects now honor the same
+  surgical contract as typed models: the envelope carries the wire class
+  they were read as, naming props are resolved through the catalogue,
+  explicitly-assigned readable names serialise (translated and coerced),
+  and reads return what was assigned.
+- **Catalogue lookups now raise a typed error.** `catalog.describe()`,
+  `class_meta()` and `prop_meta()` raised a bare `KeyError`, contradicting
+  the error guide's promise that every SDK error is a `NiwakiError`. They
+  now raise `UnknownClassError` — also a `KeyError`, so existing handlers
+  keep working unchanged.
+- Two error messages now point at the right surface: a write verb on the
+  read-only facade (`.create(...)` — the first thing every ORM or cobra
+  user tries) steers to the design DSL instead of deeper into observation,
+  and an unavailable verb no longer claims verbs are contract-only.
+- Documentation accuracy: the DSL internals page no longer claims the DSL
+  and facade always agree on names (curation deliberately shortens
+  write-side names; the navigation reference is the mapping), and
+  `vocabulary.yaml`'s header again describes its actual sections and the
+  tables that validate it.
+
+### Internal
+
+- The wheel smoke test now probes the read catalogue (describe,
+  `generated_classes()`, fault index) and the subscription stack from the
+  installed wheel — the packaging near-miss that class of defect slipped
+  through once before.
+- The public export preflight now builds the documentation (nitpicky
+  Sphinx) before anything ships — a broken cross-reference fails the
+  export instead of debuting as a red X on the public repository.
+- `context7.json` (Context7) and `.devin/wiki.json` (DeepWiki) added:
+  curated metadata, folder scoping, usage rules and an explicit page plan
+  for the AI documentation indexes — fully curated by policy, mirroring
+  the DSL's own hand-curated vocabulary.
+
 ## [1.4.0] — 2026-07-25
 
 ### Added

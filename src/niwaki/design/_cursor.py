@@ -549,8 +549,9 @@ class Cursor:
                 )
                 return self
         raise DesignError(
-            f"{verb}() is not available at any level of {self._node.path()} "
-            "(contract verbs apply to EPGs)."
+            f"{verb}() is not available at any level of {self._node.path()}. "
+            "Verbs are curated per position — see the vocabulary reference "
+            "for where this one applies."
         )
 
     # ── Escape hatch ──────────────────────────────────────────────────────────

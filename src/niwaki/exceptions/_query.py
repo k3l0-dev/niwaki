@@ -31,3 +31,19 @@ class MultipleResultsError(NiwakiError):
     objects.  Narrow the query, or use :meth:`~niwaki.query.Query.first` /
     :meth:`~niwaki.query.Query.fetch` when several matches are expected.
     """
+
+
+class UnknownClassError(NiwakiError, KeyError):
+    """A class name the read catalogue does not know.
+
+    Raised by :func:`niwaki.catalog.describe`,
+    :func:`niwaki.catalog.class_meta` and :func:`niwaki.catalog.prop_meta`
+    when the wire class name (or property) does not exist in the shipped
+    catalogue — usually a typo, or a class minted by a newer APIC firmware
+    than the one this build tracks.
+
+    Also a :class:`KeyError`: callers that guarded these lookups with
+    ``except KeyError`` before this class existed keep working unchanged —
+    the same dual-inheritance precedent as
+    :class:`~niwaki.exceptions.UnknownMakerError`.
+    """

@@ -21,6 +21,8 @@ generated and documented in the {doc}`DSL reference <../vocabulary/index>`.
 .. autofunction:: niwaki.design.fabric
 
 .. autofunction:: niwaki.design.controller
+
+.. autofunction:: niwaki.design.aaa
 ```
 
 ## References that carry configuration

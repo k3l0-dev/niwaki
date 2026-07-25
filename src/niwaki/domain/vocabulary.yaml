@@ -1,24 +1,30 @@
 # Niwaki vocabulary — the single curated naming source for the SDK.
 #
 # `tests/design/test_core_yaml.py` validates every entry against CHILD_MAP /
-# BIND_MAP / _contains so the curation cannot drift from the generated schema.
+# REFERENCE_MAP / _contains so the curation cannot drift from the generated
+# schema.
 #
 # Sections:
-#   jargon: ACI class → short name.  Feeds CHILD_MAP (read navigation);
-#           classes not listed fall back to snake_case(label) automatically.
-#   makers: parent ACI class → {maker name → child ACI class}.  The curated
-#           design surface; the "polUni" table defines the design roots.
-#           Structure is literal: one maker per real APIC child class.
-#   binds:  cursor ACI class → {bind alias → target ACI class} (the Rs class
-#           is resolved at push time via BIND_MAP, direct then inverse).
-#   verbs:  cursor ACI class → {verb → {rs, target}}.  A verb names its Rs
-#           class upfront, which is what lets it reach a target automatic
-#           resolution cannot: two relations to the same class (provide vs
-#           consume, ingress vs egress policing).  The parameter is named
-#           after the target's jargon (provide(contract), ingress_dpp(dpp_policy)).
-#   sugar:  extra typed maker/set parameters handled by design._sugar.
-#   atomic: classes whose subtree must ship in one POST in staged mode
-#           (the APIC validates them as a unit).
+#   jargon:  ACI class → short name.  Feeds CHILD_MAP (read navigation);
+#            classes not listed fall back to snake_case(label) automatically.
+#   makers:  parent ACI class → {maker name → child ACI class}.  The curated
+#            design surface; the "polUni" table defines the design roots.
+#            Structure is literal: one maker per real APIC child class.
+#   binds:   cursor ACI class → {bind alias → target ACI class} (the Rs class
+#            and its flavor are resolved at declaration time via
+#            REFERENCE_MAP, abstract targets expanded via TARGET_SUBCLASSES).
+#   verbs:   cursor ACI class → {verb → {rs, target}}.  A verb names its Rs
+#            class upfront, which is what lets it reach a target automatic
+#            resolution cannot: two relations to the same class (provide vs
+#            consume, ingress vs egress policing).  The parameter is named
+#            after the target's jargon (provide(contract), ingress_dpp(dpp_policy)).
+#   sugar:   extra typed maker/set parameters handled by design._sugar.
+#   atomic:  classes whose subtree must ship in one POST in staged mode
+#            (the APIC validates them as a unit).
+#   carrier: non-creatable path-only classes the APIC refuses as isolated
+#            POSTs — the push emits no op for them (children post at their
+#            full DN and the APIC materialises the path); plan diffs their
+#            children.
 
 jargon:
   # ── Root (polUni / uni) ─────────────────────────────────────────────────────

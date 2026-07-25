@@ -12,7 +12,7 @@ Everything below is importable straight from the package root:
 | `Niwaki`, `AsyncNiwaki` | the clients — {doc}`client` |
 | `NiwakiNode`, `AsyncNiwakiNode` | DN-scoped handles — {doc}`client` |
 | `RetryConfig` | the retry policy — {doc}`transport` |
-| `tenant`, `infra`, `fabric`, `controller`, `design` | the design roots — {doc}`design` |
+| `tenant`, `infra`, `fabric`, `controller`, `aaa`, `design` | the design roots — {doc}`design` |
 
 Sub-packages: `niwaki.design` (write), `niwaki.query` (read),
 `niwaki.catalog` (offline discovery), `niwaki.models` (typed ACI classes),

@@ -280,7 +280,7 @@ class TestBindDeclaration:
             assert bind.target_name == "isolate"
 
     def test_provide_outside_epg_raises(self) -> None:
-        with pytest.raises(DesignError, match="contract verbs apply to EPGs"):
+        with pytest.raises(DesignError, match="not available at any level"):
             tenant("prod").bd("web").provide("http")
 
 

@@ -23,3 +23,23 @@ class TestLazyTenantExport:
 
         for name in niwaki.__all__:
             assert getattr(niwaki, name) is not None
+
+    def test_every_design_root_is_importable_from_niwaki(self) -> None:
+        """Every root factory niwaki.design exports resolves from niwaki too.
+
+        Regression: ``aaa`` was exported by ``niwaki.design`` but missing from
+        the top-level lazy roots — ``from niwaki import aaa`` raised
+        ImportError while every sibling root worked.
+        """
+        import niwaki
+        import niwaki.design as design_pkg
+
+        roots = {n for n in design_pkg.__all__ if n.islower() and callable(getattr(design_pkg, n))}
+        assert {"aaa", "controller", "design", "fabric", "infra", "tenant"} <= roots
+        # ``design`` is excluded from the identity check: the name is both the
+        # sub-module and the factory, and once ``niwaki.design`` is imported the
+        # import system binds the MODULE as the package attribute, shadowing the
+        # lazy factory lookup. The factory stays reachable as
+        # ``niwaki.design.design``.
+        for name in ("aaa", "controller", "fabric", "infra", "tenant"):
+            assert getattr(niwaki, name) is getattr(design_pkg, name)

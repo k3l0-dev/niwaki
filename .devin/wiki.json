@@ -1,0 +1,135 @@
+{
+  "repo_notes": [
+    {
+      "content": "Write the wiki in English. niwaki is a design-first Python SDK for Cisco ACI (APIC) with a strict three-trades architecture: the design DSL (src/niwaki/design/ + src/niwaki/domain/vocabulary.yaml) DESCRIBES configuration as detached trees, the push engine (src/niwaki/design/_engine.py, _push.py) APPLIES them, and the facade/query (src/niwaki/facade.py, src/niwaki/query/) OBSERVES. The facade deliberately has zero write methods — documenting a write path on the facade would be wrong.",
+      "author": "maintainer"
+    },
+    {
+      "content": "Do not analyze the generated trees line by line: src/niwaki/models/_generated/ (2,222 generated Pydantic classes + enums), src/niwaki/design/_generated_cursors/ (~75k lines of typed cursors), src/niwaki/domain/_child_map.py (23k generated lines), docs/reference/vocabulary/ (938 generated pages), and src/niwaki/query/_catalog/catalog.db (31 MB sqlite artifact). Document their GENERATORS in src/niwaki/_codegen/ instead.",
+      "author": "maintainer"
+    },
+    {
+      "content": "Take code examples from docs/**/*.md (guide/, cookbook/, and the root pages design-first.md, why.md, comparison.md, inside-the-dsl.md) — every python fence there is executed under pytest via Sybil against an in-memory APIC (docs/conftest.py), so those snippets are guaranteed-correct, current code. Prefer them over tests/, which are mock-heavy unit tests.",
+      "author": "maintainer"
+    },
+    {
+      "content": "The curation surface is src/niwaki/domain/vocabulary.yaml: seven sections (jargon, makers, binds, verbs, sugar, atomic, carrier) hand-curated position by position — this file is the single source of the operator vocabulary the DSL exposes, and the intended contribution surface.",
+      "author": "maintainer"
+    },
+    {
+      "content": "The wire boundary is src/niwaki/models/_wire.py — the ONLY Python-to-APIC value translation, in both directions (to_wire/from_wire/to_filter/parse_flags/named_number). Imports like `from niwaki.models.fv.fvBD import fvBD` are served at runtime by a MetaPathFinder (src/niwaki/models/__init__.py); the real path is niwaki.models._generated.fv.fvBD. Static analyzers cannot resolve the alias — deliberate trade-off, not a bug.",
+      "author": "maintainer"
+    }
+  ],
+  "pages": [
+    {
+      "title": "Overview",
+      "purpose": "Introduce niwaki, its purpose as a typed, design-first Python SDK for Cisco ACI (APIC), the three-trades architecture (design DSL describes, push engine applies, facade observes), high-level capabilities (atomic push, dry-run plan, typed queries, WebSocket subscriptions, offline discovery), installation, and links to the child pages for details.",
+      "parent": null,
+      "page_notes": [
+        {
+          "content": "Navigation hub: keep it brief, link every other page. Take the positioning from README.md and docs/why.md — summarize existing prose, do not invent rationale."
+        }
+      ]
+    },
+    {
+      "title": "Architecture: The Three Trades",
+      "purpose": "Detailed guide to the load-bearing split: the design DSL describes (detached trees, no session), the push engine applies (src/niwaki/design/_engine.py, _push.py), the facade observes (src/niwaki/facade.py — zero write methods). The closed-world principle, and why deletion is an explicit facade act while a design never removes what it does not declare.",
+      "parent": null,
+      "page_notes": [
+        {
+          "content": "Source material: docs/design-first.md and docs/comparison.md. Summarize their argument; do not restate cobra comparisons beyond what those pages already say."
+        }
+      ]
+    },
+    {
+      "title": "The Design DSL",
+      "purpose": "Detailed guide to building configuration: root factories (tenant/infra/fabric/controller/aaa/design in src/niwaki/design/__init__.py), makers and set() on cursors (design/_cursor.py, _node.py), the rule that structure is literal while vocabulary is translated, and the .mo()/static_path() escape hatches.",
+      "parent": null
+    },
+    {
+      "title": "Vocabulary and Curation",
+      "purpose": "Detailed guide to src/niwaki/domain/vocabulary.yaml: the seven sections (jargon, makers, binds, verbs, sugar, atomic, carrier), how a position is curated (propose_vocabulary workflow in src/niwaki/_codegen/propose_vocabulary.py), how generate_design.py turns it into typed cursors, and the drift guards in tests/design/ that pin it.",
+      "parent": "The Design DSL"
+    },
+    {
+      "title": "References: bind, verbs, ref and bind_dn",
+      "purpose": "Detailed guide to closed-world reference resolution in src/niwaki/design/_resolver.py: REFERENCE_MAP name/dn flavors, abstract-target expansion via TARGET_SUBCLASSES, verbs that name their Rs class upfront in vocabulary.yaml, ref() carrying configuration on the relation itself, and bind_dn() for out-of-design DNs.",
+      "parent": "The Design DSL"
+    },
+    {
+      "title": "Design-to-Push Data Flow",
+      "purpose": "Detailed walkthrough of the lifecycle: cursor declarations compile (design/_compiler.py) into a desired-MO tree and ops, _toposort orders waves (design/_engine.py), then push(aci, mode=...) applies — strict as one atomic polUni POST, staged as ordered waves with StagedPushError isolation, plan as a dry-run diff via niwaki/utils/diff.py mo_diff. Include to_payload() inspection.",
+      "parent": "The Design DSL"
+    },
+    {
+      "title": "Observing the Fabric",
+      "purpose": "Shallow overview of the read side and its three doors: facade navigation (aci.tenant('x').bd('y').read()), the typed query builder, and offline discovery — each detailed in a child page.",
+      "parent": null,
+      "page_notes": [{ "content": "Hub page — be concise, link the children." }]
+    },
+    {
+      "title": "Query Builder and Filter AST",
+      "purpose": "Detailed guide to src/niwaki/query/: _QueryBase shared sync/async state, executors (fetch/first/one/exists/count/stream, lazy iteration, slice limits), the filter AST in _filters.py (eq/ne/lt/gt/wcard/anybit and boolean composition), smart-kwargs where(), scoping (under/children/self_only), subtree enrichment (include, with_faults, only_faulted), and build() for inspection.",
+      "parent": "Observing the Fabric"
+    },
+    {
+      "title": "Object Subscriptions (WebSocket Push)",
+      "purpose": "Detailed guide to live subscriptions: query(...).subscribe() over one shared WebSocket per session (src/niwaki/transport/_subscription_socket.py and _async variant), typed SubscriptionEvent kinds, automatic refresh sweeps, reconnect-and-resubscribe with GAP events (the APIC has no replay), refresh-failure escalation, SubscriptionLostError reasons, and the bulk tools on aci.subscriptions.",
+      "parent": "Observing the Fabric"
+    },
+    {
+      "title": "Discovery: The Read Catalogue",
+      "purpose": "Detailed guide to offline discovery in src/niwaki/catalog.py and src/niwaki/query/_catalog/: search/describe/prop_meta/find_prop/concrete_subclasses/generated_classes over ~15,450 ACI classes from the shipped sqlite store, ClassMeta.has_model, catalogue-backed readable names on non-generated result objects (models/base.py __getattr__), and the lazy cold-start-safe loading.",
+      "parent": "Observing the Fabric"
+    },
+    {
+      "title": "Session Lifecycle and Transport",
+      "purpose": "Detailed guide to src/niwaki/transport/: ApicSession/AsyncApicSession auth (aaaLogin cookie/token, proactive refresh, mid-session 401 replay), stamina-based retry policy (RetryConfig, write-safe retry rules), transparent pagination, the MoWriter/MoReader protocol boundary in _protocols.py, and the shared subscription socket lifecycle including the resource safety net.",
+      "parent": null
+    },
+    {
+      "title": "Models and the Type System",
+      "purpose": "Detailed guide to the generated models' anatomy: readable field names with wire aliases (validation_alias/serialization_alias, PEP 681 visibility), the type system from _codegen/basetypes.py (bools, int/float bounds, named numbers, Flags bitmasks, validated addresses), the wire boundary in src/niwaki/models/_wire.py, surgical serialisation via to_apic()/model_fields_set, and from_apic dispatch through REGISTRY.",
+      "parent": null
+    },
+    {
+      "title": "Code Generation Pipeline",
+      "purpose": "Narrative of the factory in src/niwaki/_codegen/: APIC schema extraction (data/scripts/), generate.py (2,222 models + _PKG_MAP), generate_enums.py (676 StrEnums), generate_domain.py (CHILD_MAP/CLASS_PKG/REFERENCE_MAP), generate_design.py (typed cursors from vocabulary.yaml), generate_catalog.py (the sqlite read catalogue with its fail-loud routing), generate_docs.py (the vocabulary book) — and the parity/drift tests that pin every artifact.",
+      "parent": null,
+      "page_notes": [
+        { "content": "Document the factory, never the 2,222 products. Avoid overdetailization." }
+      ]
+    },
+    {
+      "title": "Errors and Recovery",
+      "purpose": "Brief documentation of the typed exception hierarchy under NiwakiError (src/niwaki/exceptions/): auth, transport, API, query (including UnknownClassError), design (including StagedPushError), and subscription branches; what to catch when; the fail-loud philosophy.",
+      "parent": null,
+      "page_notes": [
+        {
+          "content": "Build one diagram of the exception tree, be concise, include short catch examples. Source material: docs/guide/errors.md."
+        }
+      ]
+    },
+    {
+      "title": "Testing and Quality Gates",
+      "purpose": "Detailed guide to the quality layers: the ~19,600-test unit suite, executable documentation via Sybil against the in-memory FakeApic (docs/conftest.py), drift guards pinning generated artifacts to each other (tests/models/test_generated_parity.py, coverage_audit snapshot, docs drift), strict mypy + pyright, the cold-start budget guard (tests/perf/test_cold_start.py), and the live integration phases against a lab fabric (tests/integration/, integration marker).",
+      "parent": null
+    },
+    {
+      "title": "Additional Components",
+      "purpose": "Shallow overview of everything without a dedicated page: niwaki/utils/ (mo_diff, parse_imdata), exceptions plumbing, packaging and the offline wheelhouse, scripts/wheel_smoke.py.",
+      "parent": null,
+      "page_notes": [
+        {
+          "content": "Gather all components left without a dedicated page even if they are not listed in the purpose. Be concise and brief."
+        }
+      ]
+    },
+    {
+      "title": "Glossary",
+      "purpose": "Definitions of codebase-specific terms, jargon, abbreviations, and domain concepts that an onboarding engineer would need to know. Each term includes code pointers to relevant files and classes. Cover ACI domain terms (MO, DN/RN, MIT, polUni, tenant/BD/EPG/VRF/contract, subtree query, fault) and niwaki terms (maker, bind, verb, ref, carrier, atomic, jargon, wire name vs readable name, closed world, surgical serialisation, design root, cursor).",
+      "parent": null
+    }
+  ]
+}

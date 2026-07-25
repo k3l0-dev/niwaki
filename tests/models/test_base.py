@@ -616,3 +616,64 @@ class TestIterationSentinel:
         items = dict(iter(SimpleMO(name="x", descr="hi")))
         assert items["name"] == "x"
         assert items["descr"] == "hi"
+
+
+class TestCatalogueServedSerialisation:
+    """``to_apic()`` on a catalogue-served instance (string query, no generated
+    model) honors the same surgical contract as a typed read-back.
+
+    Regression (client report NW-1): these instances used to serialise as
+    ``{'': {'attributes': {}}}`` — empty envelope class, empty attributes —
+    while carrying real data, and an assigned readable field kept reading back
+    its stale wire value through the catalogue mapping.
+    """
+
+    # topSystem: catalogue-served on every install, no generated model exists,
+    # so REGISTRY can never dispatch it to a typed class regardless of what
+    # other tests imported (fvBD would flip to its model once imported).
+
+    def _read_back(self) -> ManagedObject:
+        return ManagedObject.from_apic(
+            {
+                "topSystem": {
+                    "attributes": {
+                        "address": "10.0.0.1",
+                        "mode": "unspecified",
+                        "dn": "topology/pod-1/node-1/sys",
+                    }
+                }
+            }
+        )
+
+    def test_envelope_carries_the_wire_class(self) -> None:
+        mo = self._read_back()
+        assert type(mo) is ManagedObject
+        # No naming props on topSystem and nothing assigned → surgical empty.
+        assert mo.to_apic() == {"topSystem": {"attributes": {}}}
+
+    def test_assigned_readable_name_serialises_through_the_catalogue(self) -> None:
+        mo = self._read_back()
+        mo.infrastructure_ip = "10.0.0.2"  # pyright: ignore[reportAttributeAccessIssue]
+        assert mo.to_apic() == {"topSystem": {"attributes": {"address": "10.0.0.2"}}}
+
+    def test_assigned_wire_name_serialises_verbatim(self) -> None:
+        mo = self._read_back()
+        mo.mode = "standalone"  # pyright: ignore[reportAttributeAccessIssue]
+        assert mo.to_apic() == {"topSystem": {"attributes": {"mode": "standalone"}}}
+
+    def test_read_after_assignment_returns_the_assigned_value(self) -> None:
+        mo = self._read_back()
+        assert mo.infrastructure_ip == "10.0.0.1"  # the wire value
+        mo.infrastructure_ip = "10.0.0.2"  # pyright: ignore[reportAttributeAccessIssue]
+        assert mo.infrastructure_ip == "10.0.0.2"  # the assignment, not the stale read
+
+    def test_unknown_class_keeps_its_envelope_and_sends_nothing(self) -> None:
+        mo = ManagedObject.from_apic({"someDynamicClass": {"attributes": {"dn": "x/y"}}})
+        assert mo.to_apic() == {"someDynamicClass": {"attributes": {}}}
+
+    def test_absorbed_extras_are_never_serialised(self) -> None:
+        mo = self._read_back()
+        mo.infrastructure_ip = "10.0.0.2"  # pyright: ignore[reportAttributeAccessIssue]
+        payload = mo.to_apic()["topSystem"]["attributes"]
+        assert "mode" not in payload  # read, never assigned
+        assert "dn" not in payload

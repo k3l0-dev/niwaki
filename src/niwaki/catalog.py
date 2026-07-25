@@ -90,7 +90,7 @@ def describe(class_name: str) -> ClassDoc:
         subclasses.
 
     Raises:
-        KeyError: No such class in the catalogue.
+        UnknownClassError: No such class in the catalogue (also a ``KeyError``).
     """
     return _reader().describe(class_name)
 
@@ -134,7 +134,7 @@ def prop_meta(class_name: str, name: str) -> PropDoc:
         A :class:`PropDoc`.
 
     Raises:
-        KeyError: The class or property is unknown.
+        UnknownClassError: The class or property is unknown (also a ``KeyError``).
     """
     return _reader().prop_meta(class_name, name)
 
@@ -199,6 +199,6 @@ def class_meta(class_name: str) -> ClassMeta:
         A :class:`ClassMeta`.
 
     Raises:
-        KeyError: No such class in the catalogue.
+        UnknownClassError: No such class in the catalogue (also a ``KeyError``).
     """
     return _reader().class_meta(class_name)

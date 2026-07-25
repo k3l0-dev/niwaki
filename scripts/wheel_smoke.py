@@ -38,6 +38,24 @@ def main() -> None:
     assert "fabricInst" in payload, "fabric domain missing from the envelope"
     assert '"tnFvCtxName": "main"' in payload, "closed-world bind did not resolve"
 
+    # The read catalogue must ship IN the wheel and open from its installed
+    # location — the v1.2.0 near-miss (catalog.db generated but never
+    # packaged) is exactly what these probes pin.
+    from niwaki import catalog
+
+    doc = catalog.describe("topSystem")  # catalogue-served class, no model
+    assert doc.props, "catalogue served no properties for topSystem"
+    assert "fvBD" in catalog.generated_classes(), "generated-set enumeration broken"
+    assert not catalog.class_meta("topSystem").has_model
+    assert catalog.fault_name("F0467"), "fault index missing from the catalogue"
+
+    # The subscription stack must import from the wheel (its websockets
+    # dependency is declared, not vendored — a packaging slip shows here).
+    from niwaki.query import EventKind, Subscription  # noqa: F401
+    from niwaki.transport._subscription_socket import SubscriptionSocket  # noqa: F401
+
+    assert EventKind.CREATED == "created"
+
     print(f"wheel smoke OK — niwaki {niwaki.__version__}")
 
 

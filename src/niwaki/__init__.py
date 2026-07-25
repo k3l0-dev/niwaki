@@ -24,19 +24,21 @@ from niwaki.facade import AsyncNiwaki, AsyncNiwakiNode, Niwaki, NiwakiNode
 from niwaki.transport._config import RetryConfig
 
 if TYPE_CHECKING:
+    from niwaki.design import aaa as aaa
     from niwaki.design import controller as controller
     from niwaki.design import design as design
     from niwaki.design import fabric as fabric
     from niwaki.design import infra as infra
     from niwaki.design import tenant as tenant
 
-__version__ = "1.4.0"
+__version__ = "1.4.1"
 __all__ = [
     "AsyncNiwaki",
     "AsyncNiwakiNode",
     "Niwaki",
     "NiwakiNode",
     "RetryConfig",
+    "aaa",
     "controller",
     "design",
     "fabric",
@@ -44,14 +46,14 @@ __all__ = [
     "tenant",
 ]
 
-_DESIGN_ROOTS = frozenset({"controller", "design", "fabric", "infra", "tenant"})
+_DESIGN_ROOTS = frozenset({"aaa", "controller", "design", "fabric", "infra", "tenant"})
 
 
 def __getattr__(name: str) -> Any:
     """Lazily expose the design DSL roots without paying their import cost.
 
     ``from niwaki import tenant`` (or ``design``, ``infra``, ``fabric``,
-    ``controller``) works, but the design package (and its generated typed
+    ``controller``, ``aaa``) works, but the design package (and its generated typed
     cursors) is only imported on first access, keeping the ``import niwaki``
     cold-start budget intact.
     """
