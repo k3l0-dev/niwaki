@@ -5,6 +5,54 @@ All notable changes to this project are documented here.  The format follows
 [semver](https://semver.org/).  From 1.0.0 the configuration API is stable:
 breaking changes ship in a new major version with a migration note.
 
+## [1.3.2] — 2026-07-25
+
+### Fixed
+
+- **Eleven `faultThrValue*` classes were missing from the read catalogue.**
+  They ship a generated model, yet `catalog.describe()` / `catalog.class_meta()`
+  raised `KeyError` on them, and `catalog.concrete_subclasses("faultAThrValue")`
+  silently returned an empty list. The catalogue build skipped every class
+  whose schema carries an empty `readAccess` list — 151 classes in total,
+  including genuinely readable ones (the `rmon*` interface counters among
+  them). An empty `readAccess` means Cisco documents no per-privilege RBAC
+  mapping for the class, not that it is unreadable: the APIC serves class
+  reads for these names and rejects only unknown classes. The catalogue now
+  indexes the full class corpus (15,452 classes), and the build fails loudly
+  if any generated-model class ever lacks a catalogue row.
+- **Deprecated classes advertised as navigable children then crashed.**
+  The config/navigation table carried 18 deprecated classes that have no
+  generated model, so reachable facade navigation — e.g.
+  `aci.fabric().communication_policy(...).telnet_service(...)` — raised a
+  raw `ModuleNotFoundError` instead of the designed "no child accessor"
+  `AttributeError`. The table's generator now applies the same
+  deprecated/hidden filter as the model generator.
+
+### Changed
+
+- Removing the deprecated shadow classes re-ran name disambiguation, so a
+  few auto-derived facade navigation accessors are renamed to their now
+  unambiguous form: `in_band_management_epg` (was
+  `mgmt_in_band_management_epg`, same target), `out_of_band_management_epg`
+  (was `mgmt_out_of_band_management_epg`, which crashed — it pointed at a
+  deprecated class; it now reaches `mgmtRsOoB`), and
+  `relation_to_a_set_of_concrete_interfaces_from_the_device_in_the_cluster`
+  (was prefixed `vns_`, same target). `fabricSetupP` gains a
+  `pod_subnets_in_addition_to_setupp` child accessor that was previously
+  unreachable, and seven references that a deprecated class used to shadow
+  now resolve automatically in `bind()`.
+
+### Internal
+
+- `domain._child_map.CLASS_PKG` (private) shrinks from 2,239 to 2,221
+  entries and now matches the generated-model set exactly, minus `faultInst`
+  (deliberately excluded from the config surface). Code importing this
+  private module should migrate to the public API.
+- New parity tests pin the model tree, its `_PKG_MAP` index, `CLASS_PKG`,
+  and the shipped catalogue against each other, so neither gap can silently
+  reopen; the naming-parity test no longer swallows `KeyError`, which is how
+  the missing catalogue rows went unnoticed.
+
 ## [1.3.1] — 2026-07-21
 
 ### Fixed

@@ -132,9 +132,12 @@ def test_naming_parity_is_exhaustive_with_pinned_divergences(cat: _catalog.Catal
                 importlib.import_module("niwaki.models._generated." + ".".join(parts)), pyfile.stem
             )
             model_map = {(f.serialization_alias or n): n for n, f in model.model_fields.items()}
-            meta = cat.class_meta(pyfile.stem)
-        except (ImportError, AttributeError, KeyError):
+        except (ImportError, AttributeError):
             continue
+        # No KeyError swallowing: a generated class missing from the catalogue
+        # is a real defect (this exact clause once hid 11 absent faultThrValue*
+        # classes, silently shrinking "exhaustive" to 2,211 of 2,222).
+        meta = cat.class_meta(pyfile.stem)
         for wire, python_name in model_map.items():
             catalogue_name = meta.wire_to_readable.get(wire)
             if catalogue_name is not None and catalogue_name != python_name:

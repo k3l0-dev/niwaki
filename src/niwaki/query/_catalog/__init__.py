@@ -1,7 +1,7 @@
 """Runtime access to the read catalogue — the lazy, cold-start-safe reader.
 
 The catalogue ``.db`` (built by :mod:`niwaki._codegen.generate_catalog`) holds
-read metadata for every readable ACI class.  This module opens it **lazily** —
+read metadata for every ACI class in the schema.  This module opens it **lazily** —
 nothing here runs at ``import niwaki``; the connection is made on the first
 lookup — and memoises a :class:`ClassMeta` per class so a query that returns
 thousands of objects of one class touches sqlite once, then serves dict hits.
@@ -16,7 +16,7 @@ would use.
 The caveat: ``resolve_py_names`` resolves name collisions over *all* of a class's
 readable properties here, but over the smaller *configurable* subset in the
 generator, so the two can pick different names when a collision falls
-differently.  Measured on APIC 6.0(9c): **11 properties across 7 of 2,211
+differently.  Measured on APIC 6.0(9c): **11 properties across 7 of 2,222
 generated classes (0.07%)** — e.g. the catalogue names ``l3extOut.enforceRtctrl``
 ``enforce_route_control`` where the model names it ``enforce_rtctrl``.  This is
 **invisible on result objects** — a generated class is served by its typed model,

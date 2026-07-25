@@ -902,7 +902,6 @@ CHILD_MAP: dict[str, dict[str, str]] = {
     "apPluginPolContr": {
         "annotation": "tagAnnotation",
         "annotation_to_capture_rbac_info": "aaaRbacAnnotation",
-        "deprecated_global_plugin_policies": "apPluginPol",
         "global_plugin_policies": "apContainerPol",
         "tag": "tagTag",
     },
@@ -1510,7 +1509,6 @@ CHILD_MAP: dict[str, dict[str, str]] = {
         "tag": "tagTag",
     },
     "callhomeInvTrig": {
-        "triggered_window": "trigTriggeredWindow",
         "triggered_window_dn": "trigTriggeredWindowDn",
     },
     "callhomeProf": {
@@ -2783,7 +2781,6 @@ CHILD_MAP: dict[str, dict[str, str]] = {
         "shellinabox_service": "commShellinabox",
         "ssh_service": "commSsh",
         "tag": "tagTag",
-        "telnet_service": "commTelnet",
     },
     "commReconfig": {
         "annotation": "tagAnnotation",
@@ -2910,20 +2907,17 @@ CHILD_MAP: dict[str, dict[str, str]] = {
         "tag": "tagTag",
     },
     "configExportJobTrig": {
-        "triggered_window": "trigTriggeredWindow",
         "triggered_window_dn": "trigTriggeredWindowDn",
     },
     "configExportP": {
         "annotation": "tagAnnotation",
         "annotation_to_capture_rbac_info": "aaaRbacAnnotation",
         "backup_remote_path": "configRsRemotePath",
-        "export_destination": "configRsExportDestination",
         "export_scheduler": "configRsExportScheduler",
         "relation_to_triggerable_policy": "trigRsTriggerable",
         "tag": "tagTag",
     },
     "configImportIdJobTrig": {
-        "triggered_window": "trigTriggeredWindow",
         "triggered_window_dn": "trigTriggeredWindowDn",
     },
     "configImportIdP": {
@@ -2934,14 +2928,12 @@ CHILD_MAP: dict[str, dict[str, str]] = {
         "tag": "tagTag",
     },
     "configImportJobTrig": {
-        "triggered_window": "trigTriggeredWindow",
         "triggered_window_dn": "trigTriggeredWindowDn",
     },
     "configImportP": {
         "annotation": "tagAnnotation",
         "annotation_to_capture_rbac_info": "aaaRbacAnnotation",
         "backup_remote_path": "configRsRemotePath",
-        "import_source": "configRsImportSource",
         "relation_to_triggerable_policy": "trigRsTriggerable",
         "tag": "tagTag",
     },
@@ -2957,7 +2949,6 @@ CHILD_MAP: dict[str, dict[str, str]] = {
         "job_instance": "configJob",
     },
     "configRollbackJobTrig": {
-        "triggered_window": "trigTriggeredWindow",
         "triggered_window_dn": "trigTriggeredWindowDn",
     },
     "configRollbackP": {
@@ -2996,7 +2987,6 @@ CHILD_MAP: dict[str, dict[str, str]] = {
         "job_instance": "configSnapshot",
     },
     "configSnapshotMgrJobTrig": {
-        "triggered_window": "trigTriggeredWindow",
         "triggered_window_dn": "trigTriggeredWindowDn",
     },
     "configSnapshotMgrP": {
@@ -3573,7 +3563,6 @@ CHILD_MAP: dict[str, dict[str, str]] = {
         "tag": "tagTag",
     },
     "dbgexpTechSupTrig": {
-        "triggered_window": "trigTriggeredWindow",
         "triggered_window_dn": "trigTriggeredWindowDn",
     },
     "dbgexpTechSupTrigCollectLTask": {
@@ -4769,7 +4758,6 @@ CHILD_MAP: dict[str, dict[str, str]] = {
     "fabricAssociatedSetupP": {
         "annotation": "tagAnnotation",
         "annotation_to_capture_rbac_info": "aaaRbacAnnotation",
-        "fabric_setup_alloc_policy": "fabricSetupAllocP",
         "tag": "tagTag",
     },
     "fabricAutoGEp": {
@@ -5593,10 +5581,8 @@ CHILD_MAP: dict[str, dict[str, str]] = {
     "fabricSetupP": {
         "annotation": "tagAnnotation",
         "annotation_to_capture_rbac_info": "aaaRbacAnnotation",
-        "dhcp_server_node_info_of_a_virtual_pod": "fabricPodDhcpServer",
-        "fabric_pod_subnets_in_addition_to_setupp": "fabricAssociatedSetupP",
-        "fabric_setup_alloc_policy": "fabricSetupAllocP",
         "fabric_setup_policy_for_an_external_site": "fabricExtSetupP",
+        "pod_subnets_in_addition_to_setupp": "fabricExtRoutablePodSubnet",
         "tag": "tagTag",
     },
     "fabricSetupPol": {
@@ -8850,7 +8836,6 @@ CHILD_MAP: dict[str, dict[str, str]] = {
     "infraAccBndlGrp": {
         "annotation": "tagAnnotation",
         "annotation_to_capture_rbac_info": "aaaRbacAnnotation",
-        "data_plane_policy_both": "infraRsQosDppIfPol",
         "egress_data_plane_policy": "infraRsQosEgressDppIfPol",
         "ingress_data_plane_policy": "infraRsQosIngressDppIfPol",
         "interface_authentication_802_1x_policy": "infraRsL2PortAuthPol",
@@ -8884,7 +8869,6 @@ CHILD_MAP: dict[str, dict[str, str]] = {
     "infraAccBndlPolGrp": {
         "annotation": "tagAnnotation",
         "annotation_to_capture_rbac_info": "aaaRbacAnnotation",
-        "data_plane_policy_both": "infraRsQosDppIfPol",
         "egress_data_plane_policy": "infraRsQosEgressDppIfPol",
         "ingress_data_plane_policy": "infraRsQosIngressDppIfPol",
         "interface_authentication_802_1x_policy": "infraRsL2PortAuthPol",
@@ -8962,7 +8946,6 @@ CHILD_MAP: dict[str, dict[str, str]] = {
     "infraAccPortGrp": {
         "annotation": "tagAnnotation",
         "annotation_to_capture_rbac_info": "aaaRbacAnnotation",
-        "data_plane_policy_both": "infraRsQosDppIfPol",
         "dwdm_fiber_optics_channel_policy": "infraRsDwdmIfPol",
         "egress_data_plane_policy": "infraRsQosEgressDppIfPol",
         "external_tag_instance": "tagExtMngdInst",
@@ -11347,7 +11330,6 @@ CHILD_MAP: dict[str, dict[str, str]] = {
         "tag": "tagTag",
     },
     "maintMaintTrig": {
-        "triggered_window": "trigTriggeredWindow",
         "triggered_window_dn": "trigTriggeredWindowDn",
     },
     "maintPodMaintGrp": {
@@ -11651,7 +11633,7 @@ CHILD_MAP: dict[str, dict[str, str]] = {
     "mgmtInBZone": {
         "annotation": "tagAnnotation",
         "annotation_to_capture_rbac_info": "aaaRbacAnnotation",
-        "mgmt_in_band_management_epg": "mgmtRsInB",
+        "in_band_management_epg": "mgmtRsInB",
         "relation_to_ip_address_pool": "mgmtRsAddrInst",
         "tag": "tagTag",
     },
@@ -11707,7 +11689,7 @@ CHILD_MAP: dict[str, dict[str, str]] = {
     "mgmtOoBZone": {
         "annotation": "tagAnnotation",
         "annotation_to_capture_rbac_info": "aaaRbacAnnotation",
-        "mgmt_out_of_band_management_epg": "mgmtRsOobEpg",
+        "out_of_band_management_epg": "mgmtRsOoB",
         "relation_to_ip_address_pool": "mgmtRsAddrInst",
         "tag": "tagTag",
     },
@@ -13761,7 +13743,6 @@ CHILD_MAP: dict[str, dict[str, str]] = {
         "tag": "tagTag",
     },
     "recoveryReconcileConfigJobTrig": {
-        "triggered_window": "trigTriggeredWindow",
         "triggered_window_dn": "trigTriggeredWindowDn",
     },
     "recoveryReconcileConfigP": {
@@ -15930,19 +15911,16 @@ CHILD_MAP: dict[str, dict[str, str]] = {
         "annotation": "tagAnnotation",
         "annotation_to_capture_rbac_info": "aaaRbacAnnotation",
         "tag": "tagTag",
-        "telemetry_policy_filter_group": "telemetryFltPolGrp",
         "telemetry_servers": "telemetryFlowServers",
     },
     "telemetryFlowServers": {
         "annotation": "tagAnnotation",
         "annotation_to_capture_rbac_info": "aaaRbacAnnotation",
-        "config_server_info_for_telemetry_server": "telemetryServer",
         "tag": "tagTag",
     },
     "telemetryFltPolGrp": {
         "annotation": "tagAnnotation",
         "annotation_to_capture_rbac_info": "aaaRbacAnnotation",
-        "filter_logical_model_config_holder": "telemetryFilterPolicy",
         "tag": "tagTag",
     },
     "telemetryFteEventDef": {
@@ -16091,7 +16069,6 @@ CHILD_MAP: dict[str, dict[str, str]] = {
         "log_server_info_for_streaming_logs": "telemetryLogServerP",
         "stats_server_info_streaming_stats": "telemetryStatsServerP",
         "tag": "tagTag",
-        "telemetry_flow_server_policy_holder": "telemetryFlowServerP",
     },
     "telemetryStatsServer": {
         "annotation": "tagAnnotation",
@@ -16486,7 +16463,6 @@ CHILD_MAP: dict[str, dict[str, str]] = {
         "annotation": "tagAnnotation",
         "annotation_to_capture_rbac_info": "aaaRbacAnnotation",
         "tag": "tagTag",
-        "triggered": "trigTriggered",
     },
     "trigPolicy": {
         "meta": "trigMeta",
@@ -16568,7 +16544,6 @@ CHILD_MAP: dict[str, dict[str, str]] = {
         "tag": "tagTag",
     },
     "troubleshootSessionTrigger": {
-        "triggered_window": "trigTriggeredWindow",
         "triggered_window_dn": "trigTriggeredWindowDn",
     },
     "tunnelIf": {
@@ -17668,9 +17643,9 @@ CHILD_MAP: dict[str, dict[str, str]] = {
         "annotation": "tagAnnotation",
         "external_tag_instance": "tagExtMngdInst",
         "relation_from_a_logical_interface_to_an_interface_label": "vnsRsMetaIf",
+        "relation_to_a_set_of_concrete_interfaces_from_the_device_in_the_cluster": "vnsRsCIfAttN",
         "tag": "tagTag",
         "tag_instance": "tagInst",
-        "vns_relation_to_a_set_of_concrete_interfaces_from_the_device_in_the_cluster": "vnsRsCIfAttN",
     },
     "vnsLDevOperInfo": {
         "annotation": "tagAnnotation",
@@ -17680,7 +17655,6 @@ CHILD_MAP: dict[str, dict[str, str]] = {
     "vnsLDevVip": {
         "annotation": "tagAnnotation",
         "annotation_to_capture_rbac_info": "aaaRbacAnnotation",
-        "checker_for_dev_folder_params": "vnsChkr",
         "concrete_device": "vnsCDev",
         "credentials": "vnsCCred",
         "device_manager": "vnsRsALDevToDevMgr",
@@ -17705,9 +17679,9 @@ CHILD_MAP: dict[str, dict[str, str]] = {
         "external_tag_instance": "tagExtMngdInst",
         "relation_from_a_logical_interface_to_an_interface_label": "vnsRsMetaIf",
         "relation_from_lif_to_a_vlan_namespace_instance_profile": "vnsRsLIfDomP",
+        "relation_to_a_set_of_concrete_interfaces_from_the_device_in_the_cluster": "vnsRsCIfAttN",
         "tag": "tagTag",
         "tag_instance": "tagInst",
-        "vns_relation_to_a_set_of_concrete_interfaces_from_the_device_in_the_cluster": "vnsRsCIfAttN",
     },
     "vnsLIfCtx": {
         "annotation": "tagAnnotation",
@@ -17771,9 +17745,9 @@ CHILD_MAP: dict[str, dict[str, str]] = {
         "annotation_to_capture_rbac_info": "aaaRbacAnnotation",
         "external_tag_instance": "tagExtMngdInst",
         "relation_from_a_logical_interface_to_an_interface_label": "vnsRsMetaIf",
+        "relation_to_a_set_of_concrete_interfaces_from_the_device_in_the_cluster": "vnsRsCIfAttN",
         "tag": "tagTag",
         "tag_instance": "tagInst",
-        "vns_relation_to_a_set_of_concrete_interfaces_from_the_device_in_the_cluster": "vnsRsCIfAttN",
     },
     "vnsMscGraphXlateCont": {
         "annotation": "tagAnnotation",
@@ -18716,9 +18690,7 @@ RS_TARGET_PROP: dict[str, str] = {
     "conditionRsNodeEventRecRetP": "tnEventSwRetPName",
     "conditionRsNodeFaultRecRetP": "tnFaultSwRetPName",
     "conditionRsNodeHealthRecRetP": "tnHealthSwRetPName",
-    "configRsExportDestination": "tnFileRemotePathName",
     "configRsExportScheduler": "tnTrigSchedPName",
-    "configRsImportSource": "tnFileRemotePathName",
     "configRsRemotePath": "tnFileRemotePathName",
     "dbgexpRsTSOnDScheduler": "tnTrigSchedPName",
     "dbgexpRsTSScheduler": "tnTrigSchedPName",
@@ -18826,7 +18798,6 @@ RS_TARGET_PROP: dict[str, str] = {
     "infraRsPoeIfPol": "tnPoeIfPolName",
     "infraRsPoeInstPol": "tnPoeInstPolName",
     "infraRsPtpInstPol": "tnPtpInstPolName",
-    "infraRsQosDppIfPol": "tnQosDppPolName",
     "infraRsQosEgressDppIfPol": "tnQosDppPolName",
     "infraRsQosIngressDppIfPol": "tnQosDppPolName",
     "infraRsQosLlfcIfPol": "tnQosLlfcIfPolName",
@@ -19218,6 +19189,7 @@ REFERENCE_MAP: dict[str, dict[str, tuple[str, Literal["name", "dn"]]]] = {
         "trigTriggerable": ("trigRsTriggerable", "dn"),
     },
     "configExportP": {
+        "fileRemotePath": ("configRsRemotePath", "name"),
         "trigSchedP": ("configRsExportScheduler", "name"),
         "trigTest": ("trigRsTriggerable", "dn"),
         "trigTriggerable": ("trigRsTriggerable", "dn"),
@@ -19228,6 +19200,7 @@ REFERENCE_MAP: dict[str, dict[str, tuple[str, Literal["name", "dn"]]]] = {
         "trigTriggerable": ("trigRsTriggerable", "dn"),
     },
     "configImportP": {
+        "fileRemotePath": ("configRsRemotePath", "name"),
         "trigTest": ("trigRsTriggerable", "dn"),
         "trigTriggerable": ("trigRsTriggerable", "dn"),
     },
@@ -20460,6 +20433,7 @@ REFERENCE_MAP: dict[str, dict[str, tuple[str, Literal["name", "dn"]]]] = {
     },
     "mgmtInBZone": {
         "fvnsAddrInst": ("mgmtRsAddrInst", "dn"),
+        "mgmtInB": ("mgmtRsInB", "dn"),
     },
     "mgmtInstP": {
         "vzOOBBrCP": ("mgmtRsOoBCons", "name"),
@@ -20473,6 +20447,7 @@ REFERENCE_MAP: dict[str, dict[str, tuple[str, Literal["name", "dn"]]]] = {
     },
     "mgmtOoBZone": {
         "fvnsAddrInst": ("mgmtRsAddrInst", "dn"),
+        "mgmtOoB": ("mgmtRsOoB", "dn"),
     },
     "mgmtPodGrp": {
         "mgmtNodeGrp": ("mgmtRsToNodeGrp", "dn"),
@@ -21293,6 +21268,7 @@ REFERENCE_MAP: dict[str, dict[str, tuple[str, Literal["name", "dn"]]]] = {
         "vnsRtrCfg": ("vnsRsLDevCtxToRtrCfg", "name"),
     },
     "vnsLDevIfLIf": {
+        "vnsCIf": ("vnsRsCIfAttN", "dn"),
         "vnsMIfLbl": ("vnsRsMetaIf", "dn"),
     },
     "vnsLDevVip": {
@@ -21314,6 +21290,7 @@ REFERENCE_MAP: dict[str, dict[str, tuple[str, Literal["name", "dn"]]]] = {
     },
     "vnsLIf": {
         "physDomP": ("vnsRsLIfDomP", "dn"),
+        "vnsCIf": ("vnsRsCIfAttN", "dn"),
         "vnsMIfLbl": ("vnsRsMetaIf", "dn"),
     },
     "vnsLIfCtx": {
@@ -21361,6 +21338,7 @@ REFERENCE_MAP: dict[str, dict[str, tuple[str, Literal["name", "dn"]]]] = {
         "vnsMConn": ("vnsRsConnector", "dn"),
     },
     "vnsMgmtLIf": {
+        "vnsCIf": ("vnsRsCIfAttN", "dn"),
         "vnsMIfLbl": ("vnsRsMetaIf", "dn"),
     },
     "vnsNodeInst": {
@@ -21670,7 +21648,6 @@ CLASS_PKG: dict[str, str] = {
     "apDockerImage": "ap",
     "apPlugin": "ap",
     "apPluginContr": "ap",
-    "apPluginPol": "ap",
     "apPluginPolContainer": "ap",
     "apPluginPolContr": "ap",
     "apPluginPolicy": "ap",
@@ -21807,7 +21784,6 @@ CLASS_PKG: dict[str, str] = {
     "commShellinabox": "comm",
     "commSsh": "comm",
     "commSshInst": "comm",
-    "commTelnet": "comm",
     "commTelnetInst": "comm",
     "compAddrMgmtAddrBlk": "comp",
     "compRsFvAddrMgmtPool": "comp",
@@ -21825,9 +21801,7 @@ CLASS_PKG: dict[str, str] = {
     "configImportP": "config",
     "configJob": "config",
     "configRollbackP": "config",
-    "configRsExportDestination": "config",
     "configRsExportScheduler": "config",
-    "configRsImportSource": "config",
     "configRsRemotePath": "config",
     "configSnapshot": "config",
     "configSnapshotMgrP": "config",
@@ -22082,7 +22056,6 @@ CLASS_PKG: dict[str, str] = {
     "extdevSwMgrPolCont": "extdev",
     "extdevUplinkProf": "extdev",
     "fabricAnycastMulticastSetupP": "fabric",
-    "fabricAssociatedSetupP": "fabric",
     "fabricBlacklistPol": "fabric",
     "fabricCtrlrIdentP": "fabric",
     "fabricCtrlrP": "fabric",
@@ -22123,7 +22096,6 @@ CLASS_PKG: dict[str, str] = {
     "fabricOOServicePol": "fabric",
     "fabricOSpineS": "fabric",
     "fabricPodBlk": "fabric",
-    "fabricPodDhcpServer": "fabric",
     "fabricPodP": "fabric",
     "fabricPodPGrp": "fabric",
     "fabricPodS": "fabric",
@@ -22190,7 +22162,6 @@ CLASS_PKG: dict[str, str] = {
     "fabricRsVpcInstPol": "fabric",
     "fabricSFPathS": "fabric",
     "fabricSFPortS": "fabric",
-    "fabricSetupAllocP": "fabric",
     "fabricSetupP": "fabric",
     "fabricSetupPol": "fabric",
     "fabricSpCardP": "fabric",
@@ -22621,7 +22592,6 @@ CLASS_PKG: dict[str, str] = {
     "infraRsPoeInstPol": "infra",
     "infraRsPortDirection": "infra",
     "infraRsPtpInstPol": "infra",
-    "infraRsQosDppIfPol": "infra",
     "infraRsQosEgressDppIfPol": "infra",
     "infraRsQosIngressDppIfPol": "infra",
     "infraRsQosLlfcIfPol": "infra",
@@ -22885,13 +22855,11 @@ CLASS_PKG: dict[str, str] = {
     "mgmtRsGrp": "mgmt",
     "mgmtRsInB": "mgmt",
     "mgmtRsInBStNode": "mgmt",
-    "mgmtRsInbEpg": "mgmt",
     "mgmtRsMgmtBD": "mgmt",
     "mgmtRsOoB": "mgmt",
     "mgmtRsOoBCons": "mgmt",
     "mgmtRsOoBProv": "mgmt",
     "mgmtRsOoBStNode": "mgmt",
-    "mgmtRsOobEpg": "mgmt",
     "mgmtRsToNodeGrp": "mgmt",
     "mgmtStaticRoute": "mgmt",
     "mgmtSubnet": "mgmt",
@@ -23421,12 +23389,9 @@ CLASS_PKG: dict[str, str] = {
     "telemetryEventStreamP": "telemetry",
     "telemetryExternalServer": "telemetry",
     "telemetryFastExporterStreamP": "telemetry",
-    "telemetryFilterPolicy": "telemetry",
     "telemetryFlowCollectorP": "telemetry",
     "telemetryFlowServerGrp": "telemetry",
-    "telemetryFlowServerP": "telemetry",
     "telemetryFlowServers": "telemetry",
-    "telemetryFltPolGrp": "telemetry",
     "telemetryFteEventDef": "telemetry",
     "telemetryFteEventSetP": "telemetry",
     "telemetryFteEventTcpFlags": "telemetry",
@@ -23451,7 +23416,6 @@ CLASS_PKG: dict[str, str] = {
     "telemetryRsToRemoteStatsServer": "telemetry",
     "telemetryRsToStatsServerGrp": "telemetry",
     "telemetrySelector": "telemetry",
-    "telemetryServer": "telemetry",
     "telemetryServers": "telemetry",
     "telemetryStatsServer": "telemetry",
     "telemetryStatsServerGrp": "telemetry",
@@ -23517,8 +23481,6 @@ CLASS_PKG: dict[str, str] = {
     "trigSched": "trig",
     "trigSchedP": "trig",
     "trigTest": "trig",
-    "trigTriggered": "trig",
-    "trigTriggeredWindow": "trig",
     "trigTriggeredWindowDn": "trig",
     "troubleshootReportStatus": "troubleshoot",
     "troubleshootRsSessionScheduler": "troubleshoot",
@@ -23632,7 +23594,6 @@ CLASS_PKG: dict[str, str] = {
     "vnsCfgRelInst": "vns",
     "vnsChassis": "vns",
     "vnsChassisOperInfo": "vns",
-    "vnsChkr": "vns",
     "vnsCopyConnector": "vns",
     "vnsCtrlrMgmtPol": "vns",
     "vnsDevFolder": "vns",
@@ -23683,7 +23644,6 @@ CLASS_PKG: dict[str, str] = {
     "vnsRsCDevTemplateToAddrInst": "vns",
     "vnsRsCDevToChassis": "vns",
     "vnsRsCDevToCtrlrP": "vns",
-    "vnsRsCIfAtt": "vns",
     "vnsRsCIfAttN": "vns",
     "vnsRsCIfPathAtt": "vns",
     "vnsRsCfgToConn": "vns",

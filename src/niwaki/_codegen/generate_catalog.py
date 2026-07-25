@@ -1,8 +1,8 @@
 """Build the read catalogue — a shipped sqlite metadata store for every ACI class.
 
-The query builder can read all ~15,300 *readable* ACI classes by name, but only
-the 2,239 it generates as Pydantic models carry readable field names, enums and
-relations.  The catalogue closes that gap for the other ~13,000 (learned
+The query builder can read any of the ~15,450 ACI classes by name, but only
+the 2,222 it generates as Pydantic models carry readable field names, enums and
+relations.  The catalogue closes that gap for the other ~13,200 (learned
 endpoints, stats, hardware, routing runtime): a compact, shipped ``.db`` of read
 metadata, opened lazily, never touched at import.
 
@@ -51,15 +51,17 @@ APIC_VERSION = "6.0(9c)"
 
 
 class UnroutedSchemaKeyError(KeyError):
-    """A schema key is neither routed to storage nor explicitly dropped.
+    """The build would silently lose data it is required to capture.
 
-    Raised at build time.  Fatal by design: the alternative is to sweep the key
-    into a catch-all and lose track of it, the silent degradation the routing
-    table exists to prevent.
+    Two conditions raise it: a schema key that is neither routed to storage
+    nor explicitly dropped, and a generated-model class that lands no
+    catalogue row.  Fatal by design in both cases: the alternative is a
+    silent gap — a key swept into a catch-all, or a class the SDK ships a
+    typed model for that ``describe()``/``class_meta()`` cannot resolve.
     """
 
 
-# ── Class-level routing (15,301 rows — kept as plain columns) ─────────────────
+# ── Class-level routing (15,452 rows — kept as plain columns) ─────────────────
 CLASS_TEXT_COLS: dict[str, str] = {
     "classPkg": "class_pkg",
     "classId": "class_id",
@@ -119,7 +121,7 @@ CLASS_RESIDUAL_KEYS = {
     "platformFlavors",
 }
 
-# ── Property-level routing (330,786 rows — the bulk; interned aggressively) ────
+# ── Property-level routing (332,297 rows — the bulk; interned aggressively) ────
 # Type strings interned into a shared pool (int FK): 80 baseType / 3403 modelType
 # / 8 uitype distinct across 330k props — storing the string each time was 10 MB.
 PROP_TYPE_COLS: dict[str, str] = {
@@ -334,8 +336,13 @@ def build_catalog(schema_dir: Path = SCHEMA_DIR, out: Path = DEFAULT_OUT) -> dic
         if loaded is None:
             continue
         name, cls = loaded
-        if not cls.get("readAccess"):  # readable classes only
-            continue
+        # No readAccess gate: an empty ``readAccess`` list means Cisco documents
+        # no per-privilege RBAC mapping (action-payload children, switch-local
+        # counters), NOT that the class is unreadable — the APIC serves class
+        # reads for them (HTTP 200) and rejects only unknown names (HTTP 400).
+        # Gating on it silently dropped 151 classes, including 11 generated
+        # models (faultThrValue*), making describe()/class_meta() raise
+        # KeyError on classes the SDK ships models for.
         _check_class_coverage(name, cls)
 
         mo_rows.append(_mo_row(class_id, name, cls, labels, comments, mo_cols))
@@ -363,6 +370,20 @@ def build_catalog(schema_dir: Path = SCHEMA_DIR, out: Path = DEFAULT_OUT) -> dic
         scopemeta_rows += _scopemeta_rows(class_id, cls, scopemeta)
         search_docs.append((class_id, _search_text(name, cls)))
         class_id += 1
+
+    # Fail loud if any generated model class failed to land a catalogue row —
+    # describe()/class_meta() raising KeyError on a class the SDK ships a
+    # typed model for is exactly the silent gap this build must never
+    # reproduce (same discipline as UnroutedSchemaKeyError above).
+    from niwaki.models._generated import _PKG_MAP
+
+    indexed = {row[1] for row in mo_rows}  # row[1] = class_name (see _mo_column_order)
+    unindexed = sorted(set(_PKG_MAP) - indexed)
+    if unindexed:
+        raise UnroutedSchemaKeyError(
+            f"{len(unindexed)} generated model class(es) have no catalogue row: "
+            f"{unindexed}. Every generated class must resolve through the catalogue."
+        )
 
     con.executemany(f"INSERT INTO mo VALUES ({_ph(len(mo_cols))})", mo_rows)
     con.executemany(f"INSERT INTO prop VALUES ({_ph(len(_prop_column_order()))})", prop_rows)

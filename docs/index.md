@@ -36,7 +36,7 @@ network** — a typo fails in your editor, with a did-you-mean.
 4. {doc}`guide/cursors` — the cursor operations, and when to use each
 5. {doc}`guide/push-modes` — `strict`, `staged`, `plan`
 6. {doc}`guide/observing` — navigation, typed reads, queries
-7. {doc}`guide/discovery` — search and describe any of the ~15,300 readable classes
+7. {doc}`guide/discovery` — search and describe any of the ~15,450 classes
 8. {doc}`guide/subscribing` — live push notifications instead of polling
 
 ## Find your way

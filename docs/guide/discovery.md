@@ -1,7 +1,7 @@
 # Discovering classes
 
 The SDK generates typed models for the ~2,200 *configurable* ACI classes.  The
-**read catalogue** covers the rest: read metadata for all ~15,300 *readable*
+**read catalogue** covers the rest: read metadata for all ~15,450 ACI
 classes — learned endpoints, statistics, hardware, routing runtime — so you can
 search for a class, describe it, or read one with human field names.
 
@@ -95,4 +95,4 @@ assert top["address"] == "10.0.0.1"          # the raw wire attribute, always th
 ```
 
 A generated class keeps answering from its typed model; the catalogue only steps
-in for classes without one, so reading is uniform across all ~15,300 of them.
+in for classes without one, so reading is uniform across all ~15,450 of them.

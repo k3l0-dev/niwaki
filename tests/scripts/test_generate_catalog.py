@@ -123,9 +123,9 @@ def built(tmp_path_factory: pytest.TempPathFactory) -> tuple[Path, dict[str, int
 
 
 @needs_corpus
-def test_covers_every_readable_class(built: tuple[Path, dict[str, int]]) -> None:
+def test_covers_every_class(built: tuple[Path, dict[str, int]]) -> None:
     _, stats = built
-    assert stats["classes"] == 15301
+    assert stats["classes"] == 15452
     assert stats["properties"] > 300_000
 
 

@@ -1,7 +1,7 @@
-"""Discover and describe any readable Cisco ACI class — offline.
+"""Discover and describe any Cisco ACI class — offline.
 
-The read catalogue ships with the package: metadata for all ~15,300 *readable*
-ACI classes (not just the ~2,200 with generated models), opened lazily on first
+The read catalogue ships with the package: metadata for all ~15,450 ACI
+classes (not just the ~2,200 with generated models), opened lazily on first
 use.  This module is the public door to it — search for a class by name or
 label, describe its properties/faults/subclasses, or find which class carries a
 given property — with **no APIC connection required**.

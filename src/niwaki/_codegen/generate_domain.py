@@ -69,9 +69,16 @@ def _load_schemas() -> dict[str, dict[str, Any]]:
         raw = json.loads(f.read_text())
         for _key, entry in raw.items():
             mo_category: str = entry.get("moCategory", "")
+            # isDeprecated/isHidden mirror the model generator's filter
+            # (data/scripts/01_extract_classes.py) — without them, CLASS_PKG
+            # carries classes with no generated model, and the facade/design
+            # lazy import (CLASS_PKG[name] -> import _generated.<pkg>.<name>)
+            # crashes with a raw ModuleNotFoundError on reachable jargon.
             if not (
                 entry.get("isConfigurable")
                 and not entry.get("isAbstract")
+                and not entry.get("isDeprecated")
+                and not entry.get("isHidden")
                 and not entry.get("isReadOnly", False)
                 and mo_category not in _EXCLUDED_MO_CATEGORIES
             ):

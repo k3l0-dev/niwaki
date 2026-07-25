@@ -203,10 +203,11 @@ def _covered_children(parent: str) -> set[str]:
 def _is_curatable(cls_name: str) -> bool:
     """Return whether an ACI class has a generated model at all.
 
-    A handful of schema classes are contained by a curated parent yet are never
-    emitted as models (deprecated or non-concrete, e.g. ``infraRsQosDppIfPol``).
-    They appear in ``CHILD_MAP`` but a maker or bind to them could not be built,
-    so they are not real gaps.
+    A safety net: ``CHILD_MAP`` and the model generator share the same
+    deprecated/hidden filter, so an import-failing child should no longer
+    occur — but if their filters ever drift again (deprecated classes once
+    rode along in ``CHILD_MAP`` with no model behind them), the class is not
+    a real gap and must not pollute the audit.
     """
     try:
         _load_class(cls_name)
