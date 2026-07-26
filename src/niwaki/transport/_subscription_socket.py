@@ -224,7 +224,8 @@ class SubscriptionInfo:
         dropped: Cumulative events dropped by the backpressure bound
             (``max_pending``) since the subscription was opened. Non-zero
             means the consumer fell behind and at least one
-            :class:`SubscriptionOverflow` marker was delivered.
+            :class:`~niwaki.transport._subscription_socket.SubscriptionOverflow`
+            marker was delivered.
     """
 
     local_id: int
@@ -558,7 +559,8 @@ class SubscriptionSocket:
             max_pending: Bound on buffered, not-yet-consumed events for this
                 subscription. Beyond it incoming events are dropped (never
                 blocking other subscriptions) and a
-                :class:`SubscriptionOverflow` marker is delivered in-stream.
+                :class:`~niwaki.transport._subscription_socket.SubscriptionOverflow`
+                marker is delivered in-stream.
 
         Returns:
             A :class:`RawSubscription` — ``.initial`` for the synchronous
@@ -825,7 +827,8 @@ class SubscriptionSocket:
 
         Past ``max_pending`` buffered items the incoming event is dropped
         (newest-dropped: rejecting the arrival is O(1) and can never disturb
-        control items already queued) and one :class:`SubscriptionOverflow`
+        control items already queued) and one
+        :class:`~niwaki.transport._subscription_socket.SubscriptionOverflow`
         marker is enqueued per overload episode — the episode ends once the
         consumer drains below half the bound (hysteresis).  Only the reader
         thread calls this, so the drop bookkeeping is single-writer.
