@@ -47,7 +47,9 @@ from __future__ import annotations
 
 import asyncio
 import builtins
+import warnings
 from collections.abc import Coroutine
+from pathlib import Path
 from typing import TYPE_CHECKING, Any, NamedTuple, overload
 
 from niwaki.models.base import ManagedObject
@@ -55,6 +57,10 @@ from niwaki.transport._config import RetryConfig
 from niwaki.transport._subscription_socket import SubscriptionInfo
 from niwaki.transport.session import ApicSession
 from niwaki.transport.session_async import AsyncApicSession
+
+# Directory of the installed niwaki package — frames under it are skipped
+# when attributing deprecation warnings, so they land on the caller's line.
+_PKG_DIR = str(Path(__file__).resolve().parent)
 
 if TYPE_CHECKING:
     from niwaki.query._async_builder import AsyncQuery
@@ -101,26 +107,51 @@ def _navigate_jargon(parent_cls: type[ManagedObject], attr: str) -> _JargonTarge
     """
     from importlib import import_module
 
-    from niwaki.domain._child_map import CHILD_MAP, CLASS_PKG, RS_TARGET_PROP
+    from niwaki.domain._child_map import CHILD_MAP, CLASS_PKG, NAV_DEPRECATED, RS_TARGET_PROP
 
     parent_key = "_root" if parent_cls is ManagedObject else parent_cls.__name__
     children = CHILD_MAP.get(parent_key, {})
 
     if attr not in children:
-        # A write verb is the single most likely stumble on the three-trades
-        # split (the facade observes; configuration is the design DSL's job) —
-        # steer it there instead of deeper into the observation surface.
-        if attr in _WRITE_VERBS:
+        deprecated_target = NAV_DEPRECATED.get(parent_key, {}).get(attr)
+        if deprecated_target is not None:
+            # A pre-1.5.0 navigation name: resolve identically, but tell the
+            # caller its replacement.  skip_file_prefixes pins the warning on
+            # the first frame outside niwaki, whatever the entry path — the
+            # node __getattr__ and the Niwaki/AsyncNiwaki root proxies reach
+            # here through different depths (and a warning attributed to a
+            # library file is hidden by CPython's default filters).
+            current = next((n for n, c in children.items() if c == deprecated_target), None)
+            if current is None:
+                raise AttributeError(
+                    f"deprecated navigation name {attr!r} under {parent_key!r} has "
+                    "no current replacement — the generated navigation tables are "
+                    "out of sync; reinstall niwaki or regenerate _child_map.py"
+                )
+            warnings.warn(
+                f"navigation name {attr!r} under {parent_key!r} is deprecated — "
+                f"renamed {current!r} in the 1.5.0 naming unification; the old "
+                "name will not be removed before 1.7.0",
+                DeprecationWarning,
+                skip_file_prefixes=(_PKG_DIR,),
+            )
+            attr = current
+        elif attr in _WRITE_VERBS:
+            # A write verb is the single most likely stumble on the three-
+            # trades split (the facade observes; configuration is the design
+            # DSL's job) — steer it there instead of deeper into the
+            # observation surface.
             raise AttributeError(
                 f"{parent_cls.__name__!r} node has no {attr!r}: the facade is "
                 "read-only (navigate, read, query, delete). Configuration goes "
                 "through the design DSL — e.g. "
                 'tenant("prod").bd("web").push(aci); see niwaki.design.'
             )
-        raise AttributeError(
-            f"{parent_cls.__name__!r} node has no child accessor {attr!r}. "
-            "Use .mo(ChildClass, ...) for unlisted classes."
-        )
+        else:
+            raise AttributeError(
+                f"{parent_cls.__name__!r} node has no child accessor {attr!r}. "
+                "Use .mo(ChildClass, ...) for unlisted classes."
+            )
 
     child_aci_class = children[attr]
     pkg = CLASS_PKG[child_aci_class]
@@ -639,6 +670,77 @@ class AsyncNiwaki:
         self._max_concurrent = max_concurrent
         self._retry = retry
         self._session: AsyncApicSession | None = None
+
+    # ── Factory ───────────────────────────────────────────────────────────────
+
+    @classmethod
+    async def connect(
+        cls,
+        host: str,
+        username: str,
+        password: str,
+        *,
+        verify_ssl: bool | str = True,
+        timeout: float = 30.0,
+        refresh_threshold: int = 60,
+        max_concurrent: int = 10,
+        retry: RetryConfig | None = None,
+    ) -> AsyncNiwaki:
+        """Create an AsyncNiwaki instance and authenticate immediately (async).
+
+        The async twin of :meth:`Niwaki.connect` — for long-lived services
+        that manage the lifecycle themselves rather than through ``async
+        with``. The same session construction and login path as the context
+        manager is used, so every constructor option behaves identically.
+        Pair with :meth:`close` on shutdown.
+
+        Args:
+            host: Base URL of the APIC.
+            username: APIC username.
+            password: APIC password.
+            verify_ssl: TLS verification — ``True``, a PEM CA bundle path,
+                or ``False``.  Default: ``True``.
+            timeout: HTTP timeout in seconds.  Default: 30.
+            refresh_threshold: Proactive refresh threshold in seconds.
+                Default: 60.
+            max_concurrent: Maximum simultaneous in-flight requests.
+                Default: 10.
+            retry: Custom retry policy.  Defaults to 3 attempts with
+                exponential back-off.
+
+        Returns:
+            Authenticated :class:`AsyncNiwaki` instance.
+
+        Raises:
+            LoginError: APIC rejected the credentials.
+            ConnectionError: APIC host is unreachable.
+            TimeoutError: Login request timed out.
+            TLSError: TLS certificate verification failed.
+
+        Example::
+
+            aci = await AsyncNiwaki.connect(
+                "https://sandboxapicdc.cisco.com",
+                "admin",
+                "ciscopsdt",
+                verify_ssl=False,
+            )
+            try:
+                bds = await aci.query("fvBD").fetch()
+            finally:
+                await aci.close()
+        """
+        obj = cls(
+            host,
+            username,
+            password,
+            verify_ssl=verify_ssl,
+            timeout=timeout,
+            refresh_threshold=refresh_threshold,
+            max_concurrent=max_concurrent,
+            retry=retry,
+        )
+        return await obj.__aenter__()
 
     # ── Context manager ───────────────────────────────────────────────────────
 

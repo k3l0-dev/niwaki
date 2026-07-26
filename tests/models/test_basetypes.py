@@ -24,7 +24,7 @@ import pathlib
 
 import pytest
 
-from niwaki._codegen.basetypes import (
+from niwaki._schema.kinds import (
     BASETYPE_MAP,
     FieldKind,
     UnknownBaseTypeError,
@@ -160,7 +160,7 @@ class TestTheCorpusIsFullyClassified:
         unclassified = sorted(self._corpus_base_types() - set(BASETYPE_MAP))
         assert not unclassified, (
             f"unclassified schema baseType(s): {unclassified}. Classify them in "
-            "niwaki._codegen.basetypes.BASETYPE_MAP, with the reason — the old "
+            "niwaki._schema.kinds.BASETYPE_MAP, with the reason — the old "
             "behaviour was to guess str, and that guess is the bug."
         )
 

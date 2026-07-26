@@ -23,8 +23,10 @@ rest of the page can share one client — see {doc}`connection`.
 
 ## Vocabulary navigation
 
-Every node is a DN-scoped handle.  Navigate with the same vocabulary the GUI
-tree uses; the DN is computed for you:
+Every node is a DN-scoped handle.  Navigate with the curated design
+vocabulary — the same names the design DSL uses (for uncurated classes the
+name derives from the schema label, or the pkg-prefixed class name when the
+label is not identifier-shaped); the DN is computed for you:
 
 ```python
 bd = aci.tenant("prod").bd("web")  # NiwakiNode at uni/tn-prod/BD-web
@@ -32,6 +34,11 @@ assert bd.dn == "uni/tn-prod/BD-web"
 mo = bd.read()  # typed fvBD instance
 assert mo.unicast_routing is True  # human-readable field names
 ```
+
+Names renamed by the 1.5.0 naming unification keep resolving with a
+`DeprecationWarning` until at least 1.7.0 — the full old → new table is the
+{doc}`deprecated navigation names <../reference/vocabulary/deprecated-navigation>`
+reference page.
 
 `aci.node(dn, cls)` reaches any explicit DN; `.mo(Class, **naming)` descends
 one level for classes outside the curated vocabulary.

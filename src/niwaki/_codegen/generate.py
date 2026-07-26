@@ -22,7 +22,7 @@ from typing import Any
 
 from jinja2 import Environment, FileSystemLoader, StrictUndefined
 
-from niwaki._codegen._label_utils import best_field_name, propname_to_snake, resolve_py_names
+from niwaki._schema.naming import best_field_name, propname_to_snake, resolve_py_names
 
 # ── Paths ─────────────────────────────────────────────────────────────────────
 
@@ -49,17 +49,10 @@ class _CodegenInputs:
             (produced by ``generate_enums.py``).
         sm_labels: Dotted class name (``"fv.BD"``) → ``{prop: label}``
             scopemeta display labels.
-        child_map: Parent ACI class → ``{jargon name → child ACI class}``
-            (from ``domain._child_map``; empty when not yet generated).
-        rs_target_prop: Rs singleton ACI class → its ``tn*Name`` prop.
-        class_pkg: ACI class → package directory name.
     """
 
     enum_mapping: dict[str, str] = field(default_factory=dict)
     sm_labels: dict[str, dict[str, str]] = field(default_factory=dict)
-    child_map: dict[str, dict[str, str]] = field(default_factory=dict)
-    rs_target_prop: dict[str, str] = field(default_factory=dict)
-    class_pkg: dict[str, str] = field(default_factory=dict)
 
 
 # ── Validation patterns ───────────────────────────────────────────────────────
@@ -947,28 +940,9 @@ def main() -> None:
 
     subset: dict[str, dict[str, Any]] = json.loads(SUBSET_FILE.read_text())
 
-    child_map: dict[str, dict[str, str]] = {}
-    rs_target_prop: dict[str, str] = {}
-    class_pkg: dict[str, str] = {}
-    try:
-        from niwaki.domain import _child_map
-
-        child_map = _child_map.CHILD_MAP
-        rs_target_prop = _child_map.RS_TARGET_PROP
-        class_pkg = _child_map.CLASS_PKG
-    except ImportError:
-        print(
-            "WARNING: niwaki.domain._child_map not importable — "
-            "run generate_domain.py first; builder methods will be omitted",
-            file=sys.stderr,
-        )
-
     inputs = _CodegenInputs(
         enum_mapping=enum_mapping,
         sm_labels=sm_labels,
-        child_map=child_map,
-        rs_target_prop=rs_target_prop,
-        class_pkg=class_pkg,
     )
 
     env = Environment(

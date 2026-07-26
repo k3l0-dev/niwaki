@@ -44,5 +44,6 @@ vmm_provider
 uni
 enums
 navigation
+deprecated-navigation
 coverage
 ```

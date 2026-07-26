@@ -23,10 +23,12 @@ The output is a **proposal, never an input**: it is written under
 - ``abstract-target`` — the bind alias points at an abstract class; decide
   abstract-vs-concrete explicitly.
 
-Maker names come **verbatim from CHILD_MAP** (the read-navigation jargon):
-the curated maker name must agree with the facade jargon
-(``test_core_yaml.test_maker_name_matches_facade_jargon``), so proposing
-anything else would only manufacture whitelist entries.
+Maker names are **seeded verbatim from CHILD_MAP** (the read-navigation
+jargon, auto-derived at uncurated positions).  Reviewers are free to shorten
+them: once merged, the curated name is overlaid back onto CHILD_MAP by
+``generate_domain``, so the maker/navigation agreement
+(``test_core_yaml.test_maker_name_is_the_navigation_name``) holds by
+construction.
 """
 
 from __future__ import annotations
@@ -292,8 +294,9 @@ class _Wave:
 def _alias_name(label: str, aci_class: str) -> str:
     """Bind-alias spelling for a target class (label first, class fallback)."""
     from niwaki._codegen.generate_domain import _derive_name, _normalise_method
+    from niwaki.domain._child_map import CLASS_PKG
 
-    return _normalise_method(_derive_name(aci_class, label, ""))
+    return _normalise_method(_derive_name(aci_class, label, "", CLASS_PKG.get(aci_class, "")))
 
 
 def propose(roots: list[str], max_depth: int = 6, allow: frozenset[str] = frozenset()) -> _Wave:

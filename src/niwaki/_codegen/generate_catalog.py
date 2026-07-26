@@ -11,10 +11,15 @@ capture measures 87 MB (Lot 0) — above PyPI's per-file ceiling and too heavy t
 ship.  So every schema field is *routed*: lifted into a queryable column/table,
 interned into a pool, or kept verbatim in a per-row ``residual`` blob.  A handful
 are *dropped* — each an explicit decision with a written reason, never a silent
-default (the discipline of :mod:`niwaki._codegen.basetypes`, where an unknown
+default (the discipline of :mod:`niwaki._schema.kinds`, where an unknown
 family breaks the build rather than degrading quietly).  Purely *derived* fields
 (``py_name``, ``kind``) are not stored at all — they are recomputed on read from
-the fields they derive from, so the catalogue keeps one source of truth.
+the fields they derive from, so the catalogue keeps one source of truth.  One
+deliberate exception: ``name_override`` stores the frozen catalogue↔model
+naming divergences, introspected from the shipped models at build time —
+recomputation is exactly what it must NOT do (the models' emitted names are
+the truth, and generate.py's digit-split scopemeta miss makes a clean
+recomputation diverge from them).
 
 Two guarantees make "lossless" a fact rather than a hope:
 
@@ -41,7 +46,7 @@ import zlib
 from pathlib import Path
 from typing import Any
 
-from niwaki._codegen.basetypes import kind_value_or_none
+from niwaki._schema.kinds import kind_value_or_none
 
 _DATA = Path(__file__).resolve().parents[3] / "data"
 SCHEMA_DIR = _DATA / "schemas" / "mo-apic-v6.0_9c"
@@ -399,6 +404,63 @@ def build_catalog(schema_dir: Path = SCHEMA_DIR, out: Path = DEFAULT_OUT) -> dic
     con.executemany("INSERT INTO search_doc VALUES (?,?)", search_docs)
     con.execute("INSERT INTO catalog_fts(catalog_fts) VALUES('rebuild')")
 
+    # ── name_override ── freeze catalogue↔model naming divergences ────────────
+    # The models' emitted field names are the shipped truth: they come from
+    # introspecting model_fields, never from a recomputation (which the
+    # _aci_to_dot_class digit-split bug in generate.py would poison — the
+    # divergence direction flips between families, so no rule can pick the
+    # right side).  The catalogue's derived names are computed by the
+    # RUNTIME's own resolution path — a temporary read-only Catalog on the
+    # freshly built file — so the build-time comparison and runtime behavior
+    # cannot drift.  Models win: describe()/class_meta() must agree with what
+    # the typed models actually expose.
+    con.execute("INSERT INTO manifest VALUES ('prop_flags', ?)", (",".join(PROP_FLAG_ORDER),))
+    con.commit()
+
+    from importlib import import_module
+
+    from niwaki.query._catalog import Catalog
+
+    reader = Catalog(out)
+    id_of = {row[1]: row[0] for row in mo_rows}
+    override_rows: list[tuple[int, str, str]] = []
+    override_key: list[tuple[str, str, str]] = []
+    irreducible: list[tuple[str, str, str, str]] = []
+    for cls_name in sorted(indexed & set(_PKG_MAP)):
+        module = import_module(f"niwaki.models._generated.{_PKG_MAP[cls_name]}.{cls_name}")
+        model = getattr(module, cls_name)
+        merged = dict(reader.class_meta(cls_name).wire_to_readable)
+        taken = set(merged.values())
+        for field_name, field in model.model_fields.items():
+            if field_name == "children":
+                continue  # declared on ManagedObject itself, not a wire prop
+            wire = field.serialization_alias or field_name
+            derived = merged.get(wire)
+            if derived is None or derived == field_name:
+                continue
+            if field_name in taken:
+                # The model's name collides with ANOTHER wire prop that only
+                # the catalogue serves (its prop universe is a superset of the
+                # model's) — freezing it would break the readable↔wire
+                # bijection.  Irreducible: left out of the table, surfaced to
+                # the caller, pinned by the parity test with a reason.
+                irreducible.append((cls_name, wire, field_name, derived))
+                continue
+            override_rows.append((id_of[cls_name], wire, field_name))
+            override_key.append((cls_name, wire, field_name))
+            taken.discard(derived)
+            taken.add(field_name)
+            merged[wire] = field_name
+        if len(set(merged.values())) != len(merged):
+            raise ValueError(
+                f"name_override for {cls_name} breaks per-class name uniqueness: {merged}"
+            )
+    reader.close()
+    con.execute("DELETE FROM manifest WHERE key='prop_flags'")
+    con.executemany("INSERT INTO name_override VALUES (?,?,?)", override_rows)
+    for cls_name, wire, model_name, cat_name in irreducible:
+        print(f"  irreducible: {cls_name}.{wire} model={model_name!r} catalogue={cat_name!r}")
+
     stats = {
         "classes": len(mo_rows),
         "properties": n_props,
@@ -409,11 +471,18 @@ def build_catalog(schema_dir: Path = SCHEMA_DIR, out: Path = DEFAULT_OUT) -> dic
         "relations": len(relations),
         "scopemeta": len(scopemeta_rows),
         "unclassified_basetypes": len(unknown_types),
+        "name_overrides": len(override_rows),
     }
-    # A content digest of the class set + counts — a real fingerprint the freshness
-    # guard compares (two different corpora with identical counts differ here).
+    # A content digest of the class set + counts + the serialised override rows
+    # (keyed by class NAME, stable under corpus reordering) — a real fingerprint
+    # the freshness guard compares: a changed override VALUE flips the hash,
+    # not just a changed count.
     content_hash = hashlib.sha1(
-        ("\n".join(sorted(str(row[1]) for row in mo_rows)) + _compact(stats).decode()).encode()
+        (
+            "\n".join(sorted(str(row[1]) for row in mo_rows))
+            + _compact(stats).decode()
+            + _compact(sorted(override_key)).decode()
+        ).encode()
     ).hexdigest()
     _write_manifest(con, stats, unknown_types, content_hash)
     con.commit()
@@ -594,6 +663,13 @@ def _create_schema(con: sqlite3.Connection) -> None:
           enforceable INT, resolvable INT
         ) WITHOUT ROWID;
         CREATE TABLE scopemeta(class_id INT, wire_name TEXT, sm_label TEXT);
+        -- Frozen catalogue↔model naming divergences: py_name is the field name
+        -- the shipped generated model actually emits for wire_name.  Applied on
+        -- top of resolve_py_names by the runtime (models win).
+        CREATE TABLE name_override(
+          class_id INT, wire_name TEXT, py_name TEXT,
+          PRIMARY KEY(class_id, wire_name)
+        ) WITHOUT ROWID;
         -- Discovery: one searchable doc per class (wire name + GUI label).  The
         -- plain table serves the LIKE fallback; catalog_fts is an external-content
         -- FTS5 index over it (no second copy of the text).

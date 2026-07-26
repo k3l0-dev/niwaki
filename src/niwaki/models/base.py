@@ -91,7 +91,7 @@ def _coerce_read(value: object, kind: str | None) -> object:
 
     The wire boundary (:func:`niwaki.models._wire.from_wire`) coerces by a field's
     annotation; a non-generated class has no annotation, only the catalogue's
-    :class:`~niwaki._codegen.basetypes.FieldKind`.  This is the read-side twin, and
+    :class:`~niwaki._schema.kinds.FieldKind`.  This is the read-side twin, and
     it reuses the very same coercers so a value reads **identically** whether its
     class is generated or not: ``"yes"``/``"1"``/``"on"`` → ``True``, ``"0xff"`` →
     ``255``, ``"public,shared"`` → a ``frozenset`` of member names; and — like the

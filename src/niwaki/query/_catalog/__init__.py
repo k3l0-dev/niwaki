@@ -6,22 +6,16 @@ nothing here runs at ``import niwaki``; the connection is made on the first
 lookup — and memoises a :class:`ClassMeta` per class so a query that returns
 thousands of objects of one class touches sqlite once, then serves dict hits.
 
-**Naming parity, by construction (with one measured caveat).**  The readable
-field names are recomputed here with the *same* function the code generator uses
-(:func:`niwaki._codegen._label_utils.resolve_py_names`) fed the *same* inputs —
-the property labels and the scopemeta labels the catalogue stores — so a class
-the catalogue serves dynamically reads with the field names its generated model
-would use.
+**Naming parity, frozen at build time.**  The readable field names are
+recomputed here with the *same* function the code generator uses
+(:func:`niwaki._schema.naming.resolve_py_names`) fed the *same* inputs, then
+patched by the db's ``name_override`` table — the divergences introspected
+from the shipped models at build time (their emitted names are the truth).
+Only the documented irreducible residue remains: 5 properties whose model
+name collides with a wire prop the catalogue alone serves (its readable
+universe is a superset of the model's configurable subset) — pinned
+exhaustively by the parity tests.
 
-The caveat: ``resolve_py_names`` resolves name collisions over *all* of a class's
-readable properties here, but over the smaller *configurable* subset in the
-generator, so the two can pick different names when a collision falls
-differently.  Measured on APIC 6.0(9c): **11 properties across 7 of 2,222
-generated classes (0.07%)** — e.g. the catalogue names ``l3extOut.enforceRtctrl``
-``enforce_route_control`` where the model names it ``enforce_rtctrl``.  This is
-**invisible on result objects** — a generated class is served by its typed model,
-never the catalogue — and shows only when introspecting those classes with
-:meth:`Catalog.describe`.
 """
 
 from __future__ import annotations
@@ -32,8 +26,8 @@ import zlib
 from dataclasses import dataclass
 from pathlib import Path
 
-from niwaki._codegen._label_utils import resolve_py_names
-from niwaki._codegen.basetypes import kind_value_or_none
+from niwaki._schema.kinds import kind_value_or_none
+from niwaki._schema.naming import resolve_py_names
 from niwaki.exceptions._query import UnknownClassError
 
 DEFAULT_PATH = Path(__file__).resolve().parent / "catalog.db"
@@ -154,9 +148,11 @@ class Catalog:
         if self._con is None:
             if not self._path.exists():
                 raise FileNotFoundError(
-                    f"read catalogue not found at {self._path}. It ships with the "
-                    "package; in a source checkout run "
-                    "'uv run python -m niwaki._codegen.generate_catalog'."
+                    f"read catalogue not found at {self._path}. It ships inside "
+                    "the package — a missing file means a broken or partial "
+                    "install: reinstall niwaki (pip install --force-reinstall "
+                    "niwaki). In a source checkout, regenerate it with "
+                    "'bash scripts/regen.sh'."
                 )
             # immutable=1: read-only, no locking, safe to share across threads.
             self._con = sqlite3.connect(
@@ -235,6 +231,13 @@ class Catalog:
         )
         # Same function, same inputs as the generator → identical field names.
         wire_to_readable = resolve_py_names(shaped, sm_class, class_name)
+        # Frozen divergences: where the shipped generated model emits a
+        # different field name than the derived map, the model wins — the
+        # override rows were introspected from the models at build time.
+        for wire, py_name in con.execute(
+            "SELECT wire_name, py_name FROM name_override WHERE class_id=?", (class_id,)
+        ):
+            wire_to_readable[wire] = py_name
         readable_to_wire = {py: wire for wire, py in wire_to_readable.items()}
         return ClassMeta(
             class_name=class_name,

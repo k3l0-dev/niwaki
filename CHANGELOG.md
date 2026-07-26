@@ -5,6 +5,64 @@ All notable changes to this project are documented here.  The format follows
 [semver](https://semver.org/).  From 1.0.0 the configuration API is stable:
 breaking changes ship in a new major version with a migration note.
 
+## [1.5.0] — 2026-07-26
+
+### Changed
+
+- **The facade navigates by the curated design vocabulary.** At every
+  curated position the read-side navigation name is now the exact design
+  maker name — `aci.tenant("t").vrf("v").pim()` where navigation used to
+  say `pim_ctx` — and auto-derived names elsewhere drop their
+  sentence-length labels for the pkg-prefixed class name (`dwdm_if_pol`,
+  not `profiles_for_dwdm_to_be_applied_at_the_interface_level`). 773
+  navigation names change in total; every old name keeps resolving — to
+  the same class — with a `DeprecationWarning` naming its replacement
+  (removal no earlier than 1.7.0). The full table is the
+  [deprecated navigation names](https://k3l0-dev.github.io/niwaki/reference/vocabulary/deprecated-navigation.html)
+  reference page. Design-DSL maker names, `read()`, `query()` and DNs are
+  untouched.
+- **Navigation gaps closed.** 20 containment edges the old generator
+  silently dropped on name collisions are navigable again (the generator
+  now breaks the build rather than dropping an edge), and two misspelled
+  Cisco labels leave the navigation surface: `catalog_maitenance_policy`
+  is now `catalog_maintenance_policy`, and `vmm_host_availibility_policy`
+  resolves to the curated `host_availability_policy` (both misspellings
+  remain as deprecated aliases).
+
+- **Catalogue reads now name fields exactly like the typed models.** The
+  shipped `catalog.db` gains a `name_override` table freezing the six
+  properties (the `l3ext` family) where the catalogue's derived names
+  diverged from the generated models — introspected from the models
+  themselves at build time, so `describe()`/`class_meta()`/dynamic reads
+  agree with what typed code sees (`enforce_rtctrl`, not
+  `enforce_route_control`). Five documented divergences remain by design:
+  their model name collides with a wire property only the catalogue
+  serves. The build now breaks on any new unfrozen divergence, and the
+  db's content hash covers the frozen names.
+
+### Added
+
+- **`AsyncNiwaki.connect()`** — the async twin of `Niwaki.connect()`, for
+  long-lived services that own the lifecycle instead of using
+  `async with`: `aci = await AsyncNiwaki.connect(...)`, paired with
+  `await aci.close()`. Same options, same login path as the context
+  manager. Validated live against APIC 6.0(9c).
+- **"Ask the docs" chat on the documentation site.** Every page of
+  <https://k3l0-dev.github.io/niwaki/> now carries a floating chat widget
+  answering questions from the library's indexed documentation (Context7).
+  The library is also indexed for AI coding agents — Context7 id
+  `/k3l0-dev/niwaki` (with 20 maintainer rules injected into every agent
+  context) and an AI architecture wiki on DeepWiki — completing the
+  AI-onboarding surface started in 1.4.1.
+
+### Internal
+
+- Naming unification, lot A: the name-derivation and base-type
+  classification rules move from the code generators into
+  `niwaki._schema` (stdlib-only), the single authority both the
+  generators and the runtime catalogue consume. `_codegen` no longer
+  ships in the wheel.
+
 ## [1.4.1] — 2026-07-25
 
 ### Fixed

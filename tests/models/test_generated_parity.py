@@ -93,3 +93,37 @@ def test_generated_classes_are_concrete_and_non_stat_in_the_catalogue() -> None:
     assert not stat, f"generated classes flagged is_stat: {stat[:12]}"
     abstract = [n for n in _PKG_MAP if catalog.describe(n).is_abstract]
     assert not abstract, f"generated classes flagged is_abstract: {abstract[:12]}"
+
+
+def test_shipped_catalogue_names_match_the_models() -> None:
+    """Corpus-free naming parity against the SHIPPED catalog.db.
+
+    The name_override table freezes the freezable divergences at build time;
+    only the irreducible residue (model name collides with a catalogue-only
+    wire prop) may differ.  This is the parity guarantee public CI enforces
+    on the artifact users actually install.
+    """
+    from importlib import import_module
+
+    from niwaki import catalog
+    from niwaki.models._generated import _PKG_MAP
+
+    irreducible = {
+        ("vmmAgtStatus", "operSt"),
+        ("vmmPlInf", "state"),
+        ("vnsCMgmt", "gateway"),
+        ("vnsCMgmt", "host"),
+        ("vnsCMgmt", "subnetmask"),
+    }
+    divergences: set[tuple[str, str]] = set()
+    for name in sorted(_PKG_MAP):
+        model = getattr(import_module(f"niwaki.models._generated.{_PKG_MAP[name]}.{name}"), name)
+        meta = catalog.class_meta(name)
+        for field_name, field in model.model_fields.items():
+            if field_name == "children":
+                continue
+            wire = field.serialization_alias or field_name
+            catalogue_name = meta.wire_to_readable.get(wire)
+            if catalogue_name is not None and catalogue_name != field_name:
+                divergences.add((name, wire))
+    assert divergences == irreducible

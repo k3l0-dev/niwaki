@@ -71,6 +71,23 @@ class TestChildMap:
     def test_infra_has_vlan_pool(self) -> None:
         assert CHILD_MAP["infraInfra"]["vlan_pool"] == "fvnsVlanInstP"
 
+    def test_rows_are_injective_per_child_class(self) -> None:
+        """Each child class appears exactly once per parent row.
+
+        One navigation name per (parent, child) edge is the invariant behind
+        the curated-vocabulary overlay: if the generator ever inserted a
+        curated name without deleting the auto-derived one, the old name
+        would linger as a silent alias and the read/write vocabulary would
+        diverge again without any test noticing — this pins the whole map.
+        """
+        offenders = {
+            (parent, cls): names
+            for parent, row in CHILD_MAP.items()
+            for cls in row.values()
+            if len(names := [m for m, c in row.items() if c == cls]) > 1
+        }
+        assert not offenders, f"duplicate navigation edges: {offenders}"
+
     # RS_TARGET_PROP
     def test_rs_target_prop_fv_rs_bd(self) -> None:
         assert RS_TARGET_PROP["fvRsBd"] == "tnFvBDName"

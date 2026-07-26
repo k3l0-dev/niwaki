@@ -27,6 +27,27 @@ tenants = aci.query("fvTenant").fetch()
 aci.close()
 ```
 
+The async twin is `await AsyncNiwaki.connect(...)` — same options, same
+login path as the `async with` form; pair it with `await aci.close()` on
+shutdown:
+
+```python
+import asyncio
+
+from niwaki import AsyncNiwaki
+
+
+async def service() -> None:
+    aci = await AsyncNiwaki.connect("https://apic.example.com", "admin", "secret")
+    try:
+        tenants = await aci.query("fvTenant").fetch()
+    finally:
+        await aci.close()
+
+
+asyncio.run(service())
+```
+
 ## Credentials from the environment
 
 Every constructor argument you omit falls back to an environment variable —

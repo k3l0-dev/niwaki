@@ -91,7 +91,7 @@ does not match a fresh regeneration.
 
 | Generator | Output | What it derives |
 | --- | --- | --- |
-| `generate_domain` | `domain/_child_map.py` | `CHILD_MAP` (12,500+ navigation names from schema labels, sibling collisions resolved), `REFERENCE_MAP` (1,700 relation edges with their name/DN flavor), abstract-target expansion |
+| `generate_domain` | `domain/_child_map.py` | `CHILD_MAP` (12,500+ navigation names from schema labels with a pkg-prefixed class-name fallback, sibling collisions resolved, curated maker names overlaid at every curated position), `REFERENCE_MAP` (1,700 relation edges with their name/DN flavor), abstract-target expansion |
 | `generate_design` | `design/_generated_cursors/` | one typed cursor class per **position** (a maker path, not a class — `infraNodeBlk` gets distinct cursors under leaf and spine selectors), one module per domain, loaded lazily |
 | `generate_docs` | `docs/reference/vocabulary/` | the DSL reference — one page per position with every keyword argument, the enums, and the coverage matrix; documentation that cannot drift from the code |
 
@@ -127,10 +127,12 @@ uv run python -m niwaki._codegen.propose_vocabulary l3extOut --wave my-wave
 `propose_vocabulary` walks a schema subtree and emits a candidate YAML block
 shaped exactly like `vocabulary.yaml`: maker names *seeded* from the facade's
 auto-derived navigation names, then reviewed — curation deliberately shortens
-many of them to their Cisco-aligned form (`bd`, not `bridge_domain`), so the
-write-side DSL name and the read-side navigation label can differ for the
-same class; the {doc}`navigation reference <reference/vocabulary/navigation>`
-is the mapping between the two. Bind aliases derive from
+many of them to their Cisco-aligned form (`bd`, not `bridge_domain`), and the
+curated name then **becomes** the navigation name (the generator overlays it
+onto `CHILD_MAP`), so the design DSL and the facade speak one vocabulary at
+every curated position; the
+{doc}`navigation reference <reference/vocabulary/navigation>` lists the
+read-side names. Bind aliases derive from
 `REFERENCE_MAP`, contract verbs detected from the `Rs*Prov`/`Rs*Cons` pairs
 — and a `# REVIEW:` comment on every line that deserves a human eye
 (collision-resolved names, over-long labels, abstract targets).  The

@@ -10,6 +10,9 @@
 #   makers:  parent ACI class → {maker name → child ACI class}.  The curated
 #            design surface; the "polUni" table defines the design roots.
 #            Structure is literal: one maker per real APIC child class.
+#            Also feeds CHILD_MAP: at a curated position the maker name IS the
+#            facade navigation name, keyed (parent, child) — it takes
+#            precedence over the global jargon entry for that class.
 #   binds:   cursor ACI class → {bind alias → target ACI class} (the Rs class
 #            and its flavor are resolved at declaration time via
 #            REFERENCE_MAP, abstract targets expanded via TARGET_SUBCLASSES).

@@ -31,7 +31,7 @@ from typing import Any, cast
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
-from niwaki._codegen.basetypes import FieldKind, kind_for
+from niwaki._schema.kinds import FieldKind, kind_for
 
 SCHEMAS_DIR = Path(__file__).parent.parent / "schemas" / "mo-apic-v6.0_9c"
 CLASSES_FILE = Path(__file__).parent.parent / "extracted" / "classes.json"
@@ -288,7 +288,7 @@ def normalize_prop(schema: dict[str, Any]) -> dict[str, Any] | None:
     """Normalize a raw ACI property schema to a codegen-ready dict.
 
     The ``baseType`` decides everything, and it is looked up in
-    :data:`niwaki._codegen.basetypes.BASETYPE_MAP` — a family this SDK has never
+    :data:`niwaki._schema.kinds.BASETYPE_MAP` — a family this SDK has never
     classified **raises** rather than quietly becoming a string.  That silent
     fallback is what typed half the SDK's numbers as text.
 

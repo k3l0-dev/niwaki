@@ -25,7 +25,7 @@ from typing import Any, ClassVar
 
 import pytest
 
-from niwaki._codegen.basetypes import UnknownBaseTypeError
+from niwaki._schema.kinds import UnknownBaseTypeError
 
 
 def _load_extractor() -> ModuleType:

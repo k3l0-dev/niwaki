@@ -141,6 +141,13 @@ html_static_path = ["_static"]
 # The generated attribute tables are six columns wide; furo's default content
 # column squeezes Cisco's descriptions into a few characters.
 html_css_files = ["custom.css"]
+# Context7 "ask the docs" chat widget — a floating button on every page,
+# answering from this library's indexed documentation. Loads async (never
+# blocks rendering); server-side domain allowlist on the Context7 side
+# gates where it activates.
+html_js_files = [
+    ("https://context7.com/widget.js", {"data-library": "/k3l0-dev/niwaki"}),
+]
 html_theme_options = {
     "source_repository": "https://github.com/k3l0-dev/niwaki",
     "source_branch": "main",

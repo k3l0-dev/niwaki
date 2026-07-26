@@ -2,9 +2,11 @@
 
 from __future__ import annotations
 
-from niwaki._codegen._label_utils import (
+from niwaki._schema.naming import (
     MAX_LABEL_LENGTH,
+    NAV_NAME_OVERRIDES,
     best_field_name,
+    classname_to_snake,
     label_to_snake,
     propname_to_snake,
 )
@@ -217,3 +219,42 @@ class TestBestFieldName:
         # SM label "100-mhz-frequency" → "100_mhz_frequency" also starts with digit
         # → falls through to priority 3: propname_to_snake("frequency100MHz")
         assert result.isidentifier()
+
+
+# ── classname_to_snake ────────────────────────────────────────────────────────
+
+
+class TestClassnameToSnake:
+    def test_simple_pascal(self) -> None:
+        assert classname_to_snake("DevFolder") == "dev_folder"
+
+    def test_leading_acronym_stays_one_token(self) -> None:
+        assert classname_to_snake("EPg") == "epg"
+
+    def test_inner_acronym_stays_attached(self) -> None:
+        assert classname_to_snake("ThrValueUByte") == "thr_value_ubyte"
+
+    def test_relation_class_shape(self) -> None:
+        assert classname_to_snake("RsSrcToVPortDef") == "rs_src_to_vport_def"
+
+    def test_digit_boundary_splits(self) -> None:
+        assert classname_to_snake("L3Out") == "l3_out"
+
+    def test_single_word(self) -> None:
+        assert classname_to_snake("Pol") == "pol"
+
+    def test_already_lower(self) -> None:
+        assert classname_to_snake("pol") == "pol"
+
+    def test_empty(self) -> None:
+        assert classname_to_snake("") == ""
+
+
+class TestNavNameOverrides:
+    def test_all_values_are_valid_identifiers(self) -> None:
+        for cls, name in NAV_NAME_OVERRIDES.items():
+            assert name.isidentifier() and name == name.lower(), (cls, name)
+
+    def test_typo_fixes_present(self) -> None:
+        assert NAV_NAME_OVERRIDES["maintCatMaintP"] == "catalog_maintenance_policy"
+        assert NAV_NAME_OVERRIDES["vmmHvAvailPol"] == "vmm_host_availability_policy"

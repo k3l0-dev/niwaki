@@ -70,6 +70,21 @@ PyPI — the step-by-step is in
 Full documentation — guides, cookbook, vocabulary book, API reference —
 lives at **<https://k3l0-dev.github.io/niwaki/>**.
 
+### Learning it fast (humans and AI agents)
+
+- **Ask the docs** — every page of the documentation site carries a chat
+  widget answering from the indexed documentation itself.
+- **In your AI coding agent** — niwaki is indexed on
+  [Context7](https://context7.com/k3l0-dev/niwaki) (library id
+  `/k3l0-dev/niwaki`): add `use context7` to your prompt and your agent
+  gets current docs plus the maintainers' 20 usage rules injected with
+  every answer.
+- **Explore the architecture** — the
+  [DeepWiki](https://deepwiki.com/k3l0-dev/niwaki) (badge above) is an
+  AI-generated, question-answering wiki over the codebase itself.
+- Every code snippet in the documentation is executed under pytest against
+  an in-memory APIC on every build — what you copy is proven current.
+
 ## Quickstart — declarative provisioning (design DSL)
 
 **One mental model**: describe the desired configuration with the

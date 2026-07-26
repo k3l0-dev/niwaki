@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "niwaki"
-version = "1.4.1"
+version = "1.5.0"
 description = "Modern, typed, design-first Python SDK for Cisco ACI (APIC)"
 readme = "README.md"
 license = "Apache-2.0"
@@ -77,6 +77,11 @@ docs = [
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/niwaki"]
+# The code generators are dev-only tooling: they read the gitignored schema
+# corpus, and generate.py imports jinja2 (a dev dependency) at module level —
+# un-importable in a user install. The runtime imports nothing from _codegen
+# (naming/kind policy lives in niwaki._schema); wheel_smoke guards the seam.
+exclude = ["src/niwaki/_codegen"]
 
 # ── Ruff ──────────────────────────────────────────────────────────────────────
 

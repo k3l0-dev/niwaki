@@ -52,7 +52,7 @@ from pathlib import Path
 from types import UnionType
 from typing import Annotated, Any, NamedTuple, Union, get_args, get_origin
 
-from niwaki._codegen._label_utils import label_to_snake
+from niwaki._schema.naming import label_to_snake
 from niwaki.design._cursor import _load_class, _tables
 from niwaki.models._wire import Flags
 from niwaki.models.base import ManagedObject

@@ -93,22 +93,20 @@ def test_naming_parity_on_a_scopemeta_class(cat: _catalog.Catalog) -> None:
         assert meta.wire_to_readable[wire] == python_name, wire
 
 
-# The catalogue resolves name collisions over a class's whole readable property
-# set, the generator over its configurable subset, so a handful of properties
-# land a different readable name in the catalogue than on their model.  Invisible
-# at runtime (a generated class is served by its model).  Pinned exhaustively: a
-# NEW divergence (firmware drift) breaks the build; a resolved one does too, so
-# the allowlist is kept honest.  Measured on APIC 6.0(9c).
-_KNOWN_NAMING_DIVERGENCES = frozenset(
+# Since 1.5.0 the build freezes every catalogue↔model naming divergence it CAN
+# into the db's name_override table (models win — their emitted names are the
+# shipped truth).  What remains is the irreducible residue: properties whose
+# model name collides with ANOTHER wire prop that only the catalogue serves
+# (its readable universe is a superset of the model's configurable subset), so
+# freezing them would break the readable↔wire bijection.  Pinned exhaustively:
+# a NEW divergence breaks the build (freeze it or justify it here); a resolved
+# one does too.  Measured on APIC 6.0(9c).
+_IRREDUCIBLE_DIVERGENCES = frozenset(
     {
-        ("l3extMember", "addr"),
-        ("l3extOut", "enforceRtctrl"),
-        ("l3extRsNodeL3OutAtt", "rtrId"),
-        ("l3extRsPathL3OutAtt", "addr"),
-        ("l3extRsPathL3OutAtt", "llAddr"),
-        ("l3extRsPathL3OutAtt", "mac"),
+        # model 'status' collides with the wire prop 'status' (catalogue-only)
         ("vmmAgtStatus", "operSt"),
         ("vmmPlInf", "state"),
+        # model names collide with catalogue-only readable names of siblings
         ("vnsCMgmt", "gateway"),
         ("vnsCMgmt", "host"),
         ("vnsCMgmt", "subnetmask"),
@@ -118,7 +116,11 @@ _KNOWN_NAMING_DIVERGENCES = frozenset(
 
 @needs_corpus
 def test_naming_parity_is_exhaustive_with_pinned_divergences(cat: _catalog.Catalog) -> None:
-    """Across EVERY generated class, catalogue names match the model — bar a pinned set."""
+    """Across EVERY generated class, catalogue names match the model.
+
+    The name_override table freezes every freezable divergence at build time;
+    only the documented irreducible residue may remain.
+    """
     import importlib
 
     gen_root = Path("src/niwaki/models/_generated")
@@ -142,7 +144,7 @@ def test_naming_parity_is_exhaustive_with_pinned_divergences(cat: _catalog.Catal
             catalogue_name = meta.wire_to_readable.get(wire)
             if catalogue_name is not None and catalogue_name != python_name:
                 divergences.add((pyfile.stem, wire))
-    assert divergences == _KNOWN_NAMING_DIVERGENCES
+    assert divergences == _IRREDUCIBLE_DIVERGENCES
 
 
 # ── R2/R3: description, discovery, search ─────────────────────────────────────

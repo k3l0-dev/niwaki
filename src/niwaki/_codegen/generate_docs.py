@@ -390,7 +390,9 @@ def _render_navigation() -> str:
         '`aci.tenant("prod").bd("web")` walks the APIC containment model, one '
         "name at a time.  The table below lists the navigation names of every "
         "curated position (the read side accepts far more: any child name in the "
-        "APIC model resolves, curated or not).",
+        "APIC model resolves, curated or not).  Pre-1.5.0 names keep resolving "
+        "with a `DeprecationWarning` — see "
+        "{doc}`deprecated navigation names <deprecated-navigation>`.",
         "",
         "| from | name | descends into |",
         "| --- | --- | --- |",
@@ -454,6 +456,7 @@ def _render_index() -> str:
         "uni",
         "enums",
         "navigation",
+        "deprecated-navigation",
         "coverage",
         "```",
     ]
@@ -593,8 +596,37 @@ def render_all() -> dict[str, str]:
     pages["index.md"] = _render_index()
     pages["enums.md"] = _render_enums(used_enums)
     pages["navigation.md"] = _render_navigation()
+    pages["deprecated-navigation.md"] = _render_deprecated_navigation()
     pages["coverage.md"] = _render_coverage()
     return pages
+
+
+def _render_deprecated_navigation() -> str:
+    """Render the deprecated-navigation table (pre-1.5.0 names and shims)."""
+    from niwaki.domain._child_map import CHILD_MAP, NAV_DEPRECATED
+
+    total = sum(len(v) for v in NAV_DEPRECATED.values())
+    lines = [
+        _HEADER,
+        "# Deprecated navigation names",
+        "",
+        "Navigation names were unified in 1.5.0: curated design-maker names "
+        "at every curated position, pkg-prefixed class names where Cisco's "
+        f"label is too long to be an identifier.  The {total} pre-1.5.0 names "
+        "below still resolve — to the same class — but emit a "
+        "`DeprecationWarning` naming their replacement.  They will be removed "
+        "no earlier than 1.7.0.",
+        "",
+        "| under | deprecated name | current name | class |",
+        "| --- | --- | --- | --- |",
+    ]
+    for parent in sorted(NAV_DEPRECATED):
+        row = CHILD_MAP.get(parent, {})
+        inv = {cls: name for name, cls in row.items()}
+        for old_name in sorted(NAV_DEPRECATED[parent]):
+            cls = NAV_DEPRECATED[parent][old_name]
+            lines.append(f"| `{parent}` | `{old_name}` | `{inv[cls]}` | `{cls}` |")
+    return "\n".join(lines).rstrip() + "\n"
 
 
 def _render_uni_domain(subtree: list[_Position]) -> str:

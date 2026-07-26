@@ -47,6 +47,8 @@ def main() -> None:
     assert doc.props, "catalogue served no properties for topSystem"
     assert "fvBD" in catalog.generated_classes(), "generated-set enumeration broken"
     assert not catalog.class_meta("topSystem").has_model
+    # name_override seam: the shipped db and its reader move together.
+    assert catalog.class_meta("l3extOut").wire_to_readable["enforceRtctrl"] == "enforce_rtctrl"
     assert catalog.fault_name("F0467"), "fault index missing from the catalogue"
 
     # The subscription stack must import from the wheel (its websockets

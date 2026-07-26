@@ -171,8 +171,11 @@ class TestRender:
         for parent, table in data["makers"].items():
             assert tenant_wave.makers[parent].keys() == table.keys()
 
-    def test_review_flags_survive_as_comments(self, l3out_wave) -> None:  # type: ignore[no-untyped-def]
-        text = l3out_wave.render()
+    def test_review_flags_survive_as_comments(self, tenant_wave) -> None:  # type: ignore[no-untyped-def]
+        # The tenant subtree still carries flag-worthy names after the 1.5.0
+        # derivation (5+-underscore long-names); the l3extOut wave no longer
+        # produces any flag — every name there now derives clean.
+        text = tenant_wave.render()
         assert "# REVIEW:" in text
 
     def test_report_counts_match_the_tables(self, l3out_wave) -> None:  # type: ignore[no-untyped-def]

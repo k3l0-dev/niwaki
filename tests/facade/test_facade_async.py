@@ -20,6 +20,46 @@ from tests.conftest import HOST, LOGIN_URL, load_fixture, login_payload, ok
 # ── Helpers ───────────────────────────────────────────────────────────────────
 
 
+# ── AsyncNiwaki.connect ───────────────────────────────────────────────────────
+
+
+class TestAsyncConnect:
+    async def test_login_called(self, httpx_mock: HTTPXMock) -> None:
+        """The async twin of Niwaki.connect: authenticated on return."""
+        httpx_mock.add_response(method="POST", url=LOGIN_URL, json=login_payload("tok"))
+        aci = await AsyncNiwaki.connect(HOST, "admin", "secret")
+        assert aci._active_session.is_authenticated  # type: ignore[reportPrivateUsage]
+        await aci.close()
+
+    async def test_login_failure_raises(self, httpx_mock: HTTPXMock) -> None:
+        httpx_mock.add_response(
+            method="POST",
+            url=LOGIN_URL,
+            status_code=401,
+            json={"imdata": [{"error": {"attributes": {"code": "401", "text": "bad creds"}}}]},
+        )
+        with pytest.raises(exceptions.LoginError):
+            await AsyncNiwaki.connect(HOST, "admin", "wrong")
+
+    async def test_retry_propagated_to_session(self, httpx_mock: HTTPXMock) -> None:
+        """connect() honours a custom retry policy (same path as __aenter__)."""
+        from niwaki.transport import RetryConfig
+
+        httpx_mock.add_response(method="POST", url=LOGIN_URL, json=login_payload())
+        aci = await AsyncNiwaki.connect(HOST, "admin", "secret", retry=RetryConfig(attempts=5))
+        assert aci.retry is not None
+        assert aci.retry.attempts == 5
+        assert aci._active_session.retry.attempts == 5  # type: ignore[reportPrivateUsage]
+        await aci.close()
+
+    async def test_reuse_after_close_raises_auth_error(self, httpx_mock: HTTPXMock) -> None:
+        httpx_mock.add_response(method="POST", url=LOGIN_URL, json=login_payload())
+        aci = await AsyncNiwaki.connect(HOST, "admin", "secret")
+        await aci.close()
+        with pytest.raises(exceptions.AuthError, match="not initialised"):
+            aci.query("fvTenant")
+
+
 # ── Async context manager ─────────────────────────────────────────────────────
 
 

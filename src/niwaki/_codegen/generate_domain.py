@@ -4,6 +4,14 @@ The child map is a dict[str, dict[str, str]] keyed by parent ACI class name.
 The nested dict maps method name → child ACI class name.  The special key
 "_root" covers classes directly under ``uni`` (pol:Uni).
 
+Names come from three layers, in increasing precedence:
+
+1. auto-derivation from the schema label (with sibling-collision resolution);
+2. the global ``jargon`` section of vocabulary.yaml (class → name);
+3. the curated ``makers`` section, applied per ``(parent, child)`` position —
+   wherever a position is curated, the facade navigation speaks the exact
+   curated maker name, so the read and write surfaces share one vocabulary.
+
 Two additional dicts are emitted:
 
 - ``RS_TARGET_PROP`` — ``{rs_class: tn_prop_name}`` for Rs singleton classes
@@ -23,14 +31,22 @@ from __future__ import annotations
 
 import json
 import re
-from collections import defaultdict
+from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Any
 
 import yaml
 
+from niwaki._schema.naming import (
+    MAX_LABEL_LENGTH,
+    NAV_NAME_OVERRIDES,
+    classname_to_snake,
+    label_to_snake,
+)
+
 SCHEMA_DIR = Path("data/schemas/mo-apic-v6.0_9c")
 VOCABULARY_FILE = Path("src/niwaki/domain/vocabulary.yaml")
+NAV_BASELINE_FILE = Path("src/niwaki/_codegen/nav_baseline_1_4.json")
 OUT_FILE = Path("src/niwaki/domain/_child_map.py")
 
 HEADER = """\
@@ -129,24 +145,36 @@ def _load_schemas() -> dict[str, dict[str, Any]]:
     return classes
 
 
-_RESERVED_METHODS: frozenset[str] = frozenset(
-    {
-        "type",
-        "class",
-        "import",
-        "pass",
-        "return",
-        "any",
-        "all",
-        "id",
-        "in",
-        "is",
-        "or",
-        "and",
-        "not",
-        "del",
-        "if",
-    }
+# The facade's own public surface (NiwakiNode attributes): an auto-derived
+# navigation name equal to one of these would be silently shadowed by the
+# method — attribute lookup never reaches __getattr__ for real attributes.
+# Guarded by tests/domain/test_domain_nav.py against the live class surface.
+# Curated maker names are exempt (the overlay applies after normalisation):
+# the single pre-existing case, callhomeQueryGroup.query, is reachable
+# through .mo() and kept as-is rather than diverging from the DSL name.
+_FACADE_SURFACE: frozenset[str] = frozenset({"cls", "delete", "dn", "mo", "query", "read"})
+
+_RESERVED_METHODS: frozenset[str] = (
+    frozenset(
+        {
+            "type",
+            "class",
+            "import",
+            "pass",
+            "return",
+            "any",
+            "all",
+            "id",
+            "in",
+            "is",
+            "or",
+            "and",
+            "not",
+            "del",
+            "if",
+        }
+    )
+    | _FACADE_SURFACE
 )
 
 _DIRECTION_SUFFIXES: dict[str, str] = {
@@ -171,27 +199,49 @@ def _normalise_method(name: str) -> str:
     return name + "_" if name in _RESERVED_METHODS else name
 
 
-def _label_key(label: str) -> str:
-    """'Interface Profile' → 'interface_profile'."""
-    return re.sub(r"[^a-z0-9]+", "_", label.lower()).strip("_")
-
-
 def _short_label_key(label: str) -> str:
     """Drop generic tail words: 'Interface Profile' → 'interface'."""
-    words = [w for w in _label_key(label).split("_") if w not in _GENERIC_LABEL_WORDS]
-    return "_".join(words) if words else _label_key(label)
+    words = [w for w in label_to_snake(label).split("_") if w not in _GENERIC_LABEL_WORDS]
+    return "_".join(words) if words else label_to_snake(label)
 
 
-def _derive_name(aci_class: str, label: str, class_name: str) -> str:
-    """Derive a snake_case method name from label or class name."""
+def _pkg_classname(aci_class: str, class_name: str, pkg: str) -> str:
+    """pkg-prefixed snake_case className, used as the fallback and tie-break.
+
+    ``className`` is unique within its ``classPkg``; the already-prefixed
+    guard below makes global uniqueness corpus-contingent rather than
+    structural (``FvFoo`` and ``Foo`` in pkg ``fv`` would both yield
+    ``fv_foo`` — no such pair exists in the current corpus, and the
+    collision raise in ``_build_child_map`` breaks the build if one ever
+    appears).  The prefix keeps the Cisco domain visible (``dwdmIfPol`` →
+    ``dwdm_if_pol``, never a context-free ``if_pol``).
+    """
+    base = classname_to_snake(class_name) if class_name else classname_to_snake(aci_class)
+    if not pkg or base == pkg or base.startswith(f"{pkg}_"):
+        return base
+    return f"{pkg}_{base}"
+
+
+def _derive_name(aci_class: str, label: str, class_name: str, pkg: str) -> str:
+    """Derive a snake_case navigation name for one class.
+
+    Priority order — the same policy the model-field generator applies
+    (:mod:`niwaki._schema.naming`), specialised for navigation:
+
+    1. :data:`NAV_NAME_OVERRIDES` — curated fixes for labels wrong at the
+       source (Cisco typos);
+    2. the schema label, when it survives :func:`label_to_snake` at most
+       :data:`MAX_LABEL_LENGTH` characters long and a valid identifier —
+       sentence-labels fall through;
+    3. the pkg-prefixed className (:func:`_pkg_classname`).
+    """
+    if aci_class in NAV_NAME_OVERRIDES:
+        return NAV_NAME_OVERRIDES[aci_class]
     if label:
-        return _label_key(label)
-    if class_name:
-        s = re.sub(r"(?<=[a-z0-9])(?=[A-Z])", "_", class_name)
-        return s.lower()
-    stripped = re.sub(r"^(fv|vz|l3ext|l2ext|infra|phys|fabric|pim|bgp|ospf)", "", aci_class)
-    s = re.sub(r"(?<=[a-z0-9])(?=[A-Z])", "_", stripped or aci_class)
-    return s.lower()
+        candidate = label_to_snake(label)
+        if candidate and len(candidate) <= MAX_LABEL_LENGTH and candidate.isidentifier():
+            return candidate
+    return _pkg_classname(aci_class, class_name, pkg)
 
 
 def _longest_common_suffix(strings: list[str]) -> str:
@@ -239,7 +289,7 @@ def _resolve_group(
         ``{aci_class: unique_method_name}`` for every class in ``group``.
     """
     result: dict[str, str] = {}
-    lk = _label_key(shared_label)
+    lk = label_to_snake(shared_label)
     slk = _short_label_key(shared_label)
 
     # Strategy A: className direction suffix ──────────────────────────────────
@@ -312,11 +362,13 @@ def _build_child_map(
     slots: dict[str, dict[str, list[tuple[str, bool]]]] = defaultdict(lambda: defaultdict(list))
 
     for child_cls, info in classes.items():
-        is_explicit = child_cls in jargon
+        # Curated sources (jargon, NAV_NAME_OVERRIDES) are explicit: they keep
+        # their slot in a collision and are never re-derived by the cascade
+        # (which works from the raw schema label, typos included).
+        is_explicit = child_cls in jargon or child_cls in NAV_NAME_OVERRIDES
         method = _normalise_method(
-            jargon[child_cls]
-            if is_explicit
-            else _derive_name(child_cls, info["label"], info["className"])
+            jargon.get(child_cls)
+            or _derive_name(child_cls, info["label"], info["className"], info["classPkg"])
         )
         for parent_raw in info["containedBy"]:
             parent = "_root" if parent_raw == "polUni" else parent_raw
@@ -329,6 +381,12 @@ def _build_child_map(
     for parent, method_slots in slots.items():
         child_map[parent] = {}
 
+        # Sub-pass A ── seed every FIXED name first: single-candidate slots
+        # and explicit slot claims.  Collision resolution then checks
+        # membership against the complete fixed set, so the outcome can never
+        # depend on slot iteration order (a resolved name written before a
+        # later fixed slot used to be silently overwritten).
+        deferred: list[tuple[str, list[str]]] = []
         for method, candidates in method_slots.items():
             if len(candidates) == 1:
                 child_map[parent][method] = candidates[0][0]
@@ -338,25 +396,159 @@ def _build_child_map(
             explicit = [cls for cls, is_exp in candidates if is_exp]
             implicit = [cls for cls, is_exp in candidates if not is_exp]
 
+            if len(explicit) > 1:
+                # Two curated entries claiming one slot is a curation bug —
+                # never pick one arbitrarily.
+                raise ValueError(
+                    f"jargon collision under {parent!r}: {sorted(explicit)} all "
+                    f"claim the navigation name {method!r}"
+                )
+
             if explicit:
-                # Jargon wins its slot; implicit colliders get new names.
+                # The curated entry wins its slot; implicit colliders queue up.
                 child_map[parent][method] = explicit[0]
-                if implicit:
-                    shared_label = classes[implicit[0]]["label"]
-                    for cls, new_method in _resolve_group(implicit, classes, shared_label).items():
-                        new_method = _normalise_method(new_method)
-                        if new_method not in child_map[parent]:
-                            child_map[parent][new_method] = cls
+                deferred.append((method, implicit))
             else:
-                # All label-derived → resolve the whole group.
-                all_cls = [cls for cls, _ in candidates]
-                shared_label = classes[all_cls[0]]["label"]
-                for cls, new_method in _resolve_group(all_cls, classes, shared_label).items():
-                    new_method = _normalise_method(new_method)
-                    if new_method not in child_map[parent]:
-                        child_map[parent][new_method] = cls
+                deferred.append((method, [cls for cls, _ in candidates]))
+
+        # Sub-pass B ── resolve the queued colliders against the full row.
+        for _method, to_resolve in deferred:
+            shared_label = classes[to_resolve[0]]["label"]
+            for cls, new_method in _resolve_group(to_resolve, classes, shared_label).items():
+                new_method = _normalise_method(new_method)
+                if new_method in child_map[parent]:
+                    # Final tie-break: the pkg-prefixed className — unique on
+                    # this corpus (guarded by the raise below, not assumed).
+                    info = classes[cls]
+                    new_method = _normalise_method(
+                        _pkg_classname(cls, info["className"], info["classPkg"])
+                    )
+                if new_method in child_map[parent]:
+                    # A silently dropped navigation edge is how two shipped
+                    # releases lost 20 classes — break the build instead.
+                    raise ValueError(
+                        f"unresolvable navigation collision under {parent!r}: "
+                        f"{cls} still collides on {new_method!r} with "
+                        f"{child_map[parent][new_method]!r}"
+                    )
+                child_map[parent][new_method] = cls
+
+        # Edge conservation: every contributed (parent, child) edge must have
+        # landed exactly once — the belt to sub-pass A's braces.
+        contributed = sum(len(c) for c in method_slots.values())
+        if len(child_map[parent]) != contributed:
+            raise ValueError(
+                f"navigation edges lost under {parent!r}: "
+                f"{contributed} contributed, {len(child_map[parent])} emitted"
+            )
 
     return child_map, collisions_resolved
+
+
+def _apply_maker_overlay(
+    child_map: dict[str, dict[str, str]],
+    makers: dict[str, dict[str, str]],
+) -> int:
+    """Overlay the curated maker names onto the navigation map.
+
+    The ``makers`` section of vocabulary.yaml is the curated design surface
+    (``parent ACI class → {maker name → child ACI class}``).  Navigation
+    speaks the same jargon: wherever a position is curated, the curated name
+    replaces the auto-derived (or jargon) one.  The overlay is keyed strictly
+    by ``(parent, child)`` — the same child class is legitimately curated
+    under different names at different parents (``spanVSrc`` is
+    ``vspan_source`` under ``spanSrcGrp`` but ``vspan_vsource`` under
+    ``spanVSrcGrp``) — and takes precedence over the global ``jargon``
+    section at its positions.
+
+    Fail-loud by design: a curated child missing from its parent's
+    containment row, or a curated name already held by a *different* class
+    under the same parent, is a curation/schema divergence that must be
+    resolved explicitly — the build breaks instead of silently dropping or
+    shadowing a navigation edge.
+
+    Returns:
+        Number of navigation entries renamed.
+    """
+    renamed = 0
+    for parent_raw, table in makers.items():
+        parent = "_root" if parent_raw == "polUni" else parent_raw
+        row = child_map.get(parent)
+        if row is None:
+            raise ValueError(
+                f"vocabulary makers table {parent_raw!r}: parent has no containment row"
+            )
+        duplicated = {cls for cls, count in Counter(table.values()).items() if count > 1}
+        if duplicated:
+            raise ValueError(
+                f"vocabulary makers table {parent_raw!r}: child classes curated under "
+                f"more than one maker name: {sorted(duplicated)}"
+            )
+        by_class = {cls: method for method, cls in row.items()}
+        # Two phases so the result is order-independent: a curated name may
+        # equal the *current* name of a sibling that is itself being renamed.
+        pending: list[tuple[str, str]] = []
+        for curated, child_cls in table.items():
+            current = by_class.get(child_cls)
+            if current is None:
+                raise ValueError(
+                    f"vocabulary maker {parent_raw}.{curated} → {child_cls}: child not "
+                    f"in the containment row of {parent!r}"
+                )
+            if current == curated:
+                continue
+            del row[current]
+            pending.append((curated, child_cls))
+        for curated, child_cls in pending:
+            holder = row.get(curated)
+            if holder is not None:
+                raise ValueError(
+                    f"vocabulary maker {parent_raw}.{curated} → {child_cls}: name "
+                    f"already held by {holder!r} under {parent!r}"
+                )
+            row[curated] = child_cls
+            renamed += 1
+    return renamed
+
+
+def _build_nav_deprecated(
+    child_map: dict[str, dict[str, str]],
+) -> tuple[dict[str, dict[str, str]], list[tuple[str, str, str, str]]]:
+    """Diff the frozen pre-1.5.0 navigation baseline against the new map.
+
+    Every ``(parent, child)`` edge whose navigation name changed since the
+    1.4 baseline yields a deprecated alias: the facade keeps resolving the
+    old name — with a :class:`DeprecationWarning` — until the alias table is
+    retired (no earlier than 1.7.0, then this input file is deleted and the
+    table regenerates empty).
+
+    Returns:
+        ``(nav_deprecated, shadowed)`` — ``nav_deprecated`` maps
+        ``parent → {old_name: child_class}``; ``shadowed`` lists old names
+        that are now bound to a *different* class in the new map — they can
+        never ship (``main`` breaks the build on any shadowed rebind; the fix
+        is renaming the new holder).
+    """
+    if not NAV_BASELINE_FILE.exists():
+        # Retirement path (≥1.7.0): deleting the baseline file empties the
+        # alias table on the next regen.
+        return {}, []
+    baseline: dict[str, dict[str, str]] = json.loads(NAV_BASELINE_FILE.read_text())
+    deprecated: dict[str, dict[str, str]] = {}
+    shadowed: list[tuple[str, str, str, str]] = []
+    for parent, old_row in baseline.items():
+        new_row = child_map.get(parent, {})
+        inv_new = {cls: name for name, cls in new_row.items()}
+        for old_name, cls in old_row.items():
+            new_name = inv_new.get(cls)
+            if new_name is None or new_name == old_name:
+                continue  # edge no longer emitted, or name unchanged
+            holder = new_row.get(old_name)
+            if holder is not None:
+                shadowed.append((parent, old_name, cls, holder))
+                continue
+            deprecated.setdefault(parent, {})[old_name] = cls
+    return deprecated, shadowed
 
 
 def _build_rs_target_prop(classes: dict[str, dict[str, Any]]) -> dict[str, str]:
@@ -441,6 +633,7 @@ def _build_reference_map(
 
 def _render(
     child_map: dict[str, dict[str, str]],
+    nav_deprecated: dict[str, dict[str, str]],
     rs_target_prop: dict[str, str],
     reference_map: dict[str, dict[str, tuple[str, str]]],
     target_subclasses: dict[str, list[str]],
@@ -462,6 +655,24 @@ def _render(
         lines.append(f"    {parent!r}: {{\n")
         for method in sorted(children):
             lines.append(f"        {method!r}: {children[method]!r},\n")
+        lines.append("    },\n")
+    lines.append("}\n\n")
+
+    # ── NAV_DEPRECATED ────────────────────────────────────────────────────────
+    lines.append(
+        "# Pre-1.5.0 navigation names, kept resolving with a DeprecationWarning.\n"
+        "# parent ACI class → {old method name → child ACI class}.  Generated by\n"
+        "# diffing the frozen 1.4 baseline (_codegen/nav_baseline_1_4.json)\n"
+        "# against CHILD_MAP; retirement no earlier than 1.7.0.\n"
+        "NAV_DEPRECATED: dict[str, dict[str, str]] = {\n"
+    )
+    for parent in sorted(nav_deprecated):
+        aliases = nav_deprecated[parent]
+        if not aliases:
+            continue
+        lines.append(f"    {parent!r}: {{\n")
+        for old_name in sorted(aliases):
+            lines.append(f"        {old_name!r}: {aliases[old_name]!r},\n")
         lines.append("    },\n")
     lines.append("}\n\n")
 
@@ -523,16 +734,41 @@ def _render(
 
 def main() -> None:
     classes = _load_schemas()
-    jargon: dict[str, str] = yaml.safe_load(VOCABULARY_FILE.read_text()).get("jargon", {})
+    vocabulary = yaml.safe_load(VOCABULARY_FILE.read_text())
+    jargon: dict[str, str] = vocabulary.get("jargon", {})
+    makers: dict[str, dict[str, str]] = vocabulary.get("makers", {})
     child_map, collisions_resolved = _build_child_map(classes, jargon)
+    curated_renamed = _apply_maker_overlay(child_map, makers)
+    nav_deprecated, shadowed = _build_nav_deprecated(child_map)
     rs_target_prop = _build_rs_target_prop(classes)
     reference_map, target_subclasses, ref_stats = _build_reference_map(classes)
     class_pkg = {cls_name: info["classPkg"] for cls_name, info in classes.items()}
-    source = _render(child_map, rs_target_prop, reference_map, target_subclasses, class_pkg)
+    source = _render(
+        child_map, nav_deprecated, rs_target_prop, reference_map, target_subclasses, class_pkg
+    )
     OUT_FILE.write_text(source)
     total_entries = sum(len(v) for v in child_map.values())
+    deprecated_total = sum(len(v) for v in nav_deprecated.values())
     print(f"Generated {OUT_FILE}: {len(child_map)} parents, {total_entries} entries")
     print(f"  Collisions resolved: {collisions_resolved}")
+    print(f"  Curated maker overlay: {curated_renamed} navigation names renamed")
+    print(f"  NAV_DEPRECATED: {deprecated_total} aliases vs the 1.4 baseline")
+    if shadowed:
+        # An old navigation name silently resolving to a DIFFERENT class is
+        # the single most dangerous rename outcome — the user's old code
+        # keeps "working" against the wrong class with no warning.  Break
+        # the build; the fix is renaming the new holder (vocabulary or
+        # override), never shipping the rebind.
+        details = "\n".join(
+            f"  {parent}.{old_name}: was {cls}, now {holder}"
+            for parent, old_name, cls, holder in shadowed
+        )
+        raise ValueError(
+            f"{len(shadowed)} pre-1.5.0 navigation names now bind to a "
+            f"DIFFERENT class:\n{details}\n"
+            "Rename the new holder (vocabulary.yaml or NAV_NAME_OVERRIDES) so "
+            "the old name can stay a deprecated alias of its original class."
+        )
     print(f"  RS_TARGET_PROP: {len(rs_target_prop)} Rs singleton classes")
     ref_pairs = sum(len(v) for v in reference_map.values())
     print(

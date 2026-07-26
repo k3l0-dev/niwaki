@@ -65,7 +65,7 @@ def test_pack_flags_rejects_a_missing_flag() -> None:
 
 
 def test_kind_value_or_none_classifies_or_reports() -> None:
-    from niwaki._codegen.basetypes import kind_value_or_none
+    from niwaki._schema.kinds import kind_value_or_none
 
     assert kind_value_or_none("scalar:Bool") == "bool"
     assert kind_value_or_none("scalar:Uint32") == "int"
@@ -293,3 +293,30 @@ def test_manifest_records_provenance(built: tuple[Path, dict[str, int]]) -> None
         assert int(manifest["classes"]) == stats["classes"]
     finally:
         con.close()
+
+
+@needs_corpus
+def test_name_override_freezes_the_l3ext_family_only(
+    built: tuple[Path, dict[str, int]],
+) -> None:
+    """The override table holds exactly the freezable divergences, models' names."""
+    import sqlite3
+
+    out, stats = built
+    assert stats["name_overrides"] == 6
+    con = sqlite3.connect(out)
+    rows = set(
+        con.execute(
+            "SELECT m.class_name, o.wire_name, o.py_name "
+            "FROM name_override o JOIN mo m ON m.id = o.class_id"
+        )
+    )
+    con.close()
+    assert rows == {
+        ("l3extMember", "addr", "addr"),
+        ("l3extOut", "enforceRtctrl", "enforce_rtctrl"),
+        ("l3extRsNodeL3OutAtt", "rtrId", "rtr_id"),
+        ("l3extRsPathL3OutAtt", "addr", "addr"),
+        ("l3extRsPathL3OutAtt", "llAddr", "ll_addr"),
+        ("l3extRsPathL3OutAtt", "mac", "mac"),
+    }
