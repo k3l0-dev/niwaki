@@ -22246,6 +22246,7 @@ class TenantVspanDestinationGroupVspanVdestinationCursor(
         path: str | Ref | None = None,
         apic_node: str | Ref | None = None,
         virtual_port: str | Ref | None = None,
+        virtual_port_def: str | Ref | None = None,
     ) -> TenantVspanDestinationGroupVspanVdestinationCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -22259,6 +22260,7 @@ class TenantVspanDestinationGroupVspanVdestinationCursor(
         path: str | Ref | None = None,
         apic_node: str | Ref | None = None,
         virtual_port: str | Ref | None = None,
+        virtual_port_def: str | Ref | None = None,
     ) -> TenantVspanDestinationGroupVspanVdestinationCursor:
         """Reference objects outside the design by raw DN."""
         params = {k: v for k, v in locals().items() if k != "self"}

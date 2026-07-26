@@ -1491,6 +1491,8 @@ makers:
   telemetryFlowCollectorP:
     external_server: telemetryExternalServer
     fte_events: telemetryFteEventSetP
+    fte_events_ext: telemetryFteEventsExt
+    fte_event_tcp_flags: telemetryFteEventTcpFlags
   analyticsCont:
     analytics_cluster: analyticsCluster
   datetimePol:
@@ -1661,6 +1663,7 @@ binds:
     path: fabricPathEp              # fabric-discovered — bind_dn(path=...)
     apic_node: fabricNode           # ERSPAN to an APIC — bind_dn(...)
     virtual_port: fvEp              # fabric-learned endpoint — bind_dn(...)
+    virtual_port_def: spanCEpDefRef # VM port definition (VMM) — bind_dn(...)
   spanVSrcGrp:
     filter_group: spanFilterGrp
   netflowMonitorPol:

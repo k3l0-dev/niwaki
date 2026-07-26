@@ -220,6 +220,11 @@ class SubscriptionInfo:
             failed in a row, right now. 0 means healthy.
         seconds_until_refresh: Time remaining until the next scheduled
             refresh sweep considers this subscription due.
+        pending: Buffered items not yet consumed by the iterator, right now.
+        dropped: Cumulative events dropped by the backpressure bound
+            (``max_pending``) since the subscription was opened. Non-zero
+            means the consumer fell behind and at least one
+            :class:`SubscriptionOverflow` marker was delivered.
     """
 
     local_id: int
@@ -229,6 +234,8 @@ class SubscriptionInfo:
     refresh_timeout: int | None
     consecutive_refresh_failures: int
     seconds_until_refresh: float
+    pending: int
+    dropped: int
 
     @property
     def is_stale(self) -> bool:
@@ -240,7 +247,37 @@ class SubscriptionInfo:
         return self.consecutive_refresh_failures > 0
 
 
-RawPushItem = RawSubscriptionEvent | SubscriptionGap | SubscriptionRefreshFailed
+@dataclass(frozen=True)
+class SubscriptionOverflow:
+    """The consumer fell behind and buffered events were dropped.
+
+    Delivered **in-stream** as data (like :class:`SubscriptionGap`) when a
+    subscription's pending buffer hits its ``max_pending`` bound: incoming
+    events are discarded (newest-dropped) until the consumer drains, and
+    exactly one marker is enqueued per overload episode (the episode ends
+    once the buffer drains below half the bound).
+
+    The contract is the same as a gap: the stream keeps going, but events
+    were lost — reconcile with a fresh read if completeness matters.
+
+    Attributes:
+        dropped_total: Cumulative dropped-event count for this subscription
+            at the moment the marker was enqueued.  The live total is on
+            :attr:`SubscriptionInfo.dropped` — more events may have been
+            dropped after this marker was queued.
+    """
+
+    dropped_total: int
+
+
+RawPushItem = (
+    RawSubscriptionEvent | SubscriptionGap | SubscriptionRefreshFailed | SubscriptionOverflow
+)
+
+# Default per-subscription bound on buffered, not-yet-consumed data events.
+# Beyond it the socket drops incoming events for that subscription (never
+# blocking the shared reader) and delivers one SubscriptionOverflow marker.
+_DEFAULT_MAX_PENDING = 10_000
 
 
 class _Stop:
@@ -275,6 +312,13 @@ class _Registration:
     queue: queue.Queue[_QueueItem] = field(default_factory=queue.Queue)
     next_refresh_at: float = 0.0
     consecutive_refresh_failures: int = 0
+    # Backpressure: the queue object stays unbounded (control items must
+    # never block or be dropped); the bound is enforced on data events only,
+    # by the dispatcher. dropped_total/overflow_open are written by the
+    # reader thread exclusively.
+    max_pending: int = _DEFAULT_MAX_PENDING
+    dropped_total: int = 0
+    overflow_open: bool = False
 
 
 class RawSubscription:
@@ -302,6 +346,13 @@ class RawSubscription:
         self._socket = socket
         self._queue = item_queue
         self._closed = False
+        # Safety net for a consumer that vanishes without close(): the
+        # registration would otherwise stay alive forever, with the reader
+        # enqueueing into a queue nobody reads (unbounded growth with zero
+        # consumer involvement). Holds only a weakref to the socket.
+        self._finalizer = weakref.finalize(
+            self, _finalize_raw_subscription, weakref.ref(socket), local_id
+        )
 
     @property
     def subscription_id(self) -> str:
@@ -379,7 +430,25 @@ class RawSubscription:
         if self._closed:
             return
         self._closed = True
+        self._finalizer.detach()
         self._socket.unsubscribe(self._local_id)
+
+
+def _finalize_raw_subscription(socket_ref: weakref.ref[SubscriptionSocket], local_id: int) -> None:
+    """Safety-net callback: a consumer vanished without :meth:`RawSubscription.close`.
+
+    Removes the abandoned registration so the reader stops feeding a queue
+    nobody will ever read.  Holds only a weakref to the socket — if the
+    socket itself is already gone, its own finalizer covers the rest.
+    """
+    socket = socket_ref()
+    if socket is None:
+        return
+    # GC context: never acquire a lock here (not even logging's) — the
+    # interrupted thread may hold _state_lock or this queue's own mutex,
+    # and a wedged collection freezes cyclic GC process-wide. Hand the id
+    # to the sweep thread instead (list.append is atomic and lock-free).
+    socket._doomed.append(local_id)
 
 
 @dataclass
@@ -448,6 +517,11 @@ class SubscriptionSocket:
         self._state_lock = threading.Lock()
         self._ws: Any = None
         self._registrations: dict[int, _Registration] = {}
+        # Subscriptions reaped by the GC safety net. Appended from finalizer
+        # (GC) context — list.append is atomic and takes no lock, which is
+        # the whole point: the finalizer must never acquire _state_lock or a
+        # queue mutex (both may be held by the very thread GC interrupted).
+        self._doomed: list[int] = []
         self._wire_to_local: dict[str, int] = {}
         self._next_local_id = itertools.count(1)
         self._closed = False
@@ -463,7 +537,12 @@ class SubscriptionSocket:
     # ── Public: subscribe / unsubscribe / close ───────────────────────────────
 
     def subscribe(
-        self, path: str, params: dict[str, str], *, refresh_timeout: int | None = None
+        self,
+        path: str,
+        params: dict[str, str],
+        *,
+        refresh_timeout: int | None = None,
+        max_pending: int = _DEFAULT_MAX_PENDING,
     ) -> RawSubscription:
         """Open the shared socket if needed, then subscribe to *path*.
 
@@ -476,6 +555,10 @@ class SubscriptionSocket:
             refresh_timeout: Override the APIC's default 60 s subscription
                 timeout. The subscription refreshes itself automatically on a
                 schedule derived from this value regardless.
+            max_pending: Bound on buffered, not-yet-consumed events for this
+                subscription. Beyond it incoming events are dropped (never
+                blocking other subscriptions) and a
+                :class:`SubscriptionOverflow` marker is delivered in-stream.
 
         Returns:
             A :class:`RawSubscription` — ``.initial`` for the synchronous
@@ -495,6 +578,7 @@ class SubscriptionSocket:
             wire_id=wire_id,
             queue=item_queue,
             next_refresh_at=time.monotonic() + _refresh_interval(refresh_timeout),
+            max_pending=max_pending,
         )
         with self._state_lock:
             self._registrations[local_id] = reg
@@ -629,6 +713,8 @@ class SubscriptionSocket:
             refresh_timeout=reg.refresh_timeout,
             consecutive_refresh_failures=reg.consecutive_refresh_failures,
             seconds_until_refresh=max(0.0, reg.next_refresh_at - time.monotonic()),
+            pending=reg.queue.qsize(),
+            dropped=reg.dropped_total,
         )
 
     def _subscription_info_for(self, local_id: int) -> SubscriptionInfo | None:
@@ -708,13 +794,13 @@ class SubscriptionSocket:
         imdata = data.get("imdata") or []
 
         with self._state_lock:
-            target_queues = [
-                self._registrations[local_id].queue
+            targets = [
+                self._registrations[local_id]
                 for wire_id in wire_ids
                 if (local_id := self._wire_to_local.get(wire_id)) is not None
                 and local_id in self._registrations
             ]
-        if not target_queues:
+        if not targets:
             return
 
         for item in imdata:
@@ -730,8 +816,38 @@ class SubscriptionSocket:
                 attributes=dict(attrs),
                 status=attrs.get("status", "modified"),
             )
-            for q in target_queues:
-                q.put(event)
+            for reg in targets:
+                self._offer(reg, event)
+
+    @staticmethod
+    def _offer(reg: _Registration, event: RawSubscriptionEvent) -> None:
+        """Enqueue a data event under the backpressure bound — never blocks.
+
+        Past ``max_pending`` buffered items the incoming event is dropped
+        (newest-dropped: rejecting the arrival is O(1) and can never disturb
+        control items already queued) and one :class:`SubscriptionOverflow`
+        marker is enqueued per overload episode — the episode ends once the
+        consumer drains below half the bound (hysteresis).  Only the reader
+        thread calls this, so the drop bookkeeping is single-writer.
+        """
+        if reg.queue.qsize() >= reg.max_pending:
+            reg.dropped_total += 1
+            if not reg.overflow_open:
+                reg.overflow_open = True
+                reg.queue.put(SubscriptionOverflow(dropped_total=reg.dropped_total))
+                logger.warning(
+                    "niwaki: subscription buffer full (max_pending=%d) — "
+                    "dropping incoming events until the consumer catches up",
+                    reg.max_pending,
+                )
+            return
+        if reg.overflow_open and reg.queue.qsize() <= reg.max_pending // 2:
+            # Hysteresis: one marker per overload EPISODE, not per drop — the
+            # flag clears only once the consumer has drained to half the
+            # bound, so a consumer hovering at the bound cannot turn half the
+            # stream into markers (and reconcile storms).
+            reg.overflow_open = False
+        reg.queue.put(event)
 
     # ── Internal: refresh sweep (entry point is the free-function loop) ──────
 
@@ -1011,4 +1127,11 @@ def _refresh_entry(ref: weakref.ReferenceType[SubscriptionSocket]) -> None:
             ]
         for local_id, reg in due:
             socket._refresh_one(local_id, reg)
+        while socket._doomed:
+            doomed_id = socket._doomed.pop(0)
+            logger.warning(
+                "niwaki: a subscription was garbage-collected without close() — "
+                "dropping its registration (call close() or use the context manager)"
+            )
+            socket.unsubscribe(doomed_id)
         del socket

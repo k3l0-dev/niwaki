@@ -542,7 +542,7 @@ class TestListSubscriptions:
         self, ws_session: ApicSession, httpx_mock: HTTPXMock, fake_ws_server: FakeWsServer
     ) -> None:
         httpx_mock.add_response(method="GET", json=subscribe_response("1001"))
-        ws_session.subscribe(
+        sub = ws_session.subscribe(
             "/api/class/fvBD.json", {"query-target": "subtree"}, refresh_timeout=45
         )
         _wait_until(lambda: fake_ws_server.connection_count == 1)
@@ -563,6 +563,7 @@ class TestListSubscriptions:
 
         socket._registrations[1].consecutive_refresh_failures = 1  # type: ignore[reportPrivateUsage]
         assert socket.list_subscriptions()[0].is_stale is True
+        sub.close()
 
     def test_empty_before_any_subscribe(self, ws_session: ApicSession) -> None:
         socket = ws_session._subscription_socket  # type: ignore[reportPrivateUsage]
@@ -574,7 +575,7 @@ class TestRefreshAllSubscriptions:
         self, ws_session: ApicSession, httpx_mock: HTTPXMock, fake_ws_server: FakeWsServer
     ) -> None:
         httpx_mock.add_response(method="GET", json=subscribe_response("1001"))
-        ws_session.subscribe("/api/class/fvBD.json", {})
+        sub = ws_session.subscribe("/api/class/fvBD.json", {})
         _wait_until(lambda: fake_ws_server.connection_count == 1)
         socket = ws_session._subscription_socket  # type: ignore[reportPrivateUsage]
         assert socket is not None
@@ -586,12 +587,13 @@ class TestRefreshAllSubscriptions:
 
         assert infos[0].consecutive_refresh_failures == 1  # untouched, not incremented
         assert infos[0].is_stale is True
+        sub.close()
 
     def test_success_resets_counter_and_reschedules(
         self, ws_session: ApicSession, httpx_mock: HTTPXMock, fake_ws_server: FakeWsServer
     ) -> None:
         httpx_mock.add_response(method="GET", json=subscribe_response("1001"))
-        ws_session.subscribe("/api/class/fvBD.json", {})
+        sub = ws_session.subscribe("/api/class/fvBD.json", {})
         _wait_until(lambda: fake_ws_server.connection_count == 1)
         socket = ws_session._subscription_socket  # type: ignore[reportPrivateUsage]
         assert socket is not None
@@ -604,6 +606,7 @@ class TestRefreshAllSubscriptions:
 
         assert infos[0].consecutive_refresh_failures == 0
         assert reg.next_refresh_at > stale_schedule
+        sub.close()
 
 
 class TestCloseAllSubscriptions:
@@ -647,7 +650,7 @@ class TestCloseAllSubscriptions:
         self, ws_session: ApicSession, httpx_mock: HTTPXMock, fake_ws_server: FakeWsServer
     ) -> None:
         httpx_mock.add_response(method="GET", json=subscribe_response("1001"))
-        ws_session.subscribe("/api/class/fvBD.json", {})
+        sub = ws_session.subscribe("/api/class/fvBD.json", {})
         _wait_until(lambda: fake_ws_server.connection_count == 1)
         socket = ws_session._subscription_socket  # type: ignore[reportPrivateUsage]
         assert socket is not None
@@ -656,6 +659,7 @@ class TestCloseAllSubscriptions:
         socket.close_all_subscriptions()  # must not raise
 
         assert socket.list_subscriptions() == []
+        sub.close()
 
     def test_does_not_resurrect_a_registration_the_sweep_had_marked_due(
         self, ws_session: ApicSession, httpx_mock: HTTPXMock, fake_ws_server: FakeWsServer

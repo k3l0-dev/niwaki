@@ -10,10 +10,11 @@ This module turns one of those into a single typed
 read goes through ``from_apic`` — reading is uniform whether the object came
 from a GET or a push.
 
-Two of the five :class:`EventKind` values — ``GAP`` and ``REFRESH_FAILED`` —
-are not failures of the object being watched; they are stream-level
-conditions of the *subscription itself* (a reconnect happened, a refresh was
-rejected). They are delivered as data through this same event type rather
+Three of the six :class:`EventKind` values — ``GAP``, ``REFRESH_FAILED``
+and ``OVERFLOW`` — are not failures of the object being watched; they are
+stream-level conditions of the *subscription itself* (a reconnect happened,
+a refresh was rejected, the consumer fell behind and buffered events were
+dropped). They are delivered as data through this same event type rather
 than raised, because "keep going, but reconcile" is not a stream-ending
 condition — see :mod:`niwaki.exceptions._subscription` for the mirror image
 of this asymmetry: a subscription that truly cannot be recovered raises
@@ -30,6 +31,7 @@ from niwaki.transport._subscription_socket import (
     RawPushItem,
     RawSubscriptionEvent,
     SubscriptionGap,
+    SubscriptionOverflow,
 )
 
 
@@ -38,7 +40,7 @@ class EventKind(StrEnum):
 
     ``CREATED``/``MODIFIED``/``DELETED`` values equal the wire ``status``
     string a push carries, so ``EventKind(raw_status)`` maps directly.
-    ``GAP``/``REFRESH_FAILED`` have no wire equivalent — they are synthesised
+    ``GAP``/``REFRESH_FAILED``/``OVERFLOW`` have no wire equivalent — they are synthesised
     by the transport layer for conditions of the subscription itself, not the
     watched object.
     """
@@ -48,6 +50,7 @@ class EventKind(StrEnum):
     DELETED = "deleted"
     GAP = "gap"
     REFRESH_FAILED = "refresh_failed"
+    OVERFLOW = "overflow"
 
 
 @dataclass(frozen=True, slots=True)
@@ -115,4 +118,6 @@ def event_from_raw(item: RawPushItem) -> SubscriptionEvent[ManagedObject]:
         return SubscriptionEvent(kind=kind, mo=mo, subscription_ids=item.subscription_ids, raw=item)
     if isinstance(item, SubscriptionGap):
         return SubscriptionEvent(kind=EventKind.GAP, mo=None, subscription_ids=(), raw=item)
+    if isinstance(item, SubscriptionOverflow):
+        return SubscriptionEvent(kind=EventKind.OVERFLOW, mo=None, subscription_ids=(), raw=item)
     return SubscriptionEvent(kind=EventKind.REFRESH_FAILED, mo=None, subscription_ids=(), raw=item)

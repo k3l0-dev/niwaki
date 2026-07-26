@@ -657,7 +657,7 @@ class TestSubscriptionDelegation:
         from tests.conftest import subscribe_response
 
         httpx_mock.add_response(method="GET", json=subscribe_response("1001"))
-        await async_ws_session.subscribe("/api/class/fvBD.json", {})
+        sub = await async_ws_session.subscribe("/api/class/fvBD.json", {})
 
         infos = async_ws_session.list_subscriptions()
         assert len(infos) == 1
@@ -669,3 +669,4 @@ class TestSubscriptionDelegation:
 
         await async_ws_session.close_all_subscriptions()
         assert async_ws_session.list_subscriptions() == []
+        await sub.close()

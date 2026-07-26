@@ -2,9 +2,9 @@
 
 `Query.subscribe()` turns a query into a live push stream: the APIC notifies
 your client the moment a matching object is created, modified, or deleted —
-no polling. This page covers the API; for the mechanics behind it (one shared
-WebSocket per session, no replay after a disconnect, refresh/recovery policy)
-see {doc}`../design-first`.
+no polling. This page covers the API and the mechanics behind it: one shared
+WebSocket per session, no replay after a disconnect, automatic refresh and
+recovery, and a bounded per-subscription buffer.
 
 ## A live stream
 
@@ -60,8 +60,8 @@ for event in sub:
         print("new:", event.mo.model_fields_set)  # the full object
 ```
 
-Two kinds carry no object at all — they describe the *subscription*, not the
-thing being watched:
+Three kinds carry no object at all — they describe the *subscription*, not
+the thing being watched:
 
 - `EventKind.GAP` — the shared socket reconnected (or a subscription
   recovered after missed refreshes) and resubscribed from scratch. The APIC
@@ -69,8 +69,15 @@ thing being watched:
   lost — reconcile with a fresh read if that matters to you.
 - `EventKind.REFRESH_FAILED` — a scheduled refresh was rejected. Informational
   on its own; two in a row trigger an automatic recovery (see below).
+- `EventKind.OVERFLOW` — your consumer fell behind: the subscription buffers
+  at most `max_pending` unconsumed events (default 10,000, a
+  `subscribe(max_pending=...)` keyword), and past that bound incoming events
+  are dropped rather than growing memory or stalling other subscriptions.
+  One marker per burst; reconcile with a fresh read, exactly like a gap.
+  `aci.subscriptions.list()` exposes the live `pending` and `dropped`
+  counters per subscription.
 
-Neither of these ends the stream — only `SubscriptionLostError` does, and
+None of these ends the stream — only `SubscriptionLostError` does, and
 only once recovery has been tried and failed.
 
 ## Refresh, recovery, and when it gives up

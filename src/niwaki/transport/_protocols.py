@@ -17,7 +17,11 @@ from __future__ import annotations
 from typing import Any, Protocol, runtime_checkable
 
 from niwaki.models.base import ManagedObject
-from niwaki.transport._subscription_socket import RawSubscription, SubscriptionInfo
+from niwaki.transport._subscription_socket import (
+    _DEFAULT_MAX_PENDING,
+    RawSubscription,
+    SubscriptionInfo,
+)
 from niwaki.transport._subscription_socket_async import AsyncRawSubscription
 
 
@@ -106,7 +110,12 @@ class MoSubscriber(Protocol):
     """Structural type for synchronous ACI object-subscription transports."""
 
     def subscribe(
-        self, path: str, params: dict[str, str], *, refresh_timeout: int | None = None
+        self,
+        path: str,
+        params: dict[str, str],
+        *,
+        refresh_timeout: int | None = None,
+        max_pending: int = _DEFAULT_MAX_PENDING,
     ) -> RawSubscription:
         """Subscribe to push notifications for a query.
 
@@ -118,6 +127,11 @@ class MoSubscriber(Protocol):
             refresh_timeout: Override the APIC's default 60 s subscription
                 timeout. The subscription refreshes itself automatically
                 regardless of this value.
+            max_pending: Bound on buffered, not-yet-consumed events for this
+                subscription. Past it, incoming events are dropped (other
+                subscriptions are never affected) and the stream receives one
+                ``SubscriptionOverflow`` marker per overload episode —
+                reconcile with a fresh read, exactly like a gap.
 
         Returns:
             A :class:`~niwaki.transport._subscription_socket.RawSubscription`.
@@ -145,7 +159,12 @@ class AsyncMoSubscriber(Protocol):
     """Structural type for asynchronous ACI object-subscription transports."""
 
     async def subscribe(
-        self, path: str, params: dict[str, str], *, refresh_timeout: int | None = None
+        self,
+        path: str,
+        params: dict[str, str],
+        *,
+        refresh_timeout: int | None = None,
+        max_pending: int = _DEFAULT_MAX_PENDING,
     ) -> AsyncRawSubscription:
         """Subscribe to push notifications for a query.
 
@@ -157,6 +176,11 @@ class AsyncMoSubscriber(Protocol):
             refresh_timeout: Override the APIC's default 60 s subscription
                 timeout. The subscription refreshes itself automatically
                 regardless of this value.
+            max_pending: Bound on buffered, not-yet-consumed events for this
+                subscription. Past it, incoming events are dropped (other
+                subscriptions are never affected) and the stream receives one
+                ``SubscriptionOverflow`` marker per overload episode —
+                reconcile with a fresh read, exactly like a gap.
 
         Returns:
             An :class:`~niwaki.transport._subscription_socket_async.AsyncRawSubscription`.

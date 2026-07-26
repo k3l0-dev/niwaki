@@ -5,6 +5,54 @@ All notable changes to this project are documented here.  The format follows
 [semver](https://semver.org/).  From 1.0.0 the configuration API is stable:
 breaking changes ship in a new major version with a migration note.
 
+<<<<<<< HEAD
+## [1.6.0] — 2026-07-26
+
+### Added
+
+- **Subscription backpressure.** Each subscription's buffer is now bounded:
+  past `max_pending` unconsumed events (default 10,000, a new keyword on
+  `subscribe()` at every layer) incoming events are dropped — never
+  blocking the shared socket or other subscriptions, and never touching
+  control items (close/gap/refresh markers are exempt, so `close()` can
+  never wedge on a full buffer). The stream receives one
+  `SubscriptionOverflow` marker (`EventKind.OVERFLOW`) per overload
+  episode — the episode ends once the consumer drains below half the
+  bound — with the same contract as a gap: keep going, reconcile with a
+  fresh read. `SubscriptionInfo` gains live `pending` and `dropped`
+  counters, surfaced by `aci.subscriptions.list()`.
+- **Vanished-consumer safety net.** A subscription garbage-collected
+  without `close()` is now reaped automatically (with a warning) instead
+  of accumulating events forever — previously its delivery queue grew
+  unbounded with no consumer attached. Async subscriptions hop onto the
+  socket's event loop to do this safely.
+- **Flow-table-event telemetry reaches the design DSL.**
+  `flow_collector_policy().fte_events_ext(...)` and
+  `.fte_event_tcp_flags(...)` — validated live on APIC 6.0(9c) — and
+  VSPAN destinations gain the `virtual_port_def` bind (`bind_dn` to a
+  VMM-discovered vPort definition).
+
+### Fixed
+
+- **Three curation gaps closed.** All three were children of curated
+  parents hidden behind the navigation edges the pre-1.5.0 generator
+  silently dropped; 1.5.0's fail-loud generator recovered the edges and
+  the coverage audit immediately flagged them (the two telemetry makers
+  and the VSPAN bind above). The interim 1.5.0 auto-derived navigation
+  names of the two telemetry classes (`telemetry_fte_events_ext`,
+  `telemetry_fte_event_tcp_flags`) became their curated forms.
+- **A GC-context deadlock in the subscription safety net, caught in
+  review before release.** The first implementation of the
+  vanished-consumer reaper acquired locks from garbage-collector context,
+  which could freeze the event reader — and cyclic collection
+  process-wide — if collection landed at the wrong moment. The reaper now
+  defers all work out of GC context (a lock-free handoff to the refresh
+  sweep).
+- **Overflow marker flapping, caught in review before release.** A
+  consumer hovering exactly at the buffer bound would have received up to
+  half its stream as overflow markers (and one warning log each). The
+  overflow flag now has hysteresis: one marker per overload episode.
+
 ## [1.5.0] — 2026-07-26
 
 ### Changed

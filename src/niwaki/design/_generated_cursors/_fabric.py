@@ -5929,6 +5929,207 @@ class _FlowCollectorPolicyMakers(Cursor):
             self._invoke_maker("fte_events", (name,), _prune(params)),
         )
 
+    def fte_events_ext(
+        self,
+        name: str,
+        *,
+        ack_no: int | None = None,
+        acl_redirect: bool | None = None,
+        annotation: str | None = None,
+        bax_err: bool | None = None,
+        ce_etype: int | None = None,
+        cos: int | None = None,
+        d_class: int | None = None,
+        d_ip_v4: str | None = None,
+        d_ip_v6: str | None = None,
+        d_tep: int | None = None,
+        description: str | None = None,
+        ip_df: bool | None = None,
+        ip_frag_offset_non_zero: bool | None = None,
+        ip_ihl: int | None = None,
+        ip_length_error: bool | None = None,
+        ip_mf: bool | None = None,
+        ip_opt_present: bool | None = None,
+        ip_packet_id: int | None = None,
+        ip_rsvd: bool | None = None,
+        ipv4_arp_nd_packet: bool | None = None,
+        ipv4_d_port: int | str | None = None,
+        ipv4_protocol: int | None = None,
+        ipv4_s_port: int | str | None = None,
+        ipv6_d_port: int | str | None = None,
+        ipv6_flowlabel: int | None = None,
+        ipv6_opt_hdr: int | None = None,
+        ipv6_protocol: int | None = None,
+        ipv6_s_port: int | str | None = None,
+        l4_payload_length: int | None = None,
+        mac_da: str | None = None,
+        mac_sa: str | None = None,
+        mask_dip_v4: int | None = None,
+        mask_sip_v4: int | None = None,
+        display_name: str | None = None,
+        o_class: int | None = None,
+        o_port: int | None = None,
+        overlay_encap_type: int | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        packet_id: int | None = None,
+        profile_id: int | None = None,
+        sub_event_configuration_for_rest_sop_bit: int | None = None,
+        rx_bd: int | None = None,
+        rx_is_epg: bool | None = None,
+        s_class: int | None = None,
+        s_ip_v4: str | None = None,
+        s_ip_v6: str | None = None,
+        s_tep: int | None = None,
+        seq_no: int | None = None,
+        src_id: int | None = None,
+        tenant_id: int | None = None,
+        tiny_frag: bool | None = None,
+        tos: int | None = None,
+        ttl_changed: bool | None = None,
+        tx_bd: int | None = None,
+        tx_is_epg: bool | None = None,
+        urg_ptr_bad: bool | None = None,
+        userdom: str | None = None,
+    ) -> FteEventsExtCursor:
+        """Declare a ``telemetryFteEventsExt`` child under the flow_collector_policy level.
+
+        FTE Events
+
+        Args:
+            name: The name of the object.
+            ack_no: 30 Default: ``0``.
+            acl_redirect: 13 Default: ``False``.
+            annotation: User annotation. Suggested format orchestrator:value
+            bax_err: 31 Default: ``False``.
+            ce_etype: 36 Default: ``0``.
+            cos: 11 Default: ``0``.
+            d_class: 21 Default: ``0``.
+            d_ip_v4: 15
+            d_ip_v6: 19
+            d_tep: 27 Default: ``0``.
+            description: The description of this configuration item.
+            ip_df: 43 Default: ``False``.
+            ip_frag_offset_non_zero: 46 Default: ``False``.
+            ip_ihl: 06 Default: ``0``.
+            ip_length_error: 41. IP length error configuration Default: ``False``.
+            ip_mf: 44 Default: ``False``.
+            ip_opt_present: 33 Default: ``False``.
+            ip_packet_id: 04 Default: ``0``.
+            ip_rsvd: 42 Default: ``False``.
+            ipv4_arp_nd_packet: 01 Default: ``False``.
+            ipv4_d_port: 23 Default: ``unspecified``.
+            ipv4_protocol: 12 Default: ``0``.
+            ipv4_s_port: 22 Default: ``unspecified``.
+            ipv6_d_port: 50 Default: ``unspecified``.
+            ipv6_flowlabel: 47 Default: ``0``.
+            ipv6_opt_hdr: 48 Default: ``0``.
+            ipv6_protocol: 51 Default: ``0``.
+            ipv6_s_port: 49 Default: ``unspecified``.
+            l4_payload_length: 02 Default: ``0``.
+            mac_da: 35
+            mac_sa: 34
+            mask_dip_v4: 17 Default: ``0``.
+            mask_sip_v4: 16 Default: ``0``.
+            o_class: 24 Default: ``0``.
+            o_port: 25 Default: ``0``.
+            overlay_encap_type: 10 Default: ``0``.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            packet_id: 03 Default: ``0``.
+            profile_id: 08 Default: ``0``.
+            sub_event_configuration_for_rest_sop_bit: Rest sop bit configuration52 Default:
+                ``0``.
+            rx_bd: 37 Default: ``0``.
+            rx_is_epg: 39 Default: ``False``.
+            s_class: 20 Default: ``0``.
+            s_ip_v4: 14
+            s_ip_v6: 18
+            s_tep: 26 Default: ``0``.
+            seq_no: 29 Default: ``0``.
+            src_id: 05 Default: ``0``.
+            tenant_id: 28 Default: ``0``.
+            tiny_frag: 32 Default: ``False``.
+            tos: 07 Default: ``0``.
+            ttl_changed: 09 Default: ``False``.
+            tx_bd: 38 Default: ``0``.
+            tx_is_epg: 40 Default: ``False``.
+            urg_ptr_bad: 45 Default: ``False``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "FteEventsExtCursor",
+            self._invoke_maker("fte_events_ext", (name,), _prune(params)),
+        )
+
+    def fte_event_tcp_flags(
+        self,
+        name: str,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        sub_event_configuration_for_tcp_ack_flag: bool | None = None,
+        sub_event_configuration_for_tcp_cwr_flag: bool | None = None,
+        sub_event_configuration_for_tcp_ece_flag: bool | None = None,
+        sub_event_configuration_for_tcp_fin_flag: bool | None = None,
+        sub_event_configuration_for_tcp_flag_set: bool | None = None,
+        sub_event_configuration_for_tcp_ns_flag: bool | None = None,
+        sub_event_configuration_for_tcp_psh_flag: bool | None = None,
+        sub_event_configuration_for_tcp_rst_flag: bool | None = None,
+        sub_event_configuration_for_tcp_syn_flag: bool | None = None,
+        sub_event_configuration_for_tcp_urg_flag: bool | None = None,
+        userdom: str | None = None,
+    ) -> FteEventTcpFlagsCursor:
+        """Declare a ``telemetryFteEventTcpFlags`` child under the flow_collector_policy level.
+
+        FTE Events
+
+        Args:
+            name: The name of the object.
+            annotation: User annotation. Suggested format orchestrator:value
+            description: The description of this configuration item.
+            owner_key: The key for enabling clients to own their data for entity correlation.
+            owner_tag: A tag for enabling clients to add their own data. For example, to
+                indicate who created this object.
+            sub_event_configuration_for_tcp_ack_flag: 06. TCP ACK flag set Default: ``False``.
+            sub_event_configuration_for_tcp_cwr_flag: 09. TCP CWR flag set Default: ``False``.
+            sub_event_configuration_for_tcp_ece_flag: 08. TCP ECE flag set Default: ``False``.
+            sub_event_configuration_for_tcp_fin_flag: 02. TCP FIN flag configuration Default:
+                ``False``.
+            sub_event_configuration_for_tcp_flag_set: 01. TCP flag set configuration. Enables
+                all TCP flags Default: ``False``.
+            sub_event_configuration_for_tcp_ns_flag: 10. TCP NS flag set Default: ``False``.
+            sub_event_configuration_for_tcp_psh_flag: 05. TCP PSH flag set Default: ``False``.
+            sub_event_configuration_for_tcp_rst_flag: 04. TCP RST flag set Default: ``False``.
+            sub_event_configuration_for_tcp_syn_flag: 03. TCP SYN flag set Default: ``False``.
+            sub_event_configuration_for_tcp_urg_flag: 07. TCP URG flag set Default: ``False``.
+        """
+        params = {
+            k: v
+            for k, v in locals().items()
+            if k
+            not in (
+                "self",
+                "name",
+            )
+        }
+        return cast(
+            "FteEventTcpFlagsCursor",
+            self._invoke_maker("fte_event_tcp_flags", (name,), _prune(params)),
+        )
+
 
 class FlowCollectorPolicyCursor(_FlowCollectorPolicyMakers, _FabricMakers, _UniMakers):
     """Typed cursor for ``telemetryFlowCollectorP`` (flow_collector_policy level).
@@ -11338,6 +11539,43 @@ class ExternalServerCursor(_FlowCollectorPolicyMakers, _FabricMakers, _UniMakers
         return self
 
 
+class FteEventTcpFlagsCursor(_FlowCollectorPolicyMakers, _FabricMakers, _UniMakers):
+    """Typed cursor for ``telemetryFteEventTcpFlags`` (fte_event_tcp_flags level).
+
+    Position: ``uni.fabric.flow_collector_policy.fte_event_tcp_flags``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        annotation: str | None = None,
+        description: str | None = None,
+        display_name: str | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        sub_event_configuration_for_tcp_ack_flag: bool | None = None,
+        sub_event_configuration_for_tcp_cwr_flag: bool | None = None,
+        sub_event_configuration_for_tcp_ece_flag: bool | None = None,
+        sub_event_configuration_for_tcp_fin_flag: bool | None = None,
+        sub_event_configuration_for_tcp_flag_set: bool | None = None,
+        sub_event_configuration_for_tcp_ns_flag: bool | None = None,
+        sub_event_configuration_for_tcp_psh_flag: bool | None = None,
+        sub_event_configuration_for_tcp_rst_flag: bool | None = None,
+        sub_event_configuration_for_tcp_syn_flag: bool | None = None,
+        sub_event_configuration_for_tcp_urg_flag: bool | None = None,
+        userdom: str | None = None,
+    ) -> FteEventTcpFlagsCursor:
+        """Set ``telemetryFteEventTcpFlags`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
 class FteEventsCursor(_FlowCollectorPolicyMakers, _FabricMakers, _UniMakers):
     """Typed cursor for ``telemetryFteEventSetP`` (fte_events level).
 
@@ -11410,6 +11648,85 @@ class FteEventsCursor(_FlowCollectorPolicyMakers, _FabricMakers, _UniMakers):
         userdom: str | None = None,
     ) -> FteEventsCursor:
         """Set ``telemetryFteEventSetP`` attributes (merged; validated eagerly)."""
+        params = {k: v for k, v in locals().items() if k != "self"}
+        Cursor.set(self, **_prune(params))
+        return self
+
+
+class FteEventsExtCursor(_FlowCollectorPolicyMakers, _FabricMakers, _UniMakers):
+    """Typed cursor for ``telemetryFteEventsExt`` (fte_events_ext level).
+
+    Position: ``uni.fabric.flow_collector_policy.fte_events_ext``
+
+    Ancestor makers (implicit pop) come from the inherited mixins,
+    nearest level first — the MRO mirrors the runtime resolution.
+    """
+
+    __slots__ = ()
+
+    def set(
+        self,
+        *,
+        ack_no: int | None = None,
+        acl_redirect: bool | None = None,
+        annotation: str | None = None,
+        bax_err: bool | None = None,
+        ce_etype: int | None = None,
+        cos: int | None = None,
+        d_class: int | None = None,
+        d_ip_v4: str | None = None,
+        d_ip_v6: str | None = None,
+        d_tep: int | None = None,
+        description: str | None = None,
+        ip_df: bool | None = None,
+        ip_frag_offset_non_zero: bool | None = None,
+        ip_ihl: int | None = None,
+        ip_length_error: bool | None = None,
+        ip_mf: bool | None = None,
+        ip_opt_present: bool | None = None,
+        ip_packet_id: int | None = None,
+        ip_rsvd: bool | None = None,
+        ipv4_arp_nd_packet: bool | None = None,
+        ipv4_d_port: int | str | None = None,
+        ipv4_protocol: int | None = None,
+        ipv4_s_port: int | str | None = None,
+        ipv6_d_port: int | str | None = None,
+        ipv6_flowlabel: int | None = None,
+        ipv6_opt_hdr: int | None = None,
+        ipv6_protocol: int | None = None,
+        ipv6_s_port: int | str | None = None,
+        l4_payload_length: int | None = None,
+        mac_da: str | None = None,
+        mac_sa: str | None = None,
+        mask_dip_v4: int | None = None,
+        mask_sip_v4: int | None = None,
+        display_name: str | None = None,
+        o_class: int | None = None,
+        o_port: int | None = None,
+        overlay_encap_type: int | None = None,
+        owner_key: str | None = None,
+        owner_tag: str | None = None,
+        packet_id: int | None = None,
+        profile_id: int | None = None,
+        sub_event_configuration_for_rest_sop_bit: int | None = None,
+        rx_bd: int | None = None,
+        rx_is_epg: bool | None = None,
+        s_class: int | None = None,
+        s_ip_v4: str | None = None,
+        s_ip_v6: str | None = None,
+        s_tep: int | None = None,
+        seq_no: int | None = None,
+        src_id: int | None = None,
+        tenant_id: int | None = None,
+        tiny_frag: bool | None = None,
+        tos: int | None = None,
+        ttl_changed: bool | None = None,
+        tx_bd: int | None = None,
+        tx_is_epg: bool | None = None,
+        urg_ptr_bad: bool | None = None,
+        userdom: str | None = None,
+    ) -> FteEventsExtCursor:
+        """Set ``telemetryFteEventsExt`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
         return self
@@ -14723,6 +15040,7 @@ class FabricVspanDestinationGroupVspanVdestinationCursor(
         path: str | Ref | None = None,
         apic_node: str | Ref | None = None,
         virtual_port: str | Ref | None = None,
+        virtual_port_def: str | Ref | None = None,
     ) -> FabricVspanDestinationGroupVspanVdestinationCursor:
         """Declare lazy Rs references (resolved at push time)."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -14736,6 +15054,7 @@ class FabricVspanDestinationGroupVspanVdestinationCursor(
         path: str | Ref | None = None,
         apic_node: str | Ref | None = None,
         virtual_port: str | Ref | None = None,
+        virtual_port_def: str | Ref | None = None,
     ) -> FabricVspanDestinationGroupVspanVdestinationCursor:
         """Reference objects outside the design by raw DN."""
         params = {k: v for k, v in locals().items() if k != "self"}

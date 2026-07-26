@@ -15910,10 +15910,10 @@ CHILD_MAP: dict[str, dict[str, str]] = {
         "annotation": "tagAnnotation",
         "annotation_to_capture_rbac_info": "aaaRbacAnnotation",
         "external_server": "telemetryExternalServer",
+        "fte_event_tcp_flags": "telemetryFteEventTcpFlags",
         "fte_events": "telemetryFteEventSetP",
+        "fte_events_ext": "telemetryFteEventsExt",
         "tag": "tagTag",
-        "telemetry_fte_event_tcp_flags": "telemetryFteEventTcpFlags",
-        "telemetry_fte_events_ext": "telemetryFteEventsExt",
         "telemetry_rs_to_inband_epg": "telemetryRsToInbandEpg",
     },
     "telemetryFlowServerGrp": {

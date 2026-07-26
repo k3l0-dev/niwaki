@@ -38,3 +38,5 @@ Accepted as keyword arguments of `.flow_collector_policy()` and of `.set(**attrs
 | --- | --- | --- |
 | `.external_server(external_server_ip, **attrs)` | `telemetryExternalServer` | {ref}`fabric.flow_collector_policy.external_server <vocab-fabric-flow_collector_policy-external_server>` |
 | `.fte_events(name, **attrs)` | `telemetryFteEventSetP` | {ref}`fabric.flow_collector_policy.fte_events <vocab-fabric-flow_collector_policy-fte_events>` |
+| `.fte_events_ext(name, **attrs)` | `telemetryFteEventsExt` | {ref}`fabric.flow_collector_policy.fte_events_ext <vocab-fabric-flow_collector_policy-fte_events_ext>` |
+| `.fte_event_tcp_flags(name, **attrs)` | `telemetryFteEventTcpFlags` | {ref}`fabric.flow_collector_policy.fte_event_tcp_flags <vocab-fabric-flow_collector_policy-fte_event_tcp_flags>` |

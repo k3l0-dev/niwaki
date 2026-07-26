@@ -44,3 +44,4 @@ Lazy references, resolved closed-world at push time.
 | `path=` | `fabricPathEp` | DN — `bind_dn()` allowed | `spanRsDestPathEp` |
 | `apic_node=` | `fabricNode` | DN — `bind_dn()` allowed | `spanRsDestApic` |
 | `virtual_port=` | `fvEp` *(abstract: `fvCEp`…)* | DN — `bind_dn()` allowed | `spanRsDestToVPort` |
+| `virtual_port_def=` | `spanCEpDefRef` | DN — `bind_dn()` allowed | `spanRsDestToVPortDef` |

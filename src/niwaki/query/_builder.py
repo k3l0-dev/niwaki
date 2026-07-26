@@ -27,6 +27,7 @@ from typing import TYPE_CHECKING, Any, TypeVar, cast
 
 from niwaki.models.base import ManagedObject
 from niwaki.query._base import _QueryBase  # pyright: ignore[reportPrivateUsage]
+from niwaki.transport._subscription_socket import _DEFAULT_MAX_PENDING
 from niwaki.transport.session import ApicSession
 
 if TYPE_CHECKING:
@@ -267,7 +268,9 @@ class Query(_QueryBase[_T]):
                 if limit is not None and yielded >= limit:
                     return
 
-    def subscribe(self, *, refresh_timeout: int | None = None) -> Subscription[_T]:
+    def subscribe(
+        self, *, refresh_timeout: int | None = None, max_pending: int = _DEFAULT_MAX_PENDING
+    ) -> Subscription[_T]:
         """Subscribe to push notifications for this query.
 
         A subscription is a query plus ``subscription=yes`` at the wire
@@ -290,6 +293,11 @@ class Query(_QueryBase[_T]):
             refresh_timeout: Override the APIC's default 60 s subscription
                 timeout. The subscription refreshes itself automatically on a
                 schedule derived from this value regardless.
+            max_pending: Bound on buffered, not-yet-consumed events for this
+                subscription. Past it, incoming events are dropped (other
+                subscriptions are never affected) and the stream receives one
+                ``SubscriptionOverflow`` marker per overload episode —
+                reconcile with a fresh read, exactly like a gap.
 
         Returns:
             A :class:`~niwaki.query._subscription.Subscription` — ``.initial``
@@ -312,7 +320,9 @@ class Query(_QueryBase[_T]):
         from niwaki.query._subscription import Subscription
 
         path, params = self._subscription_build()
-        raw = self._session.subscribe(path, params, refresh_timeout=refresh_timeout)
+        raw = self._session.subscribe(
+            path, params, refresh_timeout=refresh_timeout, max_pending=max_pending
+        )
         return Subscription(raw)
 
     def execute_raw(self, path: str, params: dict[str, str]) -> list[ManagedObject]:

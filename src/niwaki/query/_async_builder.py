@@ -34,6 +34,7 @@ from typing import TYPE_CHECKING, Any, Never, TypeVar, cast
 
 from niwaki.models.base import ManagedObject
 from niwaki.query._base import _QueryBase  # pyright: ignore[reportPrivateUsage]
+from niwaki.transport._subscription_socket import _DEFAULT_MAX_PENDING
 from niwaki.transport.session_async import AsyncApicSession
 
 if TYPE_CHECKING:
@@ -281,7 +282,9 @@ class AsyncQuery(_QueryBase[_T]):
                 if limit is not None and yielded >= limit:
                     return
 
-    async def subscribe(self, *, refresh_timeout: int | None = None) -> AsyncSubscription[_T]:
+    async def subscribe(
+        self, *, refresh_timeout: int | None = None, max_pending: int = _DEFAULT_MAX_PENDING
+    ) -> AsyncSubscription[_T]:
         """Subscribe to push notifications for this query.
 
         Mirrors :meth:`~niwaki.query.Query.subscribe` — a subscription is a
@@ -302,6 +305,11 @@ class AsyncQuery(_QueryBase[_T]):
             refresh_timeout: Override the APIC's default 60 s subscription
                 timeout. The subscription refreshes itself automatically on a
                 schedule derived from this value regardless.
+            max_pending: Bound on buffered, not-yet-consumed events for this
+                subscription. Past it, incoming events are dropped (other
+                subscriptions are never affected) and the stream receives one
+                ``SubscriptionOverflow`` marker per overload episode —
+                reconcile with a fresh read, exactly like a gap.
 
         Returns:
             An :class:`~niwaki.query._async_subscription.AsyncSubscription`
@@ -325,7 +333,9 @@ class AsyncQuery(_QueryBase[_T]):
         from niwaki.query._async_subscription import AsyncSubscription
 
         path, params = self._subscription_build()
-        raw = await self._session.subscribe(path, params, refresh_timeout=refresh_timeout)
+        raw = await self._session.subscribe(
+            path, params, refresh_timeout=refresh_timeout, max_pending=max_pending
+        )
         return AsyncSubscription(raw)
 
     async def execute_raw(self, path: str, params: dict[str, str]) -> list[ManagedObject]:

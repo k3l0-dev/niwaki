@@ -28,6 +28,7 @@ from niwaki.models.base import ManagedObject
 from niwaki.transport._config import RetryConfig
 from niwaki.transport._errors import extract_apic_error, raise_for_apic_status
 from niwaki.transport._subscription_socket import (
+    _DEFAULT_MAX_PENDING,
     RawSubscription,
     SubscriptionInfo,
     SubscriptionSocket,
@@ -391,7 +392,12 @@ class ApicSession:
     # ── Public subscribe ──────────────────────────────────────────────────────
 
     def subscribe(
-        self, path: str, params: dict[str, str], *, refresh_timeout: int | None = None
+        self,
+        path: str,
+        params: dict[str, str],
+        *,
+        refresh_timeout: int | None = None,
+        max_pending: int = _DEFAULT_MAX_PENDING,
     ) -> RawSubscription:
         """
         Subscribe to push notifications for a query, over the session's shared WebSocket.
@@ -412,6 +418,11 @@ class ApicSession:
             refresh_timeout: Override the APIC's default 60 s subscription
                 timeout. The subscription refreshes itself automatically on a
                 schedule derived from this value regardless.
+            max_pending: Bound on buffered, not-yet-consumed events for this
+                subscription. Past it, incoming events are dropped (other
+                subscriptions are never affected) and the stream receives one
+                ``SubscriptionOverflow`` marker per overload episode —
+                reconcile with a fresh read, exactly like a gap.
 
         Returns:
             A :class:`~niwaki.transport._subscription_socket.RawSubscription`
@@ -432,7 +443,9 @@ class ApicSession:
         self._ensure_token()
         if self._subscription_socket is None:
             self._subscription_socket = SubscriptionSocket(self)
-        return self._subscription_socket.subscribe(path, params, refresh_timeout=refresh_timeout)
+        return self._subscription_socket.subscribe(
+            path, params, refresh_timeout=refresh_timeout, max_pending=max_pending
+        )
 
     def list_subscriptions(self) -> list[SubscriptionInfo]:
         """List every subscription currently tracked on this session's socket.

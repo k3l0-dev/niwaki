@@ -153,7 +153,9 @@ The facade resolves operator names into typed child handles — `aci.tenant("pro
 | `fabric.firmware_repository_profile` | `.firmware_download_task(…)` | `firmwareOSource` — {ref}`fabric.firmware_repository_profile.firmware_download_task <vocab-fabric-firmware_repository_profile-firmware_download_task>` |
 | `fabric.firmware_repository_profile` | `.internal_firmware_source(…)` | `firmwareInternalSource` — {ref}`fabric.firmware_repository_profile.internal_firmware_source <vocab-fabric-firmware_repository_profile-internal_firmware_source>` |
 | `fabric.flow_collector_policy` | `.external_server(…)` | `telemetryExternalServer` — {ref}`fabric.flow_collector_policy.external_server <vocab-fabric-flow_collector_policy-external_server>` |
+| `fabric.flow_collector_policy` | `.fte_event_tcp_flags(…)` | `telemetryFteEventTcpFlags` — {ref}`fabric.flow_collector_policy.fte_event_tcp_flags <vocab-fabric-flow_collector_policy-fte_event_tcp_flags>` |
 | `fabric.flow_collector_policy` | `.fte_events(…)` | `telemetryFteEventSetP` — {ref}`fabric.flow_collector_policy.fte_events <vocab-fabric-flow_collector_policy-fte_events>` |
+| `fabric.flow_collector_policy` | `.fte_events_ext(…)` | `telemetryFteEventsExt` — {ref}`fabric.flow_collector_policy.fte_events_ext <vocab-fabric-flow_collector_policy-fte_events_ext>` |
 | `fabric.function_profile` | `.controller_policy_group(…)` | `fabricCtrlrPGrp` — {ref}`fabric.function_profile.controller_policy_group <vocab-fabric-function_profile-controller_policy_group>` |
 | `fabric.function_profile` | `.leaf_fabric_port_policy_group(…)` | `fabricLePortPGrp` — {ref}`fabric.function_profile.leaf_fabric_port_policy_group <vocab-fabric-function_profile-leaf_fabric_port_policy_group>` |
 | `fabric.function_profile` | `.leaf_module_policy_group(…)` | `fabricLeCardPGrp` — {ref}`fabric.function_profile.leaf_module_policy_group <vocab-fabric-function_profile-leaf_module_policy_group>` |

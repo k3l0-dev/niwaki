@@ -219,6 +219,8 @@ NTP, DNS, syslog, BGP route reflectors, vPC protection — everything under `uni
   - {ref}`fabric.flow_collector_policy <vocab-fabric-flow_collector_policy>` — `telemetryFlowCollectorP`, 10 attributes
     - {ref}`fabric.flow_collector_policy.external_server <vocab-fabric-flow_collector_policy-external_server>` — `telemetryExternalServer`, 5 attributes
     - {ref}`fabric.flow_collector_policy.fte_events <vocab-fabric-flow_collector_policy-fte_events>` — `telemetryFteEventSetP`, 54 attributes
+    - {ref}`fabric.flow_collector_policy.fte_events_ext <vocab-fabric-flow_collector_policy-fte_events_ext>` — `telemetryFteEventsExt`, 56 attributes
+    - {ref}`fabric.flow_collector_policy.fte_event_tcp_flags <vocab-fabric-flow_collector_policy-fte_event_tcp_flags>` — `telemetryFteEventTcpFlags`, 14 attributes
   - {ref}`fabric.analytics_policy_container <vocab-fabric-analytics_policy_container>` — `analyticsCont`, 0 attributes
     - {ref}`fabric.analytics_policy_container.analytics_cluster <vocab-fabric-analytics_policy_container-analytics_cluster>` — `analyticsCluster`, 4 attributes
   - {ref}`fabric.twamp_responder_policy <vocab-fabric-twamp_responder_policy>` — `twampResponderPol`, 6 attributes
@@ -448,6 +450,8 @@ fabric/fabric-telemetry_enable_global_policy
 fabric/fabric-flow_collector_policy
 fabric/fabric-flow_collector_policy-external_server
 fabric/fabric-flow_collector_policy-fte_events
+fabric/fabric-flow_collector_policy-fte_events_ext
+fabric/fabric-flow_collector_policy-fte_event_tcp_flags
 fabric/fabric-analytics_policy_container
 fabric/fabric-analytics_policy_container-analytics_cluster
 fabric/fabric-twamp_responder_policy

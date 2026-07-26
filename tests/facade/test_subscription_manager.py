@@ -35,7 +35,7 @@ class TestSubscriptionsDelegation:
         aci._session = ws_session  # type: ignore[reportPrivateUsage]
 
         httpx_mock.add_response(method="GET", json=subscribe_response("1001"))
-        ws_session.subscribe("/api/class/fvBD.json", {})
+        sub = ws_session.subscribe("/api/class/fvBD.json", {})
 
         infos = aci.subscriptions.list()
         assert len(infos) == 1
@@ -47,3 +47,4 @@ class TestSubscriptionsDelegation:
 
         aci.subscriptions.close_all()
         assert aci.subscriptions.list() == []
+        sub.close()

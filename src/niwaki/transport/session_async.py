@@ -29,7 +29,7 @@ from niwaki import exceptions
 from niwaki.models.base import ManagedObject
 from niwaki.transport._config import RetryConfig
 from niwaki.transport._errors import extract_apic_error, raise_for_apic_status
-from niwaki.transport._subscription_socket import SubscriptionInfo
+from niwaki.transport._subscription_socket import _DEFAULT_MAX_PENDING, SubscriptionInfo
 from niwaki.transport._subscription_socket_async import (
     AsyncRawSubscription,
     AsyncSubscriptionSocket,
@@ -400,7 +400,12 @@ class AsyncApicSession:
     # ── Public subscribe ──────────────────────────────────────────────────────
 
     async def subscribe(
-        self, path: str, params: dict[str, str], *, refresh_timeout: int | None = None
+        self,
+        path: str,
+        params: dict[str, str],
+        *,
+        refresh_timeout: int | None = None,
+        max_pending: int = _DEFAULT_MAX_PENDING,
     ) -> AsyncRawSubscription:
         """
         Subscribe to push notifications for a query, over the session's shared WebSocket.
@@ -422,6 +427,11 @@ class AsyncApicSession:
             refresh_timeout: Override the APIC's default 60 s subscription
                 timeout. The subscription refreshes itself automatically on a
                 schedule derived from this value regardless.
+            max_pending: Bound on buffered, not-yet-consumed events for this
+                subscription. Past it, incoming events are dropped (other
+                subscriptions are never affected) and the stream receives one
+                ``SubscriptionOverflow`` marker per overload episode —
+                reconcile with a fresh read, exactly like a gap.
 
         Returns:
             A :class:`~niwaki.transport._subscription_socket_async.AsyncRawSubscription`
@@ -443,7 +453,7 @@ class AsyncApicSession:
         if self._subscription_socket is None:
             self._subscription_socket = AsyncSubscriptionSocket(self)
         return await self._subscription_socket.subscribe(
-            path, params, refresh_timeout=refresh_timeout
+            path, params, refresh_timeout=refresh_timeout, max_pending=max_pending
         )
 
     def list_subscriptions(self) -> list[SubscriptionInfo]:

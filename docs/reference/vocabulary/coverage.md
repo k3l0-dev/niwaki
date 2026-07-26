@@ -5,7 +5,7 @@ Re-generate: uv run python -m niwaki._codegen.generate_docs
 
 # Coverage matrix
 
-**927 curated positions** across the design domains plus the `uni`-level domains.  Everything else in the 2,222 generated classes stays reachable through `.mo(Class, ...)` and `bind_dn(alias=dn)` — see the design guide.
+**929 curated positions** across the design domains plus the `uni`-level domains.  Everything else in the 2,222 generated classes stays reachable through `.mo(Class, ...)` and `bind_dn(alias=dn)` — see the design guide.
 
 ## fabric
 
@@ -218,9 +218,11 @@ Re-generate: uv run python -m niwaki._codegen.generate_docs
 | {ref}`fabric.license_policy <vocab-fabric-license_policy>` | `licenseLicPolicy` | — | — | — | — | — |
 | {ref}`fabric.remote_path <vocab-fabric-remote_path>` | `fileRemotePath` | — | — | — | — | — |
 | {ref}`fabric.telemetry_enable_global_policy <vocab-fabric-telemetry_enable_global_policy>` | `telemetryEnableP` | — | — | — | — | — |
-| {ref}`fabric.flow_collector_policy <vocab-fabric-flow_collector_policy>` | `telemetryFlowCollectorP` | 2 | — | — | — | — |
+| {ref}`fabric.flow_collector_policy <vocab-fabric-flow_collector_policy>` | `telemetryFlowCollectorP` | 4 | — | — | — | — |
 | {ref}`fabric.flow_collector_policy.external_server <vocab-fabric-flow_collector_policy-external_server>` | `telemetryExternalServer` | — | — | — | — | — |
 | {ref}`fabric.flow_collector_policy.fte_events <vocab-fabric-flow_collector_policy-fte_events>` | `telemetryFteEventSetP` | — | — | — | — | — |
+| {ref}`fabric.flow_collector_policy.fte_events_ext <vocab-fabric-flow_collector_policy-fte_events_ext>` | `telemetryFteEventsExt` | — | — | — | — | — |
+| {ref}`fabric.flow_collector_policy.fte_event_tcp_flags <vocab-fabric-flow_collector_policy-fte_event_tcp_flags>` | `telemetryFteEventTcpFlags` | — | — | — | — | — |
 | {ref}`fabric.analytics_policy_container <vocab-fabric-analytics_policy_container>` | `analyticsCont` | 1 | — | — | — | — |
 | {ref}`fabric.analytics_policy_container.analytics_cluster <vocab-fabric-analytics_policy_container-analytics_cluster>` | `analyticsCluster` | — | — | — | — | — |
 | {ref}`fabric.twamp_responder_policy <vocab-fabric-twamp_responder_policy>` | `twampResponderPol` | — | — | — | — | — |
@@ -233,7 +235,7 @@ Re-generate: uv run python -m niwaki._codegen.generate_docs
 | {ref}`fabric.vspan_session.vspan_vsource <vocab-fabric-vspan_session-vspan_vsource>` | `spanVSrc` | — | — | — | — | — |
 | {ref}`fabric.vspan_session.span_label <vocab-fabric-vspan_session-span_label>` | `spanSpanLbl` | — | — | — | — | — |
 | {ref}`fabric.vspan_destination_group <vocab-fabric-vspan_destination_group>` | `spanVDestGrp` | 1 | — | — | — | — |
-| {ref}`fabric.vspan_destination_group.vspan_vdestination <vocab-fabric-vspan_destination_group-vspan_vdestination>` | `spanVDest` | 1 | `epg=`, `path=`, `apic_node=`, `virtual_port=` | — | — | — |
+| {ref}`fabric.vspan_destination_group.vspan_vdestination <vocab-fabric-vspan_destination_group-vspan_vdestination>` | `spanVDest` | 1 | `epg=`, `path=`, `apic_node=`, `virtual_port=`, `virtual_port_def=` | — | — | — |
 | {ref}`fabric.vspan_destination_group.vspan_vdestination.vspan_destination_epg_summary <vocab-fabric-vspan_destination_group-vspan_vdestination-vspan_destination_epg_summary>` | `spanVEpgSummary` | — | — | — | — | — |
 
 ## infra
@@ -418,7 +420,7 @@ Re-generate: uv run python -m niwaki._codegen.generate_docs
 | {ref}`infra.vspan_session.vspan_vsource <vocab-infra-vspan_session-vspan_vsource>` | `spanVSrc` | — | — | — | — | — |
 | {ref}`infra.vspan_session.span_label <vocab-infra-vspan_session-span_label>` | `spanSpanLbl` | — | — | — | — | — |
 | {ref}`infra.vspan_destination_group <vocab-infra-vspan_destination_group>` | `spanVDestGrp` | 1 | — | — | — | — |
-| {ref}`infra.vspan_destination_group.vspan_vdestination <vocab-infra-vspan_destination_group-vspan_vdestination>` | `spanVDest` | 1 | `epg=`, `path=`, `apic_node=`, `virtual_port=` | — | — | — |
+| {ref}`infra.vspan_destination_group.vspan_vdestination <vocab-infra-vspan_destination_group-vspan_vdestination>` | `spanVDest` | 1 | `epg=`, `path=`, `apic_node=`, `virtual_port=`, `virtual_port_def=` | — | — | — |
 | {ref}`infra.vspan_destination_group.vspan_vdestination.vspan_destination_epg_summary <vocab-infra-vspan_destination_group-vspan_vdestination-vspan_destination_epg_summary>` | `spanVEpgSummary` | — | — | — | — | — |
 | {ref}`infra.ptp_node_policy <vocab-infra-ptp_node_policy>` | `ptpInstPol` | — | — | — | — | — |
 | {ref}`infra.ptp_profile <vocab-infra-ptp_profile>` | `ptpProfile` | — | — | — | — | — |
@@ -806,7 +808,7 @@ Re-generate: uv run python -m niwaki._codegen.generate_docs
 | {ref}`tenant.span_destination_group.span_destination <vocab-tenant-span_destination_group-span_destination>` | `spanDest` | 1 | `epg=`, `path=`, `apic_node=` | — | — | — |
 | {ref}`tenant.span_destination_group.span_destination.vspan_epg_summary <vocab-tenant-span_destination_group-span_destination-vspan_epg_summary>` | `spanVEpgSummary` | — | — | — | — | — |
 | {ref}`tenant.vspan_destination_group <vocab-tenant-vspan_destination_group>` | `spanVDestGrp` | 1 | — | — | — | — |
-| {ref}`tenant.vspan_destination_group.vspan_vdestination <vocab-tenant-vspan_destination_group-vspan_vdestination>` | `spanVDest` | 1 | `epg=`, `path=`, `apic_node=`, `virtual_port=` | — | — | — |
+| {ref}`tenant.vspan_destination_group.vspan_vdestination <vocab-tenant-vspan_destination_group-vspan_vdestination>` | `spanVDest` | 1 | `epg=`, `path=`, `apic_node=`, `virtual_port=`, `virtual_port_def=` | — | — | — |
 | {ref}`tenant.vspan_destination_group.vspan_vdestination.vspan_destination_epg_summary <vocab-tenant-vspan_destination_group-vspan_vdestination-vspan_destination_epg_summary>` | `spanVEpgSummary` | — | — | — | — | — |
 | {ref}`tenant.vspan_session <vocab-tenant-vspan_session>` | `spanVSrcGrp` | 2 | `filter_group=` | — | — | — |
 | {ref}`tenant.vspan_session.vspan_vsource <vocab-tenant-vspan_session-vspan_vsource>` | `spanVSrc` | — | — | — | — | — |

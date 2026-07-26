@@ -65,6 +65,7 @@ import stamina
 
 from niwaki import exceptions
 from niwaki.transport._subscription_socket import (
+    _DEFAULT_MAX_PENDING,
     _RECONNECT_ATTEMPTS,
     _RECONNECT_WAIT_INITIAL,
     _RECONNECT_WAIT_JITTER,
@@ -76,6 +77,7 @@ from niwaki.transport._subscription_socket import (
     RawSubscriptionEvent,
     SubscriptionGap,
     SubscriptionInfo,
+    SubscriptionOverflow,
     SubscriptionRefreshFailed,
     _Fatal,
     _QueueItem,
@@ -101,6 +103,12 @@ class _AsyncRegistration:
     queue: asyncio.Queue[_QueueItem] = field(default_factory=asyncio.Queue)
     next_refresh_at: float = 0.0
     consecutive_refresh_failures: int = 0
+    # Backpressure — same policy as the sync registration: the queue object
+    # stays unbounded, the bound applies to data events only, single-writer
+    # bookkeeping (the reader task).
+    max_pending: int = _DEFAULT_MAX_PENDING
+    dropped_total: int = 0
+    overflow_open: bool = False
 
 
 class AsyncRawSubscription:
@@ -123,6 +131,16 @@ class AsyncRawSubscription:
         self._socket = socket
         self._queue = item_queue
         self._closed = False
+        # Vanished-consumer safety net — the async unsubscribe is a
+        # coroutine and the GC can fire this on any thread, so the callback
+        # hops onto the socket's loop with call_soon_threadsafe.
+        self._finalizer = weakref.finalize(
+            self,
+            _finalize_async_raw_subscription,
+            weakref.ref(socket),
+            asyncio.get_running_loop(),
+            local_id,
+        )
 
     @property
     def subscription_id(self) -> str:
@@ -189,6 +207,7 @@ class AsyncRawSubscription:
         if self._closed:
             return
         self._closed = True
+        self._finalizer.detach()
         await self._socket.unsubscribe(self._local_id)
 
 
@@ -205,6 +224,26 @@ class _AsyncSocketHandle:
 
     sock: Any = None
     closed: bool = False
+
+
+def _finalize_async_raw_subscription(
+    socket_ref: weakref.ref[AsyncSubscriptionSocket],
+    loop: asyncio.AbstractEventLoop,
+    local_id: int,
+) -> None:
+    """Safety-net callback: a consumer vanished without ``close()``.
+
+    Mirror of the sync :func:`~niwaki.transport._subscription_socket._finalize_raw_subscription`
+    — but the GC may fire it on any thread, so the registration drop hops
+    onto the socket's loop; if the loop is already closed there is nothing
+    left to leak (the socket finalizer covers the raw connection)."""
+    socket = socket_ref()
+    if socket is None:
+        return
+    # GC context: no locks here — not even logging's. The warning is
+    # emitted from the loop callback instead.
+    with contextlib.suppress(RuntimeError):  # loop closed — nothing to drop anymore
+        loop.call_soon_threadsafe(socket._drop_registration_nowait, local_id, True)
 
 
 def _finalize_async_socket(handle: _AsyncSocketHandle) -> None:
@@ -258,7 +297,12 @@ class AsyncSubscriptionSocket:
     # ── Public: subscribe / unsubscribe / close ───────────────────────────────
 
     async def subscribe(
-        self, path: str, params: dict[str, str], *, refresh_timeout: int | None = None
+        self,
+        path: str,
+        params: dict[str, str],
+        *,
+        refresh_timeout: int | None = None,
+        max_pending: int = _DEFAULT_MAX_PENDING,
     ) -> AsyncRawSubscription:
         """Open the shared socket if needed, then subscribe to *path*.
 
@@ -278,11 +322,28 @@ class AsyncSubscriptionSocket:
             wire_id=wire_id,
             queue=item_queue,
             next_refresh_at=time.monotonic() + _refresh_interval(refresh_timeout),
+            max_pending=max_pending,
         )
         async with self._state_lock:
             self._registrations[local_id] = reg
             self._wire_to_local[wire_id] = local_id
         return AsyncRawSubscription(local_id, initial, self, item_queue)
+
+    def _drop_registration_nowait(self, local_id: int, reaped: bool = False) -> None:
+        """Non-awaiting unsubscribe body — loop-affine and therefore atomic.
+
+        The vanished-consumer finalizer hops here via
+        ``call_soon_threadsafe``; never awaits, so it needs no lock (the same
+        cooperative-atomicity argument as ``_dispatch``)."""
+        reg = self._registrations.pop(local_id, None)
+        if reg is not None:
+            if reaped:
+                logger.warning(
+                    "niwaki: a subscription was garbage-collected without close() — "
+                    "dropping its registration (call close() or use the context manager)"
+                )
+            self._wire_to_local.pop(reg.wire_id, None)
+            reg.queue.put_nowait(_STOP)
 
     async def unsubscribe(self, local_id: int) -> None:
         """Drop local bookkeeping for one subscription (see :meth:`AsyncRawSubscription.close`)."""
@@ -410,6 +471,8 @@ class AsyncSubscriptionSocket:
             refresh_timeout=reg.refresh_timeout,
             consecutive_refresh_failures=reg.consecutive_refresh_failures,
             seconds_until_refresh=max(0.0, reg.next_refresh_at - time.monotonic()),
+            pending=reg.queue.qsize(),
+            dropped=reg.dropped_total,
         )
 
     def _subscription_info_for(self, local_id: int) -> SubscriptionInfo | None:
@@ -494,13 +557,13 @@ class AsyncSubscriptionSocket:
         wire_ids = [wire_ids_raw] if isinstance(wire_ids_raw, str) else list(wire_ids_raw)
         imdata = data.get("imdata") or []
 
-        target_queues = [
-            self._registrations[local_id].queue
+        targets = [
+            self._registrations[local_id]
             for wire_id in wire_ids
             if (local_id := self._wire_to_local.get(wire_id)) is not None
             and local_id in self._registrations
         ]
-        if not target_queues:
+        if not targets:
             return
 
         for item in imdata:
@@ -516,8 +579,28 @@ class AsyncSubscriptionSocket:
                 attributes=dict(attrs),
                 status=attrs.get("status", "modified"),
             )
-            for q in target_queues:
-                q.put_nowait(event)
+            for reg in targets:
+                self._offer(reg, event)
+
+    @staticmethod
+    def _offer(reg: _AsyncRegistration, event: RawSubscriptionEvent) -> None:
+        """Enqueue a data event under the backpressure bound — mirror of the
+        sync :meth:`~niwaki.transport._subscription_socket.SubscriptionSocket._offer`."""
+        if reg.queue.qsize() >= reg.max_pending:
+            reg.dropped_total += 1
+            if not reg.overflow_open:
+                reg.overflow_open = True
+                reg.queue.put_nowait(SubscriptionOverflow(dropped_total=reg.dropped_total))
+                logger.warning(
+                    "niwaki: subscription buffer full (max_pending=%d) — "
+                    "dropping incoming events until the consumer catches up",
+                    reg.max_pending,
+                )
+            return
+        if reg.overflow_open and reg.queue.qsize() <= reg.max_pending // 2:
+            # Hysteresis — mirror of the sync _offer: one marker per episode.
+            reg.overflow_open = False
+        reg.queue.put_nowait(event)
 
     # ── Internal: refresh sweep (entry point is the free-function loop) ──────
 

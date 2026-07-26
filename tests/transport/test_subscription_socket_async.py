@@ -65,7 +65,7 @@ class TestSubscribe:
     ) -> None:
         httpx_mock.add_response(method="GET", json=subscribe_response())
 
-        await async_ws_session.subscribe(
+        sub = await async_ws_session.subscribe(
             "/api/class/fvBD.json", {"query-target": "subtree"}, refresh_timeout=45
         )
 
@@ -74,6 +74,7 @@ class TestSubscribe:
         assert query["subscription"] == "yes"
         assert query["refresh-timeout"] == "45"
         assert query["query-target"] == "subtree"
+        await sub.close()
 
     async def test_rejected_subscribe_raises_typed_error(
         self, async_ws_session: AsyncApicSession, httpx_mock: HTTPXMock
@@ -359,6 +360,7 @@ class TestFinalizeAsyncSocketWiring:
     ) -> None:
         """End-to-end: the real weakref.finalize registration, no explicit close()."""
         httpx_mock.add_response(method="GET", json=subscribe_response("1001"))
+        # Deliberately discarded — this test IS the abandonment scenario.
         await async_ws_session.subscribe("/api/class/fvBD.json", {})
         await _await_until(lambda: fake_async_ws_server.connection_count == 1)
         conn = fake_async_ws_server.connections[-1]
@@ -538,7 +540,7 @@ class TestListSubscriptions:
         fake_async_ws_server: FakeAsyncWsServer,
     ) -> None:
         httpx_mock.add_response(method="GET", json=subscribe_response("1001"))
-        await async_ws_session.subscribe(
+        sub = await async_ws_session.subscribe(
             "/api/class/fvBD.json", {"query-target": "subtree"}, refresh_timeout=45
         )
         await _await_until(lambda: fake_async_ws_server.connection_count == 1)
@@ -559,6 +561,7 @@ class TestListSubscriptions:
 
         socket._registrations[1].consecutive_refresh_failures = 1  # type: ignore[reportPrivateUsage]
         assert socket.list_subscriptions()[0].is_stale is True
+        await sub.close()
 
     async def test_empty_before_any_subscribe(self, async_ws_session: AsyncApicSession) -> None:
         socket = async_ws_session._subscription_socket  # type: ignore[reportPrivateUsage]
@@ -573,7 +576,7 @@ class TestRefreshAllSubscriptions:
         fake_async_ws_server: FakeAsyncWsServer,
     ) -> None:
         httpx_mock.add_response(method="GET", json=subscribe_response("1001"))
-        await async_ws_session.subscribe("/api/class/fvBD.json", {})
+        sub = await async_ws_session.subscribe("/api/class/fvBD.json", {})
         await _await_until(lambda: fake_async_ws_server.connection_count == 1)
         socket = async_ws_session._subscription_socket  # type: ignore[reportPrivateUsage]
         assert socket is not None
@@ -585,6 +588,7 @@ class TestRefreshAllSubscriptions:
 
         assert infos[0].consecutive_refresh_failures == 1
         assert infos[0].is_stale is True
+        await sub.close()
 
     async def test_success_resets_counter_and_reschedules(
         self,
@@ -593,7 +597,7 @@ class TestRefreshAllSubscriptions:
         fake_async_ws_server: FakeAsyncWsServer,
     ) -> None:
         httpx_mock.add_response(method="GET", json=subscribe_response("1001"))
-        await async_ws_session.subscribe("/api/class/fvBD.json", {})
+        sub = await async_ws_session.subscribe("/api/class/fvBD.json", {})
         await _await_until(lambda: fake_async_ws_server.connection_count == 1)
         socket = async_ws_session._subscription_socket  # type: ignore[reportPrivateUsage]
         assert socket is not None
@@ -606,6 +610,7 @@ class TestRefreshAllSubscriptions:
 
         assert infos[0].consecutive_refresh_failures == 0
         assert reg.next_refresh_at > stale_schedule
+        await sub.close()
 
 
 class TestCloseAllSubscriptions:
@@ -655,7 +660,7 @@ class TestCloseAllSubscriptions:
         fake_async_ws_server: FakeAsyncWsServer,
     ) -> None:
         httpx_mock.add_response(method="GET", json=subscribe_response("1001"))
-        await async_ws_session.subscribe("/api/class/fvBD.json", {})
+        sub = await async_ws_session.subscribe("/api/class/fvBD.json", {})
         await _await_until(lambda: fake_async_ws_server.connection_count == 1)
         socket = async_ws_session._subscription_socket  # type: ignore[reportPrivateUsage]
         assert socket is not None
@@ -664,6 +669,7 @@ class TestCloseAllSubscriptions:
         await socket.close_all_subscriptions()  # must not raise
 
         assert socket.list_subscriptions() == []
+        await sub.close()
 
     async def test_does_not_resurrect_a_registration_the_sweep_had_marked_due(
         self,
