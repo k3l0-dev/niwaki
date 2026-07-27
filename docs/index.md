@@ -66,6 +66,7 @@ guide/observing
 guide/discovery
 guide/subscribing
 guide/connection
+guide/compatibility
 guide/errors
 guide/testing
 guide/async

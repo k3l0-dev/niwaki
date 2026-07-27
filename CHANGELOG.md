@@ -5,6 +5,34 @@ All notable changes to this project are documented here.  The format follows
 [semver](https://semver.org/).  From 1.0.0 the configuration API is stable:
 breaking changes ship in a new major version with a migration note.
 
+## [1.6.1] — 2026-07-27
+
+### Added
+
+- **Compatibility page.** The documentation now answers the evaluator's
+  first question precisely: what niwaki is validated against (APIC
+  6.0(9c), live), how it behaves on older and newer firmware (tolerant
+  reads, fail-loud writes), the Python version posture, and the thread/
+  task-safety contract of the clients.
+
+### Internal
+
+- The transport documentation now states what is actually consumed: the
+  design engine's wave runner uses the async writer protocol; the facade
+  and query builders drive the concrete sessions, and tests fake the HTTP
+  layer. The previous docs implied a protocol-typed injection point that
+  never existed. Finishing the boundary (a real query-transport protocol
+  and typed accessors) is recorded as a design candidate for a planned
+  cycle.
+
+- Freshness guards extended to the navigation tables and the generated
+  models (the catalogue already had one): a corpus-gated
+  rebuild-and-compare of `_child_map.py`'s six tables, and a sampled
+  re-render of fifteen naming-sensitive model classes compared against
+  the committed tree. A generator or input change without a regen now
+  breaks the build instead of shipping stale artifacts — the failure
+  mode that lived three releases before 1.3.2.
+
 ## [1.6.0] — 2026-07-26
 
 ### Added

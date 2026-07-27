@@ -1,9 +1,10 @@
 # Testing your automation
 
-Design-first pays off in tests: a design is a pure value, the network
-boundary is plain httpx, and the session dependency is two small structural
-protocols.  That gives your automation four natural test layers — from pure
-unit tests to a fully faked APIC — none of which needs a fabric.
+Design-first pays off in tests: a design is a pure value and the network
+boundary is plain httpx, so the natural place to fake the APIC is the HTTP
+layer — exactly how niwaki's own suite works.  That gives your automation
+four natural test layers — from pure unit tests to a fully faked APIC —
+none of which needs a fabric.
 
 ## Designs are pure — assert on the payload
 
@@ -119,12 +120,13 @@ The same technique fakes reads: return an `{"imdata": [...]}` envelope of
 `{"<class>": {"attributes": {...}}}` entries and the typed models parse it
 exactly as they would a live answer.
 
-## Stubbing the transport protocols
+## The write seam, as a checkable contract
 
-Code structured around a writer/reader dependency does not even need HTTP:
-the push engine and the facade consume two structural protocols
-({doc}`../reference/api/transport`), so any object with the right methods is
-a valid transport:
+What the push engine asks of a session is documented by small structural
+protocols ({doc}`../reference/api/transport`): ``post_mo`` and
+``delete_mo`` for writes, ``get_mo`` for typed reads.  If you build your
+own fake for engine-level tests, you can *prove* it has the right shape —
+structurally, no inheritance needed:
 
 ```python
 class RecordingWriter:

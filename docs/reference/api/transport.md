@@ -7,9 +7,11 @@
 
 ## The transport boundary
 
-The facade and the push engine depend on these structural protocols, never on
-the concrete sessions — any conforming object is a valid transport, which is
-how you test your automation without a fabric ({doc}`../../guide/testing`).
+These protocols document what the upper layers ask of a session: the
+design engine's wave runner consumes the async writer protocol; the facade
+and the query builders drive the concrete sessions directly. For testing,
+fake the HTTP layer (as niwaki's own suite does) and use the protocols as
+shape contracts for engine-level stubs ({doc}`../../guide/testing`).
 
 ```{eval-rst}
 .. autoclass:: niwaki.transport.MoWriter

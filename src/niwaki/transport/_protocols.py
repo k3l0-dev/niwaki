@@ -1,9 +1,9 @@
 """Transport boundary protocols — what the upper layers may ask of a session.
 
-The facade and the design push engine depend on these structural types
-instead of the concrete session classes, so any object implementing the
-methods is a valid session (test stubs included) and the boundary needs no
-private-attribute reach-through.
+They document the shape of the session surface the upper layers rely on:
+the design engine's wave runner consumes :class:`AsyncMoWriter`; the other
+protocols serve as checkable contracts for test stubs and as the reference
+of what each capability requires.
 
 Protocols:
     :class:`MoWriter` / :class:`AsyncMoWriter` — ``post_mo`` / ``delete_mo``.
