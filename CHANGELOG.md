@@ -5,7 +5,6 @@ All notable changes to this project are documented here.  The format follows
 [semver](https://semver.org/).  From 1.0.0 the configuration API is stable:
 breaking changes ship in a new major version with a migration note.
 
-
 ## [1.6.0] — 2026-07-26
 
 ### Added

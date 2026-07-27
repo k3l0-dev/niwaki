@@ -1,17 +1,27 @@
-# gitleaks configuration (used by the weekly canary's history audit).
+# Gitleaks configuration — the weekly canary audit of the public history.
 #
-# Default rules, plus an allowlist for the generated code: those files are
-# produced from the public APIC class schemas, where identifiers such as
-# "ipv4aclIntfACE" (ACE = Access Control Entry) trip the generic api-key
-# rule.  Generated files carry no hand-written strings by construction.
+# Every entry below is a reviewed FALSE POSITIVE; a real credential must
+# never be allowlisted here (rotate it and rewrite history instead).
 
 [extend]
 useDefault = true
 
-[[allowlists]]
-description = "generated code — ACI class tables from the public schemas"
+[allowlist]
+description = "Reviewed false positives"
+regexTarget = "match"
 paths = [
-  '''src/niwaki/models/_generated/.*''',
-  '''src/niwaki/domain/_child_map\.py''',
-  '''src/niwaki/design/_generated_cursors\.py''',
+    # Generated navigation artifacts: ACI class names (ipv4aclIntfACE, ...)
+    # trip the generic-api-key entropy heuristic. Pure schema vocabulary.
+    '''src/niwaki/_codegen/nav_baseline_1_4\.json''',
+    '''tests/domain/nav_snapshot\.json''',
+    '''src/niwaki/domain/_child_map\.py''',
+]
+regexes = [
+    # Deliberate dummy hex test vectors in the integration suites
+    # (MACsec CAK/keys, NTP auth keys) — documented lab values, not secrets.
+    '''112233445566778899aabbccddeeff00''',
+    '''a1b2c3d4e5f60708090a0b0c0d0e0f10''',
+    '''0123456789abcdef0123456789abcdef''',
+    '''"0123456789abcdef"''',
+    '''fedcba9876543210''',
 ]
