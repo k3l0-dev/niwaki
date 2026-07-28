@@ -49,12 +49,15 @@ from niwaki.design._cursor import Cursor
 from niwaki.design._generated_cursors import aaa, controller, design, fabric, infra, tenant
 from niwaki.design._node import Ref, ref
 from niwaki.design._push import PlanResult, PushReport
+from niwaki.design._verify import ExternalRef, RefCheck
 
 __all__ = [
     "Cursor",
+    "ExternalRef",
     "PlanResult",
     "PushReport",
     "Ref",
+    "RefCheck",
     "aaa",
     "controller",
     "design",

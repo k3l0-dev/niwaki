@@ -164,14 +164,14 @@ class TestCommittedMapPins:
         assert CHILD_MAP["fabricInst"]["lldp_inst_pol"] == "lldpInstPol"
         assert CHILD_MAP["fabricInst"]["lldp_policy"] == "lldpIfPol"
 
-    def test_typo_fix_with_deprecated_alias(self) -> None:
+    def test_typo_fix_stays_current(self) -> None:
         assert CHILD_MAP["fabricInst"]["catalog_maintenance_policy"] == "maintCatMaintP"
-        assert NAV_DEPRECATED["fabricInst"]["catalog_maitenance_policy"] == "maintCatMaintP"
-
-    def test_lot_c_rename_has_alias(self) -> None:
-        # The curated-overlay renames (Lot C) are covered by the same shim.
-        assert NAV_DEPRECATED["fvCtx"]["pim_ctx"] == "pimCtxP"
         assert CHILD_MAP["fvCtx"]["pim"] == "pimCtxP"
+
+    def test_aliases_are_retired(self) -> None:
+        # The 1.5.0 aliases were removed in 1.7.0; the mechanism stays for
+        # future renames (delete the baseline file → the table empties).
+        assert NAV_DEPRECATED == {}
 
     def test_every_alias_targets_a_live_edge_under_a_new_name(self) -> None:
         for parent, aliases in NAV_DEPRECATED.items():

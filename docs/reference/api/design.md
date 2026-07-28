@@ -55,4 +55,8 @@ behaviour they all share.
 .. autoclass:: niwaki.design.PushReport
 
 .. autoclass:: niwaki.design.PlanResult
+
+.. autoclass:: niwaki.design.ExternalRef
+
+.. autoclass:: niwaki.design.RefCheck
 ```

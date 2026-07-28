@@ -23,14 +23,21 @@ result types — reports and errors carry plain DN strings.
 from __future__ import annotations
 
 from collections.abc import Iterable, Iterator
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Any
 
 from niwaki.design._compiler import build_desired_tree, compile_ops, compile_poluni
 from niwaki.design._engine import _Op, _run_waves, _run_waves_sync, _WaveOutcome
 from niwaki.design._node import DesignNode
 from niwaki.design._resolver import resolve
-from niwaki.exceptions._design import StagedPushError
+from niwaki.design._verify import (
+    RefCheck,
+    collect_external_refs,
+    failures_of,
+    verify_async,
+    verify_sync,
+)
+from niwaki.exceptions._design import DanglingReferenceError, StagedPushError
 from niwaki.models.base import ManagedObject
 from niwaki.utils.diff import mo_diff
 
@@ -65,11 +72,16 @@ class PlanResult:
         creates: DNs that do not exist on the APIC and would be created.
         updates: Per-DN field changes as ``{field: (current, desired)}``.
         unchanged: DNs already matching the desired state.
+        external_refs: Per-reference verification statuses, populated only
+            by ``push(mode="plan", verify_refs=True)`` — plan is the warn
+            tier and never raises for a dangling reference; each entry is a
+            :class:`~niwaki.design.RefCheck`.
     """
 
     creates: list[str]
     updates: dict[str, dict[str, tuple[Any, Any]]]
     unchanged: list[str]
+    external_refs: list[RefCheck] = field(default_factory=list)
 
     @property
     def has_changes(self) -> bool:
@@ -157,12 +169,13 @@ def _plan_result(
     return PlanResult(creates=creates, updates=updates, unchanged=unchanged)
 
 
-def _merge_plans(parts: list[PlanResult]) -> PlanResult:
+def _merge_plans(parts: list[PlanResult], external_refs: list[RefCheck]) -> PlanResult:
     """Aggregate per-domain plan results into one report."""
     return PlanResult(
         creates=[dn for part in parts for dn in part.creates],
         updates={dn: fields for part in parts for dn, fields in part.updates.items()},
         unchanged=[dn for part in parts for dn in part.unchanged],
+        external_refs=external_refs,
     )
 
 
@@ -212,13 +225,22 @@ def _staged_report(ops: list[_Op], outcome: _WaveOutcome) -> PushReport:
 # ── Sync execution ────────────────────────────────────────────────────────────
 
 
-def push_sync(root: DesignNode, client: Niwaki, mode: PushMode) -> PushReport | PlanResult:
+def push_sync(
+    root: DesignNode, client: Niwaki, mode: PushMode, *, verify_refs: bool = False
+) -> PushReport | PlanResult:
     """Execute a push through a sync :class:`~niwaki.Niwaki` client.
 
     See :meth:`niwaki.design.Cursor.push` for the full mode contract.
     """
     extras = resolve(root)
     session = client._sync_session  # pyright: ignore[reportPrivateUsage]
+
+    checks: list[RefCheck] = []
+    if verify_refs:
+        refs = collect_external_refs(root, extras, set(_walk_dns(root, extras)))
+        checks = verify_sync(session, refs)
+        if mode != "plan" and (failures := failures_of(checks)):
+            raise DanglingReferenceError(failures)
 
     if mode == "strict":
         session.post_mo("uni", compile_poluni(root, extras))
@@ -243,7 +265,7 @@ def push_sync(root: DesignNode, client: Niwaki, mode: PushMode) -> PushReport | 
         raw = session.get(f"/api/mo/{child_dn}.json", **_plan_read_params(desired))
         current = ManagedObject.from_apic(raw[0]) if raw else None
         parts.append(_plan_result(desired, current, child_dn))
-    return _merge_plans(parts)
+    return _merge_plans(parts, checks)
 
 
 # ── Async execution ───────────────────────────────────────────────────────────
@@ -253,6 +275,8 @@ async def push_async(
     root: DesignNode,
     client: AsyncNiwaki,
     mode: PushMode,
+    *,
+    verify_refs: bool = False,
 ) -> PushReport | PlanResult:
     """Execute a push through an :class:`~niwaki.AsyncNiwaki` client.
 
@@ -261,6 +285,13 @@ async def push_async(
     """
     extras = resolve(root)
     session = client._active_session  # pyright: ignore[reportPrivateUsage]
+
+    checks: list[RefCheck] = []
+    if verify_refs:
+        refs = collect_external_refs(root, extras, set(_walk_dns(root, extras)))
+        checks = await verify_async(session, refs)
+        if mode != "plan" and (failures := failures_of(checks)):
+            raise DanglingReferenceError(failures)
 
     if mode == "strict":
         await session.post_mo("uni", compile_poluni(root, extras))
@@ -278,4 +309,4 @@ async def push_async(
         raw = await session.get(f"/api/mo/{child_dn}.json", **_plan_read_params(desired))
         current = ManagedObject.from_apic(raw[0]) if raw else None
         parts.append(_plan_result(desired, current, child_dn))
-    return _merge_plans(parts)
+    return _merge_plans(parts, checks)

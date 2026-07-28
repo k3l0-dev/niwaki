@@ -43,6 +43,7 @@ if TYPE_CHECKING:
     from collections.abc import Coroutine as _Coroutine
 
     from niwaki.design._push import PlanResult, PushReport
+    from niwaki.design._verify import ExternalRef
     from niwaki.facade import AsyncNiwaki, Niwaki
 
 PushMode = Literal["strict", "staged", "plan"]
@@ -596,22 +597,52 @@ class Cursor:
 
         return build_payload(self._node.root())
 
+    def external_refs(self) -> list[ExternalRef]:
+        """Enumerate the design's external DN references — no transport needed.
+
+        The same enumeration ``push(verify_refs=True)`` verifies: raw-DN
+        ``bind_dn`` targets and literal-DN makers (``static_path``,
+        ``path_attachment``, …), minus everything the design itself
+        declares. Inspection only, like :meth:`to_payload` — nothing is
+        read or written.
+
+        Returns:
+            The references, sorted by ``(dn, referencing class)``.
+        """
+        from niwaki.design._push import _walk_dns
+        from niwaki.design._resolver import resolve
+        from niwaki.design._verify import collect_external_refs
+
+        root = self._node.root()
+        extras = resolve(root)
+        return collect_external_refs(root, extras, set(_walk_dns(root, extras)))
+
     @overload
     def push(
-        self, client: Niwaki, *, mode: Literal["strict", "staged"] = "strict"
+        self,
+        client: Niwaki,
+        *,
+        mode: Literal["strict", "staged"] = "strict",
+        verify_refs: bool = False,
     ) -> PushReport: ...
 
     @overload
-    def push(self, client: Niwaki, *, mode: Literal["plan"]) -> PlanResult: ...
+    def push(
+        self, client: Niwaki, *, mode: Literal["plan"], verify_refs: bool = False
+    ) -> PlanResult: ...
 
     @overload
     def push(
-        self, client: AsyncNiwaki, *, mode: Literal["strict", "staged"] = "strict"
+        self,
+        client: AsyncNiwaki,
+        *,
+        mode: Literal["strict", "staged"] = "strict",
+        verify_refs: bool = False,
     ) -> _Coroutine[Any, Any, PushReport]: ...
 
     @overload
     def push(
-        self, client: AsyncNiwaki, *, mode: Literal["plan"]
+        self, client: AsyncNiwaki, *, mode: Literal["plan"], verify_refs: bool = False
     ) -> _Coroutine[Any, Any, PlanResult]: ...
 
     def push(
@@ -619,6 +650,7 @@ class Cursor:
         client: Niwaki | AsyncNiwaki,
         *,
         mode: PushMode = "strict",
+        verify_refs: bool = False,
     ) -> PushReport | PlanResult | _Coroutine[Any, Any, PushReport | PlanResult]:
         """Validate the design and push it through *client*.
 
@@ -641,6 +673,17 @@ class Cursor:
                 result directly) or :class:`~niwaki.AsyncNiwaki`
                 (returns an awaitable).
             mode: ``"strict"`` | ``"staged"`` | ``"plan"``.
+            verify_refs: Verify the design's external references (raw-DN
+                ``bind_dn`` targets and literal-DN makers such as
+                ``static_path``) against the live APIC **before anything is
+                written** — reads only. In ``strict``/``staged`` mode a
+                missing or wrong-class target raises
+                :class:`~niwaki.exceptions.DanglingReferenceError` with the
+                complete failure list; in ``plan`` mode the per-reference
+                statuses land on
+                :attr:`~niwaki.design.PlanResult.external_refs` and nothing
+                raises. Default ``False`` — the wire behavior without the
+                flag is byte-identical to previous releases.
 
         Returns:
             :class:`~niwaki.design.PushReport` for write modes,
@@ -649,6 +692,9 @@ class Cursor:
 
         Raises:
             UnresolvedReferenceError: Closed-world validation failed.
+            DanglingReferenceError: ``verify_refs=True`` in a write mode and
+                at least one external reference cannot be honored by the
+                APIC — nothing was written.
             AmbiguousBindError: A bind edge has no Rs class.
             APIError: The APIC rejected a write (strict mode).
             StagedPushError: One or more staged operations failed — carries
@@ -659,8 +705,8 @@ class Cursor:
 
         root = self._node.root()
         if isinstance(client, AsyncNiwaki):
-            return _push.push_async(root, client, mode)
-        return _push.push_sync(root, client, mode)
+            return _push.push_async(root, client, mode, verify_refs=verify_refs)
+        return _push.push_sync(root, client, mode, verify_refs=verify_refs)
 
 
 def _attach(

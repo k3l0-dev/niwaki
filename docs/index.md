@@ -62,6 +62,7 @@ guide/quickstart
 guide/design-dsl
 guide/cursors
 guide/push-modes
+guide/existing-fabric
 guide/observing
 guide/discovery
 guide/subscribing

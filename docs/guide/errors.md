@@ -29,7 +29,8 @@ NiwakiError
 │   ├── DuplicateDeclarationError      same object declared twice
 │   ├── UnresolvedReferenceError       bind() target not in the design
 │   ├── AmbiguousBindError             bind() matches several declarations
-│   └── StagedPushError                staged push partially applied
+│   ├── StagedPushError                staged push partially applied
+│   └── DanglingReferenceError         verify_refs: external target absent/wrong class
 └── SubscriptionError              "what went wrong with a live subscription?"
     ├── StatsClassNotSubscribableError    stats class — the APIC never pushes for it
     ├── SubscribeRejectedError            the APIC rejected subscription=yes
@@ -47,6 +48,7 @@ NiwakiError
 | permission-scoped tooling | `ForbiddenError` | report the missing privilege |
 | any push pipeline | `DesignError` | fix the design — do not retry |
 | a staged rollout | `StagedPushError` | see the playbook below |
+| a verified push (`verify_refs=True`) | `DanglingReferenceError` | fix or create the referenced objects; nothing was pushed |
 | a live subscription's stream | `SubscriptionLostError` | resubscribe, or exit the watcher |
 
 ## Design errors are eager

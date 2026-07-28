@@ -23,6 +23,7 @@ write a single broad ``except NiwakiError`` or target a specific branch:
         ServerError,          # 5xx — APIC internal error
         DeserializationError, # response cannot be parsed into a typed model
         StagedPushError,      # staged design push partially succeeded
+        DanglingReferenceError,  # verify_refs: external DN targets the APIC cannot honor
         SubscriptionError,             # any object-subscription (WebSocket push) failure
         StatsClassNotSubscribableError,  # subscribed to a stats class — never pushes
         SubscribeRejectedError,        # the APIC rejected a subscription=yes request
@@ -55,7 +56,8 @@ Hierarchy::
     │   ├── DuplicateDeclarationError
     │   ├── UnresolvedReferenceError
     │   ├── AmbiguousBindError
-    │   └── StagedPushError
+    │   ├── StagedPushError
+    │   └── DanglingReferenceError
     └── SubscriptionError
         ├── StatsClassNotSubscribableError
         ├── SubscribeRejectedError      (also an APIError)
@@ -80,6 +82,7 @@ from niwaki.exceptions._auth import (
 from niwaki.exceptions._base import NiwakiError
 from niwaki.exceptions._design import (
     AmbiguousBindError,
+    DanglingReferenceError,
     DesignError,
     DuplicateDeclarationError,
     StagedPushError,
@@ -107,6 +110,7 @@ __all__ = [
     "AmbiguousBindError",
     "AuthError",
     "ConnectionError",
+    "DanglingReferenceError",
     "DeserializationError",
     "DesignError",
     "DuplicateDeclarationError",

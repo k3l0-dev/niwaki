@@ -39,15 +39,18 @@ from niwaki import Niwaki
 
 def apply(config, *, plan_only: bool) -> bool:
     with Niwaki() as aci:  # APIC_* environment variables
-        plan = config.push(aci, mode="plan")
+        plan = config.push(aci, mode="plan", verify_refs=True)
         for dn in plan.creates:
             print(f"+ {dn}")
         for dn, fields in plan.updates.items():
             for field, (current, desired) in fields.items():
                 print(f"~ {dn} {field}: {current!r} -> {desired!r}")
+        for check in plan.external_refs:
+            if check.status != "ok":
+                print(f"! external ref {check.ref.dn}: {check.status}")
         if plan_only or not plan.has_changes:
             return plan.has_changes
-        config.push(aci)
+        config.push(aci, verify_refs=True)
         return plan.has_changes
 
 

@@ -63,6 +63,15 @@ def test_deprecated_name_resolves_identically_with_warning(
 
 
 class TestShimBoundaries:
+    @pytest.fixture(autouse=True)
+    def _synthetic_alias(self, monkeypatch: pytest.MonkeyPatch):
+        # The 1.5.0 aliases were retired in 1.7.0 — the shim MECHANISM stays
+        # for future renames and is exercised with a synthetic entry.
+        import niwaki.domain._child_map as cm
+
+        monkeypatch.setitem(cm.NAV_DEPRECATED, "fvCtx", {"pim_ctx": "pimCtxP"})
+        monkeypatch.setitem(cm.NAV_DEPRECATED, "_root", {"provider_profile": "vmmProvP"})
+
     def test_warning_names_the_replacement(self) -> None:
         with pytest.warns(DeprecationWarning, match="renamed 'pim'"):
             _navigate_jargon(_load_class("fvCtx"), "pim_ctx")

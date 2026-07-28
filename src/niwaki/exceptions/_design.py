@@ -12,6 +12,7 @@ from niwaki.exceptions._base import NiwakiError
 
 if TYPE_CHECKING:
     from niwaki.design._push import PushReport
+    from niwaki.design._verify import RefCheck
 
 
 class DesignError(NiwakiError):
@@ -45,6 +46,44 @@ class AmbiguousBindError(DesignError):
     ``REFERENCE_MAP[target][owner]`` resolves to a relationship class.  Use
     ``.mo(RsClass, ...)`` to create the relationship explicitly.
     """
+
+
+class DanglingReferenceError(DesignError):
+    """External references the APIC cannot honor, caught before the push.
+
+    Raised by ``push(verify_refs=True)`` in ``strict``/``staged`` mode when
+    at least one ``bind_dn``/literal-DN reference points at a DN the APIC
+    does not serve (or serves with a class outside the referencing class's
+    accept-set). Nothing has been written when this raises — verification
+    is a read-only pass that runs before the first POST.
+
+    Every failure is collected before raising (never first-fail); the
+    message carries the full list with DNs in clear, and
+    :attr:`failures` exposes the structured checks.
+
+    Args:
+        failures: One :class:`~niwaki.design.RefCheck` per failing
+            reference, sorted by DN.
+
+    Attributes:
+        failures: The failing checks, as passed.
+    """
+
+    def __init__(self, failures: list[RefCheck]) -> None:
+        self.failures = failures
+        lines = []
+        for check in failures:
+            expected = ", ".join(check.expected) if check.expected else "any class"
+            found = check.found or "nothing"
+            detail = f" ({check.detail})" if check.detail else ""
+            lines.append(
+                f"  {check.ref.dn} [{check.status}] — expected {expected}, "
+                f"found {found}{detail} (declared at {check.ref.declared_at})"
+            )
+        super().__init__(
+            f"{len(failures)} external reference(s) cannot be honored by the APIC "
+            "— nothing was pushed:\n" + "\n".join(lines)
+        )
 
 
 class StagedPushError(DesignError):

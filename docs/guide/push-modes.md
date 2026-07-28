@@ -80,6 +80,42 @@ the object as unchanged — push to apply the new value.
 Several small designs still beat one giant one — not for the APIC's sake,
 but because each plan then reads as one reviewable change.
 
+## `verify_refs` — check external references before writing
+
+A design may reference objects it does not declare: `bind_dn` targets and
+the literal-DN makers (`static_path`, `path_attachment`, …) carry raw DNs.
+The APIC *accepts* a relation whose target does not exist — the config
+lands, the relation stays unformed, and a fault is the only trace.
+`verify_refs=True` closes that gap: every external DN is read from the APIC
+**before anything is written** (reads only), and a missing or wrong-class
+target raises with the complete failure list:
+
+```python
+from niwaki import exceptions
+from niwaki.design import design
+
+dom = design().phys_dom("prod-phys")
+dom.bind_dn(vlan_pool="uni/infra/vlanns-[missing]-static")
+
+try:
+    dom.push(aci, verify_refs=True)
+except exceptions.DanglingReferenceError as exc:
+    for check in exc.failures:
+        print(check.ref.dn, check.status)  # nothing was pushed
+```
+
+In `plan` mode the statuses land on `PlanResult.external_refs` instead —
+plan is the warn tier and never raises for a dangling reference. Targets
+the design itself declares are skipped (this very push creates them), and
+verification cannot catch a target deleted *between* the check and the
+POST — that window stays inherent.
+
+Measured on APIC 6.0(9c): a dangling static path pushed without the flag
+is accepted with the relation left `state=unformed` — and on the
+simulator **no fault is ever raised**, so the unformed field is the only
+trace. Verification reads cost ~60 ms per unique DN (24 references in
+1.5 s), deduplicated across the design.
+
 ## `to_payload()` — inspect without executing
 
 Returns the exact strict-mode payload as a dict (same philosophy as the query

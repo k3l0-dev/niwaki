@@ -5,6 +5,46 @@ All notable changes to this project are documented here.  The format follows
 [semver](https://semver.org/).  From 1.0.0 the configuration API is stable:
 breaking changes ship in a new major version with a migration note.
 
+## [1.7.0] — 2026-07-28
+
+### Removed
+
+- **The pre-1.5.0 navigation aliases are retired.** The 773 deprecated
+  navigation names introduced as compatibility shims by the 1.5.0 naming
+  unification (announced for removal no earlier than 1.7.0) no longer
+  resolve — navigating by an old name now raises the standard
+  `AttributeError`. Migrate with the 1.5.0/1.6.x `DeprecationWarning`
+  messages, which named each replacement. The shim mechanism itself stays
+  in place and re-fills automatically if a future release renames
+  navigation entries.
+
+### Added
+
+- **`push(verify_refs=True)` — external references checked before the
+  wire.** A design's raw-DN references (`bind_dn` targets, the literal-DN
+  makers such as `static_path`) were pushed on faith, and the APIC accepts
+  a relation whose target does not exist — the config lands and the
+  relation stays unformed; on the 6.0(9c) simulator, measured live, **no
+  fault is ever raised**, making that field the only trace. The new
+  opt-in verification reads every external DN (deduplicated, ~60 ms per
+  unique DN, bounded concurrency in async) before anything is written: in
+  `strict`/`staged` mode a missing or wrong-class target raises the new
+  `DanglingReferenceError` carrying the complete failure list — nothing
+  pushed; in `plan` mode the per-reference statuses land on the new
+  `PlanResult.external_refs` and nothing raises. Expected target classes
+  come from the read catalogue's own accept-sets, so read-only targets
+  (fabric path endpoints) verify correctly. Without the flag, wire
+  behavior is byte-identical to previous releases.
+- **`Cursor.external_refs()`** — enumerate a design's external references
+  without a transport (the `to_payload` inspection pattern); the GitOps
+  cookbook's CI gate now verifies references in its plan and apply steps.
+- **Guide: "Working with an existing fabric".** The brownfield contract,
+  stated plainly and proven by executed examples: declaration is the
+  boundary (not provenance), declaring an existing object takes it over,
+  attribute-merge leaves every undeclared field and object untouched,
+  deletion is never a push effect, and `bind_dn` + `verify_refs` is the
+  safe way to lean on objects you do not own.
+
 ## [1.6.1] — 2026-07-27
 
 ### Added

@@ -610,12 +610,13 @@ def _render_deprecated_navigation() -> str:
         _HEADER,
         "# Deprecated navigation names",
         "",
-        "Navigation names were unified in 1.5.0: curated design-maker names "
+        "Navigation names were unified in 1.5.0 (curated design-maker names "
         "at every curated position, pkg-prefixed class names where Cisco's "
-        f"label is too long to be an identifier.  The {total} pre-1.5.0 names "
-        "below still resolve — to the same class — but emit a "
-        "`DeprecationWarning` naming their replacement.  They will be removed "
-        "no earlier than 1.7.0.",
+        "label is too long to be an identifier); the pre-1.5.0 aliases were "
+        "retired in 1.7.0.  This table lists the deprecated navigation names "
+        "currently kept resolving with a `DeprecationWarning` — "
+        f"{total or 'none'} at the moment.  It fills again whenever a future "
+        "release renames navigation entries.",
         "",
         "| under | deprecated name | current name | class |",
         "| --- | --- | --- | --- |",
