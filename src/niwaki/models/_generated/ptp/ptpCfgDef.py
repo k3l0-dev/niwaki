@@ -153,8 +153,8 @@ class ptpCfgDef(ManagedObject):
     sync_interval_for_ptp_profile: Annotated[
         int,
         Field(
-            ge=4,
-            le=1,
+            ge=-4,
+            le=-1,
             validation_alias="syncIntvl",
             serialization_alias="syncIntvl",
             description="Sync Interval",

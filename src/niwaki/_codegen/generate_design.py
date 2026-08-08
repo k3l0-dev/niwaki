@@ -53,7 +53,7 @@ from types import UnionType
 from typing import Annotated, Any, NamedTuple, Union, get_args, get_origin
 
 from niwaki._schema.naming import label_to_snake
-from niwaki.design._cursor import _load_class, _tables
+from niwaki.design._cursor import _load_class, _maker_allowed, _tables
 from niwaki.models._wire import Flags
 from niwaki.models.base import ManagedObject
 
@@ -164,7 +164,13 @@ def _positions() -> dict[str, _Position]:
     positions: dict[str, _Position] = {"": _Position("", "uni", "polUni", None)}
 
     def _walk(parent_key: str, parent_class: str, lineage: tuple[str, ...]) -> None:
+        grandparent = lineage[-2] if len(lineage) >= 2 else None
         for label, child in tables.makers.get(parent_class, {}).items():
+            # A maker the controller accepts under one grandparent only keeps
+            # its position there and nowhere else, so the typed surface stops
+            # advertising a push that cannot land.
+            if not _maker_allowed(parent_class, label, grandparent):
+                continue
             if child in lineage:
                 sys.exit(f"generate_design: class cycle through {child} at {parent_key!r}")
             key = f"{parent_key}.{label}" if parent_key else label
@@ -569,6 +575,10 @@ def _render_mixin(
     ]
     for maker_label, child_aci in tables.makers.get(pos.aci_class, {}).items():
         child_key = f"{pos.key}.{maker_label}" if pos.key else maker_label
+        # Out-of-scope makers have no position, so they have no cursor to
+        # return — rendering one here would look up a name that does not exist.
+        if child_key not in names:
+            continue
         lines.extend(
             _render_maker(maker_label, child_aci, names[child_key], enum_imports, pos.label)
         )

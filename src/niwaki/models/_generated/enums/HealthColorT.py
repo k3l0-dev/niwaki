@@ -26,7 +26,6 @@ class HealthColorT(StrEnum):
     CORNFLOWER_BLUE = "cornflower-blue"
     CORNSILK = "cornsilk"
     CRIMSON = "crimson"
-    CYAN = "cyan"
     DARK_BLUE = "dark-blue"
     DARK_CYAN = "dark-cyan"
     DARK_GOLDENROD = "dark-goldenrod"
@@ -85,7 +84,6 @@ class HealthColorT(StrEnum):
     LIME = "lime"
     LIME_GREEN = "lime-green"
     LINEN = "linen"
-    MAGENTA = "magenta"
     MAROON = "maroon"
     MEDIUM_AQUAMARINE = "medium-aquamarine"
     MEDIUM_BLUE = "medium-blue"
@@ -146,6 +144,10 @@ class HealthColorT(StrEnum):
     WHITE_SMOKE = "white-smoke"
     YELLOW = "yellow"
     YELLOW_GREEN = "yellow-green"
+
+    # Alternate spellings — aliases of the value the APIC stores.
+    CYAN = "aqua"
+    MAGENTA = "fuchsia"
 
     @classmethod
     def _missing_(cls, value: object) -> HealthColorT | None:
@@ -289,6 +291,8 @@ class HealthColorT(StrEnum):
             "0xFFFFE0": "light-yellow",
             "0xFFFFF0": "ivory",
             "0xFFFFFF": "white",
+            "cyan": "aqua",
+            "magenta": "fuchsia",
         }
         if isinstance(value, str) and value in _aliases:
             return cls(_aliases[value])

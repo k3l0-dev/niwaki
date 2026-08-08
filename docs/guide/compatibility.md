@@ -53,7 +53,8 @@ artifact itself and checked by the test suite.
 - **`Niwaki` / `ApicSession` (sync):** safe to share across threads. The
   underlying HTTP client is thread-safe, token refresh is serialized (a
   401 triggers exactly one re-login however many threads race it), and
-  the read catalogue is lock-free-safe by construction. Each
+  the read catalogue serves concurrent readers from one shared connection
+  without a lock. Each
   `Subscription` should be consumed by one thread; the shared WebSocket
   machinery behind them is thread-safe.
 - **`AsyncNiwaki` (async):** one instance per event loop. Fan out with

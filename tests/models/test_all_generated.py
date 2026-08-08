@@ -306,3 +306,53 @@ def test_to_apic_surgical(
     obj = _cls(cls_name)(**naming)
     attrs = obj.to_apic()[cls_name]["attributes"]
     assert attrs == expected_attrs
+
+
+# ── 11. Numeric ranges are satisfiable ────────────────────────────────────────
+
+
+def test_no_generated_field_declares_an_impossible_range() -> None:
+    """Every bounded number must admit at least one value.
+
+    Cisco writes both bounds as *magnitudes* on signed properties:
+    ``xcvrZRIfPol.transmitPower`` declares ``{min: 190, max: 50}`` and defaults
+    to ``-190``, meaning ``[-190, -50]`` in hundredths of a dBm.  Copied
+    literally that becomes ``ge=190, le=50`` — a range no value satisfies, and
+    the SDK rejected every PTP sync interval and every ZR optical power, their
+    own schema defaults included.
+
+    The extractor negates such a pair; this guard is what makes that correct
+    rather than merely applied.  It reports the offenders it finds instead of
+    comparing against a count written by hand — a hardcoded number goes stale
+    on the next firmware bump and turns into a false alarm.
+
+    Note this deliberately does *not* require the default to sit inside the
+    range: 2,268 schema properties declare a minimum above zero with no default
+    at all, and the generator fabricates ``0`` for them.  That zero is the
+    APIC's own "unset" reading, so the range describes what may be *written*,
+    not what may be *read*.
+    """
+    import annotated_types as at
+
+    from niwaki.models._generated import _PKG_MAP
+
+    impossible: list[str] = []
+    for cls_name, pkg in _PKG_MAP.items():
+        module = importlib.import_module(f"niwaki.models._generated.{pkg}.{cls_name}")
+        for field_name, info in getattr(module, cls_name).model_fields.items():
+            # annotated_types states the bounds as comparison protocols; the
+            # generator only ever emits numbers, so narrow to those before
+            # ordering them.
+            low: float | None = None
+            high: float | None = None
+            for constraint in info.metadata:
+                if isinstance(constraint, at.Ge) and isinstance(constraint.ge, int | float):
+                    low = constraint.ge
+                elif isinstance(constraint, at.Le) and isinstance(constraint.le, int | float):
+                    high = constraint.le
+            if low is not None and high is not None and low > high:
+                impossible.append(f"{cls_name}.{field_name} (ge={low} > le={high})")
+
+    assert not impossible, (
+        f"{len(impossible)} generated field(s) declare a range no value can satisfy: {impossible}"
+    )

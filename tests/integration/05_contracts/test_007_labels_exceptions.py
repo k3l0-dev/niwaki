@@ -35,7 +35,10 @@ EXC_CTR = "niwaki-it-exc-ctr"
 
 EXC_FIELDS = ("Ctx", "Dn", "EPg", "Tag", "Tenant")
 
-# Every PolColor value (from the generated enum) — spread across the six label kinds.
+# Every PolColor value — spread across the six label kinds.  "cyan" and
+# "magenta" are the two spellings the APIC canonicalises away (to "aqua" and
+# "fuchsia"): keeping them here proves both still write, and that what comes
+# back matches what the SDK sent.
 COLORS = (
     "alice-blue", "antique-white", "aqua", "aquamarine", "azure", "beige", "bisque", "black",
     "blanched-almond", "blue", "blue-violet", "brown", "burlywood", "cadet-blue", "chartreuse",

@@ -340,10 +340,18 @@ class Query(_QueryBase[_T]):
         Returns:
             All matching objects across every page, typed via ``REGISTRY``.
 
+        To count matching objects, use :meth:`count` — it is the only counting
+        idiom this SDK trusts.  This method returns objects, so a parameter that
+        makes the APIC answer with a tally instead yields one ``moCount``
+        envelope where the caller expected their class.
+
         Example::
 
-            path, params = aci.query(fvBD).build()
-            params["rsp-subtree-include"] = "count"
+            # Start from build() so scoping and filters are already right, then
+            # set whatever the query grammar does not model yet and run it
+            # through the same typed, paginated path.
+            path, params = aci.query(fvBD).under("uni/tn-prod").build()
+            params["some-apic-parameter"] = "value"
             objs = aci.query(fvBD).execute_raw(path, params)
         """
         from niwaki.utils.response import parse_imdata

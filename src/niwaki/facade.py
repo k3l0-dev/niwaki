@@ -130,8 +130,8 @@ def _navigate_jargon(parent_cls: type[ManagedObject], attr: str) -> _JargonTarge
                 )
             warnings.warn(
                 f"navigation name {attr!r} under {parent_key!r} is deprecated — "
-                f"renamed {current!r} in the 1.5.0 naming unification; the old "
-                "name will not be removed before 1.7.0",
+                f"use {current!r} instead; deprecated names are removed no "
+                "earlier than the next minor release",
                 DeprecationWarning,
                 skip_file_prefixes=(_PKG_DIR,),
             )
@@ -747,8 +747,12 @@ class AsyncNiwaki:
     async def __aenter__(self) -> AsyncNiwaki:
         """Authenticate an async session and return ``self``.
 
-        Creates an :class:`~niwaki.transport.session_async.AsyncApicSession`,
-        logs in, and returns this :class:`AsyncNiwaki` instance ready for use.
+        If :meth:`connect` was used, the session is already authenticated and
+        this is a no-op.  Otherwise an
+        :class:`~niwaki.transport.session_async.AsyncApicSession` is created
+        and logged in.  Re-entering never replaces a live session: doing so
+        would strand its HTTP client and any subscription socket with no
+        owner left to close them.
 
         Returns:
             This :class:`AsyncNiwaki` instance.
@@ -758,19 +762,21 @@ class AsyncNiwaki:
             ConnectionError: APIC host is unreachable.
             TimeoutError: Login request timed out.
         """
-        kwargs: dict[str, Any] = dict(
-            host=self._host,
-            username=self._username,
-            password=self._password,
-            verify_ssl=self._verify_ssl,
-            timeout=self._timeout,
-            refresh_threshold=self._refresh_threshold,
-            max_concurrent=self._max_concurrent,
-        )
-        if self._retry is not None:
-            kwargs["retry"] = self._retry
-        self._session = AsyncApicSession(**kwargs)
-        await self._session.login()
+        if self._session is None:
+            kwargs: dict[str, Any] = dict(
+                host=self._host,
+                username=self._username,
+                password=self._password,
+                verify_ssl=self._verify_ssl,
+                timeout=self._timeout,
+                refresh_threshold=self._refresh_threshold,
+                max_concurrent=self._max_concurrent,
+            )
+            if self._retry is not None:
+                kwargs["retry"] = self._retry
+            session = AsyncApicSession(**kwargs)
+            await session.login()
+            self._session = session
         return self
 
     async def __aexit__(self, *_: object) -> None:

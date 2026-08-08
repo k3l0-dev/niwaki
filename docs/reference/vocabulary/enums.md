@@ -6860,7 +6860,6 @@ Used by: {ref}`infra.poe_policy <vocab-infra-poe_policy>`
 | `cornflower-blue` | — |
 | `cornsilk` | — |
 | `crimson` | — |
-| `cyan` | — |
 | `dark-blue` | — |
 | `dark-cyan` | — |
 | `dark-goldenrod` | — |
@@ -6919,7 +6918,6 @@ Used by: {ref}`infra.poe_policy <vocab-infra-poe_policy>`
 | `lime` | — |
 | `lime-green` | — |
 | `linen` | — |
-| `magenta` | — |
 | `maroon` | — |
 | `medium-aquamarine` | — |
 | `medium-blue` | — |

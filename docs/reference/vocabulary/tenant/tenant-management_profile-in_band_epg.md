@@ -55,7 +55,6 @@ Lazy references, resolved closed-world at push time.
 | `contract_master=` | `fvEPg` *(abstract: `fvAEPg`, `fvESg`, `fvTnlEPg`, `infraCEPg`…)* | DN — `bind_dn()` allowed | `fvRsSecInherited` |
 | `imported_contract=` | `vzCPIf` | name | `fvRsConsIf` |
 | `taboo_contract=` | `vzTaboo` | name | `fvRsProtBy` |
-| `custom_qos_policy=` | `qosCustomPol` | name | `fvRsCustQosPol` |
 | `static_node=` | `fabricNode` | DN — `bind_dn()` allowed | `mgmtRsInBStNode` |
 
 ## Verbs

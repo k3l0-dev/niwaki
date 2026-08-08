@@ -506,13 +506,57 @@ class TestCount:
         session = _make_session(count_response={"totalCount": "0", "imdata": []})
         assert Query(fvBD, session).count() == 0
 
-    def test_count_adds_count_only_param(self) -> None:
+    def test_count_reads_the_total_of_a_one_object_page(self) -> None:
         from niwaki.models._generated.fv.fvBD import fvBD
 
         session = _make_session(count_response={"totalCount": "5", "imdata": []})
         Query(fvBD, session).count()
         call_params = session._request_checked.call_args[0][1]
         assert call_params["page-size"] == "1"  # count = totalCount of a 1-object page
+
+    def test_count_never_asks_the_apic_to_tally(self) -> None:
+        """The counting idiom the SDK avoids, pinned so it cannot come back.
+
+        ``rsp-subtree-include=count`` makes the APIC answer with its own tally,
+        which disagrees with reality on a scoped query — measured on 6.0(9c),
+        five tenants out of twenty-eight reported zero bridge domains while
+        holding up to a hundred and ninety-two, and the request succeeds either
+        way.  ``count()`` reads the ``totalCount`` of a one-object page instead.
+        """
+        from niwaki.models._generated.fv.fvBD import fvBD
+
+        session = _make_session(count_response={"totalCount": "7", "imdata": []})
+        Query(fvBD, session).under("uni/tn-prod").count()
+        call_params = session._request_checked.call_args[0][1]
+        assert "count" not in call_params.get("rsp-subtree-include", "")
+
+
+class TestSubtreeIncludeCount:
+    """What the ``COUNT`` facet actually does, pinned because it surprises.
+
+    It sits in :class:`SubtreeInclude` beside ``FAULTS`` and ``HEALTH`` as if it
+    enriched the answer.  It does not: the APIC replaces the result with a
+    single ``moCount`` envelope, so a query for bridge domains comes back
+    holding no bridge domains at all.  Nothing guarded this before.
+    """
+
+    def test_the_facet_replaces_the_result_with_a_tally_envelope(self) -> None:
+        from niwaki.models._generated.fv.fvBD import fvBD
+        from niwaki.query import SubtreeInclude
+
+        session = _make_session(raw_items=[{"moCount": {"attributes": {"count": "403"}}}])
+        objs = Query(fvBD, session).include_subtree(SubtreeInclude.COUNT).fetch()
+
+        assert [o._wire_class for o in objs] == ["moCount"]
+        assert not any(isinstance(o, fvBD) for o in objs)
+
+    def test_the_enum_documents_the_trap(self) -> None:
+        """A facet that behaves unlike its siblings must say so where it is read."""
+        from niwaki.query import SubtreeInclude
+
+        doc = SubtreeInclude.__doc__ or ""
+        assert "count" in doc.lower()
+        assert "moCount" in doc
 
 
 class TestStream:

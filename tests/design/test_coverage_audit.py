@@ -63,12 +63,27 @@ def test_every_scope_rule_matches_a_real_gap() -> None:
     A rule that matches nothing is a stale judgement (the class was renamed or
     already curated) and should be removed, not left to rot.
     """
-    children = {g.child for g in scan_gaps()}
+    pairs = {(g.child, g.parent) for g in scan_gaps()}
     for rule in SCOPE_RULES:
-        assert any(rule.matches(c) for c in children), (
+        assert any(rule.matches(child, parent) for child, parent in pairs), (
             f"scope rule matches no current gap: {rule.reason!r} "
-            f"(pkg={rule.pkg}, pattern={rule.pattern}, cls={rule.cls})"
+            f"(pkg={rule.pkg}, pattern={rule.pattern}, cls={rule.cls}, "
+            f"parent={rule.parent})"
         )
+
+
+def test_a_position_scoped_rule_does_not_excuse_the_same_child_elsewhere() -> None:
+    """The point of ``ScopeRule.parent``: exclude a position, not a family.
+
+    ``fvRsCustQosPol`` is out of scope under an in-band management EPG — the
+    controller writes nothing there.  Under an application EPG it works, so the
+    same relation going missing from *that* position must still be reported.
+    """
+    rule = next(r for r in SCOPE_RULES if r.parent == "mgmtInB")
+    assert rule.matches("fvRsCustQosPol", "mgmtInB")
+    assert not rule.matches("fvRsCustQosPol", "fvAEPg")
+    assert classify("fvRsCustQosPol", "mgmtInB")[0] == "out"
+    assert classify("fvRsCustQosPol", "fvAEPg")[0] == "in"
 
 
 def test_classification_partitions_every_gap() -> None:

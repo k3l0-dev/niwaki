@@ -136,17 +136,28 @@ class TestSignatures:
 
 class TestConsistency:
     def test_registry_covers_every_curated_position(self) -> None:
-        """CURSOR_FOR is keyed by position — the maker paths from polUni."""
+        """CURSOR_FOR is keyed by position — the maker paths from polUni.
+
+        The walk is re-derived here rather than imported from the generator,
+        so that a generator which forgets a position is caught.  It therefore
+        has to mirror every rule the generator applies, including the curated
+        ``maker_scope``: a maker the controller accepts under one grandparent
+        only occupies that position and no other.
+        """
+        from niwaki.design._cursor import _maker_allowed
+
         makers = _tables().makers
         expected: set[str] = {""}
 
-        def _walk(parent_key: str, parent_class: str) -> None:
+        def _walk(parent_key: str, parent_class: str, grandparent: str | None) -> None:
             for label, child in makers.get(parent_class, {}).items():
+                if not _maker_allowed(parent_class, label, grandparent):
+                    continue
                 key = f"{parent_key}.{label}" if parent_key else label
                 expected.add(key)
-                _walk(key, child)
+                _walk(key, child, parent_class)
 
-        _walk("", "polUni")
+        _walk("", "polUni", None)
         assert set(CURSOR_FOR) == expected
 
     def test_registry_root_is_unicursor(self) -> None:

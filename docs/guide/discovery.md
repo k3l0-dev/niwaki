@@ -62,6 +62,32 @@ lists them:
 assert "fvAEPg" in catalog.concrete_subclasses("fvEPg")
 ```
 
+## Where a class lives in the tree
+
+A class is rarely reachable at one place. `dn_formats` gives every DN shape the
+APIC uses for it, with the identifying values left as placeholders:
+
+```python
+assert catalog.dn_formats("fvBD") == ("uni/tn-{name}/BD-{name}",)
+
+# A subnet is the same class under a bridge domain, an EPG, a tenant, an L2Out
+# external EPG, and several service-graph nodes — twelve shapes, one class.
+assert len(catalog.dn_formats("fvSubnet")) == 12
+```
+
+Quote these; do not rebuild them. Chaining parent RNs does not reproduce them —
+the containment graph is both wider than the DNs the APIC actually mints and,
+in places, missing parents that it does mint. And a repeated placeholder is
+normal: `uni/tn-{name}/BD-{name}` names a tenant and a bridge domain, each
+identified by `name`.
+
+An abstract class usually returns an empty tuple — its places belong to the
+concrete classes behind it, which `concrete_subclasses` lists.
+
+An empty *string*, on the other hand, is a real template: a container that
+prefixes nothing. It can be the whole answer or sit among real templates, so
+skip the empties rather than testing the first element.
+
 ## Naming a fault code
 
 A `faultInst` object carries a `code` (e.g. `"F0467"`) but not the class that

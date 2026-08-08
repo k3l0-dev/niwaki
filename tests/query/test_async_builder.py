@@ -137,7 +137,7 @@ class TestAsyncCount:
         assert n == 17
 
     @pytest.mark.anyio
-    async def test_count_adds_count_only_param(self) -> None:
+    async def test_count_reads_the_total_of_a_one_object_page(self) -> None:
         from niwaki.models._generated.fv.fvBD import fvBD
         from niwaki.query import AsyncQuery
 

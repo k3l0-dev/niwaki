@@ -31,6 +31,16 @@ class SubtreeInclude(StrEnum):
     The exhaustive set the APIC offers.  Pass any of these to
     ``include_subtree()``; the ``with_*`` builder methods are ergonomic
     shortcuts for the common ones.
+
+    ``COUNT`` is the odd one out and is kept only for completeness of the set.
+    Unlike its siblings it does not *enrich* the answer, it *replaces* it: the
+    APIC returns a single ``moCount`` envelope instead of the objects that were
+    asked for.  Its tally is also unreliable on a scoped query — measured
+    against a 6.0(9c) fabric, five tenants out of twenty-eight reported zero
+    bridge domains while holding between one and a hundred and ninety-two, and
+    the request succeeds either way.  **Use** :meth:`~niwaki.query.Query.count`,
+    which reads the ``totalCount`` of a one-object page and composes with any
+    query.
     """
 
     FAULTS = "faults"

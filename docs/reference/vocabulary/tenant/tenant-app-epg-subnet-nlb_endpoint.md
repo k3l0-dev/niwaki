@@ -11,7 +11,7 @@ Re-generate: uv run python -m niwaki._codegen.generate_docs
 | --- | --- |
 | ACI class | `fvEpNlb` |
 | RN | `epnlb` |
-| Cursor | `EpgSubnetNlbEndpointCursor` |
+| Cursor | `NlbEndpointCursor` |
 | Parent | {ref}`tenant.app.epg.subnet <vocab-tenant-app-epg-subnet>` |
 | Atomic | — |
 

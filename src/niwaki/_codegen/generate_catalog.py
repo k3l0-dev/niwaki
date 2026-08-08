@@ -104,9 +104,8 @@ CLASS_FLAG_COLS: dict[str, str] = {
 CLASS_NORMALIZED = {"properties", "superClasses", "subClasses", "faults"}
 # ``className`` from the primary key; ``label``/``comment`` pool; ``identifiedBy``
 # its own ``identified_by`` column (reconstructed from it, not double-stored).
-CLASS_HANDLED = {"className", "label", "comment", "identifiedBy"}
+CLASS_HANDLED = {"className", "label", "comment", "identifiedBy", "dnFormats"}
 CLASS_DROPPED: dict[str, str] = {
-    "dnFormats": "DN-parsing template; no read-catalogue consumer (45.7 MB verbatim)",
     "rnMap": "RN-parsing map; derivable from each child's rnFormat",
 }
 CLASS_RESIDUAL_KEYS = {
@@ -461,6 +460,10 @@ def build_catalog(schema_dir: Path = SCHEMA_DIR, out: Path = DEFAULT_OUT) -> dic
     for cls_name, wire, model_name, cat_name in irreducible:
         print(f"  irreducible: {cls_name}.{wire} model={model_name!r} catalogue={cat_name!r}")
 
+    # Addressed by name, never by position: `residual` is a BLOB too, so a
+    # column appended after this one would make both counters silently
+    # measure it — and `content_hash` would stop tracking the templates.
+    _DN_COL = _mo_column_order().index("dn_formats")
     stats = {
         "classes": len(mo_rows),
         "properties": n_props,
@@ -472,6 +475,13 @@ def build_catalog(schema_dir: Path = SCHEMA_DIR, out: Path = DEFAULT_OUT) -> dic
         "scopemeta": len(scopemeta_rows),
         "unclassified_basetypes": len(unknown_types),
         "name_overrides": len(override_rows),
+        # Not a convenience counter: these two are what makes ``content_hash``
+        # move when the DN templates are routed or change.  Without them the
+        # freshness guard is blind to the whole column — a build that dropped it
+        # would hash identically to one that carries it, and every
+        # ``dn_formats()`` call would die on a stale shipped ``.db``.
+        "dn_format_classes": sum(1 for row in mo_rows if row[_DN_COL] is not None),
+        "dn_format_bytes": sum(len(row[_DN_COL]) for row in mo_rows if row[_DN_COL] is not None),
     }
     # A content digest of the class set + counts + the serialised override rows
     # (keyed by class NAME, stable under corpus reordering) — a real fingerprint
@@ -523,6 +533,7 @@ def _mo_column_order() -> list[str]:
         *CLASS_TEXT_COLS.values(),
         *CLASS_FLAG_COLS.values(),
         "residual",
+        "dn_formats",
     ]
 
 
@@ -552,6 +563,11 @@ def _mo_row(
         if k in CLASS_RESIDUAL_KEYS and not (k == "platformFlavors" and not v)
     }
     row["residual"] = _zip(residual) if residual else None
+    # Empty lists are not stored; reconstruct_class turns the NULL back into
+    # ``[]``, the same rule ``platformFlavors`` follows.  2,026 of the 15,452
+    # classes carry none — and 152 abstract ones do carry some, so emptiness
+    # cannot be derived from ``isAbstract``.
+    row["dn_formats"] = _zip(cls["dnFormats"]) if cls.get("dnFormats") else None
     return tuple(row[c] for c in cols)
 
 
@@ -642,7 +658,7 @@ def _create_schema(con: sqlite3.Connection) -> None:
         CREATE TABLE mo(
           id INTEGER PRIMARY KEY, class_name TEXT UNIQUE NOT NULL, short_name TEXT,
           label_id INT, comment_id INT, identified_by TEXT,
-          {text}, {flags}, residual BLOB
+          {text}, {flags}, residual BLOB, dn_formats BLOB
         );
         CREATE TABLE prop(
           class_id INT, wire_name TEXT, label_id INT, comment_id INT, enum_id INT,
@@ -718,6 +734,9 @@ def reconstruct_class(con: sqlite3.Connection, class_name: str) -> dict[str, Any
     if r["residual"] is not None:
         out.update(_unzip(r["residual"]))
     out.setdefault("platformFlavors", [])  # universal default; empty ones not stored
+    # Present on every class of the corpus, so always emitted — a missing key
+    # and an empty list are different answers to "where can this object live".
+    out["dnFormats"] = _unzip(r["dn_formats"]) if r["dn_formats"] is not None else []
 
     # These four keys are universal across the corpus, so always emitted (even
     # empty).  ``superClasses`` is a list — order is preserved via rowid; the

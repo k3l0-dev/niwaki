@@ -37,7 +37,8 @@ class UnknownClassError(NiwakiError, KeyError):
     """A class name the read catalogue does not know.
 
     Raised by :func:`niwaki.catalog.describe`,
-    :func:`niwaki.catalog.class_meta` and :func:`niwaki.catalog.prop_meta`
+    :func:`niwaki.catalog.class_meta`, :func:`niwaki.catalog.prop_meta` and
+    :func:`niwaki.catalog.dn_formats`
     when the wire class name (or property) does not exist in the shipped
     catalogue — usually a typo, or a class minted by a newer APIC firmware
     than the one this build tracks.

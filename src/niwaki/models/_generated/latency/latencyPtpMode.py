@@ -91,8 +91,8 @@ class latencyPtpMode(ManagedObject):
     sync_interval: Annotated[
         int,
         Field(
-            ge=4,
-            le=1,
+            ge=-4,
+            le=-1,
             validation_alias="fabSyncIntvl",
             serialization_alias="fabSyncIntvl",
             description="Fabric Interace Sync Interval",

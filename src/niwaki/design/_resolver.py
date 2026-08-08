@@ -29,9 +29,11 @@ from __future__ import annotations
 
 import difflib
 
+from niwaki._warn import warn_at_caller
 from niwaki.design._node import BindFlavor, DesignNode, PendingBind
 from niwaki.exceptions._design import (
     AmbiguousBindError,
+    DesignHintWarning,
     DuplicateDeclarationError,
     UnresolvedReferenceError,
 )
@@ -144,7 +146,35 @@ def _build_rs(rs_aci_class: str, target_fields: dict[str, str], bind: PendingBin
     cls = _load_class(rs_aci_class)
     if bind.attrs:
         _validate_attr_names(cls, bind.attrs)
-    return cls.model_validate({**target_fields, **bind.attrs})
+    rs = cls.model_validate({**target_fields, **bind.attrs})
+    _warn_on_faultable_defaults(rs, bind)
+    return rs
+
+
+def _warn_on_faultable_defaults(rs: ManagedObject, bind: PendingBind) -> None:
+    """Flag a relation the APIC will accept and then fault on.
+
+    Attaching a domain to a floating SVI without an address leaves it at
+    ``0.0.0.0``, which is outside whatever subnet the SVI serves, and the
+    controller raises a major ``F3744`` every time.  The push is legal, so this
+    is a warning rather than an error — but it is a fault the design guarantees,
+    and finding it in the fabric afterwards costs far more than reading it here.
+
+    Args:
+        rs: The relation object just built.
+        bind: The reference it came from, for naming the alias in the message.
+    """
+    if rs._aci_class != "l3extRsDynPathAtt":
+        return
+    if "floating_addr" in rs.model_fields_set:
+        return
+    warn_at_caller(
+        f"bind({bind.alias}=...) on a floating SVI leaves floating_addr at "
+        "0.0.0.0, which sits outside the SVI's subnet — the APIC will accept "
+        "the push and raise a major fault (F3744). Pass an address with "
+        f"ref(..., floating_addr='10.0.0.1/24') to the {bind.alias} reference.",
+        DesignHintWarning,
+    )
 
 
 def _lookup_target(index: _Index, owner: DesignNode, bind: PendingBind) -> DesignNode:

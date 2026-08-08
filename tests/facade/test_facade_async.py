@@ -94,6 +94,49 @@ class TestAsyncContextManager:
             async with AsyncNiwaki(HOST, "admin", "wrong"):
                 pass
 
+    async def test_entering_a_connected_client_keeps_its_session(
+        self, httpx_mock: HTTPXMock
+    ) -> None:
+        """``connect()`` then ``async with`` must not strand the first session.
+
+        ``connect()`` authenticates through ``__aenter__``; entering the
+        context manager afterwards used to build a second session and
+        overwrite the attribute, leaving the first one's HTTP client — and any
+        subscription socket it owned — with no owner left to close it.  A
+        single login proves no second session was built.
+        """
+        httpx_mock.add_response(method="POST", url=LOGIN_URL, json=login_payload())
+
+        aci = await AsyncNiwaki.connect(HOST, "admin", "secret")
+        first = aci._active_session  # type: ignore[reportPrivateUsage]
+
+        async with aci:
+            assert aci._active_session is first  # type: ignore[reportPrivateUsage]
+
+        assert first.is_closed
+        assert len(httpx_mock.get_requests()) == 1
+
+    async def test_reentering_after_close_builds_a_fresh_session(
+        self, httpx_mock: HTTPXMock
+    ) -> None:
+        """The guard must not turn a closed client into a dead one.
+
+        ``close()`` drops the session, so entering again is a genuine
+        reconnect rather than a no-op.
+        """
+        httpx_mock.add_response(method="POST", url=LOGIN_URL, json=login_payload("first"))
+        httpx_mock.add_response(method="POST", url=LOGIN_URL, json=login_payload("second"))
+
+        aci = AsyncNiwaki(HOST, "admin", "secret")
+        async with aci:
+            first = aci._active_session  # type: ignore[reportPrivateUsage]
+        async with aci:
+            second = aci._active_session  # type: ignore[reportPrivateUsage]
+            assert second is not first
+            assert not second.is_closed
+
+        assert len(httpx_mock.get_requests()) == 2
+
 
 # ── DN computation ────────────────────────────────────────────────────────────
 

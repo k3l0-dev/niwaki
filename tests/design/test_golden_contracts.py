@@ -102,7 +102,13 @@ class TestContractWorldGolden:
         }
 
     def test_vzany_uses_its_own_relation_classes(self) -> None:
-        """Not ``fvRsProv``/``fvRsCons``: vzAny has ``vzRsAnyTo*``."""
+        """Not ``fvRsProv``/``fvRsCons``: vzAny has ``vzRsAnyTo*``.
+
+        The label above declares ``tag="cyan"`` and the wire carries ``aqua``:
+        they are one colour under two spellings, and ``aqua`` is the one the
+        APIC stores.  Sending ``cyan`` would make every later plan report a
+        change that is not there.
+        """
         flat = _flatten(contract_world())
         any_dn = "uni/tn-T/ctx-v/any"
         assert {dn: a for dn, a in flat.items() if dn.startswith(any_dn)} == {
@@ -111,7 +117,7 @@ class TestContractWorldGolden:
             f"{any_dn}/rsanyToCons-web": {"tnVzBrCPName": "web"},
             f"{any_dn}/rsanyToConsIf-imp": {"tnVzCPIfName": "imp"},
             f"{any_dn}/provlbl-vrf-gold": {"name": "vrf-gold", "tag": "gold"},
-            f"{any_dn}/cCtrctLbl-vrf-cc": {"name": "vrf-cc", "tag": "cyan"},
+            f"{any_dn}/cCtrctLbl-vrf-cc": {"name": "vrf-cc", "tag": "aqua"},
         }
 
     def test_oob_contract_carries_a_subject(self) -> None:

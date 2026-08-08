@@ -67,6 +67,13 @@ class _DesignVocabulary(NamedTuple):
         carrier: Non-creatable path-only classes the APIC won't POST or read on
             their own (a VMM provider, ``vmmProvP``) — the push emits no op for
             them and the plan diffs their children instead.
+        maker_scope: Parent ACI class → {maker name → the grandparent classes
+            under which the APIC accepts it}.  A containment the schema states
+            more loosely than the controller enforces: ``fvEpNlb`` is contained
+            by ``fv:Subnet``, but a subnet hangs off a bridge domain as readily
+            as off an EPG and the APIC answers *"NLB MO should be contained
+            only by fvAEPg"* everywhere else.  Curated, because nothing in the
+            schema expresses it.
     """
 
     makers: dict[str, dict[str, str]]
@@ -75,6 +82,7 @@ class _DesignVocabulary(NamedTuple):
     sugar: dict[str, dict[str, str]]
     atomic: frozenset[str]
     carrier: frozenset[str]
+    maker_scope: dict[str, dict[str, frozenset[str]]]
 
 
 @cache
@@ -95,7 +103,33 @@ def _tables() -> _DesignVocabulary:
         sugar=data.get("sugar", {}),
         atomic=frozenset(data.get("atomic", [])),
         carrier=frozenset(data.get("carrier", [])),
+        maker_scope={
+            parent: {label: frozenset(classes) for label, classes in labels.items()}
+            for parent, labels in data.get("maker_scope", {}).items()
+        },
     )
+
+
+def _maker_allowed(parent_aci_class: str, label: str, grandparent_aci_class: str | None) -> bool:
+    """Whether *label* is offered on a *parent* sitting under *grandparent*.
+
+    Most makers apply wherever their parent class occurs.  A few are legal only
+    under one grandparent, because the controller enforces a containment the
+    schema states more loosely — see ``maker_scope`` in
+    :class:`_DesignVocabulary`.
+
+    Args:
+        parent_aci_class: The class the maker hangs off, e.g. ``"fvSubnet"``.
+        label: The maker name, e.g. ``"nlb_endpoint"``.
+        grandparent_aci_class: The class above the parent, or ``None`` at the
+            root.
+
+    Returns:
+        ``True`` when the maker applies here — including whenever the maker
+        carries no scope at all, which is the common case.
+    """
+    allowed = _tables().maker_scope.get(parent_aci_class, {}).get(label)
+    return allowed is None or grandparent_aci_class in allowed
 
 
 @cache
@@ -279,13 +313,18 @@ class Cursor:
         makers = _tables().makers
         for level in self._node.ancestors_and_self():
             table = makers.get(level.aci_class, {})
-            if name in table:
+            if name in table and _maker_allowed(
+                level.aci_class, name, level.parent.aci_class if level.parent else None
+            ):
                 return level, table[name]
         available = sorted(
             {
                 maker
                 for level in self._node.ancestors_and_self()
                 for maker in makers.get(level.aci_class, {})
+                if _maker_allowed(
+                    level.aci_class, maker, level.parent.aci_class if level.parent else None
+                )
             }
         )
         hint = difflib.get_close_matches(name, available, n=1)

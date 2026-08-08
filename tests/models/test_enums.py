@@ -110,3 +110,89 @@ class TestVzEntryPydanticIntegration:
 
         with pytest.raises(ValidationError):
             vzEntry(name="e", ethernet_type="not_valid")  # type: ignore[arg-type]
+
+
+class TestColourSynonyms:
+    """Two spellings of one colour must not read back as a change.
+
+    ``pol:Color`` and ``health:ColorT`` list ``cyan``/``aqua`` and
+    ``magenta``/``fuchsia`` against the same numeric code — the X11 pairs.  The
+    APIC accepts either on write and answers with one of them, so keeping both
+    as members made a design permanently disagree with the fabric it had just
+    configured: declare ``magenta``, read back ``fuchsia``, and every later
+    ``mode="plan"`` reports a change that is not there.
+    """
+
+    def test_only_the_stored_spelling_is_canonical(self) -> None:
+        """Iteration yields the spelling the fabric holds, and only that one."""
+        from niwaki.models._generated.enums.PolColor import PolColor
+
+        names = {member.name for member in PolColor}
+        assert "FUCHSIA" in names
+        assert "AQUA" in names
+        assert "MAGENTA" not in names
+        assert "CYAN" not in names
+
+    def test_the_other_spelling_stays_reachable_as_a_member(self) -> None:
+        """The name a 1.7.0 user could already have written must keep resolving.
+
+        Collapsing the pair fixed the plan drift but deleted two public names.
+        Python's own enum aliasing gives both at once: the alias member *is* the
+        canonical member, so it carries the stored value and writes it to the
+        wire, while attribute access never breaks.
+        """
+        from niwaki.models._generated.enums.PolColor import PolColor
+
+        assert PolColor.MAGENTA is PolColor.FUCHSIA
+        assert PolColor.CYAN is PolColor.AQUA
+        assert PolColor.MAGENTA.value == "fuchsia"  # what reaches the APIC
+        assert PolColor.CYAN.value == "aqua"
+
+    def test_the_alias_member_is_reachable_from_the_public_path(self) -> None:
+        """Not just the private one: this is the import the guide teaches."""
+        from niwaki.models.enums.HealthColorT import HealthColorT
+
+        assert HealthColorT.MAGENTA is HealthColorT.FUCHSIA
+        assert HealthColorT.CYAN is HealthColorT.AQUA
+
+    def test_the_discarded_spelling_still_coerces(self) -> None:
+        """Writing ``magenta`` keeps working — it simply lands on what is stored."""
+        from niwaki.models._generated.enums.PolColor import PolColor
+
+        assert PolColor("magenta") is PolColor.FUCHSIA
+        assert PolColor("cyan") is PolColor.AQUA
+
+    def test_numeric_aliases_still_resolve(self) -> None:
+        """The synonym entry must not displace the hex alias for the same value."""
+        from niwaki.models._generated.enums.PolColor import PolColor
+
+        assert PolColor("0xFF00FF") is PolColor.FUCHSIA
+        assert PolColor("0x00FFFF") is PolColor.AQUA
+
+    def test_unrelated_colours_are_untouched(self) -> None:
+        from niwaki.models._generated.enums.PolColor import PolColor
+
+        assert PolColor("chartreuse").value == "chartreuse"
+        assert PolColor("dark-magenta").value == "dark-magenta"
+
+    def test_health_colour_collapses_the_same_way(self) -> None:
+        from niwaki.models._generated.enums.HealthColorT import HealthColorT
+
+        assert HealthColorT("magenta") is HealthColorT.FUCHSIA
+        assert HealthColorT("cyan") is HealthColorT.AQUA
+
+    def test_both_spellings_reach_the_wire_as_one(self) -> None:
+        """The property that made this visible: a contract label's colour tag."""
+        import json
+
+        from niwaki.design import tenant
+
+        payloads = []
+        for spelling in ("magenta", "fuchsia"):
+            design = tenant("t")
+            design.app("a").epg("e").consumer_label("web", tag=spelling)
+            payloads.append(json.dumps(design.to_payload()))
+
+        assert payloads[0] == payloads[1]
+        assert "fuchsia" in payloads[0]
+        assert "magenta" not in payloads[0]

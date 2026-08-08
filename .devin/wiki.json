@@ -5,7 +5,7 @@
       "author": "maintainer"
     },
     {
-      "content": "Do not analyze the generated trees line by line: src/niwaki/models/_generated/ (2,222 generated Pydantic classes + enums), src/niwaki/design/_generated_cursors/ (~75k lines of typed cursors), src/niwaki/domain/_child_map.py (23k generated lines), docs/reference/vocabulary/ (938 generated pages), and src/niwaki/query/_catalog/catalog.db (31 MB sqlite artifact). Document their GENERATORS in src/niwaki/_codegen/ instead.",
+      "content": "Do not analyze the generated trees line by line: src/niwaki/models/_generated/ (2,222 generated Pydantic classes + enums), src/niwaki/design/_generated_cursors/ (~75k lines of typed cursors), src/niwaki/domain/_child_map.py (23k generated lines), docs/reference/vocabulary/ (938 generated pages), and src/niwaki/query/_catalog/catalog.db (35 MB sqlite artifact). Document their GENERATORS in src/niwaki/_codegen/ instead.",
       "author": "maintainer"
     },
     {

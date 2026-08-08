@@ -23,11 +23,12 @@ illustrative.
 APIC / engine constraints exercised here (real, not curation bugs):
   - contract_master (fvRsSecInherited) and intra_epg (fvRsIntraEpg): only
     supported on fvAEPg / fvESg / l3extInstP, never a management EPG.
-  - custom_qos_policy (fvRsCustQosPol): expressible on a first push, but this
-    never-creatable relation is not re-push-idempotent under strict mode — the
-    controller refuses to re-create it (unlike mgmtRsMgmtBD, which it modifies in
-    place). The custom QoS policy object is still declared; only the EPG bind is
-    left off so the suite stays green on repeated pushes.
+  - custom_qos_policy (fvRsCustQosPol): same shape of constraint. Measured on a
+    6.0(9c) fabric: on fvAEPg, fvESg, l2extInstP and l3extInstP the relation is
+    created, reaches state=formed, and re-pushes idempotently; on mgmtInB it
+    never materialises at all — the first push is accepted but writes nothing,
+    and a second one fails ("object not found"). The custom QoS policy object is
+    still declared; only the EPG bind is left off.
 
 ``wipe(aci)`` (operator-only) removes only the named objects this file creates.
 """

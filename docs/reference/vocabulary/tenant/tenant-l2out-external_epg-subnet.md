@@ -37,7 +37,6 @@ Accepted as keyword arguments of `.subnet(subnet)` and of `.set(**attrs)` on thi
 | maker | creates | position |
 | --- | --- | --- |
 | `.anycast_endpoint(mac, **attrs)` | `fvEpAnycast` | {ref}`tenant.l2out.external_epg.subnet.anycast_endpoint <vocab-tenant-l2out-external_epg-subnet-anycast_endpoint>` |
-| `.nlb_endpoint(**attrs)` | `fvEpNlb` | {ref}`tenant.l2out.external_epg.subnet.nlb_endpoint <vocab-tenant-l2out-external_epg-subnet-nlb_endpoint>` |
 | `.endpoint_network_config(name, **attrs)` | `fvCepNetCfgPol` | {ref}`tenant.l2out.external_epg.subnet.endpoint_network_config <vocab-tenant-l2out-external_epg-subnet-endpoint_network_config>` |
 
 ## Bind aliases

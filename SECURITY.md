@@ -5,10 +5,14 @@ take reports seriously and appreciate coordinated disclosure.
 
 ## Supported versions
 
-| Version            | Supported         |
-| ------------------ | ----------------- |
-| latest 0.x release | ✅                 |
-| anything older     | ❌ — upgrade first |
+| Version                 | Supported               |
+| ----------------------- | ----------------------- |
+| latest 1.x release      | ✅                       |
+| previous major, 90 days | ✅ — security fixes only |
+| anything older          | ❌ — upgrade first       |
+
+See the [versioning policy](https://k3l0-dev.github.io/niwaki/project/versioning.html)
+for what each version number promises and how names are deprecated.
 
 ## Reporting a vulnerability
 

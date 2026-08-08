@@ -132,10 +132,12 @@ def test_covers_every_class(built: tuple[Path, dict[str, int]]) -> None:
 @needs_corpus
 def test_ships_under_the_wheel_budget(built: tuple[Path, dict[str, int]]) -> None:
     _, stats = built
-    # Lot 0 measured the naive verbatim capture at 87 MB (over PyPI's ceiling).
-    # The derived tables + relation/scopemeta + the FTS index stay ~31 MB, well
-    # under PyPI's 100 MB per-file limit.
-    assert stats["size_bytes"] < 32 * 1024 * 1024
+    # A naive verbatim capture measures 87 MB — over PyPI's per-file ceiling.
+    # Routing brings it to ~34.6 MB, of which the DN templates are 3.4 MB.
+    # This ceiling is a tripwire on growth, not a limit anyone is near: PyPI
+    # allows 100 MB. Keep the headroom small enough that routing another large
+    # field has to be a decision rather than a surprise.
+    assert stats["size_bytes"] < 35 * 1024 * 1024
 
 
 def _load_original(name: str) -> dict[str, Any]:
@@ -168,7 +170,20 @@ def test_reconstruction_is_lossless(built: tuple[Path, dict[str, int]]) -> None:
         # stride across every package — a broad slice, cheap enough for the suite.
         sample = {
             n
-            for n in ("fvBD", "fvCEp", "fvAEPg", "fvEPg", "faultInst", "topSystem")
+            for n in (
+                "fvBD",
+                "fvCEp",
+                "fvAEPg",
+                "fvEPg",
+                "faultInst",
+                "topSystem",
+                # The three shapes of dnFormats the stride does not guarantee:
+                # none at all, the one-empty-string root, and the largest list
+                # in the corpus (64,313 templates).
+                "aaaADomainRef",
+                "topRoot",
+                "faultDelegate",
+            )
             if n in set(names)
         }
         sample |= set(names[::37])
@@ -320,3 +335,39 @@ def test_name_override_freezes_the_l3ext_family_only(
         ("l3extRsPathL3OutAtt", "llAddr", "ll_addr"),
         ("l3extRsPathL3OutAtt", "mac", "mac"),
     }
+
+
+def test_the_dn_formats_column_stays_last() -> None:
+    """Corpus-free: the DDL and the insert order must agree, and stay in step.
+
+    ``_create_schema`` writes the column list independently of
+    ``_mo_column_order``; a column appended to one and not the other shifts every
+    value silently.  Last is also where the blob belongs — the targeted SELECTs
+    of ``describe``/``class_meta`` never read past their own columns.
+    """
+    assert gc._mo_column_order()[-1] == "dn_formats"
+
+
+@needs_corpus
+def test_dn_format_stats_track_the_column(built: tuple[Path, dict[str, int]]) -> None:
+    """These two are what moves ``content_hash`` when the templates change.
+
+    Pinned by value, like every sibling counter: measured against the shipped
+    catalogue, they read the column addressed by name.  Addressed positionally
+    they would silently measure ``residual`` — also a BLOB, so ``len()`` keeps
+    working — and the freshness guard would stop seeing the templates entirely.
+    """
+    out, stats = built
+    assert stats["dn_format_classes"] == 13426
+    assert stats["dn_format_bytes"] == 3071918
+
+    con = sqlite3.connect(out)
+    try:
+        (rows,), (size,) = (
+            con.execute("SELECT count(*) FROM mo WHERE dn_formats IS NOT NULL").fetchone(),
+            con.execute("SELECT sum(length(dn_formats)) FROM mo").fetchone(),
+        )
+    finally:
+        con.close()
+    assert rows == stats["dn_format_classes"]
+    assert size == stats["dn_format_bytes"]

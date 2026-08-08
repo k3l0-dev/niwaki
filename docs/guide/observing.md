@@ -35,8 +35,11 @@ mo = bd.read()  # typed fvBD instance
 assert mo.unicast_routing is True  # human-readable field names
 ```
 
-Names renamed by the 1.5.0 naming unification keep resolving with a
-`DeprecationWarning` until at least 1.7.0 — the full old → new table is the
+Navigation names come from the same curated vocabulary as the design DSL, so
+what you type to describe a bridge domain is what you type to read one.  When
+a navigation name has to change, the old one keeps resolving with a
+`DeprecationWarning` naming its replacement for at least one minor release —
+see {doc}`../project/versioning` and the
 {doc}`deprecated navigation names <../reference/vocabulary/deprecated-navigation>`
 reference page.
 

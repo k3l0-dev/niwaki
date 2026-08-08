@@ -5,6 +5,107 @@ All notable changes to this project are documented here.  The format follows
 [semver](https://semver.org/).  From 1.0.0 the configuration API is stable:
 breaking changes ship in a new major version with a migration note.
 
+## [1.8.0] — 2026-08-08
+
+### Documentation
+
+- **The published exception hierarchy listed a class the SDK does not ship.**
+  `ApicVersionMismatchWarning` appeared in the tree that `help(niwaki.exceptions)`
+  and the error reference both render, so importing it — the exact use its
+  sibling `DesignHintWarning` advertises — earned an `ImportError`. The tree is
+  now checked against the package in both directions: it can no longer promise
+  a name that does not exist, nor omit an error that does.
+- **The counting idiom the SDK avoids is no longer taught as an example.**
+  `execute_raw`'s docstring showed `rsp-subtree-include=count`, which asks the
+  APIC for its own tally — a number that disagrees with reality on a scoped
+  query while the request succeeds, so the answer looks legitimate. Measured on
+  a 6.0(9c) fabric, five tenants out of twenty-eight reported zero bridge
+  domains while holding up to a hundred and ninety-two. `count()` has always
+  used the reliable idiom; the example now points at it, and `SubtreeInclude`
+  says why its `COUNT` member behaves unlike every other facet — it replaces
+  the result with a tally envelope rather than enriching it.
+
+### Added
+
+- **A published versioning and deprecation policy.** What each version
+  number promises, where the public API stops, what carries no promise
+  (exception message text, log records, `repr()` output), and how a name is
+  retired — announced with its replacement, warned on your own line, removed
+  no earlier than the next minor release.
+
+- **A warning when a design guarantees a fault.** Attaching a domain to a
+  floating SVI without an address leaves it at `0.0.0.0`, outside the subnet
+  the SVI serves, and the APIC raises a major `F3744` every time. The push is
+  legal, so this is a `DesignHintWarning` — its own category, so a pipeline
+  can turn it into a failure with `simplefilter("error", DesignHintWarning)`
+  without touching every other warning in the process. It lands on your line,
+  not on a file inside the SDK.
+
+- **`catalog.dn_formats(class_name)` — every DN shape a class can take.**
+  A class is rarely reachable at one place in the tree: a subnet is the same
+  class under a bridge domain, an EPG, a tenant, an L2Out external EPG and
+  several service-graph nodes — twelve shapes for one class. The templates now
+  ship in the catalogue and read back offline, verbatim from the schema. They
+  are meant to be quoted rather than rebuilt: chaining parent RNs reproduces
+  neither the shapes the APIC mints nor only those. Costs 3.4 MB on the
+  catalogue and 2.5 MiB on the wheel.
+
+### Fixed
+
+- **The read catalogue no longer hands one thread another thread's rows.** Its
+  sqlite connection is shared, and the driver caches prepared statements on the
+  connection keyed by SQL text: two threads running the same lookup traded one
+  statement object and overwrote each other's bindings mid-flight. Nothing
+  raised — a lookup for one class simply came back holding another's data.
+  Measured on the shipped catalogue, eight threads over four query shapes
+  produced 2,751 wrong answers. This affected every catalogue read
+  (`describe`, `class_meta`, `fault_name`, …), and the compatibility guide
+  claimed the opposite. Statement caching is now off; a concurrency test fails
+  if it comes back.
+- **`nlb_endpoint` is offered only where the APIC accepts it.** An NLB
+  endpoint is contained by a subnet, but a subnet hangs off a bridge domain,
+  an L2Out external EPG or an in-band management EPG as readily as off an
+  application EPG — and everywhere but the last the controller answers *"NLB
+  MO should be contained only by fvAEPg"*. The maker now exists on the EPG
+  subnet alone, in the typed surface and at runtime alike. Nothing that
+  worked is lost: a push that used to be rejected by the fabric is now
+  rejected in your editor.
+- **`custom_qos_policy` is offered only where the APIC writes it.** The
+  relation is declared under every EPG class in the schema, and on an
+  application EPG, an ESG, an L2Out or an L3Out external EPG it is created,
+  reaches `state=formed` and re-pushes idempotently. Under an in-band
+  management EPG it does none of that: the first push is accepted and writes
+  no relation at all, and a second one fails *"object not found"*. The bind
+  is gone from that one position, in the typed surface and at runtime alike.
+  The other binds on an in-band EPG — including `taboo_contract` and
+  `imported_contract` — are untouched and keep working.
+- **A colour no longer reads back as a change.** `pol:Color` and
+  `health:ColorT` list `cyan`/`aqua` and `magenta`/`fuchsia` against the same
+  value — the X11 pairs — and the APIC answers with one spelling whichever you
+  write. A contract label declared `magenta` came back `fuchsia`, so every
+  later `mode="plan"` reported a change that was not there. Only the spelling
+  the fabric stores is canonical now, so a design and the fabric agree. Nothing
+  is removed: `PolColor.MAGENTA` and `HealthColorT.CYAN` remain — as aliases of
+  the stored member, so `PolColor.MAGENTA is PolColor.FUCHSIA` and writing
+  either name, or either string, puts the stored spelling on the wire.
+- **PTP intervals and ZR optical power are expressible again.** Cisco states
+  the bounds of a signed property as *magnitudes*: ZR transmit power declares
+  a minimum of 190 and a maximum of 50, meaning −190 to −50 hundredths of a
+  dBm. Copied literally that is a range no value satisfies, and seven fields
+  across `ptpProfile`, `ptpCfgDef`, `latencyPtpMode` and the four `xcvrZR*`
+  interface policies rejected every value — including their own schema
+  default. Signed bounds are now read as the range they describe.
+- **`AsyncNiwaki` no longer strands a session.** Entering the context manager
+  on a client returned by `connect()` built a second session and overwrote the
+  first, leaving its HTTP client — and any subscription socket it owned — with
+  nothing left to close it. Entering a connected client is now the no-op it
+  always was on the sync side; re-entering after `close()` still reconnects.
+- The supported-versions table advertised a `0.x` line; the compatibility
+  reference claimed the sync session was not thread-safe, contradicting the
+  guide (it is: the HTTP client is thread-safe and token refresh is
+  serialised); and the navigation deprecation warning named fixed release
+  numbers instead of the rule it enforces.
+
 ## [1.7.0] — 2026-07-28
 
 ### Removed

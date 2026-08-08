@@ -34,6 +34,7 @@ __all__ = [
     "class_meta",
     "concrete_subclasses",
     "describe",
+    "dn_formats",
     "fault_name",
     "find_prop",
     "generated_classes",
@@ -121,6 +122,51 @@ def fault_name(code: str) -> str | None:
             print(f["code"], catalog.fault_name(f["code"]))
     """
     return _reader().fault_name(code)
+
+
+def dn_formats(class_name: str) -> tuple[str, ...]:
+    """Every DN shape the APIC uses for a class, as templates.
+
+    A class is rarely reachable at a single place in the tree.  A subnet lives
+    under a bridge domain, under an EPG, under a tenant, under an L2Out
+    external EPG and under several service-graph nodes — a dozen shapes, one
+    class.  These are those shapes, verbatim from the schema, with the
+    identifying values left as ``{placeholder}``.
+
+    **Quote them; do not rebuild them.**  A template is a fact about the
+    controller, and reconstructing one by chaining parent RNs does not
+    reproduce it: the containment graph is both wider than the DNs the APIC
+    actually mints and, in places, missing parents that it does mint.  A
+    repeated placeholder is normal and is not a mistake to correct —
+    ``uni/tn-{name}/BD-{name}`` names a tenant and a bridge domain, each
+    identified by ``name``.
+
+    Args:
+        class_name: The wire class name, e.g. ``"fvBD"``.
+
+    Returns:
+        The templates in schema order, duplicates included — the schema's list
+        as it stands.  Empty for a class the schema gives none, which is the
+        common case for an abstract class: its places belong to the concrete
+        classes behind it (:func:`concrete_subclasses`).
+
+        An **empty string is a legitimate template** — a container that prefixes
+        nothing.  It can be the whole answer (six classes, the root of the tree
+        among them) or sit beside real templates in the same list, so filter the
+        empties out rather than testing the first element.
+
+        The templates are not format strings: the same placeholder can name two
+        different objects, so ``str.format`` on one silently builds a wrong DN.
+
+    Raises:
+        UnknownClassError: No such class in the catalogue.  Also a ``KeyError``.
+
+    Example::
+
+        catalog.dn_formats("fvBD")     # ('uni/tn-{name}/BD-{name}',)
+        len(catalog.dn_formats("fvSubnet"))   # 12 — one class, twelve places
+    """
+    return _reader().dn_formats(class_name)
 
 
 def prop_meta(class_name: str, name: str) -> PropDoc:

@@ -62,6 +62,11 @@ Hierarchy::
         ├── StatsClassNotSubscribableError
         ├── SubscribeRejectedError      (also an APIError)
         └── SubscriptionLostError       (.reason: SubscriptionLostReason)
+
+Warnings (not exceptions — a design the fabric accepts but will fault on)::
+
+    UserWarning
+    └── DesignHintWarning           (design/: a declaration that guarantees a fault)
 """
 
 from __future__ import annotations
@@ -84,6 +89,7 @@ from niwaki.exceptions._design import (
     AmbiguousBindError,
     DanglingReferenceError,
     DesignError,
+    DesignHintWarning,
     DuplicateDeclarationError,
     StagedPushError,
     UnknownMakerError,
@@ -113,6 +119,7 @@ __all__ = [
     "DanglingReferenceError",
     "DeserializationError",
     "DesignError",
+    "DesignHintWarning",
     "DuplicateDeclarationError",
     "ForbiddenError",
     "LoginError",

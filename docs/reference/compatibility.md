@@ -41,9 +41,11 @@ never reach.
 
 ## Transport
 
-- The sync session is **not thread-safe** — one session per thread, or use
-  {class}`~niwaki.AsyncNiwaki` (bounded concurrency, default
-  `max_concurrent=10`).
+- The sync session is **safe to share across threads**: the HTTP client is
+  thread-safe and token refresh is serialised, so a `401` triggers exactly
+  one re-login however many threads race it ({doc}`../guide/compatibility`).
+  {class}`~niwaki.AsyncNiwaki` is the concurrent path within one event loop
+  (bounded, default `max_concurrent=10`).
 - Very large designs may exceed what a fabric accepts as one atomic
   envelope — `mode="staged"` ships the same design as per-object waves
   ({doc}`../guide/push-modes`).

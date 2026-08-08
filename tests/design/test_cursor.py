@@ -11,6 +11,7 @@ from pydantic import ValidationError
 from niwaki.design import Cursor, tenant
 from niwaki.exceptions import (
     DesignError,
+    DesignHintWarning,
     DuplicateDeclarationError,
     UnknownMakerError,
 )
@@ -288,3 +289,168 @@ class TestRepr:
     def test_repr_shows_path(self) -> None:
         bd = tenant("prod").bd("web")
         assert repr(bd) == "<Cursor uni → tenant 'prod' → bd 'web'>"
+
+
+class TestQosBindPosition:
+    """A bind the schema declares but the controller silently ignores.
+
+    ``fvRsCustQosPol`` is declared under every EPG class in the 6.0(9c) schema,
+    and on an application EPG, an ESG, an L2Out or an L3Out external EPG it is
+    created, reaches ``state=formed`` and re-pushes idempotently.  Under an
+    in-band management EPG it does none of that: the first push is accepted and
+    writes no relation at all, and a second one fails *"object not found"*.
+    Offering the bind there advertised configuration that never lands.
+    """
+
+    def test_a_working_position_still_binds(self) -> None:
+        cfg = tenant("prod")
+        cfg.custom_qos_policy("qp")
+        cfg.app("a").epg("web").bind(custom_qos_policy="qp")
+        epg = cfg.to_payload()["polUni"]["children"][0]["fvTenant"]["children"][-1]
+        rs = epg["fvAp"]["children"][0]["fvAEPg"]["children"]
+        assert any("fvRsCustQosPol" in child for child in rs)
+
+    def test_an_in_band_epg_no_longer_offers_it(self) -> None:
+        inb = tenant("mgmt").management_profile("default").in_band_epg("inb", encap="vlan-100")
+        with pytest.raises(TypeError, match="unexpected keyword argument 'custom_qos_policy'"):
+            inb.bind(custom_qos_policy="qp")  # type: ignore[call-arg]
+
+    def test_the_binds_that_do_work_there_are_untouched(self) -> None:
+        """Scoping one bind away must not narrow the position it lived on.
+
+        ``taboo_contract`` and ``imported_contract`` were measured on the same
+        fabric, on the same in-band EPG: both form and re-push cleanly.
+        """
+        cfg = tenant("mgmt")
+        cfg.taboo_contract("t")
+        cfg.imported_contract("i")
+        inb = cfg.management_profile("default").in_band_epg("inb", encap="vlan-100")
+        inb.bind(taboo_contract="t").bind(imported_contract="i")
+        assert inb.to_payload()  # resolves — both targets are declared
+
+
+class TestMakerScope:
+    """Makers the controller accepts under one grandparent only.
+
+    ``fvEpNlb.containedBy`` is ``fv:Subnet``, so the schema allows an NLB
+    endpoint under any subnet.  The APIC does not: a subnet hangs off a bridge
+    domain, an L2Out external EPG or an in-band management EPG as readily as
+    off an application EPG, and everywhere but the last the controller answers
+    *"NLB MO should be contained only by fvAEPg"*.  Offering the maker there
+    advertised a position no push could ever land.
+    """
+
+    def test_the_legal_position_still_works(self) -> None:
+        epg = tenant("prod").app("a").epg("web")
+        nlb = epg.subnet("10.0.0.1/24").nlb_endpoint(mac="00:11:22:33:44:55")
+        assert nlb.design_node.aci_class == "fvEpNlb"
+
+    def test_a_bd_subnet_no_longer_offers_it(self) -> None:
+        with pytest.raises(UnknownMakerError, match="No maker 'nlb_endpoint'"):
+            tenant("prod").bd("web").subnet("10.0.0.1/24").nlb_endpoint(mac="00:11:22:33:44:55")
+
+    def test_the_error_does_not_advertise_it_as_available(self) -> None:
+        """A maker listed as available on a path that rejects it is a false lead."""
+        with pytest.raises(UnknownMakerError) as excinfo:
+            tenant("prod").bd("web").subnet("10.0.0.1/24").nlb_endpoint()
+        assert "nlb_endpoint" not in str(excinfo.value).split("Available makers on this path:")[1]
+
+    def test_sibling_makers_on_the_same_parent_are_untouched(self) -> None:
+        """Scoping one maker must not narrow the position it lives on."""
+        anycast = (
+            tenant("prod").bd("web").subnet("10.0.0.1/24").anycast_endpoint("00:11:22:33:44:55")
+        )
+        assert anycast.design_node.aci_class == "fvEpAnycast"
+
+    def test_scope_helper_defaults_to_allowing(self) -> None:
+        """The common case — a maker with no curated scope applies everywhere."""
+        from niwaki.design._cursor import _maker_allowed
+
+        assert _maker_allowed("fvSubnet", "nlb_endpoint", "fvAEPg")
+        assert not _maker_allowed("fvSubnet", "nlb_endpoint", "fvBD")
+        assert _maker_allowed("fvSubnet", "anycast_endpoint", "fvBD")
+        assert _maker_allowed("fvTenant", "bd", "polUni")
+
+    def test_only_one_typed_position_exposes_it(self) -> None:
+        """The generated surface must agree with the runtime, not lag behind it."""
+        import re
+        from pathlib import Path
+
+        source = Path("src/niwaki/design/_generated_cursors/_tenant.py").read_text()
+        owners: list[str] = []
+        current = ""
+        for line in source.splitlines():
+            if match := re.match(r"class (\w+)\(", line):
+                current = match.group(1)
+            if "def nlb_endpoint(" in line:
+                owners.append(current)
+        assert owners == ["_EpgSubnetMakers"]
+
+
+class TestFloatingSviHint:
+    """A design the APIC accepts and then faults on.
+
+    Attaching a domain to a floating SVI without an address leaves it at
+    ``0.0.0.0`` — outside whatever subnet the SVI serves — and the controller
+    raises a major ``F3744`` every time.  The push is legal, so this warns
+    rather than raises; but it is a fault the design guarantees, and reading it
+    here costs far less than finding it in the fabric.
+    """
+
+    @staticmethod
+    def _floating_svi(*, with_address: bool) -> None:
+        from niwaki.design import design, ref
+
+        cfg = design()
+        cfg.l3_dom("dom")
+        svi = (
+            cfg.tenant("t")
+            .l3out("o")
+            .node_profile("np")
+            .interface_profile("ip")
+            .floating_svi("topology/pod-1/node-101", "vlan-10")
+        )
+        svi.bind(domain=ref("dom", floating_addr="10.0.0.1/24") if with_address else "dom")
+        cfg.to_payload()
+
+    def test_a_missing_floating_address_warns(self) -> None:
+        with pytest.warns(DesignHintWarning, match="F3744"):
+            self._floating_svi(with_address=False)
+
+    def test_the_warning_names_the_way_out(self) -> None:
+        """A warning the reader cannot act on is noise."""
+        with pytest.warns(DesignHintWarning, match=r"ref\(\.\.\., floating_addr="):
+            self._floating_svi(with_address=False)
+
+    def test_an_address_silences_it(self) -> None:
+        import warnings
+
+        with warnings.catch_warnings():
+            warnings.simplefilter("error", DesignHintWarning)
+            self._floating_svi(with_address=True)
+
+    def test_it_lands_on_the_caller_not_on_a_library_file(self) -> None:
+        """CPython hides a warning attributed to a file inside the library.
+
+        The resolver is several frames below the user's ``bind()``, so no fixed
+        stacklevel is right — attribution has to skip the package.
+        """
+        import warnings
+
+        with warnings.catch_warnings(record=True) as caught:
+            warnings.simplefilter("always")
+            self._floating_svi(with_address=False)
+
+        (hint,) = [w for w in caught if issubclass(w.category, DesignHintWarning)]
+        assert hint.filename == __file__
+
+    def test_other_relations_are_left_alone(self) -> None:
+        """Only the relation that guarantees a fault is flagged."""
+        import warnings
+
+        with warnings.catch_warnings():
+            warnings.simplefilter("error", DesignHintWarning)
+            cfg = tenant("t")
+            cfg.bd("b").bind(vrf="v")
+            cfg.vrf("v")
+            cfg.to_payload()

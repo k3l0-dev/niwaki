@@ -87,6 +87,11 @@ class ScopeRule:
     :param pkg: match every class of a ``classPkg`` (the lowercase name prefix).
     :param pattern: match class names against this anchored regex.
     :param cls: match one exact class name.
+    :param parent: restrict the rule to gaps under this exact parent class.
+        A gap is a ``(parent, child)`` pair, and a relation the controller
+        refuses under *one* position while honouring it elsewhere must be
+        excluded there and nowhere else — otherwise the exclusion silently
+        swallows the same child going missing from a position that does work.
     """
 
     bucket: Bucket
@@ -94,9 +99,12 @@ class ScopeRule:
     pkg: str | None = None
     pattern: str | None = None
     cls: str | None = None
+    parent: str | None = None
 
-    def matches(self, child: str) -> bool:
-        """Return whether *child* is selected by this rule."""
+    def matches(self, child: str, parent: str | None = None) -> bool:
+        """Return whether *child* (under *parent*) is selected by this rule."""
+        if self.parent is not None and parent != self.parent:
+            return False
         if self.cls is not None:
             return child == self.cls
         if self.pkg is not None:
@@ -113,6 +121,18 @@ class ScopeRule:
 # is in-scope backlog.
 
 SCOPE_RULES: tuple[ScopeRule, ...] = (
+    # ── OUT: one position the controller refuses ────────────────────────────
+    # Measured on a 6.0(9c) fabric: fvRsCustQosPol is created and reaches
+    # state=formed under fvAEPg, fvESg, l2extInstP and l3extInstP, and
+    # re-pushes idempotently there.  Under mgmtInB the first push is accepted
+    # and writes no relation at all; a second fails "object not found".  Scoped
+    # to that parent so the same relation going missing elsewhere still shows.
+    ScopeRule(
+        "out",
+        "empirically rejected — the controller writes no fvRsCustQosPol under an in-band EPG",
+        cls="fvRsCustQosPol",
+        parent="mgmtInB",
+    ),
     # ── OUT: actions, not desired state ─────────────────────────────────────
     # A design is idempotent — re-applying it must be a no-op.  These objects
     # *do* something when created (count, trace, dump, run a test), so they are
@@ -257,24 +277,27 @@ def scan_gaps() -> list[Gap]:
     return sorted(gaps, key=lambda g: g.key)
 
 
-def classify(child: str) -> tuple[Bucket, str]:
+def classify(child: str, parent: str | None = None) -> tuple[Bucket, str]:
     """Return the ``(bucket, reason)`` for a gap's child class.
 
     The first matching :data:`SCOPE_RULES` entry wins; unmatched classes default
     to ``("in", "in-scope backlog")``.
 
     :param child: the child ACI class name.
+    :param parent: the curated parent the gap sits under.  Only rules that
+        carry a ``parent`` of their own consult it; passing ``None`` therefore
+        classifies the child family as a whole, ignoring position-scoped rules.
     :returns: ``("out" | "deferred" | "in", reason)``.
     """
     for rule in SCOPE_RULES:
-        if rule.matches(child):
+        if rule.matches(child, parent):
             return rule.bucket, rule.reason
     return "in", "in-scope backlog"
 
 
 def in_scope_gaps(gaps: list[Gap] | None = None) -> list[Gap]:
     """Return only the gaps whose child classifies as ``in`` (the real backlog)."""
-    return [g for g in (gaps or scan_gaps()) if classify(g.child)[0] == "in"]
+    return [g for g in (gaps or scan_gaps()) if classify(g.child, g.parent)[0] == "in"]
 
 
 def _grouped(gaps: list[Gap]) -> Iterator[tuple[str, list[Gap]]]:
@@ -291,7 +314,7 @@ def format_report() -> str:
     buckets: dict[Bucket, list[Gap]] = {"in": [], "deferred": [], "out": []}
     reasons: dict[str, str] = {}
     for g in gaps:
-        bucket, reason = classify(g.child)
+        bucket, reason = classify(g.child, g.parent)
         buckets[bucket].append(g)
         reasons[g.child] = reason
 

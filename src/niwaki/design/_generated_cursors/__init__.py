@@ -956,7 +956,7 @@ _INDEX: dict[str, tuple[str, str]] = {
         "_tenant",
         "EpgSubnetEndpointNetworkConfigCursor",
     ),
-    "tenant.app.epg.subnet.nlb_endpoint": ("_tenant", "EpgSubnetNlbEndpointCursor"),
+    "tenant.app.epg.subnet.nlb_endpoint": ("_tenant", "NlbEndpointCursor"),
     "tenant.app.epg.virtual_ip": ("_tenant", "EpgVirtualIpCursor"),
     "tenant.app.esg": ("_tenant", "EsgCursor"),
     "tenant.app.esg.consumer_contract_label": ("_tenant", "EsgConsumerContractLabelCursor"),
@@ -985,7 +985,6 @@ _INDEX: dict[str, tuple[str, str]] = {
     "tenant.bd.subnet": ("_tenant", "BdSubnetCursor"),
     "tenant.bd.subnet.anycast_endpoint": ("_tenant", "BdSubnetAnycastEndpointCursor"),
     "tenant.bd.subnet.endpoint_network_config": ("_tenant", "BdSubnetEndpointNetworkConfigCursor"),
-    "tenant.bd.subnet.nlb_endpoint": ("_tenant", "BdSubnetNlbEndpointCursor"),
     "tenant.bfd_interface_policy": ("_tenant", "BfdInterfacePolicyCursor"),
     "tenant.bfd_mh_interface_policy": ("_tenant", "BfdMhInterfacePolicyCursor"),
     "tenant.bfd_multihop_node_policy": ("_tenant", "BfdMultihopNodePolicyCursor"),
@@ -1147,10 +1146,6 @@ _INDEX: dict[str, tuple[str, str]] = {
     "tenant.l2out.external_epg.subnet.endpoint_network_config": (
         "_tenant",
         "ExternalEpgSubnetEndpointNetworkConfigCursor",
-    ),
-    "tenant.l2out.external_epg.subnet.nlb_endpoint": (
-        "_tenant",
-        "ExternalEpgSubnetNlbEndpointCursor",
     ),
     "tenant.l2out.node_profile": ("_tenant", "L2outNodeProfileCursor"),
     "tenant.l2out.node_profile.interface_profile": (
@@ -1443,10 +1438,6 @@ _INDEX: dict[str, tuple[str, str]] = {
     "tenant.management_profile.in_band_epg.subnet.endpoint_network_config": (
         "_tenant",
         "InBandEpgSubnetEndpointNetworkConfigCursor",
-    ),
-    "tenant.management_profile.in_band_epg.subnet.nlb_endpoint": (
-        "_tenant",
-        "InBandEpgSubnetNlbEndpointCursor",
     ),
     "tenant.management_profile.out_of_band_epg": ("_tenant", "OutOfBandEpgCursor"),
     "tenant.management_profile.out_of_band_epg.static_route": (
@@ -1800,7 +1791,6 @@ _EXPORTS: dict[str, str] = {
     "BdSubnetAnycastEndpointCursor": "_tenant",
     "BdSubnetCursor": "_tenant",
     "BdSubnetEndpointNetworkConfigCursor": "_tenant",
-    "BdSubnetNlbEndpointCursor": "_tenant",
     "BfdGlobalIpv4MhPolicyCursor": "_infra",
     "BfdGlobalIpv4PolicyCursor": "_infra",
     "BfdGlobalIpv6MhPolicyCursor": "_infra",
@@ -1947,7 +1937,6 @@ _EXPORTS: dict[str, str] = {
     "EpgSubnetAnycastEndpointCursor": "_tenant",
     "EpgSubnetCursor": "_tenant",
     "EpgSubnetEndpointNetworkConfigCursor": "_tenant",
-    "EpgSubnetNlbEndpointCursor": "_tenant",
     "EpgVirtualIpCursor": "_tenant",
     "EsgConsumerContractLabelCursor": "_tenant",
     "EsgConsumerLabelCursor": "_tenant",
@@ -1960,7 +1949,6 @@ _EXPORTS: dict[str, str] = {
     "ExternalBridgeGroupProfileCursor": "_tenant",
     "ExternalEpgSubnetAnycastEndpointCursor": "_tenant",
     "ExternalEpgSubnetEndpointNetworkConfigCursor": "_tenant",
-    "ExternalEpgSubnetNlbEndpointCursor": "_tenant",
     "ExternalManagementEntityCursor": "_tenant",
     "ExternalManagementEpgCursor": "_tenant",
     "ExternalPrefixCursor": "_tenant",
@@ -2103,7 +2091,6 @@ _EXPORTS: dict[str, str] = {
     "InBandEpgSubnetAnycastEndpointCursor": "_tenant",
     "InBandEpgSubnetCursor": "_tenant",
     "InBandEpgSubnetEndpointNetworkConfigCursor": "_tenant",
-    "InBandEpgSubnetNlbEndpointCursor": "_tenant",
     "InbandZoneCursor": "_infra",
     "InboundJpFilterCursor": "_tenant",
     "InfraCursor": "_infra",
@@ -2345,6 +2332,7 @@ _EXPORTS: dict[str, str] = {
     "NetflowNodePolicyCursor": "_infra",
     "NetflowVmmExporterCursor": "_infra",
     "NextHopCursor": "_tenant",
+    "NlbEndpointCursor": "_tenant",
     "NlbStaticGroupCursor": "_tenant",
     "NodeAttachmentCursor": "_tenant",
     "NodeAttachmentStaticRouteCursor": "_tenant",

@@ -194,8 +194,8 @@ class xcvrZRPIfPol(ManagedObject):
     transmitted_power: Annotated[
         int,
         Field(
-            ge=190,
-            le=50,
+            ge=-190,
+            le=-50,
             validation_alias="transmitPower",
             serialization_alias="transmitPower",
             description="Transmit Power",

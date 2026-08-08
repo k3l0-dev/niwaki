@@ -59,7 +59,6 @@ VRFs, bridge domains, application profiles, EPGs, contracts and filters — one 
   - {ref}`tenant.bd <vocab-tenant-bd>` — `fvBD`, 27 attributes
     - {ref}`tenant.bd.subnet <vocab-tenant-bd-subnet>` — `fvSubnet`, 8 attributes
       - {ref}`tenant.bd.subnet.anycast_endpoint <vocab-tenant-bd-subnet-anycast_endpoint>` — `fvEpAnycast`, 3 attributes
-      - {ref}`tenant.bd.subnet.nlb_endpoint <vocab-tenant-bd-subnet-nlb_endpoint>` — `fvEpNlb`, 5 attributes
       - {ref}`tenant.bd.subnet.endpoint_network_config <vocab-tenant-bd-subnet-endpoint_network_config>` — `fvCepNetCfgPol`, 8 attributes
     - {ref}`tenant.bd.pim <vocab-tenant-bd-pim>` — `pimBDP`, 4 attributes
       - {ref}`tenant.bd.pim.filter <vocab-tenant-bd-pim-filter>` — `pimBDFilterPol`, 2 attributes
@@ -221,7 +220,6 @@ VRFs, bridge domains, application profiles, EPGs, contracts and filters — one 
     - {ref}`tenant.l2out.external_epg <vocab-tenant-l2out-external_epg>` — `l2extInstP`, 8 attributes
       - {ref}`tenant.l2out.external_epg.subnet <vocab-tenant-l2out-external_epg-subnet>` — `fvSubnet`, 8 attributes
         - {ref}`tenant.l2out.external_epg.subnet.anycast_endpoint <vocab-tenant-l2out-external_epg-subnet-anycast_endpoint>` — `fvEpAnycast`, 3 attributes
-        - {ref}`tenant.l2out.external_epg.subnet.nlb_endpoint <vocab-tenant-l2out-external_epg-subnet-nlb_endpoint>` — `fvEpNlb`, 5 attributes
         - {ref}`tenant.l2out.external_epg.subnet.endpoint_network_config <vocab-tenant-l2out-external_epg-subnet-endpoint_network_config>` — `fvCepNetCfgPol`, 8 attributes
       - {ref}`tenant.l2out.external_epg.provider_label <vocab-tenant-l2out-external_epg-provider_label>` — `vzProvLbl`, 6 attributes
       - {ref}`tenant.l2out.external_epg.consumer_label <vocab-tenant-l2out-external_epg-consumer_label>` — `vzConsLbl`, 5 attributes
@@ -400,7 +398,6 @@ VRFs, bridge domains, application profiles, EPGs, contracts and filters — one 
     - {ref}`tenant.management_profile.in_band_epg <vocab-tenant-management_profile-in_band_epg>` — `mgmtInB`, 8 attributes
       - {ref}`tenant.management_profile.in_band_epg.subnet <vocab-tenant-management_profile-in_band_epg-subnet>` — `fvSubnet`, 8 attributes
         - {ref}`tenant.management_profile.in_band_epg.subnet.anycast_endpoint <vocab-tenant-management_profile-in_band_epg-subnet-anycast_endpoint>` — `fvEpAnycast`, 3 attributes
-        - {ref}`tenant.management_profile.in_band_epg.subnet.nlb_endpoint <vocab-tenant-management_profile-in_band_epg-subnet-nlb_endpoint>` — `fvEpNlb`, 5 attributes
         - {ref}`tenant.management_profile.in_band_epg.subnet.endpoint_network_config <vocab-tenant-management_profile-in_band_epg-subnet-endpoint_network_config>` — `fvCepNetCfgPol`, 8 attributes
       - {ref}`tenant.management_profile.in_band_epg.static_route <vocab-tenant-management_profile-in_band_epg-static_route>` — `mgmtStaticRoute`, 2 attributes
       - {ref}`tenant.management_profile.in_band_epg.consumer_contract_label <vocab-tenant-management_profile-in_band_epg-consumer_contract_label>` — `vzConsCtrctLbl`, 5 attributes
@@ -528,7 +525,6 @@ tenant/tenant-app-esg-consumer_contract_label
 tenant/tenant-bd
 tenant/tenant-bd-subnet
 tenant/tenant-bd-subnet-anycast_endpoint
-tenant/tenant-bd-subnet-nlb_endpoint
 tenant/tenant-bd-subnet-endpoint_network_config
 tenant/tenant-bd-pim
 tenant/tenant-bd-pim-filter
@@ -690,7 +686,6 @@ tenant/tenant-l2out-node_profile-interface_profile-static_path
 tenant/tenant-l2out-external_epg
 tenant/tenant-l2out-external_epg-subnet
 tenant/tenant-l2out-external_epg-subnet-anycast_endpoint
-tenant/tenant-l2out-external_epg-subnet-nlb_endpoint
 tenant/tenant-l2out-external_epg-subnet-endpoint_network_config
 tenant/tenant-l2out-external_epg-provider_label
 tenant/tenant-l2out-external_epg-consumer_label
@@ -869,7 +864,6 @@ tenant/tenant-management_profile
 tenant/tenant-management_profile-in_band_epg
 tenant/tenant-management_profile-in_band_epg-subnet
 tenant/tenant-management_profile-in_band_epg-subnet-anycast_endpoint
-tenant/tenant-management_profile-in_band_epg-subnet-nlb_endpoint
 tenant/tenant-management_profile-in_band_epg-subnet-endpoint_network_config
 tenant/tenant-management_profile-in_band_epg-static_route
 tenant/tenant-management_profile-in_band_epg-consumer_contract_label

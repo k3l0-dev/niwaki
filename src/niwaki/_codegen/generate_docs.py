@@ -237,15 +237,23 @@ def _render_position_page(
     ]
     lines += _attribute_table(docs, used_enums)
 
-    if makers := tables.makers.get(pos.aci_class, {}):
+    # Only the makers this position actually offers: one scoped away here (the
+    # controller accepts it under a different grandparent) has no page to link
+    # to, and a reference to a page that was never written fails the nitpicky
+    # docs build.
+    children = [
+        (label, child, key)
+        for label, child in tables.makers.get(pos.aci_class, {}).items()
+        if (key := f"{pos.key}.{label}" if pos.key else label) in positions
+    ]
+    if children:
         lines += [
             "## Children",
             "",
             "| maker | creates | position |",
             "| --- | --- | --- |",
         ]
-        for maker_label, child in makers.items():
-            child_key = f"{pos.key}.{maker_label}" if pos.key else maker_label
+        for maker_label, child, child_key in children:
             ref = f"{{ref}}`{child_key} <{position_anchor(child_key)}>`"
             lines.append(f"| `.{_maker_signature(maker_label, child)}` | `{child}` | {ref} |")
         lines.append("")

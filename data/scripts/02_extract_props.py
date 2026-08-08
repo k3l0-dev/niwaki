@@ -32,6 +32,7 @@ from typing import Any, cast
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
 from niwaki._schema.kinds import FieldKind, kind_for
+from niwaki._schema.synonyms import ENUM_SYNONYMS
 
 SCHEMAS_DIR = Path(__file__).parent.parent / "schemas" / "mo-apic-v6.0_9c"
 CLASSES_FILE = Path(__file__).parent.parent / "extracted" / "classes.json"
@@ -160,7 +161,9 @@ def _extract_enum_values(
 # ── Constraints ───────────────────────────────────────────────────────────────
 
 
-def _numeric_range(validators: list[dict[str, Any]]) -> tuple[int | None, int | None]:
+def _numeric_range(
+    validators: list[dict[str, Any]], base_type: str = ""
+) -> tuple[int | None, int | None]:
     """The bounds a numeric property accepts, across **all** its validators.
 
     A schema may declare several ranges: ``bgpCtxPol.holdIntvl`` carries
@@ -177,8 +180,19 @@ def _numeric_range(validators: list[dict[str, Any]]) -> tuple[int | None, int | 
     is an empty range, and a model built from it would reject every AS number
     ever written.  So a zero maximum is dropped, not honoured.
 
+    On a **signed** property the schema writes both bounds as *magnitudes*:
+    ``xcvrZRIfPol.transmitPower`` declares ``{min: 190, max: 50}`` and defaults
+    to ``-190``, meaning the range ``[-190, -50]`` in hundredths of a dBm.
+    Taken literally that is ``ge=190, le=50`` — a range no value can satisfy,
+    which is how the SDK came to reject every PTP sync interval and every ZR
+    optical power, their own schema defaults included.  Every inverted range in
+    the 6.0(9c) schemas is signed, and negating both bounds places each
+    declared default back inside its range.
+
     Args:
         validators: The ``validators`` list from a property schema.
+        base_type: The schema ``baseType``, needed to tell a magnitude pair
+            from a genuinely malformed range.
 
     Returns:
         ``(ge, le)`` — the lowest minimum and the highest *declared* maximum, or
@@ -186,7 +200,12 @@ def _numeric_range(validators: list[dict[str, Any]]) -> tuple[int | None, int | 
     """
     mins = [v["min"] for v in validators if isinstance(v.get("min"), int)]
     maxes = [v["max"] for v in validators if isinstance(v.get("max"), int) and v["max"] > 0]
-    return (min(mins) if mins else None, max(maxes) if maxes else None)
+    ge = min(mins) if mins else None
+    le = max(maxes) if maxes else None
+
+    if ge is not None and le is not None and ge > le and "Sint" in base_type:
+        return (-ge, -le)
+    return (ge, le)
 
 
 def _string_constraints(
@@ -332,6 +351,18 @@ def normalize_prop(schema: dict[str, Any]) -> dict[str, Any] | None:
         values, aliases, value_comments, weights = _extract_enum_values(
             schema.get("validValues", [])
         )
+        # Two spellings of one value: keep the one the APIC stores and let the
+        # other coerce to it, the same way the numeric codes already do.
+        # Leaving both as members makes a design permanently disagree with the
+        # fabric it just configured — declare "magenta", read back "fuchsia",
+        # and every later plan reports a change that is not there.
+        if synonyms := ENUM_SYNONYMS.get(schema.get("modelType", "")):
+            for discarded, stored in synonyms.items():
+                if discarded in values and stored in values:
+                    values = [v for v in values if v != discarded]
+                    aliases[discarded] = stored
+                    weights.pop(discarded, None)
+                    value_comments.pop(discarded, None)
         if values:
             if kind is FieldKind.FLAGS:
                 # Declare the members in ascending bit weight — the order the
@@ -359,7 +390,7 @@ def normalize_prop(schema: dict[str, Any]) -> dict[str, Any] | None:
 
     if kind in (FieldKind.INT, FieldKind.FLOAT):
         result["python_type"] = kind.value
-        ge, le = _numeric_range(validators)
+        ge, le = _numeric_range(validators, schema.get("baseType", ""))
         if ge is not None:
             result["ge"] = ge
         if le is not None:

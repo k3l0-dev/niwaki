@@ -73,7 +73,7 @@ class TestShimBoundaries:
         monkeypatch.setitem(cm.NAV_DEPRECATED, "_root", {"provider_profile": "vmmProvP"})
 
     def test_warning_names_the_replacement(self) -> None:
-        with pytest.warns(DeprecationWarning, match="renamed 'pim'"):
+        with pytest.warns(DeprecationWarning, match="use 'pim' instead"):
             _navigate_jargon(_load_class("fvCtx"), "pim_ctx")
 
     def test_unknown_name_still_raises_attribute_error(self) -> None:

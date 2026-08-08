@@ -14818,33 +14818,6 @@ class _BdSubnetMakers(Cursor):
             self._invoke_maker("anycast_endpoint", (mac,), _prune(params)),
         )
 
-    def nlb_endpoint(
-        self,
-        *,
-        annotation: str | None = None,
-        description: str | None = None,
-        multicast_group_ip_address: str | None = None,
-        mac: str | None = None,
-        nlb_mode: int | str | None = None,
-        name: str | None = None,
-        display_name: str | None = None,
-        userdom: str | None = None,
-    ) -> BdSubnetNlbEndpointCursor:
-        """Declare a ``fvEpNlb`` child under the subnet level.
-
-        Args:
-            annotation: User annotation. Suggested format orchestrator:value
-            description: Specifies the description of a policy component.
-            multicast_group_ip_address: Multicast group address corresponding to the VIP
-            mac: The MAC address.
-            nlb_mode: Mode of operation Default: ``mode-uc``.
-        """
-        params = {k: v for k, v in locals().items() if k not in ("self",)}
-        return cast(
-            "BdSubnetNlbEndpointCursor",
-            self._invoke_maker("nlb_endpoint", (), _prune(params)),
-        )
-
     def endpoint_network_config(
         self,
         name: str,
@@ -18550,7 +18523,6 @@ class InBandEpgCursor(_InBandEpgMakers, _ManagementProfileMakers, _TenantMakers,
         contract_master: str | Ref | None = None,
         imported_contract: str | Ref | None = None,
         taboo_contract: str | Ref | None = None,
-        custom_qos_policy: str | Ref | None = None,
         static_node: str | Ref | None = None,
     ) -> InBandEpgCursor:
         """Declare lazy Rs references (resolved at push time)."""
@@ -23294,7 +23266,7 @@ class _EpgSubnetMakers(Cursor):
         name: str | None = None,
         display_name: str | None = None,
         userdom: str | None = None,
-    ) -> EpgSubnetNlbEndpointCursor:
+    ) -> NlbEndpointCursor:
         """Declare a ``fvEpNlb`` child under the subnet level.
 
         Args:
@@ -23306,7 +23278,7 @@ class _EpgSubnetMakers(Cursor):
         """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
-            "EpgSubnetNlbEndpointCursor",
+            "NlbEndpointCursor",
             self._invoke_maker("nlb_endpoint", (), _prune(params)),
         )
 
@@ -23871,35 +23843,6 @@ class BdSubnetEndpointNetworkConfigCursor(_BdSubnetMakers, _BdMakers, _TenantMak
         wins_servers: str | None = None,
     ) -> BdSubnetEndpointNetworkConfigCursor:
         """Set ``fvCepNetCfgPol`` attributes (merged; validated eagerly)."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.set(self, **_prune(params))
-        return self
-
-
-class BdSubnetNlbEndpointCursor(_BdSubnetMakers, _BdMakers, _TenantMakers, _UniMakers):
-    """Typed cursor for ``fvEpNlb`` (nlb_endpoint level).
-
-    Position: ``uni.tenant.bd.subnet.nlb_endpoint``
-
-    Ancestor makers (implicit pop) come from the inherited mixins,
-    nearest level first — the MRO mirrors the runtime resolution.
-    """
-
-    __slots__ = ()
-
-    def set(
-        self,
-        *,
-        annotation: str | None = None,
-        description: str | None = None,
-        multicast_group_ip_address: str | None = None,
-        mac: str | None = None,
-        nlb_mode: int | str | None = None,
-        name: str | None = None,
-        display_name: str | None = None,
-        userdom: str | None = None,
-    ) -> BdSubnetNlbEndpointCursor:
-        """Set ``fvEpNlb`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
         return self
@@ -24662,33 +24605,6 @@ class _L2outExternalEpgSubnetMakers(Cursor):
         return cast(
             "ExternalEpgSubnetAnycastEndpointCursor",
             self._invoke_maker("anycast_endpoint", (mac,), _prune(params)),
-        )
-
-    def nlb_endpoint(
-        self,
-        *,
-        annotation: str | None = None,
-        description: str | None = None,
-        multicast_group_ip_address: str | None = None,
-        mac: str | None = None,
-        nlb_mode: int | str | None = None,
-        name: str | None = None,
-        display_name: str | None = None,
-        userdom: str | None = None,
-    ) -> ExternalEpgSubnetNlbEndpointCursor:
-        """Declare a ``fvEpNlb`` child under the subnet level.
-
-        Args:
-            annotation: User annotation. Suggested format orchestrator:value
-            description: Specifies the description of a policy component.
-            multicast_group_ip_address: Multicast group address corresponding to the VIP
-            mac: The MAC address.
-            nlb_mode: Mode of operation Default: ``mode-uc``.
-        """
-        params = {k: v for k, v in locals().items() if k not in ("self",)}
-        return cast(
-            "ExternalEpgSubnetNlbEndpointCursor",
-            self._invoke_maker("nlb_endpoint", (), _prune(params)),
         )
 
     def endpoint_network_config(
@@ -26534,33 +26450,6 @@ class _InBandEpgSubnetMakers(Cursor):
         return cast(
             "InBandEpgSubnetAnycastEndpointCursor",
             self._invoke_maker("anycast_endpoint", (mac,), _prune(params)),
-        )
-
-    def nlb_endpoint(
-        self,
-        *,
-        annotation: str | None = None,
-        description: str | None = None,
-        multicast_group_ip_address: str | None = None,
-        mac: str | None = None,
-        nlb_mode: int | str | None = None,
-        name: str | None = None,
-        display_name: str | None = None,
-        userdom: str | None = None,
-    ) -> InBandEpgSubnetNlbEndpointCursor:
-        """Declare a ``fvEpNlb`` child under the subnet level.
-
-        Args:
-            annotation: User annotation. Suggested format orchestrator:value
-            description: Specifies the description of a policy component.
-            multicast_group_ip_address: Multicast group address corresponding to the VIP
-            mac: The MAC address.
-            nlb_mode: Mode of operation Default: ``mode-uc``.
-        """
-        params = {k: v for k, v in locals().items() if k not in ("self",)}
-        return cast(
-            "InBandEpgSubnetNlbEndpointCursor",
-            self._invoke_maker("nlb_endpoint", (), _prune(params)),
         )
 
     def endpoint_network_config(
@@ -29808,9 +29697,7 @@ class EpgSubnetEndpointNetworkConfigCursor(
         return self
 
 
-class EpgSubnetNlbEndpointCursor(
-    _EpgSubnetMakers, _EpgMakers, _AppMakers, _TenantMakers, _UniMakers
-):
+class NlbEndpointCursor(_EpgSubnetMakers, _EpgMakers, _AppMakers, _TenantMakers, _UniMakers):
     """Typed cursor for ``fvEpNlb`` (nlb_endpoint level).
 
     Position: ``uni.tenant.app.epg.subnet.nlb_endpoint``
@@ -29832,7 +29719,7 @@ class EpgSubnetNlbEndpointCursor(
         name: str | None = None,
         display_name: str | None = None,
         userdom: str | None = None,
-    ) -> EpgSubnetNlbEndpointCursor:
+    ) -> NlbEndpointCursor:
         """Set ``fvEpNlb`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
@@ -30281,37 +30168,6 @@ class ExternalEpgSubnetEndpointNetworkConfigCursor(
         wins_servers: str | None = None,
     ) -> ExternalEpgSubnetEndpointNetworkConfigCursor:
         """Set ``fvCepNetCfgPol`` attributes (merged; validated eagerly)."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.set(self, **_prune(params))
-        return self
-
-
-class ExternalEpgSubnetNlbEndpointCursor(
-    _L2outExternalEpgSubnetMakers, _L2outExternalEpgMakers, _L2outMakers, _TenantMakers, _UniMakers
-):
-    """Typed cursor for ``fvEpNlb`` (nlb_endpoint level).
-
-    Position: ``uni.tenant.l2out.external_epg.subnet.nlb_endpoint``
-
-    Ancestor makers (implicit pop) come from the inherited mixins,
-    nearest level first — the MRO mirrors the runtime resolution.
-    """
-
-    __slots__ = ()
-
-    def set(
-        self,
-        *,
-        annotation: str | None = None,
-        description: str | None = None,
-        multicast_group_ip_address: str | None = None,
-        mac: str | None = None,
-        nlb_mode: int | str | None = None,
-        name: str | None = None,
-        display_name: str | None = None,
-        userdom: str | None = None,
-    ) -> ExternalEpgSubnetNlbEndpointCursor:
-        """Set ``fvEpNlb`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
         return self
@@ -31982,37 +31838,6 @@ class InBandEpgSubnetEndpointNetworkConfigCursor(
         wins_servers: str | None = None,
     ) -> InBandEpgSubnetEndpointNetworkConfigCursor:
         """Set ``fvCepNetCfgPol`` attributes (merged; validated eagerly)."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.set(self, **_prune(params))
-        return self
-
-
-class InBandEpgSubnetNlbEndpointCursor(
-    _InBandEpgSubnetMakers, _InBandEpgMakers, _ManagementProfileMakers, _TenantMakers, _UniMakers
-):
-    """Typed cursor for ``fvEpNlb`` (nlb_endpoint level).
-
-    Position: ``uni.tenant.management_profile.in_band_epg.subnet.nlb_endpoint``
-
-    Ancestor makers (implicit pop) come from the inherited mixins,
-    nearest level first — the MRO mirrors the runtime resolution.
-    """
-
-    __slots__ = ()
-
-    def set(
-        self,
-        *,
-        annotation: str | None = None,
-        description: str | None = None,
-        multicast_group_ip_address: str | None = None,
-        mac: str | None = None,
-        nlb_mode: int | str | None = None,
-        name: str | None = None,
-        display_name: str | None = None,
-        userdom: str | None = None,
-    ) -> InBandEpgSubnetNlbEndpointCursor:
-        """Set ``fvEpNlb`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))
         return self

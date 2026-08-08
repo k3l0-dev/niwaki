@@ -10,6 +10,7 @@
   "bind:fvRsBDToProfile@fvBD",
   "bind:fvRsCloudAccount@fvTenant",
   "bind:fvRsCtxToSDWanVpn@fvCtx",
+  "bind:fvRsCustQosPol@mgmtInB",
   "bind:fvRsNodeAtt@fvAEPg",
   "bind:fvRsOspfCtxPol@fvCtx",
   "bind:fvRsProtBy@fvESg",

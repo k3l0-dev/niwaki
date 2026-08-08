@@ -1687,7 +1687,10 @@ binds:
     contract_master: fvEPg          # abstract
     imported_contract: vzCPIf
     taboo_contract: vzTaboo
-    custom_qos_policy: qosCustomPol
+    # No custom_qos_policy: fvRsCustQosPol exists in the schema under mgmtInB,
+    # but a 6.0(9c) controller silently writes nothing for it — the first push
+    # is accepted and creates no relation, a second fails "object not found".
+    # It works (formed, idempotent) on fvAEPg/fvESg/l2extInstP/l3extInstP.
     static_node: fabricNode         # fabric-discovered — bind_dn(...)
   mgmtOoB:
     static_node: fabricNode         # fabric-discovered — bind_dn(...)
@@ -2173,3 +2176,15 @@ atomic:
 # diffs those children instead.
 carrier:
   - vmmProvP
+
+# Makers the controller accepts under one grandparent only.  The schema states
+# the containment more loosely than the APIC enforces it, so the position has
+# to be curated: fvEpNlb.containedBy is fv:Subnet, but a subnet hangs off a
+# bridge domain, an L2Out external EPG or an in-band management EPG as readily
+# as off an application EPG — and everywhere but the last the controller
+# answers "NLB MO should be contained only by fvAEPg".  Offering the maker
+# there advertised a position no push could ever land.
+maker_scope:
+  fvSubnet:
+    nlb_endpoint:
+      - fvAEPg

@@ -5,7 +5,7 @@ Re-generate: uv run python -m niwaki._codegen.generate_docs
 
 # Coverage matrix
 
-**929 curated positions** across the design domains plus the `uni`-level domains.  Everything else in the 2,222 generated classes stays reachable through `.mo(Class, ...)` and `bind_dn(alias=dn)` — see the design guide.
+**926 curated positions** across the design domains plus the `uni`-level domains.  Everything else in the 2,222 generated classes stays reachable through `.mo(Class, ...)` and `bind_dn(alias=dn)` — see the design guide.
 
 ## fabric
 
@@ -485,7 +485,6 @@ Re-generate: uv run python -m niwaki._codegen.generate_docs
 | {ref}`tenant.bd <vocab-tenant-bd>` | `fvBD` | 6 | `vrf=`, `l3out=`, `fhs=`, `nd_policy=`, `igmp_snoop=`, `mld_snoop=`, `dhcp_relay=`, `endpoint_retention=`, `netflow_monitor=`, `monitoring_policy=`, `flood_filter=` | — | — | — |
 | {ref}`tenant.bd.subnet <vocab-tenant-bd-subnet>` | `fvSubnet` | 3 | `l3out=`, `nd_ra_prefix_policy=` | — | — | — |
 | {ref}`tenant.bd.subnet.anycast_endpoint <vocab-tenant-bd-subnet-anycast_endpoint>` | `fvEpAnycast` | — | — | — | — | — |
-| {ref}`tenant.bd.subnet.nlb_endpoint <vocab-tenant-bd-subnet-nlb_endpoint>` | `fvEpNlb` | — | — | — | — | — |
 | {ref}`tenant.bd.subnet.endpoint_network_config <vocab-tenant-bd-subnet-endpoint_network_config>` | `fvCepNetCfgPol` | — | — | — | — | — |
 | {ref}`tenant.bd.pim <vocab-tenant-bd-pim>` | `pimBDP` | 1 | — | — | — | — |
 | {ref}`tenant.bd.pim.filter <vocab-tenant-bd-pim-filter>` | `pimBDFilterPol` | 2 | — | — | — | — |
@@ -647,7 +646,6 @@ Re-generate: uv run python -m niwaki._codegen.generate_docs
 | {ref}`tenant.l2out.external_epg <vocab-tenant-l2out-external_epg>` | `l2extInstP` | 7 | `contract_master=`, `imported_contract=`, `taboo_contract=`, `custom_qos_policy=` | `.provide()`, `.consume()`, `.intra_epg()` | — | — |
 | {ref}`tenant.l2out.external_epg.subnet <vocab-tenant-l2out-external_epg-subnet>` | `fvSubnet` | 3 | `l3out=`, `nd_ra_prefix_policy=` | — | — | — |
 | {ref}`tenant.l2out.external_epg.subnet.anycast_endpoint <vocab-tenant-l2out-external_epg-subnet-anycast_endpoint>` | `fvEpAnycast` | — | — | — | — | — |
-| {ref}`tenant.l2out.external_epg.subnet.nlb_endpoint <vocab-tenant-l2out-external_epg-subnet-nlb_endpoint>` | `fvEpNlb` | — | — | — | — | — |
 | {ref}`tenant.l2out.external_epg.subnet.endpoint_network_config <vocab-tenant-l2out-external_epg-subnet-endpoint_network_config>` | `fvCepNetCfgPol` | — | — | — | — | — |
 | {ref}`tenant.l2out.external_epg.provider_label <vocab-tenant-l2out-external_epg-provider_label>` | `vzProvLbl` | — | — | — | — | — |
 | {ref}`tenant.l2out.external_epg.consumer_label <vocab-tenant-l2out-external_epg-consumer_label>` | `vzConsLbl` | — | — | — | — | — |
@@ -823,10 +821,9 @@ Re-generate: uv run python -m niwaki._codegen.generate_docs
 | {ref}`tenant.monitoring_policy.lifecycle_policy <vocab-tenant-monitoring_policy-lifecycle_policy>` | `faultLcP` | — | — | — | — | — |
 | {ref}`tenant.monitoring_policy.stats_limit_pol <vocab-tenant-monitoring_policy-stats_limit_pol>` | `statslimitInstLimitPol` | — | — | — | — | — |
 | {ref}`tenant.management_profile <vocab-tenant-management_profile>` | `mgmtMgmtP` | 2 | — | — | — | — |
-| {ref}`tenant.management_profile.in_band_epg <vocab-tenant-management_profile-in_band_epg>` | `mgmtInB` | 8 | `bd=`, `contract_master=`, `imported_contract=`, `taboo_contract=`, `custom_qos_policy=`, `static_node=` | `.provide()`, `.consume()`, `.intra_epg()` | — | — |
+| {ref}`tenant.management_profile.in_band_epg <vocab-tenant-management_profile-in_band_epg>` | `mgmtInB` | 8 | `bd=`, `contract_master=`, `imported_contract=`, `taboo_contract=`, `static_node=` | `.provide()`, `.consume()`, `.intra_epg()` | — | — |
 | {ref}`tenant.management_profile.in_band_epg.subnet <vocab-tenant-management_profile-in_band_epg-subnet>` | `fvSubnet` | 3 | `l3out=`, `nd_ra_prefix_policy=` | — | — | — |
 | {ref}`tenant.management_profile.in_band_epg.subnet.anycast_endpoint <vocab-tenant-management_profile-in_band_epg-subnet-anycast_endpoint>` | `fvEpAnycast` | — | — | — | — | — |
-| {ref}`tenant.management_profile.in_band_epg.subnet.nlb_endpoint <vocab-tenant-management_profile-in_band_epg-subnet-nlb_endpoint>` | `fvEpNlb` | — | — | — | — | — |
 | {ref}`tenant.management_profile.in_band_epg.subnet.endpoint_network_config <vocab-tenant-management_profile-in_band_epg-subnet-endpoint_network_config>` | `fvCepNetCfgPol` | — | — | — | — | — |
 | {ref}`tenant.management_profile.in_band_epg.static_route <vocab-tenant-management_profile-in_band_epg-static_route>` | `mgmtStaticRoute` | — | — | — | — | — |
 | {ref}`tenant.management_profile.in_band_epg.consumer_contract_label <vocab-tenant-management_profile-in_band_epg-consumer_contract_label>` | `vzConsCtrctLbl` | — | — | — | — | — |

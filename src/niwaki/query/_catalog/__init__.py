@@ -128,9 +128,12 @@ class Catalog:
     query, never at construction, so importing this module is cheap.
 
     **Concurrency**: the ``.db`` is opened ``immutable=1`` / ``query_only`` and
-    shared with ``check_same_thread=False``; the memoisation caches are unlocked
-    but every race is idempotent (the same value is recomputed, last write wins),
-    so concurrent reads are safe without a lock.
+    shared with ``check_same_thread=False``.  Two things make that safe.  The
+    memoisation caches are unlocked, but every race on them is idempotent — the
+    same value is recomputed and the last write wins.  The connection is opened
+    with ``cached_statements=0``, without which threads running the same query
+    share one prepared statement and silently receive each other's rows (see
+    :meth:`_connection`).
     """
 
     def __init__(self, path: Path = DEFAULT_PATH) -> None:
@@ -154,9 +157,23 @@ class Catalog:
                     "niwaki). In a source checkout, regenerate it with "
                     "'bash scripts/regen.sh'."
                 )
-            # immutable=1: read-only, no locking, safe to share across threads.
+            # immutable=1: read-only, no file locking, shareable across threads.
+            #
+            # cached_statements=0 is what makes that sharing *correct*.  The
+            # driver's prepared-statement cache is keyed by SQL text and lives
+            # on the connection, so two threads running the same query hand the
+            # same statement object back and forth and overwrite each other's
+            # bindings mid-flight.  The damage is silent: measured on the
+            # shipped catalogue, eight threads over four query shapes produced
+            # 2,751 answers belonging to a *different class* — a lookup for one
+            # class returning another's data, with no error raised.  Re-preparing
+            # each statement costs about 17 microseconds and this path is
+            # memoised anyway.
             self._con = sqlite3.connect(
-                f"file:{self._path}?mode=ro&immutable=1", uri=True, check_same_thread=False
+                f"file:{self._path}?mode=ro&immutable=1",
+                uri=True,
+                check_same_thread=False,
+                cached_statements=0,
             )
             self._con.execute("PRAGMA query_only=1")
         return self._con
@@ -366,6 +383,31 @@ class Catalog:
             "SELECT name FROM fault WHERE code=? ORDER BY name LIMIT 1", (code,)
         ).fetchone()
         return None if row is None else str(row[0])
+
+    def dn_formats(self, class_name: str) -> tuple[str, ...]:
+        """Every DN template the APIC uses for a class.
+
+        Args:
+            class_name: The wire class name, e.g. ``"fvBD"``.
+
+        Returns:
+            The templates, in schema order.  Empty when the class has none.
+
+        Raises:
+            UnknownClassError: No such class in the catalogue.
+        """
+        row = self._connection.execute(
+            "SELECT dn_formats FROM mo WHERE class_name=?", (class_name,)
+        ).fetchone()
+        if row is None:
+            raise UnknownClassError(class_name)
+        if row[0] is None:
+            return ()
+        # Deliberately not memoised: the tail of this distribution is long, and
+        # holding the largest class would cost megabytes for the lifetime of the
+        # process on a path almost nobody walks twice.  A caller that needs it
+        # repeatedly caches at its own layer.
+        return tuple(str(t) for t in json.loads(zlib.decompress(row[0])))
 
     # ── Full-text search (FTS5 where available, LIKE fallback everywhere) ─────
 

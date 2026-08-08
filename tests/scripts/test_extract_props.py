@@ -82,6 +82,39 @@ class TestNumericRange:
     def test_a_single_ordinary_range(self) -> None:
         assert extract._numeric_range([{"min": 1, "max": 65535}]) == (1, 65535)
 
+    def test_a_signed_property_declares_its_bounds_as_magnitudes(self) -> None:
+        """``xcvrZRIfPol.transmitPower``: ``{min: 190, max: 50}``, default ``-190``.
+
+        Optical power is negative — the schema states the range as magnitudes,
+        so the value is between -190 and -50 hundredths of a dBm.  Copied
+        literally it becomes ``ge=190, le=50``, which no value satisfies: the
+        SDK rejected every ZR transmit power, the schema's own default
+        included.
+        """
+        assert extract._numeric_range([{"min": 190, "max": 50}], "scalar:Sint32") == (-190, -50)
+
+    def test_a_signed_ptp_interval_is_negated_too(self) -> None:
+        """``ptpProfile.syncIntvl``: ``{min: 4, max: 1}``, default ``-3``.
+
+        The same magnitude convention on a log-2 interval.  Negating restores
+        [-4, -1], which contains the declared default.
+        """
+        assert extract._numeric_range([{"min": 4, "max": 1}], "scalar:Sint16") == (-4, -1)
+
+    def test_an_unsigned_property_is_never_negated(self) -> None:
+        """The rule keys off signedness, not off the inversion alone.
+
+        No unsigned property in the 6.0(9c) corpus declares an inverted range;
+        were one to appear, negating it would invent a negative bound for a
+        type that cannot hold one.  It stays as declared, and the whole-tree
+        guard in ``tests/models`` reports it.
+        """
+        assert extract._numeric_range([{"min": 190, "max": 50}], "scalar:Uint32") == (190, 50)
+
+    def test_an_ordinary_signed_range_is_left_alone(self) -> None:
+        """Negation applies only when the pair is inverted."""
+        assert extract._numeric_range([{"min": -50, "max": 50}], "scalar:Sint32") == (-50, 50)
+
 
 class TestStringConstraints:
     """A pattern does not always live in the first validator."""

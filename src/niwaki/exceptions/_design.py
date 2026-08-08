@@ -128,3 +128,20 @@ class StagedPushError(DesignError):
             f"staged push failed: {len(failures)}/{total} operation(s) did not "
             f"succeed ({len(not_run)} never attempted)"
         )
+
+
+class DesignHintWarning(UserWarning):
+    """A design the SDK can express but the fabric will not be happy with.
+
+    Not an error: the push is legal, the APIC accepts it, and forbidding it
+    would take away a shape somebody may genuinely want.  It is the case where
+    the declaration is *provably* going to raise a fault — a floating SVI whose
+    address is left at ``0.0.0.0`` lands outside its own subnet and the
+    controller answers with a major fault every time.
+
+    Its own category, so that ``warnings.simplefilter("error",
+    DesignHintWarning)`` turns these into failures in a CI pipeline without
+    touching every other ``UserWarning`` in the process, and
+    ``simplefilter("ignore", DesignHintWarning)`` silences them without hiding
+    anything else.
+    """

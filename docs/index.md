@@ -103,6 +103,7 @@ comparison
 :maxdepth: 1
 
 Changelog <project/CHANGELOG>
+Versioning <project/versioning>
 Contributing <project/CONTRIBUTING>
 Security <project/SECURITY>
 Code of conduct <project/CODE_OF_CONDUCT>

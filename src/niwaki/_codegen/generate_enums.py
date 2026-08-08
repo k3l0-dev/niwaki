@@ -72,6 +72,30 @@ def _class_name(model_type: str) -> str:
     return pkg[0].upper() + pkg[1:] + name
 
 
+def _is_numeric_alias(alias: str) -> bool:
+    """Return whether an alias key is a numeric code rather than a spelling.
+
+    ACI schemas carry two kinds of alias: the numeric code of a value (decimal
+    or hex, e.g. ``"2054"`` / ``"0x806"``) and — rarely — a second *spelling* of
+    it (``"cyan"`` for ``"aqua"``).  Only the second kind can become an enum
+    member, so they are told apart here rather than by guesswork at the call
+    site.
+
+    Args:
+        alias: The alias key as it appears in the schema.
+
+    Returns:
+        ``True`` for a decimal or hexadecimal code, ``False`` for a spelling.
+
+    Examples::
+
+        _is_numeric_alias("0x806")  # True
+        _is_numeric_alias("2054")   # True
+        _is_numeric_alias("cyan")   # False
+    """
+    return re.fullmatch(r"0[xX][0-9a-fA-F]+|\d+", alias) is not None
+
+
 def _member_name(local_name: str) -> str:
     """Convert an ACI enum ``localName`` to UPPER_SNAKE_CASE.
 
@@ -213,6 +237,22 @@ def _render_enum(
         if comment := (value_comments or {}).get(val):
             safe = comment.replace('"""', "'''")
             lines.append(f'    """{safe}"""\n')
+
+    # A *spelling* alias stays reachable as a member.  Cisco lists two names for
+    # one value (cyan/aqua, magenta/fuchsia — the X11 pairs); the APIC stores
+    # one of them, so only that one may be a canonical member or a design would
+    # permanently disagree with the fabric it just configured.  But the other
+    # spelling is a name users can already have written, and Python's own enum
+    # aliasing keeps both without ambiguity: the alias member IS the canonical
+    # member (``PolColor.CYAN is PolColor.AQUA``), carries the stored value, and
+    # is excluded from iteration.  Numeric aliases are not member material —
+    # they stay in ``_missing_`` alone, which is also what still resolves the
+    # discarded *string* (no member holds it as a value).
+    spellings = {a: c for a, c in aliases.items() if not _is_numeric_alias(a)}
+    if spellings:
+        lines.append("\n    # Alternate spellings — aliases of the value the APIC stores.\n")
+        for alias_val, canonical in sorted(spellings.items()):
+            lines.append(f'    {_member_name(alias_val)} = "{canonical}"\n')
 
     if aliases:
         lines.append("\n    @classmethod\n")
