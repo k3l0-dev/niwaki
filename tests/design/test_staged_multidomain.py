@@ -75,7 +75,12 @@ class TestPlanMultiDomain:
             method="GET",
             url=httpx.URL(
                 f"{HOST}/api/mo/uni/fabric.json",
-                params={"rsp-subtree": "full", "rsp-subtree-class": "datetimePol,fabricInst"},
+                params={
+                    "query-target": "subtree",
+                    "target-subtree-class": "datetimePol,fabricInst",
+                    "page": "0",
+                    "page-size": "500",
+                },
             ),
             json=_EMPTY,
         )
@@ -83,7 +88,12 @@ class TestPlanMultiDomain:
             method="GET",
             url=httpx.URL(
                 f"{HOST}/api/mo/uni/tn-prod.json",
-                params={"rsp-subtree": "full", "rsp-subtree-class": "fvCtx,fvTenant"},
+                params={
+                    "query-target": "subtree",
+                    "target-subtree-class": "fvCtx,fvTenant",
+                    "page": "0",
+                    "page-size": "500",
+                },
             ),
             json=_EMPTY,
         )
@@ -107,13 +117,18 @@ class TestPlanMultiDomain:
         """An existing carrier counts as unchanged; only the leaf is created."""
         existing: dict[str, Any] = {
             "totalCount": "1",
-            "imdata": [{"fabricInst": {"attributes": {}}}],
+            "imdata": [{"fabricInst": {"attributes": {"dn": "uni/fabric"}}}],
         }
         httpx_mock.add_response(
             method="GET",
             url=httpx.URL(
                 f"{HOST}/api/mo/uni/fabric.json",
-                params={"rsp-subtree": "full", "rsp-subtree-class": "datetimePol,fabricInst"},
+                params={
+                    "query-target": "subtree",
+                    "target-subtree-class": "datetimePol,fabricInst",
+                    "page": "0",
+                    "page-size": "500",
+                },
             ),
             json=existing,
         )

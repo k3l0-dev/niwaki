@@ -11,10 +11,12 @@ existing engine:
   atomic classes ship their subtree whole); a partial failure raises
   :exc:`~niwaki.exceptions.StagedPushError` carrying plain DNs;
 - ``plan`` → read the current state and diff it against the desired tree via
-  :func:`niwaki.utils.diff.mo_diff` — nothing is pushed.  One read per
-  declared domain (direct child of ``polUni``), **scoped with
-  ``rsp-subtree-class`` to the classes the design declares** (R-3): an
-  unscoped full read of ``uni/fabric`` exceeds the APIC query limit.
+  :func:`niwaki.utils.diff.mo_diff` — nothing is pushed.  One **sharded flat
+  read** per declared domain (direct child of ``polUni``), scoped to the
+  classes the design declares (R-3, both ends: an unscoped full read of
+  ``uni/fabric`` exceeds the APIC result limit, and a large design's class
+  list in a single query string exceeds the request-line limit).  The tree is
+  rebuilt from DNs by :mod:`niwaki._read`.
 
 Per the owner's decision, the engine's op unit never appears in the public
 result types — reports and errors carry plain DN strings.
@@ -27,6 +29,7 @@ from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Any
 
 from niwaki._logging import operation_failed, push_finished, push_started
+from niwaki._read import read_subtree, read_subtree_async
 from niwaki.design._compiler import build_desired_tree, compile_ops, compile_poluni
 from niwaki.design._engine import _Op, _run_waves, _run_waves_sync, _WaveOutcome
 from niwaki.design._node import DesignNode
@@ -193,16 +196,20 @@ def _merge_plans(parts: list[PlanResult], external_refs: list[RefCheck]) -> Plan
     )
 
 
-def _plan_read_params(desired: ManagedObject) -> dict[str, str]:
-    """Query parameters for one plan read, scoped to the design's classes.
+def _plan_classes(desired: ManagedObject) -> list[str]:
+    """The classes one plan read is scoped to — R-3 at both ends of the scale.
 
-    An unscoped ``rsp-subtree=full`` on ``uni/fabric`` or ``uni/infra`` blows
-    the APIC query limit ("result dataset is too big", HTTP 400) — R-3.
-    Restricting the subtree to the classes the design actually declares keeps
-    the read small and the diff exact: every intermediate node of the desired
-    tree contributes its class, so the returned hierarchy stays connected,
-    and foreign instances of the same classes are ignored by the
-    ``(class, rn)`` matcher.
+    Unscoped, ``uni/fabric`` or ``uni/infra`` blows the APIC result limit
+    ("result dataset is too big", HTTP 400); scoped into a *single* request, a
+    large design's class list blows the request-line limit instead (measured:
+    10 749 bytes of query string against a 4-8 KB ceiling).  The sharded flat
+    reader (:func:`niwaki._read.read_subtree`) escapes both: any partition of
+    this list is safe because the tree is rebuilt from DNs client-side.
+
+    Every node of the desired tree contributes its class — including the
+    intermediates — so every declared position's ancestors are part of the
+    read and the rebuilt hierarchy stays connected.  Foreign instances of the
+    same classes are ignored by the ``(class, rn)`` matcher.
     """
     classes: set[str] = set()
 
@@ -212,7 +219,7 @@ def _plan_read_params(desired: ManagedObject) -> dict[str, str]:
             _collect(child)
 
     _collect(desired)
-    return {"rsp-subtree": "full", "rsp-subtree-class": ",".join(sorted(classes))}
+    return sorted(classes)
 
 
 def _staged_report(ops: list[_Op], outcome: _WaveOutcome) -> PushReport:
@@ -283,13 +290,12 @@ def push_sync(
         push_started("staged", len(ops))
         return _staged_report(ops, _run_waves_sync(_execute, ops))
 
-    # plan: one read + diff per direct child of polUni (per declared domain),
-    # scoped to the design's classes (R-3).
+    # plan: one sharded read + diff per direct child of polUni (per declared
+    # domain), scoped to the design's classes (R-3).
     parts: list[PlanResult] = []
     for child, child_dn in _plan_roots(root.children):
         desired = build_desired_tree(child, extras)
-        raw = session.get(f"/api/mo/{child_dn}.json", **_plan_read_params(desired))
-        current = ManagedObject.from_apic(raw[0]) if raw else None
+        current = read_subtree(session, child_dn, _plan_classes(desired))
         parts.append(_plan_result(desired, current, child_dn))
     return _merge_plans(parts, checks)
 
@@ -338,12 +344,11 @@ async def push_async(
         push_started("staged", len(ops))
         return _staged_report(ops, await _run_waves(session, ops, max_concurrent=bound))
 
-    # plan: one read + diff per direct child of polUni (per declared domain),
-    # scoped to the design's classes (R-3).
+    # plan: one sharded read + diff per direct child of polUni (per declared
+    # domain), scoped to the design's classes (R-3).
     parts: list[PlanResult] = []
     for child, child_dn in _plan_roots(root.children):
         desired = build_desired_tree(child, extras)
-        raw = await session.get(f"/api/mo/{child_dn}.json", **_plan_read_params(desired))
-        current = ManagedObject.from_apic(raw[0]) if raw else None
+        current = await read_subtree_async(session, child_dn, _plan_classes(desired))
         parts.append(_plan_result(desired, current, child_dn))
     return _merge_plans(parts, checks)

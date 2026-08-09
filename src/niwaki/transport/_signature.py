@@ -30,6 +30,15 @@ with a password.  Importing this module without it raises immediately, naming
 the extra, rather than failing later at the first request.
 """
 
+# Because the extra is optional, `cryptography` is genuinely absent from an
+# install that did not ask for it, and pyright cannot resolve these imports
+# there.  The suppression is the whole file rather than each import because
+# pyright has no per-module setting (mypy's equivalent lives in pyproject.toml,
+# scoped to `cryptography.*`) and every per-import form overruns the line
+# budget.  It costs little: the only other imports here are httpx and
+# niwaki.exceptions, both mandatory, both still checked by mypy.
+# pyright: reportMissingImports=false
+
 from __future__ import annotations
 
 import base64

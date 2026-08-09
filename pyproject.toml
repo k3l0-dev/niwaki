@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "niwaki"
-version = "1.9.0"
+version = "1.9.1"
 description = "Modern, typed, design-first Python SDK for Cisco ACI (APIC)"
 readme = "README.md"
 license = "Apache-2.0"
@@ -113,6 +113,18 @@ python_version = "3.12"
 strict = true
 files = ["src/niwaki"]
 exclude = ["src/niwaki/models/_generated/"]
+
+# cryptography is the optional `x509` extra, so it is genuinely absent from any
+# install that did not ask for it — the public CI included.  The runtime already
+# answers for that: transport/_signature.py imports it behind
+# _require_cryptography(), which raises MissingDependencyError naming the extra.
+# Scoped to this one package: everything else must still resolve.  Note this
+# only degrades the types when the extra is missing — an install that has it
+# keeps the real signatures, so a source-level `type: ignore` would be wrong
+# (strict's warn_unused_ignores would then flag it here).
+[[tool.mypy.overrides]]
+module = ["cryptography", "cryptography.*"]
+ignore_missing_imports = true
 
 # Generated typed cursors deliberately narrow the base Cursor signatures
 # (set/bind take the curated typed kwargs instead of **Any), and a cursor

@@ -67,7 +67,12 @@ class TestAsyncPlan:
             method="GET",
             url=httpx.URL(
                 f"{HOST}/api/mo/uni/tn-prod.json",
-                params={"rsp-subtree": "full", "rsp-subtree-class": "fvBD,fvCtx,fvRsCtx,fvTenant"},
+                params={
+                    "query-target": "subtree",
+                    "target-subtree-class": "fvBD,fvCtx,fvRsCtx,fvTenant",
+                    "page": "0",
+                    "page-size": "500",
+                },
             ),
             json={"totalCount": "0", "imdata": []},
         )

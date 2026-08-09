@@ -58,11 +58,12 @@ recover is the subject of the {doc}`errors` playbook.
 
 Reads the current APIC state and diffs it against the design.  **Nothing is
 pushed.**  There is one read per declared domain (each direct child of
-`polUni` the design touches), and each read is scoped twice:
-`rsp-subtree=full` fetches the hierarchy, and `rsp-subtree-class` restricts
-it to **the classes the design declares** — planning a three-line `infra`
-design against a loaded fabric reads back a handful of objects, not the
-whole access-policy tree.  Returns a {class}`~niwaki.design.PlanResult`:
+`polUni` the design touches), scoped to **the classes the design declares** —
+planning a three-line `infra` design against a loaded fabric reads back a
+handful of objects, not the whole access-policy tree.  A design large enough
+that its class list would overflow the controller's URL limit is read in
+several smaller requests automatically; either way the SDK reassembles the
+hierarchy before diffing.  Returns a {class}`~niwaki.design.PlanResult`:
 
 ```python
 plan = config.push(aci, mode="plan")

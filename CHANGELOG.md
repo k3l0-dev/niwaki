@@ -5,6 +5,43 @@ All notable changes to this project are documented here.  The format follows
 [semver](https://semver.org/).  From 1.0.0 the configuration API is stable:
 breaking changes ship in a new major version with a migration note.
 
+## [1.9.1] — 2026-08-09
+
+### Fixed
+
+- **`mode="plan"` no longer fails on a large design.** The plan read scoped
+  each request to the classes the design declares — the right idea, carried
+  the wrong way: the whole class list rode in a single query string, and past
+  a few hundred declared classes the APIC front end refuses the request
+  outright (*HTTP 414 Request-URI Too Large* — observed at a 19.7 KB class
+  list against the controller's 4-8 KB request-line ceiling). The plan died
+  before reading a single object, precisely on the fabric-sized designs it
+  exists to check.
+
+  The read is now split into as many smaller class-scoped requests as the URL
+  budget requires — each sized to the *encoded* wire form, since a comma
+  ships as `%2C` — and the SDK reassembles the object hierarchy from each
+  object's DN before diffing. Small designs keep issuing one read per
+  declared domain, same as before; only designs that would have died now
+  issue several. Verified on a live fabric: the same class list that answers
+  414 in one request reads back whole across 7, and a plan forced through
+  the split path returns a verdict identical to the single-request read.
+
+  Two side effects of the rework, both strict improvements:
+
+  - The plan read now goes through the transport's pagination, so one shard
+    returning more objects than the APIC result ceiling no longer risks a
+    *result dataset is too big* refusal — the response side is bounded as
+    well as the request side.
+  - A malformed read response raises `DeserializationError` (a
+    `NiwakiError`) instead of a bare `ValueError`, keeping the promise that
+    one `except NiwakiError` catches every SDK failure.
+
+  Visible wire change, for anyone inspecting traffic: the plan read is now
+  `query-target=subtree` + `target-subtree-class` (flat, paginated) instead
+  of `rsp-subtree=full` + `rsp-subtree-class` (nested). The diff results are
+  unchanged.
+
 ## [1.9.0] — 2026-08-09
 
 ### Added
