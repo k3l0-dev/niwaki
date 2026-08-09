@@ -96,8 +96,27 @@ except NotFoundError as exc:
     print(exc)  # HTTP 404: MO not found at DN: 'uni/tn-ghost'
 ```
 
-`APIError` exposes `status_code` and `apic_message` on every branch — log
-both; the APIC message usually names the offending attribute.
+`APIError` exposes three attributes on every branch: `status_code`,
+`apic_message` and `apic_code`.  Log all three — the message usually names the
+offending attribute, and `apic_code` is the controller's own error code, the
+machine-readable half.
+
+`apic_code` is a `str | None`: `None` when the response carried no APIC error
+envelope, or when the SDK raised the error itself (the 404 above is
+synthesised — the APIC answered 200 with an empty result).  It says *what went
+wrong*, never *whether to retry*: many distinct codes share HTTP 400, so decide
+retryability from the exception type and the cause from the code.
+
+```python
+from niwaki.exceptions import APIError
+
+# what a rejected delete looks like when you catch it
+error = APIError(400, "Cannot delete object, not deletable", apic_code="107")
+
+assert error.apic_code == "107"  # the controller's own cause
+assert error.status_code == 400  # the HTTP status, independently
+assert str(error) == "HTTP 400 (APIC code 107): Cannot delete object, not deletable"
+```
 
 ## The `StagedPushError` playbook
 

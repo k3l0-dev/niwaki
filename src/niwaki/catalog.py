@@ -39,6 +39,7 @@ __all__ = [
     "find_prop",
     "generated_classes",
     "prop_meta",
+    "schema_version",
     "search",
 ]
 
@@ -248,3 +249,24 @@ def class_meta(class_name: str) -> ClassMeta:
         UnknownClassError: No such class in the catalogue (also a ``KeyError``).
     """
     return _reader().class_meta(class_name)
+
+
+def schema_version() -> str:
+    """The APIC firmware the shipped catalogue and models were generated from.
+
+    Every typed model, curated vocabulary entry and filter operator in this SDK
+    derives from one firmware's schemas.  This names it, read from the shipped
+    artifact itself rather than from a constant that could drift from it.
+
+    Pair it with :attr:`niwaki.Niwaki.apic_version` — the firmware a fabric
+    reports at login — to answer "am I inside the envelope this SDK was built
+    for?".  Offline, like everything else in this module.
+
+    Returns:
+        The version string, e.g. ``"6.0(9c)"``.
+
+    Example::
+
+        assert catalog.schema_version() == "6.0(9c)"
+    """
+    return _reader().apic_version()

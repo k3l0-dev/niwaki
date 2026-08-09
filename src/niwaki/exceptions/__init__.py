@@ -51,6 +51,7 @@ Hierarchy::
     ├── NoResultError               (query .one() matched nothing)
     ├── UnknownClassError           (catalogue lookup on an unknown class; also KeyError)
     ├── MultipleResultsError        (query .one() matched several)
+    ├── MissingDependencyError  (an optional extra is not installed)
     ├── DesignError
     │   ├── UnknownMakerError          (also an AttributeError)
     │   ├── DuplicateDeclarationError
@@ -84,7 +85,7 @@ from niwaki.exceptions._auth import (
     SessionExpiredError,
     TokenRefreshError,
 )
-from niwaki.exceptions._base import NiwakiError
+from niwaki.exceptions._base import MissingDependencyError, NiwakiError
 from niwaki.exceptions._design import (
     AmbiguousBindError,
     DanglingReferenceError,
@@ -123,6 +124,7 @@ __all__ = [
     "DuplicateDeclarationError",
     "ForbiddenError",
     "LoginError",
+    "MissingDependencyError",
     "MultipleResultsError",
     "NiwakiError",
     "NoResultError",

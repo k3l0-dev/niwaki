@@ -85,6 +85,15 @@ class RefCheck:
             unknown — existence-only check).
         found: The wire class actually found at the DN, or ``None``.
         detail: Read-error text for ``status="error"``, else ``""``.
+        apic_code: The APIC's own error code behind a ``status="error"``, when
+            the failure came from the controller and carried one.  ``None`` for
+            every other status, and for a read that failed without an APIC error
+            envelope — the HTML page a loaded controller answers instead of
+            JSON, say.  (A client-side timeout is not one of these: it raises a
+            ``TransportError``, which this pass does not catch, so it aborts the
+            verification rather than becoming a row.)  ``detail`` stays the human
+            text — this is the machine-readable half, so a caller can tell
+            "the DN is malformed" from "I am not allowed to look".
     """
 
     ref: ExternalRef
@@ -92,6 +101,7 @@ class RefCheck:
     expected: tuple[str, ...]
     found: str | None
     detail: str = ""
+    apic_code: str | None = None
 
 
 # ── Pure core ─────────────────────────────────────────────────────────────────
@@ -276,6 +286,7 @@ def _evaluate_all(
                     expected=_accept_set(ref.rs_class),
                     found=None,
                     detail=str(got),
+                    apic_code=getattr(got, "apic_code", None),
                 )
             )
         else:

@@ -107,6 +107,11 @@ nitpick_ignore = [
     ("py:class", "niwaki.transport.session_async._T"),
     ("py:obj", "niwaki.query._builder._T"),
     ("py:obj", "niwaki.query._async_builder._T"),
+    # httpx publishes no objects.inv, so its types cannot be cross-referenced.
+    # They appear in the signatures of `with_client`, which deliberately takes a
+    # caller-configured client rather than mirroring each of httpx's options.
+    ("py:class", "httpx.Client"),
+    ("py:class", "httpx.AsyncClient"),
     # pydantic's inventory does not expose its base class or exceptions.
     ("py:class", "BaseModel"),
     ("py:class", "pydantic.BaseModel"),

@@ -86,6 +86,9 @@ class TestPublicSurface:
             "MoReader",
             "MoWriter",
             "RetryConfig",
+            # A caller constructs one and hands it to a client, so it belongs
+            # on the package boundary rather than behind a private import.
+            "TokenCache",
         }
         for name in transport.__all__:
             assert getattr(transport, name) is not None

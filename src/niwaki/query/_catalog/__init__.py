@@ -143,6 +143,7 @@ class Catalog:
         self._types: dict[int, str] | None = None
         self._comments: dict[int, str] | None = None
         self._flag_order: list[str] | None = None
+        self._apic_version: str | None = None
         self._fts: bool | None = None
         self._meta: dict[str, ClassMeta] = {}
 
@@ -194,6 +195,22 @@ class Catalog:
         if self._types is None:
             self._types = dict(self._connection.execute("SELECT id, value FROM type_pool"))
         return "" if pool_id is None else self._types.get(pool_id, "")
+
+    def apic_version(self) -> str:
+        """The APIC firmware this catalogue was generated from.
+
+        Read from the artifact's own manifest rather than a constant in the
+        source, so it cannot drift from the data it describes.
+
+        Returns:
+            The version string, e.g. ``"6.0(9c)"``.
+        """
+        if self._apic_version is None:
+            (raw,) = self._connection.execute(
+                "SELECT value FROM manifest WHERE key='apic_version'"
+            ).fetchone()
+            self._apic_version = str(raw)
+        return self._apic_version
 
     def _naming_bit(self) -> int:
         if self._flag_order is None:

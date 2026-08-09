@@ -75,8 +75,9 @@ surprise: write-only attributes never read back, so a rotated password plans as
 ## Rung 4 — the APIC said no
 
 On-wire rejections surface as typed exceptions carrying the APIC's own message.
-Log `status_code` and `apic_message` — the latter names the offending attribute
-more often than not:
+Log `status_code`, `apic_message` and `apic_code` — the message names the
+offending attribute more often than not, and the code is the controller's own
+machine-readable cause (`None` when the SDK synthesised the error):
 
 ```python
 from niwaki.exceptions import APIError
@@ -84,7 +85,7 @@ from niwaki.exceptions import APIError
 try:
     config.push(aci)
 except APIError as exc:
-    print(exc.status_code, exc.apic_message)
+    print(exc.status_code, exc.apic_message, exc.apic_code)
 ```
 
 With `strict` mode there is nothing to clean up after a rejection: the POST was

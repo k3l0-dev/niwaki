@@ -17,6 +17,7 @@
 .. autofunction:: niwaki.catalog.fault_name
 .. autofunction:: niwaki.catalog.dn_formats
 .. autofunction:: niwaki.catalog.generated_classes
+.. autofunction:: niwaki.catalog.schema_version
 ```
 
 ## Result types

@@ -28,9 +28,11 @@ from dataclasses import dataclass
 class RetryConfig:
     """Stamina retry parameters for APIC HTTP transport.
 
-    A frozen (immutable, hashable) value object.  All retry parameters are
-    forwarded verbatim to ``stamina.retry_context`` / ``stamina.retry``
-    for both GET and mutating requests.
+    A frozen (immutable, hashable) value object, shared by GET and mutating
+    requests.  ``attempts``, ``wait_initial``, ``wait_max`` and ``wait_jitter``
+    are forwarded verbatim to ``stamina``; ``retry_after_max`` is not — it
+    bounds a delay the *controller* asks for, which stamina knows nothing
+    about.
 
     Args:
         attempts: Total number of attempts (first try + retries).  ``1``
@@ -41,6 +43,10 @@ class RetryConfig:
             here).  Default: ``5.0``.
         wait_jitter: Random jitter added to each backoff in seconds to
             prevent thundering-herd effects.  Default: ``0.5``.
+        retry_after_max: Ceiling, in seconds, on a ``Retry-After`` header the
+            APIC sends with a retryable status.  The header is honoured up to
+            this value and clamped beyond it, so a controller asking for an
+            hour cannot park a push for an hour.  Default: ``30.0``.
 
     Example::
 
@@ -55,3 +61,4 @@ class RetryConfig:
     wait_initial: float = 0.5
     wait_max: float = 5.0
     wait_jitter: float = 0.5
+    retry_after_max: float = 30.0

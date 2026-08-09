@@ -20,6 +20,13 @@ from typing import Any, Literal
 
 from niwaki.transport._protocols import AsyncMoWriter
 
+# Default ops in flight within one wave when :func:`_run_waves` is driven
+# directly.  Mirrors the transport's own write bound so a bare writer behaves
+# like a real session; the push path passes the client's limit instead, so this
+# constant is never what a user's push is throttled to.  Precedent for the shape
+# and the naming: ``_VERIFY_CONCURRENCY`` in ``_verify.py``.
+_WAVE_CONCURRENCY = 10
+
 
 @dataclass(frozen=True)
 class _Op:
@@ -55,7 +62,8 @@ class _WaveOutcome:
     """Bookkeeping of one engine run — never exported.
 
     Attributes:
-        succeeded: Ops that completed, in execution order.
+        succeeded: Ops that completed, in submission order — the order the
+            wave presented them, not the order they finished in.
         failed: ``(op, exception)`` pairs for ops that raised.
         not_run: Ops skipped because an *ancestor* op failed — pushing a child
             whose parent never landed would only 404.  Independent branches are
@@ -116,17 +124,49 @@ def _run_waves_sync(execute: Callable[[_Op], None], ops: Sequence[_Op]) -> _Wave
     return outcome
 
 
-async def _run_waves(session: AsyncMoWriter, ops: Sequence[_Op]) -> _WaveOutcome:
-    """Run *ops* in DN-depth waves; ops within a wave run concurrently.
+async def _run_waves(
+    session: AsyncMoWriter,
+    ops: Sequence[_Op],
+    *,
+    max_concurrent: int = _WAVE_CONCURRENCY,
+) -> _WaveOutcome:
+    """Run *ops* in DN-depth waves; ops within a wave run concurrently, bounded.
 
     Same toposort and same subtree-isolated failure semantics as
-    :func:`_run_waves_sync` — only the intra-wave execution differs
-    (``asyncio.gather`` against an :class:`AsyncMoWriter`).  The skip decision
-    reads the previous waves' failures, so partitioning a wave before gathering
-    it is safe: same-depth ops never descend from one another.
+    :func:`_run_waves_sync` — only the intra-wave execution differs.  The skip
+    decision reads the previous waves' failures, so partitioning a wave before
+    running it is safe: same-depth ops never descend from one another.
+
+    A fixed pool of workers pulls from the wave rather than one coroutine being
+    created per op.  That matters because this function is typed against the
+    bare :class:`AsyncMoWriter` protocol: an :class:`AsyncApicSession` carries
+    its own write semaphore, but any other conforming writer does not, and
+    inheriting a bound from whichever object was injected is an accident rather
+    than a contract.  Bounding here makes it the engine's own promise.  It also
+    stops the engine materialising one coroutine and one retained payload per
+    op — a 10 000-op wave costs ~0.8 MB this way against ~15 MB for a bare
+    ``gather``.
+
+    Results land in **submission order**, not completion order: each worker
+    writes into the slot its op came from.  That is what keeps
+    ``PushReport.dns`` derived from the design rather than from how fast the
+    controller happened to answer.
+
+    Args:
+        session: Anything satisfying :class:`AsyncMoWriter`.
+        ops: The operations to run, in any order — the toposort re-orders them.
+        max_concurrent: Upper bound on ops in flight within one wave.  The
+            caller passes the effective bound; the default is only reached when
+            this function is driven directly.
+
+    Returns:
+        A :class:`_WaveOutcome` — succeeded, failed and never-attempted ops.
     """
 
     async def _run(op: _Op) -> tuple[_Op, Exception | None]:
+        # Converting the failure into a return value is load-bearing: it is why
+        # one op failing never cancels its siblings.  Letting ops raise into a
+        # TaskGroup instead would cancel the whole wave.
         try:
             if op.method == "POST":
                 await session.post_mo(op.dn, op.payload or {})
@@ -135,6 +175,12 @@ async def _run_waves(session: AsyncMoWriter, ops: Sequence[_Op]) -> _WaveOutcome
             return op, None
         except Exception as exc:
             return op, exc
+
+    if max_concurrent < 1:
+        # A pool of zero would run no workers, leave every slot empty, and hand
+        # back an outcome that looks like a clean, complete run of nothing.
+        # Silence is the one answer this function must never give.
+        raise ValueError(f"max_concurrent must be >= 1, got {max_concurrent}")
 
     outcome = _WaveOutcome(succeeded=[], failed=[], not_run=[])
     failed_dns: set[str] = set()
@@ -145,7 +191,27 @@ async def _run_waves(session: AsyncMoWriter, ops: Sequence[_Op]) -> _WaveOutcome
                 outcome.not_run.append(op)
             else:
                 to_run.append(op)
-        for op, exc in await asyncio.gather(*[_run(op) for op in to_run]):
+
+        slots: list[tuple[_Op, Exception | None] | None] = [None] * len(to_run)
+        # One shared iterator, pulled by every worker.  Safe because ``next()``
+        # contains no ``await``: asyncio is single-threaded, so the pull is
+        # atomic by construction.  That invariant dies if the source ever
+        # becomes an async generator.
+        pending = enumerate(to_run)
+
+        # Both closed-over names are bound as defaults: the loop rebinds them
+        # each wave, and a late-bound closure would be a real bug here even
+        # though the gather below happens to complete first.
+        async def _worker(
+            pending: enumerate[_Op] = pending,
+            slots: list[tuple[_Op, Exception | None] | None] = slots,
+        ) -> None:
+            for index, op in pending:
+                slots[index] = await _run(op)
+
+        await asyncio.gather(*(_worker() for _ in range(min(max_concurrent, len(to_run)))))
+
+        for op, exc in (slot for slot in slots if slot is not None):
             if exc is None:
                 outcome.succeeded.append(op)
             else:

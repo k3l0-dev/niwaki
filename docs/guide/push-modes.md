@@ -44,6 +44,11 @@ client runs operations concurrently.  Classes the APIC validates as a whole
 (a vPC pair with its two node endpoints) ship their subtree in a single
 nested operation.
 
+How many operations of a wave run at once is the client's `max_concurrent`
+(default `10`), which `push(..., max_concurrent=n)` can narrow for a single
+push — never widen.  The DNs in the report follow the design, not the order
+the controller answered in.
+
 Use it when you want progress granularity, or when a fabric rejects large
 atomic envelopes.  A partial failure raises
 {class}`~niwaki.exceptions.StagedPushError` — what it carries and how to

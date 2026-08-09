@@ -52,9 +52,12 @@ from collections.abc import Coroutine
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, NamedTuple, overload
 
+import httpx
+
 from niwaki.models.base import ManagedObject
 from niwaki.transport._config import RetryConfig
 from niwaki.transport._subscription_socket import SubscriptionInfo
+from niwaki.transport._token_cache import TokenCache
 from niwaki.transport.session import ApicSession
 from niwaki.transport.session_async import AsyncApicSession
 
@@ -660,6 +663,9 @@ class AsyncNiwaki:
         refresh_threshold: int = 60,
         max_concurrent: int = 10,
         retry: RetryConfig | None = None,
+        token_cache: TokenCache | None = None,
+        private_key: str | Path | None = None,
+        cert_dn: str | None = None,
     ) -> None:
         self._host = host
         self._username = username
@@ -667,7 +673,15 @@ class AsyncNiwaki:
         self._verify_ssl = verify_ssl
         self._timeout = timeout
         self._refresh_threshold = refresh_threshold
+        if max_concurrent < 1:
+            # Caught where the value is written rather than where it bites:
+            # a zero-permit semaphore is a wait for a slot never released.
+            raise ValueError(f"max_concurrent must be >= 1, got {max_concurrent}")
         self._max_concurrent = max_concurrent
+        self._injected_client: httpx.AsyncClient | None = None
+        self._token_cache = token_cache
+        self._private_key = private_key
+        self._cert_dn = cert_dn
         self._retry = retry
         self._session: AsyncApicSession | None = None
 
@@ -772,8 +786,15 @@ class AsyncNiwaki:
                 refresh_threshold=self._refresh_threshold,
                 max_concurrent=self._max_concurrent,
             )
+            if self._token_cache is not None:
+                kwargs["token_cache"] = self._token_cache
             if self._retry is not None:
                 kwargs["retry"] = self._retry
+            if self._injected_client is not None:
+                kwargs["client"] = self._injected_client
+            if self._private_key is not None:
+                kwargs["private_key"] = self._private_key
+                kwargs["cert_dn"] = self._cert_dn
             session = AsyncApicSession(**kwargs)
             await session.login()
             self._session = session
@@ -802,6 +823,74 @@ class AsyncNiwaki:
             when the session default (3 attempts) is in use.
         """
         return self._retry
+
+    @classmethod
+    def with_client(
+        cls,
+        client: httpx.AsyncClient,
+        host: str | None = None,
+        username: str | None = None,
+        password: str | None = None,
+        **kwargs: Any,
+    ) -> AsyncNiwaki:
+        """Build a client that talks through an ``httpx`` client you configured.
+
+        Everything this SDK does not model — an outbound proxy, mutual TLS, a
+        pinned CA bundle, a custom transport, per-route timeouts — is already
+        expressible in ``httpx``.  Rather than mirror each as a parameter, this
+        hands the whole client over; the returned object is identical in every
+        other respect, and closing it closes the client you gave.
+
+        Args:
+            client: A configured ``httpx.AsyncClient``.  Pass the same host you
+                gave it, since cookies and WebSocket URLs are derived from it.
+            host: APIC base URL, or ``None`` to read ``APIC_HOST``.
+            username: Login name, or ``None`` to read ``APIC_USERNAME``.
+            password: Password, or ``None`` to read ``APIC_PASSWORD``.
+            **kwargs: Any other constructor argument, validated as usual.
+
+        Returns:
+            A client using *client* for every request.
+
+        Example::
+
+            behind_proxy = httpx.Client(base_url=host, proxy="http://proxy:3128")
+            aci = Niwaki.with_client(behind_proxy, host, user, password)
+        """
+        self = cls(host, username, password, **kwargs)
+        self._injected_client = client
+        return self
+
+    @property
+    def apic_version(self) -> str | None:
+        """The firmware the connected controller stated at login.
+
+        Compare it against :func:`niwaki.catalog.schema_version` — the firmware
+        this SDK's models and vocabulary were generated from — to know whether
+        you are inside the envelope it was built for.  A mismatch is not a
+        failure: reads stay tolerant, writes fail loudly.  It is a reason to
+        pilot rather than assume.
+
+        Returns:
+            The version string, or ``None`` before the client has connected.
+        """
+        session = self._session
+        return None if session is None else session.apic_version
+
+    @property
+    def max_concurrent(self) -> int:
+        """Upper bound on simultaneous in-flight HTTP requests for this client.
+
+        A staged push inherits this as its own fan-out bound, so
+        ``push(mode="staged")`` runs at most this many operations of a wave at
+        once.  ``push(..., max_concurrent=n)`` can lower it further but never
+        raise it above this number — construct the client with a higher limit
+        to go wider.
+
+        Returns:
+            The limit set at construction (default ``10``).
+        """
+        return self._max_concurrent
 
     @property
     def subscriptions(self) -> AsyncSubscriptionManager:
@@ -1011,6 +1100,9 @@ class Niwaki:
         timeout: float = 30.0,
         refresh_threshold: int = 60,
         retry: RetryConfig | None = None,
+        token_cache: TokenCache | None = None,
+        private_key: str | Path | None = None,
+        cert_dn: str | None = None,
     ) -> None:
         self._host = host
         self._username = username
@@ -1019,6 +1111,10 @@ class Niwaki:
         self._timeout = timeout
         self._refresh_threshold = refresh_threshold
         self._retry = retry
+        self._injected_client: httpx.Client | None = None
+        self._token_cache = token_cache
+        self._private_key = private_key
+        self._cert_dn = cert_dn
         self._session: ApicSession | None = None
 
     # ── Factory ───────────────────────────────────────────────────────────────
@@ -1108,8 +1204,15 @@ class Niwaki:
                 timeout=self._timeout,
                 refresh_threshold=self._refresh_threshold,
             )
+            if self._token_cache is not None:
+                kwargs["token_cache"] = self._token_cache
             if self._retry is not None:
                 kwargs["retry"] = self._retry
+            if self._injected_client is not None:
+                kwargs["client"] = self._injected_client
+            if self._private_key is not None:
+                kwargs["private_key"] = self._private_key
+                kwargs["cert_dn"] = self._cert_dn
             session = ApicSession(**kwargs)
             session.login()
             self._session = session
@@ -1140,6 +1243,59 @@ class Niwaki:
             when the session default (3 attempts) is in use.
         """
         return self._retry
+
+    @classmethod
+    def with_client(
+        cls,
+        client: httpx.Client,
+        host: str | None = None,
+        username: str | None = None,
+        password: str | None = None,
+        **kwargs: Any,
+    ) -> Niwaki:
+        """Build a client that talks through an ``httpx`` client you configured.
+
+        Everything this SDK does not model — an outbound proxy, mutual TLS, a
+        pinned CA bundle, a custom transport, per-route timeouts — is already
+        expressible in ``httpx``.  Rather than mirror each as a parameter, this
+        hands the whole client over; the returned object is identical in every
+        other respect, and closing it closes the client you gave.
+
+        Args:
+            client: A configured ``httpx.Client``.  Pass the same host you
+                gave it, since cookies and WebSocket URLs are derived from it.
+            host: APIC base URL, or ``None`` to read ``APIC_HOST``.
+            username: Login name, or ``None`` to read ``APIC_USERNAME``.
+            password: Password, or ``None`` to read ``APIC_PASSWORD``.
+            **kwargs: Any other constructor argument, validated as usual.
+
+        Returns:
+            A client using *client* for every request.
+
+        Example::
+
+            behind_proxy = httpx.Client(base_url=host, proxy="http://proxy:3128")
+            aci = Niwaki.with_client(behind_proxy, host, user, password)
+        """
+        self = cls(host, username, password, **kwargs)
+        self._injected_client = client
+        return self
+
+    @property
+    def apic_version(self) -> str | None:
+        """The firmware the connected controller stated at login.
+
+        Compare it against :func:`niwaki.catalog.schema_version` — the firmware
+        this SDK's models and vocabulary were generated from — to know whether
+        you are inside the envelope it was built for.  A mismatch is not a
+        failure: reads stay tolerant, writes fail loudly.  It is a reason to
+        pilot rather than assume.
+
+        Returns:
+            The version string, or ``None`` before the client has connected.
+        """
+        session = self._session
+        return None if session is None else session.apic_version
 
     @property
     def subscriptions(self) -> SubscriptionManager:

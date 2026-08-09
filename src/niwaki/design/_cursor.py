@@ -663,11 +663,17 @@ class Cursor:
         *,
         mode: Literal["strict", "staged"] = "strict",
         verify_refs: bool = False,
+        max_concurrent: int | None = None,
     ) -> PushReport: ...
 
     @overload
     def push(
-        self, client: Niwaki, *, mode: Literal["plan"], verify_refs: bool = False
+        self,
+        client: Niwaki,
+        *,
+        mode: Literal["plan"],
+        verify_refs: bool = False,
+        max_concurrent: int | None = None,
     ) -> PlanResult: ...
 
     @overload
@@ -677,11 +683,17 @@ class Cursor:
         *,
         mode: Literal["strict", "staged"] = "strict",
         verify_refs: bool = False,
+        max_concurrent: int | None = None,
     ) -> _Coroutine[Any, Any, PushReport]: ...
 
     @overload
     def push(
-        self, client: AsyncNiwaki, *, mode: Literal["plan"], verify_refs: bool = False
+        self,
+        client: AsyncNiwaki,
+        *,
+        mode: Literal["plan"],
+        verify_refs: bool = False,
+        max_concurrent: int | None = None,
     ) -> _Coroutine[Any, Any, PlanResult]: ...
 
     def push(
@@ -690,6 +702,7 @@ class Cursor:
         *,
         mode: PushMode = "strict",
         verify_refs: bool = False,
+        max_concurrent: int | None = None,
     ) -> PushReport | PlanResult | _Coroutine[Any, Any, PushReport | PlanResult]:
         """Validate the design and push it through *client*.
 
@@ -723,6 +736,17 @@ class Cursor:
                 :attr:`~niwaki.design.PlanResult.external_refs` and nothing
                 raises. Default ``False`` — the wire behavior without the
                 flag is byte-identical to previous releases.
+            max_concurrent: Upper bound on how many operations of one
+                ``staged`` wave are in flight at once — **async clients
+                only**. It throttles *down* and never up: the effective bound
+                is the smaller of this value and the client's own
+                :attr:`~niwaki.AsyncNiwaki.max_concurrent` (default ``10``),
+                so ``push(..., max_concurrent=50)`` against a default client
+                still runs ten at a time — raise the limit on the client to go
+                wider. Omitted, the push inherits the client's limit, which is
+                byte-identical to previous releases. With a sync client it is
+                accepted and inert: the sync engine writes one object at a
+                time. Must be ``>= 1``, else :exc:`ValueError` before any I/O.
 
         Returns:
             :class:`~niwaki.design.PushReport` for write modes,
@@ -742,10 +766,19 @@ class Cursor:
         from niwaki.design import _push
         from niwaki.facade import AsyncNiwaki
 
+        if max_concurrent is not None and max_concurrent < 1:
+            # Checked before the sync/async split so a bad value fails
+            # identically for both client kinds, and before any I/O.
+            raise ValueError(f"max_concurrent must be >= 1, got {max_concurrent}")
+
         root = self._node.root()
         if isinstance(client, AsyncNiwaki):
-            return _push.push_async(root, client, mode, verify_refs=verify_refs)
-        return _push.push_sync(root, client, mode, verify_refs=verify_refs)
+            return _push.push_async(
+                root, client, mode, verify_refs=verify_refs, max_concurrent=max_concurrent
+            )
+        return _push.push_sync(
+            root, client, mode, verify_refs=verify_refs, max_concurrent=max_concurrent
+        )
 
 
 def _attach(

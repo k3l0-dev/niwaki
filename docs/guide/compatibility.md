@@ -38,7 +38,19 @@ Outside 6.0(9c), the behavior is asymmetric by design:
   firmware, so refreshes are mechanical).
 
 The APIC version the shipped catalogue was built from is embedded in the
-artifact itself and checked by the test suite.
+artifact itself and checked by the test suite.  Both halves of the question are
+readable at runtime — what the SDK targets, and what your fabric actually runs:
+
+```python
+from niwaki import catalog
+
+assert catalog.schema_version() == "6.0(9c)"  # what this SDK was generated from
+```
+
+`Niwaki.apic_version` and `AsyncNiwaki.apic_version` hold what the controller
+stated at login (`None` before connecting, or if it named none).  Comparing the
+two answers "am I inside the envelope?" — a mismatch is a reason to pilot, not
+an error, so nothing warns and nothing raises.
 
 ## Python
 

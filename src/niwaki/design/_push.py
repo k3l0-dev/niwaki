@@ -26,11 +26,13 @@ from collections.abc import Iterable, Iterator
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Any
 
+from niwaki._logging import operation_failed, push_finished, push_started
 from niwaki.design._compiler import build_desired_tree, compile_ops, compile_poluni
 from niwaki.design._engine import _Op, _run_waves, _run_waves_sync, _WaveOutcome
 from niwaki.design._node import DesignNode
 from niwaki.design._resolver import resolve
 from niwaki.design._verify import (
+    _VERIFY_CONCURRENCY,
     RefCheck,
     collect_external_refs,
     failures_of,
@@ -52,7 +54,19 @@ class PushReport:
 
     Attributes:
         mode: The push mode that produced this report.
-        dns: DNs written, in execution order (includes resolved Rs objects).
+        dns: The DNs this push accounts for, including the Rs objects the
+            resolver materialises.  The order is deterministic and derived
+            from the design, never from the order in which the controller
+            answered: a parent always precedes its descendants.
+
+            The **set** is mode-dependent, so never diff one mode's report
+            against another's.  ``strict`` walks the whole design tree, so
+            every declared object appears.  ``staged`` lists one entry per
+            operation, and two curated kinds of class do not map one-to-one
+            onto operations: a class marked *atomic* ships its whole subtree
+            in a single request, so its children have no entry of their own,
+            and a *carrier* — a path-only class the APIC materialises when a
+            child posts beneath it — gets no operation and so no entry at all.
         request_count: Number of HTTP requests issued (1 for ``strict``).
     """
 
@@ -213,6 +227,9 @@ def _staged_report(ops: list[_Op], outcome: _WaveOutcome) -> PushReport:
         dns=[op.dn for op in outcome.succeeded],
         request_count=len(outcome.succeeded) + len(outcome.failed),
     )
+    push_finished("staged", len(outcome.succeeded), len(outcome.failed), len(outcome.not_run))
+    for op, error in outcome.failed:
+        operation_failed(op.dn, error)
     if not outcome.ok:
         raise StagedPushError(
             report,
@@ -226,7 +243,12 @@ def _staged_report(ops: list[_Op], outcome: _WaveOutcome) -> PushReport:
 
 
 def push_sync(
-    root: DesignNode, client: Niwaki, mode: PushMode, *, verify_refs: bool = False
+    root: DesignNode,
+    client: Niwaki,
+    mode: PushMode,
+    *,
+    verify_refs: bool = False,
+    max_concurrent: int | None = None,
 ) -> PushReport | PlanResult:
     """Execute a push through a sync :class:`~niwaki.Niwaki` client.
 
@@ -243,8 +265,11 @@ def push_sync(
             raise DanglingReferenceError(failures)
 
     if mode == "strict":
+        dns = _walk_dns(root, extras)
+        push_started("strict", len(dns))
         session.post_mo("uni", compile_poluni(root, extras))
-        return PushReport(mode="strict", dns=_walk_dns(root, extras), request_count=1)
+        push_finished("strict", len(dns), 0, 0)
+        return PushReport(mode="strict", dns=dns, request_count=1)
 
     if mode == "staged":
         ops = compile_ops(root, extras)
@@ -255,6 +280,7 @@ def push_sync(
             else:
                 session.delete_mo(op.dn)
 
+        push_started("staged", len(ops))
         return _staged_report(ops, _run_waves_sync(_execute, ops))
 
     # plan: one read + diff per direct child of polUni (per declared domain),
@@ -277,6 +303,7 @@ async def push_async(
     mode: PushMode,
     *,
     verify_refs: bool = False,
+    max_concurrent: int | None = None,
 ) -> PushReport | PlanResult:
     """Execute a push through an :class:`~niwaki.AsyncNiwaki` client.
 
@@ -286,20 +313,30 @@ async def push_async(
     extras = resolve(root)
     session = client._active_session  # pyright: ignore[reportPrivateUsage]
 
+    # Throttle down, never up: the client's own limit is the ceiling, because a
+    # push cannot make its session hand out more slots than the session owns.
+    # Omitting the argument therefore reproduces earlier releases exactly.
+    ceiling = client.max_concurrent
+    bound = ceiling if max_concurrent is None else min(max_concurrent, ceiling)
+
     checks: list[RefCheck] = []
     if verify_refs:
         refs = collect_external_refs(root, extras, set(_walk_dns(root, extras)))
-        checks = await verify_async(session, refs)
+        checks = await verify_async(session, refs, concurrency=min(_VERIFY_CONCURRENCY, bound))
         if mode != "plan" and (failures := failures_of(checks)):
             raise DanglingReferenceError(failures)
 
     if mode == "strict":
+        dns = _walk_dns(root, extras)
+        push_started("strict", len(dns))
         await session.post_mo("uni", compile_poluni(root, extras))
-        return PushReport(mode="strict", dns=_walk_dns(root, extras), request_count=1)
+        push_finished("strict", len(dns), 0, 0)
+        return PushReport(mode="strict", dns=dns, request_count=1)
 
     if mode == "staged":
         ops = compile_ops(root, extras)
-        return _staged_report(ops, await _run_waves(session, ops))
+        push_started("staged", len(ops))
+        return _staged_report(ops, await _run_waves(session, ops, max_concurrent=bound))
 
     # plan: one read + diff per direct child of polUni (per declared domain),
     # scoped to the design's classes (R-3).

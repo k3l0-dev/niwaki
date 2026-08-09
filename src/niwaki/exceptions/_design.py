@@ -90,7 +90,8 @@ class StagedPushError(DesignError):
     """A ``push(mode="staged")`` partially succeeded.
 
     Carries the partial :class:`~niwaki.design.PushReport` (the DNs actually
-    written, in execution order) and the failures as plain
+    written, in the design's deterministic order — not the order the
+    controller answered in) and the failures as plain
     ``(dn, exception)`` pairs — no engine internals leak into the public
     surface.
 

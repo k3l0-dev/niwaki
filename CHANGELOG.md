@@ -5,6 +5,154 @@ All notable changes to this project are documented here.  The format follows
 [semver](https://semver.org/).  From 1.0.0 the configuration API is stable:
 breaking changes ship in a new major version with a migration note.
 
+## [1.9.0] — 2026-08-09
+
+### Added
+
+- **Certificate authentication, without a password anywhere** —
+  `pip install niwaki[x509]`, then `Niwaki(host, user, private_key=..., cert_dn=...)`.
+  Each request carries its own RSA-SHA256 signature instead of trading a
+  password for a token, so CI has nothing to put in an environment variable
+  and the fabric's audit trail names a certificate rather than a shared
+  account. A signed session never logs in, holds no token, and has nothing to
+  refresh.
+
+  `cryptography` is an optional extra rather than a dependency: it is compiled,
+  it has its own release cadence, and most callers authenticate with a
+  password. Using the feature without it raises `MissingDependencyError`
+  naming the extra, at import rather than at the first request.
+
+  The half-configured case — a key without a DN, or a DN without a key — is
+  refused at construction. Accepting it would silently fall back to password
+  authentication, which is the opposite of what was asked for.
+
+- **A push says what it is doing.** Ten thousand objects used to go out in
+  silence; when one was refused the report named the DN, but nothing said how
+  far the push had got. Start and finish are logged at `INFO`, each wave at
+  `DEBUG`, and a partial push escalates its summary to `WARNING` so an
+  application showing only warnings still hears about it.
+
+  The SDK never configures logging — it attaches a `NullHandler` and emits
+  under the `niwaki` logger; where records go is the application's decision.
+  And **no payload is ever logged**: a design carries passwords, community
+  strings and pre-shared keys, so the SDK records what it did and where, never
+  what it sent. A canary asserts that through a *failing* push, since the
+  branch that logs a refusal exists only on that path.
+
+- **Bring your own `httpx` client.** `Niwaki.with_client()` and its async and
+  session-level twins take a client you configured — an outbound proxy, mutual
+  TLS, a pinned CA bundle, a custom transport, per-route timeouts. All of that
+  is already expressible in `httpx`, so rather than mirror each as a parameter
+  the SDK accepts the whole client and owns it thereafter.
+
+  Construction is otherwise identical, and that is load-bearing rather than
+  incidental: the injected path runs the same constructor and replaces one
+  attribute, so a session built either way carries the same state. A test
+  compares the two shapes rather than enumerating them, because the state has
+  grown by three attributes in as many releases and an enumeration is a list
+  someone forgets to update.
+
+- **An on-disk token cache, opt-in.** `token_cache=TokenCache()` lets a
+  short-lived process reuse a token instead of minting a session per run —
+  the difference between one audit-log entry and twenty for an operator
+  running twenty commands.
+
+  It is a bearer token on disk, so it is treated as one. The file and its
+  directory are created owner-only rather than chmod'ed afterwards, since
+  between creation and a later chmod there is a window in which the token is
+  world-readable. Entries are keyed by a hash of host and user, so a directory
+  listing does not enumerate which fabrics an operator touches. And it refuses
+  what it cannot trust — a file others can read, one that does not parse, one
+  whose token expires within thirty seconds — rather than repairing it: the
+  cost of being wrong is a security story, the cost of refusing is one login.
+
+- **"Will this work against my fabric?" now has a programmatic answer.** The
+  APIC states its firmware in the login envelope, and the SDK read that
+  envelope for the token and discarded the rest. `Niwaki.apic_version` and
+  `AsyncNiwaki.apic_version` hold it, refreshed for free on every token
+  refresh, and `None` before connecting or when a controller names none.
+
+  The other half is `catalog.schema_version()` — the firmware the models,
+  vocabulary and filter grammar were generated from, read from the shipped
+  catalogue's own manifest rather than a constant that could drift from the
+  data it describes. Comparing the two is the whole feature.
+
+  Nothing warns on a mismatch: connecting is not the moment to editorialise
+  about firmware, and a warning on every connection to a 5.x lab would be
+  noise. Reads stay tolerant, writes stay fail-loud, and the caller decides.
+
+- **A busy controller no longer ends a push.** The transport retried network
+  failures but never a status, so a `503` from an APIC that was merely
+  occupied killed a staged push mid-flight — the failure most worth
+  surviving. Retryable statuses are now retried, and the sets are **disjoint
+  by request kind**: a read may replay `502`, `503` and `504`, a write only
+  `503`. A gateway answering `502` or `504` has already forwarded the request,
+  so the APIC may hold the object; replaying would double-apply it or 404
+  against something the first attempt created. That mirrors the rule the SDK
+  already applied to network errors. `429` is deliberately absent — nothing
+  observed on a 6.0(9c) controller emits it, and a retry set is a claim about
+  a controller rather than a wish.
+
+  `Retry-After` is honoured when the controller sends one, in either spelling
+  (seconds or HTTP date), and clamped by the new
+  `RetryConfig.retry_after_max` (default 30 s) so one busy answer cannot park
+  a push for as long as the controller asks. A header the SDK cannot parse
+  reads as absent rather than raising inside the retry loop.
+
+  When the attempts run out, the response is handed back rather than an
+  internal signal, so the error a caller sees is the `HTTP 503` it always was.
+
+- **`push(max_concurrent=...)` — the staged fan-out is the engine's own
+  promise now, not an accident of the session you injected.** The wave engine
+  is typed against a bare writer protocol, so its only bound came from the
+  semaphore an `AsyncApicSession` happens to carry: any other conforming
+  writer got the whole wave at once, measured 500 operations entering the
+  writer simultaneously. The engine now pulls each wave through a fixed pool
+  of workers, which also stops it materialising one coroutine and one retained
+  payload per operation — a 10 000-op wave costs about 0.8 MB this way against
+  15 MB before.
+
+  The keyword **throttles down and never up**: the effective bound is the
+  smaller of it and the client's own `max_concurrent`, so asking a default
+  client for fifty still runs ten. Omitted, a push inherits the client's limit
+  — which means a client built with a raised limit keeps it, and the wire
+  behaviour without the keyword is byte-identical to previous releases. On a
+  sync client it is accepted and inert: that engine writes one object at a
+  time.
+
+  `PushReport.dns` and `StagedPushError.failures` were always ordered by the
+  design rather than by how fast the controller answered, but only because
+  `asyncio.gather` happens to preserve argument order. That is now stated in
+  the docstrings and guarded by a test, because the cheapest way to write a
+  worker pool silently flips it to completion order. The same docstring now
+  also says which DNs each mode reports: `staged` lists one entry per
+  operation, so a class that ships its subtree atomically has no entries for
+  its children, and a carrier class has none at all.
+
+- **A non-positive concurrency limit is refused where it is written.**
+  `AsyncNiwaki(..., max_concurrent=0)` used to build a semaphore with no
+  permits — not a throttle but a wait for a slot that is never released, so
+  the first write hung. It now raises `ValueError` at construction, naming the
+  value, and the engine refuses the same at its own boundary.
+
+- **`APIError.apic_code` — the controller's own error code, preserved.** The
+  APIC answers every failure with a machine-readable code beside the English
+  text, and the SDK used to drop it, so telling a malformed DN from a missing
+  naming property meant matching on prose. Every `APIError` — and every
+  subclass, including the one the subscribe path rebuilds — now carries it as
+  `str | None`.
+
+  It says *what went wrong*, never *whether to retry*: measured on a 6.0(9c)
+  fabric, many distinct codes arrive under HTTP 400 and none of the observed
+  ones is retryable, so retryability stays a question for the exception type.
+  `None` is the honest answer when the response carried no APIC error envelope,
+  or when the SDK raised without one — as it does for a DN that reads back
+  empty. The value stays a string: the SDK will not fail to report an error
+  because a controller sent a code it did not expect.
+
+  `RefCheck` (external-reference verification) carries it too — that is the one
+  place a failure is flattened to text rather than kept as an exception.
+
 ## [1.8.0] — 2026-08-08
 
 ### Documentation
@@ -51,6 +199,11 @@ breaking changes ship in a new major version with a migration note.
   catalogue and 2.5 MiB on the wheel.
 
 ### Fixed
+
+- **`RetryConfig`'s docstring promised something it could not keep.** It said
+  every parameter is forwarded verbatim to `stamina`; `retry_after_max` is
+  not, and cannot be — it bounds a delay the controller asks for, which
+  `stamina` knows nothing about.
 
 - **The read catalogue no longer hands one thread another thread's rows.** Its
   sqlite connection is shared, and the driver caches prepared statements on the

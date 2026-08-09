@@ -92,6 +92,20 @@ wide = AsyncNiwaki("https://apic.example.com", "admin", "secret", max_concurrent
 Retries compose with the limit: a retrying request holds its semaphore slot,
 so a struggling APIC gets *less* traffic, not more.
 
+A staged push inherits that limit as its own fan-out bound, and can narrow it
+for one push without touching the client:
+
+```python
+async def narrow() -> None:
+    design = tenant("prod")
+    async with wide:
+        await design.push(wide, mode="staged", max_concurrent=5)
+```
+
+It only ever throttles **down**.  The effective bound is the smaller of the
+two, so asking a default client for fifty still runs ten — raise the client's
+limit to go wider.
+
 ## When to go async
 
 - **Fan-out reads** — fabric audits, inventory collection, anything that

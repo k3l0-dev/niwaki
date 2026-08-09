@@ -192,6 +192,26 @@ class TestVerifiedPush:
         assert failure.status == "error"
         assert failure.detail
 
+    def test_a_read_error_keeps_the_apic_code(self, aci: Niwaki, httpx_mock: HTTPXMock) -> None:
+        """Verification is the one place an APIError is flattened to text.
+
+        Every other path carries the exception object itself, so the code rides
+        along for free.  Here the failure becomes a ``RefCheck``, and without
+        this the machine-readable cause is lost precisely where a caller is
+        looking at a list of things that went wrong.  The code differs from the
+        status so the assertion cannot pass by accident.
+        """
+        httpx_mock.add_response(
+            method="GET",
+            status_code=400,
+            json={"imdata": [{"error": {"attributes": {"code": "104", "text": "bad rn"}}}]},
+        )
+        with pytest.raises(exceptions.DanglingReferenceError) as excinfo:
+            _dom_design().push(aci, verify_refs=True)
+        (failure,) = excinfo.value.failures
+        assert failure.apic_code == "104"
+        assert failure.detail  # the human half is untouched
+
     def test_plan_populates_statuses_and_never_raises(
         self, aci: Niwaki, httpx_mock: HTTPXMock
     ) -> None:

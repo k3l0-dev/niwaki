@@ -100,6 +100,41 @@ class TestSubscribe:
         assert exc_info.value.status_code == 405
         assert isinstance(exc_info.value, exceptions.SubscriptionError)
 
+    def test_a_rejected_subscribe_keeps_the_apic_code(
+        self, ws_session: ApicSession, httpx_mock: HTTPXMock
+    ) -> None:
+        """The subscribe path rebuilds the exception — it must not drop the cause.
+
+        ``subscribe()`` catches the transport's ``APIError`` and re-raises it as
+        a ``SubscribeRejectedError`` built from its attributes.  Rebuilding from
+        two of the three silently produced a version where ``apic_code`` was
+        populated everywhere *except* here, with the whole suite green.  The
+        code below deliberately differs from the status, so this cannot pass by
+        reading ``status_code`` back.
+        """
+        httpx_mock.add_response(
+            method="GET",
+            status_code=400,
+            json={
+                "imdata": [
+                    {
+                        "error": {
+                            "attributes": {
+                                "code": "107",
+                                "text": "Cannot delete object, not deletable",
+                            }
+                        }
+                    }
+                ]
+            },
+        )
+
+        with pytest.raises(exceptions.SubscribeRejectedError) as exc_info:
+            ws_session.subscribe("/api/class/fvBD.json", {})
+
+        assert exc_info.value.apic_code == "107"
+        assert exc_info.value.status_code == 400
+
 
 # ── Live push demux over the fake WebSocket ────────────────────────────────────
 

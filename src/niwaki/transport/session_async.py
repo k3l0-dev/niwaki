@@ -16,9 +16,11 @@ from __future__ import annotations
 import asyncio
 import os
 import ssl
+import time
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 from datetime import timedelta
+from pathlib import Path
 from typing import Any, TypeVar, cast
 from urllib.parse import urlsplit
 
@@ -28,13 +30,25 @@ import stamina
 from niwaki import exceptions
 from niwaki.models.base import ManagedObject
 from niwaki.transport._config import RetryConfig
-from niwaki.transport._errors import extract_apic_error, raise_for_apic_status
+from niwaki.transport._errors import (
+    _imdata_attributes,
+    extract_apic_error,
+    raise_for_apic_status,
+)
+from niwaki.transport._retry import (
+    READ_RETRY_STATUSES,
+    WRITE_RETRY_STATUSES,
+    RetryableStatus,
+    retry_after_seconds,
+)
+from niwaki.transport._signature import CertificateAuth, load_private_key
 from niwaki.transport._subscription_socket import _DEFAULT_MAX_PENDING, SubscriptionInfo
 from niwaki.transport._subscription_socket_async import (
     AsyncRawSubscription,
     AsyncSubscriptionSocket,
 )
 from niwaki.transport._token import TokenState
+from niwaki.transport._token_cache import TokenCache
 from niwaki.utils.response import parse_imdata
 
 _T = TypeVar("_T", bound=ManagedObject)
@@ -115,10 +129,20 @@ class AsyncApicSession:
         refresh_threshold: int = 60,
         max_concurrent: int = 10,
         retry: RetryConfig = _DEFAULT_RETRY,
+        client: httpx.AsyncClient | None = None,
+        token_cache: TokenCache | None = None,
+        private_key: str | Path | None = None,
+        cert_dn: str | None = None,
     ) -> None:
         self._host = (host or os.environ["APIC_HOST"]).rstrip("/")
         self._username = username or os.environ["APIC_USERNAME"]
-        self._password = password or os.environ["APIC_PASSWORD"]
+        # A signed session never sends a password, so requiring one would make
+        # certificate auth impossible in the very place it is wanted: CI, where
+        # there is deliberately no password to put in the environment.
+        if private_key is not None:
+            self._password = password or ""
+        else:
+            self._password = password or os.environ["APIC_PASSWORD"]
         # Pin the cookie jar entry to the session's own host so it overwrites
         # in place rather than accumulating a second, domain-less entry next
         # to the one httpx auto-stores from the APIC's own Set-Cookie header
@@ -128,18 +152,48 @@ class AsyncApicSession:
         self._refresh_threshold = timedelta(seconds=refresh_threshold)
         self._retry = retry
         self._token_state: TokenState | None = None
+        self._token_cache = token_cache
+        # Certificate auth signs every request instead of trading a password
+        # for a token, so both halves are required together or neither.
+        if (private_key is None) != (cert_dn is None):
+            raise ValueError("private_key and cert_dn must be given together")
+        self._cert_dn = cert_dn
+        self._signing_key = load_private_key(private_key) if private_key is not None else None
+        self._apic_version: str | None = None
         self._token_lock = asyncio.Lock()
+        if max_concurrent < 1:
+            # A zero-permit semaphore does not throttle, it deadlocks:
+            # the first write waits for a slot that is never released.
+            raise ValueError(f"max_concurrent must be >= 1, got {max_concurrent}")
+        self._max_concurrent = max_concurrent
         self._semaphore = asyncio.Semaphore(max_concurrent)
-        self._client = httpx.AsyncClient(
-            base_url=self._host,
-            # httpx 0.28 deprecates verify=<str>; build the SSL context here.
-            verify=(
-                ssl.create_default_context(cafile=verify_ssl)
-                if isinstance(verify_ssl, str)
-                else verify_ssl
-            ),
-            timeout=timeout,
+        self._auth = (
+            CertificateAuth(self._signing_key, cert_dn)
+            if self._signing_key is not None and cert_dn is not None
+            else None
         )
+        self._client = (
+            client
+            if client is not None
+            else (
+                httpx.AsyncClient(
+                    base_url=self._host,
+                    # httpx 0.28 deprecates verify=<str>; build the SSL context here.
+                    verify=(
+                        ssl.create_default_context(cafile=verify_ssl)
+                        if isinstance(verify_ssl, str)
+                        else verify_ssl
+                    ),
+                    timeout=timeout,
+                )
+            )
+        )
+        if self._auth is not None:
+            # Set here rather than at construction so an injected client is
+            # signed too. Dropping the auth for a caller who supplied their own
+            # client would authenticate silently as nobody.
+            self._client.auth = self._auth
+
         # Reused for the subscription WebSocket (wss://), which needs a real
         # ssl.SSLContext rather than httpx's bool-or-path verify shorthand.
         self._ws_ssl_context = self._build_ws_ssl_context(verify_ssl)
@@ -198,6 +252,76 @@ class AsyncApicSession:
         return self._token_state is not None
 
     @property
+    def apic_version(self) -> str | None:
+        """The controller's own firmware version, as it stated it at login.
+
+        The APIC returns this in the login envelope (``"6.0(9c)"``), and again
+        on every token refresh, so it stays current for a long-lived session.
+
+        This is what answers "will this work against my fabric?".  Compare it
+        against :func:`niwaki.catalog.schema_version` — the firmware the SDK's
+        models, vocabulary and filter grammar were generated from.  A different
+        version is not a failure: reads stay tolerant of classes the SDK does
+        not know, and writes fail loudly rather than silently.  It is a reason
+        to pilot rather than assume.
+
+        Returns:
+            The version string, or ``None`` before the first successful login,
+            or when a controller answered without naming one.
+
+        Example::
+
+            if aci.apic_version != catalog.schema_version():
+                log.warning("fabric %s, SDK built for %s",
+                            aci.apic_version, catalog.schema_version())
+        """
+        return self._apic_version
+
+    @classmethod
+    def with_client(
+        cls,
+        client: httpx.AsyncClient,
+        host: str | None = None,
+        username: str | None = None,
+        password: str | None = None,
+        **kwargs: Any,
+    ) -> AsyncApicSession:
+        """Build a session that talks through a client you configured yourself.
+
+        Everything the SDK does not model — an outbound proxy, mutual TLS, a
+        pinned CA bundle, a custom transport, a timeout policy per route — is
+        already expressible in ``httpx``.  Rather than mirror each of those as
+        a parameter here, this hands the whole client over.
+
+        The session owns the client once given: closing the session closes it.
+        Construction is otherwise identical, which is the point — every
+        validation, every attribute, every default is the same as the ordinary
+        constructor, and a test compares the two shapes so they cannot drift.
+
+        Args:
+            client: A configured ``httpx.AsyncClient``.  Its ``base_url`` is used
+                as-is; *host* still names the APIC for cookies and WebSocket
+                URLs, so pass the same host you gave the client.
+            host: APIC base URL, or ``None`` to read ``APIC_HOST``.
+            username: Login name, or ``None`` to read ``APIC_USERNAME``.
+            password: Password, or ``None`` to read ``APIC_PASSWORD``.
+            **kwargs: Any other constructor argument (``max_concurrent``,
+                ``retry``, ``refresh_threshold``, …), validated as usual.
+
+        Returns:
+            A session using *client* for every request.
+
+        Raises:
+            ValueError: Whatever the ordinary constructor would raise.
+
+        Example::
+
+            proxied = httpx.Client(base_url=host, proxy="http://proxy:3128")
+            session = ApicSession.with_client(proxied, host, user, password)
+        """
+        return cls(host, username, password, client=client, **kwargs)
+
+    @property
     def retry(self) -> RetryConfig:
         """Active retry policy for this session.
 
@@ -206,9 +330,32 @@ class AsyncApicSession:
         """
         return self._retry
 
+    @property
+    def max_concurrent(self) -> int:
+        """Upper bound on simultaneous in-flight HTTP requests for this session.
+
+        Set at construction and fixed for the session's life.  A staged push
+        inherits it as its own fan-out bound, and ``push(max_concurrent=...)``
+        can only lower it further — never raise it above this number.
+
+        Returns:
+            The limit this session enforces.
+        """
+        return self._max_concurrent
+
     # ── Public auth ───────────────────────────────────────────────────────────
 
-    async def login(self) -> None:
+    def _forget_cached_token(self) -> None:
+        """Drop the cached entry before re-authenticating.
+
+        Whatever made the controller reject this token — a revocation, an
+        eviction, a restart — makes the cached copy worthless too.  Leaving it
+        would hand the same dead token to the next process, and the one after.
+        """
+        if self._token_cache is not None:
+            self._token_cache.clear(self._host, self._username)
+
+    async def login(self, *, use_cache: bool = True) -> None:
         """Authenticate against the APIC via ``/api/aaaLogin.json``.
 
         Submits credentials, stores the returned token with its TTL, and sets
@@ -225,6 +372,32 @@ class AsyncApicSession:
             session = AsyncApicSession("https://apic.example.com", "admin", "pass")
             await session.login()
         """
+        # A cached token turns a per-command CLI login into one login per
+        # session lifetime: same audit trail entry, one round trip instead of
+        # twenty. Absent, unreadable or near expiry, the cache simply says no.
+        # A signed session has no token to obtain: every request carries its
+        # own proof, so there is nothing to log in for and nothing to expire.
+        if self._signing_key is not None:
+            return
+
+        # Re-authentication must never be served from the cache: login() is the
+        # recovery primitive, so a cached entry would answer a 401 with the very
+        # token the controller just rejected — for this process and every later
+        # one, since nothing would ever refill it.
+        if use_cache and self._token_cache is not None:
+            cached = self._token_cache.read(self._host, self._username)
+            if cached is not None:
+                token, expires_at = cached
+                self._token_state = TokenState(
+                    token=token,
+                    expires_at=expires_at,
+                    refresh_threshold=self._refresh_threshold,
+                )
+                self._client.cookies.set(
+                    "APIC-cookie", self._token_state.token, domain=self._cookie_domain
+                )
+                return
+
         payload: dict[str, Any] = {
             "aaaUser": {"attributes": {"name": self._username, "pwd": self._password}}
         }
@@ -238,6 +411,14 @@ class AsyncApicSession:
             )
 
         self._token_state = self._parse_token_response(resp, threshold=self._refresh_threshold)
+        self._capture_apic_version(resp)
+        if self._token_cache is not None:
+            self._token_cache.write(
+                self._host,
+                self._username,
+                self._token_state.token,
+                self._token_state.expires_at,
+            )
         self._client.cookies.set("APIC-cookie", self._token_state.token, domain=self._cookie_domain)
 
     # ── Internal auth ─────────────────────────────────────────────────────────
@@ -261,6 +442,14 @@ class AsyncApicSession:
             )
 
         self._token_state = self._parse_token_response(resp, threshold=self._refresh_threshold)
+        self._capture_apic_version(resp)
+        if self._token_cache is not None:
+            self._token_cache.write(
+                self._host,
+                self._username,
+                self._token_state.token,
+                self._token_state.expires_at,
+            )
         self._client.cookies.set("APIC-cookie", self._token_state.token, domain=self._cookie_domain)
 
     async def _ensure_token(self) -> None:
@@ -282,6 +471,11 @@ class AsyncApicSession:
             SessionExpiredError: Token expired and re-auth failed.
         """
         async with self._token_lock:
+            if self._signing_key is not None:
+                # A signed session holds no token: each request carries its own
+                # proof, so there is nothing to check, refresh or re-obtain.
+                return
+
             if self._token_state is None:
                 raise exceptions.AuthError(
                     "Not authenticated. Call login() or use the context manager."
@@ -307,7 +501,8 @@ class AsyncApicSession:
             SessionExpiredError: If ``login()`` fails.
         """
         try:
-            await self.login()
+            self._forget_cached_token()
+            await self.login(use_cache=False)
         except exceptions.LoginError as exc:
             raise exceptions.SessionExpiredError(
                 f"Session cannot be renewed ({reason}): {exc}"
@@ -684,7 +879,11 @@ class AsyncApicSession:
         async with self._semaphore, self._http_transport():
             stale = self._token_state.token if self._token_state else None
             resp = await self._request_with_retry(
-                method, path, retry_on=_WRITE_SAFE_RETRY, **kwargs
+                method,
+                path,
+                retry_on=_WRITE_SAFE_RETRY,
+                retry_statuses=WRITE_RETRY_STATUSES,
+                **kwargs,
             )
 
         if resp.status_code == 401:
@@ -700,6 +899,7 @@ class AsyncApicSession:
         path: str,
         *,
         retry_on: type[Exception] | tuple[type[Exception], ...] = httpx.TransportError,
+        retry_statuses: frozenset[int] = READ_RETRY_STATUSES,
         **kwargs: Any,
     ) -> httpx.Response:
         """Execute a request with stamina retry on transient network errors.
@@ -719,17 +919,39 @@ class AsyncApicSession:
             Raw httpx response (HTTP errors not checked here).
         """
 
+        last: httpx.Response | None = None
+
         @stamina.retry(
-            on=retry_on,
+            on=(retry_on, RetryableStatus)
+            if isinstance(retry_on, type)
+            else (*retry_on, RetryableStatus),
             attempts=self._retry.attempts,
             wait_initial=self._retry.wait_initial,
             wait_max=self._retry.wait_max,
             wait_jitter=self._retry.wait_jitter,
         )
         async def _attempt() -> httpx.Response:
-            return await self._client.request(method, path, **kwargs)
+            nonlocal last
+            resp = await self._client.request(method, path, **kwargs)
+            if resp.status_code not in retry_statuses:
+                return resp
+            last = resp
+            delay = retry_after_seconds(resp, ceiling=self._retry.retry_after_max, now=time.time())
+            if delay is not None:
+                # The controller named a delay; honour it before stamina adds
+                # its own backoff. Clamped, so one busy answer cannot park a
+                # push for as long as the controller fancies.
+                await asyncio.sleep(delay)
+            raise RetryableStatus(resp, delay)
 
-        return await _attempt()
+        try:
+            return await _attempt()
+        except RetryableStatus:
+            # Attempts exhausted on a retryable status: hand the response back
+            # rather than an internal signal, so the caller's own error mapping
+            # runs and the user sees "HTTP 503: ..." as they always have.
+            assert last is not None
+            return last
 
     @asynccontextmanager  # pyright: ignore[reportDeprecated]
     async def _http_transport(self) -> AsyncIterator[None]:
@@ -784,6 +1006,19 @@ class AsyncApicSession:
             return context
         return None
 
+    def _capture_apic_version(self, resp: httpx.Response) -> None:
+        """Record the firmware the controller stated in a login or refresh reply.
+
+        The APIC names its version in the same envelope as the token, and a
+        refresh repeats it, so a long-lived session stays current for free.
+        Absent from the reply, the previous value is kept rather than cleared:
+        one silent answer must not erase what the fabric already told us.
+        """
+        if (
+            version := _imdata_attributes(resp, "aaaLogin", "aaaRefresh").get("version")
+        ) is not None:
+            self._apic_version = str(version)
+
     @staticmethod
     def _parse_token_response(resp: httpx.Response, *, threshold: timedelta) -> TokenState:
         """Extract the token and TTL from an APIC login or refresh response.
@@ -799,16 +1034,13 @@ class AsyncApicSession:
         Raises:
             LoginError: If the response structure is unexpected.
         """
+        # login answers inside aaaLogin, refresh inside aaaRefresh — and the
+        # controller is free to answer a refresh with either envelope.
+        attrs = _imdata_attributes(resp, "aaaLogin", "aaaRefresh")
         try:
-            data: dict[str, Any] = resp.json()
-            inner: dict[str, Any] = data["imdata"][0]
-            login_or_refresh: dict[str, Any] = (
-                inner.get("aaaLogin") or inner.get("aaaRefresh") or {}
-            )  # pyright: ignore[reportUnknownVariableType]
-            attrs: dict[str, Any] = login_or_refresh.get("attributes", {})
-            token: str = attrs["token"]  # pyright: ignore[reportUnknownVariableType]
-            ttl: int = int(attrs["refreshTimeoutSeconds"])  # pyright: ignore[reportUnknownVariableType]
-        except (KeyError, IndexError, ValueError, TypeError) as exc:
+            token: str = attrs["token"]
+            ttl: int = int(attrs["refreshTimeoutSeconds"])
+        except (KeyError, TypeError, ValueError) as exc:
             raise exceptions.LoginError(f"Unexpected APIC response structure: {exc}") from exc
 
         return TokenState.from_apic_response(

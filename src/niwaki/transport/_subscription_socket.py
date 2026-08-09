@@ -736,7 +736,9 @@ class SubscriptionSocket:
         try:
             resp = self._session._request_checked(path, full_params)
         except exceptions.APIError as exc:
-            raise exceptions.SubscribeRejectedError(exc.status_code, exc.apic_message) from exc
+            raise exceptions.SubscribeRejectedError(
+                exc.status_code, exc.apic_message, apic_code=exc.apic_code
+            ) from exc
         body: dict[str, Any] = resp.json()
         wire_id = body.get("subscriptionId")
         if not wire_id:

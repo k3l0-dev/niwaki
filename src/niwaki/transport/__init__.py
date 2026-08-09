@@ -18,6 +18,7 @@ from niwaki.transport._protocols import (
     MoReader,
     MoWriter,
 )
+from niwaki.transport._token_cache import TokenCache
 from niwaki.transport.session import ApicSession
 from niwaki.transport.session_async import AsyncApicSession
 
@@ -29,4 +30,5 @@ __all__ = [
     "MoReader",
     "MoWriter",
     "RetryConfig",
+    "TokenCache",
 ]

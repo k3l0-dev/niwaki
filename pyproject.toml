@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "niwaki"
-version = "1.8.0"
+version = "1.9.0"
 description = "Modern, typed, design-first Python SDK for Cisco ACI (APIC)"
 readme = "README.md"
 license = "Apache-2.0"
@@ -57,6 +57,11 @@ Changelog = "https://github.com/k3l0-dev/niwaki/blob/main/CHANGELOG.md"
 Issues = "https://github.com/k3l0-dev/niwaki/issues"
 
 [project.optional-dependencies]
+# Certificate authentication only. Compiled, with its own release cadence, and
+# most callers authenticate with a password — so it is not everyone's problem.
+x509 = [
+    "cryptography>=42.0",
+]
 dev = [
     "pytest>=8.2",
     "pytest-asyncio>=0.23",

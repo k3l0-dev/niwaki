@@ -102,6 +102,32 @@ class TestSubscribe:
         assert exc_info.value.status_code == 405
         assert isinstance(exc_info.value, exceptions.SubscriptionError)
 
+    async def test_a_rejected_subscribe_keeps_the_apic_code(
+        self, async_ws_session: AsyncApicSession, httpx_mock: HTTPXMock
+    ) -> None:
+        httpx_mock.add_response(
+            method="GET",
+            status_code=400,
+            json={
+                "imdata": [
+                    {
+                        "error": {
+                            "attributes": {
+                                "code": "107",
+                                "text": "Cannot delete object, not deletable",
+                            }
+                        }
+                    }
+                ]
+            },
+        )
+
+        with pytest.raises(exceptions.SubscribeRejectedError) as exc_info:
+            await async_ws_session.subscribe("/api/class/fvBD.json", {})
+
+        assert exc_info.value.apic_code == "107"
+        assert exc_info.value.status_code == 400
+
 
 # ── Live push demux over the fake WebSocket ────────────────────────────────────
 
