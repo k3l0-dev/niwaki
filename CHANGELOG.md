@@ -5,6 +5,65 @@ All notable changes to this project are documented here.  The format follows
 [semver](https://semver.org/).  From 1.0.0 the configuration API is stable:
 breaking changes ship in a new major version with a migration note.
 
+## [1.10.0] — 2026-08-10
+
+### Added
+
+- **`niwaki.snapshot` — deterministic, git-diffable captures of a fabric's
+  configuration.** `snapshot.take(aci, scope)` reads every exportable object
+  under a scope DN — the whole fabric (`"uni"`), one tenant, or any config
+  subtree — and produces a document where the same fabric state always yields
+  the same bytes: commit it to git and an unchanged fabric diffs empty, a
+  config change diffs as exactly that change. Proven on a live fabric: 2,500+
+  objects captured twice **across two separate logins**, byte-identical.
+
+  What goes in is decided by the catalogue, never by a hand-maintained list:
+  objects the schema marks exportable (Cisco's own definition of a config
+  export — runtime state such as login sessions and faults stays out),
+  properties the schema marks configurable (the operational halo of
+  timestamps, statuses and computed backpointers falls away), in **wire
+  format** (APIC names), so a capture outlives any renaming of the SDK's
+  readable surface. The curated DSL vocabulary plays no role: an object the
+  DSL cannot express is still configuration, and a backup that ignored it
+  would lie. `Snapshot.coverage` counts what the capture contains, per class.
+
+  **Secrets never ship.** Values the schema flags `secure` never read back
+  from an APIC in the first place. On top of that, a curated policy catches
+  the material the flag forgot — measured on a live fabric, a L4-L7 device
+  credential echoes back in cleartext, and an SNMP trap destination's
+  community string is a plain readable property — and redacts it to
+  `"<redacted>"`. Objects whose *DN* carries a secret (an SNMP community
+  profile is literally named by its community string) cannot be redacted in
+  place: they surface in `Snapshot.warnings` so you decide, instead of a
+  secret landing in git silently. The policy is closed by a drift guard that
+  sweeps the whole schema three different ways; a future firmware's new
+  password-shaped property fails the build until a human triages it.
+
+- **`snapshot.diff(a, b)` — drift, structurally.** Two captures in, one
+  verdict out: added, removed and changed DNs with per-attribute before/after
+  values. Two moments of one fabric give config drift; the same scope on two
+  fabrics gives divergence. Live: one added bridge domain diffs as exactly
+  that subtree, fabric-wide, zero false positives.
+
+- **`catalog.rn_format(class_name)`** — the template of a class's own DN
+  segment (`"BD-{name}"`, `"subnet-[{ip}]"`), the inverse key for turning a
+  DN read back from a fabric into its naming values. Verified round-trip on
+  all 13,497 RN formats the catalogue carries, and against 2,400+ DNs read
+  from a live fabric.
+
+- **`catalog.prop_flags(class_name)` / `PropFlags`** — the fourteen per-
+  property schema flags (configurable, read-only, secure, naming, create-only,
+  implicit, …), unpacked from the shipped catalogue and memoised per class.
+  The raw material of data-driven tooling: what is configuration, what the
+  controller computes, what never echoes back.
+
+### Internal
+
+- Every generated artifact is now covered by a corpus-free freshness guard: a
+  fingerprint manifest written at regeneration time lets any machine —
+  including CI without the 1.7 GB schema corpus — detect a generator edited
+  without a regeneration or an artifact edited by hand.
+
 ## [1.9.1] — 2026-08-09
 
 ### Fixed

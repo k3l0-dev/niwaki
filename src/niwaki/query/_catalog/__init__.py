@@ -83,6 +83,62 @@ class ClassMeta:
     has_model: bool = False
 
 
+# Manifest flag key -> PropFlags field.  The catalogue build writes the packing
+# order into the manifest; the reader unpacks by that order, never by position
+# assumptions.  A future train adding a flag makes the sets diverge and the
+# reader refuses loudly rather than mislabeling bits.
+_FLAG_FIELDS: dict[str, str] = {
+    "isConfigurable": "is_configurable",
+    "needsPropDelimiters": "needs_prop_delimiters",
+    "createOnly": "create_only",
+    "readWrite": "read_write",
+    "readOnly": "read_only",
+    "isNaming": "is_naming",
+    "secure": "secure",
+    "implicit": "implicit",
+    "mandatory": "mandatory",
+    "isOverride": "is_override",
+    "isLike": "is_like",
+    "isNxosConverged": "is_nxos_converged",
+    "isDeprecated": "is_deprecated",
+    "isHidden": "is_hidden",
+}
+
+
+@dataclass(frozen=True, slots=True)
+class PropFlags:
+    """The APIC schema flags of one property, unpacked from the catalogue.
+
+    One boolean per flag the 6.0 schemas declare, named 1:1 with Cisco's own
+    keys (snake-cased) — no editorial layer.  This is the raw material of any
+    data-driven normalisation: what is configuration (``is_configurable``),
+    what the controller computes (``read_only``, ``implicit``), what never
+    changes after creation (``create_only``), what names the object
+    (``is_naming``), what the APIC never echoes back (``secure``).
+
+    A caution proven on the live corpus: ``secure`` alone is **not** a secret
+    policy.  ``snmpCommunityP`` carries its community string as a *naming*
+    property (no ``secure`` flag, and it rides inside the DN), and
+    ``vnsCCred.value`` is plain ``read_write``.  Flags feed a policy; they do
+    not replace one.
+    """
+
+    is_configurable: bool
+    needs_prop_delimiters: bool
+    create_only: bool
+    read_write: bool
+    read_only: bool
+    is_naming: bool
+    secure: bool
+    implicit: bool
+    mandatory: bool
+    is_override: bool
+    is_like: bool
+    is_nxos_converged: bool
+    is_deprecated: bool
+    is_hidden: bool
+
+
 @dataclass(frozen=True, slots=True)
 class PropDoc:
     """One property, as ``describe`` presents it."""
@@ -143,6 +199,7 @@ class Catalog:
         self._types: dict[int, str] | None = None
         self._comments: dict[int, str] | None = None
         self._flag_order: list[str] | None = None
+        self._prop_flags: dict[str, dict[str, PropFlags]] = {}
         self._apic_version: str | None = None
         self._fts: bool | None = None
         self._meta: dict[str, ClassMeta] = {}
@@ -212,13 +269,62 @@ class Catalog:
             self._apic_version = str(raw)
         return self._apic_version
 
-    def _naming_bit(self) -> int:
+    def _flags_order(self) -> list[str]:
         if self._flag_order is None:
             (raw,) = self._connection.execute(
                 "SELECT value FROM manifest WHERE key='prop_flags'"
             ).fetchone()
             self._flag_order = str(raw).split(",")
-        return 1 << self._flag_order.index("isNaming")
+            if set(self._flag_order) != set(_FLAG_FIELDS):
+                raise RuntimeError(
+                    "catalogue prop-flag layout drifted from the reader: "
+                    f"manifest={sorted(self._flag_order)} "
+                    f"reader={sorted(_FLAG_FIELDS)} — regenerate or upgrade"
+                )
+        return self._flag_order
+
+    def _naming_bit(self) -> int:
+        return 1 << self._flags_order().index("isNaming")
+
+    def prop_flags(self, class_name: str) -> dict[str, PropFlags]:
+        """Every property's schema flags for a class, keyed by wire name.
+
+        The bulk seam of data-driven normalisation: one query per class, then
+        memoised, so a caller sweeping thousands of objects pays the unpacking
+        once per class rather than once per object.
+
+        Args:
+            class_name: The wire class name, e.g. ``"fvBD"``.
+
+        Returns:
+            Mapping of wire property name to its :class:`PropFlags`.  Shared
+            and immutable in spirit — treat it as read-only.
+
+        Raises:
+            UnknownClassError: No such class in the catalogue.
+            RuntimeError: The catalogue's flag layout does not match this
+                reader (a newer train's ``.db`` against older code) — refused
+                rather than mislabeled.
+        """
+        got = self._prop_flags.get(class_name)
+        if got is None:
+            got = self._prop_flags[class_name] = self._build_prop_flags(class_name)
+        return got
+
+    def _build_prop_flags(self, class_name: str) -> dict[str, PropFlags]:
+        con = self._connection
+        row = con.execute("SELECT id FROM mo WHERE class_name=?", (class_name,)).fetchone()
+        if row is None:
+            raise UnknownClassError(class_name)
+        order = self._flags_order()
+        fields = [_FLAG_FIELDS[key] for key in order]
+        out: dict[str, PropFlags] = {}
+        for wire, packed in con.execute(
+            "SELECT wire_name, flags FROM prop WHERE class_id=?", (row[0],)
+        ):
+            values = {field: bool(packed & (1 << i)) for i, field in enumerate(fields)}
+            out[wire] = PropFlags(**values)
+        return out
 
     # ── Class metadata (the hot path — one query per class, then memoised) ────
 
@@ -425,6 +531,31 @@ class Catalog:
         # process on a path almost nobody walks twice.  A caller that needs it
         # repeatedly caches at its own layer.
         return tuple(str(t) for t in json.loads(zlib.decompress(row[0])))
+
+    def rn_format(self, class_name: str) -> str:
+        """The class's RN format — the template for its own DN segment.
+
+        Unlike :meth:`dn_formats` (which vary by containment), a class has one
+        RN format: ``"BD-{name}"``, ``"subnet-[{ip}]"``, ``"rsctx"``.  It is the
+        inverse key for :func:`niwaki._dn.parse` — the piece a reader needs to
+        turn a DN back into its naming values.
+
+        Args:
+            class_name: The wire class name, e.g. ``"fvBD"``.
+
+        Returns:
+            The RN format string.  Empty when the class defines none (an
+            abstract class, or one that never stands alone).
+
+        Raises:
+            UnknownClassError: No such class in the catalogue.
+        """
+        row = self._connection.execute(
+            "SELECT rn_format FROM mo WHERE class_name=?", (class_name,)
+        ).fetchone()
+        if row is None:
+            raise UnknownClassError(class_name)
+        return str(row[0] or "")
 
     # ── Full-text search (FTS5 where available, LIKE fallback everywhere) ─────
 

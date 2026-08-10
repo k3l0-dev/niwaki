@@ -18,6 +18,7 @@ from pathlib import Path
 import pytest
 
 import niwaki
+from niwaki import catalog
 from niwaki._dn import DnParts, naming_values, parent_dn, parse, rn_of, split_dn
 
 
@@ -149,12 +150,16 @@ class TestParse:
         )
 
 
-class TestEndToEnd:
-    """A real DN through a real RN format, as a reader will drive it."""
+class TestEndToEndThroughTheCatalogue:
+    """The parser is inert without a source of RN formats; the catalogue is one.
 
-    def test_parse_a_real_subnet_dn(self) -> None:
+    (The ``catalog.rn_format`` accessor itself is unit-tested in
+    ``tests/query/test_catalog_public.py``, beside its ``dn_formats`` sibling.)
+    """
+
+    def test_parse_a_real_dn_using_the_catalogues_rn_format(self) -> None:
         dn = "uni/tn-prod/BD-web/subnet-[10.0.0.1/24]"
-        parts = parse(dn, "subnet-[{ip}]")
+        parts = parse(dn, catalog.rn_format("fvSubnet"))
         assert parts.parent == "uni/tn-prod/BD-web"
         assert parts.naming == {"ip": "10.0.0.1/24"}
 

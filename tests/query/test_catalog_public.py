@@ -26,6 +26,7 @@ def test_public_types_are_the_readers_types() -> None:
     assert catalog.ClassDoc is _catalog.ClassDoc
     assert catalog.PropDoc is _catalog.PropDoc
     assert catalog.ClassMeta is _catalog.ClassMeta
+    assert catalog.PropFlags is _catalog.PropFlags
 
 
 @pytest.fixture(scope="module")
@@ -183,6 +184,97 @@ def test_an_empty_template_can_sit_beside_real_ones() -> None:
 def test_the_largest_list_is_not_truncated() -> None:
     """The tail of this distribution reaches five figures; nothing caps it."""
     assert len(catalog.dn_formats("faultDelegate")) == 64313
+
+
+# ── rn_format() — offline, the inverse key for niwaki._dn.parse ───────────────
+
+
+def test_rn_format_is_the_template_for_a_classs_own_segment() -> None:
+    assert catalog.rn_format("fvBD") == "BD-{name}"
+    assert catalog.rn_format("fvSubnet") == "subnet-[{ip}]"
+
+
+def test_a_relation_with_a_fixed_rn_has_no_placeholder() -> None:
+    assert catalog.rn_format("fvRsCtx") == "rsctx"
+
+
+def test_a_class_with_no_rn_format_returns_empty() -> None:
+    """Abstract classes and the tree root stand for no segment of their own."""
+    assert catalog.rn_format("topRoot") == ""
+
+
+def test_rn_format_of_an_unknown_class_raises() -> None:
+    from niwaki.exceptions import UnknownClassError
+
+    with pytest.raises(UnknownClassError):
+        catalog.rn_format("fvNoSuchThing")
+
+
+# ── prop_flags() — offline, the raw material of data-driven normalisation ─────
+
+
+def test_prop_flags_of_an_ordinary_configurable_property() -> None:
+    flags = catalog.prop_flags("fvBD")["arpFlood"]
+    assert flags.is_configurable and flags.read_write
+    assert not flags.read_only and not flags.is_naming and not flags.secure
+
+
+def test_prop_flags_of_an_operational_property() -> None:
+    """What the controller computes: readOnly + implicit, never configurable."""
+    flags = catalog.prop_flags("topSystem")["currentTime"]
+    assert flags.read_only and flags.implicit
+    assert not flags.is_configurable
+
+
+def test_prop_flags_of_a_secret() -> None:
+    """An SNMP auth key: configurable, write-once, never echoed back."""
+    flags = catalog.prop_flags("snmpUserP")["authKey"]
+    assert flags.secure and flags.create_only and flags.is_configurable
+
+
+def test_the_secure_flag_is_not_a_secret_policy() -> None:
+    """The trap that mandates a *curated* secret policy on top of the flags.
+
+    The SNMP community string is a NAMING property — it rides inside the DN
+    and carries no ``secure`` flag; a device credential value is plain
+    read-write.  Pinned so nobody ever ships a redaction built on ``secure``
+    alone.
+    """
+    community = catalog.prop_flags("snmpCommunityP")["name"]
+    assert community.is_naming and not community.secure
+    credential = catalog.prop_flags("vnsCCred")["value"]
+    assert credential.read_write and not credential.secure
+
+
+def test_prop_flags_agrees_with_class_meta_on_naming() -> None:
+    """Two unpackings of the same bits must never diverge."""
+    flags = catalog.prop_flags("fvSubnet")
+    naming_from_flags = {wire for wire, f in flags.items() if f.is_naming}
+    assert naming_from_flags == set(catalog.class_meta("fvSubnet").naming)
+
+
+def test_prop_flags_is_memoised_per_class() -> None:
+    assert catalog.prop_flags("fvBD") is catalog.prop_flags("fvBD")
+
+
+def test_prop_flags_of_an_unknown_class_raises() -> None:
+    from niwaki.exceptions import UnknownClassError
+
+    with pytest.raises(UnknownClassError):
+        catalog.prop_flags("fvNoSuchThing")
+
+
+def test_rn_format_pairs_with_dn_formats() -> None:
+    """The RN format is always the last segment of every DN format it appears in.
+
+    This is the invariant :func:`niwaki._dn.parse` leans on: a DN read back
+    ends in this class's RN, whatever the parent path in front of it.
+    """
+    from niwaki._dn import rn_of
+
+    rn_format = catalog.rn_format("fvSubnet")
+    for dn_format in catalog.dn_formats("fvSubnet"):
+        assert rn_of(dn_format) == rn_format
 
 
 def test_an_unknown_class_raises() -> None:

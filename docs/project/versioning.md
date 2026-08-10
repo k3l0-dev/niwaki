@@ -100,8 +100,8 @@ See {doc}`SECURITY` for how to report a vulnerability.
 ## Pinning
 
 ```text
-niwaki>=1.9,<2      # recommended: every fix and feature, no breaking change
-niwaki==1.9.0       # reproducible builds; upgrade deliberately
+niwaki>=1.10,<2      # recommended: every fix and feature, no breaking change
+niwaki==1.10.0       # reproducible builds; upgrade deliberately
 ```
 
 The SDK targets a specific APIC schema release, which is a separate axis

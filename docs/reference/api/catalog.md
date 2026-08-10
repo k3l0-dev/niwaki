@@ -16,6 +16,8 @@
 .. autofunction:: niwaki.catalog.class_meta
 .. autofunction:: niwaki.catalog.fault_name
 .. autofunction:: niwaki.catalog.dn_formats
+.. autofunction:: niwaki.catalog.rn_format
+.. autofunction:: niwaki.catalog.prop_flags
 .. autofunction:: niwaki.catalog.generated_classes
 .. autofunction:: niwaki.catalog.schema_version
 ```
@@ -30,5 +32,8 @@
    :members:
 
 .. autoclass:: niwaki.catalog.ClassMeta
+   :members:
+
+.. autoclass:: niwaki.catalog.PropFlags
    :members:
 ```

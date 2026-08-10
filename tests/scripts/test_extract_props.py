@@ -27,11 +27,16 @@ import pytest
 
 from niwaki._schema.kinds import UnknownBaseTypeError
 
+# The extraction pipeline is private tooling: the public distribution ships
+# neither data/ nor its scripts, so these tests only run where they exist.
+_EXTRACTOR = pathlib.Path(__file__).parents[2] / "data" / "scripts" / "02_extract_props.py"
+if not _EXTRACTOR.is_file():
+    pytest.skip("data/scripts (private extraction tooling) not present", allow_module_level=True)
+
 
 def _load_extractor() -> ModuleType:
     """Import the numbered extraction script (its name is not an identifier)."""
-    path = pathlib.Path(__file__).parents[2] / "data" / "scripts" / "02_extract_props.py"
-    spec = importlib.util.spec_from_file_location("extract_props", path)
+    spec = importlib.util.spec_from_file_location("extract_props", _EXTRACTOR)
     assert spec is not None and spec.loader is not None
     module = importlib.util.module_from_spec(spec)
     sys.modules["extract_props"] = module

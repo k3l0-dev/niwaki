@@ -24,13 +24,14 @@ Example::
 
 from __future__ import annotations
 
-from niwaki.query._catalog import ClassDoc, ClassMeta, PropDoc
+from niwaki.query._catalog import ClassDoc, ClassMeta, PropDoc, PropFlags
 from niwaki.query._catalog import catalog as _reader
 
 __all__ = [
     "ClassDoc",
     "ClassMeta",
     "PropDoc",
+    "PropFlags",
     "class_meta",
     "concrete_subclasses",
     "describe",
@@ -38,7 +39,9 @@ __all__ = [
     "fault_name",
     "find_prop",
     "generated_classes",
+    "prop_flags",
     "prop_meta",
+    "rn_format",
     "schema_version",
     "search",
 ]
@@ -270,3 +273,55 @@ def schema_version() -> str:
         assert catalog.schema_version() == "6.0(9c)"
     """
     return _reader().apic_version()
+
+
+def rn_format(class_name: str) -> str:
+    """The RN format of a class — the template for its own DN segment.
+
+    A class has exactly one, regardless of where it sits: ``"BD-{name}"`` for a
+    bridge domain, ``"subnet-[{ip}]"`` for a subnet.  It is the inverse key of
+    DN computation — the piece a reader needs to turn a DN read back from a
+    fabric into its naming values.
+
+    Args:
+        class_name: The wire class name, e.g. ``"fvBD"``.
+
+    Returns:
+        The RN format string, empty when the class defines none.
+
+    Raises:
+        UnknownClassError: No such class in the catalogue (also a ``KeyError``).
+
+    Example::
+
+        catalog.rn_format("fvBD")       # → "BD-{name}"
+        catalog.rn_format("fvSubnet")   # → "subnet-[{ip}]"
+    """
+    return _reader().rn_format(class_name)
+
+
+def prop_flags(class_name: str) -> dict[str, PropFlags]:
+    """Every property's schema flags for a class, keyed by wire name.
+
+    The raw material of data-driven normalisation: what is configuration
+    (``is_configurable``), what the controller computes (``read_only``,
+    ``implicit``), what never changes after creation (``create_only``), what
+    names the object (``is_naming``), what the APIC never echoes back
+    (``secure``).  One catalogue query per class, then memoised.
+
+    Args:
+        class_name: The wire class name, e.g. ``"fvBD"``.
+
+    Returns:
+        Mapping of wire property name to its :class:`PropFlags`.
+
+    Raises:
+        UnknownClassError: No such class in the catalogue (also a ``KeyError``).
+
+    Example::
+
+        flags = catalog.prop_flags("fvBD")
+        flags["arpFlood"].is_configurable   # → True
+        flags["arpFlood"].read_only         # → False
+    """
+    return _reader().prop_flags(class_name)

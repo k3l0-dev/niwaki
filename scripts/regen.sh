@@ -96,3 +96,9 @@ if [ "$VERIFY" -eq 1 ]; then
     git diff --exit-code -- docs/reference/vocabulary
     echo "[regen] verify: OK — every guard green."
 fi
+
+# The freshness manifest is written LAST, after --verify has passed (set -e
+# aborts before this on any failure): it blesses the current state as the last
+# good regeneration, so it must never record a state a guard just rejected.
+echo "[regen] regen manifest (corpus-free freshness fingerprint)..."
+uv run python -m niwaki._codegen.freshness --write
