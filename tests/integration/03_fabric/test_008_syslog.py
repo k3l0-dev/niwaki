@@ -55,8 +55,8 @@ def test_syslog_destination_groups(live_aci: Niwaki) -> None:
             f"{PREFIX}-{fmt}",
             description=f"Syslog severity/facility/transport matrix ({fmt} format).",
             format_setting=fmt,
-            show_milli_seconds_in_timestamp=is_aci,
-            show_timezone_in_timestamp=is_aci,
+            include_milli_seconds=is_aci,
+            include_time_zone=is_aci,
         )
         # One remote destination per severity, cycling facility / protocol / admin.
         # The enhanced RFC-5424 format only accepts the UDP transport.

@@ -25,7 +25,7 @@ Accepted as keyword arguments of `.site_of_origin_profile()` and of `.set(**attr
 | --- | --- | --- | --- | --- | --- |
 | `description` | `descr` | `str` | — | — | Specifies the description of a policy component. |
 | `name` | `name` | `str` | — | — | — |
-| `site_of_origin` | `soo` | `str` | — | — | Site of origin |
+| `soo` | `soo` | `str` | — | — | Site of origin |
 
 ## APIC diagnostics
 

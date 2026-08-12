@@ -97,9 +97,9 @@ def test_slow_drain(live_aci: Niwaki) -> None:
             pol = fab.slow_drain_policy(
                 _sd_name(action, flush),
                 congestion_clear_action=action,
-                slowdrain_flush_mode_admin_state=flush,
+                flush_admin_st=flush,
                 congestion_detect_multiplier=(10, 5, 100)[idx % 3],
-                flush_timeout_in_milliseconds=(500, 1000, 100)[idx % 3],
+                flush_intvl=(500, 1000, 100)[idx % 3],
                 description=f"Slow-drain action/flush matrix - clear {action}, flush {flush}.",
             )
             _common(pol)

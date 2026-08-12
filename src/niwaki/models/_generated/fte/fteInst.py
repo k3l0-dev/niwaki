@@ -15,12 +15,12 @@ class fteInst(ManagedObject):
 
     Holds FTE instance information
 
-    RN format: ``inst-{configure_the_type_of_fte_instance}``
+    RN format: ``inst-{mode}``
     """
 
     _aci_class: ClassVar[str] = "fteInst"
-    _rn_format: ClassVar[str] = "inst-{configure_the_type_of_fte_instance}"
-    _naming_props: ClassVar[list[str]] = ["configure_the_type_of_fte_instance"]
+    _rn_format: ClassVar[str] = "inst-{mode}"
+    _naming_props: ClassVar[list[str]] = ["mode"]
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",
@@ -46,12 +46,7 @@ class fteInst(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    configure_the_type_of_fte_instance: FteModeT = Field(
-        default=FteModeT.FLOW_EVENTS,
-        validation_alias="mode",
-        serialization_alias="mode",
-        description="FTE mode",
-    )
+    mode: FteModeT = Field(default=FteModeT.FLOW_EVENTS, description="FTE mode")
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[

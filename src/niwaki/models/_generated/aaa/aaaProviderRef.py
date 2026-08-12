@@ -76,13 +76,11 @@ class aaaProviderRef(ManagedObject):
             serialization_alias="nameAlias",
         ),
     ] = ""
-    order_in_which_providers_are_tried: Annotated[
+    order: Annotated[
         Annotated[int, Field(ge=0, le=17)] | Literal["lowest-available"],
         AfterValidator(named_number({"17": "lowest-available"})),
         Field(
-            validation_alias="order",
-            serialization_alias="order",
-            description="The relative priority in which the AAA provider will be contacted within the provider group.",
+            description="The relative priority in which the AAA provider will be contacted within the provider group."
         ),
     ] = 0
     owner_key: Annotated[

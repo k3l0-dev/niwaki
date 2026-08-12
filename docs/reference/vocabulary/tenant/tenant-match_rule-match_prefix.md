@@ -26,6 +26,6 @@ Accepted as keyword arguments of `.match_prefix(match_ip_address)` and of `.set(
 | `match_ip_address` *(positional)* | `ip` | `str` | — | — | — |
 | `aggregated_route` | `aggregate` | `bool` | — | `False` | Aggregated Route |
 | `description` | `descr` | `str` | — | — | Specifies the description of a policy component. |
-| `start_of_prefix_length` | `fromPfxLen` | `int` | — | `0` | Prefix list range |
+| `from_pfx_len` | `fromPfxLen` | `int` | — | `0` | Prefix list range |
 | `name` | `name` | `str` | — | — | — |
-| `end_of_prefix_length` | `toPfxLen` | `int` | — | `0` | — |
+| `to_pfx_len` | `toPfxLen` | `int` | — | `0` | — |

@@ -13,12 +13,12 @@ from niwaki.models.base import ManagedObject
 class igmpStRepPol(ManagedObject):
     """ACI Managed Object: ``igmpStRepPol`` — Static Report Policy.
 
-    RN format: ``igmpstrepPol-{join_type_of_groups}``
+    RN format: ``igmpstrepPol-{join_type}``
     """
 
     _aci_class: ClassVar[str] = "igmpStRepPol"
-    _rn_format: ClassVar[str] = "igmpstrepPol-{join_type_of_groups}"
-    _naming_props: ClassVar[list[str]] = ["join_type_of_groups"]
+    _rn_format: ClassVar[str] = "igmpstrepPol-{join_type}"
+    _naming_props: ClassVar[list[str]] = ["join_type"]
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",
@@ -38,7 +38,7 @@ class igmpStRepPol(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    join_type_of_groups: IpmcJoinType = Field(
+    join_type: IpmcJoinType = Field(
         default=IpmcJoinType.STATIC_GROUP,
         validation_alias="joinType",
         serialization_alias="joinType",

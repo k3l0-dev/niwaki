@@ -11,12 +11,12 @@ from niwaki.models.base import ManagedObject
 class notifStatsClass(ManagedObject):
     """ACI Managed Object: ``notifStatsClass``.
 
-    RN format: ``stclass-{stats_classname_that_is_being_subscribed}``
+    RN format: ``stclass-{class_name}``
     """
 
     _aci_class: ClassVar[str] = "notifStatsClass"
-    _rn_format: ClassVar[str] = "stclass-{stats_classname_that_is_being_subscribed}"
-    _naming_props: ClassVar[list[str]] = ["stats_classname_that_is_being_subscribed"]
+    _rn_format: ClassVar[str] = "stclass-{class_name}"
+    _naming_props: ClassVar[list[str]] = ["class_name"]
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",
@@ -36,7 +36,7 @@ class notifStatsClass(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    stats_classname_that_is_being_subscribed: Annotated[
+    class_name: Annotated[
         str,
         Field(
             min_length=1,

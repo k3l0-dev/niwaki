@@ -25,7 +25,7 @@ Accepted as keyword arguments of `.configuration_snapshot_rollback_policy(name)`
 | `administrative_state` | `adminSt` | {ref}`TrigExecState <enum-trigexecstate>` | `triggered`, `untriggered` | `untriggered` | The administrative state of the executable policies. |
 | `description` | `descr` | `str` | — | — | Specifies the description of a policy component. |
 | `import_mode` | `mode` | {ref}`ConfigImportMode <enum-configimportmode>` | `atomic`, `best-effort` | `atomic` | The BGP Domain mode. |
-| `preview_mode_nothing_is_applied` | `preview` | `bool` | — | `False` | — |
+| `preview` | `preview` | `bool` | — | `False` | — |
 | `snapshot` | `snapshot` | `bool` | — | `False` | — |
 | `snapshot_one` | `snapshotOneDn` | `str` | — | — | — |
 | `snapshot_two` | `snapshotTwoDn` | `str` | — | — | — |

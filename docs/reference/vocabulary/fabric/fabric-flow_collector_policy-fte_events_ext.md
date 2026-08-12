@@ -63,7 +63,7 @@ Accepted as keyword arguments of `.fte_events_ext(name)` and of `.set(**attrs)` 
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |
 | `packet_id` | `packetId` | `int` | — | `0` | 03 |
 | `profile_id` | `profileId` | `int` | — | `0` | 08 |
-| `sub_event_configuration_for_rest_sop_bit` | `restSopBit` | `int` | — | `0` | Rest sop bit configuration52 |
+| `rest_sop_bit` | `restSopBit` | `int` | — | `0` | Rest sop bit configuration52 |
 | `rx_bd` | `rxBd` | `int` | — | `0` | 37 |
 | `rx_is_epg` | `rxIsEpg` | `bool` | — | `False` | 39 |
 | `s_class` | `sClass` | `int` | — | `0` | 20 |

@@ -22,11 +22,11 @@ Accepted as keyword arguments of `.port_zero_entry(name)` and of `.set(**attrs)`
 | parameter | wire | type | values | default | description |
 | --- | --- | --- | --- | --- | --- |
 | `name` *(positional)* | `name` | `str` | — | — | The name of the object. |
-| `apply_rule_for_all_fragments` | `applyToFrag` | `bool` | — | `False` | When flag is true, apply this entry rule for all fragments. When false apply for initial fragment only |
+| `apply_to_frag` | `applyToFrag` | `bool` | — | `False` | When flag is true, apply this entry rule for all fragments. When false apply for initial fragment only |
 | `description` | `descr` | `str` | — | — | Specifies the description of a policy component. |
 | `port_zero_direction` | `direction` | {ref}`VzPZDirection <enum-vzpzdirection>` | `both`, `destination`, `source` | `both` | L3 Ip Protocol peppemon should be new |
 | `ethernet_type` | `etherT` | {ref}`VzPZEtherType <enum-vzpzethertype>` | `ip`, `ipv4`, `ipv6` | `ipv4` | Ether type peppemon should new |
-| `dscp_match_for_filter_entry` | `matchDscp` | `int` | — | `unspecified` | — |
+| `match_dscp` | `matchDscp` | `int` | — | `unspecified` | — |
 | `protocol` | `prot` | {ref}`VzPZIpProt <enum-vzpzipprot>` | `sctp`, `tcp`, `udp` | `tcp` | The IP protocol. |
 | `stateful` | `stateful` | `bool` | — | `False` | Is this Entry stateful? Applies to prot tcp only |
 | `tcp_rules` | `tcpRules` | {ref}`L4TcpFlags <enum-l4tcpflags>` | `unspecified`, `syn`, `ack`, `fin`, `rst`, `est` | `unspecified` | TCP Session Rules |

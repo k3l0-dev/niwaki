@@ -66,7 +66,7 @@ def test_vmm_domain_policy_bindings(live_aci: Niwaki) -> None:
     infra.stp_policy(STP)
     infra.mcp_policy(MCP, admin_state="enabled")
     infra.netflow_vmm_exporter(NETFLOW, remote_entity_ip="10.60.0.50", remote_entity_l4_port=2055)
-    dsn.fabric().fabric_l2_mtu_policy(L2MTU, mtu_size_for_fabric_ports=9000)
+    dsn.fabric().fabric_l2_mtu_policy(L2MTU, fabric_mtu=9000)
     dsn.tenant(TN, description="VIP address pool for the VMM bind sweep.").ip_address_pool(
         ADDR, ip_address="10.61.0.1/24", address_type="vip_range"
     )

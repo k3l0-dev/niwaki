@@ -2,13 +2,20 @@
 
 from __future__ import annotations
 
+import pytest
+
 from niwaki._schema.naming import (
+    FIELD_NAME_OVERRIDES,
+    LABEL_CORRECTIONS,
+    LABEL_MARKERS,
     MAX_LABEL_LENGTH,
+    MAX_LABEL_WORDS,
     NAV_NAME_OVERRIDES,
     best_field_name,
     classname_to_snake,
     label_to_snake,
     propname_to_snake,
+    resolve_py_names,
 )
 
 # ── label_to_snake ────────────────────────────────────────────────────────────
@@ -116,10 +123,11 @@ class TestBestFieldName:
         # "descr".lower() == "descr", label "descr".lower() == "descr" → skip
         assert best_field_name("descr", "descr", "") == "descr"
 
-    def test_json_label_too_long_falls_to_sm(self) -> None:
+    def test_json_label_too_long_falls_through(self) -> None:
         long_label = "Handling of L2 Multicast Broadcast and Link Layer Traffic at EPG"
         assert len(long_label) > MAX_LABEL_LENGTH
-        # scopemeta has the short label
+        # The sm candidate "flood-on-encap" carries the marker "on" and is
+        # gated too — the identical final name comes from the wire spelling.
         result = best_field_name("floodOnEncap", long_label, "flood-on-encap")
         assert result == "flood_on_encap"
 
@@ -192,11 +200,9 @@ class TestBestFieldName:
         result = best_field_name("arpFlood", "", "")
         assert result == propname_to_snake("arpFlood")
 
-    def test_all_empty(self) -> None:
-        # aci_name="" with empty labels → propname_to_snake("") == ""
-        # Not a realistic call but must not crash
+    def test_single_letter_wire_name_passes_through(self) -> None:
         result = best_field_name("x", "", "")
-        assert isinstance(result, str)
+        assert result == "x"
 
     def test_description_label(self) -> None:
         # "descr" has json_label "Description" → different from "descr" → accepted
@@ -212,12 +218,11 @@ class TestBestFieldName:
         assert result == "type"
         assert result.isidentifier()
 
-    def test_label_digit_start_falls_to_sm(self) -> None:
-        # JSON label invalid (starts with digit) → try scopemeta label
+    def test_label_digit_start_falls_to_wire(self) -> None:
+        # JSON label invalid (starts with digit) → scopemeta candidate also
+        # starts with a digit → priority 3: propname_to_snake of the wire name.
         result = best_field_name("frequency100MHz", "100MHz Frequency", "100-mhz-frequency")
-        assert result == "100_mhz_frequency" or result.isidentifier()
-        # SM label "100-mhz-frequency" → "100_mhz_frequency" also starts with digit
-        # → falls through to priority 3: propname_to_snake("frequency100MHz")
+        assert result == propname_to_snake("frequency100MHz")
         assert result.isidentifier()
 
 
@@ -251,10 +256,215 @@ class TestClassnameToSnake:
 
 
 class TestNavNameOverrides:
-    def test_all_values_are_valid_identifiers(self) -> None:
-        for cls, name in NAV_NAME_OVERRIDES.items():
-            assert name.isidentifier() and name == name.lower(), (cls, name)
+    def test_table_is_empty(self) -> None:
+        # The historical typo entries moved to LABEL_CORRECTIONS (fixed in the
+        # common funnel); the mechanism stays as an escape hatch only.
+        assert NAV_NAME_OVERRIDES == {}
 
-    def test_typo_fixes_present(self) -> None:
-        assert NAV_NAME_OVERRIDES["maintCatMaintP"] == "catalog_maintenance_policy"
-        assert NAV_NAME_OVERRIDES["vmmHvAvailPol"] == "vmm_host_availability_policy"
+    def test_typo_names_now_derive_from_corrected_labels(self) -> None:
+        # The exact names the old overrides pinned, now produced by derivation.
+        assert label_to_snake("Catalog Maitenance Policy") == "catalog_maintenance_policy"
+        assert label_to_snake("VMM Host Availibility Policy") == "vmm_host_availability_policy"
+
+
+# ── Acceptance gate (word cap + grammar markers) ──────────────────────────────
+
+
+class TestAcceptanceGate:
+    # ── Word cap ──────────────────────────────────────────────────────────────
+
+    def test_four_word_label_accepted(self) -> None:
+        assert best_field_name("llAddr", "IPv6 Link Local Address", "") == "ipv6_link_local_address"
+
+    def test_five_word_label_rejected_to_wire(self) -> None:
+        # "Optimize Wan Bandwidth between sites" → 5 words → wire spelling.
+        result = best_field_name("OptimizeWanBandwidth", "Optimize Wan Bandwidth between sites", "")
+        assert result == "optimize_wan_bandwidth"
+
+    def test_sentence_label_under_char_cap_rejected(self) -> None:
+        # 39 chars — slipped under the historical char cap, gated by words now.
+        label = "Indicate whether MPLS is enabled or not"
+        assert len(label) <= MAX_LABEL_LENGTH
+        assert best_field_name("mplsEnabled", label, "") == "mpls_enabled"
+
+    def test_word_cap_boundary_is_exactly_max_words(self) -> None:
+        accepted = " ".join(["Word"] * MAX_LABEL_WORDS)
+        rejected = " ".join(["Word"] * (MAX_LABEL_WORDS + 1))
+        assert best_field_name("someProp", accepted, "") == "word_" + "_".join(
+            ["word"] * (MAX_LABEL_WORDS - 1)
+        )
+        assert best_field_name("someProp", rejected, "") == "some_prop"
+
+    # ── Grammar markers ───────────────────────────────────────────────────────
+
+    def test_marker_of_rejected_to_wire(self) -> None:
+        # 4 words — passes the word cap, gated by "of"/"the".
+        result = best_field_name("scope", "Visibility of the Subnet", "visibility-of-the-subnet")
+        assert result == "scope"
+
+    def test_marker_rejected_falls_to_scopemeta(self) -> None:
+        # JSON label is prose; scopemeta has the operator jargon.
+        result = best_field_name(
+            "enforceRtctrl",
+            "Enforce Route Control for Following Directions",
+            "enforce-route-control",
+        )
+        assert result == "enforce_route_control"
+
+    def test_scopemeta_candidate_gated_too(self) -> None:
+        # Both label sources are sentences → wire spelling wins.
+        result = best_field_name(
+            "limitIpLearnToSubnets",
+            "Limit IP learning to BD subnets only",
+            "limit-ip-learn-to-subnets",
+        )
+        assert result == "limit_ip_learn_to_subnets"
+
+    def test_wire_fallback_is_never_gated(self) -> None:
+        # Wire names keep grammar words and any length — they are the truth.
+        assert best_field_name("mcpPduPerVlan", "", "") == "mcp_pdu_per_vlan"
+        assert (
+            best_field_name("enableVrfValidationOspfArea", "", "")
+            == "enable_vrf_validation_ospf_area"
+        )
+
+    def test_marker_in_any_position_rejects(self) -> None:
+        assert best_field_name("joinType", "Join Type of Groups", "") == "join_type"
+        assert best_field_name("latest", "Whether Latest", "") == "latest"
+
+    # ── Python keywords ───────────────────────────────────────────────────────
+
+    def test_keyword_label_rejected_to_wire(self) -> None:
+        # Cisco labels a prop "Class" → the candidate `class` is a valid
+        # identifier but a keyword: `mo.class` would be a SyntaxError.
+        assert best_field_name("matchClass", "Class", "") == "match_class"
+        assert best_field_name("importT", "Import", "") == "import_t"
+
+    # ── Measured jargon exclusions (from/to/as/use are NOT markers) ───────────
+
+    def test_from_to_labels_survive(self) -> None:
+        assert best_field_name("from_", "From Node id", "") == "from_node_id"
+        assert best_field_name("dFromPort", "Destination From Port", "") == "destination_from_port"
+        assert best_field_name("ttl", "Time to Live", "") == "time_to_live"
+
+    def test_as_labels_survive(self) -> None:
+        assert best_field_name("privateASctrl", "Private AS Control", "") == "private_as_control"
+        assert best_field_name("criteria", "AS Path Criteria", "") == "as_path_criteria"
+
+    def test_use_labels_survive(self) -> None:
+        result = best_field_name("useConfiguredSystemGIPo", "Use Configured System GIPo", "")
+        assert result == "use_configured_system_gipo"
+
+    def test_marker_set_is_lowercase_single_tokens(self) -> None:
+        for marker in LABEL_MARKERS:
+            assert marker == marker.lower() and "_" not in marker and marker
+
+    def test_excluded_jargon_words_not_in_markers(self) -> None:
+        assert {"from", "to", "as", "use", "used", "using"}.isdisjoint(LABEL_MARKERS)
+
+
+# ── LABEL_CORRECTIONS (Cisco label typos) ─────────────────────────────────────
+
+
+class TestLabelCorrections:
+    def test_typo_tokens_corrected(self) -> None:
+        assert label_to_snake("Catalog Maitenance Policy") == "catalog_maintenance_policy"
+        assert label_to_snake("VMM Host Availibility Policy") == "vmm_host_availability_policy"
+
+    def test_correction_reaches_field_names(self) -> None:
+        # vmmDomP.hvAvailMonitor shipped the typo in its field name pre-2.0.
+        result = best_field_name("hvAvailMonitor", "Enable Host availibility monitoring", "")
+        assert result == "enable_host_availability_monitoring"
+
+    def test_clean_labels_untouched(self) -> None:
+        assert label_to_snake("Maintenance Policy") == "maintenance_policy"
+
+    def test_correction_is_token_exact_not_substring(self) -> None:
+        # A token merely containing a typo key must not be rewritten.
+        assert label_to_snake("premaitenance") == "premaitenance"
+
+    def test_keys_and_values_are_snake_tokens(self) -> None:
+        for typo, fix in LABEL_CORRECTIONS.items():
+            assert typo and typo == typo.lower() and "_" not in typo
+            assert fix and fix == fix.lower() and "_" not in fix
+            assert typo != fix
+
+
+# ── FIELD_NAME_OVERRIDES (the true irreducibles) ──────────────────────────────
+
+
+class TestFieldNameOverrides:
+    def test_exactly_the_two_irreducibles(self) -> None:
+        # 82 wire-spelling pins dissolved into the acceptance gate in 2.0;
+        # growing this table back means the gate regressed.
+        assert set(FIELD_NAME_OVERRIDES) == {
+            ("fvSubnet", "preferred"),
+            ("vzEntry", "applyToFrag"),
+        }
+
+    def test_preferred_override_applied(self) -> None:
+        # "Preferred as primary subnet" is 4 words and "as" is (deliberately)
+        # not a marker — only the override produces the operator word.
+        props = {"preferred": {"label": "Preferred as primary subnet", "is_naming": False}}
+        assert resolve_py_names(props, {}, "fvSubnet") == {"preferred": "preferred"}
+
+    def test_apply_to_frag_override_applied(self) -> None:
+        # Scopemeta says "allow-fragments"; the override keeps the wire-aligned
+        # name so vzEntry and vzEntryPortZero stay consistent.
+        props = {"applyToFrag": {"label": "Apply Rule for all Fragments", "is_naming": False}}
+        sm = {"applyToFrag": "allow-fragments"}
+        assert resolve_py_names(props, sm, "vzEntry") == {"applyToFrag": "apply_to_frag"}
+
+    def test_override_scoped_to_its_class(self) -> None:
+        # The same wire prop on another class derives normally.
+        props = {"applyToFrag": {"label": "Apply Rule for all Fragments", "is_naming": False}}
+        assert resolve_py_names(props, {}, "vzEntryPortZero") == {"applyToFrag": "apply_to_frag"}
+
+    def test_override_does_not_leak_to_other_classes(self) -> None:
+        # A class where derivation and the override value DIFFER proves the
+        # (class, prop) scoping: xNotSubnet gets the derived sentence name,
+        # not fvSubnet's pinned "preferred".
+        props = {"preferred": {"label": "Preferred as primary subnet", "is_naming": False}}
+        assert resolve_py_names(props, {}, "xNotSubnet") == {
+            "preferred": "preferred_as_primary_subnet"
+        }
+
+    def test_override_losing_its_name_raises(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        # Two overrides pinning the same name in one class: one must lose —
+        # curation silently dropped is a build error, never a reassignment.
+        monkeypatch.setitem(FIELD_NAME_OVERRIDES, ("xTest", "alpha"), "shared")
+        monkeypatch.setitem(FIELD_NAME_OVERRIDES, ("xTest", "beta"), "shared")
+        props = {
+            "alpha": {"label": "", "is_naming": False},
+            "beta": {"label": "", "is_naming": False},
+        }
+        with pytest.raises(ValueError, match="collided and lost"):
+            resolve_py_names(props, {}, "xTest")
+
+
+# ── resolve_py_names robustness under the gate ────────────────────────────────
+
+
+class TestResolvePyNamesGate:
+    def test_collision_keeps_both_props_distinct(self) -> None:
+        # Two props resolving to the same accepted label: winner keeps the
+        # label, loser falls back to its wire spelling — no silent drop.
+        props = {
+            "alpha": {"label": "Shared Label", "is_naming": False},
+            "beta": {"label": "Shared Label", "is_naming": False},
+        }
+        resolved = resolve_py_names(props, {}, "xTest")
+        assert set(resolved) == {"alpha", "beta"}
+        assert len(set(resolved.values())) == 2
+
+    def test_unresolvable_collision_raises(self) -> None:
+        # Loser's wire fallback collides with the winner's name → ValueError.
+        props = {
+            "sharedLabel": {"label": "Shared Label", "is_naming": False},
+            "shared_label": {"label": "Shared Label", "is_naming": False},
+        }
+        with pytest.raises(ValueError, match="collision"):
+            resolve_py_names(props, {}, "xTest")
+
+    def test_empty_props(self) -> None:
+        assert resolve_py_names({}, {}, "xTest") == {}

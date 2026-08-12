@@ -51,7 +51,7 @@ class analyticsProfile(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    timestamp_shift_value_for_burst_interval: Annotated[
+    burst_intvl_shift: Annotated[
         int,
         Field(
             ge=0,
@@ -61,7 +61,7 @@ class analyticsProfile(ManagedObject):
             description="Burst interval shift",
         ),
     ] = 0
-    collect_interval_in_milliseconds: Annotated[
+    collect_intvl: Annotated[
         int,
         Field(
             ge=100,
@@ -100,7 +100,7 @@ class analyticsProfile(ManagedObject):
             serialization_alias="nameAlias",
         ),
     ] = ""
-    collection_interval_in_seconds: Annotated[
+    netflow_collector_intvl: Annotated[
         int,
         Field(
             ge=60,
@@ -110,7 +110,7 @@ class analyticsProfile(ManagedObject):
             description="Collector interval",
         ),
     ] = 60
-    sequence_number_guess_threshold_high: Annotated[
+    seq_num_guess_thresh_hi: Annotated[
         int,
         Field(
             ge=0,
@@ -120,7 +120,7 @@ class analyticsProfile(ManagedObject):
             description="Sequence number guess threshold high",
         ),
     ] = 0
-    sequence_number_guess_threshold_low: Annotated[
+    seq_num_guess_thresh_lo: Annotated[
         int,
         Field(
             ge=0,
@@ -140,7 +140,7 @@ class analyticsProfile(ManagedObject):
             description="Source port",
         ),
     ] = 0
-    template_interval_in_seconds: Annotated[
+    template_intvl: Annotated[
         int,
         Field(
             ge=60,

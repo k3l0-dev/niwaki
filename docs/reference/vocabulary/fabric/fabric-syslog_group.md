@@ -26,8 +26,8 @@ Accepted as keyword arguments of `.syslog_group(name)` and of `.set(**attrs)` on
 | `name` *(positional)* | `name` | `str` | — | — | The name of the destination group. |
 | `description` | `descr` | `str` | — | — | Specifies the description of a policy component. |
 | `format_setting` | `format` | {ref}`SyslogFormatSetting <enum-syslogformatsetting>` | `aci`, `nxos`, `rfc5424-ts` | `aci` | The Call Home destination message format. |
-| `show_milli_seconds_in_timestamp` | `includeMilliSeconds` | `bool` | — | `False` | — |
-| `show_timezone_in_timestamp` | `includeTimeZone` | `bool` | — | `False` | — |
+| `include_milli_seconds` | `includeMilliSeconds` | `bool` | — | `False` | — |
+| `include_time_zone` | `includeTimeZone` | `bool` | — | `False` | — |
 
 ## Children
 

@@ -15,12 +15,12 @@ class aaaFailedLoginUser(ManagedObject):
 
     MO to represent users that fail login
 
-    RN format: ``type-{type_of_user_local_or_remote}-user-{username}``
+    RN format: ``type-{utype}-user-{username}``
     """
 
     _aci_class: ClassVar[str] = "aaaFailedLoginUser"
-    _rn_format: ClassVar[str] = "type-{type_of_user_local_or_remote}-user-{username}"
-    _naming_props: ClassVar[list[str]] = ["type_of_user_local_or_remote", "username"]
+    _rn_format: ClassVar[str] = "type-{utype}-user-{username}"
+    _naming_props: ClassVar[list[str]] = ["utype", "username"]
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaFailedLogin",
@@ -41,12 +41,7 @@ class aaaFailedLoginUser(ManagedObject):
 
     # ── Naming (required) ──────────────────────────────────────────────────────
     username: Annotated[str, Field(min_length=1, max_length=512, description="username")]
-    type_of_user_local_or_remote: AaaUserType = Field(
-        default=AaaUserType.LOCAL,
-        validation_alias="utype",
-        serialization_alias="utype",
-        description="user type",
-    )
+    utype: AaaUserType = Field(default=AaaUserType.LOCAL, description="user type")
 
     # ── Create-only (ignored by APIC on modification) ─────────────────────────
     name: Annotated[

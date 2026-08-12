@@ -11,12 +11,12 @@ from niwaki.models.base import ManagedObject
 class mdpConsumedServiceDef(ManagedObject):
     """ACI Managed Object: ``mdpConsumedServiceDef`` — Consumer of MDP Service (resolved).
 
-    RN format: ``consumedsrvdef-[{mdp_consumed_service_def_dn}]``
+    RN format: ``consumedsrvdef-[{mdp_service_def_dn}]``
     """
 
     _aci_class: ClassVar[str] = "mdpConsumedServiceDef"
-    _rn_format: ClassVar[str] = "consumedsrvdef-[{mdp_consumed_service_def_dn}]"
-    _naming_props: ClassVar[list[str]] = ["mdp_consumed_service_def_dn"]
+    _rn_format: ClassVar[str] = "consumedsrvdef-[{mdp_service_def_dn}]"
+    _naming_props: ClassVar[list[str]] = ["mdp_service_def_dn"]
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",
@@ -38,7 +38,7 @@ class mdpConsumedServiceDef(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    mdp_consumed_service_def_dn: Annotated[
+    mdp_service_def_dn: Annotated[
         str, Field(validation_alias="mdpServiceDefDn", serialization_alias="mdpServiceDefDn")
     ]
 

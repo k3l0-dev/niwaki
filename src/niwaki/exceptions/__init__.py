@@ -58,7 +58,9 @@ Hierarchy::
     │   ├── UnresolvedReferenceError
     │   ├── AmbiguousBindError
     │   ├── StagedPushError
-    │   └── DanglingReferenceError
+    │   ├── DanglingReferenceError
+    │   ├── SnapshotImportError        (to_design: items a snapshot holds that cannot import)
+    │   └── MergeConflictError         (merge: two designs disagree on one DN)
     └── SubscriptionError
         ├── StatsClassNotSubscribableError
         ├── SubscribeRejectedError      (also an APIError)
@@ -92,6 +94,8 @@ from niwaki.exceptions._design import (
     DesignError,
     DesignHintWarning,
     DuplicateDeclarationError,
+    MergeConflictError,
+    SnapshotImportError,
     StagedPushError,
     UnknownMakerError,
     UnresolvedReferenceError,
@@ -124,6 +128,7 @@ __all__ = [
     "DuplicateDeclarationError",
     "ForbiddenError",
     "LoginError",
+    "MergeConflictError",
     "MissingDependencyError",
     "MultipleResultsError",
     "NiwakiError",
@@ -131,6 +136,7 @@ __all__ = [
     "NotFoundError",
     "ServerError",
     "SessionExpiredError",
+    "SnapshotImportError",
     "StagedPushError",
     "StatsClassNotSubscribableError",
     "SubscribeRejectedError",

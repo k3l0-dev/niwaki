@@ -66,7 +66,7 @@ class rtctrlMatchRtNh(ManagedObject):
             description="Specifies the description of a policy component.",
         ),
     ] = ""
-    start_of_prefix_length: Annotated[
+    from_pfx_len: Annotated[
         int,
         Field(
             ge=0,
@@ -86,7 +86,7 @@ class rtctrlMatchRtNh(ManagedObject):
             serialization_alias="nameAlias",
         ),
     ] = ""
-    end_of_prefix_length: Annotated[
+    to_pfx_len: Annotated[
         int, Field(ge=0, le=128, validation_alias="toPfxLen", serialization_alias="toPfxLen")
     ] = 0
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

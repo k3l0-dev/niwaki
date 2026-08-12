@@ -31,6 +31,20 @@ def _plan_url(classes: str, dn: str = "uni/tn-prod") -> httpx.URL:
 PLAN_URL = _plan_url("fvBD,fvCtx,fvRsCtx,fvTenant")
 
 
+def _absent(httpx_mock: HTTPXMock, dn: str) -> None:
+    """Answer a boundary-create probe: nothing exists at this DN.
+
+    The plan verifies each absent-subtree root with a bare self-GET (the
+    class-scoped read is not gospel — measured live), so a test simulating
+    an absent object must answer that probe too.
+    """
+    httpx_mock.add_response(
+        method="GET",
+        url=f"{HOST}/api/mo/{dn}.json",
+        json={"totalCount": "0", "imdata": []},
+    )
+
+
 def _current_tree() -> dict[str, Any]:
     """APIC state: tenant + BD (unicast routing off) + VRF, no rsctx yet.
 
@@ -60,6 +74,7 @@ class TestPlan:
         self, aci: Niwaki, httpx_mock: HTTPXMock
     ) -> None:
         httpx_mock.add_response(method="GET", url=PLAN_URL, json={"totalCount": "0", "imdata": []})
+        _absent(httpx_mock, "uni/tn-prod")  # the one probe: the absent subtree's root
 
         plan = mini_design().push(aci, mode="plan")
 
@@ -76,6 +91,7 @@ class TestPlan:
 
     def test_mixed_create_update_unchanged(self, aci: Niwaki, httpx_mock: HTTPXMock) -> None:
         httpx_mock.add_response(method="GET", url=PLAN_URL, json=_current_tree())
+        _absent(httpx_mock, "uni/tn-prod/BD-web/rsctx")
 
         plan = mini_design().push(aci, mode="plan")
 
@@ -105,6 +121,7 @@ class TestPlan:
 
     def test_plan_issues_no_writes(self, aci: Niwaki, httpx_mock: HTTPXMock) -> None:
         httpx_mock.add_response(method="GET", url=PLAN_URL, json=_current_tree())
+        _absent(httpx_mock, "uni/tn-prod/BD-web/rsctx")
 
         mini_design().push(aci, mode="plan")
 
@@ -141,9 +158,12 @@ class TestPlan:
             json={"totalCount": "1", "imdata": [by_class["fvTenant"]]},
         )
 
+        _absent(httpx_mock, "uni/tn-prod/BD-web/rsctx")
+
         plan = mini_design().push(aci, mode="plan")
 
         # Same verdict as the single-request read: BD update, rsctx creation.
         assert plan.updates == {"uni/tn-prod/BD-web": {"unicast_routing": (False, True)}}
         assert plan.creates == ["uni/tn-prod/BD-web/rsctx"]
-        assert len(httpx_mock.get_requests(method="GET")) == 3
+        # Three shard reads plus the one boundary-create probe.
+        assert len(httpx_mock.get_requests(method="GET")) == 4

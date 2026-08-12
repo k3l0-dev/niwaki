@@ -80,7 +80,5 @@ class bgpSiteOfOriginP(ManagedObject):
             serialization_alias="nameAlias",
         ),
     ] = ""
-    site_of_origin: str = Field(
-        default="", validation_alias="soo", serialization_alias="soo", description="Site of origin"
-    )
+    soo: Annotated[str, Field(description="Site of origin")] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

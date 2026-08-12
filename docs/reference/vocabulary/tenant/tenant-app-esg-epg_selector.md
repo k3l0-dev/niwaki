@@ -12,18 +12,18 @@ Endpoint Group Selector, to decide which endpoints belong to the ESG
 | | |
 | --- | --- |
 | ACI class | `fvEPgSelector` |
-| RN | `epgselector-[{epg_dn_to_be_associated}]` |
+| RN | `epgselector-[{match_epg_dn}]` |
 | Cursor | `EpgSelectorCursor` |
 | Parent | {ref}`tenant.app.esg <vocab-tenant-app-esg>` |
 | Atomic | — |
 
 ## Attributes
 
-Accepted as keyword arguments of `.epg_selector(epg_dn_to_be_associated)` and of `.set(**attrs)` on this cursor.  Enum parameters also accept the plain string.
+Accepted as keyword arguments of `.epg_selector(match_epg_dn)` and of `.set(**attrs)` on this cursor.  Enum parameters also accept the plain string.
 
 | parameter | wire | type | values | default | description |
 | --- | --- | --- | --- | --- | --- |
-| `epg_dn_to_be_associated` *(positional)* | `matchEpgDn` | `str` | — | — | — |
+| `match_epg_dn` *(positional)* | `matchEpgDn` | `str` | — | — | — |
 | `description` | `descr` | `str` | — | — | Specifies a description of the policy definition. |
 | `name` | `name` | `str` | — | — | — |
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |

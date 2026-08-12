@@ -13,12 +13,12 @@ class l3extIntersiteLoopBackIfP(ManagedObject):
 
     Intersite Loop Back Interface Profile
 
-    RN format: ``sitelbp-[{intersite_loop_back_interface_address}]``
+    RN format: ``sitelbp-[{addr}]``
     """
 
     _aci_class: ClassVar[str] = "l3extIntersiteLoopBackIfP"
-    _rn_format: ClassVar[str] = "sitelbp-[{intersite_loop_back_interface_address}]"
-    _naming_props: ClassVar[list[str]] = ["intersite_loop_back_interface_address"]
+    _rn_format: ClassVar[str] = "sitelbp-[{addr}]"
+    _naming_props: ClassVar[list[str]] = ["addr"]
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",
@@ -39,14 +39,9 @@ class l3extIntersiteLoopBackIfP(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    intersite_loop_back_interface_address: Annotated[
+    addr: Annotated[
         str,
-        Field(
-            pattern="^[0-9a-fA-F.:/ ]+$",
-            validation_alias="addr",
-            serialization_alias="addr",
-            description="Intersite Loop Back Interface Address",
-        ),
+        Field(pattern="^[0-9a-fA-F.:/ ]+$", description="Intersite Loop Back Interface Address"),
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────

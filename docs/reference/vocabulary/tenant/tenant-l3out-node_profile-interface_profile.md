@@ -35,7 +35,7 @@ Accepted as keyword arguments of `.interface_profile(name)` and of `.set(**attrs
 | maker | creates | position |
 | --- | --- | --- |
 | `.path_attachment(target_dn, **attrs)` | `l3extRsPathL3OutAtt` | {ref}`tenant.l3out.node_profile.interface_profile.path_attachment <vocab-tenant-l3out-node_profile-interface_profile-path_attachment>` |
-| `.floating_svi(path_of_the_anchor_node, external_interface_encap, **attrs)` | `l3extVirtualLIfP` | {ref}`tenant.l3out.node_profile.interface_profile.floating_svi <vocab-tenant-l3out-node_profile-interface_profile-floating_svi>` |
+| `.floating_svi(node_dn, external_interface_encap, **attrs)` | `l3extVirtualLIfP` | {ref}`tenant.l3out.node_profile.interface_profile.floating_svi <vocab-tenant-l3out-node_profile-interface_profile-floating_svi>` |
 | `.ospf_interface(**attrs)` | `ospfIfP` | {ref}`tenant.l3out.node_profile.interface_profile.ospf_interface <vocab-tenant-l3out-node_profile-interface_profile-ospf_interface>` |
 | `.eigrp_interface(**attrs)` | `eigrpIfP` | {ref}`tenant.l3out.node_profile.interface_profile.eigrp_interface <vocab-tenant-l3out-node_profile-interface_profile-eigrp_interface>` |
 | `.hsrp_interface(**attrs)` | `hsrpIfP` | {ref}`tenant.l3out.node_profile.interface_profile.hsrp_interface <vocab-tenant-l3out-node_profile-interface_profile-hsrp_interface>` |

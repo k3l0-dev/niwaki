@@ -116,6 +116,7 @@ def test_shipped_catalogue_names_match_the_models() -> None:
         ("vnsCMgmt", "subnetmask"),
     }
     divergences: set[tuple[str, str]] = set()
+    unknown_wire: set[tuple[str, str]] = set()
     for name in sorted(_PKG_MAP):
         model = getattr(import_module(f"niwaki.models._generated.{_PKG_MAP[name]}.{name}"), name)
         meta = catalog.class_meta(name)
@@ -124,6 +125,16 @@ def test_shipped_catalogue_names_match_the_models() -> None:
                 continue
             wire = field.serialization_alias or field_name
             catalogue_name = meta.wire_to_readable.get(wire)
-            if catalogue_name is not None and catalogue_name != field_name:
+            if catalogue_name is None:
+                # The model's prop universe is a subset of the catalogue's:
+                # a wire key the catalogue cannot resolve means the model's
+                # serialization_alias is broken (dropped or typoed) — the
+                # exact failure a rename wave can smuggle past every other
+                # net, because this loop would silently `continue` on it.
+                unknown_wire.add((name, wire))
+            elif catalogue_name != field_name:
                 divergences.add((name, wire))
+    assert not unknown_wire, (
+        f"model wire keys unknown to the catalogue: {sorted(unknown_wire)[:10]}"
+    )
     assert divergences == irreducible

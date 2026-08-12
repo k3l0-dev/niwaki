@@ -86,7 +86,7 @@ class tacacsTacacsDest(ManagedObject):
             serialization_alias="nameAlias",
         ),
     ] = ""
-    send_changes_as_command_arguments: bool = Field(
+    populate_cmd_args: bool = Field(
         default=False, validation_alias="populateCmdArgs", serialization_alias="populateCmdArgs"
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

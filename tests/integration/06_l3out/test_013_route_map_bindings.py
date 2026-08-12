@@ -154,7 +154,7 @@ def test_route_map_bindings(live_aci: Niwaki) -> None:
     for lidx, (lname, node_id) in enumerate(leaves, start=1):
         np = out.node_profile(f"np-{lname}")
         att = np.node_attachment(
-            f"topology/pod-1/node-{node_id}", rtr_id=f"10.14.0.{lidx}", rtr_id_loop_back=False
+            f"topology/pod-1/node-{node_id}", router_id=f"10.14.0.{lidx}", rtr_id_loop_back=False
         )
         node_peer = np.bgp_peer(
             f"172.16.{lidx}.1", description="Node peer with import/export maps."

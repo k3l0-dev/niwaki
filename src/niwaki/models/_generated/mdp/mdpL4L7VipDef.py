@@ -11,14 +11,12 @@ from niwaki.models.base import ManagedObject
 class mdpL4L7VipDef(ManagedObject):
     """ACI Managed Object: ``mdpL4L7VipDef`` — Layer-4-thru-7 Virtual IP (resolved).
 
-    RN format: ``l4l7vipDef-[{virtual_ip_address}]-l4l7vipDef-[{dn_of_associated_vrf}]``
+    RN format: ``l4l7vipDef-[{virtual_ip_address}]-l4l7vipDef-[{ctx_dn}]``
     """
 
     _aci_class: ClassVar[str] = "mdpL4L7VipDef"
-    _rn_format: ClassVar[str] = (
-        "l4l7vipDef-[{virtual_ip_address}]-l4l7vipDef-[{dn_of_associated_vrf}]"
-    )
-    _naming_props: ClassVar[list[str]] = ["virtual_ip_address", "dn_of_associated_vrf"]
+    _rn_format: ClassVar[str] = "l4l7vipDef-[{virtual_ip_address}]-l4l7vipDef-[{ctx_dn}]"
+    _naming_props: ClassVar[list[str]] = ["virtual_ip_address", "ctx_dn"]
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",
@@ -39,7 +37,7 @@ class mdpL4L7VipDef(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    dn_of_associated_vrf: Annotated[
+    ctx_dn: Annotated[
         str,
         Field(
             validation_alias="ctxDn",

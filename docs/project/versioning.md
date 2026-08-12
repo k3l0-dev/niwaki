@@ -37,6 +37,8 @@ import niwaki.query  # Query, AsyncQuery, filter expressions
 import niwaki.transport  # ApicSession, AsyncApicSession, RetryConfig
 import niwaki.exceptions  # the whole error hierarchy
 import niwaki.catalog  # search, describe, prop_meta, class_meta, …
+import niwaki.snapshot  # take, diff, Snapshot, SnapshotDiff, REDACTED
+import niwaki.utils  # mo_diff, parse_imdata
 ```
 
 A single underscore anywhere in the path — `niwaki.design._engine`,
@@ -100,8 +102,8 @@ See {doc}`SECURITY` for how to report a vulnerability.
 ## Pinning
 
 ```text
-niwaki>=1.10,<2      # recommended: every fix and feature, no breaking change
-niwaki==1.10.0       # reproducible builds; upgrade deliberately
+niwaki>=2,<3         # recommended: every fix and feature, no breaking change
+niwaki==2.0.0        # reproducible builds; upgrade deliberately
 ```
 
 The SDK targets a specific APIC schema release, which is a separate axis

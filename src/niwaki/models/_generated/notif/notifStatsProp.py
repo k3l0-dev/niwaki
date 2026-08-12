@@ -61,12 +61,10 @@ class notifStatsProp(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    time_interval_of_streaming: Annotated[
+    interval: Annotated[
         int,
         Field(
-            validation_alias="interval",
-            serialization_alias="interval",
-            description="The time interval in milliseconds that the peer keepalives should be sent.",
+            description="The time interval in milliseconds that the peer keepalives should be sent."
         ),
     ] = 30
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

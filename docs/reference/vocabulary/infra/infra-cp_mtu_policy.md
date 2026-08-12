@@ -22,7 +22,7 @@ Accepted as keyword arguments of `.cp_mtu_policy()` and of `.set(**attrs)` on th
 | parameter | wire | type | values | default | description |
 | --- | --- | --- | --- | --- | --- |
 | `apply_mtu_to_apic` | `APICMtuApply` | `bool` | — | `False` | Apply this config on APIC interface |
-| `mtu_size_for_cp_traffic` | `CPMtu` | `int` | — | `9000` | MTU Size for Fabric Ports |
+| `cp_mtu` | `CPMtu` | `int` | — | `9000` | MTU Size for Fabric Ports |
 | `description` | `descr` | `str` | — | — | Specifies a description of the policy definition. |
 | `name` | `name` | `str` | — | — | — |
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |

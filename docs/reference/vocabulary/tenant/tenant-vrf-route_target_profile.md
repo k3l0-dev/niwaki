@@ -12,18 +12,18 @@ BGP Route Target Profile
 | | |
 | --- | --- |
 | ACI class | `bgpRtTargetP` |
-| RN | `rtp-{route_target_source_address_family}` |
+| RN | `rtp-{af}` |
 | Cursor | `RouteTargetProfileCursor` |
 | Parent | {ref}`tenant.vrf <vocab-tenant-vrf>` |
 | Atomic | — |
 
 ## Attributes
 
-Accepted as keyword arguments of `.route_target_profile(route_target_source_address_family)` and of `.set(**attrs)` on this cursor.  Enum parameters also accept the plain string.
+Accepted as keyword arguments of `.route_target_profile(af)` and of `.set(**attrs)` on this cursor.  Enum parameters also accept the plain string.
 
 | parameter | wire | type | values | default | description |
 | --- | --- | --- | --- | --- | --- |
-| `route_target_source_address_family` *(positional)* | `af` | {ref}`BgpRtSourceAfType <enum-bgprtsourceaftype>` | `ipv4-ucast`, `ipv6-ucast` | — | Source address family value is respected only when the Route Target Type is set to Explicit |
+| `af` *(positional)* | `af` | {ref}`BgpRtSourceAfType <enum-bgprtsourceaftype>` | `ipv4-ucast`, `ipv6-ucast` | — | Source address family value is respected only when the Route Target Type is set to Explicit |
 | `description` | `descr` | `str` | — | — | Specifies a description of the policy definition. |
 | `name` | `name` | `str` | — | — | — |
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |

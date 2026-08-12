@@ -88,7 +88,7 @@ def test_vspan_destination_groups(live_aci: Niwaki) -> None:
         vdest.vspan_destination_epg_summary(
             description=f"VSPAN ERSPAN summary {version}, {mode}.",
             destination_ip=f"192.0.2.{70 + idx}",
-            source_ip_of_erspan_packet="192.0.2.0/24",
+            source_ip_prefix="192.0.2.0/24",
             mode=mode,
             dscp="CS4",
             mtu=1518,

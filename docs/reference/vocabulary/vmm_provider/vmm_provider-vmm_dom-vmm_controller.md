@@ -24,7 +24,7 @@ Accepted as keyword arguments of `.vmm_controller(name)` and of `.set(**attrs)` 
 | parameter | wire | type | values | default | description |
 | --- | --- | --- | --- | --- | --- |
 | `name` *(positional)* | `name` | `str` | — | — | The name of the controller profile. |
-| `hostname_or_ip_address` | `hostOrIp` | `str` | — | — | Host or IP |
+| `host_or_ip` | `hostOrIp` | `str` | — | — | Host or IP |
 | `aos_version` | `aosVersion` | {ref}`VmmAosVersion <enum-vmmaosversion>` | `6.5`, `6.6`, `unknown` | `unknown` | version of aos |
 | `dvs_version` | `dvsVersion` | {ref}`VmmDvsVersion <enum-vmmdvsversion>` | `5.1`, `5.5`, `6.0`, `6.5`, `6.6`, `7.0`, `8.0`, `not-applicable`, `unmanaged` | `unmanaged` | — |
 | `triggered_inventory_sync_status` | `inventoryTrigSt` | {ref}`VmmTrigSt <enum-vmmtrigst>` | `autoTriggered`, `triggered`, `untriggered` | `untriggered` | — |

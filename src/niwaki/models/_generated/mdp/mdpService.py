@@ -50,7 +50,7 @@ class mdpService(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    consume_mode_for_this_mdp_service: MdpConsumeMode = Field(
+    consume_mode: MdpConsumeMode = Field(
         default=MdpConsumeMode.AUTO,
         validation_alias="consumeMode",
         serialization_alias="consumeMode",

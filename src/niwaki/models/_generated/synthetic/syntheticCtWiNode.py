@@ -45,13 +45,11 @@ class syntheticCtWiNode(ManagedObject):
     ] = "undefined"
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    what_to_do_with_appliance: SyntheticActionType = Field(
+    action: SyntheticActionType = Field(
         default=SyntheticActionType.OUT_OF_SERVICE,
-        validation_alias="action",
-        serialization_alias="action",
         description="The action required when the condition is met.",
     )
-    all_shards_on_this_appliance_are_leaders: bool = Field(
+    all_shard_leaders: bool = Field(
         default=False, validation_alias="allShardLeaders", serialization_alias="allShardLeaders"
     )
     annotation: Annotated[
@@ -76,7 +74,5 @@ class syntheticCtWiNode(ManagedObject):
             serialization_alias="nameAlias",
         ),
     ] = ""
-    start_appliance_clean_or_as_it_is: bool = Field(
-        default=False, validation_alias="stClean", serialization_alias="stClean"
-    )
+    st_clean: bool = Field(default=False, validation_alias="stClean", serialization_alias="stClean")
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

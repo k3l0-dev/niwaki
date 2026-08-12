@@ -11,12 +11,12 @@ from niwaki.models.base import ManagedObject
 class notifSubscriberRef(ManagedObject):
     """ACI Managed Object: ``notifSubscriberRef``.
 
-    RN format: ``subsref-{classname_that_is_being_subscribed}``
+    RN format: ``subsref-{subscriber}``
     """
 
     _aci_class: ClassVar[str] = "notifSubscriberRef"
-    _rn_format: ClassVar[str] = "subsref-{classname_that_is_being_subscribed}"
-    _naming_props: ClassVar[list[str]] = ["classname_that_is_being_subscribed"]
+    _rn_format: ClassVar[str] = "subsref-{subscriber}"
+    _naming_props: ClassVar[list[str]] = ["subscriber"]
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",
@@ -35,15 +35,7 @@ class notifSubscriberRef(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    classname_that_is_being_subscribed: Annotated[
-        str,
-        Field(
-            min_length=1,
-            max_length=512,
-            validation_alias="subscriber",
-            serialization_alias="subscriber",
-        ),
-    ]
+    subscriber: Annotated[str, Field(min_length=1, max_length=512)]
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[

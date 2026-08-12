@@ -88,11 +88,11 @@ def test_synce_interface(live_aci: Niwaki) -> None:
                 _if_name(admin, qlopt),
                 admin_state=admin,
                 qloptype=qlopt,
-                quality_receive_exact_ql_value=ql_value,
-                quality_transmit_exact_ql_value=ql_value,
+                qlrcvexactval=ql_value,
+                qltxexactval=ql_value,
                 selection_configuration=bool(idx & 1),
                 ssm_configuration_enable_disable=bool(idx & 2),
-                source_priority_1_254_default100=100 + idx,
+                srcpriority=100 + idx,
                 wait_to_restore_time=idx % 12,
                 description=f"SyncE admin/QL-option matrix - admin {admin}, QL {qlopt}.",
             )
@@ -111,7 +111,7 @@ def test_synce_instance(live_aci: Niwaki) -> None:
                     _inst_name(admin, qlopt, dnu),
                     admin_state=admin,
                     ql_option_type_node=qlopt,
-                    transmit_dnu_on_lag_members=dnu,
+                    tx_dnu_lag=dnu,
                     description=f"SyncE instance matrix - admin {admin}, QL {qlopt}, "
                     f"DNU {_dnu_slug(dnu)}.",
                 )
@@ -133,10 +133,10 @@ def test_synce_interface_ql_modes(live_aci: Niwaki) -> None:
             _ql_mode_name(qlopt, "lowhigh"),
             admin_state="enabled",
             qloptype=qlopt,
-            quality_receive_highest_ql_value=highest,
-            quality_receive_lowest_ql_value=lowest,
+            qlrcvhval=highest,
+            qlrcvlval=lowest,
             qltxhval=highest,
-            quality_transmit_lowest_ql_value=lowest,
+            qltxlval=lowest,
             description=f"SyncE QL-mode - {qlopt} low-high bounds.",
         )
         _common(low_high)
@@ -144,7 +144,7 @@ def test_synce_interface_ql_modes(live_aci: Niwaki) -> None:
             _ql_mode_name(qlopt, "high"),
             admin_state="enabled",
             qloptype=qlopt,
-            quality_receive_highest_ql_value=highest,
+            qlrcvhval=highest,
             qltxhval=highest,
             description=f"SyncE QL-mode - {qlopt} highest only.",
         )

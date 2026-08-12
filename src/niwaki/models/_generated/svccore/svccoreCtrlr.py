@@ -13,18 +13,12 @@ class svccoreCtrlr(ManagedObject):
 
     A core controller.
 
-    RN format: ``ctrlr-{ctrlr_id_where_the_core_file_was_created}-svc-{name_of_service_that_cored}-ts-{create_time}``
+    RN format: ``ctrlr-{ctrlr_id}-svc-{svc_name}-ts-{create_time}``
     """
 
     _aci_class: ClassVar[str] = "svccoreCtrlr"
-    _rn_format: ClassVar[str] = (
-        "ctrlr-{ctrlr_id_where_the_core_file_was_created}-svc-{name_of_service_that_cored}-ts-{create_time}"
-    )
-    _naming_props: ClassVar[list[str]] = [
-        "ctrlr_id_where_the_core_file_was_created",
-        "name_of_service_that_cored",
-        "create_time",
-    ]
+    _rn_format: ClassVar[str] = "ctrlr-{ctrlr_id}-svc-{svc_name}-ts-{create_time}"
+    _naming_props: ClassVar[list[str]] = ["ctrlr_id", "svc_name", "create_time"]
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",
@@ -47,7 +41,7 @@ class svccoreCtrlr(ManagedObject):
     create_time: Annotated[
         str, Field(validation_alias="createTime", serialization_alias="createTime")
     ]
-    ctrlr_id_where_the_core_file_was_created: Annotated[
+    ctrlr_id: Annotated[
         int,
         Field(
             ge=1,
@@ -57,7 +51,7 @@ class svccoreCtrlr(ManagedObject):
             description="The created core's controller identifier.",
         ),
     ] = 0
-    name_of_service_that_cored: Annotated[
+    svc_name: Annotated[
         str,
         Field(
             min_length=1, max_length=512, validation_alias="svcName", serialization_alias="svcName"

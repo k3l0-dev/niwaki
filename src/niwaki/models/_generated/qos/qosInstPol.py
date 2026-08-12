@@ -49,10 +49,10 @@ class qosInstPol(ManagedObject):
     etrap_age_timer: Annotated[
         int, Field(validation_alias="EtrapAgeTimer", serialization_alias="EtrapAgeTimer")
     ] = 0
-    track_activeness_of_elephant_flow: Annotated[
+    etrap_bw_thresh: Annotated[
         int, Field(validation_alias="EtrapBwThresh", serialization_alias="EtrapBwThresh")
     ] = 0
-    e_trap_elephant_flow_identifier: Annotated[
+    etrap_byte_ct: Annotated[
         int, Field(validation_alias="EtrapByteCt", serialization_alias="EtrapByteCt")
     ] = 0
     e_trap_enable_knob: bool = Field(
@@ -61,7 +61,7 @@ class qosInstPol(ManagedObject):
         serialization_alias="EtrapSt",
         description="E-trap parameters",
     )
-    fabric_flush_interval_in_ms: Annotated[
+    fabric_flush_interval: Annotated[
         int,
         Field(
             ge=100,
@@ -70,7 +70,7 @@ class qosInstPol(ManagedObject):
             serialization_alias="FabricFlushInterval",
         ),
     ] = 500
-    fabric_pfc_flush_enable_knob: bool = Field(
+    fabric_flush_st: bool = Field(
         default=False,
         validation_alias="FabricFlushSt",
         serialization_alias="FabricFlushSt",
@@ -129,7 +129,7 @@ class qosInstPol(ManagedObject):
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
-    micro_burst_spine_queues_percent: Annotated[
+    uburst_spine_queues: Annotated[
         int,
         Field(
             ge=0,
@@ -139,7 +139,7 @@ class qosInstPol(ManagedObject):
             description="Global microburst spine % queues",
         ),
     ] = 10
-    micro_burst_tor_queues_percent: Annotated[
+    uburst_tor_queues: Annotated[
         int,
         Field(
             ge=0,

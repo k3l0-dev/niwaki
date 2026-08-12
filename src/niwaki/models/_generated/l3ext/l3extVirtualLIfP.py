@@ -18,7 +18,7 @@ from niwaki.models.base import ManagedObject
 class l3extVirtualLIfP(ManagedObject):
     """ACI Managed Object: ``l3extVirtualLIfP`` — Logical Interface Profile.
 
-    RN format: ``vlifp-[{path_of_the_anchor_node}]-[{external_interface_encap}]``
+    RN format: ``vlifp-[{node_dn}]-[{external_interface_encap}]``
 
     The APIC can flag these accepted-but-inconsistent states on this class
     (read-only ``configIssues``):
@@ -40,8 +40,8 @@ class l3extVirtualLIfP(ManagedObject):
     """
 
     _aci_class: ClassVar[str] = "l3extVirtualLIfP"
-    _rn_format: ClassVar[str] = "vlifp-[{path_of_the_anchor_node}]-[{external_interface_encap}]"
-    _naming_props: ClassVar[list[str]] = ["path_of_the_anchor_node", "external_interface_encap"]
+    _rn_format: ClassVar[str] = "vlifp-[{node_dn}]-[{external_interface_encap}]"
+    _naming_props: ClassVar[list[str]] = ["node_dn", "external_interface_encap"]
     _config_issues: ClassVar[dict[str, str]] = {
         "access-encap-bd-map-conflict": "Conflicting access-encap to BD mapping",
         "access-encap-node-overlap": "Access encap node overlap",
@@ -102,7 +102,7 @@ class l3extVirtualLIfP(ManagedObject):
             description="Encap of the external l2/l3 interface @@@ Note: In switch, two External BDs on the same node cannot have @@@ the external encap. In order to support this for external encap @@@ on a node (it can come from any port relation), same BD vxlan @@@ id should be allocated",
         ),
     ]
-    path_of_the_anchor_node: Annotated[
+    node_dn: Annotated[
         str,
         Field(
             validation_alias="nodeDn",
@@ -112,14 +112,8 @@ class l3extVirtualLIfP(ManagedObject):
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    external_l3_interface_ip_address: Annotated[
-        str,
-        Field(
-            pattern="^[0-9a-fA-F.:/ ]+$",
-            validation_alias="addr",
-            serialization_alias="addr",
-            description="Address of the external l3 interface",
-        ),
+    addr: Annotated[
+        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", description="Address of the external l3 interface")
     ] = ""
     annotation: Annotated[
         str,
@@ -168,12 +162,10 @@ class l3extVirtualLIfP(ManagedObject):
             description="Override of system generated Ipv6 Link Local Addr",
         ),
     ] = ""
-    external_l3_interface_mac_address: Annotated[
+    mac: Annotated[
         str,
         Field(
             pattern="^([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}$",
-            validation_alias="mac",
-            serialization_alias="mac",
             description='Mac of the external l3 interface. The mac address is by default hard coded to "00:22:BD:F8:19:FF". This is a reserved MAC address and all the l3 interfaces by default use this mac as the router mac.',
         ),
     ] = ""
@@ -192,15 +184,7 @@ class l3extVirtualLIfP(ManagedObject):
             description="The administrative MTU port on the aggregated interface.",
         ),
     ] = "inherit"
-    name_of_virtuallifp: Annotated[
-        str,
-        Field(
-            max_length=512,
-            validation_alias="name",
-            serialization_alias="name",
-            description="The name of the object.",
-        ),
-    ] = ""
+    name: Annotated[str, Field(max_length=512, description="The name of the object.")] = ""
     dscp_value: Annotated[
         Annotated[int, Field(ge=0, le=64)]
         | Literal[

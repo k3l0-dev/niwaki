@@ -27,7 +27,7 @@ Accepted as keyword arguments of `.firmware_download_task(name)` and of `.set(**
 | `authentication_type` | `authPass` | {ref}`FirmwareAuthPass <enum-firmwareauthpass>` | `key`, `password` | `password` | The authentication type for the source. |
 | `authentication_type_choice` | `authType` | {ref}`FirmwareAuthenticationType <enum-firmwareauthenticationtype>` | `usePassword`, `useSshKeyContents` | `usePassword` | The OSPF authentication type specifier. The type options are; default, md5, none, and simple. |
 | `description` | `descr` | `str` | — | — | Specifies the description of a policy component. |
-| `variable_to_reuse_download_task` | `dnldTaskFlip` | `bool` | — | `True` | Download Task Flip. |
+| `dnld_task_flip` | `dnldTaskFlip` | `bool` | — | `True` | Download Task Flip. |
 | `ssh_private_key_content` | `identityPrivateKeyContents` | `str` | — | — | — |
 | `ssh_private_key_passphrase` | `identityPrivateKeyPassphrase` | `str` | — | — | Passphrase given at the identity key creation. |
 | `ssh_public_key_content` | `identityPublicKeyContents` | `str` | — | — | Certificate contents for data transfer. Used for credentials. |

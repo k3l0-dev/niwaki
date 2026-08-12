@@ -117,10 +117,8 @@ class maintCtrlrMaintP(ManagedObject):
         serialization_alias="notifCond",
         description="Specifies under what pause condition will admin be notified via email/text as configured. This notification mechanism is independent of events/faults.",
     )
-    whether_latest: bool = Field(
+    parallel: bool = Field(
         default=False,
-        validation_alias="parallel",
-        serialization_alias="parallel",
         description="Flag to turn on parallel upgrade of APICs, trades off availability to speed.",
     )
     scheduler_run_mode: MaintRunMode = Field(

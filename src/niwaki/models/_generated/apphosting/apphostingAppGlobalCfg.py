@@ -54,7 +54,7 @@ class apphostingAppGlobalCfg(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    enable_or_disable_signed_verification: ApphostingSignOption = Field(
+    sign_verify: ApphostingSignOption = Field(
         default=ApphostingSignOption.ENABLE,
         validation_alias="signVerify",
         serialization_alias="signVerify",

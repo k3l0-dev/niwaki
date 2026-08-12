@@ -25,15 +25,15 @@ Accepted as keyword arguments of `.path_attachment(target_dn)` and of `.set(**at
 | --- | --- | --- | --- | --- | --- |
 | `target_dn` *(positional)* | `tDn` | `str` | — | — | The logical interface identifier. |
 | `is_multi_pod_direct` | `isMultiPodDirect` | `bool` | — | `False` | MultiPod Direct (back-to-back) Link feature When link is MultiPod Direct Link |
-| `addr` | `addr` | `str` | — | — | The IP address of the path attached to the layer 3 outside profile. |
+| `ip_address` | `addr` | `str` | — | — | The IP address of the path attached to the layer 3 outside profile. |
 | `autostate` | `autostate` | {ref}`SviAutostate <enum-sviautostate>` | `disabled`, `enabled` | `disabled` | Autostate feature When enabled an SVI automatically goes down when forwarding states of all ports attached to it is down |
 | `descr` | `descr` | `str` | — | — | The description of this configuration item. |
 | `encap` | `encap` | `str` | — | — | The encapsulation of the path attached to the layer 3 outside profile. |
 | `encap_scope` | `encapScope` | {ref}`L3extEncapScope <enum-l3extencapscope>` | `ctx`, `local` | `local` | Represents the scope of the encap |
 | `if_inst_t` | `ifInstT` | {ref}`ExtnwIfInstT <enum-extnwifinstt>` | `ext-svi`, `l3-port`, `sub-interface`, `unspecified` | `ext-svi` | — |
 | `ipv6_dad` | `ipv6Dad` | {ref}`L3extIpv6Dad <enum-l3extipv6dad>` | `disabled`, `enabled` | `enabled` | IPv6 DAD feature When disabled it will IPv6 DAD will be diasabled |
-| `ll_addr` | `llAddr` | `str` | — | — | The override of the system generated IPv6 link-local address. |
-| `mac` | `mac` | `str` | — | — | The MAC address of the path attached to the layer 3 outside profile. |
+| `ipv6_link_local_address` | `llAddr` | `str` | — | — | The override of the system generated IPv6 link-local address. |
+| `mac_address` | `mac` | `str` | — | — | The MAC address of the path attached to the layer 3 outside profile. |
 | `mode` | `mode` | {ref}`FvMode <enum-fvmode>` | `native`, `regular`, `untagged` | `regular` | Represents the mode (native etc.) of the encap. This property only takes affect ifInstT (Interface Instantiation Type) is external-svi and is ignored for sub-interface and l3-port |
 | `mtu` | `mtu` | `int` | — | `inherit` | The maximum transmit unit of the external network. |
 | `target_dscp` | `targetDscp` | `int` | — | `unspecified` | The target differentiated service code point (DSCP) of the path attached to the layer 3 outside profile. |

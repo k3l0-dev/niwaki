@@ -57,8 +57,8 @@ def test_portzero_cartesian(live_aci: Niwaki) -> None:
                         port_zero_direction=direction,
                         ethernet_type=ether,
                         protocol=proto,
-                        apply_rule_for_all_fragments=frag,
-                        dscp_match_for_filter_entry=dscp,
+                        apply_to_frag=frag,
+                        match_dscp=dscp,
                         tcp_rules=TCP_FLAG_COMBOS[n % len(TCP_FLAG_COMBOS)],
                         stateful=frag,
                         description=desc,
@@ -69,8 +69,8 @@ def test_portzero_cartesian(live_aci: Niwaki) -> None:
                         port_zero_direction=direction,
                         ethernet_type=ether,
                         protocol=proto,
-                        apply_rule_for_all_fragments=frag,
-                        dscp_match_for_filter_entry=dscp,
+                        apply_to_frag=frag,
+                        match_dscp=dscp,
                         description=desc,
                     )
                 n += 1

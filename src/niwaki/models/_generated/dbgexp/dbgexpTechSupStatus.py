@@ -56,7 +56,7 @@ class dbgexpTechSupStatus(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    fqdn_of_the_host: Annotated[
+    host_name: Annotated[
         str,
         Field(
             max_length=512,

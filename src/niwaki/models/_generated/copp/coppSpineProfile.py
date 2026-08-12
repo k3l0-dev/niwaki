@@ -100,10 +100,7 @@ class coppSpineProfile(ManagedObject):
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
-    type_of_profile: CoppProfileType = Field(
-        default=CoppProfileType.DEFAULT,
-        validation_alias="type",
-        serialization_alias="type",
-        description="The specific type of the object or component.",
+    type: CoppProfileType = Field(
+        default=CoppProfileType.DEFAULT, description="The specific type of the object or component."
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

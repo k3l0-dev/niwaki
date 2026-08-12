@@ -34,5 +34,5 @@ Accepted as keyword arguments of `.ptp_profile_template(ptp_profile_template_nam
 | `delay_req_intvl_end` | `delayReqIntvlEnd` | `int` | — | `0` | Minimum Delay Request Interval range end |
 | `delay_req_intvl_start` | `delayReqIntvlStart` | `int` | — | `0` | Minimum Delay Request Interval range start |
 | `sync_intvl_default` | `syncIntvlDefault` | `int` | — | `0` | Sync Interval default value |
-| `minimum_delay_request_interval_range_end` | `syncIntvlEnd` | `int` | — | `0` | Sync Interval range end |
+| `sync_intvl_end` | `syncIntvlEnd` | `int` | — | `0` | Sync Interval range end |
 | `sync_intvl_start` | `syncIntvlStart` | `int` | — | `0` | Sync Interval range start |

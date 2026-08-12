@@ -76,7 +76,7 @@ class cloudCredentials(ManagedObject):
             description="Email associated to these Credentials",
         ),
     ] = ""
-    http_proxy_to_connect_to_cloud_provider: Annotated[
+    http_proxy: Annotated[
         str, Field(max_length=512, validation_alias="httpProxy", serialization_alias="httpProxy")
     ] = ""
     secret_key: Annotated[

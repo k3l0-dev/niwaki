@@ -94,8 +94,8 @@ def test_lacp_modes(live_aci: Niwaki) -> None:
         lag = fab.lacp_policy(
             _mode_name(mode),
             mode=mode,
-            maximum_number_of_links=16,
-            minimum_number_of_links=1,
+            max_links=16,
+            min_links=1,
             description=f"LACP mode sweep - {mode}.",
         )
         _common(lag)
@@ -118,8 +118,8 @@ def test_lacp_controls(live_aci: Niwaki) -> None:
             _ctrl_name(slug),
             mode="active",
             control=ctrl or None,
-            maximum_number_of_links=max_links,
-            minimum_number_of_links=min_links,
+            max_links=max_links,
+            min_links=min_links,
             description=f"LACP control-flag sweep - ({slug}), min {min_links}, max {max_links}.",
         )
         _common(lag)
@@ -145,15 +145,15 @@ def test_link_flap(live_aci: Niwaki) -> None:
     fab = infra()
     fast = fab.link_flap_policy(
         LINK_FLAP_NAMES[0],
-        max_flaps_allowed_per_time=5,
-        time_allowed_for_max_flaps=30,
+        link_flap_error_max=5,
+        link_flap_error_seconds=30,
         description="Link-flap threshold - 5 flaps in 30s.",
     )
     _common(fast)
     slow = fab.link_flap_policy(
         LINK_FLAP_NAMES[1],
-        max_flaps_allowed_per_time=30,
-        time_allowed_for_max_flaps=420,
+        link_flap_error_max=30,
+        link_flap_error_seconds=420,
         description="Link-flap threshold - 30 flaps in 420s.",
     )
     _common(slow)

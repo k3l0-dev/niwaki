@@ -77,7 +77,7 @@ class plannerEpgTmpl(ManagedObject):
         ),
     ] = ""
     encap: PlannerEncap = Field(default=PlannerEncap.VLAN, description="Encapsulation")
-    number_of_fex_ports: Annotated[
+    fex_ports: Annotated[
         int,
         Field(
             validation_alias="fexPorts",
@@ -94,14 +94,7 @@ class plannerEpgTmpl(ManagedObject):
             serialization_alias="nameAlias",
         ),
     ] = ""
-    number_of_ports: Annotated[
-        int,
-        Field(
-            validation_alias="ports",
-            serialization_alias="ports",
-            description="No of ports (per leaf) in this EPG",
-        ),
-    ] = 0
+    ports: Annotated[int, Field(description="No of ports (per leaf) in this EPG")] = 0
     epg_span: Annotated[
         int,
         Field(

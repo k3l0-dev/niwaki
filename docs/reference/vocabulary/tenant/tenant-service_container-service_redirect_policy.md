@@ -22,7 +22,7 @@ Accepted as keyword arguments of `.service_redirect_policy(name)` and of `.set(*
 | parameter | wire | type | values | default | description |
 | --- | --- | --- | --- | --- | --- |
 | `name` *(positional)* | `name` | `str` | — | — | The name of the object. |
-| `anycast_enabled_or_not` | `AnycastEnabled` | `bool` | — | `False` | — |
+| `anycast_enabled` | `AnycastEnabled` | `bool` | — | `False` | — |
 | `description` | `descr` | `str` | — | — | Specifies a description of the policy definition. |
 | `dest_type` | `destType` | {ref}`VnsDestType <enum-vnsdesttype>` | `L1`, `L2`, `L3` | `L3` | — |
 | `hashing_algorithm` | `hashingAlgorithm` | {ref}`VnshashingAlgorithm <enum-vnshashingalgorithm>` | `dip`, `sip`, `sip-dip-prototype` | `sip-dip-prototype` | — |
@@ -31,7 +31,7 @@ Accepted as keyword arguments of `.service_redirect_policy(name)` and of `.set(*
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |
 | `program_local_pod_only` | `programLocalPodOnly` | `bool` | — | `False` | — |
-| `resilient_hashing_enabled_or_not` | `resilientHashEnabled` | `bool` | — | `False` | — |
+| `resilient_hash_enabled` | `resilientHashEnabled` | `bool` | — | `False` | — |
 | `src_mac_rewrite_enabled` | `srcMacRewriteEnabled` | `bool` | — | `False` | — |
 | `threshold_down_action` | `thresholdDownAction` | {ref}`VnsThresholdDownAction <enum-vnsthresholddownaction>` | `bypass`, `deny`, `permit` | `permit` | Down action |
 | `threshold_enable` | `thresholdEnable` | `bool` | — | `False` | — |

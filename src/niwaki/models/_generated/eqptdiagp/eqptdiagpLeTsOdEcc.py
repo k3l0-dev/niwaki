@@ -79,9 +79,7 @@ class eqptdiagpLeTsOdEcc(ManagedObject):
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
-    bitmask_of_diagnostics_tests_to_be_run: Annotated[
-        Flags[EqptdiagLeOdEccTestBmT], BeforeValidator(parse_flags)
-    ] = Field(
+    diags_bm: Annotated[Flags[EqptdiagLeOdEccTestBmT], BeforeValidator(parse_flags)] = Field(
         default_factory=lambda: frozenset({EqptdiagLeOdEccTestBmT.NONE}),
         validation_alias="diagsBm",
         serialization_alias="diagsBm",
@@ -93,7 +91,7 @@ class eqptdiagpLeTsOdEcc(ManagedObject):
         serialization_alias="fullBm",
         description="A bitmask of test groups for which a full set of tests are enabled.",
     )
-    include_disruptive_tests_in_the_grp: bool = Field(
+    incl_disruptive: bool = Field(
         default=False,
         validation_alias="inclDisruptive",
         serialization_alias="inclDisruptive",

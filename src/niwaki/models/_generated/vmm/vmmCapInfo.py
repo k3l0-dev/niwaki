@@ -54,13 +54,13 @@ class vmmCapInfo(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    count_of_hypervisors: Annotated[
+    count_hvs: Annotated[
         int, Field(validation_alias="countHvs", serialization_alias="countHvs")
     ] = 0
-    count_of_virtual_machines: Annotated[
+    count_vms: Annotated[
         int, Field(validation_alias="countVms", serialization_alias="countVms")
     ] = 0
-    count_of_virtual_machines_per_hypervisor: Annotated[
+    count_vms_per_hv: Annotated[
         float, Field(validation_alias="countVmsPerHv", serialization_alias="countVmsPerHv")
     ] = 0.0
     display_name: Annotated[
@@ -81,6 +81,4 @@ class vmmCapInfo(ManagedObject):
         ),
     ] = 0
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    percentage_of_virtualization: Annotated[
-        float, Field(validation_alias="virt", serialization_alias="virt")
-    ] = 0.0
+    virt: float = 0.0

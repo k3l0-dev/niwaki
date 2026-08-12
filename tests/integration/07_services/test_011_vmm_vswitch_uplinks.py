@@ -71,7 +71,7 @@ def test_vmm_vswitch(live_aci: Niwaki) -> None:
                 f"elag-{dom_index + offset:02d}",
                 loadbalancing_mode=mode,
                 lacp_mode=next(lacp_cycle),
-                number_of_links=2,
+                num_links=2,
                 id=offset + 1,
             )
 
@@ -81,7 +81,7 @@ def test_vmm_vswitch(live_aci: Niwaki) -> None:
 def test_vmm_uplinks(live_aci: Niwaki) -> None:
     dsn = design()
     dom = dsn.vmm_provider(VENDOR).vmm_dom(UPLINK_DOM, encap_mode="vlan")
-    uplinks = dom.uplink_policy_container(number_of_uplinks="8")
+    uplinks = dom.uplink_policy_container(num_of_uplinks="8")
     for uplink_id in range(1, 9):
         uplinks.uplink_policy(uplink_id, uplink_name=f"uplink-{uplink_id}", id=uplink_id)
 

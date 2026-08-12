@@ -47,7 +47,10 @@ class l3extMember(ManagedObject):
     side: L3extSide = L3extSide.A
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    addr: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$")] = ""
+    ip_address: Annotated[
+        str,
+        Field(pattern="^[0-9a-fA-F.:/ ]+$", validation_alias="addr", serialization_alias="addr"),
+    ] = ""
     annotation: Annotated[
         str,
         Field(

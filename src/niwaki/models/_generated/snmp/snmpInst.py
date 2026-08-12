@@ -83,7 +83,7 @@ class snmpInst(ManagedObject):
             description="The location for the SNMP policy.",
         ),
     ] = ""
-    set_level_for_snmp_syslog_messages: SnmpSnmpLogLevel = Field(
+    logging_level: SnmpSnmpLogLevel = Field(
         default=SnmpSnmpLogLevel.CRITICAL,
         validation_alias="loggingLevel",
         serialization_alias="loggingLevel",

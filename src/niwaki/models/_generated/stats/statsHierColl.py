@@ -17,12 +17,12 @@ class statsHierColl(ManagedObject):
 
     The statistics collection policy, which enables you to determine how often the system collects data and to specify how far back in time data should be collected.
 
-    RN format: ``coll-{granularity_of_the_policy}``
+    RN format: ``coll-{granularity}``
     """
 
     _aci_class: ClassVar[str] = "statsHierColl"
-    _rn_format: ClassVar[str] = "coll-{granularity_of_the_policy}"
-    _naming_props: ClassVar[list[str]] = ["granularity_of_the_policy"]
+    _rn_format: ClassVar[str] = "coll-{granularity}"
+    _naming_props: ClassVar[list[str]] = ["granularity"]
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",
@@ -41,11 +41,8 @@ class statsHierColl(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    granularity_of_the_policy: StatsGranularity = Field(
-        default=StatsGranularity._5MIN,
-        validation_alias="granularity",
-        serialization_alias="granularity",
-        description="The length of time the system collects data.",
+    granularity: StatsGranularity = Field(
+        default=StatsGranularity._5MIN, description="The length of time the system collects data."
     )
 
     # ── Configurable ───────────────────────────────────────────────────────────

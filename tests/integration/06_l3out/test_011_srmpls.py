@@ -73,7 +73,7 @@ def test_srmpls_infra_handoff(live_aci: Niwaki) -> None:
     # rejected ("MPLS Default Label Policy Modification is not supported").
     inf.mpls_global_configuration(GLOBAL)
     inf.mpls_interface_policy(MPLS_IF, description="MPLS interface policy for the handoff.")
-    inf.bgp_peer_prefix_policy(INFRA_PFX, max_number_of_prefixes=20000, max_prefix_action="log")
+    inf.bgp_peer_prefix_policy(INFRA_PFX, max_pfx=20000, max_prefix_action="log")
 
     # MPLS custom-QoS (with ingress/egress EXP rules) is supported only under tenant
     # infra, so it lives here and the tenant-side node profile binds it by DN.
@@ -111,7 +111,7 @@ def test_srmpls_infra_handoff(live_aci: Niwaki) -> None:
         # loopback (20.20.20.<id>) carries the node SID.
         evpn = f"10.10.10.{node_id}"
         transport = f"20.20.20.{node_id}"
-        att = np.node_attachment(node_dn, rtr_id=evpn, rtr_id_loop_back=True)
+        att = np.node_attachment(node_dn, router_id=evpn, rtr_id_loop_back=True)
         # COVERAGE GAP: infra_node (l3extInfraNodeP, spine role) is a GOLF/multipod
         # construct and is rejected on an MPLS L3Out ("InfraNodeP is not supported
         # on Mpls L3out"), so it is not exercised in the SR-MPLS handoff.
@@ -137,7 +137,7 @@ def test_srmpls_infra_handoff(live_aci: Niwaki) -> None:
         ifp.path_attachment(
             f"topology/pod-1/paths-{node_id}/pathep-[eth1/60]",
             if_inst_t="sub-interface",
-            addr=f"10.11.4.{idx}/30",
+            ip_address=f"10.11.4.{idx}/30",
             encap="vlan-2690",
         )
         ifp.mpls_interface(description="MPLS-enabled interface.").bind(
@@ -172,12 +172,12 @@ def test_srmpls_tenant_handoff(live_aci: Niwaki) -> None:
     for idx, (name, node_id) in enumerate(_leaves(live_aci), start=1):
         np = out.node_profile(f"np-{name}")
         np.node_attachment(
-            f"topology/pod-1/node-{node_id}", rtr_id=f"10.12.0.{idx}", rtr_id_loop_back=False
+            f"topology/pod-1/node-{node_id}", router_id=f"10.12.0.{idx}", rtr_id_loop_back=False
         )
 
     out.consumer_label(
         "niwaki-it-sr-cons",
-        represents_the_provider_label_ownership="infra",
+        owner="infra",
         description="Consume the infra SR-MPLS handoff.",
     )
 

@@ -13,12 +13,12 @@ class analyticsTCPOptHdrLenBin(ManagedObject):
 
     TCP options header length bin
 
-    RN format: ``tcpopthdrlenbin-{tcp_option_header_length_bin_id}``
+    RN format: ``tcpopthdrlenbin-{id}``
     """
 
     _aci_class: ClassVar[str] = "analyticsTCPOptHdrLenBin"
-    _rn_format: ClassVar[str] = "tcpopthdrlenbin-{tcp_option_header_length_bin_id}"
-    _naming_props: ClassVar[list[str]] = ["tcp_option_header_length_bin_id"]
+    _rn_format: ClassVar[str] = "tcpopthdrlenbin-{id}"
+    _naming_props: ClassVar[list[str]] = ["id"]
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",
@@ -37,12 +37,7 @@ class analyticsTCPOptHdrLenBin(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    tcp_option_header_length_bin_id: Annotated[
-        int,
-        Field(
-            ge=0, le=6, validation_alias="id", serialization_alias="id", description="Identifier"
-        ),
-    ] = 0
+    id: Annotated[int, Field(ge=0, le=6, description="Identifier")] = 0
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[

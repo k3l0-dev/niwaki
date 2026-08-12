@@ -12,18 +12,18 @@ Inter VRF Entry policy
 | | |
 | --- | --- |
 | ACI class | `pimInterVRFEntryPol` |
-| RN | `intervrfent-[{dn_of_the_src_vrf}]` |
+| RN | `intervrfent-[{src_vrf_dn}]` |
 | Cursor | `Pim6InterVrfEntryCursor` |
 | Parent | {ref}`tenant.vrf.pim6.inter_vrf <vocab-tenant-vrf-pim6-inter_vrf>` |
 | Atomic | — |
 
 ## Attributes
 
-Accepted as keyword arguments of `.entry(dn_of_the_src_vrf)` and of `.set(**attrs)` on this cursor.  Enum parameters also accept the plain string.
+Accepted as keyword arguments of `.entry(src_vrf_dn)` and of `.set(**attrs)` on this cursor.  Enum parameters also accept the plain string.
 
 | parameter | wire | type | values | default | description |
 | --- | --- | --- | --- | --- | --- |
-| `dn_of_the_src_vrf` *(positional)* | `srcVrfDn` | `str` | — | — | Src Vrf Dn |
+| `src_vrf_dn` *(positional)* | `srcVrfDn` | `str` | — | — | Src Vrf Dn |
 | `description` | `descr` | `str` | — | — | Specifies the description of a policy component. |
 | `name` | `name` | `str` | — | — | — |
 

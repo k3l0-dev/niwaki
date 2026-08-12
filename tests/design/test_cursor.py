@@ -15,7 +15,6 @@ from niwaki.exceptions import (
     DuplicateDeclarationError,
     UnknownMakerError,
 )
-from niwaki.models._generated.fv.fvRsCtx import fvRsCtx
 from niwaki.models._generated.tag.tagTag import tagTag
 
 
@@ -207,9 +206,15 @@ class TestMoEscapeHatch:
         assert tag.design_node.attrs == {"value": "prod"}
 
     def test_containment_violation_raises(self) -> None:
-        # fvRsCtx lives under a BD, never directly under a tenant.
+        # An EPG lives under an app profile — no authority (model _contains,
+        # CHILD_MAP, nor the catalogue's DN grammar) allows it under a
+        # tenant directly.  (fvRsCtx, the old fixture here, turned out to be
+        # LEGAL under a tenant per the schema's own dn_formats —
+        # uni/tn-{name}/rsctx — once the DN-grammar authority landed.)
+        from niwaki.models._generated.fv.fvAEPg import fvAEPg
+
         with pytest.raises(DesignError, match="not a valid APIC child"):
-            tenant("prod").mo(fvRsCtx, name="prod")
+            tenant("prod").mo(fvAEPg, name="web")
 
 
 class TestBindDeclaration:

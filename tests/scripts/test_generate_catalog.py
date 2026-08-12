@@ -311,30 +311,25 @@ def test_manifest_records_provenance(built: tuple[Path, dict[str, int]]) -> None
 
 
 @needs_corpus
-def test_name_override_freezes_the_l3ext_family_only(
+def test_name_override_table_is_empty(
     built: tuple[Path, dict[str, int]],
 ) -> None:
-    """The override table holds exactly the freezable divergences, models' names."""
+    """The freeze net catches nothing since the 2.0 naming unification.
+
+    Generator and catalogue share the scopemeta lookup (class_pkg split) and
+    the acceptance gate, so their derivations agree by construction.  The six
+    l3ext rows this table used to freeze were the scar of the digit-split
+    lookup bug; a row reappearing here means the two derivations disagree
+    again — investigate, do not pin.
+    """
     import sqlite3
 
     out, stats = built
-    assert stats["name_overrides"] == 6
+    assert stats["name_overrides"] == 0
     con = sqlite3.connect(out)
-    rows = set(
-        con.execute(
-            "SELECT m.class_name, o.wire_name, o.py_name "
-            "FROM name_override o JOIN mo m ON m.id = o.class_id"
-        )
-    )
+    rows = list(con.execute("SELECT * FROM name_override"))
     con.close()
-    assert rows == {
-        ("l3extMember", "addr", "addr"),
-        ("l3extOut", "enforceRtctrl", "enforce_rtctrl"),
-        ("l3extRsNodeL3OutAtt", "rtrId", "rtr_id"),
-        ("l3extRsPathL3OutAtt", "addr", "addr"),
-        ("l3extRsPathL3OutAtt", "llAddr", "ll_addr"),
-        ("l3extRsPathL3OutAtt", "mac", "mac"),
-    }
+    assert rows == []
 
 
 def test_the_dn_formats_column_stays_last() -> None:

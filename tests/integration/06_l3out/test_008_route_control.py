@@ -42,8 +42,8 @@ def _match_rules(t: Cursor) -> list[str]:
     mr.match_prefix(
         "192.168.0.0/16",
         aggregated_route=True,
-        start_of_prefix_length=17,
-        end_of_prefix_length=24,
+        from_pfx_len=17,
+        to_pfx_len=24,
         description="RFC1918 /17..24 window.",
     )
     for scope in ("transitive", "non-transitive"):
@@ -73,8 +73,8 @@ def _match_rules(t: Cursor) -> list[str]:
         r.match_prefix(
             net,
             aggregated_route=True,
-            start_of_prefix_length=start,
-            end_of_prefix_length=end,
+            from_pfx_len=start,
+            to_pfx_len=end,
             description=f"Window {start}..{end}.",
         )
         names.append(name)

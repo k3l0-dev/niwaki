@@ -242,7 +242,7 @@ class stormctrlIfPol(ManagedObject):
         description="The storm control interface policy type. The policy type prevents disruptions on ports by a broadcast, multicast, or unknown unicast traffic storm on physical interfaces. The policy type is set to ALL types of traffic by default and can not be changed.",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    unknown_unicast_max_burst_size: Annotated[
+    uuc_burst_pps: Annotated[
         Annotated[int, Field(ge=0, le=390625000)] | Literal["unspecified"],
         AfterValidator(named_number({"0xffffffff": "unspecified"})),
         Field(

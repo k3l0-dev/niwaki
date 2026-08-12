@@ -25,7 +25,7 @@ Accepted as keyword arguments of `.fabric_l2_mtu_policy(name)` and of `.set(**at
 | --- | --- | --- | --- | --- | --- |
 | `name` *(positional)* | `name` | `str` | — | — | The Layer 2 instance policy name. |
 | `description` | `descr` | `str` | — | — | Specifies a description of the policy definition. |
-| `mtu_size_for_fabric_ports` | `fabricMtu` | `int` | — | `9000` | MTU Size for Fabric Ports |
-| `mtu_size_for_management_ports` | `managementMtu` | `int` | — | `9000` | MTU Size for Management Ports |
+| `fabric_mtu` | `fabricMtu` | `int` | — | `9000` | MTU Size for Fabric Ports |
+| `management_mtu` | `managementMtu` | `int` | — | `9000` | MTU Size for Management Ports |
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |

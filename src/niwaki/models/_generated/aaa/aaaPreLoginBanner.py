@@ -84,7 +84,7 @@ class aaaPreLoginBanner(ManagedObject):
     login_gui_string_message: str = Field(
         default="", validation_alias="guiTextMessage", serialization_alias="guiTextMessage"
     )
-    use_text_base_pre_login_banner_message: bool = Field(
+    is_gui_message_text: bool = Field(
         default=False, validation_alias="isGuiMessageText", serialization_alias="isGuiMessageText"
     )
     login_banner_message: str = Field(

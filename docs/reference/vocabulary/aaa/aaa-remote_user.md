@@ -27,4 +27,4 @@ Accepted as keyword arguments of `.remote_user(name)` and of `.set(**attrs)` on 
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |
 | `role_summary` | `roleSummary` | `str` | — | — | current set of roles (keep explicit for audit log by PD and PM) |
-| `state_for_challenge_response` | `stateCode` | `str` | — | — | — |
+| `state_code` | `stateCode` | `str` | — | — | — |

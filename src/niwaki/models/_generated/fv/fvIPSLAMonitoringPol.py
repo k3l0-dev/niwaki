@@ -72,18 +72,18 @@ class fvIPSLAMonitoringPol(ManagedObject):
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
-    http_method_used_for_probing: FvhttpMethod = Field(
+    http_method: FvhttpMethod = Field(
         default=FvhttpMethod.GET, validation_alias="httpMethod", serialization_alias="httpMethod"
     )
-    uri_for_http_probing: Annotated[
+    http_uri: Annotated[
         str, Field(max_length=512, validation_alias="httpUri", serialization_alias="httpUri")
     ] = ""
-    http_version_used_for_probing: FvhttpVersion = Field(
+    http_version: FvhttpVersion = Field(
         default=FvhttpVersion.HTTP10,
         validation_alias="httpVersion",
         serialization_alias="httpVersion",
     )
-    type_of_service_value: Annotated[
+    ipv4_tos: Annotated[
         int, Field(ge=0, le=255, validation_alias="ipv4Tos", serialization_alias="ipv4Tos")
     ] = 0
     traffic_class_value: Annotated[

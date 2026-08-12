@@ -27,6 +27,6 @@ Accepted as keyword arguments of `.service_node_cluster_settings(name)` and of `
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |
 | `service_node_admin_password` | `pwd` | `str` | — | — | The system user password. |
-| `service_node_kms_private_key` | `snKmsPrivKey` | `str` | — | — | — |
-| `service_node_kms_public_key` | `snKmsPubKey` | `str` | — | — | — |
+| `sn_kms_priv_key` | `snKmsPrivKey` | `str` | — | — | — |
+| `sn_kms_pub_key` | `snKmsPubKey` | `str` | — | — | — |
 | `service_node_mode` | `snMode` | {ref}`AaaSNModeType <enum-aaasnmodetype>` | `ACI`, `Standalone` | `ACI` | — |

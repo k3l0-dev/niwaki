@@ -15,12 +15,12 @@ class bgpRtTargetP(ManagedObject):
 
     BGP Route Target Profile
 
-    RN format: ``rtp-{route_target_source_address_family}``
+    RN format: ``rtp-{af}``
     """
 
     _aci_class: ClassVar[str] = "bgpRtTargetP"
-    _rn_format: ClassVar[str] = "rtp-{route_target_source_address_family}"
-    _naming_props: ClassVar[list[str]] = ["route_target_source_address_family"]
+    _rn_format: ClassVar[str] = "rtp-{af}"
+    _naming_props: ClassVar[list[str]] = ["af"]
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",
@@ -42,10 +42,8 @@ class bgpRtTargetP(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    route_target_source_address_family: BgpRtSourceAfType = Field(
+    af: BgpRtSourceAfType = Field(
         default=BgpRtSourceAfType.IPV4_UCAST,
-        validation_alias="af",
-        serialization_alias="af",
         description="Source address family value is respected only when the Route Target Type is set to Explicit",
     )
 

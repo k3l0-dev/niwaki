@@ -43,7 +43,7 @@ class syntheticSwitchFirmwareCheck(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    size_of_copied_tmp_file: Annotated[
+    copied_size: Annotated[
         str, Field(max_length=512, validation_alias="copiedSize", serialization_alias="copiedSize")
     ] = ""
     node_id: Annotated[

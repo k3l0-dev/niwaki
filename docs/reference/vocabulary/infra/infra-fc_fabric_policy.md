@@ -23,8 +23,8 @@ Accepted as keyword arguments of `.fc_fabric_policy(name)` and of `.set(**attrs)
 | --- | --- | --- | --- | --- | --- |
 | `name` *(positional)* | `name` | `str` | — | — | — |
 | `description` | `descr` | `str` | — | — | Specifies a description of the policy definition. |
-| `fc_protocol_error_detect_timeout` | `edTov` | `int` | — | `2000` | — |
+| `ed_tov` | `edTov` | `int` | — | `2000` | — |
 | `fcoe_mac_address_prefix` | `fcMap` | `str` | — | — | — |
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |
-| `fc_protocol_resource_allocation_timeout` | `raTov` | `int` | — | `10000` | — |
+| `ra_tov` | `raTov` | `int` | — | `10000` | — |

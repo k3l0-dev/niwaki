@@ -159,8 +159,8 @@ def test_syslog_groups(live_aci: Niwaki) -> None:
             f"{GROUP_PREFIX}-{suffix}",
             description=f"Syslog group, {group_format} format.",
             format_setting=group_format,
-            show_timezone_in_timestamp=timezone,
-            show_milli_seconds_in_timestamp=millis,
+            include_time_zone=timezone,
+            include_milli_seconds=millis,
         )
         group.console(
             description=f"Console sink, severity {console_sev}.",

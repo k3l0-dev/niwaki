@@ -404,8 +404,8 @@ class _FabricMakers(Cursor):
         annotation: str | None = None,
         description: str | None = None,
         format_setting: SyslogFormatSetting | str | None = None,
-        show_milli_seconds_in_timestamp: bool | None = None,
-        show_timezone_in_timestamp: bool | None = None,
+        include_milli_seconds: bool | None = None,
+        include_time_zone: bool | None = None,
         display_name: str | None = None,
         userdom: str | None = None,
     ) -> SyslogGroupCursor:
@@ -420,8 +420,8 @@ class _FabricMakers(Cursor):
             description: Specifies the description of a policy component.
             format_setting: The Call Home destination message format. Values: ``aci``, ``nxos``,
                 ``rfc5424-ts``. Default: ``aci``.
-            show_milli_seconds_in_timestamp: Default: ``False``.
-            show_timezone_in_timestamp: Default: ``False``.
+            include_milli_seconds: Default: ``False``.
+            include_time_zone: Default: ``False``.
         """
         params = {
             k: v
@@ -997,7 +997,7 @@ class _FabricMakers(Cursor):
         *,
         annotation: str | None = None,
         description: str | None = None,
-        fabric_link_debounce_interval_msec: int | None = None,
+        link_debounce: int | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
@@ -1009,8 +1009,7 @@ class _FabricMakers(Cursor):
             name: The name of the object.
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies a description of the policy definition.
-            fabric_link_debounce_interval_msec: Administrative Fabric Port link debounce
-                interval Default: ``0``.
+            link_debounce: Administrative Fabric Port link debounce interval Default: ``0``.
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
@@ -1035,8 +1034,8 @@ class _FabricMakers(Cursor):
         *,
         annotation: str | None = None,
         description: str | None = None,
-        max_flaps_allowed_per_time: int | None = None,
-        time_allowed_for_max_flaps: int | None = None,
+        link_flap_error_max: int | None = None,
+        link_flap_error_seconds: int | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
@@ -1048,8 +1047,8 @@ class _FabricMakers(Cursor):
             name: The name of the object.
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies a description of the policy definition.
-            max_flaps_allowed_per_time: Default: ``30``.
-            time_allowed_for_max_flaps: Default: ``420``.
+            link_flap_error_max: Default: ``30``.
+            link_flap_error_seconds: Default: ``420``.
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
@@ -1114,8 +1113,8 @@ class _FabricMakers(Cursor):
         *,
         annotation: str | None = None,
         description: str | None = None,
-        mtu_size_for_fabric_ports: int | None = None,
-        mtu_size_for_management_ports: int | None = None,
+        fabric_mtu: int | None = None,
+        management_mtu: int | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
@@ -1130,8 +1129,8 @@ class _FabricMakers(Cursor):
             name: The Layer 2 instance policy name.
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies a description of the policy definition.
-            mtu_size_for_fabric_ports: MTU Size for Fabric Ports Default: ``9000``.
-            mtu_size_for_management_ports: MTU Size for Management Ports Default: ``9000``.
+            fabric_mtu: MTU Size for Fabric Ports Default: ``9000``.
+            management_mtu: MTU Size for Management Ports Default: ``9000``.
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
@@ -2635,7 +2634,7 @@ class _FabricMakers(Cursor):
         *,
         annotation: str | None = None,
         description: str | None = None,
-        whether_effective_on_reboot: bool | None = None,
+        effective_on_reboot: bool | None = None,
         ignore_compatibility_check: bool | None = None,
         internal_label: str | None = None,
         display_name: str | None = None,
@@ -2655,9 +2654,9 @@ class _FabricMakers(Cursor):
             name: The firmware policy name.
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies a description of the policy definition.
-            whether_effective_on_reboot: A property that indicates if the selected firmware
-                version will be active after reboot. The firmware must be effective on an
-                unplanned reboot before the scheduled maintenance operation. Default: ``False``.
+            effective_on_reboot: A property that indicates if the selected firmware version will
+                be active after reboot. The firmware must be effective on an unplanned reboot
+                before the scheduled maintenance operation. Default: ``False``.
             ignore_compatibility_check: A property for specifying whether compatibility checks
                 should be ignored when applying the firmware policy. Default: ``False``.
             owner_key: The key for enabling clients to own their data for entity correlation.
@@ -3087,7 +3086,7 @@ class _FabricMakers(Cursor):
         annotation: str | None = None,
         description: str | None = None,
         export_format: ConfigFormat | str | None = None,
-        include_secure_fields_in_export: bool | None = None,
+        include_secure_fields: bool | None = None,
         max_snapshot_count: int | str | None = None,
         display_name: str | None = None,
         snapshot: bool | None = None,
@@ -3109,7 +3108,7 @@ class _FabricMakers(Cursor):
             description: Specifies the description of a policy component.
             export_format: The data format to be used when exporting. Values: ``json``, ``xml``.
                 Default: ``json``.
-            include_secure_fields_in_export: Default: ``True``.
+            include_secure_fields: Default: ``True``.
             max_snapshot_count: Default: ``global-limit``.
             snapshot: Default: ``False``.
             dn_to_export: The distinguished name of the object to be exported. The policy
@@ -3230,7 +3229,7 @@ class _FabricMakers(Cursor):
         description: str | None = None,
         import_mode: ConfigImportMode | str | None = None,
         display_name: str | None = None,
-        preview_mode_nothing_is_applied: bool | None = None,
+        preview: bool | None = None,
         snapshot: bool | None = None,
         snapshot_one: str | None = None,
         snapshot_two: str | None = None,
@@ -3246,7 +3245,7 @@ class _FabricMakers(Cursor):
             description: Specifies the description of a policy component.
             import_mode: The BGP Domain mode. Values: ``atomic``, ``best-effort``. Default:
                 ``atomic``.
-            preview_mode_nothing_is_applied: Default: ``False``.
+            preview: Default: ``False``.
             snapshot: Default: ``False``.
         """
         params = {
@@ -3497,7 +3496,7 @@ class _FabricMakers(Cursor):
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
-        software_hardware_based_record_export: bool | None = None,
+        sw_export: bool | None = None,
         userdom: str | None = None,
     ) -> FlowCollectorPolicyCursor:
         """Declare a ``telemetryFlowCollectorP`` child under the fabric level.
@@ -3516,7 +3515,7 @@ class _FabricMakers(Cursor):
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
-            software_hardware_based_record_export: Default: ``False``.
+            sw_export: Default: ``False``.
         """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
@@ -3637,7 +3636,7 @@ class _FabricMakers(Cursor):
         annotation: str | None = None,
         apic_path: str | None = None,
         app_name: str | None = None,
-        files_to_collect_and_export: DbgexpCollectType | str | None = None,
+        collection_type: DbgexpCollectType | str | None = None,
         compression: MonCompression | str | None = None,
         export_location: ScalarEnum8 | str | None = None,
         include_db_metadata_file: bool | None = None,
@@ -3660,8 +3659,8 @@ class _FabricMakers(Cursor):
             administrative_state: The administrative state of the executable policies. Values:
                 ``triggered``, ``untriggered``. Default: ``untriggered``.
             annotation: User annotation. Suggested format orchestrator:value
-            files_to_collect_and_export: The collection type for the core file. Values:
-                ``coreOnly``, ``techSup``. Default: ``coreOnly``.
+            collection_type: The collection type for the core file. Values: ``coreOnly``,
+                ``techSup``. Default: ``coreOnly``.
             compression: The compression format for core files. The format can either be gzip or
                 no compression. Values: ``gzip``, ``none``. Default: ``none``.
             export_location: Values: ``apic``, ``apicx``. Default: ``apic``.
@@ -3700,12 +3699,12 @@ class _FabricMakers(Cursor):
         export_location: ScalarEnum8 | str | None = None,
         include_db_metadata_file: bool | None = None,
         description: str | None = None,
-        end_time_for_techsupport_collection: str | None = None,
+        end_time: str | None = None,
         export_to_controller: bool | None = None,
         export_to_intersight: bool | None = None,
         extensive_logs: bool | None = None,
         display_name: str | None = None,
-        start_time_for_techsupport_collection: str | None = None,
+        start_time: str | None = None,
         include_pre_upgrade_logs: bool | None = None,
         userdom: str | None = None,
         vendor_name: str | None = None,
@@ -3788,8 +3787,8 @@ class _FabricMakers(Cursor):
         ptp_global_domain: int | None = None,
         is_count_valid: bool | None = None,
         latency_policy_count: int | None = None,
-        ptp_global_priority_1_value: int | None = None,
-        ptp_global_priority_2_value: int | None = None,
+        prio1: int | None = None,
+        prio2: int | None = None,
         state: NetflowAdminSt | str | None = None,
         system_resolution: int | None = None,
         ttag_ether_type0x8905_status: bool | None = None,
@@ -3811,8 +3810,8 @@ class _FabricMakers(Cursor):
             ptp_global_domain: Default: ``0``.
             is_count_valid: Flag to tell if the policy count is valid or not Default: ``False``.
             latency_policy_count: Total number of active latency policies Default: ``0``.
-            ptp_global_priority_1_value: PTP Global properties Default: ``255``.
-            ptp_global_priority_2_value: Default: ``255``.
+            prio1: PTP Global properties Default: ``255``.
+            prio2: Default: ``255``.
             state: State of the PTP protocol Values: ``disabled``, ``enabled``. Default:
                 ``disabled``.
             system_resolution: System Resolution factor, Value could be (0 or 11 ) Default:
@@ -4445,7 +4444,7 @@ class _CommunicationPolicyMakers(Cursor):
         description: str | None = None,
         global_throttle_rate: int | None = None,
         global_throttle_st: CommAdminState | str | None = None,
-        unit_of_rate_limit: str | None = None,
+        global_throttle_unit: str | None = None,
         max_request_status_count: int | None = None,
         name: str | None = None,
         display_name: str | None = None,
@@ -4501,7 +4500,7 @@ class _CommunicationPolicyMakers(Cursor):
         description: str | None = None,
         global_throttle_rate: int | None = None,
         global_throttle_st: CommAdminState | str | None = None,
-        unit_of_rate_limit: str | None = None,
+        global_throttle_unit: str | None = None,
         max_request_status_count: int | None = None,
         name: str | None = None,
         display_name: str | None = None,
@@ -4619,7 +4618,7 @@ class _CommunicationPolicyMakers(Cursor):
         self,
         *,
         annotation: str | None = None,
-        maximum_mos_in_query: int | None = None,
+        max_mos: int | None = None,
         userdom: str | None = None,
     ) -> CommunicationSetupCursor:
         """Declare a ``commSetup`` child under the communication_policy level.
@@ -4628,7 +4627,7 @@ class _CommunicationPolicyMakers(Cursor):
 
         Args:
             annotation: User annotation. Suggested format orchestrator:value
-            maximum_mos_in_query: Default: ``100000``.
+            max_mos: Default: ``100000``.
         """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
@@ -4730,7 +4729,7 @@ class ConfigurationExportPolicyCursor(_FabricMakers, _UniMakers):
         annotation: str | None = None,
         description: str | None = None,
         export_format: ConfigFormat | str | None = None,
-        include_secure_fields_in_export: bool | None = None,
+        include_secure_fields: bool | None = None,
         max_snapshot_count: int | str | None = None,
         display_name: str | None = None,
         snapshot: bool | None = None,
@@ -4822,7 +4821,7 @@ class ConfigurationSnapshotRollbackPolicyCursor(_FabricMakers, _UniMakers):
         description: str | None = None,
         import_mode: ConfigImportMode | str | None = None,
         display_name: str | None = None,
-        preview_mode_nothing_is_applied: bool | None = None,
+        preview: bool | None = None,
         snapshot: bool | None = None,
         snapshot_one: str | None = None,
         snapshot_two: str | None = None,
@@ -4880,7 +4879,7 @@ class CoreExportPolicyCursor(_FabricMakers, _UniMakers):
         annotation: str | None = None,
         apic_path: str | None = None,
         app_name: str | None = None,
-        files_to_collect_and_export: DbgexpCollectType | str | None = None,
+        collection_type: DbgexpCollectType | str | None = None,
         compression: MonCompression | str | None = None,
         export_location: ScalarEnum8 | str | None = None,
         include_db_metadata_file: bool | None = None,
@@ -4986,7 +4985,7 @@ class _DatetimePolicyMakers(Cursor):
         annotation: str | None = None,
         description: str | None = None,
         key: str | None = None,
-        type_of_authentication_key: DatetimeKeyType | str | None = None,
+        key_type: DatetimeKeyType | str | None = None,
         name: str | None = None,
         display_name: str | None = None,
         trusted_state: bool | None = None,
@@ -5002,8 +5001,7 @@ class _DatetimePolicyMakers(Cursor):
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies the description of a policy component.
             key: The NTP authentication key.
-            type_of_authentication_key: NTP authentication key type Values: ``md5``, ``sha1``.
-                Default: ``md5``.
+            key_type: NTP authentication key type Values: ``md5``, ``sha1``. Default: ``md5``.
             trusted_state: A property that indicates if the NTP authentication is trusted.
                 Default: ``False``.
         """
@@ -5282,8 +5280,8 @@ class FabricL2MtuPolicyCursor(_FabricMakers, _UniMakers):
         *,
         annotation: str | None = None,
         description: str | None = None,
-        mtu_size_for_fabric_ports: int | None = None,
-        mtu_size_for_management_ports: int | None = None,
+        fabric_mtu: int | None = None,
+        management_mtu: int | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
@@ -5311,8 +5309,8 @@ class FabricLinkFlapPolicyCursor(_FabricMakers, _UniMakers):
         *,
         annotation: str | None = None,
         description: str | None = None,
-        max_flaps_allowed_per_time: int | None = None,
-        time_allowed_for_max_flaps: int | None = None,
+        link_flap_error_max: int | None = None,
+        link_flap_error_seconds: int | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
@@ -5340,7 +5338,7 @@ class FabricLinkLevelPolicyCursor(_FabricMakers, _UniMakers):
         *,
         annotation: str | None = None,
         description: str | None = None,
-        fabric_link_debounce_interval_msec: int | None = None,
+        link_debounce: int | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
@@ -5499,7 +5497,7 @@ class FirmwarePolicyCursor(_FabricMakers, _UniMakers):
         *,
         annotation: str | None = None,
         description: str | None = None,
-        whether_effective_on_reboot: bool | None = None,
+        effective_on_reboot: bool | None = None,
         ignore_compatibility_check: bool | None = None,
         internal_label: str | None = None,
         display_name: str | None = None,
@@ -5530,7 +5528,7 @@ class _FirmwareRepositoryProfileMakers(Cursor):
         authentication_type: FirmwareAuthPass | str | None = None,
         authentication_type_choice: FirmwareAuthenticationType | str | None = None,
         description: str | None = None,
-        variable_to_reuse_download_task: bool | None = None,
+        dnld_task_flip: bool | None = None,
         ssh_private_key_content: str | None = None,
         ssh_private_key_passphrase: str | None = None,
         ssh_public_key_content: str | None = None,
@@ -5556,7 +5554,7 @@ class _FirmwareRepositoryProfileMakers(Cursor):
                 are; default, md5, none, and simple. Values: ``usePassword``,
                 ``useSshKeyContents``. Default: ``usePassword``.
             description: Specifies the description of a policy component.
-            variable_to_reuse_download_task: Download Task Flip. Default: ``True``.
+            dnld_task_flip: Download Task Flip. Default: ``True``.
             ssh_private_key_passphrase: Passphrase given at the identity key creation.
             ssh_public_key_content: Certificate contents for data transfer. Used for
                 credentials.
@@ -5590,7 +5588,7 @@ class _FirmwareRepositoryProfileMakers(Cursor):
         authentication_type: FirmwareAuthPass | str | None = None,
         authentication_type_choice: FirmwareAuthenticationType | str | None = None,
         description: str | None = None,
-        variable_to_reuse_download_task: bool | None = None,
+        dnld_task_flip: bool | None = None,
         ssh_private_key_content: str | None = None,
         ssh_private_key_passphrase: str | None = None,
         ssh_public_key_content: str | None = None,
@@ -5617,7 +5615,7 @@ class _FirmwareRepositoryProfileMakers(Cursor):
                 are; default, md5, none, and simple. Values: ``usePassword``,
                 ``useSshKeyContents``. Default: ``usePassword``.
             description: Specifies the description of a policy component.
-            variable_to_reuse_download_task: Download Task Flip. Default: ``True``.
+            dnld_task_flip: Download Task Flip. Default: ``True``.
             ssh_private_key_passphrase: Passphrase given at the identity key creation.
             ssh_public_key_content: Certificate contents for data transfer. Used for
                 credentials.
@@ -5651,7 +5649,7 @@ class _FirmwareRepositoryProfileMakers(Cursor):
         authentication_type: FirmwareAuthPass | str | None = None,
         authentication_type_choice: FirmwareAuthenticationType | str | None = None,
         description: str | None = None,
-        variable_to_reuse_download_task: bool | None = None,
+        dnld_task_flip: bool | None = None,
         ssh_private_key_content: str | None = None,
         ssh_private_key_passphrase: str | None = None,
         ssh_public_key_content: str | None = None,
@@ -5678,7 +5676,7 @@ class _FirmwareRepositoryProfileMakers(Cursor):
                 are; default, md5, none, and simple. Values: ``usePassword``,
                 ``useSshKeyContents``. Default: ``usePassword``.
             description: Specifies the description of a policy component.
-            variable_to_reuse_download_task: Download Task Flip. Default: ``True``.
+            dnld_task_flip: Download Task Flip. Default: ``True``.
             ssh_private_key_passphrase: Passphrase given at the identity key creation.
             ssh_public_key_content: Certificate contents for data transfer. Used for
                 credentials.
@@ -5747,7 +5745,7 @@ class _FlowCollectorPolicyMakers(Cursor):
         admin_state: TelemetryAdminState | str | None = None,
         annotation: str | None = None,
         user_grpc_certificate: str | None = None,
-        hostname_associated_with_the_certificate: str | None = None,
+        hostname: str | None = None,
         remote_port: int | str | None = None,
         userdom: str | None = None,
     ) -> ExternalServerCursor:
@@ -5759,7 +5757,7 @@ class _FlowCollectorPolicyMakers(Cursor):
             admin_state: The administrative state of the object or policy. Values: ``disabled``,
                 ``enabled``. Default: ``enabled``.
             annotation: User annotation. Suggested format orchestrator:value
-            hostname_associated_with_the_certificate: ignore, removed
+            hostname: ignore, removed
             remote_port: Default: ``unspecified``.
         """
         params = {
@@ -5801,11 +5799,11 @@ class _FlowCollectorPolicyMakers(Cursor):
         fwd_drops: bool | None = None,
         group_drop_events: bool | None = None,
         group_latency_events: bool | None = None,
-        configure_fte_latency_bucket_count: int | None = None,
+        latency_count: int | None = None,
         latency_flow_count: int | None = None,
-        configure_fte_latency_bucket_limit: int | None = None,
-        configure_fte_latency_threshold_limit: int | None = None,
-        configure_fte_latency_threshold_unit: TelemetryLatencyUnit | str | None = None,
+        latency_limit: int | None = None,
+        latency_threshold: int | None = None,
+        latency_threshold_unit: TelemetryLatencyUnit | str | None = None,
         mouse_packet_bit: bool | None = None,
         mouse_packet_count: int | None = None,
         mouse_packet_limit: int | None = None,
@@ -5870,14 +5868,12 @@ class _FlowCollectorPolicyMakers(Cursor):
                 ``False``.
             group_latency_events: 10. Dropped Event Groups for the FTE events under FTE Default:
                 ``False``.
-            configure_fte_latency_bucket_count: 32. FTE rtt_sample_seq Bucket count Default:
-                ``0``.
+            latency_count: 32. FTE rtt_sample_seq Bucket count Default: ``0``.
             latency_flow_count: 17. Latency events flow count under FTE Default: ``0``.
-            configure_fte_latency_bucket_limit: 31. FTE rtt_sample_seq Bucket limit Default:
-                ``0``.
-            configure_fte_latency_threshold_limit: 15. Latency under FTE Default: ``0``.
-            configure_fte_latency_threshold_unit: 16. Latency Unit under FTE Values: ``micro-
-                sec``, ``milli-sec``. Default: ``micro-sec``.
+            latency_limit: 31. FTE rtt_sample_seq Bucket limit Default: ``0``.
+            latency_threshold: 15. Latency under FTE Default: ``0``.
+            latency_threshold_unit: 16. Latency Unit under FTE Values: ``micro-sec``, ``milli-
+                sec``. Default: ``micro-sec``.
             mouse_packet_bit: 03. Mouse Pkt bit configuration Default: ``False``.
             mouse_packet_count: 24. FTE Bucket mouse_pkt count Default: ``0``.
             mouse_packet_limit: 23. FTE Bucket mouse_pkt limit Default: ``0``.
@@ -5974,7 +5970,7 @@ class _FlowCollectorPolicyMakers(Cursor):
         owner_tag: str | None = None,
         packet_id: int | None = None,
         profile_id: int | None = None,
-        sub_event_configuration_for_rest_sop_bit: int | None = None,
+        rest_sop_bit: int | None = None,
         rx_bd: int | None = None,
         rx_is_epg: bool | None = None,
         s_class: int | None = None,
@@ -6039,8 +6035,7 @@ class _FlowCollectorPolicyMakers(Cursor):
                 indicate who created this object.
             packet_id: 03 Default: ``0``.
             profile_id: 08 Default: ``0``.
-            sub_event_configuration_for_rest_sop_bit: Rest sop bit configuration52 Default:
-                ``0``.
+            rest_sop_bit: Rest sop bit configuration52 Default: ``0``.
             rx_bd: 37 Default: ``0``.
             rx_is_epg: 39 Default: ``False``.
             s_class: 20 Default: ``0``.
@@ -6080,16 +6075,16 @@ class _FlowCollectorPolicyMakers(Cursor):
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
-        sub_event_configuration_for_tcp_ack_flag: bool | None = None,
-        sub_event_configuration_for_tcp_cwr_flag: bool | None = None,
-        sub_event_configuration_for_tcp_ece_flag: bool | None = None,
-        sub_event_configuration_for_tcp_fin_flag: bool | None = None,
-        sub_event_configuration_for_tcp_flag_set: bool | None = None,
-        sub_event_configuration_for_tcp_ns_flag: bool | None = None,
-        sub_event_configuration_for_tcp_psh_flag: bool | None = None,
-        sub_event_configuration_for_tcp_rst_flag: bool | None = None,
-        sub_event_configuration_for_tcp_syn_flag: bool | None = None,
-        sub_event_configuration_for_tcp_urg_flag: bool | None = None,
+        tcp_ack_flag: bool | None = None,
+        tcp_cwr_flag: bool | None = None,
+        tcp_ece_flag: bool | None = None,
+        tcp_fin_flag: bool | None = None,
+        tcp_flag_set: bool | None = None,
+        tcp_ns_flag: bool | None = None,
+        tcp_psh_flag: bool | None = None,
+        tcp_rst_flag: bool | None = None,
+        tcp_syn_flag: bool | None = None,
+        tcp_urg_flag: bool | None = None,
         userdom: str | None = None,
     ) -> FteEventTcpFlagsCursor:
         """Declare a ``telemetryFteEventTcpFlags`` child under the flow_collector_policy level.
@@ -6103,18 +6098,17 @@ class _FlowCollectorPolicyMakers(Cursor):
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
-            sub_event_configuration_for_tcp_ack_flag: 06. TCP ACK flag set Default: ``False``.
-            sub_event_configuration_for_tcp_cwr_flag: 09. TCP CWR flag set Default: ``False``.
-            sub_event_configuration_for_tcp_ece_flag: 08. TCP ECE flag set Default: ``False``.
-            sub_event_configuration_for_tcp_fin_flag: 02. TCP FIN flag configuration Default:
+            tcp_ack_flag: 06. TCP ACK flag set Default: ``False``.
+            tcp_cwr_flag: 09. TCP CWR flag set Default: ``False``.
+            tcp_ece_flag: 08. TCP ECE flag set Default: ``False``.
+            tcp_fin_flag: 02. TCP FIN flag configuration Default: ``False``.
+            tcp_flag_set: 01. TCP flag set configuration. Enables all TCP flags Default:
                 ``False``.
-            sub_event_configuration_for_tcp_flag_set: 01. TCP flag set configuration. Enables
-                all TCP flags Default: ``False``.
-            sub_event_configuration_for_tcp_ns_flag: 10. TCP NS flag set Default: ``False``.
-            sub_event_configuration_for_tcp_psh_flag: 05. TCP PSH flag set Default: ``False``.
-            sub_event_configuration_for_tcp_rst_flag: 04. TCP RST flag set Default: ``False``.
-            sub_event_configuration_for_tcp_syn_flag: 03. TCP SYN flag set Default: ``False``.
-            sub_event_configuration_for_tcp_urg_flag: 07. TCP URG flag set Default: ``False``.
+            tcp_ns_flag: 10. TCP NS flag set Default: ``False``.
+            tcp_psh_flag: 05. TCP PSH flag set Default: ``False``.
+            tcp_rst_flag: 04. TCP RST flag set Default: ``False``.
+            tcp_syn_flag: 03. TCP SYN flag set Default: ``False``.
+            tcp_urg_flag: 07. TCP URG flag set Default: ``False``.
         """
         params = {
             k: v
@@ -6156,7 +6150,7 @@ class FlowCollectorPolicyCursor(_FlowCollectorPolicyMakers, _FabricMakers, _UniM
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
-        software_hardware_based_record_export: bool | None = None,
+        sw_export: bool | None = None,
         userdom: str | None = None,
     ) -> FlowCollectorPolicyCursor:
         """Set ``telemetryFlowCollectorP`` attributes (merged; validated eagerly)."""
@@ -6675,9 +6669,9 @@ class _IsisDomainPolicyMakers(Cursor):
         annotation: str | None = None,
         description: str | None = None,
         lsp_fast_flood: IsisLspFastFloodMode | str | None = None,
-        lsp_generation_initial_wait_inerval: int | None = None,
-        lsp_generation_maximal_wait_inerval: int | None = None,
-        lsp_generation_secondary_wait_inerval: int | None = None,
+        lsp_gen_init_intvl: int | None = None,
+        lsp_gen_max_intvl: int | None = None,
+        lsp_gen_sec_intvl: int | None = None,
         name: str | None = None,
         display_name: str | None = None,
         spf_comp_init_intvl: int | None = None,
@@ -6697,12 +6691,12 @@ class _IsisDomainPolicyMakers(Cursor):
                 Intermediate System (IS-IS) convergence time when new link-state packets (LSPs)
                 are generated in the network and shortest path first (SPF) is triggered by the
                 new LSPs. Values: ``disabled``, ``enabled``. Default: ``enabled``.
-            lsp_generation_initial_wait_inerval: The LSP generation initial wait interval. This
-                is used in the LSP generation interval for the LSP MTU. Default: ``50``.
-            lsp_generation_maximal_wait_inerval: The LSP generation maximum wait interval. This
-                is used in the LSP generation interval for the LSP MTU. Default: ``8000``.
-            lsp_generation_secondary_wait_inerval: The LSP generation second wait interval. This
-                is used in the LSP generation interval for the LSP MTU. Default: ``50``.
+            lsp_gen_init_intvl: The LSP generation initial wait interval. This is used in the
+                LSP generation interval for the LSP MTU. Default: ``50``.
+            lsp_gen_max_intvl: The LSP generation maximum wait interval. This is used in the LSP
+                generation interval for the LSP MTU. Default: ``8000``.
+            lsp_gen_sec_intvl: The LSP generation second wait interval. This is used in the LSP
+                generation interval for the LSP MTU. Default: ``50``.
             spf_comp_init_intvl: The SPF computation frequency initial wait interval. This is
                 used in the SPF computations for the LSP MTU. Default: ``50``.
             spf_comp_max_intvl: The SPF computation frequency maximum wait interval. This is
@@ -8631,8 +8625,8 @@ class PtpLatencyModeCursor(_FabricMakers, _UniMakers):
         ptp_global_domain: int | None = None,
         is_count_valid: bool | None = None,
         latency_policy_count: int | None = None,
-        ptp_global_priority_1_value: int | None = None,
-        ptp_global_priority_2_value: int | None = None,
+        prio1: int | None = None,
+        prio2: int | None = None,
         state: NetflowAdminSt | str | None = None,
         system_resolution: int | None = None,
         ttag_ether_type0x8905_status: bool | None = None,
@@ -8690,7 +8684,7 @@ class _FabricSchedulerMakers(Cursor):
         *,
         annotation: str | None = None,
         maximum_concurrent_tasks: int | str | None = None,
-        date_and_time: str | None = None,
+        window_start_time: str | None = None,
         display_name: str | None = None,
         delay_between_node_upgrades: int | None = None,
         proc_break: str | None = None,
@@ -8707,7 +8701,7 @@ class _FabricSchedulerMakers(Cursor):
             annotation: User annotation. Suggested format orchestrator:value
             maximum_concurrent_tasks: The concurrency capacity limit. This is the maximum number
                 of tasks that can be processed concurrently. Default: ``unlimited``.
-            date_and_time: The date that the schedule window starts.
+            window_start_time: The date that the schedule window starts.
             delay_between_node_upgrades: Delay between node upgrades in seconds. This is
                 applicable only for concurCap 1. Default: ``0``.
             proc_break: A period of time taken between processing of items within the
@@ -10090,8 +10084,8 @@ class SyslogGroupCursor(_SyslogGroupMakers, _FabricMakers, _UniMakers):
         annotation: str | None = None,
         description: str | None = None,
         format_setting: SyslogFormatSetting | str | None = None,
-        show_milli_seconds_in_timestamp: bool | None = None,
-        show_timezone_in_timestamp: bool | None = None,
+        include_milli_seconds: bool | None = None,
+        include_time_zone: bool | None = None,
         display_name: str | None = None,
         userdom: str | None = None,
     ) -> SyslogGroupCursor:
@@ -10117,7 +10111,7 @@ class _TacacsMonitoringDestinationGroupMakers(Cursor):
         key: str | None = None,
         name: str | None = None,
         display_name: str | None = None,
-        send_changes_as_command_arguments: bool | None = None,
+        populate_cmd_args: bool | None = None,
         userdom: str | None = None,
     ) -> TacacsDestinationCursor:
         """Declare a ``tacacsTacacsDest`` child under the tacacs_monitoring_destination_group level.
@@ -10131,7 +10125,7 @@ class _TacacsMonitoringDestinationGroupMakers(Cursor):
             authentication_protocol: Values: ``chap``, ``mschap``, ``pap``. Default: ``pap``.
             description: Specifies the description of a policy component.
             key: The key or password used to uniquely identify this configuration object.
-            send_changes_as_command_arguments: Default: ``False``.
+            populate_cmd_args: Default: ``False``.
         """
         params = {
             k: v
@@ -10206,12 +10200,12 @@ class TechsupportExportPolicyCursor(_FabricMakers, _UniMakers):
         export_location: ScalarEnum8 | str | None = None,
         include_db_metadata_file: bool | None = None,
         description: str | None = None,
-        end_time_for_techsupport_collection: str | None = None,
+        end_time: str | None = None,
         export_to_controller: bool | None = None,
         export_to_intersight: bool | None = None,
         extensive_logs: bool | None = None,
         display_name: str | None = None,
-        start_time_for_techsupport_collection: str | None = None,
+        start_time: str | None = None,
         include_pre_upgrade_logs: bool | None = None,
         userdom: str | None = None,
         vendor_name: str | None = None,
@@ -10960,7 +10954,7 @@ class CommunicationSetupCursor(_CommunicationPolicyMakers, _FabricMakers, _UniMa
         self,
         *,
         annotation: str | None = None,
-        maximum_mos_in_query: int | None = None,
+        max_mos: int | None = None,
         userdom: str | None = None,
     ) -> CommunicationSetupCursor:
         """Set ``commSetup`` attributes (merged; validated eagerly)."""
@@ -10991,7 +10985,7 @@ class HttpServiceCursor(_CommunicationPolicyMakers, _FabricMakers, _UniMakers):
         description: str | None = None,
         global_throttle_rate: int | None = None,
         global_throttle_st: CommAdminState | str | None = None,
-        unit_of_rate_limit: str | None = None,
+        global_throttle_unit: str | None = None,
         max_request_status_count: int | None = None,
         name: str | None = None,
         display_name: str | None = None,
@@ -11071,7 +11065,7 @@ class HttpSslConfigurationCursor(
         description: str | None = None,
         global_throttle_rate: int | None = None,
         global_throttle_st: CommAdminState | str | None = None,
-        unit_of_rate_limit: str | None = None,
+        global_throttle_unit: str | None = None,
         max_request_status_count: int | None = None,
         name: str | None = None,
         display_name: str | None = None,
@@ -11224,7 +11218,7 @@ class NtpAuthKeyCursor(_DatetimePolicyMakers, _FabricMakers, _UniMakers):
         annotation: str | None = None,
         description: str | None = None,
         key: str | None = None,
-        type_of_authentication_key: DatetimeKeyType | str | None = None,
+        key_type: DatetimeKeyType | str | None = None,
         name: str | None = None,
         display_name: str | None = None,
         trusted_state: bool | None = None,
@@ -11419,7 +11413,7 @@ class CcoFirmwareSourceCursor(_FirmwareRepositoryProfileMakers, _FabricMakers, _
         authentication_type: FirmwareAuthPass | str | None = None,
         authentication_type_choice: FirmwareAuthenticationType | str | None = None,
         description: str | None = None,
-        variable_to_reuse_download_task: bool | None = None,
+        dnld_task_flip: bool | None = None,
         ssh_private_key_content: str | None = None,
         ssh_private_key_passphrase: str | None = None,
         ssh_public_key_content: str | None = None,
@@ -11456,7 +11450,7 @@ class FirmwareDownloadTaskCursor(_FirmwareRepositoryProfileMakers, _FabricMakers
         authentication_type: FirmwareAuthPass | str | None = None,
         authentication_type_choice: FirmwareAuthenticationType | str | None = None,
         description: str | None = None,
-        variable_to_reuse_download_task: bool | None = None,
+        dnld_task_flip: bool | None = None,
         ssh_private_key_content: str | None = None,
         ssh_private_key_passphrase: str | None = None,
         ssh_public_key_content: str | None = None,
@@ -11493,7 +11487,7 @@ class InternalFirmwareSourceCursor(_FirmwareRepositoryProfileMakers, _FabricMake
         authentication_type: FirmwareAuthPass | str | None = None,
         authentication_type_choice: FirmwareAuthenticationType | str | None = None,
         description: str | None = None,
-        variable_to_reuse_download_task: bool | None = None,
+        dnld_task_flip: bool | None = None,
         ssh_private_key_content: str | None = None,
         ssh_private_key_passphrase: str | None = None,
         ssh_public_key_content: str | None = None,
@@ -11529,7 +11523,7 @@ class ExternalServerCursor(_FlowCollectorPolicyMakers, _FabricMakers, _UniMakers
         admin_state: TelemetryAdminState | str | None = None,
         annotation: str | None = None,
         user_grpc_certificate: str | None = None,
-        hostname_associated_with_the_certificate: str | None = None,
+        hostname: str | None = None,
         remote_port: int | str | None = None,
         userdom: str | None = None,
     ) -> ExternalServerCursor:
@@ -11558,16 +11552,16 @@ class FteEventTcpFlagsCursor(_FlowCollectorPolicyMakers, _FabricMakers, _UniMake
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
-        sub_event_configuration_for_tcp_ack_flag: bool | None = None,
-        sub_event_configuration_for_tcp_cwr_flag: bool | None = None,
-        sub_event_configuration_for_tcp_ece_flag: bool | None = None,
-        sub_event_configuration_for_tcp_fin_flag: bool | None = None,
-        sub_event_configuration_for_tcp_flag_set: bool | None = None,
-        sub_event_configuration_for_tcp_ns_flag: bool | None = None,
-        sub_event_configuration_for_tcp_psh_flag: bool | None = None,
-        sub_event_configuration_for_tcp_rst_flag: bool | None = None,
-        sub_event_configuration_for_tcp_syn_flag: bool | None = None,
-        sub_event_configuration_for_tcp_urg_flag: bool | None = None,
+        tcp_ack_flag: bool | None = None,
+        tcp_cwr_flag: bool | None = None,
+        tcp_ece_flag: bool | None = None,
+        tcp_fin_flag: bool | None = None,
+        tcp_flag_set: bool | None = None,
+        tcp_ns_flag: bool | None = None,
+        tcp_psh_flag: bool | None = None,
+        tcp_rst_flag: bool | None = None,
+        tcp_syn_flag: bool | None = None,
+        tcp_urg_flag: bool | None = None,
         userdom: str | None = None,
     ) -> FteEventTcpFlagsCursor:
         """Set ``telemetryFteEventTcpFlags`` attributes (merged; validated eagerly)."""
@@ -11611,11 +11605,11 @@ class FteEventsCursor(_FlowCollectorPolicyMakers, _FabricMakers, _UniMakers):
         fwd_drops: bool | None = None,
         group_drop_events: bool | None = None,
         group_latency_events: bool | None = None,
-        configure_fte_latency_bucket_count: int | None = None,
+        latency_count: int | None = None,
         latency_flow_count: int | None = None,
-        configure_fte_latency_bucket_limit: int | None = None,
-        configure_fte_latency_threshold_limit: int | None = None,
-        configure_fte_latency_threshold_unit: TelemetryLatencyUnit | str | None = None,
+        latency_limit: int | None = None,
+        latency_threshold: int | None = None,
+        latency_threshold_unit: TelemetryLatencyUnit | str | None = None,
         mouse_packet_bit: bool | None = None,
         mouse_packet_count: int | None = None,
         mouse_packet_limit: int | None = None,
@@ -11708,7 +11702,7 @@ class FteEventsExtCursor(_FlowCollectorPolicyMakers, _FabricMakers, _UniMakers):
         owner_tag: str | None = None,
         packet_id: int | None = None,
         profile_id: int | None = None,
-        sub_event_configuration_for_rest_sop_bit: int | None = None,
+        rest_sop_bit: int | None = None,
         rx_bd: int | None = None,
         rx_is_epg: bool | None = None,
         s_class: int | None = None,
@@ -12088,9 +12082,9 @@ class IsisLevelCursor(_IsisDomainPolicyMakers, _FabricMakers, _UniMakers):
         annotation: str | None = None,
         description: str | None = None,
         lsp_fast_flood: IsisLspFastFloodMode | str | None = None,
-        lsp_generation_initial_wait_inerval: int | None = None,
-        lsp_generation_maximal_wait_inerval: int | None = None,
-        lsp_generation_secondary_wait_inerval: int | None = None,
+        lsp_gen_init_intvl: int | None = None,
+        lsp_gen_max_intvl: int | None = None,
+        lsp_gen_sec_intvl: int | None = None,
         name: str | None = None,
         display_name: str | None = None,
         spf_comp_init_intvl: int | None = None,
@@ -13848,7 +13842,7 @@ class FabricSchedulerOneTimeWindowCursor(_FabricSchedulerMakers, _FabricMakers, 
         *,
         annotation: str | None = None,
         maximum_concurrent_tasks: int | str | None = None,
-        date_and_time: str | None = None,
+        window_start_time: str | None = None,
         display_name: str | None = None,
         delay_between_node_upgrades: int | None = None,
         proc_break: str | None = None,
@@ -14200,7 +14194,7 @@ class _FabricSpanDestinationGroupSpanDestinationMakers(Cursor):
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
-        source_ip_of_erspan_packet: str | None = None,
+        source_ip_prefix: str | None = None,
         time_to_live: int | str | None = None,
         userdom: str | None = None,
         vrf: str | None = None,
@@ -14871,7 +14865,7 @@ class TacacsDestinationCursor(_TacacsMonitoringDestinationGroupMakers, _FabricMa
         key: str | None = None,
         name: str | None = None,
         display_name: str | None = None,
-        send_changes_as_command_arguments: bool | None = None,
+        populate_cmd_args: bool | None = None,
         userdom: str | None = None,
     ) -> TacacsDestinationCursor:
         """Set ``tacacsTacacsDest`` attributes (merged; validated eagerly)."""
@@ -14975,7 +14969,7 @@ class _FabricVspanDestinationGroupVspanVdestinationMakers(Cursor):
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
-        source_ip_of_erspan_packet: str | None = None,
+        source_ip_prefix: str | None = None,
         time_to_live: int | str | None = None,
         userdom: str | None = None,
         vrf: str | None = None,
@@ -16398,7 +16392,7 @@ class FabricSpanDestinationGroupSpanDestinationVspanEpgSummaryCursor(
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
-        source_ip_of_erspan_packet: str | None = None,
+        source_ip_prefix: str | None = None,
         time_to_live: int | str | None = None,
         userdom: str | None = None,
         vrf: str | None = None,
@@ -16559,7 +16553,7 @@ class FabricVspanDestinationGroupVspanVdestinationVspanDestinationEpgSummaryCurs
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
-        source_ip_of_erspan_packet: str | None = None,
+        source_ip_prefix: str | None = None,
         time_to_live: int | str | None = None,
         userdom: str | None = None,
         vrf: str | None = None,

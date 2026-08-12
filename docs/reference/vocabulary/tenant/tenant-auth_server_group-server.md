@@ -22,7 +22,7 @@ Accepted as keyword arguments of `.server(name)` and of `.set(**attrs)` on this 
 | parameter | wire | type | values | default | description |
 | --- | --- | --- | --- | --- | --- |
 | `name` *(positional)* | `name` | `str` | — | — | The name of the object. |
-| `hostname_or_ip_address` | `hostOrIp` | `str` | — | — | The host or IP address. |
+| `host_or_ip` | `hostOrIp` | `str` | — | — | The host or IP address. |
 | `event_sync_interval_seconds` | `evtSyncIntvl` | `int` | — | `30` | Event Timers |
 | `triggered_inventory_sync_status` | `inventoryTrigSt` | {ref}`AuthTrigSt <enum-authtrigst>` | `triggered`, `untriggered` | `untriggered` | Manual trigger state of inventory sync |
 | `mode` | `mode` | {ref}`AuthMode <enum-authmode>` | `AD`, `unknown` | `AD` | The BGP Domain mode. |

@@ -67,7 +67,7 @@ class plannerContractTmpl(ManagedObject):
             serialization_alias="nameAlias",
         ),
     ] = ""
-    count_of_filters: Annotated[
+    unique_filters: Annotated[
         int,
         Field(
             ge=1,

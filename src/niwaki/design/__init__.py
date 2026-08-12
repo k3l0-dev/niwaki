@@ -45,24 +45,39 @@ Core rules (see the *Design-first architecture* page in the documentation):
 
 from __future__ import annotations
 
+from niwaki.design._compose import merge
 from niwaki.design._cursor import Cursor
+from niwaki.design._emit import to_code
 from niwaki.design._generated_cursors import aaa, controller, design, fabric, infra, tenant
+from niwaki.design._import import ImportProblem, from_payload, to_design
 from niwaki.design._node import Ref, ref
 from niwaki.design._push import PlanResult, PushReport
+from niwaki.design._reconcile import Reconciliation, reconcile
 from niwaki.design._verify import ExternalRef, RefCheck
+from niwaki.design._view import DesignView, DesignViewBind, DesignViewNode
 
 __all__ = [
     "Cursor",
+    "DesignView",
+    "DesignViewBind",
+    "DesignViewNode",
     "ExternalRef",
+    "ImportProblem",
     "PlanResult",
     "PushReport",
+    "Reconciliation",
     "Ref",
     "RefCheck",
     "aaa",
     "controller",
     "design",
     "fabric",
+    "from_payload",
     "infra",
+    "merge",
+    "reconcile",
     "ref",
     "tenant",
+    "to_code",
+    "to_design",
 ]

@@ -27,7 +27,7 @@ Accepted as keyword arguments of `.core_export_policy(name)` and of `.set(**attr
 | `administrative_state` | `adminSt` | {ref}`TrigExecState <enum-trigexecstate>` | `triggered`, `untriggered` | `untriggered` | The administrative state of the executable policies. |
 | `apic_path` | `apicPath` | `str` | — | — | — |
 | `app_name` | `appName` | `str` | — | — | — |
-| `files_to_collect_and_export` | `collectType` | {ref}`DbgexpCollectType <enum-dbgexpcollecttype>` | `coreOnly`, `techSup` | `coreOnly` | The collection type for the core file. |
+| `collection_type` | `collectType` | {ref}`DbgexpCollectType <enum-dbgexpcollecttype>` | `coreOnly`, `techSup` | `coreOnly` | The collection type for the core file. |
 | `compression` | `compression` | {ref}`MonCompression <enum-moncompression>` | `gzip`, `none` | `none` | The compression format for core files. The format can either be gzip or no compression. |
 | `export_location` | `controllerLocation` | {ref}`ScalarEnum8 <enum-scalarenum8>` | `apic`, `apicx` | `apic` | — |
 | `include_db_metadata_file` | `dbMetadata` | `bool` | — | `True` | — |

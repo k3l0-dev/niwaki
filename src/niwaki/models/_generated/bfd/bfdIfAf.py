@@ -18,12 +18,12 @@ class bfdIfAf(ManagedObject):
 
     This object holds per address family bfd interface information
 
-    RN format: ``af-{type_of_the_address_family}``
+    RN format: ``af-{type}``
     """
 
     _aci_class: ClassVar[str] = "bfdIfAf"
-    _rn_format: ClassVar[str] = "af-{type_of_the_address_family}"
-    _naming_props: ClassVar[list[str]] = ["type_of_the_address_family"]
+    _rn_format: ClassVar[str] = "af-{type}"
+    _naming_props: ClassVar[list[str]] = ["type"]
     _fault_codes: ClassVar[dict[str, str]] = {
         "F2169": "fltBfdIfAfBfdCfgCtrl",
     }
@@ -50,12 +50,10 @@ class bfdIfAf(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    type_of_the_address_family: BfdAfT = Field(
-        default=BfdAfT.IPV4, validation_alias="type", serialization_alias="type"
-    )
+    type: BfdAfT = BfdAfT.IPV4
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    admin_state_for_interface_address_family: NwAdminSt = Field(
+    admin_st: NwAdminSt = Field(
         default=NwAdminSt.ENABLED,
         validation_alias="adminSt",
         serialization_alias="adminSt",

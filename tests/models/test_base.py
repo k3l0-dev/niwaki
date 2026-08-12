@@ -147,13 +147,18 @@ class TestToApic:
         assert "children" not in payload
 
     def test_apic_extra_fields_excluded(self) -> None:
-        # Simulate reading from APIC: contains extra read-only fields
-        mo = SimpleMO.model_validate(
+        # Simulate reading from APIC the way reads actually happen (from_apic —
+        # a direct constructor with foreign keys now fails loud by design).
+        mo = SimpleMO.from_apic(
             {
-                "name": "prod",
-                "descr": "hello",
-                "modTs": "2024-01-01T00:00:00.000+00:00",  # APIC read-only
-                "uid": "42",
+                "simpleMO": {
+                    "attributes": {
+                        "name": "prod",
+                        "descr": "hello",
+                        "modTs": "2024-01-01T00:00:00.000+00:00",  # APIC read-only
+                        "uid": "42",
+                    }
+                }
             }
         )
         attrs = mo.to_apic()["simpleMO"]["attributes"]

@@ -112,7 +112,7 @@ def test_fabric_span_destinations(live_aci: Niwaki) -> None:
         grp.span_destination(f"dst-{i}").vspan_epg_summary(
             description=f"ERSPAN summary: {mode}, ttl {ttl}, dscp {dscp}.",
             destination_ip=f"10.93.{i}.1",
-            source_ip_of_erspan_packet=f"10.93.{i}.254",
+            source_ip_prefix=f"10.93.{i}.254",
             flow_id=i + 1,
             mode=mode,
             time_to_live=ttl,
@@ -137,7 +137,7 @@ def test_fabric_vspan(live_aci: Niwaki) -> None:
         vdst.vspan_vdestination(f"vdst-{i}").vspan_destination_epg_summary(
             description=f"VSPAN ERSPAN summary: {mode}, ttl {ttl}.",
             destination_ip=f"10.94.{i}.1",
-            source_ip_of_erspan_packet=f"10.94.{i}.254",
+            source_ip_prefix=f"10.94.{i}.254",
             flow_id=i + 1,
             mode=mode,
             time_to_live=ttl,

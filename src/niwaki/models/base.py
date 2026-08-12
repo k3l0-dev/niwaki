@@ -48,7 +48,7 @@ from __future__ import annotations
 
 from typing import Any, ClassVar, Self
 
-from pydantic import BaseModel, ConfigDict, PrivateAttr
+from pydantic import BaseModel, ConfigDict, PrivateAttr, model_validator
 
 from niwaki.models._wire import from_wire, parse_flags, to_wire
 
@@ -62,6 +62,11 @@ right typed class.
 
 # Per-class alias map cache: avoids recomputing {aci_alias → python_field} on every from_apic().
 _ALIAS_MAP_CACHE: dict[type[ManagedObject], dict[str, str]] = {}
+
+# Per-class cache of the names a CONSTRUCTOR may be called with: field names,
+# their wire aliases, and "children".  Built once per class by
+# ``_constructor_keys`` for the fail-loud unknown-key validator.
+_CONSTRUCTOR_KEYS_CACHE: dict[type[ManagedObject], frozenset[str]] = {}
 
 
 def _coerce_apic_value(annotation: Any, value: Any) -> Any:
@@ -147,6 +152,8 @@ class ManagedObject(BaseModel):
     # *non-generated* object look itself up in the read catalogue for readable
     # field access.  Empty on objects built locally rather than read back.
     _wire_class: str = PrivateAttr(default="")
+    _raw_wire_attrs: dict[str, str] = PrivateAttr(default_factory=dict)
+    _raw_rn: str = PrivateAttr(default="")
 
     _aci_class: ClassVar[str] = ""
     _rn_format: ClassVar[str] = ""
@@ -165,6 +172,92 @@ class ManagedObject(BaseModel):
     _has_stats: ClassVar[bool] = False
 
     children: list[ManagedObject] = []
+
+    @classmethod
+    def _constructor_keys(cls) -> frozenset[str]:
+        """The names this class's constructor may legitimately be called with.
+
+        Field names, their wire aliases (``populate_by_name`` accepts both),
+        and ``children``.  Cached per class.
+        """
+        cached = _CONSTRUCTOR_KEYS_CACHE.get(cls)
+        if cached is None:
+            keys: set[str] = {"children"}
+            for name, field in cls.model_fields.items():
+                keys.add(name)
+                if isinstance(field.validation_alias, str):
+                    keys.add(field.validation_alias)
+            cached = _CONSTRUCTOR_KEYS_CACHE[cls] = frozenset(keys)
+        return cached
+
+    @model_validator(mode="before")
+    @classmethod
+    def _reject_unknown_construction_keys(cls, data: Any) -> Any:
+        """Fail loud on a property this model does not have — never drop it.
+
+        Before this validator, ``fvBD(name="web", brandNewProp="x")`` absorbed
+        the foreign key into ``model_extra`` (the config is ``extra="allow"``
+        for tolerant reads) and ``to_apic()`` then silently dropped it: the
+        caller believed a property was configured, and nothing was sent.  A
+        typo or a property from a newer firmware than this SDK's baseline now
+        raises at construction, naming the keys.
+
+        Only explicit construction is guarded.  Reads stay tolerant by
+        design: ``from_apic``/``from_event`` build through ``model_construct``,
+        which bypasses validators — an APIC newer than the SDK keeps
+        deserialising without a scratch.  The base :class:`ManagedObject` is
+        exempt too: its property universe is open (catalogue-served classes),
+        so it has nothing to validate against.
+        """
+        if cls is ManagedObject or not isinstance(data, dict):
+            return data
+        unknown = [key for key in data if key not in cls._constructor_keys()]
+        if unknown:
+            names = ", ".join(sorted(repr(key) for key in unknown))
+            raise ValueError(
+                f"{cls._aci_class or cls.__name__} has no "
+                f"propert{'y' if len(unknown) == 1 else 'ies'} {names} in this "
+                "SDK's schema baseline — a typo, or a property from a newer "
+                "firmware.  Refused rather than silently dropped."
+            )
+        return data
+
+    def __setattr__(self, name: str, value: Any) -> None:
+        """Fail loud on assigning a property this model does not have.
+
+        The construction guard alone would leave the documented read-modify-
+        write flow (``bd.unicast_routing = False`` → ``to_apic()``) exposed:
+        under ``extra="allow"`` a typo'd assignment was absorbed into
+        ``model_extra`` and silently filtered out of the payload.  Same
+        defect, different door — closed the same way.
+
+        Private attributes pass (pydantic's own machinery), the open-universe
+        base class passes, real fields pass.  A **wire alias** is refused with
+        a pointer to the python name: assignment routes by field name only, so
+        ``bd.arpFlood = "yes"`` would land in extras and silently vanish —
+        exactly the trap this guard exists to close.
+
+        One residual stays open by design: ``model_copy(update={...})`` is
+        pydantic's documented validators-bypassed API; a caller reaching for
+        it accepts raw semantics.
+        """
+        cls = type(self)
+        if (
+            not name.startswith("_")
+            and cls is not ManagedObject
+            and name != "children"
+            and name not in cls.model_fields
+        ):
+            hint = ""
+            alias_map = cls._get_alias_map()
+            if name in alias_map:
+                hint = f" — assign via the python name {alias_map[name]!r}"
+            raise ValueError(
+                f"{cls._aci_class or cls.__name__} has no property {name!r} in "
+                f"this SDK's schema baseline{hint}.  Refused rather than "
+                "silently dropped."
+            )
+        super().__setattr__(name, value)
 
     @classmethod
     def _get_alias_map(cls) -> dict[str, str]:
@@ -210,6 +303,28 @@ class ManagedObject(BaseModel):
     # ── DN / RN ───────────────────────────────────────────────────────────────
 
     @property
+    def aci_class(self) -> str:
+        """The wire class name of this object (``"fvBD"``, ``"topSystem"``).
+
+        Uniform across the result substrate: a generated model answers from
+        its baked-in class, an object served through the read catalogue (a
+        class with no generated model) answers from the wire envelope it was
+        read as.  Empty only for a bare :class:`ManagedObject` built locally
+        rather than read back — a shape that never comes out of a query.
+
+        This is the public door to what the private ``_aci_class`` /
+        ``_wire_class`` pair carries: consumer code branching on object
+        classes (an audit walking mixed query results, a tool grouping
+        objects by kind) reads this instead of a private attribute.
+
+        Example::
+
+            for mo in aci.query("fvBD").under("uni/tn-prod"):
+                assert mo.aci_class == "fvBD"
+        """
+        return self._aci_class or self._wire_class
+
+    @property
     def rn(self) -> str:
         """Compute the Relative Name from _rn_format and current naming prop values.
 
@@ -221,6 +336,10 @@ class ManagedObject(BaseModel):
             bd = fvBD(name="web")
             bd.rn  # → "BD-web"
         """
+        if not self._rn_format and self._raw_rn:
+            # Catalogue-served raw instance (design .raw()): the RN was
+            # computed from catalog.rn_format at declaration time.
+            return self._raw_rn
         rn = self._rn_format
         for prop in self._naming_props:
             value = getattr(self, prop, "")
@@ -463,6 +582,11 @@ class ManagedObject(BaseModel):
                 )
                 attrs[aci_key] = to_wire(val)
 
+        if self._raw_wire_attrs:
+            # Wire-name escape hatch (design .raw()/.raw_set()): merged at the
+            # wire boundary, after the typed/catalogue serialisation - the
+            # strict model never sees these keys.
+            attrs.update(self._raw_wire_attrs)
         envelope: dict[str, Any] = {envelope_class: {"attributes": attrs}}
         if self.children:
             envelope[envelope_class]["children"] = [child.to_apic() for child in self.children]
@@ -530,6 +654,21 @@ class ManagedObject(BaseModel):
             delta.to_apic()
             # → {"fvBD": {"attributes": {"name": "web", "arpFlood": "true"}}}
         """
+        # The kwargs are caller-typed payload content — the same fail-loud
+        # contract as construction applies.  model_construct validates nothing,
+        # so an unchecked typo here would build a payload that silently omits
+        # the intended change.
+        if cls is not ManagedObject:
+            allowed = cls._constructor_keys()
+            unknown = sorted(key for key in (*naming, *changes) if key not in allowed)
+            if unknown:
+                names = ", ".join(repr(key) for key in unknown)
+                raise ValueError(
+                    f"{cls._aci_class or cls.__name__} has no "
+                    f"propert{'y' if len(unknown) == 1 else 'ies'} {names} in "
+                    "this SDK's schema baseline — a typo, or a property from a "
+                    "newer firmware.  Refused rather than silently dropped."
+                )
         return cls.model_construct(
             _fields_set=set(cls._naming_props) | set(changes.keys()),
             **{**naming, **changes},

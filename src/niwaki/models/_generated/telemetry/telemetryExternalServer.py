@@ -66,15 +66,7 @@ class telemetryExternalServer(ManagedObject):
     user_grpc_certificate: str = Field(
         default="", validation_alias="cert", serialization_alias="cert"
     )
-    hostname_associated_with_the_certificate: Annotated[
-        str,
-        Field(
-            max_length=255,
-            validation_alias="hostname",
-            serialization_alias="hostname",
-            description="ignore, removed",
-        ),
-    ] = ""
+    hostname: Annotated[str, Field(max_length=255, description="ignore, removed")] = ""
     remote_port: Annotated[
         Annotated[int, Field(ge=0, le=65535)]
         | Literal["dns", "ftpData", "http", "https", "pop3", "rtsp", "smtp", "ssh", "unspecified"],

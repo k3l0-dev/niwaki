@@ -23,6 +23,6 @@ Accepted as keyword arguments of `.fast_link_failover_policy(name)` and of `.set
 | --- | --- | --- | --- | --- | --- |
 | `name` *(positional)* | `name` | `str` | — | — | The name of the object. |
 | `description` | `descr` | `str` | — | — | Specifies a description of the policy definition. |
-| `fast_link_failover_mode_type` | `modeType` | {ref}`TopoctrlFastLinkFailoverModeType <enum-topoctrlfastlinkfailovermodetype>` | `off`, `on` | `off` | — |
+| `mode_type` | `modeType` | {ref}`TopoctrlFastLinkFailoverModeType <enum-topoctrlfastlinkfailovermodetype>` | `off`, `on` | `off` | — |
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |

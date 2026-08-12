@@ -110,10 +110,5 @@ class bfdAuthP(ManagedObject):
             serialization_alias="nameAlias",
         ),
     ] = ""
-    authentication_type_of_the_bfd_session: BfdAuthT = Field(
-        default=BfdAuthT.NONE,
-        validation_alias="type",
-        serialization_alias="type",
-        description="Authentication type",
-    )
+    type: BfdAuthT = Field(default=BfdAuthT.NONE, description="Authentication type")
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

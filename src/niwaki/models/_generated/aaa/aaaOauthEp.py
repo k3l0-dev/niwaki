@@ -94,14 +94,7 @@ class aaaOauthEp(ManagedObject):
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
-    timeout_in_seconds: Annotated[
-        int,
-        Field(
-            ge=5,
-            le=60,
-            validation_alias="timeout",
-            serialization_alias="timeout",
-            description="add units for timeout. This helps display in CLI",
-        ),
+    timeout: Annotated[
+        int, Field(ge=5, le=60, description="add units for timeout. This helps display in CLI")
     ] = 5
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

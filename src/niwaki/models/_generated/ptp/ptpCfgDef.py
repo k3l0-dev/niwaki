@@ -51,7 +51,7 @@ class ptpCfgDef(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    announce_interval_for_ptp_profile: Annotated[
+    announce_intvl: Annotated[
         int,
         Field(
             ge=3,
@@ -61,7 +61,7 @@ class ptpCfgDef(ManagedObject):
             description="Announce Interval",
         ),
     ] = 1
-    announce_timeout_for_ptp_profile: Annotated[
+    announce_timeout: Annotated[
         int,
         Field(
             ge=2,
@@ -71,7 +71,7 @@ class ptpCfgDef(ManagedObject):
             description="Announce timeout",
         ),
     ] = 3
-    delay_request_interval_for_ptp_profile: Annotated[
+    delay_intvl: Annotated[
         int,
         Field(
             ge=4,
@@ -101,10 +101,8 @@ class ptpCfgDef(ManagedObject):
             description="Telecom profile related propertiesLocal Priority or PTP Cost",
         ),
     ] = 128
-    ptp_mode_for_interface: PtpPtpTransportMode = Field(
+    mode: PtpPtpTransportMode = Field(
         default=PtpPtpTransportMode.MULTICAST,
-        validation_alias="mode",
-        serialization_alias="mode",
         description="PTP mode multicast, unicast master/slave",
     )
     name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
@@ -117,7 +115,7 @@ class ptpCfgDef(ManagedObject):
             serialization_alias="nameAlias",
         ),
     ] = ""
-    flag_to_over_ride_node_level_config: bool = Field(
+    node_profile_override: bool = Field(
         default=False,
         validation_alias="nodeProfileOverride",
         serialization_alias="nodeProfileOverride",
@@ -150,7 +148,7 @@ class ptpCfgDef(ManagedObject):
             description="IP address",
         ),
     ] = ""
-    sync_interval_for_ptp_profile: Annotated[
+    sync_intvl: Annotated[
         int,
         Field(
             ge=-4,

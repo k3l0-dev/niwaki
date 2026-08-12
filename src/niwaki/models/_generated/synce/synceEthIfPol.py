@@ -112,38 +112,24 @@ class synceEthIfPol(ManagedObject):
     qloptype: SynceQloptype = Field(
         default=SynceQloptype.NONE, description="quality transmit exact option type"
     )
-    quality_receive_exact_ql_value: SynceQlvalue = Field(
-        default=SynceQlvalue.FSYNC_QL_COMMON_NONE,
-        validation_alias="qlrcvexactval",
-        serialization_alias="qlrcvexactval",
-        description="quality receive exact value",
+    qlrcvexactval: SynceQlvalue = Field(
+        default=SynceQlvalue.FSYNC_QL_COMMON_NONE, description="quality receive exact value"
     )
-    quality_receive_highest_ql_value: SynceQlvalue = Field(
-        default=SynceQlvalue.FSYNC_QL_COMMON_NONE,
-        validation_alias="qlrcvhval",
-        serialization_alias="qlrcvhval",
-        description="quality receive highest value",
+    qlrcvhval: SynceQlvalue = Field(
+        default=SynceQlvalue.FSYNC_QL_COMMON_NONE, description="quality receive highest value"
     )
-    quality_receive_lowest_ql_value: SynceQlvalue = Field(
-        default=SynceQlvalue.FSYNC_QL_COMMON_NONE,
-        validation_alias="qlrcvlval",
-        serialization_alias="qlrcvlval",
-        description="quality receive lowest value",
+    qlrcvlval: SynceQlvalue = Field(
+        default=SynceQlvalue.FSYNC_QL_COMMON_NONE, description="quality receive lowest value"
     )
-    quality_transmit_exact_ql_value: SynceQlvalue = Field(
+    qltxexactval: SynceQlvalue = Field(
         default=SynceQlvalue.FSYNC_QL_COMMON_NONE,
-        validation_alias="qltxexactval",
-        serialization_alias="qltxexactval",
         description="quality receive exact option typequality transmit exact value",
     )
     qltxhval: SynceQlvalue = Field(
         default=SynceQlvalue.FSYNC_QL_COMMON_NONE, description="quality transmit highest value"
     )
-    quality_transmit_lowest_ql_value: SynceQlvalue = Field(
-        default=SynceQlvalue.FSYNC_QL_COMMON_NONE,
-        validation_alias="qltxlval",
-        serialization_alias="qltxlval",
-        description="quality transmit lowest value",
+    qltxlval: SynceQlvalue = Field(
+        default=SynceQlvalue.FSYNC_QL_COMMON_NONE, description="quality transmit lowest value"
     )
     selection_configuration: bool = Field(
         default=False,
@@ -151,9 +137,7 @@ class synceEthIfPol(ManagedObject):
         serialization_alias="selinput",
         description="selection input",
     )
-    source_priority_1_254_default100: Annotated[
-        int, Field(ge=1, le=254, validation_alias="srcpriority", serialization_alias="srcpriority")
-    ] = 100
+    srcpriority: Annotated[int, Field(ge=1, le=254)] = 100
     ssm_configuration_enable_disable: bool = Field(
         default=True,
         validation_alias="ssm",

@@ -1471,7 +1471,7 @@
     ],
     [
       "apphostingAppConf",
-      "unique_id_to_identify_the_application",
+      "app_id",
       1,
       64,
       false
@@ -2381,7 +2381,7 @@
     ],
     [
       "dppCkt",
-      "dn_of_l2rspathdomatt",
+      "l2_ckt_ep_dn",
       0,
       null,
       false
@@ -3613,7 +3613,7 @@
     ],
     [
       "fvEPgSelector",
-      "epg_dn_to_be_associated",
+      "match_epg_dn",
       0,
       null,
       false
@@ -3683,7 +3683,7 @@
     ],
     [
       "fvLIfCtxSelector",
-      "lifctx_dn_to_be_associated",
+      "match_l_if_ctx_dn",
       0,
       null,
       false
@@ -5069,7 +5069,7 @@
     ],
     [
       "l3extVirtualLIfP",
-      "path_of_the_anchor_node",
+      "node_dn",
       0,
       null,
       false
@@ -5083,7 +5083,7 @@
     ],
     [
       "l3extVirtualLIfPDef",
-      "path_of_the_anchor_node",
+      "node_dn",
       0,
       null,
       false
@@ -5300,7 +5300,7 @@
     ],
     [
       "mdpConsumedServiceDef",
-      "mdp_consumed_service_def_dn",
+      "mdp_service_def_dn",
       0,
       null,
       false
@@ -5713,14 +5713,14 @@
     ],
     [
       "notifOperClass",
-      "classname_that_is_being_subscribed",
+      "class_name",
       1,
       512,
       false
     ],
     [
       "notifStatsClass",
-      "stats_classname_that_is_being_subscribed",
+      "class_name",
       1,
       512,
       false
@@ -5734,21 +5734,21 @@
     ],
     [
       "notifSubscriber",
-      "name_of_the_subscriber",
+      "subscriber_name",
       1,
       512,
       false
     ],
     [
       "notifSubscriberRef",
-      "classname_that_is_being_subscribed",
+      "subscriber",
       1,
       512,
       false
     ],
     [
       "notifSubtreeObserverClass",
-      "container_class_of_observer_class",
+      "class_name",
       1,
       512,
       false
@@ -5965,7 +5965,7 @@
     ],
     [
       "pimInterVRFEntryPol",
-      "dn_of_the_src_vrf",
+      "src_vrf_dn",
       0,
       null,
       false
@@ -6931,7 +6931,7 @@
     ],
     [
       "svccoreCtrlr",
-      "name_of_service_that_cored",
+      "svc_name",
       1,
       512,
       false
@@ -6952,7 +6952,7 @@
     ],
     [
       "svccoreNode",
-      "name_of_service_that_cored",
+      "svc_name",
       1,
       512,
       false
@@ -7645,7 +7645,7 @@
     ],
     [
       "trigRoProxy",
-      "dn_of_the_triggerable_policy",
+      "policy_dn",
       0,
       null,
       false
@@ -9678,7 +9678,7 @@
     [
       "apphostingAppConf",
       {
-        "unique_id_to_identify_the_application": "ab"
+        "app_id": "ab"
       },
       "appconf-ab"
     ],
@@ -11282,7 +11282,7 @@
     [
       "dppCkt",
       {
-        "dn_of_l2rspathdomatt": "ab"
+        "l2_ckt_ep_dn": "ab"
       },
       "ckt-[ab]"
     ],
@@ -13217,7 +13217,7 @@
     [
       "fvEPgSelector",
       {
-        "epg_dn_to_be_associated": "ab"
+        "match_epg_dn": "ab"
       },
       "epgselector-[ab]"
     ],
@@ -13337,7 +13337,7 @@
     [
       "fvLIfCtxSelector",
       {
-        "lifctx_dn_to_be_associated": "ab"
+        "match_l_if_ctx_dn": "ab"
       },
       "lifctxselector-[ab]"
     ],
@@ -15873,7 +15873,7 @@
     [
       "l3extVirtualLIfP",
       {
-        "path_of_the_anchor_node": "ab",
+        "node_dn": "ab",
         "external_interface_encap": "ab"
       },
       "vlifp-[ab]-[ab]"
@@ -15881,7 +15881,7 @@
     [
       "l3extVirtualLIfPDef",
       {
-        "path_of_the_anchor_node": "ab",
+        "node_dn": "ab",
         "external_interface_encap": "ab"
       },
       "vlifpdef-[ab]-[ab]"
@@ -16231,7 +16231,7 @@
     [
       "mdpConsumedServiceDef",
       {
-        "mdp_consumed_service_def_dn": "ab"
+        "mdp_service_def_dn": "ab"
       },
       "consumedsrvdef-[ab]"
     ],
@@ -16888,14 +16888,14 @@
     [
       "notifOperClass",
       {
-        "classname_that_is_being_subscribed": "ab"
+        "class_name": "ab"
       },
       "opclass-ab"
     ],
     [
       "notifStatsClass",
       {
-        "stats_classname_that_is_being_subscribed": "ab"
+        "class_name": "ab"
       },
       "stclass-ab"
     ],
@@ -16914,7 +16914,7 @@
     [
       "notifSubscriber",
       {
-        "name_of_the_subscriber": "ab"
+        "subscriber_name": "ab"
       },
       "subscriber-ab"
     ],
@@ -16926,14 +16926,14 @@
     [
       "notifSubscriberRef",
       {
-        "classname_that_is_being_subscribed": "ab"
+        "subscriber": "ab"
       },
       "subsref-ab"
     ],
     [
       "notifSubtreeObserverClass",
       {
-        "container_class_of_observer_class": "ab"
+        "class_name": "ab"
       },
       "subobsrv-ab"
     ],
@@ -17335,7 +17335,7 @@
     [
       "pimInterVRFEntryPol",
       {
-        "dn_of_the_src_vrf": "ab"
+        "src_vrf_dn": "ab"
       },
       "intervrfent-[ab]"
     ],
@@ -19005,7 +19005,7 @@
     [
       "svccoreCtrlr",
       {
-        "name_of_service_that_cored": "ab",
+        "svc_name": "ab",
         "create_time": "ab"
       },
       "ctrlr-0-svc-ab-ts-ab"
@@ -19020,7 +19020,7 @@
     [
       "svccoreNode",
       {
-        "name_of_service_that_cored": "ab",
+        "svc_name": "ab",
         "create_time": "ab"
       },
       "node-1-card-1-svc-ab-ts-ab"
@@ -20034,7 +20034,7 @@
     [
       "trigRoProxy",
       {
-        "dn_of_the_triggerable_policy": "ab"
+        "policy_dn": "ab"
       },
       "roproxy-[ab]"
     ],
@@ -21695,7 +21695,7 @@
     [
       "aaaConsoleAuth",
       {},
-      "realm_subtype_that_can_be_default_or_duo",
+      "realm_sub_type",
       [
         "default",
         "duo"
@@ -21730,7 +21730,7 @@
     [
       "aaaDefaultAuth",
       {},
-      "realm_subtype_that_can_be_default_or_duo",
+      "realm_sub_type",
       [
         "default",
         "duo"
@@ -21768,7 +21768,7 @@
     [
       "aaaDomainAuth",
       {},
-      "realm_subtype_that_can_be_default_or_duo",
+      "realm_sub_type",
       [
         "default",
         "duo"
@@ -21814,7 +21814,7 @@
       {
         "name": "ab"
       },
-      "trigger_reset_to_factory_settings",
+      "reset_to_factory",
       [
         "no",
         "yes"
@@ -22030,7 +22030,7 @@
       {
         "name": "ab"
       },
-      "trigger_reset_to_factory_settings",
+      "reset_to_factory",
       [
         "no",
         "yes"
@@ -22506,9 +22506,9 @@
     [
       "apphostingAppConf",
       {
-        "unique_id_to_identify_the_application": "ab"
+        "app_id": "ab"
       },
-      "admin_state_for_appconf_config",
+      "admin_st",
       [
         "disabled",
         "enabled"
@@ -22518,9 +22518,9 @@
     [
       "apphostingAppConf",
       {
-        "unique_id_to_identify_the_application": "ab"
+        "app_id": "ab"
       },
-      "exec_command_of_application",
+      "app_cfg_state",
       [
         "activate",
         "deactivate",
@@ -22535,7 +22535,7 @@
     [
       "apphostingAppConf",
       {
-        "unique_id_to_identify_the_application": "ab"
+        "app_id": "ab"
       },
       "pkg_opts",
       [
@@ -22557,7 +22557,7 @@
     [
       "apphostingAppGlobalCfg",
       {},
-      "enable_or_disable_signed_verification",
+      "sign_verify",
       [
         "disable",
         "enable"
@@ -22587,7 +22587,7 @@
     [
       "apphostingRunOpt",
       {},
-      "admin_state_to_enable_or_disable_run_opt",
+      "admin_st",
       [
         "disabled",
         "enabled"
@@ -22698,7 +22698,7 @@
       {
         "interface_id": "ab"
       },
-      "local_proxy_arp_w_o_hw_flooding",
+      "local_proxy_arp_no_hw_flood",
       [
         "disabled",
         "enabled"
@@ -22852,7 +22852,7 @@
     [
       "bfdAuthP",
       {},
-      "authentication_type_of_the_bfd_session",
+      "type",
       [
         "none",
         "sha1"
@@ -22864,7 +22864,7 @@
       {
         "interface_id": "ab"
       },
-      "echo_mode_admin_state_of_bfd_interface",
+      "echo_admin_st",
       [
         "disabled",
         "enabled"
@@ -22886,7 +22886,7 @@
     [
       "bfdIfAf",
       {},
-      "admin_state_for_interface_address_family",
+      "admin_st",
       [
         "disabled",
         "enabled"
@@ -22950,7 +22950,7 @@
     [
       "bfdMhAuthP",
       {},
-      "authentication_type_of_the_mhbfd_session",
+      "type",
       [
         "none",
         "sha1"
@@ -23959,7 +23959,7 @@
       {
         "name": "ab"
       },
-      "type_of_profile",
+      "type",
       [
         "custom",
         "default",
@@ -23974,7 +23974,7 @@
       {
         "name": "ab"
       },
-      "type_of_profile",
+      "type",
       [
         "custom",
         "default",
@@ -24437,7 +24437,7 @@
     [
       "datetimeNtpAuthKey",
       {},
-      "type_of_authentication_key",
+      "key_type",
       [
         "md5",
         "sha1"
@@ -24507,7 +24507,7 @@
     [
       "dbgFtriage",
       {},
-      "operational_state_of_ftriage",
+      "oper_state",
       [
         "Idle",
         "InProgress"
@@ -24815,7 +24815,7 @@
       {
         "name": "ab"
       },
-      "files_to_collect_and_export",
+      "collection_type",
       [
         "coreOnly",
         "techSup"
@@ -24851,7 +24851,7 @@
       {
         "naming_identifier": "ab"
       },
-      "file_or_cli_based_collection",
+      "collection_type",
       [
         "cli",
         "file"
@@ -24863,7 +24863,7 @@
       {
         "naming_identifier": "ab"
       },
-      "device_on_which_to_collect_data",
+      "locale_type",
       [
         "all",
         "ifc",
@@ -25477,7 +25477,7 @@
       {
         "interface_id": "ab"
       },
-      "role_of_dot1x_authenticating_entity",
+      "pae_type",
       [
         "authenticator"
       ],
@@ -25500,7 +25500,7 @@
       {
         "name": "ab"
       },
-      "units_for_eigrp_interface_delay",
+      "delay_unit",
       [
         "pico",
         "tens-of-micro"
@@ -26635,7 +26635,7 @@
       {
         "name": "ab"
       },
-      "auto_negotiation_on_off",
+      "auto_negotiation",
       [
         "off",
         "on",
@@ -26892,7 +26892,7 @@
       {
         "property": "ab"
       },
-      "value_of_the_property",
+      "value",
       [
         "off",
         "on"
@@ -27029,7 +27029,7 @@
       {
         "name": "ab"
       },
-      "router_advertisement_guard_admin_status",
+      "ra_guard_admin_st",
       [
         "disabled",
         "enabled"
@@ -27424,7 +27424,7 @@
       {
         "name": "ab"
       },
-      "configure_fte_latency_threshold_unit",
+      "latency_threshold_unit",
       [
         "micro-sec",
         "milli-sec"
@@ -27601,7 +27601,7 @@
       {
         "name": "ab"
       },
-      "unknown_v6_multicast_destination_action",
+      "v6unk_mcast_act",
       [
         "flood",
         "opt-flood"
@@ -27771,7 +27771,7 @@
       {
         "name": "ab"
       },
-      "http_method_used_for_probing",
+      "http_method",
       [
         "get"
       ],
@@ -27782,7 +27782,7 @@
       {
         "name": "ab"
       },
-      "http_version_used_for_probing",
+      "http_version",
       [
         "HTTP10",
         "HTTP11"
@@ -28263,7 +28263,7 @@
       {
         "name": "ab"
       },
-      "type_of_tracklist",
+      "type",
       [
         "percentage",
         "weight"
@@ -30259,7 +30259,7 @@
       {
         "name": "ab"
       },
-      "represents_the_provider_label_ownership",
+      "owner",
       [
         "infra",
         "tenant"
@@ -31075,7 +31075,7 @@
     [
       "l3extVirtualLIfP",
       {
-        "path_of_the_anchor_node": "ab",
+        "node_dn": "ab",
         "external_interface_encap": "ab"
       },
       "svi_autostate",
@@ -31088,7 +31088,7 @@
     [
       "l3extVirtualLIfP",
       {
-        "path_of_the_anchor_node": "ab",
+        "node_dn": "ab",
         "external_interface_encap": "ab"
       },
       "encap_scope",
@@ -31101,7 +31101,7 @@
     [
       "l3extVirtualLIfP",
       {
-        "path_of_the_anchor_node": "ab",
+        "node_dn": "ab",
         "external_interface_encap": "ab"
       },
       "external_interface_type",
@@ -31116,7 +31116,7 @@
     [
       "l3extVirtualLIfP",
       {
-        "path_of_the_anchor_node": "ab",
+        "node_dn": "ab",
         "external_interface_encap": "ab"
       },
       "ipv6_dad",
@@ -31129,7 +31129,7 @@
     [
       "l3extVirtualLIfP",
       {
-        "path_of_the_anchor_node": "ab",
+        "node_dn": "ab",
         "external_interface_encap": "ab"
       },
       "encap_mode",
@@ -31143,7 +31143,7 @@
     [
       "l3extVirtualLIfPDef",
       {
-        "path_of_the_anchor_node": "ab",
+        "node_dn": "ab",
         "external_interface_encap": "ab"
       },
       "svi_autostate",
@@ -31156,7 +31156,7 @@
     [
       "l3extVirtualLIfPDef",
       {
-        "path_of_the_anchor_node": "ab",
+        "node_dn": "ab",
         "external_interface_encap": "ab"
       },
       "encap_scope",
@@ -31169,7 +31169,7 @@
     [
       "l3extVirtualLIfPDef",
       {
-        "path_of_the_anchor_node": "ab",
+        "node_dn": "ab",
         "external_interface_encap": "ab"
       },
       "external_interface_type",
@@ -31184,7 +31184,7 @@
     [
       "l3extVirtualLIfPDef",
       {
-        "path_of_the_anchor_node": "ab",
+        "node_dn": "ab",
         "external_interface_encap": "ab"
       },
       "ipv6_dad",
@@ -31197,7 +31197,7 @@
     [
       "l3extVirtualLIfPDef",
       {
-        "path_of_the_anchor_node": "ab",
+        "node_dn": "ab",
         "external_interface_encap": "ab"
       },
       "encap_mode",
@@ -32188,7 +32188,7 @@
     [
       "mdpService",
       {},
-      "consume_mode_for_this_mdp_service",
+      "consume_mode",
       [
         "auto",
         "manual"
@@ -32502,7 +32502,7 @@
       {
         "name": "ab"
       },
-      "vmm_exporter_netflow_version_format",
+      "ver",
       [
         "cisco-v1",
         "v5",
@@ -33131,7 +33131,7 @@
       {
         "name": "ab"
       },
-      "type_of_this_domain",
+      "domain_type",
       [
         "AVS",
         "vDS"
@@ -33197,7 +33197,7 @@
     [
       "ptpCfgDef",
       {},
-      "ptp_mode_for_interface",
+      "mode",
       [
         "multicast",
         "multicast-master",
@@ -33242,7 +33242,7 @@
     [
       "ptpEpgCfg",
       {},
-      "ptp_mode_for_interface",
+      "ptp_mode",
       [
         "multicast",
         "multicast-master",
@@ -33315,7 +33315,7 @@
     [
       "ptpRtdEpgCfg",
       {},
-      "ptp_mode_for_interface",
+      "ptp_mode",
       [
         "multicast",
         "multicast-master",
@@ -33499,7 +33499,7 @@
       {
         "name": "ab"
       },
-      "bit_or_packet",
+      "mode",
       [
         "bit",
         "packet"
@@ -33655,7 +33655,7 @@
       {
         "name": "ab"
       },
-      "priority_flow_control_enable_scope",
+      "enable_scope",
       [
         "fabric",
         "tor"
@@ -33710,7 +33710,7 @@
       {
         "name": "ab"
       },
-      "slowdrain_flush_mode_admin_state",
+      "flush_admin_st",
       [
         "disabled",
         "enabled"
@@ -33743,7 +33743,7 @@
         "class_": "ab",
         "container_dn": "ab"
       },
-      "action_when_quota_exceed",
+      "exceed_action",
       [
         "fail",
         "fault"
@@ -34357,7 +34357,7 @@
     [
       "snmpInst",
       {},
-      "set_level_for_snmp_syslog_messages",
+      "logging_level",
       [
         "alerts",
         "critical",
@@ -34489,7 +34489,7 @@
       {
         "name": "ab"
       },
-      "packet_is_routeable_or_switched",
+      "forwarding_val",
       [
         "both",
         "routed",
@@ -35381,7 +35381,7 @@
       {
         "name": "ab"
       },
-      "quality_receive_exact_ql_value",
+      "qlrcvexactval",
       [
         "fsync-ql-common-dnu",
         "fsync-ql-common-failed",
@@ -35427,7 +35427,7 @@
       {
         "name": "ab"
       },
-      "quality_receive_highest_ql_value",
+      "qlrcvhval",
       [
         "fsync-ql-common-dnu",
         "fsync-ql-common-failed",
@@ -35473,7 +35473,7 @@
       {
         "name": "ab"
       },
-      "quality_receive_lowest_ql_value",
+      "qlrcvlval",
       [
         "fsync-ql-common-dnu",
         "fsync-ql-common-failed",
@@ -35519,7 +35519,7 @@
       {
         "name": "ab"
       },
-      "quality_transmit_exact_ql_value",
+      "qltxexactval",
       [
         "fsync-ql-common-dnu",
         "fsync-ql-common-failed",
@@ -35611,7 +35611,7 @@
       {
         "name": "ab"
       },
-      "quality_transmit_lowest_ql_value",
+      "qltxlval",
       [
         "fsync-ql-common-dnu",
         "fsync-ql-common-failed",
@@ -35786,7 +35786,7 @@
     [
       "syntheticCtWiNode",
       {},
-      "what_to_do_with_appliance",
+      "action",
       [
         "bringup",
         "in-service",
@@ -36242,7 +36242,7 @@
       {
         "name": "ab"
       },
-      "configure_fte_latency_threshold_unit",
+      "latency_threshold_unit",
       [
         "micro-sec",
         "milli-sec"
@@ -36254,7 +36254,7 @@
       {
         "name": "ab"
       },
-      "configure_fte_latency_threshold_unit",
+      "latency_threshold_unit",
       [
         "micro-sec",
         "milli-sec"
@@ -36385,7 +36385,7 @@
     [
       "thirdpartyappNodeConfig",
       {},
-      "append_or_replace_runtime_options",
+      "pkg_opts",
       [
         "append",
         "over-write"
@@ -36580,7 +36580,7 @@
       {
         "name": "ab"
       },
-      "fast_link_failover_mode_type",
+      "mode_type",
       [
         "off",
         "on"
@@ -36865,7 +36865,7 @@
     [
       "trigRoProxy",
       {
-        "dn_of_the_triggerable_policy": "ab"
+        "policy_dn": "ab"
       },
       "administrative_state",
       [
@@ -36907,7 +36907,7 @@
       {
         "report_identifier": "ab"
       },
-      "format_of_the_report_data",
+      "format",
       [
         "html",
         "json",
@@ -37014,7 +37014,7 @@
     [
       "usrcallhomeRecord",
       {},
-      "urgency_of_log",
+      "urgency",
       [
         "alert",
         "critical",
@@ -37030,7 +37030,7 @@
     [
       "usrsyslogRecord",
       {},
-      "severity_of_log",
+      "severity",
       [
         "alerts",
         "critical",
@@ -37046,7 +37046,7 @@
     [
       "usrtacacsRecord",
       {},
-      "severity_of_log",
+      "severity",
       [
         "cleared",
         "critical",
@@ -37346,7 +37346,7 @@
       {
         "host_name": "ab"
       },
-      "desired_state_for_the_host",
+      "state",
       [
         "gray",
         "green",
@@ -40214,7 +40214,7 @@
       {
         "interface_id": "ab"
       },
-      "interface_controls_for_arp",
+      "ctrl",
       [
         "unspecified",
         "garp-adj-enable"
@@ -40228,7 +40228,7 @@
       {
         "name": "ab"
       },
-      "interface_controls_for_arp",
+      "ctrl",
       [
         "unspecified",
         "garp-adj-enable"
@@ -40271,7 +40271,7 @@
     [
       "bfdMhIfAf",
       {},
-      "interface_controls_for_multi_hop",
+      "ctrl",
       [
         "opt-subif"
       ],
@@ -40726,7 +40726,7 @@
       {
         "name": "ab"
       },
-      "category_of_feature_to_be_collected",
+      "category",
       [
         "all",
         "policy",
@@ -40748,7 +40748,7 @@
       {
         "name": "ab"
       },
-      "category_of_feature_to_be_collected",
+      "category",
       [
         "all",
         "policy",
@@ -40792,7 +40792,7 @@
       {
         "name": "ab"
       },
-      "category_of_feature_to_be_collected",
+      "category",
       [
         "all",
         "policy",
@@ -40886,7 +40886,7 @@
       {
         "name": "ab"
       },
-      "bitmask_of_diagnostics_tests_to_be_run",
+      "diags_bm",
       [
         "none",
         "peripherals"
@@ -40914,7 +40914,7 @@
       {
         "name": "ab"
       },
-      "bitmask_of_diagnostics_tests_to_be_run",
+      "diags_bm",
       [
         "none",
         "peripherals",
@@ -40978,7 +40978,7 @@
       {
         "name": "ab"
       },
-      "bitmask_of_diagnostics_tests_to_be_run",
+      "diags_bm",
       [
         "none",
         "peripherals"
@@ -41006,7 +41006,7 @@
       {
         "name": "ab"
       },
-      "bitmask_of_diagnostics_tests_to_be_run",
+      "diags_bm",
       [
         "none",
         "peripherals",
@@ -41036,7 +41036,7 @@
       {
         "name": "ab"
       },
-      "bitmask_of_diagnostics_tests_to_be_run",
+      "diags_bm",
       [
         "none",
         "sys-mem",
@@ -41070,7 +41070,7 @@
       {
         "name": "ab"
       },
-      "bitmask_of_diagnostics_tests_to_be_run",
+      "diags_bm",
       [
         "none",
         "peripherals"
@@ -41098,7 +41098,7 @@
       {
         "name": "ab"
       },
-      "bitmask_of_diagnostics_tests_to_be_run",
+      "recommended_diagnostics",
       [
         "none",
         "peripherals",
@@ -41128,7 +41128,7 @@
       {
         "name": "ab"
       },
-      "bitmask_of_diagnostics_tests_to_be_run",
+      "recommended_diagnostics",
       [
         "none",
         "sys-mem",
@@ -41186,7 +41186,7 @@
       {
         "name": "ab"
       },
-      "bitmask_of_diagnostics_tests_to_be_run",
+      "diags_bm",
       [
         "none",
         "sys-mem",
@@ -41222,7 +41222,7 @@
       {
         "name": "ab"
       },
-      "bitmask_of_diagnostics_tests_to_be_run",
+      "diags_bm",
       [
         "none",
         "sys-mem",
@@ -41258,7 +41258,7 @@
       {
         "name": "ab"
       },
-      "bitmask_of_diagnostics_tests_to_be_run",
+      "diags_bm",
       [
         "none",
         "sys-mem",
@@ -41292,7 +41292,7 @@
       {
         "name": "ab"
       },
-      "bitmask_of_diagnostics_tests_to_be_run",
+      "diags_bm",
       [
         "none",
         "sys-mem",
@@ -41326,7 +41326,7 @@
       {
         "name": "ab"
       },
-      "bitmask_of_diagnostics_tests_to_be_run",
+      "diags_bm",
       [
         "none",
         "sys-mem",
@@ -41362,7 +41362,7 @@
       {
         "name": "ab"
       },
-      "bitmask_of_diagnostics_tests_to_be_run",
+      "diags_bm",
       [
         "none",
         "sys-mem",
@@ -41398,7 +41398,7 @@
       {
         "name": "ab"
       },
-      "bitmask_of_diagnostics_tests_to_be_run",
+      "diags_bm",
       [
         "none",
         "sys-mem",
@@ -41432,7 +41432,7 @@
       {
         "name": "ab"
       },
-      "bitmask_of_diagnostics_tests_to_be_run",
+      "diags_bm",
       [
         "none",
         "sys-mem",
@@ -41466,7 +41466,7 @@
       {
         "name": "ab"
       },
-      "bitmask_of_diagnostics_tests_to_be_run",
+      "recommended_diagnostics",
       [
         "none",
         "sys-mem",
@@ -41502,7 +41502,7 @@
       {
         "name": "ab"
       },
-      "bitmask_of_diagnostics_tests_to_be_run",
+      "recommended_diagnostics",
       [
         "none",
         "sys-mem",
@@ -41538,7 +41538,7 @@
       {
         "name": "ab"
       },
-      "bitmask_of_diagnostics_tests_to_be_run",
+      "recommended_diagnostics",
       [
         "none",
         "sys-mem",
@@ -41572,7 +41572,7 @@
       {
         "name": "ab"
       },
-      "bitmask_of_diagnostics_tests_to_be_run",
+      "recommended_diagnostics",
       [
         "none",
         "sys-mem",
@@ -41606,7 +41606,7 @@
       {
         "name": "ab"
       },
-      "bitmask_of_diagnostics_tests_to_be_run",
+      "diags_bm",
       [
         "none",
         "internal-conn"
@@ -41634,7 +41634,7 @@
       {
         "name": "ab"
       },
-      "bitmask_of_diagnostics_tests_to_be_run",
+      "diags_bm",
       [
         "none",
         "port"
@@ -41662,7 +41662,7 @@
       {
         "name": "ab"
       },
-      "bitmask_of_diagnostics_tests_to_be_run",
+      "diags_bm",
       [
         "none",
         "port"
@@ -41690,7 +41690,7 @@
       {
         "name": "ab"
       },
-      "bitmask_of_diagnostics_tests_to_be_run",
+      "diags_bm",
       [
         "none",
         "port"
@@ -41718,7 +41718,7 @@
       {
         "name": "ab"
       },
-      "bitmask_of_diagnostics_tests_to_be_run",
+      "diags_bm",
       [
         "none",
         "internal-conn"
@@ -41746,7 +41746,7 @@
       {
         "name": "ab"
       },
-      "bitmask_of_diagnostics_tests_to_be_run",
+      "diags_bm",
       [
         "none",
         "port"
@@ -41774,7 +41774,7 @@
       {
         "name": "ab"
       },
-      "bitmask_of_diagnostics_tests_to_be_run",
+      "diags_bm",
       [
         "none",
         "port"
@@ -41802,7 +41802,7 @@
       {
         "name": "ab"
       },
-      "bitmask_of_diagnostics_tests_to_be_run",
+      "diags_bm",
       [
         "none",
         "port"
@@ -41830,7 +41830,7 @@
       {
         "name": "ab"
       },
-      "bitmask_of_diagnostics_tests_to_be_run",
+      "recommended_diagnostics",
       [
         "none",
         "port"
@@ -41858,7 +41858,7 @@
       {
         "name": "ab"
       },
-      "bitmask_of_diagnostics_tests_to_be_run",
+      "recommended_diagnostics",
       [
         "none",
         "port"
@@ -41965,7 +41965,7 @@
       {
         "name": "ab"
       },
-      "dot1q_tunnel_l2_protocol_tunneling_mask",
+      "qiq_l2_prot_tun_mask",
       [
         "none",
         "stp",
@@ -42165,7 +42165,7 @@
       {
         "name": "ab"
       },
-      "enforce_rtctrl",
+      "enforce_route_control",
       [
         "import",
         "export"
@@ -42399,7 +42399,7 @@
     [
       "notifOperClass",
       {
-        "classname_that_is_being_subscribed": "ab"
+        "class_name": "ab"
       },
       "refresh_type",
       [
@@ -42596,7 +42596,7 @@
       {
         "name": "ab"
       },
-      "bitmap_of_nodrop_cos",
+      "no_drop_cos",
       [
         "unspecified",
         "cos0",
@@ -43700,7 +43700,7 @@
       {
         "name": "ab"
       },
-      "enable_use_of_oidc_protocol",
+      "oidc_enabled",
       false
     ],
     [
@@ -43714,7 +43714,7 @@
     [
       "aaaPreLoginBanner",
       {},
-      "use_text_base_pre_login_banner_message",
+      "is_gui_message_text",
       false
     ],
     [
@@ -43744,7 +43744,7 @@
       {
         "name": "ab"
       },
-      "want_assertions_in_saml_response_signed",
+      "want_assertions_signed",
       true
     ],
     [
@@ -43752,7 +43752,7 @@
       {
         "name": "ab"
       },
-      "want_saml_auth_requests_signed",
+      "want_requests_signed",
       true
     ],
     [
@@ -43760,7 +43760,7 @@
       {
         "name": "ab"
       },
-      "want_saml_response_message_signed",
+      "want_response_signed",
       true
     ],
     [
@@ -43852,7 +43852,7 @@
       {
         "name": "ab"
       },
-      "rekey_control_to_turn_on_off_rekeying",
+      "stop_rekey",
       false
     ],
     [
@@ -43860,7 +43860,7 @@
       {
         "name": "ab"
       },
-      "include_secure_fields_in_export",
+      "include_secure_fields",
       true
     ],
     [
@@ -43908,7 +43908,7 @@
       {
         "name": "ab"
       },
-      "preview_mode_nothing_is_applied",
+      "preview",
       false
     ],
     [
@@ -44200,7 +44200,7 @@
       {
         "name": "ab"
       },
-      "include_disruptive_tests_in_the_grp",
+      "incl_disruptive",
       false
     ],
     [
@@ -44208,7 +44208,7 @@
       {
         "name": "ab"
       },
-      "include_disruptive_tests_in_the_grp",
+      "incl_disruptive",
       false
     ],
     [
@@ -44216,7 +44216,7 @@
       {
         "name": "ab"
       },
-      "include_disruptive_tests_in_the_grp",
+      "incl_disruptive",
       false
     ],
     [
@@ -44224,7 +44224,7 @@
       {
         "name": "ab"
       },
-      "include_disruptive_tests_in_the_grp",
+      "incl_disruptive",
       false
     ],
     [
@@ -44232,7 +44232,7 @@
       {
         "name": "ab"
       },
-      "include_disruptive_tests_in_the_grp",
+      "incl_disruptive",
       false
     ],
     [
@@ -44240,7 +44240,7 @@
       {
         "name": "ab"
       },
-      "include_disruptive_tests_in_the_grp",
+      "incl_disruptive",
       false
     ],
     [
@@ -44248,7 +44248,7 @@
       {
         "name": "ab"
       },
-      "include_disruptive_tests_in_the_grp",
+      "incl_disruptive",
       false
     ],
     [
@@ -44256,7 +44256,7 @@
       {
         "name": "ab"
       },
-      "include_disruptive_tests_in_the_grp",
+      "incl_disruptive",
       false
     ],
     [
@@ -44264,7 +44264,7 @@
       {
         "name": "ab"
       },
-      "include_disruptive_tests_in_the_grp",
+      "incl_disruptive",
       false
     ],
     [
@@ -44392,7 +44392,7 @@
     [
       "fhsRaGuardPol",
       {},
-      "perform_managed_config_flag_check",
+      "managed_config_check",
       false
     ],
     [
@@ -44404,7 +44404,7 @@
     [
       "fhsRaGuardPol",
       {},
-      "perform_other_config_flag_check",
+      "other_config_check",
       false
     ],
     [
@@ -44478,7 +44478,7 @@
       {
         "name": "ab"
       },
-      "variable_to_reuse_download_task",
+      "dnld_task_flip",
       true
     ],
     [
@@ -44514,7 +44514,7 @@
       {
         "name": "ab"
       },
-      "whether_latest",
+      "latest",
       false
     ],
     [
@@ -44522,7 +44522,7 @@
       {
         "name": "ab"
       },
-      "whether_effective_on_reboot",
+      "effective_on_reboot",
       false
     ],
     [
@@ -44546,7 +44546,7 @@
       {
         "name": "ab"
       },
-      "variable_to_reuse_download_task",
+      "dnld_task_flip",
       true
     ],
     [
@@ -44562,7 +44562,7 @@
       {
         "name": "ab"
       },
-      "variable_to_reuse_download_task",
+      "dnld_task_flip",
       true
     ],
     [
@@ -44592,7 +44592,7 @@
       {
         "name": "ab"
       },
-      "sub_event_configuration_for_tcp_ack_flag",
+      "tcp_ack_flag",
       false
     ],
     [
@@ -44600,7 +44600,7 @@
       {
         "name": "ab"
       },
-      "sub_event_configuration_for_tcp_cwr_flag",
+      "tcp_cwr_flag",
       false
     ],
     [
@@ -44608,7 +44608,7 @@
       {
         "name": "ab"
       },
-      "sub_event_configuration_for_tcp_ece_flag",
+      "tcp_ece_flag",
       false
     ],
     [
@@ -44616,7 +44616,7 @@
       {
         "name": "ab"
       },
-      "sub_event_configuration_for_tcp_fin_flag",
+      "tcp_fin_flag",
       false
     ],
     [
@@ -44624,7 +44624,7 @@
       {
         "name": "ab"
       },
-      "sub_event_configuration_for_tcp_flag_set",
+      "tcp_flag_set",
       false
     ],
     [
@@ -44632,7 +44632,7 @@
       {
         "name": "ab"
       },
-      "sub_event_configuration_for_tcp_ns_flag",
+      "tcp_ns_flag",
       false
     ],
     [
@@ -44640,7 +44640,7 @@
       {
         "name": "ab"
       },
-      "sub_event_configuration_for_tcp_psh_flag",
+      "tcp_psh_flag",
       false
     ],
     [
@@ -44648,7 +44648,7 @@
       {
         "name": "ab"
       },
-      "sub_event_configuration_for_tcp_rst_flag",
+      "tcp_rst_flag",
       false
     ],
     [
@@ -44656,7 +44656,7 @@
       {
         "name": "ab"
       },
-      "sub_event_configuration_for_tcp_syn_flag",
+      "tcp_syn_flag",
       false
     ],
     [
@@ -44664,7 +44664,7 @@
       {
         "name": "ab"
       },
-      "sub_event_configuration_for_tcp_urg_flag",
+      "tcp_urg_flag",
       false
     ],
     [
@@ -44680,7 +44680,7 @@
       {
         "name": "ab"
       },
-      "sub_event_configuration_for_acl_span",
+      "acl_span",
       false
     ],
     [
@@ -44728,7 +44728,7 @@
       {
         "name": "ab"
       },
-      "configure_fte_export_flow_bucket_limit",
+      "export_flow_limit",
       false
     ],
     [
@@ -44744,7 +44744,7 @@
       {
         "name": "ab"
       },
-      "configure_fte_first_packet_bucket_limit",
+      "first_packet_limit",
       false
     ],
     [
@@ -44776,7 +44776,7 @@
       {
         "name": "ab"
       },
-      "configure_fte_latency_bucket_limit",
+      "latency_limit",
       false
     ],
     [
@@ -44792,7 +44792,7 @@
       {
         "name": "ab"
       },
-      "configure_fte_mouse_packet_bucket_limit",
+      "mouse_packet_limit",
       false
     ],
     [
@@ -44896,7 +44896,7 @@
       {
         "name": "ab"
       },
-      "configure_fte_rtt_ack_bucket_limit",
+      "rtt_ack_limit",
       false
     ],
     [
@@ -44928,7 +44928,7 @@
       {
         "name": "ab"
       },
-      "configure_fte_table_full_bucket_limit",
+      "table_full_limit",
       false
     ],
     [
@@ -45190,7 +45190,7 @@
       {
         "name": "ab"
       },
-      "epg_with_multisite_mcast_source",
+      "has_mcast_source",
       false
     ],
     [
@@ -45424,7 +45424,7 @@
     [
       "infraLoNode",
       {},
-      "is_out_of_band_management_plane_engaged",
+      "is_oob_not_infra",
       false
     ],
     [
@@ -45486,7 +45486,7 @@
     [
       "infraSetPol",
       {},
-      "enable_remote_leaf_direct_communication",
+      "enable_remote_leaf_direct",
       false
     ],
     [
@@ -45546,7 +45546,7 @@
     [
       "infraSetPol",
       {},
-      "validate_overlapping_vlans_on_aepg",
+      "validate_overlapping_vlans",
       false
     ],
     [
@@ -45664,7 +45664,7 @@
       {
         "name": "ab"
       },
-      "enable_ospf_area_id_validation",
+      "enable_vrf_validation_ospf_area_id",
       true
     ],
     [
@@ -45696,7 +45696,7 @@
       {
         "name": "ab"
       },
-      "enable_subnet_non_duplication_validation",
+      "enable_vrf_validation_subnet",
       true
     ],
     [
@@ -45792,7 +45792,7 @@
     [
       "maintCtrlrMaintP",
       {},
-      "whether_latest",
+      "parallel",
       false
     ],
     [
@@ -45852,7 +45852,7 @@
     [
       "mdpClassId",
       {},
-      "control_ep_stream_for_this_epg_to_mdc",
+      "ep_stream",
       false
     ],
     [
@@ -45864,7 +45864,7 @@
     [
       "notifOperClass",
       {
-        "classname_that_is_being_subscribed": "ab"
+        "class_name": "ab"
       },
       "is_chatty",
       false
@@ -45928,7 +45928,7 @@
     [
       "ospfExtP",
       {},
-      "create_multipod_internal_ospf_instance",
+      "multipod_internal",
       false
     ],
     [
@@ -45972,7 +45972,7 @@
       {
         "name": "ab"
       },
-      "legacy_mode_one_vlan_per_bridge_domain",
+      "legacy_mode",
       false
     ],
     [
@@ -46034,7 +46034,7 @@
       {
         "name": "ab"
       },
-      "contracts_not_enforced",
+      "unenforced",
       false
     ],
     [
@@ -46048,7 +46048,7 @@
     [
       "ptpCfgDef",
       {},
-      "flag_to_over_ride_node_level_config",
+      "node_profile_override",
       false
     ],
     [
@@ -46072,7 +46072,7 @@
       {
         "name": "ab"
       },
-      "fabric_pfc_flush_enable_knob",
+      "fabric_flush_st",
       false
     ],
     [
@@ -46080,7 +46080,7 @@
       {
         "name": "ab"
       },
-      "priority_flow_control_admin_state",
+      "admin_st",
       false
     ],
     [
@@ -46108,7 +46108,7 @@
     [
       "svccoreCtrlr",
       {
-        "name_of_service_that_cored": "ab",
+        "svc_name": "ab",
         "create_time": "ab"
       },
       "ack",
@@ -46117,7 +46117,7 @@
     [
       "svccoreNode",
       {
-        "name_of_service_that_cored": "ab",
+        "svc_name": "ab",
         "create_time": "ab"
       },
       "ack",
@@ -46144,19 +46144,19 @@
       {
         "name": "ab"
       },
-      "transmit_dnu_on_lag_members",
+      "tx_dnu_lag",
       true
     ],
     [
       "syntheticCtWiNode",
       {},
-      "all_shards_on_this_appliance_are_leaders",
+      "all_shard_leaders",
       false
     ],
     [
       "syntheticCtWiNode",
       {},
-      "start_appliance_clean_or_as_it_is",
+      "st_clean",
       false
     ],
     [
@@ -46168,7 +46168,7 @@
     [
       "syntheticCtrlrPatchValidate",
       {},
-      "whether_to_show_this_validation_in_ui",
+      "show_validation",
       true
     ],
     [
@@ -46180,7 +46180,7 @@
     [
       "syntheticMaintPValidate",
       {},
-      "whether_to_show_this_validation_in_ui",
+      "show_validation",
       true
     ],
     [
@@ -46198,7 +46198,7 @@
     [
       "syntheticSwitchMaintPValidate",
       {},
-      "whether_to_show_this_validation_in_ui",
+      "show_validation",
       true
     ],
     [
@@ -46206,7 +46206,7 @@
       {
         "name": "ab"
       },
-      "show_milli_seconds_in_timestamp",
+      "include_milli_seconds",
       false
     ],
     [
@@ -46214,7 +46214,7 @@
       {
         "name": "ab"
       },
-      "show_timezone_in_timestamp",
+      "include_time_zone",
       false
     ],
     [
@@ -46228,7 +46228,7 @@
       {
         "host": "ab"
       },
-      "send_changes_as_command_arguments",
+      "populate_cmd_args",
       false
     ],
     [
@@ -46246,7 +46246,7 @@
     [
       "telemetryFlowCollectorP",
       {},
-      "software_hardware_based_record_export",
+      "sw_export",
       false
     ],
     [
@@ -46262,7 +46262,7 @@
       {
         "name": "ab"
       },
-      "sub_event_configuration_for_acl_span",
+      "acl_span",
       false
     ],
     [
@@ -46670,7 +46670,7 @@
       {
         "name": "ab"
       },
-      "sub_event_configuration_for_tcp_ack_flag",
+      "tcp_ack_flag",
       false
     ],
     [
@@ -46678,7 +46678,7 @@
       {
         "name": "ab"
       },
-      "sub_event_configuration_for_tcp_cwr_flag",
+      "tcp_cwr_flag",
       false
     ],
     [
@@ -46686,7 +46686,7 @@
       {
         "name": "ab"
       },
-      "sub_event_configuration_for_tcp_ece_flag",
+      "tcp_ece_flag",
       false
     ],
     [
@@ -46694,7 +46694,7 @@
       {
         "name": "ab"
       },
-      "sub_event_configuration_for_tcp_fin_flag",
+      "tcp_fin_flag",
       false
     ],
     [
@@ -46702,7 +46702,7 @@
       {
         "name": "ab"
       },
-      "sub_event_configuration_for_tcp_flag_set",
+      "tcp_flag_set",
       false
     ],
     [
@@ -46710,7 +46710,7 @@
       {
         "name": "ab"
       },
-      "sub_event_configuration_for_tcp_ns_flag",
+      "tcp_ns_flag",
       false
     ],
     [
@@ -46718,7 +46718,7 @@
       {
         "name": "ab"
       },
-      "sub_event_configuration_for_tcp_psh_flag",
+      "tcp_psh_flag",
       false
     ],
     [
@@ -46726,7 +46726,7 @@
       {
         "name": "ab"
       },
-      "sub_event_configuration_for_tcp_rst_flag",
+      "tcp_rst_flag",
       false
     ],
     [
@@ -46734,7 +46734,7 @@
       {
         "name": "ab"
       },
-      "sub_event_configuration_for_tcp_syn_flag",
+      "tcp_syn_flag",
       false
     ],
     [
@@ -46742,7 +46742,7 @@
       {
         "name": "ab"
       },
-      "sub_event_configuration_for_tcp_urg_flag",
+      "tcp_urg_flag",
       false
     ],
     [
@@ -46750,7 +46750,7 @@
       {
         "name": "ab"
       },
-      "sub_event_configuration_for_tcp_ack_flag",
+      "tcp_ack_flag",
       false
     ],
     [
@@ -46758,7 +46758,7 @@
       {
         "name": "ab"
       },
-      "sub_event_configuration_for_tcp_cwr_flag",
+      "tcp_cwr_flag",
       false
     ],
     [
@@ -46766,7 +46766,7 @@
       {
         "name": "ab"
       },
-      "sub_event_configuration_for_tcp_ece_flag",
+      "tcp_ece_flag",
       false
     ],
     [
@@ -46774,7 +46774,7 @@
       {
         "name": "ab"
       },
-      "sub_event_configuration_for_tcp_fin_flag",
+      "tcp_fin_flag",
       false
     ],
     [
@@ -46782,7 +46782,7 @@
       {
         "name": "ab"
       },
-      "sub_event_configuration_for_tcp_flag_set",
+      "tcp_flag_set",
       false
     ],
     [
@@ -46790,7 +46790,7 @@
       {
         "name": "ab"
       },
-      "sub_event_configuration_for_tcp_ns_flag",
+      "tcp_ns_flag",
       false
     ],
     [
@@ -46798,7 +46798,7 @@
       {
         "name": "ab"
       },
-      "sub_event_configuration_for_tcp_psh_flag",
+      "tcp_psh_flag",
       false
     ],
     [
@@ -46806,7 +46806,7 @@
       {
         "name": "ab"
       },
-      "sub_event_configuration_for_tcp_rst_flag",
+      "tcp_rst_flag",
       false
     ],
     [
@@ -46814,7 +46814,7 @@
       {
         "name": "ab"
       },
-      "sub_event_configuration_for_tcp_syn_flag",
+      "tcp_syn_flag",
       false
     ],
     [
@@ -46822,7 +46822,7 @@
       {
         "name": "ab"
       },
-      "sub_event_configuration_for_tcp_urg_flag",
+      "tcp_urg_flag",
       false
     ],
     [
@@ -47054,7 +47054,7 @@
       {
         "name": "ab"
       },
-      "connecting_to_secure_message_bus",
+      "is_secure",
       true
     ],
     [
@@ -47110,7 +47110,7 @@
       {
         "name": "ab"
       },
-      "enable_vm_folder_data_retrieval",
+      "enable_vm_folder",
       false
     ],
     [
@@ -47118,7 +47118,7 @@
       {
         "name": "ab"
       },
-      "enable_host_availibility_monitoring",
+      "enable_host_availability_monitoring",
       false
     ],
     [
@@ -47467,7 +47467,7 @@
       {
         "name": "ab"
       },
-      "anycast_enabled_or_not",
+      "anycast_enabled",
       false
     ],
     [
@@ -47483,7 +47483,7 @@
       {
         "name": "ab"
       },
-      "resilient_hashing_enabled_or_not",
+      "resilient_hash_enabled",
       false
     ],
     [
@@ -47531,7 +47531,7 @@
       {
         "name": "ab"
       },
-      "apply_rule_for_all_fragments",
+      "apply_to_frag",
       false
     ],
     [
@@ -48545,7 +48545,7 @@
     [
       "apphostingAppConf",
       {
-        "unique_id_to_identify_the_application": "ab"
+        "app_id": "ab"
       },
       {
         "appId": "ab"
@@ -50469,7 +50469,7 @@
     [
       "dppCkt",
       {
-        "dn_of_l2rspathdomatt": "ab"
+        "l2_ckt_ep_dn": "ab"
       },
       {
         "l2CktEpDn": "ab"
@@ -52806,7 +52806,7 @@
     [
       "fvEPgSelector",
       {
-        "epg_dn_to_be_associated": "ab"
+        "match_epg_dn": "ab"
       },
       {
         "matchEpgDn": "ab"
@@ -52950,7 +52950,7 @@
     [
       "fvLIfCtxSelector",
       {
-        "lifctx_dn_to_be_associated": "ab"
+        "match_l_if_ctx_dn": "ab"
       },
       {
         "matchLIfCtxDn": "ab"
@@ -55956,7 +55956,7 @@
     [
       "l3extVirtualLIfP",
       {
-        "path_of_the_anchor_node": "ab",
+        "node_dn": "ab",
         "external_interface_encap": "ab"
       },
       {
@@ -55967,7 +55967,7 @@
     [
       "l3extVirtualLIfPDef",
       {
-        "path_of_the_anchor_node": "ab",
+        "node_dn": "ab",
         "external_interface_encap": "ab"
       },
       {
@@ -56377,7 +56377,7 @@
     [
       "mdpConsumedServiceDef",
       {
-        "mdp_consumed_service_def_dn": "ab"
+        "mdp_service_def_dn": "ab"
       },
       {
         "mdpServiceDefDn": "ab"
@@ -57171,7 +57171,7 @@
     [
       "notifOperClass",
       {
-        "classname_that_is_being_subscribed": "ab"
+        "class_name": "ab"
       },
       {
         "className": "ab"
@@ -57180,7 +57180,7 @@
     [
       "notifStatsClass",
       {
-        "stats_classname_that_is_being_subscribed": "ab"
+        "class_name": "ab"
       },
       {
         "className": "ab"
@@ -57203,7 +57203,7 @@
     [
       "notifSubscriber",
       {
-        "name_of_the_subscriber": "ab"
+        "subscriber_name": "ab"
       },
       {
         "subscriberName": "ab"
@@ -57217,7 +57217,7 @@
     [
       "notifSubscriberRef",
       {
-        "classname_that_is_being_subscribed": "ab"
+        "subscriber": "ab"
       },
       {
         "subscriber": "ab"
@@ -57226,7 +57226,7 @@
     [
       "notifSubtreeObserverClass",
       {
-        "container_class_of_observer_class": "ab"
+        "class_name": "ab"
       },
       {
         "className": "ab"
@@ -57698,7 +57698,7 @@
     [
       "pimInterVRFEntryPol",
       {
-        "dn_of_the_src_vrf": "ab"
+        "src_vrf_dn": "ab"
       },
       {
         "srcVrfDn": "ab"
@@ -59693,7 +59693,7 @@
     [
       "svccoreCtrlr",
       {
-        "name_of_service_that_cored": "ab",
+        "svc_name": "ab",
         "create_time": "ab"
       },
       {
@@ -59714,7 +59714,7 @@
     [
       "svccoreNode",
       {
-        "name_of_service_that_cored": "ab",
+        "svc_name": "ab",
         "create_time": "ab"
       },
       {
@@ -60943,7 +60943,7 @@
     [
       "trigRoProxy",
       {
-        "dn_of_the_triggerable_policy": "ab"
+        "policy_dn": "ab"
       },
       {
         "policyDn": "ab"

@@ -164,7 +164,9 @@ def _plan_result(
     unchanged: list[str] = []
 
     def _walk(d: ManagedObject, c: ManagedObject | None, dn: str) -> None:
-        if c is None or type(c) is not type(d):
+        # Matching is by wire class, not Python type: two catalogue-served
+        # objects of different classes are both bare ManagedObject.
+        if c is None or c.aci_class != d.aci_class or type(c) is not type(d):
             creates.append(dn)
             for child in d.children:
                 _walk(child, None, f"{dn}/{child.rn}")
@@ -177,13 +179,167 @@ def _plan_result(
             naming = set(type(d)._naming_props)  # pyright: ignore[reportPrivateUsage]
             fields = sorted(delta.model_fields_set - naming - {"children"})
             updates[dn] = {f: (getattr(c, f, None), getattr(d, f, None)) for f in fields}
+            for wire, val in delta._raw_wire_attrs.items():  # pyright: ignore[reportPrivateUsage]
+                # Wire-channel drift (raw nodes / raw_set escapes) — reported
+                # under the wire name, both sides in wire spelling.
+                updates[dn][wire] = (c.attrs.get(wire), val)
 
-        current_children = {(type(child), child.rn): child for child in c.children}
+        current_children = {(child.aci_class, child.rn): child for child in c.children}
         for child in d.children:
-            _walk(child, current_children.get((type(child), child.rn)), f"{dn}/{child.rn}")
+            _walk(child, current_children.get((child.aci_class, child.rn)), f"{dn}/{child.rn}")
 
     _walk(desired, current, root_dn)
     return PlanResult(creates=creates, updates=updates, unchanged=unchanged)
+
+
+def _index_desired(desired: ManagedObject, root_dn: str) -> dict[str, ManagedObject]:
+    """``{dn: desired MO}`` for every node of one domain's desired tree."""
+    index: dict[str, ManagedObject] = {}
+
+    def _walk(mo: ManagedObject, dn: str) -> None:
+        index[dn] = mo
+        for child in mo.children:
+            _walk(child, f"{dn}/{child.rn}")
+
+    _walk(desired, root_dn)
+    return index
+
+
+def _absorb_found(
+    dn: str,
+    d: ManagedObject,
+    c: ManagedObject,
+    updates: dict[str, dict[str, tuple[Any, Any]]],
+    unchanged: list[str],
+) -> None:
+    """Book a verified-present object as update or unchanged (pure)."""
+    delta = mo_diff(d, c, recurse_children=False, respect_fields_set=True)
+    if delta is None:
+        unchanged.append(dn)
+        return
+    naming = set(type(d)._naming_props)  # pyright: ignore[reportPrivateUsage]
+    fields = sorted(delta.model_fields_set - naming - {"children"})
+    updates[dn] = {f: (getattr(c, f, None), getattr(d, f, None)) for f in fields}
+    for wire, val in delta._raw_wire_attrs.items():  # pyright: ignore[reportPrivateUsage]
+        updates[dn][wire] = (c.attrs.get(wire), val)
+
+
+def _boundary(creates: set[str]) -> list[str]:
+    """Creates whose parent is not itself a create — the only ones to verify."""
+    from niwaki._dn import parent_dn
+
+    return sorted(dn for dn in creates if (parent_dn(dn) or "") not in creates)
+
+
+def _refine_part_sync(
+    part: PlanResult, index: dict[str, ManagedObject], session: Any
+) -> PlanResult:
+    """Verify boundary creates with bare self-GETs — the scoped read is not gospel.
+
+    Measured live: some objects never answer a class-scoped read
+    (``quotaCont`` from any scope, ``maintLocalInstall`` from its domain
+    root) and one class is not even a legal query argument (``fabSelfCA``,
+    HTTP 400) — yet all of them answer a bare self-GET.  Reporting them as
+    creates would make ``plan`` promise writes ``push`` then no-ops on.
+
+    Cost model: one GET per **absent-subtree root** only — MIT containment
+    guarantees a child cannot exist without its parent, so descendants of a
+    confirmed-absent DN are never probed, and a greenfield design costs one
+    GET per new domain, not one per object.
+    """
+    creates = set(part.creates)
+    updates = dict(part.updates)
+    unchanged = list(part.unchanged)
+    settled: set[str] = set()  # probed and confirmed absent (or foreign)
+    while True:
+        frontier = [dn for dn in _boundary(creates) if dn not in settled]
+        if not frontier:
+            break
+        for dn in frontier:
+            d = index.get(dn)
+            current = _fetch_bare_sync(session, dn) if d is not None else None
+            if current is None or d is None or current.aci_class != d.aci_class:
+                settled.add(dn)
+                continue
+            creates.discard(dn)
+            _absorb_found(dn, d, current, updates, unchanged)
+    return PlanResult(
+        creates=[dn for dn in part.creates if dn in creates],
+        updates=updates,
+        unchanged=unchanged,
+    )
+
+
+def _fetch_bare_sync(session: Any, dn: str) -> ManagedObject | None:
+    """Bare self-GET of one DN → typed MO, or ``None`` when absent."""
+    from niwaki.exceptions import NotFoundError
+
+    try:
+        items = session.get(f"/api/mo/{dn}.json")
+    except NotFoundError:
+        return None
+    return ManagedObject.from_apic(items[0]) if items else None
+
+
+async def _refine_part_async(
+    part: PlanResult, index: dict[str, ManagedObject], session: Any
+) -> PlanResult:
+    """Async twin of :func:`_refine_part_sync` — same probes, awaited."""
+    from niwaki.exceptions import NotFoundError
+
+    creates = set(part.creates)
+    updates = dict(part.updates)
+    unchanged = list(part.unchanged)
+    settled: set[str] = set()
+    while True:
+        frontier = [dn for dn in _boundary(creates) if dn not in settled]
+        if not frontier:
+            break
+        for dn in frontier:
+            d = index.get(dn)
+            current: ManagedObject | None = None
+            if d is not None:
+                try:
+                    items = await session.get(f"/api/mo/{dn}.json")
+                except NotFoundError:
+                    items = []
+                current = ManagedObject.from_apic(items[0]) if items else None
+            if current is None or d is None or current.aci_class != d.aci_class:
+                settled.add(dn)
+                continue
+            creates.discard(dn)
+            _absorb_found(dn, d, current, updates, unchanged)
+    return PlanResult(
+        creates=[dn for dn in part.creates if dn in creates],
+        updates=updates,
+        unchanged=unchanged,
+    )
+
+
+def _drop_unqueryable(exc: Exception, remaining: list[str]) -> bool:
+    """On APIC code 12 (*Unknown class X*), remove X from *remaining*.
+
+    A few catalogue classes are not legal **query** arguments even though
+    their objects exist and answer bare GETs (measured live: ``fabSelfCA``).
+    A design can only reach one through a hand-written ``raw()``; dropping
+    the class keeps the domain read alive, and the boundary-create probes
+    still verify the object itself.
+
+    Returns ``True`` when a class was dropped and the read should retry.
+    """
+    from niwaki.exceptions import APIError
+
+    if not isinstance(exc, APIError) or exc.apic_code != "12":
+        return False
+    marker = "Unknown class "
+    text = str(exc)
+    if marker not in text:
+        return False
+    bad = text.rsplit(marker, 1)[1].split()[0]
+    if bad not in remaining:
+        return False
+    remaining.remove(bad)
+    return True
 
 
 def _merge_plans(parts: list[PlanResult], external_refs: list[RefCheck]) -> PlanResult:
@@ -210,11 +366,18 @@ def _plan_classes(desired: ManagedObject) -> list[str]:
     intermediates — so every declared position's ancestors are part of the
     read and the rebuilt hierarchy stays connected.  Foreign instances of the
     same classes are ignored by the ``(class, rn)`` matcher.
+
+    The class is read through the public ``aci_class`` accessor: a
+    catalogue-served node (a reverse-imported ``raw()`` object) carries its
+    wire class there, not in ``_aci_class`` — collecting the private field
+    silently dropped those classes from the read and every raw node planned
+    as a create (measured live: an appuser subtree, 34 phantom creates).
     """
     classes: set[str] = set()
 
     def _collect(mo: ManagedObject) -> None:
-        classes.add(mo._aci_class)  # pyright: ignore[reportPrivateUsage]
+        if mo.aci_class:
+            classes.add(mo.aci_class)
         for child in mo.children:
             _collect(child)
 
@@ -291,12 +454,26 @@ def push_sync(
         return _staged_report(ops, _run_waves_sync(_execute, ops))
 
     # plan: one sharded read + diff per direct child of polUni (per declared
-    # domain), scoped to the design's classes (R-3).
+    # domain), scoped to the design's classes (R-3); boundary creates are
+    # then verified by bare self-GETs (the scoped read is not gospel).
     parts: list[PlanResult] = []
     for child, child_dn in _plan_roots(root.children):
         desired = build_desired_tree(child, extras)
-        current = read_subtree(session, child_dn, _plan_classes(desired))
-        parts.append(_plan_result(desired, current, child_dn))
+        classes = _plan_classes(desired)
+        while True:
+            try:
+                current = read_subtree(session, child_dn, classes)
+                break
+            except Exception as exc:
+                if not _drop_unqueryable(exc, classes):
+                    raise
+                if not classes:
+                    current = None
+                    break
+        part = _plan_result(desired, current, child_dn)
+        if part.creates:
+            part = _refine_part_sync(part, _index_desired(desired, child_dn), session)
+        parts.append(part)
     return _merge_plans(parts, checks)
 
 
@@ -345,10 +522,24 @@ async def push_async(
         return _staged_report(ops, await _run_waves(session, ops, max_concurrent=bound))
 
     # plan: one sharded read + diff per direct child of polUni (per declared
-    # domain), scoped to the design's classes (R-3).
+    # domain), scoped to the design's classes (R-3); boundary creates are
+    # then verified by bare self-GETs (the scoped read is not gospel).
     parts: list[PlanResult] = []
     for child, child_dn in _plan_roots(root.children):
         desired = build_desired_tree(child, extras)
-        current = await read_subtree_async(session, child_dn, _plan_classes(desired))
-        parts.append(_plan_result(desired, current, child_dn))
+        classes = _plan_classes(desired)
+        while True:
+            try:
+                current = await read_subtree_async(session, child_dn, classes)
+                break
+            except Exception as exc:
+                if not _drop_unqueryable(exc, classes):
+                    raise
+                if not classes:
+                    current = None
+                    break
+        part = _plan_result(desired, current, child_dn)
+        if part.creates:
+            part = await _refine_part_async(part, _index_desired(desired, child_dn), session)
+        parts.append(part)
     return _merge_plans(parts, checks)

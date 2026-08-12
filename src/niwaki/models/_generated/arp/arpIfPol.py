@@ -57,13 +57,9 @@ class arpIfPol(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    interface_controls_for_arp: Annotated[Flags[ArpIfControl], BeforeValidator(parse_flags)] = (
-        Field(
-            default_factory=lambda: frozenset({ArpIfControl.UNSPECIFIED}),
-            validation_alias="ctrl",
-            serialization_alias="ctrl",
-            description="Interface controls",
-        )
+    ctrl: Annotated[Flags[ArpIfControl], BeforeValidator(parse_flags)] = Field(
+        default_factory=lambda: frozenset({ArpIfControl.UNSPECIFIED}),
+        description="Interface controls",
     )
     description: Annotated[
         str,

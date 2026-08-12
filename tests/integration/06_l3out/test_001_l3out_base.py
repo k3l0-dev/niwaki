@@ -4,7 +4,7 @@ Run:
     uv run pytest tests/integration/06_l3out/test_001_l3out_base.py -m integration -s
 
 The base of the domain: the ``l3extOut`` roots themselves, swept across every
-``enforce_rtctrl`` flag combination, the target-DSCP scale and both MPLS-enabled
+``enforce_route_control`` flag combination, the target-DSCP scale and both MPLS-enabled
 states, plus the logical node profiles that hang under them (one per fabric leaf,
 discovered at runtime, with router-id loopbacks and both ``rtr_id_loop_back``
 states). It also covers the default-route leak policy across its ``always`` /
@@ -45,7 +45,7 @@ L2DOM = "niwaki-it-l2d"
 
 # Target-DSCP scale to cycle across the L3Out roots.
 DSCP = ["CS0", "CS1", "AF11", "AF21", "AF31", "EF", "VA", "CS7"]
-# enforce_rtctrl (L3extCtrlDirection): export route control is always enforced, so
+# enforce_route_control (L3extCtrlDirection): export route control is always enforced, so
 # the valid combinations are export alone or export+import (import-only is rejected).
 ENFORCE = ["export", "export,import"]
 
@@ -101,7 +101,7 @@ def _mk_l3out(
         )
         att = np.node_attachment(
             f"topology/pod-1/node-{node_id}",
-            rtr_id=f"10.{seq}.{idx}.1",
+            router_id=f"10.{seq}.{idx}.1",
             rtr_id_loop_back=loopback,
             config_issues="none",
         )
@@ -113,7 +113,7 @@ def _mk_l3out(
 
 
 def test_l3out_roots(live_aci: Niwaki) -> None:
-    """One L3Out per (enforce_rtctrl x MPLS x rtr-id-loopback) combination."""
+    """One L3Out per (enforce_route_control x MPLS x rtr-id-loopback) combination."""
     t = tenant(
         TN,
         description="Exhaustive L3Out/L2Out coverage: interfaces, BGP/OSPF/EIGRP, route-control.",
@@ -132,7 +132,7 @@ def test_l3out_roots(live_aci: Niwaki) -> None:
                     leaves,
                     loopback=loopback,
                     description=f"L3Out enforce {enforce}, lb {loopback}, mpls {mpls}.",
-                    enforce_rtctrl=enforce,
+                    enforce_route_control=enforce,
                     out_level_dscp=DSCP[n % len(DSCP)],
                     mpls_enabled=mpls,
                 )
@@ -194,7 +194,7 @@ def test_route_target_and_labels(live_aci: Niwaki) -> None:
     for owner, color in (("infra", "blue"), ("tenant", "green")):
         cons.consumer_label(
             f"cons-{owner}",
-            represents_the_provider_label_ownership=owner,
+            owner=owner,
             tag=color,
             description=f"Consumer label owned by {owner}.",
         )

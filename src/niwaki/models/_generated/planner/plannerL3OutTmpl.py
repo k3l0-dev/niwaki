@@ -82,7 +82,7 @@ class plannerL3OutTmpl(ManagedObject):
             serialization_alias="nameAlias",
         ),
     ] = ""
-    number_of_prefix_based_epgs: Annotated[
+    prefix_based_epgs: Annotated[
         int,
         Field(
             ge=1,
@@ -102,20 +102,8 @@ class plannerL3OutTmpl(ManagedObject):
             description="No of leafs this EPG deployed on",
         ),
     ] = 1
-    number_of_l3_interfaces: Annotated[
-        int,
-        Field(
-            validation_alias="subifs",
-            serialization_alias="subifs",
-            description="Number of L3 Sub Interfaces (per leaf) in this l2out",
-        ),
+    subifs: Annotated[
+        int, Field(description="Number of L3 Sub Interfaces (per leaf) in this l2out")
     ] = 0
-    number_of_svi_interfaces: Annotated[
-        int,
-        Field(
-            validation_alias="svis",
-            serialization_alias="svis",
-            description="Number of SVI Interfaces (per leaf) in this l3out",
-        ),
-    ] = 0
+    svis: Annotated[int, Field(description="Number of SVI Interfaces (per leaf) in this l3out")] = 0
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

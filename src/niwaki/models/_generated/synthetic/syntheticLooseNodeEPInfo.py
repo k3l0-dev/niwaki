@@ -56,7 +56,7 @@ class syntheticLooseNodeEPInfo(ManagedObject):
             description="Identifies the dynamic naming string of the controller object.For internal use only.",
         ),
     ] = ""
-    domain_name_of_the_controller: Annotated[
+    ctrlr_domain_name: Annotated[
         str,
         Field(
             max_length=512,
@@ -83,16 +83,10 @@ class syntheticLooseNodeEPInfo(ManagedObject):
             description="The port encapsulation.",
         ),
     ] = ""
-    the_vm_nic_mac_address: Annotated[
-        str,
-        Field(
-            max_length=512,
-            validation_alias="ep",
-            serialization_alias="ep",
-            description="Endpoint and Adapter details from compVNic",
-        ),
+    ep: Annotated[
+        str, Field(max_length=512, description="Endpoint and Adapter details from compVNic")
     ] = ""
-    the_name_for_the_policies: Annotated[
+    epg_dn: Annotated[
         str,
         Field(
             max_length=512,

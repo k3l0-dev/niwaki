@@ -22,7 +22,7 @@ Accepted as keyword arguments of `.cluster_controller(name)` and of `.set(**attr
 | parameter | wire | type | values | default | description |
 | --- | --- | --- | --- | --- | --- |
 | `name` *(positional)* | `name` | `str` | — | — | The name of the object. |
-| `hostname_or_ip_address` | `hostOrIp` | `str` | — | — | Host or IP |
+| `host_or_ip` | `hostOrIp` | `str` | — | — | Host or IP |
 | `triggered_inventory_sync_status` | `inventoryTrigSt` | {ref}`VmmTrigSt <enum-vmmtrigst>` | `autoTriggered`, `triggered`, `untriggered` | `untriggered` | — |
 | `msft_config_err_msg` | `msftConfigErrMsg` | `str` | — | — | Deployment Error Message of Mirosoft Plugin SCVM Controller. It captures error message encountered in SCVMM Controller plugin.This error message represents specific details for bitmask based msftConfigIssues fault. |
 | `msft_config_issues` | `msftConfigIssues` | {ref}`CompmsftConfigIssues <enum-compmsftconfigissues>` | `not-applicable`, `invalid-rootContName`, `duplicate-rootContName`, `missing-hostGroup-in-cloud`, `missing-rootContName`, `aaacert-invalid`, `inventory-failed`, `invalid-object-in-inventory`, `duplicate-mac-in-inventory`, `zero-mac-in-inventory` | `not-applicable` | — |

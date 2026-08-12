@@ -33,8 +33,9 @@ Example::
 
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, cast
 
+from niwaki.models._wire import from_wire
 from niwaki.models.base import ManagedObject
 
 
@@ -98,8 +99,32 @@ def _values_equal(desired: Any, current: Any) -> bool:
     Numbers are numbers now, and sets are sets: ``80.0 == 80.0`` and
     ``{public, shared} == {shared, public}`` without anyone's help.  The
     workaround is gone, and equality means equality again.
+
+    One asymmetry remains, structural to **named numbers whose names are
+    numeric strings** (``poeIfPol.maximum_power: int | Literal['30000', …]``):
+    construction keeps the Literal string (an exact match beats the int
+    branch), while a read coerces the same wire value to ``int`` — so
+    ``'30000'`` and ``30000`` are one value spelled by two coercion paths,
+    and comparing them raw reported phantom drift on every plan (measured
+    live).  A string that parses to the exact same integer is therefore
+    equal; ``bool`` is excluded (``True == 1``, but no named number is a
+    bool).
     """
-    return bool(desired == current)
+    if desired == current:
+        return True
+    text, number = (
+        (desired, current)
+        if isinstance(desired, str) and type(current) is int
+        else (current, desired)
+        if isinstance(current, str) and type(desired) is int
+        else (None, None)
+    )
+    if text is not None:
+        try:
+            return int(text) == number
+        except ValueError:
+            return False
+    return False
 
 
 def mo_diff[T: ManagedObject](
@@ -170,6 +195,13 @@ def mo_diff[T: ManagedObject](
             f"Cannot diff {type(desired).__name__!r} against"
             f" {type(current).__name__!r}: classes must match"
         )
+    if desired.aci_class != current.aci_class:
+        # Two catalogue-served instances of different wire classes are both
+        # bare ManagedObject at the Python level - the wire class is the type.
+        raise TypeError(
+            f"Cannot diff wire class {desired.aci_class!r} against"
+            f" {current.aci_class!r}: classes must match"
+        )
 
     cls: type[T] = type(desired)
     naming_props = set(cls._naming_props)  # pyright: ignore[reportPrivateUsage]
@@ -206,6 +238,33 @@ def mo_diff[T: ManagedObject](
         if not _values_equal(d_val, c_val):
             changed[field] = d_val
 
+    # Wire-name escape hatch (design .raw()/.raw_set()): the desired side
+    # declares wire attrs outside the typed surface; the current side (a
+    # from_apic read) holds them as model extras.  Compared as wire strings.
+    raw_changed: dict[str, str] = {}
+    current_extra = current.model_extra or {}
+    alias_map = cls._get_alias_map() if cls is not ManagedObject else {}  # pyright: ignore[reportPrivateUsage]
+    for wire, d_val in desired._raw_wire_attrs.items():  # pyright: ignore[reportPrivateUsage]
+        c_raw: Any = current._raw_wire_attrs.get(wire)  # pyright: ignore[reportPrivateUsage]
+        if c_raw is None and wire in alias_map:
+            # The wire prop is a typed field on the current side (a raw_set of
+            # a prop the model DOES know): coerce the desired wire string
+            # through the field's own type and compare in coerced space —
+            # wire spellings have synonyms ("yes" and "true" are one bool).
+            field = alias_map[wire]
+            field_val = getattr(current, field, None)
+            try:
+                coerced = from_wire(cls.model_fields[field].annotation, d_val)
+            except (ValueError, TypeError):
+                coerced = d_val
+            if not _values_equal(coerced, field_val):
+                raw_changed[wire] = str(d_val)
+            continue
+        if c_raw is None:
+            c_raw = current_extra.get(wire)
+        if c_raw is None or str(d_val) != str(c_raw):
+            raw_changed[wire] = str(d_val)
+
     # Compute child deltas when requested
     child_deltas: list[ManagedObject] = []
     if recurse_children:
@@ -215,12 +274,37 @@ def mo_diff[T: ManagedObject](
             respect_fields_set=respect_fields_set,
         )
 
-    if not changed and not child_deltas:
+    if not changed and not raw_changed and not child_deltas:
         return None
 
     # Build the delta instance: naming props + changed fields only.
     naming = {prop: getattr(desired, prop) for prop in naming_props}
-    delta = cls.surgical(naming, **changed)
+    if cls is ManagedObject:
+        # Catalogue-served wire pair: rebuild the delta through the tolerant
+        # read path so the wire class and naming extras survive, then carry
+        # the changed raw attrs on the wire-attr channel.
+        naming_extras = {
+            k: str(v) for k, v in (desired.model_extra or {}).items() if k in _wire_naming(desired)
+        }
+        delta = cast(
+            "T", ManagedObject.from_apic({desired.aci_class: {"attributes": naming_extras}})
+        )
+        delta._raw_wire_attrs = raw_changed  # pyright: ignore[reportPrivateUsage]
+        delta._raw_rn = desired.rn  # pyright: ignore[reportPrivateUsage]
+    else:
+        delta = cls.surgical(naming, **changed)
+        if raw_changed:
+            delta._raw_wire_attrs = raw_changed  # pyright: ignore[reportPrivateUsage]
     if child_deltas:
         delta.children.extend(child_deltas)
     return delta
+
+
+def _wire_naming(mo: ManagedObject) -> frozenset[str]:
+    """Wire naming props of a catalogue-served instance (empty when unknown)."""
+    from niwaki.query._catalog import catalog
+
+    try:
+        return catalog().class_meta(mo.aci_class).naming
+    except (KeyError, FileNotFoundError):
+        return frozenset()

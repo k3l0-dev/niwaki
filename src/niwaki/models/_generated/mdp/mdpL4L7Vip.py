@@ -11,12 +11,12 @@ from niwaki.models.base import ManagedObject
 class mdpL4L7Vip(ManagedObject):
     """ACI Managed Object: ``mdpL4L7Vip`` — Layer-4-thru-7 Virtual IP.
 
-    RN format: ``l4l7vip-[{virtual_ip_address}]-ctxdn-[{dn_of_associated_vrf}]``
+    RN format: ``l4l7vip-[{virtual_ip_address}]-ctxdn-[{ctx_dn}]``
     """
 
     _aci_class: ClassVar[str] = "mdpL4L7Vip"
-    _rn_format: ClassVar[str] = "l4l7vip-[{virtual_ip_address}]-ctxdn-[{dn_of_associated_vrf}]"
-    _naming_props: ClassVar[list[str]] = ["virtual_ip_address", "dn_of_associated_vrf"]
+    _rn_format: ClassVar[str] = "l4l7vip-[{virtual_ip_address}]-ctxdn-[{ctx_dn}]"
+    _naming_props: ClassVar[list[str]] = ["virtual_ip_address", "ctx_dn"]
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",
@@ -38,7 +38,7 @@ class mdpL4L7Vip(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    dn_of_associated_vrf: Annotated[
+    ctx_dn: Annotated[
         str,
         Field(
             validation_alias="ctxDn",

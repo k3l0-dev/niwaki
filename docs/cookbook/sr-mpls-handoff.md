@@ -50,7 +50,7 @@ inf = tenant("infra")
 # modified — it is referenced attribute-free, purely to resolve the binding.
 inf.mpls_global_configuration("default")
 inf.mpls_interface_policy("mpls-backbone", description="MPLS handoff interface policy.")
-inf.bgp_peer_prefix_policy("sr-mpls-limit", max_number_of_prefixes=20000, max_prefix_action="log")
+inf.bgp_peer_prefix_policy("sr-mpls-limit", max_pfx=20000, max_prefix_action="log")
 
 # MPLS EXP marking is supported only under tenant infra, so it lives here and
 # the node profile binds it by name below.
@@ -92,7 +92,9 @@ for idx, (name, node_id) in enumerate(border_leaves, start=1):
     # loopback carries the node SID.
     evpn = f"10.10.10.{node_id}"
     transport = f"20.20.20.{node_id}"
-    att = np.node_attachment(f"topology/pod-1/node-{node_id}", rtr_id=evpn, rtr_id_loop_back=True)
+    att = np.node_attachment(
+        f"topology/pod-1/node-{node_id}", router_id=evpn, rtr_id_loop_back=True
+    )
     loop = att.loopback(transport, description="SR-MPLS transport loopback.")
     loop.node_sid(srgb_index=1, loopback_addr=transport, description="Node SID.")
 
@@ -117,7 +119,7 @@ for idx, (name, node_id) in enumerate(border_leaves, start=1):
     ifp.path_attachment(
         f"topology/pod-1/paths-{node_id}/pathep-[eth1/60]",
         if_inst_t="sub-interface",
-        addr=f"10.11.4.{idx}/30",
+        ip_address=f"10.11.4.{idx}/30",
         encap="vlan-2690",
     )
     ifp.mpls_interface(description="MPLS-enabled interface.").bind(
@@ -148,13 +150,13 @@ edge = t.l3out("sr-mpls-edge", mpls_enabled=True).bind(vrf="prod").bind(domain="
 for idx, (name, node_id) in enumerate(border_leaves, start=1):
     np = edge.node_profile(f"np-{name}")
     np.node_attachment(
-        f"topology/pod-1/node-{node_id}", rtr_id=f"10.12.0.{idx}", rtr_id_loop_back=False
+        f"topology/pod-1/node-{node_id}", router_id=f"10.12.0.{idx}", rtr_id_loop_back=False
     )
 
 # The consumer label stitches onto the provider label of the same name.
 edge.consumer_label(
     "sr-backbone",
-    represents_the_provider_label_ownership="infra",
+    owner="infra",
     description="Consume the infra SR-MPLS handoff.",
 )
 ```

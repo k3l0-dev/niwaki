@@ -75,7 +75,7 @@ class bgpPeerPfxPol(ManagedObject):
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
-    max_number_of_prefixes: Annotated[
+    max_pfx: Annotated[
         int,
         Field(
             ge=1,

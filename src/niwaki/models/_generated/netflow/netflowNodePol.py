@@ -56,7 +56,7 @@ class netflowNodePol(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    collection_interval_in_seconds: Annotated[
+    collect_intvl: Annotated[
         int,
         Field(
             ge=60,
@@ -106,7 +106,7 @@ class netflowNodePol(ManagedObject):
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
-    template_interval_in_seconds: Annotated[
+    template_intvl: Annotated[
         int,
         Field(
             ge=60,

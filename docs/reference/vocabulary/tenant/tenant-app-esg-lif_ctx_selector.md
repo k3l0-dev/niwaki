@@ -10,18 +10,18 @@ Re-generate: uv run python -m niwaki._codegen.generate_docs
 | | |
 | --- | --- |
 | ACI class | `fvLIfCtxSelector` |
-| RN | `lifctxselector-[{lifctx_dn_to_be_associated}]` |
+| RN | `lifctxselector-[{match_l_if_ctx_dn}]` |
 | Cursor | `LifCtxSelectorCursor` |
 | Parent | {ref}`tenant.app.esg <vocab-tenant-app-esg>` |
 | Atomic | — |
 
 ## Attributes
 
-Accepted as keyword arguments of `.lif_ctx_selector(lifctx_dn_to_be_associated)` and of `.set(**attrs)` on this cursor.  Enum parameters also accept the plain string.
+Accepted as keyword arguments of `.lif_ctx_selector(match_l_if_ctx_dn)` and of `.set(**attrs)` on this cursor.  Enum parameters also accept the plain string.
 
 | parameter | wire | type | values | default | description |
 | --- | --- | --- | --- | --- | --- |
-| `lifctx_dn_to_be_associated` *(positional)* | `matchLIfCtxDn` | `str` | — | — | — |
+| `match_l_if_ctx_dn` *(positional)* | `matchLIfCtxDn` | `str` | — | — | — |
 | `description` | `descr` | `str` | — | — | Specifies a description of the policy definition. |
 | `name` | `name` | `str` | — | — | — |
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |

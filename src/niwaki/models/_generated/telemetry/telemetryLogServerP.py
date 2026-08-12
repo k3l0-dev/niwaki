@@ -64,7 +64,7 @@ class telemetryLogServerP(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    name_of_cluster_hosting_collector: Annotated[
+    cluster_name: Annotated[
         str,
         Field(max_length=512, validation_alias="clusterName", serialization_alias="clusterName"),
     ] = ""
@@ -119,7 +119,7 @@ class telemetryLogServerP(ManagedObject):
             description="The destination port.",
         ),
     ] = "unspecified"
-    name_of_fabric_as_seen_by_service_edge: Annotated[
+    fabric_name: Annotated[
         str, Field(max_length=512, validation_alias="fabricName", serialization_alias="fabricName")
     ] = ""
     display_name: Annotated[

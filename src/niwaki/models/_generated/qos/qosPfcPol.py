@@ -52,7 +52,7 @@ class qosPfcPol(ManagedObject):
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    priority_flow_control_admin_state: bool = Field(
+    admin_st: bool = Field(
         default=False,
         validation_alias="adminSt",
         serialization_alias="adminSt",
@@ -76,7 +76,7 @@ class qosPfcPol(ManagedObject):
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
-    priority_flow_control_enable_scope: QospPfcEnableScope = Field(
+    enable_scope: QospPfcEnableScope = Field(
         default=QospPfcEnableScope.TOR,
         validation_alias="enableScope",
         serialization_alias="enableScope",
@@ -90,7 +90,7 @@ class qosPfcPol(ManagedObject):
             serialization_alias="nameAlias",
         ),
     ] = ""
-    bitmap_of_nodrop_cos: Annotated[Flags[QospCosBmap], BeforeValidator(parse_flags)] = Field(
+    no_drop_cos: Annotated[Flags[QospCosBmap], BeforeValidator(parse_flags)] = Field(
         default_factory=lambda: frozenset({QospCosBmap.UNSPECIFIED}),
         validation_alias="noDropCos",
         serialization_alias="noDropCos",

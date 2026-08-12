@@ -97,7 +97,7 @@ class aaaRole(ManagedObject):
         serialization_alias="priv",
         description="The privilege(s) assigned to a role.",
     )
-    trigger_reset_to_factory_settings: AaaBoolean = Field(
+    reset_to_factory: AaaBoolean = Field(
         default=AaaBoolean.NO,
         validation_alias="resetToFactory",
         serialization_alias="resetToFactory",

@@ -35,14 +35,14 @@ l3out.ospf(area_id="0.0.0.10", area_type="regular")
 
 # Border leaf 101 with its router ID
 nodes = l3out.node_profile("border-leaves")
-nodes.node_attachment("topology/pod-1/node-101", rtr_id="10.30.255.101")
+nodes.node_attachment("topology/pod-1/node-101", router_id="10.30.255.101")
 
 # Routed sub-interface toward the WAN router, OSPF on the link
 links = nodes.interface_profile("uplinks")
 links.path_attachment(
     "topology/pod-1/paths-101/pathep-[eth1/33]",
     if_inst_t="sub-interface",
-    addr="192.0.2.2/30",
+    ip_address="192.0.2.2/30",
     encap="vlan-3010",
 )
 links.ospf_interface().bind(ospf_interface_policy="ospf-p2p")
@@ -84,7 +84,7 @@ outs = aci.query("l3extOut").fetch()
 assert [o.name for o in outs] == ["edge"]
 
 attached = aci.query("l3extRsNodeL3OutAtt").fetch()
-assert [n.rtr_id for n in attached] == ["10.30.255.101"]
+assert [n.router_id for n in attached] == ["10.30.255.101"]
 
 assert config.push(aci, mode="plan").has_changes is False
 ```

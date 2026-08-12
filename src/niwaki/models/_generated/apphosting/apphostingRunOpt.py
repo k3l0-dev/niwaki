@@ -51,7 +51,7 @@ class apphostingRunOpt(ManagedObject):
     ] = 1
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    admin_state_to_enable_or_disable_run_opt: ApphostingAdminState = Field(
+    admin_st: ApphostingAdminState = Field(
         default=ApphostingAdminState.ENABLED,
         validation_alias="adminSt",
         serialization_alias="adminSt",
@@ -65,7 +65,7 @@ class apphostingRunOpt(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    run_option_value_eg_hostname_n9k_gx4: Annotated[
+    opt_val: Annotated[
         str,
         Field(
             min_length=1,

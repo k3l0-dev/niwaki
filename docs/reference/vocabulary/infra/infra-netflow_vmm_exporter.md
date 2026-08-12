@@ -29,4 +29,4 @@ Accepted as keyword arguments of `.netflow_vmm_exporter(name)` and of `.set(**at
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |
 | `source_ip_address` | `srcAddr` | `str` | — | — | Source IP address |
-| `vmm_exporter_netflow_version_format` | `ver` | {ref}`AnalyticsCollVersion <enum-analyticscollversion>` | `cisco-v1`, `v5`, `v9` | `v9` | Collector version |
+| `ver` | `ver` | {ref}`AnalyticsCollVersion <enum-analyticscollversion>` | `cisco-v1`, `v5`, `v9` | `v9` | Collector version |

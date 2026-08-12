@@ -13,12 +13,12 @@ class analyticsRcvWindowSzBin(ManagedObject):
 
     Receive window size bin
 
-    RN format: ``rcvwindowszbin-{receive_window_size_bin_id}``
+    RN format: ``rcvwindowszbin-{id}``
     """
 
     _aci_class: ClassVar[str] = "analyticsRcvWindowSzBin"
-    _rn_format: ClassVar[str] = "rcvwindowszbin-{receive_window_size_bin_id}"
-    _naming_props: ClassVar[list[str]] = ["receive_window_size_bin_id"]
+    _rn_format: ClassVar[str] = "rcvwindowszbin-{id}"
+    _naming_props: ClassVar[list[str]] = ["id"]
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",
@@ -37,12 +37,7 @@ class analyticsRcvWindowSzBin(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    receive_window_size_bin_id: Annotated[
-        int,
-        Field(
-            ge=0, le=4, validation_alias="id", serialization_alias="id", description="Identifier"
-        ),
-    ] = 0
+    id: Annotated[int, Field(ge=0, le=4, description="Identifier")] = 0
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[

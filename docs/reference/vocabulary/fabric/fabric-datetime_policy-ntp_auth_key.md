@@ -26,6 +26,6 @@ Accepted as keyword arguments of `.ntp_auth_key(auth_key_id)` and of `.set(**att
 | `auth_key_id` *(positional)* | `id` | `int` | — | — | Specifies the NTP key ID. |
 | `description` | `descr` | `str` | — | — | Specifies the description of a policy component. |
 | `key` | `key` | `str` | — | — | The NTP authentication key. |
-| `type_of_authentication_key` | `keyType` | {ref}`DatetimeKeyType <enum-datetimekeytype>` | `md5`, `sha1` | `md5` | NTP authentication key type |
+| `key_type` | `keyType` | {ref}`DatetimeKeyType <enum-datetimekeytype>` | `md5`, `sha1` | `md5` | NTP authentication key type |
 | `name` | `name` | `str` | — | — | — |
 | `trusted_state` | `trusted` | `bool` | — | `False` | A property that indicates if the NTP authentication is trusted. |

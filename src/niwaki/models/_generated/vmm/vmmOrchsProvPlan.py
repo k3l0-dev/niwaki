@@ -63,7 +63,7 @@ class vmmOrchsProvPlan(ManagedObject):
     map_fv_tenant: bool = Field(
         default=False, validation_alias="mapFvTenant", serialization_alias="mapFvTenant"
     )
-    maximum_number_of_bd_allowed_per_tenant: Annotated[
+    max_bd_allowed: Annotated[
         int,
         Field(
             ge=1,
@@ -73,7 +73,7 @@ class vmmOrchsProvPlan(ManagedObject):
             description="Max BD allowed per tenant",
         ),
     ] = 4000
-    maximum_number_of_vrf_allowed_per_tenant: Annotated[
+    max_ctx_allowed: Annotated[
         int,
         Field(
             ge=1,
@@ -83,7 +83,7 @@ class vmmOrchsProvPlan(ManagedObject):
             description="Max CTX or VRF allowed per tenant",
         ),
     ] = 4000
-    maximum_number_of_epg_allowed_per_tenant: Annotated[
+    max_epg_allowed: Annotated[
         int,
         Field(
             ge=1,

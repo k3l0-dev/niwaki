@@ -72,7 +72,7 @@ class pkiWebTokenData(ManagedObject):
     jwt_public_key: str = Field(
         default="", validation_alias="jwtPublicKey", serialization_alias="jwtPublicKey"
     )
-    maximum_validity_period_in_hours: Annotated[
+    maximum_validity_period: Annotated[
         int,
         Field(
             ge=4,
@@ -119,7 +119,7 @@ class pkiWebTokenData(ManagedObject):
         serialization_alias="sessionRecordFlags",
         description="Enables or disables a refresh in the session records.",
     )
-    gui_idle_timeout_in_seconds: Annotated[
+    ui_idle_timeout_seconds: Annotated[
         int,
         Field(
             ge=60,
@@ -130,7 +130,7 @@ class pkiWebTokenData(ManagedObject):
         ),
     ] = 1200
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    timeout_in_seconds: Annotated[
+    webtoken_timeout_seconds: Annotated[
         int,
         Field(
             ge=300,

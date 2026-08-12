@@ -66,7 +66,7 @@ class fabricHIfPol(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    auto_negotiation_on_off: L1AutoNeg = Field(
+    auto_negotiation: L1AutoNeg = Field(
         default=L1AutoNeg.ON,
         validation_alias="autoNeg",
         serialization_alias="autoNeg",

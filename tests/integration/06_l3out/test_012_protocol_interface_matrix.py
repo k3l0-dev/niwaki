@@ -55,7 +55,7 @@ def _scaffold(t: Cursor) -> None:
         "vlan-2600", "vlan-2699", allocation_mode="static", role="external"
     )
     t.l3_dom(L3DOM).bind(vlan_pool=POOL)
-    t.ospf_interface_policy("niwaki-it-mx-ospf-if", network_type="p2p", cost_of_interface=100)
+    t.ospf_interface_policy("niwaki-it-mx-ospf-if", network_type="p2p", cost=100)
     t.eigrp_interface_policy(
         "niwaki-it-mx-eigrp-if",
         interface_controls="split-horizon",
@@ -87,7 +87,7 @@ def test_protocol_interface_matrix(live_aci: Niwaki) -> None:
                 np = out.node_profile(f"np-{lname}")
                 np.node_attachment(
                     f"topology/pod-1/node-{node_id}",
-                    rtr_id=f"10.13.{seq}.{lidx}",
+                    router_id=f"10.13.{seq}.{lidx}",
                     rtr_id_loop_back=False,
                 )
                 ifp = np.interface_profile(f"if-{lname}")
@@ -96,7 +96,7 @@ def test_protocol_interface_matrix(live_aci: Niwaki) -> None:
                 port = base + p if inst == "l3-port" else base
                 path_kwargs: dict[str, object] = {
                     "if_inst_t": inst,
-                    "addr": f"10.13{seq}.{port}.{lidx}/24",
+                    "ip_address": f"10.13{seq}.{port}.{lidx}/24",
                 }
                 if encap_base is not None:
                     path_kwargs["encap"] = f"vlan-{encap_base + seq}"

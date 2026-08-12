@@ -12,12 +12,12 @@ from niwaki.models.base import ManagedObject
 class notifSubscriber(ManagedObject):
     """ACI Managed Object: ``notifSubscriber``.
 
-    RN format: ``subscriber-{name_of_the_subscriber}``
+    RN format: ``subscriber-{subscriber_name}``
     """
 
     _aci_class: ClassVar[str] = "notifSubscriber"
-    _rn_format: ClassVar[str] = "subscriber-{name_of_the_subscriber}"
-    _naming_props: ClassVar[list[str]] = ["name_of_the_subscriber"]
+    _rn_format: ClassVar[str] = "subscriber-{subscriber_name}"
+    _naming_props: ClassVar[list[str]] = ["subscriber_name"]
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",
@@ -38,7 +38,7 @@ class notifSubscriber(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name_of_the_subscriber: Annotated[
+    subscriber_name: Annotated[
         str,
         Field(
             min_length=1,
@@ -57,7 +57,7 @@ class notifSubscriber(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    type_of_notification_channel: Annotated[
+    channel_name: Annotated[
         str,
         Field(max_length=512, validation_alias="channelName", serialization_alias="channelName"),
     ] = ""

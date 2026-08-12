@@ -71,7 +71,7 @@ class ptpRtdEpgCfg(ManagedObject):
             serialization_alias="nameAlias",
         ),
     ] = ""
-    ptp_mode_for_interface: PtpPtpTransportMode = Field(
+    ptp_mode: PtpPtpTransportMode = Field(
         default=PtpPtpTransportMode.MULTICAST,
         validation_alias="ptpMode",
         serialization_alias="ptpMode",

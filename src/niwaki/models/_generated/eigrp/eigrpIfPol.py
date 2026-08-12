@@ -87,7 +87,7 @@ class eigrpIfPol(ManagedObject):
             description="EIGRP throughput delay, overrides the delay configured on an interface. Used to influence path selection",
         ),
     ] = 0
-    units_for_eigrp_interface_delay: EigrpDelayUnit = Field(
+    delay_unit: EigrpDelayUnit = Field(
         default=EigrpDelayUnit.TENS_OF_MICRO,
         validation_alias="delayUnit",
         serialization_alias="delayUnit",

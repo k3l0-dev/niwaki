@@ -67,7 +67,7 @@ class fteCollector(ManagedObject):
             description="The description of this configuration item.",
         ),
     ] = ""
-    configure_collector_entity_dscp_value: Annotated[
+    dscp: Annotated[
         Annotated[int, Field(ge=0, le=63)]
         | Literal[
             "AF11",
@@ -121,7 +121,7 @@ class fteCollector(ManagedObject):
                 }
             )
         ),
-        Field(validation_alias="dscp", serialization_alias="dscp", description="IP dscp value"),
+        Field(description="IP dscp value"),
     ] = 0
     configure_collector_entity_ip: Annotated[
         str,
@@ -132,7 +132,7 @@ class fteCollector(ManagedObject):
             description="Collector node destination IP address",
         ),
     ] = ""
-    configure_collector_entity_l4_port: Annotated[
+    dst_port: Annotated[
         Annotated[int, Field(ge=0, le=65535)]
         | Literal["dns", "ftpData", "http", "https", "pop3", "rtsp", "smtp", "ssh", "unspecified"],
         AfterValidator(

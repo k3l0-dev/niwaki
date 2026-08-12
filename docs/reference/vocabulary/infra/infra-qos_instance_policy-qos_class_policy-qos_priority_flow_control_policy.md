@@ -22,9 +22,9 @@ Accepted as keyword arguments of `.qos_priority_flow_control_policy(name)` and o
 | parameter | wire | type | values | default | description |
 | --- | --- | --- | --- | --- | --- |
 | `name` *(positional)* | `name` | `str` | — | — | The name of the object. |
-| `priority_flow_control_admin_state` | `adminSt` | `bool` | — | `False` | enable is for no drop policy, disable is for drop policy |
+| `admin_st` | `adminSt` | `bool` | — | `False` | enable is for no drop policy, disable is for drop policy |
 | `description` | `descr` | `str` | — | — | Specifies a description of the policy definition. |
-| `priority_flow_control_enable_scope` | `enableScope` | {ref}`QospPfcEnableScope <enum-qosppfcenablescope>` | `fabric`, `tor` | `tor` | — |
-| `bitmap_of_nodrop_cos` | `noDropCos` | {ref}`QospCosBmap <enum-qospcosbmap>` | `unspecified`, `cos0`, `cos1`, `cos2`, `cos3`, `cos4`, `cos5`, `cos6`, `cos7` | `unspecified` | — |
+| `enable_scope` | `enableScope` | {ref}`QospPfcEnableScope <enum-qosppfcenablescope>` | `fabric`, `tor` | `tor` | — |
+| `no_drop_cos` | `noDropCos` | {ref}`QospCosBmap <enum-qospcosbmap>` | `unspecified`, `cos0`, `cos1`, `cos2`, `cos3`, `cos4`, `cos5`, `cos6`, `cos7` | `unspecified` | — |
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |

@@ -49,7 +49,7 @@ class infraFabricRecovery(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    infra_ip_of_apic1: Annotated[
+    apic_ip: Annotated[
         str,
         Field(
             pattern="^[0-9a-fA-F.:/ ]+$", validation_alias="apicIp", serialization_alias="apicIp"

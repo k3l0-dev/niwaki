@@ -102,14 +102,7 @@ class aaaRsaEp(ManagedObject):
             description="The number of attempts that the authentication method is tried.",
         ),
     ] = 1
-    timeout_in_seconds: Annotated[
-        int,
-        Field(
-            ge=1,
-            le=60,
-            validation_alias="timeout",
-            serialization_alias="timeout",
-            description="The amount of time between authentication attempts.",
-        ),
+    timeout: Annotated[
+        int, Field(ge=1, le=60, description="The amount of time between authentication attempts.")
     ] = 5
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

@@ -87,7 +87,7 @@ class ospfExtP(ManagedObject):
             description="Specifies the description of a policy component.",
         ),
     ] = ""
-    create_multipod_internal_ospf_instance: bool = Field(
+    multipod_internal: bool = Field(
         default=False,
         validation_alias="multipodInternal",
         serialization_alias="multipodInternal",

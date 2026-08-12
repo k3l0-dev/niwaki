@@ -66,7 +66,7 @@ class plannerBdTmpl(ManagedObject):
         serialization_alias="enableRouting",
         description="Enable Routing",
     )
-    legacy_mode_one_vlan_per_bridge_domain: bool = Field(
+    legacy_mode: bool = Field(
         default=False,
         validation_alias="legacyMode",
         serialization_alias="legacyMode",

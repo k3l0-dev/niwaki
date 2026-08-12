@@ -93,7 +93,5 @@ class plannerSnapshot(ManagedObject):
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
-    time_when_the_snapshot_was_created: str = Field(
-        default="", validation_alias="time", serialization_alias="time"
-    )
+    time: str = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

@@ -290,7 +290,7 @@ class TestFvAEPg:
         assert epg.provider_label_match_criteria == "AtleastOne"
         assert epg.preferred_group_member == "exclude"
         assert epg.qos_class == "unspecified"
-        assert epg.epg_with_multisite_mcast_source is False
+        assert epg.has_mcast_source is False
         assert epg.attribute_based_epg is False
         assert epg.shutdown is False
 

@@ -143,14 +143,10 @@ class aaaRadiusProvider(ManagedObject):
         ),
     ] = ""
     retries: Annotated[int, Field(ge=0, le=5)] = 1
-    timeout_in_seconds: Annotated[
+    timeout: Annotated[
         int,
         Field(
-            ge=0,
-            le=60,
-            validation_alias="timeout",
-            serialization_alias="timeout",
-            description="The timeout for communication with a RADIUS provider server.",
+            ge=0, le=60, description="The timeout for communication with a RADIUS provider server."
         ),
     ] = 5
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

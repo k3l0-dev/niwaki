@@ -24,7 +24,7 @@ Accepted as keyword arguments of `.internal_subnet(subnet)` and of `.set(**attrs
 | `subnet` *(positional)* | `ip` | `str` | — | — | Ip Address corresponding to the External Subnet |
 | `description` | `descr` | `str` | — | — | Specifies the description of a policy component. |
 | `name` | `name` | `str` | — | — | — |
-| `visibility_of_the_subnet` | `scope` | {ref}`LeakRouteScp <enum-leakroutescp>` | `private`, `public` | `private` | The domain applicable to the capability. |
+| `scope` | `scope` | {ref}`LeakRouteScp <enum-leakroutescp>` | `private`, `public` | `private` | The domain applicable to the capability. |
 
 ## Children
 

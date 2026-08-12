@@ -65,7 +65,7 @@ class telemetryVipP(ManagedObject):
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
-    inband_ip_of_telemetry_vip: Annotated[
+    inb_ip: Annotated[
         str,
         Field(pattern="^[0-9a-fA-F.:/ ]+$", validation_alias="inbIp", serialization_alias="inbIp"),
     ] = ""
@@ -78,7 +78,7 @@ class telemetryVipP(ManagedObject):
             serialization_alias="nameAlias",
         ),
     ] = ""
-    out_of_band_ip_of_telemetry_vip: Annotated[
+    oob_ip: Annotated[
         str,
         Field(pattern="^[0-9a-fA-F.:/ ]+$", validation_alias="oobIp", serialization_alias="oobIp"),
     ] = ""

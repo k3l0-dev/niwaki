@@ -89,10 +89,5 @@ class compAddrMgmtAddrBlk(ManagedObject):
             serialization_alias="nameAlias",
         ),
     ] = ""
-    adress_block_is_reserved: bool = Field(
-        default=False,
-        validation_alias="reserved",
-        serialization_alias="reserved",
-        description="A reserved byte.",
-    )
+    reserved: bool = Field(default=False, description="A reserved byte.")
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

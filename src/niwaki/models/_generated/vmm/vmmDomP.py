@@ -145,7 +145,7 @@ class vmmDomP(ManagedObject):
         serialization_alias="arpLearning",
         description="Enable/Disable arp learning for AVS Domain",
     )
-    ave_time_out_time_seconds: Annotated[
+    ave_time_out: Annotated[
         int, Field(ge=10, le=300, validation_alias="aveTimeOut", serialization_alias="aveTimeOut")
     ] = 30
     configure_infra_port_group: bool = Field(
@@ -170,7 +170,7 @@ class vmmDomP(ManagedObject):
     enable_tag_data_retrieval: bool = Field(
         default=False, validation_alias="enableTag", serialization_alias="enableTag"
     )
-    enable_vm_folder_data_retrieval: bool = Field(
+    enable_vm_folder: bool = Field(
         default=False, validation_alias="enableVmFolder", serialization_alias="enableVmFolder"
     )
     encap_mode: VmmEncapMode = Field(
@@ -187,10 +187,10 @@ class vmmDomP(ManagedObject):
         validation_alias="epInventoryType",
         serialization_alias="epInventoryType",
     )
-    end_point_retention_time_seconds: Annotated[
+    ep_ret_time: Annotated[
         int, Field(ge=0, le=600, validation_alias="epRetTime", serialization_alias="epRetTime")
     ] = 0
-    enable_host_availibility_monitoring: bool = Field(
+    enable_host_availability_monitoring: bool = Field(
         default=False, validation_alias="hvAvailMonitor", serialization_alias="hvAvailMonitor"
     )
     multicast_address: Annotated[

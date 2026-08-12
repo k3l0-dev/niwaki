@@ -49,7 +49,7 @@ class infraLoNode(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    is_out_of_band_management_plane_engaged: bool = Field(
+    is_oob_not_infra: bool = Field(
         default=False, validation_alias="isOobNotInfra", serialization_alias="isOobNotInfra"
     )
     display_name: Annotated[

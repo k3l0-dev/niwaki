@@ -11,12 +11,12 @@ from niwaki.models.base import ManagedObject
 class eventSubscriptionId(ManagedObject):
     """ACI Managed Object: ``eventSubscriptionId`` — Temporary MO to hold the Subscription ID.
 
-    RN format: ``subholder-{hold_the_subscription_id}``
+    RN format: ``subholder-{sub_id}``
     """
 
     _aci_class: ClassVar[str] = "eventSubscriptionId"
-    _rn_format: ClassVar[str] = "subholder-{hold_the_subscription_id}"
-    _naming_props: ClassVar[list[str]] = ["hold_the_subscription_id"]
+    _rn_format: ClassVar[str] = "subholder-{sub_id}"
+    _naming_props: ClassVar[list[str]] = ["sub_id"]
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",
@@ -36,9 +36,7 @@ class eventSubscriptionId(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    hold_the_subscription_id: Annotated[
-        int, Field(validation_alias="subId", serialization_alias="subId")
-    ] = 0
+    sub_id: Annotated[int, Field(validation_alias="subId", serialization_alias="subId")] = 0
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[

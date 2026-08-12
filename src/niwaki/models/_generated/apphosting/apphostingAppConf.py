@@ -17,7 +17,7 @@ class apphostingAppConf(ManagedObject):
 
     1.1 AppConf [dn] /sys/apphosting/appconf-[appId]1.1 AppConf model to define app hosting config information and it is properties
 
-    RN format: ``appconf-{unique_id_to_identify_the_application}``
+    RN format: ``appconf-{app_id}``
 
     The APIC can flag these accepted-but-inconsistent states on this class
     (read-only ``configIssues``):
@@ -28,8 +28,8 @@ class apphostingAppConf(ManagedObject):
     """
 
     _aci_class: ClassVar[str] = "apphostingAppConf"
-    _rn_format: ClassVar[str] = "appconf-{unique_id_to_identify_the_application}"
-    _naming_props: ClassVar[list[str]] = ["unique_id_to_identify_the_application"]
+    _rn_format: ClassVar[str] = "appconf-{app_id}"
+    _naming_props: ClassVar[list[str]] = ["app_id"]
     _config_issues: ClassVar[dict[str, str]] = {
         "non-border-leaf": "non-border leaf",
         "non-ipn-spine": "non-ipn spine",
@@ -62,7 +62,7 @@ class apphostingAppConf(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    unique_id_to_identify_the_application: Annotated[
+    app_id: Annotated[
         str,
         Field(
             min_length=1,
@@ -74,7 +74,7 @@ class apphostingAppConf(ManagedObject):
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    admin_state_for_appconf_config: ApphostingAdminState = Field(
+    admin_st: ApphostingAdminState = Field(
         default=ApphostingAdminState.ENABLED,
         validation_alias="adminSt",
         serialization_alias="adminSt",
@@ -88,13 +88,13 @@ class apphostingAppConf(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    exec_command_of_application: ApphostingAppActionCont = Field(
+    app_cfg_state: ApphostingAppActionCont = Field(
         default=ApphostingAppActionCont.INIT,
         validation_alias="appCfgState",
         serialization_alias="appCfgState",
         description="application life cycle command. applicable only for aci",
     )
-    maximum_cpu_limit_of_app: Annotated[
+    app_max_cpu: Annotated[
         int,
         Field(
             validation_alias="appMaxCpu",
@@ -102,7 +102,7 @@ class apphostingAppConf(ManagedObject):
             description="custom cpu unit allocation in profile",
         ),
     ] = 0
-    maximum_disk_allocation_of_app: Annotated[
+    app_max_disk: Annotated[
         int,
         Field(
             validation_alias="appMaxDisk",
@@ -110,7 +110,7 @@ class apphostingAppConf(ManagedObject):
             description="custom persistent disk utilization in profile",
         ),
     ] = 0
-    maximum_memory_allocation_of_app: Annotated[
+    app_max_mem: Annotated[
         int,
         Field(
             validation_alias="appMaxMem",
@@ -130,7 +130,7 @@ class apphostingAppConf(ManagedObject):
         serialization_alias="appParamListExt",
         description="application parameter list extended",
     )
-    complete_url_path_of_application: Annotated[
+    app_pkg_name: Annotated[
         str,
         Field(
             min_length=1,
@@ -184,7 +184,7 @@ class apphostingAppConf(ManagedObject):
         serialization_alias="pkgOpts",
         description="Application Container package file may come with its own runOpts. This is to indicate whether to append the user configure runOpts List to run-opts from the package file or over-write the run-opts from package file with with the user configured runOpts list.",
     )
-    vrf_id_to_bind_with_opt_socket: Annotated[
+    switch_intf: Annotated[
         str,
         Field(
             min_length=1,

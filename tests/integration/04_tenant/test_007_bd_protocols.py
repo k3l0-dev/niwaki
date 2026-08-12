@@ -161,14 +161,14 @@ def test_bd_fhs(live_aci: Niwaki) -> None:
         description="FHS: inspection both, source-guard both, RA-guard enabled.",
         ip_inspection_admin_status="enabled-both",
         source_guard_admin_status="enabled-both",
-        router_advertisement_guard_admin_status="enabled",
+        ra_guard_admin_st="enabled",
     )
     tn.fhs_bd_policy(
         "niwaki-it-fhs-v4",
         description="FHS: inspection IPv4, source-guard IPv4, RA-guard disabled.",
         ip_inspection_admin_status="enabled-ipv4",
         source_guard_admin_status="enabled-ipv4",
-        router_advertisement_guard_admin_status="disabled",
+        ra_guard_admin_st="disabled",
     )
     tn.fhs_bd_policy(
         "niwaki-it-fhs-v6",

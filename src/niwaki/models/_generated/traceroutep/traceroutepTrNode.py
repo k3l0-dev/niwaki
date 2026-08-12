@@ -111,7 +111,7 @@ class traceroutepTrNode(ManagedObject):
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
-    payload_size_in_bytes: Annotated[
+    probe_packet_size: Annotated[
         int,
         Field(
             ge=20,

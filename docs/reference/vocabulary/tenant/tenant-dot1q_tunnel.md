@@ -32,7 +32,7 @@ Accepted as keyword arguments of `.dot1q_tunnel(name)` and of `.set(**attrs)` on
 | `provider_label_match_criteria` | `matchT` | {ref}`VzMatchT <enum-vzmatcht>` | `All`, `AtleastOne`, `AtmostOne`, `None` | `AtleastOne` | The provider label match criteria. |
 | `preferred_group_member` | `prefGrMemb` | {ref}`FvPrefGrMemb <enum-fvprefgrmemb>` | `exclude`, `include` | `exclude` | Represents parameter used to determine if EPg is part of a group that does not a contract for communication |
 | `qos_class` | `prio` | {ref}`QosTenantPrio <enum-qostenantprio>` | `level1`, `level2`, `level3`, `level4`, `level5`, `level6`, `unspecified` | `unspecified` | The QoS priority class identifier. |
-| `dot1q_tunnel_l2_protocol_tunneling_mask` | `qiqL2ProtTunMask` | {ref}`L2qiqL2ProtTunMaskT <enum-l2qiql2prottunmaskt>` | `none`, `stp`, `lldp`, `cdp`, `lacp`, `vtp` | `none` | — |
+| `qiq_l2_prot_tun_mask` | `qiqL2ProtTunMask` | {ref}`L2qiqL2ProtTunMaskT <enum-l2qiql2prottunmaskt>` | `none`, `stp`, `lldp`, `cdp`, `lacp`, `vtp` | `none` | — |
 
 ## APIC diagnostics
 

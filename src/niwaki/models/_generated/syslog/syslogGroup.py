@@ -78,12 +78,12 @@ class syslogGroup(ManagedObject):
         serialization_alias="format",
         description="The Call Home destination message format.",
     )
-    show_milli_seconds_in_timestamp: bool = Field(
+    include_milli_seconds: bool = Field(
         default=False,
         validation_alias="includeMilliSeconds",
         serialization_alias="includeMilliSeconds",
     )
-    show_timezone_in_timestamp: bool = Field(
+    include_time_zone: bool = Field(
         default=False, validation_alias="includeTimeZone", serialization_alias="includeTimeZone"
     )
     display_name: Annotated[

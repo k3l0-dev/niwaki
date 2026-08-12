@@ -68,7 +68,7 @@ class fteFwdInstTarget(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    timestamp_shift_value_for_burst_interval: Annotated[
+    burst_intvl_shift: Annotated[
         int,
         Field(
             ge=0,
@@ -78,7 +78,7 @@ class fteFwdInstTarget(ManagedObject):
             description="Burst interval shift",
         ),
     ] = 0
-    collect_interval_in_milliseconds: Annotated[
+    collect_intvl: Annotated[
         int,
         Field(
             ge=100,
@@ -121,7 +121,7 @@ class fteFwdInstTarget(ManagedObject):
         ),
     ] = 0
     mtu: Annotated[int, Field(ge=576, le=9216, description="Collector export packet MTU")] = 1500
-    sequence_number_guess_threshold_high: Annotated[
+    seq_num_guess_thresh_hi: Annotated[
         int,
         Field(
             ge=0,
@@ -131,7 +131,7 @@ class fteFwdInstTarget(ManagedObject):
             description="Sequence number guess threshold high",
         ),
     ] = 0
-    sequence_number_guess_threshold_low: Annotated[
+    seq_num_guess_thresh_lo: Annotated[
         int,
         Field(
             ge=0,

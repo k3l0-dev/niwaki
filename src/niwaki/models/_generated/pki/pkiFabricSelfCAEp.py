@@ -48,7 +48,7 @@ class pkiFabricSelfCAEp(ManagedObject):
     signature: str = Field(
         default="", validation_alias="Signature", serialization_alias="Signature"
     )
-    cert_used_for_signing: str = Field(
+    signing_cert: str = Field(
         default="", validation_alias="SigningCert", serialization_alias="SigningCert"
     )
     annotation: Annotated[

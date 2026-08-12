@@ -82,12 +82,12 @@ class qosSdIfPol(ManagedObject):
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
-    slowdrain_flush_mode_admin_state: L1PortFlushAdminSt = Field(
+    flush_admin_st: L1PortFlushAdminSt = Field(
         default=L1PortFlushAdminSt.DISABLED,
         validation_alias="flushAdminSt",
         serialization_alias="flushAdminSt",
     )
-    flush_timeout_in_milliseconds: Annotated[
+    flush_intvl: Annotated[
         int, Field(ge=100, le=1000, validation_alias="flushIntvl", serialization_alias="flushIntvl")
     ] = 500
     display_name: Annotated[

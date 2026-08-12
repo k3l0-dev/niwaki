@@ -88,6 +88,4 @@ class snmpCtx(ManagedObject):
         ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    vrf_associated_with_the_snmp_context: Annotated[
-        str, Field(max_length=512, validation_alias="vrf", serialization_alias="vrf")
-    ] = ""
+    vrf: Annotated[str, Field(max_length=512)] = ""

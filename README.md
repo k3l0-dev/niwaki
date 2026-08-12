@@ -102,22 +102,27 @@ from niwaki.design import tenant
 config = (
     tenant("prod")
     .app("shop")
-        .epg("frontend").bind(bd="frontend").consume("fe-to-be")
-        .epg("backend").bind(bd="backend").provide("fe-to-be")
+    .epg("frontend")
+    .bind(bd="frontend")
+    .consume("fe-to-be")
+    .epg("backend")
+    .bind(bd="backend")
+    .provide("fe-to-be")
     .bd("frontend")
-        .set(unicast_routing=True)
-        .bind(vrf="prod")
-        .subnet("10.0.1.1/24")
+    .set(unicast_routing=True)
+    .bind(vrf="prod")
+    .subnet("10.0.1.1/24")
     .bd("backend")
-        .set(unicast_routing=True)
-        .bind(vrf="prod")
-        .subnet("10.0.2.1/24")
+    .set(unicast_routing=True)
+    .bind(vrf="prod")
+    .subnet("10.0.2.1/24")
     .vrf("prod")
     .filter("api")
-        .entry("rest", tcp=8080)
+    .entry("rest", tcp=8080)
     .contract("fe-to-be")
-        .set(scope="vrf")
-        .subject("api").bind(filter="api")
+    .set(scope="vrf")
+    .subject("api")
+    .bind(filter="api")
 )
 
 with Niwaki("https://apic.example.com", "admin", "secret") as aci:
@@ -138,7 +143,7 @@ config.phys_dom("prod-phys").bind(vlan_pool="prod")
 inf.aaep("prod-aaep").bind(domain="prod-phys")
 config.tenant("prod").app("shop").epg("web").bind_dn(domain="uni/phys-prod-phys")
 
-config.push(aci)          # everything above in ONE atomic POST
+config.push(aci)  # everything above in ONE atomic POST
 ```
 
 Day-2 changes are just smaller designs — declare the field you want, the
@@ -148,7 +153,7 @@ parent chain rides along as attribute-less upserts:
 from niwaki.design import infra
 
 flip = infra().cdp_policy("cdp-on", admin_state="disabled")
-flip.push(aci, mode="plan")   # shows exactly one field change
+flip.push(aci, mode="plan")  # shows exactly one field change
 flip.push(aci)
 ```
 
@@ -220,7 +225,7 @@ async with AsyncNiwaki("https://apic.example.com", "admin", "secret") as aci:
         aci.query(fvTenant).fetch(),
         aci.tenant("prod").bd("frontend").read(),
     )
-    await config.push(aci, mode="strict")   # the design DSL is async-ready too
+    await config.push(aci, mode="strict")  # the design DSL is async-ready too
 ```
 
 ## Features
@@ -258,6 +263,22 @@ async with AsyncNiwaki("https://apic.example.com", "admin", "secret") as aci:
 - **Typed cursors per position** — makers, `set()` fields and `bind()` aliases are
   generated with full signatures, so autocompletion and mypy cover the entire
   curated vocabulary. Cisco's own schema comments flow into every hover.
+
+**Existing fabrics — capture, import, own.**
+
+- **`niwaki.snapshot`** — deterministic, git-diffable captures of a fabric's
+  configuration (wire format, curated secret redaction): the same fabric state
+  always yields the same bytes, and `snapshot.diff()` reports drift
+  structurally.
+- **Reverse import**: `to_design()` turns a capture back into a design,
+  preferring the curated vocabulary and falling back to the wire-name doors
+  (`raw()` / `raw_set()`) — never a guess. `from_payload()` does the same for a
+  raw `polUni` envelope.
+- **Composition and code**: `slice()` carves one subtree into a fresh design,
+  `merge()` combines designs fail-loud, and `to_code()` renders any design as
+  the Python DSL source that replays it — executing the emitted source
+  reproduces the payload byte-for-byte. `reconcile()` reports what the fabric
+  carries that the design does not declare — read-only, never a delete.
 
 **Reading and observing.**
 

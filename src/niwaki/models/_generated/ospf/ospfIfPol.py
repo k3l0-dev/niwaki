@@ -63,13 +63,11 @@ class ospfIfPol(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    cost_of_interface: Annotated[
+    cost: Annotated[
         Annotated[int, Field(ge=0, le=65535)] | Literal["unspecified"],
         AfterValidator(named_number({"0": "unspecified"})),
         Field(
-            validation_alias="cost",
-            serialization_alias="cost",
-            description="The OSPF cost for the interface. The cost (also called metric) of an interface in OSPF is an indication of the overhead required to send packets across a certain interface. The cost of an interface is inversely proportional to the bandwidth of that interface.",
+            description="The OSPF cost for the interface. The cost (also called metric) of an interface in OSPF is an indication of the overhead required to send packets across a certain interface. The cost of an interface is inversely proportional to the bandwidth of that interface."
         ),
     ] = "unspecified"
     interface_controls: Annotated[Flags[OspfIfControl], BeforeValidator(parse_flags)] = Field(

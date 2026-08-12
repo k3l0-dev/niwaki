@@ -91,14 +91,14 @@ def test_pbr_redirect(live_aci: Niwaki) -> None:
         redirect = svc.service_redirect_policy(
             f"niwaki-it-rp{index:02d}",
             description=f"L3 redirect {hashing}/{threshold_action}.",
-            anycast_enabled_or_not=anycast,
+            anycast_enabled=anycast,
             dest_type="L3",
             hashing_algorithm=hashing,
             maximum_threshold_percentage=90,
             minimum_threshold_percentage=10,
             # location-aware PBR (local-pod-only) and anycast are mutually exclusive.
             program_local_pod_only=False if anycast else next(localpod_cycle),
-            resilient_hashing_enabled_or_not=resilient,
+            resilient_hash_enabled=resilient,
             src_mac_rewrite_enabled=next(macrewrite_cycle),
             threshold_down_action=threshold_action,
             threshold_enable=True,

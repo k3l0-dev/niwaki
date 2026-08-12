@@ -152,7 +152,7 @@ class hsrpGroupPol(ManagedObject):
             description="Preemption delay after switch reboot",
         ),
     ] = 0
-    wait_for_ip_redundancy_clients: Annotated[
+    preempt_delay_sync: Annotated[
         int,
         Field(
             ge=0,

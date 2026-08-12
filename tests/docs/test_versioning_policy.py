@@ -57,6 +57,8 @@ def test_the_policy_page_lists_every_public_import_path() -> None:
         "niwaki.transport",
         "niwaki.exceptions",
         "niwaki.catalog",
+        "niwaki.snapshot",
+        "niwaki.utils",
     }
     assert published == expected, (
         "docs/project/versioning.md publishes the public surface; it drifted "

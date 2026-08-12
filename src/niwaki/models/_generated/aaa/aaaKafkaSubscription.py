@@ -108,7 +108,7 @@ class aaaKafkaSubscription(ManagedObject):
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
-    subscription_duration_in_secs: Annotated[
+    sub_expiry_secs: Annotated[
         str,
         Field(
             min_length=1,

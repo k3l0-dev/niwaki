@@ -41,7 +41,7 @@ class infraCPMtuPol(ManagedObject):
         serialization_alias="APICMtuApply",
         description="Apply this config on APIC interface",
     )
-    mtu_size_for_cp_traffic: Annotated[
+    cp_mtu: Annotated[
         int,
         Field(
             ge=576,

@@ -171,7 +171,7 @@ class analyticsCfgSrv(ManagedObject):
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
-    source_ip_of_leaf_packet: Annotated[
+    src_ip_prefix: Annotated[
         str,
         Field(
             pattern="^[0-9a-fA-F.:/ ]+$",

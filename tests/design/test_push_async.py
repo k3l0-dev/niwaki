@@ -76,6 +76,12 @@ class TestAsyncPlan:
             ),
             json={"totalCount": "0", "imdata": []},
         )
+        # The boundary-create probe: nothing exists at the absent subtree's root.
+        httpx_mock.add_response(
+            method="GET",
+            url=f"{HOST}/api/mo/uni/tn-prod.json",
+            json={"totalCount": "0", "imdata": []},
+        )
 
         async with AsyncNiwaki(HOST, "admin", "secret") as aci:
             plan = await mini_design().push(aci, mode="plan")

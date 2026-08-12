@@ -11,12 +11,12 @@ from niwaki.models.base import ManagedObject
 class fvLIfCtxSelector(ManagedObject):
     """ACI Managed Object: ``fvLIfCtxSelector`` — Endpoint Security Group LIfCtx Selector.
 
-    RN format: ``lifctxselector-[{lifctx_dn_to_be_associated}]``
+    RN format: ``lifctxselector-[{match_l_if_ctx_dn}]``
     """
 
     _aci_class: ClassVar[str] = "fvLIfCtxSelector"
-    _rn_format: ClassVar[str] = "lifctxselector-[{lifctx_dn_to_be_associated}]"
-    _naming_props: ClassVar[list[str]] = ["lifctx_dn_to_be_associated"]
+    _rn_format: ClassVar[str] = "lifctxselector-[{match_l_if_ctx_dn}]"
+    _naming_props: ClassVar[list[str]] = ["match_l_if_ctx_dn"]
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",
@@ -37,7 +37,7 @@ class fvLIfCtxSelector(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    lifctx_dn_to_be_associated: Annotated[
+    match_l_if_ctx_dn: Annotated[
         str, Field(validation_alias="matchLIfCtxDn", serialization_alias="matchLIfCtxDn")
     ]
 

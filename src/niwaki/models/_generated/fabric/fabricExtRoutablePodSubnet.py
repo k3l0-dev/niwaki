@@ -77,10 +77,7 @@ class fabricExtRoutablePodSubnet(ManagedObject):
             serialization_alias="nameAlias",
         ),
     ] = ""
-    state_of_the_pool_active_inactive: FabricExtSubnetSt = Field(
-        default=FabricExtSubnetSt.ACTIVE,
-        validation_alias="state",
-        serialization_alias="state",
-        description="The state of the relationship.",
+    state: FabricExtSubnetSt = Field(
+        default=FabricExtSubnetSt.ACTIVE, description="The state of the relationship."
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

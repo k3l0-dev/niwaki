@@ -92,10 +92,9 @@ class leakExternalPrefix(ManagedObject):
         AfterValidator(named_number({"0": "unspecified"})),
         Field(validation_alias="ge", serialization_alias="ge"),
     ] = "unspecified"
-    less_than_or_equal: Annotated[
+    le: Annotated[
         Annotated[int, Field(ge=1, le=128)] | Literal["unspecified"],
         AfterValidator(named_number({"0": "unspecified"})),
-        Field(validation_alias="le", serialization_alias="le"),
     ] = "unspecified"
     name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[

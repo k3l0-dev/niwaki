@@ -5,6 +5,171 @@ All notable changes to this project are documented here.  The format follows
 [semver](https://semver.org/).  From 1.0.0 the configuration API is stable:
 breaking changes ship in a new major version with a migration note.
 
+## [2.0.0] — 2026-08-12
+
+The fabric, reclaimed.  Since 1.0 the SDK has written configuration in one
+direction: you describe, it pushes.  A real fabric starts at the other end —
+years of GUI clicks, other tools and other people already live on the
+controller.  2.0 closes the loop: **capture** the fabric
+(`niwaki.snapshot`, since 1.10), **turn the capture into a design**
+(`to_design`), **carve out** the part you own (`slice`), **render it as
+Python** you can review, commit and diff (`to_code`), **combine** it with
+what you already maintain (`merge`), then plan, push, and `reconcile` what
+lives beside it.  An existing fabric becomes maintained code.
+
+Every step of that circle is proven against a live fabric: a whole
+controller captured and imported plans back with **zero reported changes**
+(twice, deterministically), a scoped import and a carved slice plan clean,
+the emitted Python **replays the real controller byte-for-byte**, and
+`reconcile` reads it clean — five live acceptance scenarios on an APIC
+6.0(9c) simulator, on top of a unit suite past 21,000 tests.
+
+### Breaking
+
+- **One naming policy for every generated field — 568 renames, with an
+  automatic migration.**  A readable name is now a *name*: at most four
+  words.  Where Cisco's schema label reads as prose, the 1.x field name
+  transliterated the whole sentence
+  (`realm_subtype_that_can_be_default_or_duo`); the concise form now wins
+  (`realm_sub_type`).  And where a field was stuck with its wire spelling,
+  it gains its readable name at last: `rtr_id` → `router_id`, `addr` →
+  `ip_address`, `enforce_rtctrl` → `enforce_route_control`.  568 of the
+  15,158 generated model fields change.
+
+  **The wire never moves.**  Wire aliases are untouched, so payloads,
+  filters (`where(arpFlood=...)`), item access (`mo["arpFlood"]`), snapshots
+  and anything else speaking APIC names are unaffected — this renames what
+  your Python says, never what the fabric hears.
+
+  The migration is mechanical.  The full rename table ships in the
+  repository (`tools/niwaki_migrate/migration_2_0.json` — the 568 model
+  fields plus 59,336 catalogue readable names), and the `niwaki-migrate`
+  codemod (repository tooling, deliberately outside the wheel) rewrites
+  every call site it can prove and flags the ones it cannot, printing its
+  own confidence ratio.  Measured on the SDK's own integration suite
+  replayed from the last 1.x commit: 131 rewrites, 6 flags — and the flags
+  covered exactly the sites a human had to touch anyway.  A real downstream
+  project came through with **zero manual edits**, its entire test suite
+  green against 2.0.
+
+- **Every write door now fails loud on an unknown property.**  Constructing
+  a model, assigning an attribute, and `surgical()` refuse a property the
+  class does not carry, instead of silently dropping it — the misspelled
+  kwarg that used to vanish into a "successful" push now fails at the call
+  site.  Assigning under a wire alias is refused too, with a hint naming
+  the readable field.  Reads stay tolerant, unchanged: `from_apic` and
+  `from_event` accept whatever the controller serves.  `model_copy(update=)`
+  remains the one documented escape hatch, and a test pins that contract.
+
+### Added
+
+- **`to_design(snapshot)` — the reverse import, the inverse of `push`.**
+  Rebuilds a design from any capture, preferring the curated vocabulary
+  (makers, `bind()`, the contract verbs — a captured `fvRsCtx` comes back
+  as the `bind(vrf=...)` that would have created it) and falling back to
+  the wire-name doors whenever a curated inversion cannot be made provably
+  equivalent — a fallback, never a guess.  A live capture carries the wire's
+  spelling of "not configured" (`""`, `vmac="not-applicable"`); the importer
+  normalises it so the strict models never see it, and any value the model
+  refuses but the fabric genuinely served rides the wire channel verbatim —
+  the controller stays the judge.  Two opt-in policies:
+  `on_unknown="raw"` carries classes and properties from a newer firmware
+  on the wire channel instead of raising; `redacted="skip"` drops the
+  secret values the capture elided (the right call on any real fabric —
+  they all carry some).  A scoped snapshot (`"uni/tn-prod"`) imports with
+  its ancestor chain rebuilt as attribute-less day-2 upserts.
+
+- **`SnapshotImportError` / `ImportProblem`** — when an import cannot
+  complete, every offending item across the whole tree is collected and
+  reported at once (DN, kind, detail), never first-fail.
+
+- **`raw()` / `raw_set()` — the wire-name doors, on every cursor.**
+  Declare a child by ACI class name, set attributes under their wire names —
+  for the classes outside the generated model set and for the moments only
+  the wire spelling is at hand.  Validated by the shipped catalogue (the
+  class must exist, be a legal child, carry its naming properties; an
+  unknown wire property fails loudly) — an escape hatch, not a validation
+  bypass.  And plan-faithful: configuration declared through the doors
+  diffs in `mode="plan"` exactly like typed configuration.
+
+- **`from_payload(payload)`** — the other way in: a `polUni` envelope —
+  `to_payload()` output, or configuration JSON exported from other tooling —
+  back into a design, through the same importer.
+
+- **`DesignView` and `Cursor.view()`** — a design finally walks.  A frozen
+  projection of the whole tree: iterate parents-first, look up by DN
+  (`view["uni/tn-prod/BD-web"]`), filter with `by_class("fvBD")`.  Later
+  edits do not move a taken view; take another.
+
+- **`Cursor.slice(dn)`** — carve a fresh design holding one subtree, hung
+  off its ancestors rebuilt as attribute-less upserts.  References crossing
+  the cut follow the wire-footprint rule: a relation landing inside the
+  slice is kept — as-is when its target is inside too, pinned wire-faithful
+  otherwise (`bind_dn` for a DN-flavoured relation, an explicit relation
+  child carrying the exact `tn*` name for a name-flavoured one) — never
+  silently dropped.
+
+- **`merge(*designs)` and `MergeConflictError`** — combine designs into a
+  fresh one, union by DN.  An object declared in several sources must
+  agree: same class, no attribute set to two different values — compared
+  after coercion (`True` vs `"true"` is agreement) and across channels (a
+  typed field and a `raw_set` of the same property must match).  Every
+  contradiction across the whole merge is collected before raising.
+
+- **`to_code(view)` — the emitter.**  Any design — hand-built, imported,
+  composed — renders as reviewable, replayable Python DSL source.  The
+  contract: executing the emitted source yields a design whose payload is
+  canonically byte-identical to the source's, and it holds against reality
+  — the code emitted from a live fabric import replays that fabric.
+  Everything outside the curated vocabulary renders through the wire-name
+  doors, including the tag and annotation objects every fabric touched by
+  other tooling carries.
+
+- **`reconcile(design, aci)` / `Reconciliation`** — the half of drift that
+  `plan` does not look at: what the fabric carries that the design does not
+  declare.  `extra` lists undeclared objects someone *created*; `implicit`
+  separates the objects the fabric materialises on its own (schema-driven:
+  a class marked non-creatable cannot be anyone's leftover — without the
+  split, every declared BD would drown the report in its default
+  relations); `orphan_subtrees` gives the minimal roots of the foreign
+  regions.  One capture per call, read-only, and deliberately not a delete
+  engine: a design still never removes what it does not declare.
+
+- **Containment gains a third authority: the DN grammar.**  The schema's
+  containment tables miss parent/child edges that real controllers serve —
+  measured live on three of them.  A class's own DN formats state who its
+  parent can be, so the shipped catalogue's DN grammar now backs the
+  containment check: `raw()` and the reverse import accept every edge the
+  fabric can prove about itself.
+
+### Fixed
+
+- **Named numbers no longer report phantom plan changes.**  A named-number
+  field declared as the string spelling of a plain number
+  (`maximum_power="30000"`) kept the string while the value read back from
+  the fabric coerced to the integer — so every plan reported
+  `'30000' → 30000`, forever.  Comparison now treats a string and an
+  integer as equal when the string parses to that exact integer (booleans
+  excluded).  Pre-existing defect, reachable without any import.
+
+- **`mode="plan"` sees everything a design can declare.**  The plan read
+  collected its class list from generated models only, so nodes declared
+  through the wire-name doors were never read — and always reported as
+  creates.  Separately, some real objects never answer a class query rooted
+  at themselves (measured live: `quotaCont`, `maintLocalInstall`), so even
+  a correct class read misses them.  The class collection now covers every
+  node whatever its channel, and a subtree the class read did not return is
+  confirmed absent by one bare `GET` at its root before being reported as a
+  create — one extra request per absent subtree, not per object.
+
+- **A legal direct child of the configuration root is no longer refused.**
+  The internal containment table indexes the root under a private key; the
+  containment check looked it up under its class name and could reject an
+  edge the schema allows.
+
+- **`niwaki.utils` API documentation repaired** — two broken
+  cross-references (`mo_diff`, `parse_imdata`) in the rendered docs.
+
 ## [1.10.0] — 2026-08-10
 
 ### Added
@@ -1368,9 +1533,9 @@ names from your IDE.
   APIC's own re-ordering used to cause is gone:
 
   ```python
-  fvSubnet(ip="10.1.1.1/24", scope="public,shared")        # the wire form
-  fvSubnet(ip="10.1.1.1/24", scope={"public", "shared"})   # a set of names
-  vzEntry(name="ssh", tcp_rules="syn,ack")                 # was rejected before
+  fvSubnet(ip="10.1.1.1/24", scope="public,shared")  # the wire form
+  fvSubnet(ip="10.1.1.1/24", scope={"public", "shared"})  # a set of names
+  vzEntry(name="ssh", tcp_rules="syn,ack")  # was rejected before
   ```
 
 - **Addresses are validated.**  IPv4 and IPv6 fields carry an address pattern

@@ -13,12 +13,12 @@ class l2MacCktEp(ManagedObject):
 
     Mac EP policy
 
-    RN format: ``maccktep-{identifier_of_the_mac_circuit_endpoint}``
+    RN format: ``maccktep-{addr}``
     """
 
     _aci_class: ClassVar[str] = "l2MacCktEp"
-    _rn_format: ClassVar[str] = "maccktep-{identifier_of_the_mac_circuit_endpoint}"
-    _naming_props: ClassVar[list[str]] = ["identifier_of_the_mac_circuit_endpoint"]
+    _rn_format: ClassVar[str] = "maccktep-{addr}"
+    _naming_props: ClassVar[list[str]] = ["addr"]
     _fault_codes: ClassVar[dict[str, str]] = {
         "F2407": "fltL2MacCktEpMacCktEpConfigFailed",
     }
@@ -41,12 +41,10 @@ class l2MacCktEp(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    identifier_of_the_mac_circuit_endpoint: Annotated[
+    addr: Annotated[
         str,
         Field(
             pattern="^([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}$",
-            validation_alias="addr",
-            serialization_alias="addr",
             description="MAC address of the endpoint",
         ),
     ]

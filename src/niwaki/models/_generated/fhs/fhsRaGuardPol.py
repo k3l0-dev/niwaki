@@ -55,7 +55,7 @@ class fhsRaGuardPol(ManagedObject):
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
-    perform_managed_config_flag_check: bool = Field(
+    managed_config_check: bool = Field(
         default=False,
         validation_alias="managedConfigCheck",
         serialization_alias="managedConfigCheck",
@@ -84,7 +84,7 @@ class fhsRaGuardPol(ManagedObject):
             serialization_alias="nameAlias",
         ),
     ] = ""
-    perform_other_config_flag_check: bool = Field(
+    other_config_check: bool = Field(
         default=False, validation_alias="otherConfigCheck", serialization_alias="otherConfigCheck"
     )
     other_config_flag_settting: bool = Field(

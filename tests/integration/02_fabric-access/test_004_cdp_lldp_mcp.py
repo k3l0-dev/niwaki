@@ -106,7 +106,7 @@ def test_mcp(live_aci: Niwaki) -> None:
                     mode=mode,
                     mcp_pdu_per_vlan=pdu,
                     grace_period=3 if mode == "on" else 5,
-                    maximum_number_of_vlans=256,
+                    max_pdu_per_vlan_limit=256,
                     description=f"MCP admin/mode/PDU matrix - {admin}, {mode}, {pdu}.",
                 )
                 _common(mcp)

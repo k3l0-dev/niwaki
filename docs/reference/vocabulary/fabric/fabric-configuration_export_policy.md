@@ -27,7 +27,7 @@ Accepted as keyword arguments of `.configuration_export_policy(name)` and of `.s
 | `administrative_state` | `adminSt` | {ref}`TrigExecState <enum-trigexecstate>` | `triggered`, `untriggered` | `untriggered` | The administrative state of the executable policies. |
 | `description` | `descr` | `str` | — | — | Specifies the description of a policy component. |
 | `export_format` | `format` | {ref}`ConfigFormat <enum-configformat>` | `json`, `xml` | `json` | The data format to be used when exporting. |
-| `include_secure_fields_in_export` | `includeSecureFields` | `bool` | — | `True` | — |
+| `include_secure_fields` | `includeSecureFields` | `bool` | — | `True` | — |
 | `max_snapshot_count` | `maxSnapshotCount` | `int` | — | `global-limit` | — |
 | `snapshot` | `snapshot` | `bool` | — | `False` | — |
 | `dn_to_export` | `targetDn` | `str` | — | — | The distinguished name of the object to be exported. The policy universe is exported by default. |

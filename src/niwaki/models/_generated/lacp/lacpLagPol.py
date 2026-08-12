@@ -84,7 +84,7 @@ class lacpLagPol(ManagedObject):
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
-    maximum_number_of_links: Annotated[
+    max_links: Annotated[
         int,
         Field(
             ge=1,
@@ -94,7 +94,7 @@ class lacpLagPol(ManagedObject):
             description="maximum links",
         ),
     ] = 16
-    minimum_number_of_links: Annotated[
+    min_links: Annotated[
         int,
         Field(
             ge=1,

@@ -29,7 +29,7 @@ Accepted as keyword arguments of `.isakmp_policy(priority)` and of `.set(**attrs
 | `diffie_hellman_group` | `dhGroup` | {ref}`HcisakmpDhGroup <enum-hcisakmpdhgroup>` | `0`, `1`, `14`, `15`, `16`, `19`, `2`, `20`, `21`, `24`, `5` | `1` | Diffie Hellman Group |
 | `encryption` | `encryption` | {ref}`HcisakmpEncrAlgo <enum-hcisakmpencralgo>` | `3des`, `aes`, `des` | `des` | Encryption algorithm for protection suite |
 | `hash_algorithm` | `hash` | {ref}`HcisakmpHash <enum-hcisakmphash>` | `md5`, `sha`, `sha256`, `sha384`, `sha512` | `md5` | Hash for ISAKMP security association |
-| `lifetime_for_isakmp_security_association` | `lifetime` | `int` | — | `28000` | lifetime for ISAKMP security association |
+| `lifetime` | `lifetime` | `int` | — | `28000` | lifetime for ISAKMP security association |
 | `name` | `name` | `str` | — | — | — |
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |

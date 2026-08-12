@@ -68,7 +68,7 @@ class firmwareFwP(ManagedObject):
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
-    whether_effective_on_reboot: bool = Field(
+    effective_on_reboot: bool = Field(
         default=False,
         validation_alias="effectiveOnReboot",
         serialization_alias="effectiveOnReboot",

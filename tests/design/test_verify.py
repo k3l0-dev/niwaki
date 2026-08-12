@@ -217,6 +217,8 @@ class TestVerifiedPush:
     ) -> None:
         httpx_mock.add_response(method="GET", json={"totalCount": "0", "imdata": []})  # ref read
         httpx_mock.add_response(method="GET", json={"totalCount": "0", "imdata": []})  # plan read
+        # boundary-create probe (absent domain root)
+        httpx_mock.add_response(method="GET", json={"totalCount": "0", "imdata": []})
 
         result = _dom_design().push(aci, mode="plan", verify_refs=True)
 
@@ -255,6 +257,8 @@ class TestVerifiedPushAsync:
 
         httpx_mock.add_response(method="POST", url=LOGIN_URL, json=login_payload())
         httpx_mock.add_response(method="GET", json=_envelope("fvnsVlanInstP", POOL_DN))
+        httpx_mock.add_response(method="GET", json={"totalCount": "0", "imdata": []})
+        # boundary-create probe (absent domain root)
         httpx_mock.add_response(method="GET", json={"totalCount": "0", "imdata": []})
 
         async with AsyncNiwaki(HOST, "admin", "secret") as aci:

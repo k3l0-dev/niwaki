@@ -54,7 +54,7 @@ class telemetryFlowServers(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    collection_interval_in_milliseconds: Annotated[
+    collect_intvl: Annotated[
         int,
         Field(
             ge=100,

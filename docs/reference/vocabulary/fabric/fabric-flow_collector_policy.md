@@ -30,7 +30,7 @@ Accepted as keyword arguments of `.flow_collector_policy()` and of `.set(**attrs
 | `name` | `name` | `str` | — | — | — |
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |
-| `software_hardware_based_record_export` | `swExport` | `bool` | — | `False` | — |
+| `sw_export` | `swExport` | `bool` | — | `False` | — |
 
 ## Children
 

@@ -70,7 +70,7 @@ class topoctrlFastLinkFailoverInstPol(ManagedObject):
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
-    fast_link_failover_mode_type: TopoctrlFastLinkFailoverModeType = Field(
+    mode_type: TopoctrlFastLinkFailoverModeType = Field(
         default=TopoctrlFastLinkFailoverModeType.OFF,
         validation_alias="modeType",
         serialization_alias="modeType",

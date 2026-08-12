@@ -27,7 +27,7 @@ Accepted as keyword arguments of `.copp_leaf_policy(name)` and of `.set(**attrs)
 | `description` | `descr` | `str` | — | — | Specifies a description of the policy definition. |
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |
-| `type_of_profile` | `type` | {ref}`CoppProfileType <enum-coppprofiletype>` | `custom`, `default`, `lenient`, `moderate`, `strict` | `default` | The specific type of the object or component. |
+| `type` | `type` | {ref}`CoppProfileType <enum-coppprofiletype>` | `custom`, `default`, `lenient`, `moderate`, `strict` | `default` | The specific type of the object or component. |
 
 ## Children
 

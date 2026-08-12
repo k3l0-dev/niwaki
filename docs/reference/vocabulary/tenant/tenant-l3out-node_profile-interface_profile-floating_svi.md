@@ -10,30 +10,30 @@ Re-generate: uv run python -m niwaki._codegen.generate_docs
 | | |
 | --- | --- |
 | ACI class | `l3extVirtualLIfP` |
-| RN | `vlifp-[{path_of_the_anchor_node}]-[{external_interface_encap}]` |
+| RN | `vlifp-[{node_dn}]-[{external_interface_encap}]` |
 | Cursor | `FloatingSviCursor` |
 | Parent | {ref}`tenant.l3out.node_profile.interface_profile <vocab-tenant-l3out-node_profile-interface_profile>` |
 | Atomic | — |
 
 ## Attributes
 
-Accepted as keyword arguments of `.floating_svi(path_of_the_anchor_node, external_interface_encap)` and of `.set(**attrs)` on this cursor.  Enum parameters also accept the plain string.
+Accepted as keyword arguments of `.floating_svi(node_dn, external_interface_encap)` and of `.set(**attrs)` on this cursor.  Enum parameters also accept the plain string.
 
 | parameter | wire | type | values | default | description |
 | --- | --- | --- | --- | --- | --- |
-| `path_of_the_anchor_node` *(positional)* | `nodeDn` | `str` | — | — | Dn of the Anchor Node |
+| `node_dn` *(positional)* | `nodeDn` | `str` | — | — | Dn of the Anchor Node |
 | `external_interface_encap` *(positional)* | `encap` | `str` | — | — | Encap of the external l2/l3 interface @@@ Note: In switch, two External BDs on the same node cannot have @@@ the external encap. In order to support this for external encap @@@ on a node (it can come from any port relation), same BD vxlan @@@ id should be allocated |
-| `external_l3_interface_ip_address` | `addr` | `str` | — | — | Address of the external l3 interface |
+| `addr` | `addr` | `str` | — | — | Address of the external l3 interface |
 | `svi_autostate` | `autostate` | {ref}`SviAutostate <enum-sviautostate>` | `disabled`, `enabled` | `disabled` | — |
 | `description` | `descr` | `str` | — | — | Description |
 | `encap_scope` | `encapScope` | {ref}`L3extEncapScope <enum-l3extencapscope>` | `ctx`, `local` | `local` | — |
 | `external_interface_type` | `ifInstT` | {ref}`ExtnwIfInstT <enum-extnwifinstt>` | `ext-svi`, `l3-port`, `sub-interface`, `unspecified` | `ext-svi` | Type of the external l2/l3 interface |
 | `ipv6_dad` | `ipv6Dad` | {ref}`L3extIpv6Dad <enum-l3extipv6dad>` | `disabled`, `enabled` | `enabled` | IPv6 DAD feature When disabled it will IPv6 DAD will be diasabled |
 | `ipv6_link_local_address` | `llAddr` | `str` | — | — | Override of system generated Ipv6 Link Local Addr |
-| `external_l3_interface_mac_address` | `mac` | `str` | — | — | Mac of the external l3 interface. The mac address is by default hard coded to "00:22:BD:F8:19:FF". This is a reserved MAC address and all the l3 interfaces by default use this mac as the router mac. |
+| `mac` | `mac` | `str` | — | — | Mac of the external l3 interface. The mac address is by default hard coded to "00:22:BD:F8:19:FF". This is a reserved MAC address and all the l3 interfaces by default use this mac as the router mac. |
 | `encap_mode` | `mode` | {ref}`FvMode <enum-fvmode>` | `native`, `regular`, `untagged` | `regular` | The BGP Domain mode. |
 | `mtu_size` | `mtu` | `int` | — | `inherit` | The administrative MTU port on the aggregated interface. |
-| `name_of_virtuallifp` | `name` | `str` | — | — | The name of the object. |
+| `name` | `name` | `str` | — | — | The name of the object. |
 | `dscp_value` | `targetDscp` | `int` | — | `unspecified` | Interface level Dscp value. |
 
 ## Children

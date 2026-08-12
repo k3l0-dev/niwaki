@@ -58,7 +58,7 @@ class vmmUplinkPCont(ManagedObject):
             serialization_alias="nameAlias",
         ),
     ] = ""
-    number_of_uplinks: Annotated[
+    num_of_uplinks: Annotated[
         str,
         Field(
             max_length=512,

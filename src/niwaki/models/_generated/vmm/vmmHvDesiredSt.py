@@ -67,10 +67,7 @@ class vmmHvDesiredSt(ManagedObject):
             serialization_alias="nameAlias",
         ),
     ] = ""
-    desired_state_for_the_host: HvsManagedEntityStatus = Field(
-        default=HvsManagedEntityStatus.GRAY,
-        validation_alias="state",
-        serialization_alias="state",
-        description="The state of the relationship.",
+    state: HvsManagedEntityStatus = Field(
+        default=HvsManagedEntityStatus.GRAY, description="The state of the relationship."
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

@@ -84,15 +84,8 @@ class isakmpPolicy(ManagedObject):
         serialization_alias="hash",
         description="Hash for ISAKMP security association",
     )
-    lifetime_for_isakmp_security_association: Annotated[
-        int,
-        Field(
-            ge=60,
-            le=86400,
-            validation_alias="lifetime",
-            serialization_alias="lifetime",
-            description="lifetime for ISAKMP security association",
-        ),
+    lifetime: Annotated[
+        int, Field(ge=60, le=86400, description="lifetime for ISAKMP security association")
     ] = 28000
     name: Annotated[str, Field(max_length=64, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
     display_name: Annotated[

@@ -52,7 +52,7 @@ class ctrlrCimcNode(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    cimc_ipv4_address_address_mask: Annotated[
+    ipv4_address: Annotated[
         str,
         Field(
             pattern="^[0-9a-fA-F.:/ ]+$",
@@ -61,7 +61,7 @@ class ctrlrCimcNode(ManagedObject):
             description="IPv4 address prefix",
         ),
     ] = ""
-    cimc_ipv4_gateway_address_address: Annotated[
+    ipv4_gw: Annotated[
         str,
         Field(
             pattern="^[0-9a-fA-F.:/ ]+$",
@@ -70,7 +70,7 @@ class ctrlrCimcNode(ManagedObject):
             description="IPv4 Gateway address",
         ),
     ] = ""
-    cimc_ipv6_address_address_mask: Annotated[
+    ipv6_address: Annotated[
         str,
         Field(
             pattern="^[0-9a-fA-F.:/ ]+$",
@@ -79,7 +79,7 @@ class ctrlrCimcNode(ManagedObject):
             description="IPv6 address prefix",
         ),
     ] = ""
-    cimc_ipv6_gateway_address_address: Annotated[
+    ipv6_gw: Annotated[
         str,
         Field(
             pattern="^[0-9a-fA-F.:/ ]+$",

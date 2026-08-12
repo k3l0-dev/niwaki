@@ -61,7 +61,7 @@ def test_bd_l2_matrix(live_aci: Niwaki) -> None:
             unknown_mac_unicast_action=umac,
             multi_destination_packet_action=multi,
             unknown_multicast_destination_action=v4,
-            unknown_v6_multicast_destination_action=v6,
+            v6unk_mcast_act=v6,
             ep_move_detection_mode=move,
         ).bind(vrf=VRF, monitoring_policy=MON)
 

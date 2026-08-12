@@ -15,12 +15,12 @@ class bfdInstAf(ManagedObject):
 
     This objects hold per address family bfd instance information
 
-    RN format: ``af-{type_of_the_address_family}``
+    RN format: ``af-{type}``
     """
 
     _aci_class: ClassVar[str] = "bfdInstAf"
-    _rn_format: ClassVar[str] = "af-{type_of_the_address_family}"
-    _naming_props: ClassVar[list[str]] = ["type_of_the_address_family"]
+    _rn_format: ClassVar[str] = "af-{type}"
+    _naming_props: ClassVar[list[str]] = ["type"]
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",
@@ -43,9 +43,7 @@ class bfdInstAf(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    type_of_the_address_family: BfdAfT = Field(
-        default=BfdAfT.IPV4, validation_alias="type", serialization_alias="type"
-    )
+    type: BfdAfT = BfdAfT.IPV4
 
     # ── Configurable ───────────────────────────────────────────────────────────
     annotation: Annotated[
@@ -56,7 +54,7 @@ class bfdInstAf(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    bfd_source_address_for_echo_frames: Annotated[
+    echo_src_addr: Annotated[
         str,
         Field(
             pattern="^[0-9a-fA-F.:/ ]+$",

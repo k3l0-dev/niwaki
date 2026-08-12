@@ -11,6 +11,7 @@ from typing import TYPE_CHECKING
 from niwaki.exceptions._base import NiwakiError
 
 if TYPE_CHECKING:
+    from niwaki.design._import import ImportProblem
     from niwaki.design._push import PushReport
     from niwaki.design._verify import RefCheck
 
@@ -128,6 +129,80 @@ class StagedPushError(DesignError):
         super().__init__(
             f"staged push failed: {len(failures)}/{total} operation(s) did not "
             f"succeed ({len(not_run)} never attempted)"
+        )
+
+
+class SnapshotImportError(DesignError):
+    """A snapshot holds items :func:`~niwaki.design.to_design` cannot import.
+
+    Raised after the **whole** snapshot tree has been walked (never
+    first-fail): every offending item is collected so one run reports the
+    complete list, in the style of :class:`DanglingReferenceError`.  Nothing
+    about the failed import leaks out — the partially-built design is
+    discarded.
+
+    The collected problems cover, by ``kind``:
+
+    - ``"unknown-class"`` / ``"unknown-property"`` — the shipped catalogue
+      does not know the item (a snapshot from a newer firmware than this
+      SDK's schema baseline).  Opt into a best-effort import with
+      ``to_design(snap, on_unknown="raw")``: the items are carried verbatim
+      on the wire-attribute channel instead of raising.
+    - ``"redacted-value"`` — the snapshot holds the
+      :data:`~niwaki.snapshot.REDACTED` sentinel where a curated secret was
+      elided at capture time; a design pushing the sentinel literally would
+      be wrong.  Opt into dropping those values with
+      ``to_design(snap, redacted="skip")``.
+    - ``"invalid-value"`` — a **naming** value the typed model refuses: the
+      object's identity cannot be built, and identity has no wire-channel
+      escape.  Non-naming values the model refuses never raise — they drop
+      when they are the property's schema default (an unset marker) and
+      ride the wire channel verbatim otherwise.
+    - ``"structure"`` — an RN that does not match its class's RN format, or
+      a repeated DN.  A containment the SDK's tables lack is **not** a
+      problem: the fabric is the authority on its own edges, so the
+      snapshot's parent/child placement is trusted as-is.
+
+    Args:
+        problems: One :class:`~niwaki.design.ImportProblem` per offending
+            item, sorted by DN.
+
+    Attributes:
+        problems: The collected problems, as passed.
+    """
+
+    def __init__(self, problems: list[ImportProblem]) -> None:
+        self.problems = problems
+        lines = [f"  {p.dn} [{p.kind}] — {p.detail}" for p in problems]
+        super().__init__(
+            f"{len(problems)} snapshot item(s) cannot be imported into a design:\n"
+            + "\n".join(lines)
+        )
+
+
+class MergeConflictError(DesignError):
+    """Two designs disagree — :func:`~niwaki.design.merge` refuses to guess.
+
+    Raised after the **whole** merge has been walked (never first-fail):
+    every contradiction is collected, in the style of
+    :class:`SnapshotImportError`.  A contradiction is one DN carrying the
+    same field, wire property, or class with two different values across the
+    sources — agreement and one-sided declarations merge silently.
+
+    Args:
+        conflicts: One ``(dn, what, (value_a, value_b))`` triple per
+            contradiction, sorted by DN — *what* is a field name, a wire
+            property name, or ``"class"``.
+
+    Attributes:
+        conflicts: The collected contradictions, as passed.
+    """
+
+    def __init__(self, conflicts: list[tuple[str, str, tuple[object, object]]]) -> None:
+        self.conflicts = conflicts
+        lines = [f"  {dn} [{what}] — {a!r} vs {b!r}" for dn, what, (a, b) in conflicts]
+        super().__init__(
+            f"{len(conflicts)} contradiction(s) between the merged designs:\n" + "\n".join(lines)
         )
 
 

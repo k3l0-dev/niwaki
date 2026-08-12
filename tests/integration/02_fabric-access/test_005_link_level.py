@@ -88,7 +88,7 @@ def test_speeds(live_aci: Niwaki) -> None:
     for speed in SPEEDS:
         pol = fab.link_level_policy(
             _speed_name(speed),
-            auto_negotiation_on_off="off",
+            auto_negotiation="off",
             speed=speed,
             fec_mode="inherit",
             description=f"Link-level speed sweep - forced {speed}.",
@@ -97,7 +97,7 @@ def test_speeds(live_aci: Niwaki) -> None:
     for speed in SPEED_META:
         pol = fab.link_level_policy(
             _speed_name(speed),
-            auto_negotiation_on_off="on",
+            auto_negotiation="on",
             speed=speed,
             fec_mode="inherit",
             description=f"Link-level speed sweep - {speed}, negotiation on.",
@@ -112,7 +112,7 @@ def test_fec_modes(live_aci: Niwaki) -> None:
     for fec in FEC_MODES:
         pol = fab.link_level_policy(
             _fec_name(fec),
-            auto_negotiation_on_off="off",
+            auto_negotiation="off",
             speed="100G",
             fec_mode=fec,
             description=f"Link-level FEC-mode sweep - {fec} at 100G.",
@@ -127,7 +127,7 @@ def test_negotiation_media_emi(live_aci: Niwaki) -> None:
     for an in AUTONEG:
         pol = fab.link_level_policy(
             _autoneg_name(an),
-            auto_negotiation_on_off=an,
+            auto_negotiation=an,
             speed="inherit",
             description=f"Link-level auto-negotiation sweep - {an}.",
         )
@@ -137,7 +137,7 @@ def test_negotiation_media_emi(live_aci: Niwaki) -> None:
             _media_name(media),
             physical_media_type=media,
             speed="10G",
-            auto_negotiation_on_off="off",
+            auto_negotiation="off",
             description=f"Link-level media-type sweep - {media}.",
         )
         _common(pol)
@@ -146,7 +146,7 @@ def test_negotiation_media_emi(live_aci: Niwaki) -> None:
             _emi_name(emi),
             enable_disable_emi_retrain=emi,
             speed="100G",
-            auto_negotiation_on_off="off",
+            auto_negotiation="off",
             link_debounce_interval_msec=200 if emi == "enable" else 100,
             dfe_delay_ms=1 if emi == "enable" else 0,
             description=f"Link-level EMI-retrain sweep - {emi}.",

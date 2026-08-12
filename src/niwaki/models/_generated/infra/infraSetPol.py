@@ -74,7 +74,7 @@ class infraSetPol(ManagedObject):
         serialization_alias="enableMoStreaming",
         description="Enable MO steaming feature",
     )
-    enable_remote_leaf_direct_communication: bool = Field(
+    enable_remote_leaf_direct: bool = Field(
         default=False,
         validation_alias="enableRemoteLeafDirect",
         serialization_alias="enableRemoteLeafDirect",
@@ -174,7 +174,7 @@ class infraSetPol(ManagedObject):
         description="Disable xrLeanrs",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    validate_overlapping_vlans_on_aepg: bool = Field(
+    validate_overlapping_vlans: bool = Field(
         default=False,
         validation_alias="validateOverlappingVlans",
         serialization_alias="validateOverlappingVlans",

@@ -13,12 +13,12 @@ class dppCkt(ManagedObject):
 
     EPG vlan/vxlan cktEp info
 
-    RN format: ``ckt-[{dn_of_l2rspathdomatt}]``
+    RN format: ``ckt-[{l2_ckt_ep_dn}]``
     """
 
     _aci_class: ClassVar[str] = "dppCkt"
-    _rn_format: ClassVar[str] = "ckt-[{dn_of_l2rspathdomatt}]"
-    _naming_props: ClassVar[list[str]] = ["dn_of_l2rspathdomatt"]
+    _rn_format: ClassVar[str] = "ckt-[{l2_ckt_ep_dn}]"
+    _naming_props: ClassVar[list[str]] = ["l2_ckt_ep_dn"]
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",
@@ -38,7 +38,7 @@ class dppCkt(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    dn_of_l2rspathdomatt: Annotated[
+    l2_ckt_ep_dn: Annotated[
         str,
         Field(
             validation_alias="l2CktEpDn",

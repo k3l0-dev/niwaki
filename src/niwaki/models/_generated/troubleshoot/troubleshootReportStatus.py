@@ -59,17 +59,15 @@ class troubleshootReportStatus(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    format_of_the_report_data: TroubleshootFormat = Field(
-        default=TroubleshootFormat.PDF, validation_alias="format", serialization_alias="format"
-    )
+    format: TroubleshootFormat = TroubleshootFormat.PDF
     request_mode: Annotated[
         str, Field(max_length=512, validation_alias="mode", serialization_alias="mode")
     ] = ""
     apic_id: Annotated[int, Field(validation_alias="nodeId", serialization_alias="nodeId")] = 0
-    location_of_report_file: Annotated[
+    report_dir: Annotated[
         str, Field(max_length=512, validation_alias="reportDir", serialization_alias="reportDir")
     ] = ""
-    name_of_the_report_file: Annotated[
+    report_file: Annotated[
         str, Field(max_length=512, validation_alias="reportFile", serialization_alias="reportFile")
     ] = ""
     report_generation_status_code: TroubleshootStatus = Field(
@@ -77,7 +75,7 @@ class troubleshootReportStatus(ManagedObject):
         validation_alias="reportStatus",
         serialization_alias="reportStatus",
     )
-    string_description_of_status: Annotated[
+    status_details: Annotated[
         str,
         Field(
             max_length=512, validation_alias="statusDetails", serialization_alias="statusDetails"

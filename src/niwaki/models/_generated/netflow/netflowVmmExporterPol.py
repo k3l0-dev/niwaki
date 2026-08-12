@@ -197,9 +197,6 @@ class netflowVmmExporterPol(ManagedObject):
         ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    vmm_exporter_netflow_version_format: AnalyticsCollVersion = Field(
-        default=AnalyticsCollVersion.V9,
-        validation_alias="ver",
-        serialization_alias="ver",
-        description="Collector version",
+    ver: AnalyticsCollVersion = Field(
+        default=AnalyticsCollVersion.V9, description="Collector version"
     )

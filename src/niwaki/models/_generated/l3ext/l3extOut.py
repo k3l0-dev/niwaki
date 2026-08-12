@@ -91,11 +91,13 @@ class l3extOut(ManagedObject):
             description="Specifies a description of the policy definition root.",
         ),
     ] = ""
-    enforce_rtctrl: Annotated[Flags[L3extCtrlDirection], BeforeValidator(parse_flags)] = Field(
-        default_factory=lambda: frozenset({L3extCtrlDirection.EXPORT}),
-        validation_alias="enforceRtctrl",
-        serialization_alias="enforceRtctrl",
-        description="The enforce route control type.",
+    enforce_route_control: Annotated[Flags[L3extCtrlDirection], BeforeValidator(parse_flags)] = (
+        Field(
+            default_factory=lambda: frozenset({L3extCtrlDirection.EXPORT}),
+            validation_alias="enforceRtctrl",
+            serialization_alias="enforceRtctrl",
+            description="The enforce route control type.",
+        )
     )
     mpls_enabled: bool = Field(
         default=False,

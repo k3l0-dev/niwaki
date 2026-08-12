@@ -80,7 +80,7 @@ class fvTrackMember(ManagedObject):
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
-    destination_ip_to_be_tracked: Annotated[
+    dst_ip_addr: Annotated[
         str,
         Field(
             pattern="^[0-9a-fA-F.:/ ]+$",
@@ -117,7 +117,7 @@ class fvTrackMember(ManagedObject):
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
-    scope_of_track_member: str = Field(
+    scope_dn: str = Field(
         default="",
         validation_alias="scopeDn",
         serialization_alias="scopeDn",

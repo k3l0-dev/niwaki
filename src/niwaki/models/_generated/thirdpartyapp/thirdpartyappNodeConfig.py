@@ -134,7 +134,7 @@ class thirdpartyappNodeConfig(ManagedObject):
             description="default gateway interface index - v6",
         ),
     ] = 0
-    append_or_replace_runtime_options: ApphostingPkgRunOptState = Field(
+    pkg_opts: ApphostingPkgRunOptState = Field(
         default=ApphostingPkgRunOptState.APPEND,
         validation_alias="pkgOpts",
         serialization_alias="pkgOpts",

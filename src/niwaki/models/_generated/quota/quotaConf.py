@@ -69,7 +69,7 @@ class quotaConf(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    action_when_quota_exceed: QuotaExceedActionType = Field(
+    exceed_action: QuotaExceedActionType = Field(
         default=QuotaExceedActionType.FAULT,
         validation_alias="exceedAction",
         serialization_alias="exceedAction",

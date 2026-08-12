@@ -214,7 +214,7 @@ class telemetryFteEventSetP(ManagedObject):
         serialization_alias="groupLatencyEvents",
         description="10. Dropped Event Groups for the FTE events under FTE",
     )
-    configure_fte_latency_bucket_count: Annotated[
+    latency_count: Annotated[
         int,
         Field(
             ge=0,
@@ -234,7 +234,7 @@ class telemetryFteEventSetP(ManagedObject):
             description="17. Latency events flow count under FTE",
         ),
     ] = 0
-    configure_fte_latency_bucket_limit: Annotated[
+    latency_limit: Annotated[
         int,
         Field(
             ge=1,
@@ -244,7 +244,7 @@ class telemetryFteEventSetP(ManagedObject):
             description="31. FTE rtt_sample_seq Bucket limit",
         ),
     ] = 0
-    configure_fte_latency_threshold_limit: Annotated[
+    latency_threshold: Annotated[
         int,
         Field(
             ge=0,
@@ -254,7 +254,7 @@ class telemetryFteEventSetP(ManagedObject):
             description="15. Latency under FTE",
         ),
     ] = 0
-    configure_fte_latency_threshold_unit: TelemetryLatencyUnit = Field(
+    latency_threshold_unit: TelemetryLatencyUnit = Field(
         default=TelemetryLatencyUnit.MICRO_SEC,
         validation_alias="latencyThresholdUnit",
         serialization_alias="latencyThresholdUnit",

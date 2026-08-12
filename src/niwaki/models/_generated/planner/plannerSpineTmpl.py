@@ -48,16 +48,7 @@ class plannerSpineTmpl(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    count_of_spines: Annotated[
-        int,
-        Field(
-            ge=1,
-            le=4000000000,
-            validation_alias="count",
-            serialization_alias="count",
-            description="Count of spines",
-        ),
-    ] = 1
+    count: Annotated[int, Field(ge=1, le=4000000000, description="Count of spines")] = 1
     description: Annotated[
         str,
         Field(

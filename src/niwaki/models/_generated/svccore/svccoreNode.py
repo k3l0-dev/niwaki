@@ -13,19 +13,12 @@ class svccoreNode(ManagedObject):
 
     A core node.
 
-    RN format: ``node-{node_id_where_the_core_file_was_created}-card-{card_id}-svc-{name_of_service_that_cored}-ts-{create_time}``
+    RN format: ``node-{node_id}-card-{card_id}-svc-{svc_name}-ts-{create_time}``
     """
 
     _aci_class: ClassVar[str] = "svccoreNode"
-    _rn_format: ClassVar[str] = (
-        "node-{node_id_where_the_core_file_was_created}-card-{card_id}-svc-{name_of_service_that_cored}-ts-{create_time}"
-    )
-    _naming_props: ClassVar[list[str]] = [
-        "node_id_where_the_core_file_was_created",
-        "card_id",
-        "name_of_service_that_cored",
-        "create_time",
-    ]
+    _rn_format: ClassVar[str] = "node-{node_id}-card-{card_id}-svc-{svc_name}-ts-{create_time}"
+    _naming_props: ClassVar[list[str]] = ["node_id", "card_id", "svc_name", "create_time"]
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",
@@ -58,7 +51,7 @@ class svccoreNode(ManagedObject):
     create_time: Annotated[
         str, Field(validation_alias="createTime", serialization_alias="createTime")
     ]
-    node_id_where_the_core_file_was_created: Annotated[
+    node_id: Annotated[
         int,
         Field(
             ge=1,
@@ -68,7 +61,7 @@ class svccoreNode(ManagedObject):
             description="Node ID where the core was created",
         ),
     ] = 1
-    name_of_service_that_cored: Annotated[
+    svc_name: Annotated[
         str,
         Field(
             min_length=1, max_length=512, validation_alias="svcName", serialization_alias="svcName"

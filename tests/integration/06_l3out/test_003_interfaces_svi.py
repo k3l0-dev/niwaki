@@ -67,7 +67,7 @@ def test_svi_interfaces(live_aci: Niwaki) -> None:
     for lidx, (lname, node_id) in enumerate(leaves, start=1):
         np = out.node_profile(f"np-{lname}", description=f"Node profile for {lname}.")
         np.node_attachment(
-            f"topology/pod-1/node-{node_id}", rtr_id=f"10.3.0.{lidx}", rtr_id_loop_back=False
+            f"topology/pod-1/node-{node_id}", router_id=f"10.3.0.{lidx}", rtr_id_loop_back=False
         )
         ifp = np.interface_profile(f"if-{lname}", description=f"SVI interface profile on {lname}.")
 
@@ -79,7 +79,7 @@ def test_svi_interfaces(live_aci: Niwaki) -> None:
                     pa = ifp.path_attachment(
                         f"topology/pod-1/paths-{node_id}/pathep-[eth1/{port}]",
                         if_inst_t="ext-svi",
-                        addr=f"10.30.{port}.{lidx}/24",
+                        ip_address=f"10.30.{port}.{lidx}/24",
                         encap=f"vlan-{vlan}",
                         mode=mode,
                         encap_scope=scope,
@@ -103,7 +103,7 @@ def test_subinterfaces(live_aci: Niwaki) -> None:
     for lidx, (lname, node_id) in enumerate(leaves, start=1):
         np = out.node_profile(f"np-{lname}")
         np.node_attachment(
-            f"topology/pod-1/node-{node_id}", rtr_id=f"10.3.0.{lidx}", rtr_id_loop_back=False
+            f"topology/pod-1/node-{node_id}", router_id=f"10.3.0.{lidx}", rtr_id_loop_back=False
         )
         ifp = np.interface_profile(f"if-{lname}")
         # Sub-interfaces are always tagged (mode regular); sweep encap-scope + MTU.
@@ -112,7 +112,7 @@ def test_subinterfaces(live_aci: Niwaki) -> None:
             pa = ifp.path_attachment(
                 f"topology/pod-1/paths-{node_id}/pathep-[eth1/{port}]",
                 if_inst_t="sub-interface",
-                addr=f"10.31.{port}.{lidx}/24",
+                ip_address=f"10.31.{port}.{lidx}/24",
                 encap=f"vlan-{2640 + i}",
                 mode="regular",
                 encap_scope=scope,
@@ -133,7 +133,7 @@ def test_floating_svi(live_aci: Niwaki) -> None:
     for lidx, (lname, node_id) in enumerate(leaves, start=1):
         np = out.node_profile(f"np-{lname}")
         np.node_attachment(
-            f"topology/pod-1/node-{node_id}", rtr_id=f"10.3.0.{lidx}", rtr_id_loop_back=False
+            f"topology/pod-1/node-{node_id}", router_id=f"10.3.0.{lidx}", rtr_id_loop_back=False
         )
         ifp = np.interface_profile(f"if-{lname}")
         for i, scope in enumerate(SCOPES):
@@ -145,7 +145,7 @@ def test_floating_svi(live_aci: Niwaki) -> None:
             fsvi = ifp.floating_svi(
                 f"topology/pod-1/node-{node_id}",
                 f"vlan-{2680 + i}",
-                external_l3_interface_ip_address=f"10.32.{i}.{lidx}/24",
+                addr=f"10.32.{i}.{lidx}/24",
                 external_interface_type="ext-svi",
                 encap_scope=scope,
                 encap_mode="regular",
@@ -153,8 +153,8 @@ def test_floating_svi(live_aci: Niwaki) -> None:
                 mtu_size="1500",
                 description=f"Floating SVI scope {scope}.",
             ).bind(domain=ref(L3DOM, floating_addr=f"10.32.{i}.{lidx + 40}/24"))
-            fsvi.member_node_configuration("A", addr=f"10.32.{i}.{lidx + 10}/24")
-            fsvi.member_node_configuration("B", addr=f"10.32.{i}.{lidx + 20}/24")
+            fsvi.member_node_configuration("A", ip_address=f"10.32.{i}.{lidx + 10}/24")
+            fsvi.member_node_configuration("B", ip_address=f"10.32.{i}.{lidx + 20}/24")
             fsvi.secondary_ip_address(f"10.32.{i}.{lidx + 30}/24")
             fsvi.nd_prefix_profile().bind(nd_ra_prefix_policy="niwaki-it-ndpfx")
             # COVERAGE GAP: bd_profile_container (l3extBdProfileCont) is accepted on a

@@ -89,7 +89,7 @@ class aaaSamlProvider(ManagedObject):
     key: Annotated[
         str, Field(repr=False, description="A password for the AAA provider database.")
     ] = ""
-    metadata_url_provided_by_idp: Annotated[
+    metadata_url: Annotated[
         str,
         Field(
             min_length=1,
@@ -156,13 +156,11 @@ class aaaSamlProvider(ManagedObject):
             serialization_alias="spEntityId",
         ),
     ] = ""
-    timeout_in_seconds: Annotated[
+    timeout: Annotated[
         int,
         Field(
             ge=5,
             le=60,
-            validation_alias="timeout",
-            serialization_alias="timeout",
             description="The following two properties are also defined in Ep MO. Here they reperesent per server configuration which would take precedence over global configuration defined in Ep MO",
         ),
     ] = 5
@@ -181,17 +179,17 @@ class aaaSamlProvider(ManagedObject):
         validation_alias="wantAssertionsEncrypted",
         serialization_alias="wantAssertionsEncrypted",
     )
-    want_assertions_in_saml_response_signed: bool = Field(
+    want_assertions_signed: bool = Field(
         default=True,
         validation_alias="wantAssertionsSigned",
         serialization_alias="wantAssertionsSigned",
     )
-    want_saml_auth_requests_signed: bool = Field(
+    want_requests_signed: bool = Field(
         default=True,
         validation_alias="wantRequestsSigned",
         serialization_alias="wantRequestsSigned",
     )
-    want_saml_response_message_signed: bool = Field(
+    want_response_signed: bool = Field(
         default=True,
         validation_alias="wantResponseSigned",
         serialization_alias="wantResponseSigned",

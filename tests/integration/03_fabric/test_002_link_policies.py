@@ -81,14 +81,14 @@ def test_link_level_and_flap(live_aci: Niwaki) -> None:
         fab.fabric_link_level_policy(
             f"{FLINK}-{debounce}",
             description=f"Fabric link-level policy, {debounce} ms debounce.",
-            fabric_link_debounce_interval_msec=debounce,
+            link_debounce=debounce,
         )
     for max_flaps, window in FLAP_SPECS:
         fab.fabric_link_flap_policy(
             f"{FLAP}-{max_flaps}-{window}",
             description=f"Link-flap: err-disable after {max_flaps} flaps in {window} s.",
-            max_flaps_allowed_per_time=max_flaps,
-            time_allowed_for_max_flaps=window,
+            link_flap_error_max=max_flaps,
+            link_flap_error_seconds=window,
         )
     fab.push(live_aci)
 
@@ -105,8 +105,8 @@ def test_l3_and_mtu(live_aci: Niwaki) -> None:
         fab.fabric_l2_mtu_policy(
             f"{MTU}-{fabric_mtu}-{mgmt_mtu}",
             description=f"L2 MTU: {fabric_mtu} B fabric, {mgmt_mtu} B management.",
-            mtu_size_for_fabric_ports=fabric_mtu,
-            mtu_size_for_management_ports=mgmt_mtu,
+            fabric_mtu=fabric_mtu,
+            management_mtu=mgmt_mtu,
         )
     fab.push(live_aci)
 

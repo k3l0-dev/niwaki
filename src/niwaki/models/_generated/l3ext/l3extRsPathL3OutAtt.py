@@ -121,10 +121,12 @@ class l3extRsPathL3OutAtt(ManagedObject):
     )
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    addr: Annotated[
+    ip_address: Annotated[
         str,
         Field(
             pattern="^[0-9a-fA-F.:/ ]+$",
+            validation_alias="addr",
+            serialization_alias="addr",
             description="The IP address of the path attached to the layer 3 outside profile.",
         ),
     ] = ""
@@ -167,7 +169,7 @@ class l3extRsPathL3OutAtt(ManagedObject):
         serialization_alias="ipv6Dad",
         description="IPv6 DAD feature When disabled it will IPv6 DAD will be diasabled",
     )
-    ll_addr: Annotated[
+    ipv6_link_local_address: Annotated[
         str,
         Field(
             pattern="^[0-9a-fA-F.:/ ]+$",
@@ -176,10 +178,12 @@ class l3extRsPathL3OutAtt(ManagedObject):
             description="The override of the system generated IPv6 link-local address.",
         ),
     ] = ""
-    mac: Annotated[
+    mac_address: Annotated[
         str,
         Field(
             pattern="^([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}$",
+            validation_alias="mac",
+            serialization_alias="mac",
             description="The MAC address of the path attached to the layer 3 outside profile.",
         ),
     ] = ""

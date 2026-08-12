@@ -58,7 +58,7 @@ class fcFabricPol(ManagedObject):
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
-    fc_protocol_error_detect_timeout: Annotated[
+    ed_tov: Annotated[
         int, Field(ge=1000, le=4000, validation_alias="edTov", serialization_alias="edTov")
     ] = 2000
     fcoe_mac_address_prefix: str = Field(
@@ -93,7 +93,7 @@ class fcFabricPol(ManagedObject):
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
-    fc_protocol_resource_allocation_timeout: Annotated[
+    ra_tov: Annotated[
         int, Field(ge=5000, le=10000, validation_alias="raTov", serialization_alias="raTov")
     ] = 10000
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

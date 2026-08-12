@@ -13,7 +13,7 @@ class pimInterVRFEntryPol(ManagedObject):
 
     Inter VRF Entry policy
 
-    RN format: ``intervrfent-[{dn_of_the_src_vrf}]``
+    RN format: ``intervrfent-[{src_vrf_dn}]``
 
     The APIC can flag these accepted-but-inconsistent states on this class
     (read-only ``configIssues``):
@@ -28,8 +28,8 @@ class pimInterVRFEntryPol(ManagedObject):
     """
 
     _aci_class: ClassVar[str] = "pimInterVRFEntryPol"
-    _rn_format: ClassVar[str] = "intervrfent-[{dn_of_the_src_vrf}]"
-    _naming_props: ClassVar[list[str]] = ["dn_of_the_src_vrf"]
+    _rn_format: ClassVar[str] = "intervrfent-[{src_vrf_dn}]"
+    _naming_props: ClassVar[list[str]] = ["src_vrf_dn"]
     _config_issues: ClassVar[dict[str, str]] = {
         "csw-invalid-pod-id": "Pod ID associated with this CSW Entry does not exist",
         "intervrf-route-map-empty": "No routemap associated with InterVRF policy / associated routemap is empty",
@@ -63,7 +63,7 @@ class pimInterVRFEntryPol(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    dn_of_the_src_vrf: Annotated[
+    src_vrf_dn: Annotated[
         str,
         Field(
             validation_alias="srcVrfDn", serialization_alias="srcVrfDn", description="Src Vrf Dn"

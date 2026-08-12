@@ -1,5 +1,10 @@
 # Utilities
 
+```{eval-rst}
+.. automodule:: niwaki.utils
+   :no-members:
+```
+
 Two building blocks the SDK uses internally and exposes for the same jobs in
 your own code: computing a surgical delta between two objects, and unwrapping
 an APIC response envelope.

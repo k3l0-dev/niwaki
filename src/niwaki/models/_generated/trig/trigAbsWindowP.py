@@ -66,7 +66,7 @@ class trigAbsWindowP(ManagedObject):
             description="The concurrency capacity limit. This is the maximum number of tasks that can be processed concurrently.",
         ),
     ] = "unlimited"
-    date_and_time: str = Field(
+    window_start_time: str = Field(
         default="",
         validation_alias="date",
         serialization_alias="date",

@@ -48,7 +48,7 @@ Accepted as keyword arguments of `.bd(name)` and of `.set(**attrs)` on this curs
 | `unicast_routing` | `unicastRoute` | `bool` | — | `True` | The forwarding method based on predefined forwarding criteria (IP or MAC address). |
 | `unknown_mac_unicast_action` | `unkMacUcastAct` | {ref}`L2UnkMacUcastAct <enum-l2unkmacucastact>` | `flood`, `proxy` | `proxy` | The forwarding method for unknown layer 2 destinations. |
 | `unknown_multicast_destination_action` | `unkMcastAct` | {ref}`L2UnkMcastAct <enum-l2unkmcastact>` | `flood`, `opt-flood` | `flood` | The parameter used by the node (i.e. a leaf) for forwarding data for an unknown multicast destination. |
-| `unknown_v6_multicast_destination_action` | `v6unkMcastAct` | {ref}`L2UnkMcastAct <enum-l2unkmcastact>` | `flood`, `opt-flood` | `flood` | — |
+| `v6unk_mcast_act` | `v6unkMcastAct` | {ref}`L2UnkMcastAct <enum-l2unkmcastact>` | `flood`, `opt-flood` | `flood` | — |
 | `virtual_mac_address` | `vmac` | `str` | — | — | Virtual MAC address of the BD/SVI. This is used when the BD is extended to multiple sites using l2 Outside. |
 
 ## Children

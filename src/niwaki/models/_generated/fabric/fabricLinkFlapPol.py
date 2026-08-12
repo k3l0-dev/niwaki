@@ -68,13 +68,13 @@ class fabricLinkFlapPol(ManagedObject):
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
-    max_flaps_allowed_per_time: Annotated[
+    link_flap_error_max: Annotated[
         int,
         Field(
             ge=2, le=30, validation_alias="linkFlapErrorMax", serialization_alias="linkFlapErrorMax"
         ),
     ] = 30
-    time_allowed_for_max_flaps: Annotated[
+    link_flap_error_seconds: Annotated[
         int,
         Field(
             ge=5,

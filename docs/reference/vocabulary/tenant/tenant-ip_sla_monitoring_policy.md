@@ -23,10 +23,10 @@ Accepted as keyword arguments of `.ip_sla_monitoring_policy(name)` and of `.set(
 | --- | --- | --- | --- | --- | --- |
 | `name` *(positional)* | `name` | `str` | — | — | The name of the object. |
 | `description` | `descr` | `str` | — | — | Specifies a description of the policy definition. |
-| `http_method_used_for_probing` | `httpMethod` | {ref}`FvhttpMethod <enum-fvhttpmethod>` | `get` | `get` | — |
-| `uri_for_http_probing` | `httpUri` | `str` | — | — | — |
-| `http_version_used_for_probing` | `httpVersion` | {ref}`FvhttpVersion <enum-fvhttpversion>` | `HTTP10`, `HTTP11` | `HTTP10` | — |
-| `type_of_service_value` | `ipv4Tos` | `int` | — | `0` | — |
+| `http_method` | `httpMethod` | {ref}`FvhttpMethod <enum-fvhttpmethod>` | `get` | `get` | — |
+| `http_uri` | `httpUri` | `str` | — | — | — |
+| `http_version` | `httpVersion` | {ref}`FvhttpVersion <enum-fvhttpversion>` | `HTTP10`, `HTTP11` | `HTTP10` | — |
+| `ipv4_tos` | `ipv4Tos` | `int` | — | `0` | — |
 | `traffic_class_value` | `ipv6TrfClass` | `int` | — | `0` | — |
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |

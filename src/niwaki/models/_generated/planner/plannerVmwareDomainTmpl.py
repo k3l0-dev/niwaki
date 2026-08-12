@@ -61,7 +61,7 @@ class plannerVmwareDomainTmpl(ManagedObject):
             description="Specifies the description of a policy component.",
         ),
     ] = ""
-    type_of_this_domain: PlannerVmwareDomainType = Field(
+    domain_type: PlannerVmwareDomainType = Field(
         default=PlannerVmwareDomainType.VDS,
         validation_alias="domainType",
         serialization_alias="domainType",
@@ -76,7 +76,7 @@ class plannerVmwareDomainTmpl(ManagedObject):
             serialization_alias="nameAlias",
         ),
     ] = ""
-    number_of_esxs_in_this_domain: Annotated[
+    num_esx: Annotated[
         int,
         Field(
             ge=1,

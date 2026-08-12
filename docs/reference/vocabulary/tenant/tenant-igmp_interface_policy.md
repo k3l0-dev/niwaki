@@ -45,4 +45,4 @@ Accepted as keyword arguments of `.igmp_interface_policy(name)` and of `.set(**a
 | --- | --- | --- |
 | `.report(**attrs)` | `igmpRepPol` | {ref}`tenant.igmp_interface_policy.report <vocab-tenant-igmp_interface_policy-report>` |
 | `.state_limit(**attrs)` | `igmpStateLPol` | {ref}`tenant.igmp_interface_policy.state_limit <vocab-tenant-igmp_interface_policy-state_limit>` |
-| `.static_report(join_type_of_groups, **attrs)` | `igmpStRepPol` | {ref}`tenant.igmp_interface_policy.static_report <vocab-tenant-igmp_interface_policy-static_report>` |
+| `.static_report(join_type, **attrs)` | `igmpStRepPol` | {ref}`tenant.igmp_interface_policy.static_report <vocab-tenant-igmp_interface_policy-static_report>` |

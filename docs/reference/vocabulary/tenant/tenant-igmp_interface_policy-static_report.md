@@ -10,18 +10,18 @@ Re-generate: uv run python -m niwaki._codegen.generate_docs
 | | |
 | --- | --- |
 | ACI class | `igmpStRepPol` |
-| RN | `igmpstrepPol-{join_type_of_groups}` |
+| RN | `igmpstrepPol-{join_type}` |
 | Cursor | `StaticReportCursor` |
 | Parent | {ref}`tenant.igmp_interface_policy <vocab-tenant-igmp_interface_policy>` |
 | Atomic | — |
 
 ## Attributes
 
-Accepted as keyword arguments of `.static_report(join_type_of_groups)` and of `.set(**attrs)` on this cursor.  Enum parameters also accept the plain string.
+Accepted as keyword arguments of `.static_report(join_type)` and of `.set(**attrs)` on this cursor.  Enum parameters also accept the plain string.
 
 | parameter | wire | type | values | default | description |
 | --- | --- | --- | --- | --- | --- |
-| `join_type_of_groups` *(positional)* | `joinType` | {ref}`IpmcJoinType <enum-ipmcjointype>` | `join-group`, `static-group` | — | — |
+| `join_type` *(positional)* | `joinType` | {ref}`IpmcJoinType <enum-ipmcjointype>` | `join-group`, `static-group` | — | — |
 | `description` | `descr` | `str` | — | — | Specifies the description of a policy component. |
 | `name` | `name` | `str` | — | — | — |
 

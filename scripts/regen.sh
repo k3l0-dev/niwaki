@@ -92,8 +92,13 @@ if [ "$VERIFY" -eq 1 ]; then
         tests/design/test_core_yaml.py tests/design/test_docs_generator.py \
         tests/design/test_coverage_audit.py tests/query/test_catalog.py \
         tests/query/test_catalog_public.py
-    echo "[regen] verify: vocabulary book is committed-identical..."
-    git diff --exit-code -- docs/reference/vocabulary
+    # No git-diff check on docs/reference/vocabulary here: at this point the
+    # book IS the generator's output by construction (generate_docs just ran),
+    # so comparing against the committed state can only flag "not committed
+    # yet" — the normal state of any mid-branch regen — never actual drift.
+    # Freshness of the book outside this script is owned by the regen
+    # manifest below (every page SHA-256'd, guarded by
+    # tests/test_freshness_manifest.py in checks.sh and public CI).
     echo "[regen] verify: OK — every guard green."
 fi
 

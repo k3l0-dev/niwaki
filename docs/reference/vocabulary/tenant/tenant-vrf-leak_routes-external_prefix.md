@@ -24,7 +24,7 @@ Accepted as keyword arguments of `.external_prefix(subnet)` and of `.set(**attrs
 | `subnet` *(positional)* | `ip` | `str` | — | — | Ip Address corresponding to the External Subnet |
 | `description` | `descr` | `str` | — | — | Specifies the description of a policy component. |
 | `greater_then` | `ge` | `int` | — | `unspecified` | — |
-| `less_than_or_equal` | `le` | `int` | — | `unspecified` | — |
+| `le` | `le` | `int` | — | `unspecified` | — |
 | `name` | `name` | `str` | — | — | — |
 
 ## Children

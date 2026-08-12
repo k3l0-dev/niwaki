@@ -185,7 +185,7 @@ class fvAEPg(ManagedObject):
         serialization_alias="fwdCtrl",
         description="Forwarding Control",
     )
-    epg_with_multisite_mcast_source: bool = Field(
+    has_mcast_source: bool = Field(
         default=False, validation_alias="hasMcastSource", serialization_alias="hasMcastSource"
     )
     attribute_based_epg: bool = Field(

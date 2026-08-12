@@ -63,7 +63,7 @@ class aaaOauthProvider(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    authorization_endpoint_url_of_the_idp: Annotated[
+    authz_endpoint: Annotated[
         str,
         Field(
             min_length=1,
@@ -98,7 +98,7 @@ class aaaOauthProvider(ManagedObject):
     gui_redirect_banner_message: str = Field(
         default="", validation_alias="guiBannerMessage", serialization_alias="guiBannerMessage"
     )
-    jwks_endpoint_url_of_the_idp: Annotated[
+    jwks_endpoint: Annotated[
         str,
         Field(max_length=512, validation_alias="jwksEndpoint", serialization_alias="jwksEndpoint"),
     ] = ""
@@ -131,7 +131,7 @@ class aaaOauthProvider(ManagedObject):
             serialization_alias="nameAlias",
         ),
     ] = ""
-    enable_use_of_oidc_protocol: bool = Field(
+    oidc_enabled: bool = Field(
         default=False, validation_alias="oidcEnabled", serialization_alias="oidcEnabled"
     )
     owner_key: Annotated[
@@ -158,17 +158,15 @@ class aaaOauthProvider(ManagedObject):
         str,
         Field(min_length=1, max_length=500, description="The domain applicable to the capability."),
     ] = ""
-    timeout_in_seconds: Annotated[
+    timeout: Annotated[
         int,
         Field(
             ge=5,
             le=30,
-            validation_alias="timeout",
-            serialization_alias="timeout",
             description="The following two properties are also defined in Ep MO. Here they reperesent per server configuration which would take precedence over global configuration defined in Ep MO",
         ),
     ] = 5
-    token_endpoint_url_of_the_idp: Annotated[
+    token_endpoint: Annotated[
         str,
         Field(
             min_length=1,
@@ -187,7 +185,7 @@ class aaaOauthProvider(ManagedObject):
         ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    username_claim_eg_username_email_sub_etc: Annotated[
+    username_attribute: Annotated[
         str,
         Field(
             min_length=1,

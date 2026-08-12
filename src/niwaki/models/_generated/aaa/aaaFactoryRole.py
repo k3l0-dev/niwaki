@@ -87,7 +87,7 @@ class aaaFactoryRole(ManagedObject):
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
-    trigger_reset_to_factory_settings: AaaBoolean = Field(
+    reset_to_factory: AaaBoolean = Field(
         default=AaaBoolean.NO,
         validation_alias="resetToFactory",
         serialization_alias="resetToFactory",

@@ -66,7 +66,5 @@ class usrsyslogRecord(ManagedObject):
             serialization_alias="remoteDest",
         ),
     ] = ""
-    severity_of_log: SyslogSeverity = Field(
-        default=SyslogSeverity.WARNINGS, validation_alias="severity", serialization_alias="severity"
-    )
+    severity: SyslogSeverity = SyslogSeverity.WARNINGS
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

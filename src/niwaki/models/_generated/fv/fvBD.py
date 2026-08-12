@@ -279,7 +279,7 @@ class fvBD(ManagedObject):
         description="The parameter used by the node (i.e. a leaf) for forwarding data for an unknown multicast destination.",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    unknown_v6_multicast_destination_action: L2UnkMcastAct = Field(
+    v6unk_mcast_act: L2UnkMcastAct = Field(
         default=L2UnkMcastAct.FLOOD,
         validation_alias="v6unkMcastAct",
         serialization_alias="v6unkMcastAct",

@@ -22,7 +22,13 @@ from typing import Any
 
 from jinja2 import Environment, FileSystemLoader, StrictUndefined
 
-from niwaki._schema.naming import best_field_name, propname_to_snake, resolve_py_names
+from niwaki._schema.naming import (
+    LABEL_CORRECTIONS,
+    _label_to_snake_raw,
+    best_field_name,
+    propname_to_snake,
+    resolve_py_names,
+)
 
 # ── Paths ─────────────────────────────────────────────────────────────────────
 
@@ -97,20 +103,71 @@ def _enum_sig_key(model_type: str, values: list[str]) -> str:
     return model_type + "||" + "|".join(values)
 
 
-_ACI_CLASS_RE = re.compile(r"^([a-z]+)(.+)$")
+def _aci_to_dot_class(class_pkg: str, class_name: str) -> str:
+    """Build the dotted-class scopemeta key from the schema's own metadata.
 
-
-def _aci_to_dot_class(aci_class: str) -> str:
-    """Convert an ACI class name to dotted-class notation used in scopemeta.
+    Constructed from the schema-declared package and short class name —
+    exactly the construction ``generate_catalog._scopemeta_rows`` uses, so
+    the two generators cannot disagree on a lookup key.  Never guessed from
+    the concatenated ACI class name: the historical regex split
+    (``^([a-z]+)``) stopped at the first digit, so every class in a
+    digit-bearing package (``l1``, ``l2``, ``l2ext``, ``l3``, ``l3ext``,
+    ``ipv4``, ``uribv4``) looked up a key like ``"l.3extOut"`` and silently
+    lost its scopemeta labels.
 
     Args:
-        aci_class: ACI class name, e.g. ``"fvBD"``.
+        class_pkg:  Schema package of the class, e.g. ``"l3ext"``.
+        class_name: Short class name inside the package, e.g. ``"Out"``.
 
     Returns:
-        Dotted notation, e.g. ``"fv.BD"``.
+        Dotted notation, e.g. ``"l3ext.Out"``.
     """
-    m = _ACI_CLASS_RE.match(aci_class)
-    return f"{m.group(1)}.{m.group(2)}" if m else aci_class
+    return f"{class_pkg}.{class_name}"
+
+
+def _verify_label_corrections(
+    subset: dict[str, dict[str, Any]], sm_labels: dict[str, dict[str, str]]
+) -> None:
+    """Fail the build when a LABEL_CORRECTIONS entry no longer matches.
+
+    Every key of :data:`niwaki._schema.naming.LABEL_CORRECTIONS` must occur
+    as a **funnel token** — a token of some label's raw snake form, exactly
+    what the corrected :func:`~niwaki._schema.naming.label_to_snake` would
+    rewrite — in the class labels, property labels, or scopemeta labels this
+    generator consumes.  A key that matches nothing is dead curation — Cisco
+    fixed the typo — and must be deleted rather than silently carried
+    forever.
+
+    Boundary, stated on purpose: labels of catalogue-only classes (outside
+    ``sdk_subset``) are not consulted.  A correction alive *only* there
+    would be reported dead here; check the catalogue label pool before
+    deleting one.
+
+    Args:
+        subset:    Parsed ``sdk_subset.json``.
+        sm_labels: Scopemeta labels (dotted class → ``{prop: label}``).
+
+    Raises:
+        ValueError: When one or more correction keys match no label token.
+    """
+    seen: set[str] = set()
+
+    def _tokens(label: str) -> set[str]:
+        return set(_label_to_snake_raw(label).split("_"))
+
+    for cls_data in subset.values():
+        seen.update(_tokens(cls_data["class"].get("label") or ""))
+        for pd in cls_data["properties"].values():
+            seen.update(_tokens(pd.get("label") or ""))
+    for sm_class in sm_labels.values():
+        for sm_label in sm_class.values():
+            seen.update(_tokens(sm_label))
+    dead = sorted(key for key in LABEL_CORRECTIONS if key not in seen)
+    if dead:
+        raise ValueError(
+            f"LABEL_CORRECTIONS entries match no schema label token: {dead}. "
+            "Cisco fixed the typo — delete the dead correction."
+        )
 
 
 # ── Field line builder ────────────────────────────────────────────────────────
@@ -454,7 +511,7 @@ def _render_class(
     rn_format = meta.get("rn_format", "")
     contains = sorted(meta.get("contains", []))
 
-    dot_class = _aci_to_dot_class(aci_class)
+    dot_class = _aci_to_dot_class(meta["class_pkg"], meta["class_name"])
     sm_class = inputs.sm_labels.get(dot_class, {})
 
     # Resolve all Python names once, with intra-class collision detection.
@@ -778,7 +835,7 @@ def _build_test_data(
         rn_format = meta.get("rn_format", "")
 
         # Per-class resolved names (collision-safe)
-        dot_class = _aci_to_dot_class(aci_class)
+        dot_class = _aci_to_dot_class(meta["class_pkg"], meta["class_name"])
         sm_class = sm_labels.get(dot_class, {})
         py_names = resolve_py_names(props, sm_class, aci_class)
 
@@ -939,6 +996,7 @@ def main() -> None:
         )
 
     subset: dict[str, dict[str, Any]] = json.loads(SUBSET_FILE.read_text())
+    _verify_label_corrections(subset, sm_labels)
 
     inputs = _CodegenInputs(
         enum_mapping=enum_mapping,

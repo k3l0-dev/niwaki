@@ -90,9 +90,7 @@ class configRollbackP(ManagedObject):
             serialization_alias="nameAlias",
         ),
     ] = ""
-    preview_mode_nothing_is_applied: bool = Field(
-        default=False, validation_alias="preview", serialization_alias="preview"
-    )
+    preview: bool = False
     snapshot: bool = False
     snapshot_one: str = Field(
         default="", validation_alias="snapshotOneDn", serialization_alias="snapshotOneDn"

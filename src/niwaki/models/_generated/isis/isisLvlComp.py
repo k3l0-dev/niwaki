@@ -67,7 +67,7 @@ class isisLvlComp(ManagedObject):
         serialization_alias="lspFastFlood",
         description="The IS-IS Fast-Flooding of LSPs improves Intermediate System-to-Intermediate System (IS-IS) convergence time when new link-state packets (LSPs) are generated in the network and shortest path first (SPF) is triggered by the new LSPs.",
     )
-    lsp_generation_initial_wait_inerval: Annotated[
+    lsp_gen_init_intvl: Annotated[
         int,
         Field(
             ge=50,
@@ -77,7 +77,7 @@ class isisLvlComp(ManagedObject):
             description="The LSP generation initial wait interval. This is used in the LSP generation interval for the LSP MTU.",
         ),
     ] = 50
-    lsp_generation_maximal_wait_inerval: Annotated[
+    lsp_gen_max_intvl: Annotated[
         int,
         Field(
             ge=50,
@@ -87,7 +87,7 @@ class isisLvlComp(ManagedObject):
             description="The LSP generation maximum wait interval. This is used in the LSP generation interval for the LSP MTU.",
         ),
     ] = 8000
-    lsp_generation_secondary_wait_inerval: Annotated[
+    lsp_gen_sec_intvl: Annotated[
         int,
         Field(
             ge=50,

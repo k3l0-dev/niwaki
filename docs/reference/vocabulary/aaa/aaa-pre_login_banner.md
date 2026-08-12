@@ -29,7 +29,7 @@ Accepted as keyword arguments of `.pre_login_banner()` and of `.set(**attrs)` on
 | `description` | `descr` | `str` | — | — | Specifies a description of the policy definition. |
 | `login_gui_message` | `guiMessage` | `str` | — | — | The contents of the GUI informational banner to be displayed before user login authentication. The GUI banner is a URL. Note that the URL site owner must allow the site to be placed in an iFrame to display the informational banner. |
 | `login_gui_string_message` | `guiTextMessage` | `str` | — | — | — |
-| `use_text_base_pre_login_banner_message` | `isGuiMessageText` | `bool` | — | `False` | — |
+| `is_gui_message_text` | `isGuiMessageText` | `bool` | — | `False` | — |
 | `login_banner_message` | `message` | `str` | — | — | The contents of the CLI informational banner to be displayed before user login authentication. The CLI banner is a text based string printed as-is to the console. |
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |

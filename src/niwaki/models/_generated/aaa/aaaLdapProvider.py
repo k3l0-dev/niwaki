@@ -191,14 +191,10 @@ class aaaLdapProvider(ManagedObject):
             description="The root DN or bind DN of the LDAP provider.",
         ),
     ] = ""
-    timeout_in_seconds: Annotated[
+    timeout: Annotated[
         int,
         Field(
-            ge=5,
-            le=60,
-            validation_alias="timeout",
-            serialization_alias="timeout",
-            description="The timeout for communication with an LDAP provider server.",
+            ge=5, le=60, description="The timeout for communication with an LDAP provider server."
         ),
     ] = 30
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

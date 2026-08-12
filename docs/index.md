@@ -12,6 +12,11 @@ configuration — the whole `uni` subtree, from fabric policies to tenants —
 **`push()` applies** it (dry-run diff, atomic POST, or staged waves), and
 the **facade observes** (navigation, typed reads, queries, deletion).
 
+The loop also runs backwards: `snapshot.take()` captures a fabric,
+`to_design()` turns the capture into a design, and `to_code()` renders it
+as Python — an existing fabric becomes maintained code
+({doc}`guide/existing-fabric`).
+
 ```python
 from niwaki import Niwaki
 from niwaki.design import tenant

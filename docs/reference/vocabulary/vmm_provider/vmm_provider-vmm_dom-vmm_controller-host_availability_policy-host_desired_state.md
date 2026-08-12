@@ -23,4 +23,4 @@ Accepted as keyword arguments of `.host_desired_state(host_name)` and of `.set(*
 | --- | --- | --- | --- | --- | --- |
 | `host_name` *(positional)* | `host` | `str` | — | — | The hostname or IP for export destination. Call Home sends email messages to either the IP address or hostname, and the associated port number. |
 | `name` | `name` | `str` | — | — | — |
-| `desired_state_for_the_host` | `state` | {ref}`HvsManagedEntityStatus <enum-hvsmanagedentitystatus>` | `gray`, `green`, `red`, `yellow` | `gray` | The state of the relationship. |
+| `state` | `state` | {ref}`HvsManagedEntityStatus <enum-hvsmanagedentitystatus>` | `gray`, `green`, `red`, `yellow` | `gray` | The state of the relationship. |

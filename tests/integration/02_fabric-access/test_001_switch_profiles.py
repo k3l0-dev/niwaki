@@ -95,7 +95,7 @@ def test_switch_policies(live_aci: Niwaki) -> None:
     fab.copp_leaf_policy(
         "copp-leaf-strict",
         description="Leaf control-plane policing at the strict preset.",
-        type_of_profile="strict",
+        type="strict",
     )
     fab.copp_prefilter_leaf_policy(
         "copp-prefilter-leaf",
@@ -111,7 +111,7 @@ def test_switch_policies(live_aci: Niwaki) -> None:
     fab.fast_link_failover_policy(
         "flf-enabled",
         description="Fast link failover enabled for sub-second uplink recovery.",
-        fast_link_failover_mode_type="on",
+        mode_type="on",
     )
 
     # ── Fibre Channel ───────────────────────────────────────────────────────
@@ -123,16 +123,16 @@ def test_switch_policies(live_aci: Niwaki) -> None:
     fab.fc_fabric_policy(
         "fc-san",
         description="FC SAN timers: 2 s error-detect, 10 s resource-allocation.",
-        fc_protocol_error_detect_timeout=2000,
-        fc_protocol_resource_allocation_timeout=10000,
+        ed_tov=2000,
+        ra_tov=10000,
     )
 
     # ── NetFlow, PoE, PTP ───────────────────────────────────────────────────
     fab.netflow_node_policy(
         "netflow-node",
         description="NetFlow node: 300 s collection, 600 s template, 1500 B MTU.",
-        collection_interval_in_seconds=300,
-        template_interval_in_seconds=600,
+        collect_intvl=300,
+        template_intvl=600,
         mtu=1500,
     )
     fab.poe_policy(
@@ -190,7 +190,7 @@ def test_switch_policies(live_aci: Niwaki) -> None:
     fab.copp_spine_policy(
         "copp-spine-strict",
         description="Spine control-plane policing at the strict preset.",
-        type_of_profile="strict",
+        type="strict",
     )
     fab.copp_prefilter_spine_policy(
         "copp-prefilter-spine",

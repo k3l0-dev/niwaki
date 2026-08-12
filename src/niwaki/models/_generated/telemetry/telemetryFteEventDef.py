@@ -56,7 +56,7 @@ class telemetryFteEventDef(ManagedObject):
         serialization_alias="aclDrops",
         description="11. Capture the acl drops for the FTE events under FTE",
     )
-    sub_event_configuration_for_acl_span: bool = Field(
+    acl_span: bool = Field(
         default=False,
         validation_alias="aclSpan",
         serialization_alias="aclSpan",
@@ -118,7 +118,7 @@ class telemetryFteEventDef(ManagedObject):
             description="The description of this configuration item.",
         ),
     ] = ""
-    configure_fte_drop_events_flow_count: Annotated[
+    drop_flow_count: Annotated[
         int,
         Field(
             ge=1,
@@ -128,7 +128,7 @@ class telemetryFteEventDef(ManagedObject):
             description="18. Drop events flow count under FTE",
         ),
     ] = 0
-    configure_fte_event_export_max_value: Annotated[
+    event_export_max: Annotated[
         int,
         Field(
             ge=0,
@@ -144,7 +144,7 @@ class telemetryFteEventDef(ManagedObject):
         serialization_alias="exportFlowBit",
         description="01. Export Flow bit configuration",
     )
-    configure_fte_export_flow_bucket_count: Annotated[
+    export_flow_count: Annotated[
         int,
         Field(
             ge=0,
@@ -154,7 +154,7 @@ class telemetryFteEventDef(ManagedObject):
             description="20. FTE export_flow Bucket count",
         ),
     ] = 0
-    configure_fte_export_flow_bucket_limit: Annotated[
+    export_flow_limit: Annotated[
         int,
         Field(
             ge=1,
@@ -170,7 +170,7 @@ class telemetryFteEventDef(ManagedObject):
         serialization_alias="firstPacketBit",
         description="02. First Pkt bit configuration",
     )
-    configure_fte_first_packet_bucket_count: Annotated[
+    first_packet_count: Annotated[
         int,
         Field(
             ge=0,
@@ -180,7 +180,7 @@ class telemetryFteEventDef(ManagedObject):
             description="22. FTE first_pkt Bucket count",
         ),
     ] = 0
-    configure_fte_first_packet_bucket_limit: Annotated[
+    first_packet_limit: Annotated[
         int,
         Field(
             ge=1,
@@ -214,7 +214,7 @@ class telemetryFteEventDef(ManagedObject):
         serialization_alias="groupLatencyEvents",
         description="10. Dropped Event Groups for the FTE events under FTE",
     )
-    configure_fte_latency_bucket_count: Annotated[
+    latency_count: Annotated[
         int,
         Field(
             ge=0,
@@ -224,7 +224,7 @@ class telemetryFteEventDef(ManagedObject):
             description="32. FTE rtt_sample_seq Bucket count",
         ),
     ] = 0
-    configure_fte_latency_events_flow_count: Annotated[
+    latency_flow_count: Annotated[
         int,
         Field(
             ge=1,
@@ -234,7 +234,7 @@ class telemetryFteEventDef(ManagedObject):
             description="17. Latency events flow count under FTE",
         ),
     ] = 0
-    configure_fte_latency_bucket_limit: Annotated[
+    latency_limit: Annotated[
         int,
         Field(
             ge=1,
@@ -244,7 +244,7 @@ class telemetryFteEventDef(ManagedObject):
             description="31. FTE rtt_sample_seq Bucket limit",
         ),
     ] = 0
-    configure_fte_latency_threshold_limit: Annotated[
+    latency_threshold: Annotated[
         int,
         Field(
             ge=0,
@@ -254,7 +254,7 @@ class telemetryFteEventDef(ManagedObject):
             description="15. Latency under FTE",
         ),
     ] = 0
-    configure_fte_latency_threshold_unit: TelemetryLatencyUnit = Field(
+    latency_threshold_unit: TelemetryLatencyUnit = Field(
         default=TelemetryLatencyUnit.MICRO_SEC,
         validation_alias="latencyThresholdUnit",
         serialization_alias="latencyThresholdUnit",
@@ -266,7 +266,7 @@ class telemetryFteEventDef(ManagedObject):
         serialization_alias="mousePacketBit",
         description="03. Mouse Pkt bit configuration",
     )
-    configure_fte_mouse_packet_bucket_count: Annotated[
+    mouse_packet_count: Annotated[
         int,
         Field(
             ge=0,
@@ -276,7 +276,7 @@ class telemetryFteEventDef(ManagedObject):
             description="24. FTE Bucket mouse_pkt count",
         ),
     ] = 0
-    configure_fte_mouse_packet_bucket_limit: Annotated[
+    mouse_packet_limit: Annotated[
         int,
         Field(
             ge=1,
@@ -409,7 +409,7 @@ class telemetryFteEventDef(ManagedObject):
         serialization_alias="receiveWindowZero",
         description="44. Receive window zero configuration",
     )
-    configure_fte_rtt_ack_bucket_count: Annotated[
+    rtt_ack_count: Annotated[
         int,
         Field(
             ge=0,
@@ -419,7 +419,7 @@ class telemetryFteEventDef(ManagedObject):
             description="34. FTE rtt_sample_ack Bucket count",
         ),
     ] = 0
-    configure_fte_rtt_ack_bucket_limit: Annotated[
+    rtt_ack_limit: Annotated[
         int,
         Field(
             ge=1,
@@ -447,7 +447,7 @@ class telemetryFteEventDef(ManagedObject):
         serialization_alias="tableFullBit",
         description="05. Table Full bit configuration",
     )
-    configure_fte_table_full_bucket_count: Annotated[
+    table_full_count: Annotated[
         int,
         Field(
             ge=0,
@@ -457,7 +457,7 @@ class telemetryFteEventDef(ManagedObject):
             description="28. FTE table_full Bucket count",
         ),
     ] = 0
-    configure_fte_table_full_bucket_limit: Annotated[
+    table_full_limit: Annotated[
         int,
         Field(
             ge=1,

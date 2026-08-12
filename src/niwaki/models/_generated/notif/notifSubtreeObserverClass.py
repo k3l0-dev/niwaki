@@ -11,12 +11,12 @@ from niwaki.models.base import ManagedObject
 class notifSubtreeObserverClass(ManagedObject):
     """ACI Managed Object: ``notifSubtreeObserverClass``.
 
-    RN format: ``subobsrv-{container_class_of_observer_class}``
+    RN format: ``subobsrv-{class_name}``
     """
 
     _aci_class: ClassVar[str] = "notifSubtreeObserverClass"
-    _rn_format: ClassVar[str] = "subobsrv-{container_class_of_observer_class}"
-    _naming_props: ClassVar[list[str]] = ["container_class_of_observer_class"]
+    _rn_format: ClassVar[str] = "subobsrv-{class_name}"
+    _naming_props: ClassVar[list[str]] = ["class_name"]
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",
@@ -36,7 +36,7 @@ class notifSubtreeObserverClass(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    container_class_of_observer_class: Annotated[
+    class_name: Annotated[
         str,
         Field(
             min_length=1,

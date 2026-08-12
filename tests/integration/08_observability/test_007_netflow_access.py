@@ -159,8 +159,8 @@ def test_access_netflow_monitors(live_aci: Niwaki) -> None:
         infra.netflow_node_policy(
             f"node-mtu-{mtu}",
             description=f"NetFlow node policy, MTU {mtu}.",
-            collection_interval_in_seconds=300,
-            template_interval_in_seconds=600,
+            collect_intvl=300,
+            template_intvl=600,
             mtu=mtu,
         )
     infra.netflow_vmm_exporter(
@@ -169,7 +169,7 @@ def test_access_netflow_monitors(live_aci: Niwaki) -> None:
         remote_entity_ip="10.33.0.9",
         remote_entity_l4_port=4739,
         source_ip_address="10.33.0.1",  # the VMM exporter wants a bare host address
-        vmm_exporter_netflow_version_format="v9",
+        ver="v9",
     )
 
     cfg.push(live_aci)

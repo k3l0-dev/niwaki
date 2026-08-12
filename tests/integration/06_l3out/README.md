@@ -43,7 +43,7 @@ Files are organised by object, and each sweeps that object's combination axes �
 one managed object per representative combination, factored across multiple L3Outs
 / VRFs where one object cannot hold two mutually-exclusive settings at once.
 
-- **`test_001_l3out_base`** — L3Out roots over the `enforce_rtctrl` flag set × MPLS
+- **`test_001_l3out_base`** — L3Out roots over the `enforce_route_control` flag set × MPLS
   on/off × router-id-loopback on/off; the default-route leak policy across its
   `always` × `criteria` × `scope` matrix; both route-target instrumentation modes;
   consumer labels (both ownerships).
@@ -126,7 +126,7 @@ object the suite pushes is accepted.
 
 **Encoded as value rules:**
 
-- `enforce_rtctrl` — export route control is always enforced; import-only is
+- `enforce_route_control` — export route control is always enforced; import-only is
   rejected.
 - A loopback IP is unique to one L3Out within a VRF, and a node's router-id is
   fixed per VRF → most L3Outs take their own VRF.

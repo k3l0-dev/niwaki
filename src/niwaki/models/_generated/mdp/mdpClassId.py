@@ -46,13 +46,13 @@ class mdpClassId(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    control_ep_stream_for_this_epg_to_mdc: bool = Field(
+    ep_stream: bool = Field(
         default=False,
         validation_alias="epStream",
         serialization_alias="epStream",
         description="Control EP stream for this EPg to MDC",
     )
-    domain_level_pctag_allocated_by_mdc: Annotated[
+    pc_tag: Annotated[
         int | Literal["any"],
         AfterValidator(named_number({"0": "any"})),
         Field(

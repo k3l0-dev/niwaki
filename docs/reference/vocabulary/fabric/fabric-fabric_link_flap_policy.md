@@ -23,7 +23,7 @@ Accepted as keyword arguments of `.fabric_link_flap_policy(name)` and of `.set(*
 | --- | --- | --- | --- | --- | --- |
 | `name` *(positional)* | `name` | `str` | — | — | The name of the object. |
 | `description` | `descr` | `str` | — | — | Specifies a description of the policy definition. |
-| `max_flaps_allowed_per_time` | `linkFlapErrorMax` | `int` | — | `30` | — |
-| `time_allowed_for_max_flaps` | `linkFlapErrorSeconds` | `int` | — | `420` | — |
+| `link_flap_error_max` | `linkFlapErrorMax` | `int` | — | `30` | — |
+| `link_flap_error_seconds` | `linkFlapErrorSeconds` | `int` | — | `420` | — |
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |

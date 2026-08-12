@@ -225,14 +225,22 @@ def _pkg_classname(aci_class: str, class_name: str, pkg: str) -> str:
 def _derive_name(aci_class: str, label: str, class_name: str, pkg: str) -> str:
     """Derive a snake_case navigation name for one class.
 
-    Priority order — the same policy the model-field generator applies
-    (:mod:`niwaki._schema.naming`), specialised for navigation:
+    Shares the *funnel* with the model-field generator
+    (:func:`label_to_snake`, so LABEL_CORRECTIONS typo fixes apply here
+    too) but deliberately NOT the field acceptance gate: navigation keeps
+    the historical char-cap-only check.  Applying MAX_LABEL_WORDS /
+    LABEL_MARKERS here would dump hundreds of relation/ltask nav names to
+    their pkg-classname fallback — churn without benefit on a surface no
+    config path uses (user decision 2026-08-10; measured: 448 sentence nav
+    names, see the idea box).
 
-    1. :data:`NAV_NAME_OVERRIDES` — curated fixes for labels wrong at the
-       source (Cisco typos);
+    Priority order:
+
+    1. :data:`NAV_NAME_OVERRIDES` — escape hatch for a name wrong at the
+       source in a way no data fix can express (empty since 2.0; the typo
+       entries moved to LABEL_CORRECTIONS);
     2. the schema label, when it survives :func:`label_to_snake` at most
-       :data:`MAX_LABEL_LENGTH` characters long and a valid identifier —
-       sentence-labels fall through;
+       :data:`MAX_LABEL_LENGTH` characters long and a valid identifier;
     3. the pkg-prefixed className (:func:`_pkg_classname`).
     """
     if aci_class in NAV_NAME_OVERRIDES:

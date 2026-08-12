@@ -101,16 +101,7 @@ class arpInst(ManagedObject):
             description="ARP Cache SysLog Rate",
         ),
     ] = 1
-    refresh_in_evpn_on_host_moves: Annotated[
-        int,
-        Field(
-            ge=600,
-            le=30000,
-            validation_alias="evpn_timeout",
-            serialization_alias="evpn_timeout",
-            description="Evpn-Timeout",
-        ),
-    ] = 600
+    evpn_timeout: Annotated[int, Field(ge=600, le=30000, description="Evpn-Timeout")] = 600
     ip_adjacency_route_distance: Annotated[
         int,
         Field(
@@ -120,7 +111,7 @@ class arpInst(ManagedObject):
             serialization_alias="ipAdjRouteDistance",
         ),
     ] = 250
-    cos_for_arp_packet: Annotated[
+    ip_arp_cos: Annotated[
         int,
         Field(
             ge=0,

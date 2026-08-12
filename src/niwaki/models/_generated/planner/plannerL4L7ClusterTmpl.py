@@ -68,7 +68,7 @@ class plannerL4L7ClusterTmpl(ManagedObject):
             serialization_alias="nameAlias",
         ),
     ] = ""
-    number_of_devices_in_cluster: Annotated[
+    num_devices: Annotated[
         int,
         Field(
             ge=1,

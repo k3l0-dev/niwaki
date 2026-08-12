@@ -33,7 +33,9 @@ def _cls(
 
 
 class TestDeriveName:
-    def test_override_wins_over_label(self) -> None:
+    def test_label_correction_fixes_cisco_typo(self) -> None:
+        # "Maitenance" is corrected in the common funnel (LABEL_CORRECTIONS);
+        # the old NAV_NAME_OVERRIDES entry that pinned this name is gone.
         assert (
             gd._derive_name("maintCatMaintP", "Catalog Maitenance Policy", "CatMaintP", "maint")
             == "catalog_maintenance_policy"

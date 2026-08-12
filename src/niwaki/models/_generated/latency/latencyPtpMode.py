@@ -116,19 +116,8 @@ class latencyPtpMode(ManagedObject):
             description="Total number of active latency policies",
         ),
     ] = 0
-    ptp_global_priority_1_value: Annotated[
-        int,
-        Field(
-            ge=1,
-            le=255,
-            validation_alias="prio1",
-            serialization_alias="prio1",
-            description="PTP Global properties",
-        ),
-    ] = 255
-    ptp_global_priority_2_value: Annotated[
-        int, Field(ge=0, le=255, validation_alias="prio2", serialization_alias="prio2")
-    ] = 255
+    prio1: Annotated[int, Field(ge=1, le=255, description="PTP Global properties")] = 255
+    prio2: Annotated[int, Field(ge=0, le=255)] = 255
     state: NetflowAdminSt = Field(
         default=NetflowAdminSt.DISABLED, description="State of the PTP protocol"
     )

@@ -25,6 +25,6 @@ Accepted as keyword arguments of `.provider(name)` and of `.set(**attrs)` on thi
 | --- | --- | --- | --- | --- | --- |
 | `name` *(positional)* | `name` | `str` | — | — | The name of an existing AAA service provider. |
 | `description` | `descr` | `str` | — | — | Specifies a description of the policy definition. |
-| `order_in_which_providers_are_tried` | `order` | `int` | — | `0` | The relative priority in which the AAA provider will be contacted within the provider group. |
+| `order` | `order` | `int` | — | `0` | The relative priority in which the AAA provider will be contacted within the provider group. |
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |

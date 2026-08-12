@@ -36,7 +36,7 @@ Accepted as keyword arguments of `.dpp_policy(name)` and of `.set(**attrs)` on t
 | `exceed_action` | `exceedAction` | {ref}`DppExceedRateAction <enum-dppexceedrateaction>` | `drop`, `mark`, `transmit` | `drop` | Exceed action |
 | `exceed_mark_cos` | `exceedMarkCos` | `int` | — | `unspecified` | Exceed Mark cos |
 | `exceed_mark_dscp` | `exceedMarkDscp` | `int` | — | `unspecified` | Exceed Mark Dscp |
-| `bit_or_packet` | `mode` | {ref}`DppMode <enum-dppmode>` | `bit`, `packet` | `bit` | Policer mode - bytes or packet policer |
+| `mode` | `mode` | {ref}`DppMode <enum-dppmode>` | `bit`, `packet` | `bit` | Policer mode - bytes or packet policer |
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |
 | `peak_rate` | `pir` | `int` | — | `0` | Peak rate (pir) (2R3C policer only) |

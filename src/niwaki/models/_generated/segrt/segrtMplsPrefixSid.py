@@ -60,7 +60,7 @@ class segrtMplsPrefixSid(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    value_of_sid: Annotated[
+    sid_value: Annotated[
         int,
         Field(
             ge=0,
@@ -70,7 +70,7 @@ class segrtMplsPrefixSid(ManagedObject):
             description="Value of Segment Identifier",
         ),
     ] = 0
-    type_of_segment_identifier_value: SegrtSidValueType = Field(
+    sid_value_type: SegrtSidValueType = Field(
         default=SegrtSidValueType.INDEX,
         validation_alias="sidValueType",
         serialization_alias="sidValueType",

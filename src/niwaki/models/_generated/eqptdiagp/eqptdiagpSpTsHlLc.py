@@ -78,9 +78,7 @@ class eqptdiagpSpTsHlLc(ManagedObject):
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
-    bitmask_of_diagnostics_tests_to_be_run: Annotated[
-        Flags[EqptdiagSpHlLcTestBmT], BeforeValidator(parse_flags)
-    ] = Field(
+    diags_bm: Annotated[Flags[EqptdiagSpHlLcTestBmT], BeforeValidator(parse_flags)] = Field(
         default_factory=lambda: frozenset({EqptdiagSpHlLcTestBmT.NONE}),
         validation_alias="diagsBm",
         serialization_alias="diagsBm",

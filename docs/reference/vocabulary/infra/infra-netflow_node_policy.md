@@ -22,9 +22,9 @@ Accepted as keyword arguments of `.netflow_node_policy(name)` and of `.set(**att
 | parameter | wire | type | values | default | description |
 | --- | --- | --- | --- | --- | --- |
 | `name` *(positional)* | `name` | `str` | — | — | The name of the object. |
-| `collection_interval_in_seconds` | `collectIntvl` | `int` | — | `60` | NetFlow Stats Collect interval |
+| `collect_intvl` | `collectIntvl` | `int` | — | `60` | NetFlow Stats Collect interval |
 | `description` | `descr` | `str` | — | — | Specifies a description of the policy definition. |
 | `mtu` | `mtu` | `int` | — | `1500` | Collector export packet MTU |
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |
-| `template_interval_in_seconds` | `templateIntvl` | `int` | — | `300` | NetFlow Stats Template interval |
+| `template_intvl` | `templateIntvl` | `int` | — | `300` | NetFlow Stats Template interval |

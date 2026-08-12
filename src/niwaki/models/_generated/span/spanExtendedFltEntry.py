@@ -230,7 +230,7 @@ class spanExtendedFltEntry(ManagedObject):
         ),
         Field(validation_alias="dscpTo", serialization_alias="dscpTo", description="DSCP To"),
     ] = "unspecified"
-    packet_is_routeable_or_switched: SpanForwardingType = Field(
+    forwarding_val: SpanForwardingType = Field(
         default=SpanForwardingType.BOTH,
         validation_alias="forwardingVal",
         serialization_alias="forwardingVal",

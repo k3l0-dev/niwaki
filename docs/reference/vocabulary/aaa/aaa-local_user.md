@@ -41,7 +41,7 @@ Accepted as keyword arguments of `.local_user(name)` and of `.set(**attrs)` on t
 | `password` | `pwd` | `str` | — | — | The system user password. |
 | `password_life_time` | `pwdLifeTime` | `int` | — | `0` | The lifetime of the locally-authenticated user password. |
 | `password_update_required` | `pwdUpdateRequired` | {ref}`AaaBoolean <enum-aaaboolean>` | `no`, `yes` | `no` | A boolean value indicating whether this account needs password update |
-| `domain_read_write_rules_for_user` | `rbacString` | `str` | — | — | — |
+| `rbac_string` | `rbacString` | `str` | — | — | — |
 | `restricted_rbac_user` | `restrictedRbacUser` | {ref}`AaaBoolean <enum-aaaboolean>` | `no`, `yes` | `no` | — |
 | `role_summary` | `roleSummary` | `str` | — | — | current set of roles (keep explicit for audit log by PD and PM) |
 | `unix_user_id` | `unixUserId` | `int` | — | `0` | The UNIX identifier of the locally-authenticated user. |

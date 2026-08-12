@@ -54,11 +54,9 @@ def _scaffold(t: Cursor) -> None:
         "vlan-2600", "vlan-2699", allocation_mode="static", role="external"
     )
     t.l3_dom(L3DOM).bind(vlan_pool=POOL)
+    t.ospf_interface_policy("niwaki-it-ospf-p2p", network_type="p2p", cost=100, hello_interval=10)
     t.ospf_interface_policy(
-        "niwaki-it-ospf-p2p", network_type="p2p", cost_of_interface=100, hello_interval=10
-    )
-    t.ospf_interface_policy(
-        "niwaki-it-ospf-bcast", network_type="bcast", cost_of_interface=50, hello_interval=30
+        "niwaki-it-ospf-bcast", network_type="bcast", cost=50, hello_interval=30
     )
 
 
@@ -84,7 +82,9 @@ def test_ospf_areas_and_interfaces(live_aci: Niwaki) -> None:
         for lidx, (lname, node_id) in enumerate(leaves, start=1):
             np = out.node_profile(f"np-{lname}")
             np.node_attachment(
-                f"topology/pod-1/node-{node_id}", rtr_id=f"10.5.{a}.{lidx}", rtr_id_loop_back=False
+                f"topology/pod-1/node-{node_id}",
+                router_id=f"10.5.{a}.{lidx}",
+                rtr_id_loop_back=False,
             )
             ifp = np.interface_profile(f"if-{lname}")
             # Two SVIs share the interface profile's single OSPF interface (a
@@ -95,7 +95,7 @@ def test_ospf_areas_and_interfaces(live_aci: Niwaki) -> None:
                 ifp.path_attachment(
                     f"topology/pod-1/paths-{node_id}/pathep-[eth1/{port}]",
                     if_inst_t="ext-svi",
-                    addr=f"10.5{a}.{port}.{lidx}/24",
+                    ip_address=f"10.5{a}.{port}.{lidx}/24",
                     encap=f"vlan-{vlan}",
                     mode="regular",
                 )

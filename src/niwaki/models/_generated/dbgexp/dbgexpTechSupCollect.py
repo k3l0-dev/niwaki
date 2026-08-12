@@ -61,13 +61,13 @@ class dbgexpTechSupCollect(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    file_or_cli_based_collection: DbgexpCollectionType = Field(
+    collection_type: DbgexpCollectionType = Field(
         default=DbgexpCollectionType.FILE,
         validation_alias="collectionType",
         serialization_alias="collectionType",
         description="The collection type for the core file.",
     )
-    device_on_which_to_collect_data: DbgexpLocaleType = Field(
+    locale_type: DbgexpLocaleType = Field(
         default=DbgexpLocaleType.ALL,
         validation_alias="localeType",
         serialization_alias="localeType",
@@ -84,6 +84,4 @@ class dbgexpTechSupCollect(ManagedObject):
         ),
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    filename_or_cli_command: Annotated[
-        str, Field(max_length=1024, validation_alias="value", serialization_alias="value")
-    ] = ""
+    value: Annotated[str, Field(max_length=1024)] = ""

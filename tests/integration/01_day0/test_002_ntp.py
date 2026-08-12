@@ -30,9 +30,7 @@ def test_ntp(live_aci: Niwaki) -> None:
     ntp.set(admin_state="enabled", server_mode="enabled", authentication_state="enabled")
 
     # An NTP authentication key, trusted for the corporate server.
-    ntp.ntp_auth_key(
-        NTP_AUTH_KEY_ID, key=NTP_AUTH_KEY, type_of_authentication_key="md5", trusted_state=True
-    )
+    ntp.ntp_auth_key(NTP_AUTH_KEY_ID, key=NTP_AUTH_KEY, key_type="md5", trusted_state=True)
 
     # Providers — each reachable over the OOB management EPG.
     ntp.ntp_provider(NTP_SERVERS[0], preferred_state=True).bind_dn(management_epg=OOB_MGMT_EPG)

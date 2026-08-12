@@ -66,15 +66,7 @@ class bgpRtSummPol(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    route_summarization_attribute_route_map: Annotated[
-        str,
-        Field(
-            max_length=512,
-            validation_alias="attrmap",
-            serialization_alias="attrmap",
-            description="Summary attribute map",
-        ),
-    ] = ""
+    attrmap: Annotated[str, Field(max_length=512, description="Summary attribute map")] = ""
     summary_control: Annotated[Flags[BgpSumControlPolType], BeforeValidator(parse_flags)] = Field(
         default_factory=lambda: frozenset(),
         validation_alias="ctrl",

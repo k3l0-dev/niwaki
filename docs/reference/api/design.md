@@ -60,3 +60,57 @@ behaviour they all share.
 
 .. autoclass:: niwaki.design.RefCheck
 ```
+
+## Reverse import
+
+The inverse of `push()`: rebuild a design from a
+{class}`~niwaki.snapshot.Snapshot` — the whole fabric or any scope under
+`uni` — or from a raw payload envelope, preferring the curated vocabulary
+(makers, `bind()`, the contract verbs) and falling back to the wire-name
+escape hatches so the design compiles to the same wire payload the source
+describes.
+
+```{eval-rst}
+.. autofunction:: niwaki.design.to_design
+
+.. autofunction:: niwaki.design.from_payload
+
+.. autoclass:: niwaki.design.ImportProblem
+```
+
+## Walking a design
+
+```{eval-rst}
+.. autoclass:: niwaki.design.DesignView
+
+.. autoclass:: niwaki.design.DesignViewNode
+
+.. autoclass:: niwaki.design.DesignViewBind
+```
+
+## Composition
+
+Carving is a cursor method — `Cursor.slice("uni/tn-prod")` returns a fresh
+design holding that subtree over an attribute-less ancestor chain;
+recombining is a function:
+
+```{eval-rst}
+.. autofunction:: niwaki.design.merge
+```
+
+## Emitting code
+
+```{eval-rst}
+.. autofunction:: niwaki.design.to_code
+```
+
+## Reconciliation
+
+The other half of drift, beside `plan`: what the fabric carries that the
+design does not declare. Read-only — nothing is ever proposed for deletion.
+
+```{eval-rst}
+.. autofunction:: niwaki.design.reconcile
+
+.. autoclass:: niwaki.design.Reconciliation
+```

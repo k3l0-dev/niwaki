@@ -125,13 +125,18 @@ class TestMoDiffErrors:
 class TestMoDiffIgnoresExtra:
     def test_apic_readonly_fields_not_compared(self) -> None:
         desired = fvBD(name="web", unicast_routing=True)
-        # current has read-only APIC fields — these go into model_extra
-        current = fvBD.model_validate(
+        # current has read-only APIC fields — a READ absorbs them tolerantly
+        # (a direct constructor with foreign keys now fails loud by design)
+        current = fvBD.from_apic(
             {
-                "name": "web",
-                "unicastRoute": "yes",
-                "modTs": "2024-01-01T00:00:00.000+00:00",
-                "uid": "15374",
+                "fvBD": {
+                    "attributes": {
+                        "name": "web",
+                        "unicastRoute": "yes",
+                        "modTs": "2024-01-01T00:00:00.000+00:00",
+                        "uid": "15374",
+                    }
+                }
             }
         )
         # Diff should be None because unicastRoute is the same
@@ -147,13 +152,10 @@ class TestMoDiffIgnoresExtra:
         assert mo_diff(desired, current, recurse_children=False) is None
 
     def test_extra_fields_on_desired_do_not_appear_in_delta(self) -> None:
-        # Even if desired has extra fields from a prior GET, they are not compared
-        desired = fvBD.model_validate(
-            {
-                "name": "web",
-                "unicastRoute": "no",
-                "modTs": "old",
-            }
+        # Even if desired has extra fields from a prior GET, they are not
+        # compared (the GET path is from_apic — tolerant by design)
+        desired = fvBD.from_apic(
+            {"fvBD": {"attributes": {"name": "web", "unicastRoute": "no", "modTs": "old"}}}
         )
         current = _current_bd(name="web", unicastRoute="yes")
         delta = mo_diff(desired, current)
@@ -288,3 +290,44 @@ class TestMoDiffEmptyStringMirrorsToApic:
         current = aaaConsoleAuth.model_validate({"providerGroup": ""})
         delta = mo_diff(desired, current)
         assert delta is not None and delta.provider_group == "radius-grp"
+
+
+class TestMoDiffNumericNamedNumbers:
+    """Named numbers whose names are numeric strings — one value, two coercions.
+
+    ``poeIfPol.maximum_power`` is ``int | Literal['30000', …]``: construction
+    keeps the Literal string (exact match beats the int branch) while a read
+    coerces the same wire value to ``int``.  ``'30000'`` vs ``30000`` is one
+    value spelled by two paths, never drift (measured live: a phantom update
+    on every plan of an imported fabric).
+    """
+
+    def test_literal_string_and_int_spellings_are_one_value(self) -> None:
+        from niwaki.models._generated.poe.poeIfPol import poeIfPol
+
+        desired = poeIfPol(name="default", maximum_power="30000")
+        assert desired.maximum_power == "30000"  # the Literal branch won
+        # A read through the typed model keeps the name form too — but the
+        # catalogue read side (a base ManagedObject, ``_coerce_read`` kind
+        # ``int``) serves the same wire value as ``30000``; both spellings
+        # must compare equal wherever they meet.
+        current = poeIfPol(name="default", maximum_power=30000)
+        assert mo_diff(desired, current, respect_fields_set=True) is None
+
+    def test_a_genuinely_different_number_still_diffs(self) -> None:
+        from niwaki.models._generated.poe.poeIfPol import poeIfPol
+
+        desired = poeIfPol(name="default", maximum_power="15400")
+        current = poeIfPol.from_apic(
+            {"poeIfPol": {"attributes": {"name": "default", "maximumPower": "30000"}}}
+        )
+        delta = mo_diff(desired, current, respect_fields_set=True)
+        assert delta is not None and delta.maximum_power == "15400"
+
+    def test_bool_never_matches_a_numeric_string(self) -> None:
+        from niwaki.utils.diff import _values_equal
+
+        assert not _values_equal("1", True)  # bool is not a named number
+        assert _values_equal("30000", 30000)
+        assert _values_equal(30000, "30000")
+        assert not _values_equal("abc", 30000)

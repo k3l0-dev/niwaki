@@ -70,7 +70,7 @@ class plannerL2OutTmpl(ManagedObject):
             description="Specifies the description of a policy component.",
         ),
     ] = ""
-    number_of_fex_ports: Annotated[
+    fex_ports: Annotated[
         int,
         Field(
             validation_alias="fexPorts",
@@ -87,14 +87,7 @@ class plannerL2OutTmpl(ManagedObject):
             serialization_alias="nameAlias",
         ),
     ] = ""
-    number_of_ports: Annotated[
-        int,
-        Field(
-            validation_alias="ports",
-            serialization_alias="ports",
-            description="Number of ports (per leaf) in this l2out",
-        ),
-    ] = 0
+    ports: Annotated[int, Field(description="Number of ports (per leaf) in this l2out")] = 0
     epg_span: Annotated[
         int,
         Field(

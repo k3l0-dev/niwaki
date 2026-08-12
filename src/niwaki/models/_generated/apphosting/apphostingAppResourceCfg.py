@@ -53,12 +53,10 @@ class apphostingAppResourceCfg(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    cpu_unit_allocation_for_this_profile: Annotated[
+    cpu: Annotated[
         int,
         Field(
-            validation_alias="cpu",
-            serialization_alias="cpu",
-            description="unique index to identify the package run optionscustom cpu unit allocation in profile",
+            description="unique index to identify the package run optionscustom cpu unit allocation in profile"
         ),
     ] = 0
     disk_usg: Annotated[
@@ -69,12 +67,5 @@ class apphostingAppResourceCfg(ManagedObject):
             description="custom persistent disk utilization in profile",
         ),
     ] = 0
-    memory_allocation_for_this_profile: Annotated[
-        int,
-        Field(
-            validation_alias="memory",
-            serialization_alias="memory",
-            description="custom memory in profile",
-        ),
-    ] = 0
+    memory: Annotated[int, Field(description="custom memory in profile")] = 0
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

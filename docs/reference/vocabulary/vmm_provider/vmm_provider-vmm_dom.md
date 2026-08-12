@@ -27,18 +27,18 @@ Accepted as keyword arguments of `.vmm_dom(name)` and of `.set(**attrs)` on this
 | `delimiter` | `delimiter` | `str` | — | — | — |
 | `access_mode` | `accessMode` | {ref}`VmmAccessMode <enum-vmmaccessmode>` | `read-only`, `read-write` | `read-write` | — |
 | `arp_learning` | `arpLearning` | {ref}`VmmARPLearning <enum-vmmarplearning>` | `disabled`, `enabled` | `disabled` | Enable/Disable arp learning for AVS Domain |
-| `ave_time_out_time_seconds` | `aveTimeOut` | `int` | — | `30` | — |
+| `ave_time_out` | `aveTimeOut` | `int` | — | `30` | — |
 | `configure_infra_port_group` | `configInfraPg` | `bool` | — | `False` | — |
 | `ctrl_knob` | `ctrlKnob` | {ref}`VmmCtrlKnob <enum-vmmctrlknob>` | `none`, `epDpVerify` | `epDpVerify` | — |
 | `custom_vswitch_name` | `customSwitchName` | `str` | — | — | — |
 | `enable_ave_mode` | `enableAVE` | `bool` | — | `False` | — |
 | `enable_tag_data_retrieval` | `enableTag` | `bool` | — | `False` | — |
-| `enable_vm_folder_data_retrieval` | `enableVmFolder` | `bool` | — | `False` | — |
+| `enable_vm_folder` | `enableVmFolder` | `bool` | — | `False` | — |
 | `encap_mode` | `encapMode` | {ref}`VmmEncapMode <enum-vmmencapmode>` | `ivxlan`, `unknown`, `vlan`, `vxlan` | `unknown` | — |
 | `switching_preference` | `enfPref` | {ref}`L2EnfPref <enum-l2enfpref>` | `hw`, `sw`, `unknown` | `hw` | The switching enforcement preference. This determines whether switches can be done within the virtual switch (Local Switching) or whether all switched traffic must go through the fabric (No Local Switching). |
 | `ep_inventory_type` | `epInventoryType` | {ref}`VmmEpInventoryType <enum-vmmepinventorytype>` | `none`, `on-link` | `on-link` | — |
-| `end_point_retention_time_seconds` | `epRetTime` | `int` | — | `0` | — |
-| `enable_host_availibility_monitoring` | `hvAvailMonitor` | `bool` | — | `False` | — |
+| `ep_ret_time` | `epRetTime` | `int` | — | `0` | — |
+| `enable_host_availability_monitoring` | `hvAvailMonitor` | `bool` | — | `False` | — |
 | `multicast_address` | `mcastAddr` | `str` | — | — | The multicast address of the VMM domain profile. |
 | `virtual_switch` | `mode` | {ref}`VmmMode <enum-vmmmode>` | `cf`, `default`, `k8s`, `n1kv`, `nsx`, `nutanix_pc`, `nutanix_pe`, `openshift`, `ovs`, `rancher`, `rhev`, `unknown` | `default` | The switch to be used for the domain profile. |
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |

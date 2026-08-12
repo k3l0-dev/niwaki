@@ -25,17 +25,17 @@ Accepted as keyword arguments of `.qos_instance_policy(name)` and of `.set(**att
 | --- | --- | --- | --- | --- | --- |
 | `name` *(positional)* | `name` | `str` | — | — | — |
 | `etrap_age_timer` | `EtrapAgeTimer` | `int` | — | `0` | — |
-| `track_activeness_of_elephant_flow` | `EtrapBwThresh` | `int` | — | `0` | — |
-| `e_trap_elephant_flow_identifier` | `EtrapByteCt` | `int` | — | `0` | — |
+| `etrap_bw_thresh` | `EtrapBwThresh` | `int` | — | `0` | — |
+| `etrap_byte_ct` | `EtrapByteCt` | `int` | — | `0` | — |
 | `e_trap_enable_knob` | `EtrapSt` | `bool` | — | `False` | E-trap parameters |
-| `fabric_flush_interval_in_ms` | `FabricFlushInterval` | `int` | — | `500` | — |
-| `fabric_pfc_flush_enable_knob` | `FabricFlushSt` | `bool` | — | `False` | Fabric Flush parameters |
+| `fabric_flush_interval` | `FabricFlushInterval` | `int` | — | `500` | — |
+| `fabric_flush_st` | `FabricFlushSt` | `bool` | — | `False` | Fabric Flush parameters |
 | `global_control_settings` | `ctrl` | {ref}`Qosmctrl <enum-qosmctrl>` | `none`, `dot1p-preserve` | `none` | Global control knob within QoS |
 | `description` | `descr` | `str` | — | — | Specifies a description of the policy definition. |
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |
-| `micro_burst_spine_queues_percent` | `uburstSpineQueues` | `int` | — | `10` | Global microburst spine % queues |
-| `micro_burst_tor_queues_percent` | `uburstTorQueues` | `int` | — | `10` | Global microburst tor % queues |
+| `uburst_spine_queues` | `uburstSpineQueues` | `int` | — | `10` | Global microburst spine % queues |
+| `uburst_tor_queues` | `uburstTorQueues` | `int` | — | `10` | Global microburst tor % queues |
 
 ## Children
 

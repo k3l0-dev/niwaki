@@ -22,10 +22,10 @@ Accepted as keyword arguments of `.flash_configuration_policy(name)` and of `.se
 | parameter | wire | type | values | default | description |
 | --- | --- | --- | --- | --- | --- |
 | `name` *(positional)* | `name` | `str` | — | — | The name of the object. |
-| `delta_program_erase_cycles_on_the_flash` | `deltape` | `int` | — | `21` | — |
+| `deltape` | `deltape` | `int` | — | `21` | — |
 | `description` | `descr` | `str` | — | — | Specifies a description of the policy definition. |
-| `grown_bad_block_count_on_the_flash` | `gbb` | `int` | — | `5` | — |
+| `gbb` | `gbb` | `int` | — | `5` | — |
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |
-| `program_erase_cycles_on_the_flash` | `peCycles` | `int` | — | `5000` | — |
+| `pe_cycles` | `peCycles` | `int` | — | `5000` | — |
 | `read_err` | `readErr` | `int` | — | `1000` | — |

@@ -120,10 +120,8 @@ class l3extConsLbl(ManagedObject):
             serialization_alias="nameAlias",
         ),
     ] = ""
-    represents_the_provider_label_ownership: L3extOwner = Field(
+    owner: L3extOwner = Field(
         default=L3extOwner.INFRA,
-        validation_alias="owner",
-        serialization_alias="owner",
         description="The owner of the target relay. The DHCP relay is any host that forwards DHCP packets between clients and servers. The relays are used to forward requests and replies between clients and servers when they are not on the same physical subnet.",
     )
     owner_key: Annotated[

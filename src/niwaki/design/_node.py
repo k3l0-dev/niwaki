@@ -128,7 +128,17 @@ class DesignNode:
             (``.mo()`` escapes) — those dispatch to the base cursor.
     """
 
-    __slots__ = ("attrs", "binds", "children", "cls", "label", "naming", "parent", "position")
+    __slots__ = (
+        "attrs",
+        "binds",
+        "children",
+        "cls",
+        "label",
+        "naming",
+        "parent",
+        "position",
+        "raw_attrs",
+    )
 
     def __init__(
         self,
@@ -148,6 +158,7 @@ class DesignNode:
         self.position = position
         self.children: list[DesignNode] = []
         self.binds: list[PendingBind] = []
+        self.raw_attrs: dict[str, str] = {}
 
     # ── Identity ──────────────────────────────────────────────────────────────
 
@@ -171,7 +182,12 @@ class DesignNode:
         field constraints apply.  Its ``children`` list is empty — the design
         topology lives on the node, not on the model instance.
         """
-        return self.cls(**self.naming, **self.attrs)
+        instance = self.cls(**self.naming, **self.attrs)
+        if self.raw_attrs:
+            # Wire-name escape hatch (.raw_set()): carried on the instance's
+            # wire-attr channel, merged by to_apic at the wire boundary.
+            instance._raw_wire_attrs = dict(self.raw_attrs)  # pyright: ignore[reportPrivateUsage]
+        return instance
 
     @property
     def rn(self) -> str:
@@ -223,3 +239,55 @@ class DesignNode:
         yield self
         for child in self.children:
             yield from child.iter_subtree()
+
+
+class RawDesignNode(DesignNode):
+    """A design node outside the generated model set (``Cursor.raw()``).
+
+    Declared by ACI class *name* with **wire** attribute names and values.
+    Identity (RN, naming props) comes from the shipped catalogue; the MO is
+    a catalogue-served :class:`~niwaki.models.base.ManagedObject` whose
+    non-naming attributes travel on the wire-attr channel, so every push
+    mode (strict, staged, plan) sees them without touching the strict typed
+    surface.
+    """
+
+    __slots__ = ("wire_class", "wire_naming", "wire_rn")
+
+    def __init__(
+        self,
+        wire_class: str,
+        wire_naming: dict[str, str],
+        wire_rn: str,
+        wire_attrs: dict[str, str],
+        parent: DesignNode,
+    ) -> None:
+        from niwaki.models.base import ManagedObject
+
+        super().__init__(ManagedObject, wire_class, {}, {}, parent, position=None)
+        self.wire_class = wire_class
+        self.wire_naming = wire_naming
+        self.wire_rn = wire_rn
+        self.raw_attrs = dict(wire_attrs)
+
+    @property
+    def aci_class(self) -> str:
+        return self.wire_class
+
+    @property
+    def primary_name(self) -> str:
+        return next(iter(self.wire_naming.values()), "")
+
+    def mo(self) -> ManagedObject:
+        from niwaki.models.base import ManagedObject
+
+        instance = ManagedObject.from_apic(
+            {self.wire_class: {"attributes": dict(self.wire_naming)}}
+        )
+        instance._raw_wire_attrs = dict(self.raw_attrs)  # pyright: ignore[reportPrivateUsage]
+        instance._raw_rn = self.wire_rn  # pyright: ignore[reportPrivateUsage]
+        return instance
+
+    @property
+    def rn(self) -> str:
+        return self.wire_rn

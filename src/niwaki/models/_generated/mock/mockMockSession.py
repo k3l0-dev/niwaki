@@ -69,9 +69,7 @@ class mockMockSession(ManagedObject):
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
-    duration_of_mock_session: Annotated[
-        int, Field(ge=1, validation_alias="duration", serialization_alias="duration")
-    ] = 1
+    duration: Annotated[int, Field(ge=1)] = 1
     mock_session_mode: MockMode = Field(
         default=MockMode.REPEATED,
         validation_alias="mode",
@@ -87,12 +85,9 @@ class mockMockSession(ManagedObject):
             serialization_alias="nameAlias",
         ),
     ] = ""
-    dn_of_a_mocked_mo: str = Field(
-        default="",
-        validation_alias="observable",
-        serialization_alias="observable",
-        description="This is generated and used only by internal processes",
-    )
+    observable: Annotated[
+        str, Field(description="This is generated and used only by internal processes")
+    ] = ""
     owner_key: Annotated[
         str,
         Field(

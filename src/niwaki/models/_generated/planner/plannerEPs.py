@@ -45,26 +45,7 @@ class plannerEPs(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    count_of_ipv4_endpoints: Annotated[
-        int,
-        Field(
-            validation_alias="ipv4",
-            serialization_alias="ipv4",
-            description="Count of IPv4 endpoints",
-        ),
-    ] = 0
-    count_of_ipv6_endpoints: Annotated[
-        int,
-        Field(
-            validation_alias="ipv6",
-            serialization_alias="ipv6",
-            description="Count of IPv6 endpoints",
-        ),
-    ] = 0
-    count_of_mac_endpoints: Annotated[
-        int,
-        Field(
-            validation_alias="mac", serialization_alias="mac", description="Count of mac end points"
-        ),
-    ] = 0
+    ipv4: Annotated[int, Field(description="Count of IPv4 endpoints")] = 0
+    ipv6: Annotated[int, Field(description="Count of IPv6 endpoints")] = 0
+    mac: Annotated[int, Field(description="Count of mac end points")] = 0
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

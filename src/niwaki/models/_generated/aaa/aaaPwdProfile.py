@@ -57,7 +57,7 @@ class aaaPwdProfile(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    number_of_password_changes_in_interval: Annotated[
+    change_count: Annotated[
         int,
         Field(
             ge=0,
@@ -73,7 +73,7 @@ class aaaPwdProfile(ManagedObject):
         serialization_alias="changeDuringInterval",
         description="The change count/change interval policy selector. This property enables you to select an option for enforcing password change.",
     )
-    change_interval_in_hours: Annotated[
+    change_interval: Annotated[
         int,
         Field(
             ge=0,
@@ -93,7 +93,7 @@ class aaaPwdProfile(ManagedObject):
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
-    password_expiration_warn_time_in_days: Annotated[
+    expiration_warn_time: Annotated[
         int,
         Field(
             ge=0,
@@ -122,7 +122,7 @@ class aaaPwdProfile(ManagedObject):
             serialization_alias="nameAlias",
         ),
     ] = ""
-    no_password_change_interval_in_hours: Annotated[
+    no_change_interval: Annotated[
         int,
         Field(
             ge=0,

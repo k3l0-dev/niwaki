@@ -56,7 +56,7 @@ class vnsSvcRedirectPol(ManagedObject):
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────
-    anycast_enabled_or_not: bool = Field(
+    anycast_enabled: bool = Field(
         default=False, validation_alias="AnycastEnabled", serialization_alias="AnycastEnabled"
     )
     annotation: Annotated[
@@ -137,7 +137,7 @@ class vnsSvcRedirectPol(ManagedObject):
         validation_alias="programLocalPodOnly",
         serialization_alias="programLocalPodOnly",
     )
-    resilient_hashing_enabled_or_not: bool = Field(
+    resilient_hash_enabled: bool = Field(
         default=False,
         validation_alias="resilientHashEnabled",
         serialization_alias="resilientHashEnabled",

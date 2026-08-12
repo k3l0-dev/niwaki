@@ -66,7 +66,7 @@ class fabricFIfPol(ManagedObject):
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
-    fabric_link_debounce_interval_msec: Annotated[
+    link_debounce: Annotated[
         int,
         Field(
             ge=0,

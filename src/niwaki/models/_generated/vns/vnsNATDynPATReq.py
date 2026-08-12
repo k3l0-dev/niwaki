@@ -147,7 +147,7 @@ class vnsNATDynPATReq(ManagedObject):
             description="external route network netmask",
         ),
     ] = ""
-    gateway_of_the_route_for_external_intf: Annotated[
+    external_gateway: Annotated[
         str,
         Field(
             pattern="^[0-9a-fA-F.:/ ]+$",
@@ -202,7 +202,7 @@ class vnsNATDynPATReq(ManagedObject):
             description="internal route network netmask",
         ),
     ] = ""
-    gateway_of_the_route_for_internal_intf: Annotated[
+    internal_gateway: Annotated[
         str,
         Field(
             pattern="^[0-9a-fA-F.:/ ]+$",

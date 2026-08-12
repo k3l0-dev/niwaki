@@ -26,11 +26,11 @@ Accepted as keyword arguments of `.static_route(match_ip_address)` and of `.set(
 | `match_ip_address` *(positional)* | `ip` | `str` | — | — | The static route IP address assigned to the outside network. |
 | `aggregated_route` | `aggregate` | `bool` | — | `False` | Aggregated Route |
 | `description` | `descr` | `str` | — | — | Specifies the description of a policy component. |
-| `start_of_prefix_length` | `fromPfxLen` | `int` | — | `0` | Prefix list range |
+| `from_pfx_len` | `fromPfxLen` | `int` | — | `0` | Prefix list range |
 | `name` | `name` | `str` | — | — | — |
 | `preference` | `pref` | `int` | — | `1` | The administrative preference value for this route. This value is useful for resolving routes advertised from different protocols. |
 | `route_controls` | `rtCtrl` | {ref}`IpRtCtrl <enum-iprtctrl>` | `unspecified`, `bfd` | `unspecified` | — |
-| `end_of_prefix_length` | `toPfxLen` | `int` | — | `0` | — |
+| `to_pfx_len` | `toPfxLen` | `int` | — | `0` | — |
 
 ## Children
 

@@ -102,7 +102,7 @@ class fhsBDPol(ManagedObject):
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
-    router_advertisement_guard_admin_status: NwAdminSt = Field(
+    ra_guard_admin_st: NwAdminSt = Field(
         default=NwAdminSt.ENABLED,
         validation_alias="raGuardAdminSt",
         serialization_alias="raGuardAdminSt",

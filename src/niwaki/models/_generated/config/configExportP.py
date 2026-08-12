@@ -85,7 +85,7 @@ class configExportP(ManagedObject):
         serialization_alias="format",
         description="The data format to be used when exporting.",
     )
-    include_secure_fields_in_export: bool = Field(
+    include_secure_fields: bool = Field(
         default=True,
         validation_alias="includeSecureFields",
         serialization_alias="includeSecureFields",

@@ -29,4 +29,4 @@ Accepted as keyword arguments of `.synce_policy(name)` and of `.set(**attrs)` on
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |
 | `ql_option_type_node` | `qloption` | {ref}`SynceGqloptype <enum-syncegqloptype>` | `op1`, `op2g1`, `op2g2` | `op1` | QL itu-t option |
-| `transmit_dnu_on_lag_members` | `txDnuLag` | `bool` | — | `True` | esmc peer receive timeouttransmit dnu on lag members |
+| `tx_dnu_lag` | `txDnuLag` | `bool` | — | `True` | esmc peer receive timeouttransmit dnu on lag members |

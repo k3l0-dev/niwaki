@@ -22,7 +22,7 @@ Accepted as keyword arguments of `.track_list(name)` and of `.set(**attrs)` on t
 | parameter | wire | type | values | default | description |
 | --- | --- | --- | --- | --- | --- |
 | `name` *(positional)* | `name` | `str` | — | — | The name of the object. |
-| `type_of_tracklist` | `type` | {ref}`TrackListObj <enum-tracklistobj>` | `percentage`, `weight` | `percentage` | The specific type of the object or component. |
+| `type` | `type` | {ref}`TrackListObj <enum-tracklistobj>` | `percentage`, `weight` | `percentage` | The specific type of the object or component. |
 | `description` | `descr` | `str` | — | — | Specifies a description of the policy definition. |
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |

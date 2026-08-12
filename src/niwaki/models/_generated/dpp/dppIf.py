@@ -15,12 +15,12 @@ class dppIf(ManagedObject):
 
     Interface info
 
-    RN format: ``if-[{id}]-{ingress_or_egress_direction}``
+    RN format: ``if-[{id}]-{direction}``
     """
 
     _aci_class: ClassVar[str] = "dppIf"
-    _rn_format: ClassVar[str] = "if-[{id}]-{ingress_or_egress_direction}"
-    _naming_props: ClassVar[list[str]] = ["id", "ingress_or_egress_direction"]
+    _rn_format: ClassVar[str] = "if-[{id}]-{direction}"
+    _naming_props: ClassVar[list[str]] = ["id", "direction"]
     _fault_codes: ClassVar[dict[str, str]] = {
         "F2107": "fltDppIfOperStFailed",
     }
@@ -43,11 +43,8 @@ class dppIf(ManagedObject):
     _has_stats: ClassVar[bool] = True
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    ingress_or_egress_direction: DppDirection = Field(
-        default=DppDirection.INGRESS,
-        validation_alias="direction",
-        serialization_alias="direction",
-        description="direction in which policer is applied",
+    direction: DppDirection = Field(
+        default=DppDirection.INGRESS, description="direction in which policer is applied"
     )
     id: Annotated[str, Field(description="Interface ID")]
 

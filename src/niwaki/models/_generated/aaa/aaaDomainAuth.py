@@ -110,7 +110,7 @@ class aaaDomainAuth(ManagedObject):
         default=AaaRealm2.LOCAL,
         description="The security method for processing authentication requests. The realm allows the protected resources on the associated server to be partitioned into a set of protection spaces, each with its own authentication authorization database.",
     )
-    realm_subtype_that_can_be_default_or_duo: AaaRealmSubType = Field(
+    realm_sub_type: AaaRealmSubType = Field(
         default=AaaRealmSubType.DEFAULT,
         validation_alias="realmSubType",
         serialization_alias="realmSubType",

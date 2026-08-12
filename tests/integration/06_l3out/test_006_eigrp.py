@@ -92,7 +92,7 @@ def test_eigrp_interfaces(live_aci: Niwaki) -> None:
     for lidx, (lname, node_id) in enumerate(leaves, start=1):
         np = out.node_profile(f"np-{lname}")
         np.node_attachment(
-            f"topology/pod-1/node-{node_id}", rtr_id=f"10.6.0.{lidx}", rtr_id_loop_back=False
+            f"topology/pod-1/node-{node_id}", router_id=f"10.6.0.{lidx}", rtr_id_loop_back=False
         )
         # eigrp_interface is a singleton per interface profile, so each control
         # policy rides its own interface profile (one SVI, one EIGRP interface).
@@ -102,7 +102,7 @@ def test_eigrp_interfaces(live_aci: Niwaki) -> None:
             ifp.path_attachment(
                 f"topology/pod-1/paths-{node_id}/pathep-[eth1/{port}]",
                 if_inst_t="ext-svi",
-                addr=f"10.6.{port}.{lidx}/24",
+                ip_address=f"10.6.{port}.{lidx}/24",
                 encap=f"vlan-{2670 + k}",
                 mode="regular",
             )

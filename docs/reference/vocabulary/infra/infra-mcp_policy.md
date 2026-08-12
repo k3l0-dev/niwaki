@@ -26,7 +26,7 @@ Accepted as keyword arguments of `.mcp_policy(name)` and of `.set(**attrs)` on t
 | `description` | `descr` | `str` | — | — | Specifies a description of the policy definition. |
 | `grace_period` | `gracePeriod` | `int` | — | `3` | For strict mode, grace period timeout in sec during which early loop detection takes place |
 | `grace_period_msec` | `gracePeriodMsec` | `int` | — | `0` | For strict mode, grace period timeout in millisec during which early loop detection takes place |
-| `maximum_number_of_vlans` | `maxPduPerVlanLimit` | `int` | — | `256` | — |
+| `max_pdu_per_vlan_limit` | `maxPduPerVlanLimit` | `int` | — | `256` | — |
 | `mode` | `mcpMode` | {ref}`McpMcpMode <enum-mcpmcpmode>` | `off`, `on` | `off` | Instance MCP mode |
 | `mcp_pdu_per_vlan` | `mcpPduPerVlan` | {ref}`McpMcpPduPerVlan <enum-mcpmcppdupervlan>` | `off`, `on` | `on` | — |
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |

@@ -43,7 +43,7 @@ Accepted as keyword arguments of `.storm_control_policy(name)` and of `.set(**at
 | `storm_ctrl_action` | `stormCtrlAction` | {ref}`L1StormCtrlActionT <enum-l1stormctrlactiont>` | `drop`, `shutdown` | `drop` | action drop/shutdown |
 | `storm_ctrl_soak_inst_count` | `stormCtrlSoakInstCount` | `int` | — | `3` | Instances required to declare port shutdown |
 | `packet_type` | `type` | {ref}`L1PktT <enum-l1pktt>` | `all`, `bcast`, `mcast`, `unk-ucast` | `all` | The storm control interface policy type. The policy type prevents disruptions on ports by a broadcast, multicast, or unknown unicast traffic storm on physical interfaces. The policy type is set to ALL types of traffic by default and can not be changed. |
-| `unknown_unicast_max_burst_size` | `uucBurstPps` | `int` | — | `unspecified` | burst rate in pps |
+| `uuc_burst_pps` | `uucBurstPps` | `int` | — | `unspecified` | burst rate in pps |
 | `uuc_burst_rate` | `uucBurstRate` | `float` | — | `100.0` | burst rate in % (upto 1 decimal) |
 | `unknown_unicast_traffic_rate` | `uucRate` | `float` | — | `100.0` | rate in % (upto 1 decimal) |
 | `uuc_rate_pps` | `uucRatePps` | `int` | — | `unspecified` | rate in pps |

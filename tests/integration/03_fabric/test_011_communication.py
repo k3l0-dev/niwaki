@@ -136,7 +136,7 @@ def test_other_services(live_aci: Niwaki) -> None:
         description="Shell-in-a-box disabled (hardening).",
         admin_state="disabled",
     )
-    comm.communication_setup(maximum_mos_in_query=100000)
+    comm.communication_setup(max_mos=100000)
     comm.response_time(
         admin_state="enabled",
         calc_window=300,

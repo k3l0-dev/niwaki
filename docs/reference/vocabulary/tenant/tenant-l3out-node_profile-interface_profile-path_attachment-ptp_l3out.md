@@ -25,5 +25,5 @@ Accepted as keyword arguments of `.ptp_l3out()` and of `.set(**attrs)` on this c
 | --- | --- | --- | --- | --- | --- |
 | `description` | `descr` | `str` | — | — | Specifies the description of a policy component. |
 | `name` | `name` | `str` | — | — | — |
-| `ptp_mode_for_interface` | `ptpMode` | {ref}`PtpPtpTransportMode <enum-ptpptptransportmode>` | `multicast`, `multicast-master`, `unicast-master`, `unicast-slave` | `multicast` | PTP mode multicast, unicast master/slave |
+| `ptp_mode` | `ptpMode` | {ref}`PtpPtpTransportMode <enum-ptpptptransportmode>` | `multicast`, `multicast-master`, `unicast-master`, `unicast-slave` | `multicast` | PTP mode multicast, unicast master/slave |
 | `ptp_source_address` | `srcIp` | `str` | — | — | IP address |

@@ -81,12 +81,8 @@ class dbgexpTechSupOnD(ManagedObject):
     app_name: Annotated[
         str, Field(max_length=512, validation_alias="appName", serialization_alias="appName")
     ] = ""
-    category_of_feature_to_be_collected: Annotated[
-        Flags[DbgexpCategory], BeforeValidator(parse_flags)
-    ] = Field(
+    category: Annotated[Flags[DbgexpCategory], BeforeValidator(parse_flags)] = Field(
         default_factory=lambda: frozenset({DbgexpCategory.ALL}),
-        validation_alias="category",
-        serialization_alias="category",
         description="The category name. This is the name of the grouping used when calculating the healthscore. If unspecified, the child's class name is used.",
     )
     compression: MonCompression = Field(
@@ -111,9 +107,7 @@ class dbgexpTechSupOnD(ManagedObject):
             description="Specifies the description of a policy component.",
         ),
     ] = ""
-    end_time_for_techsupport_collection: str = Field(
-        default="", validation_alias="endTime", serialization_alias="endTime"
-    )
+    end_time: str = Field(default="", validation_alias="endTime", serialization_alias="endTime")
     export_to_controller: bool = Field(
         default=False,
         validation_alias="exportToController",
@@ -136,7 +130,7 @@ class dbgexpTechSupOnD(ManagedObject):
             serialization_alias="nameAlias",
         ),
     ] = ""
-    start_time_for_techsupport_collection: str = Field(
+    start_time: str = Field(
         default="", validation_alias="startTime", serialization_alias="startTime"
     )
     include_pre_upgrade_logs: bool = Field(

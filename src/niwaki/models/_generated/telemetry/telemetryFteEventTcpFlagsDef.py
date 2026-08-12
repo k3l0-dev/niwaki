@@ -95,61 +95,61 @@ class telemetryFteEventTcpFlagsDef(ManagedObject):
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
-    sub_event_configuration_for_tcp_ack_flag: bool = Field(
+    tcp_ack_flag: bool = Field(
         default=False,
         validation_alias="tcpAckFlag",
         serialization_alias="tcpAckFlag",
         description="06. TCP ACK flag set",
     )
-    sub_event_configuration_for_tcp_cwr_flag: bool = Field(
+    tcp_cwr_flag: bool = Field(
         default=False,
         validation_alias="tcpCwrFlag",
         serialization_alias="tcpCwrFlag",
         description="09. TCP CWR flag set",
     )
-    sub_event_configuration_for_tcp_ece_flag: bool = Field(
+    tcp_ece_flag: bool = Field(
         default=False,
         validation_alias="tcpEceFlag",
         serialization_alias="tcpEceFlag",
         description="08. TCP ECE flag set",
     )
-    sub_event_configuration_for_tcp_fin_flag: bool = Field(
+    tcp_fin_flag: bool = Field(
         default=False,
         validation_alias="tcpFinFlag",
         serialization_alias="tcpFinFlag",
         description="02. TCP FIN flag configuration",
     )
-    sub_event_configuration_for_tcp_flag_set: bool = Field(
+    tcp_flag_set: bool = Field(
         default=False,
         validation_alias="tcpFlagSet",
         serialization_alias="tcpFlagSet",
         description="01. TCP flag set configuration. Enables all TCP flags",
     )
-    sub_event_configuration_for_tcp_ns_flag: bool = Field(
+    tcp_ns_flag: bool = Field(
         default=False,
         validation_alias="tcpNsFlag",
         serialization_alias="tcpNsFlag",
         description="10. TCP NS flag set",
     )
-    sub_event_configuration_for_tcp_psh_flag: bool = Field(
+    tcp_psh_flag: bool = Field(
         default=False,
         validation_alias="tcpPshFlag",
         serialization_alias="tcpPshFlag",
         description="05. TCP PSH flag set",
     )
-    sub_event_configuration_for_tcp_rst_flag: bool = Field(
+    tcp_rst_flag: bool = Field(
         default=False,
         validation_alias="tcpRstFlag",
         serialization_alias="tcpRstFlag",
         description="04. TCP RST flag set",
     )
-    sub_event_configuration_for_tcp_syn_flag: bool = Field(
+    tcp_syn_flag: bool = Field(
         default=False,
         validation_alias="tcpSynFlag",
         serialization_alias="tcpSynFlag",
         description="03. TCP SYN flag set",
     )
-    sub_event_configuration_for_tcp_urg_flag: bool = Field(
+    tcp_urg_flag: bool = Field(
         default=False,
         validation_alias="tcpUrgFlag",
         serialization_alias="tcpUrgFlag",

@@ -23,7 +23,7 @@ Accepted as keyword arguments of `.uplink_policy_container()` and of `.set(**att
 | --- | --- | --- | --- | --- | --- |
 | `id` | `id` | `int` | — | `0` | An identifier . |
 | `name` | `name` | `str` | — | — | The name of the object. |
-| `number_of_uplinks` | `numOfUplinks` | `str` | — | — | Number of uplinks |
+| `num_of_uplinks` | `numOfUplinks` | `str` | — | — | Number of uplinks |
 
 ## Children
 

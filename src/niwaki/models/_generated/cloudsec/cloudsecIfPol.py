@@ -114,7 +114,7 @@ class cloudsecIfPol(ManagedObject):
             description="SA Key expiry time",
         ),
     ] = 15
-    rekey_control_to_turn_on_off_rekeying: bool = Field(
+    stop_rekey: bool = Field(
         default=False,
         validation_alias="stopRekey",
         serialization_alias="stopRekey",

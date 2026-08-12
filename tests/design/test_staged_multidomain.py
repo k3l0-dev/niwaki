@@ -98,6 +98,10 @@ class TestPlanMultiDomain:
             json=_EMPTY,
         )
 
+        # Boundary-create probes: one bare GET per absent domain root.
+        for dn in ("uni/fabric", "uni/tn-prod"):
+            httpx_mock.add_response(method="GET", url=f"{HOST}/api/mo/{dn}.json", json=_EMPTY)
+
         cfg = design()
         cfg.fabric().datetime_policy("t")
         cfg.tenant("prod").vrf("main")
@@ -111,7 +115,8 @@ class TestPlanMultiDomain:
             "uni/tn-prod/ctx-main",
         ]
         reads = [r for r in httpx_mock.get_requests() if r.method == "GET"]
-        assert len(reads) == 2
+        # One scoped read per declared domain, plus one probe per absent root.
+        assert len(reads) == 4
 
     def test_partial_existing_domain(self, aci: Niwaki, httpx_mock: HTTPXMock) -> None:
         """An existing carrier counts as unchanged; only the leaf is created."""
@@ -131,6 +136,9 @@ class TestPlanMultiDomain:
                 },
             ),
             json=existing,
+        )
+        httpx_mock.add_response(
+            method="GET", url=f"{HOST}/api/mo/uni/fabric/time-t.json", json=_EMPTY
         )
         cfg = fabric()
         cfg.datetime_policy("t")

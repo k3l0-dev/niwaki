@@ -96,7 +96,7 @@ class mcpIfPol(ManagedObject):
             description="For strict mode, grace period timeout in millisec during which early loop detection takes place",
         ),
     ] = 0
-    maximum_number_of_vlans: Annotated[
+    max_pdu_per_vlan_limit: Annotated[
         int,
         Field(
             ge=1,

@@ -79,7 +79,7 @@ def _l3out_with_ifprofiles(t: Cursor, name: str, seq: int, leaves: list[tuple[st
         np = out.node_profile(f"np-{lname}", description=f"Node profile for {lname}.")
         np.node_attachment(
             f"topology/pod-1/node-{node_id}",
-            rtr_id=f"10.{seq}.0.{idx}",
+            router_id=f"10.{seq}.0.{idx}",
             rtr_id_loop_back=False,
         )
         ifp = np.interface_profile(f"if-{lname}", description=f"Interface profile on {lname}.")
@@ -112,7 +112,7 @@ def test_routed_interfaces(live_aci: Niwaki) -> None:
                     pa = ifp.path_attachment(
                         path,
                         if_inst_t="l3-port",
-                        addr=f"10.20.{port}.{lidx}/24",
+                        ip_address=f"10.20.{port}.{lidx}/24",
                         mtu=mtu,
                         ipv6_dad=dad,
                         target_dscp=dscp,

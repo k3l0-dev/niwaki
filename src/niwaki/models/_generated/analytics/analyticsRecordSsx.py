@@ -77,15 +77,8 @@ class analyticsRecordSsx(ManagedObject):
             description="The description of this configuration item.",
         ),
     ] = ""
-    collect_interval_in_milliseconds: Annotated[
-        int,
-        Field(
-            ge=100,
-            le=64000,
-            validation_alias="interval",
-            serialization_alias="interval",
-            description="Interval in uS of collection for this record",
-        ),
+    interval: Annotated[
+        int, Field(ge=100, le=64000, description="Interval in uS of collection for this record")
     ] = 100
     display_name: Annotated[
         str,

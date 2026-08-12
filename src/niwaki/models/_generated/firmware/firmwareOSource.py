@@ -91,7 +91,7 @@ class firmwareOSource(ManagedObject):
             description="Specifies the description of a policy component.",
         ),
     ] = ""
-    variable_to_reuse_download_task: bool = Field(
+    dnld_task_flip: bool = Field(
         default=True,
         validation_alias="dnldTaskFlip",
         serialization_alias="dnldTaskFlip",

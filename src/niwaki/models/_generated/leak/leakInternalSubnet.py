@@ -102,10 +102,7 @@ class leakInternalSubnet(ManagedObject):
             serialization_alias="nameAlias",
         ),
     ] = ""
-    visibility_of_the_subnet: LeakRouteScp = Field(
-        default=LeakRouteScp.PRIVATE,
-        validation_alias="scope",
-        serialization_alias="scope",
-        description="The domain applicable to the capability.",
+    scope: LeakRouteScp = Field(
+        default=LeakRouteScp.PRIVATE, description="The domain applicable to the capability."
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

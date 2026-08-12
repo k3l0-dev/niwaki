@@ -33,7 +33,7 @@ Accepted as keyword arguments of `.hsrp_group_policy(name)` and of `.set(**attrs
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |
 | `miminum_delay_before_preempt` | `preemptDelayMin` | `int` | — | `0` | HSRP Group's Minimum Preemption delay |
 | `preempt_delay_reload` | `preemptDelayReload` | `int` | — | `0` | Preemption delay after switch reboot |
-| `wait_for_ip_redundancy_clients` | `preemptDelaySync` | `int` | — | `0` | Maximum number of seconds to allow IPredundancy clients to prevent preemption |
+| `preempt_delay_sync` | `preemptDelaySync` | `int` | — | `0` | Maximum number of seconds to allow IPredundancy clients to prevent preemption |
 | `group_priority` | `prio` | `int` | — | `100` | Grouph Priority |
 | `secure_authentication_key` | `secureAuthKey` | `str` | — | — | Secure Authentication key |
 | `authentication_key_timeout` | `timeout` | `int` | — | `0` | Authentication timeout |

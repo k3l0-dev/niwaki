@@ -82,7 +82,7 @@ def test_tacacs_destination_group(live_aci: Niwaki) -> None:
                 description=f"TACACS+ destination, {proto}, command args {log_args}.",
                 authentication_protocol=proto,
                 key="niwaki-tacacs-secret",
-                send_changes_as_command_arguments=log_args,
+                populate_cmd_args=log_args,
             )
             port += 1
     fab.push(live_aci)

@@ -32,7 +32,7 @@ Accepted as keyword arguments of `.controller_maintenance_policy()` and of `.set
 | `internal_label` | `internalLabel` | `str` | — | — | Firmware label - internal use only! |
 | `name` | `name` | `str` | — | — | — |
 | `notification_condition` | `notifCond` | {ref}`MaintNotifCond <enum-maintnotifcond>` | `notifyAlwaysBetweenSets`, `notifyNever`, `notifyOnlyOnFailures` | `notifyOnlyOnFailures` | Specifies under what pause condition will admin be notified via email/text as configured. This notification mechanism is independent of events/faults. |
-| `whether_latest` | `parallel` | `bool` | — | `False` | Flag to turn on parallel upgrade of APICs, trades off availability to speed. |
+| `parallel` | `parallel` | `bool` | — | `False` | Flag to turn on parallel upgrade of APICs, trades off availability to speed. |
 | `scheduler_run_mode` | `runMode` | {ref}`MaintRunMode <enum-maintrunmode>` | `pauseAlwaysBetweenSets`, `pauseNever`, `pauseOnlyOnFailures` | `pauseOnlyOnFailures` | Specifies whether to proceed automatically to next set of nodes once a set of nodes have gone through maintenance successfully. |
 | `smu_operation_type` | `smuOperation` | {ref}`MaintSMUOperation <enum-maintsmuoperation>` | `smuInstall`, `smuUninstall` | `smuInstall` | Specifies SMU Operation |
 | `sr_upgrade` | `srUpgrade` | `bool` | — | `False` | — |

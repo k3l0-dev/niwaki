@@ -26,8 +26,8 @@ Accepted as keyword arguments of `.lacp_policy(name)` and of `.set(**attrs)` on 
 | `name` *(positional)* | `name` | `str` | — | — | Specifies the policy name. |
 | `control` | `ctrl` | {ref}`PcIfControl <enum-pcifcontrol>` | `susp-individual`, `graceful-conv`, `load-defer`, `fast-sel-hot-stdby`, `symmetric-hash` | `fast-sel-hot-stdby, graceful-conv, susp-individual` | LAG control properties |
 | `description` | `descr` | `str` | — | — | Specifies a description of the policy definition. |
-| `maximum_number_of_links` | `maxLinks` | `int` | — | `16` | maximum links |
-| `minimum_number_of_links` | `minLinks` | `int` | — | `1` | minimum links @@@ MinLinks in the port channel |
+| `max_links` | `maxLinks` | `int` | — | `16` | maximum links |
+| `min_links` | `minLinks` | `int` | — | `1` | minimum links @@@ MinLinks in the port channel |
 | `mode` | `mode` | {ref}`LacpMode <enum-lacpmode>` | `active`, `explicit-failover`, `mac-pin`, `mac-pin-nicload`, `off`, `passive` | `off` | mode |
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |

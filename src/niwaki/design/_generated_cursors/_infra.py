@@ -236,8 +236,8 @@ class _InfraMakers(Cursor):
         annotation: str | None = None,
         control: frozenset[PcIfControl] | set[PcIfControl] | str | None = None,
         description: str | None = None,
-        maximum_number_of_links: int | None = None,
-        minimum_number_of_links: int | None = None,
+        max_links: int | None = None,
+        min_links: int | None = None,
         mode: LacpMode | str | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
@@ -255,9 +255,8 @@ class _InfraMakers(Cursor):
             annotation: User annotation. Suggested format orchestrator:value
             control: LAG control properties Default: ``PydanticUndefined``.
             description: Specifies a description of the policy definition.
-            maximum_number_of_links: maximum links Default: ``16``.
-            minimum_number_of_links: minimum links @@@ MinLinks in the port channel Default:
-                ``1``.
+            max_links: maximum links Default: ``16``.
+            min_links: minimum links @@@ MinLinks in the port channel Default: ``1``.
             mode: mode Values: ``active``, ``explicit-failover``, ``mac-pin``, ``mac-pin-
                 nicload``, ``off``, ``passive``. Default: ``off``.
             owner_key: The key for enabling clients to own their data for entity correlation.
@@ -329,7 +328,7 @@ class _InfraMakers(Cursor):
         name: str,
         *,
         annotation: str | None = None,
-        auto_negotiation_on_off: L1AutoNeg | str | None = None,
+        auto_negotiation: L1AutoNeg | str | None = None,
         description: str | None = None,
         dfe_delay_ms: int | None = None,
         enable_disable_emi_retrain: L1EmiRetrain | str | None = None,
@@ -350,10 +349,10 @@ class _InfraMakers(Cursor):
             name: The name of the interface policy. This name can be up to 64 characters. Note
                 that you cannot change this name after the object has been saved.
             annotation: User annotation. Suggested format orchestrator:value
-            auto_negotiation_on_off: The policy auto-negotiation. Auto-negotiation is an
-                optional function of the IEEE 802.3u Fast Ethernet standard that enables devices
-                to automatically exchange information over a link about speed and duplex
-                abilities. Values: ``off``, ``on``, ``on-enforce``. Default: ``on``.
+            auto_negotiation: The policy auto-negotiation. Auto-negotiation is an optional
+                function of the IEEE 802.3u Fast Ethernet standard that enables devices to
+                automatically exchange information over a link about speed and duplex abilities.
+                Values: ``off``, ``on``, ``on-enforce``. Default: ``on``.
             description: Specifies a description of the policy definition.
             dfe_delay_ms: Default: ``0``.
             enable_disable_emi_retrain: Values: ``disable``, ``enable``. Default: ``disable``.
@@ -396,8 +395,8 @@ class _InfraMakers(Cursor):
         *,
         annotation: str | None = None,
         description: str | None = None,
-        max_flaps_allowed_per_time: int | None = None,
-        time_allowed_for_max_flaps: int | None = None,
+        link_flap_error_max: int | None = None,
+        link_flap_error_seconds: int | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
@@ -409,8 +408,8 @@ class _InfraMakers(Cursor):
             name: The name of the object.
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies a description of the policy definition.
-            max_flaps_allowed_per_time: Default: ``30``.
-            time_allowed_for_max_flaps: Default: ``420``.
+            link_flap_error_max: Default: ``30``.
+            link_flap_error_seconds: Default: ``420``.
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
@@ -438,7 +437,7 @@ class _InfraMakers(Cursor):
         description: str | None = None,
         grace_period: int | None = None,
         grace_period_msec: int | None = None,
-        maximum_number_of_vlans: int | None = None,
+        max_pdu_per_vlan_limit: int | None = None,
         mode: McpMcpMode | str | None = None,
         mcp_pdu_per_vlan: McpMcpPduPerVlan | str | None = None,
         display_name: str | None = None,
@@ -461,7 +460,7 @@ class _InfraMakers(Cursor):
                 detection takes place Default: ``3``.
             grace_period_msec: For strict mode, grace period timeout in millisec during which
                 early loop detection takes place Default: ``0``.
-            maximum_number_of_vlans: Default: ``256``.
+            max_pdu_per_vlan_limit: Default: ``256``.
             mode: Instance MCP mode Values: ``off``, ``on``. Default: ``off``.
             mcp_pdu_per_vlan: Values: ``off``, ``on``. Default: ``on``.
             owner_key: The key for enabling clients to own their data for entity correlation.
@@ -556,7 +555,7 @@ class _InfraMakers(Cursor):
         storm_ctrl_soak_inst_count: int | None = None,
         packet_type: L1PktT | str | None = None,
         userdom: str | None = None,
-        unknown_unicast_max_burst_size: int | str | None = None,
+        uuc_burst_pps: int | str | None = None,
         uuc_burst_rate: float | None = None,
         unknown_unicast_traffic_rate: float | None = None,
         uuc_rate_pps: int | str | None = None,
@@ -602,7 +601,7 @@ class _InfraMakers(Cursor):
                 on physical interfaces. The policy type is set to ALL types of traffic by
                 default and can not be changed. Values: ``all``, ``bcast``, ``mcast``, ``unk-
                 ucast``. Default: ``all``.
-            unknown_unicast_max_burst_size: burst rate in pps Default: ``unspecified``.
+            uuc_burst_pps: burst rate in pps Default: ``unspecified``.
             uuc_burst_rate: burst rate in % (upto 1 decimal) Default: ``100.0``.
             unknown_unicast_traffic_rate: rate in % (upto 1 decimal) Default: ``100.0``.
             uuc_rate_pps: rate in pps Default: ``unspecified``.
@@ -821,14 +820,14 @@ class _InfraMakers(Cursor):
         owner_key: str | None = None,
         owner_tag: str | None = None,
         qloptype: SynceQloptype | str | None = None,
-        quality_receive_exact_ql_value: SynceQlvalue | str | None = None,
-        quality_receive_highest_ql_value: SynceQlvalue | str | None = None,
-        quality_receive_lowest_ql_value: SynceQlvalue | str | None = None,
-        quality_transmit_exact_ql_value: SynceQlvalue | str | None = None,
+        qlrcvexactval: SynceQlvalue | str | None = None,
+        qlrcvhval: SynceQlvalue | str | None = None,
+        qlrcvlval: SynceQlvalue | str | None = None,
+        qltxexactval: SynceQlvalue | str | None = None,
         qltxhval: SynceQlvalue | str | None = None,
-        quality_transmit_lowest_ql_value: SynceQlvalue | str | None = None,
+        qltxlval: SynceQlvalue | str | None = None,
         selection_configuration: bool | None = None,
-        source_priority_1_254_default100: int | None = None,
+        srcpriority: int | None = None,
         ssm_configuration_enable_disable: bool | None = None,
         userdom: str | None = None,
         wait_to_restore_time: int | None = None,
@@ -847,33 +846,33 @@ class _InfraMakers(Cursor):
                 indicate who created this object.
             qloptype: quality transmit exact option type Values: ``none``, ``op1``, ``op2g1``,
                 ``op2g2``. Default: ``none``.
-            quality_receive_exact_ql_value: quality receive exact value Values: ``fsync-ql-
-                common-dnu``, ``fsync-ql-common-failed``, ``fsync-ql-common-invalid``, ``fsync-
-                ql-common-none``, ``fsync-ql-o1-eec1``, ``fsync-ql-o1-eeec``, ``fsync-
-                ql-o1-eprtc``, ``fsync-ql-o1-prc``, …. Default: ``fsync-ql-common-none``.
-            quality_receive_highest_ql_value: quality receive highest value Values: ``fsync-ql-
-                common-dnu``, ``fsync-ql-common-failed``, ``fsync-ql-common-invalid``, ``fsync-
-                ql-common-none``, ``fsync-ql-o1-eec1``, ``fsync-ql-o1-eeec``, ``fsync-
-                ql-o1-eprtc``, ``fsync-ql-o1-prc``, …. Default: ``fsync-ql-common-none``.
-            quality_receive_lowest_ql_value: quality receive lowest value Values: ``fsync-ql-
-                common-dnu``, ``fsync-ql-common-failed``, ``fsync-ql-common-invalid``, ``fsync-
-                ql-common-none``, ``fsync-ql-o1-eec1``, ``fsync-ql-o1-eeec``, ``fsync-
-                ql-o1-eprtc``, ``fsync-ql-o1-prc``, …. Default: ``fsync-ql-common-none``.
-            quality_transmit_exact_ql_value: quality receive exact option typequality transmit
-                exact value Values: ``fsync-ql-common-dnu``, ``fsync-ql-common-failed``,
-                ``fsync-ql-common-invalid``, ``fsync-ql-common-none``, ``fsync-ql-o1-eec1``,
-                ``fsync-ql-o1-eeec``, ``fsync-ql-o1-eprtc``, ``fsync-ql-o1-prc``, …. Default:
-                ``fsync-ql-common-none``.
+            qlrcvexactval: quality receive exact value Values: ``fsync-ql-common-dnu``, ``fsync-
+                ql-common-failed``, ``fsync-ql-common-invalid``, ``fsync-ql-common-none``,
+                ``fsync-ql-o1-eec1``, ``fsync-ql-o1-eeec``, ``fsync-ql-o1-eprtc``, ``fsync-
+                ql-o1-prc``, …. Default: ``fsync-ql-common-none``.
+            qlrcvhval: quality receive highest value Values: ``fsync-ql-common-dnu``, ``fsync-
+                ql-common-failed``, ``fsync-ql-common-invalid``, ``fsync-ql-common-none``,
+                ``fsync-ql-o1-eec1``, ``fsync-ql-o1-eeec``, ``fsync-ql-o1-eprtc``, ``fsync-
+                ql-o1-prc``, …. Default: ``fsync-ql-common-none``.
+            qlrcvlval: quality receive lowest value Values: ``fsync-ql-common-dnu``, ``fsync-ql-
+                common-failed``, ``fsync-ql-common-invalid``, ``fsync-ql-common-none``, ``fsync-
+                ql-o1-eec1``, ``fsync-ql-o1-eeec``, ``fsync-ql-o1-eprtc``, ``fsync-ql-o1-prc``,
+                …. Default: ``fsync-ql-common-none``.
+            qltxexactval: quality receive exact option typequality transmit exact value Values:
+                ``fsync-ql-common-dnu``, ``fsync-ql-common-failed``, ``fsync-ql-common-
+                invalid``, ``fsync-ql-common-none``, ``fsync-ql-o1-eec1``, ``fsync-ql-o1-eeec``,
+                ``fsync-ql-o1-eprtc``, ``fsync-ql-o1-prc``, …. Default: ``fsync-ql-common-
+                none``.
             qltxhval: quality transmit highest value Values: ``fsync-ql-common-dnu``, ``fsync-
                 ql-common-failed``, ``fsync-ql-common-invalid``, ``fsync-ql-common-none``,
                 ``fsync-ql-o1-eec1``, ``fsync-ql-o1-eeec``, ``fsync-ql-o1-eprtc``, ``fsync-
                 ql-o1-prc``, …. Default: ``fsync-ql-common-none``.
-            quality_transmit_lowest_ql_value: quality transmit lowest value Values: ``fsync-ql-
-                common-dnu``, ``fsync-ql-common-failed``, ``fsync-ql-common-invalid``, ``fsync-
-                ql-common-none``, ``fsync-ql-o1-eec1``, ``fsync-ql-o1-eeec``, ``fsync-
-                ql-o1-eprtc``, ``fsync-ql-o1-prc``, …. Default: ``fsync-ql-common-none``.
+            qltxlval: quality transmit lowest value Values: ``fsync-ql-common-dnu``, ``fsync-ql-
+                common-failed``, ``fsync-ql-common-invalid``, ``fsync-ql-common-none``, ``fsync-
+                ql-o1-eec1``, ``fsync-ql-o1-eeec``, ``fsync-ql-o1-eprtc``, ``fsync-ql-o1-prc``,
+                …. Default: ``fsync-ql-common-none``.
             selection_configuration: selection input Default: ``False``.
-            source_priority_1_254_default100: Default: ``100``.
+            srcpriority: Default: ``100``.
             ssm_configuration_enable_disable: ssm enabled/disabled Default: ``True``.
             wait_to_restore_time: Time-of-the-day prioritywait-to-restore time value in minutes
                 Default: ``5``.
@@ -1057,12 +1056,12 @@ class _InfraMakers(Cursor):
         *,
         annotation: str | None = None,
         description: str | None = None,
-        fc_protocol_error_detect_timeout: int | None = None,
+        ed_tov: int | None = None,
         fcoe_mac_address_prefix: str | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
-        fc_protocol_resource_allocation_timeout: int | None = None,
+        ra_tov: int | None = None,
         userdom: str | None = None,
     ) -> FcFabricPolicyCursor:
         """Declare a ``fcFabricPol`` child under the infra level.
@@ -1071,11 +1070,11 @@ class _InfraMakers(Cursor):
             name: Naming property — forms the object's RN.
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies a description of the policy definition.
-            fc_protocol_error_detect_timeout: Default: ``2000``.
+            ed_tov: Default: ``2000``.
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
-            fc_protocol_resource_allocation_timeout: Default: ``10000``.
+            ra_tov: Default: ``10000``.
         """
         params = {
             k: v
@@ -1137,7 +1136,7 @@ class _InfraMakers(Cursor):
         owner_key: str | None = None,
         owner_tag: str | None = None,
         ql_option_type_node: SynceGqloptype | str | None = None,
-        transmit_dnu_on_lag_members: bool | None = None,
+        tx_dnu_lag: bool | None = None,
         userdom: str | None = None,
     ) -> SyncePolicyCursor:
         """Declare a ``synceInstPol`` child under the infra level.
@@ -1154,8 +1153,7 @@ class _InfraMakers(Cursor):
                 indicate who created this object.
             ql_option_type_node: QL itu-t option Values: ``op1``, ``op2g1``, ``op2g2``. Default:
                 ``op1``.
-            transmit_dnu_on_lag_members: esmc peer receive timeouttransmit dnu on lag members
-                Default: ``True``.
+            tx_dnu_lag: esmc peer receive timeouttransmit dnu on lag members Default: ``True``.
         """
         params = {
             k: v
@@ -1293,7 +1291,7 @@ class _InfraMakers(Cursor):
         exceed_action: DppExceedRateAction | str | None = None,
         exceed_mark_cos: int | str | None = None,
         exceed_mark_dscp: int | str | None = None,
-        bit_or_packet: DppMode | str | None = None,
+        mode: DppMode | str | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
@@ -1335,8 +1333,8 @@ class _InfraMakers(Cursor):
                 ``drop``.
             exceed_mark_cos: Exceed Mark cos Default: ``unspecified``.
             exceed_mark_dscp: Exceed Mark Dscp Default: ``unspecified``.
-            bit_or_packet: Policer mode - bytes or packet policer Values: ``bit``, ``packet``.
-                Default: ``bit``.
+            mode: Policer mode - bytes or packet policer Values: ``bit``, ``packet``. Default:
+                ``bit``.
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
@@ -1374,19 +1372,19 @@ class _InfraMakers(Cursor):
         name: str = "default",
         *,
         etrap_age_timer: int | None = None,
-        track_activeness_of_elephant_flow: int | None = None,
-        e_trap_elephant_flow_identifier: int | None = None,
+        etrap_bw_thresh: int | None = None,
+        etrap_byte_ct: int | None = None,
         e_trap_enable_knob: bool | None = None,
-        fabric_flush_interval_in_ms: int | None = None,
-        fabric_pfc_flush_enable_knob: bool | None = None,
+        fabric_flush_interval: int | None = None,
+        fabric_flush_st: bool | None = None,
         annotation: str | None = None,
         global_control_settings: frozenset[Qosmctrl] | set[Qosmctrl] | str | None = None,
         description: str | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
-        micro_burst_spine_queues_percent: int | None = None,
-        micro_burst_tor_queues_percent: int | None = None,
+        uburst_spine_queues: int | None = None,
+        uburst_tor_queues: int | None = None,
         userdom: str | None = None,
     ) -> QosInstancePolicyCursor:
         """Declare a ``qosInstPol`` child under the infra level.
@@ -1396,11 +1394,11 @@ class _InfraMakers(Cursor):
         Args:
             name: Naming property — forms the object's RN.
             etrap_age_timer: Default: ``0``.
-            track_activeness_of_elephant_flow: Default: ``0``.
-            e_trap_elephant_flow_identifier: Default: ``0``.
+            etrap_bw_thresh: Default: ``0``.
+            etrap_byte_ct: Default: ``0``.
             e_trap_enable_knob: E-trap parameters Default: ``False``.
-            fabric_flush_interval_in_ms: Default: ``500``.
-            fabric_pfc_flush_enable_knob: Fabric Flush parameters Default: ``False``.
+            fabric_flush_interval: Default: ``500``.
+            fabric_flush_st: Fabric Flush parameters Default: ``False``.
             annotation: User annotation. Suggested format orchestrator:value
             global_control_settings: Global control knob within QoS Default:
                 ``PydanticUndefined``.
@@ -1408,8 +1406,8 @@ class _InfraMakers(Cursor):
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
-            micro_burst_spine_queues_percent: Global microburst spine % queues Default: ``10``.
-            micro_burst_tor_queues_percent: Global microburst tor % queues Default: ``10``.
+            uburst_spine_queues: Global microburst spine % queues Default: ``10``.
+            uburst_tor_queues: Global microburst tor % queues Default: ``10``.
         """
         params = {
             k: v
@@ -1514,8 +1512,8 @@ class _InfraMakers(Cursor):
         congestion_clear_action: L1CongClearAction | str | None = None,
         congestion_detect_multiplier: int | None = None,
         description: str | None = None,
-        slowdrain_flush_mode_admin_state: L1PortFlushAdminSt | str | None = None,
-        flush_timeout_in_milliseconds: int | None = None,
+        flush_admin_st: L1PortFlushAdminSt | str | None = None,
+        flush_intvl: int | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
@@ -1532,9 +1530,8 @@ class _InfraMakers(Cursor):
                 ``off``.
             congestion_detect_multiplier: Default: ``10``.
             description: Specifies a description of the policy definition.
-            slowdrain_flush_mode_admin_state: Values: ``disabled``, ``enabled``. Default:
-                ``disabled``.
-            flush_timeout_in_milliseconds: Default: ``500``.
+            flush_admin_st: Values: ``disabled``, ``enabled``. Default: ``disabled``.
+            flush_intvl: Default: ``500``.
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
@@ -1562,7 +1559,7 @@ class _InfraMakers(Cursor):
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
-        type_of_profile: CoppProfileType | str | None = None,
+        type: CoppProfileType | str | None = None,
         userdom: str | None = None,
     ) -> CoppLeafPolicyCursor:
         """Declare a ``coppLeafProfile`` child under the infra level.
@@ -1576,8 +1573,8 @@ class _InfraMakers(Cursor):
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
-            type_of_profile: The specific type of the object or component. Values: ``custom``,
-                ``default``, ``lenient``, ``moderate``, ``strict``. Default: ``default``.
+            type: The specific type of the object or component. Values: ``custom``, ``default``,
+                ``lenient``, ``moderate``, ``strict``. Default: ``default``.
         """
         params = {
             k: v
@@ -1602,7 +1599,7 @@ class _InfraMakers(Cursor):
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
-        type_of_profile: CoppProfileType | str | None = None,
+        type: CoppProfileType | str | None = None,
         userdom: str | None = None,
     ) -> CoppSpinePolicyCursor:
         """Declare a ``coppSpineProfile`` child under the infra level.
@@ -1616,8 +1613,8 @@ class _InfraMakers(Cursor):
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
-            type_of_profile: The specific type of the object or component. Values: ``custom``,
-                ``default``, ``lenient``, ``moderate``, ``strict``. Default: ``default``.
+            type: The specific type of the object or component. Values: ``custom``, ``default``,
+                ``lenient``, ``moderate``, ``strict``. Default: ``default``.
         """
         params = {
             k: v
@@ -1748,7 +1745,7 @@ class _InfraMakers(Cursor):
         self,
         *,
         apply_mtu_to_apic: bool | None = None,
-        mtu_size_for_cp_traffic: int | None = None,
+        cp_mtu: int | None = None,
         annotation: str | None = None,
         description: str | None = None,
         name: str | None = None,
@@ -1761,7 +1758,7 @@ class _InfraMakers(Cursor):
 
         Args:
             apply_mtu_to_apic: Apply this config on APIC interface Default: ``False``.
-            mtu_size_for_cp_traffic: MTU Size for Fabric Ports Default: ``9000``.
+            cp_mtu: MTU Size for Fabric Ports Default: ``9000``.
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies a description of the policy definition.
             owner_key: The key for enabling clients to own their data for entity correlation.
@@ -1851,7 +1848,7 @@ class _InfraMakers(Cursor):
         disable_ep_dampening_knob: bool | None = None,
         enforce_domain_validation: bool | None = None,
         enable_mo_streaming: bool | None = None,
-        enable_remote_leaf_direct_communication: bool | None = None,
+        enable_remote_leaf_direct: bool | None = None,
         enforce_subnet_check: bool | None = None,
         leaf_opflexp_authenticate_clients: bool | None = None,
         leaf_opflexp_use_ssl: bool | None = None,
@@ -1870,7 +1867,7 @@ class _InfraMakers(Cursor):
         enable_intra_leaf_communication: bool | None = None,
         disable_xrleanrs: bool | None = None,
         userdom: str | None = None,
-        validate_overlapping_vlans_on_aepg: bool | None = None,
+        validate_overlapping_vlans: bool | None = None,
     ) -> FabricWideSettingsPolicyCursor:
         """Declare a ``infraSetPol`` child under the infra level.
 
@@ -1881,8 +1878,8 @@ class _InfraMakers(Cursor):
             disable_ep_dampening_knob: Enable Ep Dampening knob Default: ``False``.
             enforce_domain_validation: Default: ``False``.
             enable_mo_streaming: Enable MO steaming feature Default: ``False``.
-            enable_remote_leaf_direct_communication: Enable remote leaf direct communication for
-                all RLs Default: ``False``.
+            enable_remote_leaf_direct: Enable remote leaf direct communication for all RLs
+                Default: ``False``.
             enforce_subnet_check: Enforce subnet check on all VRFs Default: ``False``.
             leaf_opflexp_authenticate_clients: Require Opflexp Client Certificates for
                 authentication for Leaf Default: ``True``.
@@ -1900,8 +1897,7 @@ class _InfraMakers(Cursor):
                 overlapping gipos Default: ``False``.
             enable_intra_leaf_communication: Enable Intra Leaf Comm knob Default: ``False``.
             disable_xrleanrs: Disable xrLeanrs Default: ``False``.
-            validate_overlapping_vlans_on_aepg: Validate Overlapping VLANS on AEPg Default:
-                ``False``.
+            validate_overlapping_vlans: Validate Overlapping VLANS on AEPg Default: ``False``.
         """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
@@ -2116,7 +2112,7 @@ class _InfraMakers(Cursor):
         *,
         annotation: str | None = None,
         description: str | None = None,
-        fast_link_failover_mode_type: TopoctrlFastLinkFailoverModeType | str | None = None,
+        mode_type: TopoctrlFastLinkFailoverModeType | str | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
@@ -2128,7 +2124,7 @@ class _InfraMakers(Cursor):
             name: The name of the object.
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies a description of the policy definition.
-            fast_link_failover_mode_type: Values: ``off``, ``on``. Default: ``off``.
+            mode_type: Values: ``off``, ``on``. Default: ``off``.
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
@@ -2208,13 +2204,13 @@ class _InfraMakers(Cursor):
         name: str,
         *,
         annotation: str | None = None,
-        delta_program_erase_cycles_on_the_flash: int | None = None,
+        deltape: int | None = None,
         description: str | None = None,
-        grown_bad_block_count_on_the_flash: int | None = None,
+        gbb: int | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
-        program_erase_cycles_on_the_flash: int | None = None,
+        pe_cycles: int | None = None,
         read_err: int | None = None,
         userdom: str | None = None,
     ) -> FlashConfigurationPolicyCursor:
@@ -2223,13 +2219,13 @@ class _InfraMakers(Cursor):
         Args:
             name: The name of the object.
             annotation: User annotation. Suggested format orchestrator:value
-            delta_program_erase_cycles_on_the_flash: Default: ``21``.
+            deltape: Default: ``21``.
             description: Specifies a description of the policy definition.
-            grown_bad_block_count_on_the_flash: Default: ``5``.
+            gbb: Default: ``5``.
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
-            program_erase_cycles_on_the_flash: Default: ``5000``.
+            pe_cycles: Default: ``5000``.
             read_err: Default: ``1000``.
         """
         params = {
@@ -3190,13 +3186,13 @@ class _InfraMakers(Cursor):
         name: str,
         *,
         annotation: str | None = None,
-        collection_interval_in_seconds: int | None = None,
+        collect_intvl: int | None = None,
         description: str | None = None,
         mtu: int | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
-        template_interval_in_seconds: int | None = None,
+        template_intvl: int | None = None,
         userdom: str | None = None,
     ) -> NetflowNodePolicyCursor:
         """Declare a ``netflowNodePol`` child under the infra level.
@@ -3204,13 +3200,13 @@ class _InfraMakers(Cursor):
         Args:
             name: The name of the object.
             annotation: User annotation. Suggested format orchestrator:value
-            collection_interval_in_seconds: NetFlow Stats Collect interval Default: ``60``.
+            collect_intvl: NetFlow Stats Collect interval Default: ``60``.
             description: Specifies a description of the policy definition.
             mtu: Collector export packet MTU Default: ``1500``.
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
-            template_interval_in_seconds: NetFlow Stats Template interval Default: ``300``.
+            template_intvl: NetFlow Stats Template interval Default: ``300``.
         """
         params = {
             k: v
@@ -3240,7 +3236,7 @@ class _InfraMakers(Cursor):
         owner_tag: str | None = None,
         source_ip_address: str | None = None,
         userdom: str | None = None,
-        vmm_exporter_netflow_version_format: AnalyticsCollVersion | str | None = None,
+        ver: AnalyticsCollVersion | str | None = None,
     ) -> NetflowVmmExporterCursor:
         """Declare a ``netflowVmmExporterPol`` child under the infra level.
 
@@ -3255,8 +3251,7 @@ class _InfraMakers(Cursor):
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
             source_ip_address: Source IP address
-            vmm_exporter_netflow_version_format: Collector version Values: ``cisco-v1``, ``v5``,
-                ``v9``. Default: ``v9``.
+            ver: Collector version Values: ``cisco-v1``, ``v5``, ``v9``. Default: ``v9``.
         """
         params = {
             k: v
@@ -3444,15 +3439,15 @@ class _InfraMakers(Cursor):
         ptp_user_profile_name: str,
         *,
         annotation: str | None = None,
-        announce_interval_for_ptp_profile: int | None = None,
-        announce_timeout_for_ptp_profile: int | None = None,
+        announce_intvl: int | None = None,
+        announce_timeout: int | None = None,
         delay_intvl: int | None = None,
         local_priority: int | None = None,
         node_profile_override: bool | None = None,
         ptp_profile_template: PtpProfileTemplate | str | None = None,
         ptpoe_dst_mac_rx_no_match: PtpPtpoeDstMacRxNoMatch | str | None = None,
         ptpoe_dst_mac_type: PtpPtpoeDstMacType | str | None = None,
-        sync_interval_for_ptp_profile: int | None = None,
+        sync_intvl: int | None = None,
         userdom: str | None = None,
     ) -> PtpProfileCursor:
         """Declare a ``ptpProfile`` child under the infra level.
@@ -3460,8 +3455,8 @@ class _InfraMakers(Cursor):
         Args:
             ptp_user_profile_name: PTP user profile name
             annotation: User annotation. Suggested format orchestrator:value
-            announce_interval_for_ptp_profile: Announce Interval Default: ``1``.
-            announce_timeout_for_ptp_profile: Announce timeout Default: ``3``.
+            announce_intvl: Announce Interval Default: ``1``.
+            announce_timeout: Announce timeout Default: ``3``.
             delay_intvl: Minimum Delay Request Interval Default: ``-2``.
             local_priority: Telecom profile related propertiesLocal Priority or PTP Cost
                 Default: ``128``.
@@ -3474,7 +3469,7 @@ class _InfraMakers(Cursor):
                 ``replyWithCfgMac``.
             ptpoe_dst_mac_type: PTPoE destination mac type Values: ``forwardable``, ``non-
                 forwardable``. Default: ``forwardable``.
-            sync_interval_for_ptp_profile: Sync Interval Default: ``-3``.
+            sync_intvl: Sync Interval Default: ``-3``.
         """
         params = {
             k: v
@@ -3536,7 +3531,7 @@ class _InfraMakers(Cursor):
         delay_req_intvl_end: int | None = None,
         delay_req_intvl_start: int | None = None,
         sync_intvl_default: int | None = None,
-        minimum_delay_request_interval_range_end: int | None = None,
+        sync_intvl_end: int | None = None,
         sync_intvl_start: int | None = None,
         userdom: str | None = None,
     ) -> PtpProfileTemplateCursor:
@@ -3558,7 +3553,7 @@ class _InfraMakers(Cursor):
             delay_req_intvl_end: Minimum Delay Request Interval range end Default: ``0``.
             delay_req_intvl_start: Minimum Delay Request Interval range start Default: ``0``.
             sync_intvl_default: Sync Interval default value Default: ``0``.
-            minimum_delay_request_interval_range_end: Sync Interval range end Default: ``0``.
+            sync_intvl_end: Sync Interval range end Default: ``0``.
             sync_intvl_start: Sync Interval range start Default: ``0``.
         """
         params = {
@@ -4366,7 +4361,7 @@ class CoppLeafPolicyCursor(_CoppLeafPolicyMakers, _InfraMakers, _UniMakers):
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
-        type_of_profile: CoppProfileType | str | None = None,
+        type: CoppProfileType | str | None = None,
         userdom: str | None = None,
     ) -> CoppLeafPolicyCursor:
         """Set ``coppLeafProfile`` attributes (merged; validated eagerly)."""
@@ -4677,7 +4672,7 @@ class CoppSpinePolicyCursor(_CoppSpinePolicyMakers, _InfraMakers, _UniMakers):
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
-        type_of_profile: CoppProfileType | str | None = None,
+        type: CoppProfileType | str | None = None,
         userdom: str | None = None,
     ) -> CoppSpinePolicyCursor:
         """Set ``coppSpineProfile`` attributes (merged; validated eagerly)."""
@@ -4701,7 +4696,7 @@ class CpMtuPolicyCursor(_InfraMakers, _UniMakers):
         self,
         *,
         apply_mtu_to_apic: bool | None = None,
-        mtu_size_for_cp_traffic: int | None = None,
+        cp_mtu: int | None = None,
         annotation: str | None = None,
         description: str | None = None,
         name: str | None = None,
@@ -5127,7 +5122,7 @@ class InfraDppPolicyCursor(_InfraMakers, _UniMakers):
         exceed_action: DppExceedRateAction | str | None = None,
         exceed_mark_cos: int | str | None = None,
         exceed_mark_dscp: int | str | None = None,
-        bit_or_packet: DppMode | str | None = None,
+        mode: DppMode | str | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
@@ -5168,7 +5163,7 @@ class FabricWideSettingsPolicyCursor(_InfraMakers, _UniMakers):
         disable_ep_dampening_knob: bool | None = None,
         enforce_domain_validation: bool | None = None,
         enable_mo_streaming: bool | None = None,
-        enable_remote_leaf_direct_communication: bool | None = None,
+        enable_remote_leaf_direct: bool | None = None,
         enforce_subnet_check: bool | None = None,
         leaf_opflexp_authenticate_clients: bool | None = None,
         leaf_opflexp_use_ssl: bool | None = None,
@@ -5187,7 +5182,7 @@ class FabricWideSettingsPolicyCursor(_InfraMakers, _UniMakers):
         enable_intra_leaf_communication: bool | None = None,
         disable_xrleanrs: bool | None = None,
         userdom: str | None = None,
-        validate_overlapping_vlans_on_aepg: bool | None = None,
+        validate_overlapping_vlans: bool | None = None,
     ) -> FabricWideSettingsPolicyCursor:
         """Set ``infraSetPol`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -5211,7 +5206,7 @@ class FastLinkFailoverPolicyCursor(_InfraMakers, _UniMakers):
         *,
         annotation: str | None = None,
         description: str | None = None,
-        fast_link_failover_mode_type: TopoctrlFastLinkFailoverModeType | str | None = None,
+        mode_type: TopoctrlFastLinkFailoverModeType | str | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
@@ -5239,12 +5234,12 @@ class FcFabricPolicyCursor(_InfraMakers, _UniMakers):
         *,
         annotation: str | None = None,
         description: str | None = None,
-        fc_protocol_error_detect_timeout: int | None = None,
+        ed_tov: int | None = None,
         fcoe_mac_address_prefix: str | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
-        fc_protocol_resource_allocation_timeout: int | None = None,
+        ra_tov: int | None = None,
         userdom: str | None = None,
     ) -> FcFabricPolicyCursor:
         """Set ``fcFabricPol`` attributes (merged; validated eagerly)."""
@@ -5542,13 +5537,13 @@ class FlashConfigurationPolicyCursor(_InfraMakers, _UniMakers):
         self,
         *,
         annotation: str | None = None,
-        delta_program_erase_cycles_on_the_flash: int | None = None,
+        deltape: int | None = None,
         description: str | None = None,
-        grown_bad_block_count_on_the_flash: int | None = None,
+        gbb: int | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
-        program_erase_cycles_on_the_flash: int | None = None,
+        pe_cycles: int | None = None,
         read_err: int | None = None,
         userdom: str | None = None,
     ) -> FlashConfigurationPolicyCursor:
@@ -6253,8 +6248,8 @@ class LacpPolicyCursor(_LacpPolicyMakers, _InfraMakers, _UniMakers):
         annotation: str | None = None,
         control: frozenset[PcIfControl] | set[PcIfControl] | str | None = None,
         description: str | None = None,
-        maximum_number_of_links: int | None = None,
-        minimum_number_of_links: int | None = None,
+        max_links: int | None = None,
+        min_links: int | None = None,
         mode: LacpMode | str | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
@@ -6383,8 +6378,8 @@ class LinkFlapPolicyCursor(_InfraMakers, _UniMakers):
         *,
         annotation: str | None = None,
         description: str | None = None,
-        max_flaps_allowed_per_time: int | None = None,
-        time_allowed_for_max_flaps: int | None = None,
+        link_flap_error_max: int | None = None,
+        link_flap_error_seconds: int | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
@@ -6411,7 +6406,7 @@ class LinkLevelPolicyCursor(_InfraMakers, _UniMakers):
         self,
         *,
         annotation: str | None = None,
-        auto_negotiation_on_off: L1AutoNeg | str | None = None,
+        auto_negotiation: L1AutoNeg | str | None = None,
         description: str | None = None,
         dfe_delay_ms: int | None = None,
         enable_disable_emi_retrain: L1EmiRetrain | str | None = None,
@@ -6751,7 +6746,7 @@ class McpPolicyCursor(_InfraMakers, _UniMakers):
         description: str | None = None,
         grace_period: int | None = None,
         grace_period_msec: int | None = None,
-        maximum_number_of_vlans: int | None = None,
+        max_pdu_per_vlan_limit: int | None = None,
         mode: McpMcpMode | str | None = None,
         mcp_pdu_per_vlan: McpMcpPduPerVlan | str | None = None,
         display_name: str | None = None,
@@ -7273,13 +7268,13 @@ class NetflowNodePolicyCursor(_InfraMakers, _UniMakers):
         self,
         *,
         annotation: str | None = None,
-        collection_interval_in_seconds: int | None = None,
+        collect_intvl: int | None = None,
         description: str | None = None,
         mtu: int | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
-        template_interval_in_seconds: int | None = None,
+        template_intvl: int | None = None,
         userdom: str | None = None,
     ) -> NetflowNodePolicyCursor:
         """Set ``netflowNodePol`` attributes (merged; validated eagerly)."""
@@ -7347,7 +7342,7 @@ class NetflowVmmExporterCursor(_InfraMakers, _UniMakers):
         owner_tag: str | None = None,
         source_ip_address: str | None = None,
         userdom: str | None = None,
-        vmm_exporter_netflow_version_format: AnalyticsCollVersion | str | None = None,
+        ver: AnalyticsCollVersion | str | None = None,
     ) -> NetflowVmmExporterCursor:
         """Set ``netflowVmmExporterPol`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
@@ -7856,15 +7851,15 @@ class PtpProfileCursor(_InfraMakers, _UniMakers):
         self,
         *,
         annotation: str | None = None,
-        announce_interval_for_ptp_profile: int | None = None,
-        announce_timeout_for_ptp_profile: int | None = None,
+        announce_intvl: int | None = None,
+        announce_timeout: int | None = None,
         delay_intvl: int | None = None,
         local_priority: int | None = None,
         node_profile_override: bool | None = None,
         ptp_profile_template: PtpProfileTemplate | str | None = None,
         ptpoe_dst_mac_rx_no_match: PtpPtpoeDstMacRxNoMatch | str | None = None,
         ptpoe_dst_mac_type: PtpPtpoeDstMacType | str | None = None,
-        sync_interval_for_ptp_profile: int | None = None,
+        sync_intvl: int | None = None,
         userdom: str | None = None,
     ) -> PtpProfileCursor:
         """Set ``ptpProfile`` attributes (merged; validated eagerly)."""
@@ -7898,7 +7893,7 @@ class PtpProfileTemplateCursor(_InfraMakers, _UniMakers):
         delay_req_intvl_end: int | None = None,
         delay_req_intvl_start: int | None = None,
         sync_intvl_default: int | None = None,
-        minimum_delay_request_interval_range_end: int | None = None,
+        sync_intvl_end: int | None = None,
         sync_intvl_start: int | None = None,
         userdom: str | None = None,
     ) -> PtpProfileTemplateCursor:
@@ -7973,19 +7968,19 @@ class QosInstancePolicyCursor(_QosInstancePolicyMakers, _InfraMakers, _UniMakers
         self,
         *,
         etrap_age_timer: int | None = None,
-        track_activeness_of_elephant_flow: int | None = None,
-        e_trap_elephant_flow_identifier: int | None = None,
+        etrap_bw_thresh: int | None = None,
+        etrap_byte_ct: int | None = None,
         e_trap_enable_knob: bool | None = None,
-        fabric_flush_interval_in_ms: int | None = None,
-        fabric_pfc_flush_enable_knob: bool | None = None,
+        fabric_flush_interval: int | None = None,
+        fabric_flush_st: bool | None = None,
         annotation: str | None = None,
         global_control_settings: frozenset[Qosmctrl] | set[Qosmctrl] | str | None = None,
         description: str | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
-        micro_burst_spine_queues_percent: int | None = None,
-        micro_burst_tor_queues_percent: int | None = None,
+        uburst_spine_queues: int | None = None,
+        uburst_tor_queues: int | None = None,
         userdom: str | None = None,
     ) -> QosInstancePolicyCursor:
         """Set ``qosInstPol`` attributes (merged; validated eagerly)."""
@@ -8042,8 +8037,8 @@ class SlowDrainPolicyCursor(_InfraMakers, _UniMakers):
         congestion_clear_action: L1CongClearAction | str | None = None,
         congestion_detect_multiplier: int | None = None,
         description: str | None = None,
-        slowdrain_flush_mode_admin_state: L1PortFlushAdminSt | str | None = None,
-        flush_timeout_in_milliseconds: int | None = None,
+        flush_admin_st: L1PortFlushAdminSt | str | None = None,
+        flush_intvl: int | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
@@ -8562,7 +8557,7 @@ class StormControlPolicyCursor(_InfraMakers, _UniMakers):
         storm_ctrl_soak_inst_count: int | None = None,
         packet_type: L1PktT | str | None = None,
         userdom: str | None = None,
-        unknown_unicast_max_burst_size: int | str | None = None,
+        uuc_burst_pps: int | str | None = None,
         uuc_burst_rate: float | None = None,
         unknown_unicast_traffic_rate: float | None = None,
         uuc_rate_pps: int | str | None = None,
@@ -8622,14 +8617,14 @@ class SynceInterfacePolicyCursor(_InfraMakers, _UniMakers):
         owner_key: str | None = None,
         owner_tag: str | None = None,
         qloptype: SynceQloptype | str | None = None,
-        quality_receive_exact_ql_value: SynceQlvalue | str | None = None,
-        quality_receive_highest_ql_value: SynceQlvalue | str | None = None,
-        quality_receive_lowest_ql_value: SynceQlvalue | str | None = None,
-        quality_transmit_exact_ql_value: SynceQlvalue | str | None = None,
+        qlrcvexactval: SynceQlvalue | str | None = None,
+        qlrcvhval: SynceQlvalue | str | None = None,
+        qlrcvlval: SynceQlvalue | str | None = None,
+        qltxexactval: SynceQlvalue | str | None = None,
         qltxhval: SynceQlvalue | str | None = None,
-        quality_transmit_lowest_ql_value: SynceQlvalue | str | None = None,
+        qltxlval: SynceQlvalue | str | None = None,
         selection_configuration: bool | None = None,
-        source_priority_1_254_default100: int | None = None,
+        srcpriority: int | None = None,
         ssm_configuration_enable_disable: bool | None = None,
         userdom: str | None = None,
         wait_to_restore_time: int | None = None,
@@ -8661,7 +8656,7 @@ class SyncePolicyCursor(_InfraMakers, _UniMakers):
         owner_key: str | None = None,
         owner_tag: str | None = None,
         ql_option_type_node: SynceGqloptype | str | None = None,
-        transmit_dnu_on_lag_members: bool | None = None,
+        tx_dnu_lag: bool | None = None,
         userdom: str | None = None,
     ) -> SyncePolicyCursor:
         """Set ``synceInstPol`` attributes (merged; validated eagerly)."""
@@ -11796,12 +11791,12 @@ class _QosClassPolicyMakers(Cursor):
         self,
         name: str,
         *,
-        priority_flow_control_admin_state: bool | None = None,
+        admin_st: bool | None = None,
         annotation: str | None = None,
         description: str | None = None,
-        priority_flow_control_enable_scope: QospPfcEnableScope | str | None = None,
+        enable_scope: QospPfcEnableScope | str | None = None,
         display_name: str | None = None,
-        bitmap_of_nodrop_cos: frozenset[QospCosBmap] | set[QospCosBmap] | str | None = None,
+        no_drop_cos: frozenset[QospCosBmap] | set[QospCosBmap] | str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
         userdom: str | None = None,
@@ -11810,12 +11805,12 @@ class _QosClassPolicyMakers(Cursor):
 
         Args:
             name: The name of the object.
-            priority_flow_control_admin_state: enable is for no drop policy, disable is for drop
-                policy Default: ``False``.
+            admin_st: enable is for no drop policy, disable is for drop policy Default:
+                ``False``.
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies a description of the policy definition.
-            priority_flow_control_enable_scope: Values: ``fabric``, ``tor``. Default: ``tor``.
-            bitmap_of_nodrop_cos: Default: ``PydanticUndefined``.
+            enable_scope: Values: ``fabric``, ``tor``. Default: ``tor``.
+            no_drop_cos: Default: ``PydanticUndefined``.
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
@@ -11985,7 +11980,7 @@ class _InfraSpanDestinationGroupSpanDestinationMakers(Cursor):
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
-        source_ip_of_erspan_packet: str | None = None,
+        source_ip_prefix: str | None = None,
         time_to_live: int | str | None = None,
         userdom: str | None = None,
         vrf: str | None = None,
@@ -12546,7 +12541,7 @@ class _InfraVspanDestinationGroupVspanVdestinationMakers(Cursor):
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
-        source_ip_of_erspan_packet: str | None = None,
+        source_ip_prefix: str | None = None,
         time_to_live: int | str | None = None,
         userdom: str | None = None,
         vrf: str | None = None,
@@ -13977,12 +13972,12 @@ class QosPriorityFlowControlPolicyCursor(
     def set(
         self,
         *,
-        priority_flow_control_admin_state: bool | None = None,
+        admin_st: bool | None = None,
         annotation: str | None = None,
         description: str | None = None,
-        priority_flow_control_enable_scope: QospPfcEnableScope | str | None = None,
+        enable_scope: QospPfcEnableScope | str | None = None,
         display_name: str | None = None,
-        bitmap_of_nodrop_cos: frozenset[QospCosBmap] | set[QospCosBmap] | str | None = None,
+        no_drop_cos: frozenset[QospCosBmap] | set[QospCosBmap] | str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
         userdom: str | None = None,
@@ -14086,7 +14081,7 @@ class InfraSpanDestinationGroupSpanDestinationVspanEpgSummaryCursor(
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
-        source_ip_of_erspan_packet: str | None = None,
+        source_ip_prefix: str | None = None,
         time_to_live: int | str | None = None,
         userdom: str | None = None,
         vrf: str | None = None,
@@ -14220,7 +14215,7 @@ class InfraVspanDestinationGroupVspanVdestinationVspanDestinationEpgSummaryCurso
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
-        source_ip_of_erspan_packet: str | None = None,
+        source_ip_prefix: str | None = None,
         time_to_live: int | str | None = None,
         userdom: str | None = None,
         vrf: str | None = None,

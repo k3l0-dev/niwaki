@@ -78,7 +78,7 @@ class dbgexpCoreP(ManagedObject):
     app_name: Annotated[
         str, Field(max_length=512, validation_alias="appName", serialization_alias="appName")
     ] = ""
-    files_to_collect_and_export: DbgexpCollectType = Field(
+    collection_type: DbgexpCollectType = Field(
         default=DbgexpCollectType.COREONLY,
         validation_alias="collectType",
         serialization_alias="collectType",

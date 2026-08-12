@@ -64,7 +64,7 @@ def _scaffold(t: Cursor) -> None:
         t.bgp_peer_prefix_policy(
             f"niwaki-it-pfx-{act}",
             max_prefix_action=act,
-            max_number_of_prefixes=10000,
+            max_pfx=10000,
             warning_threshold=75,
             description=f"Prefix policy, action {act}.",
         )
@@ -109,7 +109,7 @@ def test_bgp_peers(live_aci: Niwaki) -> None:
     for lidx, (lname, node_id) in enumerate(leaves, start=1):
         np = out.node_profile(f"np-{lname}", description=f"Node profile for {lname}.")
         np.node_attachment(
-            f"topology/pod-1/node-{node_id}", rtr_id=f"10.4.0.{lidx}", rtr_id_loop_back=False
+            f"topology/pod-1/node-{node_id}", router_id=f"10.4.0.{lidx}", rtr_id_loop_back=False
         )
 
         # Local-AS propagation modes, each with an autonomous-system profile.
@@ -163,7 +163,7 @@ def test_bgp_peers(live_aci: Niwaki) -> None:
 
         # A peer carrying a site-of-origin (extended community form).
         soo = np.bgp_peer(f"172.16.{lidx}.50", description="Peer with site-of-origin.")
-        soo.site_of_origin_profile(site_of_origin="extended:as2-nn2:65001:100", description="SOO.")
+        soo.site_of_origin_profile(soo="extended:as2-nn2:65001:100", description="SOO.")
 
         # The node's BGP protocol profile: best-path + timers.
         np.protocol_profile(name="default").bind(

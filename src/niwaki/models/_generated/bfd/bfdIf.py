@@ -86,7 +86,7 @@ class bfdIf(ManagedObject):
             description="BFD Dest IP",
         ),
     ] = ""
-    echo_mode_admin_state_of_bfd_interface: NwAdminSt = Field(
+    echo_admin_st: NwAdminSt = Field(
         default=NwAdminSt.ENABLED,
         validation_alias="echoAdminSt",
         serialization_alias="echoAdminSt",

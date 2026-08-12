@@ -218,11 +218,12 @@ def test_names_are_unique_and_deterministic(cat: _catalog.Catalog) -> None:
 
     Full cross-model parity is *not* guaranteed: the catalogue resolves names over
     a class's whole readable property set, while a generated model resolves over
-    the smaller configurable subset, so collision resolution can differ (e.g.
-    ``l3extOut.enforceRtctrl`` → ``enforce_route_control`` here vs ``enforce_rtctrl``
-    on the model).  That is invisible at runtime — a generated class is served by
-    its model, never by the catalogue — so what matters is that the catalogue's
-    own names are unique (no two wire props collide) and deterministic.
+    the smaller configurable subset, so collision resolution can differ (the
+    five pinned irreducibles, e.g. ``vnsCMgmt.host`` → ``host`` here vs
+    ``ip_address`` on the model).  That is invisible at runtime — a generated
+    class is served by its model, never by the catalogue — so what matters is
+    that the catalogue's own names are unique (no two wire props collide) and
+    deterministic.
     """
     for cls in ("faultInst", "topSystem", "l3extOut", "eqptcapacityL3TotalUsage5min"):
         meta = cat.class_meta(cls)

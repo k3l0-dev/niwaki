@@ -56,9 +56,7 @@ class equipmentFlashConfigPol(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    delta_program_erase_cycles_on_the_flash: Annotated[
-        int, Field(ge=21, le=40, validation_alias="deltape", serialization_alias="deltape")
-    ] = 21
+    deltape: Annotated[int, Field(ge=21, le=40)] = 21
     description: Annotated[
         str,
         Field(
@@ -69,9 +67,7 @@ class equipmentFlashConfigPol(ManagedObject):
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
-    grown_bad_block_count_on_the_flash: Annotated[
-        int, Field(ge=4, le=15, validation_alias="gbb", serialization_alias="gbb")
-    ] = 5
+    gbb: Annotated[int, Field(ge=4, le=15)] = 5
     display_name: Annotated[
         str,
         Field(
@@ -101,7 +97,7 @@ class equipmentFlashConfigPol(ManagedObject):
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
-    program_erase_cycles_on_the_flash: Annotated[
+    pe_cycles: Annotated[
         int, Field(ge=3000, le=10000, validation_alias="peCycles", serialization_alias="peCycles")
     ] = 5000
     read_err: Annotated[

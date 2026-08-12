@@ -30,4 +30,4 @@ Accepted as keyword arguments of `.inter_vrf()` and of `.set(**attrs)` on this c
 
 | maker | creates | position |
 | --- | --- | --- |
-| `.entry(dn_of_the_src_vrf, **attrs)` | `pimInterVRFEntryPol` | {ref}`tenant.vrf.pim.inter_vrf.entry <vocab-tenant-vrf-pim-inter_vrf-entry>` |
+| `.entry(src_vrf_dn, **attrs)` | `pimInterVRFEntryPol` | {ref}`tenant.vrf.pim.inter_vrf.entry <vocab-tenant-vrf-pim-inter_vrf-entry>` |

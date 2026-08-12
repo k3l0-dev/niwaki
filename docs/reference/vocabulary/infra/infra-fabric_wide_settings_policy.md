@@ -26,7 +26,7 @@ Accepted as keyword arguments of `.fabric_wide_settings_policy()` and of `.set(*
 | `disable_ep_dampening_knob` | `disableEpDampening` | `bool` | — | `False` | Enable Ep Dampening knob |
 | `enforce_domain_validation` | `domainValidation` | `bool` | — | `False` | — |
 | `enable_mo_streaming` | `enableMoStreaming` | `bool` | — | `False` | Enable MO steaming feature |
-| `enable_remote_leaf_direct_communication` | `enableRemoteLeafDirect` | `bool` | — | `False` | Enable remote leaf direct communication for all RLs |
+| `enable_remote_leaf_direct` | `enableRemoteLeafDirect` | `bool` | — | `False` | Enable remote leaf direct communication for all RLs |
 | `enforce_subnet_check` | `enforceSubnetCheck` | `bool` | — | `False` | Enforce subnet check on all VRFs |
 | `leaf_opflexp_authenticate_clients` | `leafOpflexpAuthenticateClients` | `bool` | — | `True` | Require Opflexp Client Certificates for authentication for Leaf |
 | `leaf_opflexp_use_ssl` | `leafOpflexpUseSsl` | `bool` | — | `True` | Require SSL transport for Opflexp for Leaf |
@@ -40,4 +40,4 @@ Accepted as keyword arguments of `.fabric_wide_settings_policy()` and of `.set(*
 | `reallocate_gipos` | `reallocateGipo` | `bool` | — | `False` | Reallocate gipo such that stretched and non stretched BDs have non overlapping gipos |
 | `enable_intra_leaf_communication` | `restrictInfraVLANTraffic` | `bool` | — | `False` | Enable Intra Leaf Comm knob |
 | `disable_xrleanrs` | `unicastXrEpLearnDisable` | `bool` | — | `False` | Disable xrLeanrs |
-| `validate_overlapping_vlans_on_aepg` | `validateOverlappingVlans` | `bool` | — | `False` | Validate Overlapping VLANS on AEPg |
+| `validate_overlapping_vlans` | `validateOverlappingVlans` | `bool` | — | `False` | Validate Overlapping VLANS on AEPg |

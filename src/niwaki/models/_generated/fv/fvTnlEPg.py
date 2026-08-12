@@ -196,11 +196,11 @@ class fvTnlEPg(ManagedObject):
         serialization_alias="prio",
         description="The QoS priority class identifier.",
     )
-    dot1q_tunnel_l2_protocol_tunneling_mask: Annotated[
-        Flags[L2qiqL2ProtTunMaskT], BeforeValidator(parse_flags)
-    ] = Field(
-        default_factory=lambda: frozenset({L2qiqL2ProtTunMaskT.NONE}),
-        validation_alias="qiqL2ProtTunMask",
-        serialization_alias="qiqL2ProtTunMask",
+    qiq_l2_prot_tun_mask: Annotated[Flags[L2qiqL2ProtTunMaskT], BeforeValidator(parse_flags)] = (
+        Field(
+            default_factory=lambda: frozenset({L2qiqL2ProtTunMaskT.NONE}),
+            validation_alias="qiqL2ProtTunMask",
+            serialization_alias="qiqL2ProtTunMask",
+        )
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

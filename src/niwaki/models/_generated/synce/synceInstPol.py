@@ -112,7 +112,7 @@ class synceInstPol(ManagedObject):
         serialization_alias="qloption",
         description="QL itu-t option",
     )
-    transmit_dnu_on_lag_members: bool = Field(
+    tx_dnu_lag: bool = Field(
         default=True,
         validation_alias="txDnuLag",
         serialization_alias="txDnuLag",

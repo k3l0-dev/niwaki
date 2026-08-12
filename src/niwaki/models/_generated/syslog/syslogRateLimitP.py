@@ -58,7 +58,7 @@ class syslogRateLimitP(ManagedObject):
     rate_limit_enabled: bool = Field(
         default=False, validation_alias="enabled", serialization_alias="enabled"
     )
-    syslog_legacy_messages_limit_per_sec: Annotated[
+    limit_per_sec: Annotated[
         int,
         Field(ge=0, le=300000, validation_alias="limitPerSec", serialization_alias="limitPerSec"),
     ] = 100000

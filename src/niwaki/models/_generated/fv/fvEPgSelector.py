@@ -13,12 +13,12 @@ class fvEPgSelector(ManagedObject):
 
     Endpoint Group Selector, to decide which endpoints belong to the ESG
 
-    RN format: ``epgselector-[{epg_dn_to_be_associated}]``
+    RN format: ``epgselector-[{match_epg_dn}]``
     """
 
     _aci_class: ClassVar[str] = "fvEPgSelector"
-    _rn_format: ClassVar[str] = "epgselector-[{epg_dn_to_be_associated}]"
-    _naming_props: ClassVar[list[str]] = ["epg_dn_to_be_associated"]
+    _rn_format: ClassVar[str] = "epgselector-[{match_epg_dn}]"
+    _naming_props: ClassVar[list[str]] = ["match_epg_dn"]
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",
@@ -39,7 +39,7 @@ class fvEPgSelector(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    epg_dn_to_be_associated: Annotated[
+    match_epg_dn: Annotated[
         str, Field(validation_alias="matchEpgDn", serialization_alias="matchEpgDn")
     ]
 

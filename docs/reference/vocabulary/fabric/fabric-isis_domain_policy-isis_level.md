@@ -26,9 +26,9 @@ Accepted as keyword arguments of `.isis_level(type)` and of `.set(**attrs)` on t
 | `type` *(positional)* | `type` | {ref}`IsisLvlT <enum-isislvlt>` | `l1`, `l2` | — | — |
 | `description` | `descr` | `str` | — | — | Specifies the description of a policy component. |
 | `lsp_fast_flood` | `lspFastFlood` | {ref}`IsisLspFastFloodMode <enum-isislspfastfloodmode>` | `disabled`, `enabled` | `enabled` | The IS-IS Fast-Flooding of LSPs improves Intermediate System-to-Intermediate System (IS-IS) convergence time when new link-state packets (LSPs) are generated in the network and shortest path first (SPF) is triggered by the new LSPs. |
-| `lsp_generation_initial_wait_inerval` | `lspGenInitIntvl` | `int` | — | `50` | The LSP generation initial wait interval. This is used in the LSP generation interval for the LSP MTU. |
-| `lsp_generation_maximal_wait_inerval` | `lspGenMaxIntvl` | `int` | — | `8000` | The LSP generation maximum wait interval. This is used in the LSP generation interval for the LSP MTU. |
-| `lsp_generation_secondary_wait_inerval` | `lspGenSecIntvl` | `int` | — | `50` | The LSP generation second wait interval. This is used in the LSP generation interval for the LSP MTU. |
+| `lsp_gen_init_intvl` | `lspGenInitIntvl` | `int` | — | `50` | The LSP generation initial wait interval. This is used in the LSP generation interval for the LSP MTU. |
+| `lsp_gen_max_intvl` | `lspGenMaxIntvl` | `int` | — | `8000` | The LSP generation maximum wait interval. This is used in the LSP generation interval for the LSP MTU. |
+| `lsp_gen_sec_intvl` | `lspGenSecIntvl` | `int` | — | `50` | The LSP generation second wait interval. This is used in the LSP generation interval for the LSP MTU. |
 | `name` | `name` | `str` | — | — | — |
 | `spf_comp_init_intvl` | `spfCompInitIntvl` | `int` | — | `50` | The SPF computation frequency initial wait interval. This is used in the SPF computations for the LSP MTU. |
 | `spf_comp_max_intvl` | `spfCompMaxIntvl` | `int` | — | `8000` | The SPF computation frequency maximum wait interval. This is used in the SPF computations for the LSP MTU. |

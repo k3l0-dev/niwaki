@@ -1,5 +1,5 @@
 {
-  "include": ["src", "tests", "docs", "scripts", "data/scripts"],
+  "include": ["src", "tests", "docs", "scripts", "data/scripts", "tools"],
   "exclude": [
     "**/node_modules",
     "**/__pycache__",

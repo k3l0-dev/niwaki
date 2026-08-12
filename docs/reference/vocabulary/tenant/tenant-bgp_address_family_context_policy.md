@@ -27,8 +27,8 @@ Accepted as keyword arguments of `.bgp_address_family_context_policy(name)` and 
 | `ebgp_distance` | `eDist` | `int` | — | `20` | The administrative distance of eBGP routes. |
 | `ibgp_distance` | `iDist` | `int` | — | `200` | The administrative distance of iBGP routes. |
 | `local_distance` | `localDist` | `int` | — | `220` | The administrative distance of local routes. |
-| `max_ecmp_for_ebgp_routes` | `maxEcmp` | `int` | — | `16` | eBGP max-path |
-| `max_ecmp_for_ibgp_routes` | `maxEcmpIbgp` | `int` | — | `16` | iBGP max-path |
+| `max_ecmp` | `maxEcmp` | `int` | — | `16` | eBGP max-path |
+| `max_ecmp_ibgp` | `maxEcmpIbgp` | `int` | — | `16` | iBGP max-path |
 | `max_local_ecmp` | `maxLocalEcmp` | `int` | — | `0` | Maximum number of equal-cost local paths for redist |
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |

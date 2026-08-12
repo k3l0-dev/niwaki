@@ -25,7 +25,7 @@ Accepted as keyword arguments of `.firmware_policy(name)` and of `.set(**attrs)`
 | --- | --- | --- | --- | --- | --- |
 | `name` *(positional)* | `name` | `str` | — | — | The firmware policy name. |
 | `description` | `descr` | `str` | — | — | Specifies a description of the policy definition. |
-| `whether_effective_on_reboot` | `effectiveOnReboot` | `bool` | — | `False` | A property that indicates if the selected firmware version will be active after reboot. The firmware must be effective on an unplanned reboot before the scheduled maintenance operation. |
+| `effective_on_reboot` | `effectiveOnReboot` | `bool` | — | `False` | A property that indicates if the selected firmware version will be active after reboot. The firmware must be effective on an unplanned reboot before the scheduled maintenance operation. |
 | `ignore_compatibility_check` | `ignoreCompat` | `bool` | — | `False` | A property for specifying whether compatibility checks should be ignored when applying the firmware policy. |
 | `internal_label` | `internalLabel` | `str` | — | — | — |
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |

@@ -111,7 +111,7 @@ class l3extRsNodeL3OutAtt(ManagedObject):
         serialization_alias="configIssues",
         description="Bitmask representation of the configuration issues found during the endpoint group deployment.",
     )
-    rtr_id: Annotated[
+    router_id: Annotated[
         str,
         Field(
             pattern="^[0-9a-fA-F.:/ ]+$",

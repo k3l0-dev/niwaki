@@ -131,7 +131,7 @@ class dot1xIf(ManagedObject):
     name: Annotated[
         str, Field(min_length=1, max_length=128, description="The name of the object.")
     ] = ""
-    role_of_dot1x_authenticating_entity: Dot1xPaeType = Field(
+    pae_type: Dot1xPaeType = Field(
         default=Dot1xPaeType.AUTHENTICATOR,
         validation_alias="paeType",
         serialization_alias="paeType",
@@ -147,7 +147,7 @@ class dot1xIf(ManagedObject):
             description="Quiet Period",
         ),
     ] = 60
-    dot1x_timeout_rate_limit_period: Annotated[
+    rate_limit_period: Annotated[
         int,
         Field(
             ge=0,
@@ -157,7 +157,7 @@ class dot1xIf(ManagedObject):
             description="Rate limit period",
         ),
     ] = 0
-    dot1x_timeout_re_auth_period: Annotated[
+    re_auth_period: Annotated[
         int,
         Field(
             ge=1,

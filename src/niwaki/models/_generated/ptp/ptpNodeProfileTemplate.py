@@ -79,7 +79,7 @@ class ptpNodeProfileTemplate(ManagedObject):
             description="Node Domain range start",
         ),
     ] = 0
-    node_priority_1_default_value: Annotated[
+    node_prio1_default: Annotated[
         int,
         Field(
             validation_alias="nodePrio1Default",
@@ -87,7 +87,7 @@ class ptpNodeProfileTemplate(ManagedObject):
             description="Node priority 1 default value",
         ),
     ] = 0
-    node_priority_1_range_end: Annotated[
+    node_prio1_end: Annotated[
         int,
         Field(
             validation_alias="nodePrio1End",
@@ -95,7 +95,7 @@ class ptpNodeProfileTemplate(ManagedObject):
             description="Node priority 1 range end",
         ),
     ] = 0
-    node_priority_1_range_start: Annotated[
+    node_prio1_start: Annotated[
         int,
         Field(
             validation_alias="nodePrio1Start",
@@ -103,7 +103,7 @@ class ptpNodeProfileTemplate(ManagedObject):
             description="Node priority 1 range start",
         ),
     ] = 0
-    node_priority_2_default_value: Annotated[
+    node_prio2_default: Annotated[
         int,
         Field(
             validation_alias="nodePrio2Default",
@@ -111,7 +111,7 @@ class ptpNodeProfileTemplate(ManagedObject):
             description="Node priority 2 default value",
         ),
     ] = 0
-    node_priority_2_range_end: Annotated[
+    node_prio2_end: Annotated[
         int,
         Field(
             validation_alias="nodePrio2End",
@@ -119,7 +119,7 @@ class ptpNodeProfileTemplate(ManagedObject):
             description="Node priority 2 range end",
         ),
     ] = 0
-    node_priority_2_range_start: Annotated[
+    node_prio2_start: Annotated[
         int,
         Field(
             validation_alias="nodePrio2Start",

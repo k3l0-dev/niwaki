@@ -24,8 +24,8 @@ Accepted as keyword arguments of `.cimc_node(apic_id)` and of `.set(**attrs)` on
 | parameter | wire | type | values | default | description |
 | --- | --- | --- | --- | --- | --- |
 | `apic_id` *(positional)* | `apicId` | `int` | — | — | — |
-| `cimc_ipv4_address_address_mask` | `ipv4Address` | `str` | — | — | IPv4 address prefix |
-| `cimc_ipv4_gateway_address_address` | `ipv4Gw` | `str` | — | — | IPv4 Gateway address |
-| `cimc_ipv6_address_address_mask` | `ipv6Address` | `str` | — | — | IPv6 address prefix |
-| `cimc_ipv6_gateway_address_address` | `ipv6Gw` | `str` | — | — | IPv6 Gateway address |
+| `ipv4_address` | `ipv4Address` | `str` | — | — | IPv4 address prefix |
+| `ipv4_gw` | `ipv4Gw` | `str` | — | — | IPv4 Gateway address |
+| `ipv6_address` | `ipv6Address` | `str` | — | — | IPv6 address prefix |
+| `ipv6_gw` | `ipv6Gw` | `str` | — | — | IPv6 Gateway address |
 | `name` | `name` | `str` | — | — | The name of the object. |

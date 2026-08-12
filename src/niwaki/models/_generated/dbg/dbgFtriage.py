@@ -55,7 +55,7 @@ class dbgFtriage(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    apic_id_that_launched_ftriage: Annotated[
+    apic_id: Annotated[
         int,
         Field(
             validation_alias="apicId",
@@ -83,7 +83,7 @@ class dbgFtriage(ManagedObject):
             serialization_alias="nameAlias",
         ),
     ] = ""
-    operational_state_of_ftriage: DbgFtriageStatus = Field(
+    oper_state: DbgFtriageStatus = Field(
         default=DbgFtriageStatus.IDLE,
         validation_alias="operState",
         serialization_alias="operState",
@@ -109,12 +109,5 @@ class dbgFtriage(ManagedObject):
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
-    pid_of_ftriage_session: Annotated[
-        int,
-        Field(
-            validation_alias="pid",
-            serialization_alias="pid",
-            description="PID of active Ftriage session",
-        ),
-    ] = 0
+    pid: Annotated[int, Field(description="PID of active Ftriage session")] = 0
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

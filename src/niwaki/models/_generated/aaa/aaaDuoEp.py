@@ -114,14 +114,7 @@ class aaaDuoEp(ManagedObject):
             description="The number of attempts that the authentication method is tried.",
         ),
     ] = 1
-    timeout_in_seconds: Annotated[
-        int,
-        Field(
-            ge=30,
-            le=120,
-            validation_alias="timeout",
-            serialization_alias="timeout",
-            description="add units for timeout. This helps display in CLI",
-        ),
+    timeout: Annotated[
+        int, Field(ge=30, le=120, description="add units for timeout. This helps display in CLI")
     ] = 60
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

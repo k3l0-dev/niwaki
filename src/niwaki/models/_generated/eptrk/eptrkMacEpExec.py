@@ -158,7 +158,7 @@ class eptrkMacEpExec(ManagedObject):
     type: ActionType = Field(
         default=ActionType.CLEAR, description="The specific type of the object or component."
     )
-    flag_to_use_encap_or_bd_vnid: bool = Field(
+    use_encap: bool = Field(
         default=True, validation_alias="useEncap", serialization_alias="useEncap"
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

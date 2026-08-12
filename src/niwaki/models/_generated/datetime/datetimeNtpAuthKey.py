@@ -73,7 +73,7 @@ class datetimeNtpAuthKey(ManagedObject):
     key: Annotated[
         str, Field(max_length=40, repr=False, description="The NTP authentication key.")
     ] = ""
-    type_of_authentication_key: DatetimeKeyType = Field(
+    key_type: DatetimeKeyType = Field(
         default=DatetimeKeyType.MD5,
         validation_alias="keyType",
         serialization_alias="keyType",

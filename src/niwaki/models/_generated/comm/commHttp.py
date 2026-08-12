@@ -103,7 +103,7 @@ class commHttp(ManagedObject):
         validation_alias="globalThrottleSt",
         serialization_alias="globalThrottleSt",
     )
-    unit_of_rate_limit: str = Field(
+    global_throttle_unit: str = Field(
         default="", validation_alias="globalThrottleUnit", serialization_alias="globalThrottleUnit"
     )
     max_request_status_count: Annotated[

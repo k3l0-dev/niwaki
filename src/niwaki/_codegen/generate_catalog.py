@@ -18,8 +18,9 @@ the fields they derive from, so the catalogue keeps one source of truth.  One
 deliberate exception: ``name_override`` stores the frozen catalogue↔model
 naming divergences, introspected from the shipped models at build time —
 recomputation is exactly what it must NOT do (the models' emitted names are
-the truth, and generate.py's digit-split scopemeta miss makes a clean
-recomputation diverge from them).
+the truth).  Since the 2.0 naming unification (shared scopemeta lookup keyed
+by ``class_pkg``, one acceptance gate) the table is expected empty; any row
+it grows is a naming-parity regression to investigate, not a fixture.
 
 Two guarantees make "lossless" a fact rather than a hope:
 
@@ -405,14 +406,14 @@ def build_catalog(schema_dir: Path = SCHEMA_DIR, out: Path = DEFAULT_OUT) -> dic
 
     # ── name_override ── freeze catalogue↔model naming divergences ────────────
     # The models' emitted field names are the shipped truth: they come from
-    # introspecting model_fields, never from a recomputation (which the
-    # _aci_to_dot_class digit-split bug in generate.py would poison — the
-    # divergence direction flips between families, so no rule can pick the
-    # right side).  The catalogue's derived names are computed by the
-    # RUNTIME's own resolution path — a temporary read-only Catalog on the
-    # freshly built file — so the build-time comparison and runtime behavior
-    # cannot drift.  Models win: describe()/class_meta() must agree with what
-    # the typed models actually expose.
+    # introspecting model_fields, never from a recomputation.  The catalogue's
+    # derived names are computed by the RUNTIME's own resolution path — a
+    # temporary read-only Catalog on the freshly built file — so the
+    # build-time comparison and runtime behavior cannot drift.  Models win:
+    # describe()/class_meta() must agree with what the typed models actually
+    # expose.  Since 2.0 both sides share the scopemeta lookup (class_pkg
+    # split) and the acceptance gate, so this net is expected to catch
+    # nothing; a row here means the two derivations disagree again.
     con.execute("INSERT INTO manifest VALUES ('prop_flags', ?)", (",".join(PROP_FLAG_ORDER),))
     con.commit()
 

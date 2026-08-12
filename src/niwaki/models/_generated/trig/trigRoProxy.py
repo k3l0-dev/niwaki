@@ -13,12 +13,12 @@ from niwaki.models.base import ManagedObject
 class trigRoProxy(ManagedObject):
     """ACI Managed Object: ``trigRoProxy`` — Proxy object for triggering admin executable policies.
 
-    RN format: ``roproxy-[{dn_of_the_triggerable_policy}]``
+    RN format: ``roproxy-[{policy_dn}]``
     """
 
     _aci_class: ClassVar[str] = "trigRoProxy"
-    _rn_format: ClassVar[str] = "roproxy-[{dn_of_the_triggerable_policy}]"
-    _naming_props: ClassVar[list[str]] = ["dn_of_the_triggerable_policy"]
+    _rn_format: ClassVar[str] = "roproxy-[{policy_dn}]"
+    _naming_props: ClassVar[list[str]] = ["policy_dn"]
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",
@@ -38,7 +38,7 @@ class trigRoProxy(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    dn_of_the_triggerable_policy: Annotated[
+    policy_dn: Annotated[
         str,
         Field(
             validation_alias="policyDn",

@@ -26,7 +26,7 @@ Accepted as keyword arguments of `.bgp_peer_prefix_policy(name)` and of `.set(**
 | `name` *(positional)* | `name` | `str` | — | — | The peer prefix policy name. This name can be up to 64 alphanumeric characters. |
 | `max_prefix_action` | `action` | {ref}`BgpMaxPfxAct <enum-bgpmaxpfxact>` | `log`, `reject`, `restart`, `shut` | `reject` | Action to be performed when the maximum prefix limit is reached. |
 | `description` | `descr` | `str` | — | — | Specifies a description of the policy definition. |
-| `max_number_of_prefixes` | `maxPfx` | `int` | — | `20000` | Maximum number of prefixes allowed from the peer. |
+| `max_pfx` | `maxPfx` | `int` | — | `20000` | Maximum number of prefixes allowed from the peer. |
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |
 | `prefix_limit_restart_time` | `restartTime` | `int` | — | `infinite` | The period of time in minutes before restarting the peer when the prefix limit is reached. |

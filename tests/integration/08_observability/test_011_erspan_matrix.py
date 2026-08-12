@@ -78,7 +78,7 @@ def test_erspan_dscp_mode_matrix(live_aci: Niwaki) -> None:
             grp.span_destination("dst").vspan_epg_summary(
                 description=f"ERSPAN summary: dscp {dscp}, mode {mode}.",
                 destination_ip=f"10.96.{di}.1",
-                source_ip_of_erspan_packet=f"10.96.{di}.254",
+                source_ip_prefix=f"10.96.{di}.254",
                 flow_id=(di % 250) + 1,
                 mode=mode,
                 dscp=dscp,
@@ -97,7 +97,7 @@ def test_erspan_ttl_sweep(live_aci: Niwaki) -> None:
         grp.span_destination("dst").vspan_epg_summary(
             description=f"ERSPAN summary: ttl {ttl}.",
             destination_ip=f"10.97.{ti}.1",
-            source_ip_of_erspan_packet=f"10.97.{ti}.254",
+            source_ip_prefix=f"10.97.{ti}.254",
             flow_id=ti + 1,
             mode="visible",
             dscp=46,

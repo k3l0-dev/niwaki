@@ -91,7 +91,7 @@ class healthEvalP(ManagedObject):
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
-    penalty_of_fault_severity_critical_in: Annotated[
+    pnlt_crit: Annotated[
         int,
         Field(
             ge=0,
@@ -101,7 +101,7 @@ class healthEvalP(ManagedObject):
             description="The fault penalty: Critical",
         ),
     ] = 100
-    penalty_of_fault_severity_major_in: Annotated[
+    pnlt_major: Annotated[
         int,
         Field(
             ge=0,
@@ -111,7 +111,7 @@ class healthEvalP(ManagedObject):
             description="The fault penalty: Major",
         ),
     ] = 10
-    penalty_of_fault_severity_minor_in: Annotated[
+    pnlt_minor: Annotated[
         int,
         Field(
             ge=0,
@@ -121,7 +121,7 @@ class healthEvalP(ManagedObject):
             description="The fault penalty: Minor",
         ),
     ] = 2
-    penalty_of_fault_severity_warning_in: Annotated[
+    pnlt_warn: Annotated[
         int,
         Field(
             ge=0,

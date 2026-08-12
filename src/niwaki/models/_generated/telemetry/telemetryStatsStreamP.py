@@ -51,7 +51,7 @@ class telemetryStatsStreamP(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    collection_interval_in_milliseconds: Annotated[
+    apic_collect_intvl: Annotated[
         int,
         Field(
             ge=0,
@@ -60,7 +60,7 @@ class telemetryStatsStreamP(ManagedObject):
             serialization_alias="apicCollectIntvl",
         ),
     ] = 30
-    number_of_stats_to_bulk: Annotated[
+    bulk_count: Annotated[
         int, Field(validation_alias="bulkCount", serialization_alias="bulkCount")
     ] = 500
     switch_collect_intvl: Annotated[
@@ -72,7 +72,5 @@ class telemetryStatsStreamP(ManagedObject):
             serialization_alias="switchCollectIntvl",
         ),
     ] = 30
-    topic_associated_with_server: Annotated[
-        str, Field(max_length=512, validation_alias="topic", serialization_alias="topic")
-    ] = ""
+    topic: Annotated[str, Field(max_length=512)] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

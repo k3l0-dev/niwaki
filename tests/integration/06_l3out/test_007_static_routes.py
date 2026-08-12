@@ -69,7 +69,7 @@ def test_static_routes(live_aci: Niwaki) -> None:
     for lidx, (lname, node_id) in enumerate(leaves, start=1):
         np = out.node_profile(f"np-{lname}", description=f"Node profile for {lname}.")
         att = np.node_attachment(
-            f"topology/pod-1/node-{node_id}", rtr_id=f"10.7.0.{lidx}", rtr_id_loop_back=False
+            f"topology/pod-1/node-{node_id}", router_id=f"10.7.0.{lidx}", rtr_id_loop_back=False
         )
 
         # route-control flag x aggregated (with a valid prefix-length window).
@@ -83,8 +83,8 @@ def test_static_routes(live_aci: Niwaki) -> None:
                 "description": f"Route rtctrl {rtctrl}, aggregated {agg}.",
             }
             if agg:
-                kwargs["start_of_prefix_length"] = 17
-                kwargs["end_of_prefix_length"] = 24
+                kwargs["from_pfx_len"] = 17
+                kwargs["to_pfx_len"] = 24
             route = att.static_route(f"10.{lidx}0.{i}.0/16", **kwargs)  # type: ignore[arg-type]
             route.next_hop(
                 f"10.{lidx}0.{i}.254",

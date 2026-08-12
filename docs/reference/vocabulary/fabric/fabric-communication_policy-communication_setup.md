@@ -23,4 +23,4 @@ Accepted as keyword arguments of `.communication_setup()` and of `.set(**attrs)`
 
 | parameter | wire | type | values | default | description |
 | --- | --- | --- | --- | --- | --- |
-| `maximum_mos_in_query` | `maxMos` | `int` | — | `100000` | — |
+| `max_mos` | `maxMos` | `int` | — | `100000` | — |

@@ -22,13 +22,13 @@ Accepted as keyword arguments of `.ra_guard_policy()` and of `.set(**attrs)` on 
 | parameter | wire | type | values | default | description |
 | --- | --- | --- | --- | --- | --- |
 | `description` | `descr` | `str` | — | — | Specifies a description of the policy definition. |
-| `perform_managed_config_flag_check` | `managedConfigCheck` | `bool` | — | `False` | — |
+| `managed_config_check` | `managedConfigCheck` | `bool` | — | `False` | — |
 | `managed_config_flag_settting` | `managedConfigFlag` | `bool` | — | `False` | — |
 | `max_allowed_hop_limit` | `maxHopLimit` | `int` | — | `0` | — |
 | `allowed_max_router_preference` | `maxRouterPref` | {ref}`FhsRAGuardMaxRouterPref <enum-fhsraguardmaxrouterpref>` | `disabled`, `high`, `low`, `medium` | `disabled` | — |
 | `min_allowed_hop_limit` | `minHopLimit` | `int` | — | `0` | — |
 | `name` | `name` | `str` | — | — | — |
-| `perform_other_config_flag_check` | `otherConfigCheck` | `bool` | — | `False` | — |
+| `other_config_check` | `otherConfigCheck` | `bool` | — | `False` | — |
 | `other_config_flag_settting` | `otherConfigFlag` | `bool` | — | `False` | — |
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |

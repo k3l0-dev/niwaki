@@ -68,7 +68,7 @@ class plannerAzureDomainTmpl(ManagedObject):
             serialization_alias="nameAlias",
         ),
     ] = ""
-    number_of_hvs_in_this_domain: Annotated[
+    num_hv: Annotated[
         int,
         Field(
             ge=1,

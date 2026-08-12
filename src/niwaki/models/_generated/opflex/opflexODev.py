@@ -87,12 +87,12 @@ class opflexODev(ManagedObject):
             description="least common set of features between oe and oa",
         ),
     ] = 0
-    fqdn_of_the_host: Annotated[
+    host_name: Annotated[
         str, Field(max_length=512, validation_alias="hostName", serialization_alias="hostName")
     ] = ""
     id: Annotated[int, Field(description="An identifier .")] = 0
     ip: Annotated[str, Field(pattern="^[0-9a-fA-F.:/ ]+$", description="The IP address.")] = ""
-    ipaddress_of_the_host: Annotated[
+    ip_addr: Annotated[
         str, Field(max_length=512, validation_alias="ipAddr", serialization_alias="ipAddr")
     ] = ""
     is_secondary: Annotated[

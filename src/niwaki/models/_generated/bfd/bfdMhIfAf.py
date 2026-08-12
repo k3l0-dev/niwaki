@@ -18,12 +18,12 @@ class bfdMhIfAf(ManagedObject):
 
     This object holds per address family bfd interface information
 
-    RN format: ``mhaf-{type_of_the_address_family}``
+    RN format: ``mhaf-{type}``
     """
 
     _aci_class: ClassVar[str] = "bfdMhIfAf"
-    _rn_format: ClassVar[str] = "mhaf-{type_of_the_address_family}"
-    _naming_props: ClassVar[list[str]] = ["type_of_the_address_family"]
+    _rn_format: ClassVar[str] = "mhaf-{type}"
+    _naming_props: ClassVar[list[str]] = ["type"]
     _fault_codes: ClassVar[dict[str, str]] = {
         "F3694": "fltBfdMhIfAfBfdCfgCtrl",
     }
@@ -50,9 +50,7 @@ class bfdMhIfAf(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    type_of_the_address_family: BfdAfT = Field(
-        default=BfdAfT.IPV4, validation_alias="type", serialization_alias="type", description="Type"
-    )
+    type: BfdAfT = Field(default=BfdAfT.IPV4, description="Type")
 
     # ── Configurable ───────────────────────────────────────────────────────────
     admin_st: NwAdminSt = Field(
@@ -69,13 +67,8 @@ class bfdMhIfAf(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    interface_controls_for_multi_hop: Annotated[
-        Flags[BfdIfControl], BeforeValidator(parse_flags)
-    ] = Field(
-        default_factory=lambda: frozenset(),
-        validation_alias="ctrl",
-        serialization_alias="ctrl",
-        description="Interface controls",
+    ctrl: Annotated[Flags[BfdIfControl], BeforeValidator(parse_flags)] = Field(
+        default_factory=lambda: frozenset(), description="Interface controls"
     )
     name: Annotated[
         str, Field(min_length=1, max_length=128, description="The name of the object.")

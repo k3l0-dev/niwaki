@@ -29,13 +29,14 @@ from importlib import import_module
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, Literal, NamedTuple, overload
 
-from niwaki.design._node import DesignNode, PendingBind, Ref
+from niwaki.design._node import DesignNode, PendingBind, RawDesignNode, Ref
 from niwaki.design._sugar import apply_sugar
 from niwaki.exceptions._design import (
     DesignError,
     DuplicateDeclarationError,
     UnknownMakerError,
 )
+from niwaki.models._wire import to_wire
 from niwaki.models.base import ManagedObject
 
 if TYPE_CHECKING:
@@ -44,6 +45,7 @@ if TYPE_CHECKING:
 
     from niwaki.design._push import PlanResult, PushReport
     from niwaki.design._verify import ExternalRef
+    from niwaki.design._view import DesignView
     from niwaki.facade import AsyncNiwaki, Niwaki
 
 PushMode = Literal["strict", "staged", "plan"]
@@ -615,6 +617,200 @@ class Cursor:
         naming, attrs = _split_naming(cls, (), kwargs)
         return _attach(self._node, cls, cls.__name__, naming, attrs)
 
+    def raw(self, aci_class: str, **wire_attrs: Any) -> Cursor:
+        """Declare a child by ACI class *name* with **wire** attributes.
+
+        The escape hatch for classes outside the generated model set (or when
+        only the wire spelling is at hand — a reverse import).  Identity and
+        validity come from the shipped catalogue: the class must exist, be a
+        valid child of this node, and every naming prop of its RN format must
+        be present in *wire_attrs*.  Unknown wire properties fail loudly.
+
+        Args:
+            aci_class: ACI class name (e.g. ``"infraKafkaPol"``).
+            **wire_attrs: Attributes under their **wire** names, values in
+                wire form (strings, or values coercible to their wire string).
+
+        Returns:
+            Cursor on the new child node (base cursor — children of a raw
+            node dispatch through ``raw()``/``mo()``, not curated makers).
+
+        Raises:
+            DesignError: Unknown class, containment violation, missing naming
+                prop, or unknown wire property.
+            DuplicateDeclarationError: Same class + RN already declared here.
+        """
+        from niwaki.domain._child_map import CLASS_PKG
+        from niwaki.query._catalog import catalog
+
+        if aci_class in CLASS_PKG:
+            # The class has a generated model: route through the typed path —
+            # wire names translated to readable fields, full validation.  raw()
+            # stays a *name-based* door, never a validation bypass.
+            cls = _load_class(aci_class)
+            # wire → readable: aliased fields from the alias map, identity for
+            # the fields whose wire spelling IS the field name.
+            alias_map: dict[str, str] = {f: f for f in cls.model_fields if f != "children"}
+            alias_map.update(cls._get_alias_map())  # pyright: ignore[reportPrivateUsage]
+            unknown = [w for w in wire_attrs if w not in alias_map]
+            if unknown:
+                raise DesignError(
+                    f"raw({aci_class!r}): unknown wire propert"
+                    f"{'ies' if len(unknown) > 1 else 'y'} {sorted(unknown)!r}."
+                )
+            readable = {alias_map[w]: v for w, v in wire_attrs.items()}
+            naming_t, attrs_t = _split_naming(cls, (), readable)
+            missing_t = [p for p in cls._naming_props if p not in naming_t]  # pyright: ignore[reportPrivateUsage]
+            if missing_t:
+                raise DesignError(
+                    f"raw({aci_class!r}): missing naming propert"
+                    f"{'ies' if len(missing_t) > 1 else 'y'} {sorted(missing_t)!r}."
+                )
+            return _attach(self._node, cls, aci_class, naming_t, attrs_t)
+
+        try:
+            meta = catalog().class_meta(aci_class)
+            rn_format = catalog().rn_format(aci_class)
+        except KeyError:
+            raise DesignError(
+                f"raw(): unknown ACI class {aci_class!r} — not in the catalogue."
+            ) from None
+        if not _may_contain(self._node, aci_class):
+            raise DesignError(
+                f"{aci_class} is not a valid APIC child of "
+                f"{self._node.path()} ({self._node.aci_class})."
+            )
+        unknown = [w for w in wire_attrs if w not in meta.wire_to_readable]
+        if unknown:
+            raise DesignError(
+                f"raw({aci_class!r}): unknown wire propert"
+                f"{'ies' if len(unknown) > 1 else 'y'} {sorted(unknown)!r}."
+            )
+        wire_strs = {w: to_wire(v) for w, v in wire_attrs.items()}
+        naming = {w: wire_strs[w] for w in meta.naming if w in wire_strs}
+        missing = sorted(set(meta.naming) - set(naming))
+        if missing:
+            raise DesignError(
+                f"raw({aci_class!r}): missing naming propert"
+                f"{'ies' if len(missing) > 1 else 'y'} {missing!r} "
+                f"(RN format {rn_format!r})."
+            )
+        rn = rn_format
+        for prop, value in naming.items():
+            rn = rn.replace(f"{{{prop}}}", value)
+        rest = {w: v for w, v in wire_strs.items() if w not in naming}
+        node = RawDesignNode(aci_class, naming, rn, rest, self._node)
+        if any(
+            sibling.aci_class == node.aci_class and sibling.rn == rn
+            for sibling in self._node.children
+        ):
+            raise DuplicateDeclarationError(
+                f"{node.path()} is already declared. Each object is declared "
+                "exactly once; use raw_set() on the original cursor."
+            )
+        self._node.children.append(node)
+        return Cursor(node)
+
+    def raw_set(self, **wire_attrs: Any) -> Cursor:
+        """Set **wire**-named attributes on the current node (escape hatch).
+
+        For properties outside the node's typed surface — a prop newer than
+        the generated models, or a reverse-imported attribute with only its
+        wire spelling at hand.  The values join the emitted attributes at the
+        wire boundary in every push mode; the strict typed model never sees
+        the keys.  Each property must exist for this class in the shipped
+        catalogue — silence is never an option.
+
+        Returns:
+            ``self`` for chaining.
+
+        Raises:
+            DesignError: A property the catalogue does not know for this class.
+        """
+        from niwaki.query._catalog import catalog
+
+        try:
+            meta = catalog().class_meta(self._node.aci_class)
+        except KeyError:
+            meta = None
+        if meta is not None:
+            unknown = [w for w in wire_attrs if w not in meta.wire_to_readable]
+            if unknown:
+                raise DesignError(
+                    f"raw_set() on {self._node.aci_class}: unknown wire propert"
+                    f"{'ies' if len(unknown) > 1 else 'y'} {sorted(unknown)!r}."
+                )
+        self._node.raw_attrs.update({w: to_wire(v) for w, v in wire_attrs.items()})
+        return self
+
+    # ── Introspection (whole design) ──────────────────────────────────────────
+
+    def view(self) -> DesignView:
+        """Project the **whole design** into a frozen, walkable view.
+
+        Like :meth:`push` and :meth:`to_payload`, this operates on the full
+        design tree regardless of which cursor it is called on.  The view is
+        a snapshot of the design at call time — later cursor edits do not
+        change it; take a new one.
+
+        Returns:
+            A :class:`~niwaki.design.DesignView`: iterate it parents-first,
+            look nodes up by DN (``view["uni/tn-prod/BD-web"]``), or filter
+            by class (``view.by_class("fvBD")``).
+
+        Example:
+            >>> from niwaki.design import tenant
+            >>> cfg = tenant("prod")
+            >>> _ = cfg.bd("web")
+            >>> [node.aci_class for node in cfg.view()]
+            ['polUni', 'fvTenant', 'fvBD']
+        """
+        from niwaki.design._view import build_view
+
+        return build_view(self._node.root())
+
+    def slice(self, dn: str) -> Cursor:
+        """Carve out a fresh design holding the subtree at *dn* alone.
+
+        The flagship brownfield move: *"import the fabric, carve out tenant
+        X, replay it in staging"*.  The result is a **new, independent
+        design** — the source is never mutated — containing the subtree at
+        *dn* in full, hung off its ancestor chain rebuilt as attribute-less
+        Day-2 upserts (pushing the slice never touches an ancestor's
+        attributes).
+
+        References follow the wire-footprint rule (see
+        :mod:`niwaki.design._compose`): a reference whose Rs object lands
+        inside the subtree is kept — as-is when its target is inside too,
+        pinned without the closed world otherwise (``bind_dn`` for a
+        DN-flavored relation, an explicit Rs child carrying the exact
+        ``tn*`` name for a name-flavored one).  An inverse edge whose Rs
+        materialises outside the subtree is not part of this slice's wire
+        and is not carried.
+
+        Args:
+            dn: DN of the subtree to carve (``"uni/tn-prod"``); ``"uni"``
+                copies the whole design.
+
+        Returns:
+            The root :class:`Cursor` of the new design.
+
+        Raises:
+            DesignError: The design declares nothing at *dn*.
+
+        Example:
+            >>> from niwaki.design import design
+            >>> cfg = design()
+            >>> _ = cfg.tenant("prod").bd("web")
+            >>> _ = cfg.tenant("dev")
+            >>> staged = cfg.slice("uni/tn-prod")
+            >>> [n.aci_class for n in staged.view()]
+            ['polUni', 'fvTenant', 'fvBD']
+        """
+        from niwaki.design._compose import slice_design
+
+        return slice_design(self._node.root(), dn)
+
     # ── Compilation / push ────────────────────────────────────────────────────
 
     def to_payload(self) -> dict[str, Any]:
@@ -781,6 +977,47 @@ class Cursor:
         )
 
 
+def _may_contain(parent: DesignNode, child_aci_class: str) -> bool:
+    """Containment truth honoring raw parents.
+
+    Typed parents carry ``_contains`` from their generated model; a raw
+    parent (base ManagedObject) has none — the navigation CHILD_MAP is the
+    authority there.
+    """
+    contains: frozenset[str] | set[str] = parent.cls._contains  # pyright: ignore[reportPrivateUsage]
+    if child_aci_class in contains:
+        return True
+    # A generated model's _contains is filtered to the generated set; raw
+    # children (and children of raw parents) resolve against the full
+    # navigation containment instead.  The navigation table keys the top
+    # level as "_root", not "polUni".
+    from niwaki.domain._child_map import CHILD_MAP
+
+    table_key = "_root" if parent.aci_class == "polUni" else parent.aci_class
+    if child_aci_class in CHILD_MAP.get(table_key, {}).values():
+        return True
+    # Third authority: the catalogue's own DN grammar.  A containment edge
+    # the generated tables dropped is still provable from the child's DN
+    # formats — the parent's RN format is the second-to-last segment
+    # (measured live: commTelnet under commPol, uiSettingsCont under
+    # polUni, aaaAppUser under aaaUserEp all prove this way).
+    from niwaki._dn import split_dn
+    from niwaki.query._catalog import catalog
+
+    try:
+        child_formats = catalog().dn_formats(child_aci_class)
+        parent_rn_format = (
+            "uni" if parent.aci_class == "polUni" else catalog().rn_format(parent.aci_class)
+        )
+    except KeyError:
+        return False
+    for fmt in child_formats:
+        segments = split_dn(fmt)
+        if len(segments) >= 2 and segments[-2] == parent_rn_format:
+            return True
+    return False
+
+
 def _attach(
     parent: DesignNode,
     cls: type[ManagedObject],
@@ -797,7 +1034,7 @@ def _attach(
         DuplicateDeclarationError: Same class + naming already declared here.
         pydantic.ValidationError: Naming/attribute constraint violation.
     """
-    if cls._aci_class not in parent.cls._contains:  # pyright: ignore[reportPrivateUsage]
+    if not _may_contain(parent, cls._aci_class):  # pyright: ignore[reportPrivateUsage]
         raise DesignError(
             f"{cls.__name__} is not a valid APIC child of {parent.path()} ({parent.aci_class})."
         )

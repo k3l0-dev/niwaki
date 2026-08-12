@@ -34,7 +34,7 @@ Accepted as keyword arguments of `.radius_provider(name)` and of `.set(**attrs)`
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |
 | `retries` | `retries` | `int` | — | `1` | — |
-| `timeout_in_seconds` | `timeout` | `int` | — | `5` | The timeout for communication with a RADIUS provider server. |
+| `timeout` | `timeout` | `int` | — | `5` | The timeout for communication with a RADIUS provider server. |
 
 ## APIC diagnostics
 

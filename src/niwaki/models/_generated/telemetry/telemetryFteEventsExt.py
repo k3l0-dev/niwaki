@@ -330,7 +330,7 @@ class telemetryFteEventsExt(ManagedObject):
     profile_id: Annotated[
         int, Field(validation_alias="profileId", serialization_alias="profileId", description="08")
     ] = 0
-    sub_event_configuration_for_rest_sop_bit: Annotated[
+    rest_sop_bit: Annotated[
         int,
         Field(
             validation_alias="restSopBit",

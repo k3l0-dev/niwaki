@@ -52,7 +52,7 @@ class _AaaMakers(Cursor):
         owner_key: str | None = None,
         owner_tag: str | None = None,
         retries: int | None = None,
-        timeout_in_seconds: int | None = None,
+        timeout: int | None = None,
         userdom: str | None = None,
     ) -> RadiusCursor:
         """Declare a ``aaaRadiusEp`` child under the aaa level.
@@ -69,8 +69,7 @@ class _AaaMakers(Cursor):
                 indicate who created this object.
             retries: The number of attempts that the authentication method is tried. Default:
                 ``1``.
-            timeout_in_seconds: The amount of time between authentication attempts. Default:
-                ``5``.
+            timeout: The amount of time between authentication attempts. Default: ``5``.
         """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
@@ -101,7 +100,7 @@ class _AaaMakers(Cursor):
         password: str | None = None,
         password_life_time: int | str | None = None,
         password_update_required: AaaBoolean | str | None = None,
-        domain_read_write_rules_for_user: str | None = None,
+        rbac_string: str | None = None,
         restricted_rbac_user: AaaBoolean | str | None = None,
         role_summary: str | None = None,
         unix_user_id: int | None = None,
@@ -163,7 +162,7 @@ class _AaaMakers(Cursor):
         owner_key: str | None = None,
         owner_tag: str | None = None,
         role_summary: str | None = None,
-        state_for_challenge_response: str | None = None,
+        state_code: str | None = None,
         userdom: str | None = None,
     ) -> RemoteUserCursor:
         """Declare a ``aaaRemoteUser`` child under the aaa level.
@@ -202,7 +201,7 @@ class _AaaMakers(Cursor):
         owner_key: str | None = None,
         owner_tag: str | None = None,
         privilege: frozenset[AaaAccess] | set[AaaAccess] | str | None = None,
-        trigger_reset_to_factory_settings: AaaBoolean | str | None = None,
+        reset_to_factory: AaaBoolean | str | None = None,
         userdom: str | None = None,
     ) -> AaaRoleCursor:
         """Declare a ``aaaRole`` child under the aaa level.
@@ -218,7 +217,7 @@ class _AaaMakers(Cursor):
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
             privilege: The privilege(s) assigned to a role. Default: ``PydanticUndefined``.
-            trigger_reset_to_factory_settings: Values: ``no``, ``yes``. Default: ``no``.
+            reset_to_factory: Values: ``no``, ``yes``. Default: ``no``.
         """
         params = {
             k: v
@@ -401,7 +400,7 @@ class _AaaMakers(Cursor):
         description: str | None = None,
         login_gui_message: str | None = None,
         login_gui_string_message: str | None = None,
-        use_text_base_pre_login_banner_message: bool | None = None,
+        is_gui_message_text: bool | None = None,
         login_banner_message: str | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
@@ -424,7 +423,7 @@ class _AaaMakers(Cursor):
                 before user login authentication. The GUI banner is a URL. Note that the URL
                 site owner must allow the site to be placed in an iFrame to display the
                 informational banner.
-            use_text_base_pre_login_banner_message: Default: ``False``.
+            is_gui_message_text: Default: ``False``.
             login_banner_message: The contents of the CLI informational banner to be displayed
                 before user login authentication. The CLI banner is a text based string printed
                 as-is to the console.
@@ -450,8 +449,8 @@ class _AaaMakers(Cursor):
         owner_key: str | None = None,
         owner_tag: str | None = None,
         service_node_admin_password: str | None = None,
-        service_node_kms_private_key: str | None = None,
-        service_node_kms_public_key: str | None = None,
+        sn_kms_priv_key: str | None = None,
+        sn_kms_pub_key: str | None = None,
         service_node_mode: AaaSNModeType | str | None = None,
         userdom: str | None = None,
     ) -> ServiceNodeClusterSettingsCursor:
@@ -560,7 +559,7 @@ class AaaRoleCursor(_AaaMakers, _UniMakers):
         owner_key: str | None = None,
         owner_tag: str | None = None,
         privilege: frozenset[AaaAccess] | set[AaaAccess] | str | None = None,
-        trigger_reset_to_factory_settings: AaaBoolean | str | None = None,
+        reset_to_factory: AaaBoolean | str | None = None,
         userdom: str | None = None,
     ) -> AaaRoleCursor:
         """Set ``aaaRole`` attributes (merged; validated eagerly)."""
@@ -663,7 +662,7 @@ class LocalUserCursor(_AaaMakers, _UniMakers):
         password: str | None = None,
         password_life_time: int | str | None = None,
         password_update_required: AaaBoolean | str | None = None,
-        domain_read_write_rules_for_user: str | None = None,
+        rbac_string: str | None = None,
         restricted_rbac_user: AaaBoolean | str | None = None,
         role_summary: str | None = None,
         unix_user_id: int | None = None,
@@ -758,7 +757,7 @@ class PreLoginBannerCursor(_AaaMakers, _UniMakers):
         description: str | None = None,
         login_gui_message: str | None = None,
         login_gui_string_message: str | None = None,
-        use_text_base_pre_login_banner_message: bool | None = None,
+        is_gui_message_text: bool | None = None,
         login_banner_message: str | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
@@ -794,7 +793,7 @@ class _RadiusMakers(Cursor):
         owner_key: str | None = None,
         owner_tag: str | None = None,
         retries: int | None = None,
-        timeout_in_seconds: int | None = None,
+        timeout: int | None = None,
         userdom: str | None = None,
     ) -> RadiusProviderCursor:
         """Declare a ``aaaRadiusProvider`` child under the radius level.
@@ -816,8 +815,8 @@ class _RadiusMakers(Cursor):
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
             retries: Default: ``1``.
-            timeout_in_seconds: The timeout for communication with a RADIUS provider server.
-                Default: ``5``.
+            timeout: The timeout for communication with a RADIUS provider server. Default:
+                ``5``.
         """
         params = {
             k: v
@@ -893,7 +892,7 @@ class RadiusCursor(_RadiusMakers, _AaaMakers, _UniMakers):
         owner_key: str | None = None,
         owner_tag: str | None = None,
         retries: int | None = None,
-        timeout_in_seconds: int | None = None,
+        timeout: int | None = None,
         userdom: str | None = None,
     ) -> RadiusCursor:
         """Set ``aaaRadiusEp`` attributes (merged; validated eagerly)."""
@@ -921,7 +920,7 @@ class RemoteUserCursor(_AaaMakers, _UniMakers):
         owner_key: str | None = None,
         owner_tag: str | None = None,
         role_summary: str | None = None,
-        state_for_challenge_response: str | None = None,
+        state_code: str | None = None,
         userdom: str | None = None,
     ) -> RemoteUserCursor:
         """Set ``aaaRemoteUser`` attributes (merged; validated eagerly)."""
@@ -979,8 +978,8 @@ class ServiceNodeClusterSettingsCursor(_AaaMakers, _UniMakers):
         owner_key: str | None = None,
         owner_tag: str | None = None,
         service_node_admin_password: str | None = None,
-        service_node_kms_private_key: str | None = None,
-        service_node_kms_public_key: str | None = None,
+        sn_kms_priv_key: str | None = None,
+        sn_kms_pub_key: str | None = None,
         service_node_mode: AaaSNModeType | str | None = None,
         userdom: str | None = None,
     ) -> ServiceNodeClusterSettingsCursor:
@@ -1016,7 +1015,7 @@ class RadiusProviderCursor(_RadiusMakers, _AaaMakers, _UniMakers):
         owner_key: str | None = None,
         owner_tag: str | None = None,
         retries: int | None = None,
-        timeout_in_seconds: int | None = None,
+        timeout: int | None = None,
         userdom: str | None = None,
     ) -> RadiusProviderCursor:
         """Set ``aaaRadiusProvider`` attributes (merged; validated eagerly)."""
@@ -1037,7 +1036,7 @@ class _RadiusProviderGroupMakers(Cursor):
         annotation: str | None = None,
         description: str | None = None,
         display_name: str | None = None,
-        order_in_which_providers_are_tried: int | str | None = None,
+        order: int | str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
         userdom: str | None = None,
@@ -1050,8 +1049,8 @@ class _RadiusProviderGroupMakers(Cursor):
             name: The name of an existing AAA service provider.
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies a description of the policy definition.
-            order_in_which_providers_are_tried: The relative priority in which the AAA provider
-                will be contacted within the provider group. Default: ``0``.
+            order: The relative priority in which the AAA provider will be contacted within the
+                provider group. Default: ``0``.
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
@@ -1117,7 +1116,7 @@ class RadiusProviderGroupProviderCursor(
         annotation: str | None = None,
         description: str | None = None,
         display_name: str | None = None,
-        order_in_which_providers_are_tried: int | str | None = None,
+        order: int | str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
         userdom: str | None = None,

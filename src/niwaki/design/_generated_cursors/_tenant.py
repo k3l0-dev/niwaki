@@ -309,7 +309,7 @@ class _TenantMakers(Cursor):
         unknown_mac_unicast_action: L2UnkMacUcastAct | str | None = None,
         unknown_multicast_destination_action: L2UnkMcastAct | str | None = None,
         userdom: str | None = None,
-        unknown_v6_multicast_destination_action: L2UnkMcastAct | str | None = None,
+        v6unk_mcast_act: L2UnkMcastAct | str | None = None,
         virtual_mac_address: str | None = None,
     ) -> BdCursor:
         """Declare a ``fvBD`` child under the tenant level.
@@ -370,8 +370,7 @@ class _TenantMakers(Cursor):
             unknown_multicast_destination_action: The parameter used by the node (i.e. a leaf)
                 for forwarding data for an unknown multicast destination. Values: ``flood``,
                 ``opt-flood``. Default: ``flood``.
-            unknown_v6_multicast_destination_action: Values: ``flood``, ``opt-flood``. Default:
-                ``flood``.
+            v6unk_mcast_act: Values: ``flood``, ``opt-flood``. Default: ``flood``.
             virtual_mac_address: Virtual MAC address of the BD/SVI. This is used when the BD is
                 extended to multiple sites using l2 Outside.
         """
@@ -448,7 +447,10 @@ class _TenantMakers(Cursor):
         *,
         annotation: str | None = None,
         description: str | None = None,
-        enforce_rtctrl: frozenset[L3extCtrlDirection] | set[L3extCtrlDirection] | str | None = None,
+        enforce_route_control: frozenset[L3extCtrlDirection]
+        | set[L3extCtrlDirection]
+        | str
+        | None = None,
         mpls_enabled: bool | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
@@ -466,7 +468,8 @@ class _TenantMakers(Cursor):
                 the object has been saved.
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies a description of the policy definition root.
-            enforce_rtctrl: The enforce route control type. Default: ``PydanticUndefined``.
+            enforce_route_control: The enforce route control type. Default:
+                ``PydanticUndefined``.
             mpls_enabled: Indiscate whether MPLS is enabled or not Default: ``False``.
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
@@ -544,7 +547,7 @@ class _TenantMakers(Cursor):
         display_name: str | None = None,
         preferred_group_member: FvPrefGrMemb | str | None = None,
         qos_class: QosTenantPrio | str | None = None,
-        dot1q_tunnel_l2_protocol_tunneling_mask: frozenset[L2qiqL2ProtTunMaskT]
+        qiq_l2_prot_tun_mask: frozenset[L2qiqL2ProtTunMaskT]
         | set[L2qiqL2ProtTunMaskT]
         | str
         | None = None,
@@ -571,7 +574,7 @@ class _TenantMakers(Cursor):
             qos_class: The QoS priority class identifier. Values: ``level1``, ``level2``,
                 ``level3``, ``level4``, ``level5``, ``level6``, ``unspecified``. Default:
                 ``unspecified``.
-            dot1q_tunnel_l2_protocol_tunneling_mask: Default: ``PydanticUndefined``.
+            qiq_l2_prot_tun_mask: Default: ``PydanticUndefined``.
         """
         params = {
             k: v
@@ -953,8 +956,8 @@ class _TenantMakers(Cursor):
         ebgp_distance: int | None = None,
         ibgp_distance: int | None = None,
         local_distance: int | None = None,
-        max_ecmp_for_ebgp_routes: int | None = None,
-        max_ecmp_for_ibgp_routes: int | None = None,
+        max_ecmp: int | None = None,
+        max_ecmp_ibgp: int | None = None,
         max_local_ecmp: int | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
@@ -971,8 +974,8 @@ class _TenantMakers(Cursor):
             ebgp_distance: The administrative distance of eBGP routes. Default: ``20``.
             ibgp_distance: The administrative distance of iBGP routes. Default: ``200``.
             local_distance: The administrative distance of local routes. Default: ``220``.
-            max_ecmp_for_ebgp_routes: eBGP max-path Default: ``16``.
-            max_ecmp_for_ibgp_routes: iBGP max-path Default: ``16``.
+            max_ecmp: eBGP max-path Default: ``16``.
+            max_ecmp_ibgp: iBGP max-path Default: ``16``.
             max_local_ecmp: Maximum number of equal-cost local paths for redist Default: ``0``.
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
@@ -1031,7 +1034,7 @@ class _TenantMakers(Cursor):
         max_prefix_action: BgpMaxPfxAct | str | None = None,
         annotation: str | None = None,
         description: str | None = None,
-        max_number_of_prefixes: int | None = None,
+        max_pfx: int | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
@@ -1052,8 +1055,7 @@ class _TenantMakers(Cursor):
                 Values: ``log``, ``reject``, ``restart``, ``shut``. Default: ``reject``.
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies a description of the policy definition.
-            max_number_of_prefixes: Maximum number of prefixes allowed from the peer. Default:
-                ``20000``.
+            max_pfx: Maximum number of prefixes allowed from the peer. Default: ``20000``.
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
@@ -1087,7 +1089,7 @@ class _TenantMakers(Cursor):
         | str
         | None = None,
         annotation: str | None = None,
-        route_summarization_attribute_route_map: str | None = None,
+        attrmap: str | None = None,
         summary_control: frozenset[BgpSumControlPolType]
         | set[BgpSumControlPolType]
         | str
@@ -1105,7 +1107,7 @@ class _TenantMakers(Cursor):
             address_type_af_controls: Ucast/Mcast Addr Type AF Control Default:
                 ``PydanticUndefined``.
             annotation: User annotation. Suggested format orchestrator:value
-            route_summarization_attribute_route_map: Summary attribute map
+            attrmap: Summary attribute map
             summary_control: Summary controlTODO: CHECK if this is user configurable Default:
                 ``PydanticUndefined``.
             description: Specifies a description of the policy definition.
@@ -1132,7 +1134,7 @@ class _TenantMakers(Cursor):
         name: str,
         *,
         annotation: str | None = None,
-        cost_of_interface: int | str | None = None,
+        cost: int | str | None = None,
         interface_controls: frozenset[OspfIfControl] | set[OspfIfControl] | str | None = None,
         dead_interval: int | None = None,
         description: str | None = None,
@@ -1156,10 +1158,10 @@ class _TenantMakers(Cursor):
                 characters. Note that you cannot change this name after the object has been
                 saved.
             annotation: User annotation. Suggested format orchestrator:value
-            cost_of_interface: The OSPF cost for the interface. The cost (also called metric) of
-                an interface in OSPF is an indication of the overhead required to send packets
-                across a certain interface. The cost of an interface is inversely proportional
-                to the bandwidth of that interface. Default: ``unspecified``.
+            cost: The OSPF cost for the interface. The cost (also called metric) of an interface
+                in OSPF is an indication of the overhead required to send packets across a
+                certain interface. The cost of an interface is inversely proportional to the
+                bandwidth of that interface. Default: ``unspecified``.
             interface_controls: The interface policy controls. Default: ``PydanticUndefined``.
             dead_interval: The interval between hello packets from a neighbor before the router
                 declares the neighbor as down. This value must be the same for all networking
@@ -1355,7 +1357,7 @@ class _TenantMakers(Cursor):
         eigrp_interface_bandwidth: int | None = None,
         interface_controls: frozenset[EigrpIfAfControl] | set[EigrpIfAfControl] | str | None = None,
         eigrp_interface_delay: int | None = None,
-        units_for_eigrp_interface_delay: EigrpDelayUnit | str | None = None,
+        delay_unit: EigrpDelayUnit | str | None = None,
         description: str | None = None,
         hello_interval: int | None = None,
         hold_interval: int | None = None,
@@ -1377,9 +1379,8 @@ class _TenantMakers(Cursor):
             interface_controls: The control state. Default: ``PydanticUndefined``.
             eigrp_interface_delay: EIGRP throughput delay, overrides the delay configured on an
                 interface. Used to influence path selection Default: ``0``.
-            units_for_eigrp_interface_delay: EIGRP delay units, Wide metrics can use picosecond
-                accuracy for delay Values: ``pico``, ``tens-of-micro``. Default: ``tens-of-
-                micro``.
+            delay_unit: EIGRP delay units, Wide metrics can use picosecond accuracy for delay
+                Values: ``pico``, ``tens-of-micro``. Default: ``tens-of-micro``.
             description: Specifies a description of the policy definition.
             hello_interval: The hello interval. Default: ``5``.
             hold_interval: The period of time before declaring that the neighbor is down.
@@ -1550,7 +1551,7 @@ class _TenantMakers(Cursor):
         owner_tag: str | None = None,
         miminum_delay_before_preempt: int | None = None,
         preempt_delay_reload: int | None = None,
-        wait_for_ip_redundancy_clients: int | None = None,
+        preempt_delay_sync: int | None = None,
         group_priority: int | None = None,
         secure_authentication_key: str | None = None,
         authentication_key_timeout: int | None = None,
@@ -1574,8 +1575,8 @@ class _TenantMakers(Cursor):
                 indicate who created this object.
             miminum_delay_before_preempt: HSRP Group's Minimum Preemption delay Default: ``0``.
             preempt_delay_reload: Preemption delay after switch reboot Default: ``0``.
-            wait_for_ip_redundancy_clients: Maximum number of seconds to allow IPredundancy
-                clients to prevent preemption Default: ``0``.
+            preempt_delay_sync: Maximum number of seconds to allow IPredundancy clients to
+                prevent preemption Default: ``0``.
             group_priority: Grouph Priority Default: ``100``.
             secure_authentication_key: Secure Authentication key
             authentication_key_timeout: Authentication timeout Default: ``0``.
@@ -2132,7 +2133,7 @@ class _TenantMakers(Cursor):
         name: str,
         *,
         annotation: str | None = None,
-        interface_controls_for_arp: frozenset[ArpIfControl] | set[ArpIfControl] | str | None = None,
+        ctrl: frozenset[ArpIfControl] | set[ArpIfControl] | str | None = None,
         description: str | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
@@ -2144,7 +2145,7 @@ class _TenantMakers(Cursor):
         Args:
             name: The name of the object.
             annotation: User annotation. Suggested format orchestrator:value
-            interface_controls_for_arp: Interface controls Default: ``PydanticUndefined``.
+            ctrl: Interface controls Default: ``PydanticUndefined``.
             description: Specifies a description of the policy definition.
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
@@ -2258,7 +2259,7 @@ class _TenantMakers(Cursor):
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
-        router_advertisement_guard_admin_status: NwAdminSt | str | None = None,
+        ra_guard_admin_st: NwAdminSt | str | None = None,
         source_guard_admin_status: FhsAdminSt | str | None = None,
         userdom: str | None = None,
     ) -> FhsBdPolicyCursor:
@@ -2273,8 +2274,7 @@ class _TenantMakers(Cursor):
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
-            router_advertisement_guard_admin_status: Values: ``disabled``, ``enabled``. Default:
-                ``enabled``.
+            ra_guard_admin_st: Values: ``disabled``, ``enabled``. Default: ``enabled``.
             source_guard_admin_status: Values: ``disabled``, ``enabled-both``, ``enabled-ipv4``,
                 ``enabled-ipv6``. Default: ``enabled-both``.
         """
@@ -2528,11 +2528,11 @@ class _TenantMakers(Cursor):
         enable_loopback_interface_validation: bool | None = None,
         enable_vrf_validation_node_router_id_bgp_peer: bool | None = None,
         enable_vrf_validation_ospf_area: bool | None = None,
-        enable_ospf_area_id_validation: bool | None = None,
+        enable_vrf_validation_ospf_area_id: bool | None = None,
         enable_vrf_validation_ospf_if_pol: bool | None = None,
         enable_redistribute_policy_validation: bool | None = None,
         enable_node_routerid_validation: bool | None = None,
-        enable_subnet_non_duplication_validation: bool | None = None,
+        enable_vrf_validation_subnet: bool | None = None,
         enable_vrf_validation_svi_link_local_addr: bool | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
@@ -2560,7 +2560,7 @@ class _TenantMakers(Cursor):
                 kVrfValidationNodeRouterIdBgpPeer Default: ``True``.
             enable_vrf_validation_ospf_area: Implementation note: Corresponds to
                 kVrfValidationRsPathOspfArea Default: ``True``.
-            enable_ospf_area_id_validation: Implementation note: Corresponds to
+            enable_vrf_validation_ospf_area_id: Implementation note: Corresponds to
                 kVrfValidationOspfAreaId Default: ``True``.
             enable_vrf_validation_ospf_if_pol: Implementation note: Corresponds to
                 kVrfValidationRsPathOspfIfPol Default: ``True``.
@@ -2568,7 +2568,7 @@ class _TenantMakers(Cursor):
                 kVrfValidationRedistributePol Default: ``True``.
             enable_node_routerid_validation: Implementation note: Corresponds to
                 kVrfValidationNodeRouterId Default: ``True``.
-            enable_subnet_non_duplication_validation: Implementation note: Corresponds to
+            enable_vrf_validation_subnet: Implementation note: Corresponds to
                 kVrfValidationSubnet Default: ``True``.
             enable_vrf_validation_svi_link_local_addr: Implementation note: Corresponds to
                 kVrfValidationRsPathSviLinkLocalAddr Default: ``True``.
@@ -2706,7 +2706,7 @@ class _TenantMakers(Cursor):
         diffie_hellman_group: HcisakmpDhGroup | str | None = None,
         encryption: HcisakmpEncrAlgo | str | None = None,
         hash_algorithm: HcisakmpHash | str | None = None,
-        lifetime_for_isakmp_security_association: int | None = None,
+        lifetime: int | None = None,
         name: str | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
@@ -2729,8 +2729,7 @@ class _TenantMakers(Cursor):
                 ``des``. Default: ``des``.
             hash_algorithm: Hash for ISAKMP security association Values: ``md5``, ``sha``,
                 ``sha256``, ``sha384``, ``sha512``. Default: ``md5``.
-            lifetime_for_isakmp_security_association: lifetime for ISAKMP security association
-                Default: ``28000``.
+            lifetime: lifetime for ISAKMP security association Default: ``28000``.
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
@@ -3029,10 +3028,10 @@ class _TenantMakers(Cursor):
         *,
         annotation: str | None = None,
         description: str | None = None,
-        http_method_used_for_probing: FvhttpMethod | str | None = None,
-        uri_for_http_probing: str | None = None,
-        http_version_used_for_probing: FvhttpVersion | str | None = None,
-        type_of_service_value: int | None = None,
+        http_method: FvhttpMethod | str | None = None,
+        http_uri: str | None = None,
+        http_version: FvhttpVersion | str | None = None,
+        ipv4_tos: int | None = None,
         traffic_class_value: int | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
@@ -3052,9 +3051,9 @@ class _TenantMakers(Cursor):
             name: The name of the object.
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies a description of the policy definition.
-            http_method_used_for_probing: Values: ``get``. Default: ``get``.
-            http_version_used_for_probing: Values: ``HTTP10``, ``HTTP11``. Default: ``HTTP10``.
-            type_of_service_value: Default: ``0``.
+            http_method: Values: ``get``. Default: ``get``.
+            http_version: Values: ``HTTP10``, ``HTTP11``. Default: ``HTTP10``.
+            ipv4_tos: Default: ``0``.
             traffic_class_value: Default: ``0``.
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
@@ -3086,7 +3085,7 @@ class _TenantMakers(Cursor):
         self,
         name: str,
         *,
-        type_of_tracklist: TrackListObj | str | None = None,
+        type: TrackListObj | str | None = None,
         annotation: str | None = None,
         description: str | None = None,
         display_name: str | None = None,
@@ -3102,8 +3101,8 @@ class _TenantMakers(Cursor):
 
         Args:
             name: The name of the object.
-            type_of_tracklist: The specific type of the object or component. Values:
-                ``percentage``, ``weight``. Default: ``percentage``.
+            type: The specific type of the object or component. Values: ``percentage``,
+                ``weight``. Default: ``percentage``.
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies a description of the policy definition.
             owner_key: The key for enabling clients to own their data for entity correlation.
@@ -3138,11 +3137,11 @@ class _TenantMakers(Cursor):
         *,
         annotation: str | None = None,
         description: str | None = None,
-        destination_ip_to_be_tracked: str | None = None,
+        dst_ip_addr: str | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
-        scope_of_track_member: str | None = None,
+        scope_dn: str | None = None,
         userdom: str | None = None,
     ) -> TrackMemberCursor:
         """Declare a ``fvTrackMember`` child under the tenant level.
@@ -3154,7 +3153,7 @@ class _TenantMakers(Cursor):
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
-            scope_of_track_member: The parameters of the service graph instance.
+            scope_dn: The parameters of the service graph instance.
         """
         params = {
             k: v
@@ -3429,7 +3428,7 @@ class _TenantMakers(Cursor):
         exceed_action: DppExceedRateAction | str | None = None,
         exceed_mark_cos: int | str | None = None,
         exceed_mark_dscp: int | str | None = None,
-        bit_or_packet: DppMode | str | None = None,
+        mode: DppMode | str | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
@@ -3471,8 +3470,8 @@ class _TenantMakers(Cursor):
                 ``drop``.
             exceed_mark_cos: Exceed Mark cos Default: ``unspecified``.
             exceed_mark_dscp: Exceed Mark Dscp Default: ``unspecified``.
-            bit_or_packet: Policer mode - bytes or packet policer Values: ``bit``, ``packet``.
-                Default: ``bit``.
+            mode: Policer mode - bytes or packet policer Values: ``bit``, ``packet``. Default:
+                ``bit``.
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
@@ -5254,7 +5253,7 @@ class _AppMakers(Cursor):
         contract_exception_tag: str | None = None,
         flood_on_encap: FvFloodOnEncap | str | None = None,
         forwarding_control_bits: frozenset[FvFwdCtrl] | set[FvFwdCtrl] | str | None = None,
-        epg_with_multisite_mcast_source: bool | None = None,
+        has_mcast_source: bool | None = None,
         attribute_based_epg: bool | None = None,
         provider_label_match_criteria: VzMatchT | str | None = None,
         display_name: str | None = None,
@@ -5277,7 +5276,7 @@ class _AppMakers(Cursor):
                 Local Layer should be flooded only on ENCAP or based on bridg-domain settings
                 Values: ``disabled``, ``enabled``. Default: ``disabled``.
             forwarding_control_bits: Forwarding Control Default: ``PydanticUndefined``.
-            epg_with_multisite_mcast_source: Default: ``False``.
+            has_mcast_source: Default: ``False``.
             attribute_based_epg: Default: ``False``.
             provider_label_match_criteria: The provider label match criteria. Values: ``All``,
                 ``AtleastOne``, ``AtmostOne``, ``None``. Default: ``AtleastOne``.
@@ -5412,7 +5411,7 @@ class ArpInterfacePolicyCursor(_TenantMakers, _UniMakers):
         self,
         *,
         annotation: str | None = None,
-        interface_controls_for_arp: frozenset[ArpIfControl] | set[ArpIfControl] | str | None = None,
+        ctrl: frozenset[ArpIfControl] | set[ArpIfControl] | str | None = None,
         description: str | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
@@ -5434,7 +5433,7 @@ class _AuthServerGroupMakers(Cursor):
         self,
         name: str,
         *,
-        hostname_or_ip_address: str | None = None,
+        host_or_ip: str | None = None,
         annotation: str | None = None,
         event_sync_interval_seconds: int | None = None,
         triggered_inventory_sync_status: AuthTrigSt | str | None = None,
@@ -5451,7 +5450,7 @@ class _AuthServerGroupMakers(Cursor):
 
         Args:
             name: The name of the object.
-            hostname_or_ip_address: The host or IP address.
+            host_or_ip: The host or IP address.
             annotation: User annotation. Suggested format orchestrator:value
             event_sync_interval_seconds: Event Timers Default: ``30``.
             triggered_inventory_sync_status: Manual trigger state of inventory sync Values:
@@ -5780,7 +5779,7 @@ class BdCursor(_BdMakers, _TenantMakers, _UniMakers):
         unknown_mac_unicast_action: L2UnkMacUcastAct | str | None = None,
         unknown_multicast_destination_action: L2UnkMcastAct | str | None = None,
         userdom: str | None = None,
-        unknown_v6_multicast_destination_action: L2UnkMcastAct | str | None = None,
+        v6unk_mcast_act: L2UnkMcastAct | str | None = None,
         virtual_mac_address: str | None = None,
     ) -> BdCursor:
         """Set ``fvBD`` attributes (merged; validated eagerly)."""
@@ -5973,8 +5972,8 @@ class BgpAddressFamilyContextPolicyCursor(
         ebgp_distance: int | None = None,
         ibgp_distance: int | None = None,
         local_distance: int | None = None,
-        max_ecmp_for_ebgp_routes: int | None = None,
-        max_ecmp_for_ibgp_routes: int | None = None,
+        max_ecmp: int | None = None,
+        max_ecmp_ibgp: int | None = None,
         max_local_ecmp: int | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
@@ -6030,7 +6029,7 @@ class BgpPeerPrefixPolicyCursor(_TenantMakers, _UniMakers):
         max_prefix_action: BgpMaxPfxAct | str | None = None,
         annotation: str | None = None,
         description: str | None = None,
-        max_number_of_prefixes: int | None = None,
+        max_pfx: int | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
@@ -6063,7 +6062,7 @@ class BgpRouteSummarizationPolicyCursor(_TenantMakers, _UniMakers):
         | str
         | None = None,
         annotation: str | None = None,
-        route_summarization_attribute_route_map: str | None = None,
+        attrmap: str | None = None,
         summary_control: frozenset[BgpSumControlPolType]
         | set[BgpSumControlPolType]
         | str
@@ -6816,7 +6815,7 @@ class Dot1qTunnelCursor(_TenantMakers, _UniMakers):
         display_name: str | None = None,
         preferred_group_member: FvPrefGrMemb | str | None = None,
         qos_class: QosTenantPrio | str | None = None,
-        dot1q_tunnel_l2_protocol_tunneling_mask: frozenset[L2qiqL2ProtTunMaskT]
+        qiq_l2_prot_tun_mask: frozenset[L2qiqL2ProtTunMaskT]
         | set[L2qiqL2ProtTunMaskT]
         | str
         | None = None,
@@ -6855,7 +6854,7 @@ class TenantDppPolicyCursor(_TenantMakers, _UniMakers):
         exceed_action: DppExceedRateAction | str | None = None,
         exceed_mark_cos: int | str | None = None,
         exceed_mark_dscp: int | str | None = None,
-        bit_or_packet: DppMode | str | None = None,
+        mode: DppMode | str | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
@@ -6926,7 +6925,7 @@ class EigrpInterfacePolicyCursor(_TenantMakers, _UniMakers):
         eigrp_interface_bandwidth: int | None = None,
         interface_controls: frozenset[EigrpIfAfControl] | set[EigrpIfAfControl] | str | None = None,
         eigrp_interface_delay: int | None = None,
-        units_for_eigrp_interface_delay: EigrpDelayUnit | str | None = None,
+        delay_unit: EigrpDelayUnit | str | None = None,
         description: str | None = None,
         hello_interval: int | None = None,
         hold_interval: int | None = None,
@@ -7248,14 +7247,14 @@ class _FhsBdPolicyMakers(Cursor):
         *,
         annotation: str | None = None,
         description: str | None = None,
-        perform_managed_config_flag_check: bool | None = None,
+        managed_config_check: bool | None = None,
         managed_config_flag_settting: bool | None = None,
         max_allowed_hop_limit: int | None = None,
         allowed_max_router_preference: FhsRAGuardMaxRouterPref | str | None = None,
         min_allowed_hop_limit: int | None = None,
         name: str | None = None,
         display_name: str | None = None,
-        perform_other_config_flag_check: bool | None = None,
+        other_config_check: bool | None = None,
         other_config_flag_settting: bool | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
@@ -7266,13 +7265,13 @@ class _FhsBdPolicyMakers(Cursor):
         Args:
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies a description of the policy definition.
-            perform_managed_config_flag_check: Default: ``False``.
+            managed_config_check: Default: ``False``.
             managed_config_flag_settting: Default: ``False``.
             max_allowed_hop_limit: Default: ``0``.
             allowed_max_router_preference: Values: ``disabled``, ``high``, ``low``, ``medium``.
                 Default: ``disabled``.
             min_allowed_hop_limit: Default: ``0``.
-            perform_other_config_flag_check: Default: ``False``.
+            other_config_check: Default: ``False``.
             other_config_flag_settting: Default: ``False``.
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
@@ -7305,7 +7304,7 @@ class FhsBdPolicyCursor(_FhsBdPolicyMakers, _TenantMakers, _UniMakers):
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
-        router_advertisement_guard_admin_status: NwAdminSt | str | None = None,
+        ra_guard_admin_st: NwAdminSt | str | None = None,
         source_guard_admin_status: FhsAdminSt | str | None = None,
         userdom: str | None = None,
     ) -> FhsBdPolicyCursor:
@@ -7390,11 +7389,11 @@ class _TenantFilterMakers(Cursor):
         name: str,
         *,
         annotation: str | None = None,
-        apply_rule_for_all_fragments: bool | None = None,
+        apply_to_frag: bool | None = None,
         description: str | None = None,
         port_zero_direction: VzPZDirection | str | None = None,
         ethernet_type: VzPZEtherType | str | None = None,
-        dscp_match_for_filter_entry: int | str | None = None,
+        match_dscp: int | str | None = None,
         display_name: str | None = None,
         protocol: VzPZIpProt | str | None = None,
         stateful: bool | None = None,
@@ -7406,14 +7405,14 @@ class _TenantFilterMakers(Cursor):
         Args:
             name: The name of the object.
             annotation: User annotation. Suggested format orchestrator:value
-            apply_rule_for_all_fragments: When flag is true, apply this entry rule for all
-                fragments. When false apply for initial fragment only Default: ``False``.
+            apply_to_frag: When flag is true, apply this entry rule for all fragments. When
+                false apply for initial fragment only Default: ``False``.
             description: Specifies the description of a policy component.
             port_zero_direction: L3 Ip Protocol peppemon should be new Values: ``both``,
                 ``destination``, ``source``. Default: ``both``.
             ethernet_type: Ether type peppemon should new Values: ``ip``, ``ipv4``, ``ipv6``.
                 Default: ``ipv4``.
-            dscp_match_for_filter_entry: Default: ``unspecified``.
+            match_dscp: Default: ``unspecified``.
             protocol: The IP protocol. Values: ``sctp``, ``tcp``, ``udp``. Default: ``tcp``.
             stateful: Is this Entry stateful? Applies to prot tcp only Default: ``False``.
             tcp_rules: TCP Session Rules Default: ``PydanticUndefined``.
@@ -7810,7 +7809,7 @@ class HsrpGroupPolicyCursor(_TenantMakers, _UniMakers):
         owner_tag: str | None = None,
         miminum_delay_before_preempt: int | None = None,
         preempt_delay_reload: int | None = None,
-        wait_for_ip_redundancy_clients: int | None = None,
+        preempt_delay_sync: int | None = None,
         group_priority: int | None = None,
         secure_authentication_key: str | None = None,
         authentication_key_timeout: int | None = None,
@@ -7906,7 +7905,7 @@ class _IgmpInterfacePolicyMakers(Cursor):
 
     def static_report(
         self,
-        join_type_of_groups: IpmcJoinType | str,
+        join_type: IpmcJoinType | str,
         *,
         annotation: str | None = None,
         description: str | None = None,
@@ -7917,7 +7916,7 @@ class _IgmpInterfacePolicyMakers(Cursor):
         """Declare a ``igmpStRepPol`` child under the igmp_interface_policy level.
 
         Args:
-            join_type_of_groups: Naming property — forms the object's RN.
+            join_type: Naming property — forms the object's RN.
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies the description of a policy component.
         """
@@ -7927,12 +7926,12 @@ class _IgmpInterfacePolicyMakers(Cursor):
             if k
             not in (
                 "self",
-                "join_type_of_groups",
+                "join_type",
             )
         }
         return cast(
             "StaticReportCursor",
-            self._invoke_maker("static_report", (join_type_of_groups,), _prune(params)),
+            self._invoke_maker("static_report", (join_type,), _prune(params)),
         )
 
 
@@ -8209,10 +8208,10 @@ class IpSlaMonitoringPolicyCursor(_IpSlaMonitoringPolicyMakers, _TenantMakers, _
         *,
         annotation: str | None = None,
         description: str | None = None,
-        http_method_used_for_probing: FvhttpMethod | str | None = None,
-        uri_for_http_probing: str | None = None,
-        http_version_used_for_probing: FvhttpVersion | str | None = None,
-        type_of_service_value: int | None = None,
+        http_method: FvhttpMethod | str | None = None,
+        http_uri: str | None = None,
+        http_version: FvhttpVersion | str | None = None,
+        ipv4_tos: int | None = None,
         traffic_class_value: int | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
@@ -8376,7 +8375,7 @@ class IsakmpPolicyCursor(_TenantMakers, _UniMakers):
         diffie_hellman_group: HcisakmpDhGroup | str | None = None,
         encryption: HcisakmpEncrAlgo | str | None = None,
         hash_algorithm: HcisakmpHash | str | None = None,
-        lifetime_for_isakmp_security_association: int | None = None,
+        lifetime: int | None = None,
         name: str | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
@@ -8718,7 +8717,7 @@ class _L3outMakers(Cursor):
         area_id: str | None = None,
         area_type: OspfAreaT | str | None = None,
         description: str | None = None,
-        create_multipod_internal_ospf_instance: bool | None = None,
+        multipod_internal: bool | None = None,
         display_name: str | None = None,
         userdom: str | None = None,
     ) -> OspfCursor:
@@ -8737,8 +8736,7 @@ class _L3outMakers(Cursor):
             area_type: The area type. Values: ``nssa``, ``regular``, ``stub``. Default:
                 ``nssa``.
             description: Specifies the description of a policy component.
-            create_multipod_internal_ospf_instance: Start OSPF in WAN instance instead of
-                default Default: ``False``.
+            multipod_internal: Start OSPF in WAN instance instead of default Default: ``False``.
         """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
@@ -8929,7 +8927,7 @@ class _L3outMakers(Cursor):
         annotation: str | None = None,
         description: str | None = None,
         display_name: str | None = None,
-        represents_the_provider_label_ownership: L3extOwner | str | None = None,
+        owner: L3extOwner | str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
         tag: PolColor | str | None = None,
@@ -8944,11 +8942,10 @@ class _L3outMakers(Cursor):
             name: The name of the object.
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies a description of the policy definition.
-            represents_the_provider_label_ownership: The owner of the target relay. The DHCP
-                relay is any host that forwards DHCP packets between clients and servers. The
-                relays are used to forward requests and replies between clients and servers when
-                they are not on the same physical subnet. Values: ``infra``, ``tenant``.
-                Default: ``infra``.
+            owner: The owner of the target relay. The DHCP relay is any host that forwards DHCP
+                packets between clients and servers. The relays are used to forward requests and
+                replies between clients and servers when they are not on the same physical
+                subnet. Values: ``infra``, ``tenant``. Default: ``infra``.
             owner_key: The key for enabling clients to own their data for entity correlation.
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
@@ -9029,7 +9026,10 @@ class L3outCursor(_L3outMakers, _TenantMakers, _UniMakers):
         *,
         annotation: str | None = None,
         description: str | None = None,
-        enforce_rtctrl: frozenset[L3extCtrlDirection] | set[L3extCtrlDirection] | str | None = None,
+        enforce_route_control: frozenset[L3extCtrlDirection]
+        | set[L3extCtrlDirection]
+        | str
+        | None = None,
         mpls_enabled: bool | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
@@ -9511,10 +9511,10 @@ class _MatchRuleMakers(Cursor):
         aggregated_route: bool | None = None,
         annotation: str | None = None,
         description: str | None = None,
-        start_of_prefix_length: int | None = None,
+        from_pfx_len: int | None = None,
         name: str | None = None,
         display_name: str | None = None,
-        end_of_prefix_length: int | None = None,
+        to_pfx_len: int | None = None,
         userdom: str | None = None,
     ) -> MatchPrefixCursor:
         """Declare a ``rtctrlMatchRtDest`` child under the match_rule level.
@@ -9526,8 +9526,8 @@ class _MatchRuleMakers(Cursor):
             aggregated_route: Aggregated Route Default: ``False``.
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies the description of a policy component.
-            start_of_prefix_length: Prefix list range Default: ``0``.
-            end_of_prefix_length: Default: ``0``.
+            from_pfx_len: Prefix list range Default: ``0``.
+            to_pfx_len: Default: ``0``.
         """
         params = {
             k: v
@@ -10604,7 +10604,7 @@ class OspfInterfacePolicyCursor(_TenantMakers, _UniMakers):
         self,
         *,
         annotation: str | None = None,
-        cost_of_interface: int | str | None = None,
+        cost: int | str | None = None,
         interface_controls: frozenset[OspfIfControl] | set[OspfIfControl] | str | None = None,
         dead_interval: int | None = None,
         description: str | None = None,
@@ -11249,7 +11249,7 @@ class _ServiceContainerMakers(Cursor):
         self,
         name: str,
         *,
-        anycast_enabled_or_not: bool | None = None,
+        anycast_enabled: bool | None = None,
         annotation: str | None = None,
         description: str | None = None,
         dest_type: VnsDestType | str | None = None,
@@ -11260,7 +11260,7 @@ class _ServiceContainerMakers(Cursor):
         owner_key: str | None = None,
         owner_tag: str | None = None,
         program_local_pod_only: bool | None = None,
-        resilient_hashing_enabled_or_not: bool | None = None,
+        resilient_hash_enabled: bool | None = None,
         src_mac_rewrite_enabled: bool | None = None,
         threshold_down_action: VnsThresholdDownAction | str | None = None,
         threshold_enable: bool | None = None,
@@ -11270,7 +11270,7 @@ class _ServiceContainerMakers(Cursor):
 
         Args:
             name: The name of the object.
-            anycast_enabled_or_not: Default: ``False``.
+            anycast_enabled: Default: ``False``.
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies a description of the policy definition.
             dest_type: Values: ``L1``, ``L2``, ``L3``. Default: ``L3``.
@@ -11282,7 +11282,7 @@ class _ServiceContainerMakers(Cursor):
             owner_tag: A tag for enabling clients to add their own data. For example, to
                 indicate who created this object.
             program_local_pod_only: Default: ``False``.
-            resilient_hashing_enabled_or_not: Default: ``False``.
+            resilient_hash_enabled: Default: ``False``.
             src_mac_rewrite_enabled: Default: ``False``.
             threshold_down_action: Down action Values: ``bypass``, ``deny``, ``permit``.
                 Default: ``permit``.
@@ -12100,7 +12100,7 @@ class TrackListCursor(_TenantMakers, _UniMakers):
     def set(
         self,
         *,
-        type_of_tracklist: TrackListObj | str | None = None,
+        type: TrackListObj | str | None = None,
         annotation: str | None = None,
         description: str | None = None,
         display_name: str | None = None,
@@ -12154,11 +12154,11 @@ class TrackMemberCursor(_TenantMakers, _UniMakers):
         *,
         annotation: str | None = None,
         description: str | None = None,
-        destination_ip_to_be_tracked: str | None = None,
+        dst_ip_addr: str | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
-        scope_of_track_member: str | None = None,
+        scope_dn: str | None = None,
         userdom: str | None = None,
     ) -> TrackMemberCursor:
         """Set ``fvTrackMember`` attributes (merged; validated eagerly)."""
@@ -12496,7 +12496,7 @@ class _VrfMakers(Cursor):
 
     def route_target_profile(
         self,
-        route_target_source_address_family: BgpRtSourceAfType | str,
+        af: BgpRtSourceAfType | str,
         *,
         annotation: str | None = None,
         description: str | None = None,
@@ -12511,8 +12511,8 @@ class _VrfMakers(Cursor):
         BGP Route Target Profile
 
         Args:
-            route_target_source_address_family: Source address family value is respected only
-                when the Route Target Type is set to Explicit
+            af: Source address family value is respected only when the Route Target Type is set
+                to Explicit
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies a description of the policy definition.
             owner_key: The key for enabling clients to own their data for entity correlation.
@@ -12525,14 +12525,12 @@ class _VrfMakers(Cursor):
             if k
             not in (
                 "self",
-                "route_target_source_address_family",
+                "af",
             )
         }
         return cast(
             "RouteTargetProfileCursor",
-            self._invoke_maker(
-                "route_target_profile", (route_target_source_address_family,), _prune(params)
-            ),
+            self._invoke_maker("route_target_profile", (af,), _prune(params)),
         )
 
     def vzany(
@@ -12687,11 +12685,11 @@ class VrfValidationPolicyCursor(_TenantMakers, _UniMakers):
         enable_loopback_interface_validation: bool | None = None,
         enable_vrf_validation_node_router_id_bgp_peer: bool | None = None,
         enable_vrf_validation_ospf_area: bool | None = None,
-        enable_ospf_area_id_validation: bool | None = None,
+        enable_vrf_validation_ospf_area_id: bool | None = None,
         enable_vrf_validation_ospf_if_pol: bool | None = None,
         enable_redistribute_policy_validation: bool | None = None,
         enable_node_routerid_validation: bool | None = None,
-        enable_subnet_non_duplication_validation: bool | None = None,
+        enable_vrf_validation_subnet: bool | None = None,
         enable_vrf_validation_svi_link_local_addr: bool | None = None,
         display_name: str | None = None,
         owner_key: str | None = None,
@@ -13957,7 +13955,7 @@ class EpgCursor(_EpgMakers, _AppMakers, _TenantMakers, _UniMakers):
         contract_exception_tag: str | None = None,
         flood_on_encap: FvFloodOnEncap | str | None = None,
         forwarding_control_bits: frozenset[FvFwdCtrl] | set[FvFwdCtrl] | str | None = None,
-        epg_with_multisite_mcast_source: bool | None = None,
+        has_mcast_source: bool | None = None,
         attribute_based_epg: bool | None = None,
         provider_label_match_criteria: VzMatchT | str | None = None,
         display_name: str | None = None,
@@ -14064,7 +14062,7 @@ class _EsgMakers(Cursor):
 
     def epg_selector(
         self,
-        epg_dn_to_be_associated: str,
+        match_epg_dn: str,
         *,
         annotation: str | None = None,
         description: str | None = None,
@@ -14079,7 +14077,7 @@ class _EsgMakers(Cursor):
         Endpoint Group Selector, to decide which endpoints belong to the ESG
 
         Args:
-            epg_dn_to_be_associated: Naming property — forms the object's RN.
+            match_epg_dn: Naming property — forms the object's RN.
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies a description of the policy definition.
             owner_key: The key for enabling clients to own their data for entity correlation.
@@ -14092,12 +14090,12 @@ class _EsgMakers(Cursor):
             if k
             not in (
                 "self",
-                "epg_dn_to_be_associated",
+                "match_epg_dn",
             )
         }
         return cast(
             "EpgSelectorCursor",
-            self._invoke_maker("epg_selector", (epg_dn_to_be_associated,), _prune(params)),
+            self._invoke_maker("epg_selector", (match_epg_dn,), _prune(params)),
         )
 
     def tag_selector(
@@ -14154,7 +14152,7 @@ class _EsgMakers(Cursor):
 
     def lif_ctx_selector(
         self,
-        lifctx_dn_to_be_associated: str,
+        match_l_if_ctx_dn: str,
         *,
         annotation: str | None = None,
         description: str | None = None,
@@ -14167,7 +14165,7 @@ class _EsgMakers(Cursor):
         """Declare a ``fvLIfCtxSelector`` child under the esg level.
 
         Args:
-            lifctx_dn_to_be_associated: Naming property — forms the object's RN.
+            match_l_if_ctx_dn: Naming property — forms the object's RN.
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies a description of the policy definition.
             owner_key: The key for enabling clients to own their data for entity correlation.
@@ -14180,12 +14178,12 @@ class _EsgMakers(Cursor):
             if k
             not in (
                 "self",
-                "lifctx_dn_to_be_associated",
+                "match_l_if_ctx_dn",
             )
         }
         return cast(
             "LifCtxSelectorCursor",
-            self._invoke_maker("lif_ctx_selector", (lifctx_dn_to_be_associated,), _prune(params)),
+            self._invoke_maker("lif_ctx_selector", (match_l_if_ctx_dn,), _prune(params)),
         )
 
     def provider_label(
@@ -14586,7 +14584,7 @@ class AuthServerGroupServerCursor(
     def set(
         self,
         *,
-        hostname_or_ip_address: str | None = None,
+        host_or_ip: str | None = None,
         annotation: str | None = None,
         event_sync_interval_seconds: int | None = None,
         triggered_inventory_sync_status: AuthTrigSt | str | None = None,
@@ -15624,14 +15622,14 @@ class RaGuardPolicyCursor(_FhsBdPolicyMakers, _TenantMakers, _UniMakers):
         *,
         annotation: str | None = None,
         description: str | None = None,
-        perform_managed_config_flag_check: bool | None = None,
+        managed_config_check: bool | None = None,
         managed_config_flag_settting: bool | None = None,
         max_allowed_hop_limit: int | None = None,
         allowed_max_router_preference: FhsRAGuardMaxRouterPref | str | None = None,
         min_allowed_hop_limit: int | None = None,
         name: str | None = None,
         display_name: str | None = None,
-        perform_other_config_flag_check: bool | None = None,
+        other_config_check: bool | None = None,
         other_config_flag_settting: bool | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
@@ -15698,11 +15696,11 @@ class PortZeroEntryCursor(_TenantFilterMakers, _TenantMakers, _UniMakers):
         self,
         *,
         annotation: str | None = None,
-        apply_rule_for_all_fragments: bool | None = None,
+        apply_to_frag: bool | None = None,
         description: str | None = None,
         port_zero_direction: VzPZDirection | str | None = None,
         ethernet_type: VzPZEtherType | str | None = None,
-        dscp_match_for_filter_entry: int | str | None = None,
+        match_dscp: int | str | None = None,
         display_name: str | None = None,
         protocol: VzPZIpProt | str | None = None,
         stateful: bool | None = None,
@@ -16764,7 +16762,7 @@ class L3outConsumerLabelCursor(_L3outMakers, _TenantMakers, _UniMakers):
         annotation: str | None = None,
         description: str | None = None,
         display_name: str | None = None,
-        represents_the_provider_label_ownership: L3extOwner | str | None = None,
+        owner: L3extOwner | str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
         tag: PolColor | str | None = None,
@@ -17337,7 +17335,7 @@ class _L3outNodeProfileMakers(Cursor):
         *,
         annotation: str | None = None,
         config_issues: frozenset[L3extConfigIssues] | set[L3extConfigIssues] | str | None = None,
-        rtr_id: str | None = None,
+        router_id: str | None = None,
         rtr_id_loop_back: bool | None = None,
         userdom: str | None = None,
     ) -> NodeAttachmentCursor:
@@ -17353,7 +17351,7 @@ class _L3outNodeProfileMakers(Cursor):
             annotation: User annotation. Suggested format orchestrator:value
             config_issues: Bitmask representation of the configuration issues found during the
                 endpoint group deployment. Default: ``PydanticUndefined``.
-            rtr_id: The router identifier used as the OSPF/BGP router ID.
+            router_id: The router identifier used as the OSPF/BGP router ID.
             rtr_id_loop_back: Default: ``True``.
         """
         params = {
@@ -17657,7 +17655,7 @@ class OspfCursor(_L3outMakers, _TenantMakers, _UniMakers):
         area_id: str | None = None,
         area_type: OspfAreaT | str | None = None,
         description: str | None = None,
-        create_multipod_internal_ospf_instance: bool | None = None,
+        multipod_internal: bool | None = None,
         display_name: str | None = None,
         userdom: str | None = None,
     ) -> OspfCursor:
@@ -18781,10 +18779,10 @@ class MatchPrefixCursor(_MatchRuleMakers, _TenantMakers, _UniMakers):
         aggregated_route: bool | None = None,
         annotation: str | None = None,
         description: str | None = None,
-        start_of_prefix_length: int | None = None,
+        from_pfx_len: int | None = None,
         name: str | None = None,
         display_name: str | None = None,
-        end_of_prefix_length: int | None = None,
+        to_pfx_len: int | None = None,
         userdom: str | None = None,
     ) -> MatchPrefixCursor:
         """Set ``rtctrlMatchRtDest`` attributes (merged; validated eagerly)."""
@@ -19991,7 +19989,7 @@ class ServiceRedirectPolicyCursor(
     def set(
         self,
         *,
-        anycast_enabled_or_not: bool | None = None,
+        anycast_enabled: bool | None = None,
         annotation: str | None = None,
         description: str | None = None,
         dest_type: VnsDestType | str | None = None,
@@ -20002,7 +20000,7 @@ class ServiceRedirectPolicyCursor(
         owner_key: str | None = None,
         owner_tag: str | None = None,
         program_local_pod_only: bool | None = None,
-        resilient_hashing_enabled_or_not: bool | None = None,
+        resilient_hash_enabled: bool | None = None,
         src_mac_rewrite_enabled: bool | None = None,
         threshold_down_action: VnsThresholdDownAction | str | None = None,
         threshold_enable: bool | None = None,
@@ -20454,7 +20452,7 @@ class _TenantSpanDestinationGroupSpanDestinationMakers(Cursor):
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
-        source_ip_of_erspan_packet: str | None = None,
+        source_ip_prefix: str | None = None,
         time_to_live: int | str | None = None,
         userdom: str | None = None,
         vrf: str | None = None,
@@ -20992,7 +20990,7 @@ class _LeakRoutesMakers(Cursor):
         annotation: str | None = None,
         description: str | None = None,
         greater_then: int | str | None = None,
-        less_than_or_equal: int | str | None = None,
+        le: int | str | None = None,
         name: str | None = None,
         display_name: str | None = None,
         userdom: str | None = None,
@@ -21004,7 +21002,7 @@ class _LeakRoutesMakers(Cursor):
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies the description of a policy component.
             greater_then: Default: ``unspecified``.
-            less_than_or_equal: Default: ``unspecified``.
+            le: Default: ``unspecified``.
         """
         params = {
             k: v
@@ -21027,7 +21025,7 @@ class _LeakRoutesMakers(Cursor):
         annotation: str | None = None,
         description: str | None = None,
         greater_then: int | str | None = None,
-        less_than_or_equal: int | str | None = None,
+        le: int | str | None = None,
         name: str | None = None,
         display_name: str | None = None,
         userdom: str | None = None,
@@ -21039,7 +21037,7 @@ class _LeakRoutesMakers(Cursor):
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies the description of a policy component.
             greater_then: Default: ``unspecified``.
-            less_than_or_equal: Default: ``unspecified``.
+            le: Default: ``unspecified``.
         """
         params = {
             k: v
@@ -21063,7 +21061,7 @@ class _LeakRoutesMakers(Cursor):
         description: str | None = None,
         name: str | None = None,
         display_name: str | None = None,
-        visibility_of_the_subnet: LeakRouteScp | str | None = None,
+        scope: LeakRouteScp | str | None = None,
         userdom: str | None = None,
     ) -> InternalSubnetCursor:
         """Declare a ``leakInternalSubnet`` child under the leak_routes level.
@@ -21072,8 +21070,8 @@ class _LeakRoutesMakers(Cursor):
             subnet: Ip Address corresponding to the External Subnet
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies the description of a policy component.
-            visibility_of_the_subnet: The domain applicable to the capability. Values:
-                ``private``, ``public``. Default: ``private``.
+            scope: The domain applicable to the capability. Values: ``private``, ``public``.
+                Default: ``private``.
         """
         params = {
             k: v
@@ -22153,7 +22151,7 @@ class _TenantVspanDestinationGroupVspanVdestinationMakers(Cursor):
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
-        source_ip_of_erspan_packet: str | None = None,
+        source_ip_prefix: str | None = None,
         time_to_live: int | str | None = None,
         userdom: str | None = None,
         vrf: str | None = None,
@@ -23137,7 +23135,7 @@ class _EpgStaticPathMakers(Cursor):
         description: str | None = None,
         name: str | None = None,
         display_name: str | None = None,
-        ptp_mode_for_interface: PtpPtpTransportMode | str | None = None,
+        ptp_mode: PtpPtpTransportMode | str | None = None,
         ptp_source_address: str | None = None,
         userdom: str | None = None,
     ) -> PtpCursor:
@@ -23148,9 +23146,9 @@ class _EpgStaticPathMakers(Cursor):
         Args:
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies the description of a policy component.
-            ptp_mode_for_interface: PTP mode multicast, unicast master/slave Values:
-                ``multicast``, ``multicast-master``, ``unicast-master``, ``unicast-slave``.
-                Default: ``multicast``.
+            ptp_mode: PTP mode multicast, unicast master/slave Values: ``multicast``,
+                ``multicast-master``, ``unicast-master``, ``unicast-slave``. Default:
+                ``multicast``.
             ptp_source_address: IP address
         """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
@@ -25117,7 +25115,7 @@ class _NodeProfileBgpPeerMakers(Cursor):
         description: str | None = None,
         name: str | None = None,
         display_name: str | None = None,
-        site_of_origin: str | None = None,
+        soo: str | None = None,
         userdom: str | None = None,
     ) -> NodeProfileBgpPeerSiteOfOriginProfileCursor:
         """Declare a ``bgpSiteOfOriginP`` child under the bgp_peer level.
@@ -25127,7 +25125,7 @@ class _NodeProfileBgpPeerMakers(Cursor):
         Args:
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies the description of a policy component.
-            site_of_origin: Site of origin
+            soo: Site of origin
         """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
@@ -25377,7 +25375,7 @@ class _L3outNodeProfileInterfaceProfileMakers(Cursor):
         target_dn: str,
         *,
         is_multi_pod_direct: bool | None = None,
-        addr: str | None = None,
+        ip_address: str | None = None,
         annotation: str | None = None,
         autostate: SviAutostate | str | None = None,
         descr: str | None = None,
@@ -25385,8 +25383,8 @@ class _L3outNodeProfileInterfaceProfileMakers(Cursor):
         encap_scope: L3extEncapScope | str | None = None,
         if_inst_t: ExtnwIfInstT | str | None = None,
         ipv6_dad: L3extIpv6Dad | str | None = None,
-        ll_addr: str | None = None,
-        mac: str | None = None,
+        ipv6_link_local_address: str | None = None,
+        mac_address: str | None = None,
         mode: FvMode | str | None = None,
         mtu: int | str | None = None,
         target_dscp: int | str | None = None,
@@ -25401,7 +25399,7 @@ class _L3outNodeProfileInterfaceProfileMakers(Cursor):
             target_dn: The logical interface identifier.
             is_multi_pod_direct: MultiPod Direct (back-to-back) Link feature When link is
                 MultiPod Direct Link Default: ``False``.
-            addr: The IP address of the path attached to the layer 3 outside profile.
+            ip_address: The IP address of the path attached to the layer 3 outside profile.
             annotation: User annotation. Suggested format orchestrator:value
             autostate: Autostate feature When enabled an SVI automatically goes down when
                 forwarding states of all ports attached to it is down Values: ``disabled``,
@@ -25414,8 +25412,9 @@ class _L3outNodeProfileInterfaceProfileMakers(Cursor):
                 Default: ``ext-svi``.
             ipv6_dad: IPv6 DAD feature When disabled it will IPv6 DAD will be diasabled Values:
                 ``disabled``, ``enabled``. Default: ``enabled``.
-            ll_addr: The override of the system generated IPv6 link-local address.
-            mac: The MAC address of the path attached to the layer 3 outside profile.
+            ipv6_link_local_address: The override of the system generated IPv6 link-local
+                address.
+            mac_address: The MAC address of the path attached to the layer 3 outside profile.
             mode: Represents the mode (native etc.) of the encap. This property only takes
                 affect ifInstT (Interface Instantiation Type) is external-svi and is ignored for
                 sub-interface and l3-port Values: ``native``, ``regular``, ``untagged``.
@@ -25440,10 +25439,10 @@ class _L3outNodeProfileInterfaceProfileMakers(Cursor):
 
     def floating_svi(
         self,
-        path_of_the_anchor_node: str,
+        node_dn: str,
         external_interface_encap: str,
         *,
-        external_l3_interface_ip_address: str | None = None,
+        addr: str | None = None,
         annotation: str | None = None,
         svi_autostate: SviAutostate | str | None = None,
         description: str | None = None,
@@ -25451,22 +25450,22 @@ class _L3outNodeProfileInterfaceProfileMakers(Cursor):
         external_interface_type: ExtnwIfInstT | str | None = None,
         ipv6_dad: L3extIpv6Dad | str | None = None,
         ipv6_link_local_address: str | None = None,
-        external_l3_interface_mac_address: str | None = None,
+        mac: str | None = None,
         encap_mode: FvMode | str | None = None,
         mtu_size: int | str | None = None,
-        name_of_virtuallifp: str | None = None,
+        name: str | None = None,
         dscp_value: int | str | None = None,
         userdom: str | None = None,
     ) -> FloatingSviCursor:
         """Declare a ``l3extVirtualLIfP`` child under the interface_profile level.
 
         Args:
-            path_of_the_anchor_node: Dn of the Anchor Node
+            node_dn: Dn of the Anchor Node
             external_interface_encap: Encap of the external l2/l3 interface @@@ Note: In switch,
                 two External BDs on the same node cannot have @@@ the external encap. In order
                 to support this for external encap @@@ on a node (it can come from any port
                 relation), same BD vxlan @@@ id should be allocated
-            external_l3_interface_ip_address: Address of the external l3 interface
+            addr: Address of the external l3 interface
             annotation: User annotation. Suggested format orchestrator:value
             svi_autostate: Values: ``disabled``, ``enabled``. Default: ``disabled``.
             description: Description
@@ -25476,14 +25475,14 @@ class _L3outNodeProfileInterfaceProfileMakers(Cursor):
             ipv6_dad: IPv6 DAD feature When disabled it will IPv6 DAD will be diasabled Values:
                 ``disabled``, ``enabled``. Default: ``enabled``.
             ipv6_link_local_address: Override of system generated Ipv6 Link Local Addr
-            external_l3_interface_mac_address: Mac of the external l3 interface. The mac address
-                is by default hard coded to "00:22:BD:F8:19:FF". This is a reserved MAC address
-                and all the l3 interfaces by default use this mac as the router mac.
+            mac: Mac of the external l3 interface. The mac address is by default hard coded to
+                "00:22:BD:F8:19:FF". This is a reserved MAC address and all the l3 interfaces by
+                default use this mac as the router mac.
             encap_mode: The BGP Domain mode. Values: ``native``, ``regular``, ``untagged``.
                 Default: ``regular``.
             mtu_size: The administrative MTU port on the aggregated interface. Default:
                 ``inherit``.
-            name_of_virtuallifp: The name of the object.
+            name: The name of the object.
             dscp_value: Interface level Dscp value. Default: ``unspecified``.
         """
         params = {
@@ -25492,7 +25491,7 @@ class _L3outNodeProfileInterfaceProfileMakers(Cursor):
             if k
             not in (
                 "self",
-                "path_of_the_anchor_node",
+                "node_dn",
                 "external_interface_encap",
             )
         }
@@ -25501,7 +25500,7 @@ class _L3outNodeProfileInterfaceProfileMakers(Cursor):
             self._invoke_maker(
                 "floating_svi",
                 (
-                    path_of_the_anchor_node,
+                    node_dn,
                     external_interface_encap,
                 ),
                 _prune(params),
@@ -25848,12 +25847,12 @@ class _NodeAttachmentMakers(Cursor):
         aggregated_route: bool | None = None,
         annotation: str | None = None,
         description: str | None = None,
-        start_of_prefix_length: int | None = None,
+        from_pfx_len: int | None = None,
         name: str | None = None,
         display_name: str | None = None,
         preference: int | None = None,
         route_controls: frozenset[IpRtCtrl] | set[IpRtCtrl] | str | None = None,
-        end_of_prefix_length: int | None = None,
+        to_pfx_len: int | None = None,
         userdom: str | None = None,
     ) -> NodeAttachmentStaticRouteCursor:
         """Declare a ``ipRouteP`` child under the node_attachment level.
@@ -25865,11 +25864,11 @@ class _NodeAttachmentMakers(Cursor):
             aggregated_route: Aggregated Route Default: ``False``.
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies the description of a policy component.
-            start_of_prefix_length: Prefix list range Default: ``0``.
+            from_pfx_len: Prefix list range Default: ``0``.
             preference: The administrative preference value for this route. This value is useful
                 for resolving routes advertised from different protocols. Default: ``1``.
             route_controls: Default: ``PydanticUndefined``.
-            end_of_prefix_length: Default: ``0``.
+            to_pfx_len: Default: ``0``.
         """
         params = {
             k: v
@@ -26003,7 +26002,7 @@ class NodeAttachmentCursor(
         *,
         annotation: str | None = None,
         config_issues: frozenset[L3extConfigIssues] | set[L3extConfigIssues] | str | None = None,
-        rtr_id: str | None = None,
+        router_id: str | None = None,
         rtr_id_loop_back: bool | None = None,
         userdom: str | None = None,
     ) -> NodeAttachmentCursor:
@@ -27367,7 +27366,7 @@ class TenantSpanDestinationGroupSpanDestinationVspanEpgSummaryCursor(
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
-        source_ip_of_erspan_packet: str | None = None,
+        source_ip_prefix: str | None = None,
         time_to_live: int | str | None = None,
         userdom: str | None = None,
         vrf: str | None = None,
@@ -27525,7 +27524,7 @@ class ExternalPrefixCursor(
         annotation: str | None = None,
         description: str | None = None,
         greater_then: int | str | None = None,
-        less_than_or_equal: int | str | None = None,
+        le: int | str | None = None,
         name: str | None = None,
         display_name: str | None = None,
         userdom: str | None = None,
@@ -27605,7 +27604,7 @@ class InternalPrefixCursor(
         annotation: str | None = None,
         description: str | None = None,
         greater_then: int | str | None = None,
-        less_than_or_equal: int | str | None = None,
+        le: int | str | None = None,
         name: str | None = None,
         display_name: str | None = None,
         userdom: str | None = None,
@@ -27686,7 +27685,7 @@ class InternalSubnetCursor(
         description: str | None = None,
         name: str | None = None,
         display_name: str | None = None,
-        visibility_of_the_subnet: LeakRouteScp | str | None = None,
+        scope: LeakRouteScp | str | None = None,
         userdom: str | None = None,
     ) -> InternalSubnetCursor:
         """Set ``leakInternalSubnet`` attributes (merged; validated eagerly)."""
@@ -27991,7 +27990,7 @@ class _PimInterVrfMakers(Cursor):
 
     def entry(
         self,
-        dn_of_the_src_vrf: str,
+        src_vrf_dn: str,
         *,
         annotation: str | None = None,
         description: str | None = None,
@@ -28004,7 +28003,7 @@ class _PimInterVrfMakers(Cursor):
         Inter VRF Entry policy
 
         Args:
-            dn_of_the_src_vrf: Src Vrf Dn
+            src_vrf_dn: Src Vrf Dn
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies the description of a policy component.
         """
@@ -28014,12 +28013,12 @@ class _PimInterVrfMakers(Cursor):
             if k
             not in (
                 "self",
-                "dn_of_the_src_vrf",
+                "src_vrf_dn",
             )
         }
         return cast(
             "PimInterVrfEntryCursor",
-            self._invoke_maker("entry", (dn_of_the_src_vrf,), _prune(params)),
+            self._invoke_maker("entry", (src_vrf_dn,), _prune(params)),
         )
 
 
@@ -28594,7 +28593,7 @@ class _Pim6InterVrfMakers(Cursor):
 
     def entry(
         self,
-        dn_of_the_src_vrf: str,
+        src_vrf_dn: str,
         *,
         annotation: str | None = None,
         description: str | None = None,
@@ -28607,7 +28606,7 @@ class _Pim6InterVrfMakers(Cursor):
         Inter VRF Entry policy
 
         Args:
-            dn_of_the_src_vrf: Src Vrf Dn
+            src_vrf_dn: Src Vrf Dn
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies the description of a policy component.
         """
@@ -28617,12 +28616,12 @@ class _Pim6InterVrfMakers(Cursor):
             if k
             not in (
                 "self",
-                "dn_of_the_src_vrf",
+                "src_vrf_dn",
             )
         }
         return cast(
             "Pim6InterVrfEntryCursor",
-            self._invoke_maker("entry", (dn_of_the_src_vrf,), _prune(params)),
+            self._invoke_maker("entry", (src_vrf_dn,), _prune(params)),
         )
 
 
@@ -29076,7 +29075,7 @@ class TenantVspanDestinationGroupVspanVdestinationVspanDestinationEpgSummaryCurs
         display_name: str | None = None,
         owner_key: str | None = None,
         owner_tag: str | None = None,
-        source_ip_of_erspan_packet: str | None = None,
+        source_ip_prefix: str | None = None,
         time_to_live: int | str | None = None,
         userdom: str | None = None,
         vrf: str | None = None,
@@ -29626,7 +29625,7 @@ class PtpCursor(_EpgStaticPathMakers, _EpgMakers, _AppMakers, _TenantMakers, _Un
         description: str | None = None,
         name: str | None = None,
         display_name: str | None = None,
-        ptp_mode_for_interface: PtpPtpTransportMode | str | None = None,
+        ptp_mode: PtpPtpTransportMode | str | None = None,
         ptp_source_address: str | None = None,
         userdom: str | None = None,
     ) -> PtpCursor:
@@ -30283,7 +30282,7 @@ class NodeProfileBgpPeerSiteOfOriginProfileCursor(
         description: str | None = None,
         name: str | None = None,
         display_name: str | None = None,
-        site_of_origin: str | None = None,
+        soo: str | None = None,
         userdom: str | None = None,
     ) -> NodeProfileBgpPeerSiteOfOriginProfileCursor:
         """Set ``bgpSiteOfOriginP`` attributes (merged; validated eagerly)."""
@@ -30765,7 +30764,7 @@ class _FloatingSviMakers(Cursor):
         self,
         side: L3extSide | str,
         *,
-        addr: str | None = None,
+        ip_address: str | None = None,
         annotation: str | None = None,
         description: str | None = None,
         ipv6_dad: L3extIpv6Dad | str | None = None,
@@ -30895,7 +30894,7 @@ class FloatingSviCursor(
     def set(
         self,
         *,
-        external_l3_interface_ip_address: str | None = None,
+        addr: str | None = None,
         annotation: str | None = None,
         svi_autostate: SviAutostate | str | None = None,
         description: str | None = None,
@@ -30903,10 +30902,10 @@ class FloatingSviCursor(
         external_interface_type: ExtnwIfInstT | str | None = None,
         ipv6_dad: L3extIpv6Dad | str | None = None,
         ipv6_link_local_address: str | None = None,
-        external_l3_interface_mac_address: str | None = None,
+        mac: str | None = None,
         encap_mode: FvMode | str | None = None,
         mtu_size: int | str | None = None,
-        name_of_virtuallifp: str | None = None,
+        name: str | None = None,
         dscp_value: int | str | None = None,
         userdom: str | None = None,
     ) -> FloatingSviCursor:
@@ -31277,7 +31276,7 @@ class _PathAttachmentMakers(Cursor):
         description: str | None = None,
         name: str | None = None,
         display_name: str | None = None,
-        ptp_mode_for_interface: PtpPtpTransportMode | str | None = None,
+        ptp_mode: PtpPtpTransportMode | str | None = None,
         ptp_source_address: str | None = None,
         userdom: str | None = None,
     ) -> PtpL3outCursor:
@@ -31288,9 +31287,9 @@ class _PathAttachmentMakers(Cursor):
         Args:
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies the description of a policy component.
-            ptp_mode_for_interface: PTP mode multicast, unicast master/slave Values:
-                ``multicast``, ``multicast-master``, ``unicast-master``, ``unicast-slave``.
-                Default: ``multicast``.
+            ptp_mode: PTP mode multicast, unicast master/slave Values: ``multicast``,
+                ``multicast-master``, ``unicast-master``, ``unicast-slave``. Default:
+                ``multicast``.
             ptp_source_address: IP address
         """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
@@ -31339,7 +31338,7 @@ class _PathAttachmentMakers(Cursor):
         self,
         side: L3extSide | str,
         *,
-        addr: str | None = None,
+        ip_address: str | None = None,
         annotation: str | None = None,
         description: str | None = None,
         ipv6_dad: L3extIpv6Dad | str | None = None,
@@ -31398,7 +31397,7 @@ class PathAttachmentCursor(
         self,
         *,
         is_multi_pod_direct: bool | None = None,
-        addr: str | None = None,
+        ip_address: str | None = None,
         annotation: str | None = None,
         autostate: SviAutostate | str | None = None,
         descr: str | None = None,
@@ -31406,8 +31405,8 @@ class PathAttachmentCursor(
         encap_scope: L3extEncapScope | str | None = None,
         if_inst_t: ExtnwIfInstT | str | None = None,
         ipv6_dad: L3extIpv6Dad | str | None = None,
-        ll_addr: str | None = None,
-        mac: str | None = None,
+        ipv6_link_local_address: str | None = None,
+        mac_address: str | None = None,
         mode: FvMode | str | None = None,
         mtu: int | str | None = None,
         target_dscp: int | str | None = None,
@@ -31726,12 +31725,12 @@ class NodeAttachmentStaticRouteCursor(
         aggregated_route: bool | None = None,
         annotation: str | None = None,
         description: str | None = None,
-        start_of_prefix_length: int | None = None,
+        from_pfx_len: int | None = None,
         name: str | None = None,
         display_name: str | None = None,
         preference: int | None = None,
         route_controls: frozenset[IpRtCtrl] | set[IpRtCtrl] | str | None = None,
-        end_of_prefix_length: int | None = None,
+        to_pfx_len: int | None = None,
         userdom: str | None = None,
     ) -> NodeAttachmentStaticRouteCursor:
         """Set ``ipRouteP`` attributes (merged; validated eagerly)."""
@@ -33345,7 +33344,7 @@ class _FloatingSviBgpPeerMakers(Cursor):
         description: str | None = None,
         name: str | None = None,
         display_name: str | None = None,
-        site_of_origin: str | None = None,
+        soo: str | None = None,
         userdom: str | None = None,
     ) -> FloatingSviBgpPeerSiteOfOriginProfileCursor:
         """Declare a ``bgpSiteOfOriginP`` child under the bgp_peer level.
@@ -33355,7 +33354,7 @@ class _FloatingSviBgpPeerMakers(Cursor):
         Args:
             annotation: User annotation. Suggested format orchestrator:value
             description: Specifies the description of a policy component.
-            site_of_origin: Site of origin
+            soo: Site of origin
         """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
@@ -33624,7 +33623,7 @@ class FloatingSviMemberNodeConfigurationCursor(
     def set(
         self,
         *,
-        addr: str | None = None,
+        ip_address: str | None = None,
         annotation: str | None = None,
         description: str | None = None,
         ipv6_dad: L3extIpv6Dad | str | None = None,
@@ -33896,7 +33895,7 @@ class PathAttachmentMemberNodeConfigurationCursor(
     def set(
         self,
         *,
-        addr: str | None = None,
+        ip_address: str | None = None,
         annotation: str | None = None,
         description: str | None = None,
         ipv6_dad: L3extIpv6Dad | str | None = None,
@@ -33972,7 +33971,7 @@ class PtpL3outCursor(
         description: str | None = None,
         name: str | None = None,
         display_name: str | None = None,
-        ptp_mode_for_interface: PtpPtpTransportMode | str | None = None,
+        ptp_mode: PtpPtpTransportMode | str | None = None,
         ptp_source_address: str | None = None,
         userdom: str | None = None,
     ) -> PtpL3outCursor:
@@ -34530,7 +34529,7 @@ class FloatingSviBgpPeerSiteOfOriginProfileCursor(
         description: str | None = None,
         name: str | None = None,
         display_name: str | None = None,
-        site_of_origin: str | None = None,
+        soo: str | None = None,
         userdom: str | None = None,
     ) -> FloatingSviBgpPeerSiteOfOriginProfileCursor:
         """Set ``bgpSiteOfOriginP`` attributes (merged; validated eagerly)."""

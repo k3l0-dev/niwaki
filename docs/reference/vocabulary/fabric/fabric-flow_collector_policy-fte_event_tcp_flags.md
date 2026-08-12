@@ -27,13 +27,13 @@ Accepted as keyword arguments of `.fte_event_tcp_flags(name)` and of `.set(**att
 | `description` | `descr` | `str` | — | — | The description of this configuration item. |
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |
-| `sub_event_configuration_for_tcp_ack_flag` | `tcpAckFlag` | `bool` | — | `False` | 06. TCP ACK flag set |
-| `sub_event_configuration_for_tcp_cwr_flag` | `tcpCwrFlag` | `bool` | — | `False` | 09. TCP CWR flag set |
-| `sub_event_configuration_for_tcp_ece_flag` | `tcpEceFlag` | `bool` | — | `False` | 08. TCP ECE flag set |
-| `sub_event_configuration_for_tcp_fin_flag` | `tcpFinFlag` | `bool` | — | `False` | 02. TCP FIN flag configuration |
-| `sub_event_configuration_for_tcp_flag_set` | `tcpFlagSet` | `bool` | — | `False` | 01. TCP flag set configuration. Enables all TCP flags |
-| `sub_event_configuration_for_tcp_ns_flag` | `tcpNsFlag` | `bool` | — | `False` | 10. TCP NS flag set |
-| `sub_event_configuration_for_tcp_psh_flag` | `tcpPshFlag` | `bool` | — | `False` | 05. TCP PSH flag set |
-| `sub_event_configuration_for_tcp_rst_flag` | `tcpRstFlag` | `bool` | — | `False` | 04. TCP RST flag set |
-| `sub_event_configuration_for_tcp_syn_flag` | `tcpSynFlag` | `bool` | — | `False` | 03. TCP SYN flag set |
-| `sub_event_configuration_for_tcp_urg_flag` | `tcpUrgFlag` | `bool` | — | `False` | 07. TCP URG flag set |
+| `tcp_ack_flag` | `tcpAckFlag` | `bool` | — | `False` | 06. TCP ACK flag set |
+| `tcp_cwr_flag` | `tcpCwrFlag` | `bool` | — | `False` | 09. TCP CWR flag set |
+| `tcp_ece_flag` | `tcpEceFlag` | `bool` | — | `False` | 08. TCP ECE flag set |
+| `tcp_fin_flag` | `tcpFinFlag` | `bool` | — | `False` | 02. TCP FIN flag configuration |
+| `tcp_flag_set` | `tcpFlagSet` | `bool` | — | `False` | 01. TCP flag set configuration. Enables all TCP flags |
+| `tcp_ns_flag` | `tcpNsFlag` | `bool` | — | `False` | 10. TCP NS flag set |
+| `tcp_psh_flag` | `tcpPshFlag` | `bool` | — | `False` | 05. TCP PSH flag set |
+| `tcp_rst_flag` | `tcpRstFlag` | `bool` | — | `False` | 04. TCP RST flag set |
+| `tcp_syn_flag` | `tcpSynFlag` | `bool` | — | `False` | 03. TCP SYN flag set |
+| `tcp_urg_flag` | `tcpUrgFlag` | `bool` | — | `False` | 07. TCP URG flag set |

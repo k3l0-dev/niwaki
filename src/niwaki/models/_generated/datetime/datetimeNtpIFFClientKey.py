@@ -19,9 +19,7 @@ class datetimeNtpIFFClientKey(ManagedObject):
     _aci_class: ClassVar[str] = "datetimeNtpIFFClientKey"
     _rn_format: ClassVar[str] = "ntpiff-{iff_key_id}"
     _naming_props: ClassVar[list[str]] = ["iff_key_id"]
-    _secure_props: ClassVar[frozenset[str]] = frozenset(
-        ["client_group_key_password", "ntp_iff_key_file_contents"]
-    )
+    _secure_props: ClassVar[frozenset[str]] = frozenset(["client_group_key_password", "iff_key"])
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",
@@ -72,7 +70,7 @@ class datetimeNtpIFFClientKey(ManagedObject):
             description="Specifies the description of a policy component.",
         ),
     ] = ""
-    ntp_iff_key_file_contents: Annotated[
+    iff_key: Annotated[
         str,
         Field(max_length=512, validation_alias="iffKey", serialization_alias="iffKey", repr=False),
     ] = ""

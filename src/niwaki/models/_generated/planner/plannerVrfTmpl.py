@@ -67,10 +67,5 @@ class plannerVrfTmpl(ManagedObject):
             serialization_alias="nameAlias",
         ),
     ] = ""
-    contracts_not_enforced: bool = Field(
-        default=False,
-        validation_alias="unenforced",
-        serialization_alias="unenforced",
-        description="Contracts not enforced",
-    )
+    unenforced: bool = Field(default=False, description="Contracts not enforced")
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

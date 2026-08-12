@@ -55,10 +55,7 @@ class firmwareFirmware(ManagedObject):
         serialization_alias="deleteIt",
         description="A property for deleting firmware (when set to true). For internal use only.",
     )
-    whether_latest: bool = Field(
-        default=False,
-        validation_alias="latest",
-        serialization_alias="latest",
-        description="A property that indicates whether the latest minor version.",
+    latest: bool = Field(
+        default=False, description="A property that indicates whether the latest minor version."
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

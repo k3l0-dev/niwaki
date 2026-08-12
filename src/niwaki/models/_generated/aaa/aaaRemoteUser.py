@@ -87,7 +87,7 @@ class aaaRemoteUser(ManagedObject):
             description="current set of roles (keep explicit for audit log by PD and PM)",
         ),
     ] = ""
-    state_for_challenge_response: Annotated[
+    state_code: Annotated[
         str, Field(max_length=512, validation_alias="stateCode", serialization_alias="stateCode")
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

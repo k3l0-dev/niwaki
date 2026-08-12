@@ -36,9 +36,9 @@ Accepted as keyword arguments of `.esg(name)` and of `.set(**attrs)` on this cur
 | maker | creates | position |
 | --- | --- | --- |
 | `.ep_selector(match_expression, **attrs)` | `fvEPSelector` | {ref}`tenant.app.esg.ep_selector <vocab-tenant-app-esg-ep_selector>` |
-| `.epg_selector(epg_dn_to_be_associated, **attrs)` | `fvEPgSelector` | {ref}`tenant.app.esg.epg_selector <vocab-tenant-app-esg-epg_selector>` |
+| `.epg_selector(match_epg_dn, **attrs)` | `fvEPgSelector` | {ref}`tenant.app.esg.epg_selector <vocab-tenant-app-esg-epg_selector>` |
 | `.tag_selector(match_key, match_value, **attrs)` | `fvTagSelector` | {ref}`tenant.app.esg.tag_selector <vocab-tenant-app-esg-tag_selector>` |
-| `.lif_ctx_selector(lifctx_dn_to_be_associated, **attrs)` | `fvLIfCtxSelector` | {ref}`tenant.app.esg.lif_ctx_selector <vocab-tenant-app-esg-lif_ctx_selector>` |
+| `.lif_ctx_selector(match_l_if_ctx_dn, **attrs)` | `fvLIfCtxSelector` | {ref}`tenant.app.esg.lif_ctx_selector <vocab-tenant-app-esg-lif_ctx_selector>` |
 | `.provider_label(name, **attrs)` | `vzProvLbl` | {ref}`tenant.app.esg.provider_label <vocab-tenant-app-esg-provider_label>` |
 | `.consumer_label(name, **attrs)` | `vzConsLbl` | {ref}`tenant.app.esg.consumer_label <vocab-tenant-app-esg-consumer_label>` |
 | `.provider_subject_label(name, **attrs)` | `vzProvSubjLbl` | {ref}`tenant.app.esg.provider_subject_label <vocab-tenant-app-esg-provider_subject_label>` |

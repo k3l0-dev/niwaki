@@ -57,9 +57,4 @@ class faultThrValueTrigger(ManagedObject):
         description="Threshold value from policy.",
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    value_of_the_property: StatsTrigger = Field(
-        default=StatsTrigger.OFF,
-        validation_alias="value",
-        serialization_alias="value",
-        description="Value of the property.",
-    )
+    value: StatsTrigger = Field(default=StatsTrigger.OFF, description="Value of the property.")

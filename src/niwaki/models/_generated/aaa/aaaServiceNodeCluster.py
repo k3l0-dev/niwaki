@@ -20,7 +20,7 @@ class aaaServiceNodeCluster(ManagedObject):
     _rn_format: ClassVar[str] = "snclstr-{name}"
     _naming_props: ClassVar[list[str]] = ["name"]
     _secure_props: ClassVar[frozenset[str]] = frozenset(
-        ["service_node_admin_password", "service_node_api_key", "service_node_kms_private_key"]
+        ["service_node_admin_password", "service_node_api_key", "sn_kms_priv_key"]
     )
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
@@ -114,10 +114,10 @@ class aaaServiceNodeCluster(ManagedObject):
             description="The system user password.",
         ),
     ] = ""
-    service_node_kms_private_key: Annotated[
+    sn_kms_priv_key: Annotated[
         str, Field(validation_alias="snKmsPrivKey", serialization_alias="snKmsPrivKey", repr=False)
     ] = ""
-    service_node_kms_public_key: str = Field(
+    sn_kms_pub_key: str = Field(
         default="", validation_alias="snKmsPubKey", serialization_alias="snKmsPubKey"
     )
     service_node_mode: AaaSNModeType = Field(

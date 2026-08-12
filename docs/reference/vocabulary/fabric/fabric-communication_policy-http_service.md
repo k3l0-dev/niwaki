@@ -30,7 +30,7 @@ Accepted as keyword arguments of `.http_service()` and of `.set(**attrs)` on thi
 | `description` | `descr` | `str` | — | — | Specifies the description of a policy component. |
 | `global_throttle_rate` | `globalThrottleRate` | `int` | — | `10000` | — |
 | `global_throttle_st` | `globalThrottleSt` | {ref}`CommAdminState <enum-commadminstate>` | `disabled`, `enabled` | `disabled` | — |
-| `unit_of_rate_limit` | `globalThrottleUnit` | `str` | — | — | — |
+| `global_throttle_unit` | `globalThrottleUnit` | `str` | — | — | — |
 | `max_request_status_count` | `maxRequestStatusCount` | `int` | — | `0` | — |
 | `name` | `name` | `str` | — | — | — |
 | `node_exporter_service` | `nodeExporter` | {ref}`CommNodeExporter <enum-commnodeexporter>` | `disabled`, `enabled` | `disabled` | — |

@@ -56,12 +56,7 @@ class dbgexpTSDomain(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    files_to_collect_and_export: str = Field(
-        default="",
-        validation_alias="domain",
-        serialization_alias="domain",
-        description="The domain of the counts object.",
-    )
+    domain: Annotated[str, Field(description="The domain of the counts object.")] = ""
     display_name: Annotated[
         str,
         Field(

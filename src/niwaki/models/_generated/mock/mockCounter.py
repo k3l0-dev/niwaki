@@ -66,9 +66,7 @@ class mockCounter(ManagedObject):
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
-    end_value_of_mocked_counter: Annotated[
-        int, Field(validation_alias="end", serialization_alias="end")
-    ] = 0
+    end: int = 0
     display_name: Annotated[
         str,
         Field(
@@ -98,6 +96,4 @@ class mockCounter(ManagedObject):
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
-    start_value_of_mocked_counter: Annotated[
-        int, Field(validation_alias="start", serialization_alias="start")
-    ] = 0
+    start: int = 0

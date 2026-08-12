@@ -13,12 +13,12 @@ class l3IpCktEp(ManagedObject):
 
     IP Circuit Endpoint
 
-    RN format: ``ipcktep-[{identifier_of_the_ip_circuit_endpoint}]``
+    RN format: ``ipcktep-[{addr}]``
     """
 
     _aci_class: ClassVar[str] = "l3IpCktEp"
-    _rn_format: ClassVar[str] = "ipcktep-[{identifier_of_the_ip_circuit_endpoint}]"
-    _naming_props: ClassVar[list[str]] = ["identifier_of_the_ip_circuit_endpoint"]
+    _rn_format: ClassVar[str] = "ipcktep-[{addr}]"
+    _naming_props: ClassVar[list[str]] = ["addr"]
     _fault_codes: ClassVar[dict[str, str]] = {
         "F1925": "fltL3IpCktEpIpCktEpConfigFailed",
     }
@@ -41,14 +41,8 @@ class l3IpCktEp(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    identifier_of_the_ip_circuit_endpoint: Annotated[
-        str,
-        Field(
-            pattern="^[0-9a-fA-F.:/ ]+$",
-            validation_alias="addr",
-            serialization_alias="addr",
-            description="IP address of the endpoint",
-        ),
+    addr: Annotated[
+        str, Field(pattern="^[0-9a-fA-F.:/ ]+$", description="IP address of the endpoint")
     ]
 
     # ── Configurable ───────────────────────────────────────────────────────────

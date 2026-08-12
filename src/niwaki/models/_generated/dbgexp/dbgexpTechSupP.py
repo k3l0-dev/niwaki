@@ -106,9 +106,7 @@ class dbgexpTechSupP(ManagedObject):
             description="Specifies the description of a policy component.",
         ),
     ] = ""
-    end_time_for_techsupport_collection: str = Field(
-        default="", validation_alias="endTime", serialization_alias="endTime"
-    )
+    end_time: str = Field(default="", validation_alias="endTime", serialization_alias="endTime")
     export_to_controller: bool = Field(
         default=False,
         validation_alias="exportToController",
@@ -131,7 +129,7 @@ class dbgexpTechSupP(ManagedObject):
             serialization_alias="nameAlias",
         ),
     ] = ""
-    start_time_for_techsupport_collection: str = Field(
+    start_time: str = Field(
         default="", validation_alias="startTime", serialization_alias="startTime"
     )
     include_pre_upgrade_logs: bool = Field(

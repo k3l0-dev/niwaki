@@ -112,7 +112,7 @@ def _policies(tn):  # type: ignore[no-untyped-def]
         description="VRF validation, several validators enabled.",
         enable_bgpinfrapeer_policy_validation=True,
         enable_vrf_validation_ip_address=True,
-        enable_subnet_non_duplication_validation=True,
+        enable_vrf_validation_subnet=True,
     )
     tn.monitoring_policy("niwaki-it-mon", description="Monitoring policy.")
 

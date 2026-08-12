@@ -56,7 +56,7 @@ def test_vmm_controllers(live_aci: Niwaki) -> None:
     for index, dvs_version in enumerate(DVS_VERSIONS):
         controller = dom.vmm_controller(
             f"vcenter-{index}",
-            hostname_or_ip_address=f"10.50.0.{index + 10}",
+            host_or_ip=f"10.50.0.{index + 10}",
             dvs_version=dvs_version,
             mode="default",
             type="vm",
@@ -70,7 +70,7 @@ def test_vmm_controllers(live_aci: Niwaki) -> None:
         if index == 0:
             controller.cluster_controller(
                 "vcenter-node-1",
-                hostname_or_ip_address="10.50.0.100",
+                host_or_ip="10.50.0.100",
                 datacenter="Lab-DC",
                 port=443,
             )
@@ -83,7 +83,7 @@ def test_vmm_host_availability(live_aci: Niwaki) -> None:
     dom = dsn.vmm_provider(VENDOR).vmm_dom(HA_DOM, encap_mode="vlan")
     controller = dom.vmm_controller(
         "vcenter-ha",
-        hostname_or_ip_address="10.51.0.10",
+        host_or_ip="10.51.0.10",
         mode="default",
         type="vm",
         port=443,
@@ -91,7 +91,7 @@ def test_vmm_host_availability(live_aci: Niwaki) -> None:
     )
     availability = controller.host_availability_policy(name="host-availability")
     for index, state in enumerate(HOST_STATES):
-        availability.host_desired_state(f"esxi-{index}", desired_state_for_the_host=state)
+        availability.host_desired_state(f"esxi-{index}", state=state)
     availability.protect_vm_group(f"uni/vmmp-{VENDOR}/dom-{HA_DOM}/vmgrp-protected")
 
     dsn.push(live_aci)

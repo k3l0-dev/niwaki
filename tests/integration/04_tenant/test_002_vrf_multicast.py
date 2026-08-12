@@ -89,24 +89,24 @@ def test_vrf_route_leaking(live_aci: Niwaki) -> None:
         "10.50.0.0/16",
         description="Internal leaked prefix with length bounds.",
         greater_then=24,
-        less_than_or_equal=32,
+        le=32,
     )
     leak.internal_prefix("10.51.0.0/16", description="Internal leaked prefix, no length bounds.")
     leak.external_prefix(
         "192.0.2.0/24",
         description="External leaked prefix with length bounds.",
         greater_then=25,
-        less_than_or_equal=32,
+        le=32,
     )
     leak.internal_subnet(
         "10.60.0.0/16",
         description="Leaked subnet, private visibility.",
-        visibility_of_the_subnet="private",
+        scope="private",
     )
     leak.internal_subnet(
         "10.61.0.0/16",
         description="Leaked subnet, public visibility.",
-        visibility_of_the_subnet="public",
+        scope="public",
     )
 
     fbr = tn.vrf(

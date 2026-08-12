@@ -133,13 +133,11 @@ class aaaRsaProvider(ManagedObject):
         ),
     ] = ""
     retries: Annotated[int, Field(ge=0, le=5)] = 1
-    timeout_in_seconds: Annotated[
+    timeout: Annotated[
         int,
         Field(
             ge=0,
             le=60,
-            validation_alias="timeout",
-            serialization_alias="timeout",
             description="Per provider configuration, if set to 0, it uses global settings value",
         ),
     ] = 5

@@ -32,6 +32,6 @@ Accepted as keyword arguments of `.vspan_epg_summary()` and of `.set(**attrs)` o
 | `name` | `name` | `str` | — | — | — |
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |
-| `source_ip_of_erspan_packet` | `srcIpPrefix` | `str` | — | — | — |
+| `source_ip_prefix` | `srcIpPrefix` | `str` | — | — | — |
 | `time_to_live` | `ttl` | `int` | — | `64` | — |
 | `vrf` | `vrfName` | `str` | — | — | — |

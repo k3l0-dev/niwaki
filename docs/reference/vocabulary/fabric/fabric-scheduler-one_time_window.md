@@ -25,7 +25,7 @@ Accepted as keyword arguments of `.one_time_window(name)` and of `.set(**attrs)`
 | --- | --- | --- | --- | --- | --- |
 | `name` *(positional)* | `name` | `str` | — | — | The name of the schedule window. |
 | `maximum_concurrent_tasks` | `concurCap` | `int` | — | `unlimited` | The concurrency capacity limit. This is the maximum number of tasks that can be processed concurrently. |
-| `date_and_time` | `date` | `str` | — | — | The date that the schedule window starts. |
+| `window_start_time` | `date` | `str` | — | — | The date that the schedule window starts. |
 | `delay_between_node_upgrades` | `nodeUpgInterval` | `int` | — | `0` | Delay between node upgrades in seconds. This is applicable only for concurCap 1. |
 | `proc_break` | `procBreak` | `str` | — | — | A period of time taken between processing of items within the concurrency cap. |
 | `proc_cap` | `procCap` | `int` | — | `unlimited` | Processing size capacity limitation specification. Indicates the limit of items to be processed within this window. |

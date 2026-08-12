@@ -23,10 +23,10 @@ Accepted as keyword arguments of `.track_member(name)` and of `.set(**attrs)` on
 | --- | --- | --- | --- | --- | --- |
 | `name` *(positional)* | `name` | `str` | — | — | The name of the object. |
 | `description` | `descr` | `str` | — | — | Specifies a description of the policy definition. |
-| `destination_ip_to_be_tracked` | `dstIpAddr` | `str` | — | — | — |
+| `dst_ip_addr` | `dstIpAddr` | `str` | — | — | — |
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |
-| `scope_of_track_member` | `scopeDn` | `str` | — | — | The parameters of the service graph instance. |
+| `scope_dn` | `scopeDn` | `str` | — | — | The parameters of the service graph instance. |
 
 ## Bind aliases
 

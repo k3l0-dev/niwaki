@@ -70,7 +70,7 @@ class aaaKafkaTopic(ManagedObject):
         validation_alias="cleanupPolicy",
         serialization_alias="cleanupPolicy",
     )
-    topic_delete_retention_time_in_ms: Annotated[
+    delete_retention_ms: Annotated[
         str,
         Field(
             max_length=128,
@@ -117,25 +117,16 @@ class aaaKafkaTopic(ManagedObject):
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
-    number_of_topic_partitions: Annotated[
-        int,
-        Field(
-            ge=1,
-            le=1024,
-            validation_alias="partition",
-            serialization_alias="partition",
-            description="An ISIS link-state packet partition flag.",
-        ),
+    partition: Annotated[
+        int, Field(ge=1, le=1024, description="An ISIS link-state packet partition flag.")
     ] = 0
-    number_of_topic_replicas: Annotated[
-        int, Field(ge=1, le=16, validation_alias="replica", serialization_alias="replica")
-    ] = 0
+    replica: Annotated[int, Field(ge=1, le=16)] = 0
     replica_assignment: AaaKafkaTopicType = Field(
         default=AaaKafkaTopicType.ANY,
         validation_alias="replicaAssignment",
         serialization_alias="replicaAssignment",
     )
-    topic_segmentation_interval_in_ms: Annotated[
+    segment_ms: Annotated[
         str, Field(max_length=128, validation_alias="segmentMs", serialization_alias="segmentMs")
     ] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

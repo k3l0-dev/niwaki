@@ -81,7 +81,7 @@ class lacpEnhancedLagPol(ManagedObject):
             serialization_alias="nameAlias",
         ),
     ] = ""
-    number_of_links: Annotated[
+    num_links: Annotated[
         int,
         Field(
             ge=2,

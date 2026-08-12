@@ -28,7 +28,7 @@ Accepted as keyword arguments of `.radius()` and of `.set(**attrs)` on this curs
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |
 | `retries` | `retries` | `int` | — | `1` | The number of attempts that the authentication method is tried. |
-| `timeout_in_seconds` | `timeout` | `int` | — | `5` | The amount of time between authentication attempts. |
+| `timeout` | `timeout` | `int` | — | `5` | The amount of time between authentication attempts. |
 
 ## Children
 

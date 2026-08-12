@@ -52,11 +52,8 @@ class fvTrackList(ManagedObject):
     ]
 
     # ── Create-only (ignored by APIC on modification) ─────────────────────────
-    type_of_tracklist: TrackListObj = Field(
-        default=TrackListObj.PERCENTAGE,
-        validation_alias="type",
-        serialization_alias="type",
-        description="The specific type of the object or component.",
+    type: TrackListObj = Field(
+        default=TrackListObj.PERCENTAGE, description="The specific type of the object or component."
     )
 
     # ── Configurable ───────────────────────────────────────────────────────────

@@ -25,7 +25,7 @@ Accepted as keyword arguments of `.l3out(name)` and of `.set(**attrs)` on this c
 | --- | --- | --- | --- | --- | --- |
 | `name` *(positional)* | `name` | `str` | — | — | The name for the policy controlling connectivity to the outside. This name can be up to 64 alphanumeric characters. Note that you cannot change this name after the object has been saved. |
 | `description` | `descr` | `str` | — | — | Specifies a description of the policy definition root. |
-| `enforce_rtctrl` | `enforceRtctrl` | {ref}`L3extCtrlDirection <enum-l3extctrldirection>` | `import`, `export` | `export` | The enforce route control type. |
+| `enforce_route_control` | `enforceRtctrl` | {ref}`L3extCtrlDirection <enum-l3extctrldirection>` | `import`, `export` | `export` | The enforce route control type. |
 | `mpls_enabled` | `mplsEnabled` | `bool` | — | `False` | Indiscate whether MPLS is enabled or not |
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |

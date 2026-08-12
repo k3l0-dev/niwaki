@@ -69,13 +69,9 @@ class arpIf(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    interface_controls_for_arp: Annotated[Flags[ArpIfControl], BeforeValidator(parse_flags)] = (
-        Field(
-            default_factory=lambda: frozenset({ArpIfControl.UNSPECIFIED}),
-            validation_alias="ctrl",
-            serialization_alias="ctrl",
-            description="Interface controls",
-        )
+    ctrl: Annotated[Flags[ArpIfControl], BeforeValidator(parse_flags)] = Field(
+        default_factory=lambda: frozenset({ArpIfControl.UNSPECIFIED}),
+        description="Interface controls",
     )
     delete_adj_on_mac_delete: NwAdminSt = Field(
         default=NwAdminSt.DISABLED,
@@ -122,7 +118,7 @@ class arpIf(ManagedObject):
         serialization_alias="localProxyArp",
         description="Local Proxy ARP",
     )
-    local_proxy_arp_w_o_hw_flooding: NwAdminSt = Field(
+    local_proxy_arp_no_hw_flood: NwAdminSt = Field(
         default=NwAdminSt.DISABLED,
         validation_alias="localProxyArpNoHwFlood",
         serialization_alias="localProxyArpNoHwFlood",

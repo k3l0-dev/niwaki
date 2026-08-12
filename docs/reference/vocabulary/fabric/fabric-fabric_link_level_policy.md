@@ -23,6 +23,6 @@ Accepted as keyword arguments of `.fabric_link_level_policy(name)` and of `.set(
 | --- | --- | --- | --- | --- | --- |
 | `name` *(positional)* | `name` | `str` | — | — | The name of the object. |
 | `description` | `descr` | `str` | — | — | Specifies a description of the policy definition. |
-| `fabric_link_debounce_interval_msec` | `linkDebounce` | `int` | — | `0` | Administrative Fabric Port link debounce interval |
+| `link_debounce` | `linkDebounce` | `int` | — | `0` | Administrative Fabric Port link debounce interval |
 | `owner_key` | `ownerKey` | `str` | — | — | The key for enabling clients to own their data for entity correlation. |
 | `owner_tag` | `ownerTag` | `str` | — | — | A tag for enabling clients to add their own data. For example, to indicate who created this object. |

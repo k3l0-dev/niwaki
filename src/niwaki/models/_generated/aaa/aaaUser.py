@@ -190,7 +190,7 @@ class aaaUser(ManagedObject):
         serialization_alias="pwdUpdateRequired",
         description="A boolean value indicating whether this account needs password update",
     )
-    domain_read_write_rules_for_user: Annotated[
+    rbac_string: Annotated[
         str,
         Field(
             max_length=1024,

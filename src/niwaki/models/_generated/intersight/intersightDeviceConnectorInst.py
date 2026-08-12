@@ -17,7 +17,7 @@ class intersightDeviceConnectorInst(ManagedObject):
     _aci_class: ClassVar[str] = "intersightDeviceConnectorInst"
     _rn_format: ClassVar[str] = "dcinst"
     _naming_props: ClassVar[list[str]] = []
-    _secure_props: ClassVar[frozenset[str]] = frozenset(["base64_encoded_parent_signature_block"])
+    _secure_props: ClassVar[frozenset[str]] = frozenset(["psb"])
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",
@@ -84,7 +84,5 @@ class intersightDeviceConnectorInst(ManagedObject):
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
-    base64_encoded_parent_signature_block: Annotated[
-        str, Field(validation_alias="psb", serialization_alias="psb", repr=False)
-    ] = ""
+    psb: Annotated[str, Field(repr=False)] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

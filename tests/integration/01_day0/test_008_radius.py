@@ -34,7 +34,7 @@ def test_radius(live_aci: Niwaki) -> None:
             key=RADIUS_KEY,
             authentication_protocol="pap",
             port=1812,
-            timeout_in_seconds=5,
+            timeout=5,
             retries=2,
         )
 
@@ -44,6 +44,6 @@ def test_radius(live_aci: Niwaki) -> None:
         description="RADIUS provider group for 802.1x node authentication.",
     )
     for order, server in enumerate(RADIUS_SERVERS, start=1):
-        group.provider(server, order_in_which_providers_are_tried=order)
+        group.provider(server, order=order)
 
     cfg.push(live_aci)

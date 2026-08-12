@@ -131,7 +131,7 @@ class telemetryFlowCollectorP(ManagedObject):
             description="A tag for enabling clients to add their own data. For example, to indicate who created this object.",
         ),
     ] = ""
-    software_hardware_based_record_export: bool = Field(
+    sw_export: bool = Field(
         default=False, validation_alias="swExport", serialization_alias="swExport"
     )
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

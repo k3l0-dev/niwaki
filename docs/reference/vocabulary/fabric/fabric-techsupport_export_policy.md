@@ -32,10 +32,10 @@ Accepted as keyword arguments of `.techsupport_export_policy(name)` and of `.set
 | `export_location` | `controllerLocation` | {ref}`ScalarEnum8 <enum-scalarenum8>` | `apic`, `apicx` | `apic` | — |
 | `include_db_metadata_file` | `dbMetadata` | `bool` | — | `True` | — |
 | `description` | `descr` | `str` | — | — | Specifies the description of a policy component. |
-| `end_time_for_techsupport_collection` | `endTime` | `str` | — | — | — |
+| `end_time` | `endTime` | `str` | — | — | — |
 | `export_to_controller` | `exportToController` | `bool` | — | `False` | — |
 | `export_to_intersight` | `exportToIntersight` | `bool` | — | `False` | — |
 | `extensive_logs` | `extensiveLogs` | `bool` | — | `False` | — |
-| `start_time_for_techsupport_collection` | `startTime` | `str` | — | — | — |
+| `start_time` | `startTime` | `str` | — | — | — |
 | `include_pre_upgrade_logs` | `upgradeLogs` | `bool` | — | `False` | — |
 | `vendor_name` | `vendorName` | `str` | — | — | The SFP transceiver vendor name (ASCII). |

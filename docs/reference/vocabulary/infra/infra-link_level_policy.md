@@ -24,7 +24,7 @@ Accepted as keyword arguments of `.link_level_policy(name)` and of `.set(**attrs
 | parameter | wire | type | values | default | description |
 | --- | --- | --- | --- | --- | --- |
 | `name` *(positional)* | `name` | `str` | — | — | The name of the interface policy. This name can be up to 64 characters. Note that you cannot change this name after the object has been saved. |
-| `auto_negotiation_on_off` | `autoNeg` | {ref}`L1AutoNeg <enum-l1autoneg>` | `off`, `on`, `on-enforce` | `on` | The policy auto-negotiation. Auto-negotiation is an optional function of the IEEE 802.3u Fast Ethernet standard that enables devices to automatically exchange information over a link about speed and duplex abilities. |
+| `auto_negotiation` | `autoNeg` | {ref}`L1AutoNeg <enum-l1autoneg>` | `off`, `on`, `on-enforce` | `on` | The policy auto-negotiation. Auto-negotiation is an optional function of the IEEE 802.3u Fast Ethernet standard that enables devices to automatically exchange information over a link about speed and duplex abilities. |
 | `description` | `descr` | `str` | — | — | Specifies a description of the policy definition. |
 | `dfe_delay_ms` | `dfeDelayMs` | `int` | — | `0` | — |
 | `enable_disable_emi_retrain` | `emiRetrain` | {ref}`L1EmiRetrain <enum-l1emiretrain>` | `disable`, `enable` | `disable` | — |

@@ -161,12 +161,7 @@ class qosDppPol(ManagedObject):
             description="Exceed Mark Dscp",
         ),
     ] = "unspecified"
-    bit_or_packet: DppMode = Field(
-        default=DppMode.BIT,
-        validation_alias="mode",
-        serialization_alias="mode",
-        description="Policer mode - bytes or packet policer",
-    )
+    mode: DppMode = Field(default=DppMode.BIT, description="Policer mode - bytes or packet policer")
     display_name: Annotated[
         str,
         Field(

@@ -58,14 +58,14 @@ def test_datetime_policies(live_aci: Niwaki) -> None:
             1,
             description="MD5 NTP authentication key, trusted.",
             key="0123456789abcdef",
-            type_of_authentication_key="md5",
+            key_type="md5",
             trusted_state=True,
         )
         policy.ntp_auth_key(
             2,
             description="SHA1 NTP authentication key, untrusted.",
             key="fedcba9876543210",
-            type_of_authentication_key="sha1",
+            key_type="sha1",
             trusted_state=False,
         )
         # Two providers: preferred + true-chimer, and neither.

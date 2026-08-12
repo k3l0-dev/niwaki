@@ -79,10 +79,10 @@ class troubleshootSession(ManagedObject):
     destination_end_point: Annotated[
         str, Field(max_length=512, validation_alias="dstEP", serialization_alias="dstEP")
     ] = ""
-    destination_end_point_external_ip: Annotated[
+    dst_ext_ip: Annotated[
         str, Field(max_length=512, validation_alias="dstExtIP", serialization_alias="dstExtIP")
     ] = ""
-    destination_end_point_external_mac: Annotated[
+    dst_ext_mac: Annotated[
         str, Field(max_length=512, validation_alias="dstExtMac", serialization_alias="dstExtMac")
     ] = ""
     destination_external_out: Annotated[
@@ -94,9 +94,7 @@ class troubleshootSession(ManagedObject):
     destination_end_point_mac: Annotated[
         str, Field(max_length=512, validation_alias="dstMAC", serialization_alias="dstMAC")
     ] = ""
-    end_time_for_the_session_period: str = Field(
-        default="", validation_alias="endTime", serialization_alias="endTime"
-    )
+    end_time: str = Field(default="", validation_alias="endTime", serialization_alias="endTime")
     format: TroubleshootFormat = TroubleshootFormat.PDF
     internal_type: Annotated[
         str,
@@ -114,7 +112,7 @@ class troubleshootSession(ManagedObject):
         serialization_alias="isSrcRemote",
         description="Flag to tell if source end point is on remote site",
     )
-    time_window_in_minutes_from_now: Annotated[
+    latest_min: Annotated[
         Annotated[int, Field(ge=5, le=525600)] | Literal["unspecified"],
         AfterValidator(named_number({"0": "unspecified"})),
         Field(validation_alias="latestMin", serialization_alias="latestMin"),
@@ -129,18 +127,8 @@ class troubleshootSession(ManagedObject):
             serialization_alias="nameAlias",
         ),
     ] = ""
-    list_of_nodes: Annotated[
-        str, Field(max_length=512, validation_alias="node", serialization_alias="node")
-    ] = ""
-    list_of_interfaces: Annotated[
-        str,
-        Field(
-            max_length=512,
-            validation_alias="path",
-            serialization_alias="path",
-            description="Ignore, removed",
-        ),
-    ] = ""
+    node: Annotated[str, Field(max_length=512)] = ""
+    path: Annotated[str, Field(max_length=512, description="Ignore, removed")] = ""
     post_processing: Annotated[
         str,
         Field(
@@ -154,7 +142,7 @@ class troubleshootSession(ManagedObject):
             max_length=512, validation_alias="spanSrcPrefix", serialization_alias="spanSrcPrefix"
         ),
     ] = ""
-    serial_id_of_apic: Annotated[
+    span_start_apic_id: Annotated[
         str,
         Field(
             max_length=512,
@@ -165,10 +153,10 @@ class troubleshootSession(ManagedObject):
     source_end_point: Annotated[
         str, Field(max_length=512, validation_alias="srcEP", serialization_alias="srcEP")
     ] = ""
-    source_end_point_external_ip: Annotated[
+    src_ext_ip: Annotated[
         str, Field(max_length=512, validation_alias="srcExtIP", serialization_alias="srcExtIP")
     ] = ""
-    source_end_point_external_mac: Annotated[
+    src_ext_mac: Annotated[
         str, Field(max_length=512, validation_alias="srcExtMac", serialization_alias="srcExtMac")
     ] = ""
     source_external_out: Annotated[
@@ -180,10 +168,8 @@ class troubleshootSession(ManagedObject):
     source_end_point_mac: Annotated[
         str, Field(max_length=512, validation_alias="srcMAC", serialization_alias="srcMAC")
     ] = ""
-    start_time_for_the_session_period: str = Field(
+    start_time: str = Field(
         default="", validation_alias="startTime", serialization_alias="startTime"
     )
-    session_type_eptoep_epext_etc: Annotated[
-        str, Field(max_length=512, validation_alias="type", serialization_alias="type")
-    ] = ""
+    type: Annotated[str, Field(max_length=512)] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

@@ -129,7 +129,7 @@ class vmmCtrlrP(ManagedObject):
     ]
 
     # ── Create-only (ignored by APIC on modification) ─────────────────────────
-    hostname_or_ip_address: str = Field(
+    host_or_ip: str = Field(
         default="",
         validation_alias="hostOrIp",
         serialization_alias="hostOrIp",

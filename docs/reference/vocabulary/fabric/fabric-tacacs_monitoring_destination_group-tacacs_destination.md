@@ -29,4 +29,4 @@ Accepted as keyword arguments of `.tacacs_destination(host, port)` and of `.set(
 | `description` | `descr` | `str` | — | — | Specifies the description of a policy component. |
 | `key` | `key` | `str` | — | — | The key or password used to uniquely identify this configuration object. |
 | `name` | `name` | `str` | — | — | — |
-| `send_changes_as_command_arguments` | `populateCmdArgs` | `bool` | — | `False` | — |
+| `populate_cmd_args` | `populateCmdArgs` | `bool` | — | `False` | — |

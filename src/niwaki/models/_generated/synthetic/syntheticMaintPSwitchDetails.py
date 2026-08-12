@@ -43,10 +43,10 @@ class syntheticMaintPSwitchDetails(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    name_of_maintenance_policy: Annotated[
+    maint_p_name: Annotated[
         str, Field(max_length=512, validation_alias="maintPName", serialization_alias="maintPName")
     ] = ""
-    node_ids_of_the_nodes_in_maintp: Annotated[
+    node_ids: Annotated[
         str, Field(max_length=512, validation_alias="nodeIds", serialization_alias="nodeIds")
     ] = ""
     target_version: Annotated[

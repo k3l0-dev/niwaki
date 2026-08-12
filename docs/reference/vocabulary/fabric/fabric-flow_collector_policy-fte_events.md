@@ -44,11 +44,11 @@ Accepted as keyword arguments of `.fte_events(name)` and of `.set(**attrs)` on t
 | `fwd_drops` | `fwdDrops` | `bool` | — | `False` | 13. Capture the forward drops for the FTE events under FTE |
 | `group_drop_events` | `groupDropEvents` | `bool` | — | `False` | 09. Dropped Event Groups for the FTE events under FTE |
 | `group_latency_events` | `groupLatencyEvents` | `bool` | — | `False` | 10. Dropped Event Groups for the FTE events under FTE |
-| `configure_fte_latency_bucket_count` | `latencyCount` | `int` | — | `0` | 32. FTE rtt_sample_seq Bucket count |
+| `latency_count` | `latencyCount` | `int` | — | `0` | 32. FTE rtt_sample_seq Bucket count |
 | `latency_flow_count` | `latencyFlowCount` | `int` | — | `0` | 17. Latency events flow count under FTE |
-| `configure_fte_latency_bucket_limit` | `latencyLimit` | `int` | — | `0` | 31. FTE rtt_sample_seq Bucket limit |
-| `configure_fte_latency_threshold_limit` | `latencyThreshold` | `int` | — | `0` | 15. Latency under FTE |
-| `configure_fte_latency_threshold_unit` | `latencyThresholdUnit` | {ref}`TelemetryLatencyUnit <enum-telemetrylatencyunit>` | `micro-sec`, `milli-sec` | `micro-sec` | 16. Latency Unit under FTE |
+| `latency_limit` | `latencyLimit` | `int` | — | `0` | 31. FTE rtt_sample_seq Bucket limit |
+| `latency_threshold` | `latencyThreshold` | `int` | — | `0` | 15. Latency under FTE |
+| `latency_threshold_unit` | `latencyThresholdUnit` | {ref}`TelemetryLatencyUnit <enum-telemetrylatencyunit>` | `micro-sec`, `milli-sec` | `micro-sec` | 16. Latency Unit under FTE |
 | `mouse_packet_bit` | `mousePacketBit` | `bool` | — | `False` | 03. Mouse Pkt bit configuration |
 | `mouse_packet_count` | `mousePacketCount` | `int` | — | `0` | 24. FTE Bucket mouse_pkt count |
 | `mouse_packet_limit` | `mousePacketLimit` | `int` | — | `0` | 23. FTE Bucket mouse_pkt limit |

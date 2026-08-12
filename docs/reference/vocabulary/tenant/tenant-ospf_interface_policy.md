@@ -24,7 +24,7 @@ Accepted as keyword arguments of `.ospf_interface_policy(name)` and of `.set(**a
 | parameter | wire | type | values | default | description |
 | --- | --- | --- | --- | --- | --- |
 | `name` *(positional)* | `name` | `str` | — | — | The OSPF interface policy name. This name can be between 1 and 64 alphanumeric characters. Note that you cannot change this name after the object has been saved. |
-| `cost_of_interface` | `cost` | `int` | — | `unspecified` | The OSPF cost for the interface. The cost (also called metric) of an interface in OSPF is an indication of the overhead required to send packets across a certain interface. The cost of an interface is inversely proportional to the bandwidth of that interface. |
+| `cost` | `cost` | `int` | — | `unspecified` | The OSPF cost for the interface. The cost (also called metric) of an interface in OSPF is an indication of the overhead required to send packets across a certain interface. The cost of an interface is inversely proportional to the bandwidth of that interface. |
 | `interface_controls` | `ctrl` | {ref}`OspfIfControl <enum-ospfifcontrol>` | `unspecified`, `passive`, `mtu-ignore`, `advert-subnet`, `bfd` | `unspecified` | The interface policy controls. |
 | `dead_interval` | `deadIntvl` | `int` | — | `40` | The interval between hello packets from a neighbor before the router declares the neighbor as down. This value must be the same for all networking devices on a specific network. |
 | `description` | `descr` | `str` | — | — | Specifies a description of the policy definition. |

@@ -109,7 +109,7 @@ class l3extVrfValidationPol(ManagedObject):
         serialization_alias="enableVrfValidationOspfArea",
         description="Implementation note: Corresponds to kVrfValidationRsPathOspfArea",
     )
-    enable_ospf_area_id_validation: bool = Field(
+    enable_vrf_validation_ospf_area_id: bool = Field(
         default=True,
         validation_alias="enableVrfValidationOspfAreaId",
         serialization_alias="enableVrfValidationOspfAreaId",
@@ -133,7 +133,7 @@ class l3extVrfValidationPol(ManagedObject):
         serialization_alias="enableVrfValidationRouterId",
         description="Implementation note: Corresponds to kVrfValidationNodeRouterId",
     )
-    enable_subnet_non_duplication_validation: bool = Field(
+    enable_vrf_validation_subnet: bool = Field(
         default=True,
         validation_alias="enableVrfValidationSubnet",
         serialization_alias="enableVrfValidationSubnet",

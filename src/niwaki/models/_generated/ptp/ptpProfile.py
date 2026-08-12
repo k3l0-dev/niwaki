@@ -62,7 +62,7 @@ class ptpProfile(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    announce_interval_for_ptp_profile: Annotated[
+    announce_intvl: Annotated[
         int,
         Field(
             ge=3,
@@ -72,7 +72,7 @@ class ptpProfile(ManagedObject):
             description="Announce Interval",
         ),
     ] = 1
-    announce_timeout_for_ptp_profile: Annotated[
+    announce_timeout: Annotated[
         int,
         Field(
             ge=2,
@@ -126,7 +126,7 @@ class ptpProfile(ManagedObject):
         serialization_alias="ptpoeDstMacType",
         description="PTPoE destination mac type",
     )
-    sync_interval_for_ptp_profile: Annotated[
+    sync_intvl: Annotated[
         int,
         Field(
             ge=-4,

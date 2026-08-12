@@ -52,7 +52,5 @@ class maintLocalInstall(ManagedObject):
         default=MaintFirmwareType.FULL, validation_alias="fwType", serialization_alias="fwType"
     )
     state: MaintState = MaintState.UNSCHEDULED
-    url_of_firmware: Annotated[
-        str, Field(max_length=512, validation_alias="url", serialization_alias="url")
-    ] = ""
+    url: Annotated[str, Field(max_length=512)] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

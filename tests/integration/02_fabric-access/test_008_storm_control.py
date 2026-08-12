@@ -92,7 +92,7 @@ def test_storm_pps(live_aci: Niwaki) -> None:
             mc_rate_pps=8000,
             multicast_max_burst_size=9000,
             uuc_rate_pps=6000,
-            unknown_unicast_max_burst_size=7000,
+            uuc_burst_pps=7000,
             storm_ctrl_action=action,
             storm_ctrl_soak_inst_count=5,
             description=f"Storm-control per-type pps rate/burst - action {action}.",

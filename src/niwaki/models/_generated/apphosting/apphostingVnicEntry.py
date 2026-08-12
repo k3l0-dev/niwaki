@@ -72,7 +72,7 @@ class apphostingVnicEntry(ManagedObject):
         serialization_alias="hostIntf",
         description='host interface type. e.g: "management or bridge<1-8>"',
     )
-    v4_ip_address_of_the_interface: Annotated[
+    ip_v4_addr: Annotated[
         str,
         Field(
             pattern="^[0-9a-fA-F.:/ ]+$",
@@ -81,7 +81,7 @@ class apphostingVnicEntry(ManagedObject):
             description="v4 ip address for vnic entry",
         ),
     ] = ""
-    v6_ip_address_for_interface: Annotated[
+    ip_v6_addr: Annotated[
         str,
         Field(
             pattern="^[0-9a-fA-F.:/ ]+$",
@@ -90,7 +90,7 @@ class apphostingVnicEntry(ManagedObject):
             description="v6 ip address for vnic entry",
         ),
     ] = ""
-    point_to_point_bridge_vrf_name: Annotated[
+    p2p_bridge_vrf: Annotated[
         str,
         Field(
             min_length=1,

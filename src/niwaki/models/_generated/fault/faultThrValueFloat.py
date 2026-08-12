@@ -57,11 +57,4 @@ class faultThrValueFloat(ManagedObject):
         ),
     ] = 0.0
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""
-    value_of_the_property: Annotated[
-        float,
-        Field(
-            validation_alias="value",
-            serialization_alias="value",
-            description="Value of the property.",
-        ),
-    ] = 0.0
+    value: Annotated[float, Field(description="Value of the property.")] = 0.0

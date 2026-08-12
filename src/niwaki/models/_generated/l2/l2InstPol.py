@@ -66,7 +66,7 @@ class l2InstPol(ManagedObject):
             description="Specifies a description of the policy definition.",
         ),
     ] = ""
-    mtu_size_for_fabric_ports: Annotated[
+    fabric_mtu: Annotated[
         int,
         Field(
             ge=576,
@@ -76,7 +76,7 @@ class l2InstPol(ManagedObject):
             description="MTU Size for Fabric Ports",
         ),
     ] = 9000
-    mtu_size_for_management_ports: Annotated[
+    management_mtu: Annotated[
         int,
         Field(
             ge=576,

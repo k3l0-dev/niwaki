@@ -51,7 +51,5 @@ class telemetryEpStreamP(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    topic_associated_with_server: Annotated[
-        str, Field(max_length=512, validation_alias="topic", serialization_alias="topic")
-    ] = ""
+    topic: Annotated[str, Field(max_length=512)] = ""
     userdom: Annotated[str, Field(max_length=1024, pattern="^[a-zA-Z0-9_.:-]+$")] = ""

@@ -24,5 +24,5 @@ Accepted as keyword arguments of `.external_server(external_server_ip)` and of `
 | `external_server_ip` *(positional)* | `serverIp` | `str` | — | — | External Server Ip and Port would be used to export the streams to an external server |
 | `admin_state` | `adminSt` | {ref}`TelemetryAdminState <enum-telemetryadminstate>` | `disabled`, `enabled` | `enabled` | The administrative state of the object or policy. |
 | `user_grpc_certificate` | `cert` | `str` | — | — | — |
-| `hostname_associated_with_the_certificate` | `hostname` | `str` | — | — | ignore, removed |
+| `hostname` | `hostname` | `str` | — | — | ignore, removed |
 | `remote_port` | `serverPort` | `int` | — | `unspecified` | — |

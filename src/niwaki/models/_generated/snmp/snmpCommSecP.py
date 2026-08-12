@@ -59,7 +59,7 @@ class snmpCommSecP(ManagedObject):
         serialization_alias="commAcess",
         description="Community Access",
     )
-    name_of_the_snmp_context: Annotated[
+    context_name: Annotated[
         str,
         Field(
             max_length=512,

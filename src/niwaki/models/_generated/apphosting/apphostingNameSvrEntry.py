@@ -16,12 +16,12 @@ class apphostingNameSvrEntry(ManagedObject):
 
     1.1.2 NameSrvEntry [dn] /sys/apphosting/appconf-[appId]/namesvr-[tagName]1.1.2 Name Server Configuration MO
 
-    RN format: ``namesvr-{name_server_entry_tag_eg_v4addr0_1}``
+    RN format: ``namesvr-{tag_name}``
     """
 
     _aci_class: ClassVar[str] = "apphostingNameSvrEntry"
-    _rn_format: ClassVar[str] = "namesvr-{name_server_entry_tag_eg_v4addr0_1}"
-    _naming_props: ClassVar[list[str]] = ["name_server_entry_tag_eg_v4addr0_1"]
+    _rn_format: ClassVar[str] = "namesvr-{tag_name}"
+    _naming_props: ClassVar[list[str]] = ["tag_name"]
     _contains: ClassVar[frozenset[str]] = frozenset(
         {
             "aaaRbacAnnotation",
@@ -40,7 +40,7 @@ class apphostingNameSvrEntry(ManagedObject):
     _has_stats: ClassVar[bool] = False
 
     # ── Naming (required) ──────────────────────────────────────────────────────
-    name_server_entry_tag_eg_v4addr0_1: ApphostingNameSrvEntryTag = Field(
+    tag_name: ApphostingNameSrvEntryTag = Field(
         default=ApphostingNameSrvEntryTag.V4ADDR0,
         validation_alias="tagName",
         serialization_alias="tagName",
@@ -62,7 +62,7 @@ class apphostingNameSvrEntry(ManagedObject):
             description="User annotation. Suggested format orchestrator:value",
         ),
     ] = ""
-    v4_ip_address_of_the_name_server_entry: Annotated[
+    ip_v4_addr: Annotated[
         str,
         Field(
             pattern="^[0-9a-fA-F.:/ ]+$",
@@ -71,7 +71,7 @@ class apphostingNameSvrEntry(ManagedObject):
             description="v4 ip address in name server entry",
         ),
     ] = ""
-    v6_ip_address_of_the_name_server_entry: Annotated[
+    ip_v6_addr: Annotated[
         str,
         Field(
             pattern="^[0-9a-fA-F.:/ ]+$",

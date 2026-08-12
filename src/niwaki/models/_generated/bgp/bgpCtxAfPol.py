@@ -104,7 +104,7 @@ class bgpCtxAfPol(ManagedObject):
             description="The administrative distance of local routes.",
         ),
     ] = 220
-    max_ecmp_for_ebgp_routes: Annotated[
+    max_ecmp: Annotated[
         int,
         Field(
             ge=1,
@@ -114,7 +114,7 @@ class bgpCtxAfPol(ManagedObject):
             description="eBGP max-path",
         ),
     ] = 16
-    max_ecmp_for_ibgp_routes: Annotated[
+    max_ecmp_ibgp: Annotated[
         int,
         Field(
             ge=1,

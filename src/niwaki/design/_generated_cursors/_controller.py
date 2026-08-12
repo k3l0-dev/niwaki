@@ -198,7 +198,7 @@ class _ControllerMakers(Cursor):
         name: str | None = None,
         display_name: str | None = None,
         notification_condition: MaintNotifCond | str | None = None,
-        whether_latest: bool | None = None,
+        parallel: bool | None = None,
         scheduler_run_mode: MaintRunMode | str | None = None,
         smu_operation_type: MaintSMUOperation | str | None = None,
         sr_upgrade: bool | None = None,
@@ -228,8 +228,8 @@ class _ControllerMakers(Cursor):
                 via email/text as configured. This notification mechanism is independent of
                 events/faults. Values: ``notifyAlwaysBetweenSets``, ``notifyNever``,
                 ``notifyOnlyOnFailures``. Default: ``notifyOnlyOnFailures``.
-            whether_latest: Flag to turn on parallel upgrade of APICs, trades off availability
-                to speed. Default: ``False``.
+            parallel: Flag to turn on parallel upgrade of APICs, trades off availability to
+                speed. Default: ``False``.
             scheduler_run_mode: Specifies whether to proceed automatically to next set of nodes
                 once a set of nodes have gone through maintenance successfully. Values:
                 ``pauseAlwaysBetweenSets``, ``pauseNever``, ``pauseOnlyOnFailures``. Default:
@@ -349,10 +349,10 @@ class _ControllerMakers(Cursor):
         apic_id: int,
         *,
         annotation: str | None = None,
-        cimc_ipv4_address_address_mask: str | None = None,
-        cimc_ipv4_gateway_address_address: str | None = None,
-        cimc_ipv6_address_address_mask: str | None = None,
-        cimc_ipv6_gateway_address_address: str | None = None,
+        ipv4_address: str | None = None,
+        ipv4_gw: str | None = None,
+        ipv6_address: str | None = None,
+        ipv6_gw: str | None = None,
         name: str | None = None,
         display_name: str | None = None,
         userdom: str | None = None,
@@ -364,10 +364,10 @@ class _ControllerMakers(Cursor):
         Args:
             apic_id: Naming property — forms the object's RN.
             annotation: User annotation. Suggested format orchestrator:value
-            cimc_ipv4_address_address_mask: IPv4 address prefix
-            cimc_ipv4_gateway_address_address: IPv4 Gateway address
-            cimc_ipv6_address_address_mask: IPv6 address prefix
-            cimc_ipv6_gateway_address_address: IPv6 Gateway address
+            ipv4_address: IPv4 address prefix
+            ipv4_gw: IPv4 Gateway address
+            ipv6_address: IPv6 address prefix
+            ipv6_gw: IPv6 Gateway address
             name: The name of the object.
         """
         params = {
@@ -467,10 +467,10 @@ class CimcNodeCursor(_ControllerMakers, _UniMakers):
         self,
         *,
         annotation: str | None = None,
-        cimc_ipv4_address_address_mask: str | None = None,
-        cimc_ipv4_gateway_address_address: str | None = None,
-        cimc_ipv6_address_address_mask: str | None = None,
-        cimc_ipv6_gateway_address_address: str | None = None,
+        ipv4_address: str | None = None,
+        ipv4_gw: str | None = None,
+        ipv6_address: str | None = None,
+        ipv6_gw: str | None = None,
         name: str | None = None,
         display_name: str | None = None,
         userdom: str | None = None,
@@ -630,7 +630,7 @@ class ControllerMaintenancePolicyCursor(_ControllerMakers, _UniMakers):
         name: str | None = None,
         display_name: str | None = None,
         notification_condition: MaintNotifCond | str | None = None,
-        whether_latest: bool | None = None,
+        parallel: bool | None = None,
         scheduler_run_mode: MaintRunMode | str | None = None,
         smu_operation_type: MaintSMUOperation | str | None = None,
         sr_upgrade: bool | None = None,
@@ -836,7 +836,7 @@ class _ControllerSchedulerMakers(Cursor):
         *,
         annotation: str | None = None,
         maximum_concurrent_tasks: int | str | None = None,
-        date_and_time: str | None = None,
+        window_start_time: str | None = None,
         display_name: str | None = None,
         delay_between_node_upgrades: int | None = None,
         proc_break: str | None = None,
@@ -853,7 +853,7 @@ class _ControllerSchedulerMakers(Cursor):
             annotation: User annotation. Suggested format orchestrator:value
             maximum_concurrent_tasks: The concurrency capacity limit. This is the maximum number
                 of tasks that can be processed concurrently. Default: ``unlimited``.
-            date_and_time: The date that the schedule window starts.
+            window_start_time: The date that the schedule window starts.
             delay_between_node_upgrades: Delay between node upgrades in seconds. This is
                 applicable only for concurCap 1. Default: ``0``.
             proc_break: A period of time taken between processing of items within the
@@ -1036,7 +1036,7 @@ class ControllerSchedulerOneTimeWindowCursor(
         *,
         annotation: str | None = None,
         maximum_concurrent_tasks: int | str | None = None,
-        date_and_time: str | None = None,
+        window_start_time: str | None = None,
         display_name: str | None = None,
         delay_between_node_upgrades: int | None = None,
         proc_break: str | None = None,

@@ -621,18 +621,18 @@ class _VmmProviderMakers(Cursor):
         access_mode: VmmAccessMode | str | None = None,
         annotation: str | None = None,
         arp_learning: frozenset[VmmARPLearning] | set[VmmARPLearning] | str | None = None,
-        ave_time_out_time_seconds: int | None = None,
+        ave_time_out: int | None = None,
         configure_infra_port_group: bool | None = None,
         ctrl_knob: frozenset[VmmCtrlKnob] | set[VmmCtrlKnob] | str | None = None,
         custom_vswitch_name: str | None = None,
         enable_ave_mode: bool | None = None,
         enable_tag_data_retrieval: bool | None = None,
-        enable_vm_folder_data_retrieval: bool | None = None,
+        enable_vm_folder: bool | None = None,
         encap_mode: VmmEncapMode | str | None = None,
         switching_preference: L2EnfPref | str | None = None,
         ep_inventory_type: VmmEpInventoryType | str | None = None,
-        end_point_retention_time_seconds: int | None = None,
-        enable_host_availibility_monitoring: bool | None = None,
+        ep_ret_time: int | None = None,
+        enable_host_availability_monitoring: bool | None = None,
         multicast_address: str | None = None,
         virtual_switch: VmmMode | str | None = None,
         display_name: str | None = None,
@@ -653,12 +653,12 @@ class _VmmProviderMakers(Cursor):
             annotation: User annotation. Suggested format orchestrator:value
             arp_learning: Enable/Disable arp learning for AVS Domain Default:
                 ``PydanticUndefined``.
-            ave_time_out_time_seconds: Default: ``30``.
+            ave_time_out: Default: ``30``.
             configure_infra_port_group: Default: ``False``.
             ctrl_knob: Default: ``PydanticUndefined``.
             enable_ave_mode: Default: ``False``.
             enable_tag_data_retrieval: Default: ``False``.
-            enable_vm_folder_data_retrieval: Default: ``False``.
+            enable_vm_folder: Default: ``False``.
             encap_mode: Values: ``ivxlan``, ``unknown``, ``vlan``, ``vxlan``. Default:
                 ``unknown``.
             switching_preference: The switching enforcement preference. This determines whether
@@ -666,8 +666,8 @@ class _VmmProviderMakers(Cursor):
                 switched traffic must go through the fabric (No Local Switching). Values:
                 ``hw``, ``sw``, ``unknown``. Default: ``hw``.
             ep_inventory_type: Values: ``none``, ``on-link``. Default: ``on-link``.
-            end_point_retention_time_seconds: Default: ``0``.
-            enable_host_availibility_monitoring: Default: ``False``.
+            ep_ret_time: Default: ``0``.
+            enable_host_availability_monitoring: Default: ``False``.
             multicast_address: The multicast address of the VMM domain profile.
             virtual_switch: The switch to be used for the domain profile. Values: ``cf``,
                 ``default``, ``k8s``, ``n1kv``, ``nsx``, ``nutanix_pc``, ``nutanix_pe``,
@@ -728,7 +728,7 @@ class _VmmDomMakers(Cursor):
         self,
         name: str,
         *,
-        hostname_or_ip_address: str | None = None,
+        host_or_ip: str | None = None,
         annotation: str | None = None,
         aos_version: VmmAosVersion | str | None = None,
         dvs_version: VmmDvsVersion | str | None = None,
@@ -757,7 +757,7 @@ class _VmmDomMakers(Cursor):
 
         Args:
             name: The name of the controller profile.
-            hostname_or_ip_address: Host or IP
+            host_or_ip: Host or IP
             annotation: User annotation. Suggested format orchestrator:value
             aos_version: version of aos Values: ``6.5``, ``6.6``, ``unknown``. Default:
                 ``unknown``.
@@ -867,7 +867,7 @@ class _VmmDomMakers(Cursor):
         id: int | None = None,
         name: str | None = None,
         display_name: str | None = None,
-        number_of_uplinks: str | None = None,
+        num_of_uplinks: str | None = None,
         userdom: str | None = None,
     ) -> UplinkPolicyContainerCursor:
         """Declare a ``vmmUplinkPCont`` child under the vmm_dom level.
@@ -876,7 +876,7 @@ class _VmmDomMakers(Cursor):
             annotation: User annotation. Suggested format orchestrator:value
             id: An identifier . Default: ``0``.
             name: The name of the object.
-            number_of_uplinks: Number of uplinks
+            num_of_uplinks: Number of uplinks
         """
         params = {k: v for k, v in locals().items() if k not in ("self",)}
         return cast(
@@ -1011,18 +1011,18 @@ class VmmDomCursor(_VmmDomMakers, _VmmProviderMakers, _UniMakers):
         access_mode: VmmAccessMode | str | None = None,
         annotation: str | None = None,
         arp_learning: frozenset[VmmARPLearning] | set[VmmARPLearning] | str | None = None,
-        ave_time_out_time_seconds: int | None = None,
+        ave_time_out: int | None = None,
         configure_infra_port_group: bool | None = None,
         ctrl_knob: frozenset[VmmCtrlKnob] | set[VmmCtrlKnob] | str | None = None,
         custom_vswitch_name: str | None = None,
         enable_ave_mode: bool | None = None,
         enable_tag_data_retrieval: bool | None = None,
-        enable_vm_folder_data_retrieval: bool | None = None,
+        enable_vm_folder: bool | None = None,
         encap_mode: VmmEncapMode | str | None = None,
         switching_preference: L2EnfPref | str | None = None,
         ep_inventory_type: VmmEpInventoryType | str | None = None,
-        end_point_retention_time_seconds: int | None = None,
-        enable_host_availibility_monitoring: bool | None = None,
+        ep_ret_time: int | None = None,
+        enable_host_availability_monitoring: bool | None = None,
         multicast_address: str | None = None,
         virtual_switch: VmmMode | str | None = None,
         display_name: str | None = None,
@@ -1307,7 +1307,7 @@ class UplinkPolicyContainerCursor(
         id: int | None = None,
         name: str | None = None,
         display_name: str | None = None,
-        number_of_uplinks: str | None = None,
+        num_of_uplinks: str | None = None,
         userdom: str | None = None,
     ) -> UplinkPolicyContainerCursor:
         """Set ``vmmUplinkPCont`` attributes (merged; validated eagerly)."""
@@ -1325,7 +1325,7 @@ class _VmmControllerMakers(Cursor):
         self,
         name: str,
         *,
-        hostname_or_ip_address: str | None = None,
+        host_or_ip: str | None = None,
         annotation: str | None = None,
         triggered_inventory_sync_status: VmmTrigSt | str | None = None,
         msft_config_err_msg: str | None = None,
@@ -1342,7 +1342,7 @@ class _VmmControllerMakers(Cursor):
 
         Args:
             name: The name of the object.
-            hostname_or_ip_address: Host or IP
+            host_or_ip: Host or IP
             annotation: User annotation. Suggested format orchestrator:value
             triggered_inventory_sync_status: Values: ``autoTriggered``, ``triggered``,
                 ``untriggered``. Default: ``untriggered``.
@@ -1424,7 +1424,7 @@ class VmmControllerCursor(_VmmControllerMakers, _VmmDomMakers, _VmmProviderMaker
     def set(
         self,
         *,
-        hostname_or_ip_address: str | None = None,
+        host_or_ip: str | None = None,
         annotation: str | None = None,
         aos_version: VmmAosVersion | str | None = None,
         dvs_version: VmmDvsVersion | str | None = None,
@@ -1494,7 +1494,7 @@ class _VswitchPolicyGroupMakers(Cursor):
         loadbalancing_mode: LacpLBMode | str | None = None,
         lacp_mode: LacpEnLacpMode | str | None = None,
         display_name: str | None = None,
-        number_of_links: int | None = None,
+        num_links: int | None = None,
         userdom: str | None = None,
     ) -> EnhancedLacpPolicyCursor:
         """Declare a ``lacpEnhancedLagPol`` child under the vswitch_policy_group level.
@@ -1507,7 +1507,7 @@ class _VswitchPolicyGroupMakers(Cursor):
                 ``dst-ip-l4port-vlan``, ``dst-ip-vlan``, ``dst-l4port``, ``dst-mac``, ``src-dst-
                 ip``, ``src-dst-ip-l4port``, …. Default: ``src-dst-ip``.
             lacp_mode: Enhanced LACP mode Values: ``active``, ``passive``. Default: ``active``.
-            number_of_links: Number of Links Default: ``2``.
+            num_links: Number of Links Default: ``2``.
         """
         params = {
             k: v
@@ -1686,7 +1686,7 @@ class ClusterControllerCursor(_VmmControllerMakers, _VmmDomMakers, _VmmProviderM
     def set(
         self,
         *,
-        hostname_or_ip_address: str | None = None,
+        host_or_ip: str | None = None,
         annotation: str | None = None,
         triggered_inventory_sync_status: VmmTrigSt | str | None = None,
         msft_config_err_msg: str | None = None,
@@ -1773,7 +1773,7 @@ class _HostAvailabilityPolicyMakers(Cursor):
         annotation: str | None = None,
         name: str | None = None,
         display_name: str | None = None,
-        desired_state_for_the_host: HvsManagedEntityStatus | str | None = None,
+        state: HvsManagedEntityStatus | str | None = None,
         userdom: str | None = None,
     ) -> HostDesiredStateCursor:
         """Declare a ``vmmHvDesiredSt`` child under the host_availability_policy level.
@@ -1782,8 +1782,8 @@ class _HostAvailabilityPolicyMakers(Cursor):
             host_name: The hostname or IP for export destination. Call Home sends email messages
                 to either the IP address or hostname, and the associated port number.
             annotation: User annotation. Suggested format orchestrator:value
-            desired_state_for_the_host: The state of the relationship. Values: ``gray``,
-                ``green``, ``red``, ``yellow``. Default: ``gray``.
+            state: The state of the relationship. Values: ``gray``, ``green``, ``red``,
+                ``yellow``. Default: ``gray``.
         """
         params = {
             k: v
@@ -1852,7 +1852,7 @@ class EnhancedLacpPolicyCursor(
         loadbalancing_mode: LacpLBMode | str | None = None,
         lacp_mode: LacpEnLacpMode | str | None = None,
         display_name: str | None = None,
-        number_of_links: int | None = None,
+        num_links: int | None = None,
         userdom: str | None = None,
     ) -> EnhancedLacpPolicyCursor:
         """Set ``lacpEnhancedLagPol`` attributes (merged; validated eagerly)."""
@@ -1884,7 +1884,7 @@ class HostDesiredStateCursor(
         annotation: str | None = None,
         name: str | None = None,
         display_name: str | None = None,
-        desired_state_for_the_host: HvsManagedEntityStatus | str | None = None,
+        state: HvsManagedEntityStatus | str | None = None,
         userdom: str | None = None,
     ) -> HostDesiredStateCursor:
         """Set ``vmmHvDesiredSt`` attributes (merged; validated eagerly)."""
