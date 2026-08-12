@@ -7,7 +7,7 @@ take reports seriously and appreciate coordinated disclosure.
 
 | Version                 | Supported               |
 | ----------------------- | ----------------------- |
-| latest 1.x release      | ✅                       |
+| latest 2.x release      | ✅                       |
 | previous major, 90 days | ✅ — security fixes only |
 | anything older          | ❌ — upgrade first       |
 

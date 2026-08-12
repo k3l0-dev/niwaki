@@ -102,7 +102,7 @@ See {doc}`SECURITY` for how to report a vulnerability.
 ## Pinning
 
 ```text
-niwaki>=2,<3         # recommended: every fix and feature, no breaking change
+niwaki>=2.0,<3       # recommended: every fix and feature, no breaking change
 niwaki==2.0.0        # reproducible builds; upgrade deliberately
 ```
 
