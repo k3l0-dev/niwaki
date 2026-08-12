@@ -35,6 +35,7 @@ from __future__ import annotations
 
 from typing import Any, cast
 
+from niwaki._dn import rn_of
 from niwaki.models._wire import from_wire
 from niwaki.models.base import ManagedObject
 
@@ -42,10 +43,22 @@ from niwaki.models.base import ManagedObject
 def _child_key(child: ManagedObject) -> tuple[str, ...]:
     """Return a hashable identity key for a child MO.
 
-    The key is ``(aci_class, *naming_prop_values)`` so that children of
-    the same class with the same name are considered the same object.
+    ``(aci_class, *naming_prop_values)`` for generated classes, so children of
+    the same class with the same name are the same object.  Catalogue-served
+    children carry no generated identity — ``_aci_class`` is empty and
+    ``_naming_props`` is empty on the base class — so they key on the public
+    :attr:`~niwaki.models.base.ManagedObject.aci_class` (which falls back to
+    the wire class the read recorded) and the RN.  Keying them all on ``("",)``
+    collapsed distinct operational children onto one identity: identical trees
+    failed with a cross-class TypeError, and same-class siblings diffed
+    against each other's attributes.
     """
-    return (child._aci_class, *(str(getattr(child, p, "")) for p in child._naming_props))  # pyright: ignore[reportPrivateUsage]
+    if child._naming_props:  # pyright: ignore[reportPrivateUsage]
+        return (child.aci_class, *(str(getattr(child, p, "")) for p in child._naming_props))
+    # Base-class reads never populate an RN of their own; the DN the APIC
+    # sent carries it (bracket-aware last segment).
+    rn = child.rn or rn_of(str(child.attrs.get("dn", "")))
+    return (child.aci_class, rn)
 
 
 def _diff_children(

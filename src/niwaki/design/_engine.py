@@ -18,6 +18,7 @@ from collections.abc import Callable, Sequence
 from dataclasses import dataclass, field
 from typing import Any, Literal
 
+from niwaki._logging import wave_started
 from niwaki.transport._protocols import AsyncMoWriter
 
 # Default ops in flight within one wave when :func:`_run_waves` is driven
@@ -111,6 +112,7 @@ def _run_waves_sync(execute: Callable[[_Op], None], ops: Sequence[_Op]) -> _Wave
     outcome = _WaveOutcome(succeeded=[], failed=[], not_run=[])
     failed_dns: set[str] = set()
     for wave in _toposort(ops):
+        wave_started(wave[0].depth, len(wave), 1)
         for op in wave:
             if _descends_from_failed(op.dn, failed_dns):
                 outcome.not_run.append(op)
@@ -185,6 +187,7 @@ async def _run_waves(
     outcome = _WaveOutcome(succeeded=[], failed=[], not_run=[])
     failed_dns: set[str] = set()
     for wave in _toposort(ops):
+        wave_started(wave[0].depth, len(wave), min(max_concurrent, len(wave)))
         to_run: list[_Op] = []
         for op in wave:
             if _descends_from_failed(op.dn, failed_dns):

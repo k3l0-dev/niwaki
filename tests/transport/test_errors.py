@@ -228,3 +228,41 @@ class TestApicCode:
         assert str(exceptions.APIError(400, "boom", apic_code="103")) == (
             "HTTP 400 (APIC code 103): boom"
         )
+
+
+class TestJsonData:
+    """The data-path twin of the auth paths' body hardening.
+
+    A 2xx whose body is not JSON (the nginx HTML page a simulator under load
+    serves) must surface as a typed APIError carrying the real status — never
+    a bare ``json.JSONDecodeError``.
+    """
+
+    def test_a_json_object_passes_through(self) -> None:
+        import httpx
+
+        from niwaki.transport._errors import json_data
+
+        resp = httpx.Response(200, json={"totalCount": "1", "imdata": []})
+        assert json_data(resp) == {"totalCount": "1", "imdata": []}
+
+    def test_a_non_json_body_raises_a_typed_error_with_the_real_status(self) -> None:
+        import httpx
+
+        from niwaki.transport._errors import json_data
+
+        resp = httpx.Response(200, content=b"<html>bad gateway page</html>")
+        with pytest.raises(exceptions.APIError) as excinfo:
+            json_data(resp)
+        assert excinfo.value.status_code == 200
+        assert "non-JSON" in excinfo.value.apic_message
+
+    def test_a_non_object_json_body_is_refused_too(self) -> None:
+        import httpx
+
+        from niwaki.transport._errors import json_data
+
+        resp = httpx.Response(200, json=["not", "an", "envelope"])
+        with pytest.raises(exceptions.APIError) as excinfo:
+            json_data(resp)
+        assert "non-object" in excinfo.value.apic_message

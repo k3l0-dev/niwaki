@@ -840,6 +840,13 @@ def _resolve_child_class(parent_cls: str, segment: str) -> str:
         except (KeyError, ValueError):
             continue
         matches.append(cls_name)
+    if not matches:
+        # Third authority: the catalogue's own DN grammar — the same authority
+        # _may_contain gained in it.4 (the scope walk shipped in it.3, before
+        # it, and never got the seam re-audited).  A containment edge both
+        # generated tables dropped is still provable from the child's DN
+        # formats: the parent's RN format is the second-to-last segment.
+        matches = _grammar_children(parent_cls, segment)
     if len(matches) == 1:
         return matches[0]
     if not matches:
@@ -850,6 +857,45 @@ def _resolve_child_class(parent_cls: str, segment: str) -> str:
         f"scope walk: RN segment {segment!r} is ambiguous under {parent_cls} "
         f"({', '.join(sorted(matches))})."
     )
+
+
+@cache
+def _rn_format_rows() -> tuple[tuple[str, str], ...]:
+    """Every catalogue ``(class_name, rn_format)`` pair, scanned once."""
+    from niwaki.query._catalog import catalog
+
+    return tuple(catalog()._rn_format_rows())  # pyright: ignore[reportPrivateUsage]
+
+
+def _grammar_children(parent_cls: str, segment: str) -> list[str]:
+    """Classes the DN grammar proves under *parent_cls* that match *segment*.
+
+    The slow path of :func:`_resolve_child_class`, walked only when neither
+    CHILD_MAP nor the generated ``_contains`` knows the edge (measured live:
+    ``uiSettingsCont`` under ``polUni``, ``aaaAppUser`` under ``aaaUserEp``,
+    ``commTelnet`` under ``commPol``).  Shape-matches the segment against
+    every catalogued RN format, then keeps only the classes whose
+    ``dn_formats`` place the parent's RN format immediately above — the same
+    proof :meth:`Cursor._may_contain` accepts.
+    """
+    from niwaki._dn import split_dn
+    from niwaki.query._catalog import catalog
+
+    parent_rn = "uni" if parent_cls == "polUni" else catalog().rn_format(parent_cls)
+    if not parent_rn:
+        return []
+    matches: list[str] = []
+    for cls_name, rn_fmt in _rn_format_rows():
+        try:
+            naming_values(segment, rn_fmt)
+        except ValueError:
+            continue
+        for fmt in catalog().dn_formats(cls_name):
+            segments = split_dn(fmt)
+            if len(segments) >= 2 and segments[-2] == parent_rn:
+                matches.append(cls_name)
+                break
+    return matches
 
 
 def _bare_ancestor(parent: Cursor, parent_dn: str, segment: str) -> tuple[Cursor, str]:

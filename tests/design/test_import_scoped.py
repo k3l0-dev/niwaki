@@ -37,6 +37,24 @@ def _tenant_tree() -> dict:
     }
 
 
+class TestGrammarOnlyAncestors:
+    """The scope walk gets the third containment authority (2.0 hygiene).
+
+    ``_may_contain`` gained the catalogue's DN grammar in it.4, but the it.3
+    scope walk still consulted only CHILD_MAP + ``_contains`` — the three
+    containment holes the fabric proved (``uiSettingsCont`` under ``polUni``
+    among them) imported fine at full scope and failed as scoped ancestors.
+    """
+
+    def test_a_grammar_only_ancestor_chain_imports(self) -> None:
+        tree = {"class": "uiSettings", "rn": "uisettings", "attributes": {}, "children": []}
+        snap = Snapshot(scope="uni/uisettingscont/uisettings", tree=tree)
+        cfg = to_design(snap)
+        classes = [n.aci_class for n in cfg.design_node.root().iter_subtree()]
+        assert "uiSettingsCont" in classes
+        assert "uiSettings" in classes
+
+
 class TestScopedImport:
     def test_tenant_scope_imports_under_a_bare_chain(self) -> None:
         snap = Snapshot(scope="uni/tn-prod", tree=_tenant_tree())

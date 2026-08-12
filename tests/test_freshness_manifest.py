@@ -34,6 +34,31 @@ def test_the_artifacts_cover_every_generated_surface() -> None:
     assert any(name.endswith("_child_map.py") for name in names)
     assert any("_generated_cursors" in name for name in names)
     assert any(name.endswith("catalog.db") for name in names)
+    # Emitted by regen and shipped with the public tests — a hand edit must
+    # fail the guard, not parametrise the model suite from doctored fixtures.
+    assert any(name.endswith("_test_data.json") for name in names)
+
+
+def test_private_inputs_cover_the_extraction_pipeline_where_present() -> None:
+    """data/scripts decides the Python type of every generated model."""
+    import pytest
+
+    names = {path.name for path in freshness._private_input_files()}
+    if not names:
+        pytest.skip("data/scripts (private extraction tooling) not present")
+    assert "02_extract_props.py" in names
+
+
+def test_absent_private_inputs_are_not_a_divergence(monkeypatch: object) -> None:
+    """The public export omits data/ on purpose: recorded-but-absent private
+    inputs must verify clean there — only files that exist are compared."""
+    import pytest
+
+    mp = monkeypatch
+    assert isinstance(mp, pytest.MonkeyPatch)
+    mp.setattr(freshness, "_private_input_files", lambda: [])
+    problems = [p for p in freshness.verify() if p.startswith("private_inputs")]
+    assert problems == []
 
 
 def test_a_divergence_is_reported_not_swallowed(tmp_path: object, monkeypatch: object) -> None:

@@ -43,6 +43,20 @@ def _input_files() -> list[Path]:
     return [f for f in files if f.is_file() and f.name != "regen_manifest.json"]
 
 
+def _private_input_files() -> list[Path]:
+    """Inputs that never ship publicly, guarded only where they exist.
+
+    The extraction pipeline (``data/scripts``) decides the Python type of
+    every generated model, but ``data/`` stays private — recording it in the
+    main ``inputs`` table would fail the public guard on files the export
+    deliberately omits.  This table is verified with skip-if-absent
+    semantics instead: on the dev machine an edited extractor without a
+    regen fails loudly; on the public side there is nothing to check.
+    """
+    repo = _SRC.parent.parent
+    return sorted(f for f in (repo / "data" / "scripts").glob("*.py") if f.is_file())
+
+
 def _artifact_files() -> list[Path]:
     """Everything a regeneration emits."""
     repo = _SRC.parent.parent
@@ -52,6 +66,11 @@ def _artifact_files() -> list[Path]:
         *sorted((_SRC / "design" / "_generated_cursors").rglob("*.py")),
         _SRC / "query" / "_catalog" / "catalog.db",
         *sorted((repo / "docs" / "reference" / "vocabulary").rglob("*.md")),
+        # Emitted by regen (scripts/regen.sh), committed, and shipped with
+        # the public tests: a hand edit — or a regen that died before this
+        # write — must fail the guard, not parametrise the whole model suite
+        # from doctored fixtures.
+        repo / "tests" / "models" / "_test_data.json",
     ]
 
 
@@ -66,7 +85,11 @@ def compute() -> dict[str, dict[str, str]]:
     def _table(files: list[Path]) -> dict[str, str]:
         return {str(f.relative_to(root)): _digest(f) for f in files}
 
-    return {"inputs": _table(_input_files()), "artifacts": _table(_artifact_files())}
+    return {
+        "inputs": _table(_input_files()),
+        "private_inputs": _table(_private_input_files()),
+        "artifacts": _table(_artifact_files()),
+    }
 
 
 def write_manifest() -> None:
@@ -102,6 +125,14 @@ def verify() -> list[str]:
         for path in sorted(set(was) & set(now)):
             if was[path] != now[path]:
                 problems.append(f"{side}: {path} changed since the last regeneration")
+    # Private inputs never ship: absence is expected off the dev machine, so
+    # only files that exist are compared — a divergence still fails loudly.
+    was, now = recorded.get("private_inputs", {}), current["private_inputs"]
+    for path in sorted(set(now) - set(was)):
+        problems.append(f"private_inputs: {path} present but not recorded (regen forgotten?)")
+    for path in sorted(set(was) & set(now)):
+        if was[path] != now[path]:
+            problems.append(f"private_inputs: {path} changed since the last regeneration")
     return problems
 
 

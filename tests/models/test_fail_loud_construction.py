@@ -106,6 +106,25 @@ class TestSurgicalFailsLoud:
         delta = fvBD.surgical({"name": "web"}, arp_flooding=True)
         assert "arpFlood" in str(delta.to_apic())
 
+    def test_a_wire_alias_change_key_is_refused_with_a_hint(self) -> None:
+        """The silent-drop trap the guard exists for, in its worst form.
+
+        A wire alias passes the constructor-keys gate and model_construct even
+        resolves it into the right field — the instance LOOKS correct — but
+        fields_set stamps the raw key, and to_apic() silently omitted the one
+        change the caller asked for. Refused with the python-name hint, the
+        same contract as __setattr__.
+        """
+        with pytest.raises(ValueError, match=r"arpFlood.*arp_flooding"):
+            fvBD.surgical({"name": "web"}, arpFlood=True)
+
+    def test_a_wire_alias_naming_key_is_refused_too(self) -> None:
+        """The naming dict walks the same stamping path as the changes."""
+        from niwaki.models._generated.fvns.fvnsEncapBlk import fvnsEncapBlk
+
+        with pytest.raises(ValueError, match=r"'from'.*'from_'"):
+            fvnsEncapBlk.surgical({"from": "vlan-100", "to": "vlan-200"})
+
 
 class TestModelCopyResidual:
     def test_model_copy_update_is_the_documented_escape(self) -> None:

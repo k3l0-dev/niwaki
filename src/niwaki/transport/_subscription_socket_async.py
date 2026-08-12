@@ -83,6 +83,7 @@ from niwaki.transport._subscription_socket import (
     _QueueItem,
     _refresh_interval,
     _Stop,
+    _validate_refresh_timeout,
 )
 
 if TYPE_CHECKING:
@@ -289,6 +290,12 @@ class AsyncSubscriptionSocket:
         self._next_local_id = itertools.count(1)
         self._closed = False
         self._dead = False
+        # Monotonic generation of the reader/refresh task pair — same
+        # mechanism as the sync socket: bumped by _ensure_open() when a fresh
+        # pair starts and by _fail_all() when the current pair must die, so a
+        # task from a superseded generation exits on its next wakeup instead
+        # of running alongside the fresh pair (double-counting failures).
+        self._generation = 0
         self._reader_task: asyncio.Task[None] | None = None
         self._refresh_task: asyncio.Task[None] | None = None
         self._handle = _AsyncSocketHandle()
@@ -309,8 +316,14 @@ class AsyncSubscriptionSocket:
         See :meth:`~niwaki.transport._subscription_socket.SubscriptionSocket.subscribe`.
 
         Raises:
+            ValueError: *refresh_timeout* is below the floor the refresh
+                machinery can mathematically honour (see
+                :func:`~niwaki.transport._subscription_socket._validate_refresh_timeout`).
+            SubscriptionError: :meth:`aclose` already ran on this socket —
+                including an ``aclose()`` that raced this very call.
             SubscribeRejectedError: The APIC rejected the subscribe request.
         """
+        _validate_refresh_timeout(refresh_timeout)
         await self._ensure_open()
         wire_id, initial = await self._do_subscribe(path, params, refresh_timeout)
         local_id = next(self._next_local_id)
@@ -325,6 +338,15 @@ class AsyncSubscriptionSocket:
             max_pending=max_pending,
         )
         async with self._state_lock:
+            if self._closed:
+                # aclose() ran between our REST subscribe and this insertion.
+                # Registering now would create a queue no _STOP ever reaches —
+                # a consumer blocked forever. The server-side subscription
+                # lapses on its own at refresh-timeout (there is no
+                # unsubscribe endpoint to call).
+                raise exceptions.SubscriptionError(
+                    "cannot subscribe: the subscription socket has been closed"
+                )
             self._registrations[local_id] = reg
             self._wire_to_local[wire_id] = local_id
         return AsyncRawSubscription(local_id, initial, self, item_queue)
@@ -523,6 +545,10 @@ class AsyncSubscriptionSocket:
 
     async def _ensure_open(self) -> None:
         async with self._state_lock:
+            if self._closed:
+                raise exceptions.SubscriptionError(
+                    "cannot subscribe: the subscription socket has been closed"
+                )
             if self._ws is not None:
                 return
         # Connect *outside* the lock: a cooperative asyncio.Lock held across a
@@ -532,17 +558,28 @@ class AsyncSubscriptionSocket:
         ws = await self._connect()
         async with self._state_lock:
             if self._closed or self._ws is not None:
-                # close() won the race, or another coroutine already opened
+                # aclose() won the race, or another coroutine already opened
                 # one while we were connecting — our connection is redundant.
                 with contextlib.suppress(Exception):
                     await ws.close()
+                if self._closed:
+                    # Raise rather than return: proceeding would REST-subscribe
+                    # and register on a closed socket, leaving the consumer's
+                    # queue without a _STOP forever.
+                    raise exceptions.SubscriptionError(
+                        "cannot subscribe: the subscription socket has been closed"
+                    )
                 return
             self._ws = ws
             self._handle.sock = ws.transport.get_extra_info("socket")
             self._dead = False
+            # A fresh socket means a fresh task generation — any task from a
+            # previous life of this socket sees the bump and exits (see the
+            # sync twin's _ensure_open).
+            self._generation += 1
             ref: weakref.ReferenceType[AsyncSubscriptionSocket] = weakref.ref(self)
-            self._reader_task = asyncio.create_task(_reader_entry(ref))
-            self._refresh_task = asyncio.create_task(_refresh_entry(ref))
+            self._reader_task = asyncio.create_task(_reader_entry(ref, self._generation))
+            self._refresh_task = asyncio.create_task(_refresh_entry(ref, self._generation))
 
     # ── Internal: dispatch (called from the free-function reader loop) ───────
 
@@ -550,39 +587,47 @@ class AsyncSubscriptionSocket:
         # No lock: this method never awaits, so asyncio's cooperative
         # scheduling makes it atomic with respect to every other coroutine on
         # this loop — nothing can mutate _registrations/_wire_to_local mid-call.
+        #
+        # The guard spans the WHOLE frame handling, not just json.loads —
+        # see the sync twin's _dispatch: a valid-JSON non-object frame or a
+        # malformed imdata shape must be skipped, never kill the reader.
+        # Only the frame's length is logged, never its content.
         try:
-            data: dict[str, Any] = json.loads(raw)
-        except (ValueError, TypeError):
-            logger.warning("niwaki: malformed subscription push frame, ignored")
-            return
-        wire_ids_raw = data.get("subscriptionId") or []
-        wire_ids = [wire_ids_raw] if isinstance(wire_ids_raw, str) else list(wire_ids_raw)
-        imdata = data.get("imdata") or []
+            data: Any = json.loads(raw)
+            if not isinstance(data, dict):
+                raise TypeError("subscription push frame is not a JSON object")
+            wire_ids_raw = data.get("subscriptionId") or []
+            wire_ids = [wire_ids_raw] if isinstance(wire_ids_raw, str) else list(wire_ids_raw)
+            imdata = data.get("imdata") or []
 
-        targets = [
-            self._registrations[local_id]
-            for wire_id in wire_ids
-            if (local_id := self._wire_to_local.get(wire_id)) is not None
-            and local_id in self._registrations
-        ]
-        if not targets:
-            return
+            targets = [
+                self._registrations[local_id]
+                for wire_id in wire_ids
+                if (local_id := self._wire_to_local.get(wire_id)) is not None
+                and local_id in self._registrations
+            ]
+            if not targets:
+                return
 
-        for item in imdata:
-            if not isinstance(item, dict) or len(item) != 1:
-                continue
-            ((class_name, body),) = item.items()
-            attrs: dict[str, str] = (
-                (body or {}).get("attributes", {}) if isinstance(body, dict) else {}
+            for item in imdata:
+                if not isinstance(item, dict) or len(item) != 1:
+                    continue
+                ((class_name, body),) = item.items()
+                attrs: dict[str, str] = (
+                    (body or {}).get("attributes", {}) if isinstance(body, dict) else {}
+                )
+                event = RawSubscriptionEvent(
+                    subscription_ids=tuple(wire_ids),
+                    class_name=class_name,
+                    attributes=dict(attrs),
+                    status=attrs.get("status", "modified"),
+                )
+                for reg in targets:
+                    self._offer(reg, event)
+        except Exception:  # a malformed frame must never kill the shared reader
+            logger.warning(
+                "niwaki: malformed subscription push frame ignored (length=%d)", len(raw)
             )
-            event = RawSubscriptionEvent(
-                subscription_ids=tuple(wire_ids),
-                class_name=class_name,
-                attributes=dict(attrs),
-                status=attrs.get("status", "modified"),
-            )
-            for reg in targets:
-                self._offer(reg, event)
 
     @staticmethod
     def _offer(reg: _AsyncRegistration, event: RawSubscriptionEvent) -> None:
@@ -607,14 +652,23 @@ class AsyncSubscriptionSocket:
     # ── Internal: refresh sweep (entry point is the free-function loop) ──────
 
     async def _do_refresh(self, reg: _AsyncRegistration) -> bool:
-        """Issue the ``subscriptionRefresh`` GET. No bookkeeping — callers own that."""
+        """Issue the ``subscriptionRefresh`` GET. No bookkeeping — callers own that.
+
+        Catches every :class:`~niwaki.exceptions.NiwakiError`, not just
+        ``APIError`` — see the sync twin's ``_do_refresh``: a transport/auth
+        error from an unreachable APIC must count as a failed refresh attempt
+        feeding the escalation machinery, never kill the sweep task.
+        """
         try:
             await self._session._request_checked(
                 "/api/subscriptionRefresh.json", {"id": reg.wire_id}
             )
-        except exceptions.APIError:
+        except exceptions.NiwakiError as exc:
             logger.warning(
-                "niwaki: subscription refresh rejected (path=%s, id=%s)", reg.path, reg.wire_id
+                "niwaki: subscription refresh failed (%s, path=%s, id=%s)",
+                type(exc).__name__,
+                reg.path,
+                reg.wire_id,
             )
             return False
         return True
@@ -664,7 +718,10 @@ class AsyncSubscriptionSocket:
         old_wire = reg.wire_id
         try:
             new_wire, _initial = await self._do_subscribe(reg.path, reg.params, reg.refresh_timeout)
-        except exceptions.SubscriptionError as exc:
+        except exceptions.NiwakiError as exc:
+            # NiwakiError, not just SubscriptionError — see the sync twin:
+            # transport/auth errors from an unreachable APIC must not escape
+            # and kill the refresh sweep for every subscription.
             async with self._state_lock:
                 if local_id not in self._registrations or reg.wire_id != old_wire:
                     return
@@ -721,8 +778,12 @@ class AsyncSubscriptionSocket:
         logger.warning("niwaki: subscription websocket disconnected — reconnecting")
         disconnected_at = time.time()
 
+        # NiwakiError is in the retry net alongside the websocket/OS errors:
+        # _connect performs HTTP via _ensure_token, which can raise
+        # TokenRefreshError/ConnectionError/… — same reasoning as the sync
+        # twin's _reconnect_and_resubscribe_all.
         @stamina.retry(
-            on=(ws_exceptions.WebSocketException, OSError),
+            on=(ws_exceptions.WebSocketException, OSError, exceptions.NiwakiError),
             attempts=_RECONNECT_ATTEMPTS,
             wait_initial=_RECONNECT_WAIT_INITIAL,
             wait_max=_RECONNECT_WAIT_MAX,
@@ -733,7 +794,7 @@ class AsyncSubscriptionSocket:
 
         try:
             ws = await _attempt_connect()
-        except (ws_exceptions.WebSocketException, OSError) as exc:
+        except (ws_exceptions.WebSocketException, OSError, exceptions.NiwakiError) as exc:
             async with self._state_lock:
                 if self._closed:
                     return False
@@ -760,11 +821,17 @@ class AsyncSubscriptionSocket:
         for local_id, reg in snapshot.items():
             old_wire = reg.wire_id
             try:
+                # NiwakiError, not just SubscriptionError — see _escalate.
                 new_wire, _initial = await self._do_subscribe(
                     reg.path, reg.params, reg.refresh_timeout
                 )
-            except exceptions.SubscriptionError as exc:
+            except exceptions.NiwakiError as exc:
                 async with self._state_lock:
+                    if local_id not in self._registrations or reg.wire_id != old_wire:
+                        # A concurrent _escalate already re-registered this
+                        # subscription under a fresh wire id (or unsubscribe
+                        # removed it) — its fate is no longer this loop's call.
+                        continue
                     self._wire_to_local.pop(old_wire, None)
                     self._registrations.pop(local_id, None)
                 reg.queue.put_nowait(
@@ -777,6 +844,13 @@ class AsyncSubscriptionSocket:
                 )
                 continue
             async with self._state_lock:
+                if local_id not in self._registrations or reg.wire_id != old_wire:
+                    # Same race on the success path — mirror of the guard in
+                    # _escalate: adopting now would leave the escalated wire
+                    # id mapped alongside ours forever, delivering every
+                    # event carrying it twice. Drop our redundant subscribe;
+                    # its unused wire id lapses server-side at refresh-timeout.
+                    continue
                 self._wire_to_local.pop(old_wire, None)
                 self._wire_to_local[new_wire] = local_id
                 reg.wire_id = new_wire
@@ -796,14 +870,23 @@ class AsyncSubscriptionSocket:
             regs = list(self._registrations.values())
             self._registrations.clear()
             self._wire_to_local.clear()
+            ws = self._ws
             self._ws = None
             # Not handle.closed = True: a fresh subscribe() later must still
             # be able to reopen (see _ensure_open), and the finalizer should
             # cover that new socket too if it is ever abandoned in turn.
             self._handle.sock = None
             self._dead = True
+            # Invalidate the current reader/refresh pair — see the sync twin.
+            self._generation += 1
         for reg in regs:
             reg.queue.put_nowait(_Fatal(exc))
+        if ws is not None:
+            # Best effort — the socket may already be dead; closing it wakes
+            # a reader still parked at recv() so it can observe the
+            # generation bump and exit instead of hanging on a zombie.
+            with contextlib.suppress(Exception):
+                await ws.close()
 
 
 # ── Task entry points (free coroutine functions — weak reference only) ───────
@@ -816,9 +899,29 @@ class AsyncSubscriptionSocket:
 # weakref.finalize safety net exactly as the sync bound-method bug did.
 
 
-async def _reader_entry(ref: weakref.ReferenceType[AsyncSubscriptionSocket]) -> None:
+async def _reader_entry(
+    ref: weakref.ReferenceType[AsyncSubscriptionSocket], generation: int
+) -> None:
     """Reader-task entry point. See the module note above on why this is a
-    free function taking a weak reference, not a bound method."""
+    free function taking a weak reference, not a bound method.
+
+    The try/except is the **last line of defense** — see the sync twin's
+    ``_reader_entry``: a silently dead reader (consumers parked forever on
+    queues nothing feeds) is the one outcome that must be impossible.
+    ``asyncio.CancelledError`` inherits ``BaseException`` and passes through
+    untouched, so :meth:`AsyncSubscriptionSocket.aclose`'s cancellation is
+    unaffected.
+    """
+    try:
+        await _reader_loop(ref, generation)
+    except Exception as exc:
+        await _fail_from_crash(ref, "reader", exc)
+
+
+async def _reader_loop(
+    ref: weakref.ReferenceType[AsyncSubscriptionSocket], generation: int
+) -> None:
+    """The reader loop body — recv/demux/reconnect until closed or superseded."""
     import websockets.exceptions as ws_exceptions
 
     while True:
@@ -826,7 +929,7 @@ async def _reader_entry(ref: weakref.ReferenceType[AsyncSubscriptionSocket]) -> 
         if socket is None:
             return
         async with socket._state_lock:
-            if socket._closed:
+            if socket._closed or socket._generation != generation:
                 return
             ws = socket._ws
         del socket  # never hold a strong reference across the blocking recv()
@@ -837,7 +940,7 @@ async def _reader_entry(ref: weakref.ReferenceType[AsyncSubscriptionSocket]) -> 
             if socket is None:
                 return
             async with socket._state_lock:
-                if socket._closed:
+                if socket._closed or socket._generation != generation:
                     return
             if not await socket._reconnect_and_resubscribe_all():
                 return
@@ -850,16 +953,29 @@ async def _reader_entry(ref: weakref.ReferenceType[AsyncSubscriptionSocket]) -> 
         del socket
 
 
-async def _refresh_entry(ref: weakref.ReferenceType[AsyncSubscriptionSocket]) -> None:
+async def _refresh_entry(
+    ref: weakref.ReferenceType[AsyncSubscriptionSocket], generation: int
+) -> None:
     """Refresh-sweep task entry point. See the module note above on why
-    this is a free function taking a weak reference, not a bound method."""
+    this is a free function taking a weak reference, not a bound method —
+    and :func:`_reader_entry` on the last-line-of-defense guard."""
+    try:
+        await _refresh_loop(ref, generation)
+    except Exception as exc:
+        await _fail_from_crash(ref, "refresh", exc)
+
+
+async def _refresh_loop(
+    ref: weakref.ReferenceType[AsyncSubscriptionSocket], generation: int
+) -> None:
+    """The sweep loop body — refresh due registrations until closed or superseded."""
     while True:
         await asyncio.sleep(_SWEEP_INTERVAL_SECONDS)
         socket = ref()
         if socket is None:
             return
         async with socket._state_lock:
-            if socket._closed or socket._dead:
+            if socket._closed or socket._dead or socket._generation != generation:
                 return
             now = time.monotonic()
             due = [
@@ -870,3 +986,33 @@ async def _refresh_entry(ref: weakref.ReferenceType[AsyncSubscriptionSocket]) ->
         for local_id, reg in due:
             await socket._refresh_one(local_id, reg)
         del socket
+
+
+async def _fail_from_crash(
+    ref: weakref.ReferenceType[AsyncSubscriptionSocket], role: str, exc: Exception
+) -> None:
+    """Last line of defense for a background task that died unexpectedly.
+
+    Mirror of the sync :func:`~niwaki.transport._subscription_socket._fail_from_crash`:
+    every consumer wakes with ``SubscriptionLostError`` (``reason=INTERNAL_ERROR``)
+    instead of blocking forever, and the socket is left restartable by a
+    later :meth:`AsyncSubscriptionSocket.subscribe`. Only the exception's
+    class name is logged, never its message — an exception raised while
+    handling a frame can embed frame content, and payloads are never logged.
+    """
+    logger.error(
+        "niwaki: subscription %s task died on an unexpected %s — every tracked "
+        "subscription is failed with SubscriptionLostError; a later subscribe() "
+        "reopens the socket",
+        role,
+        type(exc).__name__,
+    )
+    socket = ref()
+    if socket is None:
+        return
+    await socket._fail_all(
+        exceptions.SubscriptionLostError(
+            f"subscription {role} task crashed unexpectedly ({type(exc).__name__})",
+            reason=exceptions.SubscriptionLostReason.INTERNAL_ERROR,
+        )
+    )

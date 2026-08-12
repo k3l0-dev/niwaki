@@ -27,28 +27,10 @@ from __future__ import annotations
 from typing import Final
 
 #: ``modelType`` → ``{spelling the APIC discards: spelling the APIC stores}``.
+#: Consumed by the extraction pipeline (``data/scripts/02_extract_props.py``),
+#: which bakes the alias into the generated enum member — the runtime never
+#: needs a lookup of its own.
 ENUM_SYNONYMS: Final[dict[str, dict[str, str]]] = {
     "pol:Color": {"cyan": "aqua", "magenta": "fuchsia"},
     "health:ColorT": {"cyan": "aqua", "magenta": "fuchsia"},
 }
-
-
-def canonical_value(model_type: str, value: str) -> str:
-    """The spelling the APIC stores for *value*.
-
-    Args:
-        model_type: The schema ``modelType`` of the property, e.g.
-            ``"pol:Color"``.
-        value: A value the schema lists for that type.
-
-    Returns:
-        The canonical spelling, or *value* unchanged when the type has no
-        synonyms or the value is already canonical.
-
-    Example::
-
-        canonical_value("pol:Color", "magenta")   # "fuchsia"
-        canonical_value("pol:Color", "aqua")      # "aqua"
-        canonical_value("fv:RtctrlDir", "magenta")  # "magenta" — not a colour
-    """
-    return ENUM_SYNONYMS.get(model_type, {}).get(value, value)

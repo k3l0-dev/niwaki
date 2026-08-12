@@ -82,6 +82,20 @@ class TestStrictPush:
         assert body["polUni"]["children"][0]["fvTenant"]["attributes"]["name"] == "prod"
 
 
+class TestUnknownModeFailsLoud:
+    def test_an_unrecognised_mode_raises_instead_of_planning(
+        self, aci: Niwaki, httpx_mock: HTTPXMock
+    ) -> None:
+        """The Literal type guards static callers only. A dynamic caller —
+        push(aci, mode=cfg["mode"]) with "Staged" or "dry-run" — used to fall
+        through both mode branches into the unconditional plan tail: a
+        read-only dry run handed back while the caller believed they wrote.
+        """
+        with pytest.raises(ValueError, match="unknown push mode 'Staged'"):
+            mini_design().push(aci, mode="Staged")  # type: ignore[arg-type]
+        assert not [r for r in httpx_mock.get_requests() if r.url.path != "/api/aaaLogin.json"]
+
+
 class TestStagedPush:
     def test_one_post_per_object_parents_first(self, aci: Niwaki, httpx_mock: HTTPXMock) -> None:
         design = mini_design()

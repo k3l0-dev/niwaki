@@ -31,6 +31,7 @@ from niwaki.transport._config import RetryConfig
 from niwaki.transport._errors import (
     _imdata_attributes,
     extract_apic_error,
+    json_data,
     raise_for_apic_status,
 )
 from niwaki.transport._retry import (
@@ -687,9 +688,10 @@ class ApicSession:
 
         # Mid-session 401: token revoked server-side while our local state
         # considered it valid. Re-authenticate and replay exactly once.
+        # Through _relogin, not login() directly: a rejected re-login must
+        # surface as SessionExpiredError here too, as the async twin does.
         if resp.status_code == 401:
-            self._forget_cached_token()
-            self.login(use_cache=False)
+            self._relogin(reason="mid-session 401")
             with self._http_transport():
                 resp = self._client.get(path, params=params)
 
@@ -712,7 +714,7 @@ class ApicSession:
         Raises:
             See :meth:`get`.
         """
-        return self._request_checked(path, params).json().get("imdata", [])  # type: ignore[no-any-return]
+        return json_data(self._request_checked(path, params)).get("imdata", [])  # type: ignore[no-any-return]
 
     def _iter_pages(
         self, path: str, params: dict[str, Any], *, page_size: int = 500
@@ -740,12 +742,16 @@ class ApicSession:
             See :meth:`get` for transport / auth errors.
         """
         page_params = {**params, "page": "0", "page-size": str(page_size)}
-        data: dict[str, Any] = self._request_checked(path, page_params).json()
-        # Treat an absent totalCount as "unknown" and page until an empty
-        # page; never let a missing/zero totalCount stop after page 0 when
-        # a full first page came back (audit T3).
-        total_raw = data.get("totalCount")
-        total = int(total_raw) if total_raw is not None else None
+        data: dict[str, Any] = json_data(self._request_checked(path, page_params))
+        # Treat an absent, zero or non-numeric totalCount as "unknown" and
+        # page until an empty page; never let it stop after page 0 when a
+        # full first page came back (audit T3). "0" next to a non-empty
+        # imdata is the controller contradicting itself — believe the data.
+        try:
+            claimed = int(data.get("totalCount") or 0)
+        except ValueError:
+            claimed = 0
+        total: int | None = claimed if claimed > 0 else None
         first: list[dict[str, Any]] = list(data.get("imdata", []))
         if not first:
             return
@@ -761,8 +767,8 @@ class ApicSession:
                     "was not satisfied. Possible APIC response inconsistency.",
                 )
             page_params = {**params, "page": str(page), "page-size": str(page_size)}
-            batch: list[dict[str, Any]] = (
-                self._request_checked(path, page_params).json().get("imdata", [])
+            batch: list[dict[str, Any]] = json_data(self._request_checked(path, page_params)).get(
+                "imdata", []
             )
             if not batch:
                 break
@@ -898,8 +904,7 @@ class ApicSession:
             )
 
         if resp.status_code == 401:
-            self._forget_cached_token()
-            self.login(use_cache=False)
+            self._relogin(reason="mid-session 401")
             with self._http_transport():
                 resp = self._client.request(method, path, **kwargs)
 
@@ -933,6 +938,7 @@ class ApicSession:
             ``httpx.TransportError``, caught by ``_http_transport``.
         """
         last: httpx.Response | None = None
+        tries = 0
         try:
             for attempt in stamina.retry_context(
                 on=(retry_on, RetryableStatus)
@@ -944,6 +950,7 @@ class ApicSession:
                 wait_jitter=self._retry.wait_jitter,
             ):
                 with attempt:
+                    tries += 1
                     resp = self._client.request(method, path, **kwargs)
                     if resp.status_code not in retry_statuses:
                         return resp
@@ -951,10 +958,12 @@ class ApicSession:
                     delay = retry_after_seconds(
                         resp, ceiling=self._retry.retry_after_max, now=time.time()
                     )
-                    if delay is not None:
+                    if delay is not None and tries < self._retry.attempts:
                         # The controller named a delay; honour it before stamina
                         # adds its own backoff. Clamped, so one busy answer cannot
                         # park a push for as long as the controller fancies.
+                        # Never on the final attempt: stamina gives up right
+                        # after, so the sleep would only delay the error.
                         time.sleep(delay)
                     raise RetryableStatus(resp, delay)
         except RetryableStatus:

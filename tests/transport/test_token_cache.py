@@ -101,6 +101,26 @@ class TestItRefusesWhatItCannotTrust:
         path.chmod(0o644)
         assert cache.read(HOST, USER) is None
 
+    def test_the_mode_check_is_posix_only(
+        self, cache: TokenCache, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """On Windows every ordinary file stats as 0o666 — fictional bits.
+
+        The permission gate used to run there too, silently discarding every
+        entry: the cache wrote tokens no read would ever return, and each
+        process re-logged instead. ACLs are the protection on that platform,
+        so the mode check must apply only where modes mean something.
+        """
+        expires = _later(600)
+        cache.write(HOST, USER, "tok", expires)
+        path = next(cache.directory.glob("*.json"))
+        path.chmod(0o644)  # what a Windows stat effectively reports
+
+        import niwaki.transport._token_cache as module
+
+        monkeypatch.setattr(module.os, "name", "nt")
+        assert cache.read(HOST, USER) == ("tok", expires)
+
     @pytest.mark.parametrize(
         "content",
         ["", "not json", "{}", '{"token": "t"}', '{"token": "t", "expires_at": "nonsense"}'],
@@ -371,10 +391,18 @@ class TestARevokedTokenDoesNotWedgeTheCache:
         source = inspect.getsource(ApicSession.login)
         assert "use_cache and self._token_cache" in source, "the bypass flag is not honoured"
 
-        for site in (ApicSession._request_checked, ApicSession._raw_write, ApicSession._relogin):
+        # Every recovery path funnels through _relogin, which owns both halves.
+        # The 401 sites used to inline them; the 2.0 hygiene pass made them
+        # delegate so a rejected re-login wraps into SessionExpiredError there
+        # too — the guard follows the delegation.
+        relogin = inspect.getsource(ApicSession._relogin)
+        assert "login(use_cache=False)" in relogin, "_relogin may re-enter the cache"
+        assert "_forget_cached_token()" in relogin, "_relogin leaves the dead entry"
+        for site in (ApicSession._request_checked, ApicSession._raw_write):
             body = inspect.getsource(site)
-            assert "login(use_cache=False)" in body, f"{site.__name__} may re-enter the cache"
-            assert "_forget_cached_token()" in body, f"{site.__name__} leaves the dead entry"
+            assert "self._relogin(" in body, (
+                f"{site.__name__} no longer routes 401 recovery through _relogin"
+            )
 
     async def test_the_async_session_recovers_too(self, cache: TokenCache) -> None:
         import httpx

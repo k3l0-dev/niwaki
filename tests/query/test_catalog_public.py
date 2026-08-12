@@ -210,6 +210,15 @@ def test_rn_format_of_an_unknown_class_raises() -> None:
         catalog.rn_format("fvNoSuchThing")
 
 
+def test_concrete_subclasses_of_an_unknown_class_raises() -> None:
+    """Every sibling lookup raises for a typo; this one silently returned []
+    — indistinguishable from a real concrete class with no descendants."""
+    from niwaki.exceptions import UnknownClassError
+
+    with pytest.raises(UnknownClassError):
+        catalog.concrete_subclasses("fvNoSuchThing")
+
+
 # ── prop_flags() — offline, the raw material of data-driven normalisation ─────
 
 

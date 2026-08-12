@@ -653,6 +653,82 @@ class TestPaginationMissingTotalCount:
         names = [r["fvBD"]["attributes"]["name"] for r in result]
         assert names == ["a", "b"]  # both pages fetched, not just page 0
 
+    def test_zero_total_count_with_a_full_page_pages_until_empty(
+        self, logged_session: ApicSession, httpx_mock: HTTPXMock
+    ) -> None:
+        """totalCount "0" next to a non-empty page: believe the data.
+
+        The docstring above always promised the zero case; only the absent
+        case was implemented until the 2.0 hygiene pass — "0" parsed to a
+        real 0 and stopped pagination after page 0, silently truncating.
+        """
+        httpx_mock.add_response(
+            method="GET",
+            json={"totalCount": "0", "imdata": [{"fvBD": {"attributes": {"name": "a"}}}]},
+        )
+        httpx_mock.add_response(
+            method="GET",
+            json={"totalCount": "0", "imdata": [{"fvBD": {"attributes": {"name": "b"}}}]},
+        )
+        httpx_mock.add_response(method="GET", json={"imdata": []})
+
+        result = logged_session._get_all_pages("/api/class/fvBD.json", {})  # type: ignore[reportPrivateUsage]
+        names = [r["fvBD"]["attributes"]["name"] for r in result]
+        assert names == ["a", "b"]
+
+    def test_garbage_total_count_is_unknown_not_a_crash(
+        self, logged_session: ApicSession, httpx_mock: HTTPXMock
+    ) -> None:
+        """A non-numeric totalCount pages until empty instead of ValueError."""
+        httpx_mock.add_response(
+            method="GET",
+            json={"totalCount": "banana", "imdata": [{"fvBD": {"attributes": {"name": "a"}}}]},
+        )
+        httpx_mock.add_response(method="GET", json={"imdata": []})
+
+        result = logged_session._get_all_pages("/api/class/fvBD.json", {})  # type: ignore[reportPrivateUsage]
+        assert [r["fvBD"]["attributes"]["name"] for r in result] == ["a"]
+
+
+class TestMidSession401RecoveryFailure:
+    """A rejected re-login after a mid-session 401 is a SessionExpiredError.
+
+    The sync path used to call ``login()`` directly and leak ``LoginError``,
+    while the async twin wrapped it — the documented contract (and the twin)
+    say ``SessionExpiredError``.
+    """
+
+    def test_rejected_relogin_surfaces_as_session_expired(
+        self, logged_session: ApicSession, httpx_mock: HTTPXMock
+    ) -> None:
+        httpx_mock.add_response(method="GET", url=GET_URL, status_code=401, json=_error_payload())
+        httpx_mock.add_response(
+            method="POST", url=LOGIN_URL, status_code=401, json=_error_payload()
+        )
+
+        with pytest.raises(exceptions.SessionExpiredError):
+            logged_session.get("/api/class/fvTenant.json")
+
+
+class TestNonJsonSuccessBodyIsTyped:
+    """A 2xx whose body is not JSON surfaces as a typed APIError.
+
+    A simulator under load answers an nginx HTML page with a 200; the session
+    promises only NiwakiError subclasses propagate, so this must never leak a
+    bare ``json.JSONDecodeError``.
+    """
+
+    def test_an_html_200_raises_api_error_with_the_real_status(
+        self, logged_session: ApicSession, httpx_mock: HTTPXMock
+    ) -> None:
+        httpx_mock.add_response(method="GET", url=GET_URL, text="<html>gateway</html>")
+
+        with pytest.raises(exceptions.APIError) as excinfo:
+            logged_session.get("/api/class/fvTenant.json")
+
+        assert excinfo.value.status_code == 200
+        assert "non-JSON" in excinfo.value.apic_message
+
 
 class TestSubscriptionDelegation:
     """The three bulk subscription methods delegate to the socket — see

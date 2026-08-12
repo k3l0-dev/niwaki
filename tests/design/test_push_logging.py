@@ -101,6 +101,48 @@ class TestAPushNarratesItself:
         assert [r for r in caplog.records if r.levelno >= logging.WARNING] == []
 
 
+class TestWavesNarrateAtDebug:
+    """The 1.9.0 changelog promise: start and finish at INFO, each wave at DEBUG.
+
+    The promise shipped with the function (``wave_started``) but not the call —
+    nothing logged a wave until the 2.0 hygiene pass wired it into the engine.
+    These tests pin the call on both runners so it cannot fall out again.
+    """
+
+    def test_a_staged_push_logs_each_wave_at_debug(
+        self, httpx_mock: HTTPXMock, caplog: pytest.LogCaptureFixture
+    ) -> None:
+        httpx_mock.add_response(method="POST", url=LOGIN_URL, json=login_payload())
+        httpx_mock.add_response(method="POST", json=ok(), is_reusable=True)
+
+        with caplog.at_level(logging.DEBUG, logger="niwaki"), Niwaki(HOST, "a", "b") as aci:
+            _design_with_a_secret().push(aci, mode="staged")  # type: ignore[attr-defined]
+
+        waves = [r for r in caplog.records if "wave depth=" in r.getMessage()]
+        # The design compiles to two depths (tenant, then its two BDs).
+        assert len(waves) == 2
+        assert all(r.levelno == logging.DEBUG for r in waves)
+        assert "operations=2" in waves[-1].getMessage()
+
+    async def test_the_async_runner_logs_waves_too(self, caplog: pytest.LogCaptureFixture) -> None:
+        from unittest.mock import AsyncMock, MagicMock
+
+        from niwaki.design._engine import _Op, _run_waves
+
+        session = MagicMock()
+        session.post_mo = AsyncMock()
+        session.delete_mo = AsyncMock()
+        ops = [_Op(dn="uni/tn-p", method="POST", payload={})]
+
+        with caplog.at_level(logging.DEBUG, logger="niwaki"):
+            outcome = await _run_waves(session, ops, max_concurrent=4)
+
+        assert outcome.ok
+        messages = [r.getMessage() for r in caplog.records if "wave depth=" in r.getMessage()]
+        # One op at depth 1, and the effective bound is the wave size, not the pool.
+        assert messages == ["wave depth=1 operations=1 concurrency=1"]
+
+
 class TestAPartialPushIsAudible:
     @staticmethod
     def _failing_fabric(httpx_mock: HTTPXMock) -> None:

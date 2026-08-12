@@ -140,6 +140,32 @@ class TestScoping:
         bind = PendingBind(kind="bind", alias="vrf", target_aci_class="fvCtx", target_name="prod")
         assert _lookup_target(index, bd_a.design_node, bind) is vrf_a.design_node
 
+    def test_a_name_relation_to_a_sibling_tenant_only_is_refused(self) -> None:
+        """The scope score had no floor: when the owner's tenant declared
+        nothing, a candidate whose only shared ancestor was polUni won
+        silently — but a tn*Name relation carries a bare name the APIC
+        resolves in the owner's tenant then tn-common, never a sibling. The
+        closed world validated one object while the wire pointed at another.
+        """
+        from niwaki.design import design
+
+        cfg = design()
+        cfg.tenant("a").bd("web").bind(vrf="prod")
+        cfg.tenant("b").vrf("prod")  # the only fvCtx "prod" in the design
+        with pytest.raises(UnresolvedReferenceError, match="never a sibling"):
+            resolve(cfg.design_node.root())
+
+    def test_the_tn_common_fallback_stays_legal(self) -> None:
+        """A BD in tenant a naming a VRF declared under tn-common is exactly
+        the controller's own fallback — it must keep resolving."""
+        from niwaki.design import design
+
+        cfg = design()
+        bd = cfg.tenant("a").bd("web").bind(vrf="shared")
+        cfg.tenant("common").vrf("shared")
+        extras = resolve(cfg.design_node.root())
+        assert len(extras[bd.design_node]) == 1
+
 
 class TestIndex:
     def test_index_covers_named_nodes_only(self) -> None:

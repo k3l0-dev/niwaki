@@ -49,7 +49,7 @@ class SubscribeRejectedError(SubscriptionError, APIError):
 class SubscriptionLostReason(StrEnum):
     """Which recovery path was exhausted before :class:`SubscriptionLostError` was raised.
 
-    Distinguishes three distinct fatal paths that would otherwise be
+    Distinguishes the distinct fatal paths that would otherwise be
     indistinguishable from the error message alone:
 
     - ``RECONNECT_EXHAUSTED``: the shared WebSocket itself could not be
@@ -60,11 +60,17 @@ class SubscriptionLostReason(StrEnum):
     - ``REFRESH_ESCALATION``: two consecutive scheduled refreshes failed, and
       the recovery resubscribe attempted for *this* subscription alone also
       failed — the socket connection itself was never affected.
+    - ``INTERNAL_ERROR``: an unexpected error escaped a background
+      reader/refresh loop. The last-line-of-defense guard fails every
+      tracked subscription rather than let consumers block forever on a
+      queue nothing feeds; the socket is left reopenable by a later
+      subscribe.
     """
 
     RECONNECT_EXHAUSTED = "reconnect_exhausted"
     RESUBSCRIBE_FAILED = "resubscribe_failed"
     REFRESH_ESCALATION = "refresh_escalation"
+    INTERNAL_ERROR = "internal_error"
 
 
 class SubscriptionLostError(SubscriptionError):

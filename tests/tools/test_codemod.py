@@ -109,6 +109,19 @@ class TestDictSplat:
         assert '"ip_address": ip' in new
         assert [r["kind"] for r in rewrites] == ["dictkey"]
 
+    def test_prefixed_string_dict_key_survives_and_keeps_its_prefix(self) -> None:
+        """A raw-string key used to crash the whole run mid-rewrite.
+
+        ``el.key.value[0]`` took the prefix letter ``r`` for the quote and
+        rebuilding ``SimpleString("rip_addressr")`` raised CSTValidationError —
+        after earlier files were already written. The quote comes from
+        ``.quote`` now, and the prefix rides along.
+        """
+        src = 'ifp.path_attachment(dn, **{r"addr": ip})\n'
+        new, rewrites, _ = _migrate(src)
+        assert 'r"ip_address": ip' in new
+        assert [r["kind"] for r in rewrites] == ["dictkey"]
+
 
 class TestAttributeRenames:
     def test_safe_attribute_rewritten(self) -> None:

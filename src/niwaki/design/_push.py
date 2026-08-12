@@ -412,6 +412,18 @@ def _staged_report(ops: list[_Op], outcome: _WaveOutcome) -> PushReport:
 # ── Sync execution ────────────────────────────────────────────────────────────
 
 
+def _check_mode(mode: str) -> None:
+    """Refuse an unrecognised push mode at runtime.
+
+    The ``Literal`` type guards static callers only; a dynamic caller —
+    ``push(aci, mode=cfg["mode"])`` with ``"Staged"`` or ``"dry-run"`` — used
+    to fall through both mode branches into the unconditional plan tail: a
+    read-only dry run handed back while the caller believed they wrote.
+    """
+    if mode not in ("strict", "staged", "plan"):
+        raise ValueError(f"unknown push mode {mode!r} — expected 'strict', 'staged' or 'plan'.")
+
+
 def push_sync(
     root: DesignNode,
     client: Niwaki,
@@ -424,6 +436,7 @@ def push_sync(
 
     See :meth:`niwaki.design.Cursor.push` for the full mode contract.
     """
+    _check_mode(mode)
     extras = resolve(root)
     session = client._sync_session  # pyright: ignore[reportPrivateUsage]
 
@@ -493,6 +506,7 @@ async def push_async(
     Mirror of :func:`push_sync` — validation, resolution, and compilation are
     the same pure code; only the three I/O calls are awaited.
     """
+    _check_mode(mode)
     extras = resolve(root)
     session = client._active_session  # pyright: ignore[reportPrivateUsage]
 

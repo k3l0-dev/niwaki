@@ -81,7 +81,12 @@ _EXCLUDED_MO_CATEGORIES: frozenset[str] = frozenset(
 def _load_schemas() -> dict[str, dict[str, Any]]:
     """Load all configurable non-abstract ACI classes from the schema dir."""
     classes: dict[str, dict[str, Any]] = {}
-    for f in SCHEMA_DIR.glob("*.json"):
+    # sorted() is load-bearing: this was the only unsorted glob in the regen
+    # family, and dict order reaches the emitted tables through collision
+    # resolution (first member in group order keeps the contested name).
+    # Restoring the corpus from tar re-rolls readdir order — measured: 11
+    # navigation entries flipped class between two orders of this loop.
+    for f in sorted(SCHEMA_DIR.glob("*.json")):
         raw = json.loads(f.read_text())
         for _key, entry in raw.items():
             mo_category: str = entry.get("moCategory", "")
@@ -90,12 +95,14 @@ def _load_schemas() -> dict[str, dict[str, Any]]:
             # carries classes with no generated model, and the facade/design
             # lazy import (CLASS_PKG[name] -> import _generated.<pkg>.<name>)
             # crashes with a raw ModuleNotFoundError on reachable jargon.
+            # No class-level read-only check: the corpus census found the key
+            # in NO spelling on any of the 15,452 classes (the old
+            # "isReadOnly" guard here filtered nothing and never could).
             if not (
                 entry.get("isConfigurable")
                 and not entry.get("isAbstract")
                 and not entry.get("isDeprecated")
                 and not entry.get("isHidden")
-                and not entry.get("isReadOnly", False)
                 and mo_category not in _EXCLUDED_MO_CATEGORIES
             ):
                 continue
@@ -106,10 +113,15 @@ def _load_schemas() -> dict[str, dict[str, Any]]:
 
             # For Rs singleton classes, find the single configurable tn* prop.
             props_data: dict[str, Any] = entry.get("properties", {})
+            # The real schema spellings are readOnly/implicit (present on all
+            # 332,297 props); the old is* keys occur zero times, so this
+            # filter had been a no-op since it was written (no outcome change
+            # on this corpus — verified — but on a future train the intended
+            # exclusion would silently not happen).
             tn_props = [
                 p
                 for p, v in props_data.items()
-                if p.startswith("tn") and not v.get("isReadOnly") and not v.get("isImplicit")
+                if p.startswith("tn") and not v.get("readOnly") and not v.get("implicit")
             ]
             rs_target_prop = tn_props[0] if is_rs_singleton and len(tn_props) == 1 else ""
 

@@ -879,6 +879,47 @@ class TestLimitAndBool:
         assert Query(fvBD, session)[:0].exists() is False
         session._request_checked.assert_not_called()
 
+    def test_first_honours_a_zero_limit(self) -> None:
+        """q[:0].first() used to return an object while fetch/count/exists on
+        the same query all said "empty" — first() now agrees, without I/O."""
+        from niwaki.models._generated.fv.fvBD import fvBD
+
+        session = _make_session()
+        assert Query(fvBD, session)[:0].first() is None
+        session._get_imdata.assert_not_called()
+
+    def test_one_honours_a_zero_limit(self) -> None:
+        from niwaki.exceptions import NoResultError
+        from niwaki.models._generated.fv.fvBD import fvBD
+
+        session = _make_session()
+        with pytest.raises(NoResultError):
+            Query(fvBD, session)[:0].one()
+        session._get_imdata.assert_not_called()
+
+    def test_one_probe_respects_a_one_limit(self) -> None:
+        """q[:1].one() must not out-read the slice and report a
+        MultipleResultsError the sliced query cannot produce."""
+        from niwaki.models._generated.fv.fvBD import fvBD
+
+        session = _make_session(
+            raw_items=[{"fvBD": {"attributes": {"name": "a", "dn": "uni/tn-t/BD-a"}}}]
+        )
+        assert Query(fvBD, session)[:1].one().name == "a"  # type: ignore[attr-defined]
+        params = session._get_imdata.call_args.args[1]
+        assert params["page-size"] == "1"
+
+    def test_reslicing_narrows_never_widens(self) -> None:
+        """Sequence semantics: s[:5][:10] still has five items — a cap set
+        upstream must not be silently widened downstream."""
+        from niwaki.models._generated.fv.fvBD import fvBD
+
+        session = _make_session()
+        q = Query(fvBD, session)[:5][:10]
+        assert q._limit == 5  # pyright: ignore[reportPrivateUsage]
+        assert Query(fvBD, session)[:10][:5]._limit == 5  # pyright: ignore[reportPrivateUsage]
+        assert Query(fvBD, session)[:5][:]._limit == 5  # pyright: ignore[reportPrivateUsage]
+
     def test_bool_raises(self) -> None:
         from niwaki.models._generated.fv.fvBD import fvBD
 

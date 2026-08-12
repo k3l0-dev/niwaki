@@ -452,7 +452,7 @@
   "docs/reference/vocabulary/infra/infra-vxlan_pool-range.md": "a5e038ec0ff6495ed8bc988abcb2c68a05e53340c29991057277d548baa1f231",
   "docs/reference/vocabulary/infra/infra-vxlan_pool.md": "318af800e58dd78f9ee9bb3c0035ba394e42b3c52cbbc71ac21a7eecc86e2327",
   "docs/reference/vocabulary/infra/infra.md": "bcae3174ccfdcd32ab0e70eb41def57965e73abca34dcb6aa943adecf564ddc8",
-  "docs/reference/vocabulary/navigation.md": "eaeef4dedea18bad7d0c5da16f2e9d2d512cba80e6a89b13e2e62d6d0fde0b3b",
+  "docs/reference/vocabulary/navigation.md": "29abee8487da77f796bc82fd0c7459e4deedf1b5665e945f725a2d9af620679d",
   "docs/reference/vocabulary/tenant.md": "dd89311a36a4a10c4f748a806ec79990fe487fcca045454e62be3afa7234f23a",
   "docs/reference/vocabulary/tenant/tenant-access_client_profile-access_client_epg.md": "1d2dc6139f37dcdc4cfd0dbce326f4c648c4a383f350bed8f7700ddd10d40804",
   "docs/reference/vocabulary/tenant/tenant-access_client_profile.md": "b1a0ae7c4a1aa1706883ad68695f0fd0270ff6f84b528fa8d59ea6d5643c4fd6",
@@ -945,7 +945,7 @@
   "src/niwaki/design/_generated_cursors/_infra.py": "848a81d0090c4888ad040a6695e7b5ed6dac3a6f24c8ce9208eb1ffedfa0fe96",
   "src/niwaki/design/_generated_cursors/_tenant.py": "57ca4199b3f6b4864d811b2a4151d9ab251982b53de49b8d93ecc2f371b934b1",
   "src/niwaki/design/_generated_cursors/_uni.py": "838d0cd831ef84c8c9e639bdef5dbc1c0e49ab78169539e79ea305487beedc8c",
-  "src/niwaki/domain/_child_map.py": "8eeefe985781962abf6f73a485257de8916f0f6d8b84ace0f649c5c2705741bb",
+  "src/niwaki/domain/_child_map.py": "3f88f97000747b164ea23120b94af47fc72314b02ca5a0f6f3c62370112b9188",
   "src/niwaki/models/_generated/__init__.py": "300ab2bd4011e4d119a8526130607af04c77ffe8faabaeaa3ca370ed60249aeb",
   "src/niwaki/models/_generated/aaa/__init__.py": "b0223779c5dcd164456a6e0570051f0ad3700b0b1af223b1f815b43a3567a422",
   "src/niwaki/models/_generated/aaa/aaaActiveUserSession.py": "d336b5e7305f5b31bf6941eb10661e5bcbb4c5f1c93aa3af2332fd01bd0c6a55",
@@ -4021,18 +4021,19 @@
   "src/niwaki/models/_generated/xcvr/xcvrZRIfPol.py": "4af63503ab3d31880e8c924225be6eb5d5a5f24fb72d542cb643b3f6553bd884",
   "src/niwaki/models/_generated/xcvr/xcvrZRPFabIfPol.py": "7e006c7f55b3ee25b0d36ffe1fb43acad2f1ffae91d95d53a602f28d65539aac",
   "src/niwaki/models/_generated/xcvr/xcvrZRPIfPol.py": "f81c7cfdbb558207e184c8fc299fee4732e19d97ab27231bbeb503a11c7fbbf3",
-  "src/niwaki/query/_catalog/catalog.db": "e228acf600ec822999093d17816dc0bd2fc5f6a9982c41027f9821b3d003fa1c"
+  "src/niwaki/query/_catalog/catalog.db": "e228acf600ec822999093d17816dc0bd2fc5f6a9982c41027f9821b3d003fa1c",
+  "tests/models/_test_data.json": "564bd9ed2ccd5cc0d7f60fd87eaf069a32a5fc15a25b75d7ab64622dae15bff4"
  },
  "inputs": {
   "src/niwaki/_codegen/__init__.py": "dd826dbc05350e8db0c7223f4849b13ee59e409c80295ad5f2e627cb7f69c83e",
   "src/niwaki/_codegen/_field_docs.py": "be905cc121bfd39b9e35a2c2af962b588ae74ecf6bfe5485808c1d310060718b",
-  "src/niwaki/_codegen/coverage_audit.py": "f45cba368249af637694cb9d5bd1d81646b2659e2bf08e4c862f5887e97a4342",
-  "src/niwaki/_codegen/freshness.py": "c90a264c0e31fb2fbbe9c4ca2495b3930f02e537ca2a23cad8689245d94b5f32",
+  "src/niwaki/_codegen/coverage_audit.py": "4eb06ad19b3acfbe50ca84b2fde491a5f475bbc12e188ec668498bb8f592bee1",
+  "src/niwaki/_codegen/freshness.py": "c166e7436a857ee3e896445d36561d0a3317e2882fdc92fc868cc0025ca0f65d",
   "src/niwaki/_codegen/generate.py": "24e14ec9431255b9a48fd92ea639cf0b6b4134256cfd010f2520e82483be704d",
   "src/niwaki/_codegen/generate_catalog.py": "0ebdb6f4ec5df961be08632b86fba5caf657f4f00e33c9d4a33bc1fc8dc5caf7",
   "src/niwaki/_codegen/generate_design.py": "a3ff4d7aefcc8ba31efa46d9a8c12f029b87218b848b8f475a6e2fa1d4db94fe",
   "src/niwaki/_codegen/generate_docs.py": "47df4de6b58017ca61d3fca02c3f931dbd10a48b55515807699c48e98e2b8078",
-  "src/niwaki/_codegen/generate_domain.py": "54c90390c4a5193b215186fb0f63080cbd61095f62cc65d19202b0e01d319f7d",
+  "src/niwaki/_codegen/generate_domain.py": "16dfe90b9928af9a874179a430cf1cbabadfb032bf62e3ec8f95e69dd80f734e",
   "src/niwaki/_codegen/generate_enums.py": "7220075d9668500bac4ff04afdd0bd71acf87d5165b1d06b9e37cbbbdd8b3fde",
   "src/niwaki/_codegen/propose_vocabulary.py": "e8d1ff9a5ee831304d4be69ee50793ea7eb01a4ccfb692ac5b6bd6f3a25c27f7",
   "src/niwaki/_codegen/report_constraints.py": "4be23e265ca090bfec78e4dfab1ac3232cf905fa63e851b81c1943cc5fdfdd4d",
@@ -4040,7 +4041,13 @@
   "src/niwaki/_schema/__init__.py": "5f47e7d60da7e1cbc0ca7a0603fd403adf6bfc4e7e7fd1851578d6da2d053871",
   "src/niwaki/_schema/kinds.py": "0ea0ea3a13087ca3341f51b3905036e2f60ff4562883f78083eddd0ff2baa51f",
   "src/niwaki/_schema/naming.py": "cebc103a49202cfab0417995b5bc73a81b20f6db6c7477167e1d5550505c4e6e",
-  "src/niwaki/_schema/synonyms.py": "4372adfa5aedd981b0485acbc96fea293171f3ab9fcbdff128fa942c656f612e",
+  "src/niwaki/_schema/synonyms.py": "6afdfda05dfa5e0d987c49e2681ec173fbab097b5f502eb6aebb5ab04e3b38a5",
   "src/niwaki/domain/vocabulary.yaml": "4bea68484540c0acd8a063971c6a51c02339b8c459a8e70b5deadc7cb3dfe21f"
+ },
+ "private_inputs": {
+  "data/scripts/01_extract_classes.py": "8f990240dd74e91605ff929700ab39831a01cf44f732e26f9372c1d2180c9ded",
+  "data/scripts/02_extract_props.py": "bbadfe5eb154bce5cf3f9da3802fbde1857a7bec64ec3ea66c0186cfbb98253a",
+  "data/scripts/03_build_subset.py": "ffd608d57183528d1644a112ae73b15996afad071fe277b2e8568525ef21a7a1",
+  "data/scripts/fetch_train.py": "e6a3f15b148712f7048d713eb4ef51dfcc3bf8428ae6a93a5a4598db31497638"
  }
 }

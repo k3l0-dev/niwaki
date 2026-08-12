@@ -21,6 +21,7 @@ import gc
 import logging
 import threading
 import time
+from typing import Any
 
 import pytest
 import stamina
@@ -29,10 +30,12 @@ from pytest_httpx import HTTPXMock
 from niwaki import exceptions
 from niwaki.transport._config import RetryConfig
 from niwaki.transport._subscription_socket import (
+    _MIN_REFRESH_TIMEOUT_SECONDS,
     _RECONNECT_ATTEMPTS,
     RawSubscriptionEvent,
     SubscriptionGap,
     SubscriptionRefreshFailed,
+    SubscriptionSocket,
     _finalize_socket,
     _refresh_interval,
     _SocketHandle,
@@ -771,3 +774,374 @@ class TestSingleSubscriptionPrimitives:
         sub.close()
         with pytest.raises(exceptions.SubscriptionError):
             sub.refresh_now()
+
+
+# ── Background loops survive transport/auth errors and unexpected crashes ──────
+
+
+class TestBackgroundLoopResilience:
+    def test_transport_error_refresh_feeds_escalation_not_thread_death(
+        self,
+        ws_session: ApicSession,
+        httpx_mock: HTTPXMock,
+        fake_ws_server: FakeWsServer,
+        monkeypatch: pytest.MonkeyPatch,
+    ) -> None:
+        """An unreachable APIC raises niwaki ConnectionError — NOT an APIError.
+
+        Before the broadened net, that exception escaped ``_do_refresh`` and
+        killed the refresh thread for ALL subscriptions: consumers blocked on
+        ``queue.get()`` forever while the socket looked healthy. It must
+        instead count as a failed refresh attempt feeding the existing
+        escalation machinery, ending (when the recovery resubscribe is also
+        unreachable) in a fatal ``SubscriptionLostError`` — never a hang.
+        """
+        httpx_mock.add_response(method="GET", json=subscribe_response("1001"))
+        sub = ws_session.subscribe("/api/class/fvBD.json", {})
+        _wait_until(lambda: fake_ws_server.connection_count == 1)
+        socket = ws_session._subscription_socket  # type: ignore[reportPrivateUsage]
+        assert socket is not None
+        reg = socket._registrations[1]  # type: ignore[reportPrivateUsage]
+
+        def unreachable(path: str, params: dict[str, Any]) -> Any:
+            raise exceptions.ConnectionError("simulated: APIC unreachable")
+
+        monkeypatch.setattr(ws_session, "_request_checked", unreachable)
+
+        # First failed sweep: a transport error is a failed refresh attempt.
+        reg.next_refresh_at = time.monotonic() - 1
+        _wait_until(lambda: reg.queue.qsize() > 0, timeout=3.0)
+        marker = next(sub)
+        assert isinstance(marker, SubscriptionRefreshFailed)
+        assert marker.consecutive_failures == 1
+
+        # Second: escalation. The recovery resubscribe is equally unreachable
+        # (ConnectionError, not a SubscriptionError) — fatal, not a hang.
+        reg.next_refresh_at = time.monotonic() - 1
+        _wait_until(lambda: reg.queue.qsize() > 0, timeout=3.0)
+        with pytest.raises(exceptions.SubscriptionLostError) as exc_info:
+            next(sub)
+        assert exc_info.value.reason == exceptions.SubscriptionLostReason.REFRESH_ESCALATION
+
+    def test_sweep_crash_fails_consumers_and_leaves_the_socket_reopenable(
+        self,
+        ws_session: ApicSession,
+        httpx_mock: HTTPXMock,
+        fake_ws_server: FakeWsServer,
+        monkeypatch: pytest.MonkeyPatch,
+        caplog: pytest.LogCaptureFixture,
+    ) -> None:
+        """The last line of defense: an unexpected bug in the sweep must wake
+        every consumer with ``SubscriptionLostError`` (never silent permanent
+        starvation), log without any payload, and leave the socket state
+        restartable by a later ``subscribe()``."""
+        httpx_mock.add_response(method="GET", json=subscribe_response("1001"))
+        sub = ws_session.subscribe("/api/class/fvBD.json", {})
+        _wait_until(lambda: fake_ws_server.connection_count == 1)
+        socket = ws_session._subscription_socket  # type: ignore[reportPrivateUsage]
+        assert socket is not None
+        reg = socket._registrations[1]  # type: ignore[reportPrivateUsage]
+
+        def boom(local_id: int, r: Any) -> None:
+            raise RuntimeError("simulated: unexpected internal bug")
+
+        monkeypatch.setattr(socket, "_refresh_one", boom)
+        with caplog.at_level(logging.ERROR):
+            reg.next_refresh_at = time.monotonic() - 1
+            _wait_until(lambda: reg.queue.qsize() > 0, timeout=3.0)
+            with pytest.raises(exceptions.SubscriptionLostError) as exc_info:
+                next(sub)
+        assert exc_info.value.reason == exceptions.SubscriptionLostReason.INTERNAL_ERROR
+        crash_logs = [
+            r.getMessage() for r in caplog.records if "died on an unexpected" in r.getMessage()
+        ]
+        assert crash_logs and "RuntimeError" in crash_logs[0]
+        # Never the exception message itself — it could embed frame content.
+        assert all("simulated" not in message for message in crash_logs)
+
+        # State restartable: _ws cleared, a fresh subscribe reopens cleanly.
+        assert socket._ws is None  # type: ignore[reportPrivateUsage]
+        httpx_mock.add_response(method="GET", json=subscribe_response("2002"))
+        sub2 = ws_session.subscribe("/api/class/fvBD.json", {})
+        _wait_until(lambda: fake_ws_server.connection_count == 2)
+        fake_ws_server.send(
+            {
+                "subscriptionId": ["2002"],
+                "imdata": [{"fvBD": {"attributes": {"status": "modified"}}}],
+            }
+        )
+        event = next(sub2)
+        assert isinstance(event, RawSubscriptionEvent)
+        sub2.close()
+
+    def test_reader_crash_fails_consumers_and_clears_the_socket(
+        self,
+        ws_session: ApicSession,
+        httpx_mock: HTTPXMock,
+        fake_ws_server: FakeWsServer,
+        monkeypatch: pytest.MonkeyPatch,
+    ) -> None:
+        httpx_mock.add_response(method="GET", json=subscribe_response("1001"))
+        sub = ws_session.subscribe("/api/class/fvBD.json", {})
+        _wait_until(lambda: fake_ws_server.connection_count == 1)
+        socket = ws_session._subscription_socket  # type: ignore[reportPrivateUsage]
+        assert socket is not None
+        reg = socket._registrations[1]  # type: ignore[reportPrivateUsage]
+
+        def boom(raw: str | bytes) -> None:
+            raise RuntimeError("simulated: unexpected internal bug")
+
+        monkeypatch.setattr(socket, "_dispatch", boom)
+        fake_ws_server.send(
+            {
+                "subscriptionId": ["1001"],
+                "imdata": [{"fvBD": {"attributes": {"status": "modified"}}}],
+            }
+        )
+
+        _wait_until(lambda: reg.queue.qsize() > 0, timeout=3.0)
+        with pytest.raises(exceptions.SubscriptionLostError) as exc_info:
+            next(sub)
+        assert exc_info.value.reason == exceptions.SubscriptionLostReason.INTERNAL_ERROR
+        # A dead reader must never leave _ws non-None — that would make a
+        # later subscribe() skip _ensure_open's restart entirely.
+        assert socket._ws is None  # type: ignore[reportPrivateUsage]
+
+
+# ── Malformed frames: the reader survives anything the wire sends ─────────────
+
+
+class TestMalformedFrames:
+    @pytest.mark.parametrize(
+        "frame",
+        [
+            "null",
+            "[1, 2, 3]",
+            '"not-an-object"',
+            '{"subscriptionId": ["1001"],'
+            ' "imdata": [{"fvBD": {"attributes": ["not", "a", "dict"]}}]}',
+        ],
+        ids=["json-null", "json-array", "json-string", "attributes-not-a-dict"],
+    )
+    def test_non_object_frame_is_skipped_and_the_reader_survives(
+        self,
+        ws_session: ApicSession,
+        httpx_mock: HTTPXMock,
+        fake_ws_server: FakeWsServer,
+        frame: str,
+        caplog: pytest.LogCaptureFixture,
+    ) -> None:
+        """Valid-JSON garbage (null/array/string, non-dict attributes) used to
+        raise OUTSIDE the json.loads guard and kill the reader while the
+        refresh sweep kept the server-side subscriptions alive — every
+        consumer starving behind a healthy-looking socket."""
+        httpx_mock.add_response(method="GET", json=subscribe_response("1001"))
+        sub = ws_session.subscribe("/api/class/fvBD.json", {})
+        _wait_until(lambda: fake_ws_server.connection_count == 1)
+
+        with caplog.at_level(logging.WARNING):
+            with fake_ws_server.lock:
+                conn = fake_ws_server.connections[-1]
+            conn.send(frame)
+            # A later valid frame must still be delivered by the SAME reader
+            # over the SAME connection — no reconnect, no dead thread.
+            fake_ws_server.send(
+                {
+                    "subscriptionId": ["1001"],
+                    "imdata": [{"fvBD": {"attributes": {"status": "modified"}}}],
+                }
+            )
+            event = next(sub)
+
+        assert isinstance(event, RawSubscriptionEvent)
+        assert fake_ws_server.connection_count == 1
+        assert any("malformed subscription push frame" in r.getMessage() for r in caplog.records)
+
+
+# ── subscribe() vs close() race ────────────────────────────────────────────────
+
+
+class TestSubscribeCloseRace:
+    def test_subscribe_after_close_raises_instead_of_opening_a_socket(
+        self, ws_session: ApicSession, fake_ws_server: FakeWsServer
+    ) -> None:
+        """A closed socket must refuse subscribe() outright — reopening a real
+        WebSocket after close() would leak it (the finalizer safety net is
+        already disarmed at that point)."""
+        socket = SubscriptionSocket(ws_session)
+        socket.close()
+
+        with pytest.raises(exceptions.SubscriptionError):
+            socket.subscribe("/api/class/fvBD.json", {})
+        assert fake_ws_server.connection_count == 0  # nothing was ever opened
+
+    def test_close_racing_subscribe_raises_instead_of_registering_forever(
+        self,
+        ws_session: ApicSession,
+        httpx_mock: HTTPXMock,
+        fake_ws_server: FakeWsServer,
+        monkeypatch: pytest.MonkeyPatch,
+    ) -> None:
+        """close() landing between the REST subscribe and the registration
+        insert must make subscribe() raise — registering would create a queue
+        no ``_STOP`` ever reaches, blocking the consumer forever."""
+        httpx_mock.add_response(method="GET", json=subscribe_response("1001"))
+        sub = ws_session.subscribe("/api/class/fvBD.json", {})
+        _wait_until(lambda: fake_ws_server.connection_count == 1)
+        socket = ws_session._subscription_socket  # type: ignore[reportPrivateUsage]
+        assert socket is not None
+
+        original = socket._do_subscribe  # type: ignore[reportPrivateUsage]
+
+        def close_then_return(
+            path: str, params: dict[str, str], refresh_timeout: int | None
+        ) -> tuple[str, list[dict[str, Any]]]:
+            result = original(path, params, refresh_timeout)
+            socket.close()  # the race: close() wins between REST and insert
+            return result
+
+        monkeypatch.setattr(socket, "_do_subscribe", close_then_return)
+        httpx_mock.add_response(method="GET", json=subscribe_response("2002"))
+
+        with pytest.raises(exceptions.SubscriptionError):
+            ws_session.subscribe("/api/class/fvBD.json", {})
+        # The pre-existing consumer was unblocked by close(), not left hanging.
+        with pytest.raises(StopIteration):
+            next(sub)
+
+
+# ── Stale sweep generation: one refresh loop at a time, ever ──────────────────
+
+
+class TestStaleSweepGeneration:
+    def test_resubscribe_after_fail_all_does_not_leave_two_sweeps(
+        self, ws_session: ApicSession, httpx_mock: HTTPXMock, fake_ws_server: FakeWsServer
+    ) -> None:
+        """A subscribe() racing the 1 s window after ``_fail_all`` starts a new
+        refresh thread; the superseded sweep must observe the generation bump
+        on its next wakeup and exit, never run alongside the fresh one
+        (double-counting refresh failures forever)."""
+        httpx_mock.add_response(method="GET", json=subscribe_response("1001"))
+        sub = ws_session.subscribe("/api/class/fvBD.json", {})
+        _wait_until(lambda: fake_ws_server.connection_count == 1)
+        socket = ws_session._subscription_socket  # type: ignore[reportPrivateUsage]
+        assert socket is not None
+        old_refresh = socket._refresh_thread  # type: ignore[reportPrivateUsage]
+        assert old_refresh is not None
+
+        socket._fail_all(  # type: ignore[reportPrivateUsage]
+            exceptions.SubscriptionLostError("forced: test failure injection")
+        )
+        with pytest.raises(exceptions.SubscriptionLostError):
+            next(sub)  # the fatal is already queued — no blocking wait
+
+        # Immediate resubscribe, well inside the old sweep's 1 s wakeup window.
+        httpx_mock.add_response(method="GET", json=subscribe_response("2002"))
+        sub2 = ws_session.subscribe("/api/class/fvBD.json", {})
+        _wait_until(lambda: fake_ws_server.connection_count == 2)
+        new_refresh = socket._refresh_thread  # type: ignore[reportPrivateUsage]
+        assert new_refresh is not None
+        assert new_refresh is not old_refresh
+
+        _wait_until(lambda: not old_refresh.is_alive(), timeout=3.0)
+        assert new_refresh.is_alive()
+        sub2.close()
+
+
+# ── Reconnect adoption vs escalation race ─────────────────────────────────────
+
+
+class TestReconnectEscalateRace:
+    def test_reconnect_does_not_clobber_an_escalated_wire_id(
+        self,
+        ws_session: ApicSession,
+        httpx_mock: HTTPXMock,
+        fake_ws_server: FakeWsServer,
+        monkeypatch: pytest.MonkeyPatch,
+    ) -> None:
+        """If ``_escalate`` re-keys the registration while the reconnect's own
+        resubscribe is in flight, the reconnect must NOT adopt its now-stale
+        wire id: doing so would leave the escalated id mapped forever and
+        deliver every event carrying it twice."""
+        httpx_mock.add_response(method="GET", json=subscribe_response("1001"))
+        sub = ws_session.subscribe("/api/class/fvBD.json", {})
+        _wait_until(lambda: fake_ws_server.connection_count == 1)
+        socket = ws_session._subscription_socket  # type: ignore[reportPrivateUsage]
+        assert socket is not None
+        reg = socket._registrations[1]  # type: ignore[reportPrivateUsage]
+
+        def racing_do_subscribe(
+            path: str, params: dict[str, str], refresh_timeout: int | None
+        ) -> tuple[str, list[dict[str, Any]]]:
+            # An _escalate on the refresh thread wins the race while this
+            # reconnect resubscribe is in flight: by the time we return, the
+            # registration is already re-keyed under a fresh wire id.
+            with socket._state_lock:  # type: ignore[reportPrivateUsage]
+                socket._wire_to_local.pop(reg.wire_id, None)  # type: ignore[reportPrivateUsage]
+                reg.wire_id = "9999"
+                socket._wire_to_local["9999"] = 1  # type: ignore[reportPrivateUsage]
+            return ("2002", [])
+
+        monkeypatch.setattr(socket, "_do_subscribe", racing_do_subscribe)
+        fake_ws_server.disconnect()
+        _wait_until(lambda: fake_ws_server.connection_count == 2)
+
+        # Two ordered frames: were the stale "2002" mapping adopted, the first
+        # frame would fan out to the same registration twice (and a gap would
+        # precede it) — the consumer would NOT see exactly first-then-second.
+        fake_ws_server.send(
+            {
+                "subscriptionId": ["9999", "2002"],
+                "imdata": [
+                    {"fvBD": {"attributes": {"dn": "uni/tn-t/BD-first", "status": "modified"}}}
+                ],
+            }
+        )
+        fake_ws_server.send(
+            {
+                "subscriptionId": ["9999"],
+                "imdata": [
+                    {"fvBD": {"attributes": {"dn": "uni/tn-t/BD-second", "status": "modified"}}}
+                ],
+            }
+        )
+        _wait_until(lambda: reg.queue.qsize() >= 2, timeout=3.0)
+
+        first = next(sub)
+        second = next(sub)
+        assert isinstance(first, RawSubscriptionEvent)
+        assert first.attributes["dn"].endswith("BD-first")
+        assert isinstance(second, RawSubscriptionEvent)
+        assert second.attributes["dn"].endswith("BD-second")
+        assert socket._wire_to_local == {"9999": 1}  # type: ignore[reportPrivateUsage]
+        assert reg.wire_id == "9999"
+        assert sub.subscription_id == "9999"
+
+
+# ── refresh_timeout validation ─────────────────────────────────────────────────
+
+
+class TestRefreshTimeoutValidation:
+    def test_below_floor_raises_value_error_with_the_arithmetic(
+        self, ws_session: ApicSession, fake_ws_server: FakeWsServer
+    ) -> None:
+        """A refresh_timeout the sweep cannot honour (interval floors at 5 s,
+        detection lags one 1 s tick → anything ≤ 11 s expires server-side
+        before recovery can fire) must be refused up front, before any
+        network I/O."""
+        with pytest.raises(ValueError, match="refresh_timeout") as exc_info:
+            ws_session.subscribe("/api/class/fvBD.json", {}, refresh_timeout=11)
+        message = str(exc_info.value)
+        assert "11" in message  # the 2 * 5 + 1 arithmetic
+        assert str(_MIN_REFRESH_TIMEOUT_SECONDS) in message  # the floor to use
+        assert fake_ws_server.connection_count == 0  # rejected before any I/O
+
+    def test_the_floor_itself_is_accepted(
+        self, ws_session: ApicSession, httpx_mock: HTTPXMock, fake_ws_server: FakeWsServer
+    ) -> None:
+        httpx_mock.add_response(method="GET", json=subscribe_response("1001"))
+        sub = ws_session.subscribe(
+            "/api/class/fvBD.json", {}, refresh_timeout=_MIN_REFRESH_TIMEOUT_SECONDS
+        )
+        assert sub.subscription_id == "1001"
+        sub.close()

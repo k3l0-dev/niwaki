@@ -5,6 +5,111 @@ All notable changes to this project are documented here.  The format follows
 [semver](https://semver.org/).  From 1.0.0 the configuration API is stable:
 breaking changes ship in a new major version with a migration note.
 
+## [2.0.1] — 2026-08-12
+
+A hygiene pass over the entire hand-written codebase — every module read
+cold, adversarially, with each finding verified against the running code
+before being fixed.  Two silent-failure defects and a dozen significant ones
+came out, none of them reachable by the test suite that existed before
+(each fix ships with the test that would have caught it).  The brownfield
+import chain was re-proven live on an APIC 6.0(9c) simulator after the
+fixes, and two suspected query defects were *refuted* by live measurement —
+the controller compares named-number and flag properties semantically, so
+`where(dFromPort=80)` matches an entry the APIC stores as `"http"`.
+
+### Breaking
+
+- **Eleven navigation entries move, so they can never move again.**  The
+  generated navigation tables depended on filesystem read order: two
+  same-named candidates under one parent were tie-broken by whichever
+  schema file the OS listed first, and restoring the schema corpus from an
+  archive re-rolls that order silently.  Generation is now deterministic,
+  which settles eleven entries under four parents once and for all —
+  `fvDomDef` (`fv_vxlan_pool` now reaches `fvRsDomDefNs`,
+  `fv_rs_dom_def_ns_local` appears), `vnsCDev`, `vnsDevFolder` and
+  `vnsLDevVip` (`vns_device` now reaches `vnsDevFolder`; `vns_dev_param`
+  appears).  Read-only navigation names on rarely-traversed relation and
+  device-folder classes; configuration is unaffected.
+
+### Fixed
+
+- **`surgical()` no longer accepts a wire alias it would silently drop.**
+  `fvBD.surgical({"name": "web"}, arpFlood=True)` resolved the alias into
+  the right field — the instance *looked* correct on inspection — but the
+  payload intersection ran on Python field names, so the one change the
+  caller asked for vanished from the POST: a green push and an unchanged
+  fabric.  Wire aliases are now refused with a hint naming the readable
+  field, the same contract attribute assignment has enforced since 2.0.0.
+- **Subscription background machinery can no longer die silently.**  A
+  transport or auth error during the refresh sweep (an APIC briefly
+  unreachable — the most ordinary failure there is) killed the refresh
+  loop for every subscription on the session: the controller expired them
+  a minute later and every consumer blocked forever on a queue nothing
+  would ever feed, while the socket looked healthy.  Transport errors now
+  feed the existing escalation machinery, a last-line guard turns any
+  unexpected crash into `SubscriptionLostError` for every consumer (new
+  reason: `internal_error`) with the socket left reopenable, a malformed
+  WebSocket frame (JSON `null`, an array) is skipped instead of killing
+  the reader, a `subscribe()` racing `close()` fails loudly instead of
+  returning an iterator that hangs forever, and `refresh_timeout` values
+  the refresh arithmetic cannot honour (below 12 s) are rejected with the
+  arithmetic spelled out.
+- **Pagination believes the data, not a contradictory `totalCount`.**  A
+  controller answering `totalCount: "0"` (or garbage) next to a non-empty
+  first page used to stop pagination after page 0 — a silently truncated
+  result feeding queries, snapshots and plan mode alike.  Zero and
+  non-numeric counts now mean "unknown: page until an empty page".
+- **The closed world closes two escape hatches.**  A name-flavored bind
+  whose only candidate lived in a sibling tenant resolved silently to a
+  target the controller can never reach by bare name (it looks up the
+  attaching object's scope, then `tn-common`, never a sibling tree) — now
+  refused at resolve time, with the `tn-common` fallback preserved.  And
+  `ref()` attributes can no longer override the resolved target field
+  (`provide(ref("web", name="stolen"))` emitted a relation to an
+  undeclared contract right after validation) — refused at declaration.
+- **Composition round-trips.**  `merge(design, design.slice(...))` — the
+  natural brownfield move — produced a design whose own `to_payload()`
+  raised, because a verb restating the Rs child the slice had pinned was
+  treated as a conflict; byte-identical agreement now collapses.  Scoped
+  imports walk ancestor chains through containment edges only the
+  catalogue's DN grammar proves (the third authority full imports already
+  had).  An unrecognised `push` mode raises instead of silently executing
+  a read-only plan.
+- **Sessions and facade.**  A login failure inside `with Niwaki(...)`
+  abandoned the eagerly-built HTTP client with no handle left to close it
+  (one leaked connection pool per retry against an unreachable APIC) —
+  the session now closes what it cannot authenticate.  `cert_dn` without
+  `private_key` was silently dropped, downgrading certificate auth to
+  password auth without a signal — the pairing now fails at construction.
+  A rejected re-login after a mid-session 401 raises `SessionExpiredError`
+  on the sync twin as documented (it leaked `LoginError`).  `Retry-After`
+  is no longer slept on the final attempt (a push dying on 503 used to
+  wait the full delay *after* its last try).  A 2xx response with a
+  non-JSON body raises a typed `APIError` instead of a bare
+  `json.JSONDecodeError`.  The token cache works on Windows (fictional
+  permission bits made every read miss, silently).
+- **Query self-consistency.**  `first()`/`one()` honour the slice limit
+  (`q[:0].first()` returned an object while everything else said empty);
+  re-slicing narrows and never widens (`q[:5][:10]` is five); the filter
+  escape point escapes the backslash itself (a value ending in `\`
+  rendered a malformed filter); `catalog.concrete_subclasses()` of an
+  unknown class raises `UnknownClassError` like every sibling lookup.
+- **`mo_diff` keeps operational children apart.**  Children served by the
+  catalogue (no generated model) all collapsed onto one identity key:
+  identical trees could raise a cross-class `TypeError`, and a genuinely
+  new same-class sibling vanished from the delta.  They now key on their
+  wire class and RN.
+- **Staged pushes narrate their waves.**  The 1.9.0 changelog promised
+  "each wave at DEBUG"; the function existed but nothing called it.  Both
+  wave runners now log depth, width and concurrency per wave.
+- **`niwaki-migrate` survives prefixed string keys.**  A raw-string dict
+  key (`r"addr"`) crashed the codemod mid-run — after earlier files were
+  already rewritten.
+- The freshness manifest now also covers the emitted test fixture
+  (`tests/models/_test_data.json`) and, on machines that carry it, the
+  private extraction pipeline — a hand-edited input or fixture fails the
+  guard instead of silently feeding the build.
+
 ## [2.0.0] — 2026-08-12
 
 The fabric, reclaimed.  Since 1.0 the SDK has written configuration in one

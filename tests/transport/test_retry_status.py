@@ -254,3 +254,52 @@ class TestTheAsyncTwinBehavesIdentically:
                 await aci.query("fvTenant").fetch()
 
         assert excinfo.value.status_code == 503
+
+
+class TestTheFinalAttemptDoesNotSleep:
+    """Exhausting attempts on 503 + Retry-After must not pay the last delay.
+
+    Stamina gives up right after the final attempt, so honouring the header
+    there only postpones the error the caller is about to receive — a push
+    dying on 503 + ``Retry-After: 30`` used to wait 30 s *after* its last try.
+    """
+
+    def test_sync_exhaustion_skips_the_last_retry_after(self, httpx_mock: HTTPXMock) -> None:
+        httpx_mock.add_response(method="POST", url=LOGIN_URL, json=login_payload())
+        httpx_mock.add_response(
+            method="GET", status_code=503, headers={"retry-after": "0.4"}, is_reusable=True
+        )
+
+        cfg = RetryConfig(
+            attempts=2, wait_initial=0.001, wait_max=0.002, wait_jitter=0.0, retry_after_max=1.0
+        )
+        started = time.monotonic()
+        with (
+            Niwaki(HOST, "admin", "secret", retry=cfg) as aci,
+            pytest.raises(exceptions.ServerError),
+        ):
+            aci.query("fvTenant").fetch()
+        elapsed = time.monotonic() - started
+
+        # Attempt 1 honours the header (0.4 s); attempt 2 is the last and must
+        # not — the old behaviour slept both, taking >= 0.8 s.
+        assert 0.4 <= elapsed < 0.75
+
+    async def test_async_exhaustion_skips_the_last_retry_after(self, httpx_mock: HTTPXMock) -> None:
+        from niwaki.facade import AsyncNiwaki
+
+        httpx_mock.add_response(method="POST", url=LOGIN_URL, json=login_payload())
+        httpx_mock.add_response(
+            method="GET", status_code=503, headers={"retry-after": "0.4"}, is_reusable=True
+        )
+
+        cfg = RetryConfig(
+            attempts=2, wait_initial=0.001, wait_max=0.002, wait_jitter=0.0, retry_after_max=1.0
+        )
+        started = time.monotonic()
+        async with AsyncNiwaki(HOST, "admin", "secret", retry=cfg) as aci:
+            with pytest.raises(exceptions.ServerError):
+                await aci.query("fvTenant").fetch()
+        elapsed = time.monotonic() - started
+
+        assert 0.4 <= elapsed < 0.75

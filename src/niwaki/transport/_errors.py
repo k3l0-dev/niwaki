@@ -143,6 +143,35 @@ def extract_apic_error(resp: httpx.Response) -> str:
     return apic_error_fields(resp).message
 
 
+def json_data(resp: httpx.Response) -> dict[str, Any]:
+    """Parse a checked 2xx response body as the APIC JSON envelope.
+
+    A 2xx whose body is not JSON — the nginx HTML page a simulator under load
+    serves, a proxy interposing its own error page — must surface as a typed
+    error, never a bare ``json.JSONDecodeError``: the session promises that
+    only :class:`~niwaki.exceptions.NiwakiError` subclasses propagate.  The
+    auth paths already survive this shape through ``_imdata_attributes``; this
+    is the same hardening for the data paths.
+
+    Args:
+        resp: A response that already passed :func:`raise_for_apic_status`.
+
+    Returns:
+        The parsed JSON object.
+
+    Raises:
+        APIError: The body is not valid JSON, or not a JSON object.  Carries
+            the *real* HTTP status and the first 200 characters of the body.
+    """
+    try:
+        data = resp.json()
+    except ValueError as exc:
+        raise exceptions.APIError(resp.status_code, f"non-JSON body: {resp.text[:200]!r}") from exc
+    if not isinstance(data, dict):
+        raise exceptions.APIError(resp.status_code, f"non-object JSON body: {resp.text[:200]!r}")
+    return data
+
+
 def raise_for_apic_status(resp: httpx.Response) -> None:
     """Raise a typed niwaki exception for any non-2xx APIC HTTP response.
 

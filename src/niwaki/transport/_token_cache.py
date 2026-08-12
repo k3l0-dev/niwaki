@@ -117,9 +117,12 @@ class TokenCache:
             info = path.stat()
         except OSError:
             return None
-        if info.st_mode & (stat.S_IRWXG | stat.S_IRWXO):
+        if os.name == "posix" and info.st_mode & (stat.S_IRWXG | stat.S_IRWXO):
             # Someone widened it, or it was written by a careless tool. A token
-            # others can read is not one to keep using.
+            # others can read is not one to keep using. POSIX only: Windows
+            # reports fictional mode bits (0o666) for every ordinary file, so
+            # this check would silently discard every entry there — ACLs, not
+            # mode bits, are the protection on that platform.
             return None
         try:
             payload = json.loads(path.read_text(encoding="utf-8"))

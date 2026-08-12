@@ -210,7 +210,11 @@ class _Migrator(cst.CSTTransformer):
                     )
                     elements.append(el)
                     continue
-                quote = el.key.value[0]
+                # .quote, never value[0]: a prefixed key (r"...") puts the
+                # prefix letter first, and rebuilding with it as the "quote"
+                # raises CSTValidationError mid-run — after some files were
+                # already rewritten.  The prefix itself is preserved.
+                quote = el.key.quote
                 self._report.rewrites.append(
                     {
                         "line": line,
@@ -220,7 +224,9 @@ class _Migrator(cst.CSTTransformer):
                         "call": call,
                     }
                 )
-                elements.append(el.with_changes(key=cst.SimpleString(f"{quote}{target}{quote}")))
+                elements.append(
+                    el.with_changes(key=cst.SimpleString(f"{el.key.prefix}{quote}{target}{quote}"))
+                )
             else:
                 if (
                     isinstance(el, cst.DictElement)

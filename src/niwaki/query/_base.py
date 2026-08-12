@@ -610,7 +610,9 @@ class _QueryBase[T: ManagedObject]:
         if not isinstance(stop, int) or isinstance(stop, bool) or stop < 0:
             raise ValueError(f"query slice stop must be a non-negative integer, got {stop!r}")
         q = self._copy()
-        q._limit = stop
+        # Sequence semantics: s[:5][:10] still has five items — re-slicing
+        # narrows an existing bound, never widens a cap set upstream.
+        q._limit = stop if self._limit is None else min(self._limit, stop)
         return q
 
     def __bool__(self) -> bool:

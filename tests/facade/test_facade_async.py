@@ -41,6 +41,38 @@ class TestAsyncConnect:
         with pytest.raises(exceptions.LoginError):
             await AsyncNiwaki.connect(HOST, "admin", "wrong")
 
+    async def test_login_failure_closes_the_session_it_built(
+        self, httpx_mock: HTTPXMock, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """The async twin of the leak fix: no 'Unclosed AsyncClient' warnings."""
+        from niwaki.transport.session_async import AsyncApicSession
+
+        built: list[AsyncApicSession] = []
+        original_init = AsyncApicSession.__init__
+
+        def recording_init(self: AsyncApicSession, *args: object, **kwargs: object) -> None:
+            original_init(self, *args, **kwargs)  # type: ignore[arg-type]
+            built.append(self)
+
+        monkeypatch.setattr(AsyncApicSession, "__init__", recording_init)
+        httpx_mock.add_response(
+            method="POST",
+            url=LOGIN_URL,
+            status_code=401,
+            json={"imdata": [{"error": {"attributes": {"code": "401", "text": "bad creds"}}}]},
+        )
+
+        with pytest.raises(exceptions.LoginError):
+            await AsyncNiwaki.connect(HOST, "admin", "wrong")
+
+        assert len(built) == 1
+        assert built[0]._client.is_closed  # type: ignore[reportPrivateUsage]
+
+    async def test_cert_dn_alone_is_refused_at_construction(self) -> None:
+        """cert_dn without private_key used to silently downgrade to password auth."""
+        with pytest.raises(ValueError, match="together"):
+            AsyncNiwaki(HOST, "admin", "secret", cert_dn="uni/userext/user-admin/usercert-c")
+
     async def test_retry_propagated_to_session(self, httpx_mock: HTTPXMock) -> None:
         """connect() honours a custom retry policy (same path as __aenter__)."""
         from niwaki.transport import RetryConfig

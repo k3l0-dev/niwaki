@@ -225,6 +225,15 @@ class TestFilterValueEscaping:
     def test_wcard_escapes_double_quote_keeps_wildcard(self) -> None:
         assert str(wcard("descr", 'x"y*', cls_name="fvBD")) == 'wcard(fvBD.descr,"x\\"y*")'
 
+    def test_a_trailing_backslash_cannot_eat_the_closing_quote(self) -> None:
+        """The escape character itself must be escaped first: a value ending
+        in a backslash used to render eq(prop,"foo\\") — the backslash
+        swallowed the closing quote and the filter was malformed."""
+        assert str(eq("descr", "foo\\", cls_name="fvBD")) == 'eq(fvBD.descr,"foo\\\\")'
+
+    def test_a_literal_backslash_quote_stays_two_characters(self) -> None:
+        assert _coerce_value('a\\"b') == 'a\\\\\\"b'
+
 
 # ── Bitmask operators ─────────────────────────────────────────────────────────
 

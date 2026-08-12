@@ -103,7 +103,7 @@ See {doc}`SECURITY` for how to report a vulnerability.
 
 ```text
 niwaki>=2.0,<3       # recommended: every fix and feature, no breaking change
-niwaki==2.0.0        # reproducible builds; upgrade deliberately
+niwaki==2.0.1        # reproducible builds; upgrade deliberately
 ```
 
 The SDK targets a specific APIC schema release, which is a separate axis

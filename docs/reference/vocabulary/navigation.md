@@ -880,7 +880,7 @@ The facade resolves operator names into typed child handles — `aci.tenant("pro
 | `tenant.logical_device` | `.credentials(…)` | `vnsCCred` — {ref}`tenant.logical_device.credentials <vocab-tenant-logical_device-credentials>` |
 | `tenant.logical_device` | `.logical_interface(…)` | `vnsLIf` — {ref}`tenant.logical_device.logical_interface <vocab-tenant-logical_device-logical_interface>` |
 | `tenant.logical_device` | `.management_interface(…)` | `vnsCMgmt` — {ref}`tenant.logical_device.management_interface <vocab-tenant-logical_device-management_interface>` |
-| `tenant.logical_device` | `.vns_device(…)` | `vnsDevParam` — {ref}`tenant.logical_device.concrete_device.device_param <vocab-tenant-logical_device-concrete_device-device_param>` |
+| `tenant.logical_device` | `.vns_dev_param(…)` | `vnsDevParam` — {ref}`tenant.logical_device.concrete_device.device_param <vocab-tenant-logical_device-concrete_device-device_param>` |
 | `tenant.logical_device.concrete_device` | `.concrete_interface(…)` | `vnsCIf` — {ref}`tenant.logical_device.concrete_device.concrete_interface <vocab-tenant-logical_device-concrete_device-concrete_interface>` |
 | `tenant.logical_device.concrete_device` | `.credentials(…)` | `vnsCCred` — {ref}`tenant.logical_device.credentials <vocab-tenant-logical_device-credentials>` |
 | `tenant.logical_device.concrete_device` | `.device_param(…)` | `vnsDevParam` — {ref}`tenant.logical_device.concrete_device.device_param <vocab-tenant-logical_device-concrete_device-device_param>` |

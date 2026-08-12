@@ -258,7 +258,7 @@ def scan_gaps() -> list[Gap]:
     - a creatable child with configurable fields and no maker → a ``"maker"`` gap.
 
     The result is deterministic and independent of scope: use
-    :func:`classify` / :func:`in_scope_gaps` to filter by judgement.
+    :func:`classify` to filter by judgement.
 
     :returns: all gaps, sorted, ready to snapshot or group into a report.
     """
@@ -293,11 +293,6 @@ def classify(child: str, parent: str | None = None) -> tuple[Bucket, str]:
         if rule.matches(child, parent):
             return rule.bucket, rule.reason
     return "in", "in-scope backlog"
-
-
-def in_scope_gaps(gaps: list[Gap] | None = None) -> list[Gap]:
-    """Return only the gaps whose child classifies as ``in`` (the real backlog)."""
-    return [g for g in (gaps or scan_gaps()) if classify(g.child, g.parent)[0] == "in"]
 
 
 def _grouped(gaps: list[Gap]) -> Iterator[tuple[str, list[Gap]]]:

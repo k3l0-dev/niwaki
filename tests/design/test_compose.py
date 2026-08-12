@@ -121,6 +121,35 @@ class TestMerge:
         assert bd.attrs == {"arp_flooding": False, "unicast_routing": True}
         assert [b.alias for b in bd.binds] == ["vrf"]
 
+    def test_merging_a_design_with_its_own_slice_stays_pushable(self) -> None:
+        """slice() pins an out-of-slice reference as an explicit Rs child; the
+        original declares the same relation through a verb. The two sources
+        agree, so merge succeeds — and the merged design must compile: the
+        verb restating the pinned child is agreement, not a duplicate. The
+        collision check used to raise unconditionally on bind-vs-child, even
+        byte-identical, so the merged design crashed at to_payload().
+        """
+        cfg = design()
+        cfg.tenant("common").contract("shared-web")
+        epg = cfg.tenant("app").app("a1").epg("web")
+        epg.provide("shared-web")
+        combined = merge(cfg, cfg.slice("uni/tn-app"))
+        payload = json.dumps(combined.to_payload())
+        assert payload.count('"tnVzBrCPName": "shared-web"') == 1
+
+    def test_a_bind_conflicting_with_an_explicit_child_still_raises(self) -> None:
+        """Collapse is for agreement only — a same-RN child carrying different
+        attributes is a real contradiction and keeps failing loud."""
+        from niwaki.models._generated.fv.fvRsProv import fvRsProv
+
+        cfg = tenant("app")
+        cfg.contract("web")
+        epg = cfg.app("a1").epg("front")
+        epg.provide("web")
+        epg.mo(fvRsProv, name="web", priority="level1")
+        with pytest.raises(DesignError, match="conflicting attributes"):
+            cfg.to_payload()
+
     def test_identical_declarations_collapse(self) -> None:
         a = tenant("prod")
         a.bd("web", unicast_routing=True).bind(vrf="main")

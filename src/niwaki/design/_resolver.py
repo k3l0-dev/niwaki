@@ -33,6 +33,7 @@ from niwaki._warn import warn_at_caller
 from niwaki.design._node import BindFlavor, DesignNode, PendingBind
 from niwaki.exceptions._design import (
     AmbiguousBindError,
+    DesignError,
     DesignHintWarning,
     DuplicateDeclarationError,
     UnresolvedReferenceError,
@@ -138,7 +139,8 @@ def _build_rs(rs_aci_class: str, target_fields: dict[str, str], bind: PendingBin
 
     Raises:
         DesignError: A ``ref()`` attribute is not a field of the relationship
-            class (a wire name, or a typo).
+            class (a wire name, or a typo), or names the very field the
+            resolver just filled in to point at the target.
         ValidationError: A ``ref()`` attribute fails the field's constraints.
     """
     from niwaki.design._cursor import _load_class, _validate_attr_names
@@ -146,6 +148,21 @@ def _build_rs(rs_aci_class: str, target_fields: dict[str, str], bind: PendingBin
     cls = _load_class(rs_aci_class)
     if bind.attrs:
         _validate_attr_names(cls, bind.attrs)
+        # ``name`` (the D2-renamed tn*Name) and ``target_dn`` are ordinary
+        # declared fields of every Rs class, so the name gate above accepts
+        # them — but they are HOW the relation points at its resolved target.
+        # Letting a ref() attribute win the merge would emit a relation to an
+        # undeclared object right after the closed world validated a declared
+        # one: the exact bypass the closed world exists to prevent.
+        stolen = sorted(set(bind.attrs) & set(target_fields))
+        if stolen:
+            fields = ", ".join(repr(f) for f in stolen)
+            raise DesignError(
+                f"ref({bind.target_name!r}, ...) cannot set {fields} on "
+                f"{rs_aci_class} — that field is how the relation points at "
+                "its resolved target. Name the intended target in the bind "
+                "or verb itself."
+            )
     rs = cls.model_validate({**target_fields, **bind.attrs})
     _warn_on_faultable_defaults(rs, bind)
     return rs
@@ -278,12 +295,63 @@ def resolve(root: DesignNode) -> dict[DesignNode, list[ManagedObject]]:
             else:
                 # D2 renames every Rs target prop (tn*Name) to the Python
                 # field "name" — one constructor shape for all name relations.
+                _check_name_reachable(node, bind, attach, referenced, rs_aci_class)
                 fields = {"name": referenced.primary_name}
             rs_mo = _build_rs(rs_aci_class, fields, bind)
             extras.setdefault(attach, []).append(rs_mo)
 
     _check_rn_collisions(extras)
     return extras
+
+
+def _is_under_common_tenant(node: DesignNode) -> bool:
+    """Whether *node* sits inside ``tn-common`` — the APIC's name fallback."""
+    return any(
+        ancestor.aci_class == "fvTenant" and ancestor.primary_name == "common"
+        for ancestor in node.ancestors_and_self()
+    )
+
+
+def _check_name_reachable(
+    node: DesignNode,
+    bind: PendingBind,
+    attach: DesignNode,
+    referenced: DesignNode,
+    rs_aci_class: str,
+) -> None:
+    """Refuse a name-flavored relation the controller can never form.
+
+    A ``tn*Name`` reference carries a bare name on the wire; the APIC resolves
+    it inside the attaching object's own enclosing scope, then falls back to
+    ``tn-common`` — never a sibling tenant or domain.  The scoring in
+    :func:`_lookup_target` has no floor, so when the owner's scope declares
+    nothing, a candidate whose only shared ancestor is ``polUni`` used to win
+    silently: the closed world validated one object and the wire pointed at
+    another (unformed, or silently capturing a same-named brownfield object).
+
+    Args:
+        node: The node carrying the reference (for the error message).
+        bind: The pending reference being resolved.
+        attach: The node the Rs object attaches under — where the APIC starts
+            its name resolution.
+        referenced: The declared node the closed world resolved the name to.
+        rs_aci_class: The relationship class, for the error message.
+
+    Raises:
+        UnresolvedReferenceError: The resolved target shares no scope with the
+            attaching node and is not under ``tn-common``.
+    """
+    if _common_ancestor_depth(attach, referenced) > 0:
+        return
+    if _is_under_common_tenant(referenced):
+        return
+    raise UnresolvedReferenceError(
+        f"{node.path()}: {bind.alias}={bind.target_name!r} resolves to "
+        f"{referenced.path()}, but {rs_aci_class} points at its target by "
+        "bare name — the controller looks it up in the attaching object's "
+        "own scope, then tn-common, never a sibling tree. Declare the "
+        "target inside the same scope (or under tn-common)."
+    )
 
 
 def _check_rn_collisions(extras: dict[DesignNode, list[ManagedObject]]) -> None:
@@ -295,23 +363,33 @@ def _check_rn_collisions(extras: dict[DesignNode, list[ManagedObject]]) -> None:
     byte-identical (same RN **and** same attributes) they are the one relation
     declared twice, so the extra copy is pruned and the relation is emitted once.
 
-    A same-RN collision with **different** attributes is a real contradiction
-    (``bind(vrf="a").bind(vrf="b")`` → conflicting ``tnFvCtxName``), and a bind
-    colliding with an explicit ``.mo(RsClass, ...)`` child of the same RN is
-    ambiguous — both still raise.
+    The same agreement rule extends to a bind colliding with an **explicit
+    child** of the same RN: composition materialises references as explicit Rs
+    children (``slice`` pins an out-of-slice reference; an imported design
+    materialises an Rs that carries children of its own), so merging such a
+    design with an overlay that declares the same relation through a verb is
+    agreement, not conflict — when the attributes match, the bind is the same
+    relation and the richer explicit child wins.  A same-RN collision with
+    **different** attributes is a real contradiction
+    (``bind(vrf="a").bind(vrf="b")`` → conflicting ``tnFvCtxName``) and still
+    raises, as does an attribute mismatch against the explicit child.
 
     Mutates ``extras`` in place, dropping pruned duplicates.
     """
     for node, rs_list in extras.items():
-        child_rns: set[str] = {child.rn for child in node.children}
+        child_by_rn: dict[str, DesignNode] = {child.rn: child for child in node.children}
         by_rn: dict[str, ManagedObject] = {}
         kept: list[ManagedObject] = []
         for rs_mo in rs_list:
             rn = rs_mo.rn
-            if rn in child_rns:
+            twin = child_by_rn.get(rn)
+            if twin is not None:
+                if twin.mo().to_apic() == rs_mo.to_apic():
+                    continue  # the bind restates the materialised child — collapse
                 raise DuplicateDeclarationError(
                     f"{node.path()}: relationship {rn!r} is declared twice "
-                    "(a bind collides with an explicit .mo() child)."
+                    "with conflicting attributes (a bind collides with an "
+                    "explicit child of the same RN)."
                 )
             prior = by_rn.get(rn)
             if prior is not None:

@@ -669,6 +669,21 @@ class ManagedObject(BaseModel):
                     "this SDK's schema baseline — a typo, or a property from a "
                     "newer firmware.  Refused rather than silently dropped."
                 )
+            # A wire alias passes the constructor-keys gate (aliases are valid
+            # __init__ spellings) and model_construct even resolves it into the
+            # right field — but _fields_set below stamps the RAW key, and
+            # to_apic() intersects fields_set with python field names, so the
+            # change would vanish from the payload while the instance looks
+            # correct.  Same refusal as __setattr__, same hint.
+            alias_map = cls._get_alias_map()
+            aliased = sorted(key for key in (*naming, *changes) if key in alias_map)
+            if aliased:
+                hints = ", ".join(f"{key!r} (use {alias_map[key]!r})" for key in aliased)
+                raise ValueError(
+                    f"{cls._aci_class or cls.__name__}.surgical() takes python "
+                    f"field names, not wire aliases: {hints}.  Refused rather "
+                    "than silently dropped from the payload."
+                )
         return cls.model_construct(
             _fields_set=set(cls._naming_props) | set(changes.keys()),
             **{**naming, **changes},

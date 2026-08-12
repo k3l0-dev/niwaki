@@ -229,6 +229,60 @@ class TestMoDiffChildren:
         # Unchanged child must NOT appear in the delta
         assert len(delta.children) == 0
 
+    def test_catalogue_served_children_keep_distinct_identities(self) -> None:
+        """Children with no generated model must not collapse onto one key.
+
+        The old key read the ClassVar ``_aci_class`` (empty on the base class)
+        and the empty ``_naming_props``, so every operational child keyed as
+        ``("",)``: two identical trees whose children were two *different*
+        unregistered classes crashed with a cross-class TypeError, and
+        same-class siblings diffed against each other's attributes.
+        """
+        from niwaki.models.base import ManagedObject
+
+        def _tree() -> ManagedObject:
+            return ManagedObject.from_apic(
+                {
+                    "fvTenant": {
+                        "attributes": {"name": "prod", "dn": "uni/tn-prod"},
+                        "children": [
+                            {"opClsA": {"attributes": {"dn": "uni/tn-prod/opA-x", "p": "1"}}},
+                            {"opClsB": {"attributes": {"dn": "uni/tn-prod/opB-y", "p": "2"}}},
+                        ],
+                    }
+                }
+            )
+
+        assert mo_diff(_tree(), _tree()) is None  # used to raise TypeError
+
+    def test_a_new_same_class_operational_sibling_is_not_swallowed(self) -> None:
+        """The collapsed key hid new children behind their siblings.
+
+        Under the old ``("",)`` key the current-children index held a single
+        entry for ALL operational children, so a desired child that exists on
+        no current object still found a "match" and vanished from the delta —
+        a wrong verdict, not just a crash. Keyed on ``(class, rn)`` it now
+        surfaces as the new child it is.
+        """
+        from niwaki.models.base import ManagedObject
+
+        def _tree(names: list[str]) -> ManagedObject:
+            return ManagedObject.from_apic(
+                {
+                    "fvTenant": {
+                        "attributes": {"name": "prod", "dn": "uni/tn-prod"},
+                        "children": [
+                            {"opCls": {"attributes": {"dn": f"uni/tn-prod/op-{n}"}}} for n in names
+                        ],
+                    }
+                }
+            )
+
+        assert mo_diff(_tree(["a", "b"]), _tree(["a", "b"])) is None
+        delta = mo_diff(_tree(["a", "b", "c"]), _tree(["a", "b"]))
+        assert delta is not None
+        assert [c.attrs.get("dn") for c in delta.children] == ["uni/tn-prod/op-c"]
+
     def test_recurse_children_false_ignores_all_child_changes(self) -> None:
         desired = fvBD(name="web")
         desired.children.append(fvSubnet(subnet="10.0.0.1/24", scope="public"))

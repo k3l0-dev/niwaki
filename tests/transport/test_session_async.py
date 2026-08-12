@@ -553,6 +553,25 @@ class TestPaginationGuard:
             result = await s._get_all_pages("/api/class/fvBD.json", {}, page_size=1)  # type: ignore[reportPrivateUsage]
         assert len(result) == 2
 
+    async def test_zero_total_count_with_a_full_page_pages_until_empty(
+        self, httpx_mock: HTTPXMock
+    ) -> None:
+        """The async twin of the sync fix: totalCount "0" means unknown."""
+        httpx_mock.add_response(method="POST", url=LOGIN_URL, json=_login_resp())
+        httpx_mock.add_response(
+            method="GET",
+            json={"totalCount": "0", "imdata": [{"fvBD": {"attributes": {"name": "b0"}}}]},
+        )
+        httpx_mock.add_response(
+            method="GET",
+            json={"totalCount": "0", "imdata": [{"fvBD": {"attributes": {"name": "b1"}}}]},
+        )
+        httpx_mock.add_response(method="GET", json={"imdata": []})
+
+        async with AsyncApicSession(HOST, "admin", "pass") as s:
+            result = await s._get_all_pages("/api/class/fvBD.json", {})  # type: ignore[reportPrivateUsage]
+        assert [r["fvBD"]["attributes"]["name"] for r in result] == ["b0", "b1"]
+
 
 class TestAIterPages:
     """_aiter_pages() yields raw imdata lists one page at a time."""

@@ -6321,8 +6321,8 @@ CHILD_MAP: dict[str, dict[str, str]] = {
         "tag": "tagTag",
     },
     "fvDomDef": {
-        "fv_rs_dom_def_ns": "fvRsDomDefNs",
-        "fv_vxlan_pool": "fvRsDomDefNsLocal",
+        "fv_rs_dom_def_ns_local": "fvRsDomDefNsLocal",
+        "fv_vxlan_pool": "fvRsDomDefNs",
     },
     "fvEPSelector": {
         "annotation": "tagAnnotation",
@@ -17320,7 +17320,7 @@ CHILD_MAP: dict[str, dict[str, str]] = {
         "tag": "tagTag",
         "tag_instance": "tagInst",
         "vmm_controller": "vnsRsCDevToCtrlrP",
-        "vns_dev_folder": "vnsDevFolder",
+        "vns_device": "vnsDevFolder",
     },
     "vnsCDevInfo": {
         "annotation": "tagAnnotation",
@@ -17434,8 +17434,8 @@ CHILD_MAP: dict[str, dict[str, str]] = {
         "annotation_to_capture_rbac_info": "aaaRbacAnnotation",
         "l4_l7_services_meta_folder": "vnsRsDevFolderToMFolder",
         "tag": "tagTag",
-        "vns_dev_folder": "vnsDevFolder",
-        "vns_device": "vnsDevParam",
+        "vns_dev_param": "vnsDevParam",
+        "vns_device": "vnsDevFolder",
     },
     "vnsDevMgr": {
         "annotation": "tagAnnotation",
@@ -17685,8 +17685,8 @@ CHILD_MAP: dict[str, dict[str, str]] = {
         "service_instance_policy": "vnsRsLDevVipToInstPol",
         "tag": "tagTag",
         "tag_instance": "tagInst",
-        "vns_dev_folder": "vnsDevFolder",
-        "vns_device": "vnsDevParam",
+        "vns_dev_param": "vnsDevParam",
+        "vns_device": "vnsDevFolder",
         "vns_mgmt_logical_interface": "vnsMgmtLIf",
         "vns_rs_aldev_to_dom_p": "vnsRsALDevToDomP",
         "vns_rs_aldev_to_phys_dom_p": "vnsRsALDevToPhysDomP",

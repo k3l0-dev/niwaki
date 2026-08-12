@@ -47,6 +47,7 @@ from __future__ import annotations
 
 import asyncio
 import builtins
+import os
 import warnings
 from collections.abc import Coroutine
 from pathlib import Path
@@ -63,7 +64,10 @@ from niwaki.transport.session_async import AsyncApicSession
 
 # Directory of the installed niwaki package — frames under it are skipped
 # when attributing deprecation warnings, so they land on the caller's line.
-_PKG_DIR = str(Path(__file__).resolve().parent)
+# The trailing separator matters: CPython matches with a bare startswith, so
+# without it a sibling package like site-packages/niwaki_toolkit would have
+# its frames skipped too and the warning would land above the real caller.
+_PKG_DIR = str(Path(__file__).resolve().parent) + os.sep
 
 if TYPE_CHECKING:
     from niwaki.query._async_builder import AsyncQuery
@@ -491,8 +495,8 @@ class NiwakiNode[T: ManagedObject](_JargonNavMixin[T]):
             # Count subnets in a specific BD
             n = aci.root.tenant("prod").bd("web").query(fvSubnet).count()
 
-            # Unregistered / read-only class
-            nodes = aci.root.query("topSystem").naming_only().fetch()
+            # Unregistered / read-only class, scoped under this node's subtree
+            faults = aci.root.tenant("prod").query("faultInst").fetch()
         """
         from niwaki.query._builder import Query
 
@@ -680,6 +684,12 @@ class AsyncNiwaki:
         self._max_concurrent = max_concurrent
         self._injected_client: httpx.AsyncClient | None = None
         self._token_cache = token_cache
+        # The session enforces the same pairing, but only at connect time —
+        # and the old forwarding only sent cert_dn when private_key was set,
+        # so cert_dn alone silently fell back to password auth. Fail here,
+        # where the mistake was written.
+        if (private_key is None) != (cert_dn is None):
+            raise ValueError("private_key and cert_dn must be given together")
         self._private_key = private_key
         self._cert_dn = cert_dn
         self._retry = retry
@@ -796,7 +806,15 @@ class AsyncNiwaki:
                 kwargs["private_key"] = self._private_key
                 kwargs["cert_dn"] = self._cert_dn
             session = AsyncApicSession(**kwargs)
-            await session.login()
+            try:
+                await session.login()
+            except BaseException:
+                # The session built its HTTP client eagerly; abandoning it on
+                # a failed login leaks the connection pool with no handle left
+                # to close it — a service looping on connect() against an
+                # unreachable APIC leaks one pool per attempt.
+                await session.close()
+                raise
             self._session = session
         return self
 
@@ -1113,6 +1131,12 @@ class Niwaki:
         self._retry = retry
         self._injected_client: httpx.Client | None = None
         self._token_cache = token_cache
+        # The session enforces the same pairing, but only at connect time —
+        # and the old forwarding only sent cert_dn when private_key was set,
+        # so cert_dn alone silently fell back to password auth. Fail here,
+        # where the mistake was written.
+        if (private_key is None) != (cert_dn is None):
+            raise ValueError("private_key and cert_dn must be given together")
         self._private_key = private_key
         self._cert_dn = cert_dn
         self._session: ApicSession | None = None
@@ -1214,7 +1238,15 @@ class Niwaki:
                 kwargs["private_key"] = self._private_key
                 kwargs["cert_dn"] = self._cert_dn
             session = ApicSession(**kwargs)
-            session.login()
+            try:
+                session.login()
+            except BaseException:
+                # The session built its HTTP client eagerly; abandoning it on
+                # a failed login leaks the connection pool with no handle left
+                # to close it — a service looping on connect() against an
+                # unreachable APIC leaks one pool per attempt.
+                session.close()
+                raise
             self._session = session
         return self
 

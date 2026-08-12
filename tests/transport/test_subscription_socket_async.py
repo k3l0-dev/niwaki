@@ -21,6 +21,7 @@ import gc
 import logging
 import socket as socket_module
 import time
+from typing import Any
 
 import pytest
 import stamina
@@ -29,12 +30,14 @@ from pytest_httpx import HTTPXMock
 from niwaki import exceptions
 from niwaki.transport._config import RetryConfig
 from niwaki.transport._subscription_socket import (
+    _MIN_REFRESH_TIMEOUT_SECONDS,
     _RECONNECT_ATTEMPTS,
     RawSubscriptionEvent,
     SubscriptionGap,
     SubscriptionRefreshFailed,
 )
 from niwaki.transport._subscription_socket_async import (
+    AsyncSubscriptionSocket,
     _AsyncSocketHandle,
     _finalize_async_socket,
 )
@@ -782,3 +785,343 @@ class TestSingleSubscriptionPrimitives:
         await sub.close()
         with pytest.raises(exceptions.SubscriptionError):
             await sub.refresh_now()
+
+
+# ── Background loops survive transport/auth errors and unexpected crashes ──────
+
+
+class TestBackgroundLoopResilience:
+    async def test_transport_error_refresh_feeds_escalation_not_task_death(
+        self,
+        async_ws_session: AsyncApicSession,
+        httpx_mock: HTTPXMock,
+        fake_async_ws_server: FakeAsyncWsServer,
+        monkeypatch: pytest.MonkeyPatch,
+    ) -> None:
+        """Async twin of the sync test — a niwaki ConnectionError (not an
+        APIError) must feed the escalation machinery, not kill the sweep task
+        and leave every consumer parked on ``queue.get()`` forever."""
+        httpx_mock.add_response(method="GET", json=subscribe_response("1001"))
+        sub = await async_ws_session.subscribe("/api/class/fvBD.json", {})
+        await _await_until(lambda: fake_async_ws_server.connection_count == 1)
+        socket = async_ws_session._subscription_socket  # type: ignore[reportPrivateUsage]
+        assert socket is not None
+        reg = socket._registrations[1]  # type: ignore[reportPrivateUsage]
+
+        async def unreachable(path: str, params: dict[str, Any]) -> Any:
+            raise exceptions.ConnectionError("simulated: APIC unreachable")
+
+        monkeypatch.setattr(async_ws_session, "_request_checked", unreachable)
+
+        reg.next_refresh_at = time.monotonic() - 1
+        await _await_until(lambda: reg.queue.qsize() > 0, timeout=3.0)
+        marker = await anext(sub)
+        assert isinstance(marker, SubscriptionRefreshFailed)
+        assert marker.consecutive_failures == 1
+
+        reg.next_refresh_at = time.monotonic() - 1
+        await _await_until(lambda: reg.queue.qsize() > 0, timeout=3.0)
+        with pytest.raises(exceptions.SubscriptionLostError) as exc_info:
+            await anext(sub)
+        assert exc_info.value.reason == exceptions.SubscriptionLostReason.REFRESH_ESCALATION
+
+    async def test_sweep_crash_fails_consumers_and_leaves_the_socket_reopenable(
+        self,
+        async_ws_session: AsyncApicSession,
+        httpx_mock: HTTPXMock,
+        fake_async_ws_server: FakeAsyncWsServer,
+        monkeypatch: pytest.MonkeyPatch,
+        caplog: pytest.LogCaptureFixture,
+    ) -> None:
+        """The last line of defense — and specifically NOT the silent
+        swallow-by-aclose the task exception previously fell into: the crash
+        is logged (no payload) and every consumer wakes with
+        ``SubscriptionLostError``; the socket stays reopenable."""
+        httpx_mock.add_response(method="GET", json=subscribe_response("1001"))
+        sub = await async_ws_session.subscribe("/api/class/fvBD.json", {})
+        await _await_until(lambda: fake_async_ws_server.connection_count == 1)
+        socket = async_ws_session._subscription_socket  # type: ignore[reportPrivateUsage]
+        assert socket is not None
+        reg = socket._registrations[1]  # type: ignore[reportPrivateUsage]
+
+        async def boom(local_id: int, r: Any) -> None:
+            raise RuntimeError("simulated: unexpected internal bug")
+
+        monkeypatch.setattr(socket, "_refresh_one", boom)
+        with caplog.at_level(logging.ERROR):
+            reg.next_refresh_at = time.monotonic() - 1
+            await _await_until(lambda: reg.queue.qsize() > 0, timeout=3.0)
+            with pytest.raises(exceptions.SubscriptionLostError) as exc_info:
+                await anext(sub)
+        assert exc_info.value.reason == exceptions.SubscriptionLostReason.INTERNAL_ERROR
+        crash_logs = [
+            r.getMessage() for r in caplog.records if "died on an unexpected" in r.getMessage()
+        ]
+        assert crash_logs and "RuntimeError" in crash_logs[0]
+        assert all("simulated" not in message for message in crash_logs)
+
+        assert socket._ws is None  # type: ignore[reportPrivateUsage]
+        httpx_mock.add_response(method="GET", json=subscribe_response("2002"))
+        sub2 = await async_ws_session.subscribe("/api/class/fvBD.json", {})
+        await _await_until(lambda: fake_async_ws_server.connection_count == 2)
+        await fake_async_ws_server.send(
+            {
+                "subscriptionId": ["2002"],
+                "imdata": [{"fvBD": {"attributes": {"status": "modified"}}}],
+            }
+        )
+        event = await anext(sub2)
+        assert isinstance(event, RawSubscriptionEvent)
+        await sub2.close()
+
+    async def test_reader_crash_fails_consumers_and_clears_the_socket(
+        self,
+        async_ws_session: AsyncApicSession,
+        httpx_mock: HTTPXMock,
+        fake_async_ws_server: FakeAsyncWsServer,
+        monkeypatch: pytest.MonkeyPatch,
+    ) -> None:
+        httpx_mock.add_response(method="GET", json=subscribe_response("1001"))
+        sub = await async_ws_session.subscribe("/api/class/fvBD.json", {})
+        await _await_until(lambda: fake_async_ws_server.connection_count == 1)
+        socket = async_ws_session._subscription_socket  # type: ignore[reportPrivateUsage]
+        assert socket is not None
+        reg = socket._registrations[1]  # type: ignore[reportPrivateUsage]
+
+        def boom(raw: str | bytes) -> None:
+            raise RuntimeError("simulated: unexpected internal bug")
+
+        monkeypatch.setattr(socket, "_dispatch", boom)
+        await fake_async_ws_server.send(
+            {
+                "subscriptionId": ["1001"],
+                "imdata": [{"fvBD": {"attributes": {"status": "modified"}}}],
+            }
+        )
+
+        await _await_until(lambda: reg.queue.qsize() > 0, timeout=3.0)
+        with pytest.raises(exceptions.SubscriptionLostError) as exc_info:
+            await anext(sub)
+        assert exc_info.value.reason == exceptions.SubscriptionLostReason.INTERNAL_ERROR
+        assert socket._ws is None  # type: ignore[reportPrivateUsage]
+
+
+# ── Malformed frames: the reader survives anything the wire sends ─────────────
+
+
+class TestMalformedFrames:
+    @pytest.mark.parametrize(
+        "frame",
+        [
+            "null",
+            "[1, 2, 3]",
+            '"not-an-object"',
+            '{"subscriptionId": ["1001"],'
+            ' "imdata": [{"fvBD": {"attributes": ["not", "a", "dict"]}}]}',
+        ],
+        ids=["json-null", "json-array", "json-string", "attributes-not-a-dict"],
+    )
+    async def test_non_object_frame_is_skipped_and_the_reader_survives(
+        self,
+        async_ws_session: AsyncApicSession,
+        httpx_mock: HTTPXMock,
+        fake_async_ws_server: FakeAsyncWsServer,
+        frame: str,
+        caplog: pytest.LogCaptureFixture,
+    ) -> None:
+        httpx_mock.add_response(method="GET", json=subscribe_response("1001"))
+        sub = await async_ws_session.subscribe("/api/class/fvBD.json", {})
+        await _await_until(lambda: fake_async_ws_server.connection_count == 1)
+
+        with caplog.at_level(logging.WARNING):
+            await fake_async_ws_server.connections[-1].send(frame)
+            await fake_async_ws_server.send(
+                {
+                    "subscriptionId": ["1001"],
+                    "imdata": [{"fvBD": {"attributes": {"status": "modified"}}}],
+                }
+            )
+            event = await anext(sub)
+
+        assert isinstance(event, RawSubscriptionEvent)
+        assert fake_async_ws_server.connection_count == 1
+        assert any("malformed subscription push frame" in r.getMessage() for r in caplog.records)
+
+
+# ── subscribe() vs aclose() race ───────────────────────────────────────────────
+
+
+class TestSubscribeCloseRace:
+    async def test_subscribe_after_close_raises_instead_of_opening_a_socket(
+        self, async_ws_session: AsyncApicSession, fake_async_ws_server: FakeAsyncWsServer
+    ) -> None:
+        socket = AsyncSubscriptionSocket(async_ws_session)
+        await socket.aclose()
+
+        with pytest.raises(exceptions.SubscriptionError):
+            await socket.subscribe("/api/class/fvBD.json", {})
+        assert fake_async_ws_server.connection_count == 0  # nothing was ever opened
+
+    async def test_close_racing_subscribe_raises_instead_of_registering_forever(
+        self,
+        async_ws_session: AsyncApicSession,
+        httpx_mock: HTTPXMock,
+        fake_async_ws_server: FakeAsyncWsServer,
+        monkeypatch: pytest.MonkeyPatch,
+    ) -> None:
+        """aclose() landing between the REST subscribe and the registration
+        insert must make subscribe() raise — registering would create a queue
+        no ``_STOP`` ever reaches, parking the consumer forever."""
+        httpx_mock.add_response(method="GET", json=subscribe_response("1001"))
+        sub = await async_ws_session.subscribe("/api/class/fvBD.json", {})
+        await _await_until(lambda: fake_async_ws_server.connection_count == 1)
+        socket = async_ws_session._subscription_socket  # type: ignore[reportPrivateUsage]
+        assert socket is not None
+
+        original = socket._do_subscribe  # type: ignore[reportPrivateUsage]
+
+        async def close_then_return(
+            path: str, params: dict[str, str], refresh_timeout: int | None
+        ) -> tuple[str, list[dict[str, Any]]]:
+            result = await original(path, params, refresh_timeout)
+            await socket.aclose()  # the race: aclose() wins between REST and insert
+            return result
+
+        monkeypatch.setattr(socket, "_do_subscribe", close_then_return)
+        httpx_mock.add_response(method="GET", json=subscribe_response("2002"))
+
+        with pytest.raises(exceptions.SubscriptionError):
+            await async_ws_session.subscribe("/api/class/fvBD.json", {})
+        # The pre-existing consumer was unblocked by aclose(), not left hanging.
+        with pytest.raises(StopAsyncIteration):
+            await anext(sub)
+
+
+# ── Stale sweep generation: one refresh loop at a time, ever ──────────────────
+
+
+class TestStaleSweepGeneration:
+    async def test_resubscribe_after_fail_all_does_not_leave_two_sweeps(
+        self,
+        async_ws_session: AsyncApicSession,
+        httpx_mock: HTTPXMock,
+        fake_async_ws_server: FakeAsyncWsServer,
+    ) -> None:
+        """Async twin of the sync generation test: the superseded sweep task
+        must observe the generation bump on its next wakeup and finish,
+        never run alongside the fresh pair."""
+        httpx_mock.add_response(method="GET", json=subscribe_response("1001"))
+        sub = await async_ws_session.subscribe("/api/class/fvBD.json", {})
+        await _await_until(lambda: fake_async_ws_server.connection_count == 1)
+        socket = async_ws_session._subscription_socket  # type: ignore[reportPrivateUsage]
+        assert socket is not None
+        old_refresh = socket._refresh_task  # type: ignore[reportPrivateUsage]
+        assert old_refresh is not None
+
+        await socket._fail_all(  # type: ignore[reportPrivateUsage]
+            exceptions.SubscriptionLostError("forced: test failure injection")
+        )
+        with pytest.raises(exceptions.SubscriptionLostError):
+            await anext(sub)  # the fatal is already queued — no blocking wait
+
+        httpx_mock.add_response(method="GET", json=subscribe_response("2002"))
+        sub2 = await async_ws_session.subscribe("/api/class/fvBD.json", {})
+        await _await_until(lambda: fake_async_ws_server.connection_count == 2)
+        new_refresh = socket._refresh_task  # type: ignore[reportPrivateUsage]
+        assert new_refresh is not None
+        assert new_refresh is not old_refresh
+
+        await _await_until(lambda: old_refresh.done(), timeout=3.0)
+        assert not new_refresh.done()
+        await sub2.close()
+
+
+# ── Reconnect adoption vs escalation race ─────────────────────────────────────
+
+
+class TestReconnectEscalateRace:
+    async def test_reconnect_does_not_clobber_an_escalated_wire_id(
+        self,
+        async_ws_session: AsyncApicSession,
+        httpx_mock: HTTPXMock,
+        fake_async_ws_server: FakeAsyncWsServer,
+        monkeypatch: pytest.MonkeyPatch,
+    ) -> None:
+        """Async twin of the sync race test — see it for the full scenario."""
+        httpx_mock.add_response(method="GET", json=subscribe_response("1001"))
+        sub = await async_ws_session.subscribe("/api/class/fvBD.json", {})
+        await _await_until(lambda: fake_async_ws_server.connection_count == 1)
+        socket = async_ws_session._subscription_socket  # type: ignore[reportPrivateUsage]
+        assert socket is not None
+        reg = socket._registrations[1]  # type: ignore[reportPrivateUsage]
+
+        async def racing_do_subscribe(
+            path: str, params: dict[str, str], refresh_timeout: int | None
+        ) -> tuple[str, list[dict[str, Any]]]:
+            # An _escalate wins the race while this reconnect resubscribe is
+            # in flight. No lock needed: no await between the mutations, so
+            # they are atomic under asyncio's cooperative scheduling.
+            socket._wire_to_local.pop(reg.wire_id, None)  # type: ignore[reportPrivateUsage]
+            reg.wire_id = "9999"
+            socket._wire_to_local["9999"] = 1  # type: ignore[reportPrivateUsage]
+            return ("2002", [])
+
+        monkeypatch.setattr(socket, "_do_subscribe", racing_do_subscribe)
+        await fake_async_ws_server.disconnect()
+        await _await_until(lambda: fake_async_ws_server.connection_count == 2)
+
+        await fake_async_ws_server.send(
+            {
+                "subscriptionId": ["9999", "2002"],
+                "imdata": [
+                    {"fvBD": {"attributes": {"dn": "uni/tn-t/BD-first", "status": "modified"}}}
+                ],
+            }
+        )
+        await fake_async_ws_server.send(
+            {
+                "subscriptionId": ["9999"],
+                "imdata": [
+                    {"fvBD": {"attributes": {"dn": "uni/tn-t/BD-second", "status": "modified"}}}
+                ],
+            }
+        )
+        await _await_until(lambda: reg.queue.qsize() >= 2, timeout=3.0)
+
+        first = await anext(sub)
+        second = await anext(sub)
+        assert isinstance(first, RawSubscriptionEvent)
+        assert first.attributes["dn"].endswith("BD-first")
+        assert isinstance(second, RawSubscriptionEvent)
+        assert second.attributes["dn"].endswith("BD-second")
+        assert socket._wire_to_local == {"9999": 1}  # type: ignore[reportPrivateUsage]
+        assert reg.wire_id == "9999"
+        assert sub.subscription_id == "9999"
+
+
+# ── refresh_timeout validation ─────────────────────────────────────────────────
+
+
+class TestRefreshTimeoutValidation:
+    async def test_below_floor_raises_value_error_with_the_arithmetic(
+        self, async_ws_session: AsyncApicSession, fake_async_ws_server: FakeAsyncWsServer
+    ) -> None:
+        with pytest.raises(ValueError, match="refresh_timeout") as exc_info:
+            await async_ws_session.subscribe("/api/class/fvBD.json", {}, refresh_timeout=11)
+        message = str(exc_info.value)
+        assert "11" in message  # the 2 * 5 + 1 arithmetic
+        assert str(_MIN_REFRESH_TIMEOUT_SECONDS) in message  # the floor to use
+        assert fake_async_ws_server.connection_count == 0  # rejected before any I/O
+
+    async def test_the_floor_itself_is_accepted(
+        self,
+        async_ws_session: AsyncApicSession,
+        httpx_mock: HTTPXMock,
+        fake_async_ws_server: FakeAsyncWsServer,
+    ) -> None:
+        httpx_mock.add_response(method="GET", json=subscribe_response("1001"))
+        sub = await async_ws_session.subscribe(
+            "/api/class/fvBD.json", {}, refresh_timeout=_MIN_REFRESH_TIMEOUT_SECONDS
+        )
+        assert sub.subscription_id == "1001"
+        await sub.close()

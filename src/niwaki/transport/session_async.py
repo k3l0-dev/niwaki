@@ -33,6 +33,7 @@ from niwaki.transport._config import RetryConfig
 from niwaki.transport._errors import (
     _imdata_attributes,
     extract_apic_error,
+    json_data,
     raise_for_apic_status,
 )
 from niwaki.transport._retry import (
@@ -730,7 +731,7 @@ class AsyncApicSession:
         Returns:
             The ``imdata`` list from the APIC JSON response.
         """
-        return (await self._request_checked(path, params)).json().get("imdata", [])  # type: ignore[no-any-return]
+        return json_data(await self._request_checked(path, params)).get("imdata", [])  # type: ignore[no-any-return]
 
     async def _aiter_pages(
         self, path: str, params: dict[str, Any], *, page_size: int = 500
@@ -755,12 +756,16 @@ class AsyncApicSession:
             See :meth:`get` for transport / auth errors.
         """
         page_params = {**params, "page": "0", "page-size": str(page_size)}
-        data: dict[str, Any] = (await self._request_checked(path, page_params)).json()
-        # Treat an absent totalCount as "unknown" and page until an empty
-        # page; never let a missing/zero totalCount stop after page 0 when
-        # a full first page came back (audit T3).
-        total_raw = data.get("totalCount")
-        total = int(total_raw) if total_raw is not None else None
+        data: dict[str, Any] = json_data(await self._request_checked(path, page_params))
+        # Treat an absent, zero or non-numeric totalCount as "unknown" and
+        # page until an empty page; never let it stop after page 0 when a
+        # full first page came back (audit T3). "0" next to a non-empty
+        # imdata is the controller contradicting itself — believe the data.
+        try:
+            claimed = int(data.get("totalCount") or 0)
+        except ValueError:
+            claimed = 0
+        total: int | None = claimed if claimed > 0 else None
         first: list[dict[str, Any]] = list(data.get("imdata", []))
         if not first:
             return
@@ -776,9 +781,9 @@ class AsyncApicSession:
                     "was not satisfied. Possible APIC response inconsistency.",
                 )
             page_params = {**params, "page": str(page), "page-size": str(page_size)}
-            batch: list[dict[str, Any]] = (
-                (await self._request_checked(path, page_params)).json().get("imdata", [])
-            )
+            batch: list[dict[str, Any]] = json_data(
+                await self._request_checked(path, page_params)
+            ).get("imdata", [])
             if not batch:
                 break
             yield batch
@@ -920,6 +925,7 @@ class AsyncApicSession:
         """
 
         last: httpx.Response | None = None
+        tries = 0
 
         @stamina.retry(
             on=(retry_on, RetryableStatus)
@@ -931,16 +937,19 @@ class AsyncApicSession:
             wait_jitter=self._retry.wait_jitter,
         )
         async def _attempt() -> httpx.Response:
-            nonlocal last
+            nonlocal last, tries
+            tries += 1
             resp = await self._client.request(method, path, **kwargs)
             if resp.status_code not in retry_statuses:
                 return resp
             last = resp
             delay = retry_after_seconds(resp, ceiling=self._retry.retry_after_max, now=time.time())
-            if delay is not None:
+            if delay is not None and tries < self._retry.attempts:
                 # The controller named a delay; honour it before stamina adds
                 # its own backoff. Clamped, so one busy answer cannot park a
-                # push for as long as the controller fancies.
+                # push for as long as the controller fancies. Never on the
+                # final attempt: stamina gives up right after, so the sleep
+                # would only delay the error.
                 await asyncio.sleep(delay)
             raise RetryableStatus(resp, delay)
 

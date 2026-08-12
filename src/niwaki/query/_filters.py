@@ -82,9 +82,11 @@ def _escape(text: str) -> str:
         text: A rendered wire value.
 
     Returns:
-        The value with every ``"`` backslash-escaped.
+        The value with every ``\\`` and ``"`` backslash-escaped — the escape
+        character itself first, or a value ending in a backslash would eat
+        the closing quote and a literal ``\\"`` would close the string early.
     """
-    return text.replace('"', '\\"')
+    return text.replace("\\", "\\\\").replace('"', '\\"')
 
 
 @dataclass(frozen=True, slots=True)

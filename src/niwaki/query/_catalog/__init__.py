@@ -476,8 +476,16 @@ class Catalog:
         raise UnknownClassError(f"{class_name}.{name}")
 
     def concrete_subclasses(self, class_name: str) -> list[str]:
-        """Every concrete descendant of a class, walked transitively (for fan-out)."""
+        """Every concrete descendant of a class, walked transitively (for fan-out).
+
+        Raises:
+            UnknownClassError: No such class in the catalogue — like every
+                sibling lookup; a typo must not read as "concrete class with
+                no descendants".
+        """
         con = self._connection
+        if con.execute("SELECT 1 FROM mo WHERE class_name=?", (class_name,)).fetchone() is None:
+            raise UnknownClassError(class_name)
         visited: set[str] = set()
         out: list[str] = []
         stack = [class_name]
@@ -531,6 +539,19 @@ class Catalog:
         # process on a path almost nobody walks twice.  A caller that needs it
         # repeatedly caches at its own layer.
         return tuple(str(t) for t in json.loads(zlib.decompress(row[0])))
+
+    def _rn_format_rows(self) -> list[tuple[str, str]]:
+        """Every ``(class_name, rn_format)`` pair with a non-empty format.
+
+        One scan of the uncompressed ``rn_format`` column — the reverse
+        direction of :meth:`rn_format`, for callers that must find which
+        class an RN segment belongs to (the scoped-import walk).  Internal;
+        callers cache at their own layer.
+        """
+        rows = self._connection.execute(
+            "SELECT class_name, rn_format FROM mo WHERE rn_format IS NOT NULL AND rn_format != ''"
+        ).fetchall()
+        return [(str(c), str(r)) for c, r in rows]
 
     def rn_format(self, class_name: str) -> str:
         """The class's RN format — the template for its own DN segment.

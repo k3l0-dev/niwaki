@@ -140,3 +140,22 @@ class TestErrors:
         cfg.app("shop").epg("web").bind(bd=ref("absent", directives="log"))
         with pytest.raises(DesignError, match="does not resolve"):
             _flatten(cfg)
+
+    def test_the_resolved_target_field_cannot_be_overridden(self) -> None:
+        """``name`` is a declared field of every name-flavored Rs class, so the
+        attribute gate accepted it — and the merge let it WIN over the field
+        the resolver had just filled in: the closed world validated 'web' and
+        the wire pointed at an undeclared 'stolen', wrong RN included.
+        """
+        cfg = _base()
+        contract = cfg.contract("web")
+        assert contract is not None
+        cfg.app("shop").epg("web").bind(bd="web").provide(ref("web", name="stolen"))
+        with pytest.raises(DesignError, match="points at its resolved target"):
+            _flatten(cfg)
+
+    def test_target_dn_cannot_be_overridden_on_a_dn_flavor_ref(self) -> None:
+        cfg = _base()
+        cfg.app("shop").epg("web").bind(bd="web", domain=ref("phys", target_dn="uni/phys-other"))
+        with pytest.raises(DesignError, match="points at its resolved target"):
+            _flatten(cfg)

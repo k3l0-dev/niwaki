@@ -41,6 +41,53 @@ class TestConnect:
         with pytest.raises(exceptions.LoginError):
             Niwaki.connect(HOST, "admin", "wrong")
 
+    def test_login_failure_closes_the_session_it_built(
+        self, httpx_mock: HTTPXMock, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """A failed login must not leak the eagerly-built HTTP client.
+
+        The session is constructed (client pool and all) before login runs;
+        abandoning it on failure left no handle to close the pool — a service
+        looping on connect() against a dead APIC leaked one pool per attempt.
+        """
+        from niwaki.transport.session import ApicSession
+
+        built: list[ApicSession] = []
+        original_init = ApicSession.__init__
+
+        def recording_init(self: ApicSession, *args: object, **kwargs: object) -> None:
+            original_init(self, *args, **kwargs)  # type: ignore[arg-type]
+            built.append(self)
+
+        monkeypatch.setattr(ApicSession, "__init__", recording_init)
+        httpx_mock.add_response(
+            method="POST",
+            url=LOGIN_URL,
+            status_code=401,
+            json={"imdata": [{"error": {"attributes": {"code": "401", "text": "bad creds"}}}]},
+        )
+
+        with pytest.raises(exceptions.LoginError):
+            Niwaki.connect(HOST, "admin", "wrong")
+
+        assert len(built) == 1
+        assert built[0]._client.is_closed  # type: ignore[reportPrivateUsage]
+
+
+class TestCertificateArgsArePaired:
+    """cert_dn without private_key used to be silently dropped — the facade
+    forwarded it only inside the private_key branch, so the session's own
+    fail-loud pairing guard never saw it and auth silently downgraded to
+    password. The pairing now fails at construction, where the mistake is."""
+
+    def test_cert_dn_alone_is_refused(self) -> None:
+        with pytest.raises(ValueError, match="together"):
+            Niwaki(HOST, "admin", "secret", cert_dn="uni/userext/user-admin/usercert-c")
+
+    def test_private_key_alone_is_refused(self) -> None:
+        with pytest.raises(ValueError, match="together"):
+            Niwaki(HOST, "admin", "secret", private_key="/tmp/nope.key")
+
     def test_retry_propagated_to_session(self, httpx_mock: HTTPXMock) -> None:
         """connect() honours a custom retry policy (same path as __enter__)."""
         from niwaki.transport import RetryConfig

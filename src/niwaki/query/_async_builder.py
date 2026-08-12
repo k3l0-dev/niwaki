@@ -162,6 +162,10 @@ class AsyncQuery(_QueryBase[_T]):
         """
         from niwaki.utils.response import parse_imdata
 
+        if self._limit == 0:
+            # A q[:0] slice matches nothing anywhere else (fetch, count,
+            # exists) — first() must agree instead of quietly ignoring it.
+            return None
         path, params = self.build()
         params = {**params, "page": "0", "page-size": "1"}
         raw = await self._session._get_imdata(path, params)
@@ -191,8 +195,14 @@ class AsyncQuery(_QueryBase[_T]):
         from niwaki.exceptions._query import MultipleResultsError, NoResultError
         from niwaki.utils.response import parse_imdata
 
+        if self._limit == 0:
+            raise NoResultError(f"one() matched no {self._aci_class} object (limit 0)")
         path, params = self.build()
-        params = {**params, "page": "0", "page-size": "2"}
+        # A q[:1] slice caps the result set at one, so the two-object probe
+        # must not out-read it and report a MultipleResultsError the sliced
+        # query cannot produce.
+        probe = "1" if self._limit == 1 else "2"
+        params = {**params, "page": "0", "page-size": probe}
         raw = await self._session._get_imdata(path, params)
         objects = parse_imdata({"imdata": raw})
         if not objects:

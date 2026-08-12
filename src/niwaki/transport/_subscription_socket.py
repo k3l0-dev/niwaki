@@ -92,6 +92,20 @@ _MIN_REFRESH_INTERVAL_SECONDS = 5.0
 # noise, two in a row means act. Below this, a failure is only reported as a
 # SubscriptionRefreshFailed stream event; at it, _escalate() takes over.
 _REFRESH_FAILURE_ESCALATION_THRESHOLD = 2
+# The smallest refresh_timeout subscribe() accepts. The sweep refreshes at
+# max(_MIN_REFRESH_INTERVAL_SECONDS, refresh_timeout / 3) and detects the
+# second consecutive miss — the escalation trigger — up to one sweep tick
+# late, i.e. no later than 2 * 5 + 1 = 11 s after the last successful
+# refresh at the floor cadence. Any timeout at or below that expires
+# server-side before recovery could ever fire: permanent churn and silent
+# event loss. Hence the integer floor of 12.
+_MIN_REFRESH_TIMEOUT_SECONDS = (
+    int(
+        _REFRESH_FAILURE_ESCALATION_THRESHOLD * _MIN_REFRESH_INTERVAL_SECONDS
+        + _SWEEP_INTERVAL_SECONDS
+    )
+    + 1
+)
 # Dedicated reconnect backoff — deliberately more patient than the session's
 # general-purpose per-request RetryConfig (3 attempts / 5 s cap): abandoning
 # an entire subscription is a far more consequential decision than retrying
@@ -108,6 +122,40 @@ def _refresh_interval(refresh_timeout: int | None) -> float:
     if refresh_timeout is None:
         return _DEFAULT_REFRESH_INTERVAL_SECONDS
     return max(_MIN_REFRESH_INTERVAL_SECONDS, refresh_timeout / 3)
+
+
+def _validate_refresh_timeout(refresh_timeout: int | None) -> None:
+    """Reject a ``refresh_timeout`` the refresh machinery cannot honour.
+
+    The scheduled cadence is ``max(_MIN_REFRESH_INTERVAL_SECONDS,
+    refresh_timeout / 3)`` (see :func:`_refresh_interval`) and the sweep only
+    notices a due registration on its next ~1 s tick, so the second
+    consecutive missed refresh — the escalation trigger — is detected as late
+    as ``2 * interval + _SWEEP_INTERVAL_SECONDS`` seconds after the last
+    successful refresh: ``2 * 5 + 1 = 11`` seconds at the floor cadence. A
+    subscription whose server-side timeout is at or below that would expire
+    before recovery could ever fire — permanent churn and silent event loss —
+    so anything under :data:`_MIN_REFRESH_TIMEOUT_SECONDS` (12) is refused
+    up front rather than silently mis-served.
+
+    Raises:
+        ValueError: *refresh_timeout* is below the floor. The message spells
+            out the arithmetic above.
+    """
+    if refresh_timeout is not None and refresh_timeout < _MIN_REFRESH_TIMEOUT_SECONDS:
+        unsafe_ceiling = (
+            _REFRESH_FAILURE_ESCALATION_THRESHOLD * _MIN_REFRESH_INTERVAL_SECONDS
+            + _SWEEP_INTERVAL_SECONDS
+        )
+        raise ValueError(
+            f"refresh_timeout={refresh_timeout} cannot be honoured: the refresh "
+            f"cadence floors at {_MIN_REFRESH_INTERVAL_SECONDS:.0f}s and the sweep "
+            f"detects the second consecutive missed refresh (the recovery trigger) "
+            f"up to one {_SWEEP_INTERVAL_SECONDS:.0f}s tick late, so any "
+            f"subscription with refresh_timeout <= {unsafe_ceiling:.0f}s expires "
+            f"server-side before recovery can fire — use at least "
+            f"{_MIN_REFRESH_TIMEOUT_SECONDS} seconds, or None for the APIC default (60s)"
+        )
 
 
 # ── Raw push items — the wire shape, not yet a typed ManagedObject ────────────
@@ -527,6 +575,13 @@ class SubscriptionSocket:
         self._next_local_id = itertools.count(1)
         self._closed = False
         self._dead = False
+        # Monotonic generation of the reader/refresh thread pair. Bumped by
+        # _ensure_open() each time a fresh pair is started and by _fail_all()
+        # when the current pair must die: a loop from a superseded generation
+        # observes the mismatch on its next wakeup and exits, so a stale
+        # sweep can never keep running alongside a fresh one
+        # (double-counting refresh failures forever).
+        self._generation = 0
         self._reader_thread: threading.Thread | None = None
         self._refresh_thread: threading.Thread | None = None
         # Resource safety net (see the module docstring): the finalizer closes
@@ -555,7 +610,10 @@ class SubscriptionSocket:
                 them here.
             refresh_timeout: Override the APIC's default 60 s subscription
                 timeout. The subscription refreshes itself automatically on a
-                schedule derived from this value regardless.
+                schedule derived from this value regardless. Must be at least
+                :data:`_MIN_REFRESH_TIMEOUT_SECONDS` (12) — anything lower
+                would expire server-side before the refresh machinery could
+                ever recover it (see :func:`_validate_refresh_timeout`).
             max_pending: Bound on buffered, not-yet-consumed events for this
                 subscription. Beyond it incoming events are dropped (never
                 blocking other subscriptions) and a
@@ -567,8 +625,13 @@ class SubscriptionSocket:
             snapshot, then iterate for live push items.
 
         Raises:
+            ValueError: *refresh_timeout* is below the floor the refresh
+                machinery can mathematically honour.
+            SubscriptionError: :meth:`close` already ran on this socket —
+                including a ``close()`` that raced this very call.
             SubscribeRejectedError: The APIC rejected the subscribe request.
         """
+        _validate_refresh_timeout(refresh_timeout)
         self._ensure_open()
         wire_id, initial = self._do_subscribe(path, params, refresh_timeout)
         local_id = next(self._next_local_id)
@@ -583,6 +646,15 @@ class SubscriptionSocket:
             max_pending=max_pending,
         )
         with self._state_lock:
+            if self._closed:
+                # close() ran between our REST subscribe and this insertion.
+                # Registering now would create a queue no _STOP ever reaches —
+                # a consumer blocked forever. The server-side subscription
+                # lapses on its own at refresh-timeout (there is no
+                # unsubscribe endpoint to call).
+                raise exceptions.SubscriptionError(
+                    "cannot subscribe: the subscription socket has been closed"
+                )
             self._registrations[local_id] = reg
             self._wire_to_local[wire_id] = local_id
         return RawSubscription(local_id, initial, self, item_queue)
@@ -751,10 +823,22 @@ class SubscriptionSocket:
 
     def _ensure_open(self) -> None:
         with self._state_lock:
+            if self._closed:
+                # Same re-check the async twin performs: without it, a
+                # subscribe() racing close() would reopen a real WebSocket on
+                # a closed socket — with the finalizer safety net already
+                # disarmed, i.e. a leaked connection nobody can ever close.
+                raise exceptions.SubscriptionError(
+                    "cannot subscribe: the subscription socket has been closed"
+                )
             if self._ws is not None:
                 return
             self._open_socket_locked()
             self._dead = False
+            # A fresh socket means a fresh thread generation — any loop from
+            # a previous life of this socket (e.g. a sweep _fail_all told to
+            # stop but that has not woken up yet) sees the bump and exits.
+            self._generation += 1
             # The thread targets hold only a *weak* reference (see
             # ``_reader_entry``/``_refresh_entry``) — a bound method here would
             # keep ``self`` permanently alive for as long as either thread
@@ -763,11 +847,17 @@ class SubscriptionSocket:
             # thread is blocked in recv(), which is most of the time).
             ref = weakref.ref(self)
             self._reader_thread = threading.Thread(
-                target=_reader_entry, args=(ref,), name="niwaki-subscription-reader", daemon=True
+                target=_reader_entry,
+                args=(ref, self._generation),
+                name="niwaki-subscription-reader",
+                daemon=True,
             )
             self._reader_thread.start()
             self._refresh_thread = threading.Thread(
-                target=_refresh_entry, args=(ref,), name="niwaki-subscription-refresh", daemon=True
+                target=_refresh_entry,
+                args=(ref, self._generation),
+                name="niwaki-subscription-refresh",
+                daemon=True,
             )
             self._refresh_thread.start()
 
@@ -788,40 +878,50 @@ class SubscriptionSocket:
     # ── Internal: dispatch (called from the free-function reader loop) ───────
 
     def _dispatch(self, raw: str | bytes) -> None:
+        # The guard spans the WHOLE frame handling, not just json.loads: a
+        # valid-JSON non-object frame (null, array, string) or a malformed
+        # imdata shape must be skipped like any other bad frame — an
+        # exception here would kill the shared reader while the refresh sweep
+        # keeps the server-side subscriptions alive, starving every consumer
+        # behind a healthy-looking socket. Only the frame's length is logged,
+        # never its content.
         try:
-            data: dict[str, Any] = json.loads(raw)
-        except (ValueError, TypeError):
-            logger.warning("niwaki: malformed subscription push frame, ignored")
-            return
-        wire_ids_raw = data.get("subscriptionId") or []
-        wire_ids = [wire_ids_raw] if isinstance(wire_ids_raw, str) else list(wire_ids_raw)
-        imdata = data.get("imdata") or []
+            data: Any = json.loads(raw)
+            if not isinstance(data, dict):
+                raise TypeError("subscription push frame is not a JSON object")
+            wire_ids_raw = data.get("subscriptionId") or []
+            wire_ids = [wire_ids_raw] if isinstance(wire_ids_raw, str) else list(wire_ids_raw)
+            imdata = data.get("imdata") or []
 
-        with self._state_lock:
-            targets = [
-                self._registrations[local_id]
-                for wire_id in wire_ids
-                if (local_id := self._wire_to_local.get(wire_id)) is not None
-                and local_id in self._registrations
-            ]
-        if not targets:
-            return
+            with self._state_lock:
+                targets = [
+                    self._registrations[local_id]
+                    for wire_id in wire_ids
+                    if (local_id := self._wire_to_local.get(wire_id)) is not None
+                    and local_id in self._registrations
+                ]
+            if not targets:
+                return
 
-        for item in imdata:
-            if not isinstance(item, dict) or len(item) != 1:
-                continue
-            ((class_name, body),) = item.items()
-            attrs: dict[str, str] = (
-                (body or {}).get("attributes", {}) if isinstance(body, dict) else {}
+            for item in imdata:
+                if not isinstance(item, dict) or len(item) != 1:
+                    continue
+                ((class_name, body),) = item.items()
+                attrs: dict[str, str] = (
+                    (body or {}).get("attributes", {}) if isinstance(body, dict) else {}
+                )
+                event = RawSubscriptionEvent(
+                    subscription_ids=tuple(wire_ids),
+                    class_name=class_name,
+                    attributes=dict(attrs),
+                    status=attrs.get("status", "modified"),
+                )
+                for reg in targets:
+                    self._offer(reg, event)
+        except Exception:  # a malformed frame must never kill the shared reader
+            logger.warning(
+                "niwaki: malformed subscription push frame ignored (length=%d)", len(raw)
             )
-            event = RawSubscriptionEvent(
-                subscription_ids=tuple(wire_ids),
-                class_name=class_name,
-                attributes=dict(attrs),
-                status=attrs.get("status", "modified"),
-            )
-            for reg in targets:
-                self._offer(reg, event)
 
     @staticmethod
     def _offer(reg: _Registration, event: RawSubscriptionEvent) -> None:
@@ -857,12 +957,25 @@ class SubscriptionSocket:
     # ── Internal: refresh sweep (entry point is the free-function loop) ──────
 
     def _do_refresh(self, reg: _Registration) -> bool:
-        """Issue the ``subscriptionRefresh`` GET. No bookkeeping — callers own that."""
+        """Issue the ``subscriptionRefresh`` GET. No bookkeeping — callers own that.
+
+        Catches every :class:`~niwaki.exceptions.NiwakiError`, not just
+        ``APIError``: an unreachable APIC surfaces as a transport error
+        (``ConnectionError``/``TimeoutError``…) or an auth error
+        (``TokenRefreshError``…), none of which inherit ``APIError`` — and an
+        exception escaping here would kill the refresh sweep for **all**
+        subscriptions, leaving every consumer blocked forever. A transport
+        failure is a failed refresh attempt like any other; it feeds the same
+        escalation machinery.
+        """
         try:
             self._session._request_checked("/api/subscriptionRefresh.json", {"id": reg.wire_id})
-        except exceptions.APIError:
+        except exceptions.NiwakiError as exc:
             logger.warning(
-                "niwaki: subscription refresh rejected (path=%s, id=%s)", reg.path, reg.wire_id
+                "niwaki: subscription refresh failed (%s, path=%s, id=%s)",
+                type(exc).__name__,
+                reg.path,
+                reg.wire_id,
             )
             return False
         return True
@@ -924,7 +1037,11 @@ class SubscriptionSocket:
         old_wire = reg.wire_id
         try:
             new_wire, _initial = self._do_subscribe(reg.path, reg.params, reg.refresh_timeout)
-        except exceptions.SubscriptionError as exc:
+        except exceptions.NiwakiError as exc:
+            # NiwakiError, not just SubscriptionError: _do_subscribe only
+            # wraps APIError — an unreachable APIC raises transport/auth
+            # errors that would otherwise escape and kill the refresh sweep
+            # for every subscription on this socket.
             with self._state_lock:
                 if local_id not in self._registrations or reg.wire_id != old_wire:
                     # Already resubscribed by a concurrent full reconnect, or
@@ -982,8 +1099,14 @@ class SubscriptionSocket:
         logger.warning("niwaki: subscription websocket disconnected — reconnecting")
         disconnected_at = time.time()
         try:
+            # NiwakiError is in the retry net alongside the websocket/OS
+            # errors: _open_socket_locked performs HTTP via _ensure_token,
+            # which can raise TokenRefreshError/ConnectionError/… — an APIC
+            # that is briefly unreachable deserves the same patient backoff,
+            # and after exhaustion the same fail-loud _fail_all below, never
+            # an exception escaping into the reader entry point.
             for attempt in stamina.retry_context(
-                on=(ws_exceptions.WebSocketException, OSError),
+                on=(ws_exceptions.WebSocketException, OSError, exceptions.NiwakiError),
                 attempts=_RECONNECT_ATTEMPTS,
                 wait_initial=_RECONNECT_WAIT_INITIAL,
                 wait_max=_RECONNECT_WAIT_MAX,
@@ -995,7 +1118,7 @@ class SubscriptionSocket:
                     if self._closed:
                         return False
                     self._open_socket_locked()
-        except (ws_exceptions.WebSocketException, OSError) as exc:
+        except (ws_exceptions.WebSocketException, OSError, exceptions.NiwakiError) as exc:
             with self._state_lock:
                 if self._closed:
                     return False
@@ -1022,9 +1145,17 @@ class SubscriptionSocket:
         for local_id, reg in snapshot.items():
             old_wire = reg.wire_id
             try:
+                # NiwakiError, not just SubscriptionError — see _escalate for
+                # why (transport/auth errors from an unreachable APIC are not
+                # SubscriptionErrors and must not kill the reader).
                 new_wire, _initial = self._do_subscribe(reg.path, reg.params, reg.refresh_timeout)
-            except exceptions.SubscriptionError as exc:
+            except exceptions.NiwakiError as exc:
                 with self._state_lock:
+                    if local_id not in self._registrations or reg.wire_id != old_wire:
+                        # A concurrent _escalate already re-registered this
+                        # subscription under a fresh wire id (or unsubscribe
+                        # removed it) — its fate is no longer this loop's call.
+                        continue
                     self._wire_to_local.pop(old_wire, None)
                     self._registrations.pop(local_id, None)
                 reg.queue.put(
@@ -1037,6 +1168,13 @@ class SubscriptionSocket:
                 )
                 continue
             with self._state_lock:
+                if local_id not in self._registrations or reg.wire_id != old_wire:
+                    # Same race on the success path — mirror of the guard in
+                    # _escalate: adopting now would leave the escalated wire
+                    # id mapped alongside ours forever, delivering every
+                    # event carrying it twice. Drop our redundant subscribe;
+                    # its unused wire id lapses server-side at refresh-timeout.
+                    continue
                 self._wire_to_local.pop(old_wire, None)
                 self._wire_to_local[new_wire] = local_id
                 reg.wire_id = new_wire
@@ -1056,14 +1194,26 @@ class SubscriptionSocket:
             regs = list(self._registrations.values())
             self._registrations.clear()
             self._wire_to_local.clear()
+            ws = self._ws
             self._ws = None
             # Not handle.closed = True: a fresh subscribe() later must still
             # be able to reopen (see _ensure_open), and the finalizer should
             # cover that new socket too if it is ever abandoned in turn.
             self._handle.ws = None
             self._dead = True
+            # Invalidate the current reader/refresh pair: whichever of them
+            # did not initiate this failure must stop too, and a subsequent
+            # subscribe() must never find a stale sweep still running
+            # alongside the fresh one it starts.
+            self._generation += 1
         for reg in regs:
             reg.queue.put(_Fatal(exc))
+        if ws is not None:
+            # Best effort — the socket may already be dead; closing it wakes
+            # a reader still blocked in recv() so it can observe the
+            # generation bump and exit instead of hanging on a zombie.
+            with contextlib.suppress(Exception):
+                ws.close()
 
 
 # ── Thread entry points (free functions — weak reference only) ───────────────
@@ -1079,9 +1229,24 @@ class SubscriptionSocket:
 # that abandoned it keeps running.
 
 
-def _reader_entry(ref: weakref.ReferenceType[SubscriptionSocket]) -> None:
+def _reader_entry(ref: weakref.ReferenceType[SubscriptionSocket], generation: int) -> None:
     """Reader-thread entry point. See the module note above on why this is a
-    free function taking a weak reference, not a bound method."""
+    free function taking a weak reference, not a bound method.
+
+    The try/except is the **last line of defense**: after the typed nets in
+    the loop itself, nothing should ever reach it — but if something does,
+    the one unacceptable outcome is a silently dead reader (consumers
+    blocked forever on queues nothing feeds, behind a socket that still
+    looks open). See :func:`_fail_from_crash`.
+    """
+    try:
+        _reader_loop(ref, generation)
+    except Exception as exc:
+        _fail_from_crash(ref, "reader", exc)
+
+
+def _reader_loop(ref: weakref.ReferenceType[SubscriptionSocket], generation: int) -> None:
+    """The reader loop body — recv/demux/reconnect until closed or superseded."""
     import websockets.exceptions as ws_exceptions
 
     while True:
@@ -1089,7 +1254,7 @@ def _reader_entry(ref: weakref.ReferenceType[SubscriptionSocket]) -> None:
         if socket is None:
             return
         with socket._state_lock:
-            if socket._closed:
+            if socket._closed or socket._generation != generation:
                 return
             ws = socket._ws
         del socket  # never hold a strong reference across the blocking recv()
@@ -1100,7 +1265,7 @@ def _reader_entry(ref: weakref.ReferenceType[SubscriptionSocket]) -> None:
             if socket is None:
                 return
             with socket._state_lock:
-                if socket._closed:
+                if socket._closed or socket._generation != generation:
                     return
             if not socket._reconnect_and_resubscribe_all():
                 return
@@ -1113,16 +1278,26 @@ def _reader_entry(ref: weakref.ReferenceType[SubscriptionSocket]) -> None:
         del socket
 
 
-def _refresh_entry(ref: weakref.ReferenceType[SubscriptionSocket]) -> None:
+def _refresh_entry(ref: weakref.ReferenceType[SubscriptionSocket], generation: int) -> None:
     """Refresh-sweep thread entry point. See the module note above on why
-    this is a free function taking a weak reference, not a bound method."""
+    this is a free function taking a weak reference, not a bound method —
+    and :func:`_reader_entry` on why the body is wrapped in a
+    last-line-of-defense guard."""
+    try:
+        _refresh_loop(ref, generation)
+    except Exception as exc:
+        _fail_from_crash(ref, "refresh", exc)
+
+
+def _refresh_loop(ref: weakref.ReferenceType[SubscriptionSocket], generation: int) -> None:
+    """The sweep loop body — refresh due registrations until closed or superseded."""
     while True:
         time.sleep(_SWEEP_INTERVAL_SECONDS)
         socket = ref()
         if socket is None:
             return
         with socket._state_lock:
-            if socket._closed or socket._dead:
+            if socket._closed or socket._dead or socket._generation != generation:
                 return
             now = time.monotonic()
             due = [
@@ -1140,3 +1315,35 @@ def _refresh_entry(ref: weakref.ReferenceType[SubscriptionSocket]) -> None:
             )
             socket.unsubscribe(doomed_id)
         del socket
+
+
+def _fail_from_crash(
+    ref: weakref.ReferenceType[SubscriptionSocket], role: str, exc: Exception
+) -> None:
+    """Last line of defense for a background thread that died unexpectedly.
+
+    Silent permanent starvation is the one outcome that must be impossible:
+    every consumer wakes with a :class:`~niwaki.exceptions.SubscriptionLostError`
+    (``reason=INTERNAL_ERROR``) instead of blocking forever, and the socket
+    state is left restartable — ``_ws`` cleared, generation bumped — so a
+    later :meth:`SubscriptionSocket.subscribe` reopens cleanly. Only the
+    exception's class name is logged, never its message: an exception raised
+    while handling a frame can embed frame content, and payloads are never
+    logged (project rule).
+    """
+    logger.error(
+        "niwaki: subscription %s thread died on an unexpected %s — every tracked "
+        "subscription is failed with SubscriptionLostError; a later subscribe() "
+        "reopens the socket",
+        role,
+        type(exc).__name__,
+    )
+    socket = ref()
+    if socket is None:
+        return
+    socket._fail_all(
+        exceptions.SubscriptionLostError(
+            f"subscription {role} thread crashed unexpectedly ({type(exc).__name__})",
+            reason=exceptions.SubscriptionLostReason.INTERNAL_ERROR,
+        )
+    )
