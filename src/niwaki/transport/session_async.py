@@ -17,24 +17,31 @@ import asyncio
 import os
 import ssl
 import time
-from collections.abc import AsyncIterator
+from collections.abc import AsyncIterator, Mapping, Sequence
 from contextlib import asynccontextmanager
 from datetime import timedelta
 from pathlib import Path
-from typing import Any, TypeVar, cast
+from typing import Any, TypeVar, Unpack, cast
 from urllib.parse import urlsplit
 
 import httpx
 import stamina
+from pydantic import SecretStr
 
 from niwaki import exceptions
 from niwaki.models.base import ManagedObject
 from niwaki.transport._config import RetryConfig
+from niwaki.transport._credentials import resolve_password
 from niwaki.transport._errors import (
+    QueryParams,
+    RequestOptions,
     _imdata_attributes,
     extract_apic_error,
+    imdata_items,
     json_data,
+    json_imdata,
     raise_for_apic_status,
+    transport_failure,
 )
 from niwaki.transport._retry import (
     READ_RETRY_STATUSES,
@@ -50,7 +57,8 @@ from niwaki.transport._subscription_socket_async import (
 )
 from niwaki.transport._token import TokenState
 from niwaki.transport._token_cache import TokenCache
-from niwaki.utils.response import parse_imdata
+from niwaki.types import JsonObject, JsonScalar
+from niwaki.utils.response import parse_envelopes
 
 _T = TypeVar("_T", bound=ManagedObject)
 
@@ -97,7 +105,14 @@ class AsyncApicSession:
         host: Base URL of the APIC (e.g. ``"https://sandboxapicdc.cisco.com"``).
             Falls back to ``APIC_HOST`` if omitted.
         username: APIC username. Falls back to ``APIC_USERNAME`` if omitted.
-        password: APIC password. Falls back to ``APIC_PASSWORD`` if omitted.
+        password: APIC password, as a ``str`` or a ``pydantic.SecretStr``.
+            Falls back to ``APIC_PASSWORD`` (read at construction) when
+            omitted or empty — ``SecretStr("")`` counts as empty.  It is not
+            stored as a plain attribute: the session keeps a ``SecretStr``
+            (yours, never re-wrapped), masked in ``repr``/``str``, and
+            unwraps it only to build the aaaLogin request body.  A transport
+            failure during login is raised with its exception chain severed,
+            so the error does not carry the request that held it.
         verify_ssl: TLS verification — ``True`` (system CA store), a path to
             a PEM CA bundle (private CA), or ``False``. Default: ``True``.
         timeout: HTTP timeout in seconds. Default: 30.
@@ -123,7 +138,7 @@ class AsyncApicSession:
         self,
         host: str | None = None,
         username: str | None = None,
-        password: str | None = None,
+        password: str | SecretStr | None = None,
         *,
         verify_ssl: bool | str = True,
         timeout: float = 30.0,
@@ -140,10 +155,10 @@ class AsyncApicSession:
         # A signed session never sends a password, so requiring one would make
         # certificate auth impossible in the very place it is wanted: CI, where
         # there is deliberately no password to put in the environment.
-        if private_key is not None:
-            self._password = password or ""
-        else:
-            self._password = password or os.environ["APIC_PASSWORD"]
+        # The password is held as a SecretStr from the moment it is resolved
+        # and unwrapped only inside the aaaLogin body, so it is never a plain
+        # attribute and stays masked in repr/str.
+        self._password: SecretStr = resolve_password(password, signed=private_key is not None)
         # Pin the cookie jar entry to the session's own host so it overwrites
         # in place rather than accumulating a second, domain-less entry next
         # to the one httpx auto-stores from the APIC's own Set-Cookie header
@@ -284,8 +299,8 @@ class AsyncApicSession:
         client: httpx.AsyncClient,
         host: str | None = None,
         username: str | None = None,
-        password: str | None = None,
-        **kwargs: Any,
+        password: str | SecretStr | None = None,
+        **kwargs: Any,  # Any: forwarded verbatim to the constructor, which types each option
     ) -> AsyncApicSession:
         """Build a session that talks through a client you configured yourself.
 
@@ -305,7 +320,8 @@ class AsyncApicSession:
                 URLs, so pass the same host you gave the client.
             host: APIC base URL, or ``None`` to read ``APIC_HOST``.
             username: Login name, or ``None`` to read ``APIC_USERNAME``.
-            password: Password, or ``None`` to read ``APIC_PASSWORD``.
+            password: Password (``str`` or ``pydantic.SecretStr``), or
+                ``None`` to read ``APIC_PASSWORD``.
             **kwargs: Any other constructor argument (``max_concurrent``,
                 ``retry``, ``refresh_threshold``, …), validated as usual.
 
@@ -368,6 +384,13 @@ class AsyncApicSession:
             TimeoutError: The login request exceeded the configured timeout.
             TLSError: TLS verification failed.
 
+        Note:
+            The three transport errors above are not chained to the
+            underlying httpx error (neither ``__cause__`` nor ``__context__``
+            reaches it): that error keeps the request it failed on, and the
+            request's body holds the password.  The message names the httpx
+            failure class and carries its text instead.
+
         Example::
 
             session = AsyncApicSession("https://apic.example.com", "admin", "pass")
@@ -399,12 +422,27 @@ class AsyncApicSession:
                 )
                 return
 
-        payload: dict[str, Any] = {
-            "aaaUser": {"attributes": {"name": self._username, "pwd": self._password}}
+        payload: JsonObject = {
+            "aaaUser": {
+                "attributes": {
+                    "name": self._username,
+                    "pwd": self._password.get_secret_value(),
+                }
+            }
         }
 
-        async with self._http_transport():
-            resp = await self._client.post(self._LOGIN_PATH, json=payload)
+        # Not ``_http_transport()``: the httpx error keeps the request it failed
+        # on, whose body is the password, so the typed error is raised outside
+        # the ``except`` block with no chain at all (``from None`` alone would
+        # still record ``__context__``).
+        outcome: httpx.Response | exceptions.TransportError
+        try:
+            outcome = await self._client.post(self._LOGIN_PATH, json=payload)
+        except httpx.TransportError as exc:
+            outcome = transport_failure(exc, self._host, name_failure=True)
+        if isinstance(outcome, exceptions.TransportError):
+            raise outcome from None
+        resp = outcome
 
         if resp.status_code != 200:
             raise exceptions.LoginError(
@@ -430,6 +468,8 @@ class AsyncApicSession:
         Raises:
             AuthError: No active token (``login()`` not called yet).
             TokenRefreshError: The APIC rejected the refresh request.
+            ConnectionError: The APIC host is unreachable.
+            TimeoutError: The request exceeded the configured timeout.
         """
         if self._token_state is None:
             raise exceptions.AuthError("Cannot refresh: no active session. Call login() first.")
@@ -535,7 +575,7 @@ class AsyncApicSession:
 
     # ── Public GET ────────────────────────────────────────────────────────────
 
-    async def get(self, path: str, **params: Any) -> list[dict[str, Any]]:
+    async def get(self, path: str, **params: JsonScalar | Sequence[JsonScalar]) -> list[JsonObject]:
         """Execute a GET against the APIC REST API and return the ``imdata`` list.
 
         Ensures token validity, applies the concurrency semaphore, and retries
@@ -545,7 +585,9 @@ class AsyncApicSession:
         Args:
             path: API path relative to the base URL
                 (e.g. ``"/api/class/fvTenant.json"``).
-            **params: Optional query string parameters.
+            **params: Optional query string parameters.  A value is a JSON
+                scalar, or a sequence of them — the key is then repeated once
+                per element.
 
         Returns:
             The ``imdata`` list from the APIC JSON response.
@@ -588,7 +630,7 @@ class AsyncApicSession:
             NotFoundError: No object exists at *dn*.
         """
         raw = await self._get_imdata(f"/api/mo/{dn}.json", {})
-        objects = parse_imdata({"imdata": raw})
+        objects = parse_envelopes(raw)
         if not objects:
             raise exceptions.NotFoundError(404, f"MO not found at DN: {dn!r}")
         return cast(_T, objects[0])
@@ -694,7 +736,7 @@ class AsyncApicSession:
 
     # ── Internal HTTP ─────────────────────────────────────────────────────────
 
-    async def _request_checked(self, path: str, params: dict[str, Any]) -> httpx.Response:
+    async def _request_checked(self, path: str, params: QueryParams) -> httpx.Response:
         """Execute an authenticated GET with semaphore, retry, and 401 handling.
 
         Args:
@@ -721,7 +763,7 @@ class AsyncApicSession:
         raise_for_apic_status(resp)
         return resp
 
-    async def _get_imdata(self, path: str, params: dict[str, Any]) -> list[dict[str, Any]]:
+    async def _get_imdata(self, path: str, params: QueryParams) -> list[JsonObject]:
         """Execute a GET and return the raw ``imdata`` list (single page).
 
         Args:
@@ -731,11 +773,11 @@ class AsyncApicSession:
         Returns:
             The ``imdata`` list from the APIC JSON response.
         """
-        return json_data(await self._request_checked(path, params)).get("imdata", [])  # type: ignore[no-any-return]
+        return json_imdata(await self._request_checked(path, params))
 
     async def _aiter_pages(
-        self, path: str, params: dict[str, Any], *, page_size: int = 500
-    ) -> AsyncIterator[list[dict[str, Any]]]:
+        self, path: str, params: QueryParams, *, page_size: int = 500
+    ) -> AsyncIterator[list[JsonObject]]:
         """Yield one page of raw APIC ``imdata`` items at a time (async).
 
         Async counterpart of :meth:`~niwaki.transport.session.ApicSession._iter_pages`.
@@ -756,17 +798,19 @@ class AsyncApicSession:
             See :meth:`get` for transport / auth errors.
         """
         page_params = {**params, "page": "0", "page-size": str(page_size)}
-        data: dict[str, Any] = json_data(await self._request_checked(path, page_params))
+        resp = await self._request_checked(path, page_params)
+        data = json_data(resp)
         # Treat an absent, zero or non-numeric totalCount as "unknown" and
         # page until an empty page; never let it stop after page 0 when a
         # full first page came back (audit T3). "0" next to a non-empty
         # imdata is the controller contradicting itself — believe the data.
+        raw_total = data.get("totalCount") or 0
         try:
-            claimed = int(data.get("totalCount") or 0)
+            claimed = int(raw_total) if isinstance(raw_total, str | int | float) else 0
         except ValueError:
             claimed = 0
         total: int | None = claimed if claimed > 0 else None
-        first: list[dict[str, Any]] = list(data.get("imdata", []))
+        first = list(imdata_items(resp, data))
         if not first:
             return
         yield first
@@ -781,9 +825,7 @@ class AsyncApicSession:
                     "was not satisfied. Possible APIC response inconsistency.",
                 )
             page_params = {**params, "page": str(page), "page-size": str(page_size)}
-            batch: list[dict[str, Any]] = json_data(
-                await self._request_checked(path, page_params)
-            ).get("imdata", [])
+            batch = json_imdata(await self._request_checked(path, page_params))
             if not batch:
                 break
             yield batch
@@ -791,8 +833,8 @@ class AsyncApicSession:
             page += 1
 
     async def _get_all_pages(
-        self, path: str, params: dict[str, Any], *, page_size: int = 500
-    ) -> list[dict[str, Any]]:
+        self, path: str, params: QueryParams, *, page_size: int = 500
+    ) -> list[JsonObject]:
         """Fetch all pages of results, auto-paginating based on ``totalCount``.
 
         When ``page`` is already in ``params``, delegates to :meth:`_get_imdata`
@@ -812,14 +854,14 @@ class AsyncApicSession:
         """
         if "page" in params:
             return await self._get_imdata(path, params)
-        result: list[dict[str, Any]] = []
+        result: list[JsonObject] = []
         async for page in self._aiter_pages(path, params, page_size=page_size):
             result.extend(page)
         return result
 
     # ── Public write ──────────────────────────────────────────────────────────
 
-    async def post_mo(self, dn: str, payload: dict[str, Any]) -> None:
+    async def post_mo(self, dn: str, payload: Mapping[str, object]) -> None:
         """POST an APIC envelope to a Managed Object URL.
 
         APIC applies upsert semantics — the object is created if absent or
@@ -868,7 +910,7 @@ class AsyncApicSession:
         """
         await self._raw_write("DELETE", f"/api/mo/{dn}.json")
 
-    async def _raw_write(self, method: str, path: str, **kwargs: Any) -> None:
+    async def _raw_write(self, method: str, path: str, **kwargs: Unpack[RequestOptions]) -> None:
         """Execute a mutating request (POST or DELETE) with auth, semaphore, and retry.
 
         Args:
@@ -905,7 +947,7 @@ class AsyncApicSession:
         *,
         retry_on: type[Exception] | tuple[type[Exception], ...] = httpx.TransportError,
         retry_statuses: frozenset[int] = READ_RETRY_STATUSES,
-        **kwargs: Any,
+        **kwargs: Unpack[RequestOptions],
     ) -> httpx.Response:
         """Execute a request with stamina retry on transient network errors.
 
@@ -974,17 +1016,8 @@ class AsyncApicSession:
         """
         try:
             yield
-        except httpx.TimeoutException as exc:
-            raise exceptions.TimeoutError(f"APIC request timed out: {exc}") from exc
-        except httpx.ConnectError as exc:
-            cause = exc.__cause__ or exc.__context__
-            if isinstance(cause, ssl.SSLError):
-                raise exceptions.TLSError(
-                    f"TLS/SSL error connecting to {self._host}: {cause}"
-                ) from exc
-            raise exceptions.ConnectionError(f"Cannot reach APIC at {self._host}: {exc}") from exc
         except httpx.TransportError as exc:
-            raise exceptions.TransportError(str(exc)) from exc
+            raise transport_failure(exc, self._host) from exc
 
     # ── Response parsing ──────────────────────────────────────────────────────
 
@@ -1047,8 +1080,15 @@ class AsyncApicSession:
         # controller is free to answer a refresh with either envelope.
         attrs = _imdata_attributes(resp, "aaaLogin", "aaaRefresh")
         try:
-            token: str = attrs["token"]
-            ttl: int = int(attrs["refreshTimeoutSeconds"])
+            token = attrs["token"]
+            raw_ttl = attrs["refreshTimeoutSeconds"]
+            # The APIC sends both as strings; anything else is a malformed
+            # reply, reported through the same LoginError as a missing key.
+            if not isinstance(token, str):
+                raise TypeError(f"token is {type(token).__name__}, not str")
+            if not isinstance(raw_ttl, str | int | float):
+                raise TypeError(f"refreshTimeoutSeconds is {type(raw_ttl).__name__}")
+            ttl = int(raw_ttl)
         except (KeyError, TypeError, ValueError) as exc:
             raise exceptions.LoginError(f"Unexpected APIC response structure: {exc}") from exc
 

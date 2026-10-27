@@ -15,6 +15,8 @@ from niwaki.facade import Niwaki
 from tests.conftest import HOST, ok
 from tests.design.conftest import mini_design
 
+from .._jsonpath import as_object
+
 UNI_URL = f"{HOST}/api/mo/uni.json"
 
 
@@ -145,7 +147,7 @@ class TestStagedPush:
         for op in ops:
             assert op.payload is not None
             (body,) = op.payload.values()
-            assert "children" not in body
+            assert "children" not in as_object(body)
 
     def test_bracketed_rn_depth_still_parents_first(self) -> None:
         """subnet-[10.0.1.1/24] inflates DN depth but never above its parent."""

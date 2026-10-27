@@ -11,6 +11,7 @@ from __future__ import annotations
 import pytest
 
 from niwaki._codegen import generate_catalog as gc
+from niwaki._json import JsonObject
 from niwaki.models.base import ManagedObject, _coerce_read
 from niwaki.query import _catalog
 
@@ -76,7 +77,8 @@ def catalog_db(catalog_path: object, monkeypatch: pytest.MonkeyPatch) -> _catalo
 
 
 def _read(wire_class: str, attrs: dict[str, str]) -> ManagedObject:
-    return ManagedObject.from_apic({wire_class: {"attributes": attrs}})
+    attributes: JsonObject = dict(attrs)
+    return ManagedObject.from_apic({wire_class: {"attributes": attributes}})
 
 
 # ``topSystem`` is operational (not configurable) → never a generated model, so

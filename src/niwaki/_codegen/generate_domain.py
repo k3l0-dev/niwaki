@@ -12,6 +12,12 @@ Names come from three layers, in increasing precedence:
    wherever a position is curated, the facade navigation speaks the exact
    curated maker name, so the read and write surfaces share one vocabulary.
 
+No navigation name may equal an attribute of the node API (``query``,
+``read``, … — and, in the ``_root`` row, the client API): such an edge would
+be shadowed and unreachable.  Auto-derived names are escaped with a trailing
+underscore; a curated name that clashes breaks the build before anything is
+written.  The reserved set is introspected from the facade classes.
+
 Two additional dicts are emitted:
 
 - ``RS_TARGET_PROP`` — ``{rs_class: tn_prop_name}`` for Rs singleton classes
@@ -32,6 +38,7 @@ from __future__ import annotations
 import json
 import re
 from collections import Counter, defaultdict
+from collections.abc import Mapping
 from pathlib import Path
 from typing import Any
 
@@ -157,37 +164,110 @@ def _load_schemas() -> dict[str, dict[str, Any]]:
     return classes
 
 
-# The facade's own public surface (NiwakiNode attributes): an auto-derived
-# navigation name equal to one of these would be silently shadowed by the
-# method — attribute lookup never reaches __getattr__ for real attributes.
-# Guarded by tests/domain/test_domain_nav.py against the live class surface.
-# Curated maker names are exempt (the overlay applies after normalisation):
-# the single pre-existing case, callhomeQueryGroup.query, is reachable
-# through .mo() and kept as-is rather than diverging from the DSL name.
-_FACADE_SURFACE: frozenset[str] = frozenset({"cls", "delete", "dn", "mo", "query", "read"})
-
-_RESERVED_METHODS: frozenset[str] = (
-    frozenset(
-        {
-            "type",
-            "class",
-            "import",
-            "pass",
-            "return",
-            "any",
-            "all",
-            "id",
-            "in",
-            "is",
-            "or",
-            "and",
-            "not",
-            "del",
-            "if",
-        }
-    )
-    | _FACADE_SURFACE
+# Python keywords and builtins-like words that make awkward method names.
+# The node API itself (``query``, ``read``, …) is NOT listed here: it is
+# introspected from the node classes when the map is built
+# (:func:`_node_api_names`), so a method added to a node later is reserved
+# without a list to keep in sync.
+_RESERVED_METHODS: frozenset[str] = frozenset(
+    {
+        "type",
+        "class",
+        "import",
+        "pass",
+        "return",
+        "any",
+        "all",
+        "id",
+        "in",
+        "is",
+        "or",
+        "and",
+        "not",
+        "del",
+        "if",
+    }
 )
+
+
+def _public_names(cls: type) -> frozenset[str]:
+    """Every public (no leading underscore) attribute name *cls* carries."""
+    return frozenset(name for name in dir(cls) if not name.startswith("_"))
+
+
+def _node_api_names() -> frozenset[str]:
+    """The navigation node API — names a child-map entry must never take.
+
+    Attribute lookup only reaches ``__getattr__`` (where navigation lives)
+    for names the node does NOT already carry, so a navigation name equal to
+    a node attribute (``query``, ``read``, …) is shadowed by it and the edge
+    is unreachable at runtime.  The set is introspected from
+    :class:`~niwaki.facade.NiwakiNode`, :class:`~niwaki.facade.AsyncNiwakiNode`
+    and their shared mixin *at call time*, never frozen at import: a public
+    method added to a node later is reserved the moment it exists.
+
+    Returns:
+        Every public attribute name of the three node classes.
+    """
+    # Imported lazily: the facade imports the very table this module writes.
+    from niwaki.facade import AsyncNiwakiNode, NiwakiNode, _JargonNavMixin
+
+    return (
+        _public_names(NiwakiNode) | _public_names(AsyncNiwakiNode) | _public_names(_JargonNavMixin)
+    )
+
+
+def _root_api_names() -> frozenset[str]:
+    """The names reserved in the ``_root`` row: node API plus client API.
+
+    The ``_root`` row is also reached as ``aci.<name>`` through the client's
+    ``__getattr__``, which only fires for names the client does not carry
+    itself — so the public surface of :class:`~niwaki.facade.Niwaki` and
+    :class:`~niwaki.facade.AsyncNiwaki` is reserved there on top of the node
+    API.
+
+    Returns:
+        :func:`_node_api_names` plus every public attribute name of both
+        clients.
+    """
+    from niwaki.facade import AsyncNiwaki, Niwaki
+
+    return _node_api_names() | _public_names(Niwaki) | _public_names(AsyncNiwaki)
+
+
+def _check_node_api_shadowing(child_map: Mapping[str, Mapping[str, str]]) -> None:
+    """Refuse any navigation name the node (or client) API would shadow.
+
+    ``_root`` is held to :func:`_root_api_names`, every other parent to
+    :func:`_node_api_names`.  Curated maker names get no exemption: a curated
+    name that is shadowed is as unreachable as an auto-derived one.
+
+    Args:
+        child_map: ``{parent: {navigation name: child class}}`` — the final
+            map, after the curated maker overlay.
+
+    Raises:
+        ValueError: listing every offender at once (parent, clashing name,
+            child class), never only the first.
+    """
+    node_api = _node_api_names()
+    root_api = _root_api_names()
+    offenders = sorted(
+        (parent, name, child)
+        for parent, row in child_map.items()
+        for name, child in row.items()
+        if name in (root_api if parent == "_root" else node_api)
+    )
+    if offenders:
+        details = "\n".join(f"  {parent}: {name!r} → {child}" for parent, name, child in offenders)
+        raise ValueError(
+            f"{len(offenders)} navigation name(s) shadowed by the node API "
+            f"(attribute lookup never reaches __getattr__ for them — the edge "
+            f"would be unreachable):\n{details}\n"
+            "Rename the entry (vocabulary.yaml makers/jargon) to a name the node "
+            "API does not carry."
+        )
+
 
 _DIRECTION_SUFFIXES: dict[str, str] = {
     "Prov": "provider",
@@ -206,9 +286,21 @@ _GENERIC_LABEL_WORDS: frozenset[str] = frozenset(
 )
 
 
-def _normalise_method(name: str) -> str:
-    """Append trailing underscore if name is a Python reserved word."""
-    return name + "_" if name in _RESERVED_METHODS else name
+def _normalise_method(name: str, reserved: frozenset[str] | None = None) -> str:
+    """Append a trailing underscore if *name* is reserved.
+
+    Args:
+        name: The candidate navigation name.
+        reserved: The API names reserved at this position (see
+            :func:`_node_api_names` / :func:`_root_api_names`); introspected
+            from the node classes when omitted.
+
+    Returns:
+        *name*, or ``name + "_"`` when it is a Python keyword-like word or a
+        reserved API name.
+    """
+    api = _node_api_names() if reserved is None else reserved
+    return name + "_" if name in _RESERVED_METHODS or name in api else name
 
 
 def _short_label_key(label: str) -> str:
@@ -378,6 +470,14 @@ def _build_child_map(
     Returns:
         ``(child_map, collisions_resolved)``
     """
+    # The node API is introspected once per build (never frozen at import),
+    # so a node method added later is escaped like the ones known today.
+    node_api = _node_api_names()
+    root_api = _root_api_names()
+
+    def reserved_at(parent: str) -> frozenset[str]:
+        return root_api if parent == "_root" else node_api
+
     # Pass 1 ── accumulate (parent, method) → [(child_cls, is_explicit), …]
     slots: dict[str, dict[str, list[tuple[str, bool]]]] = defaultdict(lambda: defaultdict(list))
 
@@ -386,12 +486,12 @@ def _build_child_map(
         # their slot in a collision and are never re-derived by the cascade
         # (which works from the raw schema label, typos included).
         is_explicit = child_cls in jargon or child_cls in NAV_NAME_OVERRIDES
-        method = _normalise_method(
-            jargon.get(child_cls)
-            or _derive_name(child_cls, info["label"], info["className"], info["classPkg"])
+        base = jargon.get(child_cls) or _derive_name(
+            child_cls, info["label"], info["className"], info["classPkg"]
         )
         for parent_raw in info["containedBy"]:
             parent = "_root" if parent_raw == "polUni" else parent_raw
+            method = _normalise_method(base, reserved_at(parent))
             slots[parent][method].append((child_cls, is_explicit))
 
     # Pass 2 ── build child_map, resolving collisions
@@ -435,13 +535,14 @@ def _build_child_map(
         for _method, to_resolve in deferred:
             shared_label = classes[to_resolve[0]]["label"]
             for cls, new_method in _resolve_group(to_resolve, classes, shared_label).items():
-                new_method = _normalise_method(new_method)
+                new_method = _normalise_method(new_method, reserved_at(parent))
                 if new_method in child_map[parent]:
                     # Final tie-break: the pkg-prefixed className — unique on
                     # this corpus (guarded by the raise below, not assumed).
                     info = classes[cls]
                     new_method = _normalise_method(
-                        _pkg_classname(cls, info["className"], info["classPkg"])
+                        _pkg_classname(cls, info["className"], info["classPkg"]),
+                        reserved_at(parent),
                     )
                 if new_method in child_map[parent]:
                     # A silently dropped navigation edge is how two shipped
@@ -759,7 +860,12 @@ def main() -> None:
     makers: dict[str, dict[str, str]] = vocabulary.get("makers", {})
     child_map, collisions_resolved = _build_child_map(classes, jargon)
     curated_renamed = _apply_maker_overlay(child_map, makers)
+    # Fail before anything is written: a navigation name the node API
+    # shadows is an unreachable edge, curated or not.
+    _check_node_api_shadowing(child_map)
     nav_deprecated, shadowed = _build_nav_deprecated(child_map)
+    # A deprecated alias the node API shadows would be just as dead.
+    _check_node_api_shadowing(nav_deprecated)
     rs_target_prop = _build_rs_target_prop(classes)
     reference_map, target_subclasses, ref_stats = _build_reference_map(classes)
     class_pkg = {cls_name: info["classPkg"] for cls_name, info in classes.items()}

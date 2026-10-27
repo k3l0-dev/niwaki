@@ -40,11 +40,12 @@ Two honest caveats, both inherent to reading a live system in pieces:
 from __future__ import annotations
 
 from collections.abc import Iterable
-from typing import Any, Protocol
+from typing import Protocol
 
 from niwaki._dn import parent_dn
 from niwaki.exceptions import DeserializationError
 from niwaki.models.base import ManagedObject
+from niwaki.types import JsonObject
 
 # Budget in bytes for one ``target-subtree-class`` value AS ENCODED ON THE
 # WIRE.  The APIC front end caps the request line at 4-8 KB depending on
@@ -67,16 +68,16 @@ class _PagedReader(Protocol):
     """
 
     def _get_all_pages(
-        self, path: str, params: dict[str, Any], *, page_size: int = ...
-    ) -> list[dict[str, Any]]: ...
+        self, path: str, params: dict[str, str], *, page_size: int = ...
+    ) -> list[JsonObject]: ...
 
 
 class _AsyncPagedReader(Protocol):
     """Async twin of :class:`_PagedReader`."""
 
     async def _get_all_pages(
-        self, path: str, params: dict[str, Any], *, page_size: int = ...
-    ) -> list[dict[str, Any]]: ...
+        self, path: str, params: dict[str, str], *, page_size: int = ...
+    ) -> list[JsonObject]: ...
 
 
 def shard_classes(classes: Iterable[str], *, budget: int | None = None) -> list[str]:
@@ -116,7 +117,7 @@ def shard_classes(classes: Iterable[str], *, budget: int | None = None) -> list[
     return shards
 
 
-def build_tree(items: Iterable[dict[str, Any]], root_dn: str) -> ManagedObject | None:
+def build_tree(items: Iterable[JsonObject], root_dn: str) -> ManagedObject | None:
     """Rebuild the containment tree from flat class-query response items.
 
     Each item is one APIC envelope (``{"fvBD": {"attributes": {...}}}``) whose
@@ -154,8 +155,11 @@ def build_tree(items: Iterable[dict[str, Any]], root_dn: str) -> ManagedObject |
         if len(item) != 1:
             raise DeserializationError(f"flat read item is not a one-key envelope: {item!r}")
         (body,) = item.values()
-        dn = body.get("attributes", {}).get("dn")
-        if not dn:
+        attributes = body.get("attributes", {}) if isinstance(body, dict) else None
+        if not isinstance(attributes, dict):
+            raise DeserializationError(f"flat read item has no attributes object: {item!r}")
+        dn = attributes.get("dn")
+        if not dn or not isinstance(dn, str):
             raise DeserializationError(f"flat read item has no dn: {item!r}")
         nodes[dn] = ManagedObject.from_apic(item)
 
@@ -171,7 +175,7 @@ def build_tree(items: Iterable[dict[str, Any]], root_dn: str) -> ManagedObject |
     return root
 
 
-def _shard_params(shard: str) -> dict[str, Any]:
+def _shard_params(shard: str) -> dict[str, str]:
     return {"query-target": "subtree", "target-subtree-class": shard}
 
 
@@ -200,7 +204,7 @@ def read_subtree(
     Returns:
         The rebuilt tree, or ``None`` when nothing exists at *dn*.
     """
-    items: list[dict[str, Any]] = []
+    items: list[JsonObject] = []
     for shard in shard_classes(classes, budget=budget):
         items.extend(
             session._get_all_pages(f"/api/mo/{dn}.json", _shard_params(shard), page_size=_PAGE_SIZE)
@@ -216,7 +220,7 @@ async def read_subtree_async(
     budget: int | None = None,
 ) -> ManagedObject | None:
     """Async twin of :func:`read_subtree` — same requests, awaited in order."""
-    items: list[dict[str, Any]] = []
+    items: list[JsonObject] = []
     for shard in shard_classes(classes, budget=budget):
         items.extend(
             await session._get_all_pages(

@@ -15,6 +15,8 @@ import pytest
 from niwaki.models._generated.enums._all import L2EtherType, L2MultiDstPktAct, L2UnkMacUcastAct
 from niwaki.models._generated.vz.vzEntry import vzEntry
 
+from .._jsonpath import at
+
 
 class TestL2EtherType:
     """L2EtherType covers the hex-alias pattern (0x806, 0x0800, etc.)."""
@@ -103,7 +105,7 @@ class TestVzEntryPydanticIntegration:
     def test_serialises_localname_to_apic(self) -> None:
         entry = vzEntry(name="e", ethernet_type="ipv4")  # type: ignore[reportArgumentType]
         apic = entry.to_apic()
-        assert apic["vzEntry"]["attributes"]["etherT"] == "ipv4"
+        assert at(apic, "vzEntry", "attributes", "etherT") == "ipv4"
 
     def test_invalid_etherT_raises(self) -> None:
         from pydantic import ValidationError

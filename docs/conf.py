@@ -89,14 +89,46 @@ _CURSOR_IGNORES = [
     *(("py:class", f"{cls.__module__}.{cls.__name__}") for cls in _CURSOR_CLASSES),
 ]
 
+# Typed facade navigation exists for the type checker only: its classes live in
+# .pyi stubs (niwaki._generated_nav, no runtime module), yet they appear in
+# public annotations (Niwaki.root -> RootNode).  Autodoc cannot import them, so
+# this ignore list is DERIVED from the stub sources themselves: every class the
+# stubs define, bare, package-qualified and module-qualified.
+import ast  # noqa: E402
+from pathlib import Path  # noqa: E402
+
+import niwaki  # noqa: E402
+
+_NAV_DIR = Path(niwaki.__file__).resolve().parent / "_generated_nav"
+_NAV_IGNORES = [
+    ignore
+    for stub in sorted(_NAV_DIR.glob("*.pyi"))
+    for node in ast.parse(stub.read_text(encoding="utf-8")).body
+    if isinstance(node, ast.ClassDef)
+    for ignore in (
+        ("py:class", node.name),
+        ("py:class", f"niwaki._generated_nav.{node.name}"),
+        ("py:class", f"niwaki._generated_nav.{stub.stem}.{node.name}"),
+    )
+]
+
 nitpick_ignore = [
     *_CURSOR_IGNORES,
+    *_NAV_IGNORES,
     # Typing spellings autodoc cannot resolve to a documented target.
     ("py:class", "T"),
     ("py:class", "U"),
     ("py:class", "M"),
     ("py:class", "_T"),
     ("py:class", "_Coroutine"),
+    # AsyncNiwaki.gather's overloads: the coroutine alias and the per-position
+    # result type variables.
+    ("py:class", "_Co"),
+    ("py:class", "T1"),
+    ("py:class", "T2"),
+    ("py:class", "T3"),
+    ("py:class", "T4"),
+    ("py:class", "T5"),
     ("py:class", "_FilterNode"),
     ("py:class", "PushMode"),
     # A Union type alias (RawSubscriptionEvent | SubscriptionGap |
@@ -118,6 +150,9 @@ nitpick_ignore = [
     ("py:exc", "pydantic.ValidationError"),
     ("py:exc", "ValidationError"),
     ("py:class", "pydantic.ValidationError"),
+    # `password: str | SecretStr | None` on the sessions and clients: autodoc
+    # renders the bare imported name, which the pydantic inventory cannot match.
+    ("py:class", "SecretStr"),
 ]
 nitpick_ignore_regex = [
     # Design/facade/query/transport internals: documented through their public

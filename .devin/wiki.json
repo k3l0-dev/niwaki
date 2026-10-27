@@ -5,7 +5,7 @@
       "author": "maintainer"
     },
     {
-      "content": "Do not analyze the generated trees line by line: src/niwaki/models/_generated/ (2,222 generated Pydantic classes + enums), src/niwaki/design/_generated_cursors/ (~75k lines of typed cursors), src/niwaki/domain/_child_map.py (23k generated lines), docs/reference/vocabulary/ (938 generated pages), and src/niwaki/query/_catalog/catalog.db (35 MB sqlite artifact). Document their GENERATORS in src/niwaki/_codegen/ instead.",
+      "content": "Do not analyze the generated trees line by line: src/niwaki/models/_generated/ (2,222 generated Pydantic classes + enums), the public import mirror src/niwaki/models/<pkg>/ and src/niwaki/models/enums/ (~3,000 one-line re-export modules), src/niwaki/design/_generated_cursors/ (~75k lines of typed cursors), src/niwaki/domain/_child_map.py (23k generated lines), docs/reference/vocabulary/ (938 generated pages), and src/niwaki/query/_catalog/catalog.db (35 MB sqlite artifact). Document their GENERATORS in src/niwaki/_codegen/ instead.",
       "author": "maintainer"
     },
     {
@@ -17,7 +17,7 @@
       "author": "maintainer"
     },
     {
-      "content": "The wire boundary is src/niwaki/models/_wire.py — the ONLY Python-to-APIC value translation, in both directions (to_wire/from_wire/to_filter/parse_flags/named_number). Imports like `from niwaki.models.fv.fvBD import fvBD` are served at runtime by a MetaPathFinder (src/niwaki/models/__init__.py); the real path is niwaki.models._generated.fv.fvBD. Static analyzers cannot resolve the alias — deliberate trade-off, not a bug.",
+      "content": "The wire boundary is src/niwaki/models/_wire.py — the ONLY Python-to-APIC value translation, in both directions (to_wire/from_wire/to_filter/parse_flags/named_number). The public model import path `from niwaki.models.fv.fvBD import fvBD` is a generated mirror of real re-export modules (src/niwaki/models/<pkg>/<Cls>.py, emitted by src/niwaki/_codegen/generate_mirror.py) over the canonical definitions in niwaki.models._generated; it resolves for static analyzers (mypy, pyright, IDEs) and yields the very same class object, whose __module__ stays canonical.",
       "author": "maintainer"
     }
   ],
@@ -90,12 +90,12 @@
     },
     {
       "title": "Models and the Type System",
-      "purpose": "Detailed guide to the generated models' anatomy: readable field names with wire aliases (validation_alias/serialization_alias, PEP 681 visibility), the type system from _codegen/basetypes.py (bools, int/float bounds, named numbers, Flags bitmasks, validated addresses), the wire boundary in src/niwaki/models/_wire.py, surgical serialisation via to_apic()/model_fields_set, and from_apic dispatch through REGISTRY.",
+      "purpose": "Detailed guide to the generated models' anatomy: readable field names with wire aliases (validation_alias/serialization_alias, PEP 681 visibility), the type system from _codegen/basetypes.py (bools, int/float bounds, named numbers, Flags bitmasks, validated addresses), the wire boundary in src/niwaki/models/_wire.py, surgical serialisation via to_apic()/model_fields_set, from_apic dispatch through REGISTRY, and the public import path niwaki.models.<pkg>.<Cls> (a statically-resolvable re-export mirror of niwaki.models._generated, with lazy package short names such as fv.BD).",
       "parent": null
     },
     {
       "title": "Code Generation Pipeline",
-      "purpose": "Narrative of the factory in src/niwaki/_codegen/: APIC schema extraction (data/scripts/), generate.py (2,222 models + _PKG_MAP), generate_enums.py (676 StrEnums), generate_domain.py (CHILD_MAP/CLASS_PKG/REFERENCE_MAP), generate_design.py (typed cursors from vocabulary.yaml), generate_catalog.py (the sqlite read catalogue with its fail-loud routing), generate_docs.py (the vocabulary book) — and the parity/drift tests that pin every artifact.",
+      "purpose": "Narrative of the factory in src/niwaki/_codegen/: APIC schema extraction (data/scripts/), generate.py (2,222 models + _PKG_MAP), generate_enums.py (676 StrEnums), generate_domain.py (CHILD_MAP/CLASS_PKG/REFERENCE_MAP), generate_design.py (typed cursors from vocabulary.yaml), generate_catalog.py (the sqlite read catalogue with its fail-loud routing), generate_docs.py (the vocabulary book), generate_mirror.py (the corpus-free public model import mirror) — and the parity/drift tests that pin every artifact.",
       "parent": null,
       "page_notes": [
         { "content": "Document the factory, never the 2,222 products. Avoid overdetailization." }

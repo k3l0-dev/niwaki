@@ -58,6 +58,7 @@ def test_the_policy_page_lists_every_public_import_path() -> None:
         "niwaki.exceptions",
         "niwaki.catalog",
         "niwaki.snapshot",
+        "niwaki.types",
         "niwaki.utils",
     }
     assert published == expected, (

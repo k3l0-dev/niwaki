@@ -5,7 +5,11 @@
     "**/__pycache__",
     "**/.*",
     "docs/_build",
-    "src/niwaki/models/_generated",
+    // Generated trees under models/: the canonical _generated/ tree and the
+    // public import mirror (models/<pkg>/, models/enums/).  Two components are
+    // required on purpose: a single "models/*" would also swallow the
+    // hand-written models/__init__.py, base.py and _wire.py.
+    "src/niwaki/models/*/*",
     // Obsolete: replays the integration acts that the operator-scripts reorg
     // removed. Kept pending a rewrite to the new (self-verifying) model.
     "scripts/verify_live.py"

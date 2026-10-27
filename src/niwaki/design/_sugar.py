@@ -13,14 +13,12 @@ arguments of the current object into their real schema fields:
 
 from __future__ import annotations
 
-from typing import Any
-
 from niwaki.exceptions._design import DesignError
 
 _PORT_RANGE_KEYS = ("tcp", "udp")
 
 
-def _port_range(value: Any) -> tuple[int | str, int | str]:
+def _port_range(value: object) -> tuple[int | str, int | str]:
     """Normalise a port spec into ``(from_port, to_port)``.
 
     Accepts an int (``80``), a 2-tuple/list (``(8000, 8090)``), a dashed
@@ -44,7 +42,7 @@ def _port_range(value: Any) -> tuple[int | str, int | str]:
             raise DesignError(f"Unsupported port specification: {value!r}")
 
 
-def apply_sugar(aci_class: str, attrs: dict[str, Any]) -> dict[str, Any]:
+def apply_sugar(aci_class: str, attrs: dict[str, object]) -> dict[str, object]:
     """Rewrite sugared keyword arguments into real schema fields.
 
     Args:
@@ -65,7 +63,7 @@ def apply_sugar(aci_class: str, attrs: dict[str, Any]) -> dict[str, Any]:
     return attrs
 
 
-def _entry_sugar(attrs: dict[str, Any]) -> dict[str, Any]:
+def _entry_sugar(attrs: dict[str, object]) -> dict[str, object]:
     """Expand ``tcp=`` / ``udp=`` / ``protocol="icmp"`` on a ``vzEntry``.
 
     The defaulted ``ethernet_type="ip"`` is the *generic* IP ether-type: it

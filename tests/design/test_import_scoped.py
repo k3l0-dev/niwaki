@@ -6,6 +6,7 @@ import json
 
 import pytest
 
+from niwaki._json import JsonObject
 from niwaki.design import design, from_payload, tenant, to_design
 from niwaki.exceptions import DesignError, SnapshotImportError
 from niwaki.snapshot import Snapshot
@@ -47,7 +48,12 @@ class TestGrammarOnlyAncestors:
     """
 
     def test_a_grammar_only_ancestor_chain_imports(self) -> None:
-        tree = {"class": "uiSettings", "rn": "uisettings", "attributes": {}, "children": []}
+        tree: JsonObject = {
+            "class": "uiSettings",
+            "rn": "uisettings",
+            "attributes": {},
+            "children": [],
+        }
         snap = Snapshot(scope="uni/uisettingscont/uisettings", tree=tree)
         cfg = to_design(snap)
         classes = [n.aci_class for n in cfg.design_node.root().iter_subtree()]
@@ -154,7 +160,7 @@ class TestFromPayload:
             from_payload({"fvTenant": {"attributes": {"name": "x"}}})
 
     def test_missing_naming_value_is_refused(self) -> None:
-        payload = {
+        payload: JsonObject = {
             "polUni": {
                 "attributes": {},
                 "children": [{"fvTenant": {"attributes": {"descr": "no name"}}}],
@@ -164,7 +170,7 @@ class TestFromPayload:
             from_payload(payload)
 
     def test_status_directive_is_refused(self) -> None:
-        payload = {
+        payload: JsonObject = {
             "polUni": {
                 "attributes": {},
                 "children": [{"fvTenant": {"attributes": {"name": "x", "status": "deleted"}}}],
@@ -174,7 +180,7 @@ class TestFromPayload:
             from_payload(payload)
 
     def test_dn_and_rn_bookkeeping_keys_are_recomputed_not_imported(self) -> None:
-        payload = {
+        payload: JsonObject = {
             "polUni": {
                 "attributes": {},
                 "children": [
@@ -196,7 +202,7 @@ class TestFromPayload:
         assert t.rn == "tn-x"  # identity from the naming value, never from dn/rn keys
 
     def test_unknown_class_in_payload_is_refused(self) -> None:
-        payload = {
+        payload: JsonObject = {
             "polUni": {
                 "attributes": {},
                 "children": [{"fvFutureThing": {"attributes": {"name": "x"}}}],

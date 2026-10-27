@@ -17,16 +17,15 @@ so compilation is repeatable.
 
 from __future__ import annotations
 
-from typing import Any
-
 from niwaki.design._engine import _Op
 from niwaki.design._node import DesignNode
 from niwaki.models.base import ManagedObject
+from niwaki.types import JsonObject, JsonValue
 
 _Extras = dict[DesignNode, list[ManagedObject]]
 
 
-def compile_envelope(node: DesignNode, extras: _Extras) -> dict[str, Any]:
+def compile_envelope(node: DesignNode, extras: _Extras) -> JsonObject:
     """Serialise *node* and its subtree into one nested APIC envelope.
 
     Args:
@@ -37,14 +36,16 @@ def compile_envelope(node: DesignNode, extras: _Extras) -> dict[str, Any]:
         APIC envelope dict with recursively nested ``children``.
     """
     envelope = node.mo().to_apic()
-    children: list[dict[str, Any]] = [compile_envelope(c, extras) for c in node.children]
+    children: list[JsonValue] = [compile_envelope(c, extras) for c in node.children]
     children.extend(rs.to_apic() for rs in extras.get(node, []))
     if children:
-        envelope[node.aci_class]["children"] = children
+        body = envelope[node.aci_class]
+        assert isinstance(body, dict)  # to_apic() always wraps an object body
+        body["children"] = children
     return envelope
 
 
-def compile_poluni(root: DesignNode, extras: _Extras) -> dict[str, Any]:
+def compile_poluni(root: DesignNode, extras: _Extras) -> JsonObject:
     """Serialise the design (rooted on ``polUni``) for one atomic POST."""
     return compile_envelope(root, extras)
 

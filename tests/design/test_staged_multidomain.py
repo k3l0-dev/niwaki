@@ -19,6 +19,8 @@ from niwaki.design._resolver import resolve
 from niwaki.facade import Niwaki
 from tests.conftest import HOST
 
+from .._jsonpath import as_objects, at
+
 _EMPTY = {"totalCount": "0", "imdata": []}
 
 
@@ -57,7 +59,7 @@ class TestAtomicGroups:
         )
         (pair_op,) = [op for op in ops if op.dn == pair_dn]
         assert pair_op.payload is not None
-        nested = pair_op.payload["fabricExplicitGEp"]["children"]
+        nested = as_objects(at(pair_op.payload, "fabricExplicitGEp", "children"))
         assert [next(iter(child)) for child in nested] == ["fabricNodePEp", "fabricNodePEp"]
 
     def test_non_atomic_children_still_emit_ops(self) -> None:

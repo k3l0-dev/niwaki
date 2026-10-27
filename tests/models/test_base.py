@@ -12,7 +12,10 @@ from typing import ClassVar
 import pytest
 from pydantic import ValidationError
 
+from niwaki._json import JsonObject
 from niwaki.models.base import REGISTRY, ManagedObject, _coerce_apic_value
+
+from .._jsonpath import as_object, at
 
 # ── Minimal helper classes ────────────────────────────────────────────────────
 # Defined at module level so they are registered in REGISTRY exactly once.
@@ -104,46 +107,46 @@ class TestRnDn:
 class TestToApic:
     def test_naming_prop_always_included(self) -> None:
         mo = SimpleMO(name="prod")
-        attrs = mo.to_apic()["simpleMO"]["attributes"]
+        attrs = as_object(at(mo.to_apic(), "simpleMO", "attributes"))
         assert attrs["name"] == "prod"
 
     def test_only_explicit_fields_sent(self) -> None:
         mo = SimpleMO(name="prod")  # descr and active not set explicitly
-        attrs = mo.to_apic()["simpleMO"]["attributes"]
+        attrs = as_object(at(mo.to_apic(), "simpleMO", "attributes"))
         assert "descr" not in attrs
         assert "active" not in attrs
 
     def test_explicit_optional_field_included(self) -> None:
         mo = SimpleMO(name="prod", descr="hello")
-        attrs = mo.to_apic()["simpleMO"]["attributes"]
+        attrs = as_object(at(mo.to_apic(), "simpleMO", "attributes"))
         assert attrs["descr"] == "hello"
 
     def test_bool_true_serialized_as_string(self) -> None:
         mo = SimpleMO(name="x", active=True)
-        attrs = mo.to_apic()["simpleMO"]["attributes"]
+        attrs = as_object(at(mo.to_apic(), "simpleMO", "attributes"))
         assert attrs["active"] == "true"
 
     def test_bool_false_serialized_as_string(self) -> None:
         mo = SimpleMO(name="x", active=False)
-        attrs = mo.to_apic()["simpleMO"]["attributes"]
+        attrs = as_object(at(mo.to_apic(), "simpleMO", "attributes"))
         assert attrs["active"] == "false"
 
     def test_children_not_in_attributes(self) -> None:
         mo = SimpleMO(name="x")
         mo.children.append(SimpleChild(id="c1"))
-        attrs = mo.to_apic()["simpleMO"]["attributes"]
+        attrs = as_object(at(mo.to_apic(), "simpleMO", "attributes"))
         assert "children" not in attrs
 
     def test_children_serialized_under_children_key(self) -> None:
         mo = SimpleMO(name="x")
         mo.children.append(SimpleChild(id="c1"))
-        payload = mo.to_apic()["simpleMO"]
+        payload = as_object(mo.to_apic()["simpleMO"])
         assert "children" in payload
-        assert payload["children"][0]["simpleChild"]["attributes"]["id"] == "c1"
+        assert at(payload, "children", 0, "simpleChild", "attributes", "id") == "c1"
 
     def test_no_children_key_when_empty(self) -> None:
         mo = SimpleMO(name="x")
-        payload = mo.to_apic()["simpleMO"]
+        payload = as_object(mo.to_apic()["simpleMO"])
         assert "children" not in payload
 
     def test_apic_extra_fields_excluded(self) -> None:
@@ -161,7 +164,7 @@ class TestToApic:
                 }
             }
         )
-        attrs = mo.to_apic()["simpleMO"]["attributes"]
+        attrs = as_object(at(mo.to_apic(), "simpleMO", "attributes"))
         assert "modTs" not in attrs
         assert "uid" not in attrs
 
@@ -175,19 +178,19 @@ class TestToApic:
 
 class TestFromApic:
     def test_basic_deserialization(self) -> None:
-        raw = {"simpleMO": {"attributes": {"name": "prod", "descr": "test"}}}
+        raw: JsonObject = {"simpleMO": {"attributes": {"name": "prod", "descr": "test"}}}
         obj = ManagedObject.from_apic(raw)
         assert isinstance(obj, SimpleMO)
         assert obj.name == "prod"
         assert obj.descr == "test"
 
     def test_unknown_class_falls_back_to_managedobj(self) -> None:
-        raw = {"unknownClass": {"attributes": {"name": "x"}}}
+        raw: JsonObject = {"unknownClass": {"attributes": {"name": "x"}}}
         obj = ManagedObject.from_apic(raw)
         assert isinstance(obj, ManagedObject)
 
     def test_children_are_recursively_deserialized(self) -> None:
-        raw = {
+        raw: JsonObject = {
             "simpleMO": {
                 "attributes": {"name": "parent"},
                 "children": [{"simpleChild": {"attributes": {"id": "c1"}}}],
@@ -200,20 +203,20 @@ class TestFromApic:
         assert obj.children[0].id == "c1"
 
     def test_no_children_key_gives_empty_list(self) -> None:
-        raw = {"simpleMO": {"attributes": {"name": "x"}}}
+        raw: JsonObject = {"simpleMO": {"attributes": {"name": "x"}}}
         obj = ManagedObject.from_apic(raw)
         assert obj.children == []
 
     def test_missing_attributes_returns_object_without_raising(self) -> None:
         # from_apic uses model_construct (no validation) — missing required fields
         # don't raise; the object is created but the field is simply unset.
-        raw = {"simpleMO": {}}
+        raw: JsonObject = {"simpleMO": {}}
         obj = ManagedObject.from_apic(raw)
         assert isinstance(obj, SimpleMO)
 
     def test_missing_attributes_ok_for_optional_only_class(self) -> None:
         # NoNamingMO has no required fields → empty attributes dict is valid
-        raw = {"noNamingMO": {}}
+        raw: JsonObject = {"noNamingMO": {}}
         obj = ManagedObject.from_apic(raw)
         assert isinstance(obj, NoNamingMO)
 
@@ -223,7 +226,9 @@ class TestFromApic:
 
 class TestFromEvent:
     def test_modified_event_fields_set_is_exactly_the_delta(self) -> None:
-        raw = {"simpleMO": {"attributes": {"dn": "uni/mo-x", "active": "no", "status": "modified"}}}
+        raw: JsonObject = {
+            "simpleMO": {"attributes": {"dn": "uni/mo-x", "active": "no", "status": "modified"}}
+        }
         obj = ManagedObject.from_event(raw)
         assert isinstance(obj, SimpleMO)
         assert obj.model_fields_set == {"active"}
@@ -231,13 +236,13 @@ class TestFromEvent:
         assert obj["dn"] == "uni/mo-x"
 
     def test_deleted_event_has_empty_fields_set(self) -> None:
-        raw = {"simpleMO": {"attributes": {"dn": "uni/mo-x", "status": "deleted"}}}
+        raw: JsonObject = {"simpleMO": {"attributes": {"dn": "uni/mo-x", "status": "deleted"}}}
         obj = ManagedObject.from_event(raw)
         assert obj.model_fields_set == set()
         assert obj["dn"] == "uni/mo-x"
 
     def test_created_event_fields_set_is_the_full_reported_set(self) -> None:
-        raw = {
+        raw: JsonObject = {
             "simpleMO": {
                 "attributes": {"name": "prod", "descr": "hi", "active": "yes", "status": "created"}
             }
@@ -250,13 +255,13 @@ class TestFromEvent:
         assert obj.active is True
 
     def test_unknown_class_falls_back_to_managedobj(self) -> None:
-        raw = {"unknownClass": {"attributes": {"dn": "x", "status": "modified"}}}
+        raw: JsonObject = {"unknownClass": {"attributes": {"dn": "x", "status": "modified"}}}
         obj = ManagedObject.from_event(raw)
         assert isinstance(obj, ManagedObject)
         assert obj.model_fields_set == set()
 
     def test_children_are_recursively_deserialized(self) -> None:
-        raw = {
+        raw: JsonObject = {
             "simpleMO": {
                 "attributes": {"dn": "uni/mo-parent", "status": "modified"},
                 "children": [{"simpleChild": {"attributes": {"id": "c1", "status": "created"}}}],
@@ -270,12 +275,12 @@ class TestFromEvent:
         assert child.model_fields_set == {"id"}
 
     def test_no_children_key_gives_empty_list(self) -> None:
-        raw = {"simpleMO": {"attributes": {"dn": "uni/mo-x", "status": "modified"}}}
+        raw: JsonObject = {"simpleMO": {"attributes": {"dn": "uni/mo-x", "status": "modified"}}}
         obj = ManagedObject.from_event(raw)
         assert obj.children == []
 
     def test_missing_attributes_returns_object_without_raising(self) -> None:
-        raw = {"simpleMO": {}}
+        raw: JsonObject = {"simpleMO": {}}
         obj = ManagedObject.from_event(raw)
         assert isinstance(obj, SimpleMO)
         assert obj.model_fields_set == set()
@@ -288,7 +293,9 @@ class TestFromEvent:
         keeps a full read surgical on round-trip) even though this payload
         never carried it; from_event reports exactly what the payload said.
         """
-        raw = {"simpleMO": {"attributes": {"dn": "uni/mo-x", "active": "no", "status": "modified"}}}
+        raw: JsonObject = {
+            "simpleMO": {"attributes": {"dn": "uni/mo-x", "active": "no", "status": "modified"}}
+        }
         via_apic = ManagedObject.from_apic(raw)
         via_event = ManagedObject.from_event(raw)
         assert via_apic.model_fields_set == {"name"}
@@ -344,7 +351,7 @@ class TestGeneratedFvBD:
         from niwaki.models._generated.fv.fvBD import fvBD
 
         bd = fvBD(name="web", unicast_routing=True)
-        attrs = bd.to_apic()["fvBD"]["attributes"]
+        attrs = as_object(at(bd.to_apic(), "fvBD", "attributes"))
         # Only explicitly-set fields sent
         assert attrs["name"] == "web"
         assert attrs["unicastRoute"] == "true"
@@ -355,7 +362,7 @@ class TestGeneratedFvBD:
     def test_fvbd_from_apic_roundtrip(self) -> None:
         from niwaki.models._generated.fv.fvBD import fvBD
 
-        raw = {
+        raw: JsonObject = {
             "fvBD": {
                 "attributes": {
                     "name": "web",
@@ -373,7 +380,7 @@ class TestGeneratedFvBD:
         """The worked example from ``from_event``'s docstring, on a real generated class."""
         from niwaki.models._generated.fv.fvBD import fvBD
 
-        raw = {
+        raw: JsonObject = {
             "fvBD": {
                 "attributes": {
                     "dn": "uni/tn-prod/BD-web",
@@ -395,7 +402,9 @@ class TestGeneratedFvBD:
     def test_fvbd_from_event_deleted_has_empty_fields_set(self) -> None:
         from niwaki.models._generated.fv.fvBD import fvBD
 
-        raw = {"fvBD": {"attributes": {"dn": "uni/tn-prod/BD-web", "status": "deleted"}}}
+        raw: JsonObject = {
+            "fvBD": {"attributes": {"dn": "uni/tn-prod/BD-web", "status": "deleted"}}
+        }
         mo = ManagedObject.from_event(raw)
         assert isinstance(mo, fvBD)
         assert mo.model_fields_set == set()
@@ -408,17 +417,17 @@ class TestGeneratedFvBD:
 class TestToApicValueFiltering:
     def test_none_values_are_skipped(self) -> None:
         mo = SimpleMO.surgical({"name": "x"}, descr=None)
-        assert "descr" not in mo.to_apic()["simpleMO"]["attributes"]
+        assert "descr" not in as_object(at(mo.to_apic(), "simpleMO", "attributes"))
 
     def test_empty_string_non_naming_is_skipped(self) -> None:
         """Sending "" would silently erase the APIC value — never emitted."""
         mo = SimpleMO.surgical({"name": "x"}, descr="")
-        assert "descr" not in mo.to_apic()["simpleMO"]["attributes"]
+        assert "descr" not in as_object(at(mo.to_apic(), "simpleMO", "attributes"))
 
     def test_empty_naming_prop_is_kept(self) -> None:
         """Naming props are always sent, even empty (the APIC requires them)."""
         mo = SimpleMO.surgical({"name": ""})
-        assert mo.to_apic()["simpleMO"]["attributes"] == {"name": ""}
+        assert as_object(at(mo.to_apic(), "simpleMO", "attributes")) == {"name": ""}
 
 
 # ── _coerce_apic_value edge branches ──────────────────────────────────────────
@@ -447,17 +456,19 @@ class TestCoerceApicValue:
 class TestFieldsSetSemantics:
     def test_direct_assignment_marks_field_as_set(self) -> None:
         """Pydantic v2 adds assigned fields to model_fields_set — no helper needed."""
-        raw = {"simpleMO": {"attributes": {"name": "x", "descr": "hello", "active": "yes"}}}
+        raw: JsonObject = {
+            "simpleMO": {"attributes": {"name": "x", "descr": "hello", "active": "yes"}}
+        }
         mo = ManagedObject.from_apic(raw)
         assert isinstance(mo, SimpleMO)
-        assert "descr" not in mo.to_apic()["simpleMO"]["attributes"]
+        assert "descr" not in as_object(at(mo.to_apic(), "simpleMO", "attributes"))
         mo.descr = "world"
-        assert mo.to_apic()["simpleMO"]["attributes"]["descr"] == "world"
+        assert at(mo.to_apic(), "simpleMO", "attributes", "descr") == "world"
 
     def test_from_apic_excludes_non_naming_from_to_apic(self) -> None:
-        raw = {"simpleMO": {"attributes": {"name": "x", "descr": "hello"}}}
+        raw: JsonObject = {"simpleMO": {"attributes": {"name": "x", "descr": "hello"}}}
         mo = ManagedObject.from_apic(raw)
-        attrs = mo.to_apic()["simpleMO"]["attributes"]
+        attrs = as_object(at(mo.to_apic(), "simpleMO", "attributes"))
         assert "name" in attrs
         assert "descr" not in attrs  # not in model_fields_set — surgical POST
 
@@ -468,29 +479,29 @@ class TestFieldsSetSemantics:
 class TestSurgical:
     def test_naming_prop_always_present(self) -> None:
         delta = SimpleMO.surgical({"name": "x"})
-        attrs = delta.to_apic()["simpleMO"]["attributes"]
+        attrs = as_object(at(delta.to_apic(), "simpleMO", "attributes"))
         assert attrs["name"] == "x"
 
     def test_change_included_in_payload(self) -> None:
         delta = SimpleMO.surgical({"name": "x"}, descr="hello")
-        attrs = delta.to_apic()["simpleMO"]["attributes"]
+        attrs = as_object(at(delta.to_apic(), "simpleMO", "attributes"))
         assert attrs["descr"] == "hello"
 
     def test_unchanged_field_not_in_payload(self) -> None:
         delta = SimpleMO.surgical({"name": "x"}, descr="hello")
-        attrs = delta.to_apic()["simpleMO"]["attributes"]
+        attrs = as_object(at(delta.to_apic(), "simpleMO", "attributes"))
         assert "active" not in attrs
 
     def test_multiple_changes_all_included(self) -> None:
         delta = SimpleMO.surgical({"name": "x"}, descr="a", active=False)
-        attrs = delta.to_apic()["simpleMO"]["attributes"]
+        attrs = as_object(at(delta.to_apic(), "simpleMO", "attributes"))
         assert attrs["descr"] == "a"
         assert attrs["active"] == "false"
         assert attrs["name"] == "x"
 
     def test_no_changes_only_naming_in_payload(self) -> None:
         delta = SimpleMO.surgical({"name": "y"})
-        attrs = delta.to_apic()["simpleMO"]["attributes"]
+        attrs = as_object(at(delta.to_apic(), "simpleMO", "attributes"))
         assert list(attrs.keys()) == ["name"]
 
     def test_model_fields_set_is_naming_plus_changes(self) -> None:
@@ -510,7 +521,7 @@ class TestSurgical:
         from niwaki.models._generated.fv.fvBD import fvBD
 
         delta = fvBD.surgical({"name": "web"}, arp_flooding=True)
-        attrs = delta.to_apic()["fvBD"]["attributes"]
+        attrs = as_object(at(delta.to_apic(), "fvBD", "attributes"))
         assert attrs["name"] == "web"
         assert attrs["arpFlood"] == "true"
         assert "unicastRoute" not in attrs
@@ -602,7 +613,7 @@ class TestAttrsView:
         assert top.attrs == {"dn": "topology/pod-1/node-101", "role": "leaf"}
 
     def test_children_excluded(self) -> None:
-        raw = {
+        raw: JsonObject = {
             "simpleMO": {
                 "attributes": {"name": "x"},
                 "children": [{"simpleChild": {"attributes": {"id": "1"}}}],
@@ -679,6 +690,6 @@ class TestCatalogueServedSerialisation:
     def test_absorbed_extras_are_never_serialised(self) -> None:
         mo = self._read_back()
         mo.infrastructure_ip = "10.0.0.2"  # pyright: ignore[reportAttributeAccessIssue]
-        payload = mo.to_apic()["topSystem"]["attributes"]
+        payload = as_object(at(mo.to_apic(), "topSystem", "attributes"))
         assert "mode" not in payload  # read, never assigned
         assert "dn" not in payload

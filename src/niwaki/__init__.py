@@ -18,7 +18,7 @@ Public entry points, importable straight from the package root:
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING
 
 from niwaki.facade import AsyncNiwaki, AsyncNiwakiNode, Niwaki, NiwakiNode
 from niwaki.transport._config import RetryConfig
@@ -31,7 +31,7 @@ if TYPE_CHECKING:
     from niwaki.design import infra as infra
     from niwaki.design import tenant as tenant
 
-__version__ = "2.0.1"
+__version__ = "2.1.0"
 __all__ = [
     "AsyncNiwaki",
     "AsyncNiwakiNode",
@@ -49,7 +49,7 @@ __all__ = [
 _DESIGN_ROOTS = frozenset({"aaa", "controller", "design", "fabric", "infra", "tenant"})
 
 
-def __getattr__(name: str) -> Any:
+def __getattr__(name: str) -> object:
     """Lazily expose the design DSL roots without paying their import cost.
 
     ``from niwaki import tenant`` (or ``design``, ``infra``, ``fabric``,

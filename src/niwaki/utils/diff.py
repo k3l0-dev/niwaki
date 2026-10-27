@@ -33,11 +33,12 @@ Example::
 
 from __future__ import annotations
 
-from typing import Any, cast
+from typing import cast
 
 from niwaki._dn import rn_of
 from niwaki.models._wire import from_wire
 from niwaki.models.base import ManagedObject
+from niwaki.types import JsonObject
 
 
 def _child_key(child: ManagedObject) -> tuple[str, ...]:
@@ -100,7 +101,7 @@ def _diff_children(
     return deltas
 
 
-def _values_equal(desired: Any, current: Any) -> bool:
+def _values_equal(desired: object, current: object) -> bool:
     """Field equality.
 
     This used to carry a workaround: the APIC canonicalises numbers on write
@@ -237,7 +238,7 @@ def mo_diff[T: ManagedObject](
     )
     if respect_fields_set:
         model_fields &= desired.model_fields_set
-    changed: dict[str, Any] = {}
+    changed: dict[str, object] = {}
 
     for field in model_fields:
         d_val = getattr(desired, field, None)
@@ -258,7 +259,7 @@ def mo_diff[T: ManagedObject](
     current_extra = current.model_extra or {}
     alias_map = cls._get_alias_map() if cls is not ManagedObject else {}  # pyright: ignore[reportPrivateUsage]
     for wire, d_val in desired._raw_wire_attrs.items():  # pyright: ignore[reportPrivateUsage]
-        c_raw: Any = current._raw_wire_attrs.get(wire)  # pyright: ignore[reportPrivateUsage]
+        c_raw: object = current._raw_wire_attrs.get(wire)  # pyright: ignore[reportPrivateUsage]
         if c_raw is None and wire in alias_map:
             # The wire prop is a typed field on the current side (a raw_set of
             # a prop the model DOES know): coerce the desired wire string
@@ -296,7 +297,7 @@ def mo_diff[T: ManagedObject](
         # Catalogue-served wire pair: rebuild the delta through the tolerant
         # read path so the wire class and naming extras survive, then carry
         # the changed raw attrs on the wire-attr channel.
-        naming_extras = {
+        naming_extras: JsonObject = {
             k: str(v) for k, v in (desired.model_extra or {}).items() if k in _wire_naming(desired)
         }
         delta = cast(

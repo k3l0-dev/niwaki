@@ -4284,7 +4284,7 @@ class _CallhomeQueryGroupMakers(Cursor):
 
     __slots__ = ()
 
-    def query(
+    def callhome_query(
         self,
         name: str,
         *,
@@ -4299,7 +4299,7 @@ class _CallhomeQueryGroupMakers(Cursor):
         query_target: ConfigQueryTarget | str | None = None,
         query_type: ConfigQueryType | str | None = None,
         userdom: str | None = None,
-    ) -> QueryCursor:
+    ) -> CallhomeQueryCursor:
         """Declare a ``callhomeQuery`` child under the callhome_query_group level.
 
         A query. This is a query object representing all information on returned objects.
@@ -4328,8 +4328,8 @@ class _CallhomeQueryGroupMakers(Cursor):
             )
         }
         return cast(
-            "QueryCursor",
-            self._invoke_maker("query", (name,), _prune(params)),
+            "CallhomeQueryCursor",
+            self._invoke_maker("callhome_query", (name,), _prune(params)),
         )
 
 
@@ -10907,10 +10907,10 @@ class CallhomeDestinationGroupCallhomeProtocolProfileCursor(
         return self
 
 
-class QueryCursor(_CallhomeQueryGroupMakers, _FabricMakers, _UniMakers):
-    """Typed cursor for ``callhomeQuery`` (query level).
+class CallhomeQueryCursor(_CallhomeQueryGroupMakers, _FabricMakers, _UniMakers):
+    """Typed cursor for ``callhomeQuery`` (callhome_query level).
 
-    Position: ``uni.fabric.callhome_query_group.query``
+    Position: ``uni.fabric.callhome_query_group.callhome_query``
 
     Ancestor makers (implicit pop) come from the inherited mixins,
     nearest level first — the MRO mirrors the runtime resolution.
@@ -10932,7 +10932,7 @@ class QueryCursor(_CallhomeQueryGroupMakers, _FabricMakers, _UniMakers):
         query_target: ConfigQueryTarget | str | None = None,
         query_type: ConfigQueryType | str | None = None,
         userdom: str | None = None,
-    ) -> QueryCursor:
+    ) -> CallhomeQueryCursor:
         """Set ``callhomeQuery`` attributes (merged; validated eagerly)."""
         params = {k: v for k, v in locals().items() if k != "self"}
         Cursor.set(self, **_prune(params))

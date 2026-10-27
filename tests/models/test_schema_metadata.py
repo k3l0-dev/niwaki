@@ -19,6 +19,8 @@ from pydantic.fields import FieldInfo
 
 from niwaki.models.base import ManagedObject
 
+from .._jsonpath import as_object, at
+
 if TYPE_CHECKING:
     from niwaki.models._generated.aaa.aaaLdapProvider import aaaLdapProvider
 
@@ -176,7 +178,7 @@ class TestSecureFields:
         cls = _load_aaaLdapProvider()
         instance = cls(name="ldap-test", password="s3cr3t")
         payload = instance.to_apic()
-        attrs = payload["aaaLdapProvider"]["attributes"]
+        attrs = as_object(at(payload, "aaaLdapProvider", "attributes"))
         assert attrs["key"] == "s3cr3t"
 
     def test_non_secure_field_appears_in_repr(self) -> None:
@@ -216,7 +218,7 @@ class TestCreateOnlyFields:
         cls = _load_aaaActiveUserSession()
         instance = cls(hashToken="abc123", name="my-session")  # type: ignore[call-arg]
         payload = instance.to_apic()
-        attrs = payload["aaaActiveUserSession"]["attributes"]
+        attrs = as_object(at(payload, "aaaActiveUserSession", "attributes"))
         assert attrs["hashToken"] == "abc123"
         assert attrs["name"] == "my-session"
 
@@ -225,7 +227,7 @@ class TestCreateOnlyFields:
         cls = _load_aaaActiveUserSession()
         instance = cls(hashToken="abc123")  # type: ignore[call-arg]
         payload = instance.to_apic()
-        attrs = payload["aaaActiveUserSession"]["attributes"]
+        attrs = as_object(at(payload, "aaaActiveUserSession", "attributes"))
         # name is not in model_fields_set → not serialised
         assert "name" not in attrs
 

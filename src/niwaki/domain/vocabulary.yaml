@@ -1410,7 +1410,7 @@ makers:
     smart_callhome_destination: callhomeSmartDest
     callhome_protocol_profile: callhomeProf
   callhomeQueryGroup:
-    query: callhomeQuery
+    callhome_query: callhomeQuery
   snmpPol:
     snmp_community: snmpCommunityP
     user_profile: snmpUserP

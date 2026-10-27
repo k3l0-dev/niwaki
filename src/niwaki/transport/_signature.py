@@ -44,7 +44,8 @@ from __future__ import annotations
 import base64
 from collections.abc import Generator
 from pathlib import Path
-from typing import TYPE_CHECKING, Any
+from types import ModuleType
+from typing import TYPE_CHECKING
 
 import httpx
 
@@ -57,7 +58,7 @@ _ALGORITHM = "v1.0"
 _FINGERPRINT = "fingerprint"
 
 
-def _require_cryptography() -> Any:
+def _require_cryptography() -> tuple[ModuleType, ModuleType, ModuleType]:
     """Import ``cryptography``, or explain which extra provides it.
 
     Returns:

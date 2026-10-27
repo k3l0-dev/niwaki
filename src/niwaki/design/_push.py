@@ -26,7 +26,7 @@ from __future__ import annotations
 
 from collections.abc import Iterable, Iterator
 from dataclasses import dataclass, field
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING
 
 from niwaki._logging import operation_failed, push_finished, push_started
 from niwaki._read import read_subtree, read_subtree_async
@@ -44,11 +44,14 @@ from niwaki.design._verify import (
 )
 from niwaki.exceptions._design import DanglingReferenceError, StagedPushError
 from niwaki.models.base import ManagedObject
+from niwaki.types import JsonObject
 from niwaki.utils.diff import mo_diff
 
 if TYPE_CHECKING:
     from niwaki.design._cursor import PushMode
     from niwaki.facade import AsyncNiwaki, Niwaki
+    from niwaki.transport.session import ApicSession
+    from niwaki.transport.session_async import AsyncApicSession
 
 
 @dataclass(frozen=True)
@@ -96,7 +99,7 @@ class PlanResult:
     """
 
     creates: list[str]
-    updates: dict[str, dict[str, tuple[Any, Any]]]
+    updates: dict[str, dict[str, tuple[object, object]]]
     unchanged: list[str]
     external_refs: list[RefCheck] = field(default_factory=list)
 
@@ -109,7 +112,7 @@ class PlanResult:
 # ── Pure helpers ──────────────────────────────────────────────────────────────
 
 
-def build_payload(root: DesignNode) -> dict[str, Any]:
+def build_payload(root: DesignNode) -> JsonObject:
     """Resolve the design and return the atomic ``polUni`` push payload."""
     return compile_poluni(root, resolve(root))
 
@@ -160,7 +163,7 @@ def _plan_result(
 ) -> PlanResult:
     """Diff the desired tree against the current APIC tree (pure)."""
     creates: list[str] = []
-    updates: dict[str, dict[str, tuple[Any, Any]]] = {}
+    updates: dict[str, dict[str, tuple[object, object]]] = {}
     unchanged: list[str] = []
 
     def _walk(d: ManagedObject, c: ManagedObject | None, dn: str) -> None:
@@ -209,7 +212,7 @@ def _absorb_found(
     dn: str,
     d: ManagedObject,
     c: ManagedObject,
-    updates: dict[str, dict[str, tuple[Any, Any]]],
+    updates: dict[str, dict[str, tuple[object, object]]],
     unchanged: list[str],
 ) -> None:
     """Book a verified-present object as update or unchanged (pure)."""
@@ -232,7 +235,7 @@ def _boundary(creates: set[str]) -> list[str]:
 
 
 def _refine_part_sync(
-    part: PlanResult, index: dict[str, ManagedObject], session: Any
+    part: PlanResult, index: dict[str, ManagedObject], session: ApicSession
 ) -> PlanResult:
     """Verify boundary creates with bare self-GETs — the scoped read is not gospel.
 
@@ -270,7 +273,7 @@ def _refine_part_sync(
     )
 
 
-def _fetch_bare_sync(session: Any, dn: str) -> ManagedObject | None:
+def _fetch_bare_sync(session: ApicSession, dn: str) -> ManagedObject | None:
     """Bare self-GET of one DN → typed MO, or ``None`` when absent."""
     from niwaki.exceptions import NotFoundError
 
@@ -282,7 +285,7 @@ def _fetch_bare_sync(session: Any, dn: str) -> ManagedObject | None:
 
 
 async def _refine_part_async(
-    part: PlanResult, index: dict[str, ManagedObject], session: Any
+    part: PlanResult, index: dict[str, ManagedObject], session: AsyncApicSession
 ) -> PlanResult:
     """Async twin of :func:`_refine_part_sync` — same probes, awaited."""
     from niwaki.exceptions import NotFoundError

@@ -27,6 +27,8 @@ from niwaki.transport._token import TokenState
 from niwaki.transport.session import ApicSession
 from tests.conftest import HOST, LOGIN_URL, load_fixture, login_payload
 
+from .._jsonpath import as_object, at
+
 # ── Constants ─────────────────────────────────────────────────────────────────
 
 USERNAME = "admin"
@@ -335,7 +337,7 @@ class TestGet:
 
         # Fixture contains 3 tenants: common, mgmt, Prod
         assert len(result) == 3
-        names = {item["fvTenant"]["attributes"]["name"] for item in result}
+        names = {str(at(item, "fvTenant", "attributes", "name")) for item in result}
         assert names == {"common", "mgmt", "Prod"}
 
     def test_success_returns_full_mo_attributes(
@@ -348,9 +350,9 @@ class TestGet:
 
         # Verify key fvTenant schema attributes are present (dn, rn, modTs, lcOwn, uid…)
         common = next(
-            item["fvTenant"]["attributes"]
+            as_object(at(item, "fvTenant", "attributes"))
             for item in result
-            if item["fvTenant"]["attributes"]["name"] == "common"
+            if at(item, "fvTenant", "attributes", "name") == "common"
         )
         assert common["dn"] == "uni/tn-common"
         assert common["rn"] == "tn-common"
@@ -650,7 +652,7 @@ class TestPaginationMissingTotalCount:
         httpx_mock.add_response(method="GET", json={"imdata": []})
 
         result = logged_session._get_all_pages("/api/class/fvBD.json", {})  # type: ignore[reportPrivateUsage]
-        names = [r["fvBD"]["attributes"]["name"] for r in result]
+        names = [at(r, "fvBD", "attributes", "name") for r in result]
         assert names == ["a", "b"]  # both pages fetched, not just page 0
 
     def test_zero_total_count_with_a_full_page_pages_until_empty(
@@ -673,7 +675,7 @@ class TestPaginationMissingTotalCount:
         httpx_mock.add_response(method="GET", json={"imdata": []})
 
         result = logged_session._get_all_pages("/api/class/fvBD.json", {})  # type: ignore[reportPrivateUsage]
-        names = [r["fvBD"]["attributes"]["name"] for r in result]
+        names = [at(r, "fvBD", "attributes", "name") for r in result]
         assert names == ["a", "b"]
 
     def test_garbage_total_count_is_unknown_not_a_crash(
@@ -687,7 +689,7 @@ class TestPaginationMissingTotalCount:
         httpx_mock.add_response(method="GET", json={"imdata": []})
 
         result = logged_session._get_all_pages("/api/class/fvBD.json", {})  # type: ignore[reportPrivateUsage]
-        assert [r["fvBD"]["attributes"]["name"] for r in result] == ["a"]
+        assert [at(r, "fvBD", "attributes", "name") for r in result] == ["a"]
 
 
 class TestMidSession401RecoveryFailure:

@@ -28,6 +28,25 @@ def test_the_inputs_cover_every_generator_source() -> None:
     assert "naming.py" in inputs and "kinds.py" in inputs  # shared policy too
 
 
+def test_the_twin_tools_are_excluded_by_name_only() -> None:
+    """The twin tools are corpus-free: excluded explicitly, the glob intact.
+
+    ``twins.py`` (the sync/async normaliser) feeds no artifact and is guarded
+    by its own fingerprinted test.  ``unasync.py`` (the sync-from-async
+    generator) does emit committed files, but from two source files, not from
+    the schema corpus: its freshness guard (``tests/test_unasync_fresh.py``,
+    ``unasync --check`` in ``checks.sh --fast``) runs on every edit, where a
+    manifest entry would force a corpus regen on every async edit.  The
+    exclusions are names, never a pattern, so a sibling module added next to
+    them is still caught by the glob.
+    """
+    inputs = {path.name for path in freshness._input_files()}
+    assert "twins.py" not in inputs
+    assert "unasync.py" not in inputs
+    globbed = {path.name for path in freshness._CODEGEN.glob("*.py")}
+    assert globbed - inputs == {"twins.py", "unasync.py"}
+
+
 def test_the_artifacts_cover_every_generated_surface() -> None:
     names = {str(path) for path in freshness._artifact_files()}
     assert any("_generated" in name and name.endswith(".py") for name in names)

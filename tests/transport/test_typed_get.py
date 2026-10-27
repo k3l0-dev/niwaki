@@ -10,6 +10,8 @@ from pytest_httpx import HTTPXMock
 from niwaki.transport.session import ApicSession
 from tests.conftest import HOST, LOGIN_URL, login_payload
 
+from .._jsonpath import at
+
 
 @pytest.fixture
 def session(httpx_mock: HTTPXMock) -> ApicSession:
@@ -43,7 +45,7 @@ class TestGetAllPages:
         httpx_mock.add_response(method="GET", json=self._tenant_page(["c"], total=3))
         result = session._get_all_pages("/api/class/fvTenant.json", {}, page_size=2)  # type: ignore[reportPrivateUsage]
         assert len(result) == 3
-        names = [item["fvTenant"]["attributes"]["name"] for item in result]
+        names = [at(item, "fvTenant", "attributes", "name") for item in result]
         assert names == ["a", "b", "c"]
 
     def test_multi_page_sends_correct_page_numbers(

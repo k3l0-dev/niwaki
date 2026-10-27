@@ -17,6 +17,8 @@ from niwaki.exceptions import (
 )
 from niwaki.models._generated.tag.tagTag import tagTag
 
+from .._jsonpath import as_objects, at
+
 
 class TestTenantRoot:
     def test_returns_root_cursor(self) -> None:
@@ -311,8 +313,8 @@ class TestQosBindPosition:
         cfg = tenant("prod")
         cfg.custom_qos_policy("qp")
         cfg.app("a").epg("web").bind(custom_qos_policy="qp")
-        epg = cfg.to_payload()["polUni"]["children"][0]["fvTenant"]["children"][-1]
-        rs = epg["fvAp"]["children"][0]["fvAEPg"]["children"]
+        epg = at(cfg.to_payload(), "polUni", "children", 0, "fvTenant", "children", -1)
+        rs = as_objects(at(epg, "fvAp", "children", 0, "fvAEPg", "children"))
         assert any("fvRsCustQosPol" in child for child in rs)
 
     def test_an_in_band_epg_no_longer_offers_it(self) -> None:

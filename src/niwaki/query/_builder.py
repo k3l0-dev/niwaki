@@ -1,18 +1,21 @@
-"""Synchronous ACI query builder.
+# GENERATED from src/niwaki/query/_async_builder.py — DO NOT EDIT.
+# Edit the async source, then run: uv run python -m niwaki._codegen.unasync --write
+"""ACI query builder — the execution methods.
 
-:class:`Query` adds sync execution methods on top of the shared builder state
-in :class:`~niwaki.query._base._QueryBase`.
+:class:`Query` adds the execution methods (``fetch``, ``first``, ``one``,
+``exists``, ``count``, ``stream``, ``subscribe``, ``execute_raw``) on top of
+the shared builder state in :class:`~niwaki.query._base._QueryBase`.
 
 Typical usage::
 
     from niwaki import Niwaki
-    from niwaki.query import eq, wcard
+    from niwaki.query import wcard
 
     with Niwaki(...) as aci:
         # Jargon navigation — no class name needed
         bds = aci.root.tenant("prod").bd().where(name="web").fetch()
 
-        # Class-level global query
+        # Class-level global query, streamed page by page
         for bd in aci.query(fvBD).where(wcard("name", "prod-*")).stream():
             print(bd.name)
 
@@ -23,10 +26,15 @@ Typical usage::
 from __future__ import annotations
 
 from collections.abc import Iterator
-from typing import TYPE_CHECKING, Any, TypeVar, cast
+from typing import (
+    TYPE_CHECKING,
+    TypeVar,
+    cast,
+)
 
 from niwaki.models.base import ManagedObject
 from niwaki.query._base import _QueryBase  # pyright: ignore[reportPrivateUsage]
+from niwaki.transport._errors import json_data, total_count
 from niwaki.transport._subscription_socket import _DEFAULT_MAX_PENDING
 from niwaki.transport.session import ApicSession
 
@@ -37,10 +45,12 @@ _T = TypeVar("_T", bound=ManagedObject)
 
 
 class Query(_QueryBase[_T]):
-    """Fluent ACI query builder — synchronous variant.
+    """Fluent ACI query builder.
 
     Build queries by chaining scope, filter, and enrichment methods, then
-    execute with :meth:`fetch`, :meth:`first`, :meth:`count`, or :meth:`stream`.
+    execute with :meth:`fetch`, :meth:`first`, :meth:`one`, :meth:`exists`,
+    :meth:`count`, or :meth:`stream` — or iterate the query itself.  Only the
+    execution methods touch the network.
 
     Every accumulator method returns a **new** :class:`Query` instance so
     partial queries can be safely stored and reused.
@@ -60,7 +70,7 @@ class Query(_QueryBase[_T]):
             # All BDs in tenant "prod"
             bds = aci.root.tenant("prod").bd().fetch()
 
-            # First BD matching a name pattern
+            # First BD matching a name
             bd = aci.query(fvBD).where(name="web").first()
 
             # Count BDs with flood enabled
@@ -106,19 +116,20 @@ class Query(_QueryBase[_T]):
 
             bds = aci.root.tenant("prod").bd().fetch()
         """
-        from niwaki.utils.response import parse_imdata
+        from niwaki.utils.response import parse_envelopes
 
         if self._limit is not None:
-            return list(self.stream())
+            return [obj for obj in self.stream()]
         path, params = self.build()
         raw = self._session._get_all_pages(path, params, page_size=self._page_size)
-        return cast(list[_T], parse_imdata({"imdata": raw}))
+        return cast(list[_T], parse_envelopes(raw))
 
     def __iter__(self) -> Iterator[_T]:
         """Iterate the query lazily — ``for obj in query`` streams page by page.
 
-        Equivalent to :meth:`stream`; it also makes ``list(query)`` and a
-        ``query[:n]`` slice work directly, honouring any limit set by slicing.
+        Equivalent to :meth:`stream`; it also makes ``[obj for obj in query]``
+        and a ``query[:n]`` slice work directly, honouring any limit set by
+        slicing.
 
         Yields:
             Typed :class:`~niwaki.models.base.ManagedObject` instances.
@@ -128,8 +139,8 @@ class Query(_QueryBase[_T]):
     def first(self) -> _T | None:
         """Execute the query and return the first matching object, or ``None``.
 
-        More efficient than ``fetch()[0]`` — internally requests only a single
-        object (``page=0&page-size=1``).
+        More efficient than indexing the result of :meth:`fetch` — internally
+        requests only a single object (``page=0&page-size=1``).
 
         Returns:
             First matching instance, or ``None`` when the result set is empty.
@@ -145,7 +156,7 @@ class Query(_QueryBase[_T]):
             if bd is None:
                 print("not found")
         """
-        from niwaki.utils.response import parse_imdata
+        from niwaki.utils.response import parse_envelopes
 
         if self._limit == 0:
             # A q[:0] slice matches nothing anywhere else (fetch, count,
@@ -154,7 +165,7 @@ class Query(_QueryBase[_T]):
         path, params = self.build()
         params = {**params, "page": "0", "page-size": "1"}
         raw = self._session._get_imdata(path, params)
-        objects = parse_imdata({"imdata": raw})
+        objects = parse_envelopes(raw)
         return cast(_T, objects[0]) if objects else None
 
     def one(self) -> _T:
@@ -178,7 +189,7 @@ class Query(_QueryBase[_T]):
             bd = aci.query(fvBD).where(name="web").one()
         """
         from niwaki.exceptions._query import MultipleResultsError, NoResultError
-        from niwaki.utils.response import parse_imdata
+        from niwaki.utils.response import parse_envelopes
 
         if self._limit == 0:
             raise NoResultError(f"one() matched no {self._aci_class} object (limit 0)")
@@ -189,7 +200,7 @@ class Query(_QueryBase[_T]):
         probe = "1" if self._limit == 1 else "2"
         params = {**params, "page": "0", "page-size": probe}
         raw = self._session._get_imdata(path, params)
-        objects = parse_imdata({"imdata": raw})
+        objects = parse_envelopes(raw)
         if not objects:
             raise NoResultError(f"one() matched no {self._aci_class} object")
         if len(objects) > 1:
@@ -239,8 +250,8 @@ class Query(_QueryBase[_T]):
         # unlike "count-only", this composes with any query and every
         # APIC version (6.0 rejects the count-only argument).
         params = {**params, "page": "0", "page-size": "1"}
-        data: dict[str, Any] = self._session._request_checked(path, params).json()
-        total = int(data.get("totalCount", 0))
+        resp = self._session._request_checked(path, params)
+        total = total_count(resp, json_data(resp))
         # A sliced query (q[:n]) counts what it would actually yield.
         return min(total, self._limit) if self._limit is not None else total
 
@@ -264,7 +275,7 @@ class Query(_QueryBase[_T]):
             for bd in aci.query(fvBD).stream():
                 process(bd)
         """
-        from niwaki.utils.response import parse_imdata
+        from niwaki.utils.response import parse_envelopes
 
         limit = self._limit
         if limit == 0:
@@ -272,7 +283,7 @@ class Query(_QueryBase[_T]):
         path, params = self.build()
         yielded = 0
         for page in self._session._iter_pages(path, params, page_size=self._effective_page_size()):
-            for obj in cast(list[_T], parse_imdata({"imdata": page})):
+            for obj in cast(list[_T], parse_envelopes(page)):
                 yield obj
                 yielded += 1
                 if limit is not None and yielded >= limit:
@@ -310,8 +321,9 @@ class Query(_QueryBase[_T]):
                 reconcile with a fresh read, exactly like a gap.
 
         Returns:
-            A :class:`~niwaki.query._subscription.Subscription` — ``.initial``
-            for the synchronous snapshot, then iterate for live push events.
+            The :class:`~niwaki.query._subscription.Subscription`
+            handle — ``.initial`` for the synchronous snapshot, then iterate it
+            for live push events.
 
         Raises:
             ValueError: The query carries state with no meaning on a live
@@ -364,7 +376,7 @@ class Query(_QueryBase[_T]):
             params["some-apic-parameter"] = "value"
             objs = aci.query(fvBD).execute_raw(path, params)
         """
-        from niwaki.utils.response import parse_imdata
+        from niwaki.utils.response import parse_envelopes
 
         raw = self._session._get_all_pages(path, params, page_size=self._page_size)
-        return parse_imdata({"imdata": raw})
+        return parse_envelopes(raw)

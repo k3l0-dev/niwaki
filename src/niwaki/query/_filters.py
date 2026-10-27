@@ -65,7 +65,6 @@ from __future__ import annotations
 from collections.abc import Iterable
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any
 
 from niwaki.models._wire import to_filter, to_wire
 
@@ -205,7 +204,7 @@ class FilterExpr:
 # ── Internal helpers ──────────────────────────────────────────────────────────
 
 
-def _coerce_value(value: Any) -> str:
+def _coerce_value(value: object) -> str:
     """Convert a Python value to its APIC filter string representation.
 
     Delegates to the wire boundary (:mod:`niwaki.models._wire`) so a filter
@@ -273,7 +272,7 @@ def _flag_list(flags: str | Enum | Iterable[str | Enum]) -> list[str]:
     return [flag for flag in _join_flags(flags).split(",") if flag]
 
 
-def _compare(op: str, prop: str, value: Any, cls_name: str) -> FilterExpr:
+def _compare(op: str, prop: str, value: object, cls_name: str) -> FilterExpr:
     """Build a binary-comparison expression (shared by eq/ne/lt/le/gt/ge)."""
     return FilterExpr(_Compare(op, _qualify(prop, cls_name), _coerce_value(value)))
 
@@ -281,7 +280,7 @@ def _compare(op: str, prop: str, value: Any, cls_name: str) -> FilterExpr:
 # ── Public operator functions ─────────────────────────────────────────────────
 
 
-def eq(prop: str, value: Any, *, cls_name: str = "") -> FilterExpr:
+def eq(prop: str, value: object, *, cls_name: str = "") -> FilterExpr:
     """Equal: ``eq(cls.prop,"value")``.
 
     Args:
@@ -304,7 +303,7 @@ def eq(prop: str, value: Any, *, cls_name: str = "") -> FilterExpr:
     return _compare("eq", prop, value, cls_name)
 
 
-def ne(prop: str, value: Any, *, cls_name: str = "") -> FilterExpr:
+def ne(prop: str, value: object, *, cls_name: str = "") -> FilterExpr:
     """Not equal: ``ne(cls.prop,"value")``.
 
     Args:
@@ -318,7 +317,7 @@ def ne(prop: str, value: Any, *, cls_name: str = "") -> FilterExpr:
     return _compare("ne", prop, value, cls_name)
 
 
-def lt(prop: str, value: Any, *, cls_name: str = "") -> FilterExpr:
+def lt(prop: str, value: object, *, cls_name: str = "") -> FilterExpr:
     """Less than: ``lt(cls.prop,"value")``.
 
     Args:
@@ -332,7 +331,7 @@ def lt(prop: str, value: Any, *, cls_name: str = "") -> FilterExpr:
     return _compare("lt", prop, value, cls_name)
 
 
-def le(prop: str, value: Any, *, cls_name: str = "") -> FilterExpr:
+def le(prop: str, value: object, *, cls_name: str = "") -> FilterExpr:
     """Less or equal: ``le(cls.prop,"value")``.
 
     Args:
@@ -346,7 +345,7 @@ def le(prop: str, value: Any, *, cls_name: str = "") -> FilterExpr:
     return _compare("le", prop, value, cls_name)
 
 
-def gt(prop: str, value: Any, *, cls_name: str = "") -> FilterExpr:
+def gt(prop: str, value: object, *, cls_name: str = "") -> FilterExpr:
     """Greater than: ``gt(cls.prop,"value")``.
 
     Args:
@@ -360,7 +359,7 @@ def gt(prop: str, value: Any, *, cls_name: str = "") -> FilterExpr:
     return _compare("gt", prop, value, cls_name)
 
 
-def ge(prop: str, value: Any, *, cls_name: str = "") -> FilterExpr:
+def ge(prop: str, value: object, *, cls_name: str = "") -> FilterExpr:
     """Greater or equal: ``ge(cls.prop,"value")``.
 
     Args:
@@ -401,7 +400,7 @@ def wcard(prop: str, pattern: str, *, cls_name: str = "") -> FilterExpr:
     return FilterExpr(_Compare("wcard", _qualify(prop, cls_name), _escape(pattern)))
 
 
-def bw(prop: str, start: Any, end: Any, *, cls_name: str = "") -> FilterExpr:
+def bw(prop: str, start: object, end: object, *, cls_name: str = "") -> FilterExpr:
     """Between (inclusive): ``bw(cls.prop,"start","end")``.
 
     Args:
@@ -575,7 +574,7 @@ def raw(text: str) -> FilterExpr:
 class _AnyOf:
     """A ``where(prop=any_of(...))`` tag — match any of several values."""
 
-    values: tuple[Any, ...]
+    values: tuple[object, ...]
 
 
 @dataclass(frozen=True, slots=True)
@@ -589,8 +588,8 @@ class _Like:
 class _Range:
     """A ``where(prop=between(a, b))`` tag — an inclusive range."""
 
-    start: Any
-    end: Any
+    start: object
+    end: object
 
 
 type _ValueTag = _AnyOf | _Like | _Range
@@ -666,7 +665,7 @@ def between(start: _FilterScalar, end: _FilterScalar) -> _Range:
     return _Range(start, end)
 
 
-def _membership(prop: str, values: tuple[Any, ...], cls_name: str) -> FilterExpr:
+def _membership(prop: str, values: tuple[object, ...], cls_name: str) -> FilterExpr:
     """Compile a collection of values into an OR of equalities (the APIC has no ``in``)."""
     if not values:
         raise ValueError(f"where({prop}=[]): an empty collection matches nothing — omit it")
@@ -678,7 +677,7 @@ def _membership(prop: str, values: tuple[Any, ...], cls_name: str) -> FilterExpr
     return equalities[0] if len(equalities) == 1 else or_(*equalities)
 
 
-def _kwarg_to_expr(prop: str, value: Any, cls_name: str) -> FilterExpr:
+def _kwarg_to_expr(prop: str, value: object, cls_name: str) -> FilterExpr:
     """Map a ``where(prop=value)`` keyword to a filter expression by the value's type.
 
     The dispatch that turns the ergonomic keyword form into the APIC filter

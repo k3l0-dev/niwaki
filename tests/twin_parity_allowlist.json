@@ -1,0 +1,174 @@
+{
+  "comment": "Intended sync/async twin divergences. `parity`: pair -> normalised function name -> {reason, sha256 of the normalised diff} (tests/test_twin_parity.py). `raises`: class couple -> normalised method -> {reason, sync, async} declared Raises: sets (tests/test_twin_raises.py). Every entry needs a reason; stale and dead entries fail the guards.",
+  "parity": {
+    "session": {
+      "ApicSession.__init__": {
+        "reason": "Async-only bounded fan-out: max_concurrent parameter, its validation and the asyncio.Semaphore; the token lock is threading.Lock vs asyncio.Lock.",
+        "sha256": "8ab34f512357a58a718ade3603b2531370f6cb99f98feb0a3bc029a73117a3e1"
+      },
+      "ApicSession.max_concurrent": {
+        "reason": "Async-only property exposing the fan-out bound (no sync counterpart: the sync session is not a concurrency driver).",
+        "sha256": "935f1116ae97ea14cf0559affec11b1545057519d2f6b9b067f29d1136eae5ee"
+      },
+      "ApicSession._request_with_retry": {
+        "reason": "Two retry shapes: sync `for attempt in stamina.retry_context(...)` vs async nested `@stamina.retry` closure. To converge on `async for attempt in stamina.retry_context(...)` in L8.3.",
+        "sha256": "a261d228b3045e8b1d32d0acc7b036de6b2801a4956a35dabe883b3df83c8603"
+      },
+      "ApicSession._get_all_pages": {
+        "reason": "Cosmetic: nested comprehension (sync) vs explicit extend loop (async) over the same page iterator. To converge in L8.3.",
+        "sha256": "6a55e84082a193e8a553d36b07d7b08608a42ecaa6f9b17a67b6454e3b4da97c"
+      },
+      "ApicSession._request_checked": {
+        "reason": "Semaphore only: the async GET runs under `self._semaphore` (max_concurrent is async-only). The reactive re-login (stale token captured before the request, then _reactive_relogin(stale)) must be identical on both sides — this fingerprint is the post-fix shape.",
+        "sha256": "02b8629882e5fd1fe3bbfdf5a27d841e197af3ff408e61518f591013c89462cb"
+      },
+      "ApicSession._raw_write": {
+        "reason": "Semaphore only: the async write runs under `self._semaphore` (max_concurrent is async-only). The reactive re-login (stale token captured before the request, then _reactive_relogin(stale)) must be identical on both sides — this fingerprint is the post-fix shape.",
+        "sha256": "02b8629882e5fd1fe3bbfdf5a27d841e197af3ff408e61518f591013c89462cb"
+      }
+    },
+    "subscription_socket": {
+      "RawSubscription.__init__": {
+        "reason": "Concurrency by design: queue.Queue vs asyncio.Queue, and the GC finaliser (the async one also captures the running loop to hop back onto it).",
+        "sha256": "5b6eb17a159dd37911f76ec47246507fb7d4e31395373d7ac0d0f6a43855008f"
+      },
+      "SubscriptionSocket.__init__": {
+        "reason": "Concurrency by design: threading.Lock + reader/refresh threads + the `_doomed` list (sync) vs asyncio.Lock + reader/refresh tasks (async); per-flavour socket finaliser.",
+        "sha256": "e14d6ec88ba237193e422b45913aa0d22c5822344106519fbc2759908a94f5a1"
+      },
+      "SubscriptionSocket._connect": {
+        "reason": "Async-only: the connection is opened outside the state lock (a cooperative asyncio.Lock held across a slow connect would stall every coroutine waiting on the socket); the sync twin opens under the lock in _open_socket_locked.",
+        "sha256": "74865e3730c75a7435e20696c96c2b9f1d50b2b7f9b9295835be9095fb91fd0a"
+      },
+      "SubscriptionSocket._open_socket_locked": {
+        "reason": "Sync-only: opens the blocking WebSocket under the state lock; the async twin connects outside the lock via _connect.",
+        "sha256": "6bd45e7ed58eb42c75d805ff19b95d74ad930c380729f3439ba5d7411358233d"
+      },
+      "SubscriptionSocket._ensure_open": {
+        "reason": "Connection outside the lock in async (connect, then re-check _closed/_ws under the lock and discard a losing socket) vs under the lock in sync; threads vs tasks for the reader and refresh loops.",
+        "sha256": "158368d9aea6d4e0e1a52db55987a937d4b310dbebf859434a999d3af44f1de2"
+      },
+      "SubscriptionSocket._drop_registration_nowait": {
+        "reason": "Async-only: the loop-side drop scheduled by the async GC finaliser (call_soon_threadsafe); the sync twin defers through `_doomed`, drained by its refresh thread.",
+        "sha256": "c44c2d965f9137d37c9ac0fa8a261ad67e6f4d795983a37ec66d90359d83834b"
+      },
+      "SubscriptionSocket._dispatch": {
+        "reason": "The async socket reads its registry without the state lock: this is a plain `def` with no await point, so it is atomic on the event loop, and an asyncio.Lock cannot be taken from synchronous code. The sync twin must lock (reader/refresh threads mutate the registry concurrently).",
+        "sha256": "865ad47e7474f3ac16d44810ec66a5ad65410434bc5966fe337b7862f42a7435"
+      },
+      "SubscriptionSocket._subscription_info_for": {
+        "reason": "The async socket reads its registry without the state lock: this is a plain `def` with no await point, so it is atomic on the event loop, and an asyncio.Lock cannot be taken from synchronous code. The sync twin must lock (reader/refresh threads mutate the registry concurrently).",
+        "sha256": "e315bb517600c60b92be817f28efa41145ff0a0baeb0a4b74d12a64cae90eb77"
+      },
+      "SubscriptionSocket._wire_id_for": {
+        "reason": "The async socket reads its registry without the state lock: this is a plain `def` with no await point, so it is atomic on the event loop, and an asyncio.Lock cannot be taken from synchronous code. The sync twin must lock (reader/refresh threads mutate the registry concurrently).",
+        "sha256": "e394acbe55bb875abf00ca8fd2ebd37bbb94e318d3d58c1805b627fc2277a00f"
+      },
+      "SubscriptionSocket.list_subscriptions": {
+        "reason": "The async socket reads its registry without the state lock: this is a plain `def` with no await point, so it is atomic on the event loop, and an asyncio.Lock cannot be taken from synchronous code. The sync twin must lock (reader/refresh threads mutate the registry concurrently).",
+        "sha256": "ae0f7f3ad33782e6d7b2e4803b4a8167e88b52fb51337df2a62bc15d72dd2124"
+      },
+      "SubscriptionSocket.refresh_one_now": {
+        "reason": "The async socket reads its registry without the state lock: this is a plain `def` with no await point, so it is atomic on the event loop, and an asyncio.Lock cannot be taken from synchronous code. The sync twin must lock (reader/refresh threads mutate the registry concurrently).",
+        "sha256": "eba15b340e8dd9f180c6a68d3ebc4614a462553063d201348300a0cb11261345"
+      },
+      "SubscriptionSocket.subscribe": {
+        "reason": "queue.Queue (sync) vs asyncio.Queue (async) for the new registration's event queue.",
+        "sha256": "e5aacbbca2c061344779968bd7acb3dfee29e51b247e1534b474f8109eb2003b"
+      },
+      "SubscriptionSocket._fail_all": {
+        "reason": "The socket handle tracks the blocking WebSocket (`ws`, sync) vs its raw OS socket (`sock`, async, shut down by the finaliser).",
+        "sha256": "42a15bdbf31532860280f2f3767ea6891fed213ca62132f7106a192ba0a53922"
+      },
+      "SubscriptionSocket._reconnect_and_resubscribe_all": {
+        "reason": "Async reconnects outside the state lock through a nested `@stamina.retry` closure and installs the socket afterwards; sync reconnects under the lock with stamina.retry_context; ws vs sock handle.",
+        "sha256": "d0a350489e685f339a273651568f597942c95079fd03df4a7549cadcaa19f758"
+      },
+      "SubscriptionSocket.close": {
+        "reason": "Async close cancels and awaits its reader/refresh tasks (sync threads are daemons that exit on the generation/closed check); ws vs sock handle.",
+        "sha256": "f73bde1691542d07fbe1035af86e5616e063bab32be04b7506780e6e286bba04"
+      },
+      "_refresh_loop": {
+        "reason": "Sync-only drain of `_doomed` (registrations of garbage-collected subscriptions, deferred by the sync finaliser); the async finaliser schedules _drop_registration_nowait on the loop instead.",
+        "sha256": "80685216da62067748f136ef26ce61c06d0af24ca4ea7bc8ee1b48c0226debe5"
+      },
+      "_finalize_raw_subscription": {
+        "reason": "GC finalisers differ by design: sync appends to `_doomed` (the refresh thread drains it); async hops onto the captured loop with call_soon_threadsafe.",
+        "sha256": "9c7f88521889e5fe2c541426ef49289ea3bdbba7b253a538a711dfb8a72bcbdb"
+      },
+      "_finalize_socket": {
+        "reason": "GC finalisers differ by design: sync closes the blocking WebSocket; async shuts down the raw OS socket (no loop is available in a finaliser). Message names the right context manager.",
+        "sha256": "ce8bf6577d138ac3cbfa5d20e1fcf8d112dd921c56d472812fd05219f26d4b1b"
+      },
+      "_fail_from_crash": {
+        "reason": "Wording only: the crashed background worker is a thread (sync) vs a task (async).",
+        "sha256": "28b350e654dd4c9fc0d81fbc31bcdb2648a0599f0913d70d27322588b1d41de8"
+      }
+    },
+    "query_builder": {
+      "Query.__iter__": {
+        "reason": "Async-only trap: AsyncQuery.__iter__ raises TypeError so `for x in async_query` fails loudly instead of iterating a coroutine; AsyncQuery.__aiter__ carries the real iteration.",
+        "sha256": "6b6b982e8c15ed6e0bd5a3216f8d4a47cb1f2e42c5c555307a22d091bb20e759"
+      }
+    },
+    "facade_client": {
+      "Niwaki.__init__": {
+        "reason": "Async-only max_concurrent parameter, validated by the shared session-options helper and kept for the max_concurrent property.",
+        "sha256": "2a28abd76d2d4c0d53cd41365c627863b2fad94c1d322b4e95a84d55cf9b1d89"
+      },
+      "Niwaki.connect": {
+        "reason": "Async-only max_concurrent parameter, forwarded to the constructor.",
+        "sha256": "ed5adb08a5ad3aa26e0d603c7d472f1634ddaa66d76f2a17502716da06cdfb12"
+      },
+      "Niwaki.gather": {
+        "reason": "Async-only fan-out helper (asyncio.TaskGroup); the sync façade has no coroutine to gather.",
+        "sha256": "c8f137673a8242941f6ff11cf0d535cbd52c4ccdb9542a670dc47d66578b5427"
+      },
+      "Niwaki.max_concurrent": {
+        "reason": "Async-only property exposing the fan-out bound.",
+        "sha256": "935f1116ae97ea14cf0559affec11b1545057519d2f6b9b067f29d1136eae5ee"
+      },
+      "Niwaki._sync_session": {
+        "reason": "Error message names the right entry point for each flavour (Niwaki.connect()/`with` vs `async with`).",
+        "sha256": "fd4ff3bb8f54681da6e5134c5e634f6fd375e5183401b965184a029b0839ca39"
+      }
+    },
+    "design_push": {
+      "push": {
+        "reason": "Async-only concurrency: the push bound (max_concurrent capped by the client's) feeds verify's concurrency and the bounded wave pool; the sync push runs waves serially through an inline executor.",
+        "sha256": "025507b2afecc3d912d695c2c1d828a869a678946eea47e8b8db2d4404301b8e"
+      },
+      "_refine_part": {
+        "reason": "The sync twin factors the bare GET into _fetch_bare_sync; the async twin inlines the same probe (NotFoundError -> no current object).",
+        "sha256": "a747c0597005ca93e309d2957a68357956bd59118d2fa2b9ec671d6444a46cb8"
+      },
+      "_fetch_bare": {
+        "reason": "Sync-only helper of _refine_part_sync (the async twin inlines it).",
+        "sha256": "084b7e52fa33ae6198ae0d6f86dbfa0bbf87d77dc35b7894c026cec74c029030"
+      }
+    },
+    "design_verify": {
+      "verify": {
+        "reason": "Async-only bounded concurrency (asyncio.Semaphore + TaskGroup); the sync twin fetches the same sorted unique DNs serially.",
+        "sha256": "fc21705ebe28a0e034c0939192527e3835fe2431788caa36c709f9cbe88c18af"
+      }
+    },
+    "design_engine": {
+      "_run_waves": {
+        "reason": "Intended: the async wave runner is a bounded worker pool over an AsyncMoWriter (max_concurrent, slots, gather); the sync runner executes each wave serially through a callable. Skip-on-failed-ancestor logic is shared in shape.",
+        "sha256": "c5f301915df07443fccc1c57e50cf01923eba0881fc22535e1a3462c63f0a76d"
+      }
+    }
+  },
+  "raises": {
+    "query_builder": {
+      "__iter__": {
+        "reason": "Async-only trap: AsyncQuery.__iter__ raises TypeError so synchronous iteration of an async query fails loudly; the sync Query iterates for real and raises nothing of its own.",
+        "sync": [],
+        "async": [
+          "TypeError"
+        ]
+      }
+    }
+  }
+}

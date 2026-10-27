@@ -16,10 +16,11 @@ from __future__ import annotations
 import asyncio
 from collections.abc import Callable, Sequence
 from dataclasses import dataclass, field
-from typing import Any, Literal
+from typing import Literal
 
 from niwaki._logging import wave_started
 from niwaki.transport._protocols import AsyncMoWriter
+from niwaki.types import JsonObject
 
 # Default ops in flight within one wave when :func:`_run_waves` is driven
 # directly.  Mirrors the transport's own write bound so a bare writer behaves
@@ -35,7 +36,7 @@ class _Op:
 
     dn: str
     method: Literal["POST", "DELETE"]
-    payload: dict[str, Any] | None = field(default=None)
+    payload: JsonObject | None = field(default=None)
 
     @property
     def depth(self) -> int:

@@ -52,18 +52,18 @@ from __future__ import annotations
 import asyncio
 import contextlib
 import itertools
-import json
 import logging
 import time
 import weakref
 from dataclasses import dataclass, field
 from socket import SHUT_RDWR
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING
 from urllib.parse import urlsplit
 
 import stamina
 
 from niwaki import exceptions
+from niwaki.transport._errors import imdata_items, json_data
 from niwaki.transport._subscription_socket import (
     _DEFAULT_MAX_PENDING,
     _RECONNECT_ATTEMPTS,
@@ -74,19 +74,27 @@ from niwaki.transport._subscription_socket import (
     _STOP,
     _SWEEP_INTERVAL_SECONDS,
     RawPushItem,
-    RawSubscriptionEvent,
     SubscriptionGap,
     SubscriptionInfo,
-    SubscriptionOverflow,
     SubscriptionRefreshFailed,
     _Fatal,
+    _offer,
+    _parse_frame,
     _QueueItem,
+    _reconnect_exhausted_lost,
+    _refresh_escalation_lost,
     _refresh_interval,
+    _resubscribe_failed_lost,
     _Stop,
+    _subscription_info,
     _validate_refresh_timeout,
 )
+from niwaki.types import JsonObject
 
 if TYPE_CHECKING:
+    from websockets.asyncio.client import ClientConnection
+
+    from niwaki.transport._protocols import _ShutdownCapable
     from niwaki.transport.session_async import AsyncApicSession
 
 logger = logging.getLogger(__name__)
@@ -123,7 +131,7 @@ class AsyncRawSubscription:
     def __init__(
         self,
         local_id: int,
-        initial: list[dict[str, Any]],
+        initial: list[JsonObject],
         socket: AsyncSubscriptionSocket,
         item_queue: asyncio.Queue[_QueueItem],
     ) -> None:
@@ -223,7 +231,7 @@ class _AsyncSocketHandle:
     itself, for the same reason as the sync ``_SocketHandle``.
     """
 
-    sock: Any = None
+    sock: _ShutdownCapable | None = None
     closed: bool = False
 
 
@@ -284,7 +292,7 @@ class AsyncSubscriptionSocket:
     def __init__(self, session: AsyncApicSession) -> None:
         self._session = session
         self._state_lock = asyncio.Lock()
-        self._ws: Any = None
+        self._ws: ClientConnection | None = None
         self._registrations: dict[int, _AsyncRegistration] = {}
         self._wire_to_local: dict[str, int] = {}
         self._next_local_id = itertools.count(1)
@@ -388,9 +396,7 @@ class AsyncSubscriptionSocket:
             One :class:`~niwaki.transport._subscription_socket.SubscriptionInfo`
             per tracked subscription, in no particular order.
         """
-        return [
-            self._subscription_info(local_id, reg) for local_id, reg in self._registrations.items()
-        ]
+        return [_subscription_info(local_id, reg) for local_id, reg in self._registrations.items()]
 
     async def refresh_all_subscriptions(self) -> list[SubscriptionInfo]:
         """Force an immediate refresh of every tracked subscription, on demand.
@@ -482,31 +488,16 @@ class AsyncSubscriptionSocket:
         reg = self._registrations.get(local_id)
         return reg.wire_id if reg is not None else ""
 
-    @staticmethod
-    def _subscription_info(local_id: int, reg: _AsyncRegistration) -> SubscriptionInfo:
-        """Build a :class:`SubscriptionInfo` snapshot."""
-        return SubscriptionInfo(
-            local_id=local_id,
-            subscription_id=reg.wire_id,
-            path=reg.path,
-            params=dict(reg.params),
-            refresh_timeout=reg.refresh_timeout,
-            consecutive_refresh_failures=reg.consecutive_refresh_failures,
-            seconds_until_refresh=max(0.0, reg.next_refresh_at - time.monotonic()),
-            pending=reg.queue.qsize(),
-            dropped=reg.dropped_total,
-        )
-
     def _subscription_info_for(self, local_id: int) -> SubscriptionInfo | None:
         # Lock-free by design: see _wire_id_for.
         reg = self._registrations.get(local_id)
-        return self._subscription_info(local_id, reg) if reg is not None else None
+        return _subscription_info(local_id, reg) if reg is not None else None
 
     # ── Internal: the REST half of subscribe/refresh ──────────────────────────
 
     async def _do_subscribe(
         self, path: str, params: dict[str, str], refresh_timeout: int | None
-    ) -> tuple[str, list[dict[str, Any]]]:
+    ) -> tuple[str, list[JsonObject]]:
         """Issue the ``subscription=yes`` GET and return ``(wire_id, initial_imdata)``."""
         full_params: dict[str, str] = {**params, "subscription": "yes"}
         if refresh_timeout is not None:
@@ -517,17 +508,19 @@ class AsyncSubscriptionSocket:
             raise exceptions.SubscribeRejectedError(
                 exc.status_code, exc.apic_message, apic_code=exc.apic_code
             ) from exc
-        body: dict[str, Any] = resp.json()
+        # A non-JSON or non-object body is an APIError (the typed contract of
+        # every data path); imdata_items proves the item shape.
+        body = json_data(resp)
         wire_id = body.get("subscriptionId")
         if not wire_id:
             raise exceptions.SubscribeRejectedError(
                 resp.status_code, "APIC response carried no subscriptionId"
             )
-        return str(wire_id), list(body.get("imdata", []))
+        return str(wire_id), list(imdata_items(resp, body))
 
     # ── Internal: socket lifecycle ─────────────────────────────────────────────
 
-    async def _connect(self) -> Any:
+    async def _connect(self) -> ClientConnection:
         """Open a fresh WebSocket connection. No side effects on ``self``.
 
         Deliberately does not touch ``self._ws``/``self._handle`` — the
@@ -588,66 +581,32 @@ class AsyncSubscriptionSocket:
         # scheduling makes it atomic with respect to every other coroutine on
         # this loop — nothing can mutate _registrations/_wire_to_local mid-call.
         #
-        # The guard spans the WHOLE frame handling, not just json.loads —
-        # see the sync twin's _dispatch: a valid-JSON non-object frame or a
-        # malformed imdata shape must be skipped, never kill the reader.
-        # Only the frame's length is logged, never its content.
+        # The guard is defence in depth around a parser that cannot raise —
+        # see the sync twin's _dispatch: one odd frame is skipped, never
+        # fatal to every subscription. Only the frame's length is logged,
+        # never its content.
         try:
-            data: Any = json.loads(raw)
-            if not isinstance(data, dict):
-                raise TypeError("subscription push frame is not a JSON object")
-            wire_ids_raw = data.get("subscriptionId") or []
-            wire_ids = [wire_ids_raw] if isinstance(wire_ids_raw, str) else list(wire_ids_raw)
-            imdata = data.get("imdata") or []
-
-            targets = [
-                self._registrations[local_id]
-                for wire_id in wire_ids
-                if (local_id := self._wire_to_local.get(wire_id)) is not None
-                and local_id in self._registrations
-            ]
-            if not targets:
-                return
-
-            for item in imdata:
-                if not isinstance(item, dict) or len(item) != 1:
-                    continue
-                ((class_name, body),) = item.items()
-                attrs: dict[str, str] = (
-                    (body or {}).get("attributes", {}) if isinstance(body, dict) else {}
-                )
-                event = RawSubscriptionEvent(
-                    subscription_ids=tuple(wire_ids),
-                    class_name=class_name,
-                    attributes=dict(attrs),
-                    status=attrs.get("status", "modified"),
-                )
-                for reg in targets:
-                    self._offer(reg, event)
-        except Exception:  # a malformed frame must never kill the shared reader
-            logger.warning(
-                "niwaki: malformed subscription push frame ignored (length=%d)", len(raw)
-            )
-
-    @staticmethod
-    def _offer(reg: _AsyncRegistration, event: RawSubscriptionEvent) -> None:
-        """Enqueue a data event under the backpressure bound — mirror of the
-        sync :meth:`~niwaki.transport._subscription_socket.SubscriptionSocket._offer`."""
-        if reg.queue.qsize() >= reg.max_pending:
-            reg.dropped_total += 1
-            if not reg.overflow_open:
-                reg.overflow_open = True
-                reg.queue.put_nowait(SubscriptionOverflow(dropped_total=reg.dropped_total))
-                logger.warning(
-                    "niwaki: subscription buffer full (max_pending=%d) — "
-                    "dropping incoming events until the consumer catches up",
-                    reg.max_pending,
-                )
-            return
-        if reg.overflow_open and reg.queue.qsize() <= reg.max_pending // 2:
-            # Hysteresis — mirror of the sync _offer: one marker per episode.
-            reg.overflow_open = False
-        reg.queue.put_nowait(event)
+            parsed = _parse_frame(raw)
+            if parsed is not None:
+                wire_ids, events, truncated = parsed
+                targets = [
+                    self._registrations[local_id]
+                    for wire_id in wire_ids
+                    if (local_id := self._wire_to_local.get(wire_id)) is not None
+                    and local_id in self._registrations
+                ]
+                if not targets:
+                    return  # silently, even for a broken frame: nobody is listening
+                for event in events:
+                    for reg in targets:
+                        _offer(reg, event, logger)
+                if not truncated:
+                    return
+                # Truncated: the events before the broken envelope were
+                # delivered above; the frame is still reported as malformed.
+        except Exception:  # one odd frame must never fail every subscription
+            pass
+        logger.warning("niwaki: malformed subscription push frame ignored (length=%d)", len(raw))
 
     # ── Internal: refresh sweep (entry point is the free-function loop) ──────
 
@@ -727,15 +686,7 @@ class AsyncSubscriptionSocket:
                     return
                 self._wire_to_local.pop(old_wire, None)
                 self._registrations.pop(local_id, None)
-            reg.queue.put_nowait(
-                _Fatal(
-                    exceptions.SubscriptionLostError(
-                        f"subscription refresh failed {_REFRESH_FAILURE_ESCALATION_THRESHOLD} "
-                        f"times consecutively and the recovery resubscribe also failed: {exc}",
-                        reason=exceptions.SubscriptionLostReason.REFRESH_ESCALATION,
-                    )
-                )
-            )
+            reg.queue.put_nowait(_Fatal(_refresh_escalation_lost(exc)))
             return
         async with self._state_lock:
             if local_id not in self._registrations:
@@ -789,7 +740,7 @@ class AsyncSubscriptionSocket:
             wait_max=_RECONNECT_WAIT_MAX,
             wait_jitter=_RECONNECT_WAIT_JITTER,
         )
-        async def _attempt_connect() -> Any:
+        async def _attempt_connect() -> ClientConnection:
             return await self._connect()
 
         try:
@@ -798,12 +749,7 @@ class AsyncSubscriptionSocket:
             async with self._state_lock:
                 if self._closed:
                     return False
-            await self._fail_all(
-                exceptions.SubscriptionLostError(
-                    f"subscription websocket lost, reconnect exhausted: {exc}",
-                    reason=exceptions.SubscriptionLostReason.RECONNECT_EXHAUSTED,
-                )
-            )
+            await self._fail_all(_reconnect_exhausted_lost(exc))
             return False
 
         async with self._state_lock:
@@ -834,14 +780,7 @@ class AsyncSubscriptionSocket:
                         continue
                     self._wire_to_local.pop(old_wire, None)
                     self._registrations.pop(local_id, None)
-                reg.queue.put_nowait(
-                    _Fatal(
-                        exceptions.SubscriptionLostError(
-                            f"could not resubscribe after reconnect: {exc}",
-                            reason=exceptions.SubscriptionLostReason.RESUBSCRIBE_FAILED,
-                        )
-                    )
-                )
+                reg.queue.put_nowait(_Fatal(_resubscribe_failed_lost(exc)))
                 continue
             async with self._state_lock:
                 if local_id not in self._registrations or reg.wire_id != old_wire:
@@ -933,6 +872,10 @@ async def _reader_loop(
                 return
             ws = socket._ws
         del socket  # never hold a strong reference across the blocking recv()
+        if ws is None:
+            # A live generation always holds an open connection; reaching
+            # here is a bug, reported through the crash net like any other.
+            raise RuntimeError("subscription reader running without a WebSocket")
         try:
             raw = await ws.recv()
         except (ws_exceptions.WebSocketException, OSError):

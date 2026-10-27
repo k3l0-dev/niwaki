@@ -25,12 +25,12 @@ operator's decision.
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from niwaki.design._cursor import Cursor
     from niwaki.facade import Niwaki
-    from niwaki.snapshot import Snapshot
+    from niwaki.snapshot import Snapshot, _TreeNode
 
 
 @dataclass(frozen=True)
@@ -63,20 +63,9 @@ class Reconciliation:
 
 def _never_creatable() -> frozenset[str]:
     """Classes the schema marks non-creatable — fabric-materialised state."""
-    import sqlite3
-
     from niwaki.query import _catalog
 
-    con = sqlite3.connect(f"file:{_catalog.DEFAULT_PATH}?mode=ro", uri=True)
-    try:
-        return frozenset(
-            name
-            for (name,) in con.execute(
-                "SELECT class_name FROM mo WHERE is_creatable_deletable != 'always'"
-            )
-        )
-    finally:
-        con.close()
+    return _catalog.catalog()._never_creatable_classes()
 
 
 def _reconcile_against(declared: set[str], domains: set[str], snapshot: Snapshot) -> Reconciliation:
@@ -91,28 +80,30 @@ def _reconcile_against(declared: set[str], domains: set[str], snapshot: Snapshot
     implicit: list[tuple[str, str]] = []
     orphans: list[str] = []
 
-    def _walk(node: dict[str, Any], dn: str, parent_owned: bool) -> None:
+    def _walk(node: _TreeNode, dn: str, parent_owned: bool) -> None:
         is_declared = dn in declared
         if not is_declared:
-            if node["class"] in never:
-                implicit.append((dn, node["class"]))
+            if node.aci_class in never:
+                implicit.append((dn, node.aci_class))
             else:
-                extra.append((dn, node["class"]))
+                extra.append((dn, node.aci_class))
                 if parent_owned:
                     orphans.append(dn)
-        for child in node["children"]:
+        for child in node.children:
             # "Owned" for orphan-root purposes: declared, or implicit under
             # an owned parent (a minted container does not break ownership).
             child_owned = is_declared or (
-                not is_declared and node["class"] in never and parent_owned
+                not is_declared and node.aci_class in never and parent_owned
             )
-            _walk(child, f"{dn}/{child['rn']}", child_owned)
+            _walk(child, f"{dn}/{child.rn}", child_owned)
 
-    tree = snapshot.tree
+    from niwaki.snapshot import _parse_tree
+
+    tree = _parse_tree(snapshot)
     if tree is None:
         return Reconciliation(extra=[], implicit=[], orphan_subtrees=[])
-    for child in tree["children"]:
-        dn = f"uni/{child['rn']}"
+    for child in tree.children:
+        dn = f"uni/{child.rn}"
         if dn in domains:
             _walk(child, dn, True)
     return Reconciliation(

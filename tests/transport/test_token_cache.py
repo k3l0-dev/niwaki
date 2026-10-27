@@ -394,14 +394,21 @@ class TestARevokedTokenDoesNotWedgeTheCache:
         # Every recovery path funnels through _relogin, which owns both halves.
         # The 401 sites used to inline them; the 2.0 hygiene pass made them
         # delegate so a rejected re-login wraps into SessionExpiredError there
-        # too — the guard follows the delegation.
+        # too, and the 401 sites now go through _reactive_relogin first (token
+        # lock + stale-token check, as the async twin) — the guard follows the
+        # whole delegation chain.
         relogin = inspect.getsource(ApicSession._relogin)
         assert "login(use_cache=False)" in relogin, "_relogin may re-enter the cache"
         assert "_forget_cached_token()" in relogin, "_relogin leaves the dead entry"
+        reactive = vars(ApicSession).get("_reactive_relogin")
+        assert reactive is not None, "the sync session has no serialised 401 re-login"
+        assert "self._relogin(" in inspect.getsource(reactive), (
+            "_reactive_relogin no longer routes recovery through _relogin"
+        )
         for site in (ApicSession._request_checked, ApicSession._raw_write):
             body = inspect.getsource(site)
-            assert "self._relogin(" in body, (
-                f"{site.__name__} no longer routes 401 recovery through _relogin"
+            assert "self._reactive_relogin(" in body, (
+                f"{site.__name__} no longer routes 401 recovery through _reactive_relogin"
             )
 
     async def test_the_async_session_recovers_too(self, cache: TokenCache) -> None:

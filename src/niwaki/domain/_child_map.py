@@ -1527,7 +1527,7 @@ CHILD_MAP: dict[str, dict[str, str]] = {
     "callhomeQueryGroup": {
         "annotation": "tagAnnotation",
         "annotation_to_capture_rbac_info": "aaaRbacAnnotation",
-        "query": "callhomeQuery",
+        "callhome_query": "callhomeQuery",
         "tag": "tagTag",
     },
     "callhomeRsDestGroup": {

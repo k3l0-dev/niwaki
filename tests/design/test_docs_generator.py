@@ -240,3 +240,27 @@ class TestContent:
     def test_navigation_page_lists_read_side_vocabulary(self) -> None:
         navigation = render_all()["navigation.md"]
         assert "| `tenant` | `.bd(…)` |" in navigation
+
+
+@pytest.mark.parametrize(
+    "aci_class", ["faultLcP", "faultSevAsnP", "eventSevAsnP"], ids=lambda name: name
+)
+def test_a_fault_register_code_is_documented_as_a_number(aci_class: str) -> None:
+    """``condition_code`` reads as ``int``, whether the register is inlined or shared.
+
+    The fault-code register (80,512 names) moves out of the models into a
+    shared register, and the field's static type from ``int | Literal[...]`` to
+    ``int | str``.  It is still a number the APIC names — the reference must
+    keep documenting it as one, with no allowed-values list.
+    """
+    cls = _load_class(aci_class)
+    assert _is_numeric(cls.model_fields["condition_code"].annotation)
+    (doc,) = [d for d in field_docs(cls, {}) if d.name == "condition_code"]
+    assert doc.type_str == "int"
+    assert doc.kind == "naming"
+    assert doc.values == ()
+    rn_row = f"| RN | `{cls._rn_format}` |"
+    pages = [page for page in render_all().values() if rn_row in page]
+    assert pages, f"no reference page documents {aci_class} ({rn_row})"
+    numeric_row = "| `condition_code` *(positional)* | `code` | `int` |"
+    assert all(numeric_row in page for page in pages)

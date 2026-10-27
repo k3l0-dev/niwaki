@@ -134,7 +134,7 @@ The facade resolves operator names into typed child handles — `aci.tenant("pro
 | `fabric.bgp_instance.route_reflector` | `.node(…)` | `bgpRRNodePEp` — {ref}`fabric.bgp_instance.route_reflector.node <vocab-fabric-bgp_instance-route_reflector-node>` |
 | `fabric.callhome_destination_group` | `.callhome_destination(…)` | `callhomeDest` — {ref}`fabric.callhome_destination_group.callhome_destination <vocab-fabric-callhome_destination_group-callhome_destination>` |
 | `fabric.callhome_destination_group` | `.callhome_protocol_profile(…)` | `callhomeProf` — {ref}`fabric.callhome_destination_group.callhome_protocol_profile <vocab-fabric-callhome_destination_group-callhome_protocol_profile>` |
-| `fabric.callhome_query_group` | `.query(…)` | `callhomeQuery` — {ref}`fabric.callhome_query_group.query <vocab-fabric-callhome_query_group-query>` |
+| `fabric.callhome_query_group` | `.callhome_query(…)` | `callhomeQuery` — {ref}`fabric.callhome_query_group.callhome_query <vocab-fabric-callhome_query_group-callhome_query>` |
 | `fabric.communication_policy` | `.communication_setup(…)` | `commSetup` — {ref}`fabric.communication_policy.communication_setup <vocab-fabric-communication_policy-communication_setup>` |
 | `fabric.communication_policy` | `.http_service(…)` | `commHttp` — {ref}`fabric.communication_policy.http_service <vocab-fabric-communication_policy-http_service>` |
 | `fabric.communication_policy` | `.http_ssl_configuration(…)` | `commHttps` — {ref}`fabric.communication_policy.http_ssl_configuration <vocab-fabric-communication_policy-http_ssl_configuration>` |

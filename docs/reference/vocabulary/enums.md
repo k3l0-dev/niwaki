@@ -7,7 +7,7 @@ Re-generate: uv run python -m niwaki._codegen.generate_docs
 
 The 409 enum types reachable from the curated vocabulary — every constrained parameter of every maker.  A parameter typed as an enum also accepts the plain string; the value is validated at the call site either way.
 
-The remaining generated enums back the non-curated classes and live in `niwaki.models._generated.enums`.
+The remaining generated enums back the non-curated classes.  Every enum imports from `niwaki.models.enums` — `from niwaki.models.enums.FvBDType import FvBDType`.
 
 (enum-aaaaccess)=
 
@@ -881,7 +881,7 @@ Used by: {ref}`fabric.configuration_import_policy <vocab-fabric-configuration_im
 | `self` | — |
 | `subtree` | — |
 
-Used by: {ref}`fabric.callhome_query_group.query <vocab-fabric-callhome_query_group-query>`
+Used by: {ref}`fabric.callhome_query_group.callhome_query <vocab-fabric-callhome_query_group-callhome_query>`
 
 (enum-configquerytype)=
 
@@ -892,7 +892,7 @@ Used by: {ref}`fabric.callhome_query_group.query <vocab-fabric-callhome_query_gr
 | `class` | — |
 | `dn` | — |
 
-Used by: {ref}`fabric.callhome_query_group.query <vocab-fabric-callhome_query_group-query>`
+Used by: {ref}`fabric.callhome_query_group.callhome_query <vocab-fabric-callhome_query_group-callhome_query>`
 
 (enum-configrspsubtreedepth)=
 
@@ -904,7 +904,7 @@ Used by: {ref}`fabric.callhome_query_group.query <vocab-fabric-callhome_query_gr
 | `full` | — |
 | `no` | — |
 
-Used by: {ref}`fabric.callhome_query_group.query <vocab-fabric-callhome_query_group-query>`
+Used by: {ref}`fabric.callhome_query_group.callhome_query <vocab-fabric-callhome_query_group-callhome_query>`
 
 (enum-configrspsubtreeinclude)=
 
@@ -941,7 +941,7 @@ Used by: {ref}`fabric.callhome_query_group.query <vocab-fabric-callhome_query_gr
 | `pending-deployment` | — |
 | `tags` | — |
 
-Used by: {ref}`fabric.callhome_query_group.query <vocab-fabric-callhome_query_group-query>`
+Used by: {ref}`fabric.callhome_query_group.callhome_query <vocab-fabric-callhome_query_group-callhome_query>`
 
 (enum-configsnapshotaction)=
 

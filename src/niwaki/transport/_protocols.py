@@ -14,22 +14,97 @@ Protocols:
 
 from __future__ import annotations
 
-from typing import Any, Protocol, runtime_checkable
+from collections.abc import Mapping
+from typing import Protocol, runtime_checkable
 
 from niwaki.models.base import ManagedObject
 from niwaki.transport._subscription_socket import (
     _DEFAULT_MAX_PENDING,
     RawSubscription,
     SubscriptionInfo,
+    _QueueItem,
 )
 from niwaki.transport._subscription_socket_async import AsyncRawSubscription
+
+
+class _Closable(Protocol):
+    """What the sync subscription finalizer does to a connection: close it.
+
+    The finalizer handle holds only this capability, so a test double needs
+    nothing more than a ``close()``.
+    """
+
+    def close(self) -> None: ...
+
+
+class _ShutdownCapable(Protocol):
+    """What the async subscription finalizer does to a raw socket: shut it down.
+
+    The finalizer handle holds only this capability, so a test double needs
+    nothing more than a ``shutdown(how)``.
+    """
+
+    def shutdown(self, how: int, /) -> None: ...
+
+
+class _ItemSink(Protocol):
+    """The enqueue surface ``queue.Queue`` and ``asyncio.Queue`` share.
+
+    ``put_nowait`` is the only enqueue both offer. On the registrations'
+    queues, which are always unbounded (the bound lives in
+    :func:`~niwaki.transport._subscription_socket._offer`), it delivers
+    exactly like the blocking ``queue.Queue.put``: ``block`` only matters
+    while waiting for a free slot, and an unbounded queue always has one.
+    """
+
+    def qsize(self) -> int: ...
+
+    def put_nowait(self, item: _QueueItem, /) -> None: ...
+
+
+class _RegistrationState(Protocol):
+    """The registration fields the shared helpers read or write.
+
+    Satisfied structurally by both
+    :class:`~niwaki.transport._subscription_socket._Registration` and the
+    async module's ``_AsyncRegistration`` (identical fields, a different
+    queue type). Only the backpressure bookkeeping is writable here; everything
+    else is read-only to the shared helpers.
+    """
+
+    @property
+    def path(self) -> str: ...
+
+    @property
+    def params(self) -> dict[str, str]: ...
+
+    @property
+    def refresh_timeout(self) -> int | None: ...
+
+    @property
+    def wire_id(self) -> str: ...
+
+    @property
+    def queue(self) -> _ItemSink: ...
+
+    @property
+    def next_refresh_at(self) -> float: ...
+
+    @property
+    def consecutive_refresh_failures(self) -> int: ...
+
+    @property
+    def max_pending(self) -> int: ...
+
+    dropped_total: int
+    overflow_open: bool
 
 
 @runtime_checkable
 class MoWriter(Protocol):
     """Structural type for synchronous ACI write transports."""
 
-    def post_mo(self, dn: str, payload: dict[str, Any]) -> None:
+    def post_mo(self, dn: str, payload: Mapping[str, object]) -> None:
         """POST an APIC envelope to the given DN.
 
         Args:
@@ -54,14 +129,14 @@ class AsyncMoWriter(Protocol):
     Example — minimal test stub::
 
         class FakeSession:
-            async def post_mo(self, dn: str, payload: dict[str, Any]) -> None:
+            async def post_mo(self, dn: str, payload: Mapping[str, object]) -> None:
                 print(f"POST {dn}")
 
             async def delete_mo(self, dn: str) -> None:
                 print(f"DELETE {dn}")
     """
 
-    async def post_mo(self, dn: str, payload: dict[str, Any]) -> None:
+    async def post_mo(self, dn: str, payload: Mapping[str, object]) -> None:
         """POST an APIC envelope to the given DN.
 
         Args:

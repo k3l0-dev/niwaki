@@ -105,7 +105,9 @@ class TestShimBoundaries:
         with warnings.catch_warnings(record=True) as caught:
             warnings.simplefilter("always")
             _ = aci.tenant("t").vrf("v").pim_ctx  # node path
-            _ = aci.provider_profile  # root-proxy path (Niwaki.__getattr__)
+            # root-proxy path (Niwaki.__getattr__); the alias is synthetic, so
+            # the typed root does not know it.
+            _ = aci.provider_profile  # pyright: ignore[reportAttributeAccessIssue]
         assert len(caught) == 2
         for record in caught:
             assert record.filename == __file__, record.filename

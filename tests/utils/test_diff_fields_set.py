@@ -9,6 +9,8 @@ from niwaki.models._generated.fv.fvSubnet import fvSubnet
 from niwaki.models.base import ManagedObject
 from niwaki.utils.diff import mo_diff
 
+from .._jsonpath import as_object, at
+
 
 def _current_bd(**wire_attrs: str) -> fvBD:
     """A BD as it would come back from the APIC (wire names).
@@ -44,7 +46,7 @@ class TestRespectFieldsSet:
         current = _current_bd(unicastRoute="no")
         delta = mo_diff(desired, current, respect_fields_set=True)  # type: ignore[arg-type]
         assert delta is not None
-        assert delta.to_apic()["fvBD"]["attributes"] == {
+        assert as_object(at(delta.to_apic(), "fvBD", "attributes")) == {
             "name": "web",
             "unicastRoute": "true",
         }

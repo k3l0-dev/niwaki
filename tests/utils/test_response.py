@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import pytest
 
+from niwaki._json import JsonObject
 from niwaki.exceptions import DeserializationError
 from niwaki.models._generated.fv.fvBD import fvBD
 from niwaki.models._generated.fv.fvTenant import fvTenant
@@ -15,9 +16,9 @@ from niwaki.utils.response import parse_imdata
 
 # ── Fixtures ──────────────────────────────────────────────────────────────────
 
-_BD_ITEM = {"fvBD": {"attributes": {"name": "web"}}}
-_TNT_ITEM = {"fvTenant": {"attributes": {"name": "prod"}}}
-_ERR_ITEM = {"error": {"attributes": {"code": "400", "text": "Bad request"}}}
+_BD_ITEM: JsonObject = {"fvBD": {"attributes": {"name": "web"}}}
+_TNT_ITEM: JsonObject = {"fvTenant": {"attributes": {"name": "prod"}}}
+_ERR_ITEM: JsonObject = {"error": {"attributes": {"code": "400", "text": "Bad request"}}}
 
 
 # ── parse_imdata ──────────────────────────────────────────────────────────────
@@ -25,14 +26,14 @@ _ERR_ITEM = {"error": {"attributes": {"code": "400", "text": "Bad request"}}}
 
 class TestParseImdata:
     def test_nominal_single_object(self) -> None:
-        raw = {"totalCount": "1", "imdata": [_BD_ITEM]}
+        raw: JsonObject = {"totalCount": "1", "imdata": [_BD_ITEM]}
         result = parse_imdata(raw)
         assert len(result) == 1
         assert isinstance(result[0], fvBD)
         assert result[0].name == "web"
 
     def test_nominal_multiple_objects(self) -> None:
-        raw = {"imdata": [_BD_ITEM, _TNT_ITEM]}
+        raw: JsonObject = {"imdata": [_BD_ITEM, _TNT_ITEM]}
         result = parse_imdata(raw)
         assert len(result) == 2
         assert isinstance(result[0], fvBD)
@@ -45,13 +46,13 @@ class TestParseImdata:
         assert parse_imdata({}) == []
 
     def test_error_items_are_skipped(self) -> None:
-        raw = {"imdata": [_ERR_ITEM, _BD_ITEM]}
+        raw: JsonObject = {"imdata": [_ERR_ITEM, _BD_ITEM]}
         result = parse_imdata(raw)
         assert len(result) == 1
         assert isinstance(result[0], fvBD)
 
     def test_unknown_class_falls_back_to_managed_object(self) -> None:
-        raw = {"imdata": [{"unknownClass": {"attributes": {"name": "x"}}}]}
+        raw: JsonObject = {"imdata": [{"unknownClass": {"attributes": {"name": "x"}}}]}
         result = parse_imdata(raw)
         assert len(result) == 1
         assert type(result[0]) is ManagedObject

@@ -203,6 +203,10 @@ class Catalog:
         self._apic_version: str | None = None
         self._fts: bool | None = None
         self._meta: dict[str, ClassMeta] = {}
+        self._secure: frozenset[tuple[str, str]] | None = None
+        self._exportable: frozenset[str] | None = None
+        self._concrete: frozenset[str] | None = None
+        self._never_creatable: frozenset[str] | None = None
 
     @property
     def _connection(self) -> sqlite3.Connection:
@@ -320,7 +324,9 @@ class Catalog:
         fields = [_FLAG_FIELDS[key] for key in order]
         out: dict[str, PropFlags] = {}
         for wire, packed in con.execute(
-            "SELECT wire_name, flags FROM prop WHERE class_id=?", (row[0],)
+            "SELECT s.wire_name, s.flags FROM class_prop c JOIN prop_sig s ON s.id = c.sig_id "
+            "WHERE c.class_id=? ORDER BY s.wire_name",
+            (row[0],),
         ):
             values = {field: bool(packed & (1 << i)) for i, field in enumerate(fields)}
             out[wire] = PropFlags(**values)
@@ -356,8 +362,12 @@ class Catalog:
         shaped: dict[str, dict[str, object]] = {}
         wire_to_kind: dict[str, str | None] = {}
         naming: set[str] = set()
+        # Wire-name order is part of the answer: ``wire_to_kind`` iterates in
+        # it, and the naming resolver's collision fallback depends on it.
         for wire, label_id, base_type_id, flags in con.execute(
-            "SELECT wire_name, label_id, base_type_id, flags FROM prop WHERE class_id=?",
+            "SELECT s.wire_name, s.label_id, s.base_type_id, s.flags "
+            "FROM class_prop c JOIN prop_sig s ON s.id = c.sig_id "
+            "WHERE c.class_id=? ORDER BY s.wire_name",
             (class_id,),
         ):
             is_naming = bool(flags & naming_bit)
@@ -435,8 +445,9 @@ class Catalog:
         meta = self.class_meta(class_name)
         props: list[PropDoc] = []
         for wire, p_label, p_comment, enum_id, default_val in con.execute(
-            "SELECT wire_name, label_id, comment_id, enum_id, default_val "
-            "FROM prop WHERE class_id=? ORDER BY wire_name",
+            "SELECT s.wire_name, s.label_id, s.comment_id, s.enum_id, s.default_val "
+            "FROM class_prop c JOIN prop_sig s ON s.id = c.sig_id "
+            "WHERE c.class_id=? ORDER BY s.wire_name",
             (class_id,),
         ):
             w = str(wire)
@@ -578,6 +589,111 @@ class Catalog:
             raise UnknownClassError(class_name)
         return str(row[0] or "")
 
+    # ── Schema-wide sets (internal consumers: secrets, snapshot, reconcile) ───
+    #
+    # Each answer is one scan, memoised on the instance for its lifetime: the
+    # sets are small next to the db and their callers hit them per object.
+
+    def _secure_props(self) -> frozenset[tuple[str, str]]:
+        """Every ``(class, prop)`` whose schema flags carry ``secure``.
+
+        Schema-wide — abstract, runtime and non-exportable classes included —
+        because a secret is a secret wherever it is read.  The raw material
+        of the redaction policy in :mod:`niwaki._secrets`; the flag alone is
+        not the policy (see :class:`PropFlags`).
+
+        Returns:
+            The ``(wire class name, wire property name)`` pairs, e.g.
+            ``("aaaUser", "pwd")``.
+
+        Raises:
+            FileNotFoundError: The catalogue ``.db`` is missing.
+            RuntimeError: The catalogue's flag layout does not match this
+                reader.
+        """
+        if self._secure is None:
+            secure_bit = 1 << self._flags_order().index("secure")
+            # The flag is tested on the ~25,900 signatures first (the ``IN``
+            # list is built once), then the memberships are walked against
+            # it — testing it per membership would unpack the flags of all
+            # 332,297 (class, property) rows.  ``IN (subquery)`` rather than a
+            # ``MATERIALIZED`` CTE: no slower (measured), and understood by
+            # sqlite builds older than 3.35.
+            self._secure = frozenset(
+                (str(cls), str(wire))
+                for cls, wire in self._connection.execute(
+                    "SELECT m.class_name, s.wire_name FROM class_prop c "
+                    "JOIN prop_sig s ON s.id = c.sig_id JOIN mo m ON m.id = c.class_id "
+                    "WHERE c.sig_id IN (SELECT id FROM prop_sig WHERE flags & ? != 0)",
+                    (secure_bit,),
+                )
+            )
+        return self._secure
+
+    def _exportable_classes(self) -> frozenset[str]:
+        """The concrete classes a configuration export carries.
+
+        Non-abstract classes the schema marks ``isExportable``, minus those
+        whose ``moCategory`` is ``FaultCurrent``: ``faultInst`` is exportable
+        yet runtime state, and a fault raising or clearing must not read as
+        configuration drift.  The snapshot's "keep" set.
+
+        Returns:
+            Wire class names, e.g. ``"fvBD"``.
+
+        Raises:
+            FileNotFoundError: The catalogue ``.db`` is missing.
+        """
+        if self._exportable is None:
+            self._exportable = frozenset(
+                str(name)
+                for (name,) in self._connection.execute(
+                    "SELECT class_name FROM mo WHERE is_exportable=1 AND is_abstract=0"
+                    " AND mo_category != 'FaultCurrent'"
+                )
+            )
+        return self._exportable
+
+    def _concrete_classes(self) -> frozenset[str]:
+        """Every non-abstract class — the ones an APIC can hold instances of.
+
+        Returns:
+            Wire class names.
+
+        Raises:
+            FileNotFoundError: The catalogue ``.db`` is missing.
+        """
+        if self._concrete is None:
+            self._concrete = frozenset(
+                str(name)
+                for (name,) in self._connection.execute(
+                    "SELECT class_name FROM mo WHERE is_abstract=0"
+                )
+            )
+        return self._concrete
+
+    def _never_creatable_classes(self) -> frozenset[str]:
+        """Every class whose ``isCreatableDeletable`` is not ``"always"``.
+
+        Objects of these classes are materialised by the fabric (relations,
+        singletons, derived state), never created by an operator — which is
+        what lets a reconciliation file them as implicit rather than extra.
+
+        Returns:
+            Wire class names, e.g. ``"fvRsCtx"``.
+
+        Raises:
+            FileNotFoundError: The catalogue ``.db`` is missing.
+        """
+        if self._never_creatable is None:
+            self._never_creatable = frozenset(
+                str(name)
+                for (name,) in self._connection.execute(
+                    "SELECT class_name FROM mo WHERE is_creatable_deletable != 'always'"
+                )
+            )
+        return self._never_creatable
+
     # ── Full-text search (FTS5 where available, LIKE fallback everywhere) ─────
 
     def _fts_available(self) -> bool:
@@ -618,14 +734,19 @@ class Catalog:
     def find_prop(self, term: str, *, limit: int = 50) -> list[tuple[str, str]]:
         """``(class, wire property)`` pairs whose property name or label matches ``term``.
 
-        Answers "which class carries a MAC?" — a scan of the ``prop`` table, the
-        complement to class-level :meth:`search`.
+        Answers "which class carries a MAC?" — a scan of the property
+        signatures, the complement to class-level :meth:`search`.  The term is
+        matched once against the ~25,900 distinct signatures (never per
+        membership), and the classes carrying a match are then read off the
+        memberships.
         """
         rows = self._connection.execute(
-            "SELECT m.class_name, p.wire_name FROM prop p JOIN mo m ON m.id = p.class_id "
-            "LEFT JOIN label_pool l ON l.id = p.label_id "
-            "WHERE p.wire_name LIKE ? OR l.text LIKE ? "
-            "ORDER BY m.class_name, p.wire_name LIMIT ?",
+            "SELECT m.class_name, s.wire_name FROM class_prop c "
+            "JOIN prop_sig s ON s.id = c.sig_id JOIN mo m ON m.id = c.class_id "
+            "WHERE c.sig_id IN ("
+            "SELECT h.id FROM prop_sig h LEFT JOIN label_pool l ON l.id = h.label_id "
+            "WHERE h.wire_name LIKE ? OR l.text LIKE ?) "
+            "ORDER BY m.class_name, s.wire_name LIMIT ?",
             (f"%{term}%", f"%{term}%", limit),
         ).fetchall()
         return [(str(c), str(w)) for c, w in rows]

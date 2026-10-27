@@ -31,10 +31,13 @@ permanent, silent drift.
 from __future__ import annotations
 
 from collections.abc import Callable, Iterable, Mapping
+from dataclasses import dataclass
 from enum import Enum
 from functools import cache
-from types import UnionType
-from typing import Annotated, Any, Union, get_args, get_origin
+from types import MappingProxyType, UnionType
+from typing import Annotated, Self, Union, final, get_args, get_origin
+
+from pydantic_core import SchemaValidator, ValidationError, core_schema
 
 # APIC truthy/falsy string representations for bool fields.
 _APIC_TRUE = frozenset(("yes", "true", "1", "on"))
@@ -66,7 +69,7 @@ pydantic looks at the union.
 # ── Python → wire ─────────────────────────────────────────────────────────────
 
 
-def to_wire(value: Any) -> str:
+def to_wire(value: object) -> str:
     """Render *value* the way the APIC stores it.
 
     Args:
@@ -98,19 +101,21 @@ def to_wire(value: Any) -> str:
     return str(value)
 
 
-def _canonical_order(members: Iterable[Any]) -> list[str]:
+def _canonical_order(members: Iterable[object]) -> list[str]:
     """Order flag members by their enum's declaration (ascending bit weight)."""
     values = list(members)
     if not values:
         return []
     first = values[0]
     if isinstance(first, Enum):
-        order = list(type(first))
-        return [str(m.value) for m in sorted(values, key=order.index)]
+        order: list[object] = list(type(first))
+        return [
+            str(m.value) if isinstance(m, Enum) else str(m) for m in sorted(values, key=order.index)
+        ]
     return sorted(str(v) for v in values)
 
 
-def to_filter(value: Any) -> str:
+def to_filter(value: object) -> str:
     """Render *value* for an APIC query filter.
 
     The filter grammar has its own booleans (``yes``/``no``); everything else
@@ -127,7 +132,7 @@ def to_filter(value: Any) -> str:
     return to_wire(value)
 
 
-def parse_flags(value: Any) -> Any:
+def parse_flags(value: object) -> object:
     """Accept every reasonable spelling of a set of flags (a ``BeforeValidator``).
 
     Generated models declare a bitmask as ``frozenset[SomeEnum]``, and Pydantic
@@ -149,11 +154,27 @@ def parse_flags(value: Any) -> Any:
         member all validate on their own.
     """
     if isinstance(value, str):
-        return [part for part in (piece.strip() for piece in value.split(_FLAG_SEP)) if part]
+        return split_flags(value)
     return value
 
 
-def named_number(aliases: Mapping[str, str]) -> Callable[[Any], Any]:
+def split_flags(value: str) -> list[str]:
+    """Split the wire form of a bitmask into its member names.
+
+    Args:
+        value: The comma-joined form the APIC speaks (``"public,shared"``).
+
+    Returns:
+        The non-empty, stripped member names, in wire order — ``[]`` for ``""``.
+
+    Example:
+        >>> split_flags(" public, shared,")
+        ['public', 'shared']
+    """
+    return [part for part in (piece.strip() for piece in value.split(_FLAG_SEP)) if part]
+
+
+def named_number(aliases: Mapping[str, str]) -> Callable[[object], object]:
     """Build the validator that stores a number under the name the APIC gives it.
 
     592 numeric properties in the ACI schemas declare *named* values, and the
@@ -178,7 +199,7 @@ def named_number(aliases: Mapping[str, str]) -> Callable[[Any], Any]:
         everything else passes through untouched.
     """
 
-    def canonicalise(value: Any) -> Any:
+    def canonicalise(value: object) -> object:
         if isinstance(value, int | float) and not isinstance(value, bool):
             return aliases.get(_number_key(value), value)
         return value
@@ -193,10 +214,186 @@ def _number_key(value: int | float) -> str:
     return str(value)
 
 
+@final
+@dataclass(frozen=True, slots=True, eq=False, repr=False)
+class NamedRegister:
+    """The names of a *giant* named number, held once and shared by every field.
+
+    A named number usually inlines its names in the field itself
+    (``int | Literal["http", …]`` plus a :func:`named_number` table).  A few
+    schema properties declare tens of thousands of names — the fault code of
+    ``faultInst``, ``faultLcP``, ``faultSevAsnP``, ``eventSevAsnP`` and
+    ``callhomeSmartCallhomeFault`` declares 80,512 of them, the same in all
+    five.  Inlined, that is megabytes of source per model and half a second to
+    import it.  So the generator emits such a register **once**, in
+    ``niwaki.models._generated._registers``, and each field carries the shared
+    instance in its ``Annotated`` metadata, next to its two validators::
+
+        code: Annotated[
+            int | str,
+            BeforeValidator(member_of(REGISTER)),
+            AfterValidator(named_number(REGISTER.aliases)),
+            REGISTER,
+        ] = "generic"
+
+    The field behaves exactly as the inlined form did: a declared name is
+    stored verbatim, a number with a name is stored under that name, a number
+    without one stays a number, anything else is refused.
+
+    The value is immutable: ``names`` is a ``frozenset`` and ``aliases`` a
+    read-only mapping view.  Two registers are equal when their content is.
+
+    Attributes:
+        names: Every name the field accepts (``"F1000"``, ``"generic"``, …).
+        aliases: The number, as a decimal string, → the name the APIC stores it
+            under (``{"1000": "F1000", "0": "generic"}``) — the table
+            :func:`named_number` takes.
+
+    Raises:
+        ValueError: At construction, when the register has no name, or when an
+            alias points at a name the register does not hold.
+
+    Example:
+        >>> register = NamedRegister(
+        ...     names=frozenset({"generic", "F1000"}), aliases={"0": "generic", "1000": "F1000"}
+        ... )
+        >>> register.aliases["1000"]
+        'F1000'
+        >>> register
+        NamedRegister(<2 names, 2 aliases>)
+    """
+
+    names: frozenset[str]
+    aliases: Mapping[str, str]
+
+    def __post_init__(self) -> None:
+        names = frozenset(self.names)
+        aliases = MappingProxyType(dict(self.aliases))
+        if not names:
+            raise ValueError("a named register must hold at least one name")
+        if unknown := set(aliases.values()) - names:
+            raise ValueError(
+                f"named register aliases point at {len(unknown)} undeclared name(s): "
+                f"{sorted(unknown)[:5]}"
+            )
+        object.__setattr__(self, "names", names)
+        object.__setattr__(self, "aliases", aliases)
+
+    @classmethod
+    def decode(cls, numbers: str, names: str, unaliased: str = "") -> Self:
+        """Rebuild a register from its compact, whitespace-separated encoding.
+
+        The generated ``_registers`` module stores a register as text rather
+        than as an 80,000-element literal: splitting a string is an order of
+        magnitude cheaper to import than parsing and building a literal.
+
+        Args:
+            numbers: The alias keys, whitespace-separated (``"0 1000"``).
+            names: The name of each alias key, in the same order
+                (``"generic F1000"``).
+            unaliased: The names no number points at, whitespace-separated.
+
+        Returns:
+            The register: every name of *names* and *unaliased*, and the
+            ``numbers[i]`` → ``names[i]`` aliases.
+
+        Raises:
+            ValueError: *numbers* and *names* do not pair up, an alias key is
+                repeated, or the register would be empty.
+
+        Example:
+            >>> NamedRegister.decode("0 1000", "generic F1000").aliases["0"]
+            'generic'
+        """
+        keys = numbers.split()
+        targets = names.split()
+        if len(keys) != len(targets):
+            raise ValueError(
+                f"a named register encodes {len(keys)} alias key(s) for {len(targets)} name(s)"
+            )
+        aliases = dict(zip(keys, targets, strict=True))
+        if len(aliases) != len(keys):
+            raise ValueError("a named register encodes the same alias key twice")
+        return cls(names=frozenset(targets).union(unaliased.split()), aliases=aliases)
+
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, NamedRegister):
+            return NotImplemented
+        return self.names == other.names and self.aliases == other.aliases
+
+    def __hash__(self) -> int:
+        # A frozenset caches its own hash: equal registers hold equal names.
+        return hash(self.names)
+
+    def __repr__(self) -> str:
+        # Never the content: a register sits in field metadata, and 80,512
+        # names in every FieldInfo repr or validation error would drown them.
+        return f"NamedRegister(<{len(self.names):,} names, {len(self.aliases):,} aliases>)"
+
+
+def member_of(register: NamedRegister) -> Callable[[object], object]:
+    """Build the ``BeforeValidator`` of a field backed by a :class:`NamedRegister`.
+
+    The field is declared ``int | str`` — the honest static type of "a number,
+    or the name the APIC gives it" — but not every string is acceptable: only
+    the register's names, and strings that read as an integer.  This validator
+    decides before the union sees the value:
+
+    * a string that is one of the names passes, as a plain ``str``;
+    * anything else must be an integer as pydantic reads one in lax mode
+      (``1000``, ``"1000"``, ``" +1_000"``, ``"1000.0"``, ``1000.0``,
+      ``True``, ``b"1000"``) and becomes that ``int`` — :func:`named_number`
+      then stores it under its name when it has one;
+    * the rest is refused: a misspelt or unknown name (``"f1000"``,
+      ``"F1000 "``), a name sent as bytes, a fractional or non-finite number,
+      ``None``, a container.
+
+    These are exactly the values the inlined ``int | Literal[...]`` accepted:
+    its literal arm took the names, its integer arm everything else.
+
+    Args:
+        register: The shared register the field is backed by.
+
+    Returns:
+        A ``BeforeValidator`` callable returning a name (``str``) or an ``int``.
+
+    Raises:
+        ValueError: From the returned callable, for any value outside the
+            register that does not read as an integer (pydantic reports it
+            as a ``value_error``).
+
+    Example:
+        >>> check = member_of(NamedRegister.decode("1000", "F1000"))
+        >>> check("F1000"), check("1000"), check(7.0)
+        ('F1000', 1000, 7)
+    """
+    names = register.names
+
+    def check(value: object) -> object:
+        if isinstance(value, str) and value in names:
+            # A str subclass (a StrEnum member) is stored as the plain name.
+            return str.__str__(value)
+        try:
+            return _lax_int().validate_python(value)
+        except ValidationError:
+            raise ValueError(
+                f"{value!r} is neither one of the {len(names):,} names of this register "
+                "nor an integer"
+            ) from None
+
+    return check
+
+
+@cache
+def _lax_int() -> SchemaValidator:
+    """Pydantic's own lax ``int`` validation, built once on first use."""
+    return SchemaValidator(core_schema.int_schema())
+
+
 # ── Wire → Python ─────────────────────────────────────────────────────────────
 
 
-def from_wire(annotation: Any, value: Any) -> Any:
+def from_wire(annotation: object, value: object) -> object:
     """Coerce a raw APIC attribute onto its declared Python type.
 
     ``from_apic`` builds instances through ``model_construct``, which runs no
@@ -221,7 +418,7 @@ def from_wire(annotation: Any, value: Any) -> Any:
     return coerce(value)
 
 
-def _unwrap(annotation: Any) -> Any:
+def _unwrap(annotation: object) -> object:
     """Strip ``Annotated[X, ...]`` down to ``X``, and ``Flags[E]`` down to ``frozenset[E]``.
 
     ``Flags`` is a PEP 695 alias, so ``get_origin(Flags[E])`` is the alias itself
@@ -240,7 +437,7 @@ def _unwrap(annotation: Any) -> Any:
 
 
 @cache
-def _coercer(annotation: Any) -> Any:
+def _coercer(annotation: object) -> Callable[[object], object]:
     """Build (once per annotation) the callable that coerces a wire value."""
     origin = get_origin(annotation)
 
@@ -281,7 +478,7 @@ def _coercer(annotation: Any) -> Any:
     return _identity
 
 
-def _to_enum(enum_cls: Any, value: Any) -> Any:
+def _to_enum(enum_cls: type[Enum], value: object) -> object:
     """Coerce onto an enum member; an unknown value is handed back untouched."""
     if isinstance(value, enum_cls):
         return value
@@ -291,11 +488,11 @@ def _to_enum(enum_cls: Any, value: Any) -> Any:
         return value
 
 
-def _identity(value: Any) -> Any:
+def _identity(value: object) -> object:
     return value
 
 
-def _to_bool(value: Any) -> Any:
+def _to_bool(value: object) -> object:
     if isinstance(value, bool):
         return value
     text = str(value).lower()
@@ -306,7 +503,7 @@ def _to_bool(value: Any) -> Any:
     return value
 
 
-def _to_int(value: Any) -> Any:
+def _to_int(value: object) -> object:
     if isinstance(value, bool) or not isinstance(value, str):
         return value
     try:
@@ -315,7 +512,7 @@ def _to_int(value: Any) -> Any:
         return value
 
 
-def _to_float(value: Any) -> Any:
+def _to_float(value: object) -> object:
     if not isinstance(value, str):
         return value
     try:
@@ -324,7 +521,7 @@ def _to_float(value: Any) -> Any:
         return value
 
 
-def _to_flags(member: Any, value: Any) -> Any:
+def _to_flags(member: object, value: object) -> object:
     """Parse ``"public,shared"`` into a set of enum members.
 
     An unknown member is kept as-is (the APIC is trusted); the whole value is
@@ -335,7 +532,7 @@ def _to_flags(member: Any, value: Any) -> Any:
         return frozenset(value)
     if not isinstance(value, str):
         return value
-    parts = [part for part in (p.strip() for p in value.split(_FLAG_SEP)) if part]
+    parts = split_flags(value)
     if not parts:
         return frozenset()
     if isinstance(member, type) and issubclass(member, Enum):
@@ -349,4 +546,13 @@ def _to_flags(member: Any, value: Any) -> Any:
     return frozenset(parts)
 
 
-__all__ = ["Flags", "from_wire", "named_number", "parse_flags", "to_filter", "to_wire"]
+__all__ = [
+    "Flags",
+    "NamedRegister",
+    "from_wire",
+    "member_of",
+    "named_number",
+    "parse_flags",
+    "to_filter",
+    "to_wire",
+]

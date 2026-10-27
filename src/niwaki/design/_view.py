@@ -17,7 +17,7 @@ the 2.0 code emitter consumes (``to_code`` takes a view, never a snapshot).
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, Any, Literal
+from typing import TYPE_CHECKING, Literal
 
 if TYPE_CHECKING:
     from collections.abc import Iterator
@@ -46,7 +46,7 @@ class DesignViewBind:
     alias: str
     target_class: str
     target: str
-    attrs: dict[str, Any]
+    attrs: dict[str, object]
 
 
 @dataclass(frozen=True)
@@ -76,8 +76,8 @@ class DesignViewNode:
     aci_class: str
     label: str
     position: str | None
-    naming: dict[str, Any]
-    attrs: dict[str, Any]
+    naming: dict[str, object]
+    attrs: dict[str, object]
     raw_attrs: dict[str, str]
     binds: tuple[DesignViewBind, ...]
     children: tuple[DesignViewNode, ...]

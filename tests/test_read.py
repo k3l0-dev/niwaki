@@ -12,6 +12,7 @@ from typing import Any
 
 import pytest
 
+from niwaki._json import JsonObject
 from niwaki._read import build_tree, read_subtree, read_subtree_async, shard_classes
 from niwaki.exceptions import DeserializationError, NiwakiError
 
@@ -146,7 +147,10 @@ class TestBuildTree:
         assert issubclass(DeserializationError, NiwakiError)
 
     def test_a_malformed_envelope_fails_loud_and_typed(self) -> None:
-        two_keys = {"fvBD": {"attributes": {"dn": "x"}}, "fvCtx": {"attributes": {"dn": "y"}}}
+        two_keys: JsonObject = {
+            "fvBD": {"attributes": {"dn": "x"}},
+            "fvCtx": {"attributes": {"dn": "y"}},
+        }
         with pytest.raises(DeserializationError, match="one-key envelope"):
             build_tree([two_keys], "uni/tn-p")
 

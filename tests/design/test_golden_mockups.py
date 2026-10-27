@@ -14,6 +14,8 @@ from typing import Any
 from niwaki.design import Cursor, tenant
 from tests.design.conftest import find_child
 
+from .._jsonpath import as_objects, at
+
 
 def _mockup_networking() -> Cursor:
     """Mockup 1 — tenants/apps/EPGs/BDs/VRFs/L3Outs."""
@@ -100,7 +102,7 @@ def _mockup_contracts() -> Cursor:
 
 
 def _tenant_env(design: Cursor) -> dict[str, Any]:
-    (env,) = design.to_payload()["polUni"]["children"]
+    (env,) = as_objects(at(design.to_payload(), "polUni", "children"))
     return env
 
 

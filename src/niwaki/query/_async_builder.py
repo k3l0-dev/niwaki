@@ -1,8 +1,8 @@
-"""Asynchronous ACI query builder.
+"""ACI query builder — the execution methods.
 
-:class:`AsyncQuery` mirrors :class:`~niwaki.query.Query` for async contexts.
-All execution methods are coroutines (``fetch``, ``first``, ``count``) or
-async generators (``stream``).
+:class:`AsyncQuery` adds the execution methods (``fetch``, ``first``, ``one``,
+``exists``, ``count``, ``stream``, ``subscribe``, ``execute_raw``) on top of
+the shared builder state in :class:`~niwaki.query._base._QueryBase`.
 
 Typical usage::
 
@@ -10,30 +10,30 @@ Typical usage::
     from niwaki.query import wcard
 
     async with AsyncNiwaki(...) as aci:
-        # Jargon navigation — no class name required
-        bds = await aci.root.tenant("prod").bd().fetch()
+        # Jargon navigation — no class name needed
+        bds = await aci.root.tenant("prod").bd().where(name="web").fetch()
 
-        # Global class query with filter
-        bds = await aci.query(fvBD).where(wcard("name", "prod-*")).fetch()
+        # Class-level global query, streamed page by page
+        async for bd in aci.query(fvBD).where(wcard("name", "prod-*")).stream():
+            print(bd.name)
 
-        # Concurrent queries via gather()
-        tenants, bds = await aci.gather(
-            aci.query(fvTenant).fetch(),
-            aci.root.tenant("prod").bd().fetch(),
-        )
-
-        # Async streaming
-        async for bd in aci.query(fvBD).stream():
-            await process(bd)
+        # Unregistered / read-only class by string
+        nodes = await aci.query("topSystem").naming_only().fetch()
 """
 
 from __future__ import annotations
 
 from collections.abc import AsyncIterator
-from typing import TYPE_CHECKING, Any, Never, TypeVar, cast
+from typing import (
+    TYPE_CHECKING,
+    Never,  # unasync: async-only
+    TypeVar,
+    cast,
+)
 
 from niwaki.models.base import ManagedObject
 from niwaki.query._base import _QueryBase  # pyright: ignore[reportPrivateUsage]
+from niwaki.transport._errors import json_data, total_count
 from niwaki.transport._subscription_socket import _DEFAULT_MAX_PENDING
 from niwaki.transport.session_async import AsyncApicSession
 
@@ -44,15 +44,19 @@ _T = TypeVar("_T", bound=ManagedObject)
 
 
 class AsyncQuery(_QueryBase[_T]):
-    """Fluent ACI query builder — asynchronous variant.
+    """Fluent ACI query builder.
 
-    Mirrors :class:`~niwaki.query.Query` with ``async def`` execution methods.
-    Every accumulator method is synchronous and returns a new :class:`AsyncQuery`
-    (same immutable-builder pattern as the sync variant).
+    Build queries by chaining scope, filter, and enrichment methods, then
+    execute with :meth:`fetch`, :meth:`first`, :meth:`one`, :meth:`exists`,
+    :meth:`count`, or :meth:`stream` — or iterate the query itself.  Only the
+    execution methods touch the network.
+
+    Every accumulator method returns a **new** :class:`AsyncQuery` instance so
+    partial queries can be safely stored and reused.
 
     Created by :meth:`~niwaki.AsyncNiwaki.query` and
     :meth:`~niwaki.AsyncNiwakiNode.query`, or by jargon navigation without
-    a name argument on an :class:`~niwaki.AsyncNiwakiNode`.
+    a name argument (e.g. ``aci.root.tenant("prod").bd()``).
 
     Args:
         cls:      ACI class type or plain string class name.
@@ -65,17 +69,15 @@ class AsyncQuery(_QueryBase[_T]):
             # All BDs in tenant "prod"
             bds = await aci.root.tenant("prod").bd().fetch()
 
-            # First matching
+            # First BD matching a name
             bd = await aci.query(fvBD).where(name="web").first()
 
-            # Count
-            n = await aci.query(fvBD).under("uni/tn-prod").count()
+            # Count BDs with flood enabled
+            n = await aci.query(fvBD).where(arpFlood=True).count()
 
-            # Concurrent reads
-            tenants, bds = await aci.gather(
-                aci.query(fvTenant).fetch(),
-                aci.root.tenant("prod").bd().fetch(),
-            )
+            # Stream a very large result set
+            async for bd in aci.query(fvBD).stream():
+                await process(bd)
     """
 
     def __init__(
@@ -88,13 +90,16 @@ class AsyncQuery(_QueryBase[_T]):
         super().__init__(cls, scope_dn=scope_dn)
         self._session = session
 
-    # ── Async execution ───────────────────────────────────────────────────────
+    # ── Execution ─────────────────────────────────────────────────────────────
 
     async def fetch(self) -> list[_T]:
         """Execute the query and return all matching objects.
 
         Transparently paginates through all APIC pages.  For very large result
-        sets consider :meth:`stream` to process objects incrementally.
+        sets (tens of thousands of objects) consider :meth:`stream` to process
+        objects page-by-page without holding everything in memory at once.  When
+        the query is limited by a ``[:n]`` slice, only that many objects are
+        fetched.
 
         Returns:
             List of typed :class:`~niwaki.models.base.ManagedObject` instances.
@@ -110,18 +115,18 @@ class AsyncQuery(_QueryBase[_T]):
 
             bds = await aci.root.tenant("prod").bd().fetch()
         """
-        from niwaki.utils.response import parse_imdata
+        from niwaki.utils.response import parse_envelopes
 
         if self._limit is not None:
             return [obj async for obj in self.stream()]
         path, params = self.build()
         raw = await self._session._get_all_pages(path, params, page_size=self._page_size)
-        return cast(list[_T], parse_imdata({"imdata": raw}))
+        return cast(list[_T], parse_envelopes(raw))
 
     def __aiter__(self) -> AsyncIterator[_T]:
-        """Async-iterate the query lazily — ``async for obj in query``.
+        """Iterate the query lazily — ``async for obj in query`` streams page by page.
 
-        Equivalent to :meth:`stream`; it also makes ``[x async for x in query]``
+        Equivalent to :meth:`stream`; it also makes ``[obj async for obj in query]``
         and a ``query[:n]`` slice work directly, honouring any limit set by
         slicing.
 
@@ -130,6 +135,7 @@ class AsyncQuery(_QueryBase[_T]):
         """
         return self.stream()
 
+    # unasync: async-only-begin
     def __iter__(self) -> Never:
         """Reject synchronous iteration — an async query needs ``async for``.
 
@@ -142,11 +148,13 @@ class AsyncQuery(_QueryBase[_T]):
             "or 'await query.fetch()'"
         )
 
+    # unasync: async-only-end
+
     async def first(self) -> _T | None:
         """Execute the query and return the first matching object, or ``None``.
 
-        Requests only a single object (``page=0&page-size=1``) — more efficient
-        than ``(await fetch())[0]`` for large result sets.
+        More efficient than indexing the result of :meth:`fetch` — internally
+        requests only a single object (``page=0&page-size=1``).
 
         Returns:
             First matching instance, or ``None`` when the result set is empty.
@@ -159,8 +167,10 @@ class AsyncQuery(_QueryBase[_T]):
         Example::
 
             bd = await aci.root.tenant("prod").bd().where(name="web").first()
+            if bd is None:
+                print("not found")
         """
-        from niwaki.utils.response import parse_imdata
+        from niwaki.utils.response import parse_envelopes
 
         if self._limit == 0:
             # A q[:0] slice matches nothing anywhere else (fetch, count,
@@ -169,7 +179,7 @@ class AsyncQuery(_QueryBase[_T]):
         path, params = self.build()
         params = {**params, "page": "0", "page-size": "1"}
         raw = await self._session._get_imdata(path, params)
-        objects = parse_imdata({"imdata": raw})
+        objects = parse_envelopes(raw)
         return cast(_T, objects[0]) if objects else None
 
     async def one(self) -> _T:
@@ -193,7 +203,7 @@ class AsyncQuery(_QueryBase[_T]):
             bd = await aci.query(fvBD).where(name="web").one()
         """
         from niwaki.exceptions._query import MultipleResultsError, NoResultError
-        from niwaki.utils.response import parse_imdata
+        from niwaki.utils.response import parse_envelopes
 
         if self._limit == 0:
             raise NoResultError(f"one() matched no {self._aci_class} object (limit 0)")
@@ -204,7 +214,7 @@ class AsyncQuery(_QueryBase[_T]):
         probe = "1" if self._limit == 1 else "2"
         params = {**params, "page": "0", "page-size": probe}
         raw = await self._session._get_imdata(path, params)
-        objects = parse_imdata({"imdata": raw})
+        objects = parse_envelopes(raw)
         if not objects:
             raise NoResultError(f"one() matched no {self._aci_class} object")
         if len(objects) > 1:
@@ -230,7 +240,9 @@ class AsyncQuery(_QueryBase[_T]):
     async def count(self) -> int:
         """Return the count of matching objects without fetching them.
 
-        Issues a single one-object page and reads the APIC ``totalCount``.
+        Issues a single one-object page and reads the APIC ``totalCount`` — this
+        composes with any query and works on every APIC version (6.0 rejects the
+        ``count-only`` argument).
 
         Returns:
             Integer count of objects matching the current query.
@@ -243,6 +255,7 @@ class AsyncQuery(_QueryBase[_T]):
         Example::
 
             n = await aci.query(fvBD).under("uni/tn-prod").count()
+            print(f"{n} BDs in tenant prod")
         """
         if self._limit == 0:
             return 0
@@ -251,16 +264,16 @@ class AsyncQuery(_QueryBase[_T]):
         # unlike "count-only", this composes with any query and every
         # APIC version (6.0 rejects the count-only argument).
         params = {**params, "page": "0", "page-size": "1"}
-        data: dict[str, Any] = (await self._session._request_checked(path, params)).json()
-        total = int(data.get("totalCount", 0))
+        resp = await self._session._request_checked(path, params)
+        total = total_count(resp, json_data(resp))
         # A sliced query (q[:n]) counts what it would actually yield.
         return min(total, self._limit) if self._limit is not None else total
 
     async def stream(self) -> AsyncIterator[_T]:
         """Yield objects one page at a time — O(page_size) memory footprint.
 
-        Preferred over :meth:`fetch` for large result sets.  Each ``yield``
-        returns one page of parsed objects.
+        Preferred over :meth:`fetch` for large result sets where loading
+        everything into a list would consume excessive memory.
 
         Yields:
             Typed :class:`~niwaki.models.base.ManagedObject` instances in
@@ -276,7 +289,7 @@ class AsyncQuery(_QueryBase[_T]):
             async for bd in aci.query(fvBD).stream():
                 await process(bd)
         """
-        from niwaki.utils.response import parse_imdata
+        from niwaki.utils.response import parse_envelopes
 
         limit = self._limit
         if limit == 0:
@@ -286,7 +299,7 @@ class AsyncQuery(_QueryBase[_T]):
         async for page in self._session._aiter_pages(
             path, params, page_size=self._effective_page_size()
         ):
-            for obj in cast(list[_T], parse_imdata({"imdata": page})):
+            for obj in cast(list[_T], parse_envelopes(page)):
                 yield obj
                 yielded += 1
                 if limit is not None and yielded >= limit:
@@ -297,14 +310,16 @@ class AsyncQuery(_QueryBase[_T]):
     ) -> AsyncSubscription[_T]:
         """Subscribe to push notifications for this query.
 
-        Mirrors :meth:`~niwaki.query.Query.subscribe` — a subscription is a
-        query plus ``subscription=yes`` at the wire level, so every
-        accumulator that maps onto the same GET mechanism carries over
-        unchanged, and state with no meaning on an open-ended push stream is
-        rejected up front, before any network I/O — see
-        :meth:`~niwaki.query._base._QueryBase._reject_unstreamable`. Because
-        that rejection is synchronous, it surfaces the moment this coroutine
-        is awaited, still before any network call.
+        A subscription is a query plus ``subscription=yes`` at the wire
+        level, so every accumulator that maps onto the same GET mechanism —
+        :meth:`where`, :meth:`under`, :meth:`self_only`/:meth:`children`,
+        :meth:`naming_only`/:meth:`config_only` — carries over unchanged.
+        State with no meaning on an open-ended push stream (``order_by()``, a
+        slice limit, subtree enrichment, ``also()``) is rejected up front,
+        before any network I/O — see :meth:`~niwaki.query._base._QueryBase._reject_unstreamable`
+        for exactly why each one is rejected. ``page_size()`` is silently
+        ignored (it never reaches a request parameter here — the subscribe
+        response is a single page).
 
         The APIC multiplexes every subscription for a session over **one**
         WebSocket, opened lazily on the first call to this method on the
@@ -322,8 +337,8 @@ class AsyncQuery(_QueryBase[_T]):
                 reconcile with a fresh read, exactly like a gap.
 
         Returns:
-            An :class:`~niwaki.query._async_subscription.AsyncSubscription`
-            — ``.initial`` for the synchronous snapshot, then async-iterate
+            The :class:`~niwaki.query._async_subscription.AsyncSubscription`
+            handle — ``.initial`` for the synchronous snapshot, then iterate it
             for live push events.
 
         Raises:
@@ -362,8 +377,22 @@ class AsyncQuery(_QueryBase[_T]):
 
         Returns:
             All matching objects across every page, typed via ``REGISTRY``.
+
+        To count matching objects, use :meth:`count` — it is the only counting
+        idiom this SDK trusts.  This method returns objects, so a parameter that
+        makes the APIC answer with a tally instead yields one ``moCount``
+        envelope where the caller expected their class.
+
+        Example::
+
+            # Start from build() so scoping and filters are already right, then
+            # set whatever the query grammar does not model yet and run it
+            # through the same typed, paginated path.
+            path, params = aci.query(fvBD).under("uni/tn-prod").build()
+            params["some-apic-parameter"] = "value"
+            objs = await aci.query(fvBD).execute_raw(path, params)
         """
-        from niwaki.utils.response import parse_imdata
+        from niwaki.utils.response import parse_envelopes
 
         raw = await self._session._get_all_pages(path, params, page_size=self._page_size)
-        return parse_imdata({"imdata": raw})
+        return parse_envelopes(raw)

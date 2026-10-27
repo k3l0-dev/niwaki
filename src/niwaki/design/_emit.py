@@ -21,7 +21,8 @@ from __future__ import annotations
 
 import keyword
 import re
-from typing import TYPE_CHECKING, Any
+from collections.abc import Mapping
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from niwaki.design._cursor import Cursor
@@ -32,7 +33,7 @@ if TYPE_CHECKING:
 _SLUG_RE = re.compile(r"[^a-z0-9_]+")
 
 
-def _slug(label: str, primary: str) -> str:
+def _slug(label: str, primary: object) -> str:
     base = f"{label}_{primary}" if primary else label
     slug = _SLUG_RE.sub("_", base.lower()).strip("_") or "node"
     if slug[0].isdigit():
@@ -42,7 +43,7 @@ def _slug(label: str, primary: str) -> str:
     return slug
 
 
-def _literal(value: Any) -> str:
+def _literal(value: object) -> str:
     """A replayable literal for one declared value.
 
     Values from an import are wire strings (replayed verbatim — the DSL's
@@ -59,11 +60,11 @@ def _literal(value: Any) -> str:
     return repr(to_wire(value))
 
 
-def _kwargs(attrs: dict[str, Any]) -> str:
+def _kwargs(attrs: Mapping[str, object]) -> str:
     return ", ".join(f"{name}={_literal(value)}" for name, value in attrs.items())
 
 
-def _wire_kwargs(attrs: dict[str, Any]) -> str:
+def _wire_kwargs(attrs: Mapping[str, object]) -> str:
     """Wire-named keyword arguments — via ``**{...}`` when a name needs it."""
     if all(name.isidentifier() and not keyword.iskeyword(name) for name in attrs):
         return _kwargs(attrs)

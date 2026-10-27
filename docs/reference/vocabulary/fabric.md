@@ -107,7 +107,7 @@ NTP, DNS, syslog, BGP route reflectors, vPC protection — everything under `uni
     - {ref}`fabric.smart_callhome_destination_group.callhome_protocol_profile <vocab-fabric-smart_callhome_destination_group-callhome_protocol_profile>` — `callhomeProf`, 16 attributes
   - {ref}`fabric.callhome_inventory_policy <vocab-fabric-callhome_inventory_policy>` — `callhomeInvP`, 5 attributes
   - {ref}`fabric.callhome_query_group <vocab-fabric-callhome_query_group>` — `callhomeQueryGroup`, 1 attributes
-    - {ref}`fabric.callhome_query_group.query <vocab-fabric-callhome_query_group-query>` — `callhomeQuery`, 6 attributes
+    - {ref}`fabric.callhome_query_group.callhome_query <vocab-fabric-callhome_query_group-callhome_query>` — `callhomeQuery`, 6 attributes
   - {ref}`fabric.snmp_policy <vocab-fabric-snmp_policy>` — `snmpPol`, 7 attributes
     - {ref}`fabric.snmp_policy.snmp_community <vocab-fabric-snmp_policy-snmp_community>` — `snmpCommunityP`, 2 attributes
     - {ref}`fabric.snmp_policy.user_profile <vocab-fabric-snmp_policy-user_profile>` — `snmpUserP`, 6 attributes
@@ -338,7 +338,7 @@ fabric/fabric-smart_callhome_destination_group-smart_callhome_destination
 fabric/fabric-smart_callhome_destination_group-callhome_protocol_profile
 fabric/fabric-callhome_inventory_policy
 fabric/fabric-callhome_query_group
-fabric/fabric-callhome_query_group-query
+fabric/fabric-callhome_query_group-callhome_query
 fabric/fabric-snmp_policy
 fabric/fabric-snmp_policy-snmp_community
 fabric/fabric-snmp_policy-user_profile

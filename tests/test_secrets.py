@@ -10,6 +10,7 @@ curation coverage audit.
 
 from __future__ import annotations
 
+import functools
 import sqlite3
 
 import pytest
@@ -31,23 +32,30 @@ from niwaki._secrets import (
 from niwaki.query import _catalog
 
 
-def _catalog_rows() -> list[tuple[str, str, bool, bool, bool]]:
-    """(class, prop, is_naming, is_configurable, is_secure) for every prop."""
+@functools.cache
+def _catalog_rows() -> tuple[tuple[str, str, bool, bool, bool], ...]:
+    """(class, prop, is_naming, is_configurable, is_secure) for every prop.
+
+    The flags come through the reader (:meth:`Catalog.prop_flags`), never raw
+    SQL on the property storage — the layout behind it is the reader's
+    business.  Only the class list is read from ``mo`` directly (the reader
+    has no "every class" method).  Memoised: the sweep and its witnesses ask
+    for it seven times.
+    """
     con = sqlite3.connect(f"file:{_catalog.DEFAULT_PATH}?mode=ro", uri=True)
     try:
-        (raw,) = con.execute("SELECT value FROM manifest WHERE key='prop_flags'").fetchone()
-        order = str(raw).split(",")
-        secure = 1 << order.index("secure")
-        naming = 1 << order.index("isNaming")
-        config = 1 << order.index("isConfigurable")
-        return [
-            (cls, wire, bool(flags & naming), bool(flags & config), bool(flags & secure))
-            for cls, wire, flags in con.execute(
-                "SELECT m.class_name, p.wire_name, p.flags FROM prop p JOIN mo m ON p.class_id=m.id"
-            )
-        ]
+        names = [str(n) for (n,) in con.execute("SELECT class_name FROM mo ORDER BY id")]
     finally:
         con.close()
+    reader = _catalog.Catalog(_catalog.DEFAULT_PATH)
+    try:
+        return tuple(
+            (cls, wire, flags.is_naming, flags.is_configurable, flags.secure)
+            for cls in names
+            for wire, flags in reader.prop_flags(cls).items()
+        )
+    finally:
+        reader.close()
 
 
 def _classes_with_a_secure_prop() -> set[str]:

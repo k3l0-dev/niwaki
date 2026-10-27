@@ -27,7 +27,7 @@ A slice keeps exactly the references whose relationship (Rs) object lands
 
 from __future__ import annotations
 
-from typing import Any
+from typing import TYPE_CHECKING
 
 from niwaki.design._cursor import Cursor, _attach, _load_class
 from niwaki.design._node import DesignNode, PendingBind, RawDesignNode
@@ -37,6 +37,9 @@ from niwaki.exceptions._design import (
     MergeConflictError,
     UnresolvedReferenceError,
 )
+
+if TYPE_CHECKING:
+    from niwaki.models.base import ManagedObject
 
 # ── Shared cloning helpers ────────────────────────────────────────────────────
 
@@ -85,7 +88,7 @@ def _clone_node(node: DesignNode, parent: DesignNode, *, bare: bool) -> DesignNo
 def _bind_key(bind: PendingBind) -> tuple[str, ...]:
     """Hashable identity of a reference — value-stable even for ``set`` attrs."""
 
-    def _stable(value: Any) -> str:
+    def _stable(value: object) -> str:
         if isinstance(value, (set, frozenset)):
             return f"{{{','.join(sorted(str(v) for v in value))}}}"
         return repr(value)
@@ -262,7 +265,7 @@ def _pin_rs(
     rs_cls_name: str,
     flavor: str,
     value: str,
-    ref_attrs: dict[str, Any],
+    ref_attrs: dict[str, object],
 ) -> None:
     """Attach the explicit Rs child a resolved reference would have emitted.
 
@@ -275,12 +278,12 @@ def _pin_rs(
 
     rs_cls = _load_class(rs_cls_name)
     field = "target_dn" if flavor == "dn" else "name"
-    fields: dict[str, Any] = {field: value, **copy.deepcopy(ref_attrs)}
+    fields: dict[str, object] = {field: value, **copy.deepcopy(ref_attrs)}
     naming = {p: fields.pop(p) for p in rs_cls._naming_props if p in fields}  # pyright: ignore[reportPrivateUsage]
     try:
         _attach(clone, rs_cls, rs_cls_name, naming, fields)
     except DuplicateDeclarationError:
-        candidate = rs_cls(**naming, **fields)
+        candidate = rs_cls.model_validate({**naming, **fields})
         existing = next(
             (c for c in clone.children if c.aci_class == rs_cls_name and c.rn == candidate.rn),
             None,
@@ -402,7 +405,7 @@ def merge(*designs: Cursor) -> Cursor:
     return _root_cursor(new_root)
 
 
-def _values_agree(cls: type[Any], field: str, a: Any, b: Any) -> bool:
+def _values_agree(cls: type[ManagedObject], field: str, a: object, b: object) -> bool:
     """Whether two declarations of one field are the same wire value.
 
     A hand-written design holds coerced values (``True``), an imported one

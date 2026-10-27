@@ -5,6 +5,158 @@ All notable changes to this project are documented here.  The format follows
 [semver](https://semver.org/).  From 1.0.0 the configuration API is stable:
 breaking changes ship in a new major version with a migration note.
 
+## [2.1.0] — 2026-10-27
+
+Types you can trust, a package a third lighter, and a session that keeps its
+promises under concurrency.  Navigation through the facade is now typed end
+to end for mypy and pyright, and the public model import path resolves for
+type checkers and IDEs; raw APIC JSON has public aliases in `niwaki.types`
+instead of `Any`.  What the wheel installs shrinks from about 76 MB to
+44 MB, and the wheel itself from 18.9 MB to 16.6 MB (one shared fault-code
+register instead of five inlined copies, and a normalised read catalogue
+with identical answers).  A shared synchronous
+session now performs exactly one re-login when several threads hit a revoked
+session, as the compatibility page always promised; the password is no
+longer kept as a plain attribute and never travels in a login error chain.
+One rename breaks code by the letter: the call-home query child is
+`callhome_query` — its navigation form never worked, and the design-DSL
+form `.query(...)` under a call-home query group must be updated (the only
+removal in this release, made in a minor release by explicit decision).
+
+### Breaking
+
+- **The call-home query child is reached as `callhome_query`.**  Under a
+  call-home query group, the `callhomeQuery` child is now named
+  `callhome_query` on both surfaces.  In navigation,
+  `aci.fabric().callhome_query_group("g").callhome_query("q")` reaches it —
+  the former name `query` was shadowed by the node's own `query()` method
+  and never resolved, so no deprecated alias is kept for it.  In the design
+  DSL, `.query(...)` under `callhome_query_group(...)` must become
+  `.callhome_query(...)`.  No navigation name can take a name the node API
+  already carries: the tables are generated to avoid them, and the
+  generator refuses one outright.
+
+### Added
+
+- **`password` accepts a `pydantic.SecretStr`** on `ApicSession`,
+  `AsyncApicSession`, `Niwaki` and `AsyncNiwaki` — constructors,
+  `with_client()` and `connect()`.  It is used as is, never re-wrapped, and
+  `SecretStr("")` falls back to `APIC_PASSWORD` exactly like `""`.  A plain
+  `str` is still accepted everywhere.
+- **`niwaki.types`** — `JsonScalar`, `JsonValue` and `JsonObject`, the
+  type aliases of raw APIC JSON, as a public module.
+- **Facade navigation is fully typed for mypy and pyright.**
+  `aci.tenant("prod").bd("web")` has a precise type at every step: the
+  editor completes the navigation names valid under each node, `read()`
+  returns the concrete model (`fvBD`), a call with no argument is a typed
+  query (`bd.subnet()` is a `Query[fvSubnet]`), and naming arguments are
+  checked under their Python names.  A misspelled navigation name —
+  `aci.tenantt(...)`, `.bdd(...)` — is a type error.  `aci.node()` and
+  `.mo()` stay dynamic.  Nothing changes at runtime: navigation resolves
+  exactly as before and returns the same `NiwakiNode`/`AsyncNiwakiNode`.
+  A cold mypy run over a project that uses niwaki takes a few seconds
+  longer, as mypy analyses the model classes the navigation types refer to;
+  later runs are cached.
+
+### Changed
+
+- **The public model import path resolves for type checkers and IDEs.**
+  `from niwaki.models.fv.fvBD import fvBD` and
+  `from niwaki.models.enums.FvBDType import FvBDType` are served by real
+  modules — a generated tree of explicit re-exports, one file per model and
+  enum — so mypy, pyright and IDE completion see the class and its typed
+  constructor.  Nothing changes at runtime: both import paths yield the very
+  same class object, whose `__module__` (hence pickles, `repr` and
+  `isinstance`) is unchanged, and short package names (`fv.BD`) still load
+  lazily, one class on first use.  niwaki installs no import hook in
+  `sys.meta_path`.
+- **Raw APIC JSON is typed instead of `Any`.** What the SDK returns says
+  exactly what it is: `ManagedObject.to_apic()`, `Cursor.to_payload()` and
+  `Snapshot.tree` are a `niwaki.types.JsonObject`, and
+  `ApicSession.get()` / `AsyncApicSession.get()` return a
+  `list[JsonObject]` — a value read out of one is a `JsonValue`, so a type
+  checker asks you to narrow it (`isinstance(value, dict)`) before indexing
+  further. What the SDK reads accepts any `Mapping[str, object]`:
+  `ManagedObject.from_apic()` / `from_event()`, `parse_imdata()`,
+  `parse_envelopes()` (an iterable of them), `design.from_payload()` and
+  every `post_mo()` take an unannotated literal, a
+  `dict[str, dict[str, str]]` or a payload composed of `to_apic()` outputs
+  as is, and check the shape at runtime. Implementers of
+  `MoWriter` / `AsyncMoWriter` should type `payload` as
+  `Mapping[str, object]`. `get(**params)` accepts JSON scalars and
+  sequences of them (the key is repeated). `DesignView` attribute values
+  and `PlanResult.updates` values are typed `object`, and
+  `AsyncNiwaki.gather()` returns a per-position typed tuple for up to five
+  coroutines. Runtime behaviour on well-formed data is unchanged.
+- **A malformed APIC body fails with a typed error.** A response that is
+  not a JSON object, an `imdata` that is not a list of objects, or a
+  `totalCount` that is not a number raises `APIError` (with the real HTTP
+  status) — including in `Query.count()` and `subscribe()`, which used to
+  surface a raw `AttributeError` or `TypeError`. `parse_imdata()` and the
+  flat-read tree builder raise `DeserializationError` on an envelope of
+  the wrong shape. A snapshot tree that is structurally malformed (a node
+  that is not an object, no string `class`/`rn`, `attributes` or
+  `children` of the wrong JSON type) raises `ValueError` from
+  `snapshot.diff()` and is reported by `to_design()` as one
+  `"structure"` problem per node, alongside every other import problem.
+  A hand-built snapshot may hold any JSON scalar as an attribute value:
+  `to_design()` reads it like its wire string (`True` ≡ `"yes"`, `null` ≡
+  absent) and `diff()` reports it as written.
+- **The fault-code models are small, and import more than ten times
+  faster.**  `faultInst`, `faultLcP`, `faultSevAsnP`, `eventSevAsnP` and
+  `callhomeSmartCallhomeFault` are named by a fault code for which the
+  schema declares 80,512 names (`F1000`, `E4194310`, `generic`, …).  The
+  five models now share one copy of that register instead of each spelling
+  it out: their `code` / `condition_code` field is typed `int | str` (it was
+  `int | Literal[<80,512 names>]`, the type the design DSL already used) and
+  validated against the shared register.  The field accepts, stores and
+  refuses exactly the same values as before — a declared name is kept,
+  `1000` is stored as `"F1000"`, a number without a name stays a number,
+  anything else raises `ValidationError` (reported as a `value_error`
+  rather than a `literal_error`).  Importing one of these models now takes a
+  few tens of milliseconds instead of about half a second, and the
+  installed package is about 24 MB smaller (the wheel, about 2.9 MB).
+- **The read catalogue ships about 27 % smaller, with identical answers.**
+  `catalog.db` stores each distinct property signature once and links every
+  class to the signatures it carries (26.0 MB instead of 36.2 MB installed;
+  the wheel is about 0.7 MB lighter).  Every `niwaki.catalog` lookup returns
+  exactly what it did, in the same order.
+
+### Fixed
+
+- **A shared synchronous session re-logs in exactly once on a revoked
+  token.**  When several threads sharing one `ApicSession` (or `Niwaki`)
+  receive a mid-session `401` together, the session now performs a single
+  re-login and every thread replays its request on the renewed token, as the
+  compatibility page documents — reads and writes alike.  A thread whose
+  token was already renewed by another reuses it without logging in again.
+  `AsyncApicSession` behaves the same way.
+- **A missing read catalogue fails with the explicit install error
+  everywhere.**  Secret redaction, `niwaki.snapshot` and `reconcile()` raise
+  the same `FileNotFoundError` as `niwaki.catalog` — naming the missing file
+  and the reinstall that fixes it — instead of a bare
+  `sqlite3.OperationalError`.
+- **The APIC password is no longer stored as a plain attribute.**  The
+  sessions and both clients kept it as a `str` attribute for the life of the
+  process, so anything that renders object state — an error tracker
+  capturing attributes, `vars(session)` pasted into a bug report — showed
+  it.  It is now kept as a `pydantic.SecretStr`, masked in `repr`/`str`, and
+  unwrapped only to build the aaaLogin request body.  `APIC_PASSWORD` is
+  still read when the session is built, so a missing password raises
+  `KeyError` where it did before.
+- **A login that fails in transport no longer carries the password.**  A
+  connection error, timeout or TLS failure on aaaLogin was raised chained to
+  the httpx error, which keeps the request it failed on — and that
+  request's body is the password.  The same typed error
+  (`ConnectionError`, `TimeoutError`, `TLSError`) is now raised without that
+  chain; its message names the httpx failure class alongside the original
+  detail.  Errors from every other request keep their chain.
+
+`SecretStr` masks the password; it does not encrypt it.  A debugger can
+still read it, pickling keeps it, and an error tracker that captures frame
+local variables can record the login request body while it is in flight —
+see the connection guide for the scrubbing to configure.
+
 ## [2.0.1] — 2026-08-12
 
 A hygiene pass over the entire hand-written codebase — every module read

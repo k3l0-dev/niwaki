@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "niwaki"
-version = "2.0.1"
+version = "2.1.0"
 description = "Modern, typed, design-first Python SDK for Cisco ACI (APIC)"
 readme = "README.md"
 license = "Apache-2.0"
@@ -112,7 +112,10 @@ known-first-party = ["niwaki"]
 python_version = "3.12"
 strict = true
 files = ["src/niwaki"]
-exclude = ["src/niwaki/models/_generated/"]
+# Generated trees under models/: the canonical _generated/ tree and the public
+# import mirror (models/<pkg>/, models/enums/).  Only subdirectories match — the
+# hand-written models/__init__.py, base.py and _wire.py stay checked.
+exclude = ["src/niwaki/models/[^/]+/"]
 
 # cryptography is the optional `x509` extra, so it is genuinely absent from any
 # install that did not ask for it — the public CI included.  The runtime already
@@ -143,6 +146,9 @@ disable_error_code = ["override", "misc"]
 [tool.coverage.run]
 omit = [
     "*/models/_generated/*",
+    # The public model import mirror (generate_mirror): every subdirectory of
+    # models/ is generated; the root's hand-written modules stay measured.
+    "*/niwaki/models/*/*",
     "*/design/_generated_cursors/*",
     "*/domain/_child_map.py",
 ]

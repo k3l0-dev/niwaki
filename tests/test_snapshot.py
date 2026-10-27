@@ -15,8 +15,11 @@ from typing import Any
 import pytest
 
 from niwaki import snapshot as snap
+from niwaki._json import JsonObject
 from niwaki.query import _catalog
 from niwaki.snapshot import REDACTED, Snapshot, SnapshotDiff, _assemble, _snapshot_universe
+
+from ._jsonpath import as_object, as_objects, at
 
 
 def _flat(cls: str, dn: str, **attrs: str) -> dict[str, Any]:
@@ -39,7 +42,7 @@ class TestAssemble:
         other = _assemble("uni/tn-p", list(reversed(items)), _KEEP)
         assert one.to_json() == other.to_json()
         assert one.tree is not None
-        assert [c["rn"] for c in one.tree["children"]] == ["BD-a", "ctx-b"]
+        assert [c["rn"] for c in as_objects(one.tree["children"])] == ["BD-a", "ctx-b"]
 
     def test_non_configurable_properties_are_dropped(self) -> None:
         items = [
@@ -48,9 +51,10 @@ class TestAssemble:
         ]
         result = _assemble("uni/tn-p", items, _KEEP)
         assert result.tree is not None
-        (bd,) = result.tree["children"]
-        assert "modTs" not in bd["attributes"] and "lcOwn" not in bd["attributes"]
-        assert bd["attributes"]["name"] == "a"
+        (bd,) = as_objects(result.tree["children"])
+        attributes = as_object(bd["attributes"])
+        assert "modTs" not in attributes and "lcOwn" not in attributes
+        assert at(bd, "attributes", "name") == "a"
 
     def test_a_curated_secret_value_is_redacted(self) -> None:
         items = [
@@ -97,7 +101,7 @@ class TestAssemble:
         ]
         result = _assemble("uni/tn-p", items, _KEEP)
         assert result.tree is not None
-        rns = [c["rn"] for c in result.tree["children"]]
+        rns = [c["rn"] for c in as_objects(result.tree["children"])]
         assert "userext" in rns and "userext2" not in rns
 
     def test_coverage_counts_kept_classes_only(self) -> None:
@@ -156,7 +160,9 @@ class TestAssemble:
     def test_an_unknown_root_class_keeps_its_attributes_verbatim(self) -> None:
         """The scope root is read unfiltered and can be any class; a class the
         catalogue does not know must not crash the capture (review nit)."""
-        items = [{"zzNotAClass": {"attributes": {"dn": "uni/tn-p", "custom": "v"}}}]
+        items: list[JsonObject] = [
+            {"zzNotAClass": {"attributes": {"dn": "uni/tn-p", "custom": "v"}}}
+        ]
         result = _assemble("uni/tn-p", items, _KEEP)
         assert result.tree is not None
         assert result.tree["attributes"] == {"custom": "v"}

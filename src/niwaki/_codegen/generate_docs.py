@@ -362,8 +362,9 @@ def _render_enums(used_enums: set[str]) -> str:
         "enum also accepts the plain string; the value is validated at the call "
         "site either way.",
         "",
-        "The remaining generated enums back the non-curated classes and live in "
-        "`niwaki.models._generated.enums`.",
+        "The remaining generated enums back the non-curated classes.  Every enum "
+        "imports from `niwaki.models.enums` — "
+        "`from niwaki.models.enums.FvBDType import FvBDType`.",
         "",
     ]
     for enum_name in sorted(by_enum):

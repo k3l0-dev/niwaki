@@ -34,6 +34,7 @@ from functools import cache
 from typing import TYPE_CHECKING, Literal
 
 from niwaki import exceptions
+from niwaki.types import JsonObject
 
 if TYPE_CHECKING:
     from niwaki.design._node import DesignNode
@@ -195,7 +196,7 @@ def _carrier_classes() -> frozenset[str]:
     return frozenset(_tables().carrier)
 
 
-def evaluate(ref: ExternalRef, imdata: list[dict[str, object]] | None) -> RefCheck:
+def evaluate(ref: ExternalRef, imdata: list[JsonObject] | None) -> RefCheck:
     """Turn one read result into a :class:`RefCheck` (pure).
 
     Args:
@@ -235,7 +236,7 @@ def verify_sync(session: ApicSession, refs: list[ExternalRef]) -> list[RefCheck]
     :class:`~niwaki.exceptions.APIError` becomes an ``error`` status so one
     malformed DN can never abort the collection.
     """
-    fetched: dict[str, list[dict[str, object]] | Exception] = {}
+    fetched: dict[str, list[JsonObject] | Exception] = {}
     for dn in sorted({r.dn for r in refs if not _is_carrier_only(r)}):
         try:
             fetched[dn] = session.get(f"/api/mo/{dn}.json")
@@ -252,7 +253,7 @@ async def verify_async(
 ) -> list[RefCheck]:
     """Async mirror of :func:`verify_sync`, with bounded concurrency."""
     semaphore = asyncio.Semaphore(concurrency)
-    fetched: dict[str, list[dict[str, object]] | Exception] = {}
+    fetched: dict[str, list[JsonObject] | Exception] = {}
 
     async def _fetch(dn: str) -> None:
         async with semaphore:
@@ -270,7 +271,7 @@ async def verify_async(
 
 def _evaluate_all(
     refs: list[ExternalRef],
-    fetched: dict[str, list[dict[str, object]] | Exception],
+    fetched: dict[str, list[JsonObject] | Exception],
 ) -> list[RefCheck]:
     checks: list[RefCheck] = []
     for ref in refs:

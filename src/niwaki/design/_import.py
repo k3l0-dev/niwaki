@@ -70,13 +70,15 @@ and every drop above is the reproduction of "unset", never of a value.
 
 from __future__ import annotations
 
+from collections.abc import Mapping
 from dataclasses import dataclass
 from functools import cache
-from typing import TYPE_CHECKING, Any, Literal
+from typing import TYPE_CHECKING, Literal
 
 import pydantic
 
 from niwaki._dn import naming_values, split_dn
+from niwaki._json import as_list, as_mapping
 from niwaki.design._cursor import (
     Cursor,
     _attach,
@@ -91,16 +93,15 @@ from niwaki.exceptions._design import (
     DuplicateDeclarationError,
     SnapshotImportError,
 )
+from niwaki.types import JsonValue
 
 if TYPE_CHECKING:
     from niwaki.models.base import ManagedObject
-    from niwaki.snapshot import Snapshot
+    from niwaki.snapshot import Snapshot, _TreeNode
 
 _ProblemKind = Literal[
     "unknown-class", "unknown-property", "redacted-value", "invalid-value", "structure"
 ]
-
-_SnapNode = dict[str, Any]
 
 
 @dataclass(frozen=True)
@@ -223,7 +224,7 @@ def _alias_map_of(cls: type[ManagedObject]) -> dict[str, str]:
 
 
 def _attach_trusted(
-    parent: DesignNode, cls: type[ManagedObject], label: str, naming: dict[str, Any]
+    parent: DesignNode, cls: type[ManagedObject], label: str, naming: dict[str, object]
 ) -> Cursor:
     """Attach a typed child the snapshot vouches for, skipping the containment gate.
 
@@ -262,6 +263,20 @@ def _is_schema_default(cls_name: str, wire: str, value: str) -> bool:
     return default is not None and str(default) == value
 
 
+def _wire_texts(attrs: Mapping[str, JsonValue]) -> dict[str, str]:
+    """Render attribute values as wire strings for the raw (wire-name) channel.
+
+    Snapshot values are wire strings when ``take()`` wrote them; a hand-built
+    snapshot may hold other JSON scalars, which render through the wire
+    boundary (``True`` → ``"true"``, ``9000`` → ``"9000"``).
+    """
+    from niwaki.models._wire import to_wire
+
+    return {
+        wire: value if isinstance(value, str) else to_wire(value) for wire, value in attrs.items()
+    }
+
+
 # ── The importer ──────────────────────────────────────────────────────────────
 
 
@@ -278,7 +293,7 @@ class _Importer:
 
     # ── Index (pre-pass) ──────────────────────────────────────────────────────
 
-    def index(self, node: _SnapNode, dn: str) -> None:
+    def index(self, node: _TreeNode, dn: str) -> None:
         """Record every snapshot object by DN and by (class, primary name).
 
         The (class, name) index mirrors what the push-time resolver will see
@@ -287,12 +302,12 @@ class _Importer:
         """
         from niwaki.query._catalog import catalog
 
-        cls_name = node["class"]
+        cls_name = node.aci_class
         self.class_of[dn] = cls_name
         name = ""
         try:
             rn_format = catalog().rn_format(cls_name)
-            values = naming_values(node["rn"], rn_format)
+            values = naming_values(node.rn, rn_format)
             # Primary naming prop = the FIRST placeholder of the RN format
             # (catalog().class_meta().naming is an unordered set).
             first = rn_format.partition("{")[2].partition("}")[0]
@@ -302,8 +317,8 @@ class _Importer:
         self.primary[dn] = name
         if name:
             self.names.setdefault(cls_name, {}).setdefault(name, []).append(dn)
-        for child in node["children"]:
-            self.index(child, f"{dn}/{child['rn']}")
+        for child in node.children:
+            self.index(child, f"{dn}/{child.rn}")
 
     def _scoped_winner(self, owner_dn: str, classes: frozenset[str], name: str) -> str | None:
         """Simulate the resolver's scoped lookup on the snapshot index.
@@ -347,14 +362,18 @@ class _Importer:
         except KeyError:
             return False
 
-    def _screen_attrs(self, dn: str, attrs: dict[str, str]) -> dict[str, str]:
+    def _screen_attrs(self, dn: str, attrs: Mapping[str, JsonValue]) -> dict[str, JsonValue]:
         """Normalise a node's wire attributes — once per node, before any route.
 
         Two screens, both value-level and route-independent:
 
-        - **Empty strings drop silently**: ``""`` is the wire spelling of
-          "not configured", and the design layer cannot emit it by contract
-          (``to_apic`` skips it) — dropping is the identity transform.
+        - **Empty strings and nulls drop silently**: ``""`` is the wire
+          spelling of "not configured", and the design layer cannot emit it by
+          contract (``to_apic`` skips it) — dropping is the identity
+          transform.  A ``null`` in a hand-written snapshot means the same as
+          an absent attribute.  Any other JSON scalar is kept as written: the
+          typed model coerces it exactly as it coerces the wire string
+          (``True`` ≡ ``"yes"``, ``9000`` ≡ ``"9000"``).
         - **The redacted-secret sentinel never reaches a design**: collected
           as a problem by default, dropped under ``redacted="skip"``.
 
@@ -364,7 +383,11 @@ class _Importer:
         """
         from niwaki.snapshot import REDACTED
 
-        kept = {wire: value for wire, value in attrs.items() if value != "" and value != REDACTED}
+        kept: dict[str, JsonValue] = {
+            wire: value
+            for wire, value in attrs.items()
+            if value is not None and value != "" and value != REDACTED
+        }
         if self.redacted == "raise":
             elided = sorted(wire for wire, value in attrs.items() if value == REDACTED)
             if elided:
@@ -380,18 +403,18 @@ class _Importer:
 
     # ── Walk ──────────────────────────────────────────────────────────────────
 
-    def walk_children(self, cursor: Cursor, node: _SnapNode, dn: str) -> None:
-        for child in node["children"]:
-            self._import_node(cursor, child, f"{dn}/{child['rn']}", dn)
+    def walk_children(self, cursor: Cursor, node: _TreeNode, dn: str) -> None:
+        for child in node.children:
+            self._import_node(cursor, child, f"{dn}/{child.rn}", dn)
 
-    def _import_node(self, parent: Cursor, node: _SnapNode, dn: str, parent_dn: str) -> None:
+    def _import_node(self, parent: Cursor, node: _TreeNode, dn: str, parent_dn: str) -> None:
         """Import one snapshot object under *parent* — verb, maker, bind, or raw."""
-        cls_name = node["class"]
+        cls_name = node.aci_class
         parent_cls = parent.design_node.aci_class
         parent_node = parent.design_node
         grandparent_cls = parent_node.parent.aci_class if parent_node.parent else None
-        childless = not node["children"]
-        attrs = self._screen_attrs(dn, node["attributes"])
+        childless = not node.children
+        attrs = self._screen_attrs(dn, node.attributes)
 
         if childless:
             verb_spec = _verb_inversion().get((parent_cls, cls_name))
@@ -415,8 +438,8 @@ class _Importer:
     # ── Relationship preparation (shared by verbs and binds) ─────────────────
 
     def _prepare_rs(
-        self, rs_cls_name: str, node: _SnapNode, attrs: dict[str, str]
-    ) -> tuple[Literal["name", "dn"], str, dict[str, Any]] | None:
+        self, rs_cls_name: str, node: _TreeNode, attrs: dict[str, JsonValue]
+    ) -> tuple[Literal["name", "dn"], str, dict[str, object]] | None:
         """Translate a relationship node into ``(flavor, target, ref attrs)``.
 
         *attrs* is the node's already-screened attribute dict (empty strings
@@ -436,14 +459,14 @@ class _Importer:
         except KeyError:
             return None
         alias_map = _alias_map_of(cls)
-        readable: dict[str, Any] = {}
+        readable: dict[str, object] = {}
         for wire, value in attrs.items():
             field = alias_map.get(wire)
             if field is None:
                 return None  # unknown property — the raw ladder owns the policy
             readable[field] = value
         try:
-            readable.update(naming_values(node["rn"], cls._rn_format))  # pyright: ignore[reportPrivateUsage]
+            readable.update(naming_values(node.rn, cls._rn_format))  # pyright: ignore[reportPrivateUsage]
         except ValueError:
             return None
         flavor: Literal["name", "dn"] = "dn" if "target_dn" in cls.model_fields else "name"
@@ -471,14 +494,14 @@ class _Importer:
                 for field in defaults:
                     del readable[field]
 
-    def _target_arg(self, target: str, attrs: dict[str, Any]) -> str | Ref:
+    def _target_arg(self, target: str, attrs: dict[str, object]) -> str | Ref:
         return Ref(target=target, attrs=attrs) if attrs else target
 
     def _try_verb(
         self,
         parent: Cursor,
-        node: _SnapNode,
-        attrs: dict[str, str],
+        node: _TreeNode,
+        attrs: dict[str, JsonValue],
         dn: str,
         parent_dn: str,
         spec: tuple[str, str],
@@ -487,7 +510,7 @@ class _Importer:
         from niwaki.domain._child_map import TARGET_SUBCLASSES
 
         verb, target_cls = spec
-        prepared = self._prepare_rs(node["class"], node, attrs)
+        prepared = self._prepare_rs(node.aci_class, node, attrs)
         if prepared is None:
             return False
         flavor, target, rest = prepared
@@ -509,14 +532,14 @@ class _Importer:
     def _try_bind(
         self,
         parent: Cursor,
-        node: _SnapNode,
-        attrs: dict[str, str],
+        node: _TreeNode,
+        attrs: dict[str, JsonValue],
         dn: str,
         parent_dn: str,
         aliases: tuple[_BindAlias, ...],
     ) -> bool:
         """Re-express a relationship as ``bind()``/``bind_dn()``, when provably equivalent."""
-        prepared = self._prepare_rs(node["class"], node, attrs)
+        prepared = self._prepare_rs(node.aci_class, node, attrs)
         if prepared is None:
             return False
         flavor, target, rest = prepared
@@ -559,16 +582,16 @@ class _Importer:
     # ── Makers ────────────────────────────────────────────────────────────────
 
     def _try_maker(
-        self, parent: Cursor, node: _SnapNode, attrs: dict[str, str], dn: str, label: str
+        self, parent: Cursor, node: _TreeNode, attrs: dict[str, JsonValue], dn: str, label: str
     ) -> bool:
         """Import through the curated maker; naming from the RN, attrs via set()."""
-        cls_name = node["class"]
+        cls_name = node.aci_class
         try:
             cls = _load_class(cls_name)
         except KeyError:
             return False
         try:
-            naming = naming_values(node["rn"], cls._rn_format)  # pyright: ignore[reportPrivateUsage]
+            naming = naming_values(node.rn, cls._rn_format)  # pyright: ignore[reportPrivateUsage]
         except ValueError as exc:
             self._problem(dn, "structure", f"RN does not match the {cls_name} format: {exc}")
             return True  # handled (with its problem) — the raw ladder cannot parse it either
@@ -587,7 +610,7 @@ class _Importer:
     # ── Attributes (typed nodes) ──────────────────────────────────────────────
 
     def _apply_attrs(
-        self, cursor: Cursor, cls: type[ManagedObject], attrs: dict[str, str], dn: str
+        self, cursor: Cursor, cls: type[ManagedObject], attrs: dict[str, JsonValue], dn: str
     ) -> None:
         """Apply a node's screened wire attributes to a typed node — never silently.
 
@@ -605,9 +628,9 @@ class _Importer:
             _wire_name_of(cls, prop)
             for prop in cls._naming_props  # pyright: ignore[reportPrivateUsage]
         }
-        readable: dict[str, Any] = {}
-        escape_known: dict[str, str] = {}
-        escape_unknown: dict[str, str] = {}
+        readable: dict[str, JsonValue] = {}
+        escape_known: dict[str, JsonValue] = {}
+        escape_unknown: dict[str, JsonValue] = {}
         for wire, value in attrs.items():
             if wire in naming_wire:
                 continue  # identity — fixed by the maker/RN, not re-set
@@ -660,23 +683,25 @@ class _Importer:
             # Unknown to the model AND (possibly) the catalogue — raw_set's
             # validation would refuse them, which is the very reason the
             # caller opted into on_unknown="raw".  The node channel is the
-            # documented bypass; values are already wire strings.
-            cursor.design_node.raw_attrs.update(escape_unknown)
+            # documented bypass, so values are rendered to wire strings here.
+            cursor.design_node.raw_attrs.update(_wire_texts(escape_unknown))
 
     # ── Raw ladder ────────────────────────────────────────────────────────────
 
-    def _raw_node(self, parent: Cursor, node: _SnapNode, attrs: dict[str, str], dn: str) -> None:
+    def _raw_node(
+        self, parent: Cursor, node: _TreeNode, attrs: dict[str, JsonValue], dn: str
+    ) -> None:
         """Fallback: import through the wire-name doors (typed, catalogue, direct)."""
         from niwaki.domain._child_map import CLASS_PKG
         from niwaki.query._catalog import catalog
 
-        cls_name = node["class"]
+        cls_name = node.aci_class
         if cls_name in CLASS_PKG:
             # Generated model — the typed raw route, with the value escapes
             # the public raw() cannot offer.
             cls = _load_class(cls_name)
             try:
-                naming = naming_values(node["rn"], cls._rn_format)  # pyright: ignore[reportPrivateUsage]
+                naming = naming_values(node.rn, cls._rn_format)  # pyright: ignore[reportPrivateUsage]
             except ValueError as exc:
                 self._problem(dn, "structure", f"RN does not match the {cls_name} format: {exc}")
                 return
@@ -689,7 +714,7 @@ class _Importer:
                 self._problem(
                     dn,
                     "structure",
-                    f"{cls_name} {node['rn']!r} appears twice under the same "
+                    f"{cls_name} {node.rn!r} appears twice under the same "
                     "parent — a snapshot document never repeats a DN",
                 )
                 return
@@ -708,7 +733,7 @@ class _Importer:
                     self._problem(
                         dn,
                         "structure",
-                        f"{cls_name} {node['rn']!r} appears twice under the same "
+                        f"{cls_name} {node.rn!r} appears twice under the same "
                         "parent — a snapshot document never repeats a DN",
                     )
                     return
@@ -732,12 +757,12 @@ class _Importer:
             return
 
         try:
-            naming = naming_values(node["rn"], rn_format)
+            naming = naming_values(node.rn, rn_format)
         except ValueError as exc:
             self._problem(dn, "structure", f"RN does not match the {cls_name} format: {exc}")
             return
-        known: dict[str, str] = {}
-        escape_unknown: dict[str, str] = {}
+        known: dict[str, JsonValue] = {}
+        escape_unknown: dict[str, JsonValue] = {}
         for wire, value in attrs.items():
             if wire in meta.wire_to_readable:
                 known[wire] = value
@@ -756,7 +781,7 @@ class _Importer:
             self._problem(
                 dn,
                 "structure",
-                f"{cls_name} {node['rn']!r} appears twice under the same "
+                f"{cls_name} {node.rn!r} appears twice under the same "
                 "parent — a snapshot document never repeats a DN",
             )
             return
@@ -774,16 +799,16 @@ class _Importer:
             )
             return
         if escape_unknown:
-            child.design_node.raw_attrs.update(escape_unknown)
+            child.design_node.raw_attrs.update(_wire_texts(escape_unknown))
         self.walk_children(child, node, dn)
 
     def _raw_direct(
         self,
         parent: Cursor,
-        node: _SnapNode,
+        node: _TreeNode,
         dn: str,
         naming: dict[str, str],
-        rest: dict[str, str],
+        rest: Mapping[str, JsonValue],
     ) -> None:
         """Construct a raw node the snapshot vouches for, bypassing catalogue checks.
 
@@ -793,18 +818,18 @@ class _Importer:
         values stay out of *rest* so they are not emitted twice.
         """
         if any(
-            sibling.aci_class == node["class"] and sibling.rn == node["rn"]
+            sibling.aci_class == node.aci_class and sibling.rn == node.rn
             for sibling in parent.design_node.children
         ):
             self._problem(
                 dn,
                 "structure",
-                f"{node['class']} {node['rn']!r} appears twice under the same "
+                f"{node.aci_class} {node.rn!r} appears twice under the same "
                 "parent — a snapshot document never repeats a DN",
             )
             return
-        rest = {wire: value for wire, value in rest.items() if wire not in naming}
-        raw = RawDesignNode(node["class"], dict(naming), node["rn"], rest, parent.design_node)
+        wire_rest = _wire_texts({wire: value for wire, value in rest.items() if wire not in naming})
+        raw = RawDesignNode(node.aci_class, dict(naming), node.rn, wire_rest, parent.design_node)
         parent.design_node.children.append(raw)
         self.walk_children(Cursor(raw), node, dn)
 
@@ -927,7 +952,7 @@ def _bare_ancestor(parent: Cursor, parent_dn: str, segment: str) -> tuple[Cursor
     return parent.raw(cls_name, **wire_naming), dn
 
 
-def _payload_tree(envelope: dict[str, Any], *, root: bool = True) -> _SnapNode:
+def _payload_tree(envelope: object, *, root: bool = True) -> _TreeNode:
     """One APIC payload envelope → the snapshot node shape (fail-loud).
 
     The RN is recomputed from the catalogue's RN format and the envelope's
@@ -937,18 +962,21 @@ def _payload_tree(envelope: dict[str, Any], *, root: bool = True) -> _SnapNode:
     from niwaki.models._wire import to_wire
     from niwaki.query._catalog import catalog
 
-    if not isinstance(envelope, dict) or len(envelope) != 1:  # pyright: ignore[reportUnnecessaryIsInstance]
-        found = sorted(envelope) if isinstance(envelope, dict) else type(envelope).__name__  # pyright: ignore[reportUnnecessaryIsInstance]
+    mapping = as_mapping(envelope)
+    if mapping is None or len(mapping) != 1:
+        found = sorted(mapping) if mapping is not None else type(envelope).__name__
         raise DesignError(
             f"from_payload(): an envelope holds exactly one class key, found {found!r}."
         )
-    (cls_name,) = envelope.keys()
-    inner = envelope[cls_name]
-    if not isinstance(inner, dict) or not isinstance(inner.get("attributes", {}), dict):
+    (cls_name,) = mapping.keys()
+    inner = as_mapping(mapping[cls_name])
+    raw_attrs = as_mapping(inner.get("attributes", {})) if inner is not None else None
+    if inner is None or raw_attrs is None:
         raise DesignError(f"from_payload(): {cls_name} is not a well-formed envelope body.")
-    if not isinstance(inner.get("children", []), list):
+    children = as_list(inner.get("children", []))
+    if children is None:
         raise DesignError(f"from_payload(): {cls_name} carries a non-list 'children'.")
-    attrs = {str(k): v for k, v in dict(inner.get("attributes", {})).items()}
+    attrs = {str(k): v for k, v in raw_attrs.items()}
     if "status" in attrs:
         raise DesignError(
             f"from_payload(): {cls_name} carries a 'status' directive — a "
@@ -988,16 +1016,16 @@ def _payload_tree(envelope: dict[str, Any], *, root: bool = True) -> _SnapNode:
             text if kind == "lit" else wire_attrs[text]
             for kind, text in _tokenize_rn_format(rn_format)
         )
-    return {
-        "class": cls_name,
-        "rn": rn,
-        "attributes": wire_attrs,
-        "children": [_payload_tree(child, root=False) for child in inner.get("children", [])],
-    }
+    from niwaki.snapshot import _TreeNode
+
+    attributes: dict[str, JsonValue] = dict(wire_attrs)
+    return _TreeNode(
+        cls_name, rn, attributes, [_payload_tree(child, root=False) for child in children]
+    )
 
 
 def from_payload(
-    payload: dict[str, Any],
+    payload: Mapping[str, object],
     *,
     on_unknown: Literal["raise", "raw"] = "raise",
     redacted: Literal["raise", "skip"] = "raise",
@@ -1041,7 +1069,7 @@ def from_payload(
         raise DesignError(
             f"from_payload(): the payload must be one polUni envelope, found {sorted(payload)!r}."
         )
-    tree = _payload_tree(payload)
+    tree = _payload_tree(payload).to_json()
     return to_design(Snapshot(scope="uni", tree=tree), on_unknown=on_unknown, redacted=redacted)
 
 
@@ -1106,7 +1134,8 @@ def to_design(
             empty, a ``"uni"`` snapshot is not rooted on ``polUni``, or an
             ancestor segment of a scoped snapshot cannot be resolved.
         SnapshotImportError: One or more items could not be imported —
-            collected over the whole tree, never first-fail.  The partial
+            collected over the whole tree, never first-fail, a structurally
+            malformed node (``kind="structure"``) included.  The partial
             design is discarded.
 
     Example::
@@ -1120,9 +1149,9 @@ def to_design(
         assert not result.has_changes   # the design IS the fabric
     """
     from niwaki.design._generated_cursors import design
+    from niwaki.snapshot import _tree_node
 
-    tree = snapshot.tree
-    if tree is None:
+    if snapshot.tree is None:
         raise DesignError("to_design(): the snapshot is empty (tree is None).")
     segments = split_dn(snapshot.scope)
     if not segments or segments[0] != "uni":
@@ -1139,26 +1168,37 @@ def to_design(
         primary={},
         names={},
     )
+    # A structurally malformed node (not an object, no string class/rn,
+    # attributes or children of the wrong JSON type) is one "structure"
+    # problem; it is skipped with its subtree and the rest still imports, so
+    # it joins the collect-all report instead of short-circuiting it.
+    tree = _tree_node(
+        snapshot.tree,
+        snapshot.scope,
+        lambda dn, detail: importer._problem(dn, "structure", detail),  # pyright: ignore[reportPrivateUsage]
+    )
+    if tree is None:
+        raise SnapshotImportError(sorted(importer.problems, key=lambda p: (p.dn, p.detail)))
     importer.index(tree, snapshot.scope)
     root = design()
 
     if len(segments) == 1:
-        if tree["class"] != "polUni":
+        if tree.aci_class != "polUni":
             raise DesignError(
-                f"to_design(): a 'uni' snapshot must be rooted on polUni, found {tree['class']!r}."
+                f"to_design(): a 'uni' snapshot must be rooted on polUni, found {tree.aci_class!r}."
             )
         from niwaki.models._generated.pol.polUni import polUni
 
-        root_attrs = importer._screen_attrs("uni", tree["attributes"])  # pyright: ignore[reportPrivateUsage]
+        root_attrs = importer._screen_attrs("uni", tree.attributes)  # pyright: ignore[reportPrivateUsage]
         importer._apply_attrs(root, polUni, root_attrs, "uni")  # pyright: ignore[reportPrivateUsage]
         importer.walk_children(root, tree, "uni")
     else:
         # Scoped snapshot: the capture's root object hangs off a chain of
         # attribute-less ancestors (Day-2 upserts) rebuilt from the scope DN.
-        if tree["rn"] != segments[-1]:
+        if tree.rn != segments[-1]:
             raise DesignError(
                 f"to_design(): the snapshot's scope {snapshot.scope!r} ends in "
-                f"{segments[-1]!r} but its tree is rooted on {tree['rn']!r} — "
+                f"{segments[-1]!r} but its tree is rooted on {tree.rn!r} — "
                 "the document is inconsistent."
             )
         parent: Cursor = root

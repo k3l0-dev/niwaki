@@ -8,7 +8,7 @@ retry on transient errors, 401 mid-session re-auth, and all HTTP error paths.
 from __future__ import annotations
 
 import asyncio
-from typing import Any
+from typing import Any, assert_type
 
 import httpx
 import pytest
@@ -16,8 +16,11 @@ import stamina
 from pytest_httpx import HTTPXMock
 
 from niwaki import exceptions
+from niwaki._json import JsonObject
 from niwaki.transport.session_async import AsyncApicSession
 from tests.conftest import load_fixture
+
+from .._jsonpath import at
 
 # ── Constants ─────────────────────────────────────────────────────────────────
 
@@ -248,7 +251,7 @@ class TestGet:
         async with AsyncApicSession(HOST, "admin", "pass") as s:
             result = await s.get("/api/class/fvTenant.json")
             assert len(result) == 3
-            assert result[0]["fvTenant"]["attributes"]["name"] in {"common", "mgmt", "Prod"}
+            assert at(result[0], "fvTenant", "attributes", "name") in {"common", "mgmt", "Prod"}
 
     async def test_empty_response(self, httpx_mock: HTTPXMock) -> None:
         httpx_mock.add_response(method="POST", url=LOGIN_URL, json=_login_resp())
@@ -375,7 +378,10 @@ class TestGetClass:
         httpx_mock.add_response(method="GET", json=load_fixture("fvTenant_list"))
 
         async with AsyncApicSession(HOST, "admin", "pass") as s:
-            raw = await s._get_all_pages("/api/class/fvTenant.json", {})  # type: ignore[reportPrivateUsage]
+            # An imdata list, not an object: wrapping it back into a body is
+            # the consumer contract (Mapping[str, object]) at work.
+            raw = await s._get_all_pages("/api/class/fvTenant.json", {})
+            assert_type(raw, list[JsonObject])
             tenants = parse_imdata({"imdata": raw})
             assert all(isinstance(t, fvTenant) for t in tenants)
             assert len(tenants) == 3
@@ -570,7 +576,7 @@ class TestPaginationGuard:
 
         async with AsyncApicSession(HOST, "admin", "pass") as s:
             result = await s._get_all_pages("/api/class/fvBD.json", {})  # type: ignore[reportPrivateUsage]
-        assert [r["fvBD"]["attributes"]["name"] for r in result] == ["b0", "b1"]
+        assert [at(r, "fvBD", "attributes", "name") for r in result] == ["b0", "b1"]
 
 
 class TestAIterPages:

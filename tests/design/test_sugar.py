@@ -8,6 +8,8 @@ from niwaki.design import tenant
 from niwaki.design._sugar import apply_sugar
 from niwaki.exceptions import DesignError
 
+from .._jsonpath import as_object, at
+
 
 class TestEntrySugar:
     def test_tcp_int(self) -> None:
@@ -55,7 +57,7 @@ class TestEntrySugar:
 
     def test_serialises_to_wire_names(self) -> None:
         payload = tenant("t").filter("web").entry("http", tcp=80).design_node.mo().to_apic()
-        attrs = payload["vzEntry"]["attributes"]
+        attrs = as_object(at(payload, "vzEntry", "attributes"))
         assert attrs["etherT"] == "ip"
         assert attrs["prot"] == "tcp"
         # 80 has a name in the ACI schema, and the APIC stores it under that name
@@ -66,12 +68,12 @@ class TestEntrySugar:
 
     def test_a_port_without_a_name_stays_a_number(self) -> None:
         payload = tenant("t").filter("web").entry("api", tcp=8080).design_node.mo().to_apic()
-        attrs = payload["vzEntry"]["attributes"]
+        attrs = as_object(at(payload, "vzEntry", "attributes"))
         assert attrs["dFromPort"] == "8080"
 
     def test_the_name_may_be_written_directly(self) -> None:
         payload = tenant("t").filter("web").entry("http", tcp="http").design_node.mo().to_apic()
-        assert payload["vzEntry"]["attributes"]["dFromPort"] == "http"
+        assert at(payload, "vzEntry", "attributes", "dFromPort") == "http"
 
 
 class TestPortSpecErrors:
@@ -92,5 +94,5 @@ class TestContractScopeSugar:
 
 class TestSugarPassthrough:
     def test_non_sugared_class_untouched(self) -> None:
-        attrs = {"unicast_routing": True}
+        attrs: dict[str, object] = {"unicast_routing": True}
         assert apply_sugar("fvBD", attrs) is attrs

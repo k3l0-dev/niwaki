@@ -20,6 +20,8 @@ from niwaki.design._generated_cursors import (
 )
 from niwaki.exceptions import DesignError, DuplicateDeclarationError
 
+from .._jsonpath import as_objects, at
+
 
 class TestDesignFactory:
     def test_returns_empty_uni_root(self) -> None:
@@ -112,7 +114,7 @@ class TestCrossDomainPop:
         cfg.infra()
         cfg.tenant("prod")
         payload = cfg.to_payload()
-        classes = [next(iter(child)) for child in payload["polUni"]["children"]]
+        classes = [next(iter(child)) for child in as_objects(at(payload, "polUni", "children"))]
         assert classes == ["fabricInst", "infraInfra", "fvTenant"]
 
 

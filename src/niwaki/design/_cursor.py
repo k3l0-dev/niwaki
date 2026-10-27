@@ -27,7 +27,7 @@ import difflib
 from functools import cache
 from importlib import import_module
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, Literal, NamedTuple, overload
+from typing import TYPE_CHECKING, Literal, NamedTuple, TypedDict, overload
 
 from niwaki.design._node import DesignNode, PendingBind, RawDesignNode, Ref
 from niwaki.design._sugar import apply_sugar
@@ -38,6 +38,7 @@ from niwaki.exceptions._design import (
 )
 from niwaki.models._wire import to_wire
 from niwaki.models.base import ManagedObject
+from niwaki.types import JsonObject
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -87,6 +88,22 @@ class _DesignVocabulary(NamedTuple):
     maker_scope: dict[str, dict[str, frozenset[str]]]
 
 
+class _VocabularyFile(TypedDict, total=False):
+    """The on-disk shape of ``domain/vocabulary.yaml`` (the sections read here).
+
+    Every section is optional: an absent one reads as empty.  The file is
+    curated and drift-guarded by its own tests, so it is trusted to match.
+    """
+
+    makers: dict[str, dict[str, str]]
+    binds: dict[str, dict[str, str]]
+    verbs: dict[str, dict[str, dict[str, str]]]
+    sugar: dict[str, dict[str, str]]
+    atomic: list[str]
+    carrier: list[str]
+    maker_scope: dict[str, dict[str, list[str]]]
+
+
 @cache
 def _tables() -> _DesignVocabulary:
     """Load and cache the curated vocabulary from ``domain/vocabulary.yaml``.
@@ -97,7 +114,7 @@ def _tables() -> _DesignVocabulary:
     import yaml
 
     with _VOCABULARY_YAML.open(encoding="utf-8") as fh:
-        data: dict[str, Any] = yaml.safe_load(fh)
+        data: _VocabularyFile = yaml.safe_load(fh)
     return _DesignVocabulary(
         makers=data.get("makers", {}),
         binds=data.get("binds", {}),
@@ -164,13 +181,13 @@ def _cursor_class_for(position: str | None) -> type[Cursor]:
     return CURSOR_FOR.get(position, Cursor)
 
 
-def _prune(params: dict[str, Any]) -> dict[str, Any]:
+def _prune[V](params: dict[str, V | None]) -> dict[str, V]:
     """Drop ``None`` values — used by generated typed methods to forward only
     the keyword arguments the caller actually provided."""
     return {k: v for k, v in params.items() if v is not None}
 
 
-def _validate_attr_names(cls: type[ManagedObject], attrs: dict[str, Any]) -> None:
+def _validate_attr_names(cls: type[ManagedObject], attrs: dict[str, object]) -> None:
     """Reject attribute names that are not declared Python fields of *cls*.
 
     ``extra="allow"`` on the models would otherwise silently absorb typos
@@ -200,7 +217,7 @@ def _validate_attr_names(cls: type[ManagedObject], attrs: dict[str, Any]) -> Non
     raise DesignError(f"{cls.__name__} has no attribute(s) {details}.")
 
 
-def _unwrap_ref(target: Any) -> tuple[str, dict[str, Any]]:
+def _unwrap_ref(target: object) -> tuple[str, dict[str, object]]:
     """Split a bind target into ``(name_or_dn, relationship attributes)``.
 
     A plain string is a pure edge; a :class:`~niwaki.design._node.Ref` also
@@ -213,9 +230,9 @@ def _unwrap_ref(target: Any) -> tuple[str, dict[str, Any]]:
 
 def _split_naming(
     cls: type[ManagedObject],
-    args: tuple[Any, ...],
-    kwargs: dict[str, Any],
-) -> tuple[dict[str, Any], dict[str, Any]]:
+    args: tuple[object, ...],
+    kwargs: dict[str, object],
+) -> tuple[dict[str, object], dict[str, object]]:
     """Split maker arguments into naming props and scalar attributes.
 
     Positional args map onto the class naming props in order; keyword args
@@ -231,8 +248,8 @@ def _split_naming(
             f"{cls.__name__} takes at most {len(props)} naming argument(s) "
             f"({', '.join(props) or 'none'}); got {len(args)} positional."
         )
-    naming: dict[str, Any] = dict(zip(props, args, strict=False))
-    attrs: dict[str, Any] = {}
+    naming: dict[str, object] = dict(zip(props, args, strict=False))
+    attrs: dict[str, object] = {}
     for key, value in kwargs.items():
         if key in props:
             if key in naming:
@@ -298,7 +315,7 @@ class Cursor:
         # attribute access — hasattr() and typos surface immediately.
         owner, child_aci_class = self._resolve_maker_level(name)
 
-        def _maker(*args: Any, **kwargs: Any) -> Cursor:
+        def _maker(*args: object, **kwargs: object) -> Cursor:
             return _make_child(owner, name, child_aci_class, args, kwargs)
 
         return _maker
@@ -337,14 +354,16 @@ class Cursor:
             "Use .mo(Class, ...) for classes outside the curated vocabulary."
         )
 
-    def _invoke_maker(self, name: str, args: tuple[Any, ...], kwargs: dict[str, Any]) -> Cursor:
+    def _invoke_maker(
+        self, name: str, args: tuple[object, ...], kwargs: dict[str, object]
+    ) -> Cursor:
         """Runtime maker shared by dynamic dispatch and generated cursors."""
         owner, child_aci_class = self._resolve_maker_level(name)
         return _make_child(owner, name, child_aci_class, args, kwargs)
 
     # ── Attributes ────────────────────────────────────────────────────────────
 
-    def set(self, **attrs: Any) -> Cursor:
+    def set(self, **attrs: object) -> Cursor:
         """Set scalar attributes on the current object.
 
         Values are merged with previously set attributes (last call wins) and
@@ -375,13 +394,13 @@ class Cursor:
             )
         _validate_attr_names(node.cls, sugared)
         merged = {**node.attrs, **sugared}
-        node.cls(**node.naming, **merged)
+        node.cls.model_validate({**node.naming, **merged})
         node.attrs = merged
         return self
 
     # ── References ────────────────────────────────────────────────────────────
 
-    def bind(self, **targets: Any) -> Cursor:
+    def bind(self, **targets: object) -> Cursor:
         """Declare lazy Rs relationships by target vocabulary and name.
 
         Each ``alias=name`` pair records a reference resolved at push time —
@@ -598,7 +617,7 @@ class Cursor:
 
     # ── Escape hatch ──────────────────────────────────────────────────────────
 
-    def mo(self, cls: type[ManagedObject], **kwargs: Any) -> Cursor:
+    def mo(self, cls: type[ManagedObject], **kwargs: object) -> Cursor:
         """Declare a child of an arbitrary generated class (escape hatch).
 
         For classes outside the curated vocabulary.  Naming props are picked
@@ -617,7 +636,7 @@ class Cursor:
         naming, attrs = _split_naming(cls, (), kwargs)
         return _attach(self._node, cls, cls.__name__, naming, attrs)
 
-    def raw(self, aci_class: str, **wire_attrs: Any) -> Cursor:
+    def raw(self, aci_class: str, **wire_attrs: object) -> Cursor:
         """Declare a child by ACI class *name* with **wire** attributes.
 
         The escape hatch for classes outside the generated model set (or when
@@ -711,7 +730,7 @@ class Cursor:
         self._node.children.append(node)
         return Cursor(node)
 
-    def raw_set(self, **wire_attrs: Any) -> Cursor:
+    def raw_set(self, **wire_attrs: object) -> Cursor:
         """Set **wire**-named attributes on the current node (escape hatch).
 
         For properties outside the node's typed surface — a prop newer than
@@ -813,7 +832,7 @@ class Cursor:
 
     # ── Compilation / push ────────────────────────────────────────────────────
 
-    def to_payload(self) -> dict[str, Any]:
+    def to_payload(self) -> JsonObject:
         """Validate, resolve references, and return the atomic push payload.
 
         Follows the ``Query.build()`` house pattern: full inspection without
@@ -880,7 +899,7 @@ class Cursor:
         mode: Literal["strict", "staged"] = "strict",
         verify_refs: bool = False,
         max_concurrent: int | None = None,
-    ) -> _Coroutine[Any, Any, PushReport]: ...
+    ) -> _Coroutine[object, object, PushReport]: ...
 
     @overload
     def push(
@@ -890,7 +909,7 @@ class Cursor:
         mode: Literal["plan"],
         verify_refs: bool = False,
         max_concurrent: int | None = None,
-    ) -> _Coroutine[Any, Any, PlanResult]: ...
+    ) -> _Coroutine[object, object, PlanResult]: ...
 
     def push(
         self,
@@ -899,7 +918,7 @@ class Cursor:
         mode: PushMode = "strict",
         verify_refs: bool = False,
         max_concurrent: int | None = None,
-    ) -> PushReport | PlanResult | _Coroutine[Any, Any, PushReport | PlanResult]:
+    ) -> PushReport | PlanResult | _Coroutine[object, object, PushReport | PlanResult]:
         """Validate the design and push it through *client*.
 
         Always operates on the **whole design tree** regardless of which
@@ -1022,8 +1041,8 @@ def _attach(
     parent: DesignNode,
     cls: type[ManagedObject],
     label: str,
-    naming: dict[str, Any],
-    attrs: dict[str, Any],
+    naming: dict[str, object],
+    attrs: dict[str, object],
     *,
     position: str | None = None,
 ) -> Cursor:
@@ -1065,8 +1084,8 @@ def _make_child(
     owner: DesignNode,
     label: str,
     child_aci_class: str,
-    args: tuple[Any, ...],
-    kwargs: dict[str, Any],
+    args: tuple[object, ...],
+    kwargs: dict[str, object],
 ) -> Cursor:
     """Maker implementation shared by all dynamically dispatched makers."""
     cls = _load_class(child_aci_class)

@@ -32,14 +32,20 @@ snapshot survives any renaming of the SDK's readable surface unchanged.
 from __future__ import annotations
 
 import json
+from collections.abc import Callable, Mapping
 from dataclasses import dataclass, field
-from typing import Any
+from typing import TYPE_CHECKING
 
 from niwaki._dn import parent_dn, rn_of
 from niwaki._read import shard_classes
 from niwaki._secrets import SECRET_VALUE_POSITIONS, secret_dn_classes
 from niwaki.exceptions._query import UnknownClassError
 from niwaki.query import _catalog
+from niwaki.types import JsonObject, JsonValue
+
+if TYPE_CHECKING:
+    from niwaki.facade import Niwaki
+    from niwaki.query._catalog import Catalog
 
 #: The stable sentinel written in place of a curated secret value.
 REDACTED = "<redacted>"
@@ -55,28 +61,15 @@ def _snapshot_universe() -> tuple[frozenset[str], frozenset[str]]:
     non-exportable containers deep never drops as an orphan (one-level closure
     would drop it — the parent attaches but the grandparent is unread).
     """
-    import sqlite3
-
     from niwaki.domain._child_map import CHILD_MAP
 
-    con = sqlite3.connect(f"file:{_catalog.DEFAULT_PATH}?mode=ro", uri=True)
-    try:
-        # mo_category != FaultCurrent: faultInst is the one exportable class
-        # that is runtime state, not configuration — a fault raising or
-        # clearing must not read as config drift (measured: a new BD's
-        # unformed relation carried its fault straight into the capture).
-        keep = frozenset(
-            name
-            for (name,) in con.execute(
-                "SELECT class_name FROM mo WHERE is_exportable=1 AND is_abstract=0"
-                " AND mo_category != 'FaultCurrent'"
-            )
-        )
-        concrete = frozenset(
-            name for (name,) in con.execute("SELECT class_name FROM mo WHERE is_abstract=0")
-        )
-    finally:
-        con.close()
+    reader = _catalog.catalog()
+    # FaultCurrent is excluded from ``keep``: faultInst is the one exportable
+    # class that is runtime state, not configuration — a fault raising or
+    # clearing must not read as config drift (measured: a new BD's unformed
+    # relation carried its fault straight into the capture).
+    keep = reader._exportable_classes()
+    concrete = reader._concrete_classes()
 
     # Invert CHILD_MAP to {child: {parents}} once, then walk ancestors upward.
     parents_of: dict[str, set[str]] = {}
@@ -120,7 +113,7 @@ class Snapshot:
     """
 
     scope: str
-    tree: dict[str, Any] | None
+    tree: JsonObject | None
     coverage: dict[str, int] = field(default_factory=dict)
     warnings: tuple[str, ...] = ()
 
@@ -156,7 +149,7 @@ class Snapshot:
         )
 
 
-def take(aci: Any, scope: str = "uni") -> Snapshot:
+def take(aci: Niwaki, scope: str = "uni") -> Snapshot:
     """Capture the configuration under *scope* into a :class:`Snapshot`.
 
     Reads every exportable class under the scope through the sharded,
@@ -191,7 +184,7 @@ def take(aci: Any, scope: str = "uni") -> Snapshot:
     # ``target-subtree-class=polUni`` on ``/api/mo/uni.json`` answers zero
     # items even though the object exists — and the root must be present for
     # the tree to assemble at all.  One extra request, correct for any scope.
-    items: list[dict[str, Any]] = list(session.get(f"/api/mo/{scope}.json"))
+    items: list[JsonObject] = list(session.get(f"/api/mo/{scope}.json"))
     if not items:
         return Snapshot(scope=scope, tree=None)
     for shard in shard_classes(request):
@@ -205,7 +198,9 @@ def take(aci: Any, scope: str = "uni") -> Snapshot:
     return _assemble(scope, items, keep)
 
 
-def _normalise_attrs(reader: Any, cls_name: str, attrs: dict[str, str]) -> dict[str, str]:
+def _normalise_attrs(
+    reader: Catalog, cls_name: str, attrs: Mapping[str, JsonValue]
+) -> dict[str, JsonValue]:
     """Drop the operational halo, redact secrets — sorted, deterministic.
 
     A class the shipped catalogue does not know (the scope root can be
@@ -217,7 +212,7 @@ def _normalise_attrs(reader: Any, cls_name: str, attrs: dict[str, str]) -> dict[
         flags = reader.prop_flags(cls_name)
     except UnknownClassError:
         return dict(sorted(attrs.items()))
-    kept: dict[str, str] = {}
+    kept: dict[str, JsonValue] = {}
     for wire, value in attrs.items():
         prop = flags.get(wire)
         if prop is None or not prop.is_configurable:
@@ -228,16 +223,123 @@ def _normalise_attrs(reader: Any, cls_name: str, attrs: dict[str, str]) -> dict[
     return dict(sorted(kept.items()))
 
 
-def _assemble(scope: str, items: list[dict[str, Any]], keep: frozenset[str]) -> Snapshot:
+@dataclass(slots=True)
+class _TreeNode:
+    """Typed view of one snapshot tree node — the JSON shape, proven.
+
+    :attr:`Snapshot.tree` is plain JSON (it is the serialised artefact); the
+    code that builds or walks it works on this view instead, so every field
+    has its real type.  :func:`_tree_node` parses the JSON form (fail-loud on
+    a malformed document), :meth:`to_json` renders it back.
+
+    Attributes:
+        aci_class: Wire class name (the JSON ``"class"`` key).
+        rn: Relative name.
+        attributes: Wire attributes, wire string values.
+        children: Child nodes.
+    """
+
+    aci_class: str
+    rn: str
+    attributes: dict[str, JsonValue]
+    children: list[_TreeNode] = field(default_factory=list)
+
+    def to_json(self) -> JsonObject:
+        """Render the node (and its subtree) as the snapshot JSON shape."""
+        attributes: JsonObject = dict(self.attributes)
+        return {
+            "class": self.aci_class,
+            "rn": self.rn,
+            "attributes": attributes,
+            "children": [child.to_json() for child in self.children],
+        }
+
+
+type _OnMalformed = Callable[[str, str], None]
+"""Receives ``(dn, detail)`` for a malformed node that is then skipped."""
+
+
+def _malformed(dn: str, detail: str, on_malformed: _OnMalformed | None) -> None:
+    """Report one malformed node: raise, or hand it to the collector."""
+    if on_malformed is None:
+        raise ValueError(f"malformed snapshot node at {dn}: {detail}")
+    on_malformed(dn, detail)
+
+
+def _tree_node(
+    node: JsonValue, dn: str, on_malformed: _OnMalformed | None = None
+) -> _TreeNode | None:
+    """Parse one snapshot tree node (and its subtree) from its JSON form.
+
+    Attribute values are kept exactly as written — ``take()`` writes wire
+    strings, a hand-built snapshot may hold any JSON scalar.  The *structure*
+    is checked: an object with a string ``class`` and ``rn``, an object
+    ``attributes`` and a list ``children``.
+
+    Args:
+        node: A ``{"class", "rn", "attributes", "children"}`` object.
+        dn: The node's DN, for the report (its parent's DN for a child whose
+            own ``rn`` is unreadable).
+        on_malformed: ``None`` to raise on the first malformed node; else a
+            callback receiving ``(dn, detail)`` per malformed node, which is
+            then skipped (with its subtree) while the rest still parses.
+
+    Returns:
+        The typed view, or ``None`` when *node* itself is malformed and
+        *on_malformed* collected it.
+
+    Raises:
+        ValueError: A node is malformed and *on_malformed* is ``None``.
+    """
+    if not isinstance(node, dict):
+        _malformed(dn, f"a node is {type(node).__name__}, not an object", on_malformed)
+        return None
+    aci_class, rn = node.get("class"), node.get("rn")
+    if not isinstance(aci_class, str) or not isinstance(rn, str):
+        _malformed(dn, "a node's 'class' and 'rn' must be strings", on_malformed)
+        return None
+    attributes, children = node.get("attributes"), node.get("children")
+    if not isinstance(attributes, dict):
+        _malformed(dn, f"{aci_class} {rn!r} has no 'attributes' object", on_malformed)
+        return None
+    if not isinstance(children, list):
+        _malformed(dn, f"{aci_class} {rn!r} has no 'children' list", on_malformed)
+        return None
+    parsed = _TreeNode(aci_class, rn, dict(attributes))
+    for child in children:
+        child_rn = child.get("rn") if isinstance(child, dict) else None
+        child_dn = f"{dn}/{child_rn}" if isinstance(child_rn, str) else dn
+        sub = _tree_node(child, child_dn, on_malformed)
+        if sub is not None:
+            parsed.children.append(sub)
+    return parsed
+
+
+def _parse_tree(snapshot: Snapshot) -> _TreeNode | None:
+    """The typed view of *snapshot*'s tree, or ``None`` for an empty capture.
+
+    Raises:
+        ValueError: The tree is structurally malformed.
+    """
+    if snapshot.tree is None:
+        return None
+    return _tree_node(snapshot.tree, snapshot.scope)
+
+
+def _assemble(scope: str, items: list[JsonObject], keep: frozenset[str]) -> Snapshot:
     """Pure second half of :func:`take`: normalise, redact, attach, prune, count."""
     reader = _catalog.catalog()
 
-    nodes: dict[str, dict[str, Any]] = {}
+    nodes: dict[str, _TreeNode] = {}
     for item in items:
         (cls_name,) = item.keys()
-        attrs = dict(item[cls_name].get("attributes", {}))
+        body = item[cls_name]
+        raw_attrs = body.get("attributes", {}) if isinstance(body, dict) else None
+        if not isinstance(raw_attrs, dict):
+            raise TypeError(f"{cls_name} envelope carries no attributes object")
+        attrs = dict(raw_attrs)
         dn = attrs.pop("dn", None)
-        if dn:  # a paginated read can echo a boundary DN; last write wins
+        if isinstance(dn, str) and dn:  # a paginated read can echo a boundary DN
             nodes[dn] = _node(cls_name, dn, reader, attrs)
 
     root = nodes.get(scope)
@@ -249,19 +351,19 @@ def _assemble(scope: str, items: list[dict[str, Any]], keep: frozenset[str]) -> 
             continue
         parent = nodes.get(parent_dn(dn) or "")
         if parent is not None:
-            parent["children"].append(node)
+            parent.children.append(node)
 
-    def _sort(node: dict[str, Any]) -> None:
-        node["children"].sort(key=lambda child: (child["class"], child["rn"]))
-        for child in node["children"]:
+    def _sort(node: _TreeNode) -> None:
+        node.children.sort(key=lambda child: (child.aci_class, child.rn))
+        for child in node.children:
             _sort(child)
 
-    def _prune(node: dict[str, Any]) -> bool:
+    def _prune(node: _TreeNode) -> bool:
         """Keep a node when it is exportable or shelters an exportable descendant."""
-        node["children"] = [child for child in node["children"] if _prune(child)]
-        return node["class"] in keep or bool(node["children"])
+        node.children = [child for child in node.children if _prune(child)]
+        return node.aci_class in keep or bool(node.children)
 
-    root["children"] = [child for child in root["children"] if _prune(child)]
+    root.children = [child for child in root.children if _prune(child)]
     _sort(root)
 
     # Coverage and warnings are read off the FINAL tree — the fact — so they
@@ -273,28 +375,25 @@ def _assemble(scope: str, items: list[dict[str, Any]], keep: frozenset[str]) -> 
     coverage: dict[str, int] = {}
     warnings: list[str] = []
 
-    def _account(node: dict[str, Any], dn: str) -> None:
-        if node["class"] in keep or dn == scope:
-            coverage[node["class"]] = coverage.get(node["class"], 0) + 1
-        if node["class"] in dn_secret_classes:
+    def _account(node: _TreeNode, dn: str) -> None:
+        if node.aci_class in keep or dn == scope:
+            coverage[node.aci_class] = coverage.get(node.aci_class, 0) + 1
+        if node.aci_class in dn_secret_classes:
             warnings.append(
-                f"{dn}: the DN of a {node['class']} carries a secret in its naming "
+                f"{dn}: the DN of a {node.aci_class} carries a secret in its naming "
                 "property; it cannot be redacted in place"
             )
-        for child in node["children"]:
-            _account(child, f"{dn}/{child['rn']}")
+        for child in node.children:
+            _account(child, f"{dn}/{child.rn}")
 
     _account(root, scope)
-    return Snapshot(scope=scope, tree=root, coverage=coverage, warnings=tuple(sorted(warnings)))
+    return Snapshot(
+        scope=scope, tree=root.to_json(), coverage=coverage, warnings=tuple(sorted(warnings))
+    )
 
 
-def _node(cls_name: str, dn: str, reader: Any, attrs: dict[str, str]) -> dict[str, Any]:
-    return {
-        "class": cls_name,
-        "rn": rn_of(dn),
-        "attributes": _normalise_attrs(reader, cls_name, attrs),
-        "children": [],
-    }
+def _node(cls_name: str, dn: str, reader: Catalog, attrs: dict[str, JsonValue]) -> _TreeNode:
+    return _TreeNode(cls_name, rn_of(dn), _normalise_attrs(reader, cls_name, attrs))
 
 
 # ── Diff — two snapshots, one verdict (brick: drift detection) ────────────────
@@ -308,13 +407,15 @@ class SnapshotDiff:
         added: DNs present in *b* but not in *a*, sorted.
         removed: DNs present in *a* but not in *b*, sorted.
         changed: Per-DN attribute deltas, ``{dn: {wire: (a_value, b_value)}}``
-            — only attributes that differ; an attribute present on one side
-            only appears with ``None`` on the other.
+            — only attributes that differ, values as written (wire strings
+            from :func:`take`, any JSON scalar in a hand-built snapshot); an
+            attribute present on one side only appears with ``None`` on the
+            other, so a ``null`` value reads like an absent one.
     """
 
     added: tuple[str, ...]
     removed: tuple[str, ...]
-    changed: dict[str, dict[str, tuple[Any, Any]]]
+    changed: dict[str, dict[str, tuple[JsonValue, JsonValue]]]
 
     @property
     def has_changes(self) -> bool:
@@ -322,22 +423,23 @@ class SnapshotDiff:
         return bool(self.added or self.removed or self.changed)
 
 
-def _flatten(snapshot: Snapshot) -> dict[str, dict[str, Any]]:
+def _flatten(snapshot: Snapshot) -> dict[str, dict[str, JsonValue]]:
     """``{dn: attributes}`` for every node of a snapshot's tree."""
-    flat: dict[str, dict[str, Any]] = {}
+    flat: dict[str, dict[str, JsonValue]] = {}
 
-    def _walk(node: dict[str, Any], parent: str) -> None:
-        dn = node["rn"] if not parent else f"{parent}/{node['rn']}"
-        flat[dn] = node["attributes"]
-        for child in node["children"]:
+    def _walk(node: _TreeNode, parent: str) -> None:
+        dn = node.rn if not parent else f"{parent}/{node.rn}"
+        flat[dn] = node.attributes
+        for child in node.children:
             _walk(child, dn)
 
-    if snapshot.tree is not None:
+    tree = _parse_tree(snapshot)
+    if tree is not None:
         # The root's rn is not part of its own scope DN reconstruction: use
         # the scope verbatim so tenant-scoped and uni-scoped snapshots of the
         # same subtree flatten to comparable DNs.
-        flat[snapshot.scope] = snapshot.tree["attributes"]
-        for child in snapshot.tree["children"]:
+        flat[snapshot.scope] = tree.attributes
+        for child in tree.children:
             _walk(child, snapshot.scope)
     return flat
 
@@ -358,7 +460,10 @@ def diff(a: Snapshot, b: Snapshot) -> SnapshotDiff:
         captures describe identical configuration.
 
     Raises:
-        ValueError: The snapshots cover different scopes — comparing a tenant
+        ValueError: A snapshot tree is structurally malformed (a node that
+            is not an object, a missing or non-string ``class``/``rn``,
+            ``attributes`` not an object, ``children`` not a list) — or the
+            snapshots cover different scopes — comparing a tenant
             to a whole fabric is a mistake, not a diff.
 
     Example::
@@ -376,7 +481,7 @@ def diff(a: Snapshot, b: Snapshot) -> SnapshotDiff:
 
     added = tuple(sorted(set(flat_b) - set(flat_a)))
     removed = tuple(sorted(set(flat_a) - set(flat_b)))
-    changed: dict[str, dict[str, tuple[Any, Any]]] = {}
+    changed: dict[str, dict[str, tuple[JsonValue, JsonValue]]] = {}
     for dn in sorted(set(flat_a) & set(flat_b)):
         attrs_a, attrs_b = flat_a[dn], flat_b[dn]
         delta = {

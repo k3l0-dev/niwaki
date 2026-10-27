@@ -33,6 +33,7 @@ from niwaki.transport._subscription_socket import (
     SubscriptionGap,
     SubscriptionOverflow,
 )
+from niwaki.types import JsonObject
 
 
 class EventKind(StrEnum):
@@ -109,7 +110,8 @@ def event_from_raw(item: RawPushItem) -> SubscriptionEvent[ManagedObject]:
         not crash on an APIC value it has not seen before.
     """
     if isinstance(item, RawSubscriptionEvent):
-        envelope = {item.class_name: {"attributes": item.attributes}}
+        attributes: JsonObject = dict(item.attributes)
+        envelope: JsonObject = {item.class_name: {"attributes": attributes}}
         mo = ManagedObject.from_event(envelope)
         try:
             kind = EventKind(item.status)

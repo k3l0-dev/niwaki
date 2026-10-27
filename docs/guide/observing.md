@@ -46,6 +46,45 @@ reference page.
 `aci.node(dn, cls)` reaches any explicit DN; `.mo(Class, **naming)` descends
 one level for classes outside the curated vocabulary.
 
+### Typed navigation
+
+Navigation is fully typed for mypy and pyright: your editor completes the
+names valid under each node, and every step has a precise type.  A name with
+an argument is a node; the same call with no argument is a query over that
+class; `read()` returns the concrete model:
+
+```python
+from niwaki.models.fv.fvBD import fvBD
+
+bd = aci.tenant("prod").bd("web")  # checker: fvBDNode
+web = bd.read()  # checker: fvBD — fields complete, typos are errors
+assert isinstance(web, fvBD)
+subnets = bd.subnet()  # checker: Query[fvSubnet]
+```
+
+Naming arguments are checked too.  Multi-prop children take their naming
+props as keywords, under their Python names (`subnet(subnet="10.0.0.1/24")`,
+`static_path(target_dn=...)`); the APIC attribute name is accepted at runtime
+but is a type error.  A name that is not a navigation edge is a type error as
+well, on the client and on every node:
+
+```text
+aci.tenantt("prod")                  # mypy: "Niwaki" has no attribute "tenantt"
+aci.tenant("prod").bdd("web")        # mypy: "NotANavigationName" not callable
+bd.subnet(ip="10.0.0.1/24")          # mypy: Unexpected keyword argument "ip"
+```
+
+The types exist for the checker only: at runtime, navigation resolves exactly
+as before and every node is a plain {class}`~niwaki.NiwakiNode`.  The escape
+hatches stay dynamic — `aci.node(dn, cls)` and `.mo(Class, **naming)` return
+`NiwakiNode[Class]`, on which any further name is accepted by the checker and
+resolved at runtime.
+
+Type-checking a project that uses niwaki with mypy costs about four extra
+seconds on a cold run, because mypy analyses the model classes the navigation
+types refer to; the result is cached, so later runs pay nothing.  Parallel checking
+(`mypy -n auto`) shortens the cold run; pyright adds well under a second.
+
 ## The query builder
 
 {meth}`~niwaki.Niwaki.query` targets a class fabric-wide; `node.query(...)`

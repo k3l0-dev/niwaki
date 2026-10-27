@@ -13,6 +13,8 @@ from niwaki.exceptions import (
     UnresolvedReferenceError,
 )
 
+from .._jsonpath import at
+
 
 class TestClosedWorld:
     def test_forward_reference_resolves(self) -> None:
@@ -23,7 +25,7 @@ class TestClosedWorld:
         extras = resolve(cfg.design_node.root())
         (rs,) = extras[bd.design_node]
         assert rs._aci_class == "fvRsCtx"
-        assert rs.to_apic()["fvRsCtx"]["attributes"]["tnFvCtxName"] == "prod"
+        assert at(rs.to_apic(), "fvRsCtx", "attributes", "tnFvCtxName") == "prod"
 
     def test_unresolved_target_raises_with_suggestion(self) -> None:
         cfg = tenant("prod")
@@ -66,7 +68,7 @@ class TestDirection:
         (rs,) = extras[l3out.design_node]
         assert rs._aci_class == "l3extRsEctx"
         # The Rs points back at the owner VRF.
-        assert rs.to_apic()["l3extRsEctx"]["attributes"]["tnFvCtxName"] == "prod"
+        assert at(rs.to_apic(), "l3extRsEctx", "attributes", "tnFvCtxName") == "prod"
 
     def test_no_rs_class_in_either_direction(self) -> None:
         cfg = tenant("prod")

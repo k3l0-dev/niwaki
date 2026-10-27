@@ -18,6 +18,8 @@ from niwaki.design import Cursor, design
 from niwaki.design._compiler import compile_ops
 from niwaki.design._resolver import resolve
 
+from .._jsonpath import as_object
+
 
 def edge_and_management() -> Cursor:
     """One design: the L2 edge, the management EPGs, the tags."""
@@ -65,7 +67,8 @@ def _flatten(cursor: Cursor) -> dict[str, dict[str, str]]:
     for op in compile_ops(root, resolve(root)):
         assert op.payload is not None
         ((_, body),) = op.payload.items()
-        flat[op.dn] = {k: v for k, v in body["attributes"].items() if k != "dn"}
+        attributes = as_object(as_object(body)["attributes"])
+        flat[op.dn] = {k: v for k, v in attributes.items() if k != "dn"}
     return flat
 
 

@@ -16,15 +16,18 @@ from niwaki.models.base import ManagedObject
 from niwaki.models.fv.fvBD import fvBD
 from niwaki.models.fv.fvTenant import fvTenant
 
+from .._jsonpath import as_object, at
+
 
 class TestConstructionFailsLoud:
     def test_a_foreign_property_is_refused_not_dropped(self) -> None:
         with pytest.raises(ValidationError, match="brandNewProp"):
-            fvBD(name="web", brandNewProp="futureValue")
+            # The unknown keyword is the point: pyright refuses it statically too.
+            fvBD(name="web", brandNewProp="futureValue")  # pyright: ignore[reportCallIssue]
 
     def test_the_error_names_every_foreign_key(self) -> None:
         with pytest.raises(ValidationError, match=r"'alsoWrong', 'brandNewProp'"):
-            fvBD(name="web", brandNewProp="x", alsoWrong="y")
+            fvBD(name="web", brandNewProp="x", alsoWrong="y")  # pyright: ignore[reportCallIssue]
 
     def test_a_non_string_key_still_raises_a_validation_error(self) -> None:
         """A raw TypeError from the guard's own message-building would escape
@@ -35,7 +38,7 @@ class TestConstructionFailsLoud:
     def test_a_typo_on_a_real_property_is_refused(self) -> None:
         """The everyday case: one letter off from an existing field."""
         with pytest.raises(ValidationError, match="arp_floodign"):
-            fvBD(name="web", arp_floodign=True)
+            fvBD(name="web", arp_floodign=True)  # pyright: ignore[reportCallIssue]
 
     def test_python_names_still_construct(self) -> None:
         assert fvBD(name="web", arp_flooding=True).arp_flooding is True
@@ -43,7 +46,10 @@ class TestConstructionFailsLoud:
     def test_wire_aliases_still_construct(self) -> None:
         """``populate_by_name`` accepts the wire spelling; the guard must not
         reject what the model itself accepts."""
-        assert fvBD(name="web", arpFlood="yes").arp_flooding is True
+        # The wire alias is a runtime-only door: the typed constructor exposes
+        # the readable Python name alone (PEP 681), hence the targeted ignore.
+        bd = fvBD(name="web", arpFlood="yes")  # pyright: ignore[reportCallIssue]
+        assert bd.arp_flooding is True
 
     def test_children_is_a_legitimate_key(self) -> None:
         bd = fvBD(name="web", children=[])
@@ -145,7 +151,7 @@ class TestToApicExcludesExtras:
             name="web",
             modTs="2024-01-01T00:00:00.000+00:00",
         )
-        attrs = mo.to_apic()["fvBD"]["attributes"]
+        attrs = as_object(at(mo.to_apic(), "fvBD", "attributes"))
         assert attrs == {"name": "web"}
 
 

@@ -46,11 +46,14 @@ deliberately kept out of the rendered class documentation):
 
 from __future__ import annotations
 
-from typing import Any, ClassVar, Self
+from collections.abc import Mapping
+from typing import Any, ClassVar, Self, Unpack
 
 from pydantic import BaseModel, ConfigDict, PrivateAttr, model_validator
 
-from niwaki.models._wire import from_wire, parse_flags, to_wire
+from niwaki._json import as_list, as_mapping
+from niwaki.models._wire import from_wire, split_flags, to_wire
+from niwaki.types import JsonObject
 
 REGISTRY: dict[str, type[ManagedObject]] = {}
 """ACI class name → generated Python class, for every imported model.
@@ -69,7 +72,7 @@ _ALIAS_MAP_CACHE: dict[type[ManagedObject], dict[str, str]] = {}
 _CONSTRUCTOR_KEYS_CACHE: dict[type[ManagedObject], frozenset[str]] = {}
 
 
-def _coerce_apic_value(annotation: Any, value: Any) -> Any:
+def _coerce_apic_value(annotation: object, value: object) -> object:
     """Coerce a raw APIC attribute onto the field's declared Python type.
 
     Thin seam over :func:`niwaki.models._wire.from_wire`: ``from_apic`` builds
@@ -108,7 +111,7 @@ def _coerce_read(value: object, kind: str | None) -> object:
     if kind is None or not isinstance(value, str):
         return value
     if kind == "flags":
-        return frozenset(parse_flags(value))
+        return frozenset(split_flags(value))
     py_type = _KIND_TO_TYPE.get(kind)
     if py_type is None:
         return value  # enum / ip / mac / named_number / str keep the wire string
@@ -192,7 +195,7 @@ class ManagedObject(BaseModel):
 
     @model_validator(mode="before")
     @classmethod
-    def _reject_unknown_construction_keys(cls, data: Any) -> Any:
+    def _reject_unknown_construction_keys(cls, data: object) -> object:
         """Fail loud on a property this model does not have — never drop it.
 
         Before this validator, ``fvBD(name="web", brandNewProp="x")`` absorbed
@@ -222,7 +225,7 @@ class ManagedObject(BaseModel):
             )
         return data
 
-    def __setattr__(self, name: str, value: Any) -> None:
+    def __setattr__(self, name: str, value: object) -> None:
         """Fail loud on assigning a property this model does not have.
 
         The construction guard alone would leave the documented read-modify-
@@ -287,7 +290,7 @@ class ManagedObject(BaseModel):
             }
         return _ALIAS_MAP_CACHE[cls]
 
-    def __init_subclass__(cls, **kwargs: Any) -> None:
+    def __init_subclass__(cls, **kwargs: Unpack[ConfigDict]) -> None:
         """Auto-register every concrete subclass in REGISTRY.
 
         Called automatically by Python when a class inherits from ManagedObject.
@@ -452,7 +455,7 @@ class ManagedObject(BaseModel):
                 out[key] = value if isinstance(value, str) else to_wire(value)
         return out
 
-    def __getattr__(self, name: str) -> Any:
+    def __getattr__(self, name: str) -> Any:  # Any: catalogue-served attribute, typed at runtime
         """Model fields and extras resolve normally; readable names via the catalogue.
 
         A generated object answers ``bd.arp_flooding`` from its typed field.  A
@@ -484,7 +487,7 @@ class ManagedObject(BaseModel):
         # final "no such attribute" (including the ``_``-prefixed names skipped here).
         return super().__getattr__(name)  # type: ignore[misc]  # BaseModel defines it
 
-    def _catalogue_read(self, name: str) -> Any:
+    def _catalogue_read(self, name: str) -> object:
         """Coerced value of a readable property via the catalogue, or :data:`_MISS`.
 
         Returns :data:`_MISS` — so the caller falls back to Pydantic — when the
@@ -521,7 +524,7 @@ class ManagedObject(BaseModel):
 
     # ── Serialisation ─────────────────────────────────────────────────────────
 
-    def to_apic(self) -> dict[str, Any]:
+    def to_apic(self) -> JsonObject:
         """Serialise this object to the APIC JSON envelope format.
 
         Only fields that were explicitly set at construction time (tracked via
@@ -552,6 +555,7 @@ class ManagedObject(BaseModel):
         # generated model) serialises through the catalogue under the same
         # surgical contract: the wire class it was read as, its naming props,
         # and any field explicitly assigned since — never the absorbed extras.
+        attrs: JsonObject
         if not self._aci_class and self._wire_class:
             envelope_class = self._wire_class
             attrs = self._catalogue_serialize()
@@ -587,12 +591,12 @@ class ManagedObject(BaseModel):
             # wire boundary, after the typed/catalogue serialisation - the
             # strict model never sees these keys.
             attrs.update(self._raw_wire_attrs)
-        envelope: dict[str, Any] = {envelope_class: {"attributes": attrs}}
+        body: JsonObject = {"attributes": attrs}
         if self.children:
-            envelope[envelope_class]["children"] = [child.to_apic() for child in self.children]
-        return envelope
+            body["children"] = [child.to_apic() for child in self.children]
+        return {envelope_class: body}
 
-    def _catalogue_serialize(self) -> dict[str, Any]:
+    def _catalogue_serialize(self) -> JsonObject:
         """Surgical attributes of a catalogue-served instance, via the catalogue.
 
         Mirrors the typed path's contract exactly: the naming props (the APIC
@@ -603,7 +607,7 @@ class ManagedObject(BaseModel):
         metadata for the class (e.g. a class minted after this build).
         """
         extra = self.model_extra or {}
-        attrs: dict[str, Any] = {}
+        attrs: JsonObject = {}
         from niwaki.query._catalog import catalog
 
         try:
@@ -628,7 +632,7 @@ class ManagedObject(BaseModel):
     # ── Surgical construction ─────────────────────────────────────────────────
 
     @classmethod
-    def surgical(cls, naming: dict[str, Any], **changes: Any) -> Self:
+    def surgical(cls, naming: Mapping[str, object], **changes: object) -> Self:
         """Construct a payload-only instance for surgical APIC writes.
 
         Builds an instance via ``model_construct`` with ``model_fields_set``
@@ -693,8 +697,8 @@ class ManagedObject(BaseModel):
 
     @classmethod
     def _dispatch_and_coerce(
-        cls, data: dict[str, Any]
-    ) -> tuple[type[ManagedObject], dict[str, Any], dict[str, Any], str]:
+        cls, data: Mapping[str, object]
+    ) -> tuple[type[ManagedObject], dict[str, object], Mapping[str, object], str]:
         """Shared first half of :meth:`from_apic`/:meth:`from_event`: dispatch, alias, coerce.
 
         Args:
@@ -708,7 +712,10 @@ class ManagedObject(BaseModel):
         """
         aci_class = next(iter(data))
         target_cls: type[ManagedObject] = REGISTRY.get(aci_class, cls)
-        inner = data[aci_class]
+        body = data[aci_class]
+        inner = as_mapping(body)
+        if inner is None:
+            raise TypeError(f"{aci_class} envelope body is {type(body).__name__}, not an object")
 
         # Use model_construct to bypass Pydantic validation:
         # - APIC returns sentinel strings like "not-applicable" for unset fields
@@ -718,7 +725,12 @@ class ManagedObject(BaseModel):
         #   because extra="allow" is set on the model config.
         # - _coerce_apic_value converts "yes"/"no" strings to Python bools (and
         #   digit-strings to int) so that mo_diff comparisons are type-correct.
-        raw_attrs: dict[str, Any] = inner.get("attributes", {})
+        attributes = inner.get("attributes", {})
+        wire_attrs = as_mapping(attributes)
+        if wire_attrs is None:
+            raise TypeError(
+                f"{aci_class} attributes are {type(attributes).__name__}, not an object"
+            )
 
         # Remap ACI wire names → Python field names via Field aliases.
         # After D2 codegen, model_fields keys are snake_case (e.g. "arp_flooding")
@@ -726,9 +738,9 @@ class ManagedObject(BaseModel):
         # not resolve aliases, so we translate before calling it.
         # The alias map is cached per-class to avoid recomputing on every object.
         alias_map = target_cls._get_alias_map()
-        raw_attrs = {alias_map.get(k, k): v for k, v in raw_attrs.items()}
+        raw_attrs = {alias_map.get(k, k): v for k, v in wire_attrs.items()}
 
-        coerced: dict[str, Any] = {
+        coerced: dict[str, object] = {
             k: _coerce_apic_value(
                 target_cls.model_fields[k].annotation if k in target_cls.model_fields else None,
                 v,
@@ -738,7 +750,7 @@ class ManagedObject(BaseModel):
         return target_cls, coerced, inner, aci_class
 
     @classmethod
-    def from_apic(cls, data: dict[str, Any]) -> ManagedObject:
+    def from_apic(cls, data: Mapping[str, object]) -> ManagedObject:
         """Deserialise an APIC JSON response envelope into a typed ManagedObject.
 
         Uses REGISTRY to dispatch to the correct subclass.  If the ACI class is
@@ -796,13 +808,13 @@ class ManagedObject(BaseModel):
         # readable field names through the catalogue (see ``__getattr__``).
         obj._wire_class = aci_class
 
-        for child_raw in inner.get("children", []):
+        for child_raw in _children_of(inner, aci_class):
             obj.children.append(ManagedObject.from_apic(child_raw))
 
         return obj
 
     @classmethod
-    def from_event(cls, data: dict[str, Any]) -> ManagedObject:
+    def from_event(cls, data: Mapping[str, object]) -> ManagedObject:
         """Deserialise one object-subscription push item into a typed ManagedObject.
 
         A sibling of :meth:`from_apic`, differing in exactly one respect:
@@ -856,10 +868,38 @@ class ManagedObject(BaseModel):
         obj = target_cls.model_construct(_fields_set=fields_set, **coerced)
         obj._wire_class = aci_class
 
-        for child_raw in inner.get("children", []):
+        for child_raw in _children_of(inner, aci_class):
             obj.children.append(ManagedObject.from_event(child_raw))
 
         return obj
+
+
+def _children_of(inner: Mapping[str, object], aci_class: str) -> list[Mapping[str, object]]:
+    """Return the child envelopes of one envelope body, proving their shape.
+
+    Args:
+        inner: The envelope body (``{"attributes": ..., "children": [...]}``).
+        aci_class: The envelope's class, named in the error.
+
+    Returns:
+        The child envelopes (empty when the body carries none).
+
+    Raises:
+        TypeError: ``children`` is not a list of JSON objects — a body the
+            APIC never sends.  :func:`~niwaki.utils.parse_imdata` reports it
+            as a :class:`~niwaki.exceptions.DeserializationError`.
+    """
+    raw_children = inner.get("children", [])
+    children = as_list(raw_children)
+    if children is None:
+        raise TypeError(f"{aci_class} children are {type(raw_children).__name__}, not a list")
+    envelopes: list[Mapping[str, object]] = []
+    for child in children:
+        envelope = as_mapping(child)
+        if envelope is None:
+            raise TypeError(f"{aci_class} child is {type(child).__name__}, not an object")
+        envelopes.append(envelope)
+    return envelopes
 
 
 # Resolve the self-referential `children: list[ManagedObject]` annotation

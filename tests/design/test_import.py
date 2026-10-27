@@ -17,12 +17,15 @@ from typing import Any
 
 import pytest
 
+from niwaki._json import JsonObject
 from niwaki.design import design, ref, to_design
 from niwaki.design._import import _maker_inversion, _verb_inversion
 from niwaki.design._node import DesignNode
 from niwaki.exceptions import DesignError, SnapshotImportError
 from niwaki.query._catalog import catalog
 from niwaki.snapshot import REDACTED, Snapshot
+
+from .._jsonpath import as_array, as_object, at
 
 # ── Helpers: payload → pseudo-snapshot, canonical payload comparison ──────────
 
@@ -83,7 +86,7 @@ def find_node(root: DesignNode, aci_class: str) -> DesignNode | None:
 def _tenant_snapshot(**bd_extra: str) -> Snapshot:
     """A minimal hand-built uni snapshot: tenant → (vrf, bd→bind(vrf))."""
     bd_attrs = {"name": "web", **bd_extra}
-    tree = {
+    tree: JsonObject = {
         "class": "polUni",
         "rn": "uni",
         "attributes": {},
@@ -231,8 +234,8 @@ class TestCuratedInversion:
     def test_dangling_name_relation_falls_back_to_raw(self) -> None:
         snap = _tenant_snapshot()
         assert snap.tree is not None
-        rs = snap.tree["children"][0]["children"][0]["children"][0]
-        rs["attributes"]["tnFvCtxName"] = "ghost"  # no such VRF anywhere
+        rs = at(snap.tree, "children", 0, "children", 0, "children", 0)
+        as_object(at(rs, "attributes"))["tnFvCtxName"] = "ghost"  # no such VRF anywhere
         cfg = to_design(snap)
         bd = find_node(cfg.design_node, "fvBD")
         assert bd is not None
@@ -263,8 +266,8 @@ class TestUnknownPolicy:
     def _snapshot_with_unknown_class(self) -> Snapshot:
         snap = _tenant_snapshot()
         assert snap.tree is not None
-        tenant_node = snap.tree["children"][0]
-        tenant_node["children"].append(
+        tenant_node = as_object(at(snap.tree, "children", 0))
+        as_array(tenant_node["children"]).append(
             {
                 "class": "fvFutureThing",
                 "rn": "future-x",
@@ -277,7 +280,7 @@ class TestUnknownPolicy:
     def test_unknown_class_raises_collect_all(self) -> None:
         snap = self._snapshot_with_unknown_class()
         assert snap.tree is not None
-        snap.tree["children"][0]["children"].append(
+        as_array(at(snap.tree, "children", 0, "children")).append(
             {"class": "fvOtherThing", "rn": "other-y", "attributes": {}, "children": []}
         )
         with pytest.raises(SnapshotImportError) as exc:
@@ -321,7 +324,7 @@ class TestUnknownPolicy:
         # commTelnet under commPol, uiSettingsCont under polUni).
         snap = _tenant_snapshot()
         assert snap.tree is not None
-        snap.tree["children"][0]["children"].append(
+        as_array(at(snap.tree, "children", 0, "children")).append(
             {"class": "topSystem", "rn": "sys", "attributes": {}, "children": []}
         )
         cfg = to_design(snap)
@@ -332,7 +335,7 @@ class TestUnknownPolicy:
         # containment the tables lack still imports, fully typed.
         snap = _tenant_snapshot()
         assert snap.tree is not None
-        snap.tree["children"].append(
+        as_array(snap.tree["children"]).append(
             {
                 "class": "fvSubnet",
                 "rn": "subnet-[10.8.8.1/24]",
@@ -376,8 +379,8 @@ class TestEnumEscape:
     def test_unknown_enum_member_escapes_to_the_wire_channel(self) -> None:
         snap = _tenant_snapshot()
         assert snap.tree is not None
-        vrf = snap.tree["children"][0]["children"][1]
-        vrf["attributes"]["ipDataPlaneLearning"] = "futuremode"
+        vrf = at(snap.tree, "children", 0, "children", 1)
+        as_object(at(vrf, "attributes"))["ipDataPlaneLearning"] = "futuremode"
         cfg = to_design(snap)  # no opt-in needed
         ctx = find_node(cfg.design_node, "fvCtx")
         assert ctx is not None
@@ -388,8 +391,8 @@ class TestEnumEscape:
     def test_known_enum_member_stays_typed(self) -> None:
         snap = _tenant_snapshot()
         assert snap.tree is not None
-        vrf = snap.tree["children"][0]["children"][1]
-        vrf["attributes"]["ipDataPlaneLearning"] = "disabled"
+        vrf = at(snap.tree, "children", 0, "children", 1)
+        as_object(at(vrf, "attributes"))["ipDataPlaneLearning"] = "disabled"
         cfg = to_design(snap)
         ctx = find_node(cfg.design_node, "fvCtx")
         assert ctx is not None
@@ -415,9 +418,9 @@ class TestEnumEscape:
         payload = cfg.to_payload()
         snap = pseudo_snapshot(payload)
         assert snap.tree is not None
-        entry = snap.tree["children"][0]["children"][0]["children"][0]
+        entry = as_object(at(snap.tree, "children", 0, "children", 0, "children", 0))
         assert entry["class"] == "vzEntry"
-        entry["attributes"]["dFromPort"] = "99999"
+        as_object(at(entry, "attributes"))["dFromPort"] = "99999"
         imported = to_design(snap)
         node = find_node(imported.design_node, "vzEntry")
         assert node is not None
@@ -428,12 +431,78 @@ class TestEnumEscape:
         # refuses is the one value family that still collects.
         snap = _tenant_snapshot()
         assert snap.tree is not None
-        tenant_node = snap.tree["children"][0]
+        tenant_node = as_object(at(snap.tree, "children", 0))
         tenant_node["rn"] = "tn-a b"
-        tenant_node["attributes"]["name"] = "a b"  # space: refused by pattern
+        as_object(at(tenant_node, "attributes"))["name"] = "a b"  # space: refused by pattern
         with pytest.raises(SnapshotImportError) as exc:
             to_design(snap)
         assert any(p.kind == "invalid-value" for p in exc.value.problems)
+
+
+# ── Policy: register-backed named numbers (the fault-code register) ───────────
+
+
+class TestFaultRegisterImport:
+    """A fault code read from the wire, through the shared fault-code register.
+
+    The five register-backed fields (``code``/``condition_code`` of the fault,
+    event and callhome classes) are all **naming** props, so the
+    out-of-bounds escape of an ordinary named number (``raw_set``, see
+    ``test_named_number_out_of_bounds_escapes_to_the_wire``) never applies:
+    identity has no wire channel, and a refused code is collected.  Pinned on
+    the inlined register; sharing it must not move any of this.
+    """
+
+    @staticmethod
+    def _snapshot_with_code(wire: str) -> Snapshot:
+        cfg = design()
+        cfg.infra().monitoring_policy("mon").lifecycle_policy("F1000")
+        snap = pseudo_snapshot(cfg.to_payload())
+        assert snap.tree is not None
+        policy = as_object(at(snap.tree, "children", 0, "children", 0))
+        (lifecycle,) = as_array(policy["children"])
+        lifecycle = as_object(lifecycle)
+        assert lifecycle["class"] == "faultLcP"
+        as_object(lifecycle["attributes"])["code"] = wire
+        lifecycle["rn"] = f"flcp-{wire}"
+        return snap
+
+    @staticmethod
+    def _imported_code(cfg: Any) -> str:
+        node = find_node(cfg.design_node, "faultLcP")
+        assert node is not None
+        assert node.raw_attrs == {}
+        payload = cfg.to_payload()
+        policy = payload["polUni"]["children"][0]["infraInfra"]["children"][0]
+        (lifecycle,) = policy["monInfraPol"]["children"]
+        code: str = lifecycle["faultLcP"]["attributes"]["code"]
+        return code
+
+    @pytest.mark.parametrize(
+        ("wire", "imported"),
+        [
+            ("F1000", "F1000"),
+            ("E4194310", "E4194310"),
+            ("generic", "generic"),
+            # A number with a name is canonicalised to the name.
+            ("1000", "F1000"),
+            ("0", "generic"),
+            # A number without one is kept as the number.
+            ("99999999", "99999999"),
+        ],
+    )
+    def test_a_code_imports_typed(self, wire: str, imported: str) -> None:
+        cfg = to_design(self._snapshot_with_code(wire))
+        assert self._imported_code(cfg) == imported
+
+    @pytest.mark.parametrize("wire", ["bogus", "F1"])
+    def test_a_code_the_register_refuses_is_collected(self, wire: str) -> None:
+        with pytest.raises(SnapshotImportError) as exc:
+            to_design(self._snapshot_with_code(wire))
+        (problem,) = exc.value.problems
+        assert problem.kind == "invalid-value"
+        assert problem.dn == f"uni/infra/moninfra-mon/flcp-{wire}"
+        assert "faultLcP" in problem.detail
 
 
 # ── The real-fabric halo (what a live snapshot actually carries) ──────────────
@@ -501,8 +570,8 @@ class TestLiveWireHalo:
         # attributes carry the "" halo must still invert to bind().
         snap = _tenant_snapshot()
         assert snap.tree is not None
-        rs = snap.tree["children"][0]["children"][0]["children"][0]
-        rs["attributes"].update(_HALO)
+        rs = at(snap.tree, "children", 0, "children", 0, "children", 0)
+        as_object(at(rs, "attributes")).update(_HALO)
         cfg = to_design(snap)
         bd = find_node(cfg.design_node, "fvBD")
         assert bd is not None
@@ -520,7 +589,7 @@ class TestLiveWireHalo:
         bd_attrs = dict(raw["imdata"][0]["fvBD"]["attributes"])
         bd_attrs.pop("dn", None)
         rn = bd_attrs.pop("rn", "BD-Prod-BD")
-        attrs = _normalise_attrs(catalog(), "fvBD", bd_attrs)
+        attrs: JsonObject = dict(_normalise_attrs(catalog(), "fvBD", bd_attrs))
         snap = Snapshot(
             scope="uni",
             tree={
@@ -556,7 +625,7 @@ class TestReviewScenarios:
         # on_unknown="raw" carries the whole subtree verbatim.
         snap = _tenant_snapshot()
         assert snap.tree is not None
-        snap.tree["children"][0]["children"].append(
+        as_array(at(snap.tree, "children", 0, "children")).append(
             {
                 "class": "fvFutureContainer",
                 "rn": "future-x",
@@ -589,9 +658,9 @@ class TestReviewScenarios:
         # raw); the screen runs once per node, so exactly one problem.
         snap = _tenant_snapshot()
         assert snap.tree is not None
-        rs = snap.tree["children"][0]["children"][0]["children"][0]
-        rs["attributes"]["tnFvCtxName"] = "ghost"
-        rs["attributes"]["descr"] = REDACTED
+        rs = at(snap.tree, "children", 0, "children", 0, "children", 0)
+        as_object(at(rs, "attributes"))["tnFvCtxName"] = "ghost"
+        as_object(at(rs, "attributes"))["descr"] = REDACTED
         with pytest.raises(SnapshotImportError) as exc:
             to_design(snap)
         redacted_problems = [p for p in exc.value.problems if p.kind == "redacted-value"]
@@ -616,8 +685,8 @@ class TestReviewScenarios:
     def test_duplicate_dn_in_raw_direct_is_a_structure_problem(self) -> None:
         snap = _tenant_snapshot()
         assert snap.tree is not None
-        twin = {"class": "fvWeird", "rn": "w-x", "attributes": {}, "children": []}
-        snap.tree["children"][0]["children"] += [twin, dict(twin)]
+        twin: JsonObject = {"class": "fvWeird", "rn": "w-x", "attributes": {}, "children": []}
+        as_array(at(snap.tree, "children", 0, "children")).extend([twin, dict(twin)])
         with pytest.raises(SnapshotImportError) as exc:
             to_design(snap, on_unknown="raw")
         assert [p.kind for p in exc.value.problems] == ["structure"]
@@ -652,7 +721,7 @@ class TestStructureGuards:
     def test_rn_format_mismatch_is_collected(self) -> None:
         snap = _tenant_snapshot()
         assert snap.tree is not None
-        snap.tree["children"][0]["rn"] = "weird-prod"
+        as_object(at(snap.tree, "children", 0))["rn"] = "weird-prod"
         with pytest.raises(SnapshotImportError) as exc:
             to_design(snap)
         assert [p.kind for p in exc.value.problems] == ["structure"]

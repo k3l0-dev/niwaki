@@ -49,11 +49,12 @@ import asyncio
 import builtins
 import os
 import warnings
-from collections.abc import Coroutine
+from collections.abc import Callable, Coroutine
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, NamedTuple, overload
+from typing import TYPE_CHECKING, Any, NamedTuple, cast, overload
 
 import httpx
+from pydantic import SecretStr
 
 from niwaki.models.base import ManagedObject
 from niwaki.transport._config import RetryConfig
@@ -72,6 +73,22 @@ _PKG_DIR = str(Path(__file__).resolve().parent) + os.sep
 if TYPE_CHECKING:
     from niwaki.query._async_builder import AsyncQuery
     from niwaki.query._builder import Query
+
+# Typed navigation exists for the type checker only: ``niwaki._generated_nav``
+# is a stub-only package (``.pyi`` files, no ``.py`` module).  The checker sees
+# each client derive from its typed root navigator; at runtime both bases are
+# plain ``object`` and every navigation still resolves through ``__getattr__``.
+if TYPE_CHECKING:
+    from niwaki._generated_nav import AsyncRootNav as _AsyncRootNavBase
+    from niwaki._generated_nav import AsyncRootNode, RootNode
+    from niwaki._generated_nav import RootNav as _RootNavBase
+else:
+    _RootNavBase = object
+    _AsyncRootNavBase = object
+
+# A coroutine handed to AsyncNiwaki.gather: what it yields and is sent is the
+# event loop's business, only its result type matters to the caller.
+type _Co[T] = Coroutine[object, object, T]
 
 # ── Private navigation helpers ─────────────────────────────────────────────────
 
@@ -169,12 +186,12 @@ def _navigate_jargon(parent_cls: type[ManagedObject], attr: str) -> _JargonTarge
     return _JargonTarget(child_cls, naming_props, child_aci_class in RS_TARGET_PROP)
 
 
-def _make_jargon_navigator(
-    node: NiwakiNode[Any] | AsyncNiwakiNode[Any],
+def _make_jargon_navigator[T: ManagedObject](
+    node: NiwakiNode[T] | AsyncNiwakiNode[T],
     child_cls: type[ManagedObject],
     naming_props: list[str],
     is_rs_target: bool,
-) -> Any:
+) -> Callable[..., object]:
     """Build the callable that navigation sugar returns for a vocabulary attribute.
 
     Dispatches to ``node.mo()`` regardless of whether *node* is a
@@ -192,7 +209,7 @@ def _make_jargon_navigator(
     """
     if not naming_props and is_rs_target:
 
-        def _nav_rs_singleton(target_name: str = "", **kwargs: Any) -> Any:
+        def _nav_rs_singleton(target_name: str = "", **kwargs: object) -> object:
             # D2 renames every tn*Name target prop to the Python field
             # "name", so one constructor shape covers all Rs classes.
             if target_name:
@@ -203,21 +220,21 @@ def _make_jargon_navigator(
 
     if not naming_props:
 
-        def _nav_singleton() -> Any:
+        def _nav_singleton() -> object:
             return node.mo(child_cls)
 
         return _nav_singleton
 
     if naming_props == ["name"]:
 
-        def _nav_name(name: str = "") -> Any:
+        def _nav_name(name: str = "") -> object:
             if name:
                 return node.mo(child_cls, name=name)
             return node.query(child_cls)
 
         return _nav_name
 
-    def _nav_kwargs(**naming_kwargs: Any) -> Any:
+    def _nav_kwargs(**naming_kwargs: object) -> object:
         if naming_kwargs:
             return node.mo(child_cls, **naming_kwargs)
         return node.query(child_cls)
@@ -243,7 +260,7 @@ class _JargonNavMixin[T: ManagedObject]:
 
     _cls: type[T]
 
-    def __getattr__(self, attr: str) -> Any:
+    def __getattr__(self, attr: str) -> Any:  # Any: name-driven navigation, resolved at runtime
         """Resolve vocabulary attribute names to typed child navigators.
 
         Args:
@@ -397,7 +414,7 @@ class NiwakiNode[T: ManagedObject](_JargonNavMixin[T]):
         """
         return self._cls
 
-    def mo[U: ManagedObject](self, cls: type[U], **naming_kwargs: Any) -> NiwakiNode[U]:
+    def mo[U: ManagedObject](self, cls: type[U], **naming_kwargs: object) -> NiwakiNode[U]:
         """Descend to a child node, computing its DN automatically.
 
         Creates a temporary instance of ``cls`` purely to derive the RN from
@@ -422,7 +439,7 @@ class NiwakiNode[T: ManagedObject](_JargonNavMixin[T]):
                .mo(fvBD, name="web") \
                .mo(fvSubnet, ip="10.0.0.1/24")
         """
-        instance = cls(**naming_kwargs)
+        instance = cls.model_validate(naming_kwargs)
         child_dn = f"{self._dn}/{instance.rn}"
         return NiwakiNode(self._niwaki, child_dn, cls)
 
@@ -545,7 +562,7 @@ class AsyncNiwakiNode[T: ManagedObject](_JargonNavMixin[T]):
         """
         return self._cls
 
-    def mo[U: ManagedObject](self, cls: type[U], **naming_kwargs: Any) -> AsyncNiwakiNode[U]:
+    def mo[U: ManagedObject](self, cls: type[U], **naming_kwargs: object) -> AsyncNiwakiNode[U]:
         """Descend to a child node, computing its DN automatically.
 
         Args:
@@ -558,7 +575,7 @@ class AsyncNiwakiNode[T: ManagedObject](_JargonNavMixin[T]):
         Raises:
             ValidationError: If ``naming_kwargs`` violate model constraints.
         """
-        instance = cls(**naming_kwargs)
+        instance = cls.model_validate(naming_kwargs)
         child_dn = f"{self._dn}/{instance.rn}"
         return AsyncNiwakiNode(self._niwaki, child_dn, cls)
 
@@ -616,10 +633,125 @@ class AsyncNiwakiNode[T: ManagedObject](_JargonNavMixin[T]):
         return AsyncQuery(cls, self._niwaki._active_session, scope_dn=self._dn)  # pyright: ignore[reportPrivateUsage]
 
 
+# ── Shared client construction ─────────────────────────────────────────────────
+
+
+def _session_kwargs(
+    *,
+    host: str | None,
+    username: str | None,
+    password: str | SecretStr | None,
+    verify_ssl: bool | str,
+    timeout: float,
+    refresh_threshold: int,
+    retry: RetryConfig | None,
+    token_cache: TokenCache | None,
+    private_key: str | Path | None,
+    cert_dn: str | None,
+    max_concurrent: int | None = None,
+) -> dict[str, Any]:  # Any: heterogeneous options splatted into the session constructor
+    """Validate a client's options and turn them into its session's keyword arguments.
+
+    The one place where :class:`Niwaki` and :class:`AsyncNiwaki` check what
+    they were given and decide what their session class receives.  Both
+    constructors call it and keep the mapping; entry (``__enter__`` /
+    ``__aenter__``, hence ``connect()`` and ``with_client()``) builds the
+    session from a copy of it, plus the injected ``httpx`` client when there
+    is one.  Validating here, from the constructors, makes a mistake fail
+    where it was written rather than at the first login.
+
+    The function is pure: it reads no environment variable and performs no
+    I/O.  The environment fallbacks (``APIC_HOST``, ``APIC_USERNAME``,
+    ``APIC_PASSWORD``) belong to the session and are resolved when it is
+    built; a private key path is forwarded, never opened.
+
+    Args:
+        host: APIC base URL, or ``None`` for the session's ``APIC_HOST``
+            fallback.  Passed through unchanged.
+        username: Login name, or ``None`` for the session's
+            ``APIC_USERNAME`` fallback.  Passed through unchanged.
+        password: Password.  A ``str`` (even ``""``) is wrapped in a
+            ``pydantic.SecretStr`` so it is never held in clear; a
+            ``SecretStr`` is passed through as the same object; ``None``
+            stays ``None`` (the session owns the environment fallback).
+        verify_ssl: TLS verification — ``True``, a PEM CA bundle path, or
+            ``False``.  Passed through unchanged.
+        timeout: HTTP request timeout in seconds.  Passed through unchanged.
+        refresh_threshold: Seconds before token expiry at which the session
+            refreshes proactively.  Passed through unchanged.
+        retry: Custom retry policy.  The key is present only when not
+            ``None``, so the session keeps its own default otherwise.
+        token_cache: Opt-in login token cache.  The key is present only when
+            not ``None``.
+        private_key: Path to the PEM private key of a certificate login.
+            Must be given together with *cert_dn*; both keys are present only
+            when the pair is.
+        cert_dn: DN of the certificate registered on the APIC user.  Must be
+            given together with *private_key*.
+        max_concurrent: Async only — the bound on simultaneous in-flight
+            requests.  The key is present only when given; the sync client
+            never passes it.
+
+    Returns:
+        A fresh ``dict`` on every call, ready to splat into the session
+        class.  It always holds ``host``, ``username``, ``password``,
+        ``verify_ssl``, ``timeout`` and ``refresh_threshold``.  It never
+        holds ``client``: an injected ``httpx`` client is attached by the
+        caller at entry, after the mapping is built.
+
+    Raises:
+        ValueError: Exactly one of *private_key* / *cert_dn* is given (a lone
+            ``cert_dn`` would otherwise fall back to password auth without a
+            word), or *max_concurrent* is given and below 1 (a zero-permit
+            semaphore is a wait for a slot never released).
+
+    Example::
+
+        options = _session_kwargs(
+            host="https://apic.example.com",
+            username="admin",
+            password="secret",
+            verify_ssl=True,
+            timeout=30.0,
+            refresh_threshold=60,
+            retry=None,
+            token_cache=None,
+            private_key=None,
+            cert_dn=None,
+            max_concurrent=10,
+        )
+        options["password"]   # SecretStr('**********')
+        "retry" in options    # False: the session keeps its default policy
+        session = AsyncApicSession(**options)
+    """
+    if (private_key is None) != (cert_dn is None):
+        raise ValueError("private_key and cert_dn must be given together")
+    if max_concurrent is not None and max_concurrent < 1:
+        raise ValueError(f"max_concurrent must be >= 1, got {max_concurrent}")
+    options: dict[str, object] = {
+        "host": host,
+        "username": username,
+        "password": SecretStr(password) if isinstance(password, str) else password,
+        "verify_ssl": verify_ssl,
+        "timeout": timeout,
+        "refresh_threshold": refresh_threshold,
+    }
+    if max_concurrent is not None:
+        options["max_concurrent"] = max_concurrent
+    if retry is not None:
+        options["retry"] = retry
+    if token_cache is not None:
+        options["token_cache"] = token_cache
+    if private_key is not None and cert_dn is not None:
+        options["private_key"] = private_key
+        options["cert_dn"] = cert_dn
+    return options
+
+
 # ── AsyncNiwaki ────────────────────────────────────────────────────────────────
 
 
-class AsyncNiwaki:
+class AsyncNiwaki(_AsyncRootNavBase):
     """Async entry point for the ACI SDK.
 
     Mirrors :class:`Niwaki` for async code.  Use as an async context manager —
@@ -630,7 +762,11 @@ class AsyncNiwaki:
         host: Base URL of the APIC (e.g. ``"https://sandboxapicdc.cisco.com"``).
             Falls back to ``APIC_HOST`` environment variable if omitted.
         username: APIC username. Falls back to ``APIC_USERNAME`` if omitted.
-        password: APIC password. Falls back to ``APIC_PASSWORD`` if omitted.
+        password: APIC password, as a ``str`` or a ``pydantic.SecretStr``.
+            Falls back to ``APIC_PASSWORD`` when omitted or empty, read when
+            the session is built (on entry or ``connect()``), not here.  It is
+            not stored as a plain attribute: the client keeps a ``SecretStr``,
+            masked in ``repr``/``str``, and hands it to the session as is.
         verify_ssl: TLS verification — ``True`` (system CA store), a path to
             a PEM CA bundle (private/enterprise CA), or ``False`` (lab only).
             Default: ``True``.
@@ -660,7 +796,7 @@ class AsyncNiwaki:
         self,
         host: str | None = None,
         username: str | None = None,
-        password: str | None = None,
+        password: str | SecretStr | None = None,
         *,
         verify_ssl: bool | str = True,
         timeout: float = 30.0,
@@ -671,28 +807,27 @@ class AsyncNiwaki:
         private_key: str | Path | None = None,
         cert_dn: str | None = None,
     ) -> None:
-        self._host = host
+        # Validated here, where a mistake is written; the password is held as a
+        # SecretStr and the environment fallbacks are left to the session, so
+        # nothing is read or opened before entry.
+        self._session_options = _session_kwargs(
+            host=host,
+            username=username,
+            password=password,
+            verify_ssl=verify_ssl,
+            timeout=timeout,
+            refresh_threshold=refresh_threshold,
+            retry=retry,
+            token_cache=token_cache,
+            private_key=private_key,
+            cert_dn=cert_dn,
+            max_concurrent=max_concurrent,
+        )
+        # The login name is not a secret: kept on the client for inspection.
         self._username = username
-        self._password = password
-        self._verify_ssl = verify_ssl
-        self._timeout = timeout
-        self._refresh_threshold = refresh_threshold
-        if max_concurrent < 1:
-            # Caught where the value is written rather than where it bites:
-            # a zero-permit semaphore is a wait for a slot never released.
-            raise ValueError(f"max_concurrent must be >= 1, got {max_concurrent}")
+        self._retry = retry
         self._max_concurrent = max_concurrent
         self._injected_client: httpx.AsyncClient | None = None
-        self._token_cache = token_cache
-        # The session enforces the same pairing, but only at connect time —
-        # and the old forwarding only sent cert_dn when private_key was set,
-        # so cert_dn alone silently fell back to password auth. Fail here,
-        # where the mistake was written.
-        if (private_key is None) != (cert_dn is None):
-            raise ValueError("private_key and cert_dn must be given together")
-        self._private_key = private_key
-        self._cert_dn = cert_dn
-        self._retry = retry
         self._session: AsyncApicSession | None = None
 
     # ── Factory ───────────────────────────────────────────────────────────────
@@ -702,7 +837,7 @@ class AsyncNiwaki:
         cls,
         host: str,
         username: str,
-        password: str,
+        password: str | SecretStr,
         *,
         verify_ssl: bool | str = True,
         timeout: float = 30.0,
@@ -721,7 +856,7 @@ class AsyncNiwaki:
         Args:
             host: Base URL of the APIC.
             username: APIC username.
-            password: APIC password.
+            password: APIC password (``str`` or ``pydantic.SecretStr``).
             verify_ssl: TLS verification — ``True``, a PEM CA bundle path,
                 or ``False``.  Default: ``True``.
             timeout: HTTP timeout in seconds.  Default: 30.
@@ -787,25 +922,10 @@ class AsyncNiwaki:
             TimeoutError: Login request timed out.
         """
         if self._session is None:
-            kwargs: dict[str, Any] = dict(
-                host=self._host,
-                username=self._username,
-                password=self._password,
-                verify_ssl=self._verify_ssl,
-                timeout=self._timeout,
-                refresh_threshold=self._refresh_threshold,
-                max_concurrent=self._max_concurrent,
-            )
-            if self._token_cache is not None:
-                kwargs["token_cache"] = self._token_cache
-            if self._retry is not None:
-                kwargs["retry"] = self._retry
+            options = dict(self._session_options)
             if self._injected_client is not None:
-                kwargs["client"] = self._injected_client
-            if self._private_key is not None:
-                kwargs["private_key"] = self._private_key
-                kwargs["cert_dn"] = self._cert_dn
-            session = AsyncApicSession(**kwargs)
+                options["client"] = self._injected_client
+            session = AsyncApicSession(**options)
             try:
                 await session.login()
             except BaseException:
@@ -848,8 +968,8 @@ class AsyncNiwaki:
         client: httpx.AsyncClient,
         host: str | None = None,
         username: str | None = None,
-        password: str | None = None,
-        **kwargs: Any,
+        password: str | SecretStr | None = None,
+        **kwargs: Any,  # Any: forwarded verbatim to the constructor, which types each option
     ) -> AsyncNiwaki:
         """Build a client that talks through an ``httpx`` client you configured.
 
@@ -864,7 +984,8 @@ class AsyncNiwaki:
                 gave it, since cookies and WebSocket URLs are derived from it.
             host: APIC base URL, or ``None`` to read ``APIC_HOST``.
             username: Login name, or ``None`` to read ``APIC_USERNAME``.
-            password: Password, or ``None`` to read ``APIC_PASSWORD``.
+            password: Password (``str`` or ``pydantic.SecretStr``), or
+                ``None`` to read ``APIC_PASSWORD``.
             **kwargs: Any other constructor argument, validated as usual.
 
         Returns:
@@ -948,17 +1069,18 @@ class AsyncNiwaki:
     # ── Navigation ────────────────────────────────────────────────────────────
 
     @property
-    def root(self) -> AsyncNiwakiNode[ManagedObject]:
+    def root(self) -> AsyncRootNode:
         """Entry point for the ACI object hierarchy.
 
         Returns:
-            :class:`AsyncNiwakiNode` at DN ``"uni"``.
+            :class:`AsyncNiwakiNode` at DN ``"uni"``.  Type checkers see the
+            typed root node, whose navigation names are checked and complete.
 
         Example::
 
             bd = await aci.root.tenant("prod").bd("web").read()
         """
-        return AsyncNiwakiNode(self, "uni", ManagedObject)
+        return cast("AsyncRootNode", AsyncNiwakiNode(self, "uni", ManagedObject))
 
     def node[T: ManagedObject](
         self,
@@ -977,21 +1099,24 @@ class AsyncNiwaki:
         """
         return AsyncNiwakiNode(self, dn, cls)
 
-    def __getattr__(self, attr: str) -> Any:
-        """Proxy vocabulary navigation to :attr:`root`.
+    if not TYPE_CHECKING:
+        # Hidden from the checker, which sees the typed root navigator (the
+        # base class) instead: an unknown top-level name is a static error.
+        def __getattr__(self, attr: str) -> Any:  # Any: name-driven navigation, resolved at runtime
+            """Proxy vocabulary navigation to :attr:`root`.
 
-        Args:
-            attr: Jargon method name (e.g. ``"tenant"``).
+            Args:
+                attr: Jargon method name (e.g. ``"tenant"``).
 
-        Returns:
-            Whatever :meth:`AsyncNiwakiNode.__getattr__` returns for the root.
+            Returns:
+                Whatever :meth:`AsyncNiwakiNode.__getattr__` returns for the root.
 
-        Raises:
-            AttributeError: ``attr`` is not a known top-level child.
-        """
-        if attr.startswith("_"):
-            raise AttributeError(attr)
-        return getattr(self.root, attr)
+            Raises:
+                AttributeError: ``attr`` is not a known top-level child.
+            """
+            if attr.startswith("_"):
+                raise AttributeError(attr)
+            return getattr(self.root, attr)
 
     # ── Queries ───────────────────────────────────────────────────────────────
 
@@ -1037,7 +1162,33 @@ class AsyncNiwaki:
 
     # ── Concurrency helpers ───────────────────────────────────────────────────
 
-    async def gather(self, *coros: Coroutine[Any, Any, Any]) -> tuple[Any, ...]:
+    @overload
+    async def gather[T1](self, c1: _Co[T1], /) -> tuple[T1]: ...
+
+    @overload
+    async def gather[T1, T2](self, c1: _Co[T1], c2: _Co[T2], /) -> tuple[T1, T2]: ...
+
+    @overload
+    async def gather[T1, T2, T3](
+        self, c1: _Co[T1], c2: _Co[T2], c3: _Co[T3], /
+    ) -> tuple[T1, T2, T3]: ...
+
+    @overload
+    async def gather[T1, T2, T3, T4](
+        self, c1: _Co[T1], c2: _Co[T2], c3: _Co[T3], c4: _Co[T4], /
+    ) -> tuple[T1, T2, T3, T4]: ...
+
+    @overload
+    async def gather[T1, T2, T3, T4, T5](
+        self, c1: _Co[T1], c2: _Co[T2], c3: _Co[T3], c4: _Co[T4], c5: _Co[T5], /
+    ) -> tuple[T1, T2, T3, T4, T5]: ...
+
+    @overload
+    async def gather(
+        self, *coros: _Co[object]
+    ) -> tuple[Any, ...]: ...  # Any: heterogeneous arity beyond the typed overloads
+
+    async def gather(self, *coros: _Co[object]) -> tuple[object, ...]:
         """Run multiple coroutines concurrently under a structured TaskGroup.
 
         The APIC concurrency semaphore (``max_concurrent``) is already applied
@@ -1052,7 +1203,9 @@ class AsyncNiwaki:
                 ``.read()``, ``aci.query(...).fetch()``, ``config.push(aci)``).
 
         Returns:
-            Tuple of results in the same order as the input coroutines.
+            Tuple of results in the same order as the input coroutines.  A
+            type checker sees each position's own result type for up to five
+            coroutines; beyond that, a ``tuple[Any, ...]``.
 
         Raises:
             ExceptionGroup: If one or more coroutines raise.  Remaining siblings
@@ -1073,7 +1226,7 @@ class AsyncNiwaki:
 # ── Niwaki ─────────────────────────────────────────────────────────────────────
 
 
-class Niwaki:
+class Niwaki(_RootNavBase):
     """Sync entry point for the ACI SDK.
 
     Use as a sync context manager — authentication happens on ``__enter__``
@@ -1097,7 +1250,11 @@ class Niwaki:
         host: Base URL of the APIC (e.g. ``"https://sandboxapicdc.cisco.com"``).
             Falls back to ``APIC_HOST`` environment variable if omitted.
         username: APIC username. Falls back to ``APIC_USERNAME`` if omitted.
-        password: APIC password. Falls back to ``APIC_PASSWORD`` if omitted.
+        password: APIC password, as a ``str`` or a ``pydantic.SecretStr``.
+            Falls back to ``APIC_PASSWORD`` when omitted or empty, read when
+            the session is built (on entry or ``connect()``), not here.  It is
+            not stored as a plain attribute: the client keeps a ``SecretStr``,
+            masked in ``repr``/``str``, and hands it to the session as is.
         verify_ssl: TLS verification — ``True`` (system CA store), a path to
             a PEM CA bundle (private/enterprise CA), or ``False`` (lab only).
             Default: ``True``.
@@ -1112,7 +1269,7 @@ class Niwaki:
         self,
         host: str | None = None,
         username: str | None = None,
-        password: str | None = None,
+        password: str | SecretStr | None = None,
         *,
         verify_ssl: bool | str = True,
         timeout: float = 30.0,
@@ -1122,23 +1279,25 @@ class Niwaki:
         private_key: str | Path | None = None,
         cert_dn: str | None = None,
     ) -> None:
-        self._host = host
+        # Validated here, where a mistake is written; the password is held as a
+        # SecretStr and the environment fallbacks are left to the session, so
+        # nothing is read or opened before entry.
+        self._session_options = _session_kwargs(
+            host=host,
+            username=username,
+            password=password,
+            verify_ssl=verify_ssl,
+            timeout=timeout,
+            refresh_threshold=refresh_threshold,
+            retry=retry,
+            token_cache=token_cache,
+            private_key=private_key,
+            cert_dn=cert_dn,
+        )
+        # The login name is not a secret: kept on the client for inspection.
         self._username = username
-        self._password = password
-        self._verify_ssl = verify_ssl
-        self._timeout = timeout
-        self._refresh_threshold = refresh_threshold
         self._retry = retry
         self._injected_client: httpx.Client | None = None
-        self._token_cache = token_cache
-        # The session enforces the same pairing, but only at connect time —
-        # and the old forwarding only sent cert_dn when private_key was set,
-        # so cert_dn alone silently fell back to password auth. Fail here,
-        # where the mistake was written.
-        if (private_key is None) != (cert_dn is None):
-            raise ValueError("private_key and cert_dn must be given together")
-        self._private_key = private_key
-        self._cert_dn = cert_dn
         self._session: ApicSession | None = None
 
     # ── Factory ───────────────────────────────────────────────────────────────
@@ -1148,7 +1307,7 @@ class Niwaki:
         cls,
         host: str,
         username: str,
-        password: str,
+        password: str | SecretStr,
         *,
         verify_ssl: bool | str = True,
         timeout: float = 30.0,
@@ -1165,7 +1324,7 @@ class Niwaki:
         Args:
             host: Base URL of the APIC.
             username: APIC username.
-            password: APIC password.
+            password: APIC password (``str`` or ``pydantic.SecretStr``).
             verify_ssl: TLS verification — ``True``, a PEM CA bundle path,
                 or ``False``.  Default: ``True``.
             timeout: HTTP timeout in seconds.  Default: 30.
@@ -1218,26 +1377,13 @@ class Niwaki:
         Raises:
             LoginError: APIC rejected the credentials.
             ConnectionError: APIC host is unreachable.
+            TimeoutError: Login request timed out.
         """
         if self._session is None:
-            kwargs: dict[str, Any] = dict(
-                host=self._host,
-                username=self._username,
-                password=self._password,
-                verify_ssl=self._verify_ssl,
-                timeout=self._timeout,
-                refresh_threshold=self._refresh_threshold,
-            )
-            if self._token_cache is not None:
-                kwargs["token_cache"] = self._token_cache
-            if self._retry is not None:
-                kwargs["retry"] = self._retry
+            options = dict(self._session_options)
             if self._injected_client is not None:
-                kwargs["client"] = self._injected_client
-            if self._private_key is not None:
-                kwargs["private_key"] = self._private_key
-                kwargs["cert_dn"] = self._cert_dn
-            session = ApicSession(**kwargs)
+                options["client"] = self._injected_client
+            session = ApicSession(**options)
             try:
                 session.login()
             except BaseException:
@@ -1282,8 +1428,8 @@ class Niwaki:
         client: httpx.Client,
         host: str | None = None,
         username: str | None = None,
-        password: str | None = None,
-        **kwargs: Any,
+        password: str | SecretStr | None = None,
+        **kwargs: Any,  # Any: forwarded verbatim to the constructor, which types each option
     ) -> Niwaki:
         """Build a client that talks through an ``httpx`` client you configured.
 
@@ -1298,7 +1444,8 @@ class Niwaki:
                 gave it, since cookies and WebSocket URLs are derived from it.
             host: APIC base URL, or ``None`` to read ``APIC_HOST``.
             username: Login name, or ``None`` to read ``APIC_USERNAME``.
-            password: Password, or ``None`` to read ``APIC_PASSWORD``.
+            password: Password (``str`` or ``pydantic.SecretStr``), or
+                ``None`` to read ``APIC_PASSWORD``.
             **kwargs: Any other constructor argument, validated as usual.
 
         Returns:
@@ -1367,20 +1514,21 @@ class Niwaki:
         return self._session
 
     @property
-    def root(self) -> NiwakiNode[ManagedObject]:
+    def root(self) -> RootNode:
         """Entry point for the ACI object hierarchy.
 
         Returns a :class:`NiwakiNode` at DN ``"uni"`` — the root of all ACI
         objects.
 
         Returns:
-            :class:`NiwakiNode` with ``dn = "uni"``.
+            :class:`NiwakiNode` with ``dn = "uni"``.  Type checkers see the
+            typed root node, whose navigation names are checked and complete.
 
         Example::
 
             bd = aci.root.tenant("prod").bd("web").read()
         """
-        return NiwakiNode(self, "uni", ManagedObject)
+        return cast("RootNode", NiwakiNode(self, "uni", ManagedObject))
 
     def node[T: ManagedObject](
         self,
@@ -1403,22 +1551,25 @@ class Niwaki:
         """
         return NiwakiNode(self, dn, cls)
 
-    def __getattr__(self, attr: str) -> Any:
-        """Proxy vocabulary navigation to :attr:`root`.
+    if not TYPE_CHECKING:
+        # Hidden from the checker, which sees the typed root navigator (the
+        # base class) instead: an unknown top-level name is a static error.
+        def __getattr__(self, attr: str) -> Any:  # Any: name-driven navigation, resolved at runtime
+            """Proxy vocabulary navigation to :attr:`root`.
 
-        Allows top-level shortcuts without an explicit ``.root``::
+            Allows top-level shortcuts without an explicit ``.root``::
 
-            bd = aci.tenant("prod").bd("web").read()
+                bd = aci.tenant("prod").bd("web").read()
 
-        Args:
-            attr: Jargon method name.
+            Args:
+                attr: Jargon method name.
 
-        Raises:
-            AttributeError: ``attr`` is not a known top-level child.
-        """
-        if attr.startswith("_"):
-            raise AttributeError(attr)
-        return getattr(self.root, attr)
+            Raises:
+                AttributeError: ``attr`` is not a known top-level child.
+            """
+            if attr.startswith("_"):
+                raise AttributeError(attr)
+            return getattr(self.root, attr)
 
     @overload
     def query[T: ManagedObject](self, cls: type[T]) -> Query[T]: ...

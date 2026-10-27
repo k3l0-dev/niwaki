@@ -19,6 +19,8 @@ from niwaki.design._compiler import compile_ops
 from niwaki.design._resolver import resolve
 from niwaki.exceptions import DesignError
 
+from .._jsonpath import as_object
+
 
 def _flatten(cursor: Cursor) -> dict[str, dict[str, str]]:
     root = cursor.design_node.root()
@@ -26,7 +28,8 @@ def _flatten(cursor: Cursor) -> dict[str, dict[str, str]]:
     for op in compile_ops(root, resolve(root)):
         assert op.payload is not None
         ((_, body),) = op.payload.items()
-        flat[op.dn] = {k: v for k, v in body["attributes"].items() if k != "dn"}
+        attributes = as_object(as_object(body)["attributes"])
+        flat[op.dn] = {k: v for k, v in attributes.items() if k != "dn"}
     return flat
 
 

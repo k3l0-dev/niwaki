@@ -19,6 +19,7 @@ it has to preserve it deliberately, and a plausible cheaper shape
 from __future__ import annotations
 
 import asyncio
+from collections.abc import Mapping
 
 import pytest
 
@@ -40,7 +41,7 @@ class _CountingWriter:
         self.peak_tasks = 0
         self.completion_order: list[str] = []
 
-    async def post_mo(self, dn: str, payload: dict[str, object]) -> None:
+    async def post_mo(self, dn: str, payload: Mapping[str, object]) -> None:
         self.in_flight += 1
         self.peak_in_flight = max(self.peak_in_flight, self.in_flight)
         self.peak_tasks = max(self.peak_tasks, len(asyncio.all_tasks()))
@@ -112,7 +113,7 @@ class _ReversedLatencyWriter(_CountingWriter):
         super().__init__()
         self.width = width
 
-    async def post_mo(self, dn: str, payload: dict[str, object]) -> None:
+    async def post_mo(self, dn: str, payload: Mapping[str, object]) -> None:
         index = int(dn.rsplit("b", 1)[1])
         await asyncio.sleep(0.001 * (self.width - index))
         self.completion_order.append(dn)
@@ -138,7 +139,7 @@ class TestSubmissionOrder:
         """``StagedPushError.failures`` inherits this order — it is public."""
 
         class _FailsTwoInReverse(_CountingWriter):
-            async def post_mo(self, dn: str, payload: dict[str, object]) -> None:
+            async def post_mo(self, dn: str, payload: Mapping[str, object]) -> None:
                 if dn.endswith("b0001"):
                     await asyncio.sleep(0.02)  # fails second, in time
                     raise RuntimeError("late")
@@ -163,7 +164,7 @@ class TestFailureSemanticsUnderThePool:
         """
 
         class _FailsOneParent(_CountingWriter):
-            async def post_mo(self, dn: str, payload: dict[str, object]) -> None:
+            async def post_mo(self, dn: str, payload: Mapping[str, object]) -> None:
                 await asyncio.sleep(0.001)
                 if dn == "uni/tn-t/BD-b0003":
                     raise RuntimeError("nope")
@@ -184,7 +185,7 @@ class TestFailureSemanticsUnderThePool:
     @pytest.mark.parametrize("pool", [1, 2, 7, 100])
     def test_the_outcome_does_not_depend_on_the_pool_size(self, pool: int) -> None:
         class _FailsOne(_CountingWriter):
-            async def post_mo(self, dn: str, payload: dict[str, object]) -> None:
+            async def post_mo(self, dn: str, payload: Mapping[str, object]) -> None:
                 await asyncio.sleep(0.001)
                 if dn.endswith("b0004"):
                     raise RuntimeError("nope")

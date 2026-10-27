@@ -6,6 +6,7 @@ import json
 
 import pytest
 
+from niwaki._json import JsonObject
 from niwaki.design import design, merge, ref, tenant
 from niwaki.exceptions import DesignError, MergeConflictError
 from tests.design.test_import import canonical, find_node
@@ -293,7 +294,7 @@ class TestReviewScenariosIt3:
         # M7: the config universe is declared exactly once.
         from niwaki.design import from_payload
 
-        payload = {
+        payload: JsonObject = {
             "polUni": {
                 "attributes": {},
                 "children": [{"polUni": {"attributes": {}, "children": []}}],
@@ -323,7 +324,9 @@ class TestReviewScenariosIt3:
         cfg.filter("f").entry("e", tcp_rules={L4TcpFlags("syn")})
         before = canonical(cfg.to_payload())
         view = cfg.view()
-        view["uni/tn-prod/flt-f/e-e"].attrs["tcp_rules"].add(L4TcpFlags("ack"))
+        tcp_rules = view["uni/tn-prod/flt-f/e-e"].attrs["tcp_rules"]
+        assert isinstance(tcp_rules, set)
+        tcp_rules.add(L4TcpFlags("ack"))
         assert canonical(cfg.to_payload()) == before
 
     def test_composition_results_carry_the_typed_root_cursor(self) -> None:

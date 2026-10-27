@@ -11,12 +11,15 @@ from __future__ import annotations
 import pytest
 from pydantic import ValidationError
 
+from niwaki._json import JsonObject
 from niwaki.models._generated.fv.fvAEPg import fvAEPg
 from niwaki.models._generated.fv.fvAp import fvAp
 from niwaki.models._generated.fv.fvBD import fvBD
 from niwaki.models._generated.fv.fvCtx import fvCtx
 from niwaki.models._generated.fv.fvTenant import fvTenant
 from niwaki.models.base import ManagedObject
+
+from .._jsonpath import as_object, at
 
 # ── fvTenant ──────────────────────────────────────────────────────────────────
 
@@ -51,12 +54,12 @@ class TestFvTenant:
 
     def test_to_apic_only_sends_name(self) -> None:
         t = fvTenant(name="prod")
-        attrs = t.to_apic()["fvTenant"]["attributes"]
+        attrs = as_object(at(t.to_apic(), "fvTenant", "attributes"))
         assert attrs == {"name": "prod"}
 
     def test_to_apic_includes_explicitly_set_descr(self) -> None:
         t = fvTenant(name="prod", description="Production tenant")
-        attrs = t.to_apic()["fvTenant"]["attributes"]
+        attrs = as_object(at(t.to_apic(), "fvTenant", "attributes"))
         assert attrs["descr"] == "Production tenant"
 
     def test_descr_max_128_chars(self) -> None:
@@ -64,7 +67,7 @@ class TestFvTenant:
             fvTenant(name="x", description="d" * 129)
 
     def test_from_apic_roundtrip(self) -> None:
-        raw = {"fvTenant": {"attributes": {"name": "prod", "descr": "test"}}}
+        raw: JsonObject = {"fvTenant": {"attributes": {"name": "prod", "descr": "test"}}}
         obj = ManagedObject.from_apic(raw)
         assert isinstance(obj, fvTenant)
         assert obj.name == "prod"
@@ -130,14 +133,14 @@ class TestFvCtx:
 
     def test_to_apic_surgical(self) -> None:
         v = fvCtx(name="main", policy_control_enforcement="unenforced")  # type: ignore[reportArgumentType]
-        attrs = v.to_apic()["fvCtx"]["attributes"]
+        attrs = as_object(at(v.to_apic(), "fvCtx", "attributes"))
         assert attrs["name"] == "main"
         assert attrs["pcEnfPref"] == "unenforced"
         assert "pcEnfDir" not in attrs  # not explicitly set
         assert "knwMcastAct" not in attrs
 
     def test_from_apic_roundtrip(self) -> None:
-        raw = {"fvCtx": {"attributes": {"name": "main", "pcEnfPref": "unenforced"}}}
+        raw: JsonObject = {"fvCtx": {"attributes": {"name": "main", "pcEnfPref": "unenforced"}}}
         obj = ManagedObject.from_apic(raw)
         assert isinstance(obj, fvCtx)
         assert obj.name == "main"
@@ -188,7 +191,7 @@ class TestFvBD:
 
     def test_bool_serialized_as_string_in_to_apic(self) -> None:
         bd = fvBD(name="web", unicast_routing=False)
-        attrs = bd.to_apic()["fvBD"]["attributes"]
+        attrs = as_object(at(bd.to_apic(), "fvBD", "attributes"))
         assert attrs["unicastRoute"] == "false"
 
     def test_name_invalid_char_rejected(self) -> None:
@@ -196,7 +199,7 @@ class TestFvBD:
             fvBD(name="my bd")  # space not allowed
 
     def test_from_apic_roundtrip(self) -> None:
-        raw = {
+        raw: JsonObject = {
             "fvBD": {
                 "attributes": {
                     "name": "web",
@@ -248,16 +251,16 @@ class TestFvAp:
 
     def test_to_apic_sends_only_name_by_default(self) -> None:
         ap = fvAp(name="shop")
-        attrs = ap.to_apic()["fvAp"]["attributes"]
+        attrs = as_object(at(ap.to_apic(), "fvAp", "attributes"))
         assert attrs == {"name": "shop"}
 
     def test_to_apic_includes_prio_when_set(self) -> None:
         ap = fvAp(name="shop", priority="level1")  # type: ignore[reportArgumentType]
-        attrs = ap.to_apic()["fvAp"]["attributes"]
+        attrs = as_object(at(ap.to_apic(), "fvAp", "attributes"))
         assert attrs["prio"] == "level1"
 
     def test_from_apic_roundtrip(self) -> None:
-        raw = {"fvAp": {"attributes": {"name": "shop", "prio": "level2"}}}
+        raw: JsonObject = {"fvAp": {"attributes": {"name": "shop", "prio": "level2"}}}
         obj = ManagedObject.from_apic(raw)
         assert isinstance(obj, fvAp)
         assert obj.priority == "level2"
@@ -312,19 +315,19 @@ class TestFvAEPg:
 
     def test_shutdown_bool_serialized(self) -> None:
         epg = fvAEPg(name="web", shutdown=True)
-        attrs = epg.to_apic()["fvAEPg"]["attributes"]
+        attrs = as_object(at(epg.to_apic(), "fvAEPg", "attributes"))
         assert attrs["shutdown"] == "true"
 
     def test_to_apic_surgical(self) -> None:
         epg = fvAEPg(name="web", flood_on_encap="enabled")  # type: ignore[reportArgumentType]
-        attrs = epg.to_apic()["fvAEPg"]["attributes"]
+        attrs = as_object(at(epg.to_apic(), "fvAEPg", "attributes"))
         assert attrs["name"] == "web"
         assert attrs["floodOnEncap"] == "enabled"
         assert "pcEnfPref" not in attrs
         assert "shutdown" not in attrs
 
     def test_from_apic_roundtrip(self) -> None:
-        raw = {
+        raw: JsonObject = {
             "fvAEPg": {
                 "attributes": {
                     "name": "web",

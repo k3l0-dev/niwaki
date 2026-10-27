@@ -16,7 +16,7 @@ from __future__ import annotations
 
 from collections.abc import Iterator
 from dataclasses import dataclass, field
-from typing import Any, Literal
+from typing import Literal
 
 from niwaki.models.base import ManagedObject
 
@@ -51,10 +51,10 @@ class Ref:
     """
 
     target: str
-    attrs: dict[str, Any]
+    attrs: dict[str, object]
 
 
-def ref(target: str, **attrs: Any) -> Ref:
+def ref(target: str, **attrs: object) -> Ref:
     """Reference *target* and configure the relationship itself.
 
     Args:
@@ -109,7 +109,7 @@ class PendingBind:
     target_name: str
     rs_aci_class: str = ""
     flavor: BindFlavor | None = None
-    attrs: dict[str, Any] = field(default_factory=dict)
+    attrs: dict[str, object] = field(default_factory=dict)
 
 
 class DesignNode:
@@ -144,8 +144,8 @@ class DesignNode:
         self,
         cls: type[ManagedObject],
         label: str,
-        naming: dict[str, Any],
-        attrs: dict[str, Any],
+        naming: dict[str, object],
+        attrs: dict[str, object],
         parent: DesignNode | None,
         *,
         position: str | None = None,
@@ -182,7 +182,7 @@ class DesignNode:
         field constraints apply.  Its ``children`` list is empty — the design
         topology lives on the node, not on the model instance.
         """
-        instance = self.cls(**self.naming, **self.attrs)
+        instance = self.cls.model_validate({**self.naming, **self.attrs})
         if self.raw_attrs:
             # Wire-name escape hatch (.raw_set()): carried on the instance's
             # wire-attr channel, merged by to_apic at the wire boundary.

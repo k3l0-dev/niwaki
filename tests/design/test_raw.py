@@ -20,6 +20,8 @@ from niwaki.exceptions import DesignError, DuplicateDeclarationError
 from niwaki.models.base import ManagedObject
 from niwaki.utils import mo_diff
 
+from .._jsonpath import as_object, at
+
 
 def _find(payload: dict, aci_class: str) -> dict | None:
     for cls, body in payload.items():
@@ -64,7 +66,7 @@ class TestRawTypedRouting:
         kafka_ops = [op for op in ops if op.payload is not None and "infraKafkaPol" in op.payload]
         assert len(kafka_ops) == 1
         assert kafka_ops[0].payload is not None
-        assert kafka_ops[0].payload["infraKafkaPol"]["attributes"]["mode"] == "ON"
+        assert at(kafka_ops[0].payload, "infraKafkaPol", "attributes", "mode") == "ON"
 
     def test_unknown_class_fails_loud(self) -> None:
         with pytest.raises(DesignError, match="unknown ACI class"):
@@ -126,7 +128,7 @@ class TestRawSet:
         cur = t.bd("web").raw_set(arpFlood="yes")
         instance = cur._node.mo()  # pyright: ignore[reportPrivateUsage]
         assert "arpFlood" not in instance.model_fields_set
-        assert instance.to_apic()["fvBD"]["attributes"]["arpFlood"] == "yes"
+        assert at(instance.to_apic(), "fvBD", "attributes", "arpFlood") == "yes"
 
 
 def _raw_node(wire_class: str, naming: dict, rn: str, attrs: dict):
@@ -149,7 +151,7 @@ class TestRawSubstrate:
             "telemetryServer", {"ip": "10.0.0.9"}, "server-10.0.0.9", {"dstPort": "5640"}
         )
         mo = node.mo()
-        attrs = mo.to_apic()["telemetryServer"]["attributes"]
+        attrs = as_object(at(mo.to_apic(), "telemetryServer", "attributes"))
         assert attrs["ip"] == "10.0.0.9"
         assert attrs["dstPort"] == "5640"
         assert mo.rn == "server-10.0.0.9"
@@ -164,7 +166,7 @@ class TestRawSubstrate:
         )
         delta = mo_diff(desired, current, respect_fields_set=True)
         assert delta is not None
-        emitted = delta.to_apic()["telemetryServer"]["attributes"]
+        emitted = as_object(at(delta.to_apic(), "telemetryServer", "attributes"))
         assert emitted["dstPort"] == "5640"
         assert delta.rn == desired.rn  # pairing identity survives the delta
 
@@ -195,7 +197,7 @@ class TestPlanFidelityTyped:
         )
         delta = mo_diff(desired, current, respect_fields_set=True)
         assert delta is not None
-        assert delta.to_apic()["fvBD"]["attributes"]["arpFlood"] == "yes"
+        assert at(delta.to_apic(), "fvBD", "attributes", "arpFlood") == "yes"
 
     def test_mo_diff_converges_when_raw_attr_matches(self) -> None:
         # Wire spellings have synonyms: the read side coerces "yes" to True,

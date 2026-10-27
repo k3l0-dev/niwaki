@@ -15,6 +15,8 @@ from typing import Any
 
 from niwaki.design import design
 
+from .._jsonpath import as_objects, at
+
 
 def _mo(aci_class: str, attributes: dict[str, str], *children: dict[str, Any]) -> dict[str, Any]:
     body: dict[str, Any] = {"attributes": attributes}
@@ -140,14 +142,16 @@ class TestThreeActsOneDesign:
         t.app("shop").epg("web").bind(bd="web", domain="niwaki-phys")
 
         payload = cfg.to_payload()
-        domains = [next(iter(child)) for child in payload["polUni"]["children"]]
+        domains = [next(iter(child)) for child in as_objects(at(payload, "polUni", "children"))]
         assert domains == ["fabricInst", "infraInfra", "physDomP", "fvTenant"]
 
         # The cross-domain reference resolved against the declared phys-dom.
-        tenant_tree = payload["polUni"]["children"][3]["fvTenant"]
-        epg = tenant_tree["children"][2]["fvAp"]["children"][0]["fvAEPg"]
-        rs_classes = {next(iter(child)): child for child in epg["children"]}
-        assert rs_classes["fvRsDomAtt"]["fvRsDomAtt"]["attributes"]["tDn"] == "uni/phys-niwaki-phys"
+        tenant_tree = at(payload, "polUni", "children", 3, "fvTenant")
+        epg = at(tenant_tree, "children", 2, "fvAp", "children", 0, "fvAEPg")
+        rs_classes = {next(iter(child)): child for child in as_objects(at(epg, "children"))}
+        assert at(rs_classes["fvRsDomAtt"], "fvRsDomAtt", "attributes", "tDn") == (
+            "uni/phys-niwaki-phys"
+        )
 
     def test_staged_ops_cover_all_domains_in_order(self) -> None:
         from niwaki.design._compiler import compile_ops

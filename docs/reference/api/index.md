@@ -17,6 +17,7 @@ reference ({doc}`../vocabulary/index`).
 | the model contract | {doc}`models` |
 | sessions, retries, the transport protocols | {doc}`transport` |
 | diffing and response parsing | {doc}`utils` |
+| the type of a raw APIC payload (`JsonObject`, …) | {doc}`types` |
 
 ```{toctree}
 :maxdepth: 2
@@ -31,4 +32,5 @@ exceptions
 models
 transport
 utils
+types
 ```

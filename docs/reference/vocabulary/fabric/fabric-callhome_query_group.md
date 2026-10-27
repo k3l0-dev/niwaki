@@ -29,4 +29,4 @@ Accepted as keyword arguments of `.callhome_query_group(name)` and of `.set(**at
 
 | maker | creates | position |
 | --- | --- | --- |
-| `.query(name, **attrs)` | `callhomeQuery` | {ref}`fabric.callhome_query_group.query <vocab-fabric-callhome_query_group-query>` |
+| `.callhome_query(name, **attrs)` | `callhomeQuery` | {ref}`fabric.callhome_query_group.callhome_query <vocab-fabric-callhome_query_group-callhome_query>` |

@@ -132,7 +132,9 @@ class TestNiwakiNodeGetattr:
         assert node.dn == "uni/tn-prod/ap-myapp/epg-frontend"
 
     def test_subnet_dn(self, mock_niwaki: Niwaki) -> None:
-        node = mock_niwaki.root.tenant("prod").bd("web").subnet(ip="10.0.0.1/24")
+        # The wire alias (ip) is accepted at runtime; the typed navigation
+        # only declares the Python naming prop (subnet).
+        node = mock_niwaki.root.tenant("prod").bd("web").subnet(ip="10.0.0.1/24")  # pyright: ignore[reportCallIssue]
         assert node.dn == "uni/tn-prod/BD-web/subnet-[10.0.0.1/24]"
 
     def test_infra_dn(self, mock_niwaki: Niwaki) -> None:

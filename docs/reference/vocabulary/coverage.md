@@ -109,7 +109,7 @@ Re-generate: uv run python -m niwaki._codegen.generate_docs
 | {ref}`fabric.smart_callhome_destination_group.callhome_protocol_profile <vocab-fabric-smart_callhome_destination_group-callhome_protocol_profile>` | `callhomeProf` | — | — | — | — | — |
 | {ref}`fabric.callhome_inventory_policy <vocab-fabric-callhome_inventory_policy>` | `callhomeInvP` | — | — | — | — | — |
 | {ref}`fabric.callhome_query_group <vocab-fabric-callhome_query_group>` | `callhomeQueryGroup` | 1 | — | — | — | — |
-| {ref}`fabric.callhome_query_group.query <vocab-fabric-callhome_query_group-query>` | `callhomeQuery` | — | — | — | — | — |
+| {ref}`fabric.callhome_query_group.callhome_query <vocab-fabric-callhome_query_group-callhome_query>` | `callhomeQuery` | — | — | — | — | — |
 | {ref}`fabric.snmp_policy <vocab-fabric-snmp_policy>` | `snmpPol` | 4 | — | — | — | — |
 | {ref}`fabric.snmp_policy.snmp_community <vocab-fabric-snmp_policy-snmp_community>` | `snmpCommunityP` | — | — | — | — | — |
 | {ref}`fabric.snmp_policy.user_profile <vocab-fabric-snmp_policy-user_profile>` | `snmpUserP` | — | — | — | — | — |

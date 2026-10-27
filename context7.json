@@ -34,7 +34,7 @@
     "Class and property discovery is offline via `niwaki.catalog` (`search`, `describe`, `prop_meta`, `generated_classes`) — no APIC connection needed. `catalog.generated_classes()` enumerates the ~2,200 classes with typed models.",
     "Subscribe to live changes with `aci.query(fvBD).under(dn).subscribe()`; iterate typed CREATED/MODIFIED/DELETED events. Stats classes can never push — `StatsClassNotSubscribableError` fires before any network call.",
     "A subscription GAP event means the socket reconnected and events were lost forever (the APIC has no replay) — reconcile with a fresh read when it matters.",
-    "Imports like `from niwaki.models.fv.fvBD import fvBD` are valid at runtime (module alias); static analyzers may flag them — expected, do not fix. If tooling insists, the statically-resolvable path is `niwaki.models._generated.fv.fvBD`.",
+    "Import generated models from the public path `from niwaki.models.fv.fvBD import fvBD` (enums: `from niwaki.models.enums.FvBDType import FvBDType`) — it resolves for static analyzers (mypy, pyright, IDEs) and is the documented path. Never import from `niwaki.models._generated` in user code: it is internal; both paths yield the very same class object.",
     "Do not emit APIs that do not exist: the facade has no `create/push/update/bind`, models have no `add_*`/`bind_*` builders, and filter operators `contains`/`isdigit` do not exist (use `wcard`).",
     "Niwaki is not cobra or acitoolkit — never import `cobra.*` or mix its `ConfigRequest` pattern with niwaki code.",
     "Catch typed exceptions: every SDK error subclasses `NiwakiError` (auth/transport/API/query/design/subscription branches). `catalog` lookups raise `UnknownClassError`, which is also a `KeyError`.",

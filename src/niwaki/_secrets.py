@@ -39,9 +39,7 @@ triages it.
 from __future__ import annotations
 
 import re
-import sqlite3
 from functools import cache
-from pathlib import Path
 
 # ── The sweep definition (shared with the drift guard) ────────────────────────
 # Three nets. A: property names that smell of secret material. B: classes whose
@@ -262,20 +260,7 @@ def _secure_flagged() -> frozenset[tuple[str, str]]:
     """Every (class, prop) the schema flags ``secure``, from the shipped db."""
     from niwaki.query import _catalog
 
-    db = Path(_catalog.DEFAULT_PATH)
-    con = sqlite3.connect(f"file:{db}?mode=ro", uri=True)
-    try:
-        (raw,) = con.execute("SELECT value FROM manifest WHERE key='prop_flags'").fetchone()
-        secure_bit = 1 << str(raw).split(",").index("secure")
-        return frozenset(
-            (cls, wire)
-            for cls, wire, flags in con.execute(
-                "SELECT m.class_name, p.wire_name, p.flags FROM prop p JOIN mo m ON p.class_id=m.id"
-            )
-            if flags & secure_bit
-        )
-    finally:
-        con.close()
+    return _catalog.catalog()._secure_props()
 
 
 def is_secret_prop(class_name: str, wire_name: str) -> bool:

@@ -112,6 +112,193 @@ def test_build_rejects_an_unrouted_property_key(tmp_path: Path) -> None:
         gc.build_catalog(schemas, tmp_path / "c.db")
 
 
+# ── Unit: property signatures are shared across classes (no corpus) ───────────
+#
+# The ``prop`` storage is normalised: ``prop_sig`` holds each distinct property
+# signature once, ``class_prop`` links ``(class_id, sig_id)``.  These build tiny
+# catalogues from synthetic schemas with the real generator and look at the
+# storage directly — only the two tables' names and ``class_prop``'s two
+# columns are assumed, never ``prop_sig``'s inner layout.
+
+
+def _tiny_class(name: str, props: dict[str, dict[str, Any]]) -> dict[str, Any]:
+    """A concrete schema class, every column the reader reads set explicitly."""
+    return {
+        "classPkg": "xy",
+        "className": name,
+        "rnFormat": f"{name.lower()}-{{name}}",
+        "isAbstract": False,
+        "isExportable": True,
+        "isConfigurable": True,
+        "moCategory": "Regular",
+        "isCreatableDeletable": "always",
+        # Universal in the corpus, so always reconstructed — even when empty.
+        "platformFlavors": [],
+        "dnFormats": [],
+        "superClasses": [],
+        "subClasses": {},
+        "faults": {},
+        "properties": props,
+    }
+
+
+def _tiny_prop(**overrides: Any) -> dict[str, Any]:
+    """A configurable string property; ``overrides`` win over the defaults."""
+    return _full_prop(
+        **{
+            "baseType": "string:Basic",
+            "label": "Colour",
+            "isConfigurable": True,
+            "platformFlavors": [],
+            **overrides,
+        }
+    )
+
+
+def _build_tiny(root: Path, classes: dict[str, dict[str, Any]]) -> Path:
+    """Build a catalogue from ``{ShortName: schema class}`` and return its path.
+
+    ``build_catalog`` refuses a db missing any *generated* model class (its
+    completeness check against ``_PKG_MAP``); a synthetic universe has none,
+    so the index is emptied for the build only.
+    """
+    schemas = root / "schemas"
+    schemas.mkdir()
+    for name, cls in classes.items():
+        (schemas / f"xy{name}.json").write_text(json.dumps({f"xy:{name}": cls}))
+    out = root / "catalog.db"
+    with pytest.MonkeyPatch.context() as mp:
+        from niwaki.models import _generated
+
+        mp.setattr(_generated, "_PKG_MAP", {})
+        gc.build_catalog(schemas, out)
+    return out
+
+
+def _count(db: Path, table: str) -> int:
+    con = sqlite3.connect(db)
+    try:
+        # ``table`` is a literal from this module, never user input.
+        (n,) = con.execute(f"SELECT COUNT(*) FROM {table}").fetchone()
+        return int(n)
+    finally:
+        con.close()
+
+
+def _sig_ids(db: Path) -> dict[str, set[int]]:
+    """``{class name: {sig_id, ...}}`` read through ``class_prop`` and ``mo``."""
+    con = sqlite3.connect(db)
+    try:
+        out: dict[str, set[int]] = {}
+        for name, sig in con.execute(
+            "SELECT m.class_name, c.sig_id FROM class_prop c JOIN mo m ON m.id = c.class_id"
+        ):
+            out.setdefault(str(name), set()).add(int(sig))
+        return out
+    finally:
+        con.close()
+
+
+def _reconstructed(db: Path, name: str) -> dict[str, Any]:
+    con = sqlite3.connect(db)
+    try:
+        return gc.reconstruct_class(con, name)
+    finally:
+        con.close()
+
+
+def test_identical_props_on_two_classes_share_one_signature(tmp_path: Path) -> None:
+    same = _tiny_prop(default="blue")
+    db = _build_tiny(
+        tmp_path,
+        {
+            "Alpha": _tiny_class("Alpha", {"colour": same}),
+            "Beta": _tiny_class("Beta", {"colour": same}),
+        },
+    )
+    assert _count(db, "prop_sig") == 1
+    assert _count(db, "class_prop") == 2
+    ids = _sig_ids(db)
+    assert ids["xyAlpha"] == ids["xyBeta"]
+
+
+def test_a_different_default_makes_two_signatures(tmp_path: Path) -> None:
+    db = _build_tiny(
+        tmp_path,
+        {
+            "Alpha": _tiny_class("Alpha", {"colour": _tiny_prop(default="blue")}),
+            "Beta": _tiny_class("Beta", {"colour": _tiny_prop(default="red")}),
+        },
+    )
+    assert _count(db, "prop_sig") == 2
+    ids = _sig_ids(db)
+    assert ids["xyAlpha"].isdisjoint(ids["xyBeta"])
+
+
+def test_a_different_residual_makes_two_signatures(tmp_path: Path) -> None:
+    """``residual`` is part of the signature: a validator never leaks across classes."""
+    db = _build_tiny(
+        tmp_path,
+        {
+            "Alpha": _tiny_class("Alpha", {"mac": _tiny_prop(validateAsMAC=True)}),
+            "Beta": _tiny_class("Beta", {"mac": _tiny_prop()}),
+        },
+    )
+    assert _count(db, "prop_sig") == 2
+
+
+def test_each_class_reads_back_its_own_default(tmp_path: Path) -> None:
+    """Nominal through the reader: shared storage, per-class answers."""
+    from niwaki.query import _catalog
+
+    db = _build_tiny(
+        tmp_path,
+        {
+            "Alpha": _tiny_class("Alpha", {"colour": _tiny_prop(default="blue")}),
+            "Beta": _tiny_class("Beta", {"colour": _tiny_prop(default="red")}),
+        },
+    )
+    cat = _catalog.Catalog(db)
+    try:
+        assert cat.prop_meta("xyAlpha", "colour").default == "blue"
+        assert cat.prop_meta("xyBeta", "colour").default == "red"
+        assert cat.find_prop("colour") == [("xyAlpha", "colour"), ("xyBeta", "colour")]
+    finally:
+        cat.close()
+
+
+def test_a_non_null_residual_stays_reconstructible(tmp_path: Path) -> None:
+    """The residual of a shared-looking property survives on its own class only."""
+    validators = [{"type": "range", "min": 0, "max": 7}]
+    alpha_props = {
+        "mac": _tiny_prop(validateAsMAC=True, validators=validators),
+        "name": _tiny_prop(isNaming=True, label="Name"),
+    }
+    beta_props = {"mac": _tiny_prop(), "name": _tiny_prop(isNaming=True, label="Name")}
+    classes = {"Alpha": _tiny_class("Alpha", alpha_props), "Beta": _tiny_class("Beta", beta_props)}
+    db = _build_tiny(tmp_path, classes)
+
+    alpha = _reconstructed(db, "xyAlpha")
+    beta = _reconstructed(db, "xyBeta")
+    assert alpha["properties"]["mac"]["validateAsMAC"] is True
+    assert alpha["properties"]["mac"]["validators"] == validators
+    assert "validateAsMAC" not in beta["properties"]["mac"]
+    assert "validators" not in beta["properties"]["mac"]
+    # Lossless, whole class: the source schema minus what is dropped by decision.
+    assert alpha == _expected(classes["Alpha"])
+    assert beta == _expected(classes["Beta"])
+
+
+def test_reconstructing_an_unknown_class_raises(tmp_path: Path) -> None:
+    db = _build_tiny(tmp_path, {"Alpha": _tiny_class("Alpha", {"colour": _tiny_prop()})})
+    con = sqlite3.connect(db)
+    try:
+        with pytest.raises(KeyError, match="xyNoSuchClass"):
+            gc.reconstruct_class(con, "xyNoSuchClass")
+    finally:
+        con.close()
+
+
 # ── Corpus: the real build, its size, and lossless reconstruction ─────────────
 
 
@@ -133,11 +320,13 @@ def test_covers_every_class(built: tuple[Path, dict[str, int]]) -> None:
 def test_ships_under_the_wheel_budget(built: tuple[Path, dict[str, int]]) -> None:
     _, stats = built
     # A naive verbatim capture measures 87 MB — over PyPI's per-file ceiling.
-    # Routing brings it to ~34.6 MB, of which the DN templates are 3.4 MB.
-    # This ceiling is a tripwire on growth, not a limit anyone is near: PyPI
-    # allows 100 MB. Keep the headroom small enough that routing another large
-    # field has to be a decision rather than a surprise.
-    assert stats["size_bytes"] < 35 * 1024 * 1024
+    # Routing brings it to ~34.6 MB, of which the DN templates are 3.4 MB;
+    # sharing property signatures across classes (332,297 rows, 25,901
+    # distinct) brings it to ~26.6 MB. This ceiling is a tripwire on growth,
+    # not a limit anyone is near: PyPI allows 100 MB. Keep the headroom small
+    # enough that routing another large field has to be a decision rather
+    # than a surprise.
+    assert stats["size_bytes"] < 26 * 1024 * 1024
 
 
 def _load_original(name: str) -> dict[str, Any]:

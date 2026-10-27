@@ -1,9 +1,12 @@
-"""The user-facing object-subscription handle — synchronous variant.
+# GENERATED from src/niwaki/query/_async_subscription.py — DO NOT EDIT.
+# Edit the async source, then run: uv run python -m niwaki._codegen.unasync --write
+"""The user-facing object-subscription handle.
 
 :class:`Subscription` wraps a transport-level
-:class:`~niwaki.transport._subscription_socket.RawSubscription` with the
-typed event layer (:mod:`niwaki.query._events`): the raw wire shapes never
-reach a caller directly.
+:class:`~niwaki.transport._subscription_socket.RawSubscription`
+with the typed event layer (:mod:`niwaki.query._events`): the raw wire shapes
+never reach a caller directly.  The event layer does no I/O, so every
+subscription handle shares it verbatim.
 """
 
 from __future__ import annotations
@@ -12,8 +15,11 @@ from typing import cast
 
 from niwaki.models.base import ManagedObject
 from niwaki.query._events import SubscriptionEvent, event_from_raw
-from niwaki.transport._subscription_socket import RawSubscription, SubscriptionInfo
-from niwaki.utils.response import parse_imdata
+from niwaki.transport._subscription_socket import (
+    RawSubscription,
+    SubscriptionInfo,
+)
+from niwaki.utils.response import parse_envelopes
 
 
 class Subscription[T: ManagedObject]:
@@ -23,7 +29,7 @@ class Subscription[T: ManagedObject]:
     reconnect-and-resubscribe are handled automatically in the background —
     nothing here needs a caller-driven loop beyond iterating the stream.
 
-    A subscription is both an iterator and a context manager::
+    A subscription is both an iterator and a context manager, used as below::
 
         with aci.query(fvBD).under("uni/tn-prod").subscribe() as sub:
             for bd in sub.initial:
@@ -33,15 +39,15 @@ class Subscription[T: ManagedObject]:
 
     Attributes:
         initial: The subscribe response's own synchronous snapshot — a single,
-            un-paginated page (not the exhaustive read :meth:`~niwaki.query.Query.fetch`
-            would give you), typed via the normal
-            :meth:`~niwaki.models.ManagedObject.from_apic` path since it
-            is a real read, not a push event.
+            un-paginated page (not the exhaustive read
+            :meth:`~niwaki.query.Query.fetch` would give you), typed via
+            the normal :meth:`~niwaki.models.ManagedObject.from_apic` path
+            since it is a real read, not a push event.
     """
 
     def __init__(self, raw: RawSubscription) -> None:
         self._raw = raw
-        self.initial: list[T] = cast(list[T], parse_imdata({"imdata": raw.initial}))
+        self.initial: list[T] = cast(list[T], parse_envelopes(raw.initial))
 
     @property
     def subscription_id(self) -> str:
@@ -57,9 +63,9 @@ class Subscription[T: ManagedObject]:
     def info(self) -> SubscriptionInfo:
         """Current diagnostic snapshot of this subscription.
 
-        See :meth:`~niwaki.query.Query.subscribe`'s session-level counterpart
-        for listing every subscription at once; this is the single-item
-        equivalent.
+        See :meth:`~niwaki.query.Query.subscribe`'s session-level
+        counterpart for listing every subscription at once; this is the
+        single-item equivalent.
 
         Raises:
             SubscriptionError: This subscription has already been closed.
@@ -86,14 +92,14 @@ class Subscription[T: ManagedObject]:
         return self
 
     def __next__(self) -> SubscriptionEvent[T]:
-        """Block until the next event, gap marker, or refresh-failure marker.
+        """Wait for the next event, gap marker, or refresh-failure marker.
 
         Raises:
-            StopIteration: :meth:`close` was called (from any thread).
+            StopIteration: :meth:`close` was called (from anywhere).
             SubscriptionLostError: Reconnect-and-resubscribe was exhausted —
                 this subscription cannot be recovered.
         """
-        return cast(SubscriptionEvent[T], event_from_raw(next(self._raw)))
+        return cast(SubscriptionEvent[T], event_from_raw(self._raw.__next__()))
 
     def close(self) -> None:
         """Stop this subscription: local bookkeeping only.

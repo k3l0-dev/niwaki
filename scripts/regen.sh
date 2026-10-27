@@ -19,12 +19,20 @@
 #          ├─ generate_enums    → models/_generated/enums/ + enum_mapping.json
 #          ├─ generate          → models/_generated/** + _PKG_MAP + tests/models/_test_data.json
 #          │    ├─ generate_catalog → query/_catalog/catalog.db   (needs _PKG_MAP)
-#          │    └─ generate_design  → design/_generated_cursors/  (also needs _child_map)
-#          │         └─ generate_docs → docs/reference/vocabulary/ (last)
+#          │    ├─ generate_design  → design/_generated_cursors/  (also needs _child_map)
+#          │    │    └─ generate_docs → docs/reference/vocabulary/
+#          │    └─ generate_mirror  → models/<pkg>/** public import mirror (corpus-free:
+#          │                           reads the formatted models/_generated tree only)
 #          └─ generate_domain   → domain/_child_map.py  (schemas + vocabulary.yaml only)
+#               └─ generate_nav → _generated_nav/*.pyi typed facade navigation stubs
+#                                 (corpus-free: _child_map + the models, types via
+#                                 generate_design._param_type; emits ruff-formatted text)
 #
 # Raw generator output is NOT ruff-format-clean (all three Python trees) — the
-# format pass at the end is part of the pipeline, not cosmetics.
+# format pass at the end is part of the pipeline, not cosmetics.  The mirror runs
+# after it and emits its exact committed text (`# fmt: off`), so it is not reformatted.
+# The navigation stubs run last: they read the formatted models, and their
+# generator formats its own output, so they are not reformatted either.
 set -euo pipefail
 cd "$(git rev-parse --show-toplevel)"
 
@@ -80,6 +88,12 @@ uv run ruff format --quiet \
     src/niwaki/domain/_child_map.py \
     src/niwaki/design/_generated_cursors
 
+echo "[regen] model import mirror (corpus-free, reads models/_generated)..."
+uv run python -m niwaki._codegen.generate_mirror
+
+echo "[regen] typed navigation stubs (corpus-free, reads _child_map + the models)..."
+uv run python -m niwaki._codegen.generate_nav
+
 echo "[regen] done — all artifacts regenerated."
 
 if [ "$VERIFY" -eq 1 ]; then
@@ -91,7 +105,8 @@ if [ "$VERIFY" -eq 1 ]; then
         tests/scripts tests/models tests/domain tests/design/test_generated_cursors.py \
         tests/design/test_core_yaml.py tests/design/test_docs_generator.py \
         tests/design/test_coverage_audit.py tests/query/test_catalog.py \
-        tests/query/test_catalog_public.py
+        tests/query/test_catalog_public.py tests/typing/test_nav_stubs_fresh.py \
+        tests/typing/test_nav_conformance.py
     # No git-diff check on docs/reference/vocabulary here: at this point the
     # book IS the generator's output by construction (generate_docs just ran),
     # so comparing against the committed state can only flag "not committed

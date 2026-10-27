@@ -71,6 +71,34 @@ with Niwaki() as aci:  # everything comes from the environment
 | `username` | `APIC_USERNAME` |
 | `password` | `APIC_PASSWORD` |
 
+### How the password is held
+
+`password` accepts a plain `str` or a pydantic `SecretStr`, so a password
+your settings layer already holds as a secret can be passed without
+unwrapping it:
+
+```python
+from pydantic import SecretStr
+
+with Niwaki("https://apic.example.com", "admin", SecretStr("secret")) as aci:
+    ...
+```
+
+Either way, the client and its session keep the password as a `SecretStr`
+rather than a plain attribute: it is masked in `repr`/`str` and in state
+dumps that render attributes, and it is unwrapped only to build the login
+request.  When that login fails in transport (unreachable host, timeout,
+TLS), the error is raised without its exception chain, so it does not carry
+the request that held the password.
+
+This is a narrower guarantee than "the password is never in memory in
+clear".  While a login request is in flight, the request body sits in a
+local variable, and `SecretStr` is masking rather than encryption — a
+debugger can read its value, and pickling it keeps it.  Error trackers that
+capture frame local variables (Sentry's `include_local_variables`, for
+instance) can therefore record the password if a login fails.  Configure
+their scrubbing to redact `pwd` and `password` keys.
+
 ## TLS and timeouts
 
 Certificate verification is **on by default** and should stay on for

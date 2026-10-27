@@ -14,6 +14,8 @@ from niwaki.models._generated.fv.fvSubnet import fvSubnet
 from niwaki.models._generated.fv.fvTenant import fvTenant
 from niwaki.utils.diff import mo_diff
 
+from .._jsonpath import as_object, at
+
 
 def _current_bd(**attrs: str) -> fvBD:
     """Build an fvBD instance simulating a deserialized APIC GET response."""
@@ -29,7 +31,7 @@ class TestMoDiffNominal:
         current = _current_bd(name="web", unicastRoute="yes")
         delta = mo_diff(desired, current)
         assert delta is not None
-        attrs = delta.to_apic()["fvBD"]["attributes"]
+        attrs = as_object(at(delta.to_apic(), "fvBD", "attributes"))
         assert attrs["unicastRoute"] == "false"
         assert attrs["name"] == "web"
 
@@ -38,7 +40,7 @@ class TestMoDiffNominal:
         current = _current_bd(name="web", multiDstPktAct="bd-flood")
         delta = mo_diff(desired, current)
         assert delta is not None
-        attrs = delta.to_apic()["fvBD"]["attributes"]
+        attrs = as_object(at(delta.to_apic(), "fvBD", "attributes"))
         assert attrs["multiDstPktAct"] == "drop"
 
     def test_multiple_fields_changed(self) -> None:
@@ -46,7 +48,7 @@ class TestMoDiffNominal:
         current = _current_bd(name="web", unicastRoute="yes", arpFlood="no")
         delta = mo_diff(desired, current)
         assert delta is not None
-        attrs = delta.to_apic()["fvBD"]["attributes"]
+        attrs = as_object(at(delta.to_apic(), "fvBD", "attributes"))
         assert attrs["unicastRoute"] == "false"
         assert attrs["arpFlood"] == "true"
 
@@ -62,7 +64,7 @@ class TestMoDiffNominal:
         current = _current_bd(name="web", arpFlood="no")
         delta = mo_diff(desired, current)
         assert delta is not None
-        attrs = delta.to_apic()["fvBD"]["attributes"]
+        attrs = as_object(at(delta.to_apic(), "fvBD", "attributes"))
         assert "name" in attrs
 
     def test_delta_to_apic_only_sends_naming_plus_changed(self) -> None:
@@ -70,7 +72,7 @@ class TestMoDiffNominal:
         current = _current_bd(name="web", unicastRoute="yes", arpFlood="no")
         delta = mo_diff(desired, current)
         assert delta is not None
-        attrs = delta.to_apic()["fvBD"]["attributes"]
+        attrs = as_object(at(delta.to_apic(), "fvBD", "attributes"))
         # Only name (naming) + unicastRoute (changed) should be present
         assert set(attrs.keys()) == {"name", "unicastRoute"}
 
@@ -160,7 +162,7 @@ class TestMoDiffIgnoresExtra:
         current = _current_bd(name="web", unicastRoute="yes")
         delta = mo_diff(desired, current)
         assert delta is not None
-        attrs = delta.to_apic()["fvBD"]["attributes"]
+        attrs = as_object(at(delta.to_apic(), "fvBD", "attributes"))
         assert "modTs" not in attrs
 
 
@@ -179,7 +181,7 @@ class TestMoDiffChildren:
         delta = mo_diff(desired, current)
         assert delta is not None
         assert len(delta.children) == 1
-        child_attrs = delta.children[0].to_apic()["fvSubnet"]["attributes"]
+        child_attrs = as_object(at(delta.children[0].to_apic(), "fvSubnet", "attributes"))
         assert child_attrs["scope"] == "public"
 
     def test_new_child_in_desired_is_included_in_full(self) -> None:
@@ -225,7 +227,7 @@ class TestMoDiffChildren:
 
         delta = mo_diff(desired, current)
         assert delta is not None
-        assert delta.to_apic()["fvBD"]["attributes"]["arpFlood"] == "true"
+        assert at(delta.to_apic(), "fvBD", "attributes", "arpFlood") == "true"
         # Unchanged child must NOT appear in the delta
         assert len(delta.children) == 0
 
@@ -333,7 +335,9 @@ class TestMoDiffEmptyStringMirrorsToApic:
         desired = aaaConsoleAuth.model_validate({"providerGroup": ""})
         current = aaaConsoleAuth.model_validate({"providerGroup": "radius-grp"})
         # to_apic drops the empty field → push sends nothing → no real change
-        assert "providerGroup" not in desired.to_apic()["aaaConsoleAuth"]["attributes"]
+        assert "providerGroup" not in as_object(
+            at(desired.to_apic(), "aaaConsoleAuth", "attributes")
+        )
         assert mo_diff(desired, current) is None
         assert mo_diff(desired, current, respect_fields_set=True) is None
 

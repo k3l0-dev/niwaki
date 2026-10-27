@@ -8,24 +8,44 @@ case (e.g. 429 Too Many Requests) requires a change in exactly one place.
 
 from __future__ import annotations
 
-from collections.abc import Mapping
-from typing import Any, NamedTuple, Protocol
+import ssl
+from collections.abc import Mapping, Sequence
+from typing import NamedTuple, Protocol, TypedDict
 
 import httpx
 
 from niwaki import exceptions
+from niwaki.types import JsonObject, JsonScalar
+
+# Query-string parameters of an APIC GET: what httpx accepts as primitive
+# query values — the JSON scalar set — or a sequence of them (httpx repeats
+# the key).  A ``Mapping`` so a caller's ``dict[str, str]`` is accepted as-is.
+type QueryParamValue = JsonScalar | Sequence[JsonScalar]
+type QueryParams = Mapping[str, QueryParamValue]
+
+
+class RequestOptions(TypedDict, total=False):
+    """The ``httpx`` request options the transport forwards — and nothing else.
+
+    Attributes:
+        params: Query-string parameters of a GET.
+        json: The JSON body of a POST (an APIC envelope, any mapping).
+    """
+
+    params: QueryParams
+    json: Mapping[str, object]
 
 
 class _JsonResponse(Protocol):
     """Anything that answers ``.json()`` and carries ``.text`` — a response."""
 
-    def json(self) -> Any: ...
+    def json(self) -> object: ...
 
     @property
     def text(self) -> str: ...
 
 
-def _imdata_attributes(resp: _JsonResponse, *keys: str) -> dict[str, Any]:
+def _imdata_attributes(resp: _JsonResponse, *keys: str) -> JsonObject:
     """Return ``imdata[0].<key>.attributes`` for the first *keys* entry present.
 
     Every APIC response — success, error, login, refresh — wraps its payload the
@@ -62,16 +82,21 @@ def _imdata_attributes(resp: _JsonResponse, *keys: str) -> dict[str, Any]:
         code = attrs.get("code")   # None when the body was not an APIC error
     """
     try:
-        data: Any = resp.json()
-        inner: Any = data["imdata"][0]
+        data = resp.json()
     except (KeyError, IndexError, TypeError, ValueError):
         return {}
+    if not isinstance(data, Mapping):
+        return {}
+    imdata: object = data.get("imdata")
+    if not isinstance(imdata, list) or not imdata:
+        return {}
+    inner: object = imdata[0]
     if not isinstance(inner, Mapping):
         return {}
     for key in keys:
-        wrapper: Any = inner.get(key)
+        wrapper: object = inner.get(key)
         if isinstance(wrapper, Mapping):
-            attrs: Any = wrapper.get("attributes")
+            attrs: object = wrapper.get("attributes")
             if isinstance(attrs, Mapping):
                 return dict(attrs)
     return {}
@@ -143,7 +168,7 @@ def extract_apic_error(resp: httpx.Response) -> str:
     return apic_error_fields(resp).message
 
 
-def json_data(resp: httpx.Response) -> dict[str, Any]:
+def json_data(resp: httpx.Response) -> JsonObject:
     """Parse a checked 2xx response body as the APIC JSON envelope.
 
     A 2xx whose body is not JSON — the nginx HTML page a simulator under load
@@ -170,6 +195,95 @@ def json_data(resp: httpx.Response) -> dict[str, Any]:
     if not isinstance(data, dict):
         raise exceptions.APIError(resp.status_code, f"non-object JSON body: {resp.text[:200]!r}")
     return data
+
+
+def imdata_items(resp: httpx.Response, data: JsonObject) -> list[JsonObject]:
+    """Return the ``imdata`` list of a parsed APIC body, checked item by item.
+
+    Every APIC answer carries its objects as ``{"imdata": [{<class>: {...}},
+    ...]}``.  This is the one place that proves the shape instead of assuming
+    it: a missing ``imdata`` is an empty answer, anything else that is not a
+    list of JSON objects is a body the APIC never sends — a proxy or a broken
+    simulator talking — and surfaces as a typed error.
+
+    Args:
+        resp: The response *data* was parsed from (its status and body
+            prefix go into the error).
+        data: The parsed body, as returned by :func:`json_data`.
+
+    Returns:
+        The ``imdata`` items, the same list object the body carried.
+
+    Raises:
+        APIError: ``imdata`` is present but not a list of JSON objects.
+
+    Example::
+
+        items = imdata_items(resp, json_data(resp))
+    """
+    items = data.get("imdata", [])
+    if not isinstance(items, list):
+        raise exceptions.APIError(resp.status_code, f"non-list imdata: {resp.text[:200]!r}")
+    objects: list[JsonObject] = []
+    for item in items:
+        if not isinstance(item, dict):
+            raise exceptions.APIError(
+                resp.status_code, f"non-object imdata item: {resp.text[:200]!r}"
+            )
+        objects.append(item)
+    return objects
+
+
+def total_count(resp: httpx.Response, data: JsonObject) -> int:
+    """Read the ``totalCount`` of a parsed APIC body, as an integer.
+
+    The APIC sends it as a numeric string (``"42"``); an absent one counts as
+    ``0``.  Anything else — an object, a list, a non-numeric string — is a
+    body the APIC never sends and surfaces as a typed error.
+
+    Args:
+        resp: The response *data* was parsed from (status and body prefix go
+            into the error).
+        data: The parsed body, as returned by :func:`json_data`.
+
+    Returns:
+        The count.
+
+    Raises:
+        APIError: ``totalCount`` is present but not a number.
+
+    Example::
+
+        total = total_count(resp, json_data(resp))
+    """
+    raw = data.get("totalCount", 0)
+    if isinstance(raw, str | int | float):
+        try:
+            return int(raw)
+        except ValueError:
+            pass
+    raise exceptions.APIError(
+        resp.status_code, f"malformed totalCount {raw!r}: {resp.text[:200]!r}"
+    )
+
+
+def json_imdata(resp: httpx.Response) -> list[JsonObject]:
+    """Parse a checked 2xx response and return its ``imdata`` items.
+
+    Shorthand for ``imdata_items(resp, json_data(resp))`` — the data paths
+    that only want the objects, not ``totalCount``.
+
+    Args:
+        resp: A response that already passed :func:`raise_for_apic_status`.
+
+    Returns:
+        The ``imdata`` items (empty when the body has none).
+
+    Raises:
+        APIError: The body is not a JSON object, or its ``imdata`` is not a
+            list of JSON objects.
+    """
+    return imdata_items(resp, json_data(resp))
 
 
 def raise_for_apic_status(resp: httpx.Response) -> None:
@@ -217,3 +331,50 @@ def raise_for_apic_status(resp: httpx.Response) -> None:
     if status >= 500:
         raise exceptions.ServerError(status, msg, apic_code=code)
     raise exceptions.APIError(status, msg, apic_code=code)
+
+
+def transport_failure(
+    exc: httpx.TransportError, host: str, *, name_failure: bool = False
+) -> exceptions.TransportError:
+    """Map an httpx transport failure to the typed niwaki error, without raising it.
+
+    The single mapping behind every request the sessions send.  It *returns*
+    the error rather than raising it so the caller decides how it is chained:
+    an ordinary request raises it ``from`` the httpx error, while the login
+    path raises it outside the ``except`` block with no chain at all — an
+    httpx error keeps the request it failed on, and an aaaLogin request's
+    body is the password.
+
+    Args:
+        exc: The httpx failure.
+        host: The APIC base URL, named in connection and TLS messages.
+        name_failure: Also name the httpx exception class in the message
+            (``"(ConnectTimeout)"``).  Set where the chain is severed: the
+            class name is then the only record of which failure it was.
+
+    Returns:
+        :class:`~niwaki.exceptions.TimeoutError` for an
+        ``httpx.TimeoutException``; :class:`~niwaki.exceptions.TLSError` for an
+        ``httpx.ConnectError`` caused by an ``ssl.SSLError`` (the message
+        carries the SSL error's text); :class:`~niwaki.exceptions.ConnectionError`
+        for any other ``httpx.ConnectError``; the base
+        :class:`~niwaki.exceptions.TransportError` for anything else.
+
+    Example::
+
+        try:
+            resp = client.get(path)
+        except httpx.TransportError as exc:
+            raise transport_failure(exc, host) from exc
+    """
+    kind = f" ({type(exc).__name__})" if name_failure else ""
+    match exc:
+        case httpx.TimeoutException():
+            return exceptions.TimeoutError(f"APIC request timed out{kind}: {exc}")
+        case httpx.ConnectError():
+            cause = exc.__cause__ or exc.__context__
+            if isinstance(cause, ssl.SSLError):
+                return exceptions.TLSError(f"TLS/SSL error connecting to {host}{kind}: {cause}")
+            return exceptions.ConnectionError(f"Cannot reach APIC at {host}{kind}: {exc}")
+        case _:
+            return exceptions.TransportError(f"{type(exc).__name__}: {exc}" if kind else str(exc))

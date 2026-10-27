@@ -191,6 +191,7 @@ def test_forced_reconnect_recovers_live(live_aci: Niwaki, _subscribe_tenant_read
         old_wire_id = sub.subscription_id
         with socket._state_lock:  # type: ignore[reportPrivateUsage]
             ws = socket._ws  # type: ignore[reportPrivateUsage]
+        assert ws is not None
         ws.close()  # force-drop the connection, exactly like a real network blip
 
         gap = _next_of_kind(sub, EventKind.GAP, timeout=20.0)

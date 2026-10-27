@@ -160,8 +160,12 @@ def _build_catalog_surface(
     naming_bit = 1 << flag_order.index("isNaming")
 
     props: dict[int, dict[str, dict[str, Any]]] = defaultdict(dict)
+    # Class then wire-name order, as the catalogue reader feeds the naming
+    # resolver (its collision fallback depends on the input order).
     for class_id, wire, label_id, flags in con.execute(
-        "SELECT class_id, wire_name, label_id, flags FROM prop"
+        "SELECT c.class_id, s.wire_name, s.label_id, s.flags "
+        "FROM class_prop c JOIN prop_sig s ON s.id = c.sig_id "
+        "ORDER BY c.class_id, s.wire_name"
     ):
         props[class_id][wire] = {
             "label": labels.get(label_id, "") if label_id is not None else "",

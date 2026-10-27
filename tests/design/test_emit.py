@@ -7,6 +7,7 @@ from typing import Any
 
 import pytest
 
+from niwaki._json import JsonObject, JsonValue
 from niwaki.design import Cursor, design, ref, tenant, to_code, to_design
 from niwaki.exceptions import DesignError
 from niwaki.snapshot import Snapshot
@@ -130,7 +131,7 @@ class TestEmittedShape:
 class TestReconciliationPure:
     """The pure half of reconcile() — one uni capture vs declared DNs."""
 
-    def _snap(self, tenant_children: list[dict]) -> Snapshot:
+    def _snap(self, tenant_children: list[JsonValue]) -> Snapshot:
         from niwaki.snapshot import Snapshot
 
         return Snapshot(
@@ -236,7 +237,7 @@ class TestReviewScenariosIt4:
         # must execute.
         from niwaki.snapshot import Snapshot
 
-        tree = {
+        tree: JsonObject = {
             "class": "polUni",
             "rn": "uni",
             "attributes": {},
@@ -283,7 +284,7 @@ class TestReviewScenariosIt4:
         # replay — to_code must refuse, never emit crashing source.
         from niwaki.snapshot import Snapshot
 
-        tree = {
+        tree: JsonObject = {
             "class": "polUni",
             "rn": "uni",
             "attributes": {},

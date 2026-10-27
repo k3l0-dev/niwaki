@@ -34,7 +34,7 @@ from __future__ import annotations
 
 import keyword
 import re
-from typing import Any
+from collections.abc import Mapping
 
 __all__ = [
     "FIELD_NAME_OVERRIDES",
@@ -404,7 +404,7 @@ FIELD_NAME_OVERRIDES: dict[tuple[str, str], str] = {
 
 
 def resolve_py_names(
-    props: dict[str, Any],
+    props: Mapping[str, Mapping[str, object]],
     sm_class: dict[str, str],
     aci_class: str = "",
 ) -> dict[str, str]:
@@ -442,8 +442,13 @@ def resolve_py_names(
         if (override := FIELD_NAME_OVERRIDES.get((aci_class, pn))) is not None:
             pyn = override
         else:
+            label = pd.get("label", "")
             pyn = best_field_name(
-                pn, pd.get("label", ""), sm_class.get(pn, ""), is_naming=bool(pd.get("is_naming"))
+                pn,
+                # A missing or null label is "unavailable" — the same as "".
+                label if isinstance(label, str) else "",
+                sm_class.get(pn, ""),
+                is_naming=bool(pd.get("is_naming")),
             )
         name_to_aci.setdefault(pyn, []).append(pn)
 

@@ -259,7 +259,12 @@ def _prop_row(
     enums: _EnumStore,
     unknown_types: set[str],
 ) -> tuple[Any, ...]:
-    """Route one property into a prop-table row tuple. Fail-loud on unknown keys."""
+    """Route one property into a ``(class_id, *signature)`` tuple. Fail-loud on unknown keys.
+
+    Everything after ``class_id`` is the property's *signature*: the build
+    stores each distinct signature once (``prop_sig``) and links classes to it
+    (``class_prop``).
+    """
     base_type = str(prop.get("baseType", ""))
     if base_type and kind_value_or_none(base_type) is None:
         unknown_types.add(base_type)  # a family beyond the model set — reported, not swallowed
@@ -267,7 +272,7 @@ def _prop_row(
     enum_id: int | None = None
     vv = prop.get("validValues")
     # Keep real enums / scalar dicts (deduped); drop the mo:* identifier registers
-    # (redundant with the mo/prop tables — a monument to a misreading of the schema).
+    # (redundant with the mo/prop_sig tables — a monument to a misreading of the schema).
     if isinstance(vv, list) and vv and not base_type.startswith("mo:"):
         enum_id = enums.add(vv)
 
@@ -324,7 +329,13 @@ def build_catalog(schema_dir: Path = SCHEMA_DIR, out: Path = DEFAULT_OUT) -> dic
     enums = _EnumStore()
     unknown_types: set[str] = set()
     mo_rows: list[tuple[Any, ...]] = []
-    prop_rows: list[tuple[Any, ...]] = []
+    # Normalised property storage: 332,297 (class, property) rows carry only
+    # ~25,900 distinct signatures (``status``/``rn``/``dn``/``childAction``
+    # alone repeat on every class).  Each signature is stored once in
+    # ``prop_sig``, ids assigned in first-seen order (deterministic: the
+    # schema files are walked sorted); ``class_prop`` links the two.
+    sig_ids: dict[tuple[Any, ...], int] = {}
+    class_props: list[tuple[int, int]] = []
     inherits: list[tuple[int, str]] = []
     subclass: list[tuple[int, str]] = []
     faults: list[tuple[int, str, str]] = []
@@ -354,19 +365,19 @@ def build_catalog(schema_dir: Path = SCHEMA_DIR, out: Path = DEFAULT_OUT) -> dic
         for wire, prop in (cls.get("properties") or {}).items():
             if not isinstance(prop, dict):
                 continue
-            prop_rows.append(
-                _prop_row(
-                    class_id,
-                    name,
-                    wire,
-                    prop,
-                    labels,
-                    comments,
-                    types,
-                    enums,
-                    unknown_types,
-                )
-            )
+            signature = _prop_row(
+                class_id,
+                name,
+                wire,
+                prop,
+                labels,
+                comments,
+                types,
+                enums,
+                unknown_types,
+            )[1:]
+            sig_id = sig_ids.setdefault(signature, len(sig_ids))
+            class_props.append((class_id, sig_id))
             n_props += 1
         inherits += [(class_id, a) for a in cls.get("superClasses") or []]
         subclass += [(class_id, c) for c in cls.get("subClasses") or {}]
@@ -391,7 +402,11 @@ def build_catalog(schema_dir: Path = SCHEMA_DIR, out: Path = DEFAULT_OUT) -> dic
         )
 
     con.executemany(f"INSERT INTO mo VALUES ({_ph(len(mo_cols))})", mo_rows)
-    con.executemany(f"INSERT INTO prop VALUES ({_ph(len(_prop_column_order()))})", prop_rows)
+    con.executemany(
+        f"INSERT INTO prop_sig VALUES ({_ph(len(_prop_sig_column_order()))})",
+        [(sig_id, *signature) for signature, sig_id in sig_ids.items()],
+    )
+    con.executemany("INSERT INTO class_prop VALUES (?,?)", class_props)
     con.executemany("INSERT INTO label_pool VALUES (?,?)", labels.rows())
     con.executemany("INSERT INTO comment_pool VALUES (?,?)", comments.rows())
     con.executemany("INSERT INTO type_pool VALUES (?,?)", types.rows())
@@ -468,6 +483,11 @@ def build_catalog(schema_dir: Path = SCHEMA_DIR, out: Path = DEFAULT_OUT) -> dic
     stats = {
         "classes": len(mo_rows),
         "properties": n_props,
+        # Part of the fingerprint on purpose: the property layout is what the
+        # reader's queries are written against, so a rebuild that changes how
+        # properties are shared must move ``content_hash`` even when every
+        # other count stays put.
+        "prop_signatures": len(sig_ids),
         "enums": len(enums.rows()),
         "labels": len(labels.rows()),
         "comments": len(comments.rows()),
@@ -596,7 +616,7 @@ def _search_text(name: str, cls: dict[str, Any]) -> str:
     would re-store the ``comment_pool`` text (a second copy the FTS index would
     grow again → +3.4 MB); folding in 330k prop labels would triple the file.
     Property search (``find_prop`` — "which class carries a MAC?") queries the
-    ``prop`` table directly; comment search can scan ``comment_pool`` on demand.
+    property signatures directly; comment search can scan ``comment_pool`` on demand.
     """
     return f"{name} {cls.get('label', '')}".strip()
 
@@ -661,11 +681,18 @@ def _create_schema(con: sqlite3.Connection) -> None:
           label_id INT, comment_id INT, identified_by TEXT,
           {text}, {flags}, residual BLOB, dn_formats BLOB
         );
-        CREATE TABLE prop(
-          class_id INT, wire_name TEXT, label_id INT, comment_id INT, enum_id INT,
-          base_type_id INT, model_type_id INT, uitype_id INT,
-          default_val TEXT, like_prop TEXT, flags INT, residual BLOB,
-          PRIMARY KEY(class_id, wire_name)
+        -- One row per distinct property signature (everything a property
+        -- carries but the class it sits on); ``class_prop`` says which classes
+        -- carry it.  Keyed by class first, so a class's memberships sit
+        -- together in the b-tree — the per-class lookup is one range seek.
+        CREATE TABLE prop_sig(
+          id INTEGER PRIMARY KEY, wire_name TEXT, label_id INT, comment_id INT,
+          enum_id INT, base_type_id INT, model_type_id INT, uitype_id INT,
+          default_val TEXT, like_prop TEXT, flags INT, residual BLOB
+        );
+        CREATE TABLE class_prop(
+          class_id INT, sig_id INT,
+          PRIMARY KEY(class_id, sig_id)
         ) WITHOUT ROWID;
         CREATE TABLE label_pool(id INT PRIMARY KEY, text TEXT) WITHOUT ROWID;
         CREATE TABLE comment_pool(id INT PRIMARY KEY, text TEXT) WITHOUT ROWID;
@@ -758,10 +785,10 @@ def reconstruct_class(con: sqlite3.Connection, class_name: str) -> dict[str, Any
     return out
 
 
-def _prop_column_order() -> list[str]:
-    """The ``prop`` table columns, in insert/select order (one source for both)."""
+def _prop_sig_column_order() -> list[str]:
+    """The ``prop_sig`` table columns, in insert/select order (one source for both)."""
     return [
-        "class_id",
+        "id",
         "wire_name",
         "label_id",
         "comment_id",
@@ -777,8 +804,12 @@ def _prop_column_order() -> list[str]:
 
 
 def _reconstruct_props(con: sqlite3.Connection, class_id: int) -> list[tuple[str, dict[str, Any]]]:
-    rows = con.execute("SELECT * FROM prop WHERE class_id=?", (class_id,)).fetchall()
-    cols = _prop_column_order()
+    cols = _prop_sig_column_order()
+    rows = con.execute(
+        f"SELECT {', '.join(f's.{c}' for c in cols)} FROM class_prop c "
+        "JOIN prop_sig s ON s.id = c.sig_id WHERE c.class_id=? ORDER BY s.wire_name",
+        (class_id,),
+    ).fetchall()
     out: list[tuple[str, dict[str, Any]]] = []
     for row in rows:
         r = dict(zip(cols, row, strict=True))
