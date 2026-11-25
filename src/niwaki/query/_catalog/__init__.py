@@ -176,6 +176,68 @@ class ClassDoc:
     concrete_subclasses: tuple[str, ...]
 
 
+@dataclass(frozen=True, slots=True)
+class RelationDoc:
+    """One relation class (an Rs) of the object model, as the schema states it.
+
+    A relation is a managed object of its own: an *Rs* class (``fvRsCtx``) that a
+    *source* object carries to point at a *target* object (``fvCtx``), which in
+    return grows the matching *Rt* class (``fvRtCtx``).  Every name is a wire
+    class name.
+
+    Attributes:
+        rs_class: The relation class itself, e.g. ``"fvRsCtx"`` — the key
+            :func:`niwaki.catalog.relation` takes.
+        source: The class that carries the Rs, exactly as the schema declares
+            it.  Often **abstract** (``fvRsCtx`` is declared on ``fvABDPol``,
+            not on ``fvBD``): the relation then applies to every concrete
+            descendant, which is what :func:`niwaki.catalog.relations` walks.
+        target: The class the Rs points at, possibly abstract
+            (``fvRsDomAtt`` targets ``infraDomP``, reaching every concrete
+            domain).  A handful of targets are cloud classes this catalogue
+            does not describe; the relation is still served.
+        target_rt: The Rt class the target grows in return, e.g. ``"fvRtCtx"``.
+        cardinality: The schema's cardinality, one of ``"1-to-1"``,
+            ``"1-to-m"``, ``"n-to-1"``, ``"n-to-m"``.
+        kind: How the Rs names its target — ``"named"`` (by name, e.g.
+            ``tnFvCtxName``, resolved in scope) or ``"explicit"`` (by DN,
+            ``tDn``).
+        enforceable: The schema's ``enforceable`` flag, served as it stands.
+        resolvable: The schema's ``resolvable`` flag, served as it stands.
+    """
+
+    rs_class: str
+    source: str
+    target: str
+    target_rt: str
+    cardinality: str
+    kind: str
+    enforceable: bool
+    resolvable: bool
+
+
+@dataclass(frozen=True, slots=True)
+class _RelationIndex:
+    """The relation graph, read once: every Rs, indexed both ways.
+
+    ``by_source`` / ``by_target`` map a wire class name to the Rs classes
+    declared on it / aimed at it — the declared endpoint only; inheritance is
+    applied per lookup by :meth:`Catalog.relations`.
+    """
+
+    docs: dict[str, RelationDoc]
+    by_source: dict[str, tuple[str, ...]]
+    by_target: dict[str, tuple[str, ...]]
+
+
+_DIRECTIONS = ("out", "in")
+
+
+def _wire_name(name: str) -> str:
+    """``pkg:Name`` → ``pkgName`` — the catalogue-wide class-name conversion."""
+    return name.replace(":", "")
+
+
 class Catalog:
     """A lazy, read-only reader over the catalogue ``.db``.
 
@@ -207,6 +269,8 @@ class Catalog:
         self._exportable: frozenset[str] | None = None
         self._concrete: frozenset[str] | None = None
         self._never_creatable: frozenset[str] | None = None
+        self._relation_index: _RelationIndex | None = None
+        self._relations: dict[tuple[str, str], tuple[RelationDoc, ...]] = {}
 
     @property
     def _connection(self) -> sqlite3.Connection:
@@ -588,6 +652,136 @@ class Catalog:
         if row is None:
             raise UnknownClassError(class_name)
         return str(row[0] or "")
+
+    # ── The relation graph (one scan of a small table, then memory) ───────────
+
+    def _relations_index(self) -> _RelationIndex:
+        """The relation graph, built on first use and kept for the instance.
+
+        The ``relation`` table keys each relation twice — once by its Rs class,
+        once by its Rt class, field-for-field identical — and also holds the
+        abstract relation bases (``relnFrom`` …) with no endpoint at all.  Only
+        the Rs-keyed rows (``rs_class`` is the wire form of ``from_rel_mo``)
+        with every endpoint present are relations; the rest is never served.
+
+        Built into locals and published with one assignment, so a concurrent
+        first build is idempotent: the last writer wins with an equal index.
+        """
+        index = self._relation_index
+        if index is None:
+            docs: dict[str, RelationDoc] = {}
+            by_source: dict[str, list[str]] = {}
+            by_target: dict[str, list[str]] = {}
+            for (
+                rs_class,
+                rel_type,
+                cardinality,
+                from_mo,
+                from_rel_mo,
+                to_mo,
+                to_rel_mo,
+                enforceable,
+                resolvable,
+            ) in self._connection.execute(
+                "SELECT rs_class, rel_type, cardinality, from_mo, from_rel_mo, "
+                "to_mo, to_rel_mo, enforceable, resolvable FROM relation ORDER BY rs_class"
+            ):
+                if from_rel_mo is None or _wire_name(str(from_rel_mo)) != rs_class:
+                    continue  # an Rt-keyed duplicate, or an abstract relation base
+                if None in (rel_type, cardinality, from_mo, to_mo, to_rel_mo):
+                    continue  # no endpoint to describe: not a relation
+                doc = RelationDoc(
+                    rs_class=str(rs_class),
+                    source=_wire_name(str(from_mo)),
+                    target=_wire_name(str(to_mo)),
+                    target_rt=_wire_name(str(to_rel_mo)),
+                    cardinality=str(cardinality),
+                    kind=str(rel_type),
+                    enforceable=bool(enforceable),
+                    resolvable=bool(resolvable),
+                )
+                docs[doc.rs_class] = doc
+                by_source.setdefault(doc.source, []).append(doc.rs_class)
+                by_target.setdefault(doc.target, []).append(doc.rs_class)
+            index = self._relation_index = _RelationIndex(
+                docs=docs,
+                by_source={name: tuple(rs) for name, rs in by_source.items()},
+                by_target={name: tuple(rs) for name, rs in by_target.items()},
+            )
+        return index
+
+    def relation(self, rs_class: str) -> RelationDoc:
+        """Describe one relation class (an Rs).
+
+        Args:
+            rs_class: The wire name of the Rs class, e.g. ``"fvRsCtx"``.
+
+        Returns:
+            The :class:`RelationDoc`, shared across calls.
+
+        Raises:
+            UnknownClassError: No such class in the catalogue, or a known class
+                that is not a relation (an Rt class, an abstract relation base,
+                any ordinary class) — the message says which.
+        """
+        doc = self._relations_index().docs.get(rs_class)
+        if doc is not None:
+            return doc
+        if (
+            self._connection.execute("SELECT 1 FROM mo WHERE class_name=?", (rs_class,)).fetchone()
+            is None
+        ):
+            raise UnknownClassError(rs_class)
+        raise UnknownClassError(
+            f"{rs_class} is a known class but not a relation (Rs) class — "
+            "describe a relation by its Rs class, e.g. 'fvRsCtx' rather than 'fvRtCtx'"
+        )
+
+    def relations(self, class_name: str, *, direction: str = "out") -> tuple[RelationDoc, ...]:
+        """Every relation a class carries (``out``) or is the target of (``in``).
+
+        Inheritance applies both ways: a relation declared on — or aimed at —
+        any superclass of ``class_name`` counts.  Memoised per
+        ``(class_name, direction)``; the answer is the same tuple object on
+        every call.
+
+        Args:
+            class_name: The wire class name, e.g. ``"fvBD"``.
+            direction: ``"out"`` or ``"in"``.
+
+        Returns:
+            The relations, sorted by ``rs_class``, each listed once.
+
+        Raises:
+            ValueError: ``direction`` is neither ``"out"`` nor ``"in"`` —
+                checked before the class is looked up.
+            UnknownClassError: No such class in the catalogue.
+        """
+        if direction not in _DIRECTIONS:
+            raise ValueError(f"direction must be 'out' or 'in', got {direction!r}")
+        key = (class_name, direction)
+        got = self._relations.get(key)
+        if got is not None:
+            return got
+        con = self._connection
+        row = con.execute("SELECT id FROM mo WHERE class_name=?", (class_name,)).fetchone()
+        if row is None:
+            raise UnknownClassError(class_name)
+        # ``inherits`` holds the schema's ``superClasses`` list: the whole chain
+        # up to the root, not just the direct parent.
+        lineage = {class_name} | {
+            _wire_name(str(ancestor))
+            for (ancestor,) in con.execute(
+                "SELECT ancestor FROM inherits WHERE class_id=?", (row[0],)
+            )
+        }
+        index = self._relations_index()
+        declared = index.by_source if direction == "out" else index.by_target
+        names = sorted({rs for owner in lineage for rs in declared.get(owner, ())})
+        docs = tuple(index.docs[name] for name in names)
+        # ``setdefault`` is atomic: racing first callers all return the one
+        # tuple that landed, so the identity promise holds under threads too.
+        return self._relations.setdefault(key, docs)
 
     # ── Schema-wide sets (internal consumers: secrets, snapshot, reconcile) ───
     #

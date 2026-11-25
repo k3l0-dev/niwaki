@@ -13,6 +13,7 @@ reference ({doc}`../vocabulary/index`).
 | reads: query builder and filters | {doc}`query` |
 | discovering any of the ~15,450 classes | {doc}`catalog` |
 | deterministic config captures and drift | {doc}`snapshot` |
+| an in-memory APIC for your tests | {doc}`testing` |
 | what a failure raises | {doc}`exceptions` |
 | the model contract | {doc}`models` |
 | sessions, retries, the transport protocols | {doc}`transport` |
@@ -28,6 +29,7 @@ design
 query
 catalog
 snapshot
+testing
 exceptions
 models
 transport

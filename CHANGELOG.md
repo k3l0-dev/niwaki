@@ -3,7 +3,128 @@
 All notable changes to this project are documented here.  The format follows
 [Keep a Changelog](https://keepachangelog.com/); versions follow
 [semver](https://semver.org/).  From 1.0.0 the configuration API is stable:
-breaking changes ship in a new major version with a migration note.
+breaking changes ship in a new major version with a migration note — except
+the corrections the versioning policy names (a call that never did what it
+said now raises), which ship in a minor release under **Breaking**.
+
+## [2.2.0] — 2026-11-25
+
+Test without a fabric, and nothing silently ignored.  `niwaki.testing.FakeApic`
+— the in-memory APIC the documentation itself runs on — becomes public: push,
+plan and read a design back with no controller, from objects or a snapshot,
+with a request log and injected failures.  The schema's relations can be
+looked up (`catalog.relations()`), `where()` accepts readable property names,
+and `node()` / `mo()` are typed for mypy and pyright.  The rest of the release
+closes one kind of defect everywhere it was found: a call that accepted an
+argument and quietly did something else.  Navigation edges and `mo()` that
+dropped keywords, a relation singleton that ignored its name (and let
+`.delete()` remove another object than the one named), a carrier whose
+attributes only one push mode wrote — each now raises before anything is
+sent.  These are the **Breaking** entries below; under the versioning policy
+they are corrections, because none of them takes away anything that worked as
+written.  Planning a design with raw nodes, such as an imported fabric, now
+costs one scoped read instead of one request per node.
+
+### Breaking
+
+- **`where()` refuses a key that is both a wire name and another
+  property's readable name.**  Readable keyword names are now accepted
+  (see Added); where one spelling would name two different properties the
+  query fails loudly instead of guessing: `version` on `firmwareFwP`,
+  `firmwareCatFwP` and `firmwareCtrlrFwP`, `description` on
+  `mdpProviderP`, `status` on `vmmAgtStatus` and `vmmPlInf`.  Use a
+  qualified expression such as `eq("firmwareFwP.version", ...)`.
+- **`node()` resolves the DN's class and checks what you state.**
+  `aci.node(dn)` now finds the class from the DN and navigates that
+  class's vocabulary; it no longer offers the root vocabulary on an
+  arbitrary DN, and neither does `node(dn, ManagedObject)`.  A class that
+  contradicts the DN raises `ValueError`, and anything that is not a model
+  class (a string, an instance) raises `TypeError` — both were accepted
+  silently before.  An ambiguous DN raises a message naming every
+  candidate class: state the one you mean.
+- **A navigation edge with a fixed RN refuses any argument.**  A child
+  that exists at most once under its parent — every relation singleton
+  such as `vrf_binding()` or `custom_qos_policy()`, and singletons such as
+  `pim()` or `infra()` — used to accept a name and ignore it, so
+  `epg.custom_qos_policy("gold")` reached the EPG's QoS relation whatever
+  the name, and `.delete()` removed that relation.  Any argument now
+  raises `TypeError` before a request is sent, the message shows the
+  correct call, and the typed stubs no longer declare a name.  Read the
+  relation to see its target: `epg.custom_qos_policy().read()`.
+- **`mo()` and navigation edges refuse an argument that is not a naming
+  property.**  The facade built the object from whatever keywords it
+  was given and kept only its RN, so every other keyword was accepted and
+  silently dropped: `epg.mo(fvRsCustQosPol, name="gold")` reached the EPG's
+  QoS relation whatever the name (and `.delete()` removed it),
+  `bd.subnet(subnet="10.0.0.1/24", scope="public")` lost its `scope`, and
+  `fabric.fabric_port_port(description="x")` fell back to a port config with
+  default values.  Any key that is not a naming property of the class — by
+  Python name or wire alias — now raises `TypeError` before a request is
+  sent, even when its value is invalid, and the message names the class,
+  every offending key and the naming properties it does take (a class with
+  a fixed RN says it takes no name).  A typo that used to raise the model's
+  `ValidationError` is a `TypeError` too; an invalid value for a real naming
+  property stays a `ValidationError`.  The same goes for a name edge:
+  `tenant.bd("web", arp_flooding=True)` is refused, in the words of the
+  edge.  Giving one naming property by both spellings
+  (`subnet(subnet=..., ip=...)`, Python name and wire alias) is refused as
+  well — the alias used to win silently.  To fix a call, drop the key: a
+  node addresses the object by its DN alone, and configuration goes through
+  the design DSL.  `mo(Class)` without argument is unchanged.
+- **`aci.root` is typed as the `polUni` node**, and children of the
+  universe are reached through its vocabulary like any other node.
+- **A carrier node takes its naming and nothing else.**  The VMM provider
+  (`design().vmm_provider("VMware")`) is a path-only class the APIC refuses
+  to accept on its own, so its attributes had no consistent path: `strict`
+  carried them in the `polUni` envelope, `staged` dropped them silently and
+  `plan` never compared them, so the same design pushed different
+  configuration depending on the mode.  The typed `vmm_provider()` now takes
+  its vendor and nothing else and its `set()` takes no argument, so
+  `vmm_provider("VMware", owner_tag=...)` is a type error under mypy and
+  pyright; reached around the types — `set(**attrs)` on the base cursor,
+  `raw_set()`, `mo()`, `raw()` — it raises a `DesignError` naming the class
+  and every offending attribute, and the refused call leaves nothing behind.
+  Declare the provider bare and put the configuration on its children.
+
+### Added
+
+- **`niwaki.testing`** — `FakeApic`, a stateful in-memory APIC for testing
+  designs without a fabric: `fake.client()` / `fake.async_client()`,
+  seeding from objects or a snapshot, a request log, injected failures,
+  APIC-like refusals, and the opt-in pytest plugin
+  `niwaki.testing.pytest`.  Anything it cannot honour faithfully is
+  refused rather than approximated.
+- **`catalog.relation()` / `catalog.relations()`** and `RelationDoc`: the
+  schema's relations, looked up by relation class or by source/target
+  class (`direction="out"|"in"`), inheritance included.
+- **Readable property names in `where()` and `subtree_where()`**: the
+  rendered query is byte-identical to the wire-name form.
+- **Typed `node()` and `mo()`**: `aci.node(dn, fvBD)` and
+  `node.mo(fvBD, ...)` return the typed navigation node for mypy and
+  pyright, sync and async, and every node lists its navigation in
+  `dir()` for REPL completion.
+
+### Fixed
+
+- `to_design()` and `from_payload()` import a carrier (the VMM provider,
+  `uni/vmmp-VMware`) bare and report what they dropped.  A capture of a real
+  fabric holds a few properties on it (`userdom=":all:"`) that a push
+  cannot carry consistently; each dropped attribute is now named in a
+  `DesignHintWarning` (class, DN and attribute, never the value) attributed
+  to the calling line, and the import never fails for it.  Escalate it with
+  `warnings.simplefilter("error", DesignHintWarning)`.
+- Importing a snapshot no longer splits a naming value at the wrong
+  separator (`leaves-a-typ-b-typ-range`): the object's own attributes and
+  the property kinds decide, and a genuinely ambiguous RN is reported as
+  an import problem instead of being parsed wrongly.
+- `mo_diff` compares raw wire values in the catalogue-coerced space
+  (no phantom `true`/`yes` drift), and a property the read did not return
+  — such as a secret — is always reported as a change.
+- `to_code` refuses to emit a child the containment rules cannot prove,
+  instead of emitting code that would not replay.
+- Planning a design with raw nodes (`raw()`, or an import with
+  `on_unknown="raw"`) reads them in the one scoped request instead of
+  issuing one extra GET per raw node; the plan's verdicts are unchanged.
 
 ## [2.1.0] — 2026-10-27
 

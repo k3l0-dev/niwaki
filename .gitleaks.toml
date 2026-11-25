@@ -15,6 +15,10 @@ paths = [
     '''src/niwaki/_codegen/nav_baseline_1_4\.json''',
     '''tests/domain/nav_snapshot\.json''',
     '''src/niwaki/domain/_child_map\.py''',
+    # Regeneration freshness manifest: SHA-256 digests keyed by generated file
+    # names (aaaConsoleAuth.py, ..._ntp_auth_key.md) — the names trip the
+    # keyword, the digests trip the entropy check.  Written by regen.sh only.
+    '''src/niwaki/_codegen/regen_manifest\.json''',
 ]
 regexes = [
     # Deliberate dummy hex test vectors in the integration suites
@@ -24,4 +28,12 @@ regexes = [
     '''0123456789abcdef0123456789abcdef''',
     '''"0123456789abcdef"''',
     '''fedcba9876543210''',
+    # Keyword arguments that forward a credential *variable* (no value):
+    # login helpers in the transport and the X.509 auth tests.
+    '''signed=private_key''',
+    '''cert_dn=CERT_DN''',
+    # Dummy passwords the credential-hygiene tests plant in the environment
+    # to prove they never leak into errors or reprs.
+    '''h3lper-env-Pa55''',
+    '''env-s3cr3t-Pa55-zz9''',
 ]

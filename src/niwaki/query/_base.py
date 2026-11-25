@@ -11,7 +11,11 @@ This split avoids code duplication while keeping execution-layer concerns
 
 from __future__ import annotations
 
+from collections.abc import Mapping
+from dataclasses import dataclass
 from enum import StrEnum
+from functools import cache
+from importlib import import_module
 from typing import Literal, Self
 
 from niwaki import exceptions
@@ -56,6 +60,124 @@ class SubtreeInclude(StrEnum):
     FAULT_RECORDS = "fault-records"
     HEALTH_RECORDS = "health-records"
     TASKS = "tasks"
+
+
+# ── Readable property names in keyword filters ────────────────────────────────
+
+
+@dataclass(frozen=True, slots=True)
+class _PropertyNames:
+    """The two name spaces a ``where(prop=value)`` keyword is resolved against.
+
+    Attributes:
+        readable_to_wire: ``{readable_name: wire_name}`` — the readable names a
+            keyword may use in place of the wire name.
+        wire_to_readable: ``{wire_name: readable_name}`` — every wire property
+            the class carries (the keys are what makes a key "a wire name").
+    """
+
+    readable_to_wire: Mapping[str, str]
+    wire_to_readable: Mapping[str, str]
+
+
+@cache
+def _model_property_names(aci_class: str) -> _PropertyNames | None:
+    """The property names of a generated class, or ``None`` if it has no model.
+
+    The readable names are the model's own field names — a generated class is
+    served by its model, never by the catalogue.  Its wire names are the
+    model's aliases **plus** every wire property the catalogue knows for the
+    class: a model carries the configurable subset only, and a wire name the
+    model leaves out is still a wire name (rule 1 of the resolution keeps it
+    verbatim; a model field reading under that same name is ambiguous).
+
+    Lazy: nothing is imported until the first keyword filter on the class, and
+    the answer is memoised per class.
+    """
+    from niwaki.models._generated import _PKG_MAP  # pyright: ignore[reportPrivateUsage]
+
+    pkg = _PKG_MAP.get(aci_class)
+    if pkg is None:
+        return None
+    model: type[ManagedObject] = getattr(
+        import_module(f"niwaki.models._generated.{pkg}.{aci_class}"), aci_class
+    )
+    readable_to_wire: dict[str, str] = {}
+    for readable, field in model.model_fields.items():
+        alias = field.validation_alias
+        readable_to_wire[readable] = alias if isinstance(alias, str) else readable
+
+    wire_to_readable: dict[str, str] = {}
+    meta = _catalogue_meta(aci_class)
+    if meta is not None:
+        wire_to_readable.update(meta.wire_to_readable)
+    wire_to_readable.update({wire: readable for readable, wire in readable_to_wire.items()})
+    return _PropertyNames(readable_to_wire, wire_to_readable)
+
+
+# Classes the catalogue cannot serve readable names for: unknown to it, or whose
+# readable names it refuses to derive (an internal name collision).  Memoised
+# here because the catalogue memoises successes only.
+_UNNAMED_IN_CATALOGUE: set[str] = set()
+
+
+def _catalogue_meta(aci_class: str) -> _PropertyNames | None:
+    """The catalogue's property names for a class, or ``None`` if it has none.
+
+    Always asks :meth:`~niwaki.query._catalog.Catalog.class_meta`, which
+    memoises per class.  A class the catalogue does not know, or whose readable
+    names cannot be derived (it raises on an internal collision), yields
+    ``None``: its keywords are then taken verbatim, exactly as before readable
+    names existed — a lookup that cannot help must never make a filter fail.
+    """
+    if aci_class in _UNNAMED_IN_CATALOGUE:
+        return None
+    from niwaki.query._catalog import catalog
+
+    try:
+        meta = catalog().class_meta(aci_class)
+    except (exceptions.UnknownClassError, ValueError):
+        _UNNAMED_IN_CATALOGUE.add(aci_class)
+        return None
+    return _PropertyNames(meta.readable_to_wire, meta.wire_to_readable)
+
+
+def _resolve_keyword(key: str, aci_class: str, method: str) -> str:
+    """Return the wire property a ``where()``/``subtree_where()`` keyword names.
+
+    Resolution, against *aci_class*:
+
+    1. an already-qualified key (``"fvBD.name"``) is returned untouched;
+    2. a wire name of the class is returned as-is;
+    3. otherwise a readable name of the class is replaced by its wire name;
+    4. an unknown key — or any key on a class with no known names — is
+       returned as-is.
+
+    Raises:
+        ValueError: *key* is the wire name of one property **and** the
+            readable name of another one: no reading can be chosen silently.
+    """
+    if "." in key:
+        return key
+    names = _model_property_names(aci_class) or _catalogue_meta(aci_class)
+    if names is None:
+        return key
+    as_readable = names.readable_to_wire.get(key)
+    if key in names.wire_to_readable:
+        if as_readable is not None and as_readable != key:
+            own = names.wire_to_readable[key]
+            first = f" (readable name {own!r})" if own != key else ""
+            keywords = f"{own}=... for the first, " if own != key else ""
+            raise ValueError(
+                f"{method}({key}=...) is ambiguous on {aci_class}: {key!r} is the wire "
+                f"name of one property{first} and the readable name of another, whose "
+                f"wire name is {as_readable!r}. Pass a qualified expression instead — "
+                f'eq("{aci_class}.{key}", ...) for the first, '
+                f'eq("{aci_class}.{as_readable}", ...) for the second — or the '
+                f"unambiguous keywords: {keywords}{as_readable}=... for the second."
+            )
+        return key
+    return as_readable if as_readable is not None else key
 
 
 class _QueryBase[T: ManagedObject]:
@@ -223,14 +345,53 @@ class _QueryBase[T: ManagedObject]:
         verbatim: qualify their properties (``"fvBD.name"``) or build them
         with ``cls_name=``.
 
+        **Readable or wire names.**  A keyword may name the property by its
+        wire name (``arpFlood=True``) or by the readable field name the models
+        expose (``arp_flooding=True``); both render the very same filter,
+        ``eq(fvBD.arpFlood,"yes")``.  A keyword is resolved against the queried
+        class, in this order:
+
+        1. a wire name of the class is used as-is;
+        2. otherwise a readable name of the class is replaced by its wire name
+           — the model's field names for a generated class, the catalogue's
+           readable names (:func:`niwaki.catalog.class_meta`) for a class
+           queried by name that has no model (``aci.query("topSystem")``);
+        3. any other key is qualified and sent verbatim, unchecked.
+
+        Only the *name* is translated: the value is rendered exactly as it
+        would be under the wire keyword (booleans as ``yes``/``no``, numbers
+        as their digits, a ``set`` of flags as a bitmask, ``*`` as a
+        wildcard, a ``list`` as a membership OR).
+
+        A few classes carry a name that is the wire name of one property *and*
+        the readable name of another (``version`` on ``firmwareFwP``: the wire
+        ``version`` reads as ``target_firmware_version``, the readable
+        ``version`` is the wire ``srVersion``).  Such a keyword is refused
+        rather than guessed — use the unambiguous keyword of the property you
+        mean, or a qualified expression such as
+        ``eq("firmwareFwP.version", ...)``.
+
         Args:
             *exprs:   One or more :class:`~niwaki.query.FilterExpr` objects,
-                      with class-qualified property names.
-            **kwargs: Equality shortcuts — ``name="web"`` becomes
-                      ``eq(ClassName.name,"web")`` automatically.
+                      with class-qualified property names.  Never translated.
+            **kwargs: Filter shortcuts keyed by wire or readable property
+                      name — ``name="web"`` becomes ``eq(ClassName.name,"web")``
+                      and ``arp_flooding=True`` becomes
+                      ``eq(fvBD.arpFlood,"yes")``.  The value's type
+                      picks the operator (scalar → equality, ``list``/
+                      ``tuple`` → membership OR, ``*`` → wildcard, ``set`` →
+                      bitmask equality, :func:`~niwaki.query.between` →
+                      range).
 
         Returns:
             New query with the filter applied.
+
+        Raises:
+            ValueError: A keyword is ambiguous on the queried class (the wire
+                name of one property and the readable name of another), or a
+                keyword value is ``None`` or an empty collection.
+            TypeError: A keyword value is a :class:`~niwaki.query.FilterExpr`
+                (pass those positionally).
 
         Example::
 
@@ -239,21 +400,26 @@ class _QueryBase[T: ManagedObject]:
             # Keyword shorthand — simplest, auto-qualified
             aci.root.tenant("prod").bd().where(name="web").fetch()
 
+            # Readable and wire names are interchangeable
+            aci.query(fvBD).where(arp_flooding=True).fetch()
+            aci.query(fvBD).where(arpFlood=True).fetch()  # same filter
+
             # Explicit expression — qualified property
             aci.query(fvBD).where(wcard("fvBD.name", "prod-*")).fetch()
 
             # Chained (implicit AND)
-            aci.query(fvBD).where(wcard("fvBD.name", "prod-*")).where(arpFlood=True).fetch()
+            aci.query(fvBD).where(wcard("fvBD.name", "prod-*")).where(arp_flooding=True).fetch()
 
             # Combined in one call
             aci.query(fvBD).where(
                 wcard("fvBD.name", "prod-*"),
-                arpFlood=True,
+                arp_flooding=True,
             ).fetch()
         """
         all_exprs: list[FilterExpr] = list(exprs)
         for prop, value in kwargs.items():
-            all_exprs.append(_kwarg_to_expr(prop, value, self._aci_class))
+            wire = _resolve_keyword(prop, self._aci_class, "where")
+            all_exprs.append(_kwarg_to_expr(wire, value, self._aci_class))
 
         if not all_exprs:
             return self
@@ -346,18 +512,32 @@ class _QueryBase[T: ManagedObject]:
 
         Accepts the same expression DSL as :meth:`where`: explicit
         :class:`~niwaki.query.FilterExpr` objects **and** keyword shortcuts
-        ``prop=value`` auto-prefixed with the queried class name.
+        ``prop=value``.  A keyword filters the *included* class, so it is
+        qualified with — and its name resolved against — the single class
+        passed to :meth:`include`, not the queried class: wire names and the
+        included class's readable names are both accepted
+        (``subnet_control={"querier"}`` ≡ ``ctrl={"querier"}`` on
+        ``fvSubnet``), a key that is neither is sent verbatim, and a key that
+        is the wire name of one property and the readable name of another is
+        refused (see :meth:`where`).
 
         Args:
-            *exprs:   One or more :class:`~niwaki.query.FilterExpr` objects.
-            **kwargs: Equality shortcuts applied to the query's class, e.g.
-                      ``ip="10.0.0.1/24"`` becomes ``eq(fvSubnet.ip,"10.0.0.1/24")``.
+            *exprs:   One or more :class:`~niwaki.query.FilterExpr` objects,
+                      with class-qualified property names.  Never translated.
+            **kwargs: Filter shortcuts on the included class, keyed by wire or
+                      readable property name, e.g. ``ip="10.0.0.1/24"`` becomes
+                      ``eq(fvSubnet.ip,"10.0.0.1/24")``.
 
         Returns:
             New query with ``rsp-subtree-filter`` set.
 
         Raises:
-            ValueError: Called with no arguments.
+            ValueError: Called with no arguments; keywords given while no
+                single :meth:`include` class is set; a keyword is ambiguous on
+                the included class; or a keyword value is ``None`` or an
+                empty collection.
+            TypeError: A keyword value is a :class:`~niwaki.query.FilterExpr`
+                (pass those positionally).
 
         Example::
 
@@ -370,14 +550,21 @@ class _QueryBase[T: ManagedObject]:
                 .fetch()
             )
 
-            # Keyword form
+            # Keyword form — wire or readable names of the included class
             bds = aci.query(fvBD).include(fvSubnet).subtree_where(ip="10.0.0.1/24").fetch()
+            bds = (
+                aci.query(fvBD)
+                .include(fvSubnet)
+                .subtree_where(subnet_control={"querier"})
+                .fetch()
+            )
         """
         all_exprs: list[FilterExpr] = list(exprs)
         if kwargs:
             subtree_class = self._subtree_filter_class()
             for prop, value in kwargs.items():
-                all_exprs.append(_kwarg_to_expr(prop, value, subtree_class))
+                wire = _resolve_keyword(prop, subtree_class, "subtree_where")
+                all_exprs.append(_kwarg_to_expr(wire, value, subtree_class))
 
         if not all_exprs:
             raise ValueError("subtree_where() requires at least one filter expression.")

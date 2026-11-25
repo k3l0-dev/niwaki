@@ -16,7 +16,6 @@ import pytest
 
 from niwaki.design._cursor import _load_class, _tables
 from niwaki.facade import _navigate_jargon
-from niwaki.models.base import ManagedObject
 
 
 def _maker_positions() -> list[tuple[str, str, str]]:
@@ -29,7 +28,8 @@ def _maker_positions() -> list[tuple[str, str, str]]:
 @pytest.mark.parametrize(("parent", "name", "child"), _maker_positions())
 def test_curated_position_resolves_on_facade(parent: str, name: str, child: str) -> None:
     """The curated maker name resolves to its exact child class, warning-free."""
-    parent_cls = ManagedObject if parent == "polUni" else _load_class(parent)
+    # The root row belongs to polUni itself (2.2) — ManagedObject navigates nowhere.
+    parent_cls = _load_class(parent)
     with warnings.catch_warnings():
         warnings.simplefilter("error")
         target = _navigate_jargon(parent_cls, name)

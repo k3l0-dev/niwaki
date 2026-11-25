@@ -203,10 +203,15 @@ class TestDnComputation:
             assert node.dn == "uni/tn-prod/BD-web"
             assert node.cls is fvBD
 
-    async def test_node_default_cls(self, httpx_mock: HTTPXMock) -> None:
+    async def test_node_without_cls_resolves_the_class_from_the_dn(
+        self, httpx_mock: HTTPXMock
+    ) -> None:
+        # 2.2: the class is resolved from the DN (it used to default to
+        # ManagedObject, which aliased the root vocabulary at any DN).
         httpx_mock.add_response(method="POST", url=LOGIN_URL, json=login_payload())
         async with AsyncNiwaki(HOST, "admin", "secret") as aci:
-            assert aci.node("uni/tn-prod").cls is ManagedObject
+            assert aci.node("uni/tn-prod").cls is fvTenant
+            assert aci.node("topology/pod-1/node-101/sys").cls is ManagedObject
 
 
 # ── Read ──────────────────────────────────────────────────────────────────────

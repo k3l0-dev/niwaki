@@ -66,10 +66,10 @@ Hierarchy::
         ├── SubscribeRejectedError      (also an APIError)
         └── SubscriptionLostError       (.reason: SubscriptionLostReason)
 
-Warnings (not exceptions — a design the fabric accepts but will fault on)::
+Warnings (not exceptions — legal, but worth knowing about)::
 
     UserWarning
-    └── DesignHintWarning           (design/: a declaration that guarantees a fault)
+    └── DesignHintWarning           (design/: a guaranteed fault, or what an import dropped)
 """
 
 from __future__ import annotations

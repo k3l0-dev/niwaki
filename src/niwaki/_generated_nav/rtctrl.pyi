@@ -85,9 +85,7 @@ class rtctrlProfileNode(_Sealed, _UniversalNav, NiwakiNode[rtctrlProfile]):
     def route_control_context(self, name: str) -> rtctrlCtxPNode: ...
 
 class rtctrlScopeNode(_Sealed, _UniversalNav, NiwakiNode[rtctrlScope]):
-    def attribute_profile(
-        self, target_name: str = "", **kwargs: object
-    ) -> NavLeaf[rtctrlRsScopeToAttrP]: ...
+    def attribute_profile(self) -> NavLeaf[rtctrlRsScopeToAttrP]: ...
 
 class rtctrlSetASPathNode(_Sealed, _UniversalNav, NiwakiNode[rtctrlSetASPath]):
     @overload
@@ -161,9 +159,7 @@ class AsyncrtctrlProfileNode(_Sealed, _AsyncUniversalNav, AsyncNiwakiNode[rtctrl
     def route_control_context(self, name: str) -> AsyncrtctrlCtxPNode: ...
 
 class AsyncrtctrlScopeNode(_Sealed, _AsyncUniversalNav, AsyncNiwakiNode[rtctrlScope]):
-    def attribute_profile(
-        self, target_name: str = "", **kwargs: object
-    ) -> AsyncNavLeaf[rtctrlRsScopeToAttrP]: ...
+    def attribute_profile(self) -> AsyncNavLeaf[rtctrlRsScopeToAttrP]: ...
 
 class AsyncrtctrlSetASPathNode(_Sealed, _AsyncUniversalNav, AsyncNiwakiNode[rtctrlSetASPath]):
     @overload

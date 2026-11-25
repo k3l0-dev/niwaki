@@ -53,8 +53,17 @@ critical = aci.query("faultInst").where(severity="critical").fetch()
 print(f"{len(nodes)} nodes, {len(critical)} critical faults")
 ```
 
-`where()` speaks to the APIC, so it uses **wire** attribute names (`severity`,
-`lcOwn`, `arpFlood`), not the pythonic field names.
+Keyword filters take either name of a property: the **wire** attribute name
+(`severity`, `lcOwn`, `arpFlood`) or the readable field name the models and the
+read catalogue expose (`arp_flooding`, `infrastructure_ip` on `topSystem`).
+Both compile to the same APIC filter:
+
+```python
+_, readable = aci.query("topSystem").where(infrastructure_ip="10.0.0.1").build()
+_, wire = aci.query("topSystem").where(address="10.0.0.1").build()
+assert readable == wire
+assert readable["query-target-filter"] == 'eq(topSystem.address,"10.0.0.1")'
+```
 
 ## Health of what you own
 
@@ -116,9 +125,13 @@ assert seen == 2
 - **Audit is not a drift check** — for objects a *design* owns, the design's own
   `plan` is the sharper tool ({doc}`day-2-changes`).  The query side is for what
   you do *not* own: faults, endpoints, operational state.
-- **Wire names in filters** — a filter string goes to the APIC verbatim, so
-  `where(arpFlood=True)`, not `where(arp_flooding=True)`
-  ({doc}`../guide/models`).
+- **Readable or wire names in filters** — `where(arp_flooding=True)` and
+  `where(arpFlood=True)` build the same filter.  Explicit expressions are the
+  exception: `eq("fvBD.arpFlood", True)` goes to the APIC verbatim, so it takes
+  the wire name only ({doc}`../guide/models`).  On the rare class where one
+  name is the wire name of a property *and* the readable name of another
+  (`version` on `firmwareFwP`), the keyword is refused rather than guessed —
+  use the qualified expression.
 - **Rate-respect on shared fabrics** — the async client's `max_concurrent`
   (default 10) is the polite ceiling; audits rarely need more.
 - **Deletion is the one imperative** — the facade reads, but it can also

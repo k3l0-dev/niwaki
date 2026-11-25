@@ -41,9 +41,11 @@ assert bd.arp_flooding is True
 assert bd.to_apic() == {"fvBD": {"attributes": {"name": "web", "arpFlood": "true"}}}
 ```
 
-Two places still speak wire names, because the APIC does: query filters
-(`where(arpFlood=True)` — the filter string goes to the APIC verbatim) and
-raw payloads you inspect with `to_payload()`.
+Two places still speak wire names, because the APIC does: explicit filter
+expressions (`eq("fvBD.arpFlood", True)` — the expression goes to the APIC
+verbatim) and raw payloads you inspect with `to_payload()`.  Keyword filters
+accept both spellings: `where(arp_flooding=True)` and `where(arpFlood=True)`
+build the same query.
 
 Serialisation is **surgical** on read-back objects too: an object returned
 by a query re-serialises only its naming props plus whatever you explicitly

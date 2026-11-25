@@ -46,7 +46,7 @@ def _tiny_table() -> dict[str, dict[str, str]]:
             **_UNIVERSAL,
             "legacy_mode": "fvAccP",  # singleton → NavLeaf
             "subnet": "fvSubnet",  # kwargs (wire alias `ip`)
-            "vrf_binding": "fvRsCtx",  # Rs-singleton
+            "vrf_binding": "fvRsCtx",  # Rs singleton: fixed RN, no argument
         },
         "fvAccP": dict(_UNIVERSAL),
         "fvSubnet": dict(_UNIVERSAL),
@@ -89,7 +89,9 @@ def test_tiny_table_renders_the_expected_modules(table: dict[str, dict[str, str]
     fv = rendered[Path("fv.pyi")]
     assert "class fvBDNode(_Sealed, _UniversalNav, NiwakiNode[fvBD]):" in fv
     assert "def legacy_mode(self) -> NavLeaf[fvAccP]: ..." in fv
-    assert 'def vrf_binding(self, target_name: str = "", **kwargs: object) -> NavLeaf' in fv
+    # An Rs singleton has a fixed RN: it takes no argument, like any singleton.
+    assert "def vrf_binding(self) -> NavLeaf[fvRsCtx]: ..." in fv
+    assert "target_name" not in fv
     assert "def subnet(self, *, subnet: str) -> NavLeaf[fvSubnet]: ..." in fv
     assert "ip:" not in fv  # the wire alias never becomes a parameter
 

@@ -30,9 +30,7 @@ from niwaki.query._async_builder import AsyncQuery
 from niwaki.query._builder import Query
 
 class dhcpLblNode(_Sealed, _UniversalNav, NiwakiNode[dhcpLbl]):
-    def dhcp_option_policy(
-        self, target_name: str = "", **kwargs: object
-    ) -> NavLeaf[dhcpRsDhcpOptionPol]: ...
+    def dhcp_option_policy(self) -> NavLeaf[dhcpRsDhcpOptionPol]: ...
 
 class dhcpNodeGrpNode(_Sealed, _UniversalNav, NiwakiNode[dhcpNodeGrp]):
     @overload
@@ -70,9 +68,7 @@ class dhcpRelayPNode(_Sealed, _UniversalNav, NiwakiNode[dhcpRelayP]):
     def provider(self, *, target_dn: str) -> NavLeaf[dhcpRsProv]: ...
 
 class AsyncdhcpLblNode(_Sealed, _AsyncUniversalNav, AsyncNiwakiNode[dhcpLbl]):
-    def dhcp_option_policy(
-        self, target_name: str = "", **kwargs: object
-    ) -> AsyncNavLeaf[dhcpRsDhcpOptionPol]: ...
+    def dhcp_option_policy(self) -> AsyncNavLeaf[dhcpRsDhcpOptionPol]: ...
 
 class AsyncdhcpNodeGrpNode(_Sealed, _AsyncUniversalNav, AsyncNiwakiNode[dhcpNodeGrp]):
     @overload

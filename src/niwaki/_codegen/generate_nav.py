@@ -18,8 +18,7 @@ Usage (from repo root)::
 Inputs (all committed — the generator is corpus-free):
 
 - ``niwaki.domain._child_map`` — ``CHILD_MAP`` (which edges exist under each
-  parent), ``CLASS_PKG`` (each class's package) and ``RS_TARGET_PROP`` (the Rs
-  singletons that take a target name);
+  parent) and ``CLASS_PKG`` (each class's package);
 - the generated models — their naming props and field annotations, rendered
   through :func:`niwaki._codegen.generate_design._param_type`, the same type
   rendering the design cursors use;
@@ -41,7 +40,8 @@ Layout of the output
 ``_root.pyi``
     ``RootNav``/``AsyncRootNav`` — the client's checker-only base, **not**
     sealed (``aci.tenantt`` must stay an attribute error, and the client has
-    its own API) — and ``RootNode``/``AsyncRootNode``, the typed ``aci.root``.
+    its own API) — and ``RootNode``/``AsyncRootNode``, the typed ``aci.root``
+    (a ``polUni`` node: the root row is ``polUni``'s vocabulary).
 ``<pkg>.pyi``
     One per ACI class package: ``<Cls>Node`` and ``Async<Cls>Node`` for every
     generated class of that package with at least one specific
@@ -55,9 +55,9 @@ Each edge mirrors the runtime navigator's shape exactly (see
 ==========================  ==============================================
 child naming props          stub
 ==========================  ==============================================
-none, Rs target             ``(self, target_name: str = "", **kwargs:
-                            object) -> node``
-none                        ``(self) -> node``
+none (a fixed RN)           ``(self) -> node`` — Rs singletons included: a
+                            name the fixed RN would ignore is refused at
+                            runtime, and is a type error here
 ``["name"]``                ``@overload (self, name: Literal[""] = "") ->
                             Query[C]`` and ``@overload (self, name: str)
                             -> node``
@@ -70,9 +70,10 @@ anything else               ``@overload (self) -> Query[C]`` then
 
 "node" is ``<Child>Node`` when the child has a typed class, ``NavLeaf[Child]``
 when its only edges are the universal ones, ``NavEnd[Child]`` when it has
-none.  The output text is the exact committed text: the generator runs
-``ruff check --fix`` and ``ruff format`` (the repo configuration) on it before
-returning it, so ``regen.sh`` does not reformat it.
+none — and ``RootNode`` for ``polUni``, whose vocabulary is the ``_root`` row.
+The output text is the exact committed text: the generator runs ``ruff check
+--fix`` and ``ruff format`` (the repo configuration) on it before returning
+it, so ``regen.sh`` does not reformat it.
 """
 
 from __future__ import annotations
@@ -89,7 +90,7 @@ from pathlib import Path
 
 from niwaki._codegen.generate_design import _naming_params
 from niwaki._codegen.generate_domain import _node_api_names, _root_api_names
-from niwaki.domain._child_map import CHILD_MAP, CLASS_PKG, RS_TARGET_PROP
+from niwaki.domain._child_map import CHILD_MAP, CLASS_PKG
 from niwaki.models.base import ManagedObject
 
 _SRC = Path(__file__).resolve().parent.parent  # src/niwaki
@@ -100,6 +101,8 @@ _NAV_PACKAGE = "niwaki._generated_nav"
 _ROOT_KEY = "_root"
 _BASE_MODULE = "_base"
 _ROOT_MODULE = "_root"
+# The class whose vocabulary is the ``_root`` row (the policy universe, DN ``uni``).
+_ROOT_CLASS = "polUni"
 
 # The edges every generated class carries.  They live in one mixin per flavour
 # instead of being repeated in ~1,800 classes; their children are read from the
@@ -299,6 +302,11 @@ def _node_return(child: str, flavour: _Flavour, imports: _Imports) -> str:
             exactly the universal ones — neither a leaf nor an end.
     """
     imports.model(child)
+    if child == _ROOT_CLASS:
+        # polUni's vocabulary is the _root row: its node is the typed root.
+        name = f"{flavour.prefix}RootNode"
+        imports.nav(_ROOT_MODULE, name)
+        return name
     if child in _typed_parents():
         name = f"{flavour.prefix}{child}Node"
         imports.nav(CLASS_PKG[child], name)
@@ -332,8 +340,8 @@ def _edge_lines(name: str, child: str, flavour: _Flavour, imports: _Imports) -> 
         imports.add(module, enum)
 
     if not naming:
-        if child in RS_TARGET_PROP:
-            return [f'    def {name}(self, target_name: str = "", **kwargs: object) -> {node}: ...']
+        # A fixed RN (plain singletons and Rs singletons alike): the runtime
+        # refuses any argument, so the stub takes none either.
         return [f"    def {name}(self) -> {node}: ..."]
 
     imports.add("typing", "overload")
@@ -476,7 +484,9 @@ def _render_package(pkg: str, classes: list[str]) -> str:
 def _render_root() -> str:
     """``_root.pyi``: the client's typed base and the typed ``aci.root``."""
     imports = _Imports(_ROOT_MODULE)
-    imports.add("niwaki.models.base", "ManagedObject")
+    # The root row is polUni's vocabulary: aci.root and aci.node("uni") are
+    # polUni nodes, and polUni's model names RootNode as its navigation class.
+    imports.model(_ROOT_CLASS)
     body: list[str] = []
     for flavour in _FLAVOURS:
         imports.add("niwaki.facade", flavour.node)
@@ -499,7 +509,7 @@ def _render_root() -> str:
             ],
         )
         body += _class_lines(
-            f"class {pre}RootNode(_Sealed, {pre}RootNav, {flavour.node}[ManagedObject]):",
+            f"class {pre}RootNode(_Sealed, {pre}RootNav, {flavour.node}[{_ROOT_CLASS}]):",
             ['    """``aci.root``: the typed node at DN ``uni``."""'],
         )
     defined = [

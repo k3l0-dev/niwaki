@@ -409,6 +409,18 @@ def _singleton_naming_default(
     return None
 
 
+_CARRIER_NOTE = (
+    "A carrier — a path-only class the APIC will not accept on its own — takes its naming "
+    "and nothing else: an attribute here cannot be pushed and is refused at declaration. "
+    "Put the configuration on its children."
+)
+
+
+def _wrapped(text: str) -> list[str]:
+    """Wrap *text* as docstring body lines (8-space indent, ruff-format friendly)."""
+    return textwrap.wrap(text, width=100, initial_indent="        ", subsequent_indent="        ")
+
+
 def _render_signature(
     method: str,
     naming: list[str],
@@ -521,9 +533,17 @@ def _render_maker(
 ) -> list[str]:
     child_cls = _load_class(child_aci)
     naming, naming_types, naming_enums = _naming_params(child_cls)
-    params, imports = _field_params(child_cls)
+    is_carrier = child_aci in _tables().carrier
+    params: list[tuple[str, str]] = []
+    imports: set[tuple[str, str]] = set()
+    sugar: list[tuple[str, str]] = []
+    if not is_carrier:
+        # A carrier takes its naming and nothing else — the runtime refuses any
+        # attribute (``_refuse_carrier_attrs``), so the typed surface must not
+        # offer one: a call that always raises does not type-check.
+        params, imports = _field_params(child_cls)
+        sugar = _sugar_params(child_aci)
     enum_imports |= imports | naming_enums
-    sugar = _sugar_params(child_aci)
     keyword_params = sugar + params
     naming_default = _singleton_naming_default(child_cls, naming, naming_types)
     lines = _render_signature(
@@ -543,6 +563,9 @@ def _render_maker(
                     cisco, width=100, initial_indent="        ", subsequent_indent="        "
                 )
             )
+    if is_carrier:
+        doc_lines.append("")
+        doc_lines.extend(_wrapped(_CARRIER_NOTE))
     doc_lines.extend(_render_args_section(_arg_doc_entries(child_cls, naming, sugar, params)))
     doc_lines.append('        """')
 
@@ -617,15 +640,28 @@ def _render_cursor(
     ]
 
     # set() — typed scalar attributes of this class.
-    params, imports = _field_params(cls)
-    enum_imports |= imports
-    keyword_params = _sugar_params(pos.aci_class) + params
-    lines.extend(_render_signature("set", [], keyword_params, cursor_name))
-    lines.append(f'        """Set ``{pos.aci_class}`` attributes (merged; validated eagerly)."""')
-    lines.append('        params = {k: v for k, v in locals().items() if k != "self"}')
-    lines.append("        Cursor.set(self, **_prune(params))")
-    lines.append("        return self")
-    lines.append("")
+    if pos.aci_class in tables.carrier:
+        # A carrier takes no attribute: the signature is ``set(self)`` so that
+        # ``carrier.set(owner_tag=...)`` is a type error, not just a runtime one.
+        lines.append(f"    def set(self) -> {cursor_name}:")
+        lines.append(f'        """Take no attribute: ``{pos.aci_class}`` is a carrier (path-only).')
+        lines.append("")
+        lines.extend(_wrapped(_CARRIER_NOTE))
+        lines.append('        """')
+        lines.append("        return self")
+        lines.append("")
+    else:
+        params, imports = _field_params(cls)
+        enum_imports |= imports
+        keyword_params = _sugar_params(pos.aci_class) + params
+        lines.extend(_render_signature("set", [], keyword_params, cursor_name))
+        lines.append(
+            f'        """Set ``{pos.aci_class}`` attributes (merged; validated eagerly)."""'
+        )
+        lines.append('        params = {k: v for k, v in locals().items() if k != "self"}')
+        lines.append("        Cursor.set(self, **_prune(params))")
+        lines.append("        return self")
+        lines.append("")
 
     # bind() — aliases curated on THIS level only.  Binds never climb to an
     # ancestor at runtime (a relation must land on the object that owns it), so

@@ -41,7 +41,7 @@ from niwaki.models.base import ManagedObject
 from niwaki.types import JsonObject
 
 if TYPE_CHECKING:
-    from collections.abc import Callable
+    from collections.abc import Callable, Iterable
     from collections.abc import Coroutine as _Coroutine
 
     from niwaki.design._push import PlanResult, PushReport
@@ -217,6 +217,41 @@ def _validate_attr_names(cls: type[ManagedObject], attrs: dict[str, object]) -> 
     raise DesignError(f"{cls.__name__} has no attribute(s) {details}.")
 
 
+def _refuse_carrier_attrs(aci_class: str, attrs: Iterable[str]) -> None:
+    """Refuse every attribute declared on a *carrier* class.
+
+    A carrier (``carrier`` in ``domain/vocabulary.yaml``, today the VMM
+    provider ``vmmProvP``) is a path-only class: the APIC rejects a POST on it
+    alone, so no push mode writes it — strict would carry its attributes in the
+    ``polUni`` envelope, staged emits no operation for it, plan never compares
+    it.  A declared attribute would therefore be written, dropped or ignored
+    depending on the mode; refusing it at declaration keeps the three
+    identical.  The carrier's naming props (its identity) are not attributes
+    and stay accepted — callers pass only non-naming names.
+
+    Args:
+        aci_class: ACI class of the node being declared or changed.
+        attrs: Non-naming attribute names the caller is about to apply (the
+            names as the caller spelled them).
+
+    Raises:
+        DesignError: *aci_class* is a carrier and *attrs* is not empty; the
+            message names the class and every offending attribute.
+    """
+    if aci_class not in _tables().carrier:
+        return
+    offending = sorted(attrs)
+    if not offending:
+        return
+    names = ", ".join(map(repr, offending))
+    raise DesignError(
+        f"{aci_class} is a carrier: a path-only class the APIC will not accept on its "
+        f"own, so a push never writes it and its attributes cannot be pushed "
+        f"(refused: {names}). Declare its children beneath it; the carrier itself "
+        "takes its naming only."
+    )
+
+
 def _unwrap_ref(target: object) -> tuple[str, dict[str, object]]:
     """Split a bind target into ``(name_or_dn, relationship attributes)``.
 
@@ -381,8 +416,18 @@ class Cursor:
 
         Raises:
             DesignError: Unknown attribute name, ACI wire name used instead
-                of the Python field name, or attempt to change a naming prop.
+                of the Python field name, attempt to change a naming prop, or
+                any attribute at all on a *carrier* node (see below).
             pydantic.ValidationError: A value violates the model constraints.
+
+        Note:
+            A carrier — a path-only class the APIC will not accept on its own,
+            such as the VMM provider ``vmm_provider("VMware")`` — takes its
+            naming and nothing else: a push cannot carry its attributes consistently,
+            so declaring one is refused here rather than written by ``strict``,
+            dropped by ``staged`` and never compared by ``plan``.  The same
+            refusal applies to the maker keyword arguments, :meth:`mo`,
+            :meth:`raw` and :meth:`raw_set`.
         """
         node = self._node
         sugared = apply_sugar(node.aci_class, attrs)
@@ -392,6 +437,7 @@ class Cursor:
                 f"{node.path()}: naming prop(s) {', '.join(map(repr, fixed))} "
                 "are fixed at creation and cannot be changed with set()."
             )
+        _refuse_carrier_attrs(node.aci_class, sugared)
         _validate_attr_names(node.cls, sugared)
         merged = {**node.attrs, **sugared}
         node.cls.model_validate({**node.naming, **merged})
@@ -631,7 +677,9 @@ class Cursor:
             Cursor on the new child node.
 
         Raises:
-            DesignError: *cls* is not a valid APIC child of this object.
+            DesignError: *cls* is not a valid APIC child of this object, or
+                *cls* is a carrier (path-only class) and *kwargs* hold anything
+                beyond its naming props — see :meth:`set`.
         """
         naming, attrs = _split_naming(cls, (), kwargs)
         return _attach(self._node, cls, cls.__name__, naming, attrs)
@@ -656,7 +704,8 @@ class Cursor:
 
         Raises:
             DesignError: Unknown class, containment violation, missing naming
-                prop, or unknown wire property.
+                prop, unknown wire property, or a non-naming attribute on a
+                carrier class (see :meth:`set`).
             DuplicateDeclarationError: Same class + RN already declared here.
         """
         from niwaki.domain._child_map import CLASS_PKG
@@ -718,6 +767,7 @@ class Cursor:
         for prop, value in naming.items():
             rn = rn.replace(f"{{{prop}}}", value)
         rest = {w: v for w, v in wire_strs.items() if w not in naming}
+        _refuse_carrier_attrs(aci_class, rest)
         node = RawDesignNode(aci_class, naming, rn, rest, self._node)
         if any(
             sibling.aci_class == node.aci_class and sibling.rn == rn
@@ -744,7 +794,8 @@ class Cursor:
             ``self`` for chaining.
 
         Raises:
-            DesignError: A property the catalogue does not know for this class.
+            DesignError: A property the catalogue does not know for this class,
+                or any non-naming property on a carrier node (see :meth:`set`).
         """
         from niwaki.query._catalog import catalog
 
@@ -752,6 +803,10 @@ class Cursor:
             meta = catalog().class_meta(self._node.aci_class)
         except KeyError:
             meta = None
+        _refuse_carrier_attrs(
+            self._node.aci_class,
+            [w for w in wire_attrs if meta is None or w not in meta.naming],
+        )
         if meta is not None:
             unknown = [w for w in wire_attrs if w not in meta.wire_to_readable]
             if unknown:
@@ -1004,6 +1059,31 @@ def _may_contain(parent: DesignNode, child_aci_class: str) -> bool:
     authority there.
     """
     contains: frozenset[str] | set[str] = parent.cls._contains  # pyright: ignore[reportPrivateUsage]
+    return _edge_is_provable(parent.aci_class, contains, child_aci_class)
+
+
+def _class_may_contain(parent_aci_class: str, child_aci_class: str) -> bool:
+    """:func:`_may_contain` for a parent known only by its class name.
+
+    The parent is taken as the public doors would build it on replay: the
+    generated model (and its ``_contains``) when the class has one, the bare
+    catalogue-served object otherwise — so a ``True`` here is exactly the
+    edge a ``raw()``/maker call under that parent accepts.
+    """
+    from niwaki.domain._child_map import CLASS_PKG
+
+    contains: frozenset[str] | set[str] = (
+        _load_class(parent_aci_class)._contains  # pyright: ignore[reportPrivateUsage]
+        if parent_aci_class in CLASS_PKG
+        else frozenset()
+    )
+    return _edge_is_provable(parent_aci_class, contains, child_aci_class)
+
+
+def _edge_is_provable(
+    parent_aci_class: str, contains: frozenset[str] | set[str], child_aci_class: str
+) -> bool:
+    """The three containment authorities, in order (shared by both doors)."""
     if child_aci_class in contains:
         return True
     # A generated model's _contains is filtered to the generated set; raw
@@ -1012,7 +1092,7 @@ def _may_contain(parent: DesignNode, child_aci_class: str) -> bool:
     # level as "_root", not "polUni".
     from niwaki.domain._child_map import CHILD_MAP
 
-    table_key = "_root" if parent.aci_class == "polUni" else parent.aci_class
+    table_key = "_root" if parent_aci_class == "polUni" else parent_aci_class
     if child_aci_class in CHILD_MAP.get(table_key, {}).values():
         return True
     # Third authority: the catalogue's own DN grammar.  A containment edge
@@ -1026,7 +1106,7 @@ def _may_contain(parent: DesignNode, child_aci_class: str) -> bool:
     try:
         child_formats = catalog().dn_formats(child_aci_class)
         parent_rn_format = (
-            "uni" if parent.aci_class == "polUni" else catalog().rn_format(parent.aci_class)
+            "uni" if parent_aci_class == "polUni" else catalog().rn_format(parent_aci_class)
         )
     except KeyError:
         return False
@@ -1057,6 +1137,7 @@ def _attach(
         raise DesignError(
             f"{cls.__name__} is not a valid APIC child of {parent.path()} ({parent.aci_class})."
         )
+    _refuse_carrier_attrs(cls._aci_class, attrs)  # pyright: ignore[reportPrivateUsage]
     _validate_attr_names(cls, attrs)
     node = DesignNode(cls, label, naming, attrs, parent, position=position)
     rn = node.rn  # constructs + validates the MO

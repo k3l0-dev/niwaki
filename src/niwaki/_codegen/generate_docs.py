@@ -138,7 +138,8 @@ def _maker_signature(label: str, child_aci: str) -> str:
     cls = _load_class(child_aci)
     naming = list(cls._naming_props)  # pyright: ignore[reportPrivateUsage]
     sugar = list(_tables().sugar.get(child_aci, {}))
-    parts = [*naming, *sugar, "**attrs"]
+    # A carrier takes its naming only — it has no ``**attrs`` to summarise.
+    parts = [*naming, *sugar] if child_aci in _tables().carrier else [*naming, *sugar, "**attrs"]
     return f"{label}({', '.join(parts)})"
 
 
@@ -228,13 +229,19 @@ def _render_position_page(
     naming = [d.name for d in docs if d.kind == "naming"]
     call = f".{label}({', '.join(naming)})" if pos.parent_key is not None else f"{label}()"
 
-    lines += [
-        "## Attributes",
-        "",
-        f"Accepted as keyword arguments of `{call}` and of `.set(**attrs)` on this "
-        "cursor.  Enum parameters also accept the plain string.",
-        "",
-    ]
+    if pos.aci_class in tables.carrier:
+        intro = (
+            "A carrier — a path-only class the APIC will not accept on its own — takes "
+            f"its naming only: `{call}` and `.set()` accept no attribute, and declaring "
+            "one raises.  The table lists what the class defines; configure its children "
+            "instead."
+        )
+    else:
+        intro = (
+            f"Accepted as keyword arguments of `{call}` and of `.set(**attrs)` on this "
+            "cursor.  Enum parameters also accept the plain string."
+        )
+    lines += ["## Attributes", "", intro, ""]
     lines += _attribute_table(docs, used_enums)
 
     # Only the makers this position actually offers: one scoped away here (the

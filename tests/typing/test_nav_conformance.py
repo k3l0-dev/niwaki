@@ -21,7 +21,9 @@ The stub layout this module pins
   mixins, and the generic ``NavLeaf[T]``/``NavEnd[T]`` (+ ``Async`` twins);
 * ``_root.pyi`` — ``RootNav``/``AsyncRootNav`` (the client's checker-only base:
   **not** sealed, so ``aci.tenantt`` stays an attribute error) and
-  ``RootNode``/``AsyncRootNode`` (``_Sealed, RootNav, NiwakiNode[ManagedObject]``);
+  ``RootNode``/``AsyncRootNode`` (``_Sealed, RootNav, NiwakiNode[polUni]`` — the
+  root row is ``polUni``'s vocabulary, so ``aci.root`` and ``aci.node("uni")``
+  are ``polUni`` nodes);
 * ``<pkg>.pyi`` — one per ACI class package, holding ``<Cls>Node`` and
   ``Async<Cls>Node`` for every generated class of that package with at least
   one specific (non-universal) edge;
@@ -34,8 +36,6 @@ The rules each edge must follow (the runtime shape decides, never the stub):
 runtime signature   stub                                    returns
 ==================  ======================================  ========================
 ``()``              one plain ``def e(self)``               node
-``(target_name="",  one plain ``def e(self, target_name:    node
-**kwargs)``         str = "", **kwargs: object)``
 ``(name="")``       ``@overload (self, name: Literal[""]    ``Query[C]`` then node
                     = "")`` then ``@overload (self, name:
                     str)``
@@ -45,6 +45,12 @@ runtime signature   stub                                    returns
                     alias is never a parameter), types
                     from ``generate_design._param_type``
 ==================  ======================================  ========================
+
+A fixed-RN child (no naming prop — Rs singletons with a target-name prop
+included) is always ``()``: a name it would ignore is refused at runtime and
+statically alike (``tests/facade/test_fixed_rn_navigation.py``).  The former
+Rs-singleton shape ``(target_name="", **kwargs)`` is no longer a valid
+runtime shape — :func:`_runtime_shape` rejects it.
 
 For a kwargs edge with at least one required naming prop there is exactly one
 node overload whose required parameters are the model's required props.  When
@@ -132,7 +138,8 @@ def _expected_edges(parent: str) -> set[str]:
 
 def _runtime_navigator(parent: str, edge: str, flavour: str) -> object:
     """The navigator the runtime builds for ``<parent node>.<edge>`` — no session."""
-    cls = ManagedObject if parent == "_root" else _model(parent)
+    # The root row is polUni's (2.2): a ManagedObject node navigates nowhere.
+    cls = _model("polUni" if parent == "_root" else parent)
     dn = "uni" if parent == "_root" else "uni/x"
     if flavour == "sync":
         return getattr(NiwakiNode(cast("Niwaki", None), dn, cls), edge)
@@ -140,7 +147,7 @@ def _runtime_navigator(parent: str, edge: str, flavour: str) -> object:
 
 
 def _runtime_shape(parent: str, edge: str, flavour: str) -> str:
-    """Classify the runtime navigator signature: singleton, rs, name or kwargs."""
+    """Classify the runtime navigator signature: singleton, name or kwargs."""
     navigator = _runtime_navigator(parent, edge, flavour)
     assert callable(navigator)
     params = list(inspect.signature(navigator).parameters.values())
@@ -149,8 +156,6 @@ def _runtime_shape(parent: str, edge: str, flavour: str) -> str:
     match kinds:
         case []:
             return "singleton"
-        case [("target_name", k1, ""), (_, k2, _)] if k1 == pok and k2 == var_kw:
-            return "rs"
         case [("name", k1, "")] if k1 == pok:
             return "name"
         case [(_, k1, _)] if k1 == var_kw:
@@ -161,6 +166,9 @@ def _runtime_shape(parent: str, edge: str, flavour: str) -> str:
 
 def _node_return(child: str, flavour: str) -> str:
     pre = "Async" if flavour == "async" else ""
+    if child == "polUni":
+        # polUni's vocabulary is the root row ("_root"): its node is RootNode.
+        return f"{pre}RootNode"
     if child in _typed_parents():
         return f"{pre}{child}Node"
     if _row(child):
@@ -285,9 +293,9 @@ def _check_edge(parent: str, edge: str, flavour: str) -> list[str]:
     query_ret = _query_return(child, flavour)
     problems: list[str] = []
 
-    def no_extras(func: ast.FunctionDef, *, kwarg_ok: bool = False) -> None:
+    def no_extras(func: ast.FunctionDef) -> None:
         args = func.args
-        if args.posonlyargs or args.vararg or (args.kwarg and not kwarg_ok):
+        if args.posonlyargs or args.vararg or args.kwarg:
             problems.append(f"{where}: unexpected positional-only/*args/**kwargs")
 
     match shape:
@@ -298,21 +306,6 @@ def _check_edge(parent: str, edge: str, flavour: str) -> list[str]:
             no_extras(func)
             if [a.arg for a in func.args.args] != ["self"] or func.args.kwonlyargs:
                 problems.append(f"{where}: singleton takes no argument")
-            if _norm(func.returns) != node_ret:
-                problems.append(f"{where}: returns {_norm(func.returns)}, expected {node_ret}")
-        case "rs":
-            if len(defs) != 1 or _is_overload(defs[0]):
-                return [f"{where}: Rs-singleton must be one plain def, got {len(defs)} def(s)"]
-            func = defs[0]
-            no_extras(func, kwarg_ok=True)
-            args = func.args
-            if [a.arg for a in args.args] != ["self", "target_name"] or args.kwonlyargs:
-                problems.append(f"{where}: Rs-singleton must be (self, target_name, **kwargs)")
-            else:
-                if _norm(args.args[1].annotation) != "str" or len(args.defaults) != 1:
-                    problems.append(f"{where}: target_name must be `str` with a default")
-            if args.kwarg is None or _norm(args.kwarg.annotation) != "object":
-                problems.append(f"{where}: Rs-singleton must take `**kwargs: object`")
             if _norm(func.returns) != node_ret:
                 problems.append(f"{where}: returns {_norm(func.returns)}, expected {node_ret}")
         case "name":
@@ -531,8 +524,8 @@ def test_node_classes_derive_from_the_node_of_their_model() -> None:
             if last is None or ast.unparse(last) != f"{node_base}[{parent}]":
                 wrong.append(name)
     for name, expected in (
-        ("RootNode", "NiwakiNode[ManagedObject]"),
-        ("AsyncRootNode", "AsyncNiwakiNode[ManagedObject]"),
+        ("RootNode", "NiwakiNode[polUni]"),
+        ("AsyncRootNode", "AsyncNiwakiNode[polUni]"),
     ):
         if ast.unparse(stubs[name].node.bases[-1]) != expected:
             wrong.append(name)
@@ -633,10 +626,14 @@ def test_sync_and_async_navigators_share_one_signature() -> None:
         assert str(inspect.signature(sync)) == str(inspect.signature(async_))
 
 
-def test_runtime_shapes_cover_all_four_families() -> None:
-    """Sanity: the classifier sees every family on known edges."""
+def test_runtime_shapes_cover_all_three_families() -> None:
+    """Sanity: the classifier sees every family on known edges.
+
+    An Rs singleton (``vrf_binding``) has a fixed RN: it is a plain singleton.
+    """
     assert _runtime_shape("fvBD", "pim", "sync") == "singleton"
-    assert _runtime_shape("fvBD", "vrf_binding", "sync") == "rs"
+    assert _runtime_shape("fvBD", "vrf_binding", "sync") == "singleton"
+    assert _runtime_shape("fvAEPg", "custom_qos_policy", "sync") == "singleton"
     assert _runtime_shape("fvTenant", "bd", "sync") == "name"
     assert _runtime_shape("fvBD", "subnet", "sync") == "kwargs"
     assert _runtime_shape("_root", "tenant", "sync") == "name"

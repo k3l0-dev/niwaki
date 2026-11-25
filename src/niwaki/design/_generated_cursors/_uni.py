@@ -360,24 +360,18 @@ class _UniMakers(Cursor):
     def vmm_provider(
         self,
         vendor: CompVendor | str,
-        *,
-        annotation: str | None = None,
-        display_name: str | None = None,
-        owner_key: str | None = None,
-        owner_tag: str | None = None,
-        userdom: str | None = None,
     ) -> VmmProviderCursor:
         """Declare a ``vmmProvP`` child under the uni level.
 
         The VMM provider profile stores the policies of VMM systems from a particular vendor (VMware
         or Microsoft). This container is automatically created by the system.
 
+        A carrier — a path-only class the APIC will not accept on its own — takes its naming and
+        nothing else: an attribute here cannot be pushed and is refused at declaration. Put the
+        configuration on its children.
+
         Args:
             vendor: The provider profile vendor.
-            annotation: User annotation. Suggested format orchestrator:value
-            owner_key: The key for enabling clients to own their data for entity correlation.
-            owner_tag: A tag for enabling clients to add their own data. For example, to
-                indicate who created this object.
         """
         params = {
             k: v
@@ -704,18 +698,13 @@ class VmmProviderCursor(_VmmProviderMakers, _UniMakers):
 
     __slots__ = ()
 
-    def set(
-        self,
-        *,
-        annotation: str | None = None,
-        display_name: str | None = None,
-        owner_key: str | None = None,
-        owner_tag: str | None = None,
-        userdom: str | None = None,
-    ) -> VmmProviderCursor:
-        """Set ``vmmProvP`` attributes (merged; validated eagerly)."""
-        params = {k: v for k, v in locals().items() if k != "self"}
-        Cursor.set(self, **_prune(params))
+    def set(self) -> VmmProviderCursor:
+        """Take no attribute: ``vmmProvP`` is a carrier (path-only).
+
+        A carrier — a path-only class the APIC will not accept on its own — takes its naming and
+        nothing else: an attribute here cannot be pushed and is refused at declaration. Put the
+        configuration on its children.
+        """
         return self
 
 

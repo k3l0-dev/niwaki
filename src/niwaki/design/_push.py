@@ -28,6 +28,7 @@ from collections.abc import Iterable, Iterator
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING
 
+from niwaki._dn import rn_of
 from niwaki._logging import operation_failed, push_finished, push_started
 from niwaki._read import read_subtree, read_subtree_async
 from niwaki.design._compiler import build_desired_tree, compile_ops, compile_poluni
@@ -156,6 +157,21 @@ def _walk_dns(root: DesignNode, extras: dict[DesignNode, list[ManagedObject]]) -
     return dns
 
 
+def _pair_key(mo: ManagedObject) -> tuple[str, str]:
+    """Identity under which a desired child meets its read-back counterpart.
+
+    ``(wire class, RN)``.  A generated model computes its RN from its naming
+    properties, and a raw design node carries the RN computed at declaration;
+    but an object read back for a class with no generated model is a bare
+    :class:`~niwaki.models.base.ManagedObject` whose own RN is empty — the DN
+    the APIC sent is the only place it lives.  Deriving it from there (the
+    bracket-aware last segment, so ``subnet-[10.0.1.1/24]`` stays whole) pairs
+    raw nodes with what the scoped read already returned, instead of booking
+    each one as a create and re-verifying it with a GET of its own.
+    """
+    return (mo.aci_class, mo.rn or rn_of(mo.attrs.get("dn", "")))
+
+
 def _plan_result(
     desired: ManagedObject,
     current: ManagedObject | None,
@@ -187,9 +203,9 @@ def _plan_result(
                 # under the wire name, both sides in wire spelling.
                 updates[dn][wire] = (c.attrs.get(wire), val)
 
-        current_children = {(child.aci_class, child.rn): child for child in c.children}
+        current_children = {_pair_key(child): child for child in c.children}
         for child in d.children:
-            _walk(child, current_children.get((child.aci_class, child.rn)), f"{dn}/{child.rn}")
+            _walk(child, current_children.get(_pair_key(child)), f"{dn}/{child.rn}")
 
     _walk(desired, current, root_dn)
     return PlanResult(creates=creates, updates=updates, unchanged=unchanged)

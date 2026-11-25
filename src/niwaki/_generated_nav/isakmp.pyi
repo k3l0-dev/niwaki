@@ -13,11 +13,7 @@ from niwaki.models._generated.isakmp.isakmpProfile import isakmpProfile
 from niwaki.models._generated.isakmp.isakmpRsProfileToKeyring import isakmpRsProfileToKeyring
 
 class isakmpProfileNode(_Sealed, _UniversalNav, NiwakiNode[isakmpProfile]):
-    def profile_attachment_to_keyring(
-        self, target_name: str = "", **kwargs: object
-    ) -> NavLeaf[isakmpRsProfileToKeyring]: ...
+    def profile_attachment_to_keyring(self) -> NavLeaf[isakmpRsProfileToKeyring]: ...
 
 class AsyncisakmpProfileNode(_Sealed, _AsyncUniversalNav, AsyncNiwakiNode[isakmpProfile]):
-    def profile_attachment_to_keyring(
-        self, target_name: str = "", **kwargs: object
-    ) -> AsyncNavLeaf[isakmpRsProfileToKeyring]: ...
+    def profile_attachment_to_keyring(self) -> AsyncNavLeaf[isakmpRsProfileToKeyring]: ...

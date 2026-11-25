@@ -21,9 +21,10 @@ written.  The reserved set is introspected from the facade classes.
 Two additional dicts are emitted:
 
 - ``RS_TARGET_PROP`` — ``{rs_class: tn_prop_name}`` for Rs singleton classes
-  that have exactly one configurable ``tn*`` prop.  Used by
-  ``NiwakiNode.__getattr__`` to accept an optional positional ``target_name``
-  argument.
+  that have exactly one configurable ``tn*`` prop.  An Rs singleton has a
+  fixed RN, so its facade navigation edge takes no argument; the facade only
+  consults this table to word its refusal of one — the message points at
+  ``<edge>().read()`` to see the target the relation names.
 
 - ``REFERENCE_MAP`` / ``TARGET_SUBCLASSES`` — the design resolver's relation
   tables: ``{owner: {target: (rs_class, flavor)}}`` with abstract targets
@@ -677,8 +678,10 @@ def _build_rs_target_prop(classes: dict[str, dict[str, Any]]) -> dict[str, str]:
 
     Returns:
         ``{rs_class: tn_prop_name}`` for Rs singletons with exactly one
-        configurable ``tn*`` prop — the facade's read-side Rs navigation
-        accepts an optional positional target name thanks to this table.
+        configurable ``tn*`` prop.  Their facade navigation edge takes no
+        argument (the RN is fixed); the facade uses this table only to add,
+        when it refuses a name, the hint that ``<edge>().read()`` shows the
+        target the relation names.
     """
     return {
         cls_name: info["rs_target_prop"]

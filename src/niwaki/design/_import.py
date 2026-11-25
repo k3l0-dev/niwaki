@@ -62,23 +62,33 @@ the importer normalises values before the strict models see them:
 - **Redacted secrets** (the :data:`~niwaki.snapshot.REDACTED` sentinel):
   collected and raised — a design pushing the sentinel literally would be
   wrong — or dropped with ``redacted="skip"``.
+- **Carriers** (``carrier`` in the vocabulary — the VMM provider
+  ``vmmProvP``) import **bare**: a push cannot carry a path-only class's
+  attributes consistently, so a design cannot declare any on one, yet a real capture
+  carries a few (``userdom=":all:"``).  The importer drops them and reports
+  each through a :class:`~niwaki.exceptions.DesignHintWarning` (class, DN
+  and attribute name — never the value) instead of refusing the capture.
 
 Nothing else is ever elided: every attribute the snapshot carries reaches
 the design (the snapshot already dropped the operational halo at capture),
-and every drop above is the reproduction of "unset", never of a value.
+and every drop above is the reproduction of "unset" — except a carrier's
+attributes, which are dropped and reported, never silently.
 """
 
 from __future__ import annotations
 
+import re
 from collections.abc import Mapping
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from functools import cache
 from typing import TYPE_CHECKING, Literal
 
 import pydantic
 
-from niwaki._dn import naming_values, split_dn
+from niwaki._containment import UnresolvedSegmentError, child_class, grammar_children
+from niwaki._dn import AmbiguousRnError, _placeholders, naming_values, split_dn
 from niwaki._json import as_list, as_mapping
+from niwaki._warn import warn_at_caller
 from niwaki.design._cursor import (
     Cursor,
     _attach,
@@ -90,6 +100,7 @@ from niwaki.design._cursor import (
 from niwaki.design._node import DesignNode, RawDesignNode, Ref
 from niwaki.exceptions._design import (
     DesignError,
+    DesignHintWarning,
     DuplicateDeclarationError,
     SnapshotImportError,
 )
@@ -277,7 +288,198 @@ def _wire_texts(attrs: Mapping[str, JsonValue]) -> dict[str, str]:
     }
 
 
+# ── Naming values: settling an RN several parses fit ──────────────────────────
+
+_MAC_VALUE = re.compile(r"([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}")
+_INT_VALUE = re.compile(r"[+-]?[0-9]+")
+
+
+@cache
+def _prop_kinds(cls_name: str) -> dict[str, tuple[str | None, frozenset[str]]]:
+    """``{wire_name: (kind, enum values)}`` of a catalogued class (``{}`` if unknown).
+
+    Read once per class, and only when the attributes do not settle an RN on
+    their own.  A class the catalogue cannot describe — unknown, or one of the
+    few whose description fails (measured: ``compHpNic``, ``compSystem``,
+    ``smarteventRuleInst`` … collide on a field name) — has unknowable kinds:
+    ``{}``, so every value is admitted rather than an error escaping.
+    """
+    from niwaki.query._catalog import catalog
+
+    try:
+        props = catalog().describe(cls_name).props
+    except (KeyError, ValueError):
+        return {}
+    return {prop.wire: (prop.kind, frozenset(prop.enum_values)) for prop in props}
+
+
+def _kind_admits(kind: str | None, members: frozenset[str], value: str) -> bool:
+    """Whether a naming *value* fits its property's catalogue kind.
+
+    ``enum`` → a member; ``int`` → an integer literal or a named number;
+    ``mac`` → a MAC address; ``ip`` → an address or prefix, or a named member
+    (``wildcard``, ``backbone``); ``flags`` → every comma-separated part a
+    member.  Free text — and any kind the catalogue
+    does not pin down — admits anything: only a provable misfit refuses.
+    """
+    match kind:
+        case "enum":
+            return not members or value in members
+        case "int":
+            return _INT_VALUE.fullmatch(value) is not None or value in members
+        case "mac":
+            return _MAC_VALUE.fullmatch(value) is not None
+        case "ip":
+            import ipaddress
+
+            if value in members:
+                return True
+            try:
+                ipaddress.ip_interface(value)
+            except ValueError:
+                return False
+            return True
+        case "flags":
+            return not members or all(part in members for part in value.split(","))
+        case _:
+            return True
+
+
+def _resolve_naming(
+    rn: str,
+    rn_format: str,
+    cls_name: str,
+    *,
+    model: type[ManagedObject] | None = None,
+    attrs: Mapping[str, JsonValue] | None = None,
+) -> dict[str, str]:
+    """The naming values of *rn* — settled by the attributes, then by the kinds.
+
+    An RN whose unbracketed value contains the literal that follows it admits
+    several structural parses (:func:`niwaki._dn.naming_values` enumerates
+    them).  The chain that settles them:
+
+    1. **The attributes alone** — a snapshot or payload carries the naming
+       properties, and the value it holds (unless empty or redacted) *is*
+       the identity.  One parse carries those values → it wins, even when
+       the kind would refuse it: the model's own validation then reports the
+       invalid value, rather than a different, silently re-split identity.
+       Several parses carry them (incomplete attributes) → the catalogue
+       kinds narrow those; if the kinds refuse them all, the attribute
+       ambiguity stands.
+    2. **The kinds alone** — when no parse carries the attribute values (or
+       there are none): an enum member, an integer or named number, a MAC,
+       an IP; free text admits anything.
+    3. **The bare structure** — when the kinds admit no parse either.
+
+    ``accept`` is applied from the first pass, so an RN the attributes
+    settle never pays for the enumeration of its structural parses.  Two or
+    more parses left at any step raise at once: what the authorities cannot
+    settle is a genuine ambiguity, never a guess.
+
+    Args:
+        rn: The RN segment.
+        rn_format: The format to parse it against — a generated model's
+            ``_rn_format`` (Python field names) or the catalogue's (wire
+            names).
+        cls_name: The wire class name, for the catalogue kinds.
+        model: The generated model whose ``_rn_format`` this is — its
+            placeholders are translated to wire names before reading
+            *attrs* or the kinds.  ``None`` for a catalogue format.
+        attrs: The node's wire attributes, or ``None`` (a scope-walk
+            ancestor carries none).
+
+    Returns:
+        Placeholder name → wire value, keyed like *rn_format*.
+
+    Raises:
+        AmbiguousRnError: The authorities leave several parses standing.
+        ValueError: *rn* does not match *rn_format* at all.
+    """
+    from niwaki.models._wire import to_wire
+    from niwaki.snapshot import REDACTED
+
+    def wire_of(prop: str) -> str:
+        if model is not None and prop in model.model_fields:
+            return _wire_name_of(model, prop)
+        return prop
+
+    kinds: dict[str, tuple[str | None, frozenset[str]]] | None = None
+
+    def kind_admits(prop: str, value: str) -> bool:
+        nonlocal kinds
+        if kinds is None:
+            kinds = _prop_kinds(cls_name)  # only read when the attributes do not settle it
+        spec = kinds.get(wire_of(prop))
+        return spec is None or _kind_admits(spec[0], spec[1], value)
+
+    authority: dict[str, str] = {}
+    for prop in _placeholders(rn_format):
+        value = (attrs or {}).get(wire_of(prop))
+        if value is None or value == "" or value == REDACTED:
+            continue
+        authority[prop] = value if isinstance(value, str) else to_wire(value)
+
+    def carries_attrs(prop: str, value: str) -> bool:
+        return authority.get(prop, value) == value
+
+    if authority:
+        try:
+            return naming_values(rn, rn_format, accept=carries_attrs)
+        except AmbiguousRnError as ambiguity:
+            # Incomplete attributes: the kinds narrow the parses carrying them.
+            try:
+                return naming_values(
+                    rn,
+                    rn_format,
+                    accept=lambda prop, value: (
+                        carries_attrs(prop, value) and kind_admits(prop, value)
+                    ),
+                )
+            except AmbiguousRnError:
+                raise
+            except ValueError:
+                raise ambiguity from None  # the kinds refuse them all
+        except ValueError:
+            pass  # no parse carries the attributes' values — they cannot settle it
+    try:
+        return naming_values(rn, rn_format, accept=kind_admits)
+    except AmbiguousRnError:
+        raise
+    except ValueError:
+        pass  # no parse fits the kinds — only the structure is left
+    return naming_values(rn, rn_format)
+
+
+def _naming_problem(cls_name: str, exc: ValueError) -> str:
+    """The ``"structure"`` problem detail for an RN that cannot name its object."""
+    if isinstance(exc, AmbiguousRnError):
+        return (
+            f"RN is ambiguous under the {cls_name} format — neither its attributes "
+            f"nor its property kinds settle it: {exc}"
+        )
+    return f"RN does not match the {cls_name} format: {exc}"
+
+
 # ── The importer ──────────────────────────────────────────────────────────────
+
+
+@dataclass(frozen=True)
+class _CarrierDrop:
+    """The attributes dropped from one carrier imported bare.
+
+    Attributes:
+        cls_name: ACI class of the carrier.
+        dn: DN of the carrier in the snapshot.
+        wires: Wire names of the dropped attributes, sorted.
+        unknown: The subset of *wires* the shipped catalogue does not know
+            for this class (a capture from a newer firmware).
+    """
+
+    cls_name: str
+    dn: str
+    wires: list[str]
+    unknown: frozenset[str]
 
 
 @dataclass
@@ -290,6 +492,8 @@ class _Importer:
     class_of: dict[str, str]  # dn → snapshot class
     primary: dict[str, str]  # dn → primary naming value ("" when unnamed/unknown)
     names: dict[str, dict[str, list[str]]]  # class → primary name → [dns]
+    carrier_drops: list[_CarrierDrop] = field(default_factory=list)
+    """Each carrier imported bare, in walk order."""
 
     # ── Index (pre-pass) ──────────────────────────────────────────────────────
 
@@ -307,13 +511,13 @@ class _Importer:
         name = ""
         try:
             rn_format = catalog().rn_format(cls_name)
-            values = naming_values(node.rn, rn_format)
+            values = _resolve_naming(node.rn, rn_format, cls_name, attrs=node.attributes)
             # Primary naming prop = the FIRST placeholder of the RN format
             # (catalog().class_meta().naming is an unordered set).
             first = rn_format.partition("{")[2].partition("}")[0]
             name = values.get(first, "")
         except (KeyError, ValueError):
-            pass  # unknown class or unparseable RN — indexed by DN only
+            pass  # unknown class, unparseable or ambiguous RN — indexed by DN only
         self.primary[dn] = name
         if name:
             self.names.setdefault(cls_name, {}).setdefault(name, []).append(dn)
@@ -401,6 +605,63 @@ class _Importer:
                 )
         return kept
 
+    def _drop_carrier_attrs(
+        self, cls_name: str, dn: str, attrs: dict[str, JsonValue]
+    ) -> dict[str, JsonValue]:
+        """Import a carrier bare: keep its naming, drop and record the rest.
+
+        A carrier (``carrier`` in the vocabulary — the VMM provider
+        ``vmmProvP``) is a path-only class whose attributes no push mode
+        carries consistently, so a design cannot declare any on it.  A real capture does carry
+        some (``userdom=":all:"`` on every fabric), and refusing the capture
+        would close the brownfield door: the attributes are dropped instead
+        and each one is recorded for :func:`to_design` to report.
+
+        Called once per node on the screened attributes (so the empty
+        "not configured" values were already dropped and are not reported),
+        *before* any import route — typed, catalogue or direct wire — sees
+        them: nothing downstream can write a carrier attribute through a
+        door that bypasses ``set()``.  Naming values stay: the RN parse may
+        need them.
+
+        Returns:
+            *attrs* itself for a non-carrier, else its naming entries only.
+        """
+        if cls_name not in _tables().carrier:
+            return attrs
+        from niwaki.query._catalog import catalog
+
+        meta = catalog().class_meta(cls_name)
+        if dropped := sorted(wire for wire in attrs if wire not in meta.naming):
+            unknown = frozenset(wire for wire in dropped if wire not in meta.wire_to_readable)
+            self.carrier_drops.append(_CarrierDrop(cls_name, dn, dropped, unknown))
+        return {wire: value for wire, value in attrs.items() if wire in meta.naming}
+
+    def report_carrier_drops(self) -> None:
+        """Emit one :class:`~niwaki.exceptions.DesignHintWarning` per bare-imported carrier.
+
+        Attributed to the caller's line (``warn_at_caller``) and ordered by
+        DN.  The text names the class, the DN and the attribute names — never
+        a value, so nothing a property's redaction policy protects can leak
+        through a report.  A property the shipped catalogue does not know
+        (a capture from a newer firmware) is marked as such beside its name.
+
+        Called by :func:`to_design` only once the import has succeeded: an
+        import that raises :class:`~niwaki.exceptions.SnapshotImportError`
+        reports nothing.
+        """
+        for drop in sorted(self.carrier_drops, key=lambda d: d.dn):
+            names = ", ".join(
+                f"{wire!r} (unknown to the catalogue)" if wire in drop.unknown else repr(wire)
+                for wire in drop.wires
+            )
+            warn_at_caller(
+                f"{drop.cls_name} {drop.dn} is a carrier — a path-only class whose attributes "
+                f"cannot be pushed — so it was imported bare and these attributes were dropped: "
+                f"{names}. Its children are imported in full.",
+                DesignHintWarning,
+            )
+
     # ── Walk ──────────────────────────────────────────────────────────────────
 
     def walk_children(self, cursor: Cursor, node: _TreeNode, dn: str) -> None:
@@ -414,7 +675,7 @@ class _Importer:
         parent_node = parent.design_node
         grandparent_cls = parent_node.parent.aci_class if parent_node.parent else None
         childless = not node.children
-        attrs = self._screen_attrs(dn, node.attributes)
+        attrs = self._drop_carrier_attrs(cls_name, dn, self._screen_attrs(dn, node.attributes))
 
         if childless:
             verb_spec = _verb_inversion().get((parent_cls, cls_name))
@@ -466,9 +727,17 @@ class _Importer:
                 return None  # unknown property — the raw ladder owns the policy
             readable[field] = value
         try:
-            readable.update(naming_values(node.rn, cls._rn_format))  # pyright: ignore[reportPrivateUsage]
+            readable.update(
+                _resolve_naming(
+                    node.rn,
+                    cls._rn_format,  # pyright: ignore[reportPrivateUsage]
+                    rs_cls_name,
+                    model=cls,
+                    attrs=attrs,
+                )
+            )
         except ValueError:
-            return None
+            return None  # unparseable or ambiguous — the raw ladder reports it
         flavor: Literal["name", "dn"] = "dn" if "target_dn" in cls.model_fields else "name"
         target = str(readable.pop("target_dn" if flavor == "dn" else "name", ""))
         if not target:
@@ -591,9 +860,15 @@ class _Importer:
         except KeyError:
             return False
         try:
-            naming = naming_values(node.rn, cls._rn_format)  # pyright: ignore[reportPrivateUsage]
+            naming = _resolve_naming(
+                node.rn,
+                cls._rn_format,  # pyright: ignore[reportPrivateUsage]
+                cls_name,
+                model=cls,
+                attrs=attrs,
+            )
         except ValueError as exc:
-            self._problem(dn, "structure", f"RN does not match the {cls_name} format: {exc}")
+            self._problem(dn, "structure", _naming_problem(cls_name, exc))
             return True  # handled (with its problem) — the raw ladder cannot parse it either
         try:
             child = _make_child(parent.design_node, label, cls_name, (), dict(naming))
@@ -701,9 +976,15 @@ class _Importer:
             # the public raw() cannot offer.
             cls = _load_class(cls_name)
             try:
-                naming = naming_values(node.rn, cls._rn_format)  # pyright: ignore[reportPrivateUsage]
+                naming = _resolve_naming(
+                    node.rn,
+                    cls._rn_format,  # pyright: ignore[reportPrivateUsage]
+                    cls_name,
+                    model=cls,
+                    attrs=attrs,
+                )
             except ValueError as exc:
-                self._problem(dn, "structure", f"RN does not match the {cls_name} format: {exc}")
+                self._problem(dn, "structure", _naming_problem(cls_name, exc))
                 return
             try:
                 child = _attach(parent.design_node, cls, cls_name, dict(naming), {})
@@ -757,9 +1038,9 @@ class _Importer:
             return
 
         try:
-            naming = naming_values(node.rn, rn_format)
+            naming = _resolve_naming(node.rn, rn_format, cls_name, attrs=attrs)
         except ValueError as exc:
-            self._problem(dn, "structure", f"RN does not match the {cls_name} format: {exc}")
+            self._problem(dn, "structure", _naming_problem(cls_name, exc))
             return
         known: dict[str, JsonValue] = {}
         escape_unknown: dict[str, JsonValue] = {}
@@ -837,90 +1118,24 @@ class _Importer:
 def _resolve_child_class(parent_cls: str, segment: str) -> str:
     """Resolve one RN segment to its class among *parent_cls*'s children.
 
-    The 117 RN prefixes shared across the whole schema are ambiguous
-    *globally*, never among one parent's children — measured: zero RN-format
-    skeleton collisions inside any of the 3 049 containment tables.  The
-    walk from ``polUni`` down a scope DN therefore resolves each segment
-    uniquely.
+    The walk itself (``CHILD_MAP``, the generated ``_contains``, then the
+    catalogue's DN grammar) is :func:`niwaki._containment.child_class`,
+    shared with the façade's ``node(dn)``; this wrapper speaks the scope
+    walk's error.
 
     Raises:
         DesignError: No child class of *parent_cls* matches *segment*, or —
             should curation ever break the measured uniqueness — more than
             one does.
     """
-    from niwaki.domain._child_map import CHILD_MAP, CLASS_PKG
-    from niwaki.query._catalog import catalog
-
-    # The navigation table keys the top level as "_root"; the generated
-    # model's _contains completes the picture for typed parents.
-    table_key = "_root" if parent_cls == "polUni" else parent_cls
-    candidates = set(CHILD_MAP.get(table_key, {}).values())
-    if parent_cls in CLASS_PKG:
-        candidates |= set(_load_class(parent_cls)._contains)  # pyright: ignore[reportPrivateUsage]
-
-    matches: list[str] = []
-    for cls_name in candidates:
-        try:
-            naming_values(segment, catalog().rn_format(cls_name))
-        except (KeyError, ValueError):
-            continue
-        matches.append(cls_name)
-    if not matches:
-        # Third authority: the catalogue's own DN grammar — the same authority
-        # _may_contain gained in it.4 (the scope walk shipped in it.3, before
-        # it, and never got the seam re-audited).  A containment edge both
-        # generated tables dropped is still provable from the child's DN
-        # formats: the parent's RN format is the second-to-last segment.
-        matches = _grammar_children(parent_cls, segment)
-    if len(matches) == 1:
-        return matches[0]
-    if not matches:
-        raise DesignError(
-            f"scope walk: no child class of {parent_cls} matches the RN segment {segment!r}."
-        )
-    raise DesignError(
-        f"scope walk: RN segment {segment!r} is ambiguous under {parent_cls} "
-        f"({', '.join(sorted(matches))})."
-    )
+    try:
+        return child_class(parent_cls, segment)
+    except UnresolvedSegmentError as exc:
+        raise DesignError(f"scope walk: {exc}") from None
 
 
-@cache
-def _rn_format_rows() -> tuple[tuple[str, str], ...]:
-    """Every catalogue ``(class_name, rn_format)`` pair, scanned once."""
-    from niwaki.query._catalog import catalog
-
-    return tuple(catalog()._rn_format_rows())  # pyright: ignore[reportPrivateUsage]
-
-
-def _grammar_children(parent_cls: str, segment: str) -> list[str]:
-    """Classes the DN grammar proves under *parent_cls* that match *segment*.
-
-    The slow path of :func:`_resolve_child_class`, walked only when neither
-    CHILD_MAP nor the generated ``_contains`` knows the edge (measured live:
-    ``uiSettingsCont`` under ``polUni``, ``aaaAppUser`` under ``aaaUserEp``,
-    ``commTelnet`` under ``commPol``).  Shape-matches the segment against
-    every catalogued RN format, then keeps only the classes whose
-    ``dn_formats`` place the parent's RN format immediately above — the same
-    proof :meth:`Cursor._may_contain` accepts.
-    """
-    from niwaki._dn import split_dn
-    from niwaki.query._catalog import catalog
-
-    parent_rn = "uni" if parent_cls == "polUni" else catalog().rn_format(parent_cls)
-    if not parent_rn:
-        return []
-    matches: list[str] = []
-    for cls_name, rn_fmt in _rn_format_rows():
-        try:
-            naming_values(segment, rn_fmt)
-        except ValueError:
-            continue
-        for fmt in catalog().dn_formats(cls_name):
-            segments = split_dn(fmt)
-            if len(segments) >= 2 and segments[-2] == parent_rn:
-                matches.append(cls_name)
-                break
-    return matches
+# The scope walk's DN-grammar authority, under its historical name.
+_grammar_children = grammar_children
 
 
 def _bare_ancestor(parent: Cursor, parent_dn: str, segment: str) -> tuple[Cursor, str]:
@@ -929,7 +1144,12 @@ def _bare_ancestor(parent: Cursor, parent_dn: str, segment: str) -> tuple[Cursor
     The ancestors of a scoped snapshot are not part of the capture — they
     exist on the fabric by definition — so they enter the design bare: the
     push upserts them without touching a single attribute (the established
-    Day-2 pattern).
+    Day-2 pattern).  With no attributes to read, only the property kinds can
+    settle a segment several parses fit.
+
+    Raises:
+        DesignError: The segment names no child class, or its naming values
+            stay ambiguous — an ancestor's identity is never guessed.
     """
     from niwaki.domain._child_map import CLASS_PKG
     from niwaki.query._catalog import catalog
@@ -937,9 +1157,24 @@ def _bare_ancestor(parent: Cursor, parent_dn: str, segment: str) -> tuple[Cursor
     parent_cls = parent.design_node.aci_class
     cls_name = _resolve_child_class(parent_cls, segment)
     dn = f"{parent_dn}/{segment}"
-    if cls_name in CLASS_PKG:
-        cls = _load_class(cls_name)
-        naming = naming_values(segment, cls._rn_format)  # pyright: ignore[reportPrivateUsage]
+    cls: type[ManagedObject] | None = None
+    try:
+        if cls_name in CLASS_PKG:
+            cls = _load_class(cls_name)
+            naming = _resolve_naming(
+                segment,
+                cls._rn_format,  # pyright: ignore[reportPrivateUsage]
+                cls_name,
+                model=cls,
+            )
+        else:
+            naming = _resolve_naming(segment, catalog().rn_format(cls_name), cls_name)
+    except AmbiguousRnError as exc:
+        raise DesignError(
+            f"scope walk: the {cls_name} segment {segment!r} is ambiguous — "
+            f"several naming values fit and nothing settles them: {exc}"
+        ) from None
+    if cls is not None:
         label = _maker_inversion().get((parent_cls, cls_name))
         if label is not None and _maker_allowed(
             parent_cls,
@@ -948,8 +1183,7 @@ def _bare_ancestor(parent: Cursor, parent_dn: str, segment: str) -> tuple[Cursor
         ):
             return _make_child(parent.design_node, label, cls_name, (), dict(naming)), dn
         return _attach(parent.design_node, cls, cls_name, dict(naming), {}), dn
-    wire_naming = naming_values(segment, catalog().rn_format(cls_name))
-    return parent.raw(cls_name, **wire_naming), dn
+    return parent.raw(cls_name, **naming), dn
 
 
 def _payload_tree(envelope: object, *, root: bool = True) -> _TreeNode:
@@ -1054,6 +1288,10 @@ def from_payload(
             naming value, or a ``status`` directive.
         SnapshotImportError: See :func:`to_design`.
 
+    Warns:
+        DesignHintWarning: A carrier in the payload (the VMM provider) holds
+            attributes — they are dropped and reported, see :func:`to_design`.
+
     Example::
 
         from niwaki.design import from_payload, tenant
@@ -1104,6 +1342,19 @@ def to_design(
     identity cannot be redacted; review the snapshot's warnings before
     sharing anything derived from it.
 
+    A *carrier* — a path-only class the APIC will not accept on its own, such
+    as the VMM provider ``uni/vmmp-VMware`` — imports **bare**.  A push
+    cannot carry its attributes consistently, so a design cannot declare any on it, yet a
+    real capture carries a few (``userdom=":all:"``): they are dropped and
+    each one is reported through a
+    :class:`~niwaki.exceptions.DesignHintWarning` attributed to the calling
+    line — the class, the DN and the attribute name, never the value; a
+    property the shipped catalogue does not know is marked as such.  The
+    import never raises for it; ``warnings.simplefilter("error",
+    DesignHintWarning)`` makes it fail in a pipeline that wants to.  The
+    carrier's children import in full.  Drops are reported only once the
+    import has succeeded: a failed import raises and reports nothing.
+
     Args:
         snapshot: A :class:`~niwaki.snapshot.Snapshot` — the whole
             configuration (scope ``"uni"``) or any narrower config scope
@@ -1137,6 +1388,10 @@ def to_design(
             collected over the whole tree, never first-fail, a structurally
             malformed node (``kind="structure"``) included.  The partial
             design is discarded.
+
+    Warns:
+        DesignHintWarning: A carrier in the snapshot holds attributes — they
+            are dropped and reported, one warning per carrier (see above).
 
     Example::
 
@@ -1209,4 +1464,5 @@ def to_design(
 
     if importer.problems:
         raise SnapshotImportError(sorted(importer.problems, key=lambda p: (p.dn, p.detail)))
+    importer.report_carrier_drops()
     return root

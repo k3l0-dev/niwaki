@@ -150,8 +150,14 @@ class TestDnComputation:
     def test_node_explicit_dn(self, aci: Niwaki) -> None:
         assert aci.node("uni/tn-prod/BD-web", fvBD).dn == "uni/tn-prod/BD-web"
 
-    def test_node_default_cls_is_managed_object(self, aci: Niwaki) -> None:
+    def test_node_without_cls_resolves_the_class_from_the_dn(self, aci: Niwaki) -> None:
+        # 2.2: the class is resolved from the DN (it used to default to
+        # ManagedObject, which aliased the root vocabulary at any DN).
         node = aci.node("uni/tn-prod/BD-web")
+        assert node.cls is fvBD
+
+    def test_node_with_unresolvable_dn_is_untyped(self, aci: Niwaki) -> None:
+        node = aci.node("topology/pod-1/node-101/sys")
         assert node.cls is ManagedObject
 
 

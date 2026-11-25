@@ -20,11 +20,15 @@ Example::
     catalog.find_prop("mac")                # → [('fvCEp', 'mac'), ...]
     catalog.concrete_subclasses("fvEPg")    # → every concrete EPG class
     catalog.fault_name("F0467")             # → 'fltFvNwIssuesConfig-failed'
+    catalog.relation("fvRsCtx").target      # → 'fvCtx'
+    catalog.relations("fvCtx", direction="in")   # → every Rs aimed at a VRF
 """
 
 from __future__ import annotations
 
-from niwaki.query._catalog import ClassDoc, ClassMeta, PropDoc, PropFlags
+from typing import Literal
+
+from niwaki.query._catalog import ClassDoc, ClassMeta, PropDoc, PropFlags, RelationDoc
 from niwaki.query._catalog import catalog as _reader
 
 __all__ = [
@@ -32,6 +36,7 @@ __all__ = [
     "ClassMeta",
     "PropDoc",
     "PropFlags",
+    "RelationDoc",
     "class_meta",
     "concrete_subclasses",
     "describe",
@@ -41,6 +46,8 @@ __all__ = [
     "generated_classes",
     "prop_flags",
     "prop_meta",
+    "relation",
+    "relations",
     "rn_format",
     "schema_version",
     "search",
@@ -325,3 +332,95 @@ def prop_flags(class_name: str) -> dict[str, PropFlags]:
         flags["arpFlood"].read_only         # → False
     """
     return _reader().prop_flags(class_name)
+
+
+def relation(rs_class: str) -> RelationDoc:
+    """Describe one relation class — which class carries it, what it points at.
+
+    In the ACI object model a relation is an object of its own: an *Rs* class
+    (``fvRsCtx``) that a *source* object holds to point at a *target* object
+    (``fvCtx``), which grows the matching *Rt* class (``fvRtCtx``) in return.
+    This answers, offline, the questions a relation raises before you write
+    one: what may carry it, what it must point at, how many it allows, and
+    whether it names its target (``kind="named"``) or holds its DN
+    (``kind="explicit"``).
+
+    The endpoints are served exactly as the schema declares them, and the
+    schema often declares them on an **abstract** class: ``fvRsCtx`` hangs off
+    ``fvABDPol``, the abstract parent of every bridge-domain flavour, not off
+    ``fvBD``.  Use :func:`relations` to ask from a concrete class instead —
+    it walks the inheritance for you.
+
+    Args:
+        rs_class: The wire name of the Rs class, e.g. ``"fvRsCtx"``.
+
+    Returns:
+        A :class:`RelationDoc` with every name in wire form.  A few targets are
+        cloud classes this catalogue does not describe (``fvRsCloudAccount``
+        aims at ``cloudAccount``); the relation is still served, while
+        :func:`describe` of such a target raises.
+
+    Raises:
+        UnknownClassError: No such class in the catalogue — or a known class
+            that is not a relation: an Rt class (``fvRtCtx`` — ask for its
+            ``fvRsCtx``), an abstract relation base (``relnFrom``), or any
+            ordinary class (``fvBD``); the message says which.  Also a
+            ``KeyError``.
+
+    Example::
+
+        rel = catalog.relation("fvRsCtx")
+        rel.source         # → 'fvABDPol'  (abstract: every bridge domain)
+        rel.target         # → 'fvCtx'
+        rel.target_rt      # → 'fvRtCtx'
+        rel.cardinality    # → 'n-to-1'    (many bridge domains, one VRF each)
+        rel.kind           # → 'named'     (tnFvCtxName, resolved by name)
+    """
+    return _reader().relation(rs_class)
+
+
+def relations(
+    class_name: str, *, direction: Literal["out", "in"] = "out"
+) -> tuple[RelationDoc, ...]:
+    """Every relation a class can carry, or be the target of.
+
+    ``direction="out"`` lists the Rs classes an object of ``class_name`` may
+    hold — those declared on the class itself **and on every superclass**, so
+    asking from ``fvBD`` finds ``fvRsCtx`` although the schema declares it on
+    the abstract ``fvABDPol``.  It never reaches *down*: an abstract class does
+    not carry what only some of its descendants carry.
+
+    ``direction="in"`` lists the Rs classes that may point at an object of
+    ``class_name`` — those aimed at the class itself **or at any of its
+    superclasses**, so ``physDomP`` is reachable by ``fvRsDomAtt``, whose
+    declared target is the abstract ``infraDomP``.
+
+    Offline, read once from the shipped catalogue and then memoised: the same
+    tuple object comes back for the same question.
+
+    Args:
+        class_name: The wire class name, e.g. ``"fvBD"``.
+        direction: ``"out"`` (the default) for relations the class carries,
+            ``"in"`` for relations aimed at it.  Keyword-only.
+
+    Returns:
+        The :class:`RelationDoc` of each relation, sorted by ``rs_class``, each
+        listed once.  Empty when the class has none in that direction — a
+        known class with no relation is not an error.
+
+    Raises:
+        ValueError: ``direction`` is neither ``"out"`` nor ``"in"``.  Checked
+            first, so a bad argument is never masked by a lookup failure.
+        UnknownClassError: No such class in the catalogue — including a cloud
+            endpoint :func:`relation` names but this catalogue does not
+            describe.  Also a ``KeyError``.
+
+    Example::
+
+        [r.rs_class for r in catalog.relations("fvBD")]
+        # → ['fvRsABDPolMonPol', ..., 'fvRsCtx', 'fvRsIgmpsn', 'fvRsMldsn']
+
+        [r.source for r in catalog.relations("fvCtx", direction="in")]
+        # → every class that may point at a VRF ('fvABDPol' among them)
+    """
+    return _reader().relations(class_name, direction=direction)

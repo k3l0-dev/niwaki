@@ -44,6 +44,40 @@ def test_release_preflight_runs_the_wheel_smoke() -> None:
     assert "--wheel-smoke" in text, "release_public.sh preflight no longer runs the wheel smoke"
 
 
+def test_release_preflight_runs_the_canary_gitleaks() -> None:
+    """The export runs the canary's own secret scanner on the staged tree.
+
+    The canary audits the public history with gitleaks, whose rules differ
+    from the preflight's detect-secrets; without this step a gitleaks finding
+    only surfaced a week after the release.  The version must come from
+    ``canary.yml`` (one pin, never a second copy that drifts), the scan must
+    use the shipped ``.gitleaks.toml``, and a finding must abort the export.
+    """
+    text = (_SCRIPTS / "release_public.sh").read_text(encoding="utf-8")
+    code = [line for line in text.splitlines() if not line.lstrip().startswith("#")]
+    pin_lines = [line for line in code if "canary.yml" in line]
+    assert pin_lines, "release_public.sh no longer reads the gitleaks pin from canary.yml"
+    scans = [line for line in code if "gitleaks dir" in line]
+    assert scans, "release_public.sh no longer runs `gitleaks dir` on the staged tree"
+    scan = scans[0]
+    assert '"$STAGE"' in scan, f"gitleaks does not scan the staged tree: {scan.strip()!r}"
+    assert ".gitleaks.toml" in scan, f"gitleaks does not use the shipped config: {scan.strip()!r}"
+    assert "|| true" not in scan, "the gitleaks scan must be able to abort the export"
+    assert "if ! gitleaks dir" in scan, "a gitleaks finding no longer aborts the export"
+    # The scan happens before anything is cloned or pushed.
+    assert text.index("gitleaks dir") < text.index("git clone"), (
+        "gitleaks runs after publishing starts"
+    )
+
+
+def test_canary_pins_the_gitleaks_version_the_preflight_reads() -> None:
+    """The pin the preflight greps for is still there, in the expected form."""
+    canary = (_SCRIPTS.parent / ".github" / "workflows" / "canary.yml").read_text(encoding="utf-8")
+    assert re.search(r"gitleaks/releases/download/v\d+\.\d+\.\d+/", canary), (
+        "canary.yml no longer pins gitleaks as releases/download/vX.Y.Z/ — update release_public.sh"
+    )
+
+
 def _wheel_smoke_body(text: str) -> str:
     """The body of the ``run_wheel_smoke`` shell function in ``checks.sh``."""
     match = re.search(r"^run_wheel_smoke\(\) \{\n(.*?)^\}", text, flags=re.MULTILINE | re.DOTALL)
@@ -95,3 +129,36 @@ def test_fast_gate_runs_the_unasync_freshness_check() -> None:
     assert index < fast_exit, "the unasync check sits behind the --fast early exit"
     assert "|| true" not in call, "the unasync check must be able to fail the gate"
     assert "--write" not in call, "the gate must check, never rewrite"
+
+
+def _regen_verify_block() -> list[str]:
+    """The non-comment lines of the ``--verify`` block of ``regen.sh``."""
+    lines = (_SCRIPTS / "regen.sh").read_text(encoding="utf-8").splitlines()
+    start = next(
+        (i for i, line in enumerate(lines) if re.match(r'\s*if \[ "\$VERIFY" -eq 1 \]', line)),
+        None,
+    )
+    assert start is not None, "regen.sh lost its --verify block"
+    end = next(i for i in range(start + 1, len(lines)) if lines[i].strip() == "fi")
+    return [line for line in lines[start:end] if not line.lstrip().startswith("#")]
+
+
+def test_regen_verify_runs_the_exhaustive_node_probe() -> None:
+    """``regen.sh --verify`` proves every model's typed-navigation target exists.
+
+    Each generated model names its typed navigation class under
+    ``TYPE_CHECKING`` (an import of ``niwaki._generated_nav.<pkg>``); a regen
+    that drops or renames a stub class leaves a dangling import that no
+    runtime test can see.  The only guard is the exhaustive ``node(dn, C)``
+    probe of ``tests/typing/test_node_static.py`` (mypy and pyright over
+    every generated class) — so the regeneration pipeline's own verify step
+    must run it, not just the full gate.
+    """
+    block = "\n".join(_regen_verify_block())
+    assert "tests/typing/test_node_static.py" in block, (
+        "regen.sh --verify does not run tests/typing/test_node_static.py"
+    )
+    # Neither deselected nor narrowed away from the exhaustive probes.
+    for line in _regen_verify_block():
+        if "test_node_static.py" in line:
+            assert "--deselect" not in line and "not every_generated" not in line, line.strip()

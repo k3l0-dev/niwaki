@@ -130,6 +130,11 @@ nitpick_ignore = [
     ("py:class", "T4"),
     ("py:class", "T5"),
     ("py:class", "_FilterNode"),
+    # node()/mo() overloads: the checker-only protocols (facade.py, under
+    # TYPE_CHECKING) mapping a model class to its typed navigation class N.
+    ("py:class", "N"),
+    ("py:class", "_Navigable"),
+    ("py:class", "_AsyncNavigable"),
     ("py:class", "PushMode"),
     # A Union type alias (RawSubscriptionEvent | SubscriptionGap |
     # SubscriptionRefreshFailed) -- autodoc_typehints renders a field
@@ -144,6 +149,11 @@ nitpick_ignore = [
     # caller-configured client rather than mirroring each of httpx's options.
     ("py:class", "httpx.Client"),
     ("py:class", "httpx.AsyncClient"),
+    # niwaki.testing.FakeApic is an httpx handler: its transport, and the
+    # request/response pair of `handle`, are httpx types too.
+    ("py:class", "httpx.MockTransport"),
+    ("py:class", "httpx.Request"),
+    ("py:class", "httpx.Response"),
     # pydantic's inventory does not expose its base class or exceptions.
     ("py:class", "BaseModel"),
     ("py:class", "pydantic.BaseModel"),

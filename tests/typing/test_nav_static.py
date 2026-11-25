@@ -26,9 +26,9 @@ This module pins three things:
      prop, that prop required, so the empty call still means ``Query``
      (root → VMM provider, datetime policy → NTP auth key, fabric → port
      config with four optional props);
-   * singleton ``()`` (infra, fabric, bd → pim);
-   * Rs-singleton ``(target_name="", **kwargs)`` (bd → vrf binding, subnet →
-     ND prefix policy);
+   * singleton ``()`` (infra, fabric, bd → pim) — Rs singletons included
+     (bd → vrf binding, subnet → ND prefix policy, epg → custom QoS policy):
+     their RN is fixed, so they take no name either;
    * the three return families — a parent with specific edges gets its own
      typed class (``fvBDNode``), a class whose only edges are the universal
      ones gets ``NavLeaf[C]``, a class with no edge at all gets ``NavEnd[C]``;
@@ -54,7 +54,10 @@ This module pins three things:
    ``ndo_controller_profile(ip=..., name=...)``) — the runtime accepts wire
    aliases, the typed surface speaks Python names only, as the design DSL
    does — a positional argument to a kwargs edge, a missing required naming
-   prop, an argument to a singleton, a wrongly-typed name.
+   prop, an argument to a singleton, a wrongly-typed name.  A name passed
+   to an Rs singleton (a fixed RN would ignore it) is pinned apart, in
+   ``tests/typing/test_fixed_rn_static.py``: its probe is generated, so it
+   stays out of the repo-wide pyright run.
 3. **Runtime side** — the typed classes never exist at runtime: navigation
    still returns plain :class:`~niwaki.NiwakiNode`, :class:`~niwaki.Niwaki`
    still derives from :class:`object` only, and no name or submodule of
@@ -124,6 +127,7 @@ if TYPE_CHECKING:
         vmmDomPNode,
         vmmProvPNode,
     )
+    from niwaki.models.base import ManagedObject
     from niwaki.models.datetime.datetimeNtpAuthKey import datetimeNtpAuthKey
     from niwaki.models.datetime.datetimeNtpProv import datetimeNtpProv
     from niwaki.models.datetime.datetimePol import datetimePol
@@ -134,6 +138,7 @@ if TYPE_CHECKING:
     from niwaki.models.fv.fvAp import fvAp
     from niwaki.models.fv.fvBD import fvBD
     from niwaki.models.fv.fvRsCtx import fvRsCtx
+    from niwaki.models.fv.fvRsCustQosPol import fvRsCustQosPol
     from niwaki.models.fv.fvRsNdPfxPol import fvRsNdPfxPol
     from niwaki.models.fv.fvRsPathAtt import fvRsPathAtt
     from niwaki.models.fv.fvSubnet import fvSubnet
@@ -235,16 +240,15 @@ def _static_all_optional_kwargs(aci: Niwaki) -> None:
 
 
 def _static_singleton_shapes(aci: Niwaki) -> None:
-    """Singleton ``()`` and Rs-singleton ``(target_name="", **kwargs)`` → node."""
+    """Singleton ``()`` → node — Rs singletons too: a fixed RN takes no name."""
     bd = aci.tenant("prod").bd("web")
     assert_type(bd.pim(), pimBDPNode)
     assert_type(bd.legacy_mode(), NavLeaf[fvAccP])
     assert_type(bd.vrf_binding(), fvRsCtxNode)
-    assert_type(bd.vrf_binding("prod"), fvRsCtxNode)
-    assert_type(bd.vrf_binding(target_name="prod"), fvRsCtxNode)
     subnet = bd.subnet(subnet="10.0.0.1/24")
-    assert_type(subnet.nd_prefix_policy("ra"), NavLeaf[fvRsNdPfxPol])
     assert_type(subnet.nd_prefix_policy(), NavLeaf[fvRsNdPfxPol])
+    epg = aci.tenant("prod").app("shop").epg("web")
+    assert_type(epg.custom_qos_policy(), NavLeaf[fvRsCustQosPol])
 
 
 def _static_universal_edges(aci: Niwaki) -> None:
@@ -280,7 +284,7 @@ def _static_read_is_concrete(aci: Niwaki) -> None:
     assert_type(aci.tenant("prod").app("shop").read(), fvAp)
     assert_type(aci.tenant("prod").bd("web").subnet(subnet="10.0.0.1/24").read(), fvSubnet)
     assert_type(aci.tenant("prod").bd("web").legacy_mode().read(), fvAccP)
-    assert_type(aci.tenant("prod").bd("web").vrf_binding("prod").read(), fvRsCtx)
+    assert_type(aci.tenant("prod").bd("web").vrf_binding().read(), fvRsCtx)
     assert_type(aci.tenant("prod").bd("web").tag(key="owner").read(), tagTag)
     assert_type(aci.infra().read(), infraInfra)
     assert_type(aci.fabric().read(), fabricInst)
@@ -293,14 +297,15 @@ def _static_read_is_concrete(aci: Niwaki) -> None:
 
 
 def _static_dynamic_escape_hatches(aci: Niwaki) -> None:
-    """``node()``/``mo()`` stay dynamic: ``NiwakiNode[T]``, any attribute, no error."""
-    node = aci.node("uni/tn-prod/BD-web", fvBD)
-    assert_type(node, NiwakiNode[fvBD])
-    assert_type(node.read(), fvBD)
+    """``node(dn)`` without a class stays dynamic: any attribute, no error.
+
+    With a class, ``node()`` and ``mo()`` are typed since 2.2 — pinned in
+    ``tests/typing/test_node_static.py``.
+    """
+    node = aci.node("uni/tn-prod/BD-web")
+    assert_type(node, NiwakiNode[ManagedObject])
+    assert_type(node.read(), ManagedObject)
     node.anything_at_all("x")  # resolved at runtime — never a static error
-    child = aci.tenant("prod").mo(fvBD, name="web")
-    assert_type(child, NiwakiNode[fvBD])
-    child.subnet(subnet="10.0.0.1/24").whatever()
 
 
 # ── 2. Expected errors, sync ──────────────────────────────────────────────────
@@ -340,8 +345,8 @@ def _static_wrong_arguments(aci: Niwaki) -> None:
     aci.ndo_controller_profile(ndo_ip="10.0.0.9")  # type: ignore[call-overload]  # expect: reportCallIssue
     bd.pim("x")  # type: ignore[call-arg]  # expect: reportCallIssue
     aci.infra("x")  # type: ignore[call-arg]  # expect: reportCallIssue
+    bd.legacy_mode(name="x")  # type: ignore[call-arg]  # expect: reportCallIssue
     aci.tenant(42)  # type: ignore[call-overload]  # expect: reportCallIssue, reportArgumentType
-    bd.vrf_binding(42)  # type: ignore[arg-type]  # expect: reportArgumentType
 
 
 # ── 1+2. The same contract, async ─────────────────────────────────────────────
@@ -384,7 +389,7 @@ async def _static_async_chains(aci: AsyncNiwaki, bd_name: str) -> None:
     # singletons, leaves, ends
     assert_type(bd.pim(), AsyncpimBDPNode)
     assert_type(bd.legacy_mode(), AsyncNavLeaf[fvAccP])
-    assert_type(bd.vrf_binding("prod"), AsyncfvRsCtxNode)
+    assert_type(bd.vrf_binding(), AsyncfvRsCtxNode)
     assert_type(bd.tag(key="owner"), AsyncNavEnd[tagTag])
     assert_type(aci.tag(key="owner"), AsyncNavEnd[tagTag])
     assert_type(
@@ -395,9 +400,9 @@ async def _static_async_chains(aci: AsyncNiwaki, bd_name: str) -> None:
     assert_type(await bd.subnet(subnet="10.0.0.1/24").read(), fvSubnet)
     assert_type(await infra.read(), infraInfra)
     assert_type(await bd.legacy_mode().read(), fvAccP)
-    # Dynamic escape hatches stay dynamic.
-    node = aci.node("uni/tn-prod/BD-web", fvBD)
-    assert_type(node, AsyncNiwakiNode[fvBD])
+    # The class-less escape hatch stays dynamic.
+    node = aci.node("uni/tn-prod/BD-web")
+    assert_type(node, AsyncNiwakiNode[ManagedObject])
     node.anything_at_all("x")
 
 
@@ -492,7 +497,7 @@ def test_navigation_still_returns_plain_nodes() -> None:
     bd = tenant.bd("web")
     assert type(bd) is NiwakiNode
     assert type(bd.subnet(subnet="10.0.0.1/24")) is NiwakiNode
-    assert type(bd.vrf_binding("prod")) is NiwakiNode
+    assert type(bd.vrf_binding()) is NiwakiNode
     assert type(bd.legacy_mode()) is NiwakiNode
     assert type(bd.tag(key="owner")) is NiwakiNode
     assert type(aci.infra().leaf_profile("leaf101").leaf_selector(name="s1")) is NiwakiNode

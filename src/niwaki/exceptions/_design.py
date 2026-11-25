@@ -207,13 +207,21 @@ class MergeConflictError(DesignError):
 
 
 class DesignHintWarning(UserWarning):
-    """A design the SDK can express but the fabric will not be happy with.
+    """A legal design or import the SDK flags because part of it will not do what it says.
 
-    Not an error: the push is legal, the APIC accepts it, and forbidding it
-    would take away a shape somebody may genuinely want.  It is the case where
-    the declaration is *provably* going to raise a fault — a floating SVI whose
-    address is left at ``0.0.0.0`` lands outside its own subnet and the
-    controller answers with a major fault every time.
+    Not an error, and nothing is refused: the design is legal and the
+    controller accepts its push, or the import still returns its design.
+    Forbidding the shape would take away something somebody may genuinely want
+    — or, for an import, would close the door on a real capture.  Two uses:
+
+    - **A declaration that is provably going to raise a fault**: a floating SVI
+      whose address is left at ``0.0.0.0`` lands outside its own subnet and the
+      controller answers with a major fault every time.
+    - **An importer reporting what it left out**: ``to_design()`` and
+      ``from_payload()`` import a *carrier* (a path-only class such as the VMM
+      provider ``vmmProvP``) bare, because a push cannot carry its attributes consistently
+      — a real capture carries some — and report each attribute they dropped,
+      by class, DN and name (never the value).
 
     Its own category, so that ``warnings.simplefilter("error",
     DesignHintWarning)`` turns these into failures in a CI pipeline without

@@ -47,13 +47,16 @@ deliberately kept out of the rendered class documentation):
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, ClassVar, Self, Unpack
+from typing import TYPE_CHECKING, Any, ClassVar, Self, Unpack
 
 from pydantic import BaseModel, ConfigDict, PrivateAttr, model_validator
 
 from niwaki._json import as_list, as_mapping
 from niwaki.models._wire import from_wire, split_flags, to_wire
 from niwaki.types import JsonObject
+
+if TYPE_CHECKING:
+    from niwaki.facade import AsyncNiwakiNode, NiwakiNode
 
 REGISTRY: dict[str, type[ManagedObject]] = {}
 """ACI class name → generated Python class, for every imported model.
@@ -157,6 +160,20 @@ class ManagedObject(BaseModel):
     _wire_class: str = PrivateAttr(default="")
     _raw_wire_attrs: dict[str, str] = PrivateAttr(default_factory=dict)
     _raw_rn: str = PrivateAttr(default="")
+    # The wire attribute names a read returned (``from_apic``/``from_event``);
+    # ``None`` on objects built locally.  A typed field the read did not return
+    # holds its model default, indistinguishable from a returned default —
+    # this is what tells ``mo_diff`` the two apart (an unechoed secret).
+    _read_wire_keys: frozenset[str] | None = PrivateAttr(default=None)
+
+    if TYPE_CHECKING:
+        # The typed façade navigation class of the model, for type checkers
+        # only (never assigned).  Generated models narrow it to their own node
+        # class (``fvBDNode``…); the base names the plain node, so that
+        # ``node(dn, ManagedObject)`` stays ``NiwakiNode[ManagedObject]``
+        # instead of matching the navigation protocol through ``__getattr__``.
+        __niwaki_nav__: ClassVar[NiwakiNode[ManagedObject]]
+        __niwaki_async_nav__: ClassVar[AsyncNiwakiNode[ManagedObject]]
 
     _aci_class: ClassVar[str] = ""
     _rn_format: ClassVar[str] = ""
@@ -698,17 +715,18 @@ class ManagedObject(BaseModel):
     @classmethod
     def _dispatch_and_coerce(
         cls, data: Mapping[str, object]
-    ) -> tuple[type[ManagedObject], dict[str, object], Mapping[str, object], str]:
+    ) -> tuple[type[ManagedObject], dict[str, object], Mapping[str, object], str, frozenset[str]]:
         """Shared first half of :meth:`from_apic`/:meth:`from_event`: dispatch, alias, coerce.
 
         Args:
             data: One envelope, e.g. ``{"fvBD": {"attributes": {...}}}``.
 
         Returns:
-            ``(target_cls, coerced, inner, aci_class)`` — the REGISTRY-resolved
-            subclass, the alias-remapped and type-coerced attributes, the raw
-            inner envelope (attributes + children, for the caller to recurse
-            on), and the wire class name.
+            ``(target_cls, coerced, inner, aci_class, wire_keys)`` — the
+            REGISTRY-resolved subclass, the alias-remapped and type-coerced
+            attributes, the raw inner envelope (attributes + children, for the
+            caller to recurse on), the wire class name, and the wire attribute
+            names the envelope carried.
         """
         aci_class = next(iter(data))
         target_cls: type[ManagedObject] = REGISTRY.get(aci_class, cls)
@@ -747,7 +765,7 @@ class ManagedObject(BaseModel):
             )
             for k, v in raw_attrs.items()
         }
-        return target_cls, coerced, inner, aci_class
+        return target_cls, coerced, inner, aci_class, frozenset(wire_attrs)
 
     @classmethod
     def from_apic(cls, data: Mapping[str, object]) -> ManagedObject:
@@ -799,7 +817,7 @@ class ManagedObject(BaseModel):
         """
         # _fields_set is limited to naming props so that to_apic() on a
         # deserialized object remains surgical (only naming props are re-sent).
-        target_cls, coerced, inner, aci_class = cls._dispatch_and_coerce(data)
+        target_cls, coerced, inner, aci_class, wire_keys = cls._dispatch_and_coerce(data)
         obj = target_cls.model_construct(
             _fields_set=set(target_cls._naming_props),
             **coerced,
@@ -807,6 +825,7 @@ class ManagedObject(BaseModel):
         # Retain the wire class name so a non-generated object can resolve its
         # readable field names through the catalogue (see ``__getattr__``).
         obj._wire_class = aci_class
+        obj._read_wire_keys = wire_keys
 
         for child_raw in _children_of(inner, aci_class):
             obj.children.append(ManagedObject.from_apic(child_raw))
@@ -863,10 +882,11 @@ class ManagedObject(BaseModel):
             mo.model_fields_set   # → {"arp_flooding"} — "dn" is not a config field
             mo.arp_flooding       # → True
         """
-        target_cls, coerced, inner, aci_class = cls._dispatch_and_coerce(data)
+        target_cls, coerced, inner, aci_class, wire_keys = cls._dispatch_and_coerce(data)
         fields_set = set(coerced) & set(target_cls.model_fields)
         obj = target_cls.model_construct(_fields_set=fields_set, **coerced)
         obj._wire_class = aci_class
+        obj._read_wire_keys = wire_keys
 
         for child_raw in _children_of(inner, aci_class):
             obj.children.append(ManagedObject.from_event(child_raw))

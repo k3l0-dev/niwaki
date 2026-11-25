@@ -187,7 +187,10 @@ class TestNiwakiProxy:
 
 
 class TestRsSingletonNavigator:
-    """NiwakiNode.__getattr__ Rs-singleton branch: optional positional target_name."""
+    """NiwakiNode.__getattr__ Rs-singleton branch: a fixed RN, so no argument at all.
+
+    Passing a target name is refused (``tests/facade/test_fixed_rn_navigation.py``).
+    """
 
     @pytest.fixture()
     def epg(self, mock_niwaki: Niwaki) -> object:

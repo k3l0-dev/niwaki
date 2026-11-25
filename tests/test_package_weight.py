@@ -46,13 +46,13 @@ from tests._package_weight import (
 # Lowered by the shared fault-code register (one copy, not ten) and the read
 # catalogue's shared property signatures (prop_sig + class_prop); raised for the
 # typed navigation stubs (134 .pyi files).
-BUDGET_TREE: int = 43_070_000
+BUDGET_TREE: int = 43_800_000
 """Every file the wheel ships (measured 43,061,762 bytes on 2026-10-27)."""
 
 BUDGET_DB: int = 26_000_000
 """The read catalogue, ``query/_catalog/catalog.db`` (25,993,216 bytes)."""
 
-BUDGET_MODELS: int = 10_070_000
+BUDGET_MODELS: int = 10_640_000
 """The generated models, ``models/_generated`` (10,061,309 bytes)."""
 
 CEILING: int = 1_000_000

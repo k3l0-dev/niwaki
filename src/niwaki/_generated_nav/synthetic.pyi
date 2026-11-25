@@ -159,9 +159,7 @@ class syntheticIfcTLTestObjNode(_Sealed, _UniversalNav, NiwakiNode[syntheticIfcT
     def synthetic_sw_c_test_object(self, name: str) -> syntheticSwCTestObjNode: ...
 
 class syntheticRelNTestNode(_Sealed, _UniversalNav, NiwakiNode[syntheticRelNTest]):
-    def synthetic_rs_policy(
-        self, target_name: str = "", **kwargs: object
-    ) -> NavLeaf[syntheticRsPolicy]: ...
+    def synthetic_rs_policy(self) -> NavLeaf[syntheticRsPolicy]: ...
 
 class syntheticRelUnenfTestNode(_Sealed, _UniversalNav, NiwakiNode[syntheticRelUnenfTest]):
     @overload
@@ -368,9 +366,7 @@ class AsyncsyntheticIfcTLTestObjNode(
     def synthetic_sw_c_test_object(self, name: str) -> AsyncsyntheticSwCTestObjNode: ...
 
 class AsyncsyntheticRelNTestNode(_Sealed, _AsyncUniversalNav, AsyncNiwakiNode[syntheticRelNTest]):
-    def synthetic_rs_policy(
-        self, target_name: str = "", **kwargs: object
-    ) -> AsyncNavLeaf[syntheticRsPolicy]: ...
+    def synthetic_rs_policy(self) -> AsyncNavLeaf[syntheticRsPolicy]: ...
 
 class AsyncsyntheticRelUnenfTestNode(
     _Sealed, _AsyncUniversalNav, AsyncNiwakiNode[syntheticRelUnenfTest]

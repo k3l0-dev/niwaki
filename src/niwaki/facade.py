@@ -47,9 +47,10 @@ from __future__ import annotations
 
 import asyncio
 import builtins
+import inspect
 import os
 import warnings
-from collections.abc import Callable, Coroutine
+from collections.abc import Callable, Coroutine, Mapping
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, NamedTuple, cast, overload
 
@@ -79,9 +80,40 @@ if TYPE_CHECKING:
 # each client derive from its typed root navigator; at runtime both bases are
 # plain ``object`` and every navigation still resolves through ``__getattr__``.
 if TYPE_CHECKING:
+    from typing import ClassVar, Protocol
+
     from niwaki._generated_nav import AsyncRootNav as _AsyncRootNavBase
     from niwaki._generated_nav import AsyncRootNode, RootNode
     from niwaki._generated_nav import RootNav as _RootNavBase
+
+    # How the checker maps a model class to its typed navigation class: every
+    # generated model declares (under TYPE_CHECKING, never assigned) the class
+    # attributes ``__niwaki_nav__``/``__niwaki_async_nav__`` naming its node
+    # class — ``fvBDNode``, ``NavLeaf[fvAccP]``, ``RootNode`` for polUni.
+    # ``node(dn, cls)`` and ``mo(cls)`` take ``type[<protocol>[N]]``: the
+    # *class object* must satisfy it (an instance is a static error, as at
+    # runtime), and they return what vocabulary navigation returns for the
+    # same class.  ManagedObject declares the plain node, so it maps to
+    # ``NiwakiNode[ManagedObject]`` rather than matching through __getattr__.
+
+    # The member is a ClassVar because the models declare a ClassVar: pyright
+    # matches a ClassVar only against a ClassVar protocol member (a property
+    # would not do), and the parameters are ``type[<protocol>[N]]`` so that
+    # only the class object satisfies them.  The typing spec forbids a type
+    # variable inside ClassVar in general; pyright says so (hence the ignore),
+    # mypy accepts it in a protocol, and both solve N from the model's
+    # declaration — verified per class by tests/typing/test_node_static.py.
+
+    class _Navigable[N](Protocol):
+        """A model class that names its typed (sync) navigation class."""
+
+        __niwaki_nav__: ClassVar[N]  # pyright: ignore[reportGeneralTypeIssues]
+
+    class _AsyncNavigable[N](Protocol):
+        """A model class that names its typed async navigation class."""
+
+        __niwaki_async_nav__: ClassVar[N]  # pyright: ignore[reportGeneralTypeIssues]
+
 else:
     _RootNavBase = object
     _AsyncRootNavBase = object
@@ -97,12 +129,17 @@ class _JargonTarget(NamedTuple):
     """Navigation metadata resolved from a vocabulary attribute.
 
     Attributes:
+        edge: The current vocabulary name of the edge (a deprecated alias is
+            already resolved to its replacement) — what an error message tells
+            the caller to type.
         child_cls: Generated class the vocabulary name maps to.
-        naming_props: Naming properties of that class.
+        naming_props: Naming properties of that class — empty for a fixed-RN
+            child, which exists at most once under its parent.
         is_rs_target: ``True`` for Rs singletons carrying a target-name prop
             (exposed as the Python field ``name`` by the D2 renaming).
     """
 
+    edge: str
     child_cls: type[ManagedObject]
     naming_props: list[str]
     is_rs_target: bool
@@ -115,6 +152,259 @@ _WRITE_VERBS = frozenset(
 )
 
 
+_ROOT_CLASS = "polUni"
+_ROOT_ROW = "_root"
+
+
+def _child_dn(parent_dn: str, rn: str) -> str:
+    """The DN of a child: ``parent/rn`` — just ``rn`` under the empty DN of ``topRoot``."""
+    return f"{parent_dn}/{rn}" if parent_dn else rn
+
+
+def _child_rn(model: type[ManagedObject], naming_kwargs: Mapping[str, object]) -> str:
+    """The RN ``mo(model, **naming_kwargs)`` addresses — after refusing any key that names nothing.
+
+    ``mo()`` builds *model* from the keywords only to read its RN back, so a
+    key that is not a naming property was validated, accepted and dropped:
+    ``epg.mo(fvRsCustQosPol, name="gold")`` reached the EPG's QoS relation
+    whatever the name, ``bd.subnet(subnet=..., scope="public")`` lost its
+    ``scope``, and ``.delete()`` on such a node removed an object the caller
+    never described.  The keys are checked first (:func:`_check_naming_keys`),
+    so a refusal is a :class:`TypeError` whatever the values, and no request
+    is made.
+
+    Args:
+        model: The child's class.
+        naming_kwargs: The keywords ``mo()`` was called with.
+
+    Returns:
+        The child's RN, computed by the model from the validated naming
+        properties (their defaults when *naming_kwargs* is empty).
+
+    Raises:
+        TypeError: A key is not a naming property of *model*, or one naming
+            property is given by both of its spellings.
+        ValidationError: A naming property has an invalid value.
+    """
+    _check_naming_keys(model, naming_kwargs)
+    return model.model_validate(naming_kwargs).rn
+
+
+def _check_naming_keys(
+    model: type[ManagedObject], naming_kwargs: Mapping[str, object], edge: str | None = None
+) -> None:
+    """Refuse a key that is not a naming property of *model*, and a naming property given twice.
+
+    The accepted keys are exactly the model's naming properties
+    (``_naming_props``, the list the fixed-RN refusal and the typed navigation
+    stubs read as well), spelled with the Python name or the wire alias
+    (``subnet`` or ``ip`` for ``fvSubnet``) — one spelling per property: both
+    at once would let the model pick one silently.  The check covers every
+    key of the call; the values are not looked at.
+
+    Args:
+        model: The child's class.
+        naming_kwargs: The keywords of the call.
+        edge: The navigation edge the call went through, in the words the
+            message uses (``subnet()``); ``None`` for a direct ``mo()`` call.
+
+    Raises:
+        TypeError: Every offending key is named, with the naming properties
+            the class does take (a fixed-RN class says it takes no name) — or
+            the property given twice, with both spellings.
+    """
+    spelling_of: dict[str, str] = {}
+    for prop in model._naming_props:  # pyright: ignore[reportPrivateUsage]
+        spelling_of[prop] = prop
+        alias = model.model_fields[prop].validation_alias
+        if isinstance(alias, str):
+            spelling_of[alias] = prop
+    foreign = [key for key in naming_kwargs if key not in spelling_of]
+    if foreign:
+        raise TypeError(_foreign_keys_message(model, foreign, edge))
+    given: dict[str, list[str]] = {}
+    for key in naming_kwargs:
+        given.setdefault(spelling_of[key], []).append(key)
+    twice = [
+        f"{prop} (given as {' and '.join(keys)})" for prop, keys in given.items() if len(keys) > 1
+    ]
+    if twice:
+        raise TypeError(
+            f"{_subject(model, edge)} got a naming property twice — {', '.join(twice)}: "
+            f"{model.__name__} names it once, by its Python name or by its wire name"
+        )
+
+
+def _subject(model: type[ManagedObject], edge: str | None) -> str:
+    """The call a refusal talks about, in the caller's words: ``subnet()`` or ``mo(fvSubnet)``."""
+    return f"mo({model.__name__})" if edge is None else f"{edge}()"
+
+
+def _foreign_keys_message(
+    model: type[ManagedObject], foreign: list[str], edge: str | None, *, wire_names: bool = True
+) -> str:
+    """The message of the refusal of *foreign* keys: the class, the keys, what *can* be passed.
+
+    Only the keys are echoed, never their values — a refused call may carry a
+    secret (a password on an AAA object) that must not end up in a traceback.
+
+    Args:
+        model: The child's class.
+        foreign: The keys that are not naming properties of *model*.
+        edge: The edge the call went through (``bd()`` is the subject), or
+            ``None`` for ``mo(<Class>)``.
+        wire_names: Whether the listing of the naming properties shows their
+            wire names — ``False`` on a ``name`` edge, which takes ``name``
+            only.
+    """
+    cls = model.__name__
+    subject = _subject(model, edge)
+    got = ", ".join(foreign)
+    naming: list[str] = model._naming_props  # pyright: ignore[reportPrivateUsage]
+    if not naming:
+        rn = model._rn_format  # pyright: ignore[reportPrivateUsage]
+        message = (
+            f"{subject} takes no name (got {got}): {cls} has the fixed RN {rn!r}, so it "
+            f"exists at most once under its parent and an argument would be ignored — "
+            f"call {subject} instead"
+        )
+        from niwaki.domain._child_map import RS_TARGET_PROP
+
+        if cls in RS_TARGET_PROP:
+            message += f" (to see which target the relation points at, read it: {subject}.read())"
+        return message
+    spelled: list[str] = []
+    for prop in naming:
+        alias = model.model_fields[prop].validation_alias
+        shown = isinstance(alias, str) and wire_names
+        spelled.append(f"{prop} (wire name {alias})" if shown else prop)
+    return (
+        f"{subject} takes only the naming properties of {cls} — {', '.join(spelled)} — "
+        f"not {got}: the node is addressed by its DN alone, so any other key would be "
+        "dropped (the facade does not write configuration — use the design DSL, niwaki.design)"
+    )
+
+
+def _no_navigation_message(dn: str, attr: str) -> str:
+    """Why the ``ManagedObject`` node at *dn* cannot navigate *attr* — and the way out.
+
+    The DN is walked again (the per-segment outcome is cached, no request) to
+    tell the four cases apart: an ambiguous DN (every candidate is named), an
+    unresolvable one, one that resolves to a catalogue-only class (named), and
+    a resolvable DN the caller pinned to ``ManagedObject`` explicitly.
+    """
+    from niwaki._containment import UnresolvedDnError, class_of_dn, load_model
+
+    head = f"the node at {dn!r} has no navigation {attr!r}: "
+    reads = "It still reads, queries and deletes. "
+    try:
+        resolved = class_of_dn(dn)
+    except UnresolvedDnError as exc:
+        if exc.ambiguous:
+            return (
+                f"{head}the DN is ambiguous — its RN segment {exc.segment!r} fits "
+                f"{', '.join(exc.candidates)}. {reads}To navigate, state the class: "
+                "node(dn, <Class>) (checked against the DN's last RN segment)."
+            )
+        return (
+            f"{head}its class is unknown — {exc.reason} {reads}To navigate, state "
+            "the class with node(dn, <Class>) or descend with .mo(<Class>, ...)."
+        )
+    if load_model(resolved) is None:
+        return (
+            f"{head}the DN resolves to {resolved}, which has no generated model, "
+            f"so no vocabulary. {reads}Descend with .mo(<Class>, ...) to reach "
+            "a modelled child."
+        )
+    return (
+        f"{head}the node was built with ManagedObject, but the DN is a {resolved} — "
+        f"use node(dn) or node(dn, {resolved}) to navigate it."
+    )
+
+
+def _row_key(cls: type[ManagedObject]) -> str:
+    """The ``CHILD_MAP`` row of *cls*: ``"_root"`` for ``polUni``, else its class name.
+
+    :class:`~niwaki.models.base.ManagedObject` itself keys no row — a node
+    whose class is unknown has no navigation.
+    """
+    name = cls._aci_class or cls.__name__  # pyright: ignore[reportPrivateUsage]
+    return _ROOT_ROW if name == _ROOT_CLASS else name
+
+
+def _navigation_names(cls: type[ManagedObject]) -> frozenset[str]:
+    """The vocabulary names a node of class *cls* offers (deprecated aliases excluded)."""
+    if cls is ManagedObject:
+        return frozenset()
+    from niwaki.domain._child_map import CHILD_MAP
+
+    return frozenset(CHILD_MAP.get(_row_key(cls), {}))
+
+
+def _root_model() -> type[ManagedObject]:
+    """``polUni``, the class at DN ``uni`` (imported lazily — never at ``import niwaki``)."""
+    from niwaki.models._generated.pol.polUni import polUni
+
+    return polUni
+
+
+def _require_model(cls: object, call: str) -> type[ManagedObject]:
+    """*cls* when it is a model class, else :class:`TypeError` naming *call*."""
+    if isinstance(cls, type) and issubclass(cls, ManagedObject):
+        return cls
+    raise TypeError(f"{call}: expected a ManagedObject subclass, got {cls!r}")
+
+
+def _node_class(dn: str, cls: object) -> type[ManagedObject]:
+    """The class a ``node(dn, cls)`` carries — resolved from *dn*, checked against *cls*.
+
+    Without *cls*, the DN is walked from ``uni`` against the containment
+    tables (:func:`niwaki._containment.class_of_dn`, no request): the
+    resolved class when it has a generated model, else
+    :class:`~niwaki.models.base.ManagedObject` (an ambiguous or unresolvable
+    DN, or a catalogue-only class such as ``faultInst`` — the node's
+    navigation error tells them apart).  With *cls*, the DN must
+    agree: the resolved class must be *cls*; when the DN does not resolve
+    (the tables can miss an edge), *cls*'s RN format must at least parse the
+    DN's last RN segment.  ``ManagedObject`` itself states nothing and is
+    kept as is.
+
+    Raises:
+        TypeError: *cls* is not a model class.
+        ValueError: *cls* contradicts the DN.
+    """
+    from niwaki._containment import UnresolvedDnError, class_of_dn, load_model
+
+    stated = None if cls is None else _require_model(cls, f"node({dn!r}, cls)")
+    try:
+        resolved: str | None = class_of_dn(dn)
+    except UnresolvedDnError:
+        resolved = None
+    if stated is None:
+        model = None if resolved is None else load_model(resolved)
+        return ManagedObject if model is None else model
+    if stated is ManagedObject:
+        return stated
+    name = stated._aci_class or stated.__name__  # pyright: ignore[reportPrivateUsage]
+    if resolved is not None:
+        if resolved != name:
+            raise ValueError(
+                f"node({dn!r}, {name}): the DN resolves to {resolved}, not {name} — "
+                f"omit the class to use {resolved}, or fix the DN."
+            )
+        return stated
+    from niwaki._dn import _has_parse, rn_of
+
+    rn_format = stated._rn_format  # pyright: ignore[reportPrivateUsage]
+    last = rn_of(dn)
+    if not _has_parse(last, rn_format):
+        raise ValueError(
+            f"node({dn!r}, {name}): the DN's last RN segment {last!r} does not fit "
+            f"{name}'s RN format {rn_format!r} — the class cannot name this object."
+        )
+    return stated
+
+
 def _navigate_jargon(parent_cls: type[ManagedObject], attr: str) -> _JargonTarget:
     """Resolve a vocabulary attribute to its child class and navigation metadata.
 
@@ -122,8 +412,8 @@ def _navigate_jargon(parent_cls: type[ManagedObject], attr: str) -> _JargonTarge
     class module, and returns everything needed to build a navigator function.
 
     Args:
-        parent_cls: The ACI class of the parent node (or
-            :class:`~niwaki.models.base.ManagedObject` for the root).
+        parent_cls: The ACI class of the parent node (``polUni`` for the
+            root, whose vocabulary ``CHILD_MAP`` keys as ``"_root"``).
         attr: Vocabulary method name to resolve (e.g. ``"tenant"``, ``"bd"``).
 
     Raises:
@@ -133,7 +423,7 @@ def _navigate_jargon(parent_cls: type[ManagedObject], attr: str) -> _JargonTarge
 
     from niwaki.domain._child_map import CHILD_MAP, CLASS_PKG, NAV_DEPRECATED, RS_TARGET_PROP
 
-    parent_key = "_root" if parent_cls is ManagedObject else parent_cls.__name__
+    parent_key = _row_key(parent_cls)
     children = CHILD_MAP.get(parent_key, {})
 
     if attr not in children:
@@ -183,62 +473,182 @@ def _navigate_jargon(parent_cls: type[ManagedObject], attr: str) -> _JargonTarge
     child_cls: type[ManagedObject] = getattr(mod, child_aci_class)
     naming_props: list[str] = child_cls._naming_props  # pyright: ignore[reportPrivateUsage]
 
-    return _JargonTarget(child_cls, naming_props, child_aci_class in RS_TARGET_PROP)
+    return _JargonTarget(attr, child_cls, naming_props, child_aci_class in RS_TARGET_PROP)
+
+
+class _FixedRnNavigator:
+    """The navigator of a fixed-RN edge: called empty it reaches the child, never with a name.
+
+    A child without a naming property (``pimBDP``, ``infraInfra``, the Rs
+    singletons such as ``fvRsCustQosPol``) has a fixed RN: it exists at most
+    once under its parent, so there is nothing to name.  A name passed to its
+    edge could only be dropped — ``epg.custom_qos_policy("gold")`` would point
+    at the EPG's QoS relation whatever the name, and ``.delete()`` on it would
+    remove that relation.  Any argument is therefore refused, before any
+    request, with a :class:`TypeError` that names the edge and shows the
+    correct call.
+
+    The class declares an empty :attr:`__signature__` so that
+    :func:`inspect.signature` reads ``()`` — the shape the typed navigation
+    stubs mirror — although :meth:`__call__` accepts anything in order to
+    refuse it with a useful message.
+    """
+
+    __slots__ = ("__name__", "__qualname__", "_child_cls", "_edge", "_is_rs_target", "_node")
+
+    __signature__ = inspect.Signature()
+
+    def __init__(
+        self,
+        node: NiwakiNode[ManagedObject] | AsyncNiwakiNode[ManagedObject],
+        edge: str,
+        child_cls: type[ManagedObject],
+        is_rs_target: bool,
+    ) -> None:
+        self._node = node
+        self._edge = edge
+        self._child_cls = child_cls
+        self._is_rs_target = is_rs_target
+        # Read like the function it stands for (tracebacks, help(), REPL).
+        self.__name__ = edge
+        self.__qualname__ = edge
+
+    def __repr__(self) -> str:
+        """Show the edge, the node it is bound to and where it leads.
+
+        Returns:
+            For example ``<navigation custom_qos_policy() of
+            'uni/tn-prod/ap-shop/epg-web' → fvRsCustQosPol (fixed RN
+            'rscustQosPol')>``.
+        """
+        rn = self._child_cls._rn_format  # pyright: ignore[reportPrivateUsage]
+        return (
+            f"<navigation {self._edge}() of {self._node.dn!r} → "
+            f"{self._child_cls.__name__} (fixed RN {rn!r})>"
+        )
+
+    def __call__(self, *args: object, **kwargs: object) -> object:
+        """Return the child node, or refuse the name a fixed RN would ignore.
+
+        Args:
+            *args: Must be empty — a fixed-RN edge takes no name.
+            **kwargs: Must be empty — likewise.
+
+        Returns:
+            The child node (:class:`NiwakiNode` or :class:`AsyncNiwakiNode`,
+            following the parent) at ``<parent dn>/<fixed RN>``.
+
+        Raises:
+            TypeError: Any positional or keyword argument was passed.  The
+                message names the edge, says it takes no name and shows the
+                call to make instead.
+        """
+        if args or kwargs:
+            raise TypeError(self._refusal(args, kwargs))
+        return self._node.mo(self._child_cls)
+
+    def _refusal(self, args: tuple[object, ...], kwargs: dict[str, object]) -> str:
+        """The message of the refusal: which edge, why, and the correct call."""
+        passed = ", ".join(
+            [*map(repr, args), *(f"{key}={value!r}" for key, value in kwargs.items())]
+        )
+        cls = self._child_cls.__name__
+        rn = self._child_cls._rn_format  # pyright: ignore[reportPrivateUsage]
+        message = (
+            f"{self._edge}() takes no name (got {passed}): {cls} has the fixed RN "
+            f"{rn!r}, so it exists at most once under its parent and a name would "
+            f"be ignored — call {self._edge}() instead"
+        )
+        if self._is_rs_target:
+            message += (
+                f" (to see which target the relation points at, read it: {self._edge}().read())"
+            )
+        return message
+
+
+# What ``inspect.signature`` reads on a ``name`` edge — the shape the typed
+# navigation stubs mirror (the navigator itself also takes ``**extra``, to
+# refuse it in its own words).
+_NAME_EDGE_SIGNATURE = inspect.Signature(
+    [inspect.Parameter("name", inspect.Parameter.POSITIONAL_OR_KEYWORD, default="", annotation=str)]
+)
 
 
 def _make_jargon_navigator[T: ManagedObject](
     node: NiwakiNode[T] | AsyncNiwakiNode[T],
-    child_cls: type[ManagedObject],
-    naming_props: list[str],
-    is_rs_target: bool,
+    target: _JargonTarget,
 ) -> Callable[..., object]:
     """Build the callable that navigation sugar returns for a vocabulary attribute.
 
     Dispatches to ``node.mo()`` regardless of whether *node* is a
     :class:`NiwakiNode` or :class:`AsyncNiwakiNode`, so both return the correct
-    child type without code duplication.
+    child type without code duplication.  The shape follows the child's naming
+    properties:
+
+    * none (a fixed RN — plain singletons and Rs singletons alike): ``()``,
+      and any argument is refused with :class:`TypeError`
+      (:class:`_FixedRnNavigator`);
+    * ``["name"]``: ``(name="")`` — empty means a query of the class; any
+      other keyword is refused with :class:`TypeError`;
+    * anything else: ``(**naming_kwargs)`` — empty means a query of the class;
+      a keyword that is not a naming property, or a naming property given by
+      both of its spellings, is refused with :class:`TypeError`.
+
+    Every refusal speaks of the edge as called (``bd() takes only…``), never
+    of ``mo()`` or of the navigator's private name.
 
     Args:
         node: Parent node instance.
-        child_cls: Child ACI class to navigate into.
-        naming_props: List of naming properties for *child_cls*.
-        is_rs_target: ``True`` for Rs singletons carrying a target-name prop.
+        target: The resolved edge — its name, child class, naming properties
+            and whether the child is an Rs singleton with a target prop.
 
     Returns:
-        A callable that accepts naming arguments and returns a child node.
+        The navigator: for a fixed-RN child, a :class:`_FixedRnNavigator`
+        that takes no argument and returns the child node; for a named child,
+        a callable that takes the naming value(s) and returns the child node,
+        or a query over the child class when called empty.
     """
-    if not naming_props and is_rs_target:
-
-        def _nav_rs_singleton(target_name: str = "", **kwargs: object) -> object:
-            # D2 renames every tn*Name target prop to the Python field
-            # "name", so one constructor shape covers all Rs classes.
-            if target_name:
-                kwargs = {"name": target_name, **kwargs}
-            return node.mo(child_cls, **kwargs)
-
-        return _nav_rs_singleton
-
+    child_cls, naming_props = target.child_cls, target.naming_props
     if not naming_props:
+        return _FixedRnNavigator(
+            cast("NiwakiNode[ManagedObject] | AsyncNiwakiNode[ManagedObject]", node),
+            target.edge,
+            child_cls,
+            target.is_rs_target,
+        )
 
-        def _nav_singleton() -> object:
-            return node.mo(child_cls)
-
-        return _nav_singleton
+    edge = target.edge
 
     if naming_props == ["name"]:
 
-        def _nav_name(name: str = "") -> object:
+        def _nav_name(name: str = "", **extra: object) -> object:
+            # A ``name`` edge takes ``name`` only — the wire alias of an Rs
+            # target (``tnVzBrCPName``) included — so every extra keyword is
+            # foreign here, unlike on a keyword edge.
+            if extra:
+                raise TypeError(
+                    _foreign_keys_message(child_cls, list(extra), edge, wire_names=False)
+                )
             if name:
                 return node.mo(child_cls, name=name)
             return node.query(child_cls)
 
+        # The runtime shape the typed stubs mirror stays ``(name="")``:
+        # ``**extra`` exists to refuse, not to be offered.
+        _nav_name.__signature__ = _NAME_EDGE_SIGNATURE  # type: ignore[attr-defined]
+        _nav_name.__name__ = _nav_name.__qualname__ = edge
         return _nav_name
 
     def _nav_kwargs(**naming_kwargs: object) -> object:
         if naming_kwargs:
+            # Checked here for the edge's own words; ``mo()`` checks again (a
+            # few set lookups) and does the rest, so there is one door.
+            _check_naming_keys(child_cls, naming_kwargs, edge)
             return node.mo(child_cls, **naming_kwargs)
         return node.query(child_cls)
 
+    # Python's own arity errors read ``subnet() takes 0 positional arguments``.
+    _nav_kwargs.__name__ = _nav_kwargs.__qualname__ = edge
     return _nav_kwargs
 
 
@@ -253,11 +663,12 @@ class _JargonNavMixin[T: ManagedObject]:
     centralises the implementation so that any change to the resolution logic
     applies to both node types automatically.
 
-    The contract with the host class is declared below as an annotation
-    (``_cls``); the host also provides the ``mo()`` method used by the
-    navigators.
+    The contract with the host class is declared below as annotations
+    (``_dn``, ``_cls``); the host also provides the ``mo()`` method used by
+    the navigators.
     """
 
+    _dn: str
     _cls: type[T]
 
     def __getattr__(self, attr: str) -> Any:  # Any: name-driven navigation, resolved at runtime
@@ -267,16 +678,40 @@ class _JargonNavMixin[T: ManagedObject]:
             attr: Method name to resolve (e.g. ``"tenant"``, ``"bd"``).
 
         Returns:
-            Callable that, when invoked with naming kwargs, returns a child
-            node of the appropriate concrete type (sync or async).
+            The edge's navigator, shaped by the child's naming properties:
+            a fixed-RN child (no naming property) takes no argument and
+            returns the child node — any argument raises :class:`TypeError`;
+            a named child takes its naming value(s) — and nothing else: any
+            other keyword, or a naming property given by both of its
+            spellings, raises :class:`TypeError` — and returns the child
+            node, or, called empty, a query over the child class.  Nodes are
+            of the parent's flavour (sync or async).
 
         Raises:
-            AttributeError: ``attr`` is not a known child of this node's class.
+            AttributeError: ``attr`` is not a known child of this node's class,
+                or the node carries no model class — its DN is ambiguous,
+                unresolvable, or resolves to a class without a generated
+                model: such a node has no navigation at all, and the message
+                says which case it is and how to state the class.
         """
         if attr.startswith("_"):
             raise AttributeError(attr)
-        child_cls, naming_props, is_rs_target = _navigate_jargon(self._cls, attr)
-        return _make_jargon_navigator(self, child_cls, naming_props, is_rs_target)  # type: ignore[arg-type]
+        if self._cls is ManagedObject:
+            raise AttributeError(_no_navigation_message(self._dn, attr))
+        return _make_jargon_navigator(self, _navigate_jargon(self._cls, attr))  # type: ignore[arg-type]
+
+    def __dir__(self) -> list[str]:
+        """List the ordinary attributes plus the navigation names valid here.
+
+        IPython and Jupyter complete from :func:`dir`: a node offers exactly
+        the vocabulary of its class (none when the class is unknown).
+        Deprecated aliases still resolve but are never offered.  Local — no
+        request is made.
+
+        Returns:
+            The sorted attribute names.
+        """
+        return sorted({*super().__dir__(), *_navigation_names(self._cls)})
 
 
 # ── Subscription managers ───────────────────────────────────────────────────────
@@ -414,21 +849,59 @@ class NiwakiNode[T: ManagedObject](_JargonNavMixin[T]):
         """
         return self._cls
 
-    def mo[U: ManagedObject](self, cls: type[U], **naming_kwargs: object) -> NiwakiNode[U]:
+    @overload
+    def mo[N](self, cls: type[_Navigable[N]], **naming_kwargs: object) -> N: ...
+
+    # Shadowed for every model: ManagedObject itself declares the plain node,
+    # so the protocol overload always matches (pyright flags the overlap).  It
+    # stays as the readable signature and the fallback should a model ever
+    # lose its declaration.
+    @overload
+    def mo[U: ManagedObject](  # pyright: ignore[reportOverlappingOverload]
+        self, cls: type[U], **naming_kwargs: object
+    ) -> NiwakiNode[U]: ...
+
+    def mo(self, cls: object, **naming_kwargs: object) -> object:
         """Descend to a child node, computing its DN automatically.
 
         Creates a temporary instance of ``cls`` purely to derive the RN from
-        ``_rn_format``.  The child DN is ``self.dn + "/" + child.rn``.
+        ``_rn_format``.  The child DN is ``self.dn + "/" + child.rn`` — just
+        ``child.rn`` under a node at the empty DN (``topRoot``, whose
+        ``uni`` child is ``"uni"``, not ``"/uni"``).  Works from any node —
+        including one whose own class is unknown — since *cls* states the
+        child's class.
+
+        For type checkers the child is the typed navigation node of *cls* —
+        the very class vocabulary navigation returns (``fvBDNode`` for
+        ``fvBD``, ``RootNode`` for ``polUni``) — so its names are checked and
+        complete.  *cls* must be the class itself: a model *instance* is a
+        static error (and a :class:`TypeError` at runtime).  At runtime the
+        child is a plain :class:`NiwakiNode`.
+
+        Only the naming properties of *cls* are accepted, spelled with the
+        Python name or the wire alias (``subnet`` or ``ip`` for ``fvSubnet``)
+        — one spelling per property: both at once is refused.
+        Any other keyword — a configurable property, a typo, a name given to a
+        class that has a fixed RN — is refused rather than silently dropped
+        (the node addresses the object by its DN alone, so it would never
+        reach the APIC).  Called without keyword, ``mo(cls)`` uses the naming
+        defaults: it is the form of a fixed-RN class.
 
         Args:
-            cls: ACI class of the child object.
-            **naming_kwargs: Naming props required by ``cls``
-                (e.g. ``name="web"``).
+            cls: ACI class of the child object (the class, not an instance).
+            **naming_kwargs: Naming props of ``cls`` (e.g. ``name="web"``) —
+                nothing else.
 
         Returns:
-            A new :class:`NiwakiNode` scoped to the child DN.
+            A new :class:`NiwakiNode` scoped to the child DN, carrying *cls*.
 
         Raises:
+            TypeError: *cls* is not a :class:`~niwaki.models.base.ManagedObject`
+                subclass, or a keyword is not a naming property of *cls* (the
+                message names the class and every offending key, and lists the
+                naming properties — or says the class takes no name, when its
+                RN is fixed), or a naming property is given by both its
+                Python name and its wire alias.  Raised before any request.
             ValidationError: If ``naming_kwargs`` violate the model constraints
                 for ``cls``.
 
@@ -439,9 +912,8 @@ class NiwakiNode[T: ManagedObject](_JargonNavMixin[T]):
                .mo(fvBD, name="web") \
                .mo(fvSubnet, ip="10.0.0.1/24")
         """
-        instance = cls.model_validate(naming_kwargs)
-        child_dn = f"{self._dn}/{instance.rn}"
-        return NiwakiNode(self._niwaki, child_dn, cls)
+        model = _require_model(cls, "mo(cls, ...)")
+        return NiwakiNode(self._niwaki, _child_dn(self._dn, _child_rn(model, naming_kwargs)), model)
 
     # ── Terminal operations (read-side + delete) ─────────────────────────────
 
@@ -562,22 +1034,54 @@ class AsyncNiwakiNode[T: ManagedObject](_JargonNavMixin[T]):
         """
         return self._cls
 
-    def mo[U: ManagedObject](self, cls: type[U], **naming_kwargs: object) -> AsyncNiwakiNode[U]:
+    @overload
+    def mo[N](self, cls: type[_AsyncNavigable[N]], **naming_kwargs: object) -> N: ...
+
+    # Shadowed for every model: ManagedObject itself declares the plain node,
+    # so the protocol overload always matches (pyright flags the overlap).  It
+    # stays as the readable signature and the fallback should a model ever
+    # lose its declaration.
+    @overload
+    def mo[U: ManagedObject](  # pyright: ignore[reportOverlappingOverload]
+        self, cls: type[U], **naming_kwargs: object
+    ) -> AsyncNiwakiNode[U]: ...
+
+    def mo(self, cls: object, **naming_kwargs: object) -> object:
         """Descend to a child node, computing its DN automatically.
 
+        Mirrors :meth:`NiwakiNode.mo`: type checkers see the typed async
+        navigation node of *cls* (``AsyncfvBDNode`` for ``fvBD``,
+        ``AsyncRootNode`` for ``polUni``) — a model *instance* is a static
+        error; at runtime it is a plain :class:`AsyncNiwakiNode`.  The child
+        DN is ``self.dn + "/" + child.rn``, or just ``child.rn`` under the
+        empty DN of ``topRoot``.
+
+        Like the sync twin, it accepts the naming properties of *cls* only
+        (Python name or wire alias, one spelling per property); any other
+        keyword is refused with a :class:`TypeError`, synchronously — this
+        method is not a coroutine.
+
         Args:
-            cls: ACI class of the child object.
-            **naming_kwargs: Naming props required by ``cls``.
+            cls: ACI class of the child object (the class, not an instance).
+            **naming_kwargs: Naming props of ``cls`` — nothing else.
 
         Returns:
-            A new :class:`AsyncNiwakiNode` scoped to the child DN.
+            A new :class:`AsyncNiwakiNode` scoped to the child DN, carrying *cls*.
 
         Raises:
+            TypeError: *cls* is not a :class:`~niwaki.models.base.ManagedObject`
+                subclass, or a keyword is not a naming property of *cls*, or
+                a naming property is given twice (raised before any request).
             ValidationError: If ``naming_kwargs`` violate model constraints.
+
+        Example::
+
+            bd = await aci.root.mo(fvTenant, name="prod").mo(fvBD, name="web").read()
         """
-        instance = cls.model_validate(naming_kwargs)
-        child_dn = f"{self._dn}/{instance.rn}"
-        return AsyncNiwakiNode(self._niwaki, child_dn, cls)
+        model = _require_model(cls, "mo(cls, ...)")
+        return AsyncNiwakiNode(
+            self._niwaki, _child_dn(self._dn, _child_rn(model, naming_kwargs)), model
+        )
 
     # ── Terminal operations (read-side + delete) ─────────────────────────────
 
@@ -1073,31 +1577,77 @@ class AsyncNiwaki(_AsyncRootNavBase):
         """Entry point for the ACI object hierarchy.
 
         Returns:
-            :class:`AsyncNiwakiNode` at DN ``"uni"``.  Type checkers see the
-            typed root node, whose navigation names are checked and complete.
+            :class:`AsyncNiwakiNode` at DN ``"uni"``, carrying ``polUni`` (the
+            policy universe, whose vocabulary is the top level).  Type
+            checkers see the typed root node, whose navigation names are
+            checked and complete.
 
         Example::
 
             bd = await aci.root.tenant("prod").bd("web").read()
         """
-        return cast("AsyncRootNode", AsyncNiwakiNode(self, "uni", ManagedObject))
+        return cast("AsyncRootNode", AsyncNiwakiNode(self, "uni", _root_model()))
 
-    def node[T: ManagedObject](
-        self,
-        dn: str,
-        cls: type[T] = ManagedObject,  # type: ignore[assignment]
-    ) -> AsyncNiwakiNode[T]:
+    @overload
+    def node(self, dn: str) -> AsyncNiwakiNode[ManagedObject]: ...
+
+    @overload
+    def node[N](self, dn: str, cls: type[_AsyncNavigable[N]]) -> N: ...
+
+    # Shadowed for every model: ManagedObject itself declares the plain node,
+    # so the protocol overload always matches (pyright flags the overlap).  It
+    # stays as the readable signature and the fallback should a model ever
+    # lose its declaration.
+    @overload
+    def node[T: ManagedObject](  # pyright: ignore[reportOverlappingOverload]
+        self, dn: str, cls: type[T]
+    ) -> AsyncNiwakiNode[T]: ...
+
+    def node(self, dn: str, cls: object = None) -> object:
         """Access a node by explicit DN.
+
+        Mirrors :meth:`Niwaki.node`: without *cls* the class is resolved from
+        the DN (locally, no request); with *cls* the DN must agree with it,
+        and type checkers see the typed async navigation node of *cls*.
 
         Args:
             dn: Full Distinguished Name (e.g. ``"uni/tn-prod/BD-web"``).
-            cls: ACI class hint.  Defaults to
-                :class:`~niwaki.models.base.ManagedObject`.
+            cls: The object's ACI class (the class, not an instance).
+                Optional: when omitted, it is resolved from *dn*; a DN that
+                is ambiguous, unresolvable, or resolves to a class without a
+                generated model yields a node of class
+                :class:`~niwaki.models.base.ManagedObject` — it reads,
+                queries and deletes, but has no navigation (see
+                :meth:`Niwaki.node`).
 
         Returns:
             :class:`AsyncNiwakiNode` scoped to the given DN.
+
+        Raises:
+            TypeError: *cls* is not a :class:`~niwaki.models.base.ManagedObject`
+                subclass.
+            ValueError: *cls* contradicts the DN — it resolves to another
+                class, or (when it does not resolve) *cls*'s RN format cannot
+                parse its last RN segment.
+
+        Example::
+
+            bd = await aci.node("uni/tn-prod/BD-web").read()  # an fvBD
+            subnets = await aci.node("uni/tn-prod/BD-web", fvBD).subnet().fetch()
         """
-        return AsyncNiwakiNode(self, dn, cls)
+        return AsyncNiwakiNode(self, dn, _node_class(dn, cls))
+
+    def __dir__(self) -> list[str]:
+        """List the ordinary attributes plus the top-level navigation names.
+
+        IPython and Jupyter complete from :func:`dir`: the client offers the
+        root vocabulary (``tenant``, ``infra``, ...) it proxies to
+        :attr:`root`.  Deprecated aliases are never offered.
+
+        Returns:
+            The sorted attribute names.
+        """
+        return sorted({*super().__dir__(), *_navigation_names(_root_model())})
 
     if not TYPE_CHECKING:
         # Hidden from the checker, which sees the typed root navigator (the
@@ -1521,35 +2071,99 @@ class Niwaki(_RootNavBase):
         objects.
 
         Returns:
-            :class:`NiwakiNode` with ``dn = "uni"``.  Type checkers see the
-            typed root node, whose navigation names are checked and complete.
+            :class:`NiwakiNode` with ``dn = "uni"``, carrying ``polUni`` (the
+            policy universe, whose vocabulary is the top level).  Type
+            checkers see the typed root node, whose navigation names are
+            checked and complete.
 
         Example::
 
             bd = aci.root.tenant("prod").bd("web").read()
         """
-        return cast("RootNode", NiwakiNode(self, "uni", ManagedObject))
+        return cast("RootNode", NiwakiNode(self, "uni", _root_model()))
 
-    def node[T: ManagedObject](
-        self,
-        dn: str,
-        cls: type[T] = ManagedObject,  # type: ignore[assignment]
-    ) -> NiwakiNode[T]:
+    @overload
+    def node(self, dn: str) -> NiwakiNode[ManagedObject]: ...
+
+    @overload
+    def node[N](self, dn: str, cls: type[_Navigable[N]]) -> N: ...
+
+    # Shadowed for every model: ManagedObject itself declares the plain node,
+    # so the protocol overload always matches (pyright flags the overlap).  It
+    # stays as the readable signature and the fallback should a model ever
+    # lose its declaration.
+    @overload
+    def node[T: ManagedObject](  # pyright: ignore[reportOverlappingOverload]
+        self, dn: str, cls: type[T]
+    ) -> NiwakiNode[T]: ...
+
+    def node(self, dn: str, cls: object = None) -> object:
         """Access a node by explicit DN.
+
+        Without *cls*, the class is **resolved from the DN** — walked from
+        ``uni`` segment by segment against the containment tables, locally
+        (no request is made): ``node("uni/tn-prod")`` is an ``fvTenant`` node
+        offering the tenant vocabulary, ``node("uni")`` the ``polUni`` root.
+        The static type is then ``NiwakiNode[ManagedObject]``: the class is
+        only known at runtime, so the checker accepts any further name.
+
+        With *cls*, the node carries *cls* and type checkers see its typed
+        navigation node — the class vocabulary navigation returns for it
+        (``fvBDNode`` for ``fvBD``, ``RootNode`` for ``polUni``) — so names
+        are checked and complete.  *cls* must be the class itself (a model
+        *instance* is a static error) and must agree with the DN.
+
+        Without *cls*, some DNs carry no model class, and the node is a
+        :class:`~niwaki.models.base.ManagedObject` node that reads, queries
+        and deletes but has no navigation.  Naming a vocabulary entry on it
+        raises :class:`AttributeError` saying which case applies:
+
+        * **ambiguous** — an RN segment several classes fit (the DN grammar
+          places ``uni/infra/nodecfgcont/node-101`` under both
+          ``infraNodeCfg`` and ``fabricNodeCfg``): the error names every
+          candidate; state the class with ``node(dn, Class)``;
+        * **unresolvable** — a DN outside ``uni``, or a segment no class
+          fits under its parent;
+        * **no generated model** — the DN resolves to a catalogue-only class
+          (``faultInst``, ``aaaAppUser``), which the error names; descend
+          with :meth:`NiwakiNode.mo` to reach a modelled child.
 
         Args:
             dn: Full Distinguished Name (e.g. ``"uni/tn-prod/BD-web"``).
-            cls: ACI class hint.  Defaults to
-                :class:`~niwaki.models.base.ManagedObject`.
+            cls: The object's ACI class (the class, not an instance).
+                Optional: when omitted, it is resolved from *dn* (see above
+                for the DNs that yield a navigation-less
+                :class:`~niwaki.models.base.ManagedObject` node).
 
         Returns:
             :class:`NiwakiNode` scoped to the given DN.
 
+        Raises:
+            TypeError: *cls* is not a :class:`~niwaki.models.base.ManagedObject`
+                subclass.
+            ValueError: *cls* contradicts the DN — the DN resolves to another
+                class, or (when it does not resolve) *cls*'s RN format cannot
+                parse its last RN segment.
+
         Example::
 
-            bd = aci.node("uni/tn-prod/BD-web", fvBD).read()
+            bd = aci.node("uni/tn-prod/BD-web").read()  # resolved: an fvBD
+            subnets = aci.node("uni/tn-prod/BD-web", fvBD).subnet().fetch()
+            aci.node("uni/tn-prod", fvBD)  # ValueError: the DN resolves to fvTenant
         """
-        return NiwakiNode(self, dn, cls)
+        return NiwakiNode(self, dn, _node_class(dn, cls))
+
+    def __dir__(self) -> list[str]:
+        """List the ordinary attributes plus the top-level navigation names.
+
+        IPython and Jupyter complete from :func:`dir`: the client offers the
+        root vocabulary (``tenant``, ``infra``, ...) it proxies to
+        :attr:`root`.  Deprecated aliases are never offered.
+
+        Returns:
+            The sorted attribute names.
+        """
+        return sorted({*super().__dir__(), *_navigation_names(_root_model())})
 
     if not TYPE_CHECKING:
         # Hidden from the checker, which sees the typed root navigator (the

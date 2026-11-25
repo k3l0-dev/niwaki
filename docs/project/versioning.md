@@ -17,12 +17,20 @@ A minor release may add parameters, methods, curated vocabulary and
 generated classes.  It never removes a name you could reach, and never
 changes what an existing call writes to the fabric.
 
-One exception, and it cuts the other way: a **curated position the
-controller refuses** is a defect, not a capability.  The vocabulary offers a
-maker in a place the APIC rejects — the call has never written anything and
-never could — so it is corrected rather than carried, and the changelog says
-which one.  You lose nothing that worked; a push that used to fail against
-the fabric now fails in your editor.
+Two exceptions, and both cut the other way — they are corrections, listed
+under **Breaking** in the changelog with the call to use instead:
+
+- A **curated position the controller refuses** is a defect, not a
+  capability.  The vocabulary offers a maker in a place the APIC rejects —
+  the call has never written anything and never could — so it is corrected
+  rather than carried.  You lose nothing that worked; a push that used to
+  fail against the fabric now fails in your editor.
+- A **call that silently does something other than what it says** is a
+  defect too: an argument accepted and then ignored, an object addressed by
+  a name that played no part in its address, an attribute that only some
+  push modes write.  It now raises before anything is sent.  You lose
+  nothing that worked as written, because what was written was never what
+  happened.
 
 ## The public API
 
@@ -38,6 +46,7 @@ import niwaki.transport  # ApicSession, AsyncApicSession, RetryConfig
 import niwaki.exceptions  # the whole error hierarchy
 import niwaki.catalog  # search, describe, prop_meta, class_meta, …
 import niwaki.snapshot  # take, diff, Snapshot, SnapshotDiff, REDACTED
+import niwaki.testing  # FakeApic, StoredObject (+ the opt-in niwaki.testing.pytest plugin)
 import niwaki.types  # JsonScalar, JsonValue, JsonObject — raw APIC JSON
 import niwaki.utils  # mo_diff, parse_imdata
 ```
@@ -87,7 +96,8 @@ with warnings.catch_warnings():
 The write surface and the read surface do not move at the same speed:
 
 - **The curated write surface** — everything you type to describe
-  configuration — is frozen until a major release.
+  configuration — is frozen until a major release, but for the two
+  corrections above.
 - **Schema-derived navigation and catalogue names** may be corrected in a
   minor release behind the deprecation shim above, because they are
   derived from Cisco's own schema and inherit its occasional mistakes.
@@ -103,8 +113,8 @@ See {doc}`SECURITY` for how to report a vulnerability.
 ## Pinning
 
 ```text
-niwaki>=2.1,<3       # recommended: every fix and feature, no breaking change
-niwaki==2.1.0        # reproducible builds; upgrade deliberately
+niwaki>=2.2,<3       # recommended: every fix and feature; only the listed corrections break
+niwaki==2.2.0        # reproducible builds; upgrade deliberately
 ```
 
 The SDK targets a specific APIC schema release, which is a separate axis

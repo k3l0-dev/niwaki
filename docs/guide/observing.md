@@ -43,8 +43,43 @@ see {doc}`../project/versioning` and the
 {doc}`deprecated navigation names <../reference/vocabulary/deprecated-navigation>`
 reference page.
 
-`aci.node(dn, cls)` reaches any explicit DN; `.mo(Class, **naming)` descends
-one level for classes outside the curated vocabulary.
+`aci.node(dn)` reaches any explicit DN.  Its class is resolved from the DN
+itself — walked from `uni`, locally, with no request — so the node offers that
+class's vocabulary, and only it; `aci.root` (DN `uni`) is the `polUni` node
+whose vocabulary is the top level:
+
+```python
+from niwaki.models.fv.fvTenant import fvTenant
+
+prod = aci.node("uni/tn-prod")  # resolved: an fvTenant node
+assert prod.cls is fvTenant
+assert prod.bd("web").dn == "uni/tn-prod/BD-web"
+assert aci.node("uni/tn-prod/BD-web").read().unicast_routing is True
+assert "bd" in dir(prod)  # IPython/Jupyter complete the valid names
+```
+
+Some DNs yield a node without a model class.  It still reads, queries and
+deletes, but offers no navigation, and naming a vocabulary entry on it raises
+`AttributeError` that names the DN and says which case applies:
+
+- **ambiguous** — a segment several classes fit (`uni/infra/nodecfgcont/node-101`
+  is both an `infraNodeCfg` and a `fabricNodeCfg` by the catalogue's DN
+  grammar): the error names every candidate, and you state the one you mean;
+- **unresolvable** — a DN outside `uni`, or a segment no class fits;
+- **no generated model** — the DN resolves to a class the SDK only knows from
+  its catalogue (`faultInst`, `aaaAppUser`), which the error names.
+
+Stating the class, `aci.node(dn, Class)`, keeps it, after checking it against
+the DN: a class the DN contradicts raises `ValueError`.  `.mo(Class, **naming)`
+descends one level for classes outside the curated vocabulary.
+
+```python
+node = aci.node("uni/infra/nodecfgcont/node-101")  # ambiguous: no navigation
+try:
+    node.tenant
+except AttributeError as error:
+    assert "ambiguous" in str(error) and "infraNodeCfg" in str(error)
+```
 
 ### Typed navigation
 
@@ -62,6 +97,24 @@ assert isinstance(web, fvBD)
 subnets = bd.subnet()  # checker: Query[fvSubnet]
 ```
 
+A child with a fixed RN — one that exists at most once under its parent, such
+as a relation (`vrf_binding`, `custom_qos_policy`) or a singleton policy
+(`pim`, `infra`) — has nothing to name: its call takes no argument and is
+always a node.  Passing a name anyway raises `TypeError` before any request
+(and is a type error), rather than silently pointing at the one child whatever
+the name — a `delete()` on it would otherwise remove a relation you did not
+mean.  To see which object a relation targets, read it:
+
+```python
+import pytest
+
+link = bd.vrf_binding()  # the BD's VRF relation: a node, not a query
+assert link.dn == "uni/tn-prod/BD-web/rsctx"
+
+with pytest.raises(TypeError, match="takes no name"):
+    bd.vrf_binding("prod")  # the RN is fixed: "prod" would be ignored
+```
+
 Naming arguments are checked too.  Multi-prop children take their naming
 props as keywords, under their Python names (`subnet(subnet="10.0.0.1/24")`,
 `static_path(target_dn=...)`); the APIC attribute name is accepted at runtime
@@ -74,11 +127,51 @@ aci.tenant("prod").bdd("web")        # mypy: "NotANavigationName" not callable
 bd.subnet(ip="10.0.0.1/24")          # mypy: Unexpected keyword argument "ip"
 ```
 
+Only naming properties go into the call — on a name edge, a keyword edge and
+`.mo(Class, **naming)` alike.  Any other keyword is refused with `TypeError`
+before any request, and the message names the class, every offending key and
+the naming properties it does take, in the words of the call you made
+(`subnet() takes only…`, `mo(fvSubnet) takes only…`).  So is a naming property
+given by both of its spellings, `subnet=` and `ip=` — one of the two would be
+dropped.  A node is addressed by its DN alone, so
+such a keyword (a configurable property like `scope`, a typo, a name given to
+a class with a fixed RN) could only be dropped — and a `delete()` on the node
+would remove an object you did not describe.  Configuration goes through the
+design DSL:
+
+```python
+from niwaki.models.fv.fvRsCtx import fvRsCtx
+from niwaki.models.fv.fvSubnet import fvSubnet
+
+with pytest.raises(TypeError, match="scope"):
+    bd.subnet(subnet="10.0.0.1/24", scope="public")  # scope is configuration, not a name
+with pytest.raises(TypeError, match="takes no name"):
+    bd.mo(fvRsCtx, name="prod")  # the VRF relation has a fixed RN
+with pytest.raises(TypeError, match="twice"):
+    bd.subnet(subnet="10.0.0.1/24", ip="10.0.0.1/24")  # one spelling per property
+with pytest.raises(TypeError, match="arp_flooding"):
+    aci.tenant("prod").bd("web", arp_flooding=True)  # a name edge takes the name only
+
+assert bd.mo(fvSubnet, subnet="10.0.0.1/24").dn == "uni/tn-prod/BD-web/subnet-[10.0.0.1/24]"
+```
+
+The two explicit-class entry points are typed the same way: `aci.node(dn, Class)`
+and `.mo(Class, **naming)` return the very node type vocabulary navigation
+returns for `Class` (`aci.node(dn, fvBD)` is an `fvBDNode`, `aci.node("uni",
+polUni)` the root node), so their names are checked and complete too.  Only
+`aci.node(dn)` without a class stays dynamic: the class is known at runtime
+only, so the checker sees a `NiwakiNode[ManagedObject]` and accepts any further
+name, resolved at runtime.
+
+```python
+from niwaki.models.fv.fvBD import fvBD
+
+web = aci.node("uni/tn-prod/BD-web", fvBD)  # checker: fvBDNode
+assert web.read().unicast_routing is True  # checker: fvBD
+```
+
 The types exist for the checker only: at runtime, navigation resolves exactly
-as before and every node is a plain {class}`~niwaki.NiwakiNode`.  The escape
-hatches stay dynamic — `aci.node(dn, cls)` and `.mo(Class, **naming)` return
-`NiwakiNode[Class]`, on which any further name is accepted by the checker and
-resolved at runtime.
+as before and every node is a plain {class}`~niwaki.NiwakiNode`.
 
 Type-checking a project that uses niwaki with mypy costs about four extra
 seconds on a cold run, because mypy analyses the model classes the navigation
@@ -93,9 +186,9 @@ scopes it to a subtree.  Accumulate, then execute:
 ```python
 from niwaki.models.fv.fvBD import fvBD
 
-# Filters, scoping, counting — filters address the APIC attribute
-# names (the wire side: arpFlood, not arp_flooding)
-bds = aci.query(fvBD).where(arpFlood=True).under("uni/tn-prod").fetch()
+# Filters, scoping, counting — keyword filters take the readable field
+# name (arp_flooding) or the APIC wire name (arpFlood), interchangeably
+bds = aci.query(fvBD).where(arp_flooding=True).under("uni/tn-prod").fetch()
 n = aci.tenant("prod").query(fvBD).count()
 
 # Filter expressions when kwargs are not enough — qualify the
@@ -139,8 +232,14 @@ assert aci.query(fvBD).where(name="web").exists()
 
 ### Smart keyword filters
 
-In `where(prop=value)`, the value's *type* chooses the APIC operator.  Inspect
-the compiled filter with `.build()` without touching the network:
+In `where(prop=value)`, the value's *type* chooses the APIC operator, and
+`prop` is either the APIC wire name or the readable field name of the queried
+class (for `subtree_where`, of the included class).  Only the name is
+translated — the value renders exactly as it would under the wire name.  A
+name that is the wire name of one property *and* the readable name of another
+(`version` on `firmwareFwP`) raises `ValueError`; use a qualified expression
+such as `eq("firmwareFwP.version", ...)` instead.  Inspect the compiled filter
+with `.build()` without touching the network:
 
 ```python
 from niwaki.query import any_of, anybit
@@ -156,6 +255,12 @@ assert params["query-target-filter"] == 'wcard(fvBD.name,"prod-*")'
 # a set stays a bitmask equality (Flags fields), never a membership OR
 _, params = aci.query("fvSubnet").where(scope={"public", "shared"}).build()
 assert params["query-target-filter"] == 'eq(fvSubnet.scope,"public,shared")'
+
+# readable and wire names compile to the same filter
+_, readable = aci.query(fvBD).where(arp_flooding=True).build()
+_, wire = aci.query(fvBD).where(arpFlood=True).build()
+assert readable == wire
+assert readable["query-target-filter"] == 'eq(fvBD.arpFlood,"yes")'
 
 # explicit helpers: any_of(...), and anybit(...) to match a single bit of a mask
 faults = aci.query("faultInst").where(code=any_of("F0467", "F1394")).fetch()

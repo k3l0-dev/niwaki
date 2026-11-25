@@ -222,6 +222,19 @@ relation child carrying the exact wire name (`raw("fvRsCtx",
 tnFvCtxName="main")`), so the slice's wire payload stays faithful. A
 reference is never silently dropped.
 
+One class the import treats differently is the VMM provider
+(`uni/vmmp-VMware`): a *carrier*, a path-only class the APIC creates itself
+and refuses to accept on its own. A push cannot carry its attributes
+consistently, so a design cannot declare any on it —
+`vmm_provider("VMware", owner_tag=...)` and `set(owner_tag=...)` are type
+errors, and raise a `DesignError` when reached around the types — yet a real
+capture carries a few (`userdom=":all:"`). `to_design` and `from_payload` import the carrier bare
+and report each attribute they dropped through a
+{class}`~niwaki.exceptions.DesignHintWarning` naming the class, the DN and
+the attribute (never the value); its children import in full. A pipeline
+that wants the import to fail on it turns the warning into an error with
+`warnings.simplefilter("error", DesignHintWarning)`.
+
 To *see* everything the fabric holds regardless of origin, the
 observation surface remains — {doc}`observing` and {doc}`discovery` read
 every class the APIC serves, whoever created it.

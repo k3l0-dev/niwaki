@@ -179,7 +179,7 @@ def bench_cold_imports() -> dict[str, Any]:
                 "from niwaki import Niwaki; "
                 "from unittest.mock import MagicMock; "
                 "aci = Niwaki(MagicMock()); "
-                "node = aci.tenant('prod').bd('web').vrf_binding('niwaki-prod')"
+                "node = aci.tenant('prod').bd('web').vrf_binding()"
             ),
         ),
         # Design DSL entry point — typed cursors, no yaml/child_map at import
@@ -222,7 +222,7 @@ def bench_domain_navigation() -> dict[str, Any]:
     aci = Niwaki(sess)
 
     # Prime lazy imports — first __getattr__ call triggers import_module
-    _ = aci.tenant("prod").app("myapp").epg("web").bd_binding("web")
+    _ = aci.tenant("prod").app("myapp").epg("web").bd_binding()
 
     cases: list[tuple[str, Callable[[], Any]]] = [
         # Pure dict access (lower bound)
@@ -244,11 +244,6 @@ def bench_domain_navigation() -> dict[str, Any]:
         (
             "nav_3hop_tenant_bd_vrf",
             lambda: aci.tenant("prod").bd("web").vrf_binding(),
-        ),
-        # 3 hops + Rs singleton positional arg
-        (
-            "nav_3hop_rs_positional",
-            lambda: aci.tenant("prod").bd("web").vrf_binding("niwaki-prod"),
         ),
         # 4 hops — EPG with BD binding (read-side Rs navigation)
         (
@@ -281,7 +276,7 @@ def bench_dn_computation() -> dict[str, Any]:
     tenant_node = aci.tenant("prod")
     bd_node = aci.tenant("prod").bd("web")
     epg_node = aci.tenant("prod").app("myapp").epg("web")
-    rs_node = aci.tenant("prod").bd("web").vrf_binding("niwaki-prod")
+    rs_node = aci.tenant("prod").bd("web").vrf_binding()
 
     cases: list[tuple[str, Callable[[], Any]]] = [
         ("dn_tenant", lambda: tenant_node.dn),
@@ -339,7 +334,7 @@ def main() -> None:
     print(f"  import Niwaki (cold)          : {b['import_niwaki']['mean_ms']:>7.1f} ms")
     print(f"  import 1 model (cold)         : {b['import_1_model_fvBD']['mean_ms']:>7.1f} ms")
     print(f"  import 10 models (cold)       : {b['import_10_models']['mean_ms']:>7.1f} ms")
-    print(f"  domain nav 3-hop (warm)       : {b['nav_3hop_rs_positional']['mean_us']:>7.3f} µs")
+    print(f"  domain nav 3-hop (warm)       : {b['nav_3hop_tenant_bd_vrf']['mean_us']:>7.3f} µs")
     print(f"  full session no model import  : {b['import_niwaki_nav_only']['mean_ms']:>7.1f} ms")
     print()
 

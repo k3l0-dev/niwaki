@@ -64,6 +64,73 @@ class _CodegenInputs:
     sm_labels: dict[str, dict[str, str]] = field(default_factory=dict)
 
 
+# ── Typed façade navigation (checker-only class attributes) ──────────────────
+
+# The edges every generated class carries (see generate_nav): a class whose
+# row holds only these navigates through the generic NavLeaf, not a class of
+# its own.
+_UNIVERSAL_NAV_EDGES: frozenset[str] = frozenset(
+    {"annotation", "annotation_to_capture_rbac_info", "tag"}
+)
+_NAV_PACKAGE = "niwaki._generated_nav"
+
+
+@dataclass(frozen=True)
+class _NavTypes:
+    """The typed façade navigation class of one model, both flavours.
+
+    Rendered into the model under ``if TYPE_CHECKING:`` as the class
+    attributes ``__niwaki_nav__``/``__niwaki_async_nav__`` — never assigned,
+    so the runtime class is unchanged.  ``Niwaki.node(dn, cls)`` and
+    ``NiwakiNode.mo(cls)`` read them through a protocol, which is how a
+    type checker maps a model class to its navigation class.
+
+    Attributes:
+        module: The stub module both names are imported from.
+        sync: The sync navigation type (``fvBDNode``, ``NavLeaf[fvAccP]``…).
+        async_: The async twin (``AsyncfvBDNode``…).
+        names: The names to import from *module*, sorted.
+    """
+
+    module: str
+    sync: str
+    async_: str
+    names: tuple[str, ...]
+
+
+def _nav_types(aci_class: str) -> _NavTypes:
+    """The navigation class ``CHILD_MAP`` implies for *aci_class*.
+
+    The same rule as ``generate_nav`` (which renders the classes named here):
+    ``polUni``'s vocabulary is the root row, so its node is ``RootNode``; a
+    class with at least one specific (non-universal) edge has its own
+    ``<Cls>Node``; a class with the universal edges only is a
+    ``NavLeaf[Cls]``; a class with no edge at all a ``NavEnd[Cls]``.
+
+    ``CHILD_MAP`` is read from the committed ``domain/_child_map.py`` —
+    ``regen.sh`` therefore runs ``generate_domain`` (which needs no model)
+    before this generator.
+    """
+    from niwaki.domain._child_map import CHILD_MAP, CLASS_PKG
+
+    if aci_class == "polUni":
+        return _NavTypes(
+            f"{_NAV_PACKAGE}._root", "RootNode", "AsyncRootNode", ("AsyncRootNode", "RootNode")
+        )
+    row = set(CHILD_MAP.get(aci_class, {}))
+    if row - _UNIVERSAL_NAV_EDGES and aci_class in CLASS_PKG:
+        sync, async_ = f"{aci_class}Node", f"Async{aci_class}Node"
+        module = f"{_NAV_PACKAGE}.{CLASS_PKG[aci_class]}"
+        return _NavTypes(module, sync, async_, tuple(sorted((sync, async_))))
+    family = "NavLeaf" if row else "NavEnd"
+    return _NavTypes(
+        f"{_NAV_PACKAGE}._base",
+        f"{family}[{aci_class}]",
+        f"Async{family}[{aci_class}]",
+        tuple(sorted((family, f"Async{family}"))),
+    )
+
+
 # ── Validation patterns ───────────────────────────────────────────────────────
 
 _IP_PATTERN = r"^[0-9a-fA-F.:/ ]+$"
@@ -857,9 +924,14 @@ def _render_class(
     is_health_scorable = meta.get("is_health_scorable", False)
     has_stats = meta.get("has_stats", False)
 
+    nav = _nav_types(aci_class)
     template = env.get_template("mo_class.py.jinja2")
     return template.render(
         class_name=aci_class,
+        nav_module=nav.module,
+        nav_names=nav.names,
+        nav_sync=nav.sync,
+        nav_async=nav.async_,
         rn_format=rn_format,
         naming_props=naming_props_py,
         secure_props=sorted(secure_props),

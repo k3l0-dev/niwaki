@@ -2,9 +2,9 @@
 
 Design-first pays off in tests: a design is a pure value and the network
 boundary is plain httpx, so the natural place to fake the APIC is the HTTP
-layer — exactly how niwaki's own suite works.  That gives your automation
-four natural test layers — from pure unit tests to a fully faked APIC —
-none of which needs a fabric.
+layer — and niwaki ships that fake, the one its own documentation runs on.
+That gives your automation natural test layers — from pure unit tests to a
+fully faked APIC — none of which needs a fabric.
 
 ## Designs are pure — assert on the payload
 
@@ -71,54 +71,184 @@ config.push(aci)
 assert config.push(aci, mode="plan").has_changes is False
 ```
 
-## An offline APIC at the HTTP boundary
+## A fake APIC in your tests
 
-The transport is plain httpx, so a fake APIC is just a mocked HTTP server —
-[pytest-httpx](https://colin-b.github.io/pytest_httpx/) (or respx) is
-enough.  Three routes cover a whole push test: login, the atomic POST, and
-logout.  The assertion closes the loop: what went over the wire is exactly
-`to_payload()`.
+`niwaki.testing` ships {class}`~niwaki.testing.FakeApic`: an in-memory APIC
+that answers the HTTP a client sends — login, pushes, deletes, reads with
+the full query grammar — from a store of objects indexed by DN.  Your code
+runs unchanged against it; the fake is the network.
+
+```python
+from niwaki.testing import FakeApic
+
+fake = FakeApic()
+with fake.client() as offline:
+    build_shop("acme").push(offline)
+    bd = offline.tenant("acme").bd("web").read()
+
+assert bd.unicast_routing is True
+assert fake.get("uni/tn-acme/ctx-prod") is not None
+```
+
+`fake.client()` returns a {class}`~niwaki.Niwaki` wired to the fake
+(`fake.async_client()` an {class}`~niwaki.AsyncNiwaki`); any keyword is
+relayed to the constructor.  For a client you build yourself, the fake is
+also an `httpx` transport (`fake.transport`), and `fake.handle` is a plain
+request → response callback for pytest-httpx or respx.  What the fake
+holds is read back with `fake.get(dn)` and `fake.objects(aci_class)` —
+read-only {class}`~niwaki.testing.StoredObject` values.
+
+### With pytest
+
+The fixture is an opt-in plugin — installing niwaki registers nothing.
+Opt in from your root `conftest.py`:
+
+```python
+# conftest.py
+pytest_plugins = ["niwaki.testing.pytest"]
+```
+
+Every test that names `fake_apic` gets a fresh, empty fake.  The request
+log closes the loop: what went over the wire is exactly `to_payload()`.
 
 ```python
 # test_provisioning.py
 import json
 
-AUTH = {
-    "imdata": [
-        {
-            "aaaLogin": {
-                "attributes": {
-                    "token": "fake-token",
-                    "refreshTimeoutSeconds": "600",
-                }
-            }
-        }
-    ]
-}
 
-
-def test_shop_lands_in_one_post(httpx_mock):
-    from niwaki import Niwaki
-
-    httpx_mock.add_response(url="https://apic.test/api/aaaLogin.json", json=AUTH)
-    httpx_mock.add_response(url="https://apic.test/api/mo/uni.json", json={"imdata": []})
-    httpx_mock.add_response(url="https://apic.test/api/aaaLogout.json", json={"imdata": []})
-
-    with Niwaki("https://apic.test", "admin", "test") as aci:
+def test_shop_lands_in_one_post(fake_apic):
+    with fake_apic.client() as aci:
         build_shop("acme").push(aci)
 
-    push = [r for r in httpx_mock.get_requests() if r.url.path == "/api/mo/uni.json"]
-    assert len(push) == 1
-    assert json.loads(push[0].content) == build_shop("acme").to_payload()
+    (push,) = [r for r in fake_apic.requests if r.url.path == "/api/mo/uni.json"]
+    assert json.loads(push.content) == build_shop("acme").to_payload()
+    assert [o.dn for o in fake_apic.objects("fvBD")] == ["uni/tn-acme/BD-web"]
+
+
+test_shop_lands_in_one_post(FakeApic())  # what pytest does for you
 ```
 
-```console
-$ uv run pytest test_provisioning.py
+### Reads answer like a controller
+
+Seed the store with an APIC envelope — the shape a POST carries, at any
+depth — then read it back.  Filters are **evaluated** the way the fabric
+evaluates them: a boolean whatever its spelling, a number numerically, a
+bitmask as a set, a named number by value.
+
+```python
+fake = FakeApic()
+fake.seed(
+    {
+        "fvTenant": {
+            "attributes": {"dn": "uni/tn-acme", "name": "acme"},
+            "children": [
+                {"fvBD": {"attributes": {"name": "web", "arpFlood": "yes"}}},
+                {"fvBD": {"attributes": {"name": "db", "arpFlood": "no"}}},
+            ],
+        }
+    }
+)
+
+with fake.client() as offline:
+    flooded = offline.query("fvBD").where(arpFlood=True).fetch()
+    assert offline.query("fvBD").under("uni/tn-acme").count() == 2
+
+assert [bd.dn for bd in flooded] == ["uni/tn-acme/BD-web"]
 ```
 
-The same technique fakes reads: return an `{"imdata": [...]}` envelope of
-`{"<class>": {"attributes": {...}}}` entries and the typed models parse it
-exactly as they would a live answer.
+It also stores what it is given the way an APIC does, so a test cannot pass
+on a parroted payload: a bitmask comes back in another order than written,
+and a number the schema names is stored by its name.
+
+```python
+with fake.client() as offline:
+    tenant("acme").filter("web").entry("http", tcp=80).push(offline)
+
+entry = fake.get("uni/tn-acme/flt-web/e-http")
+assert entry is not None
+assert entry.attributes["dFromPort"] == "http"
+```
+
+### A lab capture becomes a fixture
+
+{func}`niwaki.snapshot.take` captures a scope of a real fabric;
+{meth}`FakeApic.from_snapshot <niwaki.testing.FakeApic.from_snapshot>`
+rebuilds it offline, object for object — a capture of the replayed fake is
+the same bytes.  Plan your next change against yesterday's fabric, with no
+fabric:
+
+```python
+from niwaki import snapshot
+
+captured = snapshot.take(aci, "uni/tn-acme")  # the lab client from above
+replica = FakeApic.from_snapshot(captured)
+
+with replica.client() as offline:
+    assert build_shop("acme").push(offline, mode="plan").has_changes is False
+```
+
+### Failures on demand
+
+`fake.fail(dn, ...)` makes the next requests that target a DN answer an
+APIC error, which the SDK raises as its typed exception — `apic_code`
+included.  A failed write changes nothing: an APIC POST is atomic.
+
+```python
+from niwaki.exceptions import APIError
+
+fake = FakeApic()
+fake.fail("uni/tn-acme/BD-web", code="103", text="BD quota exceeded")
+
+with fake.client() as offline, pytest.raises(APIError) as caught:
+    build_shop("acme").push(offline)
+
+assert caught.value.apic_code == "103"
+assert [o.dn for o in fake.objects()] == ["uni"]  # only the universe, as before
+```
+
+Narrow a failure to one verb (`method="POST"`) or a number of requests
+(`times=2`); `fake.clear_failures()` drops them all.
+
+### It fails loud, never wrong
+
+A request the fake cannot answer faithfully is refused with an APIC error
+whose message starts with `"FakeApic:"` (from `seed()`, a `ValueError` with
+that message).  That covers an unknown parameter, class or property, a
+filter operator outside the APIC grammar, a response facet it has no data
+for — and everything it would otherwise have to guess: ordering an enum,
+an address or a bitmask; a wildcard the APIC rejects (a leading `*`, any
+wildcard on an IP, a `dn` or a `descr`); a filter term qualified with a
+class the query does not return, or met by an object of another class; a
+response-subtree parameter with nothing embedded; a placement that
+contradicts itself (a body `dn` that is not the URL's, or whose RN its
+naming properties do not compute).  A test that reaches it learns that the
+fake, not the code, is the limit.
+
+```python
+from niwaki.query import SubtreeInclude
+
+with FakeApic().client() as offline, pytest.raises(APIError) as caught:
+    offline.query("fvBD").include_subtree(SubtreeInclude.AUDIT_LOGS).fetch()
+
+assert caught.value.apic_message.startswith("FakeApic:")
+```
+
+### What the fake is not
+
+- **No RBAC.**  Every login succeeds; a write your user may not perform is
+  stored anyway.
+- **No WebSocket subscriptions.**  A subscription request is refused.
+- **No policy validation, no containment check.**  A design the controller
+  would reject — a value out of the fabric's policy, an object under a parent
+  that does not exist or cannot contain it — is stored.  Convergence against
+  a lab fabric (`plan`, above) stays the test of that.
+- **No fault is ever raised.**  A fault exists when you seed a `faultInst`
+  under an object; a failure when you inject it with `fail()`.
+- **One implicit object only.**  Like every controller, a fake always holds
+  the policy universe — a `polUni` at `uni`, which cannot be deleted.
+  Everything else is what was written or seeded, and reads return the
+  attributes that were stored — not the defaults a controller would add
+  (filters do compare against the schema defaults).
 
 ## The write seam, as a checkable contract
 

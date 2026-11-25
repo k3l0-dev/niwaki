@@ -27,9 +27,7 @@ class mplsExtPNode(_Sealed, _UniversalNav, NiwakiNode[mplsExtP]):
     def mpls_labelpol_relation(self) -> NavLeaf[mplsRsLabelPol]: ...
 
 class mplsIfPNode(_Sealed, _UniversalNav, NiwakiNode[mplsIfP]):
-    def mpls_ifpol_relation(
-        self, target_name: str = "", **kwargs: object
-    ) -> NavLeaf[mplsRsIfPol]: ...
+    def mpls_ifpol_relation(self) -> NavLeaf[mplsRsIfPol]: ...
 
 class mplsLabelPolNode(_Sealed, _UniversalNav, NiwakiNode[mplsLabelPol]):
     @overload
@@ -49,9 +47,7 @@ class AsyncmplsExtPNode(_Sealed, _AsyncUniversalNav, AsyncNiwakiNode[mplsExtP]):
     def mpls_labelpol_relation(self) -> AsyncNavLeaf[mplsRsLabelPol]: ...
 
 class AsyncmplsIfPNode(_Sealed, _AsyncUniversalNav, AsyncNiwakiNode[mplsIfP]):
-    def mpls_ifpol_relation(
-        self, target_name: str = "", **kwargs: object
-    ) -> AsyncNavLeaf[mplsRsIfPol]: ...
+    def mpls_ifpol_relation(self) -> AsyncNavLeaf[mplsRsIfPol]: ...
 
 class AsyncmplsLabelPolNode(_Sealed, _AsyncUniversalNav, AsyncNiwakiNode[mplsLabelPol]):
     @overload

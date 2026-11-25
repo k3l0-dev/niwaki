@@ -80,15 +80,18 @@ class _Emitter:
         self.uses_ref = False
         self.unreplayable: list[str] = []
 
-    def _check_replayable(self, node: DesignViewNode) -> None:
+    def _check_replayable(self, node: DesignViewNode, parent_class: str) -> None:
         """Collect what the public doors cannot replay (fail-loud, never emit).
 
-        A design imported with ``on_unknown="raw"`` can carry classes and
-        properties outside the shipped catalogue on the bypass channel; the
-        emitted source only speaks the public API, whose doors validate
-        against the catalogue — emitting them would produce source that
-        crashes at exec.
+        Two sources.  A design imported with ``on_unknown="raw"`` can carry
+        classes and properties outside the shipped catalogue on the bypass
+        channel.  And the reverse importer trusts the snapshot on
+        containment, so it can attach a child under a parent none of the
+        SDK's containment authorities proves; the door that would render it
+        re-checks that edge.  The emitted source only speaks the public API —
+        emitting either would produce source that crashes at exec.
         """
+        from niwaki.design._cursor import _class_may_contain
         from niwaki.query._catalog import catalog
 
         try:
@@ -96,6 +99,12 @@ class _Emitter:
         except KeyError:
             self.unreplayable.append(f"{node.dn}: class {node.aci_class!r} is not in the catalogue")
             return
+        if not _class_may_contain(parent_class, node.aci_class):
+            self.unreplayable.append(
+                f"{node.dn}: {node.aci_class} is not a provable child of {parent_class} "
+                "(no containment authority — model, navigation table, DN grammar — "
+                "proves the edge)"
+            )
         for wire in node.raw_attrs:
             if wire not in meta.wire_to_readable:
                 self.unreplayable.append(
@@ -173,8 +182,8 @@ class _Emitter:
 
     # ── Walk ──────────────────────────────────────────────────────────────────
 
-    def emit_node(self, node: DesignViewNode, parent_var: str) -> None:
-        self._check_replayable(node)
+    def emit_node(self, node: DesignViewNode, parent_var: str, parent_class: str) -> None:
+        self._check_replayable(node, parent_class)
         expression = self._call_for(node, parent_var)
         raw_set = f".raw_set({_wire_kwargs(node.raw_attrs)})" if node.raw_attrs else ""
         binds = self._bind_calls(node)
@@ -187,7 +196,7 @@ class _Emitter:
             if raw_set:
                 self.lines.append(f"{var}{raw_set}")
             for child in node.children:
-                self.emit_node(child, var)
+                self.emit_node(child, var, node.aci_class)
         else:
             self.lines.append(f"{expression}{''.join(binds)}{raw_set}")
 
@@ -198,7 +207,7 @@ class _Emitter:
         if root.raw_attrs:
             self.lines.append(f"{self.root_var}.raw_set({_wire_kwargs(root.raw_attrs)})")
         for child in root.children:
-            self.emit_node(child, self.root_var)
+            self.emit_node(child, self.root_var, root.aci_class)
 
 
 def to_code(source: Cursor | DesignView, *, var: str = "cfg") -> str:
@@ -226,6 +235,15 @@ def to_code(source: Cursor | DesignView, *, var: str = "cfg") -> str:
         through the wire-name doors (``raw()`` / ``raw_set()``) — including
         the tag/annotation objects that fabrics touched by other tooling
         always carry.
+
+    Raises:
+        DesignError: *var* is not usable as the root variable; or the design
+            holds something the public doors cannot replay — a class or
+            property outside the shipped catalogue (carried by an
+            ``on_unknown="raw"`` import), or a parent → child edge that none
+            of the containment authorities the doors check proves (the
+            reverse importer trusts the snapshot's containment).  Every such
+            item is reported at once, by DN; nothing is emitted.
 
     Example::
 
@@ -258,9 +276,11 @@ def to_code(source: Cursor | DesignView, *, var: str = "cfg") -> str:
     emitter.emit_root(view.root)
     if emitter.unreplayable:
         raise DesignError(
-            f"to_code(): {len(emitter.unreplayable)} item(s) live on the "
-            "wire-bypass channel (on_unknown='raw' import) and the public "
-            "doors cannot replay them:\n  " + "\n  ".join(emitter.unreplayable)
+            f"to_code(): {len(emitter.unreplayable)} item(s) cannot be replayed "
+            "through the public doors — carried on the wire-bypass channel "
+            "(on_unknown='raw' import) or attached under a parent no "
+            "containment authority proves (a trusted snapshot edge):\n  "
+            + "\n  ".join(emitter.unreplayable)
         )
     imports = ["design"] + (["ref"] if emitter.uses_ref else [])
     header = f"from niwaki.design import {', '.join(imports)}"

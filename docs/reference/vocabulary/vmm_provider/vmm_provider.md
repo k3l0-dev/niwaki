@@ -19,7 +19,7 @@ The VMM provider profile stores the policies of VMM systems from a particular ve
 
 ## Attributes
 
-Accepted as keyword arguments of `.vmm_provider(vendor)` and of `.set(**attrs)` on this cursor.  Enum parameters also accept the plain string.
+A carrier — a path-only class the APIC will not accept on its own — takes its naming only: `.vmm_provider(vendor)` and `.set()` accept no attribute, and declaring one raises.  The table lists what the class defines; configure its children instead.
 
 | parameter | wire | type | values | default | description |
 | --- | --- | --- | --- | --- | --- |

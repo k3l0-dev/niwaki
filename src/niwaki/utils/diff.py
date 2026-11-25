@@ -37,7 +37,7 @@ from typing import cast
 
 from niwaki._dn import rn_of
 from niwaki.models._wire import from_wire
-from niwaki.models.base import ManagedObject
+from niwaki.models.base import ManagedObject, _coerce_read  # pyright: ignore[reportPrivateUsage]
 from niwaki.types import JsonObject
 
 
@@ -154,6 +154,29 @@ def mo_diff[T: ManagedObject](
     fields (``modTs``, ``uid``, …) stored in ``model_extra`` are ignored on
     both sides.
 
+    The one exception is the **wire-name channel** of the design escape
+    hatches (``raw()`` on a catalogue-served class, ``raw_set()`` on any
+    node): every wire attribute *desired* declares there is compared too.  A
+    prop the generated model types (renamed or spelled like its wire name)
+    is coerced through the field's annotation; any other prop is compared in
+    the space the catalogue-backed read path coerces to — ``"true"`` equals
+    ``"yes"``, ``"syn,ack"`` equals ``"ack,syn"``, ``"0x10"`` equals
+    ``"16"``.  That coercion follows the read path's rules, lenient ones
+    included (a bitmask is compared as its member set without checking the
+    members against the schema), and it does not canonicalise **named
+    numbers**: the read path keeps a name (``"http"``) as the wire string,
+    so ``"80"`` and ``"http"`` stay a change on this channel.  An unknown
+    class or property, a class the catalogue cannot describe, or a value
+    its kind cannot hold falls back to plain string equality (never an
+    exception).  A wire attribute **absent from the read** is always a
+    change — whatever the model default of the field it maps to: ``push``
+    sends every raw attribute verbatim, and the APIC never echoes a secret
+    (``raw_set(password="")`` would clear it).  Presence is known for a
+    *current* built by :meth:`~niwaki.models.ManagedObject.from_apic` or
+    :meth:`~niwaki.models.ManagedObject.from_event`; for one built locally,
+    a typed field compares by value.  A reported change keeps the declared
+    wire spelling.
+
     Args:
         desired: Target state — the object as you want it to be.
         current: Current state — typically from :meth:`~niwaki.models.ManagedObject.from_apic`.
@@ -253,31 +276,51 @@ def mo_diff[T: ManagedObject](
             changed[field] = d_val
 
     # Wire-name escape hatch (design .raw()/.raw_set()): the desired side
-    # declares wire attrs outside the typed surface; the current side (a
-    # from_apic read) holds them as model extras.  Compared as wire strings.
+    # declares wire attrs outside the typed surface.  A prop the generated
+    # model types is compared through the field's annotation; any other prop
+    # (a catalogue-served class, or a prop the model omits) is read back as a
+    # model extra and compared in the catalogue's coerced space.  A prop the
+    # read did not return is a change whatever the model default says: push
+    # sends every raw attr verbatim, and the APIC never echoes a secret.
     raw_changed: dict[str, str] = {}
-    current_extra = current.model_extra or {}
-    alias_map = cls._get_alias_map() if cls is not ManagedObject else {}  # pyright: ignore[reportPrivateUsage]
-    for wire, d_val in desired._raw_wire_attrs.items():  # pyright: ignore[reportPrivateUsage]
-        c_raw: object = current._raw_wire_attrs.get(wire)  # pyright: ignore[reportPrivateUsage]
-        if c_raw is None and wire in alias_map:
-            # The wire prop is a typed field on the current side (a raw_set of
-            # a prop the model DOES know): coerce the desired wire string
-            # through the field's own type and compare in coerced space —
-            # wire spellings have synonyms ("yes" and "true" are one bool).
-            field = alias_map[wire]
-            field_val = getattr(current, field, None)
-            try:
-                coerced = from_wire(cls.model_fields[field].annotation, d_val)
-            except (ValueError, TypeError):
-                coerced = d_val
-            if not _values_equal(coerced, field_val):
+    desired_raw = desired._raw_wire_attrs  # pyright: ignore[reportPrivateUsage]
+    if desired_raw:
+        current_extra = current.model_extra or {}
+        read_keys = current._read_wire_keys  # pyright: ignore[reportPrivateUsage]
+        typed_fields = _typed_wire_fields(cls)
+        wire_kinds: dict[str, str | None] | None = None
+        for wire, d_val in desired_raw.items():
+            c_raw: object = current._raw_wire_attrs.get(wire)  # pyright: ignore[reportPrivateUsage]
+            if c_raw is None and read_keys is not None and wire not in read_keys:
                 raw_changed[wire] = str(d_val)
-            continue
-        if c_raw is None:
-            c_raw = current_extra.get(wire)
-        if c_raw is None or str(d_val) != str(c_raw):
-            raw_changed[wire] = str(d_val)
+                continue
+            if c_raw is None and wire in typed_fields:
+                # The wire prop is a typed field on the current side (a raw_set
+                # of a prop the model DOES know — renamed or spelled like its
+                # wire name, from_apic stores it in the field either way):
+                # coerce the desired wire string through the field's own type
+                # and compare in coerced space — wire spellings have synonyms
+                # ("yes" and "true" are one bool).
+                field = typed_fields[wire]
+                field_val = getattr(current, field, None)
+                try:
+                    coerced = from_wire(cls.model_fields[field].annotation, d_val)
+                except (ValueError, TypeError):
+                    coerced = d_val
+                if not _values_equal(coerced, field_val):
+                    raw_changed[wire] = str(d_val)
+                continue
+            if c_raw is None:
+                c_raw = current_extra.get(wire)
+            if c_raw is None:
+                raw_changed[wire] = str(d_val)
+                continue
+            if d_val == str(c_raw):
+                continue
+            if wire_kinds is None:
+                wire_kinds = _wire_kinds(desired.aci_class)
+            if not _raw_values_equal(d_val, c_raw, wire_kinds.get(wire)):
+                raw_changed[wire] = str(d_val)
 
     # Compute child deltas when requested
     child_deltas: list[ManagedObject] = []
@@ -314,11 +357,68 @@ def mo_diff[T: ManagedObject](
     return delta
 
 
+def _typed_wire_fields(cls: type[ManagedObject]) -> dict[str, str]:
+    """``{wire name: python field}`` for every typed field of a generated class.
+
+    The alias map lists renamed fields only (``arpFlood`` → ``arp_flooding``);
+    a field whose wire name IS its Python name (``type``, ``mode``, ``port``)
+    carries no alias but is just as typed — ``from_apic`` stores its value in
+    the field, never in the extras.  Both kinds are returned; the bare
+    :class:`~niwaki.models.base.ManagedObject` (catalogue-served) has none.
+    """
+    if cls is ManagedObject:
+        return {}
+    fields = {
+        name: name
+        for name, info in cls.model_fields.items()
+        if name != "children" and not isinstance(info.validation_alias, str)
+    }
+    fields.update(cls._get_alias_map())  # pyright: ignore[reportPrivateUsage]
+    return fields
+
+
+def _wire_kinds(aci_class: str) -> dict[str, str | None]:
+    """The catalogue's ``{wire prop: kind}`` for *aci_class* (empty when unknown).
+
+    Empty too when the catalogue refuses to describe the class (a
+    ``ValueError`` — two wire props colliding on one readable name): the raw
+    compare then falls back to plain strings.
+    """
+    # Function-local import: the catalogue stays off ``import niwaki``'s path.
+    from niwaki.query._catalog import catalog
+
+    try:
+        return catalog().class_meta(aci_class).wire_to_kind
+    except (KeyError, FileNotFoundError, ValueError):
+        return {}
+
+
+def _raw_values_equal(desired: str, current: object, kind: str | None) -> bool:
+    """Wire-string equality, widened to the catalogue's coerced space.
+
+    Both sides go through the coercion the catalogue-backed read path applies
+    (:func:`~niwaki.models.base._coerce_read` — the same coercers as the wire
+    boundary): ``"true"``/``"yes"`` are one bool, ``"syn,ack"``/``"ack,syn"``
+    one bitmask, ``"0x10"``/``"16"`` one integer.  With no known *kind* (an
+    unknown class or property) — or a value the kind refuses — the plain
+    string comparison stands: a spelling that cannot be proven equal is a
+    change, never an exception.
+    """
+    if desired == str(current):
+        return True
+    if kind is None:
+        return False
+    try:
+        return _values_equal(_coerce_read(desired, kind), _coerce_read(str(current), kind))
+    except (ValueError, TypeError):
+        return False
+
+
 def _wire_naming(mo: ManagedObject) -> frozenset[str]:
-    """Wire naming props of a catalogue-served instance (empty when unknown)."""
+    """Wire naming props of a catalogue-served instance (empty when unknown or refused)."""
     from niwaki.query._catalog import catalog
 
     try:
         return catalog().class_meta(mo.aci_class).naming
-    except (KeyError, FileNotFoundError):
+    except (KeyError, FileNotFoundError, ValueError):
         return frozenset()

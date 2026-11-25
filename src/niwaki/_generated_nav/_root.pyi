@@ -62,10 +62,10 @@ from niwaki.models._generated.pki.pkiExportEncryptionKey import pkiExportEncrypt
 from niwaki.models._generated.pki.pkiFabricCommunicationEp import pkiFabricCommunicationEp
 from niwaki.models._generated.pki.pkiFabricSelfCAEp import pkiFabricSelfCAEp
 from niwaki.models._generated.pol.polNdoProfile import polNdoProfile
+from niwaki.models._generated.pol.polUni import polUni
 from niwaki.models._generated.tag.tagAliasDef import tagAliasDef
 from niwaki.models._generated.tag.tagDef import tagDef
 from niwaki.models._generated.vmm.vmmProvP import vmmProvP
-from niwaki.models.base import ManagedObject
 from niwaki.query._async_builder import AsyncQuery
 from niwaki.query._builder import Query
 
@@ -144,7 +144,7 @@ class RootNav(_UniversalNav):
     @overload
     def vmm_provider(self, *, vendor: CompVendor | str) -> vmmProvPNode: ...
 
-class RootNode(_Sealed, RootNav, NiwakiNode[ManagedObject]):
+class RootNode(_Sealed, RootNav, NiwakiNode[polUni]):
     """``aci.root``: the typed node at DN ``uni``."""
 
 class AsyncRootNav(_AsyncUniversalNav):
@@ -224,5 +224,5 @@ class AsyncRootNav(_AsyncUniversalNav):
     @overload
     def vmm_provider(self, *, vendor: CompVendor | str) -> AsyncvmmProvPNode: ...
 
-class AsyncRootNode(_Sealed, AsyncRootNav, AsyncNiwakiNode[ManagedObject]):
+class AsyncRootNode(_Sealed, AsyncRootNav, AsyncNiwakiNode[polUni]):
     """``aci.root``: the typed node at DN ``uni``."""

@@ -17,16 +17,19 @@
 #     └─ 03_build_subset.py     → data/extracted/sdk_subset.json
 #          │
 #          ├─ generate_enums    → models/_generated/enums/ + enum_mapping.json
-#          ├─ generate          → models/_generated/** + _PKG_MAP + tests/models/_test_data.json
-#          │    ├─ generate_catalog → query/_catalog/catalog.db   (needs _PKG_MAP)
-#          │    ├─ generate_design  → design/_generated_cursors/  (also needs _child_map)
-#          │    │    └─ generate_docs → docs/reference/vocabulary/
-#          │    └─ generate_mirror  → models/<pkg>/** public import mirror (corpus-free:
-#          │                           reads the formatted models/_generated tree only)
-#          └─ generate_domain   → domain/_child_map.py  (schemas + vocabulary.yaml only)
-#               └─ generate_nav → _generated_nav/*.pyi typed facade navigation stubs
-#                                 (corpus-free: _child_map + the models, types via
-#                                 generate_design._param_type; emits ruff-formatted text)
+#          ├─ generate_domain   → domain/_child_map.py  (schemas + vocabulary.yaml only —
+#          │                      no model needed, so it runs before the models)
+#          │    └─ generate_nav → _generated_nav/*.pyi typed facade navigation stubs
+#          │                      (corpus-free: _child_map + the models, types via
+#          │                      generate_design._param_type; emits ruff-formatted text)
+#          └─ generate          → models/_generated/** + _PKG_MAP + tests/models/_test_data.json
+#               │                 (also needs _child_map: each model names its typed
+#               │                 navigation class for the checker — __niwaki_nav__)
+#               ├─ generate_catalog → query/_catalog/catalog.db   (needs _PKG_MAP)
+#               ├─ generate_design  → design/_generated_cursors/  (also needs _child_map)
+#               │    └─ generate_docs → docs/reference/vocabulary/
+#               └─ generate_mirror  → models/<pkg>/** public import mirror (corpus-free:
+#                                      reads the formatted models/_generated tree only)
 #
 # Raw generator output is NOT ruff-format-clean (all three Python trees) — the
 # format pass at the end is part of the pipeline, not cosmetics.  The mirror runs
@@ -71,10 +74,10 @@ fi
 
 echo "[regen] codegen 1/6: enums..."
 uv run python -m niwaki._codegen.generate_enums
-echo "[regen] codegen 2/6: models..."
-uv run python -m niwaki._codegen.generate
-echo "[regen] codegen 3/6: domain tables..."
+echo "[regen] codegen 2/6: domain tables..."
 uv run python -m niwaki._codegen.generate_domain
+echo "[regen] codegen 3/6: models (read the domain tables)..."
+uv run python -m niwaki._codegen.generate
 echo "[regen] codegen 4/6: typed cursors..."
 uv run python -m niwaki._codegen.generate_design
 echo "[regen] codegen 5/6: read catalogue..."
@@ -106,7 +109,10 @@ if [ "$VERIFY" -eq 1 ]; then
         tests/design/test_core_yaml.py tests/design/test_docs_generator.py \
         tests/design/test_coverage_audit.py tests/query/test_catalog.py \
         tests/query/test_catalog_public.py tests/typing/test_nav_stubs_fresh.py \
-        tests/typing/test_nav_conformance.py
+        tests/typing/test_nav_conformance.py tests/typing/test_node_static.py
+    # test_node_static.py holds the exhaustive node(dn, C) probe (mypy and
+    # pyright over every generated class): the only guard proving that each
+    # model's TYPE_CHECKING navigation import names a stub class that exists.
     # No git-diff check on docs/reference/vocabulary here: at this point the
     # book IS the generator's output by construction (generate_docs just ran),
     # so comparing against the committed state can only flag "not committed

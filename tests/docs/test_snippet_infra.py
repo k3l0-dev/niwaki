@@ -1,8 +1,19 @@
 """Tests for the executable-documentation harness (``docs/conftest.py``).
 
-They pin the harness behaviour: the FakeApic verbs and DN bookkeeping,
-plus the guard that no ``python`` fence in the documentation can silently
-dodge execution.
+The harness no longer carries its own in-memory APIC: it registers the
+shipped :meth:`niwaki.testing.FakeApic.handle` as a pytest_httpx callback.
+These tests pin
+
+- that wiring (the docs conftest imports ``FakeApic`` from
+  ``niwaki.testing`` and defines no fake of its own);
+- the wire behaviour the documentation snippets lean on, at the level the
+  harness uses it — ``handle(request)`` on a host the fake was not built
+  with (the snippets say ``https://apic.example.com``);
+- the guard that no ``python`` fence in the documentation can silently
+  dodge execution.
+
+The ``FakeApic`` tests import ``niwaki.testing`` lazily so that the fence
+guards below keep running whatever the state of that package.
 """
 
 from __future__ import annotations
@@ -13,9 +24,12 @@ import json
 import textwrap
 from pathlib import Path
 from types import ModuleType
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import httpx
+
+if TYPE_CHECKING:
+    from niwaki.testing import FakeApic
 
 ROOT = Path(__file__).parent.parent.parent
 DOCS = ROOT / "docs"
@@ -41,6 +55,13 @@ def _req(method: str, url: str, body: dict[str, Any] | None = None) -> httpx.Req
 def _imdata(response: httpx.Response) -> list[dict[str, Any]]:
     data: list[dict[str, Any]] = json.loads(response.content)["imdata"]
     return data
+
+
+_TRUE = frozenset({"true", "yes"})
+
+
+def _dns(fake: FakeApic) -> set[str]:
+    return {stored.dn for stored in fake.objects()}
 
 
 TENANT_ENVELOPE: dict[str, Any] = {
@@ -69,16 +90,46 @@ TENANT_ENVELOPE: dict[str, Any] = {
 }
 
 
+class TestDocsHarnessWiring:
+    """The documentation runs on the shipped fake, not on a private copy."""
+
+    def _tree(self) -> ast.Module:
+        return ast.parse((DOCS / "conftest.py").read_text(encoding="utf-8"))
+
+    def test_the_docs_conftest_defines_no_fake_of_its_own(self) -> None:
+        classes = [node.name for node in ast.walk(self._tree()) if isinstance(node, ast.ClassDef)]
+        assert "FakeApic" not in classes
+
+    def test_the_docs_conftest_imports_the_shipped_fake(self) -> None:
+        imported = {
+            (node.module, alias.name)
+            for node in ast.walk(self._tree())
+            if isinstance(node, ast.ImportFrom)
+            for alias in node.names
+        }
+        assert ("niwaki.testing", "FakeApic") in imported
+
+    def test_the_harness_fake_is_the_shipped_class(self) -> None:
+        from niwaki.testing import FakeApic
+
+        assert docs_conftest.FakeApic is FakeApic
+
+
 class TestFakeApic:
-    """The in-memory APIC behind the documentation snippets."""
+    """The wire behaviour the documentation snippets rely on, through ``handle``."""
 
-    def _fake(self) -> Any:
-        return docs_conftest.FakeApic()
+    def _fake(self) -> FakeApic:
+        from niwaki.testing import FakeApic
 
-    def test_login_and_refresh_answer_from_fixtures(self) -> None:
+        return FakeApic()
+
+    def test_login_and_refresh_are_answered(self) -> None:
         fake = self._fake()
-        for path, key in (("aaaLogin", "aaaLogin"), ("aaaRefresh", "aaaRefresh")):
-            resp = fake.handle(_req("POST", f"{HOST}/api/{path}.json"))
+        for method, path, key in (
+            ("POST", "aaaLogin", "aaaLogin"),
+            ("GET", "aaaRefresh", "aaaRefresh"),
+        ):
+            resp = fake.handle(_req(method, f"{HOST}/api/{path}.json"))
             assert resp.status_code == 200
             (entry,) = _imdata(resp)
             assert "token" in entry[key]["attributes"]
@@ -86,7 +137,7 @@ class TestFakeApic:
     def test_strict_push_indexes_the_whole_subtree(self) -> None:
         fake = self._fake()
         fake.handle(_req("POST", f"{HOST}/api/mo/uni.json", TENANT_ENVELOPE))
-        assert set(fake.store) == {
+        assert _dns(fake) == {
             "uni",
             "uni/tn-prod",
             "uni/tn-prod/BD-web",
@@ -94,15 +145,16 @@ class TestFakeApic:
             "uni/tn-prod/BD-web/rsctx",
             "uni/tn-prod/ctx-main",
         }
-        cls_name, attrs = fake.store["uni/tn-prod/BD-web"]
-        assert cls_name == "fvBD"
-        assert attrs["unicastRoute"] == "true"
+        stored = fake.get("uni/tn-prod/BD-web")
+        assert stored is not None
+        assert stored.aci_class == "fvBD"
+        assert stored.attributes["unicastRoute"] in _TRUE
 
     def test_staged_push_derives_the_parent_from_the_url(self) -> None:
         fake = self._fake()
         body = {"fvTenant": {"attributes": {"name": "prod"}}}
         fake.handle(_req("POST", f"{HOST}/api/mo/uni/tn-prod.json", body))
-        assert "uni/tn-prod" in fake.store
+        assert fake.get("uni/tn-prod") is not None
 
     def test_get_self_returns_the_object_with_its_dn(self) -> None:
         fake = self._fake()
@@ -114,6 +166,7 @@ class TestFakeApic:
     def test_get_unknown_dn_is_an_empty_envelope(self) -> None:
         fake = self._fake()
         resp = fake.handle(_req("GET", f"{HOST}/api/mo/uni/tn-ghost.json"))
+        assert resp.status_code == 200
         assert _imdata(resp) == []
         assert json.loads(resp.content)["totalCount"] == "0"
 
@@ -162,9 +215,9 @@ class TestFakeApic:
         fake = self._fake()
         fake.handle(_req("POST", f"{HOST}/api/mo/uni.json", TENANT_ENVELOPE))
         fake.handle(_req("DELETE", f"{HOST}/api/mo/uni/tn-prod/BD-web.json"))
-        assert "uni/tn-prod/BD-web" not in fake.store
-        assert "uni/tn-prod/BD-web/rsctx" not in fake.store
-        assert "uni/tn-prod" in fake.store
+        assert fake.get("uni/tn-prod/BD-web") is None
+        assert fake.get("uni/tn-prod/BD-web/rsctx") is None
+        assert fake.get("uni/tn-prod") is not None
 
     def test_repeated_pushes_merge_attributes(self) -> None:
         fake = self._fake()
@@ -173,9 +226,22 @@ class TestFakeApic:
             "fvBD": {"attributes": {"name": "web", "arpFlood": "true"}},
         }
         fake.handle(_req("POST", f"{HOST}/api/mo/uni/tn-prod/BD-web.json", patch))
-        _, attrs = fake.store["uni/tn-prod/BD-web"]
-        assert attrs["unicastRoute"] == "true"
-        assert attrs["arpFlood"] == "true"
+        stored = fake.get("uni/tn-prod/BD-web")
+        assert stored is not None
+        # Earlier attributes survive a later upsert (a boolean may be stored in
+        # the APIC's own spelling, so either truthy form is accepted).
+        assert stored.attributes["unicastRoute"] in _TRUE
+        assert stored.attributes["arpFlood"] in _TRUE
+
+    def test_the_documented_enrichment_is_answered(self) -> None:
+        """``observing.md`` chains ``with_health().with_faults()``: it must not fail."""
+        fake = self._fake()
+        fake.handle(_req("POST", f"{HOST}/api/mo/uni.json", TENANT_ENVELOPE))
+        resp = fake.handle(
+            _req("GET", f"{HOST}/api/class/fvBD.json?rsp-subtree-include=health,faults")
+        )
+        assert resp.status_code == 200
+        assert len(_imdata(resp)) == 1
 
 
 # ── Guard: no fence dodges execution ──────────────────────────────────────────

@@ -16,12 +16,12 @@ from niwaki.models._generated.mld.mldSnoopAccessGroup import mldSnoopAccessGroup
 
 class mldSnoopAccessGroupNode(_Sealed, _UniversalNav, NiwakiNode[mldSnoopAccessGroup]):
     def mld_rs_mldsnoop_access_group_filter_rmap(
-        self, target_name: str = "", **kwargs: object
+        self,
     ) -> NavLeaf[mldRsMldsnoopAccessGroupFilterRMap]: ...
 
 class AsyncmldSnoopAccessGroupNode(
     _Sealed, _AsyncUniversalNav, AsyncNiwakiNode[mldSnoopAccessGroup]
 ):
     def mld_rs_mldsnoop_access_group_filter_rmap(
-        self, target_name: str = "", **kwargs: object
+        self,
     ) -> AsyncNavLeaf[mldRsMldsnoopAccessGroupFilterRMap]: ...

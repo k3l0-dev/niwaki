@@ -42,7 +42,8 @@ def _deprecated_positions() -> list[tuple[str, str, str]]:
 
 
 def _parent_cls(parent: str) -> type[ManagedObject]:
-    return ManagedObject if parent == "_root" else _load_class(parent)
+    # The root row belongs to polUni (2.2) — ManagedObject navigates nowhere.
+    return _load_class("polUni" if parent == "_root" else parent)
 
 
 @pytest.mark.parametrize(("parent", "old_name", "cls"), _deprecated_positions())
